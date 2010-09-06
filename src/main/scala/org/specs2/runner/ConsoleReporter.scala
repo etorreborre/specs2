@@ -7,11 +7,30 @@ trait ConsoleReporter extends Reporter with ConsoleOutput with ExampleExecution 
   type T = Accumulator
   val initial = new Accumulator()
   val folder: PartialFunction[(Accumulator, Fragment), Accumulator] = {
-	case (a, Text(s)) => println(a.indent + s); a.copy(indent = a.indent + "  ")
+	case (a, Text(s)) => {
+	  println(a.indent + s)
+	  a.copy(indent = a.indent + "  ")
+	}
 	case (a, e @ Example(s, Some(body))) => {
 	  val result = execute(body)
-	  println(a.indent + s)
+	  println(a.indent + status(result) + " " + s)
+	  printMessage(a, result)
 	  a
+	}
+  }
+  private def printMessage(a: Accumulator, result: Result) = {
+	result match {
+	  case Success(_) => ()
+	  case _ => println(a.indent + "  " + result.message)
+	}
+  }
+  private def status(result: Result) = {
+	result match {
+	  case Success(_) => "+"
+	  case Failure(_) => "x"
+	  case Error(_) => "x"
+	  case Pending(_) => "o"
+	  case Skipped(_) => "o"
 	}
   }
 }
