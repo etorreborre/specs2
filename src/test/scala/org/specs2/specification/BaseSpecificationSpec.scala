@@ -1,9 +1,10 @@
 package org.specs2.specification
 
 import org.specs2.Specification
+import org.specs2.runner._
 
 class BaseSpecificationSpec extends Specification {
-   val spec: Examples = 
+   val examples = 
 """A basic specification is just some pieces of text interleaved with some examples
    This is an example of such a specification:
    
@@ -27,8 +28,12 @@ class BaseSpecificationSpec extends Specification {
     * executing the tree to collect results
     * printing out results to the Console
 """ ^
-  "building the list of examples, with text and executable code" ^
-  include(new ExamplesSpec())
-    
-  
+  "Examples building specification" ^
+  include(new ExamplesSpec)^
+  "Examples parsing as a tree specification" ^
+  include(new ExamplesParsingSpec)^
+  "Examples execution" ^
+  include(ExamplesExecutionSpec)^
+  "Examples execution" ^
+  include(new ConsoleReporterSpec)
 }
