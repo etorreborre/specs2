@@ -24,16 +24,13 @@ class BaseSpecificationSpec extends Specification {
     
   The following examples are going to specify the basic components for such a specification:
     * building the list of examples, with text and executable code
-    * parsing the text so that it can be rendered as a tree
-    * executing the tree to collect results
+    * executing the examples to collect results
     * printing out results to the Console
 """ ^
   "Examples building specification" ^
   include(new ExamplesSpec)^
-  "Examples parsing as a tree specification" ^
-  include(new ExamplesParsingSpec)^
   "Examples execution" ^
   include(ExamplesExecutionSpec)^
   "Examples execution" ^
-  include(new ConsoleReporterSpec)
+  include(ConsoleReporterSpec)
 }
