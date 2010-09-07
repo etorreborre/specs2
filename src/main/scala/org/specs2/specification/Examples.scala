@@ -1,4 +1,5 @@
-package org.specs2.specification
+package org.specs2
+package specification
 
 trait ExamplesBuilder {
   implicit def toExamples(e: Example): Examples = new Examples(List(e))

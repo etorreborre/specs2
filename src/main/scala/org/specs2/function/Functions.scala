@@ -1,4 +1,5 @@
-package org.specs2.function
+package org.specs2
+package function
 
 trait Functions {
   implicit def inject[T, S](function: PartialFunction[T, S]) = new Injected(function)

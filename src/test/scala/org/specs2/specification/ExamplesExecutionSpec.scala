@@ -1,6 +1,5 @@
-package org.specs2.specification
-
-import org.specs2._
+package org.specs2
+package specification
 
 object ExamplesExecutionSpec extends Specification {
   val examples: Examples = 

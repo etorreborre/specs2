@@ -1,6 +1,6 @@
 package org.specs2
-import org.specs2.specification._
-import org.specs2.runner._
+import specification._
+import runner._
 
 trait Specification extends ExamplesBuilder with Expectations with AConsoleReporter {
   val examples: Examples

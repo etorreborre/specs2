@@ -1,7 +1,7 @@
-package org.specs2.runner
-import org.specs2._
-import org.specs2.specification._
-import org.specs2.io._
+package org.specs2
+package runner
+import specification._
+import io._
 
 trait Reporter extends Output with Folder {
   def report(spec: Specification): Unit = report(spec.examples)

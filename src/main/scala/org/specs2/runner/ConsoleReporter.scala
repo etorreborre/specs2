@@ -1,17 +1,10 @@
-package org.specs2.runner
-import org.specs2.Specification
-import org.specs2.specification._
-import org.specs2.io._
-import org.specs2.function._
+package org.specs2
+package runner
+import specification._
+import io._
+import function._
 
 trait ConsoleReporter extends Reporter with ConsoleOutput with ExampleExecution with Functions {
-	
-  sealed trait Direction
-  case object Up extends Direction
-  case object Down extends Direction
-  sealed trait LastNode
-  case object E extends LastNode
-  case object T extends LastNode
   
   case class Accumulator(level: Int = 0, state: Direction = Up, lastNode: LastNode = T)
   type T = Accumulator
@@ -67,6 +60,12 @@ trait ConsoleReporter extends Reporter with ConsoleOutput with ExampleExecution 
 	  a.copy(state = Down, lastNode = E)
 	}
   }
+  sealed trait Direction
+  case object Up extends Direction
+  case object Down extends Direction
+  sealed trait LastNode
+  case object E extends LastNode
+  case object T extends LastNode
 }
 
 trait AConsoleReporter extends AReporter {

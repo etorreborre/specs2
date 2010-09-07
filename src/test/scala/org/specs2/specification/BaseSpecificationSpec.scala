@@ -1,7 +1,6 @@
-package org.specs2.specification
-
-import org.specs2.Specification
-import org.specs2.runner._
+package org.specs2
+package specification
+import runner._
 
 class BaseSpecificationSpec extends Specification {
    val examples = 
