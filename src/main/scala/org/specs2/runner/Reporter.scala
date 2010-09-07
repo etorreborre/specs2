@@ -1,20 +1,21 @@
 package org.specs2.runner
 import org.specs2._
 import org.specs2.specification._
+import org.specs2.io._
 
 trait Reporter extends Output with Folder {
   def report(spec: Specification): Unit = report(spec.examples)
   def report(examples: Examples): Unit = {
 	examples.fragments.foldLeft(initial) { (res, cur) => 
-	  if (folder.isDefinedAt((res, cur))) folder.apply((res, cur)) else res
+	  if (folder.isDefinedAt((res, cur))) folder.apply((res, cur)) 
+	  else res
     }
   } 
 }
 trait Folder {
   type T
-  type FoldingFunction = PartialFunction[(T, Fragment), T] 
   val initial: T
-  val folder: FoldingFunction
+  val folder: PartialFunction[(T, Fragment), T]
 }
 
 trait AReporter {

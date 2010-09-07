@@ -24,3 +24,4 @@ case class Example(desc: String = "", body: Option[()=>Result] = None) extends F
   def ^(a: Example) = Examples(List(this))
 }
 object par extends Fragment
+object br extends Fragment
