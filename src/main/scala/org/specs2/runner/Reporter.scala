@@ -12,8 +12,9 @@ trait Reporter extends Output with Folder {
 }
 trait Folder {
   type T
+  type FoldingFunction = PartialFunction[(T, Fragment), T] 
   val initial: T
-  val folder: PartialFunction[(T, Fragment), T]
+  val folder: FoldingFunction
 }
 
 trait AReporter {

@@ -7,15 +7,35 @@ object ConsoleReporterSpec extends Specification {
  val examples = 
 """
 A console reporter is used to execute examples and display their status in the Console.
+
+Examples are displayed with their description, status and a message if they're not ok.
+Text fragments before examples are indented to give a visual indication
+or more specific context:
+
+  when a customer logins
+    if he's a frequent customer
+      + he must be greeted specially
+      + if he must be presented his last orders
+    if he's not a frequent customer
+      + he must be presented the new products
+
+The following examples specify the behavior for the display of a single example
+and for the display of nested examples:
 """^
-  "A simple example must"^
+  "A single example must"^
     "have its description printed out" ~ e1^
     "be reported with a + if it is successful" ~ e2^
     "be reported with a x if it has a failure" ~ e3^
     "be reported with a x if it has a error" ~ e4^
     "be reported with a o if it is skipped or pending" ~ e5^
     "have the failure message displayed if it failed" ~ e6^
-    ""
+    ""^
+  "Nested examples must be displayed as a tree"^
+    "if a text starts a list of examples, there is one level" ~ e7^
+    "if 2 text fragments start a list of examples, there are two levels" ~ e8^
+    """if it is necessary to 'restart' the levels, ^^ must be used to separate
+       the fragments""" ~ e9
+    
   def e1 = descriptionMustBe(1 must_== 1, "+ this example")
   def e2 = descriptionMustBe(1 must_== 1, "+ this example")
   def e3 = descriptionMustBe(1 must_== 2, "x this example")
@@ -23,6 +43,56 @@ A console reporter is used to execute examples and display their status in the C
   def e5 = descriptionMustBe(Pending("pending"), "o this example")
   def e6 = messageMustBe(1 must_== 2, "  '1' is not equal to '2'")
   
+  val success = Success("ok")
+  val failure = Failure("failure")
+  val level1 = 
+	"multi-level1.1"^
+      "ex1" ~ success^
+      "ex2" ~ success
+  val level2 = 
+  "examples are"^
+    level1^
+    "multi-level1.2"^
+      "ex1" ~ failure^
+      "ex2" ~ success
+	  
+  val examplesWithResetToLevel0 =
+  level2^^
+  "an other example is"^
+    "multi-level2.1"^
+      "ex1" ~ success^
+      "ex2" ~ success
+
+  def e7 = reportIs(level1)(List(
+    "multi-level1.1",
+    "  + ex1",
+    "  + ex2"))
+  def e8 = reportIs(level2)(List(
+    "examples are",
+    "  multi-level1.1",
+    "    + ex1",
+    "    + ex2",
+    "  multi-level1.2",
+    "    x ex1",
+    "      failure",
+    "    + ex2"))
+  def e9 = reportIs(examplesWithResetToLevel0)(List(
+    "examples are",
+    "  multi-level1.1",
+    "    + ex1",
+    "    + ex2",
+    "  multi-level1.2",
+    "    x ex1",
+    "      failure",
+    "    + ex2",
+    "an other example is",
+    "  multi-level2.1",
+    "    + ex1",
+    "    + ex2"))
+	
+  def reportIs(examples: Examples)(output: List[String]) = {
+	report(examples).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
+  }
   def descriptionMustBe(body: =>Result, description: String) = {
 	report("this example" ~ body).head must_== description 
   }
