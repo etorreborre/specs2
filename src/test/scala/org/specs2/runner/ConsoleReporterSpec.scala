@@ -2,7 +2,7 @@ package org.specs2
 package runner
 import specification._
 
-object ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
+class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
  val examples = 
 """
 A console reporter is used to execute examples and display their status in the Console.

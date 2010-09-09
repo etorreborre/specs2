@@ -31,5 +31,5 @@ class BaseSpecificationSpec extends Specification {
   "Examples execution" ^
   include(ExamplesExecutionSpec)^
   "Examples execution" ^
-  include(ConsoleReporterSpec)
+  include(new ConsoleReporterSpec)
 }
