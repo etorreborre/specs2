@@ -32,4 +32,30 @@ trait Functions {
 	  }
 	} 
   }
+  
+  def identity[T]: PartialFunction[T, T] = { case (t: T) => Predef.identity(t) }
+  
+    implicit def PartialFunctionCategory: scalaz.Category[PartialFunction] = new scalaz.Category[PartialFunction] {
+    def id[A] = {case a => a}
+    def compose[X, Y, Z](f: PartialFunction[Y, Z], g: PartialFunction[X, Y]) = new PartialFunction[X, Z] {
+      def isDefinedAt(x: X) = g.isDefinedAt(x) && f.isDefinedAt(g(x))
+      def apply(x: X) = f(g(x))
+    }
+  }
+  implicit def PartialFunctionArrow: scalaz.Arrow[PartialFunction] = new scalaz.Arrow[PartialFunction] {
+    val category = PartialFunctionCategory
+
+    def arrow[B, C](f: B => C) = {
+      case b => f(b)
+    }
+
+    def first[B, C, D](a: PartialFunction[B, C]) = {
+      case (b, d) if a isDefinedAt b => (a(b), d)
+    }
+
+    def second[B, C, D](a: PartialFunction[B, C]): PartialFunction[(D, B), (D, C)] = {
+      case (d, b) if a isDefinedAt b => (d, a(b))
+    }
+  } 
+
 }

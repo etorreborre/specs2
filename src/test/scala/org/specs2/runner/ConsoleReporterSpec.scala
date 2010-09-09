@@ -28,11 +28,12 @@ and for the display of nested examples:
     "be reported with a x if it has a error" ~ e4^
     "be reported with a o if it is skipped or pending" ~ e5^
     "have the failure message displayed if it failed" ~ e6^
-  br^  
+  par^  
   "Nested examples must be displayed as a tree"^
     "if a text starts a list of examples, there is one level" ~ e7^
     "if 2 text fragments start a list of examples, there are two levels" ~ e8^
-    "if it is necessary to 'restart' the levels, ^^ must be used to separate the fragments" ~ e9
+    "if it is necessary to 'restart' the levels, ^^ must be used to separate the fragments" ~ e9^
+    "when ^^ is used to restart example a line is skipped as starting a new paragraph" ~ e10
 }
 
 trait ConsoleReporterSpecImplementation extends Specification {
@@ -87,11 +88,22 @@ trait ConsoleReporterSpecImplementation extends Specification {
     "    x ex1",
     "      failure",
     "    + ex2",
+    "",
     "an other example is",
     "  multi-level2.1",
     "    + ex1",
     "    + ex2"))
-	
+
+  def e10 = reportIs(level1 ^^ level1)(List(
+    "multi-level1.1",
+    "  + ex1",
+    "  + ex2",
+    "",
+    "multi-level1.1",
+    "  + ex1",
+    "  + ex2"))
+
+    
   def reportIs(examples: Examples)(output: List[String]) = {
 	report(examples).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
   }

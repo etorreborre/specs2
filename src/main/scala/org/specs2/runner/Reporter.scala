@@ -14,7 +14,7 @@ trait Reporter extends Output with Folder {
 }
 trait Folder {
   type T
-  val initial: T
+  def initial: T
   val folder: PartialFunction[(T, Fragment), T]
 }
 
