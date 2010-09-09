@@ -34,11 +34,11 @@ The following examples specify the behavior for:
     "have the failure message displayed if it failed" ! e6^
   par^  
   "Nested examples must be displayed as a tree"^
-    "if a text starts a list of examples, they are indented to one level" ! e7^
-    "if 2 text fragments start a list of examples, examples are indented to two levels" ! e8^
+    "if a text starts a list of examples, these examples are indented to one level" ! e7^
+    "if 2 text fragments start a list of examples, they are indented to two levels" ! e8^
     "if it is necessary to 'restart' the levels to zero, " +
     "^^ must be used to separate the groups of examples" ! e9^
-    "when ^^ is used to restart example a line is skipped as starting a new paragraph" ! e10^
+    "when ^^ is used to restart an example block, a line is skipped as if starting a new paragraph" ! e10^
   par^  
   "At the end of the report"^
     "the total number of examples must be displayed" ! e11^
