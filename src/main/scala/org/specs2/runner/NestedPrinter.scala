@@ -3,9 +3,19 @@ package runner
 import specification._
 import io._
 
-trait NestedPrinter extends Output {
+trait APrinter extends Output { outer =>
+  val printer: Printer = new NestedPrinter {
+	val output = outer
+  }
+}
+trait Printer {
+  val output: Output
+  def println(s: String) = output.println(s)
+  val print: Function[(Int, ExecutedFragment), Unit]
+}
+trait NestedPrinter extends Printer {
 
-  val print: PartialFunction[(Int, ExecutedFragment), Unit] = { 
+  val print: Function[(Int, ExecutedFragment), Unit] = { 
 	case (level, ExecutedText(s)) => println(("  " * level) + s)
 	case (level, ExecutedResult(s, result)) => {
 	  println("  " * level + status(result) + " " + s)

@@ -6,16 +6,13 @@ import io._
 trait Reporter extends Output with Folder {
   def report(spec: Specification): Unit = report(spec.examples)
   def report(examples: Examples): Unit = {
-	examples.fragments.foldLeft(initial) { (res, cur) => 
-	  if (folder.isDefinedAt((res, cur))) folder.apply((res, cur)) 
-	  else res
-    }
+	examples.fragments.foldLeft(initial)(folder)
   } 
 }
 trait Folder {
   type T
   def initial: T
-  val folder: PartialFunction[(T, Fragment), T]
+  val folder: Function2[T, Fragment, T]
 }
 
 trait AReporter {

@@ -1,6 +1,8 @@
 package org.specs2
 package specification
-
+trait AnExecutor {
+  val executor: ExampleExecution = new ExampleExecution {}
+}
 trait ExampleExecution {
   def execute(body: () => Result): Result = {
 	try {

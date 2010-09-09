@@ -5,8 +5,7 @@ import io._
 import function._
 import scalaz.Scalaz._
 
-trait ConsoleReporter extends Reporter with ConsoleOutput with ExampleExecution with Functions with NestedPrinter {
-  import NestedLevels._
+trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with APrinter with ALevelParser {
   
   /**
    *                          (Level[Int], ExecutedFragment) -> print
@@ -16,15 +15,15 @@ trait ConsoleReporter extends Reporter with ConsoleOutput with ExampleExecution 
    *                          updated[T]                     -> identity -> T
    * 
    */
-  lazy val folder: PartialFunction[(T, Fragment), T] = {
-	case p => ((level >>> (print *** identity)) apply p)._2
+  lazy val folder: Function2[T, Fragment, T] = {
+	case p => ((execute >>> (printer.print *** identity)) apply p)._2
   }
 
-  type T = Accumulator
-  def initial = new Accumulator()
+  type T = Level
+  def initial = levelParser.initial
   
-  val level: PartialFunction[(T, Fragment), ((Int, ExecutedFragment), T)] = {
-	case p @ (a, f) => ((currentLevel(p), execute(f)), updateLevel(p))
+  val execute: Function[(T, Fragment), ((Int, ExecutedFragment), T)] = {
+	case p @ (a, f) => ((levelParser.currentLevel(p), executor.execute(f)), levelParser.updateLevel(p))
   }
 }
 

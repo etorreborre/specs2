@@ -2,18 +2,26 @@ package org.specs2
 package runner
 import specification._
 
-trait NestedLevels {
-  case class Accumulator(level: Int = 0, state: Direction = Up, lastNode: LastNode = Txt)
-  type T = Accumulator
-  def initial = new Accumulator()
-  
-  val currentLevel: PartialFunction[(T, Fragment), Int] = { 
+trait LevelParser {
+  type T
+  def initial: T
+  val currentLevel: Function[(T, Fragment), Int]
+  val updateLevel: Function[(T, Fragment), T]
+}
+trait ALevelParser {
+  type Level = levelParser.T
+  val levelParser: LevelParser = new NestedLevels {}
+}
+trait NestedLevels extends LevelParser {
+  case class Level(level: Int = 0, state: Direction = Up, lastNode: LastNode = Txt)
+  def initial = Level()
+  type T = Level
+  val currentLevel: Function[(T, Fragment), Int] = { 
 	case (a, f @ Text(s)) if (a.state == Down && a.lastNode == Ex) => (a.level - 1)
-	case (a, f) => (a.level)
-	case _ => 0
+	case (a, f) => a.level
   }
   
-  val updateLevel: PartialFunction[(T, Fragment), T] = {
+  val updateLevel: Function[(T, Fragment), T] = {
 	case (a, `end`) => initial
 	case (a, `par`) => a
 	case (a, `br`) => a
@@ -41,4 +49,3 @@ trait NestedLevels {
   case object Ex extends LastNode
   case object Txt extends LastNode
 }
-object NestedLevels extends NestedLevels
