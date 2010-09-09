@@ -29,7 +29,7 @@ class BaseSpecificationSpec extends Specification {
   "Examples building specification" ^
   include(new ExamplesSpec)^
   "Examples execution" ^
-  include(ExamplesExecutionSpec)^
+  include(new ExamplesExecutionSpec)^
   "Examples execution" ^
   include(new ConsoleReporterSpec)
 }

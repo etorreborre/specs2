@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-object ExamplesExecutionSpec extends Specification {
+class ExamplesExecutionSpec extends Specification {
   val examples: Examples = 
   "An example when executed returns a result" ! e1
   
