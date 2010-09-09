@@ -4,10 +4,11 @@ import specification._
 import io._
 
 trait Reporter extends Output with Folder {
-  def report(spec: Specification): Unit = report(spec.examples)
-  def report(examples: Examples): Unit = {
-	examples.fragments.foldLeft(initial)(folder)
+  def report(spec: Specification): Unit = report(Start(name(spec)) +: spec.examples.fragments)
+  def report(fragments: List[Fragment]): Unit = {
+	fragments.foldLeft(initial)(folder)
   } 
+  def name(spec: Specification) = ClassName.className(spec)
 }
 trait Folder {
   type T

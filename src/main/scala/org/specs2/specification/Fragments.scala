@@ -1,7 +1,8 @@
 package org.specs2
 package specification
 
-sealed trait Fragment	
+sealed trait Fragment
+case class Start(name: String) extends Fragment
 case class Text(t: String) extends Fragment
 case class Group(fragments: List[Fragment])
 case class Example(desc: String = "", body: Option[()=>Result] = None) extends Fragment { 

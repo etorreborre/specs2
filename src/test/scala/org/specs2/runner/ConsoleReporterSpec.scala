@@ -8,8 +8,9 @@ object ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
 A console reporter is used to execute examples and display their status in the Console.
 
 Examples are displayed with their description, status and a message if they're not ok.
+
 Text fragments before examples are indented to give a visual indication
-or more specific context:
+of a more specific context (but context management is done independently), like this:
 
   when a customer logs-in
     if he's a frequent customer
@@ -18,8 +19,11 @@ or more specific context:
     if he's not a frequent customer
       + he must be presented the new products
 
-The following examples specify the behavior for the display of a single example
-and for the display of nested examples:
+The following examples specify the behavior for:
+
+  * the display of a single example
+  * the display of nested examples
+  * the display of statistics at the end
 """^
   "A single example must"^
     "have its description printed out" ! e1^
@@ -34,10 +38,13 @@ and for the display of nested examples:
     "if 2 text fragments start a list of examples, examples are indented to two levels" ! e8^
     "if it is necessary to 'restart' the levels to zero, " +
     "^^ must be used to separate the groups of examples" ! e9^
-    "when ^^ is used to restart example a line is skipped as starting a new paragraph" ! e10
+    "when ^^ is used to restart example a line is skipped as starting a new paragraph" ! e10^
+  par^  
+  "At the end of the report"^
+    "the total number of examples must be displayed" ! e11
 }
 
-trait ConsoleReporterSpecImplementation extends Specification with InputSpecs with ExpectedOutputs {
+trait ConsoleReporterSpecImplementation extends Specification with InputSpecs with ExpectedOutputs with ReportExpectations {
   def e1 = descriptionMustBe(1 must_== 1, "+ this example")
   def e2 = descriptionMustBe(1 must_== 1, "+ this example")
   def e3 = descriptionMustBe(1 must_== 2, "x this example")
@@ -45,19 +52,14 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
   def e5 = descriptionMustBe(Pending("pending"), "o this example")
   def e6 = messageMustBe(1 must_== 2, "  '1' is not equal to '2'")
   
-  def e7 = reportIs(level1)(level1Output)
+  def e7 = reportStartsWith(level1)(level1Output)
 
-  def e8 = reportIs(level1and2)(
+  def e8 = reportStartsWith(level1and2)(
     List("examples are") ++
     level1Output.map("  " + _) ++ 
     level2Output.map("  " + _))
 
-  val examplesWithResetToLevel0 =
-  level1and2^^
-  "an other example is"^
-  level3
-
-  def e9 = reportIs(examplesWithResetToLevel0)(
+  def e9 = reportStartsWith(examplesWithResetToLevel0)(
     List("examples are") ++
     level1Output.map("  " + _) ++ 
     level2Output.map("  " + _) ++
@@ -65,8 +67,17 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
     List("an other example is") ++
     level3Output.map("  " + _))
 
-  def e10 = reportIs(level1 ^^ level1)(level1Output ++ List("") ++ level1Output)
-  
+  def e10 = reportStartsWith(level1 ^^ level1)(level1Output ++ List("") ++ level1Output)
+  def e11 = reportEndsWith(level1)(level1Stats)
+
+}
+trait ReportExpectations extends Expectations with ExamplesBuilder {
+  def reportStartsWith(examples: Examples)(output: List[String]) = {
+	report(examples).mkString("\n", "\n", "\n").startsWith(output.mkString("\n", "\n", "\n")) must_== true
+  }
+  def reportEndsWith(examples: Examples)(output: List[String]) = {
+	report(examples).mkString("\n", "\n", "\n").endsWith(output.mkString("\n", "\n", "\n")) must_== true
+  }
   def reportIs(examples: Examples)(output: List[String]) = {
 	report(examples).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
   }
@@ -79,7 +90,7 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
   def report(ex: Example): List[String] = report(Examples(List(ex))) 
   def report(ex: Examples): List[String] = {
 	val reporter = new ConsoleReporter with MockOutput
-	reporter.report(ex)
+	reporter.report(ex.fragments)
 	reporter.messages.toList
   }
 }
@@ -104,6 +115,11 @@ trait InputSpecs extends ExamplesBuilder {
   "examples are"^
     level1^
     level2
+
+  val examplesWithResetToLevel0 =
+  level1and2^^
+  "an other example is"^
+  level3
 }
 trait ExpectedOutputs {
 
@@ -120,4 +136,8 @@ trait ExpectedOutputs {
     "level3",
     "  + ex1",
     "  + ex2")
+  val level1Stats = List(
+    "Total for specification",
+    "2 examples")
+    
 }
