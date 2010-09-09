@@ -3,30 +3,23 @@ package runner
 import specification._
 
 trait LevelParser {
-  type T
-  def initial: T
-  val level: Function[(T, Fragment), (Int, T)]
-}
-trait ALevelParser {
-  type Level = levelParser.T
-  val levelParser: LevelParser = new NestedLevels {}
+  type L
+  val level: Function[(L, Fragment), (Int, L)]
 }
 trait NestedLevels extends LevelParser {
   case class Level(level: Int = 0, state: Direction = Up, lastNode: LastNode = Txt)
-  type T = Level
+  type L = Level
 
-  def initial = Level()
-  
-  val level: Function[(T, Fragment), (Int, T)] = {
+  val level: Function[(L, Fragment), (Int, L)] = {
 	case p => (currentLevel(p), updateLevel(p))
   }
-  private val currentLevel: Function[(T, Fragment), Int] = { 
+  private val currentLevel: Function[(L, Fragment), Int] = { 
 	case (a, f @ Text(s)) if (a.state == Down && a.lastNode == Ex) => (a.level - 1)
 	case (a, f) => a.level
   }
   
-  private val updateLevel: Function[(T, Fragment), T] = {
-	case (a, `end`) => initial
+  private val updateLevel: Function[(L, Fragment), L] = {
+	case (a, `end`) => Level()
 	case (a, `par`) => a
 	case (a, `br`) => a
 	case (a, Text(s)) => {

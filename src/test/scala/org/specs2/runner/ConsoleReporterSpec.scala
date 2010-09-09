@@ -51,7 +51,6 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
   def e4 = descriptionMustBe({error("error"); 1 must_== 2}, "x this example")
   def e5 = descriptionMustBe(Pending("pending"), "o this example")
   def e6 = messageMustBe(1 must_== 2, "  '1' is not equal to '2'")
-  
   def e7 = reportStartsWith(level1)(level1Output)
 
   def e8 = reportStartsWith(level1and2)(
@@ -68,7 +67,7 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
     level3Output.map("  " + _))
 
   def e10 = reportStartsWith(level1 ^^ level1)(level1Output ++ List("") ++ level1Output)
-  def e11 = reportEndsWith(level1)(level1Stats)
+  def e11 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
 
 }
 trait ReportExpectations extends Expectations with ExamplesBuilder {
@@ -76,6 +75,7 @@ trait ReportExpectations extends Expectations with ExamplesBuilder {
 	report(examples).mkString("\n", "\n", "\n").startsWith(output.mkString("\n", "\n", "\n")) must_== true
   }
   def reportEndsWith(examples: Examples)(output: List[String]) = {
+//	Console.println(report(examples).mkString("\n", "\n", "\n"))// + "\n" +output.mkString("\n", "\n", "\n"))  
 	report(examples).mkString("\n", "\n", "\n").endsWith(output.mkString("\n", "\n", "\n")) must_== true
   }
   def reportIs(examples: Examples)(output: List[String]) = {
