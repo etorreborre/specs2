@@ -22,21 +22,22 @@ The following examples specify the behavior for the display of a single example
 and for the display of nested examples:
 """^
   "A single example must"^
-    "have its description printed out" ~ e1^
-    "be reported with a + if it is successful" ~ e2^
-    "be reported with a x if it has a failure" ~ e3^
-    "be reported with a x if it has a error" ~ e4^
-    "be reported with a o if it is skipped or pending" ~ e5^
-    "have the failure message displayed if it failed" ~ e6^
+    "have its description printed out" ! e1^
+    "be reported with a + if it is successful" ! e2^
+    "be reported with a x if it has a failure" ! e3^
+    "be reported with a x if it has a error" ! e4^
+    "be reported with a o if it is skipped or pending" ! e5^
+    "have the failure message displayed if it failed" ! e6^
   par^  
   "Nested examples must be displayed as a tree"^
-    "if a text starts a list of examples, there is one level" ~ e7^
-    "if 2 text fragments start a list of examples, there are two levels" ~ e8^
-    "if it is necessary to 'restart' the levels, ^^ must be used to separate the fragments" ~ e9^
-    "when ^^ is used to restart example a line is skipped as starting a new paragraph" ~ e10
+    "if a text starts a list of examples, they are indented to one level" ! e7^
+    "if 2 text fragments start a list of examples, examples are indented to two levels" ! e8^
+    "if it is necessary to 'restart' the levels to zero, " +
+    "^^ must be used to separate the groups of examples" ! e9^
+    "when ^^ is used to restart example a line is skipped as starting a new paragraph" ! e10
 }
 
-trait ConsoleReporterSpecImplementation extends Specification {
+trait ConsoleReporterSpecImplementation extends Specification with InputSpecs with ExpectedOutputs {
   def e1 = descriptionMustBe(1 must_== 1, "+ this example")
   def e2 = descriptionMustBe(1 must_== 1, "+ this example")
   def e3 = descriptionMustBe(1 must_== 2, "x this example")
@@ -44,79 +45,79 @@ trait ConsoleReporterSpecImplementation extends Specification {
   def e5 = descriptionMustBe(Pending("pending"), "o this example")
   def e6 = messageMustBe(1 must_== 2, "  '1' is not equal to '2'")
   
-  val success = Success("ok")
-  val failure = Failure("failure")
-  val level1 = 
-	"multi-level1.1"^
-      "ex1" ~ success^
-      "ex2" ~ success
-  def e7 = reportIs(level1)(List(
-    "multi-level1.1",
-    "  + ex1",
-    "  + ex2"))
+  def e7 = reportIs(level1)(level1Output)
 
-  val level2 = 
-  "examples are"^
-    level1^
-    "multi-level1.2"^
-      "ex1" ~ failure^
-      "ex2" ~ success
-	  
-  def e8 = reportIs(level2)(List(
-    "examples are",
-    "  multi-level1.1",
-    "    + ex1",
-    "    + ex2",
-    "  multi-level1.2",
-    "    x ex1",
-    "      failure",
-    "    + ex2"))
+  def e8 = reportIs(level1and2)(
+    List("examples are") ++
+    level1Output.map("  " + _) ++ 
+    level2Output.map("  " + _))
 
   val examplesWithResetToLevel0 =
-  level2^^
+  level1and2^^
   "an other example is"^
-    "multi-level2.1"^
-      "ex1" ~ success^
-      "ex2" ~ success
+  level3
 
-  def e9 = reportIs(examplesWithResetToLevel0)(List(
-    "examples are",
-    "  multi-level1.1",
-    "    + ex1",
-    "    + ex2",
-    "  multi-level1.2",
-    "    x ex1",
-    "      failure",
-    "    + ex2",
-    "",
-    "an other example is",
-    "  multi-level2.1",
-    "    + ex1",
-    "    + ex2"))
+  def e9 = reportIs(examplesWithResetToLevel0)(
+    List("examples are") ++
+    level1Output.map("  " + _) ++ 
+    level2Output.map("  " + _) ++
+    List("") ++
+    List("an other example is") ++
+    level3Output.map("  " + _))
 
-  def e10 = reportIs(level1 ^^ level1)(List(
-    "multi-level1.1",
-    "  + ex1",
-    "  + ex2",
-    "",
-    "multi-level1.1",
-    "  + ex1",
-    "  + ex2"))
-
-    
+  def e10 = reportIs(level1 ^^ level1)(level1Output ++ List("") ++ level1Output)
+  
   def reportIs(examples: Examples)(output: List[String]) = {
 	report(examples).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
   }
   def descriptionMustBe(body: =>Result, description: String) = {
-	report("this example" ~ body).head must_== description 
+	report("this example" ! body).head must_== description 
   }
   def messageMustBe(body: Result, message: String) = {
-	report("this example" ~ body)(1) must_== message 
+	report("this example" ! body)(1) must_== message 
   }
   def report(ex: Example): List[String] = report(Examples(List(ex))) 
   def report(ex: Examples): List[String] = {
 	val reporter = new ConsoleReporter with MockOutput
 	reporter.report(ex)
 	reporter.messages.toList
- }
+  }
+}
+trait InputSpecs extends ExamplesBuilder {
+  val success = Success("ok")
+  val failure = Failure("failure")
+  
+  val level1 = 
+	"level1"^
+      "ex1" ! success^
+      "ex2" ! success
+  val level2 = 
+    "level2"^
+      "ex1" ! failure^
+      "ex2" ! success
+  val level3 = 
+	"level3"^
+      "ex1" ! success^
+      "ex2" ! success
+
+  val level1and2 = 
+  "examples are"^
+    level1^
+    level2
+}
+trait ExpectedOutputs {
+
+  val level1Output = List(
+    "level1",
+    "  + ex1",
+    "  + ex2")
+  val level2Output = List(
+    "level2",
+    "  x ex1",
+    "    failure",
+    "  + ex2")
+  val level3Output = List(
+    "level3",
+    "  + ex1",
+    "  + ex2")
 }

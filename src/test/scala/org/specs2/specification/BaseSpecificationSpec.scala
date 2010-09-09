@@ -10,8 +10,8 @@ class BaseSpecificationSpec extends Specification {
      object ReverseSpec extends Specification { 
        val spec = 
        "A reverse function can reverse a string"^
-       "if the string is empty, it return an empty string" ~ e1
-       "if the string is not empty, it returns the reversed string" ~ e2
+       "if the string is empty, it return an empty string" ! e1
+       "if the string is not empty, it returns the reversed string" ! e2
        def e1 = reverse("") must_== ""
        def e2 = reverse("abc") must_== "bca"
     

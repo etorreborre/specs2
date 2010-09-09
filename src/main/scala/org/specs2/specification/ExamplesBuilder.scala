@@ -9,6 +9,6 @@ trait ExamplesBuilder {
   implicit def group(examples: Examples) = Group(examples.fragments)
   implicit def group(fragments: List[Fragment]) = Group(fragments)
   class ExampleDesc(s: String) {
-	def ~(t: =>Result) = new Example(s, body = Some(() => t))
+	def !(t: =>Result) = new Example(s, body = Some(() => t))
   }
 }
