@@ -5,8 +5,7 @@ import specification._
 trait LevelParser {
   type T
   def initial: T
-  val currentLevel: Function[(T, Fragment), Int]
-  val updateLevel: Function[(T, Fragment), T]
+  val level: Function[(T, Fragment), (Int, T)]
 }
 trait ALevelParser {
   type Level = levelParser.T
@@ -14,14 +13,19 @@ trait ALevelParser {
 }
 trait NestedLevels extends LevelParser {
   case class Level(level: Int = 0, state: Direction = Up, lastNode: LastNode = Txt)
-  def initial = Level()
   type T = Level
-  val currentLevel: Function[(T, Fragment), Int] = { 
+
+  def initial = Level()
+  
+  val level: Function[(T, Fragment), (Int, T)] = {
+	case p => (currentLevel(p), updateLevel(p))
+  }
+  private val currentLevel: Function[(T, Fragment), Int] = { 
 	case (a, f @ Text(s)) if (a.state == Down && a.lastNode == Ex) => (a.level - 1)
 	case (a, f) => a.level
   }
   
-  val updateLevel: Function[(T, Fragment), T] = {
+  private val updateLevel: Function[(T, Fragment), T] = {
 	case (a, `end`) => initial
 	case (a, `par`) => a
 	case (a, `br`) => a

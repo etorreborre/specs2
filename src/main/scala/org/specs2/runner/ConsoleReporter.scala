@@ -23,7 +23,10 @@ trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with A
   def initial = levelParser.initial
   
   val execute: Function[(T, Fragment), ((Int, ExecutedFragment), T)] = {
-	case p @ (a, f) => ((levelParser.currentLevel(p), executor.execute(f)), levelParser.updateLevel(p))
+	case p @ (a, f) => {
+	  val level = levelParser.level(p)
+	  ((level._1, executor.execute(f)), level._2)
+	}
   }
 }
 
