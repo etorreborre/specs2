@@ -12,9 +12,9 @@ class Expectable[T](t: =>T) {
   }
   def q(a: Any) = "'"+a+"'"
 }
-sealed trait Result { def message: String }
-case class Success(message: String = "") extends Result
-case class Failure(message: String = "") extends Result
-case class Error(message: String = "") extends Result
-case class Pending(message: String = "") extends Result
-case class Skipped(message: String = "") extends Result
+sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1)
+case class Success(m: String = "")  extends Result(m)
+case class Failure(m: String = "")  extends Result(m)
+case class Error  (m: String = "")  extends Result(m)
+case class Pending(m: String = "")  extends Result(m)
+case class Skipped(m: String = "")  extends Result(m)

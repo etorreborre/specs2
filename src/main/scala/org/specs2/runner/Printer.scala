@@ -17,9 +17,16 @@ trait NestedPrinter extends Printer with TotalStatistics {
 	    printMessage(level + 1, result)
 	  }
 	  case (_, _, ExecutedPar()) => println("")
-	  case (_, Stats(examplesNumber), ExecutedSpecEnd(n)) => {
+	  case (_, Stats(examples, expectations, failures, errors, pending, skipped), ExecutedSpecEnd(n)) => {
 	    println("\nTotal for specification" + (if (n.isEmpty) n else " "+n))
-	    println(examplesNumber qty "example")
+	    println((
+	      List(
+	        examples qty "example", 
+	        expectations qty "expectation",
+	        failures qty "failure",
+	        errors qty "error") ++
+	        (0 until pending).map(pending qty "pending") ++
+	        (0 until skipped).map(skipped qty "skipped")).mkString(", "))
 	  }
 	  case _ => ()
     }

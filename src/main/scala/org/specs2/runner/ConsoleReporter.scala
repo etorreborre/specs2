@@ -9,11 +9,11 @@ trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with N
   with TotalStatistics {
   
   /**
-   *                          (Level[Int], ExecutedFragment) -> print
+   *                          (Level[Int], Stats, ExecutedFragment) -> print
    *                        /       
-   * (T, Fragment) -> level                                       x
+   * (T, Fragment) -> level                                              x
    *                        \
-   *                          updated[T]                     -> identity -> T
+   *                          updated[T]                            -> identity -> T
    * 
    */
   lazy val folder: Function2[T, Fragment, T] = {

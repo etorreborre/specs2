@@ -41,7 +41,8 @@ The following examples specify the behavior for:
     "when ^^ is used to restart example a line is skipped as starting a new paragraph" ! e10^
   par^  
   "At the end of the report"^
-    "the total number of examples must be displayed" ! e11
+    "the total number of examples must be displayed" ! e11^
+    "the total number of failures must be displayed" ! e12
 }
 
 trait ConsoleReporterSpecImplementation extends Specification with InputSpecs with ExpectedOutputs with ReportExpectations {
@@ -68,14 +69,13 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
 
   def e10 = reportStartsWith(level1 ^^ level1)(level1Output ++ List("") ++ level1Output)
   def e11 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
-
+  def e12 = reportEndsWith(level2 ^ SpecEnd(""))(level2Stats)
 }
 trait ReportExpectations extends Expectations with ExamplesBuilder {
   def reportStartsWith(examples: Examples)(output: List[String]) = {
 	report(examples).mkString("\n", "\n", "\n").startsWith(output.mkString("\n", "\n", "\n")) must_== true
   }
   def reportEndsWith(examples: Examples)(output: List[String]) = {
-//	Console.println(report(examples).mkString("\n", "\n", "\n"))// + "\n" +output.mkString("\n", "\n", "\n"))  
 	report(examples).mkString("\n", "\n", "\n").endsWith(output.mkString("\n", "\n", "\n")) must_== true
   }
   def reportIs(examples: Examples)(output: List[String]) = {
@@ -138,6 +138,9 @@ trait ExpectedOutputs {
     "  + ex2")
   val level1Stats = List(
     "Total for specification",
-    "2 examples")
+    "2 examples, 2 expectations, 0 failure, 0 error")
     
+  val level2Stats = List(
+    "Total for specification",
+    "2 examples, 2 expectations, 1 failure, 0 error")
 }
