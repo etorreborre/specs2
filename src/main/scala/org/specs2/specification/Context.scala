@@ -1,10 +1,17 @@
 package org.specs2
 package specification
 
-trait Context extends BeforeContext with AfterContext {
+trait BeforeAfter extends Before with After {
   override def apply[T](a: =>T) = {
 	before
 	try { a	 } 
+	finally { after }
+  }  	
+}
+trait BeforeAfterAround extends Before with After with Around {
+  override def apply[T](a: =>T): T = {
+	before
+	try { around(a)	 } 
 	finally { after }
   }  	
 }

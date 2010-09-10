@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-trait AfterContext {
+trait After {
   def after: Any
   def apply[T](a: =>T) = {
 	try { a	 } 
