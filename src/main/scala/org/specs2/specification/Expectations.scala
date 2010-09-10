@@ -12,9 +12,3 @@ class Expectable[T](t: =>T) {
   }
   def q(a: Any) = "'"+a+"'"
 }
-sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1)
-case class Success(m: String = "")  extends Result(m)
-case class Failure(m: String = "")  extends Result(m)
-case class Error  (m: String = "")  extends Result(m)
-case class Pending(m: String = "")  extends Result(m)
-case class Skipped(m: String = "")  extends Result(m)

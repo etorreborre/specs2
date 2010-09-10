@@ -4,6 +4,7 @@ import java.io._
 
 /**
  * The FileReader trait provides functions to read files
+ * It can be overriden if necessary to mock that behaviour
  */
 trait FileReader {
 

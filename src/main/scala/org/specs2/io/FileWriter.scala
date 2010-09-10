@@ -5,16 +5,17 @@ import java.io._
 
 /**
  * The FileWriter trait provides functions to write files
+ * It can be overriden if necessary to mock that behaviour
  */
 trait FileWriter {
 
   /**
    * writes some content to a file and take care of closing the file.<p>
-   * Usage: <pre>
+   * Usage: <code>
    * write("./dir/hello.txt") { out =>
    *   out.write("content")
    * }
-   * </pre>
+   * </code>
    * @param path path of the file to write
    */
   def write(path: String)(function: Writer => Unit): Unit = {
