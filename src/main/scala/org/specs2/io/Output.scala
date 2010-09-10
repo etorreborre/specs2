@@ -14,6 +14,10 @@ trait Output {
    */
   def println(m: Any) = printf("%s\n", m)
   /**
+   * prints an object with no newline
+   */
+  def print(m: Any) = this.printf("%s", m)
+  /**
    * flushes the content if necessary
    */
   def flush() = {}
