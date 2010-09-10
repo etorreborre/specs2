@@ -1,4 +1,5 @@
-package org.specs2.specification
+package org.specs2
+package specification
 
 trait AfterContext {
   def after: Any
@@ -7,3 +8,4 @@ trait AfterContext {
 	finally { after }
   }  
 }
+
