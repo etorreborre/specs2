@@ -2,7 +2,6 @@ package org.specs2
 package runner
 import specification._
 import io._
-import function._
 import scalaz.Scalaz._
 
 trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with NestedPrinter with NestedLevels 
