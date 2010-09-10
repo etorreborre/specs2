@@ -1,6 +1,7 @@
 package org.specs2
 package runner
 import specification._
+import io._
 
 class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
  val examples = 

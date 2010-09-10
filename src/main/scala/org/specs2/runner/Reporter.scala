@@ -19,9 +19,4 @@ trait Folder {
 trait AReporter {
   val reporter: Reporter
 }
-import scala.collection.mutable.ListBuffer
 
-trait MockOutput extends Output {
-  val messages: ListBuffer[String] = new ListBuffer
-  override def println(m: String): Unit = messages += m
-}
