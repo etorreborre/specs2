@@ -13,9 +13,9 @@ trait MustExpectations {
 trait Expectable[T] {
   protected[specs2] val description: Option[String] = None
   /** @return the description of the matched value, quoted. */
-  protected def d(value: Any) = description match {
+  protected def d(value: Any) = description  match {
     case None => q(value)
-    case Some(desc: String) => desc + " " + q(value)
+    case Some(desc: String) => desc + (if (!value.toString.isEmpty) " " + q(value) else "")
   }
   /** @return the description of the matched value, unquoted. */
   protected def dUnquoted(value: Any) = description match {
