@@ -4,7 +4,6 @@ import specification._
 import io._
 
 class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
-	override def args = "xonly"
  val examples = 
 """
 A console reporter is used to execute examples and display their status in the Console.

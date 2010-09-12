@@ -2,6 +2,7 @@ package org.specs2
 import specification._
 
 class FeaturesSpec extends Specification with FeaturesResults {
+  override def args = "pending"
   val examples = 
 """
  These are the list of features to develop / port for specs2.
@@ -22,8 +23,8 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "with stacktraces" ! done^
       "with output configuration"^
         "no-stacktraces" ! done^
-        "fail only" ! todo^
-        "pending only" ! todo^
+        "fail only" ! done^
+        "pending only" ! done^
         "examples filter" ! todo^
     "A specs file runner"^
       "reporter all classes on the path" ! done^

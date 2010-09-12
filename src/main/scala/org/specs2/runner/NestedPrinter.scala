@@ -7,11 +7,11 @@ trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
 
   val print: Function[(Int, Stats, ExecutedFragment), ExecutedFragment] = { p: (Int, Stats, ExecutedFragment) => 
 	p match { 
-  	  case (level, stats, ExecutedText(s)) => if (!configuration.failOnly) printText(level, s)
+  	  case (level, stats, ExecutedText(s)) => if (configuration.text) printText(level, s)
 	  case (level, stats, ExecutedResult(s, result)) => printResult(level, s, result)
-	  case (level, _, ExecutedPar()) => if (!configuration.failOnly) printPar(level)
+	  case (level, _, ExecutedPar()) => if (configuration.text) printPar(level)
 	  case (level, stats, end @ ExecutedSpecEnd(_)) => printStats(level, stats, end)
-	  case (level, stats, fragment) => if (!configuration.failOnly) printOther(level, stats, fragment)
+	  case (level, stats, fragment) => if (configuration.text) printOther(level, stats, fragment)
     }
 	p._3
   }
@@ -26,9 +26,9 @@ trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
 	 	if (configuration.printStackTrace)
 	 	  e.stackTrace.foreach(t => printWithLevel(level, t.toString))
 	  }
-      case r: Success => if (!configuration.failOnly) println(description)
-      case r: Pending => if (!configuration.failOnly) println(description + " " + result.message)
-      case r: Skipped => if (!configuration.failOnly) {
+      case r: Success => if (configuration.text) println(description)
+      case r: Pending => if (configuration.pending) println(description + " " + result.message)
+      case r: Skipped => if (configuration.text) {
     	println(description)
 	 	printWithLevel(level, result.message)
       }
