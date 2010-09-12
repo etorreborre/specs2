@@ -1,6 +1,7 @@
 package org.specs2
 package runner
 import specification._
+import execute._
 import text.Plural._
 
 trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {

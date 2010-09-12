@@ -1,5 +1,7 @@
 package org.specs2
 package specification
+import execute._
+
 trait AnExecutor {
   val executor: ExampleExecution = new ExampleExecution {}
 }

@@ -1,5 +1,5 @@
 package org.specs2
-package specification
+package execute
 
 sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1)
 case class Success(m: String = "")  extends Result(m)

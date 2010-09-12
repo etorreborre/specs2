@@ -2,6 +2,7 @@ package org.specs2
 package runner
 import specification._
 import io._
+import execute._
 
 class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
  val examples = 
@@ -74,7 +75,7 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
   def stat1 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
   def stat2 = reportEndsWith(level2WithFailure ^ SpecEnd(""))(level2WithFailureStats)
 }
-trait ReportExpectations extends Expectations with ExamplesBuilder {
+trait ReportExpectations extends MustExpectations with ExamplesBuilder {
   def reportStartsWith(examples: Examples)(output: List[String]) = {
 	report(examples).mkString("\n", "\n", "\n").startsWith(output.mkString("\n", "\n", "\n")) must_== true
   }

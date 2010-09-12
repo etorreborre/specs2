@@ -1,4 +1,5 @@
-package org.specs2.specification
+package org.specs2
+package execute
 
 trait FeaturesResults {
   def done = Success("DONE")

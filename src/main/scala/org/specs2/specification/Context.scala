@@ -1,5 +1,6 @@
 package org.specs2
 package specification
+import execute._
 
 trait BeforeAfter extends Before with After {
   override def apply[T <: Result](a: =>T) = {

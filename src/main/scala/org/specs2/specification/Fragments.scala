@@ -1,5 +1,6 @@
 package org.specs2
 package specification
+import execute._
 
 sealed trait Fragment
 case class SpecStart(name: String) extends Fragment

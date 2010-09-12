@@ -1,6 +1,7 @@
 package org.specs2
 package runner
 import specification._
+import execute._
 
 trait Statistics {
   type S

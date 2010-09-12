@@ -1,5 +1,6 @@
 package org.specs2
 package specification
+import execute._
 
 class ExampleIsolationSpec extends Specification with FeaturesResults with UserInteractions {
   val examples = 
@@ -40,7 +41,7 @@ par^
 	def e4 = { local must_== 0; local2 must_== 0 } 
   }
 }
-trait UserInteractions extends FeaturesResults with Expectations {
+trait UserInteractions extends FeaturesResults with MustExpectations {
   class Login {
     var loggedIn = false
 	def login = loggedIn = true

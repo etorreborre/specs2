@@ -2,6 +2,7 @@ package org.specs2
 package io
 import java.io.File
 import specification._
+import execute._
 
 class FileWriterSpec extends Specification {
   val examples = 

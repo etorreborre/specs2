@@ -1,6 +1,7 @@
 package org.specs2
 package specification
 import control.Exceptions._
+import execute._
 
 trait Before {
   def before: Any

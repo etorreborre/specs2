@@ -1,6 +1,7 @@
 package org.specs2
 package specification
 import io._
+import execute._
 
 class ContextSpec extends Specification with FeaturesResults with ContextData with ExampleExecution {
   val examples = """

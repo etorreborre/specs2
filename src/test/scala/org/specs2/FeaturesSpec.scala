@@ -1,5 +1,6 @@
 package org.specs2
 import specification._
+import execute._
 
 class FeaturesSpec extends Specification with FeaturesResults {
   override def args = "pending"

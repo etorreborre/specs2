@@ -1,5 +1,6 @@
 package org.specs2
 package specification
+import execute._
 import control.Exceptions._
 
 trait After {

@@ -2,7 +2,7 @@ package org.specs2
 import specification._
 import runner._
 
-trait Specification extends ExamplesBuilder with Expectations with AConsoleReporter with Main {
+trait Specification extends ExamplesBuilder with MustExpectations with AConsoleReporter with Main {
   val examples: Examples
   def include(s: Specification) =  group(examples.fragments)
   override def main(args: Array[String]): Unit = reporter.report(this)
