@@ -30,7 +30,9 @@ br^
   "execute a method after the second example" ! c(e6)^
 "If the after method throws an exception"^
   "the first example will execute" ! c(e7)^
-  "the first example will be reported as an error" ! c(e8)
+  "the first example will be reported as an error" ! c(e8)^
+"The Around trait can be used to"^
+  "execute the example inside a user provided function" ! c(e9)
   
   def e1 = executing(ex1Before)("before", "e1")
   def e2 = executing(ex1_2Before)("before", "e1", "before", "e2")
@@ -41,6 +43,7 @@ br^
   def e6 = executing(ex1_2After)("e1", "after", "e2", "after")
   def e7 = executing(ex1_afterFail)("e1")
   def e8 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
+  def e9 = executing(ex1Around)("around", "e1")
 
   def executing(exs: Examples)(messages: String*) = {
 	executeBodies(exs)
@@ -63,6 +66,12 @@ trait ContextData extends FeaturesResults with ExamplesBuilder {
   object a2 extends After {
 	def after = Predef.error("error")
   }
+  object ar extends Around {
+	def around[T <: Result](a: =>T): T = {
+	  c.println("around")
+	  a
+	} 
+  }
   def ex1Before = "ex1" ! b { c.println("e1"); success } 
   def ex1_beforeFail = "ex1" ! b2 { c.println("e1"); success } 
   def ex1_2Before = (ex1Before ^ "ex2" ! b { c.println("e2"); success })
@@ -70,4 +79,6 @@ trait ContextData extends FeaturesResults with ExamplesBuilder {
   def ex1After = "ex1" ! a { c.println("e1"); success } 
   def ex1_afterFail = "ex1" ! a2 { c.println("e1"); success } 
   def ex1_2After = (ex1After ^ "ex2" ! a { c.println("e2"); success })
+
+  def ex1Around = "ex1" ! ar { c.println("e1"); success } 
 }
