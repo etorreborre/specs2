@@ -24,9 +24,9 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "for strings" ! todo^
       "for iterables" ! todo^
     "Spec for before/after/around"^
-      "before/after" ! todo^
+      "before/after" ! done^
       "example isolation" ! todo^
-      "around" ! todo^
+      "around" ! done^
       "first/last" ! todo^
       "beforeSpec/afterSpec" ! todo^
     "A literate specs environment"^
