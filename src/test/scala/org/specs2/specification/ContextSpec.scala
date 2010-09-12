@@ -34,20 +34,22 @@ br^
 "The Around trait can be used to"^
   "execute the example inside a user provided function" ! c(e9)
   
-  def e1 = executing(ex1Before)("before", "e1")
-  def e2 = executing(ex1_2Before)("before", "e1", "before", "e2")
-  def e3 = executing(ex1_beforeFail)()
+  def e1 = executing(ex1Before).prints("before", "e1")
+  def e2 = executing(ex1_2Before).prints("before", "e1", "before", "e2")
+  def e3 = executing(ex1_beforeFail).prints()
   def e4 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
   
-  def e5 = executing(ex1After)("e1", "after")
-  def e6 = executing(ex1_2After)("e1", "after", "e2", "after")
-  def e7 = executing(ex1_afterFail)("e1")
+  def e5 = executing(ex1After).prints("e1", "after")
+  def e6 = executing(ex1_2After).prints("e1", "after", "e2", "after")
+  def e7 = executing(ex1_afterFail).prints("e1")
   def e8 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
-  def e9 = executing(ex1Around)("around", "e1")
+  def e9 = executing(ex1Around).prints("around", "e1")
 
-  def executing(exs: Examples)(messages: String*) = {
-	executeBodies(exs)
-	c.messages must_== List(messages:_*)
+  def executing(exs: Examples): Executed = Executed(executeBodies(exs))
+  case class Executed(r: List[Result]) {
+	def prints(messages: String*) = {
+	  c.messages must_== List(messages:_*)
+    }  
   }
 }
 trait ContextData extends FeaturesResults with ExamplesBuilder {
