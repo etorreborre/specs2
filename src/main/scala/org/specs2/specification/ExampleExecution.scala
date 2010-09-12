@@ -4,16 +4,22 @@ trait AnExecutor {
   val executor: ExampleExecution = new ExampleExecution {}
 }
 trait ExampleExecution {
-  def execute(body: () => Result): Result = {
+  def execute(body: =>Result): Result = {
 	try {
-	  body() 
+	  body
 	} catch {
-	  case e: Exception => Error(e.getMessage + e.getStackTraceString)
+	  case e: Exception => Error(e)
 	}
   }
-  val execute: PartialFunction[Fragment, ExecutedFragment] = { 
+  def executeBodies(exs: Examples): List[Result] = {
+    ((Nil:List[Result]) /: exs.examples) { (res: List[Result], ex: Example) =>
+      executeBody(ex) :: res 
+    }
+  }
+  def executeBody(ex: Example): Result = ex.body.map(b => execute(b())).getOrElse(Success("ok"))
+  val execute: Function[Fragment, ExecutedFragment] = { 
 	case Text(s) => ExecutedText(s)
-	case e @ Example(s, Some(body)) => ExecutedResult(s, execute(body))
+	case e @ Example(s, _) => ExecutedResult(s, executeBody(e))
 	case `br` => ExecutedBr()
 	case `par` => ExecutedPar()
 	case SpecStart(n) => ExecutedSpecStart(n)

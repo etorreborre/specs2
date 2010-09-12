@@ -1,7 +1,7 @@
 package org.specs2
 import specification._
 
-class FeaturesSpec extends Specification {
+class FeaturesSpec extends Specification with FeaturesResults {
   val examples = 
 """
  These are the list of features to develop / port for specs2.
@@ -19,6 +19,7 @@ class FeaturesSpec extends Specification {
   "High priority"^
     "A Console reporter"^
       "with statistics" ! done^
+      "with stacktraces" ! todo^
     "Matchers"^
       "for strings" ! todo^
       "for iterables" ! todo^
@@ -44,6 +45,4 @@ class FeaturesSpec extends Specification {
     "Detailed diffs"^
       "non mutable version"    ! todo
     
-    val done = Success("DONE")
-    val todo = Pending("TODO")
 }

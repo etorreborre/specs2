@@ -1,9 +1,12 @@
 package org.specs2
 package specification
+import control.Exceptions._
 
 trait Before {
   def before: Any
-  def apply[T](a: =>T) = { before; a }
+  def apply[T <: Result](a: =>T): Result = { 
+	tryo(before)(Error(_)).left.getOrElse(a)
+  }
 }
 trait First extends LazyValues {
   val first: Lazy[_]

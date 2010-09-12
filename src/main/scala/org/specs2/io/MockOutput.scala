@@ -16,7 +16,7 @@ trait MockOutput extends Output {
   override def printf(s: String, args: Any*): Unit = {
 	val formatted = s format (args : _*)
 	if (formatted.endsWith("\n"))
-	  msgs += formatted
+	  msgs += formatted.dropRight(1)
 	else if (msgs.isEmpty)
 	  msgs += formatted
 	else {
@@ -25,4 +25,6 @@ trait MockOutput extends Output {
 	  msgs += (last + formatted)
 	}
   }
+  
+  def clear() = msgs.clear()
 }
