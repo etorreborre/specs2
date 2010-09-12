@@ -25,7 +25,7 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "for iterables" ! todo^
     "Spec for before/after/around"^
       "before/after" ! done^
-      "example isolation" ! todo^
+      "example isolation" ! done^
       "around" ! done^
       "first/last" ! done^
       "beforeSpec/afterSpec" ! done^
@@ -39,10 +39,10 @@ class FeaturesSpec extends Specification with FeaturesResults {
   par^    
   "Low priority"^
     "A Console reporter"^
-      "with a timer"    ! todo
-      "with colored output"    ! todo
-      "with intermediary stats where required"    ! todo
+      "with a timer" ! todo
+      "with colored output" ! todo
+      "with intermediary stats where required" ! todo
     "Detailed diffs"^
-      "non mutable version"    ! todo
+      "non mutable version" ! todo
     
 }
