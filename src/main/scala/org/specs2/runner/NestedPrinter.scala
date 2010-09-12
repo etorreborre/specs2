@@ -7,11 +7,11 @@ trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
 
   val print: Function[(Int, Stats, ExecutedFragment), ExecutedFragment] = { p: (Int, Stats, ExecutedFragment) => 
 	p match { 
-  	  case (level, stats, ExecutedText(s)) => printText(level, s)
+  	  case (level, stats, ExecutedText(s)) => if (!configuration.failOnly) printText(level, s)
 	  case (level, stats, ExecutedResult(s, result)) => printResult(level, s, result)
-	  case (level, _, ExecutedPar()) => printPar(level)
+	  case (level, _, ExecutedPar()) => if (!configuration.failOnly) printPar(level)
 	  case (level, stats, end @ ExecutedSpecEnd(_)) => printStats(level, stats, end)
-	  case (level, stats, fragment) => printOther(level, stats, fragment)
+	  case (level, stats, fragment) => if (!configuration.failOnly) printOther(level, stats, fragment)
     }
 	p._3
   }
@@ -20,10 +20,17 @@ trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
   def printResult(level: Int, s: String, result: Result) = {
  	val description = "  " * level + status(result) + " " + s
     result match {
-      case r: Pending => println(description + " " + result.message)
-      case _       => {
-     	println(description)
-     	printMessage(level + 1, result)
+	  case e: HasStackTrace => {
+	 	println(description)
+	 	printWithLevel(level, result.message)
+	 	if (configuration.printStackTrace)
+	 	  e.stackTrace.foreach(t => printWithLevel(level, t.toString))
+	  }
+      case r: Success => if (!configuration.failOnly) println(description)
+      case r: Pending => if (!configuration.failOnly) println(description + " " + result.message)
+      case r: Skipped => if (!configuration.failOnly) {
+    	println(description)
+	 	printWithLevel(level, result.message)
       }
     }
   }
@@ -44,17 +51,7 @@ trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
   }
   def printOther(level: Int, stats: Stats, fragment: ExecutedFragment) = ()
   
-  def printMessage(level: Int, result: Result) = {
-	result match {
-	  case e: HasStackTrace => {
-	 	printWithLevel(level, result.message)
-	 	if (configuration.printStackTrace)
-	 		e.stackTrace.foreach(t => printWithLevel(level, t.toString))
-	  }
-	  case _ => ()
-	}
-  }
-  def printWithLevel(level: Int, message: String) = println("  " * level + message) 
+  def printWithLevel(level: Int, message: String) = println("  " * (level + 1) + message) 
   
   def status(result: Result) = {
 	result match {
