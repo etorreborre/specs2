@@ -78,10 +78,10 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
 }
 trait ReportExpectations extends MustExpectations with ExamplesBuilder with Matchers {
   def reportStartsWith(examples: Examples)(output: List[String]) = {
-	report(examples).mkString("\n", "\n", "\n").startsWith(output.mkString("\n", "\n", "\n")) must_== true
+	report(examples).mkString("\n", "\n", "\n") must startWith(output.mkString("\n", "\n", "\n"))
   }
   def reportEndsWith(examples: Examples)(output: List[String]) = {
-	report(examples).mkString("\n", "\n", "\n").endsWith(output.mkString("\n", "\n", "\n")) must_== true
+	report(examples).mkString("\n", "\n", "\n") must endWith(output.mkString("\n", "\n", "\n"))
   }
   def reportIs(examples: Examples)(output: List[String]) = {
 	report(examples).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
@@ -93,7 +93,7 @@ trait ReportExpectations extends MustExpectations with ExamplesBuilder with Matc
 	report("this example" ! body)(1) must_== message 
   }
   def messagesContain(body: Result, message: String) = {
-	report("this example" ! body) must contain(message) 
+	report("this example" ! body) must containMatch(message) 
   }
   def report(ex: Example): List[String] = report(Examples(List(ex))) 
   def report(ex: Examples): List[String] = {
