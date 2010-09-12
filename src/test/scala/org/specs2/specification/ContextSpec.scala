@@ -23,28 +23,51 @@ All of this can be achieved in specs2 by using case classes which extend the fol
   "execute a method before the second example" ! c(e2)^
 "If the before method throws an exception"^
   "the first example will not execute" ! c(e3)^
-  "it will be reported as an error" ! c(e4)
+  "it will be reported as an error" ! c(e4)^
+br^
+"The After trait can be used to"^
+  "execute a method after the first example" ! c(e5)^
+  "execute a method after the second example" ! c(e6)^
+"If the after method throws an exception"^
+  "the first example will execute" ! c(e7)^
+  "the first example will be reported as an error" ! c(e8)
   
-  def e1 = executing(ex1)("before", "e1")(b)
-  def e2 = executing(ex1_2)("before", "e1", "before", "e2")(b)
-  def e3 = executing(ex1_beforeFail)()(b2)
+  def e1 = executing(ex1Before)("before", "e1")
+  def e2 = executing(ex1_2Before)("before", "e1", "before", "e2")
+  def e3 = executing(ex1_beforeFail)()
   def e4 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
-  def executing(exs: Examples)(messages: String*)(c: MockOutput) = {
+  
+  def e5 = executing(ex1After)("e1", "after")
+  def e6 = executing(ex1_2After)("e1", "after", "e2", "after")
+  def e7 = executing(ex1_afterFail)("e1")
+  def e8 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
+
+  def executing(exs: Examples)(messages: String*) = {
 	executeBodies(exs)
 	c.messages must_== List(messages:_*)
   }
 }
 trait ContextData extends FeaturesResults with ExamplesBuilder {
-  object c extends Before {
-	def before = b.clear()
+  object c extends Before with MockOutput {
+	def before = clear()
+  }
+  object b extends Before {
+	def before = c.println("before")
   }
   object b2 extends Before with MockOutput {
 	def before = Predef.error("error")
   }
-  object b extends Before with MockOutput {
-	def before = println("before")
+  object a extends After {
+	def after = c.println("after")
   }
-  def ex1 = "ex1" ! b { b.println("e1"); success } 
-  def ex1_beforeFail = "ex1" ! b2 { b2.println("e1"); success } 
-  def ex1_2: Examples = (ex1 ^ "ex2" ! b { b.println("e2"); success })
+  object a2 extends After {
+	def after = Predef.error("error")
+  }
+  def ex1Before = "ex1" ! b { c.println("e1"); success } 
+  def ex1_beforeFail = "ex1" ! b2 { c.println("e1"); success } 
+  def ex1_2Before = (ex1Before ^ "ex2" ! b { c.println("e2"); success })
+
+  def ex1After = "ex1" ! a { c.println("e1"); success } 
+  def ex1_afterFail = "ex1" ! a2 { c.println("e1"); success } 
+  def ex1_2After = (ex1After ^ "ex2" ! a { c.println("e2"); success })
 }
