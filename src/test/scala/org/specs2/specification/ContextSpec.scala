@@ -3,9 +3,9 @@ package specification
 import io._
 
 class ContextSpec extends Specification with FeaturesResults with ContextData with ExampleExecution {
-  val examples = 
-"""It is sometimes necessary to provide functions to "prepare" the specification before executing the examples and
-   clean it up afterwards. This may be for example:
+  val examples = """
+It is sometimes necessary to provide functions to "prepare" the specification before executing the examples and
+clean it up afterwards. This may be for example:
    * opening a database connection
    * inserting some data
    * executing the example
@@ -17,20 +17,24 @@ web application session.
 All of this can be achieved in specs2 by using case classes which extend the following traits:
    * Before
    * After
-   * Around"""^^
+   * Around
+"""^
 "The Before trait can be used to"^
   "execute a method before the first example" ! c(e1)^
   "execute a method before the second example" ! c(e2)^
+par^
 "If the before method throws an exception"^
   "the first example will not execute" ! c(e3)^
   "it will be reported as an error" ! c(e4)^
-br^
+par^
 "The After trait can be used to"^
   "execute a method after the first example" ! c(e5)^
   "execute a method after the second example" ! c(e6)^
+par^
 "If the after method throws an exception"^
   "the first example will execute" ! c(e7)^
   "the first example will be reported as an error" ! c(e8)^
+par^
 "The Around trait can be used to"^
   "execute the example inside a user provided function" ! c(e9)
   
