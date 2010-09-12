@@ -7,3 +7,6 @@ class Action {
 	tryo(a)(Error(_)).left.getOrElse(Success())  
   })
 }
+object Action {
+  def apply(a: =>Any) = new Action().apply(a)
+}

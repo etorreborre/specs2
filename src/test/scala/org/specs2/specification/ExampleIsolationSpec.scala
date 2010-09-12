@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-class ExampleIsolationSpec extends Specification with FeaturesResults {
+class ExampleIsolationSpec extends Specification with FeaturesResults with UserInteractions {
   val examples = 
 """ 
 This specification shows how to use case classes to ensure examples isolation.
@@ -17,8 +17,16 @@ object
 par^
 "The next 2 examples show that it is possible to 'nest' context by inheriting them"^
   "This example uses new local variables + the one from the parent context" ! c1().e3^
-  "And isolation is still ok for another example" ! c1().e4
-  
+  "And isolation is still ok for another example" ! c1().e4^
+par^
+"Now these examples model a fictive customer interaction"^
+  "The user logs in"^ 
+    "if he selects a car, then his favorite must be displayed" ! select.favoriteCar^
+    "if he selects an hotel, then his favorite must be displayed" ! select.favoriteHotel^
+  "The user logs out"^ 
+    "if he has selected a car, then it must be displayed" ! summary.carSelection
+
+
   trait Env {
 	var local = 0
 	var local2 = 0
@@ -30,5 +38,25 @@ par^
   case class c1() extends Env {
 	def e3 = { local += 1; local2 +=1; success } 
 	def e4 = { local must_== 0; local2 must_== 0 } 
+  }
+}
+trait UserInteractions extends FeaturesResults with Expectations {
+  class Login {
+    var loggedIn = false
+	def login = loggedIn = true
+	def logout = loggedIn = false
+  }
+  def select = new Select
+  class Select extends Login {
+	login
+	var selection = ""
+	def favoriteCar = { selection = "car"; loggedIn must_== true }
+	def favoriteHotel = { selection = "hotel"; loggedIn must_== true }
+  }
+  def summary = new Summary
+  class Summary extends Select {
+	favoriteCar
+	logout
+	def carSelection = loggedIn must_== false
   }
 }
