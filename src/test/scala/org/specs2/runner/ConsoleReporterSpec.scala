@@ -54,7 +54,7 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
   def single4 = descriptionMustBe({error("error"); 1 must_== 2}, "x this example")
   def single5 = descriptionMustBe(Pending("PENDING"), "o this example PENDING")
   def single6 = messageMustBe(1 must_== 2, "  '1' is not equal to '2'")
-  def single7 = messagesContain(1 must_== 2, "hello")//"ConsoleReporterSpec.scala")
+  def single7 = messagesContain(1 must_== 2, "ConsoleReporterSpec.scala")
   
   def nested1 = reportStartsWith(level1)(level1Output)
   def nested2 = reportStartsWith(level1and2)(

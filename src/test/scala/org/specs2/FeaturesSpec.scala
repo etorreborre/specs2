@@ -21,8 +21,14 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "with statistics" ! done^
       "with stacktraces" ! done^
       "with output configuration"^
-        "no-stacktraces" ! todo^
+        "no-stacktraces" ! done^
         "fail only" ! todo^
+        "pending only" ! todo^
+        "examples filter" ! todo^
+    "A specs file runner"^
+      "reporter all classes on the path" ! done^
+      "according to a regular expression" ! todo^
+      "reporting the final statistics" ! todo^
     "Matchers"^
       "for strings" ! todo^
       "for iterables" ! todo^
@@ -42,10 +48,15 @@ class FeaturesSpec extends Specification with FeaturesResults {
   par^    
   "Low priority"^
     "A Console reporter"^
-      "with a timer" ! todo
-      "with colored output" ! todo
-      "with intermediary stats where required" ! todo
+      "with a timer" ! todo^
+      "with colored output" ! todo^
+      "with intermediary stats where required" ! todo^
+    "StackTraces"^
+      "sanitized" ! todo^
     "Detailed diffs"^
-      "non mutable version" ! todo
-    
+      "non mutable version" ! todo^
+    "Configuration"^
+      "specify its behavior" ! todo^
+    "Command line arguments"^
+      "implement an easy to maintain system coherent with the config" ! todo
 }
