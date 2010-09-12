@@ -27,8 +27,8 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "before/after" ! done^
       "example isolation" ! todo^
       "around" ! done^
-      "first/last" ! todo^
-      "beforeSpec/afterSpec" ! todo^
+      "first/last" ! done^
+      "beforeSpec/afterSpec" ! done^
     "A literate specs environment"^
       "with an html reporter" ! todo^
       "with non mutable forms" ! todo^
