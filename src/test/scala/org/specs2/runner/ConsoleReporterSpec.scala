@@ -3,6 +3,7 @@ package runner
 import specification._
 import io._
 import execute._
+import matcher._
 
 class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
  val examples = 
@@ -75,7 +76,7 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
   def stat1 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
   def stat2 = reportEndsWith(level2WithFailure ^ SpecEnd(""))(level2WithFailureStats)
 }
-trait ReportExpectations extends MustExpectations with ExamplesBuilder {
+trait ReportExpectations extends MustExpectations with ExamplesBuilder with Matchers {
   def reportStartsWith(examples: Examples)(output: List[String]) = {
 	report(examples).mkString("\n", "\n", "\n").startsWith(output.mkString("\n", "\n", "\n")) must_== true
   }
@@ -92,7 +93,7 @@ trait ReportExpectations extends MustExpectations with ExamplesBuilder {
 	report("this example" ! body)(1) must_== message 
   }
   def messagesContain(body: Result, message: String) = {
-	report("this example" ! body).toString.contains(message) must_== true 
+	report("this example" ! body) must contain(message) 
   }
   def report(ex: Example): List[String] = report(Examples(List(ex))) 
   def report(ex: Examples): List[String] = {
