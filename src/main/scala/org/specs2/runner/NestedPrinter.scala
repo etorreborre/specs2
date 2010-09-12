@@ -46,10 +46,14 @@ trait NestedPrinter extends Printer with TotalStatistics {
   
   def printMessage(level: Int, result: Result) = {
 	result match {
-	  case Success(_) => ()
-	  case _ => println("  " * level + result.message)
+	  case e: HasStackTrace => {
+	 	printWithLevel(level, result.message)
+	 	e.stackTrace.foreach(t => printWithLevel(level, t.toString))
+	  }
+	  case _ => ()
 	}
   }
+  def printWithLevel(level: Int, message: String) = println("  " * level + message) 
   
   def status(result: Result) = {
 	result match {

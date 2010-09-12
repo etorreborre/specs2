@@ -27,40 +27,42 @@ The following examples specify the behavior for:
   * the display of statistics at the end
 """^
   "A single example must"^
-    "have its description printed out" ! e1^
-    "be reported with a + if it is successful" ! e2^
-    "be reported with a x if it has a failure" ! e3^
-    "be reported with a x if it has a error" ! e4^
-    "be reported with a o if it is skipped or pending" ! e5^
-    "have the failure message displayed if it failed" ! e6^
+    "have its description printed out" ! single1^
+    "be reported with a + if it is successful" ! single2^
+    "be reported with a x if it has a failure" ! single3^
+    "be reported with a x if it has a error" ! single4^
+    "be reported with a o if it is skipped or pending" ! single5^
+    "have the failure message displayed if it failed" ! single6^
+    "have the stacktrace displayed if it is a failure or an error" ! single7^
   par^  
   "Nested examples must be displayed as a tree"^
-    "if a text starts a list of examples, these examples are indented to one level" ! e7^
-    "if 2 text fragments start a list of examples, they are indented to two levels" ! e8^
+    "if a text starts a list of examples, these examples are indented to one level" ! nested1^
+    "if 2 text fragments start a list of examples, they are indented to two levels" ! nested2^
     "if it is necessary to 'restart' the levels to zero, " +
-    "^^ must be used to separate the groups of examples" ! e9^
-    "when ^^ is used to restart an example block, a line is skipped as if starting a new paragraph" ! e10^
+    "^^ must be used to separate the groups of examples" ! nested3^
+    "when ^^ is used to restart an example block, a line is skipped as if starting a new paragraph" ! nested4^
   par^  
   "At the end of the report"^
-    "the total number of examples must be displayed" ! e11^
-    "the total number of failures must be displayed" ! e12
+    "the total number of examples must be displayed" ! stat1^
+    "the total number of failures must be displayed" ! stat2
 }
 
 trait ConsoleReporterSpecImplementation extends Specification with InputSpecs with ExpectedOutputs with ReportExpectations {
-  def e1 = descriptionMustBe(1 must_== 1, "+ this example")
-  def e2 = descriptionMustBe(1 must_== 1, "+ this example")
-  def e3 = descriptionMustBe(1 must_== 2, "x this example")
-  def e4 = descriptionMustBe({error("error"); 1 must_== 2}, "x this example")
-  def e5 = descriptionMustBe(Pending("pending"), "o this example")
-  def e6 = messageMustBe(1 must_== 2, "  '1' is not equal to '2'")
-  def e7 = reportStartsWith(level1)(level1Output)
-
-  def e8 = reportStartsWith(level1and2)(
+  def single1 = descriptionMustBe(1 must_== 1, "+ this example")
+  def single2 = descriptionMustBe(1 must_== 1, "+ this example")
+  def single3 = descriptionMustBe(1 must_== 2, "x this example")
+  def single4 = descriptionMustBe({error("error"); 1 must_== 2}, "x this example")
+  def single5 = descriptionMustBe(Pending("PENDING"), "o this example PENDING")
+  def single6 = messageMustBe(1 must_== 2, "  '1' is not equal to '2'")
+  def single7 = messagesContain(1 must_== 2, "ConsoleReporterSpec.scala")
+  
+  def nested1 = reportStartsWith(level1)(level1Output)
+  def nested2 = reportStartsWith(level1and2)(
     List("examples are") ++
     level1Output.map("  " + _) ++ 
     level2Output.map("  " + _))
 
-  def e9 = reportStartsWith(examplesWithResetToLevel0)(
+  def nested3 = reportStartsWith(examplesWithResetToLevel0)(
     List("examples are") ++
     level1Output.map("  " + _) ++ 
     level2Output.map("  " + _) ++
@@ -68,9 +70,9 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
     List("an other example is") ++
     level3Output.map("  " + _))
 
-  def e10 = reportStartsWith(level1 ^^ level1)(level1Output ++ List("") ++ level1Output)
-  def e11 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
-  def e12 = reportEndsWith(level2 ^ SpecEnd(""))(level2Stats)
+  def nested4 = reportStartsWith(level1 ^^ level1)(level1Output ++ List("") ++ level1Output)
+  def stat1 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
+  def stat2 = reportEndsWith(level2WithFailure ^ SpecEnd(""))(level2WithFailureStats)
 }
 trait ReportExpectations extends Expectations with ExamplesBuilder {
   def reportStartsWith(examples: Examples)(output: List[String]) = {
@@ -88,6 +90,9 @@ trait ReportExpectations extends Expectations with ExamplesBuilder {
   def messageMustBe(body: Result, message: String) = {
 	report("this example" ! body)(1) must_== message 
   }
+  def messagesContain(body: Result, message: String) = {
+	report("this example" ! body).toString.contains(message) must_== true 
+  }
   def report(ex: Example): List[String] = report(Examples(List(ex))) 
   def report(ex: Examples): List[String] = {
 	val reporter = new ConsoleReporter with MockOutput
@@ -104,6 +109,10 @@ trait InputSpecs extends ExamplesBuilder {
       "ex1" ! success^
       "ex2" ! success
   val level2 = 
+    "level2"^
+      "ex1" ! success^
+      "ex2" ! success
+  val level2WithFailure = 
     "level2"^
       "ex1" ! failure^
       "ex2" ! success
@@ -130,6 +139,10 @@ trait ExpectedOutputs {
     "  + ex2")
   val level2Output = List(
     "level2",
+    "  + ex1",
+    "  + ex2")
+  val level2OutputWithFailure = List(
+    "level2",
     "  x ex1",
     "    failure",
     "  + ex2")
@@ -141,7 +154,7 @@ trait ExpectedOutputs {
     "Total for specification",
     "2 examples, 2 expectations, 0 failure, 0 error")
     
-  val level2Stats = List(
+  val level2WithFailureStats = List(
     "Total for specification",
     "2 examples, 2 expectations, 1 failure, 0 error")
 }
