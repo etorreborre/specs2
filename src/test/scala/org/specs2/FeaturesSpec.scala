@@ -32,7 +32,8 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "according to a regular expression" ! todo^
       "reporting the final statistics" ! todo^
     "Matchers"^
-      "for strings" ! todo^
+      "with logical combinators" ! todo^
+      "for strings" ! done^
       "for iterables" ! todo^
     "Spec for before/after/around"^
       "before/after" ! done^
