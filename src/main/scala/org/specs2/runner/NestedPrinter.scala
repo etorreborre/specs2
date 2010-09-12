@@ -3,7 +3,7 @@ package runner
 import specification._
 import text.Plural._
 
-trait NestedPrinter extends Printer with TotalStatistics {
+trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
 
   val print: Function[(Int, Stats, ExecutedFragment), ExecutedFragment] = { p: (Int, Stats, ExecutedFragment) => 
 	p match { 
@@ -48,7 +48,8 @@ trait NestedPrinter extends Printer with TotalStatistics {
 	result match {
 	  case e: HasStackTrace => {
 	 	printWithLevel(level, result.message)
-	 	e.stackTrace.foreach(t => printWithLevel(level, t.toString))
+	 	if (configuration.printStackTrace)
+	 		e.stackTrace.foreach(t => printWithLevel(level, t.toString))
 	  }
 	  case _ => ()
 	}

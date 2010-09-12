@@ -32,6 +32,8 @@ trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with N
   }
 }
 
-trait AConsoleReporter extends AReporter {
-  val reporter = new ConsoleReporter {}
+trait AConsoleReporter extends AReporter with Arguments {
+  lazy val reporter: Reporter = new ConsoleReporter {
+	override val configuration =  Configuration(arguments)
+  }
 }

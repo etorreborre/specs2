@@ -19,7 +19,10 @@ class FeaturesSpec extends Specification with FeaturesResults {
   "High priority"^
     "A Console reporter"^
       "with statistics" ! done^
-      "with stacktraces" ! todo^
+      "with stacktraces" ! done^
+      "with output configuration"^
+        "no-stacktraces" ! todo^
+        "fail only" ! todo^
     "Matchers"^
       "for strings" ! todo^
       "for iterables" ! todo^
