@@ -44,7 +44,12 @@ par^
   "execute a method before and after the first example" ! c(e10)^
 par^
 "The BeforeAfterAround trait can be used to"^
-  "execute a method before, around and after the first example" ! c(e11)
+  "execute a method before, around and after the first example" ! c(e11)^
+par^
+"An action can be introduced as a fragment"^
+  "it will execute by returning a result" ! c(e12)^
+  "if it executes ok, nothing is printed, it is a SilentSuccess" ! c(e13)^
+  "otherwise, it is reported as an Error" ! c(e14)
   
   def e1 = executing(ex1Before).prints("before", "e1")
   def e2 = executing(ex1_2Before).prints("before", "e1", "before", "e2")
@@ -58,6 +63,9 @@ par^
   def e9 = executing(ex1Around).prints("around", "e1")
   def e10 = executing(ex1BeforeAfter).prints("before", "e1", "after")
   def e11 = executing(ex1BeforeAfterAround).prints("before", "around", "e1", "after")
+  def e12 = executing(firstThenEx1).prints("first", "e1")
+  def e13 = executeBodies(silentFirstThenEx1).map(_.message) must_== List("success")
+  def e14 = executeBodies(failingFirstThenEx1).map(_.message) must_== List("error", "success")
 
   def executing(exs: Examples): Executed = Executed(executeBodies(exs))
   case class Executed(r: List[Result]) {
@@ -95,18 +103,24 @@ trait ContextData extends FeaturesResults with ExamplesBuilder {
 	def around[T <: Result](a: =>T): T = { c.println("around"); a } 
   }
 
-  def ex(name: String) = { c.println(name); success }
-  def ex1 = ex("e1")
-  def ex2 = ex("e2")
-  def ex1Before = "ex1" ! b(ex1)  
-  def ex1_beforeFail = "ex1" ! b2(ex1) 
-  def ex1_2Before = ex1Before ^ "ex2" ! b(ex2)
+  def ok(name: String) = { c.println(name); success }
+  def ok1 = ok("e1")
+  def ok2 = ok("e2")
+  def ex1 = "ex1" ! ok1  
+  def ex1Before = "ex1" ! b(ok1)  
+  def ex1_beforeFail = "ex1" ! b2(ok1) 
+  def ex1_2Before = ex1Before ^ "ex2" ! b(ok2)
 
-  def ex1After = "ex1" ! a(ex1) 
-  def ex1_afterFail = "ex1" ! a2(ex1) 
-  def ex1_2After = ex1After ^ "ex2" ! a(ex2)
+  def ex1After = "ex1" ! a(ok1) 
+  def ex1_afterFail = "ex1" ! a2(ok1) 
+  def ex1_2After = ex1After ^ "ex2" ! a(ok2)
 
-  def ex1Around = "ex1" ! ar(ex1) 
-  def ex1BeforeAfter = "ex1" ! ba(ex1) 
-  def ex1BeforeAfterAround = "ex1" ! baa(ex1) 
+  def ex1Around = "ex1" ! ar(ok1) 
+  def ex1BeforeAfter = "ex1" ! ba(ok1) 
+  def ex1BeforeAfterAround = "ex1" ! baa(ok1)
+  
+  val first = new Action
+  def firstThenEx1 = first(c.println("first")) ^ ex1
+  def silentFirstThenEx1 = first("first") ^ ex1
+  def failingFirstThenEx1 = first(Predef.error("error")) ^ ex1
 }

@@ -33,7 +33,7 @@ trait NestedLevels extends LevelParser {
 	 	}
 	  }
 	}
-	case (a, e @ Example(s, Some(body))) => {
+	case (a, e @ Example(s, body)) => {
 	  a.copy(state = Down, lastNode = Ex)
 	}
 	case (t, f) => t

@@ -7,4 +7,5 @@ case class Examples(fragments: List[Fragment]) {
   def ^(e: Group) = copy(fragments = this.fragments ++ e.fragments) 
   def ^^(examples: Examples) = copy(fragments = (this.fragments :+ end :+ par) ++ examples.fragments)
   def examples: List[Example] = fragments.collect { case ex: Example => ex }
+  def executables: List[Executable] = fragments.collect { case e: Executable => e }
 }

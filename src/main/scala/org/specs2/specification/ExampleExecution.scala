@@ -4,22 +4,29 @@ trait AnExecutor {
   val executor: ExampleExecution = new ExampleExecution {}
 }
 trait ExampleExecution {
-  def execute(body: =>Result): Result = {
+  def executeBody(body: =>Result): Result = {
 	try {
 	  body
 	} catch {
-	  case e: Exception => Error(e)
+	  case e => Error(e)
 	}
   }
   def executeBodies(exs: Examples): List[Result] = {
-    ((Nil:List[Result]) /: exs.examples) { (res: List[Result], ex: Example) =>
-      executeBody(ex) :: res 
+    ((Nil:List[Result]) /: exs.fragments) { (res: List[Result], e: Fragment) =>
+      execute(e) match {
+    	case r: ExecutedResult => res :+ r.result 
+    	case _ => res
+      }
     }
   }
-  def executeBody(ex: Example): Result = ex.body.map(b => execute(b())).getOrElse(Success("ok"))
+  
   val execute: Function[Fragment, ExecutedFragment] = { 
+	case e @ Example(s, _) => ExecutedResult(s, executeBody(e.execute))
+	case s @ Step(a) => executeBody(a()) match {
+	  case err @ Error(_) => ExecutedResult("action error", err)
+	  case _ => ExecutedNoText()	
+	}
 	case Text(s) => ExecutedText(s)
-	case e @ Example(s, _) => ExecutedResult(s, executeBody(e))
 	case `br` => ExecutedBr()
 	case `par` => ExecutedPar()
 	case SpecStart(n) => ExecutedSpecStart(n)
@@ -28,11 +35,11 @@ trait ExampleExecution {
   }
 }
 sealed trait ExecutedFragment
-case class ExecutedText(s: String) extends ExecutedFragment
-case class ExecutedResult(s: String, r: Result) extends ExecutedFragment
+case class ExecutedText(text: String) extends ExecutedFragment
+case class ExecutedResult(text: String, result: Result) extends ExecutedFragment
 case class ExecutedBr() extends ExecutedFragment
 case class ExecutedPar() extends ExecutedFragment
-case class ExecutedSpecStart(n: String) extends ExecutedFragment
-case class ExecutedSpecEnd(n: String) extends ExecutedFragment
+case class ExecutedSpecStart(name: String) extends ExecutedFragment
+case class ExecutedSpecEnd(name: String) extends ExecutedFragment
 case class ExecutedNoText() extends ExecutedFragment
 
