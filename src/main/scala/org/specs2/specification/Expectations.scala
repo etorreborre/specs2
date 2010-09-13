@@ -40,5 +40,8 @@ class ShouldExpectable[T](t: =>T) extends Expectable[T]{
 	if (a == b) Success(q(a) + " is equal to " + q(b)) 
 	else Failure(q(a) + " is not equal to " + q(b))
   }
-  def q(a: Any) = "'"+a+"'"
+  def q(a: Any) = a match {
+  	case b: Boolean => "the value"
+  	case _ => "'"+a+"'"
+  }
 }

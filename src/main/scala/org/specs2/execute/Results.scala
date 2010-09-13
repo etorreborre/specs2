@@ -20,3 +20,13 @@ trait HasStackTrace {
 }
 case class Pending(m: String = "")  extends Result(m)
 case class Skipped(m: String = "")  extends Result(m)
+
+trait MatchResult {
+  def not: Result with MatchResult
+}
+class MatchSuccess(val okMessage: String, val koMessage: String) extends Success(okMessage) with MatchResult {
+  def not = new MatchFailure(koMessage, okMessage)
+}
+class MatchFailure(val okMessage: String, val koMessage: String) extends Failure(new Exception(koMessage)) with MatchResult {
+  def not = new MatchSuccess(koMessage, okMessage)
+}

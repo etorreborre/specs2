@@ -20,7 +20,7 @@ class FileWriterSpec extends Specification {
     catch { case e => () }
     out.closed must_== true
   }
-  def e3 = {
+  def e3: Result = {
 	try { fw.write("filePath")(_ => error("bad")); Failure("an exception must be thrown") }
     catch { case e => { e.getMessage must_== "bad"} }
   }

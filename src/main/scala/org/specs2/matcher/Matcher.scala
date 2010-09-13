@@ -4,10 +4,13 @@ import specification._
 import execute._
 import AnyMatchers._
 
-trait Matcher[-T] {
-  def apply(t: =>T)(description: (Any => String) = q(_)): Result
-  protected def result(test: =>Boolean, okMessage: =>String, koMessage: =>String) = {
-	if (test) Success(okMessage) 
-	else Failure(koMessage)
+trait Matcher[-T] { outer =>
+  def apply(t: =>T)(description: (Any => String) = q(_)): Result with MatchResult
+  protected def result(test: =>Boolean, okMessage: =>String, koMessage: =>String): Result with MatchResult = {
+	if (test) new MatchSuccess(okMessage, koMessage) 
+	else new MatchFailure(koMessage, okMessage)
+  }
+  def not = new Matcher[T] {
+    def apply(a: => T)(d: Any => String) = outer(a)(d).not
   }
 }

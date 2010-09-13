@@ -70,7 +70,7 @@ par^
 
   def executing(exs: Examples): Executed = Executed(executeBodies(exs))
   case class Executed(r: List[Result]) {
-	def prints(messages: String*) = {
+	def prints(messages: String*): Result = {
 	  c.messages must_== List(messages:_*)
     }  
   }

@@ -1,6 +1,7 @@
 package org.specs2
 package specification
 import execute._
+import matcher._
 
 trait ExamplesBuilder {
   implicit def toExamples(e: Example): Examples = new Examples(List(e))
