@@ -15,7 +15,7 @@ trait Expectable[T] {
   /** @return the description of the matched value, quoted. */
   protected def d(value: Any) = description  match {
     case None => q(value)
-    case Some(desc: String) => desc + (if (!value.toString.isEmpty) " " + q(value) else "")
+    case Some(desc: String) => desc + (if (!value.toString.isEmpty && !isBoolean(value)) " " + q(value) else "")
   }
   /** @return the description of the matched value, unquoted. */
   protected def dUnquoted(value: Any) = description match {
@@ -39,9 +39,5 @@ class ShouldExpectable[T](t: =>T) extends Expectable[T]{
 	val (a, b) = (t, other)
 	if (a == b) Success(q(a) + " is equal to " + q(b)) 
 	else Failure(q(a) + " is not equal to " + q(b))
-  }
-  def q(a: Any) = a match {
-  	case b: Boolean => "the value"
-  	case _ => "'"+a+"'"
   }
 }

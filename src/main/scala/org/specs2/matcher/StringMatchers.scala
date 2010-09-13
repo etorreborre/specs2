@@ -16,12 +16,6 @@ trait StringMatchers { outer =>
    */   
   def be_==/[T <: String](a: T) = beEqualToIgnoringCase(a)  
   /**
-   * Matches if (a.equalsIgnoreCase(b))
-   * @deprecated use equalToIgnoringCase instead
-   */   
-  def equalIgnoreCase[T <: String](a: T) = beEqualToIgnoringCase(a)
-
-  /**
    * Matches if (a.trim == b.trim)
    */   
   def beEqualToIgnoringSpace[T <: String](t: =>T) = new Matcher[T] { 
@@ -32,7 +26,6 @@ trait StringMatchers { outer =>
              d(b) + " is not equal ignoring space to " + q(a))
       }
   }
-
   /**
    * Matches if (a.trim == b.trim)
    * @deprecated use beEqualToIgnoringSpace instead
@@ -61,7 +54,6 @@ trait StringMatchers { outer =>
              d(b) + " doesn't match " + q(a))
     }
   }
-
   /**
    * Matches if b.startsWith(a)
    */   
@@ -144,6 +136,42 @@ trait StringMatchers { outer =>
       result(string.length == n, d(string) + " has length " + n, d(string) + " doesn't have length " + n)
     }
   }
+  /**
+   * Matches if (a.notEqualIgnoreCase(b))
+   */   
+  def be_!=/[T <: String](a: T) = notEqualIgnoreCase(a)  
+
+  /**
+   * Matches if !(a.equalsIgnoreCase(b))
+   * @deprecated use notBeEqualToIgnoringCase instead
+   */   
+  def notEqualIgnoreCase[T <: String](a: T) = beEqualToIgnoringCase(a).not 
+  /**
+   * Matches if !(a.equalsIgnoreCase(b))
+   */   
+  def notBeEqualToIgnoringCase[T <: String](a: T) = beEqualToIgnoringCase(a).not 
+  /**
+   * Matches if !(a.equalsIgnoreSpace(b))
+   */   
+  def notBeEqualToIgnoringSpace[T <: String](a: T) = beEqualToIgnoringSpace(a).not 
+  /**
+   * Matches if !(b.indexOf(a) >= 0)
+   */   
+  def notInclude[T <: String](a: T) = include[T](a).not 
+  /**
+   * Matches if b doesn't match the regular expression a
+   */   
+  def notBeMatching(a: String) = beMatching[String](a).not
+  /**
+   * Matches if !b.startsWith(a)
+   */   
+  def notStartWith(a: String) = startWith[String](a).not
+  /**
+   * Matches if !b.endsWith(a)
+   */   
+  def notEndWith(a: String) = endWith[String](a).not
+  def !=/(s: String) = be_!=/(s)
+
   def ==/(s: String) = be_==/(s)
   def equalToIgnoringCase[T <: String](a: T) = beEqualToIgnoringCase(a)
   def equalToIgnoringSpace[T <: String](a: T) = beEqualToIgnoringSpace(a)
