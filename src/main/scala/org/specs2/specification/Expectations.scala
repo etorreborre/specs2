@@ -14,8 +14,9 @@ abstract class Expectable[T](t: =>T) {
   protected[specs2] val description: Option[String] = None
   protected def applyMatcher(m: Matcher[T]) = {
 	lazy val value = t
-	m.apply(value)(d(value)) 
+	m.apply(t)(this) 
   }
+  def desc = d(t)
   /** @return the description of the matched value, quoted. */
   protected def d[T](value: T) = description  match {
     case None => q(value)

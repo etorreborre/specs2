@@ -2,13 +2,13 @@ package org.specs2
 package matcher
 import execute._
 import reflect.Classes._
-
+import specification._
 trait AnyMatchers {
   
   def beTrue = new Matcher[Boolean] {
-    def apply(v: =>Boolean)(d: =>String) = { 
+    def apply[S <: Boolean : Expectable](v: =>S) = {
       val b = v
-      result(b, d + " is true", d + " is false") 
+      result(b, desc + " is true", desc + " is false") 
     }
   }
   /**
@@ -28,9 +28,9 @@ trait AnyMatchers {
 }
 class BeEqualToMatcher[T](t: =>T) extends Matcher[T] {
   import AnyMatchers._
-  def apply(v: =>T)(d: =>String) = {
+  def apply[S <: T : Expectable](v: =>S) = {
     val (a, b) = (t, v)
-    val (db, qa) = (d, q(a)) match {
+    val (db, qa) = (desc, q(a)) match {
       case (x, y) if (x == y) => {
 	    val aClass = getClassName(x)
 	    val bClass = getClassName(y)
