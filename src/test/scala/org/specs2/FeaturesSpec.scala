@@ -55,6 +55,7 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "with colored output" ! todo^
       "with intermediary stats where required" ! todo^
     "StackTraces"^
+      "for examples, to help with IDE navigation" ! todo^
       "for all results, even success" ! todo^
       "sanitized" ! todo^
     "Detailed diffs"^
