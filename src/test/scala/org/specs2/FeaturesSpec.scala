@@ -13,10 +13,11 @@ class FeaturesSpec extends Specification with FeaturesResults {
  * check the feasability of old features in a fully functional setting
  * re-evaluate the necessity of some existing features and provide the most important ones first
      including the ones necessary for a proper development of specs2 itself
- * make sure at each step that everything is well specified
- * dependencies are well-controled
- * implicits visibility is reduced
- * specs2 API is kept private unless necessary
+ * make sure that
+   ** at each step that everything is well specified
+   ** dependencies are well-controled
+   ** implicits visibility is reduced
+   ** specs2 API is kept private unless necessary
  """^^
   "High priority"^
     "A Console reporter"^

@@ -1,8 +1,9 @@
 package org.specs2
 package specification
+import main._
 
 case class Configuration (
-  val printStackTrace: Boolean = true,
+  val printStackTrace: Boolean = false,
   val failOnly: Boolean = false,
   val pendingOnly: Boolean = false) {
   
@@ -11,7 +12,7 @@ case class Configuration (
 }
 object Configuration {
   def apply(args: Args) = new Configuration(
-    printStackTrace = !args.contains("ns"),
+    printStackTrace = args.contains("stacktrace"),
     failOnly = args.contains("xonly"),
     pendingOnly = args.contains("pending"))
 }

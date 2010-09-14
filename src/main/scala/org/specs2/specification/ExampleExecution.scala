@@ -10,7 +10,7 @@ trait ExampleExecution {
 	try {
 	  body
 	} catch {
-	  case e => Error(e)
+	  case e: Exception => Error(e)
 	}
   }
   def executeBodies(exs: Examples): List[Result] = {

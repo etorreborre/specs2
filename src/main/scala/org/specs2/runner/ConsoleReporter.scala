@@ -3,6 +3,7 @@ package runner
 import specification._
 import io._
 import scalaz.Scalaz._
+import main._
 
 trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with NestedPrinter with NestedLevels 
   with TotalStatistics {

@@ -23,7 +23,7 @@ trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
     result match {
 	  case e: HasStackTrace => {
 	 	println(description)
-	 	printWithLevel(level, result.message)
+	 	printWithLevel(level, result.message + " ("+e.location+")")
 	 	if (configuration.printStackTrace)
 	 	  e.stackTrace.foreach(t => printWithLevel(level, t.toString))
 	  }

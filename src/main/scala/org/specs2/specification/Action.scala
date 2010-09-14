@@ -5,7 +5,7 @@ import execute._
 
 class Action {
   def apply(a: =>Any) = Step({() =>
-	tryo(a)(Error(_)).left.getOrElse(Success())  
+	trye(a)(Error(_)).left.getOrElse(Success())  
   })
 }
 object Action {

@@ -31,7 +31,7 @@ class BeEqualToMatcher[T](t: =>T) extends Matcher[T] {
   def apply[S <: T : Expectable](v: =>S) = {
     val (a, b) = (t, v)
     val (db, qa) = (desc, q(a)) match {
-      case (x, y) if (a != b) => {
+      case (x, y) if (a != b && q(a) == q(b)) => {
 	    val aClass = getClassName(x)
 	    val bClass = getClassName(y)
 	    if (aClass != bClass)
