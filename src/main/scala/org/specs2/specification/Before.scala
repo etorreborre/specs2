@@ -5,7 +5,7 @@ import execute._
 
 trait Before {
   def before: Any
-  def apply[T <: Result](a: =>T): Result = { 
+  def apply[T <% Result](a: =>T): Result = { 
 	tryo(before)(Error(_)).left.getOrElse(a)
   }
 }

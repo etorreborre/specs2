@@ -183,10 +183,10 @@ trait StringBaseMatchers { outer =>
   def equalIgnoringSpaceTo(a: String) = beEqualToIgnoringSpace(a)
 }
 trait StringBeHaveMatchers { outer: StringBaseMatchers =>
-  implicit def toStringResultMatcher(result: Expectable[String]) = new StringResultMatcher(result)
-  class StringResultMatcher(result: Expectable[String]) {
-    def matching(s: String) = result.applyMatcher(beMatching(s))
-    def startingWith(s: String) = result.applyMatcher(startWith(s))
+  implicit def toStringResultMatcher(result: MatchResult[String]) = new StringResultMatcher(result)
+  class StringResultMatcher(result: MatchResult[String]) {
+    def matching(s: String) = result.expectable.applyMatcher(beMatching(s))
+    def startingWith(s: String) = result.expectable.applyMatcher(startWith(s))
   }
 }
 

@@ -3,7 +3,7 @@ package specification
 import execute._
 
 trait Around {
-  def around[T <: Result](t: =>T): T
-  def apply[T <: Result](a: =>T) = around(a)
+  def around[T <% Result](t: =>T): Result
+  def apply[T <% Result](a: =>T) = around(a)
 }
 

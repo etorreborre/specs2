@@ -6,13 +6,17 @@ import specification._
 class LogicalMatcherSpec extends Specification { 
   val examples = 
   "a matcher can be or-ed with another one"^
-    "if both matches are ok the result is ok" ! e1^
-    "if both matches are ko the result is ko" ! e2^
-    "if the first matcher is ok, the second one is not evaluated" ! e3^
-    "if both matchers are ko the combination is ko" ! e4
+    "if both matches are ok the result is ok" ! or1^
+    "if both matches are ko the result is ko" ! or2^
+    "if the first matcher is ok, the second one is not evaluated" ! or3^
+    "if both matchers are ko the combination is ko" ! or4^
+  "a matcher can be and-ed with another one"^
+    "if both matches are ok the result is ok" ! and1
   
-  def e1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
-  def e2 = "eric" must (beMatching("a.*") or beMatching(".*z")).not
-  def e3 = "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
-  def e4 = "eric" mustNot (beMatching("a.*") or beMatching(".*z"))
+  def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
+  def or2 = "eric" must (beMatching("a.*") or beMatching(".*z")).not
+  def or3 = "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
+  def or4 = "eric" mustNot (beMatching("a.*") or beMatching(".*z"))
+
+  def and1 = "eric" must be matching("a.*") and be matching(".*c")
 }

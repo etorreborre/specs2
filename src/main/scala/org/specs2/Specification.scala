@@ -13,10 +13,10 @@ trait Main extends Arguments {
 }
 trait Arguments {
   protected def args: String = ""
-  private[specs2] val arguments = new Args(args)
+  private[specs2] def arguments = new Args(args)
 }
 case class Args(arguments: String) {
-  private lazy val names = arguments.split(" ").map(_.replace("-", "")).toList
+  private def names = arguments.split(" ").map(_.replace("-", "")).toList
   def contains(name: String) = names.contains(name)
   override def toString = names.mkString
 }

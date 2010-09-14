@@ -92,7 +92,7 @@ trait ContextData extends FeaturesResults with ExamplesBuilder {
 	def after = Predef.error("error")
   }
   object ar extends Around {
-	def around[T <: Result](a: =>T): T = { c.println("around"); a } 
+	def around[T <% Result](a: =>T) = { c.println("around"); a } 
   }
   object ba extends BeforeAfter {
 	def before = c.println("before")
@@ -101,7 +101,7 @@ trait ContextData extends FeaturesResults with ExamplesBuilder {
   object baa extends BeforeAfterAround {
 	def before = c.println("before")
 	def after = c.println("after")
-	def around[T <: Result](a: =>T): T = { c.println("around"); a } 
+	def around[T <% Result](a: =>T) = { c.println("around"); a } 
   }
 
   def ok(name: String) = { c.println(name); success }
