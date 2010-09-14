@@ -52,15 +52,12 @@ trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
   }
   def printOther(level: Int, stats: Stats, fragment: ExecutedFragment) = ()
   
-  def printWithLevel(level: Int, message: String) = println("  " * (level + 1) + message) 
-  
-  def status(result: Result) = {
-	result match {
-	  case Success(_) => "+"
-	  case Failure(_) => "x"
-	  case Error(_)   => "x"
-	  case Pending(_) => "o"
-	  case Skipped(_) => "o"
-	}
+  def printWithLevel(level: Int, message: String) = {
+	val splitted = message.split("\n")
+	if (splitted.size > 1)
+	  splitted.foreach(m => println("  " * (level + 1) + m))
+	else println("  " * (level + 1) + message)
   }
+  
+  def status(result: Result) = result.status
 }

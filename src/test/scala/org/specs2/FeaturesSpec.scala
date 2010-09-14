@@ -49,6 +49,8 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "with suites and test cases" ! todo^
     "A sbt reporter"^
       "based on a generic notifier" ! todo^
+    "Data tables"^
+      "with ! and | as separators" ! todo^
   par^    
   "Low priority"^
     "A Console reporter"^
@@ -58,7 +60,8 @@ class FeaturesSpec extends Specification with FeaturesResults {
     "StackTraces"^
       "for examples, to help with IDE navigation" ! todo^
       "for all results, even success" ! todo^
-      "sanitized" ! todo^
+      "with source code location" ! done^
+      "sanitized" ! done^
     "Detailed diffs"^
       "non mutable version" ! todo^
     "Configuration"^
