@@ -36,7 +36,7 @@ trait StringBaseMatchers { outer =>
   /**
    * Matches if (b.indexOf(a) >= 0)
    */   
-  def include(t: =>String) = new Matcher[String] { 
+  def contain(t: =>String) = new Matcher[String] { 
     def apply[S <: String : Expectable](v: =>S) = {
       val (a, b) = (t, v)
       result(a != null && b != null && b.indexOf(a) >= 0, 
@@ -161,7 +161,7 @@ trait StringBaseMatchers { outer =>
   /**
    * Matches if !(b.indexOf(a) >= 0)
    */   
-  def notInclude(a: String) = include(a).not 
+  def notContain(a: String) = contain(a).not 
   /**
    * Matches if b doesn't match the regular expression a
    */   
