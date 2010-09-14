@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 import AnyMatchers._
 import specification._
+
 trait IterableMatchers {
   def contain[T](t: =>T) = new Matcher[Iterable[Any]](){
     def apply[S <: Iterable[Any] : Expectable](v: =>S) = {

@@ -6,7 +6,8 @@ import specification._
 /**
  * The <code>StringMatchers</code> trait provides matchers which are applicable to String objects
  */
-trait StringMatchers { outer =>
+trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers
+trait StringBaseMatchers { outer =>
   
   /**
    * Matches if (a.equalsIgnoreCase(b))
@@ -50,7 +51,7 @@ trait StringMatchers { outer =>
   def beMatching(t: =>String) = new Matcher[String] {
     def apply[S <: String : Expectable](v: =>S) = {
       val (a, b) = (t, v)
-      result(a matches b, 
+      result(b matches a, 
              desc + " matches " + q(a), 
              desc + " doesn't match " + q(a))
     }
@@ -181,6 +182,14 @@ trait StringMatchers { outer =>
   def equalIgnoringCaseTo(a: String) = beEqualToIgnoringCase(a)
   def equalIgnoringSpaceTo(a: String) = beEqualToIgnoringSpace(a)
 }
+trait StringBeHaveMatchers { outer: StringBaseMatchers =>
+  implicit def toStringResultMatcher(result: Expectable[String]) = new StringResultMatcher(result)
+  class StringResultMatcher(result: Expectable[String]) {
+    def matching(s: String) = result.applyMatcher(beMatching(s))
+    def startingWith(s: String) = result.applyMatcher(startWith(s))
+  }
+}
+
 class StringEmptyMatcher extends Matcher[String] {
   def apply[S <: String : Expectable](v: =>S) = {
     val s = v
