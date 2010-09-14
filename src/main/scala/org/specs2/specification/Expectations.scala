@@ -15,6 +15,7 @@ class MustExpectable[T](t: =>T) extends Expectable[T](t) {
 	override val description = Some(alias)
   } 
   def must(b: BeHave): Expectable[T] = this
+  def mustNot(m: =>Matcher[T]) = applyMatcher(m.not)
   def must(m: =>Matcher[T]) = applyMatcher(m)
   def must_==(other: =>T) = must(new BeEqualToMatcher(other))
 }
@@ -24,6 +25,7 @@ class ShouldExpectable[T](t: =>T) extends Expectable[T](t ){
   } 
   def should(b: BeHave): Expectable[T] = this
   def should(m: =>Matcher[T]) = applyMatcher(m)
+  def shouldNot(m: =>Matcher[T]) = applyMatcher(m.not)
   def should_==(other: =>T) = should(new BeEqualToMatcher(other))
 }
 class BeHave
