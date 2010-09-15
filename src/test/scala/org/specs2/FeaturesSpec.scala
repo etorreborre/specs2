@@ -23,7 +23,7 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "with statistics" ! done^
       "with stacktraces" ! done^
       "with output configuration"^
-        "no-stacktraces" ! done^
+        "stacktraces on demand" ! done^
         "fail only" ! done^
         "pending only" ! done^
         "examples filter" ! todo^
@@ -49,7 +49,9 @@ class FeaturesSpec extends Specification with FeaturesResults {
     "A sbt reporter"^
       "based on a generic notifier" ! todo^
     "Data tables"^
-      "with ! and | as separators" ! todo^
+      "with ! and | as separators" ! done^
+    "Mockito"^
+      "with the new syntax and latest Mockito" ! done^
   par^    
   "Low priority"^
     "A Console reporter"^
@@ -63,6 +65,8 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "sanitized" ! done^
     "Detailed diffs"^
       "non mutable version" ! todo^
+    "ScalaCheck"^
+      "with all previous features" ! todo^
     "Configuration"^
       "specify its behavior" ! todo^
     "Command line arguments"^
