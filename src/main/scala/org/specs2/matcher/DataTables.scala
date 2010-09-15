@@ -61,3 +61,58 @@ trait DataTables {
   case class DataRow3[T1, T2, T3](val t1: T1, t2: T2, t3: T3) extends DataRow[T1, T2, T3] {
   }
 }
+private object DataTablesGenerator {
+  def main(args: Array[String]) = {
+	println(all(3))  
+  }
+  def all(n: Int) = {
+	List(rows(n), tableClasses(n), dataRowClass(n), dataRowClasses(n)).mkString("\n")
+  }
+  def parametersList(i: Int) = (1 to i).map(j => "t"+j+": T"+j).mkString("(",", ", ")")
+  def parameters(i: Int) = (1 to i).map("t"+_).mkString("(",", ", ")")
+  def types(i: Int) = (1 to i).map("T"+_).mkString("[",", ", "]")
+  def typesList(i: Int): String =  (1 to i).map("T"+_).mkString(", ")
+  def typesList(i: Int, n: Int): String =  List(typesList(i), (i to n-i).map("Any").mkString(",")).mkString(",")
+  def typesTuple(i: Int) =  (1 to i).map("T"+_).mkString("(",", ", ")")
+  def dataRow(i: Int) = "DataRow"+i+types(i)
+  def table(i: Int) = "Table"+i
+  def rows(n: Int) = {
+    (1 to n).flatMap { i =>
+      val addRow = types(i)+"(row: "+dataRow(i)+") = new "+table(i)+"(titles, List(row)"
+      val addRowStill = "def |"+addRow 
+      val addRowExecute = "def |>"+addRow 
+	  List(addRowStill, addRowExecute+", execute = true").map(_+")")
+    }.mkString("\n")
+  }
+  
+  def tableClasses(n: Int) = {
+	(1 to n).map { i =>  
+	  List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false) extends"+ 
+           "Table(titles, execute) { outer =>",
+	       "  def |(row: "+dataRow(i)+") = "+table(i)+"(titles, outer.rows :+ row, execute)",
+	       "  def |[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, execute)",
+	       "  def |>[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, true)",
+	       "  def executeRow[R <% Result](f: "+typesTuple(i)+" => R, exec: Boolean): Result = {", 
+	       "    if (exec) {",
+	       "      collect(rows map { (d: "+dataRow(i)+") =>", 
+	       "        (d.show, f("+(1 to i).map("d.t"+_).mkString(",")+"))",
+	       "    })",
+	       "  }",
+	       "  else Success(\"ok\")",
+	       "}").mkString("\n") 		
+	}
+  }
+  def dataRowClass(n: Int) = {
+	"abstract class "+dataRow(n)+" extends Product {\n"+
+	"  def show = productIterator.mkString(\"|\", \"|\", \"|\")\n"+
+    "}"
+  }
+  def dataRowClasses(n: Int) = {
+	(1 to n).map { i =>  
+      List(
+      	"case class "+dataRow(i)+parametersList(i)+" extends DataRow["+typesList(i, n)+"] {",
+        " def !"+types(i+1)+"(t"+(i+1)+": S"+(i+1)+") = "+"DataRow"+i+parameters(i+1),
+	    "}").mkString("\n")
+	}
+  }
+}
