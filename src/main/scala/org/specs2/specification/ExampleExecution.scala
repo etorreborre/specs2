@@ -30,8 +30,8 @@ trait ExampleExecution {
 	  case _ => ExecutedNoText()	
 	}
 	case Text(s) => ExecutedText(s)
-	case f if (f == br) => ExecutedBr()
-	case f if (f == par) => ExecutedPar()
+	case `br` => ExecutedBr()
+	case `par` => ExecutedPar()
 	case SpecStart(n) => ExecutedSpecStart(n)
 	case SpecEnd(n) => ExecutedSpecEnd(n)
 	case f => ExecutedNoText()

@@ -21,9 +21,9 @@ trait NestedLevels extends LevelParser {
   }
   
   private val updateLevel: Function[(L, Fragment), L] = {
-	case (a, f) if (f == end) => Level()
-	case (a, f) if (f == par) => a
-	case (a, f) if (f == br) => a
+	case (a, `end`) => Level()
+	case (a, `par`) => a
+	case (a, `br`) => a
 	case (a, Text(s)) => {
 	  a.state match {
 	 	case Up => a.copy(level = a.level + 1, lastNode = Txt)
