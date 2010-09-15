@@ -6,6 +6,7 @@ import java.io._
 /**
  * This trait allows to add some utility methods to </code>Exception</code> objects.
  */
+private [specs2]
 trait Exceptionx {
   /**
    * Implicit method to add additional methods to Exception objects
