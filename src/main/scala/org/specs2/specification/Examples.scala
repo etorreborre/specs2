@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-case class Examples(fragments: List[Fragment]) {
+case class Examples(fragments: List[Fragment]) extends PredefinedFragments {
   override def toString = fragments.mkString("\n")
   def ^(e: Fragment) = copy(fragments = this.fragments :+ e)
   def ^(e: Group) = copy(fragments = this.fragments ++ e.fragments) 

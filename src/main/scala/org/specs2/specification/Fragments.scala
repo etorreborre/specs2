@@ -18,7 +18,9 @@ case class Step(action: () => Result) extends Fragment with Executable {
 trait Executable {
   def execute: Result
 }
+trait PredefinedFragments {
+  object end extends Fragment
+  object par extends Fragment
+  object br extends Fragment
+}
 
-object end extends Fragment
-object par extends Fragment
-object br extends Fragment

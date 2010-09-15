@@ -5,7 +5,7 @@ import execute._
 trait AnExecutor {
   val executor: ExampleExecution = new ExampleExecution {}
 }
-trait ExampleExecution {
+trait ExampleExecution extends PredefinedFragments {
   def executeBody(body: =>Result): Result = {
 	try {
 	  body

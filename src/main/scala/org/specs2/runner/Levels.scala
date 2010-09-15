@@ -6,7 +6,7 @@ trait LevelParser {
   type L
   val level: Function[(L, Fragment), (Int, L)]
 }
-trait NestedLevels extends LevelParser {
+trait NestedLevels extends LevelParser with PredefinedFragments {
   case class Level(level: Int = 0, state: Direction = Up, lastNode: LastNode = Txt)
   type L = Level
 
