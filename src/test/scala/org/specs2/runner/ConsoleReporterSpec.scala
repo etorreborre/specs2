@@ -6,6 +6,7 @@ import execute._
 import matcher._
 
 class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
+	override def args = "xonly stacktrace"
  val examples = 
 """
 A console reporter is used to execute examples and display their status in the Console.
@@ -35,7 +36,7 @@ The following examples specify the behavior for:
     "be reported with a x if it has a error" ! single4^
     "be reported with a o if it is skipped or pending" ! single5^
     "have the failure message displayed if it failed" ! single6^
-    "have the stacktrace displayed if it is a failure or an error" ! single7^
+    "have the file location displayed if it is a failure or an error" ! single7^
   par^  
   "Nested examples must be displayed as a tree"^
     "if a text starts a list of examples, these examples are indented to one level" ! nested1^
@@ -55,7 +56,7 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
   def single3 = descriptionMustBe(1 must_== 2, "x this example")
   def single4 = descriptionMustBe({error("error"); 1 must_== 2}, "x this example")
   def single5 = descriptionMustBe(Pending("PENDING"), "o this example PENDING")
-  def single6 = messageMustBe(1 must_== 2, "  '1' is not equal to '2'")
+  def single6 = messagesContain(1 must_== 2, "  '1' is not equal to '2'")
   def single7 = messagesContain(1 must_== 2, "ConsoleReporterSpec.scala")
   
   def nested1 = reportStartsWith(level1)(level1Output)

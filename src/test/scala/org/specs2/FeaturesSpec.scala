@@ -3,7 +3,6 @@ import specification._
 import execute._
 
 class FeaturesSpec extends Specification with FeaturesResults {
-  override def args = "pending"
   val examples = 
 """
  These are the list of features to develop / port for specs2.

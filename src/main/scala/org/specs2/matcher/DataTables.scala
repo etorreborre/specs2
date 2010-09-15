@@ -25,7 +25,7 @@ trait DataTables {
 	private def result(desc: String, result: Result): String = {
 	  result.status+" "+desc+{
 	 	 result match {
-	 	   case Success(_) =>
+	 	   case Success(_) => ""
 	 	   case _ => " " + result.message
 	 	 }
 	  }

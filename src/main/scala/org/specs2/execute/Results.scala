@@ -2,6 +2,7 @@ package org.specs2
 package execute
 import matcher._
 import control.Exceptionx._
+
 sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1) {
   def and(r: Result): Result = this
   def status = this match {
@@ -42,7 +43,19 @@ case object Error {
 }
 trait HasStackTrace {
   val exception: Exception
-  private def e = exception.removeTracesAsFarAsNameMatches("specification.BaseSpecification")
+  private def specName(ex: Exception) = {
+	ex.getStackTrace().toList.
+	  filter(_.toString matches ".*\\.main\\(.*").
+	  filterNot(_.toString matches "org.specs2.runner.ClassRunner.main.*").
+	  filterNot(_.toString matches "specs2.run.main.*").
+	  reverse.
+	  headOption match {
+		case Some(t) => new Location(t).className
+		case None => ""
+	}
+	  
+  }
+  private def e = exception.removeTracesWhileNameDoesntMatch(specName(exception))
   def stackTrace = e.getStackTrace.toList
   def location = e.location
 }
@@ -50,3 +63,4 @@ case class Pending(m: String = "")  extends Result(m) {
 }
 case class Skipped(m: String = "")  extends Result(m) {
 }
+

@@ -15,16 +15,13 @@ trait Exceptionx {
    * See the ExtendedThrowable object description
    */
   class ExtendedException[T <: Exception](t: T) {
-    private def fileName = t.getStackTrace()(0).getFileName
-    private def className = t.getStackTrace()(0).getClassName.split('$')(0)
-    private def lineNumber = t.getStackTrace()(0).getLineNumber
-
+    private val topTrace = new Location(if (t.getStackTrace().isEmpty) new StackTraceElement("specs2", "internals", "file", 1) else t.getStackTrace()(0)) 
     /** @return the file name and the line number where the Throwable was created */
-    def location: String = fileName + ":" + lineNumber
+    def location = topTrace.location
     /** @return the class name and the line number where the Throwable was created */
-    def classLocation: String = className + ":" + lineNumber
+    def classLocation = topTrace.classLocation
     /** @return the class name, file Name and the line number where the Throwable was created */
-    def fullLocation: String = className + " (" + location + ")"
+    def fullLocation= topTrace.fullLocation
     /** @return the stack trace as a string with where each message is separated by a new line */
     def stackToString: String = stackToString("", "\n", "\n")
     /** @return the stack trace with user-specified separators */
@@ -48,9 +45,23 @@ trait Exceptionx {
      * remove all traces of this exception until there's a line not matching <code>name</code>.
      */
     def removeTracesWhileNameMatches(name: String): Exception = {
-      t.setStackTrace((t.getStackTrace.toList.drop(1).dropWhile { x: StackTraceElement => 
-                             x.toString.matches(".*" + name + ".*") 
-                          }).toArray)
+      removeTracesWhile{ x: StackTraceElement => 
+        x.toString.matches(".*" + name + ".*") 
+      }
+    }
+    /** 
+     * remove all traces of this exception until there's a line matching <code>name</code>.
+     */
+    def removeTracesWhileNameDoesntMatch(name: String): Exception = {
+      removeTracesWhile { x: StackTraceElement => 
+        !x.toString.matches(".*" + name + ".*") 
+      }
+    }
+    /** 
+     * remove all traces of this exception until a given function is true
+     */
+    private def removeTracesWhile(f: StackTraceElement => Boolean): Exception = {
+      t.setStackTrace((t.getStackTrace.toList.drop(1).dropWhile(f)).toArray)
       t
     }
     /**
@@ -81,6 +92,16 @@ trait Exceptionx {
      * return the class name of an object without $.
      */
     private def getClassName(o: Object) = o.getClass.getName.split("\\.").last.replace("$", "")
+  }
+  class Location(t: StackTraceElement) {
+    val fileName = t.getFileName
+    val className = t.getClassName.split('$')(0)
+    val lineNumber = t.getLineNumber
+    def location: String = fileName + ":" + lineNumber
+    /** @return the class name and the line number where the Throwable was created */
+    def classLocation: String = className + ":" + lineNumber
+    /** @return the class name, file Name and the line number where the Throwable was created */
+    def fullLocation: String = className + " (" + location + ")"
   }
 }
 object Exceptionx extends Exceptionx
