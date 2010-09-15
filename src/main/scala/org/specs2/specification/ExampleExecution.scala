@@ -5,7 +5,8 @@ import execute._
 trait AnExecutor {
   val executor: ExampleExecution = new ExampleExecution {}
 }
-trait ExampleExecution extends PredefinedFragments {
+trait ExampleExecution {
+  import PredefinedFragments._
   def executeBody(body: =>Result): Result = {
 	try {
 	  body
@@ -29,11 +30,11 @@ trait ExampleExecution extends PredefinedFragments {
 	  case _ => ExecutedNoText()	
 	}
 	case Text(s) => ExecutedText(s)
-	case `br` => ExecutedBr()
-	case `par` => ExecutedPar()
+	case f if (f == br) => ExecutedBr()
+	case f if (f == par) => ExecutedPar()
 	case SpecStart(n) => ExecutedSpecStart(n)
 	case SpecEnd(n) => ExecutedSpecEnd(n)
-	case _ => ExecutedNoText()
+	case f => ExecutedNoText()
   }
 }
 sealed trait ExecutedFragment

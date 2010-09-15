@@ -6,7 +6,7 @@ import execute._
 import matcher._
 
 class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
-	override def args = "xonly stacktrace"
+	override def args = "xonly"// stacktrace"
  val examples = 
 """
 A console reporter is used to execute examples and display their status in the Console.

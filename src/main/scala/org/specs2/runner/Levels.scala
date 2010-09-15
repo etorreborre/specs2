@@ -6,7 +6,9 @@ trait LevelParser {
   type L
   val level: Function[(L, Fragment), (Int, L)]
 }
-trait NestedLevels extends LevelParser with PredefinedFragments {
+trait NestedLevels extends LevelParser {
+  import PredefinedFragments._
+
   case class Level(level: Int = 0, state: Direction = Up, lastNode: LastNode = Txt)
   type L = Level
 
@@ -19,9 +21,9 @@ trait NestedLevels extends LevelParser with PredefinedFragments {
   }
   
   private val updateLevel: Function[(L, Fragment), L] = {
-	case (a, `end`) => Level()
-	case (a, `par`) => a
-	case (a, `br`) => a
+	case (a, f) if (f == end) => Level()
+	case (a, f) if (f == par) => a
+	case (a, f) if (f == br) => a
 	case (a, Text(s)) => {
 	  a.state match {
 	 	case Up => a.copy(level = a.level + 1, lastNode = Txt)
