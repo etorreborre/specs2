@@ -5,11 +5,6 @@ import execute._
 trait DataTables {
   implicit def toTableHeader(a: String) = new TableHeader(List(a))
   implicit def toDataRow[T](a: T) = DataRow1(a)
-  case class TableHeader(titles: List[String]) {
-	def |(title: String) = copy(titles = this.titles :+ title)
-	def |[T1, T2, T3](row: DataRow3[T1, T2, T3]) = new Table3(titles, List(row))
-	def |>[T1, T2, T3](row: DataRow3[T1, T2, T3]) = new Table3(titles, List(row), execute = true)
-  }
   class Table(val titles: List[String], val execute: Boolean = false) {
 	def showTitles = titles.mkString("|", "|", "|")
 	def collect[R <% Result](results: List[(String, R)]): Result = {
@@ -31,79 +26,207 @@ trait DataTables {
 	  }
 	}
   }
-  case class Table3[T1, T2, T3](override val titles: List[String], rows: List[DataRow3[T1, T2, T3]], override val execute: Boolean = false) extends 
-  Table(titles, execute) { outer =>
-	def |(row: DataRow3[T1, T2, T3]) = Table3(titles, outer.rows :+ row, execute)
-	def |[R <% Result](f: (T1, T2, T3) => R) = executeRow(f, execute)
-	def |>[R <% Result](f: (T1, T2, T3) => R) = executeRow(f, true)
-	def executeRow[R <% Result](f: (T1, T2, T3) => R, exec: Boolean): Result = { 
-	  if (exec) {
-	    collect(rows map { (d: DataRow3[T1, T2, T3]) => 
-	      (d.show, f(d.t1, d.t2, d.t3)) 
-	    })
-	  }
-	  else Success("ok")
-	}
+  /** GENERATED */
+  case class TableHeader(titles: List[String]) {
+    def |(title: String) = copy(titles = this.titles :+ title)
+    def |[T1](row: DataRow1[T1]) = new Table1(titles, List(row))
+    def |>[T1](row: DataRow1[T1]) = new Table1(titles, List(row), execute = true)
+    def |[T1, T2](row: DataRow2[T1, T2]) = new Table2(titles, List(row))
+    def |>[T1, T2](row: DataRow2[T1, T2]) = new Table2(titles, List(row), execute = true)
+    def |[T1, T2, T3](row: DataRow3[T1, T2, T3]) = new Table3(titles, List(row))
+    def |>[T1, T2, T3](row: DataRow3[T1, T2, T3]) = new Table3(titles, List(row), execute = true)
+    def |[T1, T2, T3, T4](row: DataRow4[T1, T2, T3, T4]) = new Table4(titles, List(row))
+    def |>[T1, T2, T3, T4](row: DataRow4[T1, T2, T3, T4]) = new Table4(titles, List(row), execute = true)
+    def |[T1, T2, T3, T4, T5](row: DataRow5[T1, T2, T3, T4, T5]) = new Table5(titles, List(row))
+    def |>[T1, T2, T3, T4, T5](row: DataRow5[T1, T2, T3, T4, T5]) = new Table5(titles, List(row), execute = true)
+    def |[T1, T2, T3, T4, T5, T6](row: DataRow6[T1, T2, T3, T4, T5, T6]) = new Table6(titles, List(row))
+    def |>[T1, T2, T3, T4, T5, T6](row: DataRow6[T1, T2, T3, T4, T5, T6]) = new Table6(titles, List(row), execute = true)
+    def |[T1, T2, T3, T4, T5, T6, T7](row: DataRow7[T1, T2, T3, T4, T5, T6, T7]) = new Table7(titles, List(row))
+    def |>[T1, T2, T3, T4, T5, T6, T7](row: DataRow7[T1, T2, T3, T4, T5, T6, T7]) = new Table7(titles, List(row), execute = true)
+    def |[T1, T2, T3, T4, T5, T6, T7, T8](row: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) = new Table8(titles, List(row))
+    def |>[T1, T2, T3, T4, T5, T6, T7, T8](row: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) = new Table8(titles, List(row), execute = true)
+    def |[T1, T2, T3, T4, T5, T6, T7, T8, T9](row: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) = new Table9(titles, List(row))
+    def |>[T1, T2, T3, T4, T5, T6, T7, T8, T9](row: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) = new Table9(titles, List(row), execute = true)
+    def |[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](row: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) = new Table10(titles, List(row))
+    def |>[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](row: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) = new Table10(titles, List(row), execute = true)
   }
-  abstract class DataRow[T1, T2, T3] extends Product {
-	def show = productIterator.mkString("|", "|", "|")
+  
+  case class Table1[T1](override val titles: List[String], rows: List[DataRow1[T1]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow1[T1]) = Table1(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow1[T1]) => (d.show, f(d.t1)) })
+      else Success("ok")
+    }
   }
-  case class DataRow1[T1](t1: T1) extends DataRow[T1, Any, Any] {
-	def ![S2](t2: S2) = {
-	  DataRow2(t1, t2)
-	}
-  }	
-  case class DataRow2[T1, T2](t1: T1, t2: T2) extends DataRow[T1, T2, Any] {
-	def ![S3](t3: S3) = {
-	  DataRow3(t1, t2, t3)
-	}
-  }	
-  case class DataRow3[T1, T2, T3](val t1: T1, t2: T2, t3: T3) extends DataRow[T1, T2, T3] {
+  case class Table2[T1, T2](override val titles: List[String], rows: List[DataRow2[T1, T2]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow2[T1, T2]) = Table2(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1, T2) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1, T2) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1, T2) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow2[T1, T2]) => (d.show, f(d.t1,d.t2)) })
+      else Success("ok")
+    }
+  }
+  case class Table3[T1, T2, T3](override val titles: List[String], rows: List[DataRow3[T1, T2, T3]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow3[T1, T2, T3]) = Table3(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1, T2, T3) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1, T2, T3) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1, T2, T3) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow3[T1, T2, T3]) => (d.show, f(d.t1,d.t2,d.t3)) })
+      else Success("ok")
+    }
+  }
+  case class Table4[T1, T2, T3, T4](override val titles: List[String], rows: List[DataRow4[T1, T2, T3, T4]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow4[T1, T2, T3, T4]) = Table4(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1, T2, T3, T4) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1, T2, T3, T4) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1, T2, T3, T4) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow4[T1, T2, T3, T4]) => (d.show, f(d.t1,d.t2,d.t3,d.t4)) })
+      else Success("ok")
+    }
+  }
+  case class Table5[T1, T2, T3, T4, T5](override val titles: List[String], rows: List[DataRow5[T1, T2, T3, T4, T5]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow5[T1, T2, T3, T4, T5]) = Table5(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1, T2, T3, T4, T5) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow5[T1, T2, T3, T4, T5]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5)) })
+      else Success("ok")
+    }
+  }
+  case class Table6[T1, T2, T3, T4, T5, T6](override val titles: List[String], rows: List[DataRow6[T1, T2, T3, T4, T5, T6]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow6[T1, T2, T3, T4, T5, T6]) = Table6(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow6[T1, T2, T3, T4, T5, T6]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6)) })
+      else Success("ok")
+    }
+  }
+  case class Table7[T1, T2, T3, T4, T5, T6, T7](override val titles: List[String], rows: List[DataRow7[T1, T2, T3, T4, T5, T6, T7]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow7[T1, T2, T3, T4, T5, T6, T7]) = Table7(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow7[T1, T2, T3, T4, T5, T6, T7]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7)) })
+      else Success("ok")
+    }
+  }
+  case class Table8[T1, T2, T3, T4, T5, T6, T7, T8](override val titles: List[String], rows: List[DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) = Table8(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8)) })
+      else Success("ok")
+    }
+  }
+  case class Table9[T1, T2, T3, T4, T5, T6, T7, T8, T9](override val titles: List[String], rows: List[DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) = Table9(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9)) })
+      else Success("ok")
+    }
+  }
+  case class Table10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](override val titles: List[String], rows: List[DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
+    def |(row: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) = Table10(titles, outer.rows :+ row, execute)
+    def |[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, execute)
+    def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, true)
+    def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R, exec: Boolean): Result = {
+      if (exec)
+        collect(rows map { (d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10)) })
+      else Success("ok")
+    }
+  }
+  
+  abstract class DataRow[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] extends Product {
+    def show = productIterator.mkString("|", "|", "|")
+  }
+  
+  case class DataRow1[T1](t1: T1) extends DataRow[T1, Any, Any, Any, Any, Any, Any, Any, Any, Any] {
+    def ![S2](t2: S2) = DataRow2(t1, t2)
+  }
+  case class DataRow2[T1, T2](t1: T1, t2: T2) extends DataRow[T1, T2, Any, Any, Any, Any, Any, Any, Any, Any] {
+    def ![S3](t3: S3) = DataRow3(t1, t2, t3)
+  }
+  case class DataRow3[T1, T2, T3](t1: T1, t2: T2, t3: T3) extends DataRow[T1, T2, T3, Any, Any, Any, Any, Any, Any, Any] {
+    def ![S4](t4: S4) = DataRow4(t1, t2, t3, t4)
+  }
+  case class DataRow4[T1, T2, T3, T4](t1: T1, t2: T2, t3: T3, t4: T4) extends DataRow[T1, T2, T3, T4, Any, Any, Any, Any, Any, Any] {
+    def ![S5](t5: S5) = DataRow5(t1, t2, t3, t4, t5)
+  }
+  case class DataRow5[T1, T2, T3, T4, T5](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) extends DataRow[T1, T2, T3, T4, T5, Any, Any, Any, Any, Any] {
+    def ![S6](t6: S6) = DataRow6(t1, t2, t3, t4, t5, t6)
+  }
+  case class DataRow6[T1, T2, T3, T4, T5, T6](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) extends DataRow[T1, T2, T3, T4, T5, T6, Any, Any, Any, Any] {
+    def ![S7](t7: S7) = DataRow7(t1, t2, t3, t4, t5, t6, t7)
+  }
+  case class DataRow7[T1, T2, T3, T4, T5, T6, T7](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) extends DataRow[T1, T2, T3, T4, T5, T6, T7, Any, Any, Any] {
+    def ![S8](t8: S8) = DataRow8(t1, t2, t3, t4, t5, t6, t7, t8)
+  }
+  case class DataRow8[T1, T2, T3, T4, T5, T6, T7, T8](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) extends DataRow[T1, T2, T3, T4, T5, T6, T7, T8, Any, Any] {
+    def ![S9](t9: S9) = DataRow9(t1, t2, t3, t4, t5, t6, t7, t8, t9)
+  }
+  case class DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9) extends DataRow[T1, T2, T3, T4, T5, T6, T7, T8, T9, Any] {
+    def ![S10](t10: S10) = DataRow10(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10)
+  }
+  case class DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10) extends DataRow[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] {
+  
   }
 }
 private object DataTablesGenerator {
   def main(args: Array[String]) = {
-	println(all(3))  
+	println(all(10))  
   }
   def all(n: Int) = {
-	List(rows(n), tableClasses(n), dataRowClass(n), dataRowClasses(n)).mkString("\n")
+	List(tableHeader(n), 
+	     tableClasses(n), 
+	     dataRowClass(n), 
+	     dataRowClasses(n)).mkString("\n\n").replace("\n", "\n  ")
   }
-  def parametersList(i: Int) = (1 to i).map(j => "t"+j+": T"+j).mkString("(",", ", ")")
-  def parameters(i: Int) = (1 to i).map("t"+_).mkString("(",", ", ")")
-  def types(i: Int) = (1 to i).map("T"+_).mkString("[",", ", "]")
-  def typesList(i: Int): String =  (1 to i).map("T"+_).mkString(", ")
-  def typesList(i: Int, n: Int): String =  List(typesList(i), (i to n-i).map("Any").mkString(",")).mkString(",")
-  def typesTuple(i: Int) =  (1 to i).map("T"+_).mkString("(",", ", ")")
-  def dataRow(i: Int) = "DataRow"+i+types(i)
-  def table(i: Int) = "Table"+i
-  def rows(n: Int) = {
+
+  def tableHeader(n: Int) = {
+	"case class TableHeader(titles: List[String]) {\n"+
+    "  def |(title: String) = copy(titles = this.titles :+ title)\n"+
     (1 to n).flatMap { i =>
       val addRow = types(i)+"(row: "+dataRow(i)+") = new "+table(i)+"(titles, List(row)"
       val addRowStill = "def |"+addRow 
       val addRowExecute = "def |>"+addRow 
 	  List(addRowStill, addRowExecute+", execute = true").map(_+")")
-    }.mkString("\n")
+    }.mkString("  ", "\n  ", "\n") +
+    "}"
   }
   
   def tableClasses(n: Int) = {
 	(1 to n).map { i =>  
-	  List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false) extends"+ 
+	  List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false) extends "+ 
            "Table(titles, execute) { outer =>",
 	       "  def |(row: "+dataRow(i)+") = "+table(i)+"(titles, outer.rows :+ row, execute)",
 	       "  def |[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, execute)",
 	       "  def |>[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, true)",
 	       "  def executeRow[R <% Result](f: "+typesTuple(i)+" => R, exec: Boolean): Result = {", 
-	       "    if (exec) {",
-	       "      collect(rows map { (d: "+dataRow(i)+") =>", 
-	       "        (d.show, f("+(1 to i).map("d.t"+_).mkString(",")+"))",
-	       "    })",
+	       "    if (exec)",
+	       "      collect(rows map { (d: "+dataRow(i)+") => (d.show, f("+(1 to i).map("d.t"+_).mkString(",")+")) })",
+	       "    else Success(\"ok\")",
 	       "  }",
-	       "  else Success(\"ok\")",
 	       "}").mkString("\n") 		
-	}
+	}.mkString("\n")
   }
   def dataRowClass(n: Int) = {
-	"abstract class "+dataRow(n)+" extends Product {\n"+
+	"abstract class DataRow"+types(n)+" extends Product {\n"+
 	"  def show = productIterator.mkString(\"|\", \"|\", \"|\")\n"+
     "}"
   }
@@ -111,8 +234,16 @@ private object DataTablesGenerator {
 	(1 to n).map { i =>  
       List(
       	"case class "+dataRow(i)+parametersList(i)+" extends DataRow["+typesList(i, n)+"] {",
-        " def !"+types(i+1)+"(t"+(i+1)+": S"+(i+1)+") = "+"DataRow"+i+parameters(i+1),
+        if (i < n) "  def ![S"+(i+1)+"](t"+(i+1)+": S"+(i+1)+") = "+"DataRow"+(i+1)+parameters(i+1) else "",
 	    "}").mkString("\n")
-	}
+	}.mkString("\n")
   }
+  def parametersList(i: Int) = (1 to i).map(j => "t"+j+": T"+j).mkString("(",", ", ")")
+  def parameters(i: Int) = (1 to i).map("t"+_).mkString("(",", ", ")")
+  def types(i: Int) = (1 to i).map("T"+_).mkString("[",", ", "]")
+  def typesList(i: Int): String =  (1 to i).map("T"+_).mkString(", ")
+  def typesList(i: Int, n: Int): String =  (List(typesList(i)) ::: (i+1 to n).map(t => "Any").toList).mkString(", ")
+  def typesTuple(i: Int) =  (1 to i).map("T"+_).mkString("(",", ", ")")
+  def dataRow(i: Int) = "DataRow"+i+types(i)
+  def table(i: Int) = "Table"+i
 }

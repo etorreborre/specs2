@@ -13,7 +13,7 @@ Data tables
   def e1 = {
 	"a"   | "b" | "c" |
 	 2    !  2  !  4  |
-	 1    !  2  !  3  |> { (a, b, c) => 
+	 1    !  1  !  2  |> { (a, b, c) => 
       a + b must_== c
     }
   }
