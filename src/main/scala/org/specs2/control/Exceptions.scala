@@ -1,6 +1,7 @@
 package org.specs2
 package control
 
+private[specs2]
 trait Exceptions {
   def tryo[T](a: =>T): Option[T] = {
 	try { Some(a) }
@@ -11,4 +12,6 @@ trait Exceptions {
 	catch { case e: Exception => Left(f(e)) }
   }
 }
+
+private[specs2]
 object Exceptions extends Exceptions

@@ -43,19 +43,12 @@ case object Error {
 }
 trait HasStackTrace {
   val exception: Exception
-  private def specName(ex: Exception) = {
-	ex.getStackTrace().toList.
-	  filter(_.toString matches ".*\\.main\\(.*").
-	  filterNot(_.toString matches "org.specs2.runner.ClassRunner.main.*").
-	  filterNot(_.toString matches "specs2.run.main.*").
-	  reverse.
-	  headOption match {
-		case Some(t) => new Location(t).className
-		case None => ""
-	}
-	  
+  private def e = {
+	if (!exception.getStackTrace.exists(_.toString matches "(org.specs2.*Spec|org.specs2.*Unit)"))
+      exception.filter("org.specs2") 
+    else 
+      exception
   }
-  private def e = exception.removeTracesWhileNameDoesntMatch(specName(exception))
   def stackTrace = e.getStackTrace.toList
   def location = e.location
 }
