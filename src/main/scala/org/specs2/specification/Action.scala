@@ -16,10 +16,15 @@ import execute._
  * `val first = new Action; first(println("do it"))`
  * `Action(println("do it")) ^ "example1" ! e1`
  * 
+ * @see the ContextSpec specification
+ * 
  */
 object Action {
   def apply(a: =>Any) = new Action().apply(a)
 }
+/**
+ * creates an Action that can create Step fragments as required with the apply method 
+ */
 class Action {
   def apply(a: =>Any) = Step({() =>
 	trye(a)(Error(_)).left.getOrElse(Success())  

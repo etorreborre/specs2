@@ -47,8 +47,11 @@ p^
 "  The BeforeAfterAround trait can be used to"^
 "    execute a method before, around and after the first example" ! c(e11)^
 p^
-"  An action can be used as a fragment"^
-"    it will execute and return a result" ! c(e12)^
+"  An Action can be used to create Step fragments containing an action to execute:"^
+"    val first = new Action"^
+"    val examples = first(c.println('first')) ^ ex1"^
+p^
+"    that action will execute and return a result" ! c(e12)^
 "    if it executes ok, nothing is printed, it is a silent Success" ! c(e13)^
 "    otherwise, it is reported as an Error" ! c(e14)
   
