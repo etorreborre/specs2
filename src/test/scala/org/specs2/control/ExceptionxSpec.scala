@@ -26,7 +26,7 @@ end
 	def e1 = e.location must_== "ExceptionxContext.scala:4"
     def e2 = e.classLocation must_== "org.specs2.control.ExceptionxContext:4"
     def e3 = e.fullLocation must_== "org.specs2.control.ExceptionxContext (ExceptionxContext.scala:4)"
-    def e4 = e.filter("org.specs2.control").getStackTrace.size must_== 5
+    def e4 = e.filter("org.specs2.control").getStackTrace.size <= 5 must_== true
     def e5 = e.filterNot("org.specs2.control").getStackTrace.size > 20 must_== true
     def e6 = e(2).toString must beMatching(".*apply.*")
     def e7 = e.headOption.map(_.toString).toIterable must containMatch("ExceptionxContext")
