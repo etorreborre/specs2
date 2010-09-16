@@ -22,34 +22,34 @@ class ContextSpec extends Specification with StandardResults with ContextData wi
      * Around
      * BeforeAfter or BeforeAfterAround for combined functionality
 """^
-"  The Before trait can be used to"^
-"    execute a method before the first example" ! c(e1)^
-"    execute a method before the second example" ! c(e2)^
+"  The Before trait can be used to execute methods before examples"^
+"    the before method is executed before a first example" ! c(e1)^
+"    the before method is executed before the second example" ! c(e2)^
 p^
 "  If the before method throws an exception"^
 "    the first example will not execute" ! c(e3)^
-"    it will be reported as an error" ! c(e4)^
+"    and it will be reported as an error" ! c(e4)^
 p^
-"  The After trait can be used to"^
-"    execute a method after the first example" ! c(e5)^
-"    execute a method after the second example" ! c(e6)^
+"  The After trait can be used to execute methods after examples"^
+"    the after method is executed after a first example" ! c(e5)^
+"    the after method is executed after the second example" ! c(e6)^
 p^
 "  If the after method throws an exception"^
 "    the first example will execute" ! c(e7)^
-"    the first example will be reported as an error" ! c(e8)^
+"    but it will be reported as an error" ! c(e8)^
 p^
 "  The Around trait can be used to"^
 "    execute the example inside a user provided function" ! c(e9)^
 p^
 "  The BeforeAfter trait can be used to"^
-"    execute a method before and after the first example" ! c(e10)^
+"    execute a method before and after each example" ! c(e10)^
 p^
 "  The BeforeAfterAround trait can be used to"^
 "    execute a method before, around and after the first example" ! c(e11)^
 p^
-"  An action can be introduced as a fragment"^
-"    it will execute by returning a result" ! c(e12)^
-"    if it executes ok, nothing is printed, it is a SilentSuccess" ! c(e13)^
+"  An action can be used as a fragment"^
+"    it will execute and return a result" ! c(e12)^
+"    if it executes ok, nothing is printed, it is a silent Success" ! c(e13)^
 "    otherwise, it is reported as an Error" ! c(e14)
   
   def e1 = executing(ex1Before).prints("before", "e1")
@@ -75,53 +75,57 @@ p^
     }  
   }
 }
-trait ContextData extends StandardResults with ExamplesBuilder {
-  object c extends Before with MockOutput {
-	def before = clear()
-  }
-  object b extends Before {
-	def before = c.println("before")
-  }
-  object b2 extends Before with MockOutput {
-	def before = Predef.error("error")
-  }
-  object a extends After {
-	def after = c.println("after")
-  }
-  object a2 extends After {
-	def after = Predef.error("error")
-  }
-  object ar extends Around {
-	def around[T <% Result](a: =>T) = { c.println("around"); a } 
-  }
-  object ba extends BeforeAfter {
-	def before = c.println("before")
-	def after = c.println("after")
-  }
-  object baa extends BeforeAfterAround {
-	def before = c.println("before")
-	def after = c.println("after")
-	def around[T <% Result](a: =>T) = { c.println("around"); a } 
-  }
+trait ContextData extends StandardResults with ExamplesBuilder with ContextsForExamples {
 
   def ok(name: String) = { c.println(name); success }
   def ok1 = ok("e1")
   def ok2 = ok("e2")
+  
   def ex1 = "ex1" ! ok1  
-  def ex1Before = "ex1" ! b(ok1)  
-  def ex1_beforeFail = "ex1" ! b2(ok1) 
-  def ex1_2Before = ex1Before ^ "ex2" ! b(ok2)
+  def ex1Before = "ex1" ! before(ok1)  
+  def ex1_beforeFail = "ex1" ! beforeWithError(ok1) 
+  def ex1_2Before = ex1Before ^ "ex2" ! before(ok2)
 
-  def ex1After = "ex1" ! a(ok1) 
-  def ex1_afterFail = "ex1" ! a2(ok1) 
-  def ex1_2After = ex1After ^ "ex2" ! a(ok2)
+  def ex1After = "ex1" ! after(ok1) 
+  def ex1_afterFail = "ex1" ! afterWithError(ok1) 
+  def ex1_2After = ex1After ^ "ex2" ! after(ok2)
 
-  def ex1Around = "ex1" ! ar(ok1) 
-  def ex1BeforeAfter = "ex1" ! ba(ok1) 
-  def ex1BeforeAfterAround = "ex1" ! baa(ok1)
+  def ex1Around = "ex1" ! around(ok1) 
+  def ex1BeforeAfter = "ex1" ! beforeAfter(ok1) 
+  def ex1BeforeAfterAround = "ex1" ! beforeAfterAround(ok1)
   
   val first = new Action
   def firstThenEx1 = first(c.println("first")) ^ ex1
   def silentFirstThenEx1 = first("first") ^ ex1
   def failingFirstThenEx1 = first(Predef.error("error")) ^ ex1
+}
+trait ContextsForExamples {
+  object c extends Before with MockOutput {
+	def before = clear()
+  }
+
+  object before extends Before {
+	def before = c.println("before")
+  }
+  object beforeWithError extends Before with MockOutput {
+	def before = Predef.error("error")
+  }
+  object after extends After {
+	def after = c.println("after")
+  }
+  object afterWithError extends After {
+	def after = Predef.error("error")
+  }
+  object around extends Around {
+	def around[T <% Result](a: =>T) = { c.println("around"); a } 
+  }
+  object beforeAfter extends BeforeAfter {
+	def before = c.println("before")
+	def after = c.println("after")
+  }
+  object beforeAfterAround extends BeforeAfterAround {
+	def before = c.println("before")
+	def after = c.println("after")
+	def around[T <% Result](a: =>T) = { c.println("around"); a } 
+  }
 }

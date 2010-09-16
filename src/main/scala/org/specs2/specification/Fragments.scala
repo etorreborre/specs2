@@ -15,9 +15,6 @@ case class Step(action: () => Result) extends Fragment with Executable {
   def ^(a: Fragment) = Examples(List(this, a))
   def execute = action()
 }
-trait Executable {
-  def execute: Result
-}
 object StandardFragments {
   case class End() extends Fragment
   case class Par() extends Fragment
