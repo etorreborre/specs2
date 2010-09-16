@@ -1,19 +1,20 @@
 package org.specs2
 package specification
 import execute._
+import control.Exceptions._
 
 trait AnExecutor {
   val executor: ExampleExecution = new ExampleExecution {}
 }
+/**
+ * This trait executes examples
+ *
+ */
 trait ExampleExecution {
   import StandardFragments._
-  def executeBody(body: =>Result): Result = {
-	try {
-	  body
-	} catch {
-	  case e: Exception => Error(e)
-	}
-  }
+  
+  def executeBody(body: =>Result): Result = tryOr(body)(Error(_))
+
   def executeBodies(exs: Examples): List[Result] = {
     ((Nil:List[Result]) /: exs.fragments) { (res: List[Result], e: Fragment) =>
       execute(e) match {
@@ -37,12 +38,4 @@ trait ExampleExecution {
 	case f => ExecutedNoText()
   }
 }
-sealed trait ExecutedFragment
-case class ExecutedText(text: String) extends ExecutedFragment
-case class ExecutedResult(text: String, result: Result) extends ExecutedFragment
-case class ExecutedBr() extends ExecutedFragment
-case class ExecutedPar() extends ExecutedFragment
-case class ExecutedSpecStart(name: String) extends ExecutedFragment
-case class ExecutedSpecEnd(name: String) extends ExecutedFragment
-case class ExecutedNoText() extends ExecutedFragment
 
