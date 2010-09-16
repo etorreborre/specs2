@@ -16,7 +16,7 @@ trait Exceptionx {
    * See the ExtendedThrowable object description
    */
   class ExtendedException[T <: Exception](t: T) {
-    private val topTrace = new Location(if (t.getStackTrace().isEmpty) new StackTraceElement("specs2", "internals", "file", 1) else t.getStackTrace()(0)) 
+    private val topTrace = new Location(if (t.getStackTrace().isEmpty) stackTraceElement("specs2") else t.getStackTrace()(0)) 
     /** @return the file name and the line number where the Throwable was created */
     def location = topTrace.location
     /** @return the class name and the line number where the Throwable was created */
@@ -28,14 +28,14 @@ trait Exceptionx {
     /** @return the first stacktrace element as an option */
     def headOption = t.getStackTrace().toList.headOption
     /** 
-     * filter all traces of this exception matching a given pattern
+     * Select all traces of this exception matching a given pattern
      */
     def filter(pattern: String) = {
       t.setStackTrace(t.getStackTrace.toList.filter(_.toString matches (".*"+pattern+".*")).toArray)
       t
-    } 
+    }
     /** 
-     * filter all traces of this exception not matching a given pattern
+     * Select all traces of this exception not matching a given pattern
      */
     def filterNot(pattern: String) = {
       t.setStackTrace(t.getStackTrace.toList.filterNot(_.toString matches (".*"+pattern+".*")).toArray)
@@ -45,6 +45,16 @@ trait Exceptionx {
       t
     }
   }
+  /** utility method to create a default stacktrace element */
+  def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 
+	   new StackTraceElement(m, className, fileName, lineNumber)
+  /** @return an exception with the given stacktrace */
+  def exception(st: List[StackTraceElement]) = {
+	val exception = new Exception
+	exception.setStackTrace(st.toArray)
+	exception
+  }
+
   class Location(t: StackTraceElement) {
     val fileName = t.getFileName
     val className = t.getClassName.split('$')(0)
