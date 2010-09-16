@@ -6,7 +6,7 @@ trait AnExecutor {
   val executor: ExampleExecution = new ExampleExecution {}
 }
 trait ExampleExecution {
-  import PredefinedFragments._
+  import StandardFragments._
   def executeBody(body: =>Result): Result = {
 	try {
 	  body
@@ -30,8 +30,8 @@ trait ExampleExecution {
 	  case _ => ExecutedNoText()	
 	}
 	case Text(s) => ExecutedText(s)
-	case `br` => ExecutedBr()
-	case `p` => ExecutedPar()
+	case Br() => ExecutedBr()
+	case Par() => ExecutedPar()
 	case SpecStart(n) => ExecutedSpecStart(n)
 	case SpecEnd(n) => ExecutedSpecEnd(n)
 	case f => ExecutedNoText()

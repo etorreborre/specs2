@@ -3,7 +3,7 @@ package specification
 import execute._
 import matcher._
 
-trait ExamplesBuilder extends PredefinedFragments {
+trait ExamplesBuilder {
 
   implicit def asResult[T](r: MatchResult[T]) = r.toResult
   implicit def toExamples(e: Example): Examples = new Examples(List(e))
