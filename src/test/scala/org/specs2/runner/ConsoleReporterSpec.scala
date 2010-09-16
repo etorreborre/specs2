@@ -28,25 +28,18 @@ The following examples specify the behavior for:
   * the display of nested examples
   * the display of statistics at the end
 """^
-  "A single example must"^
-    "have its description printed out" ! single1^
-    "be reported with a + if it is successful" ! single2^
-    "be reported with a x if it has a failure" ! single3^
-    "be reported with a x if it has a error" ! single4^
-    "be reported with a o if it is skipped or pending" ! single5^
-    "have the failure message displayed if it failed" ! single6^
-    "have the file location displayed if it is a failure or an error" ! single7^
+"  A single example must"^
+"    have its description printed out" ! single1^
+"    be reported with a + if it is successful" ! single2^
+"    be reported with a x if it has a failure" ! single3^
+"    be reported with a x if it has a error" ! single4^
+"    be reported with a o if it is skipped or pending" ! single5^
+"    have the failure message displayed if it failed" ! single6^
+"    have the file location displayed if it is a failure or an error" ! single7^
 p^  
-  "Nested examples must be displayed as a tree"^
-    "if a text starts a list of examples, these examples are indented to one level" ! nested1^
-    "if 2 text fragments start a list of examples, they are indented to two levels" ! nested2^
-    "if it is necessary to 'restart' the levels to zero, " +
-    "^^ must be used to separate the groups of examples" ! nested3^
-    "when ^^ is used to restart an example block, a line is skipped as if starting a new paragraph" ! nested4^
-p^  
-  "At the end of the report"^
-    "the total number of examples must be displayed" ! stat1^
-    "the total number of failures must be displayed" ! stat2
+"  At the end of the report"^
+"    the total number of examples must be displayed" ! stat1^
+"    the total number of failures must be displayed" ! stat2
 }
 
 trait ConsoleReporterSpecImplementation extends Specification with InputSpecs with ExpectedOutputs with ReportExpectations {
@@ -55,24 +48,9 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
   def single3 = descriptionMustBe(1 must_== 2, "x this example")
   def single4 = descriptionMustBe({error("error"); 1 must_== 2}, "x this example")
   def single5 = descriptionMustBe(Pending("PENDING"), "o this example PENDING")
-  def single6 = messagesContain(1 must_== 2, "  '1' is not equal to '2'")
+  def single6 = messagesContain(1 must_== 2, "'1' is not equal to '2'")
   def single7 = messagesContain(1 must_== 2, "ConsoleReporterSpec.scala")
   
-  def nested1 = reportStartsWith(level1)(level1Output)
-  def nested2 = reportStartsWith(level1and2)(
-    List("examples are") ++
-    level1Output.map("  " + _) ++ 
-    level2Output.map("  " + _))
-
-  def nested3 = reportStartsWith(examplesWithResetToLevel0)(
-    List("examples are") ++
-    level1Output.map("  " + _) ++ 
-    level2Output.map("  " + _) ++
-    List("") ++
-    List("an other example is") ++
-    level3Output.map("  " + _))
-
-  def nested4 = reportStartsWith(level1 ^^ level1)(level1Output ++ List("") ++ level1Output)
   def stat1 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
   def stat2 = reportEndsWith(level2WithFailure ^ SpecEnd(""))(level2WithFailureStats)
 }
@@ -110,48 +88,13 @@ trait InputSpecs extends ExamplesBuilder {
 	"level1"^
       "ex1" ! success^
       "ex2" ! success
-  val level2 = 
-    "level2"^
-      "ex1" ! success^
-      "ex2" ! success
   val level2WithFailure = 
     "level2"^
       "ex1" ! failure^
       "ex2" ! success
-  val level3 = 
-	"level3"^
-      "ex1" ! success^
-      "ex2" ! success
-
-  val level1and2 = 
-  "examples are"^
-    level1^
-    level2
-
-  val examplesWithResetToLevel0 =
-  level1and2^^
-  "an other example is"^
-  level3
 }
 trait ExpectedOutputs {
 
-  val level1Output = List(
-    "level1",
-    "  + ex1",
-    "  + ex2")
-  val level2Output = List(
-    "level2",
-    "  + ex1",
-    "  + ex2")
-  val level2OutputWithFailure = List(
-    "level2",
-    "  x ex1",
-    "    failure",
-    "  + ex2")
-  val level3Output = List(
-    "level3",
-    "  + ex1",
-    "  + ex2")
   val level1Stats = List(
     "",
     "Total for specification",

@@ -26,10 +26,10 @@ class BaseSpecificationSpec extends Specification {
     * executing the examples to collect results
     * printing out results to the Console
 """ ^
-  "Examples building specification" ^
-  include(new ExamplesSpec)^
-  "Examples execution" ^
-  include(new ExamplesExecutionSpec)^
-  "Examples execution" ^
-  include(new ConsoleReporterSpec)
+"  Examples building specification" ^
+   include(new ExamplesSpec)^
+"  Examples execution" ^
+   include(new ExamplesExecutionSpec)^
+"  Examples execution" ^
+   include(new ConsoleReporterSpec)
 }

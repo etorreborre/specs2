@@ -3,12 +3,11 @@ package matcher
 import execute._
 
 class DataTablesSpec extends Specification with DataTables {
-	override def args = "stacktrace"
   val examples = 
 """
-Data tables
+  Data tables
 """^
-"simple table" ! e1
+"  simple table" ! e1
 
   def e1 = {
 	"a"   | "b" | "c" |

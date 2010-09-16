@@ -5,52 +5,52 @@ import execute._
 
 class ContextSpec extends Specification with FeaturesResults with ContextData with ExampleExecution {
   val examples = """
-It is sometimes necessary to provide functions to "prepare" the specification before executing the examples and
-clean it up afterwards. This may be for example:
-   * opening a database connection
-   * inserting some data
-   * executing the example
-   * closing the connection after each example
-   
-It may also be very convenient to have each example executed "inside" a specific context, like a 
-web application session. Finally, some setups or cleanups are very expensive so one might want
-to add arbitrary actions that will be executed only once
-
-All of this can be achieved in specs2 by using case classes which extend the following traits:
-   * Before
-   * After
-   * Around
-   * BeforeAfter or BeforeAfterAround for combined functionality
+  It is sometimes necessary to provide functions to "prepare" the specification before executing the examples and
+  clean it up afterwards. This may be for example:
+     * opening a database connection
+     * inserting some data
+     * executing the example
+     * closing the connection after each example
+     
+  It may also be very convenient to have each example executed "inside" a specific context, like a 
+  web application session. Finally, some setups or cleanups are very expensive so one might want
+  to add arbitrary actions that will be executed only once
+  
+  All of this can be achieved in specs2 by using case classes which extend the following traits:
+     * Before
+     * After
+     * Around
+     * BeforeAfter or BeforeAfterAround for combined functionality
 """^
-"The Before trait can be used to"^
-  "execute a method before the first example" ! c(e1)^
-  "execute a method before the second example" ! c(e2)^
+"  The Before trait can be used to"^
+"    execute a method before the first example" ! c(e1)^
+"    execute a method before the second example" ! c(e2)^
 p^
-"If the before method throws an exception"^
-  "the first example will not execute" ! c(e3)^
-  "it will be reported as an error" ! c(e4)^
+"  If the before method throws an exception"^
+"    the first example will not execute" ! c(e3)^
+"    it will be reported as an error" ! c(e4)^
 p^
-"The After trait can be used to"^
-  "execute a method after the first example" ! c(e5)^
-  "execute a method after the second example" ! c(e6)^
+"  The After trait can be used to"^
+"    execute a method after the first example" ! c(e5)^
+"    execute a method after the second example" ! c(e6)^
 p^
-"If the after method throws an exception"^
-  "the first example will execute" ! c(e7)^
-  "the first example will be reported as an error" ! c(e8)^
+"  If the after method throws an exception"^
+"    the first example will execute" ! c(e7)^
+"    the first example will be reported as an error" ! c(e8)^
 p^
-"The Around trait can be used to"^
-  "execute the example inside a user provided function" ! c(e9)^
+"  The Around trait can be used to"^
+"    execute the example inside a user provided function" ! c(e9)^
 p^
-"The BeforeAfter trait can be used to"^
-  "execute a method before and after the first example" ! c(e10)^
+"  The BeforeAfter trait can be used to"^
+"    execute a method before and after the first example" ! c(e10)^
 p^
-"The BeforeAfterAround trait can be used to"^
-  "execute a method before, around and after the first example" ! c(e11)^
+"  The BeforeAfterAround trait can be used to"^
+"    execute a method before, around and after the first example" ! c(e11)^
 p^
-"An action can be introduced as a fragment"^
-  "it will execute by returning a result" ! c(e12)^
-  "if it executes ok, nothing is printed, it is a SilentSuccess" ! c(e13)^
-  "otherwise, it is reported as an Error" ! c(e14)
+"  An action can be introduced as a fragment"^
+"    it will execute by returning a result" ! c(e12)^
+"    if it executes ok, nothing is printed, it is a SilentSuccess" ! c(e13)^
+"    otherwise, it is reported as an Error" ! c(e14)
   
   def e1 = executing(ex1Before).prints("before", "e1")
   def e2 = executing(ex1_2Before).prints("before", "e1", "before", "e2")

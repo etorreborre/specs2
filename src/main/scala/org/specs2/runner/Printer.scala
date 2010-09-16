@@ -5,5 +5,5 @@ import io._
 import text.Plural._
 
 trait Printer extends Statistics with Output {
-  val print: Function[(Int, S, ExecutedFragment), ExecutedFragment]
+  val print: Function[(S, ExecutedFragment), ExecutedFragment]
 }

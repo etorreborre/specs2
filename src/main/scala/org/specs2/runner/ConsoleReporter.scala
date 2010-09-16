@@ -5,30 +5,29 @@ import io._
 import scalaz.Scalaz._
 import main._
 
-trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with NestedPrinter with NestedLevels 
+trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with TextPrinter
   with TotalStatistics {
   
   /**
-   *                          (Level[Int], Stats, ExecutedFragment) -> print
-   *                        /       
-   * (T, Fragment) -> level                                              x
-   *                        \
-   *                          updated[T]                            -> identity -> T
+   *                     (Stats, ExecutedFragment) -> print
+   *                   /       
+   * (T, Fragment) ->                                   x
+   *                   \
+   *                     updated[T]                -> identity -> T
    * 
    */
   lazy val folder: Function2[T, Fragment, T] = {
 	case p => ((execute >>> print *** identity) apply p)._2
   }
 
-  type T = (Level, Stats)
-  def initial = (Level(), Stats())
+  type T = Stats
+  def initial = Stats()
   
-  val execute: Function[(T, Fragment), ((Int, Stats, ExecutedFragment), T)] = {
-	case p @ ((l, s), f) => {
-	  val newLevel = level((l, f))
+  val execute: Function[(T, Fragment), ((Stats, ExecutedFragment), T)] = {
+	case p @ (s, f) => {
 	  val executed = executor.execute(f)
 	  val newStats = stats((s, executed))
-	  ((newLevel._1, newStats, executed), (newLevel._2, newStats))
+	  ((newStats, executed), newStats)
 	}
   }
 }
