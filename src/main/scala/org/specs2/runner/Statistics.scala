@@ -17,7 +17,7 @@ trait TotalStatistics extends Statistics {
 	  r match {
 	 	case Success(_) => u
 	 	case Failure(_, _) => u.copy(failures = u.failures + 1)
-	 	case Error(_) => u.copy(errors = u.errors + 1)
+	 	case Error(_,_) => u.copy(errors = u.errors + 1)
 	 	case Pending(_) => u.copy(pending = u.pending + 1)
 	 	case Skipped(_) => u.copy(skipped = u.skipped + 1)
 	  }

@@ -51,7 +51,7 @@ trait Exceptionx {
 	exception.setStackTrace(st.toArray)
 	exception
   }
-
+  /** location information from a stackTrace element */
   class Location(t: StackTraceElement) {
     val fileName = t.getFileName
     val className = t.getClassName.split('$')(0)

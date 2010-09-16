@@ -26,7 +26,7 @@ trait ExampleExecution {
   val execute: Function[Fragment, ExecutedFragment] = { 
 	case e @ Example(s, _) => ExecutedResult(s, executeBody(e.execute))
 	case s @ Step(a) => executeBody(a()) match {
-	  case err @ Error(_) => ExecutedResult("action error", err)
+	  case err @ Error(_, _) => ExecutedResult("action error", err)
 	  case _ => ExecutedNoText()	
 	}
 	case Text(s) => ExecutedText(s)
