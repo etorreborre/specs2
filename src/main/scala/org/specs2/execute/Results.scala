@@ -44,10 +44,11 @@ case object Error {
 trait HasStackTrace {
   val exception: Exception
   private def e = {
-	if (!exception.getStackTrace.exists(_.toString matches "(org.specs2.*Spec|org.specs2.*Unit)"))
+	// filter only if the specs comes from specs2
+	if (!exception.getStackTrace.exists(_.toString matches "(org.specs2.*Spec.*|org.specs2.*Unit.*)"))
       exception.filter("org.specs2") 
     else 
-      exception
+      exception.filterNot(".*Result.*")
   }
   def stackTrace = e.getStackTrace.toList
   def location = e.location
