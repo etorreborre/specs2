@@ -1,7 +1,11 @@
 package org.specs2
 package execute
 
-trait FeaturesResults {
+/**
+ * This trait provides standard results that can be used in
+ * examples bodies
+ */
+trait StandardResults {
   def done = Success("DONE")
   def todo = Pending("TODO")
   def pending = Pending("PENDING")

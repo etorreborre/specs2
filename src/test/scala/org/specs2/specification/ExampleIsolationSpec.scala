@@ -3,7 +3,7 @@ package specification
 import execute._
 import matcher._
 
-class ExampleIsolationSpec extends Specification with FeaturesResults with UserInteractions {
+class ExampleIsolationSpec extends Specification with StandardResults with UserInteractions {
   val examples = 
 """ 
   This specification shows how to use case classes to ensure examples isolation.
@@ -41,7 +41,7 @@ p^
 	def e4 = { local must_== 0; local2 must_== 0 } 
   }
 }
-trait UserInteractions extends FeaturesResults with MustExpectations with Matchers {
+trait UserInteractions extends StandardResults with MustExpectations with Matchers {
   class Login {
     var loggedIn = false
 	def login = loggedIn = true

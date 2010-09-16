@@ -3,7 +3,7 @@ package specification
 import io._
 import execute._
 
-class ContextSpec extends Specification with FeaturesResults with ContextData with ExampleExecution {
+class ContextSpec extends Specification with StandardResults with ContextData with ExampleExecution {
   val examples = """
   It is sometimes necessary to provide functions to "prepare" the specification before executing the examples and
   clean it up afterwards. This may be for example:
@@ -75,7 +75,7 @@ p^
     }  
   }
 }
-trait ContextData extends FeaturesResults with ExamplesBuilder {
+trait ContextData extends StandardResults with ExamplesBuilder {
   object c extends Before with MockOutput {
 	def before = clear()
   }

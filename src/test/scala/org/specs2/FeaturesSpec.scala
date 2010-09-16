@@ -2,7 +2,7 @@ package org.specs2
 import specification._
 import execute._
 
-class FeaturesSpec extends Specification with FeaturesResults {
+class FeaturesSpec extends Specification with StandardResults {
   val examples = 
 """
  These are the list of features to develop / port for specs2.
