@@ -17,7 +17,7 @@ sealed abstract class Result(val message: String = "", val expectationsNb: Int =
   def status = this match {
 	case Success(_) => "+"
 	case Failure(_, _) => "x"
-	case Error(_)   => "!"
+	case Error(_, _)   => "!"
 	case Pending(_) => "*"
 	case Skipped(_) => "o"
   }
@@ -26,7 +26,7 @@ sealed abstract class Result(val message: String = "", val expectationsNb: Int =
 	this match {
 	  case Success(m) => Success(msg)
 	  case Failure(m, st) => Failure(msg, st)
-	  case Error(e)   => Error(msg)
+	  case Error(m, st)   => Error(msg, st)
 	  case Skipped(m) => Skipped(msg)
 	  case Pending(m) => Pending(msg)
 	}
@@ -52,17 +52,22 @@ case class Failure(m: String, stackTrace: List[StackTraceElement] = new Exceptio
 /** 
  * This class represents an exception occurring during an execution.
  */
-case class Error(exception: Exception) extends Result(exception.getMessage) with ResultStackTrace {
-  val stackTrace = exception.getStackTrace.toList
-}
+case class Error(m: String, stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList) 
+  extends Result(m) with ResultStackTrace
 /** 
- * This object allow to create an Error from a message
+ * This object allows to create an Error from an exception
  */
 case object Error {
-  def apply(m: String) = new Error(new Exception(m))	
+  def apply(e: Exception) = new Error(e.getMessage, e.getStackTrace.toList)	
 }
-case class Pending(m: String = "")  extends Result(m) {
-}
-case class Skipped(m: String = "")  extends Result(m) {
-}
+/** 
+ * Pending result
+ * @see Result for description
+ */
+case class Pending(m: String = "")  extends Result(m)
+/** 
+ * Skipped result
+ * @see Result for description 
+ */
+case class Skipped(m: String = "")  extends Result(m)
 

@@ -41,9 +41,6 @@ trait Exceptionx {
       t.setStackTrace(t.getStackTrace.toList.filterNot(_.toString matches (".*"+pattern+".*")).toArray)
       t
     }
-    def updateMessage(m: String) = {
-      t
-    }
   }
   /** utility method to create a default stacktrace element */
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 
