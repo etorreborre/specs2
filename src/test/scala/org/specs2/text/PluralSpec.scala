@@ -4,7 +4,8 @@ package text
 class PluralSpec extends Specification with Plural {
   val examples = 
 """
-  A string can be pluralized: "apple".plural(n) """^
+  A string can be pluralized: "apple".plural(n) 
+"""^
 "    if the quantity is 0, no 's' must be added" ! e1^
 "    if the quantity is 0, no 's' must be added" ! e2^
 "    if the quantity is 2 or more, 's' must added to the string" ! e3^
