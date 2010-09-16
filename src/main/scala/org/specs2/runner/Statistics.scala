@@ -16,7 +16,7 @@ trait TotalStatistics extends Statistics {
 	  val u = s.copy(examples = s.examples + 1, expectations = s.expectations + r.expectationsNb)
 	  r match {
 	 	case Success(_) => u
-	 	case Failure(_) => u.copy(failures = u.failures + 1)
+	 	case Failure(_, _) => u.copy(failures = u.failures + 1)
 	 	case Error(_) => u.copy(errors = u.errors + 1)
 	 	case Pending(_) => u.copy(pending = u.pending + 1)
 	 	case Skipped(_) => u.copy(skipped = u.skipped + 1)

@@ -16,7 +16,7 @@ trait DataTables {
 	 	case Success(_) => showTitles
 	 	case other      => "  " + showTitles  
 	  }
-	  totalSuccess.copyMessage(header+"\n"+collected)
+	  totalSuccess.updateMessage(header+"\n"+collected)
 	}
 	private def result(desc: String, result: Result): String = {
 	  result.status+" "+desc+{

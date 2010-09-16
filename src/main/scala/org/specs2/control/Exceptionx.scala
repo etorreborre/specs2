@@ -40,7 +40,10 @@ trait Exceptionx {
     def filterNot(pattern: String) = {
       t.setStackTrace(t.getStackTrace.toList.filterNot(_.toString matches (".*"+pattern+".*")).toArray)
       t
-    } 
+    }
+    def updateMessage(m: String) = {
+      t
+    }
   }
   class Location(t: StackTraceElement) {
     val fileName = t.getFileName

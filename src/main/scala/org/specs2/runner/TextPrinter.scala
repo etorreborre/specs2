@@ -24,7 +24,7 @@ trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
   def printResult(s: String, result: Result) = {
 	val description = statusAndDescription(s, result)
     result match {
-	  case e: HasStackTrace => {
+	  case e: ResultStackTrace => {
 	 	printMessage(description)
 	 	printMessage(s.takeWhile(_ == ' ') + "  " + result.message + " ("+e.location+")")
 	 	if (configuration.printStackTrace)

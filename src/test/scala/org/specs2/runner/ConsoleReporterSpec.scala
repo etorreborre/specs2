@@ -32,8 +32,9 @@ The following examples specify the behavior for:
 "    have its description printed out" ! single1^
 "    be reported with a + if it is successful" ! single2^
 "    be reported with a x if it has a failure" ! single3^
-"    be reported with a x if it has a error" ! single4^
-"    be reported with a o if it is skipped or pending" ! single5^
+"    be reported with a ! if it has a error" ! single4^
+"    be reported with a * if it is pending" ! single5^
+"    be reported with a o if it is skipped " ! single5_1^
 "    have the failure message displayed if it failed" ! single6^
 "    have the file location displayed if it is a failure or an error" ! single7^
 p^  
@@ -46,8 +47,9 @@ trait ConsoleReporterSpecImplementation extends Specification with InputSpecs wi
   def single1 = descriptionMustBe(1 must_== 1, "+ this example")
   def single2 = descriptionMustBe(1 must_== 1, "+ this example")
   def single3 = descriptionMustBe(1 must_== 2, "x this example")
-  def single4 = descriptionMustBe({error("error"); 1 must_== 2}, "x this example")
-  def single5 = descriptionMustBe(Pending("PENDING"), "o this example PENDING")
+  def single4 = descriptionMustBe({error("error"); 1 must_== 2}, "! this example")
+  def single5 = descriptionMustBe(Pending("PENDING"), "* this example PENDING")
+  def single5_1 = descriptionMustBe(Skipped("not ready"), "o this example")
   def single6 = messagesContain(1 must_== 2, "'1' is not equal to '2'")
   def single7 = messagesContain(1 must_== 2, "ConsoleReporterSpec.scala")
   
