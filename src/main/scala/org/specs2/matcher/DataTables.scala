@@ -1,9 +1,10 @@
 package org.specs2
 package matcher
 import execute._
-
+object DataTables extends DataTables
 trait DataTables {
   implicit def toTableHeader(a: String) = new TableHeader(List(a))
+  implicit def stringToDataRow(a: String) = StringDataRow1(a)
   implicit def toDataRow[T](a: T) = DataRow1(a)
   class Table(val titles: List[String], val execute: Boolean = false) {
 	def showTitles = titles.mkString("|", "|", "|")
@@ -28,6 +29,7 @@ trait DataTables {
   }
   /** GENERATED */
   case class TableHeader(titles: List[String]) {
+    def ||(title: String) = copy(titles = this.titles :+ title)
     def |(title: String) = copy(titles = this.titles :+ title)
     def |[T1](row: DataRow1[T1]) = new Table1(titles, List(row))
     def |>[T1](row: DataRow1[T1]) = new Table1(titles, List(row), execute = true)
@@ -156,6 +158,9 @@ trait DataTables {
     def show = productIterator.mkString("|", "|", "|")
   }
   
+  case class StringDataRow1(t1: String) extends DataRow[String, Any, Any, Any, Any, Any, Any, Any, Any, Any] {
+    def !![S2](t2: S2) = DataRow2(t1, t2)
+  }
   case class DataRow1[T1](t1: T1) extends DataRow[T1, Any, Any, Any, Any, Any, Any, Any, Any, Any] {
     def ![S2](t2: S2) = DataRow2(t1, t2)
   }
