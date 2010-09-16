@@ -4,18 +4,22 @@ import execute._
 import specification._
 
 class ExceptionxSpec extends Specification with Exceptionx {
-	override val args = "stacktrace"
   val examples =
 """  
-The Exceptionx trait provide extensions to regular exceptions
+The Exceptionx trait provides extensions to regular exceptions
 """^
   "It has location methods"^
     "to get the name of the file and the line from an exception" ! c().e1^
     "to get the class name and line number of an exception" ! c().e2^
     "to get the class name, file name and line number of an exception" ! c().e3^
+p^
   "It allows to filter stacktraces"^
     "to filter all the lines matching a given pattern" ! c().e4^
     "to filter all the lines not matching a given pattern" ! c().e5^
+p^
+  "It provides utility functions for stacktrace elements"^
+    "apply returns the ith element" ! c().e6^
+    "headOption returns the first element as an option" ! c().e7^
 end
 
   case class c() extends ExceptionxContext {
@@ -24,5 +28,7 @@ end
     def e3 = e.fullLocation must_== "org.specs2.control.ExceptionxContext (ExceptionxContext.scala:4)"
     def e4 = e.filter("org.specs2.control").getStackTrace.size must_== 5
     def e5 = e.filterNot("org.specs2.control").getStackTrace.size must_== 23
+    def e6 = e(2).toString must beMatching(".*apply.*")
+    def e7 = e.headOption.map(_.toString).toIterable must containMatch("ExceptionxContext")
   }
 }

@@ -22,7 +22,7 @@ trait NestedLevels extends LevelParser {
   
   private val updateLevel: Function[(L, Fragment), L] = {
 	case (a, `end`) => Level()
-	case (a, `par`) => a
+	case (a, `p`) => a
 	case (a, `br`) => a
 	case (a, Text(s)) => {
 	  a.state match {

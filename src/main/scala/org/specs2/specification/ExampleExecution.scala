@@ -31,7 +31,7 @@ trait ExampleExecution {
 	}
 	case Text(s) => ExecutedText(s)
 	case `br` => ExecutedBr()
-	case `par` => ExecutedPar()
+	case `p` => ExecutedPar()
 	case SpecStart(n) => ExecutedSpecStart(n)
 	case SpecEnd(n) => ExecutedSpecEnd(n)
 	case f => ExecutedNoText()

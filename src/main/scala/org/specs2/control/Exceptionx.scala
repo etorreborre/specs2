@@ -23,7 +23,9 @@ trait Exceptionx {
     def classLocation = topTrace.classLocation
     /** @return the class name, file Name and the line number where the Throwable was created */
     def fullLocation= topTrace.fullLocation
+    /** @return the ith stacktrace element */
     def apply(i: Int) = t.getStackTrace()(i)
+    /** @return the first stacktrace element as an option */
     def headOption = t.getStackTrace().toList.headOption
     /** 
      * filter all traces of this exception matching a given pattern
@@ -39,38 +41,6 @@ trait Exceptionx {
       t.setStackTrace(t.getStackTrace.toList.filterNot(_.toString matches (".*"+pattern+".*")).toArray)
       t
     } 
-    /** 
-     * remove all traces of this exception until the last line matching <code>name</code> is found.
-     */
-    def removeTracesAsFarAsNameMatches(name: String): Exception = {
-      t.setStackTrace(t.getStackTrace.toList.drop(1).reverse.takeWhile { x: StackTraceElement => 
-                             !x.toString.matches(".*" + name + ".*") }
-                      .reverse.toArray)
-      t
-    }
-    /** 
-     * remove all traces of this exception until there's a line not matching <code>name</code>.
-     */
-    def removeTracesWhileNameMatches(name: String): Exception = {
-      removeTracesWhile{ x: StackTraceElement => 
-        x.toString.matches(".*" + name + ".*") 
-      }
-    }
-    /** 
-     * remove all traces of this exception until there's a line matching <code>name</code>.
-     */
-    def removeTracesWhileNameDoesntMatch(name: String): Exception = {
-      removeTracesWhile { x: StackTraceElement => 
-        !x.toString.matches(".*" + name + ".*") 
-      }
-    }
-    /** 
-     * remove all traces of this exception until a given function is true
-     */
-    private def removeTracesWhile(f: StackTraceElement => Boolean): Exception = {
-      t.setStackTrace((t.getStackTrace.toList.drop(1).dropWhile(f)).toArray)
-      t
-    }
   }
   class Location(t: StackTraceElement) {
     val fileName = t.getFileName

@@ -19,13 +19,13 @@ trait Executable {
   def execute: Result
 }
 trait PredefinedFragments {
-  def par = PredefinedFragments.par
+  def p = PredefinedFragments.p
   def br = PredefinedFragments.br
   def end = PredefinedFragments.end
 }
 object PredefinedFragments {
   object end extends Fragment
-  object par extends Fragment
+  object p extends Fragment
   object br extends Fragment
 }
 

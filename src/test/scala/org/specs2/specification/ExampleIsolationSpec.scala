@@ -16,11 +16,11 @@ object
   "This one modifies a local variable" ! c().e1^
   "This other one 'reuses' the same local variable, but the variable is " +
   "reinitialized"! c().e2^
-par^
+p^
 "The next 2 examples show that it is possible to 'nest' context by inheriting them"^
   "This example uses new local variables + the one from the parent context" ! c1().e3^
   "And isolation is still ok for another example" ! c1().e4^
-par^
+p^
 "Now these examples model a fictive customer interaction"^
   "The user logs in"^ 
     "if he selects a car, then his favorite must be displayed" ! select.favoriteCar^

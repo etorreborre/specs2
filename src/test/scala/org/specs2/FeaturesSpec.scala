@@ -52,7 +52,7 @@ class FeaturesSpec extends Specification with FeaturesResults {
       "with ! and | as separators" ! done^
     "Mockito"^
       "with the new syntax and latest Mockito" ! done^
-  par^    
+  p^    
   "Low priority"^
     "A Console reporter"^
       "with a timer" ! todo^

@@ -11,14 +11,14 @@ trait IterableMatchers {
       result(iterable.exists(_ == a), desc + " contains " + q(a), desc + " doesn't contain " + q(a))
     }
   }
-  private def containLike(pattern: =>String, matchType: String) = new IterableMatcher[Any] {
-    def apply[S <: Iterable[Any] : Expectable](v: =>S) = {
+  private def containLike[T](pattern: =>String, matchType: String) = new IterableMatcher[T] {
+    def apply[S <: Iterable[T] : Expectable](v: =>S) = {
       val (a, iterable) = (pattern, v)
       result(iterable.exists(_.toString.matches(a)), 
     		 desc + " contains "+matchType+ " " + q(a), desc + " doesn't contain "+matchType+ " " + q(a))
     }
   }
-  def containPattern(t: =>String) = containLike(t, "pattern")
-  def containMatch(t: =>String) = containLike(".*"+t+".*", "match")
+  def containPattern[T](t: =>String) = containLike(t, "pattern")
+  def containMatch[T](t: =>String): IterableMatcher[T] = containLike(".*"+t+".*", "match")
 }
 object IterableMatchers extends IterableMatchers

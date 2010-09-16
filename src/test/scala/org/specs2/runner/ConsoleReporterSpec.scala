@@ -37,14 +37,14 @@ The following examples specify the behavior for:
     "be reported with a o if it is skipped or pending" ! single5^
     "have the failure message displayed if it failed" ! single6^
     "have the file location displayed if it is a failure or an error" ! single7^
-  par^  
+  p^  
   "Nested examples must be displayed as a tree"^
     "if a text starts a list of examples, these examples are indented to one level" ! nested1^
     "if 2 text fragments start a list of examples, they are indented to two levels" ! nested2^
     "if it is necessary to 'restart' the levels to zero, " +
     "^^ must be used to separate the groups of examples" ! nested3^
     "when ^^ is used to restart an example block, a line is skipped as if starting a new paragraph" ! nested4^
-  par^  
+  p^  
   "At the end of the report"^
     "the total number of examples must be displayed" ! stat1^
     "the total number of failures must be displayed" ! stat2
