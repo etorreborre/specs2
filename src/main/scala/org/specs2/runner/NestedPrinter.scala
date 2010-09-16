@@ -27,9 +27,9 @@ trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
 	 	if (configuration.printStackTrace)
 	 	  e.stackTrace.foreach(t => printWithLevel(level, t.toString))
 	  }
-      case r: Success => if (configuration.text) println(description)
-      case r: Pending => if (configuration.pending) println(description + " " + result.message)
-      case r: Skipped => if (configuration.text) {
+      case Success(_) => if (configuration.text) println(description)
+      case Pending(_) => if (configuration.pending) println(description + " " + result.message)
+      case Skipped(_) => if (configuration.text) {
     	println(description)
 	 	printWithLevel(level, result.message)
       }
@@ -47,6 +47,7 @@ trait NestedPrinter extends Printer with TotalStatistics with AConfiguration {
 	        errors qty "error") ++
 	        List(pending.qty_>("pending")(0),
 	             skipped.qty_>("skipped")(0)).flatten).mkString(", "))
+	    println("\n")
 	  }
 	}
   }

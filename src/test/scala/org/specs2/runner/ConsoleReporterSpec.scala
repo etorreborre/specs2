@@ -6,7 +6,6 @@ import execute._
 import matcher._
 
 class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
-	override def args = "xonly"// stacktrace"
  val examples = 
 """
 A console reporter is used to execute examples and display their status in the Console.
@@ -37,14 +36,14 @@ The following examples specify the behavior for:
     "be reported with a o if it is skipped or pending" ! single5^
     "have the failure message displayed if it failed" ! single6^
     "have the file location displayed if it is a failure or an error" ! single7^
-  p^  
+p^  
   "Nested examples must be displayed as a tree"^
     "if a text starts a list of examples, these examples are indented to one level" ! nested1^
     "if 2 text fragments start a list of examples, they are indented to two levels" ! nested2^
     "if it is necessary to 'restart' the levels to zero, " +
     "^^ must be used to separate the groups of examples" ! nested3^
     "when ^^ is used to restart an example block, a line is skipped as if starting a new paragraph" ! nested4^
-  p^  
+p^  
   "At the end of the report"^
     "the total number of examples must be displayed" ! stat1^
     "the total number of failures must be displayed" ! stat2
@@ -154,10 +153,14 @@ trait ExpectedOutputs {
     "  + ex1",
     "  + ex2")
   val level1Stats = List(
+    "",
     "Total for specification",
-    "2 examples, 2 expectations, 0 failure, 0 error")
+    "2 examples, 2 expectations, 0 failure, 0 error",
+    "\n")
     
   val level2WithFailureStats = List(
-    "Total for specification",
-    "2 examples, 2 expectations, 1 failure, 0 error")
+    "",
+	"Total for specification",
+    "2 examples, 2 expectations, 1 failure, 0 error",
+    "\n")
 }

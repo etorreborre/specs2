@@ -4,7 +4,8 @@ package control
 class ExceptionsSpec extends Specification with Exceptions {
   val examples =
 """  
-The Exceptions trait provide functional ways to deal with exceptions
+The Exceptions trait provide functional ways to catch exceptions
+and deal with them
 """^
   "tryo executes an expression and return "^
     "Some(result) if the expression doesn't through an exception" ! e1^
