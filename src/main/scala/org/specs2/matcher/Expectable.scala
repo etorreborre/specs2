@@ -3,15 +3,15 @@ package matcher
 import AnyMatchers._
 import execute._
 
-abstract class Expectable[T](t: =>T) {
+class Expectable[T](t: =>T) {
   protected val desc: Option[String] = None
+  private def value = t
   
   def applyMatcher(m: Matcher[T]): MatchResult[T] = {
-	lazy val value = t
-	m.apply(t)(this) 
+	m.apply(value)(this) 
   }
   
-  def description = d(t)
+  def description = d(value)
   /** @return the description of the matched value, quoted. */
   protected def d[T](value: =>T) = desc  match {
     case None => q(value)
