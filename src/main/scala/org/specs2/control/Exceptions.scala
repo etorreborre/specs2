@@ -14,6 +14,10 @@ trait Exceptions {
 	try { Right(a) }
 	catch { case e: Exception => Left(f(e)) }
   }
+  def catchAll[T, S](a: =>T)(f: Throwable =>S): Either[S, T] = {
+	try { Right(a) }
+	catch { case e: Throwable => Left(f(e)) }
+  }
 }
 
 private[specs2]
