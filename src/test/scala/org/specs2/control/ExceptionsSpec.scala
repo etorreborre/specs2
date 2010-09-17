@@ -2,7 +2,7 @@ package org.specs2
 package control
 
 class ExceptionsSpec extends Specification with Exceptions {
-  val Fragments =
+  val examples =
 """  
   The Exceptions trait provide functional ways to catch exceptions
   and deal with them

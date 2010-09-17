@@ -3,7 +3,7 @@ package execute
 import control._
 
 class ResultStackTraceSpec extends Specification {
-  val Fragments =
+  val examples =
 " A StackTrace for a Result must sanitize the stacktrace "^
 " to present only a relevant result locationt for a user"^
 "   if it is a a user specification, the 'org.specs2' lines are filtered" ! e1^

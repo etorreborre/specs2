@@ -5,8 +5,8 @@ import execute._
 sealed trait Fragment
 case class SpecStart(name: String) extends Fragment
 case class SpecEnd(name: String) extends Fragment
-case class Text(t: String) extends Fragment
 case class Group(fragments: List[Fragment])
+case class Text(t: String) extends Fragment
 case class Example(desc: String = "", body: () => Result) extends Fragment with Executable { 
   def ^(a: Fragment) = Fragments(List(this, a))
   def execute = body()

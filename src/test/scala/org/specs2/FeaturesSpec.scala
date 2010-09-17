@@ -3,7 +3,7 @@ import specification._
 import execute._
 
 class FeaturesSpec extends Specification with StandardResults {
-  val Fragments = 
+  val examples = 
 """
  These are the list of features to develop / port for specs2.
 

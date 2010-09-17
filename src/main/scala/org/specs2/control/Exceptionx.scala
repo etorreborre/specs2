@@ -45,12 +45,14 @@ trait Exceptionx {
   /** utility method to create a default stacktrace element */
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 
 	   new StackTraceElement(m, className, fileName, lineNumber)
-  /** @return an exception with the given stacktrace */
-  def exception(st: List[StackTraceElement]) = {
-	val exception = new Exception
+  /** @return an exception with the given message and stacktrace */
+  def exception(m: String, st: List[StackTraceElement]): Exception = {
+	val exception = new Exception(m)
 	exception.setStackTrace(st.toArray)
 	exception
   }
+  /** @return an exception with the given stacktrace */
+  def exception(st: List[StackTraceElement]): Exception = exception("", st)
   /** location information from a stackTrace element */
   class Location(t: StackTraceElement) {
     val fileName = t.getFileName

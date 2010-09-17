@@ -3,7 +3,7 @@ package specification
 import reporter._
 
 class BaseSpecificationSpec extends Specification {
-   val Fragments = 
+   val examples = 
 """A basic specification is just some pieces of text interleaved with some Fragments
    This is an example of such a specification:
    

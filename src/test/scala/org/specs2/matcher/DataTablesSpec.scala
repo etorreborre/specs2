@@ -3,7 +3,7 @@ package matcher
 import execute._
 
 class DataTablesSpec extends Specification with DataTables {
-  val Fragments = 
+  val examples = 
 """
   Data tables
 """^

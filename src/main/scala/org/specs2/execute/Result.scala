@@ -1,5 +1,6 @@
 package org.specs2
 package execute
+import control.Exceptionx
 import control.Exceptionx._
 
 /**
@@ -48,12 +49,16 @@ case class Success(m: String = "")  extends Result(m) {
  * It has a message and a stacktrace
  */
 case class Failure(m: String, stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList) 
-  extends Result(m) with ResultStackTrace
+  extends Result(m) with ResultStackTrace {
+  def exception = Exceptionx.exception(m, stackTrace)
+}
 /** 
  * This class represents an exception occurring during an execution.
  */
 case class Error(m: String, stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList) 
-  extends Result(m) with ResultStackTrace
+  extends Result(m) with ResultStackTrace {
+  def exception = Exceptionx.exception(m, stackTrace)
+}
 /** 
  * This object allows to create an Error from an exception
  */

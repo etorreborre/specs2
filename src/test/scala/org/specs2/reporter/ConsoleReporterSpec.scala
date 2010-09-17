@@ -6,7 +6,7 @@ import execute._
 import matcher._
 
 class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
- val Fragments = 
+ val examples = 
 """
 A console reporter is used to execute Fragments and display their status in the Console.
 

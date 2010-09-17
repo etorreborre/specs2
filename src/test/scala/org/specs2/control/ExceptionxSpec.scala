@@ -4,7 +4,7 @@ import execute._
 import specification._
 
 class ExceptionxSpec extends Specification with Exceptionx {
-  val Fragments =
+  val examples =
 """  
   The Exceptionx trait provides extensions to regular exceptions:
 """^
