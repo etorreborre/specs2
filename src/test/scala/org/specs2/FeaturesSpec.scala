@@ -32,7 +32,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      according to a regular expression" ! todo^
 "      reporting the final statistics" ! done^
 "    A JUnit4 reporter"^
-"      with suites and test cases" ! todo^
+"      with a simple display" ! done^
 "    Matchers"^
 "      with logical combinators" ! done^
 "      with adapters" ! todo^
@@ -52,7 +52,8 @@ class FeaturesSpec extends Specification with StandardResults {
 "    Data tables"^
 "      with ! and | as separators" ! done^
 "    Mockito"^
-"      with the new syntax and latest Mockito" ! todo^
+"      verification of the calls" ! done^
+"      returning stub values" ! todo^
 p^    
 "  Low priority"^
 "    A Console reporter"^
