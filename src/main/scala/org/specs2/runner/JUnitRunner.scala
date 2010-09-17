@@ -59,7 +59,7 @@ class DescriptionReporter(specificationName: String) extends Reporter with MockO
   }
   def testName(s: String)= {
 	val spaces = s.takeWhile(_ == ' ')
-	val name = s.trim.replaceAll("\r", "").split("\n")(0)
+	val name = (if (s contains "\n") (s.trim.split("\n")(0) + "...") else s.trim).replaceAll("\r", "")
 	if (spaces.isEmpty)
       name
     else
