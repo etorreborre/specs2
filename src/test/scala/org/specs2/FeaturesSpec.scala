@@ -69,6 +69,7 @@ p^
 "      non mutable version" ! todo^
 "    ScalaCheck"^
 "      with all previous features" ! todo^
+"      with the reporting of expectations" ! todo^
 "    Configuration"^
 "      specify its behavior" ! todo^
 "    Command line arguments"^

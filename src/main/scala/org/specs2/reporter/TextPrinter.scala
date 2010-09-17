@@ -42,14 +42,11 @@ trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
 	(stats, result) match {   
       case (stats @ Stats(examples, expectations, failures, errors, pending, skipped), ExecutedSpecEnd(n)) => {
 	    println("\nTotal for specification" + (if (n.isEmpty) n else " "+n))
-	    println(
-	      (List(
-	        examples qty "example", 
-	        expectations qty "expectation",
-	        failures qty "failure",
-	        errors qty "error") ++
-	        List(pending.qty_>("pending")(0),
-	             skipped.qty_>("skipped")(0)).flatten).mkString(", "))
+	    println((
+	      List(examples qty "example") ++ 
+	      (if (expectations != examples) List(expectations qty "expectation") else Nil) ++
+	      List(failures qty "failure", errors qty "error") ++
+	      List(pending.qty_>("pending")(0), skipped.qty_>("skipped")(0)).flatten).mkString(", "))
 	    println("\n")
 	  }
 	}

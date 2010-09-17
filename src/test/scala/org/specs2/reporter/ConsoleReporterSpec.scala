@@ -98,12 +98,12 @@ trait ExpectedOutputs {
   val level1Stats = List(
     "",
     "Total for specification",
-    "2 examples, 2 expectations, 0 failure, 0 error",
+    "2 examples, 0 failure, 0 error",
     "\n")
     
   val level2WithFailureStats = List(
     "",
 	"Total for specification",
-    "2 examples, 2 expectations, 1 failure, 0 error",
+    "2 examples, 1 failure, 0 error",
     "\n")
 }
