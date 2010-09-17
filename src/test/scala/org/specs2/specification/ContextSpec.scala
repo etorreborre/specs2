@@ -21,7 +21,7 @@ class ContextSpec extends SpecificationWithJUnit with StandardResults with Conte
      * After
      * Around
      * BeforeAfter or BeforeAfterAround for combined functionality
-"""^
+""" ^
 "  The Before trait can be used to execute methods before Fragments"^
 "    the before method is executed before a first example" ! c(e1)^
 "    the before method is executed before the second example" ! c(e2)^

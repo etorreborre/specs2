@@ -43,7 +43,7 @@ p^
 "    the total number of failures must be displayed" ! stat2
 }
 
-trait ConsoleReporterSpecImplementation extends Specification with InputSpecs with ExpectedOutputs with ReportExpectations {
+abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit with InputSpecs with ExpectedOutputs with ReportExpectations {
   def single1 = descriptionMustBe(1 must_== 1, "+ this example")
   def single2 = descriptionMustBe(1 must_== 1, "+ this example")
   def single3 = descriptionMustBe(1 must_== 2, "x this example")

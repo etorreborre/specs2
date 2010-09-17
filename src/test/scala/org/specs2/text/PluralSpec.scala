@@ -3,7 +3,8 @@ package text
 import matcher.DataTables
 import specification._
 
-class PluralSpec extends Specification with Plural with DataTables {
+class PluralSpec extends SpecificationWithJUnit with Plural with DataTables {
+  
   val examples: Fragments = 
 """A string can be pluralized: "apple".plural(n)""" ! {
 
