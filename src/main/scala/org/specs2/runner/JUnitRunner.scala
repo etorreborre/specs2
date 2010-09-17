@@ -9,6 +9,7 @@ import org.junit.runner._
 import org.junit.runner.notification.RunNotifier
 import org.junit.runners._
 import org.junit._
+import junit.framework._
 import specification._
 
 class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with ConsoleOutput {
@@ -18,31 +19,30 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
   val descriptionReporter = new DescriptionReporter(klass.getSimpleName)
   
   def run(notifier: RunNotifier) {
-	val result = new org.junit.runner.Result
-	notifier.addFirstListener(result.createListener)
 	notifier.fireTestRunStarted(getDescription)
 	executions.toStream.collect { case (desc, ex) => (desc, execute(ex)) }.
 	  collect { 
 		case (desc, ExecutedNoText()) => (desc, Success("specs2.silent")) 
-		case (desc, ExecutedText(t)) => (desc, Success(t)) 
+		case (desc, ExecutedText(t)) => (desc, Success("specs2.text")) 
 		case (desc, ExecutedResult(_, result)) => (desc, result) 
 	  }.foreach { 
 	 	case (desc, Success("specs2.silent")) => ()
 	 	case (desc, result) => { 
-	      notifier.fireTestStarted(desc)
+	      if (result != Success("specs2.text")) 
+	     	notifier.fireTestStarted(desc)
 	      result match {
-            case f @ Failure(m, st) => notifier.fireTestFailure(new notification.Failure(desc, f.exception))
+            case f @ Failure(m, st) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f.exception)))
             case e @ Error(m, st) if desc.getDisplayName contains "specs2.silent" => { println(m); st foreach println }
             case e @ Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
             case Pending(_) => notifier.fireTestIgnored(desc) 
             case Skipped(_) => notifier.fireTestIgnored(desc) 
             case Success(_) => ()
           }
-	      notifier.fireTestFinished(desc)
+	      if (result != Success("specs2.text")) notifier.fireTestFinished(desc)
 	    }
 	  }	
-	notifier.fireTestRunFinished(result)
   }
+  def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
   def getDescription = description
 }
 class DescriptionReporter(specificationName: String) extends Reporter with MockOutput {
@@ -71,4 +71,15 @@ class DescriptionReporter(specificationName: String) extends Reporter with MockO
 	(desc, map + (exampleDesc -> f)) 
   }
   def createDescription(s: String) = Description.createTestDescription(classOf[Specification], s)
+}
+/**
+ * This class refines the <code>AssertionFailedError</code> from junit
+ * and provides the stackTrace of an exception which occured during the specification execution
+ */
+class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError(e.getMessage) {
+  override def getStackTrace = e.getStackTrace
+  override def getCause = e.getCause
+  override def printStackTrace = e.printStackTrace
+  override def printStackTrace(w: java.io.PrintStream) = e.printStackTrace(w)
+  override def printStackTrace(w: java.io.PrintWriter) = e.printStackTrace(w)
 }

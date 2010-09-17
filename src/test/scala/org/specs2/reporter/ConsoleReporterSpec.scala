@@ -82,9 +82,7 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
 	reporter.messages.toList
   }
 }
-trait InputSpecs extends FragmentsBuilder {
-  val success = Success("ok")
-  val failure = Failure("failure")
+trait InputSpecs extends FragmentsBuilder with StandardResults {
   
   val level1 = 
 	"level1"^
