@@ -37,7 +37,7 @@ trait FileSystem extends FileReader with FileWriter {
   }
   
   /**
-   * @return the regular expression equivalent to a glob pattern (see the specs for examples)
+   * @return the regular expression equivalent to a glob pattern (see the specs for Fragments)
    */
   def globToPattern(glob: String): String = {
     val star = "<STAR>"

@@ -3,7 +3,7 @@ import specification._
 import execute._
 
 class FeaturesSpec extends Specification with StandardResults {
-  val examples = 
+  val Fragments = 
 """
  These are the list of features to develop / port for specs2.
 
@@ -26,7 +26,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "        stacktraces on demand" ! done^
 "        fail only" ! done^
 "        pending only" ! done^
-"        examples filter" ! todo^
+"        Fragments filter" ! todo^
 "    A specs file runner"^
 "      reporter all classes on the path" ! done^
 "      according to a regular expression" ! todo^
@@ -60,7 +60,7 @@ p^
 "      with colored output" ! todo^
 "      with intermediary stats where required" ! todo^
 "    StackTraces"^
-"      for examples, to help with IDE navigation" ! todo^
+"      for Fragments, to help with IDE navigation" ! todo^
 "      for all results, even success" ! todo^
 "      with source code location" ! done^
 "      sanitized" ! done^

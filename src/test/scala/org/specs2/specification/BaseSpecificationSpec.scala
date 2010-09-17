@@ -1,17 +1,18 @@
 package org.specs2
 package specification
-import runner._
+import reporter._
 
 class BaseSpecificationSpec extends Specification {
-   val examples = 
-"""A basic specification is just some pieces of text interleaved with some examples
+   val Fragments = 
+"""A basic specification is just some pieces of text interleaved with some Fragments
    This is an example of such a specification:
    
      object ReverseSpec extends Specification { 
-       val spec = 
+       val examples = 
        "A reverse function can reverse a string"^
-       "if the string is empty, it return an empty string" ! e1
-       "if the string is not empty, it returns the reversed string" ! e2
+       "  if the string is empty, it return an empty string" ! e1
+       "  if the string is not empty, it returns the reversed string" ! e2
+      
        def e1 = reverse("") must_== ""
        def e2 = reverse("abc") must_== "bca"
     
@@ -21,15 +22,15 @@ class BaseSpecificationSpec extends Specification {
    >   + if the string is empty, it return an empty string
    >   + if the string is not empty, it returns the reversed string
     
-  The following examples are going to specify the basic components for such a specification:
-    * building the list of examples, with text and executable code
-    * executing the examples to collect results
+  The following Fragments are going to specify the basic components for such a specification:
+    * building the list of Fragments, with text and executable code
+    * executing the Fragments to collect results
     * printing out results to the Console
 """ ^
-"  Examples building specification" ^
-   include(new ExamplesSpec)^
-"  Examples execution" ^
-   include(new ExamplesExecutionSpec)^
-"  Examples execution" ^
+"  Fragments building specification" ^
+   include(new FragmentsSpec)^
+"  Fragments execution" ^
+   include(new FragmentsExecutionSpec)^
+"  Fragments execution" ^
    include(new ConsoleReporterSpec)
 }

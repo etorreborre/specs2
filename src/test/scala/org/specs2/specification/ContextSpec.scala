@@ -4,8 +4,8 @@ import io._
 import execute._
 
 class ContextSpec extends Specification with StandardResults with ContextData with ExampleExecution {
-  val examples = """
-  It is sometimes necessary to provide functions to "prepare" the specification before executing the examples and
+  val Fragments = """
+  It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments and
   clean it up afterwards. This may be for example:
      * opening a database connection
      * inserting some data
@@ -22,7 +22,7 @@ class ContextSpec extends Specification with StandardResults with ContextData wi
      * Around
      * BeforeAfter or BeforeAfterAround for combined functionality
 """^
-"  The Before trait can be used to execute methods before examples"^
+"  The Before trait can be used to execute methods before Fragments"^
 "    the before method is executed before a first example" ! c(e1)^
 "    the before method is executed before the second example" ! c(e2)^
 p^
@@ -30,7 +30,7 @@ p^
 "    the first example will not execute" ! c(e3)^
 "    and it will be reported as an error" ! c(e4)^
 p^
-"  The After trait can be used to execute methods after examples"^
+"  The After trait can be used to execute methods after Fragments"^
 "    the after method is executed after a first example" ! c(e5)^
 "    the after method is executed after the second example" ! c(e6)^
 p^
@@ -49,7 +49,7 @@ p^
 p^
 "  An Action can be used to create Step fragments containing an action to execute:"^
 "    val first = new Action"^
-"    val examples = first(c.println('first')) ^ ex1"^
+"    val Fragments = first(c.println('first')) ^ ex1"^
 p^
 "    that action will execute and return a result" ! c(e12)^
 "    if it executes ok, nothing is printed, it is a silent Success" ! c(e13)^
@@ -71,14 +71,14 @@ p^
   def e13 = executeBodies(silentFirstThenEx1).map(_.message) must_== List("success")
   def e14 = executeBodies(failingFirstThenEx1).map(_.message) must_== List("error", "success")
 
-  def executing(exs: Examples): Executed = Executed(executeBodies(exs))
+  def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
   case class Executed(r: List[Result]) {
 	def prints(messages: String*): Result = {
 	  c.messages must_== List(messages:_*)
     }  
   }
 }
-trait ContextData extends StandardResults with ExamplesBuilder with ContextsForExamples {
+trait ContextData extends StandardResults with FragmentsBuilder with ContextsForFragments {
 
   def ok(name: String) = { c.println(name); success }
   def ok1 = ok("e1")
@@ -102,7 +102,7 @@ trait ContextData extends StandardResults with ExamplesBuilder with ContextsForE
   def silentFirstThenEx1 = first("first") ^ ex1
   def failingFirstThenEx1 = first(Predef.error("error")) ^ ex1
 }
-trait ContextsForExamples {
+trait ContextsForFragments {
   object c extends Before with MockOutput {
 	def before = clear()
   }

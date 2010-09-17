@@ -4,7 +4,7 @@ import matcher.DataTables
 import specification._
 
 class PluralSpec extends Specification with Plural with DataTables {
-  val examples: Examples = 
+  val Fragments: Fragments = 
 """A string can be pluralized: "apple".plural(n)""" ! {
 
 	"word"   || "quantity"	| "result"	|>

@@ -3,7 +3,7 @@ package execute
 
 /**
  * This trait provides standard results that can be used in
- * examples bodies
+ * Fragments bodies
  */
 trait StandardResults {
   def done = Success("DONE")

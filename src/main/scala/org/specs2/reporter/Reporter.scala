@@ -1,17 +1,17 @@
 package org.specs2
-package runner
+package reporter
 import specification._
 import io._
 
 trait Reporter extends Output with Folder {
-  def report(spec: Specification): T = 
-	report(SpecStart(name(spec)) +: spec.examples.fragments :+ SpecEnd(name(spec)))
+  def report(spec: BaseSpecification): T = 
+	report(SpecStart(name(spec)) +: spec.Fragments.fragments :+ SpecEnd(name(spec)))
 	
   def report(fragments: List[Fragment]): T = {
 	fragments.foldLeft(initial)(folder)
   } 
   
-  def name(spec: Specification) = ClassName.className(spec)
+  def name(spec: BaseSpecification) = ClassName.className(spec)
   val configuration = new Configuration
 }
 trait Folder {

@@ -4,24 +4,24 @@ import execute._
 import matcher._
 
 class ExampleIsolationSpec extends Specification with StandardResults with UserInteractions {
-  val examples = 
+  val Fragments = 
 """ 
-  This specification shows how to use case classes to ensure examples isolation.
+  This specification shows how to use case classes to ensure Fragments isolation.
   
   The main idea is to create a inheritance tree of classes to model nested contexts where
   variables are renitialized for each example by the sheer virtue of creating a fresh context 
   object
 """^
-"  Those 2 first examples show that they are not sharing variables"^
+"  Those 2 first Fragments show that they are not sharing variables"^
 "    This one modifies a local variable" ! c().e1^
 "    This other one 'reuses' the same local variable, but the variable is " +
 "    reinitialized"! c().e2^
 p^
-"  The next 2 examples show that it is possible to 'nest' context by inheriting them"^
+"  The next 2 Fragments show that it is possible to 'nest' context by inheriting them"^
 "    This example uses new local variables + the one from the parent context" ! c1().e3^
 "    And isolation is still ok for another example" ! c1().e4^
 p^
-"  Now these examples model a fictive customer interaction"^
+"  Now these Fragments model a fictive customer interaction"^
 "  The user logs in"^ 
 "    if he selects a car, then his favorite must be displayed" ! select.favoriteCar^
 "    if he selects an hotel, then his favorite must be displayed" ! select.favoriteHotel^

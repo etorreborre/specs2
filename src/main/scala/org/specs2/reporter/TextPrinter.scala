@@ -1,5 +1,5 @@
 package org.specs2
-package runner
+package reporter
 import specification._
 import execute._
 import text.Plural._

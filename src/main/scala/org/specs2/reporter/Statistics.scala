@@ -1,5 +1,5 @@
 package org.specs2
-package runner
+package reporter
 import specification._
 import execute._
 
@@ -9,11 +9,11 @@ trait Statistics {
 }
 trait TotalStatistics extends Statistics {
   type S = Stats
-  case class Stats(examples: Int = 0, expectations: Int = 0, failures: Int = 0, errors: Int = 0, pending: Int = 0, skipped: Int = 0)
+  case class Stats(Fragments: Int = 0, expectations: Int = 0, failures: Int = 0, errors: Int = 0, pending: Int = 0, skipped: Int = 0)
 
   val stats: Function[(S, ExecutedFragment), S] = {
 	case (s, ExecutedResult(_, r)) => {
-	  val u = s.copy(examples = s.examples + 1, expectations = s.expectations + r.expectationsNb)
+	  val u = s.copy(Fragments = s.Fragments + 1, expectations = s.expectations + r.expectationsNb)
 	  r match {
 	 	case Success(_) => u
 	 	case Failure(_, _) => u.copy(failures = u.failures + 1)

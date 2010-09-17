@@ -8,7 +8,7 @@ import execute._
  * Error if there is an exception or a Success.
  * 
  * It is usually used to do some initialisation or cleanup before or after all
- * the examples.
+ * the Fragments.
  * 
  * Note that a Step fragment will not be reported in the output.
  * 
