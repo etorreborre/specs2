@@ -27,13 +27,13 @@ end
   		    "Expected an exception of class java.lang.Error but no exception was thrown"
 
   def e2 = (theBlock(error("boom")) must throwA[RuntimeException]).message must_== 
-	        "java.lang.RuntimeException: boom is an instance of java.lang.RuntimeException"
+	        "Got the exception java.lang.RuntimeException: boom"
 	  
   def e3 = (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must_== 
 	        "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead"
 	  
   def e4 = (theBlock(error("boom")) must throwA[RuntimeException].like { case e => e.getMessage()(0) == 'b' }).message must_== 
-	        "java.lang.RuntimeException: boom is an instance of java.lang.RuntimeException as expected"
+	        "Got the exception java.lang.RuntimeException: boom"
 	  
   def e5 = (theBlock(error("boom")) must throwA[RuntimeException].like { case e => e.getMessage()(0) == 'a' }).message must_== 
 	        "Expected: java.lang.RuntimeException. Got: java.lang.RuntimeException: boom instead"

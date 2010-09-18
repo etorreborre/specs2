@@ -25,32 +25,18 @@ trait ExceptionMatchers {
    */
   class ExceptionClassMatcher(klass: Class[_]) extends Matcher[Any] {
     def apply[S <: Any : Expectable](value: =>S) = {
-      getException(value) match {
-    	case Some(e)  => 
-    	  result(klass.isAssignableFrom(e.getClass), 
-    	 		 asString(e) + " is an instance of " + asString(klass), 
-    	 		 "Expected: "+ asString(klass) + ". Got: " + e + " instead")
-    	case None => 
-    	  result(false, 
-    	 		 "An exception of class " + asString(klass) + " was thrown", 
-    	 		 "Expected an exception of class " + asString(klass) + " but no exception was thrown")
-      }
+      check(value, implicitly[Expectable[S]], (e: Throwable) => classType(e))
     }
     def like[T](f: =>PartialFunction[Throwable, Boolean]) = new Matcher[T] {
       def apply[S <: T : Expectable](v: =>S) = {
-	    getException(value) match {
-	   	  case Some(e)  => 
-	   	    result(klass.isAssignableFrom(e.getClass) && f(e), 
-	   	 	  	   e + " is an instance of " + asString(klass) + " as expected", 
-	   	 		   "Expected: "+ asString(klass) + ". Got: " + e + " instead")
-	   	  case None => 
-	   	    result(false, 
-	   	 		   "An exception of class " + asString(klass) + " was thrown", 
-	   	 		   "Expected an exception of class " + asString(klass) + " but no exception was thrown")
-	    }
+    	check(value, implicitly[Expectable[S]], (e: Throwable) => classType(e) && f(e))
       }
     }
-    protected[matcher] def asString(exception: Any) = {
+    private val classType = (e: Throwable) => klass.isAssignableFrom(e.getClass)  
+    private def check[T](value: =>Any, expected: Expectable[T], f: Throwable => Boolean) = {
+      checkExceptionValue(value, expected, f, asString(klass))
+    }
+    private def asString(exception: Any) = {
       exception match {
         case e: Class[_] => e.toString.replaceFirst("class ", "")
         case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage
@@ -64,33 +50,35 @@ trait ExceptionMatchers {
    */
   class ExceptionMatcher[E <: Throwable](exception: E) extends Matcher[Any] {
     def apply[S <: Any : Expectable](value: =>S) = {
-      getException(value) match {
-    	case Some(e)  => 
-    	  result(exception.getClass == e.getClass && exception.getMessage == e.getMessage, 
-    	 		 "Got the exception " + exception, 
-    	 		 "Expected: "+ exception + ". Got: " + e + " instead")
-    	case None => 
-    	  result(false, 
-    	 		 "Got the exception " + exception, 
-    	 		 "Expected: "+ exception + ". Got nothing")
-      }
+      check(value, implicitly[Expectable[S]], (e: Throwable) => classAndMessage(e))
     }
     def like(f: =>PartialFunction[E, Boolean]) = new Matcher[Any] {
-      def apply[S <: Any : Expectable](v: =>S) = {
-	    getException(value) match {
-	   	  case Some(e)  => 
-	   	    result(exception.getClass == e.getClass && exception.getMessage == e.getMessage && f(e.asInstanceOf[E]), 
-    	 	  	   "Got the exception " + exception, 
-    	 		   "Expected: "+ exception + ". Got: " + e + " instead")
-    	  case None => 
-    	    result(false, 
-    	 		   "Got the exception " + exception, 
-    	 		   "Expected: "+ exception + ". Got nothing")
-	    }
-      }
+      def apply[S <: Any : Expectable](value: =>S) = 
+    	check(value, implicitly[Expectable[S]], (e: Throwable) => classAndMessage(e) && f(e.asInstanceOf[E]))
+    }
+    private val classAndMessage = (e: Throwable) => exception.getClass == e.getClass && exception.getMessage == e.getMessage 
+    private def check[T](value: =>Any, expected: Expectable[T], f: Throwable => Boolean) = {
+      checkExceptionValue(value, expected, f, exception.toString)
     }
   }
-  protected[matcher] def message(exception: Any) = {
+  private def checkExceptionValue[T](value: =>Any, expected: Expectable[T], f: Throwable => Boolean, expectedAsString: String) = {
+      checkException(value, expected, 
+		  f,
+		  (e: Throwable) => "Got the exception " + e, 
+		  (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead",
+		  "Got the exception " + expectedAsString, 
+	 	  "Expected: "+ expectedAsString + ". Got nothing")
+  }
+  private def checkException[T](value: =>Any, expected: Expectable[T], f: Throwable => Boolean,
+		  someOk: Throwable => String, someKo: Throwable => String,
+		  noneOk: String, noneKo: String) = {
+    getException(value) match {
+	  case Some(e) => Matcher.result(f(e), someOk(e), someKo(e), expected)
+	  case None    => Matcher.result(false, noneOk, noneKo, expected)
+    }
+  }
+  
+  private def message(exception: Any) = {
     exception match {
       case e: Class[_] => e.toString.replaceFirst("class ", "")
       case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage
