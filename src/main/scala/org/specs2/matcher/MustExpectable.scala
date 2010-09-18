@@ -7,5 +7,5 @@ class MustExpectable[T](t: =>T) extends Expectable[T](t) {
   } 
   def mustNot(m: =>Matcher[T]) = applyMatcher(m.not)
   def must(m: =>Matcher[T]) = applyMatcher(m)
-  def must_==(other: =>T) = must(new BeEqualToMatcher(other))
+  def must_==(other: =>T) = must(new BeEqualTo(other))
 }

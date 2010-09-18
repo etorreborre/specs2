@@ -26,7 +26,7 @@ trait AnyMatchers {
   private[specs2] def unq(a: Any)  = if (null == a) "null" else a.toString
 
 }
-class BeEqualToMatcher[T](t: =>T) extends Matcher[T] {
+class BeEqualTo[T](t: =>T) extends Matcher[T] {
   import AnyMatchers._
   def apply[S <: T : Expectable](v: =>S) = {
     val (a, b) = (t, v)
