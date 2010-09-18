@@ -1,6 +1,7 @@
 package org.specs2
 package mock
 import specification._
+import control.Exceptions._
 
 class MockitoSpec extends SpecificationWithJUnit with Mockito {
   val examples = 	
@@ -11,48 +12,48 @@ class MockitoSpec extends SpecificationWithJUnit with Mockito {
   here: http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
 """^
 "   When a mock is created with the mock method"^
-"     it is possible to call methods to the mock" ! listMock().e1^
-//"     it is possible to verify that a method has been called" ! listMock().e2^
-"     if one method has not been called on a mock there will be a failure" ! listMock().e3^
+"     it is possible to call methods to the mock" ! listMock().call1^
+"     it is possible to verify that a method has been called" ! listMock().verify1^
+"     if one method has not been called on a mock there will be a failure" ! listMock().verify2^
+p^
+"   It is also possible to return a specific value from a mocked method"^
+"     then when the mocked method is called, the same values will be returned" ! listMock().return1^
+"     different successive values can even be returned" ! listMock().return2^
+p^
+"   It is also possible to throw an exception from a mocked method"^
+"     then when the mocked method is called, the exception will be thrown" ! listMock().throw1^
+"     different successive exceptions can even be thrown" ! listMock().throw2^
 end  
 
   case class listMock() {
 	val list = mock[java.util.List[String]]
-    def e1 = { list.add("one"); success }
-	def e2 = { 
+    def call1 = { list.add("one"); success }
+	def verify1 = { 
 	  list.add("one")
 	  there was one(list).add("one")
 	}
-	def e3 = (there was one(list).add("one")).message must startWith("The mock was not called as expected")
+	def verify2 = (there was one(list).add("one")).message must startWith("The mock was not called as expected")
+	def return1 = {
+	  list.add("one") returns true
+	  list.add("one") must_== true
+	}
+	def return2 = {
+	  list.add("one") returns (true, false, true)
+	  (list.add("one"), list.add("one"), list.add("one")) must_== (true, false, true)
+	}
+	def throw1 = { 
+	  list.clear() throws new RuntimeException 
+	  list.clear()
+	} must throwA[RuntimeException]
+	
+	def throw2 = { 
+	  list.clear() throws (new RuntimeException, new IllegalArgumentException) 
+	  tryo(list.clear())
+	  list.clear()
+	} must throwAn[IllegalArgumentException]
+
   }
-//
-//  object s extends Specification with Mockito {
-//
-//    // mock creation
-//    val m = mock[List[String]]
-//
-//    // using mock object
-//    m.add("one")
-//    m.clear()""" snip it }
-//
-//  // <ex>It is possible to check that some methods have been called on the mock with the @called@ matcher</ex>:
-//
-//{"""    // verification
-//    there was one(m).add("one")
-//    there was one(m).clear()
-//  } """ add it }{ executeIsNot("error") }
-//
 //h4. Failures
-//
-//If one method has not been called on a mock, <ex>the expression @there was one(m).method@ must throw a @FailureException@</ex>: {"""
-//
-//  object s2 extends Specification with Mockito {
-//    val m = mock[List[String]]
-//    there was one(m).clear()
-//  }
-//  s2.failures
-//  """ snip it }
-//  { >("Wanted but not invoked") }
 //
 //h4. Argument matchers
 //
