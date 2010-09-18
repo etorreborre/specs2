@@ -66,9 +66,9 @@ trait ExceptionMatchers {
     def apply[S <: Any : Expectable](value: =>S) = {
       getException(value) match {
     	case Some(e)  => 
-    	  result(exception == e, 
+    	  result(exception.getClass == e.getClass && exception.getMessage == e.getMessage, 
     	 		 "Got the exception " + exception, 
-    	 		 "Expected: "+ exception + ". Got :" + e + " instead")
+    	 		 "Expected: "+ exception + ". Got: " + e + " instead")
     	case None => 
     	  result(false, 
     	 		 "Got the exception " + exception, 
@@ -79,9 +79,9 @@ trait ExceptionMatchers {
       def apply[S <: Any : Expectable](v: =>S) = {
 	    getException(value) match {
 	   	  case Some(e)  => 
-	   	    result(exception == e && f(e.asInstanceOf[E]), 
+	   	    result(exception.getClass == e.getClass && exception.getMessage == e.getMessage && f(e.asInstanceOf[E]), 
     	 	  	   "Got the exception " + exception, 
-    	 		   "Expected: "+ exception + ". Got :" + e + " instead")
+    	 		   "Expected: "+ exception + ". Got: " + e + " instead")
     	  case None => 
     	    result(false, 
     	 		   "Got the exception " + exception, 
