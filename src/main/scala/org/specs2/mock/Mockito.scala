@@ -2,6 +2,7 @@ package org.specs2
 package mock
 import matcher._
 import control.Exceptions._
+import control.LocalVariables._
 import org.mockito.InOrder
 import org.mockito.stubbing.Answer
 import org.mockito.internal.stubbing.StubberImpl
@@ -43,30 +44,26 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
   /** temporary InOrder object to accumulate mocks to verify in order */
   private var inOrder: Option[InOrderImpl] = None
   /** this matcher evaluates an expression containing mockito calls verification */
-  private class CallsMatcher[T] extends Matcher[T] {
-    def apply[S <: T : Expectable](v: =>S) = {
-      tryOr {
-    	v
-    	result(true, "The mock was called as expected", "The mock was not called as expected")
-      } { (e: Exception) =>
-          result(false, "The mock was called as expected", "The mock was not called as expected: " + e.getMessage)
-      }
+  private class CallsMatcher extends Matcher[Any] {
+    def apply[S <: Any : Expectable](calls: =>S) = checkCalls[S](calls, implicitly[Expectable[S]])
+  }
+  private def checkCalls[T](calls: =>T, expectable: Expectable[T]): MatchResult[T] = {
+    catchAll { calls } { identity } match {
+   	  case Right(v) => new MatchSuccess("The mock was called as expected", "The mock was not called as expected", new Expectable(v))
+  	  case Left(e) => 
+   	    new MatchFailure("The mock was called as expected", 
+  			             "The mock was not called as expected: " + e.getMessage, 
+  			             new Expectable(calls) { override def description = e.getMessage })
     }
   }
-  
   /** create an object supporting 'was' and 'were' methods */
   def there = new Calls
   /** 
    * class supporting 'was' and 'were' methods to forward mockito calls to the CallsMatcher matcher 
    */
   class Calls {
-    def were[T](calls: =>T): MatchResult[String] = was(calls)
-    def was[T](calls: =>T): MatchResult[String] = {
-      catchAll { calls } { identity } match {
-    	case Right(v) => new MatchSuccess("The mock was called as expected", "The mock was not called as expected", new Expectable(v.toString))
-    	case Left(e) => new MatchFailure("The mock was called as expected", "The mock was not called as expected: " + e.getMessage, new Expectable(e.getMessage))
-      }
-    }
+    def were[T](calls: =>T): MatchResult[T] = was(calls)
+    def was[T](calls: =>T): MatchResult[T] = checkCalls(calls, new Expectable(calls))
   }
   /**
    * alias for 'there was'
@@ -134,23 +131,23 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
    * The orderedBy method can be used to declare the mock order if there are several mocks
    */
   class ToInOrderMode[T](calls: =>T) {
-//    def then[U](otherCalls: =>U) = {
-//      val newOrder = inOrder match {
-//        case Some(o) => Some(o)
-//        case None => Some(new InOrderImpl(new java.util.ArrayList[Object]))
-//      }
-//      val f = () => setTemporarily(inOrder, newOrder, (o:Option[InOrderImpl]) => inOrder = o) {
-//        calls
-//        otherCalls 
-//      }
-//      f() must new CallsMatcher
-//    }
-//    /** specify the mocks which are to be checked in order */
-//    def orderedBy(mocks: AnyRef*) = {
-//      setTemporarily(inOrder, Some(new InOrderImpl(java.util.Arrays.asList(mocks.toArray: _*) )), (o:Option[InOrderImpl]) => inOrder = o) {
-//        calls
-//      } 
-//    }
+    def then[U](otherCalls: =>U) = {
+      val newOrder = inOrder match {
+        case Some(o) => Some(o)
+        case None => Some(new InOrderImpl(new java.util.ArrayList[Object]))
+      }
+      val f = () => setTemporarily(inOrder, newOrder, (o:Option[InOrderImpl]) => inOrder = o) {
+        calls
+        otherCalls 
+      }
+      new Expectable(f()).applyMatcher(new CallsMatcher)
+    }
+    /** specify the mocks which are to be checked in order */
+    def orderedBy(mocks: AnyRef*) = {
+      setTemporarily(inOrder, Some(new InOrderImpl(java.util.Arrays.asList(mocks.toArray: _*) )), (o:Option[InOrderImpl]) => inOrder = o) {
+        calls
+      } 
+    }
   }
 }
 /**

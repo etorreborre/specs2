@@ -38,10 +38,13 @@ p^
 "     if the mocked method has never been called" ! calls().calls5^
 "     if the mocked method has not been called after some calls" ! calls().calls6^
 p^
-"   Callbacks can be created to control the returned a value" ! callbacks().e1^
+"   The order of calls to a mocked method can be checked"^
+"     with 2 calls that were indeed in order" ! inOrder().asExpected^
+"     with 2 calls that were indeed not in order" ! inOrder().failed^
+p^
+"   Callbacks can be created to control the returned a value" ! callbacks().c1^
 end  
     
-
   case class listMock() {
 	val list = mock[java.util.List[String]]
     def call1 = { list.add("one"); success }
@@ -96,10 +99,26 @@ end
   }
   case class callbacks() {
 	val list = mock[java.util.List[String]]
-    def e1 = {
+    def c1 = {
 	  list.get(anyInt()) answers { i => "The parameter is " + i.toString }
 	  list.get(2) must_== "The parameter is 2"
 	}
-
+  }
+  case class inOrder() {
+	val list1 = mock[java.util.List[String]]
+	val list2 = mock[java.util.List[String]]
+    def asExpected = {
+	  list1.get(0); list1.get(0)
+	  list2.get(0)
+      (there was atLeastOne(list1).get(0) then
+                 one(list2).get(0) orderedBy (list1, list2)).message must_== "The mock was called as expected"
+    }
+	
+    def failed = {
+	  list1.get(0); list1.get(0)
+	  list2.get(0)
+      (there was one(list2).get(0) then
+                 atLeastOne(list1).get(0) orderedBy (list1, list2)).message must startWith("The mock was not called as expected")
+    }
   }
 }
