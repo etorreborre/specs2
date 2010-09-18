@@ -23,6 +23,13 @@ p^
 "   It is also possible to throw an exception from a mocked method"^
 "     then when the mocked method is called, the exception will be thrown" ! listMock().throw1^
 "     different successive exceptions can even be thrown" ! listMock().throw2^
+p^
+"   The number of calls to a mocked method can be checked"^
+"     if the mocked method has been called once" ! calls().calls1^
+"     if the mocked method has been called twice" ! calls().calls2^
+"     if the mocked method has been called atLeast n times" ! calls().calls3^
+"     if the mocked method has been called atMost n times" ! calls().calls4^
+"     if the mocked method has never been called" ! calls().calls5^
 end  
 
   case class listMock() {
@@ -51,41 +58,25 @@ end
 	  tryo(list.clear())
 	  list.clear()
 	} must throwAn[IllegalArgumentException]
+  }
+  
+  case class calls() {
+	val list = mock[java.util.List[String]]
+	list.add("one")
+	1 to 2 foreach { i => list.add("two") } 
+    1 to 3 foreach { i => list.add("three") } 
 
+    def calls1 = there was one(list).add("one")
+    def calls2 = there was two(list).add("two")
+    def calls3 = there was atLeast(1)(list).add("two")
+    def calls4 = there was atMost(2)(list).add("two")
+    def calls5 = there was no(list).add("four")
   }
 //h4. Failures
 //
 //h4. Argument matchers
 //
 //{ linkTo(argumentMatchers) } allow flexible verification or stubbing.
-//
-//h3. How about some stubbing?
-//
-//<ex>You can mock concrete classes, not only interfaces</ex> {"""
-//
-//  object s3 extends Specification with Mockito {
-//    val m = mock[LinkedList[String]]
-//
-//    // stubbing
-//    m.get(0) returns "first"
-//    m.clear() throws new RuntimeException
-//  }
-//""" prelude it }{ executeIsNot("error") }
-//
-//<ex>Calling a stubbed method with @returns@ returns the expected value</ex>. For example, the following prints "first":
-//
-//{ "s3.m.get(0)" snip it }
-//{ >("first") }
-//
-//<ex>Calling a stubbed method with @throws@ throws the expected exception</ex>. For example, the following throws a RuntimeException:
-//
-//{ "s3.m.clear()" snip it }
-//{ >("RuntimeException") }
-//
-//<ex>Calling a non-stubbed method should return a default value</ex>. For example, the following returns @null@ because @get(999)@ was not stubbed:
-//  
-//{ "s3.m.get(999)" snip it }
-//{ >("null") }
 //
 //h3. Verifying the number of invocations
 //
