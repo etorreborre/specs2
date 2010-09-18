@@ -5,9 +5,9 @@ import execute._
 
 class Expectable[T](t: =>T) {
   protected val desc: Option[String] = None
-  private def value = t
+  lazy val value = t
   
-  def applyMatcher(m: Matcher[T]): MatchResult[T] = {
+  def applyMatcher(m: =>Matcher[T]): MatchResult[T] = {
 	m.apply(value)(this) 
   }
   
