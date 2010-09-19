@@ -89,45 +89,37 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
    */
   private def verify[T <: AnyRef](mock: =>T, v: VerificationMode)(implicit order: Option[InOrderImpl]) = {
     order match { 
-      case Some(ordered) => { 
-        val mocksList = ordered.getMocksToBeVerifiedInOrder()
-        if (!mocksList.contains(mock))
-          mocksList.add(mock)
-        mocker.verify(Some(new InOrderImpl(mocksList)), mock, v)
-      }
+      case Some(ordered) => mocker.verify(order, mock, v)
       case None => mocker.verify(mock, v)
     }
   }
   def inOrder(mocks: AnyRef*) = {
-	val order = new InOrderImpl(new java.util.ArrayList[Object])
-    val mocksList = order.getMocksToBeVerifiedInOrder()
-    mocks foreach { m => mocksList.add(m) }
-    Some(new InOrderImpl(mocksList))
+    Some(new InOrderImpl(java.util.Arrays.asList(mocks:_*)))
   }
   /** no call made to the mock */
-  def no[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.never())
+  def no[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.never())(anOrder)
   /** one call only made to the mock */
   def one[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.times(1))(anOrder)
   /** two calls only made to the mock */
-  def two[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.times(2))
+  def two[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.times(2))(anOrder)
   /** three calls only made to the mock */
-  def three[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.times(3))
+  def three[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.times(3))(anOrder)
   /** at least n calls made to the mock */
-  def atLeast[T <: AnyRef](i: Int)(mock: =>T) = verify(mock, org.mockito.Mockito.atLeast(i))
+  def atLeast[T <: AnyRef](i: Int)(mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.atLeast(i))(anOrder)
   /** at least 1 call made to the mock */
-  def atLeastOne[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.atLeast(1))
+  def atLeastOne[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.atLeast(1))(anOrder)
   /** at least 2 calls made to the mock */
-  def atLeastTwo[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.atLeast(2))
+  def atLeastTwo[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.atLeast(2))(anOrder)
   /** at least 3 calls made to the mock */
-  def atLeastThree[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.atLeast(3))
+  def atLeastThree[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.atLeast(3))(anOrder)
   /** at most n calls made to the mock */
-  def atMost[T <: AnyRef](i: Int)(mock: =>T) = verify(mock, org.mockito.Mockito.atMost(i))
+  def atMost[T <: AnyRef](i: Int)(mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.atMost(i))(anOrder)
   /** at most 1 call made to the mock */
-  def atMostOne[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.atMost(1))
+  def atMostOne[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.atMost(1))(anOrder)
   /** at most 2 calls made to the mock */
-  def atMostTwo[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.atMost(2))
+  def atMostTwo[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.atMost(2))(anOrder)
   /** at most 3 calls made to the mock */
-  def atMostThree[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.atMost(3))
+  def atMostThree[T <: AnyRef](mock: =>T)(implicit anOrder: Option[InOrderImpl]) = verify(mock, org.mockito.Mockito.atMost(3))(anOrder)
   /** no more calls made to the mock */
   def noMoreCallsTo[T <: AnyRef](mock: =>T) = mocker.verifyNoMoreInteractions(mock)
   /** implicit def supporting calls in order */
