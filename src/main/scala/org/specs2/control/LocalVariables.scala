@@ -1,6 +1,10 @@
 package org.specs2
 package control
 
+/**
+ * 
+ *
+ */
 trait LocalVariables {
   /**
    * save the value of a variable, set it temporarily to another value and reset it when f is executed
