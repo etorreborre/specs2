@@ -14,7 +14,7 @@ p^
 "      'error(boom) must throwAn[RuntimeException].like(e => e.getMessage(0) == 'a') will fail" ! e5^
 p^
 "    by specifying the expected exception: 'value must throwA(new java.lang.RuntimeException('wrong')'"^
-"      it must fail if the exception is not thrown" ! e6^
+"      it must fail if the exception is not thrown at all" ! e6^
 "      it must succeed if an exception of same class and message is thrown" ! e7^
 "      it must fail if an exception of a different class and same message is thrown" ! e8^
 "      it must fail if an exception of a same class and different message is thrown" ! e9^
@@ -23,8 +23,7 @@ p^
 "        succeeding otherwise" ! e11^
 end
 
-  def e1 = ("hello" must throwAn[Error]).message must_==
-  		    "Expected an exception of class java.lang.Error but no exception was thrown"
+  def e1 = ("hello" must throwAn[Error]).message must_== "Expected: java.lang.Error. Got nothing"
 
   def e2 = (theBlock(error("boom")) must throwA[RuntimeException]).message must_== 
 	        "Got the exception java.lang.RuntimeException: boom"
