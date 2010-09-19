@@ -33,6 +33,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      reporting the final statistics" ! done^
 "    A JUnit4 reporter"^
 "      with a simple display" ! done^
+"      with proper display when the tests have the same name" ! todo^
 "    Matchers"^
 "      with logical combinators" ! done^
 "      with adapters" ! todo^
@@ -53,7 +54,8 @@ class FeaturesSpec extends Specification with StandardResults {
 "      with ! and | as separators" ! done^
 "    Mockito"^
 "      verification of the calls" ! done^
-"      returning stub values" ! todo^
+"      returning stub values" ! done^
+"      order of method calls" ! done^
 p^    
 "  Low priority"^
 "    A Console reporter"^
