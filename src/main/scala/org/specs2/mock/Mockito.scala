@@ -43,15 +43,15 @@ trait Mockito extends MocksCreation with CalledMatchers with MockitoStubs
 trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectations {
   /** this matcher evaluates an expression containing mockito calls verification */
   private class CallsMatcher extends Matcher[Any] {
-    def apply[S <: Any : Expectable](calls: =>S) = checkCalls[S](calls, implicitly[Expectable[S]])
+    def apply[S <: Any](calls: =>Expectable[S]) = checkCalls[S](calls)
   }
-  private def checkCalls[T](calls: =>T, expectable: Expectable[T]): MatchResult[T] = {
-    catchAll { calls } { identity } match {
+  private def checkCalls[T](expectable: Expectable[T]): MatchResult[T] = {
+    catchAll { expectable.value } { identity } match {
    	  case Right(v) => new MatchSuccess("The mock was called as expected", "The mock was not called as expected", new Expectable(v))
   	  case Left(e) => 
    	    new MatchFailure("The mock was called as expected", 
   			             "The mock was not called as expected: " + e.getMessage, 
-  			             new Expectable(calls) { override def description = e.getMessage })
+  			             new Expectable(expectable.value) { override def description = e.getMessage })
     }
   }
   /** create an object supporting 'was' and 'were' methods */
@@ -61,7 +61,7 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
    */
   class Calls {
     def were[T](calls: =>T): MatchResult[T] = was(calls)
-    def was[T](calls: =>T): MatchResult[T] = checkCalls(calls, new Expectable(calls))
+    def was[T](calls: =>T): MatchResult[T] = checkCalls(new Expectable(calls))
   }
   /**
    * alias for 'there was'

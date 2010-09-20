@@ -3,12 +3,12 @@ package matcher
 import AnyMatchers._
 import execute._
 
-class Expectable[T](t: =>T) {
+class Expectable[+T](t: =>T) {
   protected val desc: Option[String] = None
   lazy val value = t
   
-  def applyMatcher(m: =>Matcher[T]): MatchResult[T] = {
-	m.apply(value)(this) 
+  def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = {
+	m.apply(this) 
   }
   
   def description = d(value)

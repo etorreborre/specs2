@@ -6,9 +6,8 @@ import specification._
 trait AnyMatchers {
   
   def beTrue = new Matcher[Boolean] {
-    def apply[S <: Boolean : Expectable](v: =>S) = {
-      val b = v
-      result(b, desc + " is true", desc + " is false") 
+    def apply[S <: Boolean](v: =>Expectable[S]) = {
+      result(v.value, v.description + " is true", v.description + " is false", v) 
     }
   }
   /**
@@ -28,9 +27,9 @@ trait AnyMatchers {
 }
 class BeEqualTo[T](t: =>T) extends Matcher[T] {
   import AnyMatchers._
-  def apply[S <: T : Expectable](v: =>S) = {
+  def apply[S <: T](v: =>Expectable[S]) = {
     val (a, b) = (t, v)
-    val (db, qa) = (desc, q(a)) match {
+    val (db, qa) = (b.description, q(a)) match {
       case (x, y) if (a != b && q(a) == q(b)) => {
 	    val aClass = getClassName(x)
 	    val bClass = getClassName(y)
@@ -41,7 +40,7 @@ class BeEqualTo[T](t: =>T) extends Matcher[T] {
 	  }
       case other @ _ => other 
 	}
-    result(a == b, db + " is equal to " + qa, db + " is not equal to " + qa)
+    result(a == b, db + " is equal to " + qa, db + " is not equal to " + qa, b)
   }
 }
 

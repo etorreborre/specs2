@@ -21,11 +21,11 @@ trait StringBaseMatchers { outer =>
    * Matches if (a.trim == b.trim)
    */   
   def beEqualToIgnoringSpace(t: =>String) = new Matcher[String] { 
-    def apply[S <: String : Expectable](v: =>S) = {
+    def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v) 
-      result(a != null && b != null && a.trim == b.trim, 
-             desc + " is equal ignoring space to " + q(a), 
-             desc + " is not equal ignoring space to " + q(a))
+      result(a != null && b.value != null && a.trim == b.value.trim, 
+             b.description + " is equal ignoring space to " + q(a), 
+             b.description + " is not equal ignoring space to " + q(a), b)
       }
   }
   /**
@@ -37,11 +37,11 @@ trait StringBaseMatchers { outer =>
    * Matches if (b.indexOf(a) >= 0)
    */   
   def contain(t: =>String) = new Matcher[String] { 
-    def apply[S <: String : Expectable](v: =>S) = {
+    def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
-      result(a != null && b != null && b.indexOf(a) >= 0, 
-             desc + " includes " + q(a), 
-             desc + " doesn't include " + q(a))
+      result(a != null && b.value != null && b.value.indexOf(a) >= 0, 
+             b.description + " includes " + q(a), 
+             b.description + " doesn't include " + q(a), b)
     } 
   }
 
@@ -49,33 +49,33 @@ trait StringBaseMatchers { outer =>
    * Matches if b matches the regular expression a
    */   
   def beMatching(t: =>String) = new Matcher[String] {
-    def apply[S <: String : Expectable](v: =>S) = {
+    def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
-      result(b matches a, 
-             desc + " matches " + q(a), 
-             desc + " doesn't match " + q(a))
+      result(b.value matches a, 
+             b.description + " matches " + q(a), 
+             b.description + " doesn't match " + q(a), b)
     }
   }
   /**
    * Matches if b.startsWith(a)
    */   
   def startWith(t: =>String) = new Matcher[String] { 
-    def apply[S <: String : Expectable](v: =>S) = {
+    def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
-      result(b!= null && a!= null && b.startsWith(a), 
-             desc + " starts with " + q(a), 
-             desc + " doesn't start with " + q(a))
+      result(b.value!= null && a!= null && b.value.startsWith(a), 
+             b.description + " starts with " + q(a), 
+             b.description + " doesn't start with " + q(a), b)
     }
   }
   /**
    * Matches if b.endsWith(a)
    */   
   def endWith(t: =>String) = new Matcher[String] { 
-    def apply[S <: String : Expectable](v: =>S) = {
+    def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
-      result(b!= null && a!= null && b.endsWith(a), 
-             desc + " ends with " + q(a), 
-             desc + " doesn't end with " + q(a))
+      result(b.value!= null && a!= null && b.value.endsWith(a), 
+             b.description  + " ends with " + q(a), 
+             b.description  + " doesn't end with " + q(a), b)
     }
   }
   /**
@@ -94,11 +94,11 @@ trait StringBaseMatchers { outer =>
     }
     def withGroup(group: String) = new FindMatcherWithGroups(t, group)
     def withGroups(groups: String*) = new FindMatcherWithGroups(t, groups:_*)
-    def apply[S <: String : Expectable](v: =>S) = {
+    def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
-      result(a != null && b != null && found(a, b), 
-             q(a) + " is found in " + desc, 
-             q(a) + " isn't found in " + desc)
+      result(a != null && b.value != null && found(a, b.value), 
+             q(a) + " is found in " + b.description, 
+             q(a) + " isn't found in " + b.description, b)
       } 
   }
 
@@ -113,9 +113,9 @@ trait StringBaseMatchers { outer =>
       while (matcher.find) { groupsFound += matcher.group(1) }
       groupsFound.toList
     }
-    def apply[S <: String : Expectable](v: =>S) = {
+    def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
-      val groupsFound = found(a, b)
+      val groupsFound = found(a, b.value)
       val withGroups = if (groups.size > 1) " with groups " else " with group "
       def foundText = {
         if (groupsFound.isEmpty) 
@@ -124,20 +124,20 @@ trait StringBaseMatchers { outer =>
            ". Found: " + q(groupsFound.mkString(", "))
       }
       val groupsToFind = if (groups == null) Nil else groups.toList
-      result(a != null && b != null && groupsFound == groupsToFind, 
-             q(a) + " is found in " + desc + withGroups + q(groupsToFind.mkString(", ")), 
-             q(a) + " isn't found in " + desc + withGroups + q(groupsToFind.mkString(", ")) + foundText)
+      result(a != null && b.value != null && groupsFound == groupsToFind, 
+             q(a) + " is found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")), 
+             q(a) + " isn't found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")) + foundText, b)
     } 
   }
   /**
    * Matches if the length is n
    */
   def haveLength(n: Int) = new Matcher[String](){
-    def apply[S <: String : Expectable](v: =>S) = {
+    def apply[S <: String](v: =>Expectable[S]) = {
       val string = v
-      result(string.length == n, 
-    		 desc + " has length " + n,
-    		 desc + " doesn't have length " + n)
+      result(string.value.length == n, 
+    		 string.description  + " has length " + n,
+    		 string.description  + " doesn't have length " + n, string)
     }
   }
   /**
@@ -191,16 +191,16 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
 }
 
 class StringEmptyMatcher extends Matcher[String] {
-  def apply[S <: String : Expectable](v: =>S) = {
-    val s = v
-    result(s.isEmpty, desc + " is empty", desc + " is not empty")
+  def apply[S <: String](v: =>Expectable[S]) = {
+    val b = v
+    result(b.value.isEmpty, b.description  + " is empty", b.description  + " is not empty", b)
   }
 }
 class BeEqualToIgnoringCase(t: =>String) extends Matcher[String] { 
-  def apply[S <: String : Expectable](v: =>S) = {
+  def apply[S <: String](v: =>Expectable[S]) = {
 	val (a, b) = (t, v)
-	result(a != null && b != null && a.equalsIgnoreCase(b), 
-           desc + " is equal ignoring case to " + q(a), 
-           desc + " is not equal ignoring case to " + q(a))
+	result(a != null && b.value != null && a.equalsIgnoreCase(b.value), 
+           b.description  + " is equal ignoring case to " + q(a), 
+           b.description  + " is not equal ignoring case to " + q(a), b)
   } 
 }
