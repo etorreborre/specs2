@@ -40,7 +40,7 @@ class BeEqualTo[T](t: =>T) extends Matcher[T] {
 	  }
       case other @ _ => other 
 	}
-    result(a == b, db + " is equal to " + qa, db + " is not equal to " + qa, b)
+    result(a == b.value, db + " is equal to " + qa, db + " is not equal to " + qa, b)
   }
 }
 
