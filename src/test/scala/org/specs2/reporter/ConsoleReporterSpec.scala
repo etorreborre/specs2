@@ -40,7 +40,10 @@ The following Fragments specify the behavior for:
 p^  
 "  At the end of the report"^
 "    the total number of Fragments must be displayed" ! stat1^
-"    the total number of failures must be displayed" ! stat2
+"    the total number of failures must be displayed" ! stat2^
+"    the total number of expectations must be displayed " +
+"    if it is different from the number of examples" ! stat3^
+end
 }
 
 abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit with InputSpecs with ExpectedOutputs with ReportExpectations {
@@ -55,6 +58,7 @@ abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit 
   
   def stat1 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
   def stat2 = reportEndsWith(level2WithFailure ^ SpecEnd(""))(level2WithFailureStats)
+  def stat3 = reportEndsWith(exampleWithExpectations ^ SpecEnd(""))(exampleWithExpectationsStats)
 }
 trait ReportExpectations extends MustExpectations with FragmentsBuilder with Matchers {
   def reportStartsWith(Fragments: Fragments)(output: List[String]) = {
@@ -92,6 +96,9 @@ trait InputSpecs extends FragmentsBuilder with StandardResults {
     "level2"^
       "ex1" ! failure^
       "ex2" ! success
+  val exampleWithExpectations = 
+	"level1"^
+      "ex1" ! Success("ok", 2)
 }
 trait ExpectedOutputs {
 
@@ -106,4 +113,8 @@ trait ExpectedOutputs {
 	"Total for specification",
     "2 examples, 1 failure, 0 error",
     "\n")
-}
+  val exampleWithExpectationsStats = List(
+    "",
+    "Total for specification",
+    "1 example, 2 expectations, 0 failure, 0 error",
+    "\n")}

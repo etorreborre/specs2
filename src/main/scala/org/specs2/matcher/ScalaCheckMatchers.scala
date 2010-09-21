@@ -27,7 +27,7 @@ trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckP
    * generation parameters <code>p</code>. <code>p</code> is transformed into a scalacheck parameters
    * and indicates if the generation should be verbose or not
    */
-  private[matcher] def checkProperty(prop: Prop)(implicit p: Parameters): execute.Result = {
+  private[matcher] def checkProperty(prop: =>Prop)(implicit p: Parameters): execute.Result = {
     checkScalaCheckProperty(prop)(Params(p(minTestsOk), p(maxDiscarded), p(minSize), p(maxSize), StdRand, p(workers), p(wrkSize)), p.verbose)
   }
 
@@ -35,7 +35,7 @@ trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckP
    * checks if the property is true for each generated value, and with the specified
    * scalacheck parameters. If verbose is true, then print the results on the console
    */
-  private [matcher] def checkScalaCheckProperty(prop: Prop)(params: Params, verbose: Boolean): execute.Result = {
+  private [matcher] def checkScalaCheckProperty(prop: =>Prop)(params: Params, verbose: Boolean): execute.Result = {
      // will print the result of each test if verbose = true
      def printResult(succeeded: Int, discarded: Int): Unit = {
        if (!verbose) return
@@ -66,7 +66,7 @@ trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckP
        case Result(Failed(args, labels), n, _, _) =>
          execute.Failure("A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels))
        case Result(PropException(args, ex, labels), n, _, _) =>
-         execute.Failure("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels))
+         execute.Error("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels))
      }
    }
    // depending on the result, return the appropriate success status and messages
@@ -105,7 +105,7 @@ trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckP
  * This trait is used to facilitate testing by mocking ScalaCheck functionalities
  */
 trait ScalaCheckFunctions {
-  def checkProp(params: Params, prop: Prop, printResult: (Int, Int) => Unit) = Test.check(params, prop, printResult)
+  def checkProp(params: Params, prop: =>Prop, printResult: (Int, Int) => Unit) = Test.check(params, prop, printResult)
   def forAllProp[A,P](g: Gen[A])(f: A => Prop): Prop = Prop.forAll(g)(f)
 }
 /**
