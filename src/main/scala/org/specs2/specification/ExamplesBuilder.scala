@@ -11,6 +11,7 @@ trait FragmentsBuilder {
   implicit def text(s: String): Text = new Text(s)
   implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s)
   class ExampleDesc(s: String) {
+	def ![T](t: =>MatchResult[T]) = new Example(s, body = () => t.toResult)
 	def ![T <% Result](t: =>T) = new Example(s, body = () => t)
   }
   implicit def group(Fragments: Fragments) = Group(Fragments.fragments)

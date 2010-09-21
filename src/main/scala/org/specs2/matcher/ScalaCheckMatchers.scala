@@ -16,10 +16,31 @@ import text.Plural._
  * @see the <a href="http://code.google.com/p/scalacheck/">ScalaCheck project</a>
  */
 trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters { outer =>
+  implicit def check[T, S](result: T => Boolean)(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
+	result.forAll(a, s)
+  }
+  implicit def check2[T](result: T => MatchResult[T])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
+	result.forAll(a, s, p)
+  }
+  implicit def check3[T, S](result: T => MatchResult[S])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
+	result.forAll(a, s, p)
+  }
+  private def asProperty[T, S](f: T => MatchResult[S])(implicit a: Arbitrary[T], s: Shrink[T]): Prop = {
+	Prop.forAll { (t: T) =>
+	  f(t) match {
+	 	case MatchSuccess(_, _ , _) => true  
+	 	case MatchFailure(_, _ , _) => false  
+	  } 	
+	}
+  }
   implicit def check(prop: Prop)(implicit p: Parameters): execute.Result = checkProperty(prop)(p)
   implicit def toProp[T](f: T => Boolean): ForAll[T] = new ForAll(f)
   class ForAll[T](f: T => Boolean) {
     def forAll(implicit a: Arbitrary[T], s: Shrink[T]) = Prop.forAll(f)
+  }
+  implicit def toProp[T, S](f: T => MatchResult[S]): ForAll2[T, S] = new ForAll2(f)
+  class ForAll2[T, S](f: T => MatchResult[S]) {
+    def forAll(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters) = check(asProperty(f))
   }
 
   /**
