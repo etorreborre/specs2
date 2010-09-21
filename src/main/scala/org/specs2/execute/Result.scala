@@ -44,6 +44,11 @@ case class Success(m: String = "")  extends Result(m) {
 	case _ => super.and(r)
   }
 }
+object Success {
+  def apply(m: String, expNb: Int) = new Success(m) {
+	override val expectationsNb = expNb
+  }
+}
 /** 
  * This class represents the failure of an execution.
  * It has a message and a stacktrace
