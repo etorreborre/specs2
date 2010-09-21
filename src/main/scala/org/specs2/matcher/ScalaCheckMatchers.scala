@@ -9,6 +9,7 @@ import org.scalacheck.Pretty
 import org.scalacheck.ConsoleReporter._
 import scala.collection.Map
 import io.ConsoleOutput
+import text.Plural._
 /**
  * The <code>ScalaCheckMatchers</code> trait provides matchers which allow to
  * assess properties multiple times with generated data.
@@ -71,7 +72,7 @@ trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckP
    // depending on the result, return the appropriate success status and messages
    // the failure message indicates a counter-example to the property
    private[matcher] def noCounterExample(n: Int) = "The property passed without any counter-example " + afterNTries(n)
-   private[matcher] def afterNTries(n: Int) = "after " + (if (n == 1) n + " try" else n + " tries")
+   private[matcher] def afterNTries(n: Int) = "after " + (if (n <= 1) n + " try" else n + " tries")
    private[matcher] def afterNShrinks(args: List[Arg[_]]) = {
      if (args.forall(_.shrinks == 0))
        ""
