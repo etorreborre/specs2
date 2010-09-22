@@ -19,6 +19,9 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
 p^
 "  A specs2 matcher can be returned by a function to be checked with ScalaCheck"^	  
 "    if it is a MatchSuccess the execution will yield a Success" ! matcher1^
+"    if the type of the input parameter is not the same as the MatchResult type"^
+"      it should still work" ! matcher2^
+"      another way is to transform it as a property with .forAll" ! matcher3^
 p^
 "  A partial function can also be used in the body of the Example" ! partial1^
 p^
@@ -45,6 +48,8 @@ end
 
   def partial1 = ("example" ! partialFunction.forAll).execute must_== success100tries
   def matcher1 = ("example" ! alwaysTrueWithMatcher).execute must_== success100tries
+  def matcher2 = ("example" ! check(stringToBooleanMatcher)).execute must_== success100tries
+  def matcher3 = ("example" ! stringToBooleanMatcher.forAll).execute must_== success100tries
   def result1 = ("example" ! trueFunction.forAll).execute.expectationsNb must_== 100
 
   implicit def params = display(minTestsOk -> 20)
@@ -67,6 +72,7 @@ trait ScalaCheckProperties {  this: Specification =>
   val trueStringFunction = (s: String) => true
   val partialFunction: PartialFunction[Boolean, Boolean] = { case (x: Boolean) => true }
   val alwaysTrueWithMatcher = (x: Boolean) => true must_== true
+  val stringToBooleanMatcher = (x: String) => true must_== true
   val identityProp = forAll(identityFunction)
   val alwaysTrueProp = proved
   val alwaysTrue = Gen.value(true)

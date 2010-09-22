@@ -70,7 +70,7 @@ p^
 "    Detailed diffs"^
 "      non mutable version" ! todo^
 "    ScalaCheck"^
-"      with all previous features" ! todo^
+"      with all previous features" ! done^
 "      with the reporting of expectations" ! done^
 "    Configuration"^
 "      specify its behavior" ! todo^
