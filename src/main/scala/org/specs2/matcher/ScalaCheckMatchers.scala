@@ -16,13 +16,13 @@ import text.Plural._
  * @see the <a href="http://code.google.com/p/scalacheck/">ScalaCheck project</a>
  */
 trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters { outer =>
-  implicit def check[T, S](result: T => Boolean)(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	result.forAll(a, s)
+  implicit def checkPartial[T, S](f: PartialFunction[T, Boolean])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
+	checkProp(f.forAll(a, s))(p)
   }
-  implicit def check2[T](result: T => MatchResult[T])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	result.forAll(a, s, p)
+  implicit def checkFunction[T, S](f: T => Boolean)(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
+	checkProp(f.forAll(a, s))(p)
   }
-  implicit def check3[T, S](result: T => MatchResult[S])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
+  implicit def check[T](result: T => MatchResult[T])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
 	result.forAll(a, s, p)
   }
   private def asProperty[T, S](f: T => MatchResult[S])(implicit a: Arbitrary[T], s: Shrink[T]): Prop = {
@@ -33,14 +33,18 @@ trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckP
 	  } 	
 	}
   }
-  implicit def check(prop: Prop)(implicit p: Parameters): execute.Result = checkProperty(prop)(p)
-  implicit def toProp[T](f: T => Boolean): ForAll[T] = new ForAll(f)
-  class ForAll[T](f: T => Boolean) {
-    def forAll(implicit a: Arbitrary[T], s: Shrink[T]) = Prop.forAll(f)
+  implicit def checkProp(prop: Prop)(implicit p: Parameters): execute.Result = checkProperty(prop)(p)
+  implicit def functionToProp[T](f: T => Boolean): FunctionForAll[T] = new FunctionForAll(f)
+  class FunctionForAll[T](f: T => Boolean) {
+    def forAll(implicit a: Arbitrary[T], s: Shrink[T]): Prop = Prop.forAll(f)
+  }
+  implicit def partialFunctionToProp[T](f: PartialFunction[T, Boolean]): PartialFunctionForAll[T] = new PartialFunctionForAll(f)
+  class PartialFunctionForAll[T](f: PartialFunction[T, Boolean]) {
+    def forAll(implicit a: Arbitrary[T], s: Shrink[T]): Prop = Prop.forAll(f)
   }
   implicit def toProp[T, S](f: T => MatchResult[S]): ForAll2[T, S] = new ForAll2(f)
   class ForAll2[T, S](f: T => MatchResult[S]) {
-    def forAll(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters) = check(asProperty(f))
+    def forAll(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = checkProp(asProperty(f))(p)
   }
 
   /**
