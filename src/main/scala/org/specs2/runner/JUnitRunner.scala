@@ -5,10 +5,10 @@ import execute._
 import specification._
 import io._
 import reflect.Classes._
-import org.junit.runner._
-import org.junit.runner.notification.RunNotifier
-import org.junit.runners._
-import org.junit._
+import _root_.org.junit.runner._
+import _root_.org.junit.runner.notification.RunNotifier
+import _root_.org.junit.runners._
+import _root_.org.junit._
 import junit.framework._
 import specification._
 
