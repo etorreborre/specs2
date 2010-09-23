@@ -2,7 +2,6 @@ package org.specs2
 package mock
 import matcher._
 import control.Exceptions._
-import control.LocalVariables._
 import org.mockito.InOrder
 import org.mockito.stubbing.Answer
 import org.mockito.internal.stubbing.StubberImpl
