@@ -141,6 +141,7 @@ trait PropertyImplicits {
 	  f(t) match {
 	 	case MatchSuccess(_, _ , _) => true  
 	 	case MatchFailure(_, _ , _) => false  
+	 	case MatchSkip(_) => true  
 	  } 	
 	}
   }

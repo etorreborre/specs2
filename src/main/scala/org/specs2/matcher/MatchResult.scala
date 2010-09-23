@@ -18,6 +18,7 @@ case class MatchSuccess[T](val okMessage: String, val koMessage: String, e: Expe
   def and(m: =>MatchResult[T]): MatchResult[T] = m match {
 	case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" and "+okMessage, ko+" and "+okMessage, e)
 	case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+ " and "+okMessage, e)
+	case r @ MatchSkip(_) => r
   }
   def toResult = Success(okMessage)
 }
@@ -27,10 +28,18 @@ case class MatchFailure[T](val okMessage: String, val koMessage: String, e: Expe
   def or(m: =>MatchResult[T]): MatchResult[T]  = m match {
 	case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" but "+koMessage, ko, e)
 	case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+" and "+okMessage, e)
+	case MatchSkip(_) => this
   } 
   def and(m: =>MatchResult[T]): MatchResult[T] =  m match {
 	case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" but "+koMessage, ko, e)
 	case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+ " and "+okMessage, e)
+	case MatchSkip(_) => this
   } 
   def toResult = Failure(koMessage)
+}
+case class MatchSkip[T](val expectable: Expectable[T]) extends MatchResult[T] {
+  def toResult = Skipped("skipped")
+  def not = MatchSuccess("ok", "ko", expectable)
+  def or(m: =>MatchResult[T]) = this
+  def and(m: =>MatchResult[T]) = this
 }

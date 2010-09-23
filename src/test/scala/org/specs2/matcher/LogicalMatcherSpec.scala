@@ -12,12 +12,21 @@ class LogicalMatcherSpec extends Specification {
 "    if both matchers are ko the combination is ko" ! or4^
 p^
 "  a matcher can be and-ed with another one"^
-"    if both matches are ok the result is ok" ! and1
-  
+"    if both matches are ok the result is ok" ! and1^
+"  it is possible also to 'and' 2 match expressions"^
+"    if both matches are ok the result is ok" ! and2^
+p^
+"  a matcher can be ok or be skipped"^
+"    if it is ko, it returns a MatchSkip result" ! skip1^
+p^
+end  
+
   def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
   def or2 = "eric" must (beMatching("a.*") or beMatching(".*z")).not
   def or3 = "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
   def or4 = "eric" mustNot (beMatching("a.*") or beMatching(".*z"))
 
   def and1 = "eric" must be matching("a.*") and be matching(".*c")
+  def and2 = ("eric" must be matching("a.*")) and ("torreborre" must be matching(".*tor.*"))
+  def skip1 = 1 must be_==(1).orSkip
 }

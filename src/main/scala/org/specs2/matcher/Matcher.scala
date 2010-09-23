@@ -34,7 +34,19 @@ trait Matcher[-T] { outer =>
     def apply[U <: T](a: =>Expectable[U]) = outer(a).not
   }
   def or[S <: T](m: =>Matcher[S]) = new Matcher[S] {
-    def apply[U <: S](a: =>Expectable[U]) = outer(a).or(m(a))
+    def apply[U <: S](a: =>Expectable[U]) = {
+      val value = a
+      outer(value).or(m(value))
+    }
+  }
+  def orSkip: Matcher[T] = new Matcher[T] {
+    def apply[U <: T](a: =>Expectable[U]) = {
+      val value = a
+      outer(value) match {
+    	case m @ MatchSuccess(_, _, _) => m
+    	case _ => MatchSkip(value)
+      }
+    }
   }
 }
 

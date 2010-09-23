@@ -5,16 +5,18 @@ import reflect.Classes._
 import specification._
 trait AnyMatchers {
   
+  /** Matches if the expectable is true */
   def beTrue = new Matcher[Boolean] {
     def apply[S <: Boolean](v: =>Expectable[S]) = {
       result(v.value, v.description + " is true", v.description + " is false", v) 
     }
   }
-  /**
-   * Matches if b is false
-   */
+  /** Matches if the expectable is false */
   def beFalse = beTrue.not
-  
+
+  def be_==[T](t: =>T) = beEqualTo(t)
+  def beEqualTo[T](t: =>T) = new BeEqualTo(t)
+
   private[specs2] def q(a: Any) = if (isBoolean(a)) "the value" else "'"+a+"'" 
   def isBoolean(a: Any) = a match {
   	case b: Boolean => true
