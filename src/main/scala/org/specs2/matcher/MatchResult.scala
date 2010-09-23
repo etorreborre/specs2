@@ -11,34 +11,32 @@ sealed trait MatchResult[T] {
   def and(m: Matcher[T]): MatchResult[T] = and(expectable.applyMatcher(m))
   def toResult: Result
 }
-case class MatchSuccess[T](val okMessage: String, val koMessage: String, e: Expectable[T]) extends MatchResult[T] {
-  val expectable: Expectable[T] = e
-  def not = MatchFailure(okMessage, koMessage, e)
+case class MatchSuccess[T](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
+  def not = MatchFailure(okMessage, koMessage, expectable)
   def or(m: =>MatchResult[T]): MatchResult[T] = this
   def and(m: =>MatchResult[T]): MatchResult[T] = m match {
-	case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" and "+okMessage, ko+" and "+okMessage, e)
-	case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+ " and "+okMessage, e)
-	case r @ MatchSkip(_) => r
+	case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" and "+okMessage, ko+" and "+okMessage, expectable)
+	case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+ " and "+okMessage, expectable)
+	case r @ MatchSkip(_, _) => r
   }
   def toResult = Success(okMessage)
 }
-case class MatchFailure[T](val okMessage: String, val koMessage: String, e: Expectable[T]) extends MatchResult[T] {
-  val expectable: Expectable[T] = e
-  def not = MatchSuccess(okMessage, koMessage, e)
+case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
+  def not = MatchSuccess(okMessage, koMessage, expectable)
   def or(m: =>MatchResult[T]): MatchResult[T]  = m match {
-	case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" but "+koMessage, ko, e)
-	case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+" and "+okMessage, e)
-	case MatchSkip(_) => this
+	case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" but "+koMessage, ko, expectable)
+	case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+" and "+okMessage, expectable)
+	case MatchSkip(_, _) => this
   } 
   def and(m: =>MatchResult[T]): MatchResult[T] =  m match {
-	case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" but "+koMessage, ko, e)
-	case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+ " and "+okMessage, e)
-	case MatchSkip(_) => this
+	case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" but "+koMessage, ko, expectable)
+	case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+ " and "+okMessage, expectable)
+	case MatchSkip(_, _) => this
   } 
   def toResult = Failure(koMessage)
 }
-case class MatchSkip[T](val expectable: Expectable[T]) extends MatchResult[T] {
-  def toResult = Skipped("skipped")
+case class MatchSkip[T](message: String, expectable: Expectable[T]) extends MatchResult[T] {
+  def toResult = Skipped(message)
   def not = MatchSuccess("ok", "ko", expectable)
   def or(m: =>MatchResult[T]) = this
   def and(m: =>MatchResult[T]) = this

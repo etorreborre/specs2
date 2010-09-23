@@ -43,8 +43,8 @@ trait Matcher[-T] { outer =>
     def apply[U <: T](a: =>Expectable[U]) = {
       val value = a
       outer(value) match {
-    	case m @ MatchSuccess(_, _, _) => m
-    	case _ => MatchSkip(value)
+    	case MatchFailure(_, ko, _) => MatchSkip(ko, value)
+    	case other => other
       }
     }
   }

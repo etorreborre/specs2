@@ -17,7 +17,8 @@ p^
 "    if both matches are ok the result is ok" ! and2^
 p^
 "  a matcher can be ok or be skipped"^
-"    if it is ko, it returns a MatchSkip result" ! skip1^
+"    if it is ok, it returns a MatchSuccess result" ! skip1^
+"    if it is ko, it returns a MatchSkip result" ! skip2^
 p^
 end  
 
@@ -29,4 +30,5 @@ end
   def and1 = "eric" must be matching("a.*") and be matching(".*c")
   def and2 = ("eric" must be matching("a.*")) and ("torreborre" must be matching(".*tor.*"))
   def skip1 = 1 must be_==(1).orSkip
+  def skip2 = (1 must be_==(2).orSkip).toResult must_== Skipped("'1' is not equal to '2'")
 }
