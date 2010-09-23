@@ -5,18 +5,19 @@ import execute._
 import specification._
 import io._
 import reflect.Classes._
-import _root_.org.junit.runner._
+import specification._
+import reporter._
 import _root_.org.junit.runner.notification.RunNotifier
 import _root_.org.junit.runners._
 import _root_.org.junit._
 import junit.framework._
-import specification._
+import _root_.org.junit.runner._
 
 class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with ConsoleOutput {
+  val descriptionReporter = new JUnitDescriptionReporter(klass.getSimpleName)
+
   lazy val specification = tryToCreateObject[Specification](klass.getName, true, true).get
-  lazy val (description, executions) = descriptionReporter.report(specification.examples.fragments)
-  
-  val descriptionReporter = new DescriptionReporter(klass.getSimpleName)
+  lazy val (description, executions, level) = descriptionReporter.report(specification.examples.fragments)
   
   def run(notifier: RunNotifier) {
 	notifier.fireTestRunStarted(getDescription)
@@ -44,33 +45,6 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
   }
   def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
   def getDescription = description
-}
-class DescriptionReporter(specificationName: String) extends Reporter with MockOutput {
-  type T = (Description, Map[Description, Fragment])
-  val initial = (Description.createSuiteDescription(specificationName), Map.empty[Description, Fragment])
-  val folder = (descAndExamples: (Description, Map[Description, Fragment]), f: Fragment) => {
-	val (desc, examples) = descAndExamples
-	f match {
-      case Step(action) => (desc, examples + (createDescription("specs2.silent") -> f))
-      case Text(t) => addDescription(desc, testName(t), f, examples)
-      case ex @ Example(description, body) =>  addDescription(desc, testName(description), f, examples)
-      case _ => (desc, examples)
-	}
-  }
-  def testName(s: String)= {
-	val spaces = s.takeWhile(_ == ' ')
-	val name = (if (s contains "\n") (s.trim.split("\n")(0) + "...") else s.trim).replaceAll("\r", "")
-	if (spaces.isEmpty)
-      name
-    else
-      "." + spaces + name	  
-  }
-  def addDescription(desc: Description, d: String, f: Fragment, map: Map[Description, Fragment]) = {
-	val exampleDesc = createDescription(d)
-	desc.addChild(exampleDesc)
-	(desc, map + (exampleDesc -> f)) 
-  }
-  def createDescription(s: String) = Description.createTestDescription(classOf[Specification], s)
 }
 /**
  * This class refines the <code>AssertionFailedError</code> from junit

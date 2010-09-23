@@ -1,8 +1,5 @@
 package org.specs2
 package reporter
-
-package org.specs2
-package runner
 import specification._
 
 trait LevelParser {
