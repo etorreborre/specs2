@@ -2,8 +2,9 @@ package org.specs2
 package specification
 import matcher._
 
-trait BaseSpecification extends FragmentsBuilder  with Matchers {
-  val examples: Fragments
+trait BaseSpecification extends SpecificationStructure with FragmentsBuilder  with Matchers {
   def include(s: BaseSpecification) =  group(examples.fragments)
-
+}
+trait SpecificationStructure {
+  val examples: Fragments
 } 

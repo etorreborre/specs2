@@ -15,12 +15,12 @@ trait NestedLevels extends LevelParser {
   val level: Function[(L, Fragment), (Int, L)] = {
 	case p => (currentLevel(p), updateLevel(p))
   }
-  private val currentLevel: Function[(L, Fragment), Int] = { 
+  val currentLevel: Function[(L, Fragment), Int] = { 
 	case (a, f @ Text(s)) if (a.state == Down && a.lastNode == Ex) => (a.level - 1)
 	case (a, f) => a.level
   }
   
-  private val updateLevel: Function[(L, Fragment), L] = {
+  val updateLevel: Function[(L, Fragment), L] = {
 	case (a, End()) => Level()
 	case (a, Par()) => a
 	case (a, Br()) => a
@@ -48,3 +48,4 @@ trait NestedLevels extends LevelParser {
   case object Ex extends LastNode
   case object Txt extends LastNode
 }
+object NestedLevels extends NestedLevels
