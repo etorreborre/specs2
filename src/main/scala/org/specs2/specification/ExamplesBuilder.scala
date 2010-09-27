@@ -17,3 +17,12 @@ trait FragmentsBuilder {
   implicit def group(Fragments: Fragments) = Group(Fragments.fragments)
   implicit def group(fragments: List[Fragment]) = Group(fragments)
 }
+trait FragmentsShow {
+  implicit object showFragments extends scalaz.Show[Fragment] {
+	def show(f: Fragment) = (f match {
+	  case Example(d, _) => "Example("+d+")"
+	  case other => other.toString
+	}).toList
+  }
+}
+object FragmentsShow extends FragmentsShow
