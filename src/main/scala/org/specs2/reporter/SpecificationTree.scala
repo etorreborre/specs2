@@ -3,6 +3,7 @@ package reporter
 import specification._
 import scalaz._
 import Scalaz._
+import FragmentsShow._
 
 trait SpecificationTree {
   def toTree(name: String, specification: SpecificationStructure): Tree[Fragment] = {
@@ -15,12 +16,24 @@ trait SpecificationTree {
 	  val (treeLoc, level) = res
 	  val newLevel = updateLevel((level, fragment))
 	  val newTreeLoc = level.state match {
-  	    case Down => treeLoc.insertDownLast(leaf(fragment))
-	 	case Up => treeLoc.insertRight(leaf(fragment))
+  	    case Down => {
+	 	  if (level.level == newLevel.level && level.lastNode == Ex && newLevel.lastNode != Txt)
+	 	 	treeLoc.parent.getOrElse(treeLoc).insertDownLast(leaf(fragment))
+	 	  else if (level.lastNode == Ex)
+	 	 	treeLoc.parent.getOrElse(treeLoc).parent.getOrElse(treeLoc).insertDownLast(leaf(fragment))
+	 	  else
+	 	 	treeLoc.insertDownLast(leaf(fragment))
+  	    }
+	 	case Up => 
+  	      if (level.lastNode != Ex)
+  	    	treeLoc.insertDownFirst(leaf(fragment))
+  	      else
+  	    	treeLoc.parent.getOrElse(treeLoc).insertDownLast(leaf(fragment))
 	  } 
       (newTreeLoc, newLevel)	
-	}._1.tree
+	}._1.toTree
   }
   
   private def treeLoc(fragment: Fragment) = loc(leaf(fragment), Stream.empty, Stream.empty, Stream.empty)
 }
+
