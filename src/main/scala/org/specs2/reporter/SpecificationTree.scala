@@ -24,17 +24,17 @@ trait SpecificationTree[S] extends Reporter with ConsoleOutput {
           level.state match {
             case Down => {
    	          if (level.level == newLevel.level && level.lastNode == Ex && newLevel.lastNode != Txt)
-   	         	  treeLoc.parent.getOrElse(treeLoc).insertDownLast(leaf(map(fragment)))
+   	         	treeLoc.parent.getOrElse(treeLoc).insertDownLast(leaf(map(fragment)))
    	          else if (level.lastNode == Ex)
-   	         	  treeLoc.parent.getOrElse(treeLoc).parent.getOrElse(treeLoc).insertDownLast(leaf(map(fragment)))
+   	         	treeLoc.parent.getOrElse(treeLoc).parent.getOrElse(treeLoc).insertDownLast(leaf(map(fragment)))
    	          else
-   	         	  treeLoc.insertDownLast(leaf(map(fragment)))
+   	         	treeLoc.insertDownLast(leaf(map(fragment)))
             }
             case Up => 
               if (level.lastNode != Ex)
-            	  treeLoc.insertDownFirst(leaf(map(fragment)))
+            	treeLoc.insertDownFirst(leaf(map(fragment)))
               else
-            	  treeLoc.parent.getOrElse(treeLoc).insertDownLast(leaf(map(fragment)))
+            	treeLoc.parent.getOrElse(treeLoc).insertDownLast(leaf(map(fragment)))
     	}
       }
     } 

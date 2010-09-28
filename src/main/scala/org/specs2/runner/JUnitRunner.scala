@@ -46,15 +46,15 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
   def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
 
   def getDescription = {
-    import scalaz.Scalaz._
-    implicit object DescriptionMonoid extends scalaz.Monoid[Description] {
-      def append(s1: Description, s2: =>Description) = {
-    	s1.addChild(s2)
-    	s1
-      }
-      val zero = Description.createSuiteDescription((klass.getSimpleName))
+    import scalaz.Tree
+    def addDescriptions(tree: Tree[Description]): Description = {
+      if (!tree.subForest.isEmpty)
+    	tree.subForest.foreach { sub =>
+    	  tree.rootLabel.addChild(addDescriptions(sub))	
+    	}
+      tree.rootLabel
     }
-    descriptionTree.toTree.collapse
+    addDescriptions(descriptionTree.toTree)
   }
 }
 /**
