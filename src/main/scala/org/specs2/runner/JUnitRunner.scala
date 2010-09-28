@@ -17,7 +17,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
   val descriptionReporter = new JUnitDescriptionReporter(klass.getSimpleName)
 
   lazy val specification = tryToCreateObject[Specification](klass.getName, true, true).get
-  lazy val (description, executions, level) = descriptionReporter.report(specification.examples.fragments)
+  lazy val (executions, (descriptionTree, level)) = descriptionReporter.report(specification.examples.fragments)
   
   def run(notifier: RunNotifier) {
 	notifier.fireTestRunStarted(getDescription)
@@ -44,7 +44,18 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
 	  }	
   }
   def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
-  def getDescription = description
+
+  def getDescription = {
+    import scalaz.Scalaz._
+    implicit object DescriptionMonoid extends scalaz.Monoid[Description] {
+      def append(s1: Description, s2: =>Description) = {
+    	s1.addChild(s2)
+    	s1
+      }
+      val zero = Description.createSuiteDescription((klass.getSimpleName))
+    }
+    descriptionTree.toTree.collapse
+  }
 }
 /**
  * This class refines the <code>AssertionFailedError</code> from junit

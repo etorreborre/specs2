@@ -4,25 +4,26 @@ import scalaz._
 import Scalaz._
 import specification._
 import FragmentsShow._
+import SpecificationTree._
 
-class SpecificationTreeSpec extends SpecificationWithJUnit with SpecificationTree {
+class SpecificationTreeSpec extends SpecificationWithJUnit {
   val examples = 
   "a specification can be turned to a tree of fragments"^
   "if there is only one text fragment, the tree will have only one leaf" ! {
 	toTree("name", List(Text("description"))).drawTree.trim must_== 
-    List("Text(name)",
+    List("SpecStart(name)",
 	     "|",
 	     "`- Text(description)").mkString("\n")
   }^
   "if there is an example only, the tree will have only one leaf" ! {
 	toTree("name", List("description" ! success)).drawTree.trim must_==
-    List("Text(name)",
+    List("SpecStart(name)",
 	     "|",
 	     "`- Example(description)").mkString("\n")
   }^
   "if there is a text and an example, the tree will have a root and 2 nodes" ! {
 	toTree("name", textAndExample.fragments).drawTree.trim must_==
-    List("Text(name)",
+    List("SpecStart(name)",
 	     "|",
 	     "`- Text(a text)",
 	     "   |",
@@ -30,7 +31,7 @@ class SpecificationTreeSpec extends SpecificationWithJUnit with SpecificationTre
   }^
   "if there is a text and an 2 examples, the 2 examples must be leaves of the text node" ! {
 	toTree("name", textAnd2Examples.fragments).drawTree.trim must_==
-    List("Text(name)",
+    List("SpecStart(name)",
 	     "|",
 	     "`- Text(a text)",
 	     "   |",
@@ -40,7 +41,7 @@ class SpecificationTreeSpec extends SpecificationWithJUnit with SpecificationTre
   }^
   "if there are 2 texts and with one example each, each example must be under each text" ! {
 	toTree("name", twoTextsAnd1ExampleEach.fragments).drawTree.trim must_==
-    List("Text(name)",
+    List("SpecStart(name)",
 	     "|",
 	     "+- Text(text1)",
 	     "|  |",
@@ -52,7 +53,7 @@ class SpecificationTreeSpec extends SpecificationWithJUnit with SpecificationTre
   }^
   "if there are 2 texts and with 2 examples each, all examples must be under each text" ! {
 	toTree("name", twoTextsAnd2ExamplesEach.fragments).drawTree.trim must_==
-    List("Text(name)",
+    List("SpecStart(name)",
 	     "|",
 	     "+- Text(text1)",
 	     "|  |",
