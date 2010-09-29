@@ -31,14 +31,14 @@ trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckP
    * where the input type of the function is different from the MatchResult type
    */
   implicit def checkResult[T](result: T => MatchResult[T])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	result.forAll(a, s)
+	checkProp(result.forAll(a, s))(p)
   }
   /** 
    * execute a Function returning a MatchResult as a ScalaCheck property
    * this must be used when the input type of the function is different from the MatchResult type 
    */
   implicit def check[T, S](result: T => MatchResult[S])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	result.forAll(a, s)
+	checkProp(result.forAll(a, s))(p)
   }
   /** execute a ScalaCheck property */
   implicit def checkProp(prop: Prop)(implicit p: Parameters): execute.Result = checkProperty(prop)(p)

@@ -14,7 +14,7 @@ import junit.framework._
 import _root_.org.junit.runner._
 
 class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with ConsoleOutput {
-  val descriptionReporter = new JUnitDescriptionReporter(klass.getSimpleName)
+  val descriptionReporter = new JUnitDescriptionReporter(klass)
 
   lazy val specification = tryToCreateObject[Specification](klass.getName, true, true).get
   lazy val (executions, (descriptionTree, level)) = descriptionReporter.report(specification.examples.fragments)
@@ -43,23 +43,27 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
 	    }
 	  }	
   }
-  def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
-
-  def getDescription = {
+  private def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
+  def getDescription = treeDescription
+  
+  private lazy val treeDescription = {
     import scalaz.Tree
     def addDescriptions(tree: Tree[Description]): Description = {
-      if (!tree.subForest.isEmpty)
-    	tree.subForest.foreach { sub =>
-    	  tree.rootLabel.addChild(addDescriptions(sub))	
-    	}
+      tree.subForest.filterNot(_.rootLabel.getDisplayName.startsWith("specs2.remove")).foreach(sub => tree.rootLabel.addChild(addDescriptions(sub)))	
       tree.rootLabel
     }
     addDescriptions(descriptionTree.toTree)
   }
 }
+trait ShowDescription {
+  implicit object show extends scalaz.Show[Description] {
+    def show(d: Description) = d.getDisplayName.toList
+  }
+}
+object ShowDescription extends ShowDescription
 /**
  * This class refines the <code>AssertionFailedError</code> from junit
- * and provides the stackTrace of an exception which occured during the specification execution
+ * and provides the stackTrace of an exception which occurred during the specification execution
  */
 class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError(e.getMessage) {
   override def getStackTrace = e.getStackTrace

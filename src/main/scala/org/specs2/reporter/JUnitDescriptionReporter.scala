@@ -6,12 +6,13 @@ import _root_.org.junit.runner._
 import scalaz._
 import Scalaz._
 
-class JUnitDescriptionReporter(specificationName: String) extends Reporter with MockOutput {
+class JUnitDescriptionReporter(specificationKlass: Class[_]) extends Reporter with MockOutput {
   lazy val descriptionTree = new SpecificationTree[Description] {
 	def map: Function[Fragment, Description] = {
-	  case Text(t) => createDescription(testName(t))
+	  case Text(t) => createSuiteDescription(testName(t))
       case Example(description, body) =>  createDescription(testName(description))
-      case other => createDescription(other.toString)
+      case Step(action) => createDescription("specs2.silent")
+      case other => createDescription("specs2.remove")
 	}
   }
   override type T = (Map[Description, Fragment], descriptionTree.T)
@@ -22,7 +23,7 @@ class JUnitDescriptionReporter(specificationName: String) extends Reporter with 
 	val newTreeLoc = descriptionTree.folder(treeLoc, f)
 	val newExamples = f match {
       case Step(action) => examples + (createDescription("specs2.silent") -> f)
-      case Text(t) => examples + (createDescription(testName(t)) -> f)
+      case Text(t) => examples + (createSuiteDescription(testName(t)) -> f)
       case Example(description, body) =>  examples + (createDescription(testName(description)) -> f)
       case _ => examples
 	}
@@ -30,12 +31,10 @@ class JUnitDescriptionReporter(specificationName: String) extends Reporter with 
   }
   
   def testName(s: String)= {
-	val spaces = s.takeWhile(_ == ' ')
-	val name = (if (s contains "\n") (s.trim.split("\n")(0) + "...") else s.trim).replaceAll("\r", "")
-	if (spaces.isEmpty)
-      name
-    else
-      "." + spaces + name	  
+	(if (s contains "\n") (s.trim.split("\n")(0) + "...") else s.trim).replaceAll("\r", "")
   }
-  def createDescription(s: String) = Description.createTestDescription(classOf[Specification], s)
+  private def sanitize(s: String) = s.replace("(", "[").replace(")", "]")
+  private def createDescription(s: String) = Description.createTestDescription(specificationKlass, sanitize(s))
+  private def createSuiteDescription(s: String) = Description.createSuiteDescription(sanitize(s))
 }
+
