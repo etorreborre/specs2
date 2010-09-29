@@ -44,32 +44,10 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
 	  }	
   }
   private def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
-  def getDescription = treeDescription
+  def getDescription = description
+  private lazy val description = descriptionFold.toDescription(descriptionTree.toTree)
   
-  private lazy val treeDescription = {
-    import scalaz.Tree
-    def addDescriptions(tree: Tree[Description]): Description = {
-      tree.subForest.foreach(sub => tree.rootLabel.addChild(addDescriptions(sub)))	
-      tree.rootLabel
-    }
-//    import scalaz._; import Scalaz._
-//    case class D[T](d: T)
-//    implicit object DIsApplicative extends Applicative[D] {
-//      def apply[A, B](f: D[A => B], a: D[A]) = f match {
-//    	case D(function) => a.copy(d = function(a.d))
-//      }
-//      def pure[A](a: =>A) = D(a)
-//    }
-//    val desc: Const[Description, Description] = descriptionTree.toTree.traverse(d => Const(d))
-    addDescriptions(descriptionTree.toTree)
-  }
 }
-trait ShowDescription {
-  implicit object show extends scalaz.Show[Description] {
-    def show(d: Description) = d.getDisplayName.toList
-  }
-}
-object ShowDescription extends ShowDescription
 /**
  * This class refines the <code>AssertionFailedError</code> from junit
  * and provides the stackTrace of an exception which occurred during the specification execution
