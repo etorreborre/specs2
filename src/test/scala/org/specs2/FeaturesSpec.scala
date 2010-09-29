@@ -32,8 +32,8 @@ class FeaturesSpec extends Specification with StandardResults {
 "      according to a regular expression" ! todo^
 "      reporting the final statistics" ! done^
 "    A JUnit4 reporter"^
-"      with a simple display" ! done^
-"      with proper display when the tests have the same name" ! todo^
+"      with a nested suites" ! done^
+"      with proper display when the tests have the same name" ! done^
 "    Matchers"^
 "      with logical combinators" ! done^
 "      with adapters" ! todo^
