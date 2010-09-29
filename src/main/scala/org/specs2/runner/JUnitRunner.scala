@@ -49,7 +49,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
   private lazy val treeDescription = {
     import scalaz.Tree
     def addDescriptions(tree: Tree[Description]): Description = {
-      tree.subForest.filterNot(_.rootLabel.getDisplayName.startsWith("specs2.remove")).foreach(sub => tree.rootLabel.addChild(addDescriptions(sub)))	
+      tree.subForest.foreach(sub => tree.rootLabel.addChild(addDescriptions(sub)))	
       tree.rootLabel
     }
     addDescriptions(descriptionTree.toTree)

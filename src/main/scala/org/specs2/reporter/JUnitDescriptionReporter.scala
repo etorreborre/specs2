@@ -6,17 +6,18 @@ import _root_.org.junit.runner._
 import scalaz._
 import Scalaz._
 
-class JUnitDescriptionReporter(specificationKlass: Class[_]) extends Reporter with MockOutput {
+class JUnitDescriptionReporter(specificationClass: Class[_]) extends Reporter with MockOutput {
   lazy val descriptionTree = new SpecificationTree[Description] {
-	def map: Function[Fragment, Description] = {
-	  case Text(t) => createSuiteDescription(testName(t))
-      case Example(description, body) =>  createDescription(testName(description))
-      case Step(action) => createDescription("specs2.silent")
-      case other => createDescription("specs2.remove")
+	def root = createSuiteDescription(specificationClass.getSimpleName)
+	def map: Function[Fragment, Option[Description]] = {
+	  case Text(t) => Some(createSuiteDescription(testName(t)))
+      case Example(description, body) =>  Some(createDescription(testName(description)))
+      case Step(action) => Some(createDescription("specs2.silent"))
+      case other => None
 	}
   }
   override type T = (Map[Description, Fragment], descriptionTree.T)
-  val initial = (Map.empty[Description, Fragment], descriptionTree.emptySpecTree)
+  val initial = (Map.empty[Description, Fragment], descriptionTree.initial)
   
   val folder = (descExamples: T, f: Fragment) => {
 	val (examples, treeLoc) = descExamples
@@ -34,7 +35,7 @@ class JUnitDescriptionReporter(specificationKlass: Class[_]) extends Reporter wi
 	(if (s contains "\n") (s.trim.split("\n")(0) + "...") else s.trim).replaceAll("\r", "")
   }
   private def sanitize(s: String) = s.replace("(", "[").replace(")", "]")
-  private def createDescription(s: String) = Description.createTestDescription(specificationKlass, sanitize(s))
+  private def createDescription(s: String) = Description.createTestDescription(specificationClass, sanitize(s))
   private def createSuiteDescription(s: String) = Description.createSuiteDescription(sanitize(s))
 }
 
