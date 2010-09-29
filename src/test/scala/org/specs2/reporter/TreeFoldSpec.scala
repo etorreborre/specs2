@@ -4,9 +4,9 @@ import scalaz._
 import Scalaz._
 import specification._
 import FragmentsShow._
-import SpecificationTree._
+import FragmentsTree._
 
-class SpecificationTreeSpec extends SpecificationWithJUnit {
+class TreeFoldSpec extends SpecificationWithJUnit {
   val examples = 
   "a specification can be turned to a tree of fragments"^
   "if there is only one text fragment, the tree will have only one leaf" ! {

@@ -6,8 +6,8 @@ import scalaz._
 import Scalaz._
 import FragmentsShow._
 
-trait SpecificationTree[S] extends Reporter with ConsoleOutput {
-  import NestedLevels._
+trait TreeFold[S] extends Fold {
+  import LevelsFold._
   def map: Fragment => Option[S]
   def root: S
   
@@ -15,9 +15,9 @@ trait SpecificationTree[S] extends Reporter with ConsoleOutput {
   val initial = rootTree
   def rootTree = (leaf(root).loc, Level())
 
-  val folder = (t: T, fragment: Fragment) => {
+  val fold = (t: T, fragment: Fragment) => {
     val (treeLoc, level) = t
-    val newLevel = updateLevel((level, fragment))
+    val newLevel = LevelsFold.fold(level, fragment)
     val newTreeLoc: TreeLoc[S] =     
     fragment match {
       case SpecStart(_) => map(fragment).map(leaf(_).loc).getOrElse(treeLoc)
@@ -27,7 +27,7 @@ trait SpecificationTree[S] extends Reporter with ConsoleOutput {
   }
 
   def toTree(name: String, fragments: Fragments): Tree[S] = toTree(name, fragments.fragments)
-  def toTree(name: String, fragments: List[Fragment]): Tree[S] = report(SpecStart(name) :: fragments)._1.toTree
+  def toTree(name: String, fragments: List[Fragment]): Tree[S] = fold(SpecStart(name) :: fragments)._1.toTree
   
   private def updateTreeLoc(level: Level, newLevel: Level, treeLoc: TreeLoc[S], f: S): TreeLoc[S] = {
 	level.state match {
@@ -47,7 +47,7 @@ trait SpecificationTree[S] extends Reporter with ConsoleOutput {
 	}
   }
 }
-object SpecificationTree extends SpecificationTree[Fragment] {
+object FragmentsTree extends TreeFold[Fragment] {
   def map: Function[Fragment, Option[Fragment]] = (f: Fragment) => Some(f)
   def root = SpecStart("")
 }

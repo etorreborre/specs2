@@ -16,7 +16,7 @@ trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with T
    *                     updated[T]                -> identity -> T
    * 
    */
-  lazy val folder: Function2[T, Fragment, T] = {
+  lazy val fold: Function2[T, Fragment, T] = {
 	case p => ((execute >>> print *** identity) apply p)._2
   }
 

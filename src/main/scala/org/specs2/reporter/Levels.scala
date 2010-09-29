@@ -2,25 +2,22 @@ package org.specs2
 package reporter
 import specification._
 
-trait LevelParser {
-  type L
-  val level: Function[(L, Fragment), (Int, L)]
-}
-trait NestedLevels extends LevelParser {
+trait LevelsFold extends Fold {
   import StandardFragments._
 
   case class Level(level: Int = 0, state: Direction = Up, lastNode: LastNode = Txt)
-  type L = Level
-
-  val level: Function[(L, Fragment), (Int, L)] = {
-	case p => (currentLevel(p), updateLevel(p))
+  type T = Level
+  lazy val initial = new Level()
+  
+  val level: Function[(T, Fragment), (Int, T)] = {
+	case p => (currentLevel(p), fold.tupled(p))
   }
-  val currentLevel: Function[(L, Fragment), Int] = { 
+  val currentLevel: Function[(T, Fragment), Int] = { 
 	case (a, f @ Text(s)) if (a.state == Down && a.lastNode == Ex) => (a.level - 1)
 	case (a, f) => a.level
   }
   
-  val updateLevel: Function[(L, Fragment), L] = {
+  val fold: Function2[T, Fragment, T] = (t: T, f: Fragment) => (t, f) match {
 	case (a, End()) => Level()
 	case (a, Par()) => a
 	case (a, Br()) => a
@@ -48,4 +45,4 @@ trait NestedLevels extends LevelParser {
   case object Ex extends LastNode
   case object Txt extends LastNode
 }
-object NestedLevels extends NestedLevels
+object LevelsFold extends LevelsFold

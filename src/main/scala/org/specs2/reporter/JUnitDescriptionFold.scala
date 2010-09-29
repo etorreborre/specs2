@@ -6,8 +6,9 @@ import _root_.org.junit.runner._
 import scalaz._
 import Scalaz._
 
-class JUnitDescriptionReporter(specificationClass: Class[_]) extends Reporter with MockOutput {
-  lazy val descriptionTree = new SpecificationTree[Description] {
+class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
+	
+  object descriptionTree extends TreeFold[Description] {
 	def root = createSuiteDescription(specificationClass.getSimpleName)
 	def map: Function[Fragment, Option[Description]] = {
 	  case Text(t) => Some(createSuiteDescription(testName(t)))
@@ -16,12 +17,13 @@ class JUnitDescriptionReporter(specificationClass: Class[_]) extends Reporter wi
       case other => None
 	}
   }
+  
   override type T = (Map[Description, Fragment], descriptionTree.T)
   val initial = (Map.empty[Description, Fragment], descriptionTree.initial)
   
-  val folder = (descExamples: T, f: Fragment) => {
+  val fold = (descExamples: T, f: Fragment) => {
 	val (examples, treeLoc) = descExamples
-	val newTreeLoc = descriptionTree.folder(treeLoc, f)
+	val newTreeLoc = descriptionTree.fold(treeLoc, f)
 	val newExamples = f match {
       case Step(action) => examples + (createDescription("specs2.silent") -> f)
       case Text(t) => examples + (createSuiteDescription(testName(t)) -> f)

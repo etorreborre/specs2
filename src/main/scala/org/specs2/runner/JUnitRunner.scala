@@ -14,10 +14,10 @@ import junit.framework._
 import _root_.org.junit.runner._
 
 class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with ConsoleOutput {
-  val descriptionReporter = new JUnitDescriptionReporter(klass)
+  val descriptionFold = new JUnitDescriptionFold(klass)
 
   lazy val specification = tryToCreateObject[Specification](klass.getName, true, true).get
-  lazy val (executions, (descriptionTree, level)) = descriptionReporter.report(specification.examples.fragments)
+  lazy val (executions, (descriptionTree, level)) = descriptionFold.fold(specification.examples.fragments)
   
   def run(notifier: RunNotifier) {
 	notifier.fireTestRunStarted(getDescription)
