@@ -46,7 +46,7 @@ p^
 end
 }
 
-abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit with InputSpecs with ExpectedOutputs with ReportExpectations {
+abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit with FragmentsSamples with ExpectedOutputs with ReportExpectations {
   def single1 = descriptionMustBe(1 must_== 1, "+ this example")
   def single2 = descriptionMustBe(1 must_== 1, "+ this example")
   def single3 = descriptionMustBe(1 must_== 2, "x this example")
@@ -58,7 +58,7 @@ abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit 
   
   def stat1 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
   def stat2 = reportEndsWith(level2WithFailure ^ SpecEnd(""))(level2WithFailureStats)
-  def stat3 = reportEndsWith(exampleWithExpectations ^ SpecEnd(""))(exampleWithExpectationsStats)
+  def stat3 = reportEndsWith("level1" ^ exampleWithExpectations ^ SpecEnd(""))(exampleWithExpectationsStats)
 }
 trait ReportExpectations extends MustExpectations with FragmentsBuilder with Matchers {
   def reportStartsWith(Fragments: Fragments)(output: List[String]) = {
@@ -85,20 +85,6 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
 	reporter.report(ex.fragments)
 	reporter.messages.toList
   }
-}
-trait InputSpecs extends FragmentsBuilder with StandardResults {
-  
-  val level1 = 
-	"level1"^
-      "ex1" ! success^
-      "ex2" ! success
-  val level2WithFailure = 
-    "level2"^
-      "ex1" ! failure^
-      "ex2" ! success
-  val exampleWithExpectations = 
-	"level1"^
-      "ex1" ! Success("ok", 2)
 }
 trait ExpectedOutputs {
 

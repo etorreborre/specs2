@@ -52,6 +52,15 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
       tree.subForest.foreach(sub => tree.rootLabel.addChild(addDescriptions(sub)))	
       tree.rootLabel
     }
+//    import scalaz._; import Scalaz._
+//    case class D[T](d: T)
+//    implicit object DIsApplicative extends Applicative[D] {
+//      def apply[A, B](f: D[A => B], a: D[A]) = f match {
+//    	case D(function) => a.copy(d = function(a.d))
+//      }
+//      def pure[A](a: =>A) = D(a)
+//    }
+//    val desc: Const[Description, Description] = descriptionTree.toTree.traverse(d => Const(d))
     addDescriptions(descriptionTree.toTree)
   }
 }
