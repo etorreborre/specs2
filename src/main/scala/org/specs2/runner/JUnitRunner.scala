@@ -45,7 +45,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
   }
   private def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
   def getDescription = description
-  private lazy val description = descriptionFold.toDescription(descriptionTree.toTree)
+  private lazy val description = descriptionFold.asOneDescription(descriptionTree.toTree)
   
 }
 /**

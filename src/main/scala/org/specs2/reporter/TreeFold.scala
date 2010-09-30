@@ -28,7 +28,6 @@ trait TreeFold[S] extends Fold {
 
   def toTree(name: String, fragments: Fragments): Tree[S] = toTree(name, fragments.fragments)
   def toTree(name: String, fragments: List[Fragment]): Tree[S] = fold(SpecStart(name) :: fragments)._1.toTree
-  
   private def updateTreeLoc(level: Level, newLevel: Level, treeLoc: TreeLoc[S], f: S): TreeLoc[S] = {
 	level.state match {
       case Down => {
@@ -45,6 +44,12 @@ trait TreeFold[S] extends Fold {
         else
       	  treeLoc.parent.getOrElse(treeLoc).insertDownLast(leaf(f))
 	}
+  }
+}
+object TreeFold {
+  def bottomUp[A, B](t: Tree[A], f: ((A, Stream[B]) => B)): Tree[B] = {
+    val tbs = t.subForest.map(t => bottomUp(t, f))
+    node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
   }
 }
 object FragmentsTree extends TreeFold[Fragment] {

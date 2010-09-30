@@ -17,26 +17,11 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
       case other => None
 	}
   }
-  def toDescription(fragments: Fragment*): Description = toDescription(super.fold(fragments:_*)._2._1.toTree)
-  def toDescription(descriptionTree: Tree[Description]) = {
-    import scalaz.Tree
-    def addDescriptions(tree: Tree[Description]): Description = {
-      tree.subForest.foreach(sub => tree.rootLabel.addChild(addDescriptions(sub)))	
-      tree.rootLabel
-    }
-//    import scalaz._; import Scalaz._
-//    case class D[T](d: T)
-//    implicit object DIsApplicative extends Applicative[D] {
-//      def apply[A, B](f: D[A => B], a: D[A]) = f match {
-//    	case D(function) => a.copy(d = function(a.d))
-//      }
-//      def pure[A](a: =>A) = D(a)
-//    }
-//    val desc: Const[Description, Description] = descriptionTree.toTree.traverse(d => Const(d))
-    addDescriptions(descriptionTree)
+  def toDescription(fragments: Fragment*): Description = asOneDescription(super.fold(fragments:_*)._2._1.toTree)
+  def asOneDescription(descriptionTree: Tree[Description]): Description = {
+    val addChildren = (d: Description, children: Stream[Description]) => { children.foreach(d.addChild(_)); d }
+    TreeFold.bottomUp(descriptionTree, addChildren).rootLabel
   }
-
-  
   
   override type T = (Map[Description, Fragment], descriptionTree.T)
   val initial = (Map.empty[Description, Fragment], descriptionTree.initial)
