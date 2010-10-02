@@ -11,23 +11,31 @@ trait TreeFold[S] extends Fold {
   def map: Fragment => Option[S]
   def root: S
   
-  type T = (TreeLoc[S], Level)
-  val initial = rootTree
-  def rootTree = (leaf(root).loc, Level())
+  case class AccumulatedTree[S](private val treeLoc: TreeLoc[S], private val level: Level) {
+	def tree = treeLoc.toTree
+  }
+  object AccumulatedTree {
+	def rootTree = new AccumulatedTree(leaf(root).loc, Level())
+  }
+  object Tree {
+	def unapply(acc: AccumulatedTree[S]): Option[(Tree[S])] = Some(acc.tree)
+  }
+  type T = AccumulatedTree[S]
+  val initial = AccumulatedTree.rootTree
 
   val fold = (t: T, fragment: Fragment) => {
-    val (treeLoc, level) = t
-    val newLevel = LevelsFold.fold(level, fragment)
+    val AccumulatedTree(treeLocation, l) = t
+    val newLevel = LevelsFold.fold(l, fragment)
     val newTreeLoc: TreeLoc[S] =     
     fragment match {
-      case SpecStart(_) => map(fragment).map(leaf(_).loc).getOrElse(treeLoc)
-      case other => map(fragment).map(updateTreeLoc(level, newLevel, treeLoc, _)).getOrElse(treeLoc)
+      case SpecStart(_) => map(fragment).map(leaf(_).loc).getOrElse(treeLocation)
+      case other => map(fragment).map(updateTreeLoc(l, newLevel, treeLocation, _)).getOrElse(treeLocation)
     }
-    (newTreeLoc, newLevel)	
+    new AccumulatedTree(newTreeLoc, newLevel)	
   }
 
   def toTree(name: String, fragments: Fragments): Tree[S] = toTree(name, fragments.fragments)
-  def toTree(name: String, fragments: List[Fragment]): Tree[S] = fold(SpecStart(name) :: fragments)._1.toTree
+  def toTree(name: String, fragments: List[Fragment]): Tree[S] = fold(SpecStart(name) :: fragments).tree
   private def updateTreeLoc(level: Level, newLevel: Level, treeLoc: TreeLoc[S], f: S): TreeLoc[S] = {
 	level.state match {
       case Down => {

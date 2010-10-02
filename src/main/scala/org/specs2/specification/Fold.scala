@@ -1,6 +1,5 @@
 package org.specs2
-package reporter
-import specification._
+package specification
 
 /**
  * A Fold transforms a list of fragments to a given type T, starting from an initial value.
@@ -22,6 +21,7 @@ trait Fold {
   type T
   def initial: T
   val fold: Function2[T, Fragment, T]
-  def fold(fragments: Fragment*): T = fragments.foldLeft(initial)(fold)
+  
   def fold(fragments: List[Fragment]): T = fold(fragments:_*)
+  def fold(fragments: Fragment*): T = fragments.foldLeft(initial)(fold)
 }

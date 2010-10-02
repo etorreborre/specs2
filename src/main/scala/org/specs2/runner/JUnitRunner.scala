@@ -14,10 +14,10 @@ import junit.framework._
 import _root_.org.junit.runner._
 
 class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with ConsoleOutput {
-  val descriptionFold = new JUnitDescriptionFold(klass)
-
   lazy val specification = tryToCreateObject[Specification](klass.getName, true, true).get
-  lazy val (executions, (descriptionTree, level)) = descriptionFold.fold(specification.examples.fragments)
+
+  val descriptionFold = new JUnitDescriptionFold(klass)
+  lazy val descriptionFold.DescriptionAndExamples(description, executions) = descriptionFold.fold(specification.examples.fragments)
   
   def run(notifier: RunNotifier) {
 	notifier.fireTestRunStarted(getDescription)
@@ -45,8 +45,6 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with Con
   }
   private def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
   def getDescription = description
-  private lazy val description = descriptionFold.asOneDescription(descriptionTree.toTree)
-  
 }
 /**
  * This class refines the <code>AssertionFailedError</code> from junit
