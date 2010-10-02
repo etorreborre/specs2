@@ -22,6 +22,7 @@ trait Fold {
   def initial: T
   val fold: Function2[T, Fragment, T]
   
+  def fold(fragments: Fragments): T = fold(fragments.fragments:_*)
   def fold(fragments: List[Fragment]): T = fold(fragments:_*)
   def fold(fragments: Fragment*): T = fragments.foldLeft(initial)(fold)
 }
