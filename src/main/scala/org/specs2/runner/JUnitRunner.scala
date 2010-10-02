@@ -13,38 +13,62 @@ import _root_.org.junit._
 import junit.framework._
 import _root_.org.junit.runner._
 
-class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution with ConsoleOutput {
-  lazy val specification = tryToCreateObject[Specification](klass.getName, true, true).get
-
-  val descriptionFold = new JUnitDescriptionFold(klass)
-  lazy val descriptionFold.DescriptionAndExamples(description, executions) = descriptionFold.fold(specification.examples.fragments)
+/**
+ * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
+ * to execute a specification as a JUnit suite.
+ * 
+ * The implementation is using a description Fold to fold the fragments into a tree
+ * of Description objects and a Map relating each Description to a Fragment to execute. 
+ *
+ */
+class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution {
   
+  /** specification to execute */
+  protected lazy val specification = tryToCreateObject[BaseSpecification](klass.getName, true, true).get
+  protected lazy val examples = specification.examples
+  /** fold object used to create descriptions */
+  private val descriptions = new JUnitDescriptionFold(klass)
+  /** extract the root Description object and the examples to execute */
+  private lazy val descriptions.DescriptionAndExamples(desc, executions) = descriptions.fold(examples)
+  /** @return a Description for the TestSuite */
+  def getDescription = desc
+  
+  /** 
+   * run the suite by executing each fragment related to a description:
+   * * execute all fragments (including Steps which are reported as steps)
+   * * for each result, report the failure/error/skipped or pending message as a
+   *   junit failure or ignored event on the RunNotifier
+   */
   def run(notifier: RunNotifier) {
-	notifier.fireTestRunStarted(getDescription)
 	executions.toStream.collect { case (desc, ex) => (desc, execute(ex)) }.
-	  collect { 
-		case (desc, ExecutedNoText()) => (desc, Success("specs2.silent")) 
-		case (desc, ExecutedText(t)) => (desc, Success("specs2.text")) 
-		case (desc, ExecutedResult(_, result)) => (desc, result) 
-	  }.foreach { 
-	 	case (desc, Success("specs2.silent")) => ()
-	 	case (desc, result) => { 
-	      if (result != Success("specs2.text")) 
-	     	notifier.fireTestStarted(desc)
+	  foreach { 
+	 	case (desc, ExecutedResult(_, result)) => { 
+	      notifier.fireTestStarted(desc)
 	      result match {
             case f @ Failure(m, st) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f.exception)))
-            case e @ Error(m, st) if desc.getDisplayName contains "specs2.silent" => { println(m); st foreach println }
             case e @ Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
-            case Pending(_) => notifier.fireTestIgnored(desc) 
-            case Skipped(_) => notifier.fireTestIgnored(desc) 
-            case Success(_) => ()
+            case Pending(_) | Skipped(_)  => notifier.fireTestIgnored(desc) 
+            case _ => ()
           }
-	      if (result != Success("specs2.text")) notifier.fireTestFinished(desc)
+	      notifier.fireTestFinished(desc)
 	    }
-	  }	
+	 	case _ => ()
+	  }
   }
+  /** @return a Throwable expected by JUnit Failure object */
   private def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
-  def getDescription = description
+}
+/**
+ * Factory methods to help with testing
+ */
+object JUnitRunner {
+  def apply[T <: BaseSpecification](implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure)
+  def apply[T <: BaseSpecification](s: T)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
+    override protected lazy val specification = s	  
+  }
+  def apply[T <: BaseSpecification](fragments: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
+    override protected lazy val examples = fragments	  
+  }
 }
 /**
  * This class refines the <code>AssertionFailedError</code> from junit

@@ -23,6 +23,7 @@ trait MockitoMocker {
   def when[V](v: V) = org.mockito.Mockito.when(v)
   def times(i: Int): org.mockito.internal.verification.Times = 
 	  org.mockito.Mockito.times(i).asInstanceOf[org.mockito.internal.verification.Times]
+  def any[T](implicit m: ClassManifest[T]): T = org.mockito.Matchers.any(m.erasure).asInstanceOf[T]
   def verify[M <: AnyRef](inOrder: Option[InOrder], m: M, v: VerificationMode) = {
     inOrder match {
       case Some(ordered) => ordered.verify(m, v)

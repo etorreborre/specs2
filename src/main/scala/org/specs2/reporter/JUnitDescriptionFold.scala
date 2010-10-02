@@ -34,7 +34,7 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
 	def map: Function[Fragment, Option[Description]] = {
 	  case Text(t) => Some(createSuiteDescription(testName(t)))
       case Example(description, body) =>  Some(createDescription(testName(description)))
-      case Step(action) => Some(createDescription("specs2.silent"))
+      case Step(action) => Some(createDescription("step"))
       case other => None
 	}
   }
@@ -55,7 +55,7 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
 	val AccumulatedDescription(treeLoc, examples) = descExamples
 	val newTreeLoc = descriptionTree.fold(treeLoc, f)
 	val newExamples = f match {
-      case Step(action) => examples + (createDescription("specs2.silent") -> f)
+      case Step(action) => examples + (createDescription("step") -> f)
       case Text(t) => examples + (createSuiteDescription(testName(t)) -> f)
       case Example(description, body) =>  examples + (createDescription(testName(description)) -> f)
       case _ => examples

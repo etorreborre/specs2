@@ -12,7 +12,7 @@ import org.mockito.internal.stubbing._
 import org.mockito.stubbing.{ OngoingStubbing, Stubber }
 
 
-trait Mockito extends MocksCreation with CalledMatchers with MockitoStubs 
+trait Mockito extends MocksCreation with CalledMatchers with MockitoStubs with CapturedArgument
 /**
  * This trait provides methods to declare expectations on mock calls:<code>
  * 
@@ -198,6 +198,7 @@ trait MockitoStubs extends MocksCreation {
   implicit def argThat[T](m: org.specs2.matcher.Matcher[T]): T = org.mockito.Matchers.argThat(new org.specs2.mock.HamcrestMatcherAdapter(m))
   /** allows to use a hamcrest matchers to match parameters. */
   def argThat[T](m: org.hamcrest.Matcher[T]): T = org.mockito.Matchers.argThat(m)
+  def any[T : ClassManifest]: T = mocker.any[T]
 
   /** 
    * This class is an implementation of the Answer interface allowing to pass functions as an answer.
@@ -297,7 +298,25 @@ trait MocksCreation extends TheMockitoMocker {
    */
   def spy[T](m: T): T = mocker.spy(m)
 }
+/**
+ * Syntactic sugar on top of the ArgumentCaptor API
+ * to avoid using classOf and an explicit call to capture()
+ */
+trait CapturedArgument {
+  /** capture an argument of type T */
+  def capture[T : ClassManifest]: ArgumentCapture[T] = new ArgumentCapture[T]
 
+  /** This class encapsulates an ArgumentCaptor */
+  class ArgumentCapture[T](implicit m: ClassManifest[T]) {
+	import org.mockito.ArgumentCaptor
+	lazy private val captor: ArgumentCaptor[T] = ArgumentCaptor.forClass(m.erasure).asInstanceOf[ArgumentCaptor[T]]
+	def value = captor.getValue
+	def capture = captor.capture()
+  }
+  /** this conversion allows to capture the parameter is a mocked call */
+  implicit def captured[T](c: ArgumentCapture[T]): T = c.capture
+
+}
 /**
  * shortcuts to standard Mockito functions
  */
