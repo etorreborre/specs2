@@ -1,6 +1,5 @@
 package org.specs2
-package reporter
-import specification._
+package specification
 import execute._
 
 /**
