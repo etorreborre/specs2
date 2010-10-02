@@ -43,6 +43,8 @@ p^
 "     with 2 calls that were indeed not in order" ! ordered().failed^
 p^
 "   Callbacks can be created to control the returned a value" ! callbacks().c1^
+p^
+"   A parameter can be captured in order to check its value" ! captured().e1^
 end  
     
   case class aMock() {
@@ -123,5 +125,14 @@ end
       (there was one(list2)(order).get(0) then
                  one(list1)(order).get(0)).message must startWith("The mock was not called as expected")
     }
+  }
+  case class captured() {
+	val list = mock[java.util.List[String]]
+    def e1 = {
+	  list.get(1)
+	  val c = capture[Int]
+	  there was one(list).get(c)
+	  c.value must_== 1
+	}
   }
 }
