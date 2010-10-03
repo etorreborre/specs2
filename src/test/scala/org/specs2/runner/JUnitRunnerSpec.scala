@@ -18,6 +18,8 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
 "  if the specification has 1 failing example, there must be a testStarted/testFailure notification" ! notified().e3^
 "  if the specification has 1 failing example, the failure message must be reported" ! notified().e4^
 "  if the specification has 1 example with an error, the error message must be reported" ! notified().e5^
+"  if the specification has 1 skipped example, a test ignored must be reported" ! notified().e6^
+"  if the specification has 1 pending example, a test ignored must be reported" ! notified().e7^
 end
 
   case class notified() {
@@ -52,6 +54,14 @@ end
 	def e5 = { 
 	  run(ex1Error)
 	  there was one(notifier).fireTestFailure(be_==("error")^^((_:Failure).getMessage))
+    }
+	def e6 = { 
+	  run(ex1Skipped)
+	  there was one(notifier).fireTestIgnored(desc("ex1"))
+    }
+	def e7 = { 
+	  run(ex1Pending)
+	  there was one(notifier).fireTestIgnored(desc("ex1"))
     }
   }
   

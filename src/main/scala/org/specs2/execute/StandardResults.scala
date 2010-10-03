@@ -12,4 +12,5 @@ trait StandardResults {
   def anError = Error("error")
   def success = Success("success")
   def failure = Failure("failure")
+  def skipped = Skipped("skipped")
 }
