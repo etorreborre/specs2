@@ -10,6 +10,7 @@ trait FragmentsSamples extends FragmentsBuilder with StandardResults with Predef
   val ex1 = "ex1" ! success 
   val ex2 = "ex2" ! success
   val ex1Failure = "ex1" ! failure
+  val ex1Error = "ex1" ! anError
   val exampleWithExpectations = "ex1" ! Success("ok", 2)
 
   val level1 = "level1" ^ ex1 ^ ex2
