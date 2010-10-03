@@ -9,7 +9,7 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
   val examples = 
 """	  
   The JUnitRunner is meant to be used with the RunWith annotation.
-  It takes a Specification, execute it and notifies a RunNotifier of the possible failures.
+  It takes a Specification, execute it and notifies a RunNotifier object of the possible failures.
   
   The following examples show the result of running a Specification with different successes or failures:
 """^
@@ -17,6 +17,7 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
 "  if the specification has 2 ok examples, there must be a testStarted/testFinished notification for each" ! notified().e2^
 "  if the specification has 1 failing example, there must be a testStarted/testFailure notification" ! notified().e3^
 "  if the specification has 1 failing example, the failure message must be reported" ! notified().e4^
+"  if the specification has 1 example with an error, the error message must be reported" ! notified().e5^
 end
 
   case class notified() {
@@ -47,6 +48,10 @@ end
 	  val c = capture[Failure]
 	  there was one(notifier).fireTestFailure(c)
 	  c.value.getMessage must_== "failure"
+    }
+	def e5 = { 
+	  run(ex1Error)
+	  there was one(notifier).fireTestFailure(be_==("error")^^((_:Failure).getMessage))
     }
   }
   
