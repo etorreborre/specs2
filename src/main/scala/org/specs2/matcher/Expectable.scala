@@ -2,8 +2,8 @@ package org.specs2
 package matcher
 import AnyMatchers._
 import execute._
-
-class Expectable[+T](t: =>T) {
+import scalaz._
+class Expectable[+T](t: =>T) { outer =>
   protected val desc: Option[String] = None
   lazy val value = t
   
@@ -21,5 +21,12 @@ class Expectable[+T](t: =>T) {
   protected def dUnquoted[T](value: T) = desc match {
     case None => unq(value)
     case Some(de) => de + " " + unq(value)  
+  }
+}
+object Expectable {
+  implicit def ExpectableFunctor[T](e: Expectable[T]): Functor[Expectable] = new Functor[Expectable] {
+    def fmap[A, B](r: Expectable[A], f: A => B) = new Expectable(f(r.value)) {
+      override protected val desc: Option[String] = r.desc
+    }
   }
 }

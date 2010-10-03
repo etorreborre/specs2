@@ -3,7 +3,8 @@ package matcher
 import specification._
 import execute._
 import AnyMatchers._
-
+import Expectable._
+import MatchResult._
 /**
  * <p>The <code>Matcher</code> trait is the base trait for Matchers.
  * 
@@ -28,6 +29,17 @@ trait Matcher[-T] { outer =>
   
   protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S]): MatchResult[S] = {
 	Matcher.result(test, okMessage, koMessage, value) 
+  }
+ 
+  /** 
+   * Adapts a matcher to another.
+   * ex: be_==("message") ^^ (_.getMessage)  
+   */
+  def ^^[S](f: S => T) = new Matcher[S] {
+    def apply[U <: S](a: =>Expectable[U]) = {
+      val result = outer.apply(a.fmap[U, T](a, f))
+      result.compose((_:Expectable[T]) => a)
+    }
   }
 
   def not = new Matcher[T] {
