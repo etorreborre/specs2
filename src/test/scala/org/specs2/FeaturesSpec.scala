@@ -36,7 +36,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      with proper display when the tests have the same name" ! done^
 "    Matchers"^
 "      with logical combinators" ! done^
-"      with adapters" ! todo^
+"      with adapters" ! done^
 "      for strings" ! done^
 "      for iterables" ! todo^
 "    Spec for before/after/around"^
@@ -56,6 +56,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      verification of the calls" ! done^
 "      returning stub values" ! done^
 "      order of method calls" ! done^
+"      with argument capture" ! done^
 p^    
 "  Low priority"^
 "    A Console reporter"^
