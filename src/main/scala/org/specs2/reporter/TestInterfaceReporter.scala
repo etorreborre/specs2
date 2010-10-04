@@ -6,33 +6,32 @@ import control.Exceptionx._
 import io._
 import execute.{ Success, Failure, Error, Skipped, Pending }
 
-class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends Reporter with MockOutput { outer =>  
-  val printer = new ConsoleReporter with LoggedOutput with HandlerEvents { inner =>
-	val loggers = outer.loggers
-    override val print: Function[(S, ExecutedFragment), ExecutedFragment] = { case (s, executed) =>
+class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends ConsoleReporter 
+  with LoggedOutput with HandlerEvents {  
+	
+  override val executor = new ExampleExecution {
+    override val execute: Function[Fragment, ExecutedFragment] = (f: Fragment) => {
+   	  val executed = new ExampleExecution {}.execute(f)
       executed match {
         case ExecutedResult(text: String, result: org.specs2.execute.Result) => result match {
-            case Success(text) => handler.handle(succeeded(text)) 	
-            case r @ Failure(text, e) => handler.handle(failure(text, r.exception))
-            case r @ Error(text, e) => handler.handle(error(text, r.exception))
-            case Skipped(text) => handler.handle(skipped(text))
-            case Pending(text) => handler.handle(skipped(text))
-          }
-          inner.print(text)
-        case ExecutedText(text) => inner.print(text) 
-        case ExecutedPar() => inner.print("\n\n") 
+          case Success(text) => handler.handle(succeeded(text)) 	
+          case r @ Failure(text, e) => handler.handle(failure(text, r.exception))
+          case r @ Error(text, e) => handler.handle(error(text, r.exception))
+          case Skipped(text) => handler.handle(skipped(text))
+          case Pending(text) => handler.handle(skipped(text))
+        }
         case _ => ()
       }
       executed
     }
-  } 
-  type T = printer.T
-  val initial = printer.initial
-  val fold = printer.fold
+  }
 }
 trait LoggedOutput extends Output with TestLoggers {
   override def printf(format: String, args: Any*) = loggers.foreach { logger =>
-    logger.info(format.format(args:_*))
+    if (logger.ansiCodesSupported)
+      logger.info(format.format(args:_*))
+    else
+      logger.info(AnsiColors.removeColors(format.format(args:_*)))	
   }
 }
 /**
