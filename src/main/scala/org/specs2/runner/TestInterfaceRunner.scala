@@ -41,7 +41,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     specification.left.map { e =>
       handler.handle(error(classname, e))
       logError("Could not create an instance of "+classname+"\n")
-      logError("  "+e.getMessage+"\n")
+      logError("  "+e+"\n")
       e.getStackTrace foreach { s => logError("  "+s.toString) }
       if (e.getCause != null)
 		e.getCause.getStackTrace foreach { s => logError("  "+s.toString) }
@@ -49,7 +49,8 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     val specificationOption = specification.right.toOption
     run(specificationOption, handler)
   }
-  def run(specification: Option[Specification], handler: EventHandler): Option[Specification] = {
+  
+  private def run(specification: Option[Specification], handler: EventHandler): Option[Specification] = {
     specification map { s =>
       new TestInterfaceReporter(handler, loggers).report(s)
     }

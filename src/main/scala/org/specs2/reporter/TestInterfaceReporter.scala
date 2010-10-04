@@ -6,6 +6,11 @@ import control.Exceptionx._
 import io._
 import execute.{ Success, Failure, Error, Skipped, Pending }
 
+/**
+ * 
+ * @author Eric
+ *
+ */
 class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends ConsoleReporter 
   with LoggedOutput with HandlerEvents {  
 	
