@@ -16,37 +16,39 @@ import control.Exceptionx._
 sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1) {
   /** @return the textual status of the result */
   def status = this match {
-	case Success(_) => "+"
-	case Failure(_, _) => "x"
-	case Error(_, _)   => "!"
-	case Pending(_) => "*"
-	case Skipped(_) => "o"
+	  case Success(_) => "+"
+	  case Failure(_, _) => "x"
+	  case Error(_, _)   => "!"
+	  case Pending(_) => "*"
+	  case Skipped(_) => "o"
   }
   /** update the message of a result, keeping the subclass type */
   def updateMessage(msg: String) = { 
-	this match {
-	  case Success(m) => Success(msg)
-	  case Failure(m, st) => Failure(msg, st)
-	  case Error(m, st)   => Error(msg, st)
-	  case Skipped(m) => Skipped(msg)
-	  case Pending(m) => Pending(msg)
-	}
+	  this match {
+	    case Success(m) => Success(msg)
+	    case Failure(m, st) => Failure(msg, st)
+	    case Error(m, st)   => Error(msg, st)
+	    case Skipped(m) => Skipped(msg)
+	    case Pending(m) => Pending(msg)
+	  }
   }
   def and(r: Result): Result = this
+  def isSuccess: Boolean = false
 }
 /** 
  * This class represents the success of an execution
  */
 case class Success(m: String = "")  extends Result(m) {
   override def and(r: Result): Result = r match {
-	case Success(m) => Success(message+" and "+m)
-	case Failure(m, st) => r
-	case _ => super.and(r)
+	  case Success(m) => Success(message+" and "+m)
+	  case Failure(m, st) => r
+	  case _ => super.and(r)
   }
+  override def isSuccess = true
 }
 object Success {
   def apply(m: String, expNb: Int) = new Success(m) {
-	override val expectationsNb = expNb
+	 override val expectationsNb = expNb
   }
 }
 /** 

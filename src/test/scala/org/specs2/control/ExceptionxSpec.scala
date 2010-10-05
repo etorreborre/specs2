@@ -7,20 +7,20 @@ class ExceptionxSpec extends Specification with Exceptionx {
   val content =
 """  
   The Exceptionx trait provides extensions to regular exceptions:
-"""^
-"  It has location methods"^
-"    to get the name of the file and the line from an exception" ! c().e1^
-"    to get the class name and line number of an exception" ! c().e2^
+"""																		                                 ^
+"  It has location methods"												                     ^
+"    to get the name of the file and the line from an exception" 		   ! c().e1^
+"    to get the class name and line number of an exception" 			     ! c().e2^
 "    to get the class name, file name and line number of an exception" ! c().e3^
-p^
-"  It allows to filter stacktraces"^
-"    to filter all the lines matching a given pattern" ! c().e4^
-"    to filter all the lines not matching a given pattern" ! c().e5^
-p^
-"  It provides utility functions for stacktrace elements"^
-"    apply returns the ith element" ! c().e6^
-"    headOption returns the first element as an option" ! c().e7^
-end
+																		                                   p^
+"  It allows to filter stacktraces"										                 ^
+"    to filter all the lines matching a given pattern" 					       ! c().e4^
+"    to filter all the lines not matching a given pattern" 				     ! c().e5^
+																		                                   p^
+"  It provides utility functions for stacktrace elements"				       ^
+"    apply returns the ith element" 									                 ! c().e6^
+"    headOption returns the first element as an option" 				       ! c().e7^
+																		                                   end
 
   case class c() extends ExceptionxContext {
 	def e1 = e.location must_== "ExceptionxContext.scala:6"

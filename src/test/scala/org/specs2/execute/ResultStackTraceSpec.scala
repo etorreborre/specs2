@@ -4,12 +4,12 @@ import control._
 
 class ResultStackTraceSpec extends Specification {
   val content =
-" A StackTrace for a Result must sanitize the stacktrace "^
-" to present only a relevant result locationt for a user"^
-"   if it is a a user specification, the 'org.specs2' lines are filtered" ! e1^
-"   if it is a a specs2 specification, the 'org.specs2' lines are not filtered" ! e2^
+" A StackTrace for a Result must sanitize the stacktrace"                             ^
+" to present only a relevant stacktrace element for the user"                         ^
+"   if it is a a user specification, the 'org.specs2' lines are filtered"             ! e1^
+"   if it is a a specs2 specification, the 'org.specs2' lines are not filtered"       ! e2^
 "   if it is a a user specification, only the lines containing 'Result' are filtered" ! e3^
-end
+                                                                                      end
 
   def e1 = locationMustBe(
 		  List(("org.specs2.runner", "Runner.scala", 8), 
@@ -27,10 +27,10 @@ end
 	stackTraceResult(messages:_*).location must_== expected
 
   case class stackTraceResult(msg: (String, String, Int)*) extends ResultStackTrace {
-	def stackTrace = {
-	  msg.foldLeft(Nil: List[StackTraceElement]) { (res, cur) =>
-	    res :+ Exceptionx.stackTraceElement(cur._1, fileName = cur._2, lineNumber = cur._3)
+	  def stackTrace = {
+	    msg.foldLeft(Nil: List[StackTraceElement]) { (res, cur) =>
+	      res :+ Exceptionx.stackTraceElement(cur._1, fileName = cur._2, lineNumber = cur._3)
+	    }
 	  }
-	}
   } 
 }

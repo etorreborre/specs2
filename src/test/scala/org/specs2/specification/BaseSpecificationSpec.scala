@@ -28,7 +28,7 @@ class BaseSpecificationSpec extends Specification {
     * printing out results to the Console
 """ ^
 "  Fragments building specification" ^
-   include(new FragmentsSpec)^
+   include(new ExamplesSpec)^
 "  Fragments execution" ^
    include(new FragmentsExecutionSpec)^
 "  Fragments execution" ^

@@ -11,10 +11,12 @@ trait FragmentsBuilder {
   implicit def toFragments(e: Example): Fragments = new Fragments(List(e))
   implicit def start(s: String): Fragments = new Fragments(List(Text(s)))
   implicit def text(s: String): Text = new Text(s)
+  
   implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s)
   class ExampleDesc(s: String) {
-	def ![T](t: =>MatchResult[T]) = new Example(s, body = () => t.toResult)
-	def ![T <% Result](t: =>T) = new Example(s, body = () => t)
+    def ![T](function: String => MatchResult[T]) = new Example(s, body = () => function(s).toResult)
+	  def ![T](t: =>MatchResult[T]) = new Example(s, body = () => t.toResult)
+	  def ![T <% Result](t: =>T) = new Example(s, body = () => t)
   }
   implicit def group(Fragments: Fragments) = Group(Fragments.fragments)
   implicit def group(fragments: List[Fragment]) = Group(fragments)
