@@ -63,7 +63,7 @@ trait FileSystem extends FileReader with FileWriter {
   def createDir(path: String) = (new File(path)).mkdirs
 
   /**
-   * deletes the directory and all directory contents at the specified path and return the parent path of that directory
+   * deletes the directory and all directory content at the specified path and return the parent path of that directory
    */
   def removeDir(path: String): String = {
     val dir = new File(path)

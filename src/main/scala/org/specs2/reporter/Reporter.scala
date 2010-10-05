@@ -5,7 +5,7 @@ import io._
 
 trait Reporter extends Output with Fold {
   def report(spec: BaseSpecification): T = 
-	report(SpecStart(name(spec)) +: spec.examples.fragments :+ SpecEnd(name(spec)))
+	report(SpecStart(name(spec)) +: spec.content.fragments :+ SpecEnd(name(spec)))
 	
   def report(fragments: List[Fragment]): T = fold(fragments)
   

@@ -4,7 +4,7 @@ import execute._
 import matcher._
 
 class ExampleIsolationSpec extends Specification with StandardResults with UserInteractions {
-  val examples = 
+  val content = 
 """ 
   This specification shows how to use case classes to ensure Fragments isolation.
   

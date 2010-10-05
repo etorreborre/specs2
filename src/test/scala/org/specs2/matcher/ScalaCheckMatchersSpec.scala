@@ -10,7 +10,7 @@ import io._
 import specification._
 
 class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with ScalaCheckProperties with MockOutput {
-  val examples = 
+  val content = 
 "  A ScalaCheck property can be used in the body of an Example"^	  
 "    if it is proved the execution will yield a Success" ! prop1^
 "    if it is a function which is always true, it will yield a Success" ! prop2^

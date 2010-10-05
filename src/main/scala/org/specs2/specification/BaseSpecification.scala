@@ -3,8 +3,8 @@ package specification
 import matcher._
 
 trait BaseSpecification extends SpecificationStructure with FragmentsBuilder with Matchers {
-  def include(s: BaseSpecification) =  group(examples.fragments)
+  def include(s: BaseSpecification) =  group(content.fragments)
 }
 trait SpecificationStructure {
-  val examples: Fragments
+  val content: Fragments
 } 

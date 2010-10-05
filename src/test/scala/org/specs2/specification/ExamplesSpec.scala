@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 class FragmentsSpec extends Specification {
-  val examples: Fragments =
+  val content: Fragments =
 """
   In a Specification, the spec variable stores an instance of the Fragments class,
   which is merely a list of fragments. Those fragments are either:

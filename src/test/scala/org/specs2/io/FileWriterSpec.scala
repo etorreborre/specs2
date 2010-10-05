@@ -5,7 +5,7 @@ import specification._
 import execute._
 
 class FileWriterSpec extends Specification {
-  val examples = 
+  val content = 
 "  A FileWriter should"^
 "    write inside a file" ! c(e1)^
 "    close the file if an exception occurs" ! c(e2)^

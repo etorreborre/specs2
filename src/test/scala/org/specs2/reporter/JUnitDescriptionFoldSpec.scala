@@ -8,7 +8,7 @@ import ShowDescription._
 import scala.collection.JavaConversions._
 
 class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamples {
-  val examples = 
+  val content = 
 """
   A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is  
   a root Description object (the top 'suite') and children objects representing either 
@@ -19,6 +19,7 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
 " A text and two subordinates examples are folded as a node and 2 children descriptions" ! e3^
 " 2 texts and two subordinates examples each are folded as 2 nodes and with their own children descriptions" ! e4^
 " 2 groups of examples separated by a paragraph are folded as 2 nodes and with their own children descriptions" ! e5^
+" 2 grouped examples and a separate one" ! e6^
 end
 
   def e1 = descriptionIs(ex1)(
@@ -72,6 +73,17 @@ end
   		   "   |",
   		   "   `- ex2(org.specs2.reporter.JUnitDescriptionFoldSpec)\n")
   		   
+  def e6 = descriptionIs(level1 ^ end ^ ex3)(
+  		   "JUnitDescriptionFoldSpec",
+  		   "|",
+  		   "+- level1",
+  		   "|  |",
+  		   "|  +- ex1(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "|  |",
+  		   "|  `- ex2(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "|",
+  		   "`- ex3(org.specs2.reporter.JUnitDescriptionFoldSpec)\n")
+
   def descriptionIs(f: Fragments)(tree: String*) = 
 	showDescriptionTree(f.fragments) must_== tree.toList.mkString("\n")
   

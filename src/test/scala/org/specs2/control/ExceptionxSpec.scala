@@ -4,7 +4,7 @@ import execute._
 import specification._
 
 class ExceptionxSpec extends Specification with Exceptionx {
-  val examples =
+  val content =
 """  
   The Exceptionx trait provides extensions to regular exceptions:
 """^
@@ -23,9 +23,9 @@ p^
 end
 
   case class c() extends ExceptionxContext {
-	def e1 = e.location must_== "ExceptionxContext.scala:4"
-    def e2 = e.classLocation must_== "org.specs2.control.ExceptionxContext:4"
-    def e3 = e.fullLocation must_== "org.specs2.control.ExceptionxContext (ExceptionxContext.scala:4)"
+	def e1 = e.location must_== "ExceptionxContext.scala:6"
+    def e2 = e.classLocation must_== "org.specs2.control.ExceptionxContext:6"
+    def e3 = e.fullLocation must_== "org.specs2.control.ExceptionxContext (ExceptionxContext.scala:6)"
     def e4 = e.filter("org.specs2.control").getStackTrace.toList.map(_.toString) must 
                containMatch("org.specs2.control")
     def e5 = e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must 

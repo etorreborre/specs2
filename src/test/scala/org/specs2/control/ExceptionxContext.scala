@@ -1,5 +1,7 @@
-package org.specs2.control
+package org.specs2
+package control
 
 class ExceptionxContext {
-  val e = new Exception("message")
+  val cause = new IllegalArgumentException("cause")
+  val e = new Exception("message", cause)
 }

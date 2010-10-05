@@ -47,7 +47,9 @@ trait TreeFold[S] extends Fold {
    	   	  treeLoc.insertDownLast(leaf(f))
       }
       case Up => 
-        if (level.lastNode != Ex)
+        if (level.level == 0 )
+   	   	  treeLoc.root.insertDownLast(leaf(f))
+        else if (level.lastNode != Ex)
       	  treeLoc.insertDownFirst(leaf(f))
         else
       	  treeLoc.parent.getOrElse(treeLoc).insertDownLast(leaf(f))

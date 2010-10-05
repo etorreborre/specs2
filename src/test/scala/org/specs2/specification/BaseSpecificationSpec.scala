@@ -3,12 +3,12 @@ package specification
 import reporter._
 
 class BaseSpecificationSpec extends Specification {
-   val examples = 
+   val content = 
 """A basic specification is just some pieces of text interleaved with some Fragments
    This is an example of such a specification:
    
      object ReverseSpec extends Specification { 
-       val examples = 
+       val content = 
        "A reverse function can reverse a string"^
        "  if the string is empty, it return an empty string" ! e1
        "  if the string is not empty, it returns the reversed string" ! e2

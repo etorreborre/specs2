@@ -13,7 +13,7 @@ trait Exceptionx {
    */
   implicit def toExceptionx[T <: Exception](t: T) = new ExtendedException(t)  
   /**
-   * See the ExtendedThrowable object description
+   * See the ExtendedExceptions object description
    */
   class ExtendedException[T <: Exception](t: T) {
     private val topTrace = new Location(if (t.getStackTrace().isEmpty) stackTraceElement("specs2") else t.getStackTrace()(0)) 

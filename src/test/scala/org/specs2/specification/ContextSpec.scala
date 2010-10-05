@@ -4,7 +4,7 @@ import io._
 import execute._
 
 class ContextSpec extends SpecificationWithJUnit with StandardResults with ContextData with ExampleExecution {
-  val examples = """
+  val content = """
   It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments and
   clean it up afterwards. This may be for example:
      * opening a database connection
@@ -49,7 +49,7 @@ p^
 p^
 "  An Action can be used to create Step fragments containing an action to execute:"^
 "    val first = new Action"^
-"    val examples = first(c.println('first')) ^ ex1"^
+"    val content = first(c.println('first')) ^ ex1"^
 p^
 "    that action will execute and return a result" ! c(e12)^
 "    if it executes ok, nothing is printed, it is a silent Success" ! c(e13)^

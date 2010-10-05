@@ -4,7 +4,7 @@ import execute._
 import specification._
 
 class StringMatcherSpec extends Specification { outer =>
-  val examples = 
+  val content = 
 "  a string can be matched against a pattern using beMatching" ! e1^
 "  a string can be matched against a pattern using be matching" ! e2
   

@@ -5,7 +5,7 @@ import specification._
 
 class PluralSpec extends SpecificationWithJUnit with Plural with DataTables {
   
-  val examples: Fragments = 
+  val content: Fragments = 
 """A string can be pluralized: "apple".plural(n)""" ! {
 
 	"word"   || "quantity"	| "result"	|>

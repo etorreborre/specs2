@@ -7,7 +7,7 @@ import FragmentsShow._
 import FragmentsTree._
 
 class TreeFoldSpec extends SpecificationWithJUnit {
-  val examples = 
+  val content = 
   "a specification can be turned to a tree of fragments"^
   "if there is only one text fragment, the tree will have only one leaf" ! {
 	toTree("name", List(Text("description"))).drawTree.trim must_== 
@@ -67,6 +67,18 @@ class TreeFoldSpec extends SpecificationWithJUnit {
 	     "   |",
 	     "   `- Example(ex2.2)").mkString("\n")
   }
+  "if there is one text and 2 examples, an end and one text with 1 example, the tree must be well formed" ! {
+	toTree("name", oneTextWith2ExamplesAnEndAnd1Example.fragments).drawTree.trim must_==
+    List("SpecStart(name)",
+	     "|",
+	     "+- Text(text1)",
+	     "|  |",
+	     "|  +- Example(ex1.1)",
+	     "|  |",
+	     "|  `- Example(ex1.2)",
+	     "|",
+	     "`- Example(ex2.1)").mkString("\n")
+  }
   
   val textAndExample = "a text" ^ "an example" ! success
   val textAnd2Examples = 
@@ -85,4 +97,11 @@ class TreeFoldSpec extends SpecificationWithJUnit {
 	"text2"^ 
 	  "ex2.1" ! success^
 	  "ex2.2" ! success
+
+  val oneTextWith2ExamplesAnEndAnd1Example = 
+	"text1"^ 
+	  "ex1.1" ! success^
+	  "ex1.2" ! success^
+	end^
+	"ex2.1" ! success
 }

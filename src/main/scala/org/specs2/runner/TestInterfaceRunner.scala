@@ -2,6 +2,7 @@ package org.specs2
 package runner
 import reporter._
 import _root_.org.scalatools.testing._
+import control.Throwablex._
 /**
  * Implementation of the Framework interface for the sbt tool.
  * It declares the classes which can be executed by the specs2 library.
@@ -29,10 +30,10 @@ class SpecsFramework extends Framework {
  * 
  * Then it uses a NotifierRunner to notify the EventHandler of the test events.
  */
-class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) extends _root_.org.scalatools.testing.Runner
+class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) extends _root_.org.scalatools.testing.Runner 
   with HandlerEvents with TestLoggers {
   import reflect.Classes._
-  
+
   def run(classname: String, fingerprint: TestFingerprint, handler: EventHandler, args: Array[String]) = {
     val specification: Either[Throwable, Specification] = create[Specification](classname + "$") match {
       case Right(s) => Right(s)
@@ -41,10 +42,10 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     specification.left.map { e =>
       handler.handle(error(classname, e))
       logError("Could not create an instance of "+classname+"\n")
-      logError("  "+e+"\n")
-      e.getStackTrace foreach { s => logError("  "+s.toString) }
-      if (e.getCause != null)
-		e.getCause.getStackTrace foreach { s => logError("  "+s.toString) }
+      (e :: e.chainedExceptions) foreach { s => 
+        logError("  caused by " + s.toString)
+        s.getStackTrace.foreach(t => logError("  " + t.toString))
+      }
     }
     val specificationOption = specification.right.toOption
     run(specificationOption, handler)
@@ -52,9 +53,11 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   
   private def run(specification: Option[Specification], handler: EventHandler): Option[Specification] = {
     specification map { s =>
-      new TestInterfaceReporter(handler, loggers).report(s)
+      reporter(handler).report(s)
     }
     specification
   }
+  def reporter(handler: EventHandler) = new TestInterfaceReporter(handler, loggers)
+
 }
  

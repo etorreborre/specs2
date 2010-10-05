@@ -25,11 +25,11 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution {
   
   /** specification to execute */
   protected lazy val specification = tryToCreateObject[BaseSpecification](klass.getName, true, true).get
-  protected lazy val examples = specification.examples
+  protected lazy val content = specification.content
   /** fold object used to create descriptions */
   private val descriptions = new JUnitDescriptionFold(klass)
   /** extract the root Description object and the examples to execute */
-  private lazy val descriptions.DescriptionAndExamples(desc, executions) = descriptions.fold(examples)
+  private lazy val descriptions.DescriptionAndExamples(desc, executions) = descriptions.fold(content)
   /** @return a Description for the TestSuite */
   def getDescription = desc
   
@@ -67,7 +67,7 @@ object JUnitRunner {
     override protected lazy val specification = s	  
   }
   def apply[T <: BaseSpecification](fragments: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
-    override protected lazy val examples = fragments	  
+    override protected lazy val content = fragments	  
   }
 }
 /**
