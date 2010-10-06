@@ -27,6 +27,6 @@ object Action {
  */
 class Action {
   def apply(a: =>Any) = Step({() =>
-	trye(a)(Error(_)).left.getOrElse(Success())  
+	  trye(a)(Error(_)).left.getOrElse(Success())  
   })
 }

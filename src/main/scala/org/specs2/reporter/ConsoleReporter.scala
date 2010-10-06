@@ -17,23 +17,23 @@ trait ConsoleReporter extends Reporter with ConsoleOutput with AnExecutor with T
    * 
    */
   lazy val fold: Function2[T, Fragment, T] = {
-	case p => ((execute >>> print *** identity) apply p)._2
+	  case p => ((execute >>> print *** identity) apply p)._2
   }
 
   type T = Stats
   def initial = Stats()
   
   val execute: Function[(T, Fragment), ((Stats, ExecutedFragment), T)] = {
-	case p @ (s, f) => {
-	  val executed = executor.execute(f)
-	  val newStats = stats((s, executed))
-	  ((newStats, executed), newStats)
-	}
+	  case p @ (s, f) => {
+	    val executed = executor.execute(f)
+	    val newStats = stats((s, executed))
+	    ((newStats, executed), newStats)
+	  }
   }
 }
 
 trait AConsoleReporter extends AReporter with Arguments {
   lazy val reporter: Reporter = new ConsoleReporter {
-	override val configuration =  Configuration(arguments)
+	  override val configuration =  Configuration(arguments)
   }
 }

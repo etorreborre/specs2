@@ -21,18 +21,18 @@ trait ExampleExecution {
   def executeBody(body: =>Result): Result = tryOr(body)(Error(_))
 
   val execute: Function[Fragment, ExecutedFragment] = { 
-	case e @ Example(s, _) =>     ExecutedResult(s, executeBody(e.execute))
-	case s @ Step(a) => 
-	  executeBody(a()) match {
-	    case err @ Error(_, _) => ExecutedResult("action error", err)
-	    case _ =>                 ExecutedNoText()	
-	  }
-	case Text(s) =>               ExecutedText(s)
-	case Br() =>                  ExecutedBr()
-	case Par() =>                 ExecutedPar()
-	case SpecStart(n) =>          ExecutedSpecStart(n)
-	case SpecEnd(n) =>            ExecutedSpecEnd(n)
-	case f =>                     ExecutedNoText()
+	  case e @ Example(s, _) =>     ExecutedResult(s, executeBody(e.execute))
+	  case s @ Step(a) => 
+	    executeBody(a()) match {
+	      case err @ Error(_, _) => ExecutedResult("action error", err)
+	      case _ =>                 ExecutedNoText()	
+	    }
+	  case Text(s) =>               ExecutedText(s)
+	  case Br() =>                  ExecutedBr()
+	  case Par() =>                 ExecutedPar()
+	  case SpecStart(n) =>          ExecutedSpecStart(n)
+	  case SpecEnd(n) =>            ExecutedSpecEnd(n)
+	  case f =>                     ExecutedNoText()
   }
 
   private[specs2]

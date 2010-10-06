@@ -26,11 +26,11 @@ class BaseSpecificationSpec extends Specification {
     * building the list of Fragments, with text and executable code
     * executing the Fragments to collect results
     * printing out results to the Console
-""" ^
-"  Fragments building specification" ^
-   include(new ExamplesSpec)^
-"  Fragments execution" ^
-   include(new FragmentsExecutionSpec)^
-"  Fragments execution" ^
+"""                                                      ^
+"  Fragments building specification"                     ^
+   include(new ExamplesSpec)                             ^
+"  Fragments execution"                                  ^
+   include(new FragmentsExecutionSpec)                   ^
+"  Fragments execution"                                  ^
    include(new ConsoleReporterSpec)
 }

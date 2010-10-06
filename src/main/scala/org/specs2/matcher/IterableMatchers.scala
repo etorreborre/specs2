@@ -9,16 +9,16 @@ trait IterableMatchers {
     def apply[S <: Iterable[T]](v: => Expectable[S]) = {
       val (a, iterable) = (t, v)
       result(iterable.value.exists(_ == a), 
-    		 iterable.description + " contains " + q(a), 
-    		 iterable.description + " doesn't contain " + q(a), iterable)
+    		     iterable.description + " contains " + q(a), 
+    		     iterable.description + " doesn't contain " + q(a), iterable)
     }
   }
   private def containLike[T](pattern: =>String, matchType: String) = new IterableMatcher[T] {
     def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
       val (a, iterable) = (pattern, v)
       result(iterable.value.exists(_.toString.matches(a)), 
-    		 iterable.description + " contains "+matchType+ " " + q(a), 
-    		 iterable.description + " doesn't contain "+matchType+ " " + q(a), iterable)
+    		     iterable.description + " contains "+matchType+ " " + q(a), 
+    		     iterable.description + " doesn't contain "+matchType+ " " + q(a), iterable)
     }
   }
   def containPattern[T](t: =>String) = containLike(t, "pattern")

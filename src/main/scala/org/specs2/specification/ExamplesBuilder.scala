@@ -23,10 +23,10 @@ trait FragmentsBuilder {
 }
 trait FragmentsShow {
   implicit object showFragments extends scalaz.Show[Fragment] {
-	def show(f: Fragment) = (f match {
-	  case Example(d, _) => "Example("+d+")"
-	  case other => other.toString
-	}).toList
+	  def show(f: Fragment) = (f match {
+	    case Example(d, _) => "Example("+d+")"
+	    case other => other.toString
+	  }).toList
   }
 }
 object FragmentsShow extends FragmentsShow

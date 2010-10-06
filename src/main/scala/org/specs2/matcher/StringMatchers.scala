@@ -200,7 +200,7 @@ class BeEqualToIgnoringCase(t: =>String) extends Matcher[String] {
   def apply[S <: String](v: =>Expectable[S]) = {
 	val (a, b) = (t, v)
 	result(a != null && b.value != null && a.equalsIgnoreCase(b.value), 
-           b.description  + " is equal ignoring case to " + q(a), 
-           b.description  + " is not equal ignoring case to " + q(a), b)
+         b.description  + " is equal ignoring case to " + q(a), 
+         b.description  + " is not equal ignoring case to " + q(a), b)
   } 
 }

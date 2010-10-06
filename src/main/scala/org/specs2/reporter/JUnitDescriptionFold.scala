@@ -30,37 +30,37 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
    * not outputed as JUnit Description nodes when run 
    */
   object descriptionTree extends TreeFold[Description] {
-	def root = createSuiteDescription(specificationClass.getSimpleName)
-	def map: Function[Fragment, Option[Description]] = {
-	  case Text(t) => Some(createSuiteDescription(testName(t)))
+	  def root = createSuiteDescription(specificationClass.getSimpleName)
+	  def map: Function[Fragment, Option[Description]] = {
+	    case Text(t) => Some(createSuiteDescription(testName(t)))
       case Example(description, body) =>  Some(createDescription(testName(description)))
       case Step(action) => Some(createDescription("step"))
       case other => None
-	}
+	  }
   }
   case class AccumulatedDescription(val description: descriptionTree.T, val executions: Map[Description, Fragment])
   object DescriptionAndExamples {
-	def unapply(acc: AccumulatedDescription): Option[(Description, Map[Description, Fragment])] =
-	  acc match {
-		case AccumulatedDescription(description, executions) => {
-		  val descriptionTree.Tree(tree) = description
-		  Some((asOneDescription(tree), executions)) 
-		}
-	  }
+	  def unapply(acc: AccumulatedDescription): Option[(Description, Map[Description, Fragment])] =
+	    acc match {
+	  	  case AccumulatedDescription(description, executions) => {
+	  	    val descriptionTree.Tree(tree) = description
+	  	    Some((asOneDescription(tree), executions)) 
+	  	  }
+	    }
   }
   override type T = AccumulatedDescription
   val initial = new AccumulatedDescription(descriptionTree.initial, Map.empty[Description, Fragment])
   
   val fold = (descExamples: T, f: Fragment) => {
-	val AccumulatedDescription(treeLoc, examples) = descExamples
-	val newTreeLoc = descriptionTree.fold(treeLoc, f)
-	val newExamples = f match {
+	  val AccumulatedDescription(treeLoc, examples) = descExamples
+	  val newTreeLoc = descriptionTree.fold(treeLoc, f)
+	  val newExamples = f match {
       case Step(action) => examples + (createDescription("step") -> f)
       case Text(t) => examples + (createSuiteDescription(testName(t)) -> f)
       case Example(description, body) =>  examples + (createDescription(testName(description)) -> f)
       case _ => examples
-	}
-	new AccumulatedDescription(newTreeLoc, newExamples)
+	  }
+	  new AccumulatedDescription(newTreeLoc, newExamples)
   }
   
   def toDescription(fragments: Fragment*): Description = asOneDescription(descriptionTree.fold(fragments:_*).tree)
@@ -70,7 +70,7 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
   }
   
   private def testName(s: String)= {
-	(if (s contains "\n") (s.trim.split("\n")(0) + "...") else s.trim).replaceAll("\r", "")
+	  (if (s contains "\n") (s.trim.split("\n")(0) + "...") else s.trim).replaceAll("\r", "")
   }
   private def sanitize(s: String) = s.replace("(", "[").replace(")", "]")
   private def createDescription(s: String) = Description.createTestDescription(specificationClass, sanitize(s))

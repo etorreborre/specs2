@@ -42,17 +42,17 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution {
   def run(notifier: RunNotifier) {
 	executions.toStream.collect { case (desc, ex) => (desc, execute(ex)) }.
 	  foreach { 
-	 	case (desc, ExecutedResult(_, result)) => { 
+	 	  case (desc, ExecutedResult(_, result)) => { 
 	      notifier.fireTestStarted(desc)
 	      result match {
-            case f @ Failure(m, st) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f.exception)))
-            case e @ Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
-            case Pending(_) | Skipped(_)  => notifier.fireTestIgnored(desc) 
-            case _ => ()
-          }
+          case f @ Failure(m, st) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f.exception)))
+          case e @ Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
+          case Pending(_) | Skipped(_)  => notifier.fireTestIgnored(desc) 
+          case _ => ()
+        }
 	      notifier.fireTestFinished(desc)
 	    }
-	 	case _ => ()
+	 	  case _ => ()
 	  }
   }
   /** @return a Throwable expected by JUnit Failure object */

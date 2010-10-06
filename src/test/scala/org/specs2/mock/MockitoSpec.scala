@@ -48,46 +48,46 @@ class MockitoSpec extends SpecificationWithJUnit with Mockito {
                                                                                   end  
     
   case class aMock() {
-	val list = mock[java.util.List[String]]
+	  val list = mock[java.util.List[String]]
     def call1 = { list.add("one"); success }
-	def verify1 = { 
-	  list.add("one")
-	  there was one(list).add("one")
-	}
-	def verify2 = (there was one(list).add("one")).message must startWith("The mock was not called as expected")
-	def return1 = {
-	  list.add("one") returns true
-	  list.add("one") must_== true
-	}
-	def return2 = {
-	  list.add("one") returns (true, false, true)
-	  (list.add("one"), list.add("one"), list.add("one")) must_== (true, false, true)
-	}
-	def return3 = {
-	  list.contains(argThat(new IsNull[String])) returns true
-	  list.contains(null) must_== true
-	}
-	def return4 = {
-	  list.contains(argThat(beMatching(".*o"))) returns true
-	  list.contains("o") must_== true
-	}
-	def throw1 = { 
-	  list.clear() throws new RuntimeException 
-	  list.clear()
-	} must throwA[RuntimeException]
-	
-	def throw2 = { 
-	  list.clear() throws (new RuntimeException, new IllegalArgumentException) 
-	  tryo(list.clear())
-	  list.clear()
-	} must throwAn[IllegalArgumentException]
+	  def verify1 = { 
+	    list.add("one")
+	    there was one(list).add("one")
+	  }
+	  def verify2 = (there was one(list).add("one")).message must startWith("The mock was not called as expected")
+	  def return1 = {
+	    list.add("one") returns true
+	    list.add("one") must_== true
+	  }
+	  def return2 = {
+	    list.add("one") returns (true, false, true)
+	    (list.add("one"), list.add("one"), list.add("one")) must_== (true, false, true)
+	  }
+	  def return3 = {
+	    list.contains(argThat(new IsNull[String])) returns true
+	    list.contains(null) must_== true
+	  }
+  	def return4 = {
+  	  list.contains(argThat(beMatching(".*o"))) returns true
+  	  list.contains("o") must_== true
+  	}
+  	def throw1 = { 
+  	  list.clear() throws new RuntimeException 
+  	  list.clear()
+  	} must throwA[RuntimeException]
+  	
+  	def throw2 = { 
+  	  list.clear() throws (new RuntimeException, new IllegalArgumentException) 
+  	  tryo(list.clear())
+  	  list.clear()
+  	} must throwAn[IllegalArgumentException]
   }
   
   case class calls() {
-	val list = mock[java.util.List[String]]
-	list.add("one")
-	1 to 2 foreach { i => list.add("two") } 
-
+	  val list = mock[java.util.List[String]]
+	  list.add("one")
+	  1 to 2 foreach { i => list.add("two") } 
+    
     def calls1 = got { one(list).add("one") }  // equivalent to 'there was one(list).add("one")'
     def calls2 = there were two(list).add("two")
     def calls3 = there was atLeast(1)(list).add("two")
@@ -100,39 +100,39 @@ class MockitoSpec extends SpecificationWithJUnit with Mockito {
     }
   }
   case class callbacks() {
-	val list = mock[java.util.List[String]]
+	  val list = mock[java.util.List[String]]
     def c1 = {
-	  list.get(anyInt()) answers { i => "The parameter is " + i.toString }
-	  list.get(2) must_== "The parameter is 2"
-	}
+	    list.get(anyInt()) answers { i => "The parameter is " + i.toString }
+	    list.get(2) must_== "The parameter is 2"
+	  }
   }
   case class ordered() {
-	val list1 = mock[java.util.List[String]]
-	val list2 = mock[java.util.List[String]]
+	  val list1 = mock[java.util.List[String]]
+	  val list2 = mock[java.util.List[String]]
 	
     def asExpected = {
-	  list1.get(0)
-	  list2.get(0)
-	  implicit val order = inOrder(list1, list2)
+	    list1.get(0)
+	    list2.get(0)
+	    implicit val order = inOrder(list1, list2)
       (there was one(list1)(order).get(0) then
                  one(list2)(order).get(0)).message must_== "The mock was called as expected"
     }
 	
     def failed = {
-	  list1.get(0)
-	  list2.get(0)
-	  implicit val order = inOrder(list1, list2)
+	    list1.get(0)
+	    list2.get(0)
+	    implicit val order = inOrder(list1, list2)
       (there was one(list2)(order).get(0) then
                  one(list1)(order).get(0)).message must startWith("The mock was not called as expected")
     }
   }
   case class captured() {
-	val list = mock[java.util.List[String]]
+	  val list = mock[java.util.List[String]]
     def e1 = {
-	  list.get(1)
-	  val c = capture[Int]
-	  there was one(list).get(c)
-	  c.value must_== 1
-	}
+	    list.get(1)
+	    val c = capture[Int]
+	    there was one(list).get(c)
+	    c.value must_== 1
+	  }
   }
 }

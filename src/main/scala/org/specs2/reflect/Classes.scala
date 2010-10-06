@@ -1,6 +1,7 @@
 package org.specs2
 package reflect
 import io._
+import control.Exceptions._
 import scala.reflect.ClassManifest
 import scala.reflect.NameTransformer
 
@@ -12,11 +13,7 @@ trait Classes extends Output {
    * Create an instance of a given class, returning either the instance, or an exception
    */
   def create[T <: AnyRef](className: String)(implicit m: ClassManifest[T]): Either[Throwable, T] = {
-    try {
-      return Right(createInstanceFor(loadClassOf[T](className)))
-    } catch {
-      case e => return Left(e)
-    }
+    trye(createInstanceFor(loadClassOf[T](className)))
   }
   /**
    * Create an instance of a given class.
@@ -31,20 +28,15 @@ trait Classes extends Output {
    * Create an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
    */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)(implicit m: ClassManifest[T]): Option[T] = {
-    try {
-      return createInstanceOf[T](loadClass[T](className))
-    } catch {
-      case e => {
-        if (printMessage || System.getProperty("debugCreateObject") != null) println("Could not instantiate class " + className + ": " + e.getMessage)
-        if (printStackTrace || System.getProperty("debugCreateObject") != null) e.getStackTrace() foreach (s => println(s.toString))
-      }
-    }
-    return None
+    tryo(createInstanceOf[T](loadClass[T](className))) { (e: Exception) => 
+      if (printMessage || System.getProperty("debugCreateObject") != null) println("Could not instantiate class " + className + ": " + e.getMessage)
+      if (printStackTrace || System.getProperty("debugCreateObject") != null) e.getStackTrace() foreach (s => println(s.toString))
+    }.flatMap(identity)
   }
   /**
    * create an instance of a given class, checking that the created instance typechecks as expected
    */
-  private[reflect] def createInstanceOf[T <: AnyRef](c: Option[Class[T]])(implicit m: ClassManifest[T]) = {
+  private[reflect] def createInstanceOf[T <: AnyRef](c: Option[Class[T]])(implicit m: ClassManifest[T]): Option[T] = {
     c map { klass => createInstanceFor(klass) }
   }
   /**
@@ -52,7 +44,7 @@ trait Classes extends Output {
    */
   private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassManifest[T]) = {
     val constructor = klass.getDeclaredConstructors()(0)
-	constructor.setAccessible(true)
+	  constructor.setAccessible(true)
     val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
     if (!m.erasure.isInstance(instance)) error(instance + " is not an instance of " + m.erasure.getName)
     instance.asInstanceOf[T]
@@ -61,17 +53,12 @@ trait Classes extends Output {
    * Load a class, given the class name
    */
   private[reflect] def loadClass[T <: AnyRef](className: String): Option[Class[T]] = {
-    try {
-      return Some(loadClassOf(className))
-    } catch {
-      case e => {
-        if (System.getProperty("debugLoadClass") != null) {
-          println("Could not load class " + className)
-          e.getStackTrace() foreach (s => println(s.toString))
-        }
+    tryo(Some(loadClassOf(className).asInstanceOf[Class[T]])) { (e: Throwable) =>
+      if (System.getProperty("debugLoadClass") != null) {
+        println("Could not load class " + className)
+        e.getStackTrace() foreach (s => println(s.toString))
       }
-    }
-    return None
+    }.flatMap(identity)
   }
   /**
    * Load a class, given the class name, without catching exceptions

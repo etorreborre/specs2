@@ -8,7 +8,7 @@ class Expectable[+T](t: =>T) { outer =>
   lazy val value = t
   
   def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = {
-	m.apply(this) 
+	  m.apply(this) 
   }
   
   def description = d(value)

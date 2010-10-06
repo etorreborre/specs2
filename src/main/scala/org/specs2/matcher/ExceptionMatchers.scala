@@ -62,19 +62,19 @@ trait ExceptionMatchers {
     }
   }
   private def checkExceptionValue[T](expectable: Expectable[T], f: Throwable => Boolean, expectedAsString: String) = {
-      checkException(expectable, 
-		  f,
-		  (e: Throwable) => "Got the exception " + e, 
-		  (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead",
-		  "Got the exception " + expectedAsString, 
-	 	  "Expected: "+ expectedAsString + ". Got nothing")
+    checkException(expectable, 
+		               f,
+		               (e: Throwable) => "Got the exception " + e, 
+		               (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead",
+		               "Got the exception " + expectedAsString, 
+	 	               "Expected: "+ expectedAsString + ". Got nothing")
   }
   private def checkException[T](expectable: Expectable[T], f: Throwable => Boolean,
 		  someOk: Throwable => String, someKo: Throwable => String,
 		  noneOk: String, noneKo: String) = {
     getException(expectable.value) match {
-	  case Some(e) => Matcher.result(f(e), someOk(e), someKo(e), expectable)
-	  case None    => Matcher.result(false, noneOk, noneKo, expectable)
+	    case Some(e) => Matcher.result(f(e), someOk(e), someKo(e), expectable)
+	    case None    => Matcher.result(false, noneOk, noneKo, expectable)
     }
   }
   
@@ -93,8 +93,8 @@ trait ExceptionMatchers {
   private def getException[E <: Throwable](value: =>Any): Option[Throwable] = {
     catchAll { 
       value match { 
-    	case e: Expectable[_] => e.value 
-    	case _ => value 
+    	  case e: Expectable[_] => e.value 
+    	  case _ => value 
       } 
     }(identity).left.toOption
   }

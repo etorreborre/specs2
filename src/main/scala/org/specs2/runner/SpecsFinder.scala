@@ -33,8 +33,8 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
   def classNames(packageName: String, content: String, pattern: String, specType: String, suffix: String): List[String] = {
     def result(m: Matcher): Stream[String] = 
       if (m.find) { 
-    	val fullName = List(packageName, m.group(1).trim).mkString(".") + suffix   
-    	Stream.cons(fullName, result(m))
+    	  val fullName = List(packageName, m.group(1).trim).mkString(".") + suffix   
+    	  Stream.cons(fullName, result(m))
       }
       else Stream.empty
       
@@ -47,7 +47,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
       if (m.find) Stream.cons(m.group(1).replace(";", "").trim, result(m))
       else Stream.empty
       
-	val pattern = "\\s*package\\s*(.+)\\s*"
+	  val pattern = "\\s*package\\s*(.+)\\s*"
     result(Pattern.compile(pattern).matcher(content)).mkString(".")
   }
   /**

@@ -24,7 +24,7 @@ class ResultStackTraceSpec extends Specification {
 		       ("org.specs2.specs2Spec", "specs2Spec.scala", 3)), "specs2Spec.scala:3")
 
   def locationMustBe(messages: Seq[(String, String, Int)], expected: String) =
-	stackTraceResult(messages:_*).location must_== expected
+	  stackTraceResult(messages:_*).location must_== expected
 
   case class stackTraceResult(msg: (String, String, Int)*) extends ResultStackTrace {
 	  def stackTrace = {

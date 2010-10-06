@@ -10,32 +10,30 @@ trait LevelsFold extends Fold {
   lazy val initial = new Level()
   
   val level: Function[(T, Fragment), (Int, T)] = {
-	case p => (currentLevel(p), fold.tupled(p))
+	  case p => (currentLevel(p), fold.tupled(p))
   }
   val currentLevel: Function[(T, Fragment), Int] = { 
-	case (a, f @ Text(s)) if (a.state == Down && a.lastNode == Ex) => (a.level - 1)
-	case (a, f) => a.level
+	  case (a, f @ Text(s)) if (a.state == Down && a.lastNode == Ex) => (a.level - 1)
+	  case (a, f) => a.level
   }
   
   val fold: Function2[T, Fragment, T] = (t: T, f: Fragment) => (t, f) match {
-	case (a, End()) => Level()
-	case (a, Par()) => a
-	case (a, Br()) => a
-	case (a, Text(s)) => {
-	  a.state match {
-	 	case Up => a.copy(level = a.level + 1, lastNode = Txt)
-	 	case Down => {
-  	 	   if (a.lastNode == Ex)
-	 	     a.copy(lastNode = Txt)
-  	 	   else 
-	 	     a.copy(level = a.level + 1, lastNode = Txt, state = Up)
-	 	}
+	  case (a, End()) => Level()
+	  case (a, Par()) => a
+	  case (a, Br()) => a
+	  case (a, Text(s)) => {
+	    a.state match {
+	   	  case Up => a.copy(level = a.level + 1, lastNode = Txt)
+	   	  case Down => {
+    	 	  if (a.lastNode == Ex)
+	   	      a.copy(lastNode = Txt)
+    	 	  else 
+	   	      a.copy(level = a.level + 1, lastNode = Txt, state = Up)
+	   	  }
+	    }
 	  }
-	}
-	case (a, e @ Example(s, body)) => {
-	  a.copy(state = Down, lastNode = Ex)
-	}
-	case (t, f) => t
+	  case (a, e @ Example(s, body)) => a.copy(state = Down, lastNode = Ex)
+	  case (t, f) => t
   }
   
   sealed trait Direction

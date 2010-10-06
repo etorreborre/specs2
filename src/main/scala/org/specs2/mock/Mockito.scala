@@ -49,8 +49,8 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
    	  case Right(v) => new MatchSuccess("The mock was called as expected", "The mock was not called as expected", new Expectable(v))
   	  case Left(e) => 
    	    new MatchFailure("The mock was called as expected", 
-  			             "The mock was not called as expected: " + e.getMessage, 
-  			             new Expectable(expectable.value) { override def description = e.getMessage })
+  			                 "The mock was not called as expected: " + e.getMessage, 
+  			                 new Expectable(expectable.value) { override def description = e.getMessage })
     }
   }
   /** create an object supporting 'was' and 'were' methods */
@@ -131,7 +131,7 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
   class ToInOrderMode[T](calls: =>T) {
     def then[U](otherCalls: =>U) = {
       val f = () => {
-    	calls
+    	  calls
         otherCalls 
       }
       new Expectable(f()).applyMatcher(new CallsMatcher)

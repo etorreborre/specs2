@@ -13,14 +13,14 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
   A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is  
   a root Description object (the top 'suite') and children objects representing either 
   nested suites or Tests
-"""^
-" An example is folded into a root description for the spec class and a description of the example" ! e1^
-" Two examples are folded as 2 children descriptions" ! e2^
-" A text and two subordinates examples are folded as a node and 2 children descriptions" ! e3^
-" 2 texts and two subordinates examples each are folded as 2 nodes and with their own children descriptions" ! e4^
-" 2 groups of examples separated by a paragraph are folded as 2 nodes and with their own children descriptions" ! e5^
-" 2 grouped examples and a separate one" ! e6^
-end
+"""                                                                                                               ^
+" An example is folded into a root description for the spec class and a description of the example"               ! e1^
+" Two examples are folded as 2 children descriptions"                                                             ! e2^
+" A text and two subordinates examples are folded as a node and 2 children descriptions"                          ! e3^
+" 2 texts and two subordinates examples each are folded as 2 nodes and with their own children descriptions"      ! e4^
+" 2 groups of examples separated by a paragraph are folded as 2 nodes and with their own children descriptions"   ! e5^
+" 2 grouped examples and a separate one"                                                                          ! e6^
+                                                                                                                  end
 
   def e1 = descriptionIs(ex1)(
   		   "JUnitDescriptionFoldSpec",
@@ -85,9 +85,9 @@ end
   		   "`- ex3(org.specs2.reporter.JUnitDescriptionFoldSpec)\n")
 
   def descriptionIs(f: Fragments)(tree: String*) = 
-	showDescriptionTree(f.fragments) must_== tree.toList.mkString("\n")
+	  showDescriptionTree(f.fragments) must_== tree.toList.mkString("\n")
   
   def showDescriptionTree(fragments: List[Fragment]): String = {
-	new JUnitDescriptionFold(getClass).toDescription(fragments:_*).drawTree
+	  new JUnitDescriptionFold(getClass).toDescription(fragments:_*).drawTree
   }
 }

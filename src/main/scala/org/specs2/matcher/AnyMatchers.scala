@@ -33,15 +33,15 @@ class BeEqualTo[T](t: =>T) extends Matcher[T] {
     val (a, b) = (t, v)
     val (db, qa) = (b.description, q(a)) match {
       case (x, y) if (a != b && q(a) == q(b)) => {
-	    val aClass = getClassName(x)
-	    val bClass = getClassName(y)
-	    if (aClass != bClass)
+	      val aClass = getClassName(x)
+	      val bClass = getClassName(y)
+	      if (aClass != bClass)
           (y + ": " + bClass, x + ": " + aClass)
         else
           (y, x + ". Values have the same string representation but possibly different types like List[Int] and List[String]")
-	  }
+	    }
       case other @ _ => other 
-	}
+	  }
     result(a == b.value, db + " is equal to " + qa, db + " is not equal to " + qa, b)
   }
 }

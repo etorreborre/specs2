@@ -17,8 +17,8 @@ trait After {
    * and finally the after action 
    */
   def apply[T <% Result](a: =>T): Result = {
-	try { return a } 
-	finally { after	}
+	  try { return a } 
+	  finally { after	}
   }  
 }
 

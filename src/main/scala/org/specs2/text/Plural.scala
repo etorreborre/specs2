@@ -11,9 +11,9 @@ trait Plural {
     def bePlural(v: Long) = if (v > 1) s+"are" else s+"is"
   }
   implicit def intToQuantity(i: Int) = Quantity(i)
-  case class Quantity(i: Int) {
-	def qty(s: String) = i.toString + " " + s.plural(i)
-	def qty_>(s: String)(a: Int = 0): Option[String] = if (i > a) Some(qty(s)) else None
+    case class Quantity(i: Int) {
+	  def qty(s: String) = i.toString + " " + s.plural(i)
+	  def qty_>(s: String)(a: Int = 0): Option[String] = if (i > a) Some(qty(s)) else None
   }
 }
 private[specs2] 

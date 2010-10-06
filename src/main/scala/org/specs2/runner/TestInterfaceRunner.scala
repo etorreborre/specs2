@@ -10,7 +10,7 @@ import control.Throwablex._
 class SpecsFramework extends Framework {
   def name = "specs2"
   trait Specs2Fingerprint extends TestFingerprint {
-	def superClassName = "org.specs2.specification.BaseSpecification"
+	  def superClassName = "org.specs2.specification.BaseSpecification"
   }
   val specificationClass = new Specs2Fingerprint {
     def isModule = false
@@ -47,8 +47,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
         s.getStackTrace.foreach(t => logError("  " + t.toString))
       }
     }
-    val specificationOption = specification.right.toOption
-    run(specificationOption, handler)
+    run(specification.right.toOption, handler)
   }
   
   private def run(specification: Option[Specification], handler: EventHandler): Option[Specification] = {

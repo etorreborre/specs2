@@ -27,23 +27,23 @@ The following Fragments specify the behavior for:
   * the display of a single example
   * the display of nested Fragments
   * the display of statistics at the end
-"""^
-"  A single example must"^
-"    have its description printed out" ! single1^
-"    be reported with a + if it is successful" ! single2^
-"    be reported with a x if it has a failure" ! single3^
-"    be reported with a ! if it has a error" ! single4^
-"    be reported with a * if it is pending" ! single5^
-"    be reported with a o if it is skipped " ! single5_1^
-"    have the failure message displayed if it failed" ! single6^
-"    have the file location displayed if it is a failure or an error" ! single7^
-p^  
-"  At the end of the report"^
-"    the total number of Fragments must be displayed" ! stat1^
-"    the total number of failures must be displayed" ! stat2^
-"    the total number of expectations must be displayed " +
-"    if it is different from the number of examples" ! stat3^
-end
+"""                                                                           ^
+"  A single example must"                                                     ^
+"    have its description printed out"                                        ! single1^
+"    be reported with a + if it is successful"                                ! single2^
+"    be reported with a x if it has a failure"                                ! single3^
+"    be reported with a ! if it has a error"                                  ! single4^
+"    be reported with a * if it is pending"                                   ! single5^
+"    be reported with a o if it is skipped "                                  ! single5_1^
+"    have the failure message displayed if it failed"                         ! single6^
+"    have the file location displayed if it is a failure or an error"         ! single7^
+                                                                              p^  
+"  At the end of the report"                                                  ^
+"    the total number of Fragments must be displayed"                         ! stat1^
+"    the total number of failures must be displayed"                          ! stat2^
+"    the total number of expectations must be displayed " +                   
+"    if it is different from the number of examples"                          ! stat3^
+                                                                              end
 }
 
 abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit with FragmentsSamples with ExpectedOutputs with ReportExpectations {
@@ -62,28 +62,28 @@ abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit 
 }
 trait ReportExpectations extends MustExpectations with FragmentsBuilder with Matchers {
   def reportStartsWith(Fragments: Fragments)(output: List[String]) = {
-	report(Fragments).mkString("\n", "\n", "\n") must startWith(output.mkString("\n", "\n", "\n"))
+	  report(Fragments).mkString("\n", "\n", "\n") must startWith(output.mkString("\n", "\n", "\n"))
   }
   def reportEndsWith(Fragments: Fragments)(output: List[String]) = {
-	report(Fragments).mkString("\n", "\n", "\n") must endWith(output.mkString("\n", "\n", "\n"))
+	  report(Fragments).mkString("\n", "\n", "\n") must endWith(output.mkString("\n", "\n", "\n"))
   }
   def reportIs(Fragments: Fragments)(output: List[String]) = {
-	report(Fragments).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
+	  report(Fragments).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
   }
   def descriptionMustBe(body: =>Result, description: String) = {
-	report("this example" ! body).head must_== description 
+	  report("this example" ! body).head must_== description 
   }
   def messageMustBe(body: Result, message: String) = {
-	report("this example" ! body)(1) must_== message 
+	  report("this example" ! body)(1) must_== message 
   }
   def messagesContain(body: Result, message: String) = {
-	report("this example" ! body) must containMatch(message) 
+	  report("this example" ! body) must containMatch(message) 
   }
   def report(ex: Example): List[String] = report(Fragments(List(ex))) 
   def report(ex: Fragments): List[String] = {
 	val reporter = new ConsoleReporter with MockOutput
-	reporter.report(ex.fragments)
-	reporter.messages.toList
+	  reporter.report(ex.fragments)
+	  reporter.messages.toList
   }
 }
 trait ExpectedOutputs {

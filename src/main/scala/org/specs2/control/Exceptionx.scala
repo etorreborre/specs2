@@ -47,9 +47,9 @@ trait Exceptionx {
 	   new StackTraceElement(m, className, fileName, lineNumber)
   /** @return an exception with the given message and stacktrace */
   def exception(m: String, st: List[StackTraceElement]): Exception = {
-	val exception = new Exception(m)
-	exception.setStackTrace(st.toArray)
-	exception
+	  val exception = new Exception(m)
+	  exception.setStackTrace(st.toArray)
+	  exception
   }
   /** @return an exception with the given stacktrace */
   def exception(st: List[StackTraceElement]): Exception = exception("", st)

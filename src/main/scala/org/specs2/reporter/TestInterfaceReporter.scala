@@ -79,13 +79,9 @@ trait TestLoggers {
       logger.info(message)
   }
   def logStatus(name: String, color: String, status: String) = {
-    logInfo(padding + status + " " + name, color)
+    logInfo(status + " " + name, color)
   }
   def logErrorDetails(e: Exception) = {
     logStatus(e.getMessage + " (" + e.location + ")", AnsiColors.red, " ")
   }
-
-  var padding = ""
-  def incrementPadding = padding += "  " 
-  def decrementPadding = if (padding.size >= 2) padding = padding.take(padding.size - 2)
 }

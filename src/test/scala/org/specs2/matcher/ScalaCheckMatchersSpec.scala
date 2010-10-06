@@ -41,7 +41,7 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
   val success100tries = Success("The property passed without any counter-example after 100 tries")
 
   def prop1 = ("example" ! proved).execute must_== 
-	       Success("The property passed without any counter-example after 1 try")
+	            Success("The property passed without any counter-example after 1 try")
   def prop2 = ("example" ! trueStringFunction.forAll).execute must_== success100tries
   def prop3 = ("example" ! identityFunction.forAll).execute.message must startWith("A counter-example is 'false'")
   def prop4 = ("example" ! exceptionProp).execute.toString must startWith("Error(A counter-example is")
@@ -55,12 +55,12 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
   implicit def params = display(minTestsOk -> 20)
   def config1 = ("example" ! trueFunction.forAll).execute.expectationsNb must_== 20
   def config2 = {
-	("example" ! trueFunction.forAll).execute
-	messages.mkString must contain("passed 20 tests")
+	  ("example" ! trueFunction.forAll).execute
+	  messages.mkString must contain("passed 20 tests")
   }
   def config3 = {
-	("example" ! (falseFunction.forAll :| "my property")).execute
-	messages.mkString must contain("my property")
+	  ("example" ! (falseFunction.forAll :| "my property")).execute
+	  messages.mkString must contain("my property")
   }
 }
 

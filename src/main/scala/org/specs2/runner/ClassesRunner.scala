@@ -14,14 +14,14 @@ class ClassRunner extends Classes with ConsoleOutput with Main with AConsoleRepo
       println("The first argument should be at least the specification class name")
 
     run(arguments.drop(1), createSpecification(arguments(0))) {  case e =>
-	  println("\nAn error occurred. " +
-	  		  "Please create an issue on the http://code.google.com/specs2 website with the stacktrace below. Thanks.")
-	  e.printStackTrace 
-	}
+	    println("\nAn error occurred. " +
+              "Please create an issue on the http://code.google.com/specs2 website with the stacktrace below. Thanks.")
+	    e.printStackTrace 
+	  }
   }
   
   protected[specs2] def run(args: Array[String], specification: BaseSpecification)(f: Exception => Unit): Either[Unit, reporter.T] = {
-	trye(reporter.report(specification))(f)
+	  trye(reporter.report(specification))(f)
   }
 
   private def createSpecification(className: String): Specification = {

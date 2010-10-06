@@ -18,9 +18,9 @@ trait AnsiColors {
   val reset   = "\033[0m"
 	 
   def removeColors(s: String): String = {
-	Seq(black, red, green, yellow, blue, magenta, cyan, white).foldLeft (s) { (res, cur) =>
-	  res.replace(cur, "")
-	}
+	  Seq(black, red, green, yellow, blue, magenta, cyan, white).foldLeft (s) { (res, cur) =>
+	    res.replace(cur, "")
+	  }
   }	  
 
 }

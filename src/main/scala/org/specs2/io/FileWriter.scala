@@ -24,9 +24,8 @@ trait FileWriter {
     try {
       function(out)
     } finally {
-      try {
-      out.close()
-      } catch { case _ => }
+      try { out.close() } 
+      catch { case _ => }
     }
   }
   /**

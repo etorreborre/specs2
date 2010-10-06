@@ -19,6 +19,6 @@ trait Before {
    * The action will be aborted if the before block fails
    */
   def apply[T <% Result](a: =>T): Result = { 
-	trye(before)(Error(_)).left.getOrElse(a)
+	  trye(before)(Error(_)).left.getOrElse(a)
   }
 }

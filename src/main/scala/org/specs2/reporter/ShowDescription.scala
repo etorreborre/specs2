@@ -8,6 +8,6 @@ trait ShowDescription {
     def show(d: Description) = d.getDisplayName.toList
   }
   implicit def toTree(desc: Description): Tree[Description] = 
-	desc.unfoldTree((d: Description) => (d, () => d.getChildren.toStream))
+	  desc.unfoldTree((d: Description) => (d, () => d.getChildren.toStream))
 }
 object ShowDescription extends ShowDescription

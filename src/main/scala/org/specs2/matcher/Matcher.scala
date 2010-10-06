@@ -28,7 +28,7 @@ trait Matcher[-T] { outer =>
   def apply[S <: T](t: =>Expectable[S]): MatchResult[S]
   
   protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S]): MatchResult[S] = {
-	Matcher.result(test, okMessage, koMessage, value) 
+	  Matcher.result(test, okMessage, koMessage, value) 
   }
  
   /** 
@@ -55,8 +55,8 @@ trait Matcher[-T] { outer =>
     def apply[U <: T](a: =>Expectable[U]) = {
       val value = a
       outer(value) match {
-    	case MatchFailure(_, ko, _) => MatchSkip(ko, value)
-    	case other => other
+    	  case MatchFailure(_, ko, _) => MatchSkip(ko, value)
+    	  case other => other
       }
     }
   }
@@ -64,7 +64,7 @@ trait Matcher[-T] { outer =>
 
 object Matcher {
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: =>Expectable[T]): MatchResult[T] = {
-	if (test) new MatchSuccess(okMessage, koMessage, value) 
-	else new MatchFailure(okMessage, koMessage, value)
+	  if (test) new MatchSuccess(okMessage, koMessage, value) 
+	  else new MatchFailure(okMessage, koMessage, value)
   }
 }

@@ -32,8 +32,8 @@ trait FileSystem extends FileReader with FileWriter {
    * @return a Stream with all the recursively accessible files
    */
   private def recurse(file: File): Stream[File] = {
-	import Stream._
-	cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.flatMap(recurse(_)))
+	  import Stream._
+	  cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.flatMap(recurse(_)))
   }
   
   /**
@@ -166,12 +166,12 @@ trait FileSystem extends FileReader with FileWriter {
    */
   def unjar(path: String, dirPath: String, regexFilter: String) = {
 	 mkdirs(dirPath)
-     val fis = new FileInputStream(path)
-     val zis = new ZipInputStream(new BufferedInputStream(fis))
-     var entry: ZipEntry = null
-     def extractEntry(entry: ZipEntry): Unit = {
-       if (entry != null) {
-         if (entry.getName.matches(regexFilter)) {
+   val fis = new FileInputStream(path)
+   val zis = new ZipInputStream(new BufferedInputStream(fis))
+   var entry: ZipEntry = null
+   def extractEntry(entry: ZipEntry): Unit = {
+     if (entry != null) {
+       if (entry.getName.matches(regexFilter)) {
 		     if (entry.isDirectory()){
 		       createDir(dirPath + "/" + entry.getName)
 		     } else {
@@ -179,16 +179,16 @@ trait FileSystem extends FileReader with FileWriter {
 		       val fos = new FileOutputStream(dirPath + "/" + entry.getName)
 		       val dest = new BufferedOutputStream(fos, 2048)
 		       copy(zis, dest)
-               dest.flush
+             dest.flush
 		       dest.close
 		     }
-           
-         }
-         extractEntry(zis.getNextEntry)
+         
        }
-     } 
-     extractEntry(zis.getNextEntry)
-     zis.close
+       extractEntry(zis.getNextEntry)
+     }
+   } 
+   extractEntry(zis.getNextEntry)
+   zis.close
   }
   
   /** 
@@ -223,7 +223,6 @@ trait FileSystem extends FileReader with FileWriter {
       } else {
          copyDir(dirUrl, outputDir + src)
       }
-      
     } 
   }
   /**
@@ -231,9 +230,9 @@ trait FileSystem extends FileReader with FileWriter {
    */
   private def getPath(url: URL) = {
     if (System.getProperty("file.separator") == "\\") 
-		url.getPath.replace("\\", "/").replace("file:/", "")
-	else
-		url.getPath.replace("file:", "")
+		  url.getPath.replace("\\", "/").replace("file:/", "")
+	  else
+		  url.getPath.replace("file:", "")
   }
   /** 
    * Return urls of the resources containing the name "name" from this ClassLoader and the System classLoader.

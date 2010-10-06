@@ -18,11 +18,11 @@ import text.Plural._
 trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters with PropertyImplicits { outer =>
   /** execute a PartialFunction as a ScalaCheck property */
   implicit def checkPartial[T, S](f: PartialFunction[T, Boolean])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	checkProp(f.forAll(a, s))(p)
+	  checkProp(f.forAll(a, s))(p)
   }
   /** execute a Function as a ScalaCheck property */
   implicit def checkFunction[T, S](f: T => Boolean)(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	checkProp(f.forAll(a, s))(p)
+	  checkProp(f.forAll(a, s))(p)
   }
   /** 
    * execute a Function returning a MatchResult as a ScalaCheck property
@@ -31,14 +31,14 @@ trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckP
    * where the input type of the function is different from the MatchResult type
    */
   implicit def checkResult[T](result: T => MatchResult[T])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	checkProp(result.forAll(a, s))(p)
+	  checkProp(result.forAll(a, s))(p)
   }
   /** 
    * execute a Function returning a MatchResult as a ScalaCheck property
    * this must be used when the input type of the function is different from the MatchResult type 
    */
   implicit def check[T, S](result: T => MatchResult[S])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	checkProp(result.forAll(a, s))(p)
+	   checkProp(result.forAll(a, s))(p)
   }
   /** execute a ScalaCheck property */
   implicit def checkProp(prop: Prop)(implicit p: Parameters): execute.Result = checkProperty(prop)(p)
@@ -137,13 +137,13 @@ trait PropertyImplicits {
   }
   /** transform a function returning a MatchResult to a property */
   private def asProperty[T](f: T => MatchResult[_])(implicit a: Arbitrary[T], s: Shrink[T]): Prop = {
-	Prop.forAll { (t: T) =>
-	  f(t) match {
-	 	case MatchSuccess(_, _ , _) => true  
-	 	case MatchFailure(_, _ , _) => false  
-	 	case MatchSkip(_, _) => true  
-	  } 	
-	}
+	  Prop.forAll { (t: T) =>
+	    f(t) match {
+	   	  case MatchSuccess(_, _ , _) => true  
+	   	  case MatchFailure(_, _ , _) => false  
+	   	  case MatchSkip(_, _) => true  
+	    } 	
+	  }
   }
 
 }

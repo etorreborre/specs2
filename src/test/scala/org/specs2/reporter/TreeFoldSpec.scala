@@ -82,26 +82,26 @@ class TreeFoldSpec extends SpecificationWithJUnit {
   
   val textAndExample = "a text" ^ "an example" ! success
   val textAnd2Examples = 
-	"a text"^ 
-	  "ex1" ! success^
-	  "ex2" ! success
+	  "a text"^ 
+	    "ex1" ! success^
+	    "ex2" ! success
 	  
   val twoTextsAnd1ExampleEach = 	
-	"text1"^ "ex1" ! success^
-	"text2"^ "ex2" ! success
+	  "text1"^ "ex1" ! success^
+	  "text2"^ "ex2" ! success
  
   val twoTextsAnd2ExamplesEach = 
-	"text1"^ 
-	  "ex1.1" ! success^
-	  "ex1.2" ! success^
-	"text2"^ 
-	  "ex2.1" ! success^
-	  "ex2.2" ! success
+	  "text1"^ 
+	    "ex1.1" ! success^
+	    "ex1.2" ! success^
+	  "text2"^ 
+	    "ex2.1" ! success^
+	    "ex2.2" ! success
 
   val oneTextWith2ExamplesAnEndAnd1Example = 
-	"text1"^ 
-	  "ex1.1" ! success^
-	  "ex1.2" ! success^
-	end^
-	"ex2.1" ! success
+	  "text1"^ 
+	    "ex1.1" ! success^
+	    "ex1.2" ! success^
+	  end^
+	  "ex2.1" ! success
 }
