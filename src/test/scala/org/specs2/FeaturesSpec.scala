@@ -33,7 +33,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      reporting the final statistics"                                ! done^
 "    A JUnit4 reporter"                                               ^
 "      with a nested suites"                                          ! done^
-"      with proper display when the tests have the same name"         ! done^
+"      with proper display when the tests have the same name"         ! todo^
 "    Matchers"                                                        ^
 "      with logical combinators"                                      ! done^
 "      with adapters"                                                 ! done^

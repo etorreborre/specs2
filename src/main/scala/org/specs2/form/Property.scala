@@ -11,8 +11,11 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def updateValue(init: =>Option[T]) = new Property(value = () => init)
   /** change the value */
   def withValue(init: =>T) = Property(init)
+  /** @return the option(value) */
   def optionalValue: Option[T] = execute.evaluatedValue
-  /** @returns a value */
+  /** alias for optionalValue */
+  def toOption: Option[T] = optionalValue
+  /** @return a value */
   def get: T = optionalValue.get
   /** alias for get */
   def apply(): T = get
