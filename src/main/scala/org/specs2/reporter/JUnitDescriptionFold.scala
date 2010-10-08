@@ -31,10 +31,10 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
    */
   object descriptionTree extends TreeFold[Description] {
 	  def root = createSuiteDescription(specificationClass.getSimpleName)
-	  def map: Function[Fragment, Option[Description]] = {
-	    case Text(t) => Some(createSuiteDescription(testName(t)))
-      case Example(description, body) =>  Some(createDescription(testName(description)))
-      case Step(action) => Some(createDescription("step"))
+	  def optFold: Function2[descriptionTree.T, Fragment, Option[Description]] = {
+	    case (a, Text(t)) => Some(createSuiteDescription(testName(t)))
+      case (a, Example(description, body)) =>  Some(createDescription(testName(description), a.rootTree.flatten.size))
+      case (a, Step(action)) => Some(createDescription("step", a.rootTree.flatten.size))
       case other => None
 	  }
   }
@@ -55,15 +55,16 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
 	  val AccumulatedDescription(treeLoc, examples) = descExamples
 	  val newTreeLoc = descriptionTree.fold(treeLoc, f)
 	  val newExamples = f match {
-      case Step(action) => examples + (createDescription("step") -> f)
-      case Text(t) => examples + (createSuiteDescription(testName(t)) -> f)
-      case Example(description, body) =>  examples + (createDescription(testName(description)) -> f)
+      case Step(action) => examples + (newTreeLoc.label -> f)
+      case Text(t) => examples + (newTreeLoc.label -> f)
+      case Example(description, body) => examples + (newTreeLoc.label -> f)
       case _ => examples
-	  }
+    }
+	  
 	  new AccumulatedDescription(newTreeLoc, newExamples)
   }
   
-  def toDescription(fragments: Fragment*): Description = asOneDescription(descriptionTree.fold(fragments:_*).tree)
+  def toDescription(fragments: Fragment*): Description = asOneDescription(descriptionTree.fold(fragments:_*).rootTree)
   def asOneDescription(descriptionTree: Tree[Description]): Description = {
     val addChildren = (d: Description, children: Stream[Description]) => { children.foreach(d.addChild(_)); d }
     TreeFold.bottomUp(descriptionTree, addChildren).rootLabel
@@ -73,7 +74,7 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
 	  (if (s contains "\n") (s.trim.split("\n")(0) + "...") else s.trim).replaceAll("\r", "")
   }
   private def sanitize(s: String) = s.replace("(", "[").replace(")", "]")
-  private def createDescription(s: String) = Description.createTestDescription(specificationClass, sanitize(s))
+  private def createDescription(s: String, e: Any) = Description.createSuiteDescription(sanitize(s)+"("+e.toString+")")
   private def createSuiteDescription(s: String) = Description.createSuiteDescription(sanitize(s))
 }
 

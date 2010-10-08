@@ -14,76 +14,84 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
   a root Description object (the top 'suite') and children objects representing either 
   nested suites or Tests
 """                                                                                                               ^
-" An example is folded into a root description for the spec class and a description of the example"               ! e1^
-" Two examples are folded as 2 children descriptions"                                                             ! e2^
-" A text and two subordinates examples are folded as a node and 2 children descriptions"                          ! e3^
-" 2 texts and two subordinates examples each are folded as 2 nodes and with their own children descriptions"      ! e4^
-" 2 groups of examples separated by a paragraph are folded as 2 nodes and with their own children descriptions"   ! e5^
-" 2 grouped examples and a separate one"                                                                          ! e6^
-                                                                                                                  end
+"  An example is folded into a root description for the spec class and a description of the example"               ! e1^
+"  Two examples are folded as 2 children descriptions"                                                             ! e2^
+"  A text and two subordinates examples are folded as a node and 2 children descriptions"                          ! e3^
+"  2 texts and two subordinates examples each are folded as 2 nodes and with their own children descriptions"      ! e4^
+"  2 groups of examples separated by a paragraph are folded as 2 nodes and with their own children descriptions"   ! e5^
+"  2 grouped examples and a separate one are folded as 2 suites and one test case"                                 ! e6^
+"  if 2 fragments have the same name, they must have a different description"                                      ! e7^
+                                                                                                                   end
 
   def e1 = descriptionIs(ex1)(
   		   "JUnitDescriptionFoldSpec",
   		   "|",
-  		   "`- ex1(org.specs2.reporter.JUnitDescriptionFoldSpec)\n")
+  		   "`- ex1(1)\n")
   		   
   def e2 = descriptionIs(ex1 ^ ex2)(
   		   "JUnitDescriptionFoldSpec",
   		   "|",
-  		   "+- ex1(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "+- ex1(1)",
   		   "|",
-  		   "`- ex2(org.specs2.reporter.JUnitDescriptionFoldSpec)\n")
+  		   "`- ex2(2)\n")
   		   
   def e3 = descriptionIs(level1)(
   		   "JUnitDescriptionFoldSpec",
   		   "|",
   		   "`- level1",
   		   "   |",
-  		   "   +- ex1(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "   +- ex1(2)",
   		   "   |",
-  		   "   `- ex2(org.specs2.reporter.JUnitDescriptionFoldSpec)\n")
+  		   "   `- ex2(3)\n")
 
   def e4 = descriptionIs(level1Level2)(
   		   "JUnitDescriptionFoldSpec",
   		   "|",
   		   "+- level1",
   		   "|  |",
-  		   "|  +- ex1(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "|  +- ex1(2)",
   		   "|  |",
-  		   "|  `- ex2(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "|  `- ex2(3)",
   		   "|",
   		   "`- level2",
   		   "   |",
-  		   "   +- ex1(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "   +- ex1(5)",
   		   "   |",
-  		   "   `- ex2(org.specs2.reporter.JUnitDescriptionFoldSpec)\n")
+  		   "   `- ex2(6)\n")
 
   def e5 = descriptionIs(level1ParLevel2)(
   		   "JUnitDescriptionFoldSpec",
   		   "|",
   		   "+- level1",
   		   "|  |",
-  		   "|  +- ex1(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "|  +- ex1(2)",
   		   "|  |",
-  		   "|  `- ex2(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "|  `- ex2(3)",
   		   "|",
   		   "`- level2",
   		   "   |",
-  		   "   +- ex1(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "   +- ex1(5)",
   		   "   |",
-  		   "   `- ex2(org.specs2.reporter.JUnitDescriptionFoldSpec)\n")
+  		   "   `- ex2(6)\n")
   		   
   def e6 = descriptionIs(level1 ^ end ^ ex3)(
   		   "JUnitDescriptionFoldSpec",
   		   "|",
   		   "+- level1",
   		   "|  |",
-  		   "|  +- ex1(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "|  +- ex1(2)",
   		   "|  |",
-  		   "|  `- ex2(org.specs2.reporter.JUnitDescriptionFoldSpec)",
+  		   "|  `- ex2(3)",
   		   "|",
-  		   "`- ex3(org.specs2.reporter.JUnitDescriptionFoldSpec)\n")
+  		   "`- ex3(4)\n")
 
+  def e7 = descriptionIs(ex1 ^ ex1)(
+         "JUnitDescriptionFoldSpec",
+         "|",
+         "+- ex1(1)",
+         "|",
+         "`- ex1(2)\n")
+ 		   
   def descriptionIs(f: Fragments)(tree: String*) = 
 	  showDescriptionTree(f.fragments) must_== tree.toList.mkString("\n")
   

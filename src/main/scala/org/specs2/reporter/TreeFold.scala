@@ -8,17 +8,20 @@ import FragmentsShow._
 
 trait TreeFold[S] extends Fold {
   import LevelsFold._
-  def map: Fragment => Option[S]
+  def optFold: (T, Fragment) => Option[S]
   def root: S
   
   case class AccumulatedTree[S](private val treeLoc: TreeLoc[S], private val level: Level) {
-	  def tree = treeLoc.toTree
+	  def rootTree = treeLoc.toTree
+	  def rootLabel = rootTree.rootLabel
+    def tree = treeLoc.tree
+    def label = tree.rootLabel
   }
   object AccumulatedTree {
 	  def rootTree = new AccumulatedTree(leaf(root).loc, Level())
   }
   object Tree {
-	  def unapply(acc: AccumulatedTree[S]): Option[(Tree[S])] = Some(acc.tree)
+	  def unapply(acc: AccumulatedTree[S]): Option[(Tree[S])] = Some(acc.rootTree)
   }
   type T = AccumulatedTree[S]
   val initial = AccumulatedTree.rootTree
@@ -27,15 +30,15 @@ trait TreeFold[S] extends Fold {
     val AccumulatedTree(treeLocation, l) = t
     val newLevel = LevelsFold.fold(l, fragment)
     val newTreeLoc: TreeLoc[S] =     
-    fragment match {
-      case SpecStart(_) => map(fragment).map(leaf(_).loc).getOrElse(treeLocation)
-      case other => map(fragment).map(updateTreeLoc(l, newLevel, treeLocation, _)).getOrElse(treeLocation)
-    }
+      fragment match {
+        case SpecStart(_) => optFold(t, fragment).map(leaf(_).loc).getOrElse(treeLocation)
+        case other => optFold(t, fragment).map(updateTreeLoc(l, newLevel, treeLocation, _)).getOrElse(treeLocation)
+      }
     new AccumulatedTree(newTreeLoc, newLevel)	
   }
 
   def toTree(name: String, fragments: Fragments): Tree[S] = toTree(name, fragments.fragments)
-  def toTree(name: String, fragments: List[Fragment]): Tree[S] = fold(SpecStart(name) :: fragments).tree
+  def toTree(name: String, fragments: List[Fragment]): Tree[S] = fold(SpecStart(name) :: fragments).rootTree
   private def updateTreeLoc(level: Level, newLevel: Level, treeLoc: TreeLoc[S], f: S): TreeLoc[S] = {
 	  level.state match {
       case Down => {
@@ -63,7 +66,7 @@ object TreeFold {
   }
 }
 object FragmentsTree extends TreeFold[Fragment] {
-  def map: Function[Fragment, Option[Fragment]] = (f: Fragment) => Some(f)
+  def optFold = (t: FragmentsTree.T, f: Fragment) => Some(f)
   def root = SpecStart("")
 }
 

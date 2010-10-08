@@ -33,7 +33,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      reporting the final statistics"                                ! done^
 "    A JUnit4 reporter"                                               ^
 "      with a nested suites"                                          ! done^
-"      with proper display when the tests have the same name"         ! todo^
+"      with proper display when the tests have the same name"         ! done^
 "    Matchers"                                                        ^
 "      with logical combinators"                                      ! done^
 "      with adapters"                                                 ! done^
@@ -49,7 +49,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      with an html reporter"                                         ! todo^
 "      with non mutable forms"                                        ! todo^
 "    A sbt reporter"                                                  ^
-"      based on a generic notifier"                                   ! todo^
+"      based on the console reporter"                                 ! done^
 "    Data tables"                                                     ^
 "      with ! and | as separators"                                    ! done^
 "    Mockito"                                                         ^

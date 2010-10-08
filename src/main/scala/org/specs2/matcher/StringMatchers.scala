@@ -40,8 +40,8 @@ trait StringBaseMatchers { outer =>
     def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
       result(a != null && b.value != null && b.value.indexOf(a) >= 0, 
-             b.description + " includes " + q(a), 
-             b.description + " doesn't include " + q(a), b)
+             b.description + " contains " + q(a), 
+             b.description + " doesn't contain " + q(a), b)
     } 
   }
 

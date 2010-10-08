@@ -26,16 +26,16 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
 	  val notifier = mock[RunNotifier]
 	  abstract class DummySpec extends Specification 
 	  def run(f: Fragments) = JUnitRunner[DummySpec](f).run(notifier)
-	  def desc(s: String) = Description.createTestDescription(classOf[DummySpec], s)
+	  def desc(s: String) = Description.createSuiteDescription(s)
 	  
 	  def e1 = { 
 	    run(ex1)
-	    Seq(there was one(notifier).fireTestStarted(desc("ex1")),
-	        there was one(notifier).fireTestFinished(desc("ex1")))
+	    Seq(there was one(notifier).fireTestStarted(desc("ex1(1)")),
+	        there was one(notifier).fireTestFinished(desc("ex1(1)")))
     }
 	  def e2 = { 
 	    run(level1)
-	    Seq("ex1", "ex2") flatMap { s =>
+	    Seq("ex1(2)", "ex2(3)") flatMap { s =>
 	      Seq(there was one(notifier).fireTestStarted(desc(s)),
 	          there was one(notifier).fireTestFinished(desc(s)))
 	    }
@@ -57,11 +57,11 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
     }
 	  def e6 = { 
 	    run(ex1Skipped)
-	    there was one(notifier).fireTestIgnored(desc("ex1"))
+	    there was one(notifier).fireTestIgnored(desc("ex1(1)"))
     }
 	  def e7 = { 
 	    run(ex1Pending)
-	    there was one(notifier).fireTestIgnored(desc("ex1"))
+	    there was one(notifier).fireTestIgnored(desc("ex1(1)"))
     }
   }
   

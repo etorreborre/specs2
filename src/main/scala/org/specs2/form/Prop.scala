@@ -85,12 +85,12 @@ object Prop {
   /** create a Prop with a label only */
   def apply(l: String) = new Prop(label = l)
   /** create a Prop with a label and an expected value */
-  def apply[T](label: String, expected: =>T) = new Prop(label, Property[String](), Property(expected), checkProp)
+  def apply[T](label: String, actual: =>T) = new Prop(label, Property(actual), Property[String](), checkProp)
   /** create a Prop with a label, an expected value, and a constraint */
-  def apply[T, S](label: String, exp: =>S, c: (T, S) => Result) = new Prop[T, S](label, expected = Property(exp), constraint = c)
+  def apply[T, S](label: String, act: =>T, c: (T, S) => Result) = new Prop[T, S](label, actual = Property(act), constraint = c)
   /** create a Prop with a label, an expected value, and a constraint */
-  def apply[T, S](label: String, exp: =>S, c: (S) => Matcher[T]) = 
-    new Prop[T, S](label, expected = Property(exp), constraint = (t: T, s: S) => c(s).apply(new Expectable(t)).toResult)
+  def apply[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = 
+    new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(new Expectable(t)).toResult)
   /** create a Prop with an empty label and an actual value */
   def apply[T](value: =>T) = new Prop(actual = Property(value))
   
