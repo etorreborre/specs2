@@ -25,9 +25,9 @@ class PropSpec extends SpecificationWithJUnit {
 "   with the expected value"                                                              ! update.e1^
                                                                                           p^
 " A Prop can be executed"                                                                  ^
-"   it returns success if it has no values at all"                                        ! exec.e1^
-"   it returns success if it only has an actual value"                                    ! exec.e2^
-"   it returns success if it only has an expected value"                                  ! exec.e3^
+"   it returns pending if it has no values at all"                                        ! exec.e1^
+"   it returns pending if it only has an actual value"                                    ! exec.e2^
+"   it returns pending if it only has an expected value"                                  ! exec.e3^
 "   it returns success if expected == actual"                                             ! exec.e4^
 "   it returns a failure if expected != actual"                                           ! exec.e5^
 "   it works with a general constraint"                                                   ^
@@ -61,9 +61,9 @@ class PropSpec extends SpecificationWithJUnit {
     def e1 = Prop("name", "eric")("paolo").expected.get must_== "paolo"
   }
   object exec {
-    def e1 = noValues.execute must_== success
-    def e2 = actualOnly.execute must_== success
-    def e3 = name.execute must_== success
+    def e1 = noValues.execute must_== pending
+    def e2 = actualOnly.execute must_== pending
+    def e3 = name.execute must_== pending
     def e4 = name("eric").execute must_== Success("'eric' is equal to 'eric'")
     def e5 = name("eric2").execute.message must_== "'eric' is not equal to 'eric2'"
     def e6 = constrained("e").execute.isSuccess must beTrue

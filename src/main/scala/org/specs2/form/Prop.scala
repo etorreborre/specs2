@@ -2,6 +2,7 @@ package org.specs2
 package form
 import execute._
 import matcher._
+import StandardResults._
 
 /**
  * The Prop class is a named property which holds:
@@ -67,7 +68,7 @@ case class Prop[T, S](val label: String = "",
   /** execute the constraint set on this property, with the expected value */
   def execute = expected.flatMap { e => 
     actual.map(a => constraint(a, e)).toOption 
-  }.getOrElse(Success("success"))
+  }.getOrElse(pending)
 
   /**
    * Display the property:

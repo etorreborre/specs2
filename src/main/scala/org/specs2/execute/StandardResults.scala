@@ -14,3 +14,4 @@ trait StandardResults {
   def failure = Failure("failure")
   def skipped = Skipped("skipped")
 }
+object StandardResults extends StandardResults
