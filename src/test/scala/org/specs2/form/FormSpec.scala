@@ -71,11 +71,21 @@ class FormSpec extends SpecificationWithJUnit {
     def e1 = ("This is the expected customer" ^ form).fragments.size must_== 2
     def e2 = {
       val example = "the customer must be as expected" ! form
-      example.execute.isSuccess must_== true
+      example.execute.isSuccess must beTrue
     }
     def e3 = {
-      val example = "the customer must be as expected" ! form
-      example.execute.isSuccess must_== false
+      trait Customer {
+        val name: String
+        val age: Int
+        def form = Form("Customer").tr(prop("name", "eric")(name), prop("age", 20)(age))
+      }
+      
+      val example = "the customer must be as expected" ! new Customer {
+        val name = "eric"
+        val age = 18
+      }.form
+      example.execute.message must_== "'20' is not equal to '18'"
+      
     }
   }
 }

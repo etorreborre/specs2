@@ -7,7 +7,8 @@ import Scalaz.{ nel1 }
 import specification._
 import StandardResults._
 
-case class Form(title: Option[String] = None, rows: List[Row] = (Nil: List[Row])) extends Executable {
+class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Row])) extends Executable {
+  def this(t: String) = this(Some(t)) 
   def tr(c1: Cell, cs: Cell*) = {
     new Form(title, this.rows :+ Row.tr(c1, cs:_*))
   }
@@ -21,6 +22,7 @@ case object Row {
   def tr(c1: Cell, cs: Cell*) = Row(nel1(c1, cs:_*))
 }
 case object Form {
+  def apply() = new Form(None, Nil)
   def apply(title: String) = new Form(Some(title), Nil)
   def tr(c1: Cell, c: Cell*) = new Form().tr(c1, c:_*)
 }
@@ -53,7 +55,7 @@ object Forms {
   def field(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, value1, values:_*)
   
   def prop(l: String) = Prop(l)
-  def prop[T](label: String, actual: =>T) = Prop(label, actual)
+  def prop[T](label: String, actual: =>T) = Prop[T](label, actual)
   def prop[T, S](label: String, act: =>T, c: (T, S) => Result) = Prop(label, act, c)
   def prop[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = Prop(label, act, c)
   def prop[T](value: =>T) = Prop(value)

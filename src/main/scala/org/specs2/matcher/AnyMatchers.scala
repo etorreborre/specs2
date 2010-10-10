@@ -17,7 +17,7 @@ trait AnyMatchers {
   def be_==[T](t: =>T) = beEqualTo(t)
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
 
-  private[specs2] def q(a: Any) = if (isBoolean(a)) "the value" else "'"+a+"'" 
+  private[specs2] def q(a: Any) = "'"+a+"'" 
   def isBoolean(a: Any) = a match {
   	case b: Boolean => true
   	case _ => false

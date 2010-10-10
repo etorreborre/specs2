@@ -14,7 +14,7 @@ class Expectable[+T](t: =>T) { outer =>
   def description = d(value)
   /** @return the description of the matched value, quoted. */
   protected def d[T](value: =>T) = desc  match {
-    case None => q(value)
+    case None => if (isBoolean(value)) "the value" else q(value)
     case Some(de: String) => de + (if (!value.toString.isEmpty && !isBoolean(value)) " " + q(value) else "")
   }
   /** @return the description of the matched value, unquoted. */
