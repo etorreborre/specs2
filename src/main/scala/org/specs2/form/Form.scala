@@ -32,7 +32,7 @@ case class FieldCell(f: Field[_]) extends Cell {
   def execute = skipped
 }
 case class PropCell(p: Prop[_,_]) extends Cell {
-  def text = p.toString
+  def text = p.expected.getOrElse("_").toString
   def execute = p.execute
 }
 trait Text { def text: String }
@@ -54,7 +54,9 @@ object Forms {
   def field[T](label: String, value: =>T): Field[T] = Field(label, value)
   def field(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, value1, values:_*)
   
-  def prop(l: String) = Prop(l)
+  def prop[T](l: String) = Prop[T](l)
+  def prop[T, S](label: String, actual: =>Option[T], exp: =>Option[S]) = 
+    new Prop[T, S](label, new Property(() => actual), new Property(() => exp))
   def prop[T](label: String, actual: =>T) = Prop[T](label, actual)
   def prop[T, S](label: String, act: =>T, c: (T, S) => Result) = Prop(label, act, c)
   def prop[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = Prop(label, act, c)

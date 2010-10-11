@@ -84,7 +84,7 @@ case class Prop[T, S](val label: String = "",
  */
 object Prop {
   /** create a Prop with a label only */
-  def apply(l: String) = new Prop(label = l)
+  def apply[T](l: String) = new Prop[T, T](label = l)
   /** create a Prop with a label and an expected value */
   def apply[T](label: String, actual: =>T) = new Prop(label, Property(actual), Property[T](), checkProp)
   /** create a Prop with a label, an expected value, and a constraint */
