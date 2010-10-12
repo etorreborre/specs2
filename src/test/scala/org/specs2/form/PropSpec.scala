@@ -39,7 +39,7 @@ class PropSpec extends SpecificationWithJUnit {
                                                                                           end
 
   val name = Prop("name", "eric")
-  val noValues = Prop("name")
+  val noValues = new Prop("name")
   val actualOnly = Prop(18)
   val constrained = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
   val withMatcher = Prop("name", "eric", contain(_:String))

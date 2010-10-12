@@ -83,8 +83,6 @@ case class Prop[T, S](val label: String = "",
  * Companion object with factory methods
  */
 object Prop {
-  /** create a Prop with a label only */
-  def apply[T](l: String) = new Prop[T, T](label = l)
   /** create a Prop with a label and an expected value */
   def apply[T](label: String, actual: =>T) = new Prop(label, Property(actual), Property[T](), checkProp)
   /** create a Prop with a label, an expected value, and a constraint */
@@ -93,7 +91,7 @@ object Prop {
   def apply[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = 
     new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(new Expectable(t)).toResult)
   /** create a Prop with an empty label and an actual value */
-  def apply[T](value: =>T) = new Prop(actual = Property(value))
+  def apply[T](value: =>T) = new Prop[T, T](actual = Property(value))
   
   /** default constraint function */
   private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeEqualTo(s).apply(new Expectable(t))).toResult

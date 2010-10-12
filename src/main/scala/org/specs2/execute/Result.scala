@@ -12,6 +12,10 @@ import control.Exceptionx._
  *  * a skipped execution: based on dynamic conditions (a database not available for instance)
  *    the execution is not performed 
  * 
+ * A Result has a message describing it more precisely and possibly a number of expectations
+ * when it is the outcome of several checks (this is used for the reporting of ScalaCheck 
+ * properties.
+ * 
  */
 sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1) {
   /** @return the textual status of the result */
@@ -40,12 +44,16 @@ sealed abstract class Result(val message: String = "", val expectationsNb: Int =
  */
 case class Success(m: String = "")  extends Result(m) {
   override def and(r: Result): Result = r match {
-	  case Success(m) => Success(message+" and "+m)
+	  case Success(m) => if (message == m) this else Success(message+" and "+m)
 	  case Failure(m, st) => r
 	  case _ => super.and(r)
   }
   override def isSuccess = true
 }
+/**
+ * Companion object to the Success class providing 
+ * a method to set the expectations number
+ */
 object Success {
   def apply(m: String, expNb: Int) = new Success(m) {
 	 override val expectationsNb = expNb

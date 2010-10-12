@@ -31,7 +31,6 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
       this
   }
   override def toString = optionalValue.toString
-  
   /** @return an iterator containing the value if present */
   def iterator = optionalValue.iterator
   /** return the property with the value being filtered according to a predicate */
@@ -64,6 +63,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
       case _ => false
     }
   }
+  override def hashCode = optionalValue.hashCode
 }
 /**
  * Companion object to create properties with possibly no initial value

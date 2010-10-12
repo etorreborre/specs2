@@ -13,7 +13,7 @@ class FormSpec extends SpecificationWithJUnit {
   can be displayed with the rest of the text (whereas a DataTable is only displayed
   when there are failures. It is then "implemented" with actual values in an example. 
   Upon execution a Form will return a Result value summarizing the execution of each 
-  Prop it embbeds.
+  Prop it embeds.
 
 """                                                                            ^                        
 " A Form can be created"                                                       ^
@@ -41,6 +41,13 @@ class FormSpec extends SpecificationWithJUnit {
 "     showing all expected values"                                             ! fragments.e1_2^           
 "   to an example, returning success if the form is a success"                 ! fragments.e2 ^
 "   to an example, returning a failure if one property in the  form fails"     ! fragments.e3 ^
+                                                                               p^
+" A Form can be executed as a success"                                         ^
+"   then its rows are a success"                                               ! exec.e1^
+"   and row cells are a success"                                               ! exec.e2^
+" A Form can be executed as a failure"                                         ^
+"   then its rows are a failure"                                               ! exec.e3^
+"   and row cells are a failure"                                               ! exec.e4^
                                                                                end
                                                                                
   object creation {
@@ -99,30 +106,11 @@ class FormSpec extends SpecificationWithJUnit {
       
     }
   }
-  object components {
-    trait Address {
-      val street: String
-      val number: Int
-      def form = Form("Address").
-                 tr(prop("street")(street), prop("age")(number))
-    }
-    trait Customer {
-      val name: String
-      val age: Int
-      val address: Address
-      def form = Form("Customer").
-                 tr(prop("name", "eric")(name), prop("age", 20)(age)).
-                 tr(address.form)
-    }
-    def e1 = {
-      new Customer {
-        val name = "eric"
-        val age = 18
-        val address = new Address {
-          val street = "Rose Crescent"
-          val number = 2
-        }
-      }.form.text must_== "" 
-    }
+  
+  object exec {
+    def e1 = Form.tr("a").setSuccess.execute must_== success
+    def e2 = Form.tr("a").setSuccess.rows.forall(_.execute.isSuccess) must_== true
+    def e3 = Form.tr("a").setFailure.execute.message must_== failure.message
+    def e4 = Form.tr("a").setFailure.rows.forall(_.execute.isSuccess) must_== false
   }
 }

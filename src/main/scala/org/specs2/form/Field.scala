@@ -10,7 +10,7 @@ import execute._
  * 
  * The value is stored in a Property object so it will not be evaluated until explicitly queried.
  */
-case class Field[T](val label: String, val value: Property[T]) extends Executable with StandardResults {
+case class Field[T](label: String, value: Property[T]) extends Executable with StandardResults {
   /** executing a field does nothing */
   override def execute = success
   /**
@@ -29,13 +29,8 @@ case class Field[T](val label: String, val value: Property[T]) extends Executabl
   /** transforms this typed Field as a Field containing the toString value of the Fields value*/
   def toStringField = Field(label, value.get.toString)
   
-  override def equals(a: Any): Boolean = {
-    a match {
-      case f: Field[_] => f.label == label && f.value == value
-      case _ => false 
-    }
-  }
   override def hashCode = label.hashCode + value.hashCode
+
 }
 /**
  * Factory methods for creating Fields. Fields values can also be concatenated to produce "summary" fields.
