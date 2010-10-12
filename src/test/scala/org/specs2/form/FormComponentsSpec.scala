@@ -4,7 +4,7 @@ import Forms._
 import specification._
 
 class FormComponentsSpec extends SpecificationWithJUnit { val content = 
-"""
+                                                                                          """
   Forms can be used to represent domain objects or service, relating
   expected values to actual ones. Forms are also thought as being reusable components 
   which can be reused between specifications. In the following examples, we'll see several 
@@ -28,12 +28,12 @@ First example: Address entity
     * the Address class can be instantiated once with expected values, to be displayed as
       a Fragment
     * then the form method can be used in a example to provide actual values
-"""                                                                                       ^                        
+                                                                                          """^                        
     components.address.form                                                               ^
                                                                                           p^
 "   The Address form can then be used in an example and executed with actual values"      ! components.e1^
-                                                                                          p^
-"""
+                                                                                          end^
+                                                                                          """                        
 
 Second example: Aggregate entity
 --------------------------------
@@ -45,13 +45,13 @@ Second example: Aggregate entity
       Address class
     * the Customer Form is defined by setting the name on one row and the Address form 
       on the second row
-"""                                                                                       ^
+                                                                                          """^                        
     components.customer.form                                                              ^
                                                                                           p^
 "   The Customer (and Address component) can then be used in an example"                  +
 "   and automatically executed with actual values"                                        ! components.e2^
-                                                                                          p^
-"""
+                                                                                          end^
+                                                                                          """                        
 
 Third example: Decision table
 -----------------------------
@@ -61,12 +61,12 @@ Third example: Decision table
   
     * the initials column specifies the expected values for a given first name and last name
       "eric" "torreborre" => "E.T."
-"""                                                                                       ^
+                                                                                          """^                        
     components.initialsTable.form                                                         ^
                                                                                           p^
 " The table can then be used in an example and executed with actual values"               ! components.e3^
-                                                                                          p^
-"""
+                                                                                          end^
+                                                                                          """                        
 
 Fourth example: 1-n relationship
 --------------------------------
@@ -80,7 +80,7 @@ Fourth example: 1-n relationship
     * the expected rows are included in the actual rows, in the same order
     * the expected rows are exactly the actual rows, with no specific order
     * the expected rows are exactly the actual rows, in the same order
-"""                                                                                       ^
+                                                                                          """^                        
     components.order.form                                                                 ^
                                                                                           p^
 " The table can then be used in an example and executed with actual values"               ^

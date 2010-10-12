@@ -20,7 +20,7 @@ class SpecsFramework extends Framework {
   }
   def tests = Array[Fingerprint](specificationClass, specificationObject)
   def testRunner(classLoader: ClassLoader, loggers: Array[Logger]) = {
-	new TestInterfaceRunner(classLoader, loggers)
+	  new TestInterfaceRunner(classLoader, loggers)
   }
 }
 
@@ -35,7 +35,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   import reflect.Classes._
 
   def run(classname: String, fingerprint: TestFingerprint, handler: EventHandler, args: Array[String]) = {
-    val specification: Either[Throwable, Specification] = create[Specification](classname + "$") match {
+    val specification: Either[Throwable, Specification] = create[Specification](classname + "$", loader) match {
       case Right(s) => Right(s)
       case Left(e) => create[Specification](classname)
     }
