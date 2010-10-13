@@ -3,7 +3,7 @@ package execute
 
 class ResultSpec extends SpecificationWithJUnit {
   val content = 
-"""
+                                                                                          """
   Results are the outcome of some execution. There are several kinds of Results, all
 	having a message describing them more precisely:
 	  * Success: everything is ok
@@ -11,7 +11,7 @@ class ResultSpec extends SpecificationWithJUnit {
 	  * Error: something completely unexpected happened
 	  * Skipped: the user decided to skip the execution for some reason
 	  * Pending: the user decided that the execution was not yet implemented
-"""                                                                                       ^
+                                                                                          """                                                                                       ^
 "  Results can be combined"                                                               ^
 "    success1 and success2 == Success(s1 and s2)"                                         ! e1^
 "    success1 and success1 == Success(s1)"                                                ! e2^

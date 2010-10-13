@@ -5,34 +5,34 @@ import specification._
 
 class PropertySpec extends SpecificationWithJUnit {
   val content =
-"""
+                                                                                          """
   A Property is used to store values which can be executed lazily.
   It has an Option-like structure, supporting the same kind of operations and 
   can be empty like an Option
-"""                                                                  ^
-"  A property"                                                       ^
-"    can be created from any value"                                  ! creation1^
-"    can be empty "                                                  ! creation2^
-"    can be updated with another value"                              ! creation3^
-"    can be updated with an option"                                  ! creation4^
-"    has a toString method returning the option value toString"      ! creation5^
-                                                                     p^
-"  A property can be executed"                                       ^
-"    and return a value"                                             ! exec().e1^
-"    it is only executed once"                                       ! exec().e2^
-                                                                     p^
-"  A property behaves like an Option"                                ^
-"    with map"                                                       ! option().e1^
-"    with flatMap"                                                   ! option().e2^
-"    with filter"                                                    ! option().e3^
-"    with foreach"                                                   ! option().e4^
-"    with getOrElse"                                                 ! option().e5^
-"    with isDefined"                                                 ! option().e6^
-"    with isEmpty"                                                   ! option().e7^
-"    with orElse"                                                    ! option().e8^
-"    with toLeft"                                                    ! option().e9^
-"    with toRight"                                                   ! option().e10^
-                                                                     end
+                                                                                          """                                                                  ^
+"  A property"                                                                            ^
+"    can be created from any value"                                                       ! creation1^
+"    can be empty "                                                                       ! creation2^
+"    can be updated with another value"                                                   ! creation3^
+"    can be updated with an option"                                                       ! creation4^
+"    has a toString method returning the option value toString"                           ! creation5^
+                                                                                          p^
+"  A property can be executed"                                                            ^
+"    and return a value"                                                                  ! exec().e1^
+"    it is only executed once"                                                            ! exec().e2^
+                                                                                          p^
+"  A property behaves like an Option"                                                     ^
+"    with map"                                                                            ! option().e1^
+"    with flatMap"                                                                        ! option().e2^
+"    with filter"                                                                         ! option().e3^
+"    with foreach"                                                                        ! option().e4^
+"    with getOrElse"                                                                      ! option().e5^
+"    with isDefined"                                                                      ! option().e6^
+"    with isEmpty"                                                                        ! option().e7^
+"    with orElse"                                                                         ! option().e8^
+"    with toLeft"                                                                         ! option().e9^
+"    with toRight"                                                                        ! option().e10^
+                                                                                          end
 
   def creation1 = Property(1).get must_== 1
   def creation2 = Property().isEmpty must beTrue

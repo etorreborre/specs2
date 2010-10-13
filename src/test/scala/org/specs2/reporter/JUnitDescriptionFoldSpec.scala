@@ -9,19 +9,22 @@ import scala.collection.JavaConversions._
 
 class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamples {
   val content = 
-"""
+                                                                                          """
   A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is  
   a root Description object (the top 'suite') and children objects representing either 
   nested suites or Tests
-"""                                                                                                               ^
-"  An example is folded into a root description for the spec class and a description of the example"               ! e1^
-"  Two examples are folded as 2 children descriptions"                                                             ! e2^
-"  A text and two subordinates examples are folded as a node and 2 children descriptions"                          ! e3^
-"  2 texts and two subordinates examples each are folded as 2 nodes and with their own children descriptions"      ! e4^
-"  2 groups of examples separated by a paragraph are folded as 2 nodes and with their own children descriptions"   ! e5^
-"  2 grouped examples and a separate one are folded as 2 suites and one test case"                                 ! e6^
-"  if 2 fragments have the same name, they must have a different description"                                      ! e7^
-                                                                                                                   end
+                                                                                          """                                                                                                               ^
+"  An example is folded into a root description for the spec class and a description of"  +  
+"  the example"                                                                           ! e1^
+"  Two examples are folded as 2 children descriptions"                                    ! e2^
+"  A text and two subordinates examples are folded as a node and 2 children descriptions" ! e3^
+"  2 texts and two subordinates examples each are folded as 2 nodes and with their own "  +
+"  children descriptions"                                                                 ! e4^
+"  2 groups of examples separated by a paragraph are folded as 2 nodes and with their "
+"  own children descriptions"                                                             ! e5^
+"  2 grouped examples and a separate one are folded as 2 suites and one test case"        ! e6^
+"  if 2 fragments have the same name, they must have a different description"             ! e7^
+                                                                                          end
 
   def e1 = descriptionIs(ex1)(
   		   "JUnitDescriptionFoldSpec",

@@ -3,10 +3,10 @@ package control
 
 class ExceptionsSpec extends SpecificationWithJUnit with Exceptions {
   val content =
-"""  
+                                                                                 """  
   The Exceptions trait provide functional ways to catch exceptions
   and deal with them
-"""																					                                     ^
+                                                                                 """																					                                     ^
 "  tryo executes an expression and returns"                                      ^
 "    Some(result) if the expression doesn't throw an exception"                  ! tryo1^
 "    None if the expression failed"                                              ! tryo2^

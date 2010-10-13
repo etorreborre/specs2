@@ -4,7 +4,7 @@ import io._
 import execute._
 
 class ContextSpec extends SpecificationWithJUnit with StandardResults with ContextData with ExampleExecution {
-  val content = """
+  val content =                                                                           """
   It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments and
   clean it up afterwards. This may be for example:
      * opening a database connection
@@ -21,40 +21,40 @@ class ContextSpec extends SpecificationWithJUnit with StandardResults with Conte
      * After
      * Around
      * BeforeAfter or BeforeAfterAround for combined functionality
-"""                                                                                 ^
-"  The Before trait can be used to execute methods before Fragments"                ^
-"    the before method is executed before a first example"                          ! c(e1)^
-"    the before method is executed before the second example"                       ! c(e2)^
-                                                                                    p^
-"  If the before method throws an exception"                                        ^
-"    the first example will not execute"                                            ! c(e3)^
-"    and it will be reported as an error"                                           ! c(e4)^
-                                                                                    p^
-"  The After trait can be used to execute methods after Fragments"                  ^
-"    the after method is executed after a first example"                            ! c(e5)^
-"    the after method is executed after the second example"                         ! c(e6)^
-                                                                                    p^
-"  If the after method throws an exception"                                         ^
-"    the first example will execute"                                                ! c(e7)^
-"    but it will be reported as an error"                                           ! c(e8)^
-                                                                                    p^
-"  The Around trait can be used to"                                                 ^
-"    execute the example inside a user provided function"                           ! c(e9)^
-                                                                                    p^
-"  The BeforeAfter trait can be used to"                                            ^
-"    execute a method before and after each example"                                ! c(e10)^
-                                                                                    p^
-"  The BeforeAfterAround trait can be used to"                                      ^
-"    execute a method before, around and after the first example"                   ! c(e11)^
-                                                                                    p^
-"  An Action can be used to create Step fragments containing an action to execute:" ^
-"    val first = new Action"                                                        ^
-"    val content = first(c.println('first')) ^ ex1"                                 ^
-                                                                                    p^
-"    that action will execute and return a result"                                  ! c(e12)^
-"    if it executes ok, nothing is printed, it is a silent Success"                 ! c(e13)^
-"    otherwise, it is reported as an Error"                                         ! c(e14)^
-                                                                                    end
+                                                                                          """                                                                                 ^
+"  The Before trait can be used to execute methods before Fragments"                      ^
+"    the before method is executed before a first example"                                ! c(e1)^
+"    the before method is executed before the second example"                             ! c(e2)^
+                                                                                          p^
+"  If the before method throws an exception"                                              ^
+"    the first example will not execute"                                                  ! c(e3)^
+"    and it will be reported as an error"                                                 ! c(e4)^
+                                                                                          p^
+"  The After trait can be used to execute methods after Fragments"                        ^
+"    the after method is executed after a first example"                                  ! c(e5)^
+"    the after method is executed after the second example"                               ! c(e6)^
+                                                                                          p^
+"  If the after method throws an exception"                                               ^
+"    the first example will execute"                                                      ! c(e7)^
+"    but it will be reported as an error"                                                 ! c(e8)^
+                                                                                          p^
+"  The Around trait can be used to"                                                       ^
+"    execute the example inside a user provided function"                                 ! c(e9)^
+                                                                                          p^
+"  The BeforeAfter trait can be used to"                                                  ^
+"    execute a method before and after each example"                                      ! c(e10)^
+                                                                                          p^
+"  The BeforeAfterAround trait can be used to"                                            ^
+"    execute a method before, around and after the first example"                         ! c(e11)^
+                                                                                          p^
+"  An Action can be used to create Step fragments containing an action to execute:"       ^
+"    val first = new Action"                                                              ^
+"    val content = first(c.println('first')) ^ ex1"                                       ^
+                                                                                          p^
+"    that action will execute and return a result"                                        ! c(e12)^
+"    if it executes ok, nothing is printed, it is a silent Success"                       ! c(e13)^
+"    otherwise, it is reported as an Error"                                               ! c(e14)^
+                                                                                          end
   
   def e1 = executing(ex1Before).prints("before", "e1")
   def e2 = executing(ex1_2Before).prints("before", "e1", "before", "e2")

@@ -3,18 +3,18 @@ package form
 
 class FieldSpec extends SpecificationWithJUnit {
   val content =
-"""
+                                                                                          """
   A Field is a labelled property with can be embedded in a Form.
-"""                                                               ^
-" A Field can be created"                                         ^
-"   from just a value (then the name is empty)"                   ! creation.e1^
-"   from a name and a value"                                      ! creation.e2^
-"   from existing fields, concatenating them"                     ! creation.e3^
-" A Field can be executed"                                        ^
-"   it returns a Success"                                         ! execute.e1^
-" A Field can be modified"                                        ^
-"   to a string Field"                                            ! modify.e1^
-                                                                  end
+                                                                                          """                                                               ^
+" A Field can be created"                                                                 ^
+"   from just a value (then the name is empty)"                                           ! creation.e1^
+"   from a name and a value"                                                              ! creation.e2^
+"   from existing fields, concatenating them"                                             ! creation.e3^
+" A Field can be executed"                                                                ^
+"   it returns a Success"                                                                 ! execute.e1^
+" A Field can be modified"                                                                ^
+"   to a string Field"                                                                    ! modify.e1^
+                                                                                          end
 
   val name = Field("name", "eric")
   val age = Field("age", 18)

@@ -35,7 +35,7 @@ object MatchResult {
 }
 case class MatchSuccess[T](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
   def compose[S](f: Expectable[T] => Expectable[S]): MatchResult[S] = MatchSuccess(okMessage, koMessage, f(expectable))
-  def not = MatchFailure(okMessage, koMessage, expectable)
+  def not = MatchFailure(koMessage, okMessage, expectable)
   def or(m: =>MatchResult[T]): MatchResult[T] = this
   def and(m: =>MatchResult[T]): MatchResult[T] = m match {
 	  case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" and "+okMessage, ko+" and "+okMessage, expectable)
@@ -46,7 +46,7 @@ case class MatchSuccess[T](okMessage: String, koMessage: String, expectable: Exp
 }
 case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
   def compose[S](f: Expectable[T] => Expectable[S]): MatchResult[S] = MatchFailure(okMessage, koMessage, f(expectable))
-  def not = MatchSuccess(okMessage, koMessage, expectable)
+  def not = MatchSuccess(koMessage, okMessage, expectable)
   def or(m: =>MatchResult[T]): MatchResult[T]  = m match {
 	  case MatchSuccess(ok, ko, e) => MatchSuccess(ok+" but "+koMessage, ko, expectable)
 	  case MatchFailure(ok, ko, e) => MatchFailure(ko+" and "+koMessage, ok+" and "+okMessage, expectable)

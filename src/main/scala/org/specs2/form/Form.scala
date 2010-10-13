@@ -23,8 +23,6 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
   def header: List[Cell] = if (rows.isEmpty) Nil else rows(0).header.flatten
   def setSuccess = new Form(title, rows.map(_.setSuccess))
   def setFailure = new Form(title, rows.map(_.setFailure))
-  
-  override def hashCode = title.hashCode + rows.map(_.hashCode).sum
 }
 /**
  * Companion object of a Form to create:
@@ -87,7 +85,6 @@ case class TextCell(s: String, result: Result = skipped) extends Cell {
   def execute = result
   def setSuccess = TextCell(s, success)
   def setFailure = TextCell(s, failure)
-  override def hashCode = s.hashCode + result.hashCode
 }
 /**
  * Cell embedding a Field
@@ -98,7 +95,6 @@ case class FieldCell(f: Field[_], result: Result = skipped) extends Cell {
   override def header = List(TextCell(f.label))
   def setSuccess = FieldCell(f, success)
   def setFailure = FieldCell(f, failure)
-  override def hashCode = f.hashCode + result.hashCode
 }
 /**
  * Cell embedding a Field
@@ -109,7 +105,6 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
   override def header = List(TextCell(p.label))
   def setSuccess = PropCell(p, Some(success))
   def setFailure = PropCell(p, Some(failure))
-  override def hashCode = p.hashCode + result.hashCode
 }
 /**
  * Cell embedding a Form
@@ -123,6 +118,5 @@ case class FormCell(form: Form) extends Cell {
   override def header = form.header
   def setSuccess = FormCell(form.setSuccess)
   def setFailure = FormCell(form.setFailure)
-  override def hashCode = form.hashCode
 }
 

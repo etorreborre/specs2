@@ -5,7 +5,7 @@ import specification._
 
 class FormSpec extends SpecificationWithJUnit {
   val content = 
-"""
+                                                                                          """
   A Form is a generic table which has a title (optional) and rows.
   Each row contains cells which can be created from Fields, Props or other Forms.
 
@@ -15,40 +15,40 @@ class FormSpec extends SpecificationWithJUnit {
   Upon execution a Form will return a Result value summarizing the execution of each 
   Prop it embeds.
 
-"""                                                                            ^                        
-" A Form can be created"                                                       ^
-"   with a title"                                                              ! creation.e1 ^
-"   with one field on one row"                                                 ! creation.e2 ^
-"   with two fields on one row"                                                ! creation.e3 ^
-"   with a title and on field on each row"                                     ! creation.e4 ^
-"   with a property on one row"                                                ! creation.e5 ^
-"   with another form on one row"                                              ! creation.e6 ^
-                                                                               p^
-" A Form can be displayed, showing expected values"                            ^
-"   with its title"                                                            ^
-"     if present: | title |"                                                   ! display.e1 ^
-"     if absent: the text is empty"                                            ! display.e2 ^
-"   with one row only"                                                         ^
-"     and one cell"                                                            ! display.e3 ^
-"     and 2 cells"                                                             ! display.e4 ^
-"   with a title and one row"                                                  ^
-"     and one cell"                                                            ! display.e5 ^
-"     and 2 cells"                                                             ! display.e6 ^
-                                                                               p^
-" A Form can be added"                                                         ^
-"   as a Fragment in a specification"                                          ^
-"     creating a new Text Fragment"                                            ! fragments.e1_1^
-"     showing all expected values"                                             ! fragments.e1_2^           
-"   to an example, returning success if the form is a success"                 ! fragments.e2 ^
-"   to an example, returning a failure if one property in the  form fails"     ! fragments.e3 ^
-                                                                               p^
-" A Form can be executed as a success"                                         ^
-"   then its rows are a success"                                               ! exec.e1^
-"   and row cells are a success"                                               ! exec.e2^
-" A Form can be executed as a failure"                                         ^
-"   then its rows are a failure"                                               ! exec.e3^
-"   and row cells are a failure"                                               ! exec.e4^
-                                                                               end
+                                                                                          """                                                                            ^                        
+" A Form can be created"                                                                  ^
+"   with a title"                                                                         ! creation.e1 ^
+"   with one field on one row"                                                            ! creation.e2 ^
+"   with two fields on one row"                                                           ! creation.e3 ^
+"   with a title and on field on each row"                                                ! creation.e4 ^
+"   with a property on one row"                                                           ! creation.e5 ^
+"   with another form on one row"                                                         ! creation.e6 ^
+                                                                                          p^
+" A Form can be displayed, showing expected values"                                       ^
+"   with its title"                                                                       ^
+"     if present: | title |"                                                              ! display.e1 ^
+"     if absent: the text is empty"                                                       ! display.e2 ^
+"   with one row only"                                                                    ^
+"     and one cell"                                                                       ! display.e3 ^
+"     and 2 cells"                                                                        ! display.e4 ^
+"   with a title and one row"                                                             ^
+"     and one cell"                                                                       ! display.e5 ^
+"     and 2 cells"                                                                        ! display.e6 ^
+                                                                                          p^
+" A Form can be added"                                                                    ^
+"   as a Fragment in a specification"                                                     ^
+"     creating a new Text Fragment"                                                       ! fragments.e1_1^
+"     showing all expected values"                                                        ! fragments.e1_2^           
+"   to an example, returning success if the form is a success"                            ! fragments.e2 ^
+"   to an example, returning a failure if one property in the  form fails"                ! fragments.e3 ^
+                                                                                          p^
+" A Form can be executed as a success"                                                    ^
+"   then its rows are a success"                                                          ! exec.e1^
+"   and row cells are a success"                                                          ! exec.e2^
+" A Form can be executed as a failure"                                                    ^
+"   then its rows are a failure"                                                          ! exec.e3^
+"   and row cells are a failure"                                                          ! exec.e4^
+                                                                                          end
                                                                                
   object creation {
     def e1 = Form("title").title must_== Some("title")

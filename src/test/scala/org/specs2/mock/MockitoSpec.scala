@@ -8,44 +8,44 @@ import matcher._
 
 class MockitoSpec extends SpecificationWithJUnit with Mockito {
   val content = 	
-"""
+                                                                                          """
   Mockito is a Java library for mocking.
 
   The following samples are taken from the main documentation which can be found 
   here: http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
-"""                                                                               ^
-"   When a mock is created with the mock method"                                  ^
-"     it is possible to call methods on the mock" 								                ! aMock().call1^
-"     it is possible to verify that a method has been called" 					          ! aMock().verify1^
-"     if one method has not been called on a mock there will be a failure" 		    ! aMock().verify2^
-                                                                                  p^
-"   It is also possible to return a specific value from a mocked method"          ^
-"     then when the mocked method is called, the same values will be returned" 	  ! aMock().return1^
-"     different successive values can even be returned" 						              ! aMock().return2^
-"     a value can be returned when a parameter of the method matches" 			      ! aMock().return3^
-"       a hamcrest matcher" 													                            ! aMock().return3^
-"       a specs2 matcher" 														                            ! aMock().return4^
-                                                                                  p^
-"   It is also possible to throw an exception from a mocked method"               ^
-"     then when the mocked method is called, the exception will be thrown" 		    ! aMock().throw1^
-"     different successive exceptions can even be thrown" 						            ! aMock().throw2^
-                                                                                  p^
-"   The number of calls to a mocked method can be checked"^                       
-"     if the mocked method has been called once"                                  ! calls().calls1^
-"     if the mocked method has been called twice"                                 ! calls().calls2^
-"     if the mocked method has been called atLeast n times"                       ! calls().calls3^
-"     if the mocked method has been called atMost n times"                        ! calls().calls4^
-"     if the mocked method has never been called"                                 ! calls().calls5^
-"     if the mocked method has not been called after some calls"                  ! calls().calls6^
-                                                                                  p^
-"   The order of calls to a mocked method can be checked"^                        
-"     with 2 calls that were indeed in order"                                     ! ordered().asExpected^
-"     with 2 calls that were indeed not in order"                                 ! ordered().failed^
-                                                                                  p^
-"   Callbacks can be created to control the returned a value"                     ! callbacks().c1^
-                                                                                  p^
-"   A parameter can be captured in order to check its value"                      ! captured().e1^
-                                                                                  end  
+                                                                                          """                                                                               ^
+"   When a mock is created with the mock method"                                          ^
+"     it is possible to call methods on the mock" 								                        ! aMock().call1^
+"     it is possible to verify that a method has been called" 					                  ! aMock().verify1^
+"     if one method has not been called on a mock there will be a failure" 		            ! aMock().verify2^
+                                                                                          p^
+"   It is also possible to return a specific value from a mocked method"                  ^
+"     then when the mocked method is called, the same values will be returned" 	          ! aMock().return1^
+"     different successive values can even be returned" 						                      ! aMock().return2^
+"     a value can be returned when a parameter of the method matches" 			              ! aMock().return3^
+"       a hamcrest matcher" 													                                    ! aMock().return3^
+"       a specs2 matcher" 														                                    ! aMock().return4^
+                                                                                          p^
+"   It is also possible to throw an exception from a mocked method"                       ^
+"     then when the mocked method is called, the exception will be thrown" 		            ! aMock().throw1^
+"     different successive exceptions can even be thrown" 						                    ! aMock().throw2^
+                                                                                          p^
+"   The number of calls to a mocked method can be checked"^                               
+"     if the mocked method has been called once"                                          ! calls().calls1^
+"     if the mocked method has been called twice"                                         ! calls().calls2^
+"     if the mocked method has been called atLeast n times"                               ! calls().calls3^
+"     if the mocked method has been called atMost n times"                                ! calls().calls4^
+"     if the mocked method has never been called"                                         ! calls().calls5^
+"     if the mocked method has not been called after some calls"                          ! calls().calls6^
+                                                                                          p^
+"   The order of calls to a mocked method can be checked"^                                
+"     with 2 calls that were indeed in order"                                             ! ordered().asExpected^
+"     with 2 calls that were indeed not in order"                                         ! ordered().failed^
+                                                                                          p^
+"   Callbacks can be created to control the returned a value"                             ! callbacks().c1^
+                                                                                          p^
+"   A parameter can be captured in order to check its value"                              ! captured().e1^
+                                                                                          end  
     
   case class aMock() {
 	  val list = mock[java.util.List[String]]

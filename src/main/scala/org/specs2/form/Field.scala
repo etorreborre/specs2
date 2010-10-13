@@ -28,9 +28,6 @@ case class Field[T](label: String, value: Property[T]) extends Executable with S
   override def toString = label + ": " + this.get
   /** transforms this typed Field as a Field containing the toString value of the Fields value*/
   def toStringField = Field(label, value.get.toString)
-  
-  override def hashCode = label.hashCode + value.hashCode
-
 }
 /**
  * Factory methods for creating Fields. Fields values can also be concatenated to produce "summary" fields.

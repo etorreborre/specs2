@@ -83,9 +83,23 @@ Fourth example: 1-n relationship
                                                                                           """^                        
     components.order.form                                                                 ^
                                                                                           p^
-" The table can then be used in an example and executed with actual values"               ^
+" It is possible to check if expected rows are a subset of actual rows"                   ^
 "   if the expected rows are contained in the actual rows, it succeeds"                   ! components.e4^
 "   if the expected rows are not contained in the actual rows, it fails"                  ! components.e5^
+                                                                                          p^
+" It is possible to check if expected rows are a subsequence of actual rows,"             +
+" (in the same order)"                                                                    ^
+"   if the expected rows are in the same order, it succeeds"                              ! components.e6^
+"   if the expected rows are in a different order, it fails"                              ! components.e7^
+                                                                                          p^
+" It is possible to check if expected rows are the actual rows, in any order"             ^
+"   if the expected rows are the same, it succeeds"                                       ! components.e8^
+"   if the expected rows are not same, it fails"                                          ! components.e9^
+                                                                                          p^
+" It is possible to check if expected rows are the actual rows,"                          +
+" (in the same order)"                                                                    ^
+"   if the expected rows are the same, in the same order, it succeeds"                    ! components.e10^
+"   if the expected rows are the same, in an other order, it fails"                       ! components.e11^
                                                                                           end
   object components extends ComponentsDefinitions {
     val address = Address(street = "Rose Crescent", number = 2)
@@ -105,50 +119,49 @@ Fourth example: 1-n relationship
                              
     def e3 = initialsTable.form.execute.message must_== "'H.W.' is not equal to 'H.Wo.'"
     def e4 = {
-      order.fill(
+      order.fillSubset(
         OrderLine("PIS", 1),
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)
       ).execute must_== success
     }
     def e5 = {
-      order.fill( 
+      order.fillSubset( 
         OrderLine("PS", 2),
         OrderLine("Beginning Scala", 3)
       ).execute.isSuccess must beFalse
     }
-  }
-}
-trait ComponentsDefinitions {
-  case class Address(street: String, number: Int) {
-    def form = fill(street, number)
-    def fill(s: String, n: Int) = 
-      Form("Address").
-          tr(prop("street", s)(street)).
-          tr(prop("number", n)(number))
-  }
-  case class Customer(name: String, address: Address) {
-    def form = fill(name, address.form) 
-    def fill(na: String, a: Form) =
-      Form("Customer").
-          tr(prop("name", na)(name)).
-          tr(a)
-         
-  }
-  case class initials(form: Form = Form.tr("First name", "Last name", "Initials")) {
-    def computeInitials(f: String, l: String) = f(0).toUpper+"."+l(0).toUpper+"."
-    
-    def tr(firstName: String, lastName: String, expected: String) = initials {
-      form.tr(firstName, lastName, prop(computeInitials(firstName, lastName))(expected))
-    }
-  }
-  
-  case class Order(lines: List[OrderLine] = Nil) {
-    def line(orderLine: OrderLine) = Order(lines :+ orderLine)
-    def form = fill(lines:_*)
-    def fill(ls: OrderLine*) = Forms.form("Order", subset(lines, ls.toList))
-  }
-  case class OrderLine(name: String, quantity: Int) {
-    def form = Form.tr(field("name", name), field("qty", quantity))
+    def e6 = order.fillSubsequence(
+        OrderLine("PIS", 1),
+        OrderLine("Beginning Scala", 3),
+        OrderLine("PS", 2)
+      ).execute must_== success
+
+    def e7 = order.fillSubsequence(
+        OrderLine("Beginning Scala", 3),
+        OrderLine("PIS", 1),
+        OrderLine("PS", 2)
+      ).execute.isSuccess must beFalse
+      
+    def e8 = order.fillSet(
+        OrderLine("Beginning Scala", 3),
+        OrderLine("PIS", 1)
+      ).execute.isSuccess must beTrue
+      
+    def e9 = order.fillSet(
+        OrderLine("Beginning Scala", 3),
+        OrderLine("PS", 2)
+      ).execute.isSuccess must beFalse
+      
+    def e10 = order.fillSequence(
+        OrderLine("Beginning Scala", 3),
+        OrderLine("PIS", 1)
+      ).execute.isSuccess must beFalse
+      
+    def e11 = order.fillSequence(
+        OrderLine("Beginning Scala", 3),
+        OrderLine("PS", 2)
+      ).execute.isSuccess must beFalse
+
   }
 }

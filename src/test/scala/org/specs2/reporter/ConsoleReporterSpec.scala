@@ -5,9 +5,8 @@ import io._
 import execute._
 import matcher._
 
-class ConsoleReporterSpec extends ConsoleReporterSpecImplementation {
- val content = 
-"""
+class ConsoleReporterSpec extends ConsoleReporterSpecImplementation { val content = 
+                                                                                          """
 A console reporter is used to execute Fragments and display their status in the Console.
 
 Fragments are displayed with their description, status and a message if they're not ok.
@@ -27,23 +26,23 @@ The following Fragments specify the behavior for:
   * the display of a single example
   * the display of nested Fragments
   * the display of statistics at the end
-"""                                                                           ^
-"  A single example must"                                                     ^
-"    have its description printed out"                                        ! single1^
-"    be reported with a + if it is successful"                                ! single2^
-"    be reported with a x if it has a failure"                                ! single3^
-"    be reported with a ! if it has a error"                                  ! single4^
-"    be reported with a * if it is pending"                                   ! single5^
-"    be reported with a o if it is skipped "                                  ! single5_1^
-"    have the failure message displayed if it failed"                         ! single6^
-"    have the file location displayed if it is a failure or an error"         ! single7^
-                                                                              p^  
-"  At the end of the report"                                                  ^
-"    the total number of Fragments must be displayed"                         ! stat1^
-"    the total number of failures must be displayed"                          ! stat2^
-"    the total number of expectations must be displayed " +                   
-"    if it is different from the number of examples"                          ! stat3^
-                                                                              end
+                                                                                          """                                                                           ^
+"  A single example must"                                                                 ^
+"    have its description printed out"                                                    ! single1^
+"    be reported with a + if it is successful"                                            ! single2^
+"    be reported with a x if it has a failure"                                            ! single3^
+"    be reported with a ! if it has a error"                                              ! single4^
+"    be reported with a * if it is pending"                                               ! single5^
+"    be reported with a o if it is skipped "                                              ! single5_1^
+"    have the failure message displayed if it failed"                                     ! single6^
+"    have the file location displayed if it is a failure or an error"                     ! single7^
+                                                                                          p^  
+"  At the end of the report"                                                              ^
+"    the total number of Fragments must be displayed"                                     ! stat1^
+"    the total number of failures must be displayed"                                      ! stat2^
+"    the total number of expectations must be displayed " +                               
+"    if it is different from the number of examples"                                      ! stat3^
+                                                                                          end
 }
 
 abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit with FragmentsSamples with ExpectedOutputs with ReportExpectations {
@@ -92,15 +91,15 @@ trait ExpectedOutputs {
     "",
     "Total for specification",
     "2 examples, 0 failure, 0 error",
-    "\n")
+    " ")
     
   val level2WithFailureStats = List(
     "",
 	"Total for specification",
     "2 examples, 1 failure, 0 error",
-    "\n")
+    " ")
   val exampleWithExpectationsStats = List(
     "",
     "Total for specification",
     "1 example, 2 expectations, 0 failure, 0 error",
-    "\n")}
+    " ")}

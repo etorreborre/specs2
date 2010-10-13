@@ -37,7 +37,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   def run(classname: String, fingerprint: TestFingerprint, handler: EventHandler, args: Array[String]) = {
     val specification: Either[Throwable, Specification] = create[Specification](classname + "$", loader) match {
       case Right(s) => Right(s)
-      case Left(e) => create[Specification](classname)
+      case Left(e) => create[Specification](classname, loader)
     }
     specification.left.map { e =>
       handler.handle(error(classname, e))

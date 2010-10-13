@@ -5,9 +5,9 @@ import specification._
 
 class ExceptionxSpec extends Specification with Exceptionx {
   val content =
-"""  
+                                                                       """  
   The Exceptionx trait provides extensions to regular exceptions:
-"""																		                                 ^
+                                                                       """																		                                 ^
 "  It has location methods"												                     ^
 "    to get the name of the file and the line from an exception" 		   ! c().e1^
 "    to get the class name and line number of an exception" 			     ! c().e2^

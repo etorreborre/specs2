@@ -4,11 +4,11 @@ import execute._
 
 class PropSpec extends SpecificationWithJUnit {
   val content = 
-"""  
+                                                                                          """  
   A Prop is a Field defining an expected and an actual value. 
   It embeddeds an optional constraint which allows to execute the Prop and see (by default) if 
   the actual value is equal to the expected value. 
-"""                                                                                       ^
+                                                                                          """                                                                                       ^
 " A Prop can be created"                                                                  ^
 "   with a single label"                                                                  ! creation.e1^
 "   with a single value (the actual one)"                                                 ! creation.e2^

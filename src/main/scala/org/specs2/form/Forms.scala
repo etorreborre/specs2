@@ -52,11 +52,41 @@ trait Forms extends FormFragments {
   def subset[T <: Any { def form: Form }](f1: List[T], f2: List[T]): List[Form] = {
     executeSubset(f1.map(_.form), f2.map(_.form))
   }
+  def subsequence[T <: Any { def form: Form }](f1: List[T], f2: List[T]): List[Form] = {
+    executeSubsequence(f1.map(_.form), f2.map(_.form))
+  }
+  def set[T <: Any { def form: Form }](f1: List[T], f2: List[T]): List[Form] = {
+    executeSet(f1.map(_.form), f2.map(_.form))
+  }
+  def sequence[T <: Any { def form: Form }](f1: List[T], f2: List[T]): List[Form] = {
+    executeSequence(f1.map(_.form), f2.map(_.form))
+  }
   
   def executeSubset(form1: List[Form], form2: List[Form]): List[Form] = {
     val intersection = form1 intersect form2 
     intersection.map(_.setSuccess) ++
     (form1 diff intersection).map(_.setFailure)
+  }
+
+  def executeSubsequence(form1: List[Form], form2: List[Form]): List[Form] = {
+    (form1 zip form2).foldLeft(Nil:List[Form]) { (res, cur) => cur match {
+        case (f1, f2) if (f1 == f2) => res :+ f1.setSuccess
+        case (f1, f2) => (res :+ f1.setFailure)
+      }
+    } ++
+    form1.drop(form2.size).map(_.setFailure)
+  }
+
+  def executeSet(form1: List[Form], form2: List[Form]): List[Form] = {
+    val intersection = form1 intersect form2 
+    intersection.map(_.setSuccess) ++
+    (form1 diff intersection).map(_.setFailure) ++
+    (form2 diff intersection).map(_.setFailure)
+  }
+
+  def executeSequence(form1: List[Form], form2: List[Form]): List[Form] = {
+    executeSubsequence(form1, form2) ++
+    form2.drop(form1.size).map(_.setFailure)
   }
 }
 object Forms extends Forms

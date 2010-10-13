@@ -17,7 +17,7 @@ trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
 	  p._2
   }
   def printText(s: String)= println(s)
-  def printPar() = println("")
+  def printPar() = println(" ")
   def statusAndDescription(s: String, result: Result) = {
 	  s.takeWhile(_ == ' ') + status(result) + " " + s.dropWhile(_ == ' ')
   }
@@ -47,7 +47,7 @@ trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
 	                 (if (expectations != examples) List(expectations qty "expectation") else Nil) ++
 	                 List(failures qty "failure", errors qty "error") ++
 	                 List(pending.qty_>("pending")(0), skipped.qty_>("skipped")(0)).flatten).mkString(", "))
-	        println("\n")
+	        println(" ")
 	    }
 	  }
   }
