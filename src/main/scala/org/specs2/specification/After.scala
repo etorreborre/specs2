@@ -9,7 +9,7 @@ import control.Exceptions._
  * 
  * @see Example to understand why the type T must <% Result
  */
-trait After {
+trait After { outer =>
   /** override this method to provide the after behavior */
   def after: Any
   /** 
@@ -19,6 +19,17 @@ trait After {
   def apply[T <% Result](a: =>T): Result = {
 	  try { return a } 
 	  finally { after	}
-  }  
+  } 
+  
+  /** compose the actions of 2 After traits */
+  def compose(a: After): After = new After {
+    def after = { a.after; outer.after }
+  }
+
+  /** sequence the actions of 2 After traits */
+  def then(a: After): After = new After {
+    def after = { outer.after; a.after }
+  }
+
 }
 

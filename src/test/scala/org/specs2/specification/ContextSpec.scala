@@ -5,18 +5,22 @@ import execute._
 
 class ContextSpec extends SpecificationWithJUnit with StandardResults with ContextData with ExampleExecution {
   val content =                                                                           """
-  It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments and
-  clean it up afterwards. This may be for example:
+  It is sometimes necessary to provide functions to "prepare" the specification before
+  executing the Fragments and clean it up afterwards. This may be for example:
+
      * opening a database connection
      * inserting some data
      * executing the example
      * closing the connection after each example
      
-  It may also be very convenient to have each example executed "inside" a specific context, like a 
-  web application session. Finally, some setups or cleanups are very expensive so one might want
-  to add arbitrary actions that will be executed only once
+  It may also be very convenient to have each example executed "inside" a specific 
+  context, like a  web application session. Finally, some setups or cleanups are very 
+  expensive so one might want to add arbitrary actions that will be executed only once, 
+  at the beginning of the specification or the end.
   
-  All of this can be achieved in specs2 by using case classes which extend the following traits:
+  All of this can be achieved in specs2 by using case classes which extend the following
+  traits:
+
      * Before
      * After
      * Around
@@ -47,9 +51,21 @@ class ContextSpec extends SpecificationWithJUnit with StandardResults with Conte
 "  The BeforeAfterAround trait can be used to"                                            ^
 "    execute a method before, around and after the first example"                         ! c(e11)^
                                                                                           p^
+"  The Before After Around traits can be composed to create more complex setups"          ^
+"    before compose before2 "                                                             ! c(compose1)^
+"    before then before2 "                                                                ! c(compose2)^
+"    after compose after2 "                                                               ! c(compose3)^
+"    after then after2 "                                                                  ! c(compose4)^
+"    beforeAfter compose before2After2 "                                                  ! c(compose5)^
+"    beforeAfter then before2After2 "                                                     ! c(compose6)^
+"    around compose around2 "                                                             ! c(compose7)^
+"    around then around2 "                                                                ! c(compose8)^
+"    beforeAfterAround compose before2After2Around"                                       ! c(compose9)^
+"    beforeAfterAround then before2After2Around2"                                         ! c(compose10)^
+                                                                                          p^
 "  An Action can be used to create Step fragments containing an action to execute:"       ^
-"    val first = new Action"                                                              ^
-"    val content = first(c.println('first')) ^ ex1"                                       ^
+"    val beforeSpec = new Action"                                                         ^
+"    val content = beforeSpec(c.println('beforeSpec')) ^ ex1"                             ^
                                                                                           p^
 "    that action will execute and return a result"                                        ! c(e12)^
 "    if it executes ok, nothing is printed, it is a silent Success"                       ! c(e13)^
@@ -72,6 +88,19 @@ class ContextSpec extends SpecificationWithJUnit with StandardResults with Conte
   def e13 = executeBodies(silentFirstThenEx1).map(_.message) must_== List("success")
   def e14 = executeBodies(failingFirstThenEx1).map(_.message) must_== List("error", "success")
 
+  def compose1 = executing(ex1BeforeComposeBefore2).prints("before2", "before", "e1")
+  def compose2 = executing(ex1BeforeThenBefore2).prints("before", "before2", "e1")
+  def compose3 = executing(ex1AfterComposeAfter2).prints("e1", "after2", "after")
+  def compose4 = executing(ex1AfterThenAfter2).prints("e1", "after", "after2")
+  def compose5 = executing(ex1BeforeAfterComposeBefore2After2).prints("before2", "before", "e1", "after2", "after")
+  def compose6 = executing(ex1BeforeAfterThenBefore2After2).prints("before", "before2", "e1", "after", "after2")
+  def compose7 = executing(ex1AroundComposeAround2).prints("around2", "around", "e1")
+  def compose8 = executing(ex1AroundThenAround2).prints("around", "around2", "e1")
+  def compose9 = executing(ex1BeforeAfterAroundComposeBefore2After2Around2).
+                 prints("before2", "before", "around2", "around", "e1", "after2", "after")
+  def compose10 = executing(ex1BeforeAfterAroundThenBefore2After2Around2).
+                 prints("before", "before2", "around", "around2", "e1", "after", "after2")
+    
   def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
   case class Executed(r: List[Result]) {
 	  def prints(messages: String*): Result = {
@@ -86,7 +115,18 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ok2 = ok("e2")
   
   def ex1 = "ex1" ! ok1  
-  def ex1Before = "ex1" ! before(ok1)  
+  def ex1Before = "ex1" ! before(ok1) 
+  def ex1BeforeComposeBefore2 = "ex1" ! (before compose before2)(ok1)  
+  def ex1BeforeThenBefore2 = "ex1" ! (before then before2)(ok1)  
+  def ex1AfterComposeAfter2 = "ex1" ! (after compose after2)(ok1)  
+  def ex1AfterThenAfter2 = "ex1" ! (after then after2)(ok1)  
+  def ex1BeforeAfterComposeBefore2After2 = "ex1" ! (beforeAfter compose before2After2)(ok1)  
+  def ex1BeforeAfterThenBefore2After2 = "ex1" ! (beforeAfter then before2After2)(ok1)  
+  def ex1AroundComposeAround2 = "ex1" ! (around compose around2)(ok1)  
+  def ex1AroundThenAround2 = "ex1" ! (around then around2)(ok1)  
+  def ex1BeforeAfterAroundComposeBefore2After2Around2 = "ex1" ! (beforeAfterAround compose before2After2Around2)(ok1)  
+  def ex1BeforeAfterAroundThenBefore2After2Around2 = "ex1" ! (beforeAfterAround then before2After2Around2)(ok1)  
+
   def ex1_beforeFail = "ex1" ! beforeWithError(ok1) 
   def ex1_2Before = ex1Before ^ "ex2" ! before(ok2)
 
@@ -111,11 +151,17 @@ trait ContextsForFragments {
   object before extends Before {
 	  def before = c.println("before")
   }
+  object before2 extends Before {
+    def before = c.println("before2")
+  }
   object beforeWithError extends Before with MockOutput {
 	  def before = Predef.error("error")
   }
   object after extends After {
 	  def after = c.println("after")
+  }
+  object after2 extends After {
+    def after = c.println("after2")
   }
   object afterWithError extends After {
 	  def after = Predef.error("error")
@@ -123,13 +169,25 @@ trait ContextsForFragments {
   object around extends Around {
 	  def around[T <% Result](a: =>T) = { c.println("around"); a } 
   }
+  object around2 extends Around {
+    def around[T <% Result](a: =>T) = { c.println("around2"); a } 
+  }
   object beforeAfter extends BeforeAfter {
 	  def before = c.println("before")
 	  def after = c.println("after")
+  }
+  object before2After2 extends BeforeAfter {
+    def before = c.println("before2")
+    def after = c.println("after2")
   }
   object beforeAfterAround extends BeforeAfterAround {
 	  def before = c.println("before")
 	  def after = c.println("after")
 	  def around[T <% Result](a: =>T) = { c.println("around"); a } 
+  }
+  object before2After2Around2 extends BeforeAfterAround {
+    def before = c.println("before2")
+    def after = c.println("after2")
+    def around[T <% Result](a: =>T) = { c.println("around2"); a } 
   }
 }

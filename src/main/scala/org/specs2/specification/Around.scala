@@ -10,8 +10,22 @@ import execute._
  * 
  * @see Example to understand why the type T must <% Result
  */
-trait Around {
+trait Around { outer =>
   def around[T <% Result](t: =>T): Result
   def apply[T <% Result](a: =>T) = around(a)
+  
+  /** compose the actions of 2 Around traits */
+  def compose(a: Around): Around = new Around {
+    def around[T <% Result](t: =>T): Result = {
+      a.around(outer.around(t))
+    }
+  }
+
+  /** sequence the actions of 2 Around traits */
+  def then(a: Around): Around = new Around {
+    def around[T <% Result](t: =>T): Result = {
+      outer.around(a.around(t))
+    }
+  }
 }
 
