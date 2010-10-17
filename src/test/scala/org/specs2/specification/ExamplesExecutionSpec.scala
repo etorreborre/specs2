@@ -4,7 +4,7 @@ import execute._
 import matcher._
 
 class FragmentsExecutionSpec extends Specification {
-  val content: Fragments = 
+  def content: Fragments = 
   "An example when executed returns a result" ! {
     (1 must_== 1).toResult must_== Success("'1' is equal to '1'")
   }

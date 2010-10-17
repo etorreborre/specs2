@@ -4,8 +4,9 @@ import specification._
 import io._
 import execute._
 import matcher._
+import control.LazyParameters._
 
-class ConsoleReporterSpec extends ConsoleReporterSpecImplementation { val content = 
+class ConsoleReporterSpec extends ConsoleReporterSpecImplementation { def content = 
                                                                                           """
 A console reporter is used to execute Fragments and display their status in the Console.
 
@@ -78,7 +79,7 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
   def messagesContain(body: Result, message: String) = {
 	  report("this example" ! body) must containMatch(message) 
   }
-  def report(ex: Example): List[String] = report(Fragments(List(ex))) 
+  def report(ex: Example): List[String] = report(Fragments(ex)) 
   def report(ex: Fragments): List[String] = {
 	val reporter = new ConsoleReporter with MockOutput
 	  reporter.report(ex.fragments)

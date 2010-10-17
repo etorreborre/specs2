@@ -3,7 +3,7 @@ package form
 import Forms._
 import specification._
 
-class FormComponentsSpec extends SpecificationWithJUnit { val content = 
+class FormComponentsSpec extends SpecificationWithJUnit { def content = 
                                                                                           """
   Forms can be used to represent domain objects or service, relating
   expected values to actual ones. Forms are also thought as being reusable components 

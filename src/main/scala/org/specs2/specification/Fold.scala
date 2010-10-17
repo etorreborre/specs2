@@ -1,6 +1,7 @@
 package org.specs2
 package specification
-
+import control.Exceptions._
+import control.Throwablex._
 /**
  * A Fold transforms a list of fragments to a given type T, starting from an initial value.
  * It is either used to:
@@ -22,7 +23,15 @@ trait Fold {
   def initial: T
   val fold: Function2[T, Fragment, T]
   
-  def fold(fragments: Fragments): T = fold(fragments.fragments:_*)
-  def fold(fragments: List[Fragment]): T = fold(fragments:_*)
-  def fold(fragments: Fragment*): T = fragments.foldLeft(initial)(fold)
+  def fold(fragments: Fragments): T = trye {
+    fragments.fragments.foldLeft(initial)(fold)
+  } ((e: Exception) => e.printStackTrace) match {
+    case Right(e) => e
+    case Left(e) => initial
+  }
+  def handleException(e: Exception) = {
+    Console.println("There was an exception during the building of fragments: " + e)
+    e.getFullStackTrace.foreach(println(_))
+  }
+  def fold(fragments: Fragment*): T = fold(new Fragments(() => fragments.toList))
 }

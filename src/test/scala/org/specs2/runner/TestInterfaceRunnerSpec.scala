@@ -6,7 +6,7 @@ import _root_.org.scalatools.testing._
 import reporter._
 
 class TestInterfaceRunnerSpec extends SpecificationWithJUnit with Mockito {
-  val content = 
+  def content = 
                                                                                           """
   A TestInterfaceRunner is responsible for instantiating Specification classes found by sbt
   and executing them using a TestInterfaceReporter
@@ -66,8 +66,8 @@ trait MockLogger {
 class SpecificationForSbtWithException extends Specification {
   val cause = new IllegalArgumentException("cause")
   throw new Exception("fail", cause)
-  val content = "ex1" ! success ^ end
+  def content = "ex1" ! success ^ end
 }
 class SpecificationForSbt extends Specification {
-  val content = "ex1" ! success ^ end
+  def content = "ex1" ! success ^ end
 }

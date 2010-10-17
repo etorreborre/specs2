@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 class ExceptionMatchersSpec extends SpecificationWithJUnit {
-  val content =
+  def content =
 "" +
 "  Exception matchers allow to check that exceptions are thrown"                          				      ^
 "    by specifying the expected type of exception: 'value must throwAn[Error]'"							            ^

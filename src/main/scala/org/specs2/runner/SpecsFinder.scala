@@ -15,7 +15,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
     */
    def specificationNames(path: String, pattern: String) : List[String] = {
      filePaths(path) filter (_.endsWith(".scala")) flatMap { p =>
-       val content = readFile(p)
+       def content = readFile(p)
        val packName = packageName(content)
        classNames(packName, content, pattern, "object", "$") ++ classNames(packName, content, pattern, "class", "")	 
      } 

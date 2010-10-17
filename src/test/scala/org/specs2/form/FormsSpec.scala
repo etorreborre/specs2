@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 class FormsSpec extends SpecificationWithJUnit with Forms {
-  val content = 
+  def content = 
                                                                                           """
   The Forms object provides several utility functions for creating forms
                                                                                           """                                                                                       ^

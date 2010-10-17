@@ -4,7 +4,7 @@ import Forms._
 import specification._
 
 class FormSpec extends SpecificationWithJUnit {
-  val content = 
+  def content = 
                                                                                           """
   A Form is a generic table which has a title (optional) and rows.
   Each row contains cells which can be created from Fields, Props or other Forms.
@@ -95,7 +95,7 @@ class FormSpec extends SpecificationWithJUnit {
     def e1_1 = ("This is the expected customer" ^ form).fragments.size must_== 2
     def e1_2 = ("This is the expected customer" ^ form).fragments(1) must_== Text( 
                 "| Customer |\n"+
-                "| eric | 20 |")
+                "| name: eric | age: 20 |")
     def e2 = {
       val example = "the customer must be as expected" ! form
       example.execute.isSuccess must beTrue

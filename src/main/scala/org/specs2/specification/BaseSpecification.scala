@@ -6,5 +6,5 @@ trait BaseSpecification extends SpecificationStructure with FragmentsBuilder wit
   def include(s: BaseSpecification) = group(s.content.fragments)
 }
 trait SpecificationStructure {
-  val content: Fragments
+  def content: Fragments
 } 

@@ -8,7 +8,7 @@ import ShowDescription._
 import scala.collection.JavaConversions._
 
 class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamples {
-  val content = 
+  def content = 
                                                                                           """
   A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is  
   a root Description object (the top 'suite') and children objects representing either 

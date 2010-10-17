@@ -3,7 +3,7 @@ package form
 import execute._
 
 class PropSpec extends SpecificationWithJUnit {
-  val content = 
+  def content = 
                                                                                           """  
   A Prop is a Field defining an expected and an actual value. 
   It embeddeds an optional constraint which allows to execute the Prop and see (by default) if 
@@ -19,7 +19,7 @@ class PropSpec extends SpecificationWithJUnit {
 " A Prop can be displayed"                                                                ^ 
 "   with only the expected value"                                                         ! display.e1^
 "   with only the actual value"                                                           ! display.e2^ 
-"   with both values"                                                                     ! display.e3^
+"   with only one value when expected == actual"                                          ! display.e3^
                                                                                           p^
 " A Prop can be updated"                                                                  ^
 "   with the expected value"                                                              ! update.e1^
@@ -53,9 +53,9 @@ class PropSpec extends SpecificationWithJUnit {
   }
                                               
   object display {
-    def e1 = new Prop("name", expected = Property("eric")).toString must_== "name: _ (expected: eric)"
-    def e2 = new Prop("name", actual = Property("eric")).toString must_== "name: eric (expected: _)"
-    def e3 = new Prop("name", Property("eric"), Property("eric")).toString must_== "name: eric (expected: eric)"
+    def e1 = new Prop("name", expected = Property("eric")).toString must_== "name: eric (actual: _)"
+    def e2 = new Prop("name", actual = Property("eric")).toString must_== "name: _ (actual: eric)"
+    def e3 = new Prop("name", Property("eric"), Property("eric")).toString must_== "name: eric"
   }
   object update {
     def e1 = Prop("name", "eric")("paolo").expected.get must_== "paolo"

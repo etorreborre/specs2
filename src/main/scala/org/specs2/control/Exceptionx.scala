@@ -11,7 +11,7 @@ trait Exceptionx {
   /**
    * Implicit method to add additional methods to Exception objects
    */
-  implicit def toExceptionx[T <: Exception](t: T) = new ExtendedException(t)  
+  implicit def extend[T <: Exception](t: T) = new ExtendedException(t)  
   /**
    * See the ExtendedExceptions object description
    */

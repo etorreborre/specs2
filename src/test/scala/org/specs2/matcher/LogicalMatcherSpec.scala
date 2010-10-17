@@ -4,7 +4,7 @@ import execute._
 import specification._
 
 class LogicalMatcherSpec extends Specification { 
-  val content = 
+  def content = 
 "  a matcher can be or-ed with another one"                       ^
 "    if both matches are ok the result is ok"                     ! or1^
 "    if both matches are ko the result is ko"                     ! or2^

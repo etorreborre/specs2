@@ -4,7 +4,7 @@ import io._
 import specification._
 
 class PropertySpec extends SpecificationWithJUnit {
-  val content =
+  def content =
                                                                                           """
   A Property is used to store values which can be executed lazily.
   It has an Option-like structure, supporting the same kind of operations and 

@@ -7,7 +7,7 @@ object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
   def main(args: Array[String]): Unit = {
 	  val f = (e: Exception) => e.printStackTrace  
 	  val totalSpec = new Specification {
-	    val content = new Fragments(
+	    def content = new Fragments(() =>
 	   		specificationNames("src/test/scala", ".*Spec").
 	        flatMap(s => createSpecification(s)).flatMap(_.content.fragments :+ end))
 	  }

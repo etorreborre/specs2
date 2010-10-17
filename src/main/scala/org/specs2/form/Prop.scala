@@ -73,10 +73,12 @@ case class Prop[T, S](val label: String = "",
   /**
    * Display the property:
    * 
-   * label: "this" (expected: "that")
+   * label: "this" (actual: "that")
    */
   override def toString = {
-    label + ": " + actual.getOrElse("_") + " (expected: " + expected.getOrElse("_") + ")"
+    (if (label.isEmpty) "" else (label + ": ")) + 
+    expected.getOrElse("_") + 
+    (if (expected == actual) "" else (" (actual: " + actual.getOrElse("_") + ")"))
   }
 }
 /**

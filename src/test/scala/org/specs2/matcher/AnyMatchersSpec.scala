@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 class AnyMatchersSpec extends SpecificationWithJUnit {
-  val content =
+  def content =
 "  beTrue"                                                                                ^
 "    when ok" !  { true must beTrue }                                                     ^
 "    when ko" !  { (false must beTrue).message must_==  "the value is false" }            ^

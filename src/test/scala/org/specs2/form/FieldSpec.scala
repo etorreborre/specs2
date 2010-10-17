@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 class FieldSpec extends SpecificationWithJUnit {
-  val content =
+  def content =
                                                                                           """
   A Field is a labelled property with can be embedded in a Form.
                                                                                           """                                                               ^

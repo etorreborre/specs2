@@ -2,6 +2,7 @@ package org.specs2
 package reflect
 import io._
 import control.Exceptions._
+import control.Throwablex._
 import scala.reflect.ClassManifest
 import scala.reflect.NameTransformer
 
@@ -29,8 +30,8 @@ trait Classes extends Output {
    */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)(implicit m: ClassManifest[T]): Option[T] = {
     tryo(createInstanceOf[T](loadClass[T](className))) { (e: Exception) => 
-      if (printMessage || System.getProperty("debugCreateObject") != null) println("Could not instantiate class " + className + ": " + e.getMessage)
-      if (printStackTrace || System.getProperty("debugCreateObject") != null) e.getStackTrace() foreach (s => println(s.toString))
+      if (printMessage || System.getProperty("debugCreateObject") != null) println("Could not instantiate class " + className + ": " + e)
+      if (printStackTrace || System.getProperty("debugCreateObject") != null) e.getFullStackTrace foreach (s => println(s.toString))
     }.flatMap(identity)
   }
   /**
@@ -90,8 +91,8 @@ trait Classes extends Output {
             None
         } catch {
           case e => {
-            if (printMessage || System.getProperty("debugCreateObject") != null) println("Could not instantiate class " + className + ": " + e.getMessage)
-            if (printStackTrace || System.getProperty("debugCreateObject") != null) e.getStackTrace() foreach (s => println(s.toString))
+            if (printMessage || System.getProperty("debugCreateObject") != null) println("Could not instantiate class " + className + ": " + e)
+            if (printStackTrace || System.getProperty("debugCreateObject") != null) e.getFullStackTrace foreach (s => println(s.toString))
             return None
           }
         }
