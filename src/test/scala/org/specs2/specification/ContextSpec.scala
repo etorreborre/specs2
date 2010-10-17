@@ -4,7 +4,7 @@ import io._
 import execute._
 
 class ContextSpec extends SpecificationWithJUnit with StandardResults with ContextData with ExampleExecution {
-  def content =                                                                           """
+  def is =                                                                           """
   It is sometimes necessary to provide functions to "prepare" the specification before
   executing the Fragments and clean it up afterwards. This may be for example:
 
@@ -65,7 +65,7 @@ class ContextSpec extends SpecificationWithJUnit with StandardResults with Conte
                                                                                           p^
 "  An Action can be used to create Step fragments containing an action to execute:"       ^
 "    val beforeSpec = new Action"                                                         ^
-"    def content = beforeSpec(c.println('beforeSpec')) ^ ex1"                             ^
+"    def is = beforeSpec(c.println('beforeSpec')) ^ ex1"                             ^
                                                                                           p^
 "    that action will execute and return a result"                                        ! c(e12)^
 "    if it executes ok, nothing is printed, it is a silent Success"                       ! c(e13)^

@@ -74,7 +74,7 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable with
   def setFailure = new Row(cellList.map(_.setFailure))
   
   override def equals(a: Any) = a match {
-    case Row(c) => cells == c
+    case Row(c) => cells == c.list
     case other => false
   }
   override def hashCode = cells.map(_.hashCode).sum

@@ -4,7 +4,7 @@ import Forms._
 import specification._
 
 class FormSpec extends SpecificationWithJUnit {
-  def content = 
+  def is = 
                                                                                           """
   A Form is a generic table which has a title (optional) and rows.
   Each row contains cells which can be created from Fields, Props or other Forms.
@@ -48,6 +48,10 @@ class FormSpec extends SpecificationWithJUnit {
 " A Form can be executed as a failure"                                                    ^
 "   then its rows are a failure"                                                          ! exec.e3^
 "   and row cells are a failure"                                                          ! exec.e4^
+                                                                                          p^
+" Forms rows and cells have equals/hashcode methods"                                            ^
+"   row1 == row1"                                                                         ! equality.e1^
+"   cell1 == cell1"                                                                       ! equality.e2^
                                                                                           end
                                                                                
   object creation {
@@ -68,10 +72,10 @@ class FormSpec extends SpecificationWithJUnit {
     def e3 = Form.tr(name).text must_== "| name: eric |"
     def e4 = Form.tr(name, age).text must_== "| name: eric | age: 18 |"
     def e5 = form("title").tr(name).text must_==
-             "| title |\n" +    
+             "| title      |\n" +    
              "| name: eric |"
     def e6 = form("title").tr(name, age).text must_== 
-             "| title |\n" + 
+             "| title                |\n" + 
              "| name: eric | age: 18 |"
   }
   
@@ -94,7 +98,7 @@ class FormSpec extends SpecificationWithJUnit {
     
     def e1_1 = ("This is the expected customer" ^ form).fragments.size must_== 2
     def e1_2 = ("This is the expected customer" ^ form).fragments(1) must_== Text( 
-                "| Customer |\n"+
+                "| Customer             |\n"+
                 "| name: eric | age: 20 |")
     def e2 = {
       val example = "the customer must be as expected" ! form
@@ -113,4 +117,9 @@ class FormSpec extends SpecificationWithJUnit {
     def e3 = Form.tr("a").setFailure.execute.message must_== failure.message
     def e4 = Form.tr("a").setFailure.rows.forall(_.execute.isSuccess) must_== false
   }
+  
+  object equality {
+    def e1 = Row.tr(TextCell("a")) must_== Row.tr(TextCell("a"))   
+    def e2 = TextCell("a") must_== TextCell("a")   
+ }
 }

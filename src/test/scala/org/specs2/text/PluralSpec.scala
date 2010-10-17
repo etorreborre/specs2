@@ -5,7 +5,7 @@ import specification._
 
 class PluralSpec extends SpecificationWithJUnit with Plural with DataTables {
   
-  def content: Fragments = 
+  def is: Fragments = 
                                                                                           """ 
                                                                                           """^
 """A string can be pluralized: "apple".plural(n)""" ! {

@@ -3,7 +3,7 @@ package execute
 import control._
 
 class ResultStackTraceSpec extends Specification {
-  def content =
+  def is =
 " A StackTrace for a Result must sanitize the stacktrace"                             ^
 " to present only a relevant stacktrace element for the user"                         ^
 "   if it is a a user specification, the 'org.specs2' lines are filtered"             ! e1^

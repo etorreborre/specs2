@@ -2,7 +2,7 @@ package org.specs2
 package control
 
 class ExceptionsSpec extends SpecificationWithJUnit with Exceptions {
-  def content =
+  def is =
                                                                                  """  
   The Exceptions trait provide functional ways to catch exceptions
   and deal with them

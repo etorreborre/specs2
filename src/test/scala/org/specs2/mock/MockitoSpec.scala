@@ -7,7 +7,7 @@ import org.mockito.Matchers.{ anyInt }
 import matcher._
 
 class MockitoSpec extends SpecificationWithJUnit with Mockito {
-  def content = 	
+  def is = 	
                                                                                           """
   Mockito is a Java library for mocking.
 

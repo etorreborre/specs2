@@ -3,7 +3,7 @@ package form
 import Forms._
 
 class FormTextSpec extends SpecificationWithJUnit { 
-  def content = 
+  def is = 
                                                                                           """
   Forms can be displayed as text in the ConsoleReporter for example.
   This specification shows what's expected for different kind of forms.

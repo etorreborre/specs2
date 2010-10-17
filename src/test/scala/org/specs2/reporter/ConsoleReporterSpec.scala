@@ -6,7 +6,7 @@ import execute._
 import matcher._
 import control.LazyParameters._
 
-class ConsoleReporterSpec extends ConsoleReporterSpecImplementation { def content = 
+class ConsoleReporterSpec extends ConsoleReporterSpecImplementation { def is = 
                                                                                           """
 A console reporter is used to execute Fragments and display their status in the Console.
 

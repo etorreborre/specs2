@@ -4,7 +4,7 @@ import execute._
 import specification._
 
 class ThrowablexSpec extends SpecificationWithJUnit with Throwablex {
-  def content =
+  def is =
                                                                          """  
   The Throwablex trait provides extensions to regular throwables:
                                                                          """																		                                   ^

@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 class MatcherSpec extends SpecificationWithJUnit {
-  def content = 
+  def is = 
 "  a matcher can be adapted with a function"              ! e1^
                                                           end
 

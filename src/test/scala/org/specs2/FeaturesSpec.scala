@@ -3,7 +3,7 @@ import specification._
 import execute._
 
 class FeaturesSpec extends Specification with StandardResults {
-  def content = 
+  def is = 
                                                                                           """
  These are the list of features todevelop / port for specs2.
 

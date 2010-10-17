@@ -7,7 +7,7 @@ import FragmentsShow._
 import FragmentsTree._
 
 class TreeFoldSpec extends SpecificationWithJUnit {
-  def content = 
+  def is = 
   "a specification can be turned to a tree of fragments"^
   "if there is only one text fragment, the tree will have only one leaf" ! {
 	toTree("name", List(Text("description"))).drawTree.trim must_== 

@@ -2,7 +2,7 @@ package org.specs2
 package execute
 
 class ResultSpec extends SpecificationWithJUnit {
-  def content = 
+  def is = 
                                                                                           """
   Results are the outcome of some execution. There are several kinds of Results, all
 	having a message describing them more precisely:

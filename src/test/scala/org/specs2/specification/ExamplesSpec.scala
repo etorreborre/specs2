@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 class ExamplesSpec extends SpecificationWithJUnit {
-  def content: Fragments =
+  def is: Fragments =
                                                                                           """
   In a Specification, the content variable stores an instance of the Fragments class,
   which is merely a list of fragments. Those fragments are either:

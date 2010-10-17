@@ -3,7 +3,7 @@ package form
 import Forms._
 
 class CellsSpec extends SpecificationWithJUnit {
-  def content = 
+  def is = 
                                                                                           p^
 " Text output for cells"                                                                  ^                                                                     
 "   for FieldCell(name, 3)"         ! { fieldCell.text must_== "name: 3" }                ^   
