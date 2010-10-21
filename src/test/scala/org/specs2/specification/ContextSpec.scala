@@ -2,8 +2,9 @@ package org.specs2
 package specification
 import io._
 import execute._
+import reporter._
 
-class ContextSpec extends SpecificationWithJUnit with StandardResults with ContextData with ExampleExecution {
+class ContextSpec extends SpecificationWithJUnit with StandardResults with FragmentExecution {
   def is =                                                                           """
   It is sometimes necessary to provide functions to "prepare" the specification before
   executing the Fragments and clean it up afterwards. This may be for example:
@@ -27,90 +28,96 @@ class ContextSpec extends SpecificationWithJUnit with StandardResults with Conte
      * BeforeAfter or BeforeAfterAround for combined functionality
                                                                                           """                                                                                 ^
 "  The Before trait can be used to execute methods before Fragments"                      ^
-"    the before method is executed before a first example"                                ! c(e1)^
-"    the before method is executed before the second example"                             ! c(e2)^
-                                                                                          p^
-"  If the before method throws an exception"                                              ^
-"    the first example will not execute"                                                  ! c(e3)^
-"    and it will be reported as an error"                                                 ! c(e4)^
-                                                                                          p^
-"  The After trait can be used to execute methods after Fragments"                        ^
-"    the after method is executed after a first example"                                  ! c(e5)^
-"    the after method is executed after the second example"                               ! c(e6)^
-                                                                                          p^
-"  If the after method throws an exception"                                               ^
-"    the first example will execute"                                                      ! c(e7)^
-"    but it will be reported as an error"                                                 ! c(e8)^
-                                                                                          p^
-"  The Around trait can be used to"                                                       ^
-"    execute the example inside a user provided function"                                 ! c(e9)^
-                                                                                          p^
-"  The BeforeAfter trait can be used to"                                                  ^
-"    execute a method before and after each example"                                      ! c(e10)^
-                                                                                          p^
-"  The BeforeAfterAround trait can be used to"                                            ^
-"    execute a method before, around and after the first example"                         ! c(e11)^
+"    the before method is executed before a first example"                                ! c().e1^
+"    the before method is executed before the second example"                             ! c().e2^
+                                                                                          p^  
+"  If the before method throws an exception"                                              ^   
+"    the first example will not execute"                                                  ! c().e3^
+"    and it will be reported as an error"                                                 ! c().e4^
+                                                                                          p^  
+"  The After trait can be used to execute methods after Fragments"                        ^   
+"    the after method is executed after a first example"                                  ! c().e5^
+"    the after method is executed after the second example"                               ! c().e6^
+                                                                                          p^  
+"  If the after method throws an exception"                                               ^   
+"    the first example will execute"                                                      ! c().e7^
+"    but it will be reported as an error"                                                 ! c().e8^
+                                                                                          p^  
+"  The Around trait can be used to"                                                       ^   
+"    execute the example inside a user provided function"                                 ! c().e9^
+                                                                                          p^  
+"  The BeforeAfter trait can be used to"                                                  ^   
+"    execute a method before and after each example"                                      ! c().e10^
+                                                                                          p^  
+"  The BeforeAfterAround trait can be used to"                                            ^   
+"    execute a method before, around and after the first example"                         ! c().e11^
                                                                                           p^
 "  The Before After Around traits can be composed to create more complex setups"          ^
-"    before compose before2 "                                                             ! c(compose1)^
-"    before then before2 "                                                                ! c(compose2)^
-"    after compose after2 "                                                               ! c(compose3)^
-"    after then after2 "                                                                  ! c(compose4)^
-"    beforeAfter compose before2After2 "                                                  ! c(compose5)^
-"    beforeAfter then before2After2 "                                                     ! c(compose6)^
-"    around compose around2 "                                                             ! c(compose7)^
-"    around then around2 "                                                                ! c(compose8)^
-"    beforeAfterAround compose before2After2Around"                                       ! c(compose9)^
-"    beforeAfterAround then before2After2Around2"                                         ! c(compose10)^
+"    before compose before2 "                                                             ! compose().e1^
+"    before then before2 "                                                                ! compose().e2^
+"    after compose after2 "                                                               ! compose().e3^
+"    after then after2 "                                                                  ! compose().e4^
+"    beforeAfter compose before2After2 "                                                  ! compose().e5^
+"    beforeAfter then before2After2 "                                                     ! compose().e6^
+"    around compose around2 "                                                             ! compose().e7^
+"    around then around2 "                                                                ! compose().e8^
+"    beforeAfterAround compose before2After2Around"                                       ! compose().e9^
+"    beforeAfterAround then before2After2Around2"                                         ! compose().e10^
                                                                                           p^
 "  An Action can be used to create Step fragments containing an action to execute:"       ^
 "    val beforeSpec = new Action"                                                         ^
-"    def is = beforeSpec(c.println('beforeSpec')) ^ ex1"                             ^
+"    def is = beforeSpec(c.println('beforeSpec')) ^ ex1"                                  ^
                                                                                           p^
-"    that action will execute and return a result"                                        ! c(e12)^
-"    if it executes ok, nothing is printed, it is a silent Success"                       ! c(e13)^
-"    otherwise, it is reported as an Error"                                               ! c(e14)^
+"    that action will execute and return a result"                                        ! c().e12^
+"    if it executes ok, nothing is printed, it is a silent Success"                       ! c().e13^
+"    otherwise, it is reported as an Error"                                               ! c().e14^
                                                                                           end
   
-  def e1 = executing(ex1Before).prints("before", "e1")
-  def e2 = executing(ex1_2Before).prints("before", "e1", "before", "e2")
-  def e3 = executing(ex1_beforeFail).prints()
-  def e4 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
-  
-  def e5 = executing(ex1After).prints("e1", "after")
-  def e6 = executing(ex1_2After).prints("e1", "after", "e2", "after")
-  def e7 = executing(ex1_afterFail).prints("e1")
-  def e8 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
-  def e9 = executing(ex1Around).prints("around", "e1")
-  def e10 = executing(ex1BeforeAfter).prints("before", "e1", "after")
-  def e11 = executing(ex1BeforeAfterAround).prints("before", "around", "e1", "after")
-  def e12 = executing(firstThenEx1).prints("first", "e1")
-  def e13 = executeBodies(silentFirstThenEx1).map(_.message) must_== List("success")
-  def e14 = executeBodies(failingFirstThenEx1).map(_.message) must_== List("error", "success")
-
-  def compose1 = executing(ex1BeforeComposeBefore2).prints("before2", "before", "e1")
-  def compose2 = executing(ex1BeforeThenBefore2).prints("before", "before2", "e1")
-  def compose3 = executing(ex1AfterComposeAfter2).prints("e1", "after2", "after")
-  def compose4 = executing(ex1AfterThenAfter2).prints("e1", "after", "after2")
-  def compose5 = executing(ex1BeforeAfterComposeBefore2After2).prints("before2", "before", "e1", "after2", "after")
-  def compose6 = executing(ex1BeforeAfterThenBefore2After2).prints("before", "before2", "e1", "after", "after2")
-  def compose7 = executing(ex1AroundComposeAround2).prints("around2", "around", "e1")
-  def compose8 = executing(ex1AroundThenAround2).prints("around", "around2", "e1")
-  def compose9 = executing(ex1BeforeAfterAroundComposeBefore2After2Around2).
-                 prints("before2", "before", "around2", "around", "e1", "after2", "after")
-  def compose10 = executing(ex1BeforeAfterAroundThenBefore2After2Around2).
-                 prints("before", "before2", "around", "around2", "e1", "after", "after2")
+  case class c() extends FragmentsExecution {
+    def e1 = executing(ex1Before).prints("before", "e1")
+    def e2 = executing(ex1_2Before).prints("before", "e1", "before", "e2")
+    def e3 = executing(ex1_beforeFail).prints()
+    def e4 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
     
-  def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
-  case class Executed(r: List[Result]) {
-	  def prints(messages: String*): Result = {
-	    c.messages must_== List(messages:_*)
-    }  
+    def e5 = executing(ex1After).prints("e1", "after")
+    def e6 = executing(ex1_2After).prints("e1", "after", "e2", "after")
+    def e7 = executing(ex1_afterFail).prints("e1")
+    def e8 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
+    def e9 = executing(ex1Around).prints("around", "e1")
+    def e10 = executing(ex1BeforeAfter).prints("before", "e1", "after")
+    def e11 = executing(ex1BeforeAfterAround).prints("before", "around", "e1", "after")
+    def e12 = executing(firstThenEx1).prints("first", "e1")
+    def e13 = executeBodies(silentFirstThenEx1).map(_.message) must_== List("success")
+    def e14 = executeBodies(failingFirstThenEx1).map(_.message) must_== List("error", "success")
+ 
+  }
+  case class compose() extends FragmentsExecution {
+    def e1 = executing(ex1BeforeComposeBefore2).prints("before2", "before", "e1")
+    def e2 = executing(ex1BeforeThenBefore2).prints("before", "before2", "e1")
+    def e3 = executing(ex1AfterComposeAfter2).prints("e1", "after2", "after")
+    def e4 = executing(ex1AfterThenAfter2).prints("e1", "after", "after2")
+    def e5 = executing(ex1BeforeAfterComposeBefore2After2).prints("before2", "before", "e1", "after2", "after")
+    def e6 = executing(ex1BeforeAfterThenBefore2After2).prints("before", "before2", "e1", "after", "after2")
+    def e7 = executing(ex1AroundComposeAround2).prints("around2", "around", "e1")
+    def e8 = executing(ex1AroundThenAround2).prints("around", "around2", "e1")
+    def e9 = executing(ex1BeforeAfterAroundComposeBefore2After2Around2).
+             prints("before2", "before", "around2", "around", "e1", "after2", "after")
+    def e10 = executing(ex1BeforeAfterAroundThenBefore2After2Around2).
+                   prints("before", "before2", "around", "around2", "e1", "after", "after2")
+  }
+    
+  class FragmentsExecution extends MockOutput with ContextData {
+    def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
+    case class Executed(r: List[Result]) {
+      def prints(ms: String*): Result = {
+        messages must_== List(ms:_*)
+      }  
+    }
   }
 }
 trait ContextData extends StandardResults with FragmentsBuilder with ContextsForFragments {
 
-  def ok(name: String) = { c.println(name); success }
+  def ok(name: String) = { println(name); success }
   def ok1 = ok("e1")
   def ok2 = ok("e2")
   
@@ -139,55 +146,51 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1BeforeAfterAround = "ex1" ! beforeAfterAround(ok1)
   
   val first = new Action
-  def firstThenEx1 = first(c.println("first")) ^ ex1
+  def firstThenEx1 = first(println("first")) ^ ex1
   def silentFirstThenEx1 = first("first") ^ ex1
   def failingFirstThenEx1 = first(Predef.error("error")) ^ ex1
 }
-trait ContextsForFragments {
-  object c extends Before with MockOutput {
-	  def before = clear()
-  }
-
+trait ContextsForFragments extends MockOutput {
   object before extends Before {
-	  def before = c.println("before")
+	  def before = println("before")
   }
   object before2 extends Before {
-    def before = c.println("before2")
+    def before = println("before2")
   }
   object beforeWithError extends Before with MockOutput {
 	  def before = Predef.error("error")
   }
   object after extends After {
-	  def after = c.println("after")
+	  def after = println("after")
   }
   object after2 extends After {
-    def after = c.println("after2")
+    def after = println("after2")
   }
   object afterWithError extends After {
 	  def after = Predef.error("error")
   }
   object around extends Around {
-	  def around[T <% Result](a: =>T) = { c.println("around"); a } 
+	  def around[T <% Result](a: =>T) = { println("around"); a } 
   }
   object around2 extends Around {
-    def around[T <% Result](a: =>T) = { c.println("around2"); a } 
+    def around[T <% Result](a: =>T) = { println("around2"); a } 
   }
   object beforeAfter extends BeforeAfter {
-	  def before = c.println("before")
-	  def after = c.println("after")
+	  def before = println("before")
+	  def after = println("after")
   }
   object before2After2 extends BeforeAfter {
-    def before = c.println("before2")
-    def after = c.println("after2")
+    def before = println("before2")
+    def after = println("after2")
   }
   object beforeAfterAround extends BeforeAfterAround {
-	  def before = c.println("before")
-	  def after = c.println("after")
-	  def around[T <% Result](a: =>T) = { c.println("around"); a } 
+	  def before = println("before")
+	  def after = println("after")
+	  def around[T <% Result](a: =>T) = { println("around"); a } 
   }
   object before2After2Around2 extends BeforeAfterAround {
-    def before = c.println("before2")
-    def after = c.println("after2")
-    def around[T <% Result](a: =>T) = { c.println("around2"); a } 
+    def before = println("before2")
+    def after = println("after2")
+    def around[T <% Result](a: =>T) = { println("around2"); a } 
   }
 }

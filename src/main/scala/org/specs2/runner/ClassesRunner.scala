@@ -20,7 +20,7 @@ class ClassRunner extends Classes with ConsoleOutput with Main with AConsoleRepo
 	  }
   }
   
-  protected[specs2] def run(args: Array[String], specification: BaseSpecification)(f: Exception => Unit): Either[Unit, reporter.T] = {
+  protected[specs2] def run(args: Array[String], specification: BaseSpecification)(f: Exception => Unit) = {
 	  trye(reporter.report(specification))(f)
   }
 

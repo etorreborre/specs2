@@ -7,7 +7,7 @@ import control.Exceptions._
  * Thi trait provides an Executor with a default implementation
  */
 trait AnExecutor {
-  val executor: ExampleExecution = new ExampleExecution {}
+  val executor: FragmentExecution = new FragmentExecution {}
 }
 /**
  * This trait executes Fragments
@@ -15,12 +15,12 @@ trait AnExecutor {
  * It provides a method which executes fragments
  * and returns executed fragments
  */
-trait ExampleExecution {
+trait FragmentExecution {
   import StandardFragments._
   
   def executeBody(body: =>Result): Result = tryOr(body)(Error(_))
 
-  val execute: Function[Fragment, ExecutedFragment] = { 
+  val executeFragment: Function[Fragment, ExecutedFragment] = { 
 	  case e @ Example(s, _) =>     ExecutedResult(s, executeBody(e.execute))
 	  case s @ Step(a) => 
 	    executeBody(a()) match {
@@ -37,7 +37,7 @@ trait ExampleExecution {
 
   private[specs2]
   def executeBodies(exs: Fragments): List[Result] = {
-    exs.fragments.map(execute(_)). collect { case r: ExecutedResult => r.result }
+    exs.fragments.map(executeFragment(_)). collect { case r: ExecutedResult => r.result }
   }
   
 }

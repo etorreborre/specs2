@@ -48,7 +48,7 @@ class TestInterfaceRunnerSpec extends SpecificationWithJUnit with Mockito {
 	  }
 	  runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], Array(""))
 	
-	  def e1 = there was one(reporter).report(any[Specification])
+	  def e1 = there was one(reporter).report(any[specification.BaseSpecification])
   }
 }
 

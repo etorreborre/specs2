@@ -35,12 +35,13 @@ trait LevelsFold extends Fold {
 	  case (a, e @ Example(s, body)) => a.copy(state = Down, lastNode = Ex)
 	  case (t, f) => t
   }
-  
-  sealed trait Direction
-  case object Up extends Direction
-  case object Down extends Direction
-  sealed trait LastNode
-  case object Ex extends LastNode
-  case object Txt extends LastNode
+ 
 }
+sealed trait Direction
+case object Up extends Direction
+case object Down extends Direction
+sealed trait LastNode
+case object Ex extends LastNode
+case object Txt extends LastNode
+
 object LevelsFold extends LevelsFold

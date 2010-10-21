@@ -8,27 +8,23 @@ import execute.{ Success, Failure, Error, Skipped, Pending }
 
 /**
  * 
- * @author Eric
- *
  */
 class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends ConsoleReporter 
   with LoggedOutput with HandlerEvents {  
 	
-  override val executor = new ExampleExecution {
-    override val execute: Function[Fragment, ExecutedFragment] = (f: Fragment) => {
-   	  val executed = new ExampleExecution {}.execute(f)
-      executed match {
-        case ExecutedResult(text: String, result: org.specs2.execute.Result) => result match {
-          case Success(text) => handler.handle(succeeded(text)) 	
-          case r @ Failure(text, e) => handler.handle(failure(text, r.exception))
-          case r @ Error(text, e) => handler.handle(error(text, r.exception))
-          case Skipped(text) => handler.handle(skipped(text))
-          case Pending(text) => handler.handle(skipped(text))
-        }
-        case _ => ()
+  override val executeFragment: Function[Fragment, ExecutedFragment] = (f: Fragment) => {
+ 	  val executed = new FragmentExecution {}.executeFragment(f)
+    executed match {
+      case ExecutedResult(text: String, result: org.specs2.execute.Result) => result match {
+        case Success(text) => handler.handle(succeeded(text)) 	
+        case r @ Failure(text, e) => handler.handle(failure(text, r.exception))
+        case r @ Error(text, e) => handler.handle(error(text, r.exception))
+        case Skipped(text) => handler.handle(skipped(text))
+        case Pending(text) => handler.handle(skipped(text))
       }
-      executed
+      case _ => ()
     }
+    executed
   }
 }
 trait LoggedOutput extends Output with TestLoggers {

@@ -29,9 +29,9 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
    * to be translated to "silent" Descriptions which will be executed but 
    * not outputed as JUnit Description nodes when run 
    */
-  object descriptionTree extends TreeFold[Description] {
+  lazy val descriptionTree = new TreeFold[Description] {
 	  def root = createSuiteDescription(specificationClass.getSimpleName)
-	  def optFold: Function2[descriptionTree.T, Fragment, Option[Description]] = {
+	  def optFold: Function2[T, Fragment, Option[Description]] = {
 	    case (a, Text(t)) => Some(createSuiteDescription(testName(t)))
       case (a, Example(description, body)) =>  Some(createDescription(testName(description), a.rootTree.flatten.size))
       case (a, Step(action)) => Some(createDescription("step", a.rootTree.flatten.size))
@@ -71,9 +71,9 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
   }
   
   private def testName(s: String)= {
-	  (if (s contains "\n") (s.trim.split("\n")(0) + "...") else s.trim).replaceAll("\r", "")
+	  s.trim.replaceAll("\r", "").replaceAll("\n", "")
   }
-  private def sanitize(s: String) = s.replace("(", "[").replace(")", "]")
+  private def sanitize(s: String) = s.trim.replace("(", "[").replace(")", "]")
   private def createDescription(s: String, e: Any) = Description.createSuiteDescription(sanitize(s)+"("+e.toString+")")
   private def createSuiteDescription(s: String) = Description.createSuiteDescription(sanitize(s))
 }

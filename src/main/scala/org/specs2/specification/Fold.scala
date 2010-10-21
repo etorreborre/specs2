@@ -25,7 +25,7 @@ trait Fold {
   
   def fold(fragments: Fragments): T = trye {
     fragments.fragments.foldLeft(initial)(fold)
-  } ((e: Exception) => e.printStackTrace) match {
+  } ((e: Exception) => handleException(e)) match {
     case Right(e) => e
     case Left(e) => initial
   }
@@ -35,3 +35,23 @@ trait Fold {
   }
   def fold(fragments: Fragment*): T = fold(new Fragments(() => fragments.toList))
 }
+trait Folder[F] {
+  type T
+  def initial: T
+  val fold: Function2[T, F, T]
+  
+  def fold(fs: =>List[F]): T = trye {
+    fs.foldLeft(initial)(fold)
+  } ((e: Exception) => handleException(e)) match {
+    case Right(e) => e
+    case Left(e) => initial
+  }
+  def handleException(e: Exception) = {
+    Console.println("There was an exception during the building of fragments: " + e)
+    e.getFullStackTrace.foreach(println(_))
+  }
+}
+
+
+
+

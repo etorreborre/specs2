@@ -21,7 +21,7 @@ import _root_.org.junit.runner._
  * of Description objects and a Map relating each Description to a Fragment to execute. 
  *
  */
-class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution {
+class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
   
   /** specification to execute */
   protected lazy val specification = tryToCreateObject[BaseSpecification](klass.getName, true, true).get
@@ -40,20 +40,20 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExampleExecution {
    *   junit failure or ignored event on the RunNotifier
    */
   def run(notifier: RunNotifier) {
-	executions.toStream.collect { case (desc, ex) => (desc, execute(ex)) }.
-	  foreach { 
-	 	  case (desc, ExecutedResult(_, result)) => { 
-	      notifier.fireTestStarted(desc)
-	      result match {
-          case f @ Failure(m, st) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f.exception)))
-          case e @ Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
-          case Pending(_) | Skipped(_)  => notifier.fireTestIgnored(desc) 
-          case _ => ()
-        }
-	      notifier.fireTestFinished(desc)
+	  executions.toStream.collect { case (desc, ex) => (desc, executeFragment(ex)) }.
+	    foreach {
+	   	  case (desc, ExecutedResult(_, result)) => {
+	        notifier.fireTestStarted(desc)
+	        result match {
+            case f @ Failure(m, st) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f.exception)))
+            case e @ Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
+            case Pending(_) | Skipped(_)  => notifier.fireTestIgnored(desc)
+            case _ => ()
+          }
+	        notifier.fireTestFinished(desc)
+	      }
+	   	  case (desc, _) => {	notifier.fireTestStarted(desc); notifier.fireTestFinished(desc) }
 	    }
-	 	  case _ => ()
-	  }
   }
   /** @return a Throwable expected by JUnit Failure object */
   private def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)

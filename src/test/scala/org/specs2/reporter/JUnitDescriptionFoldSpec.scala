@@ -20,7 +20,7 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
 "  A text and two subordinates examples are folded as a node and 2 children descriptions" ! e3^
 "  2 texts and two subordinates examples each are folded as 2 nodes and with their own "  +
 "  children descriptions"                                                                 ! e4^
-"  2 groups of examples separated by a paragraph are folded as 2 nodes and with their "
+"  2 groups of examples separated by a paragraph are folded as 2 nodes and with their "   +
 "  own children descriptions"                                                             ! e5^
 "  2 grouped examples and a separate one are folded as 2 suites and one test case"        ! e6^
 "  if 2 fragments have the same name, they must have a different description"             ! e7^
