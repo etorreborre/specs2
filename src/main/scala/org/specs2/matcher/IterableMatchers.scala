@@ -13,6 +13,20 @@ trait IterableMatchers {
     		     iterable.description + " doesn't contain " + q(a), iterable)
     }
   }
+  def containInOrder[T](t: T*): IterableMatcher[T] = new IterableMatcher[T] {
+    def apply[S <: Iterable[T]](v: => Expectable[S]) = {
+      val (a, iterable) = (t, v)
+      result(inOrder(iterable.value.toList, t.toList), 
+             iterable.description + " contains in order" + q(a.toList), 
+             iterable.description + " doesn't contain in order" + q(a.toList), iterable)
+    }
+  }
+  private def inOrder[T](l1: List[T], l2: List[T]): Boolean = {
+    l1 match {
+      case Nil => l2 == Nil
+      case other => l2.headOption == l1.headOption && inOrder(l1.drop(1), l2.drop(1)) || inOrder(l1.drop(1), l2)
+    }
+  }
   private def containLike[T](pattern: =>String, matchType: String) = new IterableMatcher[T] {
     def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
       val (a, iterable) = (pattern, v)
