@@ -2,23 +2,26 @@ package org.specs2
 package matcher
 import AnyMatchers._
 import specification._
+import control._
 
 trait IterableMatchers {
   trait IterableMatcher[T] extends Matcher[Iterable[T]]
-  def contain[T](t: =>T): IterableMatcher[T] = new IterableMatcher[T] {
-    def apply[S <: Iterable[T]](v: => Expectable[S]) = {
-      val (a, iterable) = (t, v)
-      result(iterable.value.exists(_ == a), 
-    		     iterable.description + " contains " + q(a), 
-    		     iterable.description + " doesn't contain " + q(a), iterable)
+  
+  def contain[T](t: LazyParameter[T]*): IterableMatcher[T] = new IterableMatcher[T] {
+    def apply[S <: Iterable[T]](it: =>Expectable[S]) = {
+      val (expected, iterable) = (t.toList.map(_.value), it)
+      result(iterable.value.toList.intersect(expected) == expected, 
+    		     iterable.description + " contains " + q(expected.mkString(", ")), 
+    		     iterable.description + " doesn't contain " + q(expected.mkString(", ")), iterable)
     }
   }
-  def containInOrder[T](t: T*): IterableMatcher[T] = new IterableMatcher[T] {
-    def apply[S <: Iterable[T]](v: => Expectable[S]) = {
-      val (a, iterable) = (t, v)
-      result(inOrder(iterable.value.toList, t.toList), 
-             iterable.description + " contains in order" + q(a.toList), 
-             iterable.description + " doesn't contain in order" + q(a.toList), iterable)
+  
+  def containInOrder[T](t: LazyParameter[T]*): IterableMatcher[T] = new IterableMatcher[T] {
+    def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
+      val (expected, iterable) = (t.toList.map(_.value), v)
+      result(inOrder(iterable.value.toList, expected), 
+             iterable.description + " contains in order " + q(expected.mkString(", ")), 
+             iterable.description + " doesn't contain in order " + q(expected.mkString(", ")), iterable)
     }
   }
   private def inOrder[T](l1: List[T], l2: List[T]): Boolean = {

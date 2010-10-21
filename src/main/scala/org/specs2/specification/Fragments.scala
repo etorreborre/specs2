@@ -18,6 +18,6 @@ case class Fragments(private val fragmentList: () => List[Fragment]) {
   def executables: List[Executable] = fragments.collect { case e: Executable => e }
 }
 case object Fragments {
-  def apply(fragments: LazyParameter[Fragment]*) = new Fragments(() => fragments.map(_.getValue).toList)
+  def apply(fragments: LazyParameter[Fragment]*) = new Fragments(() => fragments.map(_.value).toList)
 }
 
