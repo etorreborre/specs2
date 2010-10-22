@@ -15,13 +15,13 @@ import text.Plural._
  * assess properties multiple times with generated data.
  * @see the <a href="http://code.google.com/p/scalacheck/">ScalaCheck project</a>
  */
-trait ScalaCheck extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters with PropertyImplicits { outer =>
+trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters with PropertyImplicits { outer =>
   /** execute a PartialFunction as a ScalaCheck property */
   implicit def checkPartial[T, S](f: PartialFunction[T, Boolean])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
 	  checkProp(f.forAll(a, s))(p)
   }
   /** execute a Function as a ScalaCheck property */
-  implicit def checkFunction[T, S](f: T => Boolean)(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
+  implicit def checkFunction[T](f: T => Boolean)(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
 	  checkProp(f.forAll(a, s))(p)
   }
   /** 

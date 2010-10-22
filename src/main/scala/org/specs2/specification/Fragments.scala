@@ -19,5 +19,7 @@ case class Fragments(private val fragmentList: () => List[Fragment]) {
 }
 case object Fragments {
   def apply(fragments: LazyParameter[Fragment]*) = new Fragments(() => fragments.map(_.value).toList)
+  def isExample: Function[Fragment, Boolean] = { case Example(_, _) => true; case _ => false }
+  def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
 }
 

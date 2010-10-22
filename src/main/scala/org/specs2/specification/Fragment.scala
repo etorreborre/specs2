@@ -9,9 +9,11 @@ case class Group(fragments: List[Fragment])
 case class Text(t: String) extends Fragment
 case class Example(desc: String = "", body: () => Result) extends Fragment with Executable { 
   def execute = body()
+  override def toString = "Example("+desc+")"
 }
 case class Step(action: () => Result) extends Fragment with Executable {
   def execute = action()
+  override def toString = "Step"
 }
 object StandardFragments {
   case class End() extends Fragment

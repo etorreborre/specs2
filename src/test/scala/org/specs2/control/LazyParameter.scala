@@ -28,5 +28,9 @@ class LazyParameter[T](private val v: () => T) {
    *         implicit to leak to client specifications using the 'value' method 
    */
   private[specs2] def value = evaluated
+  
+  override def toString = value.toString
+  override def equals(o: Any) = value == o
+  override def hashCode = value.hashCode
 }
 
