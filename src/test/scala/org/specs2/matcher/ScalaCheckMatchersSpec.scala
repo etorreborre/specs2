@@ -9,34 +9,33 @@ import org.scalacheck.Prop._
 import io._
 import specification._
 
-class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with ScalaCheckProperties with MockOutput {
+class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with ScalaCheckProperties {
   def is = 
-"  A ScalaCheck property can be used in the body of an Example"                    ^	  
-"    if it is proved the execution will yield a Success"                           ! prop1^
-"    if it is a function which is always true, it will yield a Success"            ! prop2^
-"    if it is a function which is always false, it will yield a Failure"           ! prop3^
-"    if it is a property throwing an exception, it will yield an Error"            ! prop4^
-                                                                                   p^
-"  A specs2 matcher can be returned by a function to be checked with ScalaCheck"   ^	  
-"    if it is a MatchSuccess the execution will yield a Success"                   ! matcher1^
-"    if the type of the input parameter is not the same as the MatchResult type"   ^
-"      it should still work"                                                       ! matcher2^
-"      another way is to transform it as a property with .forAll"                  ! matcher3^
-                                                                                   p^
-"  A partial function can also be used in the body of the Example"                 ! partial1^
-                                                                                   p^
-"  A ScalaCheck property will create a result"                                     ^	  
-"    with a number of expectations that is equal to the minTestsOk"                ! result1^
-                                                                                   p^
-"  It is possible to change the default parameters used for the test"              ^	  
-"    by setting up new implicit parameters locally"                                ! config1^
-                                                                                   p^
-"  It is possible to display"                                                      ^	  
-"    the executed tests by setting up display parameters locally"                  ! c(config2)^
-"    the labels that are set on properties"                                        ! c(config3)^
-                                                                                   end
+"  A ScalaCheck property can be used in the body of an Example"                           ^	  
+"    if it is proved the execution will yield a Success"                                  ! prop1^
+"    if it is a function which is always true, it will yield a Success"                   ! prop2^
+"    if it is a function which is always false, it will yield a Failure"                  ! prop3^
+"    if it is a property throwing an exception, it will yield an Error"                   ! prop4^
+                                                                                          p^
+"  A specs2 matcher can be returned by a function to be checked with ScalaCheck"          ^	  
+"    if it is a MatchSuccess the execution will yield a Success"                          ! matcher1^
+"    if the type of the input parameter is not the same as the MatchResult type"          ^
+"      it should still work"                                                              ! matcher2^
+"      another way is to transform it as a property with .forAll"                         ! matcher3^
+                                                                                          p^
+"  A partial function can also be used in the body of the Example"                        ! partial1^
+                                                                                          p^
+"  A ScalaCheck property will create a result"                                            ^	  
+"    with a number of expectations that is equal to the minTestsOk"                       ! result1^
+                                                                                          p^
+"  It is possible to change the default parameters used for the test"                     ^	  
+"    by setting up new implicit parameters locally"                                       ! config().e1^
+                                                                                          p^
+"  It is possible to display"                                                             ^	  
+"    the executed tests by setting up display parameters locally"                         ! config().e2^
+"    the labels that are set on properties"                                               ! config().e3^
+                                                                                          end
 
-  case object c extends Before { def before = clear() }
   
   val success100tries = Success("The property passed without any counter-example after 100 tries")
 
@@ -52,15 +51,18 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
   def matcher3 = ("example" ! stringToBooleanMatcher.forAll).execute must_== success100tries
   def result1 = ("example" ! trueFunction.forAll).execute.expectationsNb must_== 100
 
-  implicit def params = display(minTestsOk -> 20)
-  def config1 = ("example" ! trueFunction.forAll).execute.expectationsNb must_== 20
-  def config2 = {
-	  ("example" ! trueFunction.forAll).execute
-	  messages.mkString must contain("passed 20 tests")
-  }
-  def config3 = {
-	  ("example" ! (falseFunction.forAll :| "my property")).execute
-	  messages.mkString must contain("my property")
+  case class config() extends Before with ScalaCheck with MockOutput {
+    def before = clear()
+    implicit def params = display(minTestsOk -> 20)
+    def e1 = ("example" ! trueFunction.forAll).execute.expectationsNb must_== 20
+    def e2 = {
+  	  ("example" ! trueFunction.forAll).execute
+  	  messages.mkString must contain("passed 20 tests")
+    }
+    def e3 = {
+  	  ("example" ! (falseFunction.forAll :| "my property")).execute
+  	  messages.mkString must contain("my property")
+    }
   }
 }
 

@@ -5,7 +5,7 @@ import io._
 import _root_.org.scalatools.testing._
 import reporter._
 
-class TestInterfaceRunnerSpec extends SpecificationWithJUnit with Mockito {
+class TestInterfaceRunnerSpec extends SpecificationWithJUnit {
   def is = 
                                                                                           """
   A TestInterfaceRunner is responsible for instantiating Specification classes found by sbt
@@ -21,45 +21,49 @@ class TestInterfaceRunnerSpec extends SpecificationWithJUnit with Mockito {
 "   the cause stacktrace must also be logged if there is one"                             ! instance().e2^
 "   the cause stacktrace must be nicely separated from the top exception"                 ! instance().e3^
                                                                                           end^
-" if the specification instance can be created it must be passed to TestInterfaceReporter"! reporter().e1^
+" if the specification instance can be created it must be passed to TestInterfaceReporter"! reporting().e1^
                                                                                           end
 
-  case class missing() extends MockLogger {
-	  val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
-	  runner.run("missing", mock[TestFingerprint], mock[EventHandler], Array(""))
-	  
-	  def e1 = logger.messages must contain("error: Could not create an instance of missing\n")
-	  def e2 = logger.messages must contain("error:   caused by java.lang.ClassNotFoundException: missing")
+  case class missing()  {
+    object run extends MockLogger {
+	    val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
+	    runner.run("missing", mock[TestFingerprint], mock[EventHandler], Array(""))
+    }
+	  def e1 = run.logger.messages must contain("error: Could not create an instance of missing\n")
+	  def e2 = run.logger.messages must contain("error:   caused by java.lang.ClassNotFoundException: missing")
   }
 
-  case class instance() extends MockLogger {
-	  val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
-	  runner.run("org.specs2.runner.SpecificationForSbtWithException", mock[TestFingerprint], mock[EventHandler], Array(""))
-	  
-	  def e1 = logger.messages must contain("error: Could not create an instance of org.specs2.runner.SpecificationForSbtWithException\n")
-	  def e2 = logger.messages must contain("error:   caused by java.lang.reflect.InvocationTargetException")
-	  def e3 = logger.messages must contain("error:   caused by java.lang.Exception: fail")
+  case class instance() {
+    object run extends MockLogger {
+      val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
+	    runner.run("org.specs2.runner.SpecificationForSbtWithException", mock[TestFingerprint], mock[EventHandler], Array(""))
+    }	  
+	  def e1 = run.logger.messages must contain("error: Could not create an instance of org.specs2.runner.SpecificationForSbtWithException\n")
+	  def e2 = run.logger.messages must contain("error:   caused by java.lang.reflect.InvocationTargetException")
+	  def e3 = run.logger.messages must contain("error:   caused by java.lang.Exception: fail")
   }
 
-  case class reporter() extends MockLogger { outer =>
-	  val reporter = mock[TestInterfaceReporter]
-	  val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger)) {
-	    override def reporter(handler: EventHandler) = outer.reporter
-	  }
-	  runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], Array(""))
-	
-	  def e1 = there was one(reporter).report(any[specification.BaseSpecification])
+  case class reporting() extends Mockito with matcher.MustExpectations {
+    object run extends MockLogger {
+      val outer = this
+	    val reporter = mock[TestInterfaceReporter]
+	    val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger)) {
+	      override def reporter(handler: EventHandler) = outer.reporter
+	    }
+	    runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], Array(""))
+    }
+	  def e1 = there was one(run.reporter).report(any[specification.BaseSpecification])
   }
 }
 
-trait MockLogger {
+trait MockLogger extends matcher.MustExpectations with Mockito {
   val logger = new Logger with MockOutput {
-	override def ansiCodesSupported = false
-	override def error(message: String) = println("error: " + message)
-	override def info(message: String) = println("info: " + message)
-	override def warn(message: String) = println("warn: " + message)
-	override def debug(message: String) = println("debug: " + message)
-	override def trace(t: Throwable) = println("trace: " + t)
+	  override def ansiCodesSupported = false
+	  override def error(message: String) = println("error: " + message)
+	  override def info(message: String) = println("info: " + message)
+	  override def warn(message: String) = println("warn: " + message)
+	  override def debug(message: String) = println("debug: " + message)
+	  override def trace(t: Throwable) = println("trace: " + t)
   }
 
 }
