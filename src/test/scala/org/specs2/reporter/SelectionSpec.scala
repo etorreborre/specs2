@@ -14,6 +14,9 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
     * steps must be executed before examples as specified
     * tagged examples with dependencies must respect their specified ordering
                                                                                           """^
+  "It is possible to filter the examples to execute by giving args"                       ^
+  "  specifying a regular expression: ex = ex1.*"                                         ! filter().e1^
+                                                                                          p^
   "If a specification contains steps they must be grouped before the examples"            ^
   "  2 consecutive steps must be in the same list"                                        ! steps().e1^
   "  2 consecutive examples must be in the same list"                                     ! steps().e2^
@@ -22,6 +25,10 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
   "  so that steps and examples are always separate"                                      ! steps().e5^
                                                                                           end
   
+  case class filter()  {
+    def e1 = select(args(ex = "ex1.*") ^ ex1 ^ ex2).toString must_== "List(List(Example(ex1)))"
+  }
+
   case class steps()  {
     def e1 = Prop.forAll { (fs: Fragments) =>
       val selected = select(fs ^ action("1"))
@@ -51,13 +58,13 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
       "List(Step, Step)",
       "List(Example(ex1), Example(ex2))").mkString("\n")  
     }
-    val ex1 = "ex1" ! success
-    val ex2 = "ex2" ! success
-    val selection = new Selection with MockOutput
     def action(message: String) = Action(selection.println(message)) 
-    def select(f: Fragments) = {
-      selection.select(new Specification { def is = f }.content).map(l => l.map(_.toString))
-    }
+  }
+  val ex1 = "ex1" ! success
+  val ex2 = "ex2" ! success
+  val selection = new Selection with MockOutput
+  def select(f: Fragments) = {
+    selection.select(new Specification { def is = f }.content).map(l => l.map(_.toString))
   }
 
 }

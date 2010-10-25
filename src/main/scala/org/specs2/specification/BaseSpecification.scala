@@ -3,7 +3,7 @@ package specification
 import matcher._
 import control._
 
-trait BaseSpecification extends SpecificationStructure with FragmentsBuilder with Matchers with LazyParameters {
+trait BaseSpecification extends SpecificationStructure with FragmentsBuilder with Matchers {
   def include(s: BaseSpecification) = group(s.content.fragments)
 }
 trait SpecificationStructure {

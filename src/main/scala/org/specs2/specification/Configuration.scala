@@ -11,7 +11,7 @@ case class Configuration (
   def pending = !failOnly
 }
 object Configuration {
-  def apply(args: Args) = new Configuration(
+  def apply(args: LineArgs) = new Configuration(
     printStackTrace = args.contains("stacktrace"),
     failOnly = args.contains("xonly"),
     pendingOnly = args.contains("pending"))

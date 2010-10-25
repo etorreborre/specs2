@@ -4,7 +4,7 @@ import AnyMatchers._
 import specification._
 import control._
 
-trait IterableMatchers {
+trait IterableMatchers extends LazyParameters {
   trait IterableMatcher[T] extends Matcher[Iterable[T]]
   
   def contain[T](t: LazyParameter[T]*): IterableMatcher[T] = new IterableMatcher[T] {

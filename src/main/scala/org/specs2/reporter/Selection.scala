@@ -9,11 +9,11 @@ import Fragments._
  */
 trait Selection {
   val select = (fragments: Fragments) => {
-    extractSteps(fragments.fragments)
+    sort(fragments)
   }
   
-  private def extractSteps(fragments: List[Fragment]): List[List[Fragment]] = {
-    fragments.foldLeft(Nil: List[List[Fragment]]) { (res, cur) =>
+  private def sort(fragments: Fragments): List[List[Fragment]] = {
+    fragments.fragments.view.filter(filter(fragments.arguments)).foldLeft(Nil: List[List[Fragment]]) { (res, cur) =>
       res match {
         case Nil => List(List(cur))
         case last :: rest => cur match {
@@ -23,5 +23,12 @@ trait Selection {
         }
       }
     }.reverse
+  }
+  
+  private def filter(arguments: Args) = (f: Fragment) => {
+    f match {
+      case e: Example => e.matches(arguments.ex)
+      case _ => true
+    }
   }
 }

@@ -23,7 +23,9 @@ trait FragmentsBuilder {
   }
   implicit def group(Fragments: Fragments) = Group(Fragments.fragments)
   implicit def group(fragments: List[Fragment]) = Group(fragments)
+  def args(ex: String = "") = Args(".*"+ex+".*")
 }
+
 trait FragmentsShow {
   implicit object showFragments extends scalaz.Show[Fragment] {
 	  def show(f: Fragment) = (f match {

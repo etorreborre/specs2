@@ -8,7 +8,7 @@ import control.LazyParameter
  * An Fragments object is a list of fragments which can be related 
  * to other fragments by using the ^ method
  */
-case class Fragments(private val fragmentList: () => List[Fragment]) {
+case class Fragments(private val fragmentList: () => List[Fragment], arguments: Args = Args()) {
   def fragments = fragmentList()
   import StandardFragments._
   override def toString = fragments.mkString("\n")
@@ -16,6 +16,7 @@ case class Fragments(private val fragmentList: () => List[Fragment]) {
   def ^(e: Group) = copy(fragmentList = () => this.fragments ++ e.fragments) 
   def Fragments: List[Example] = fragments.collect { case ex: Example => ex }
   def executables: List[Executable] = fragments.collect { case e: Executable => e }
+  def ^(a: Args) = copy(fragmentList = () => this.fragments, arguments = a)
 }
 case object Fragments {
   def apply(fragments: LazyParameter[Fragment]*) = new Fragments(() => fragments.map(_.value).toList)

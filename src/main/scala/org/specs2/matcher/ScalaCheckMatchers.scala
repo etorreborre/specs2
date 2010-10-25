@@ -115,6 +115,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
     else labels.mkString("\nlabels of failing property: ", ", ", "\n")
   }
 }
+object ScalaCheckMatchers extends ScalaCheckMatchers
 /**
  * This trait adds some syntactic sugar to transform function
  * to properties by appending forAll

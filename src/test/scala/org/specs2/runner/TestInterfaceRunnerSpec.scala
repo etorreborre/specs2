@@ -24,7 +24,7 @@ class TestInterfaceRunnerSpec extends SpecificationWithJUnit {
 " if the specification instance can be created it must be passed to TestInterfaceReporter"! reporting().e1^
                                                                                           end
 
-  case class missing()  {
+  case class missing() {
     object run extends MockLogger {
 	    val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
 	    runner.run("missing", mock[TestFingerprint], mock[EventHandler], Array(""))

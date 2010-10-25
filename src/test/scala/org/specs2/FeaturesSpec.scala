@@ -23,9 +23,9 @@ class FeaturesSpec extends Specification with StandardResults {
 "      with statistics"                                                                   ! done^
 "      with stacktraces"                                                                  ! done^
 "      with output configuration"                                                         ^
-"        stacktraces on demand"                                                           ! done^
-"        fail only"                                                                       ! done^
-"        pending only"                                                                    ! done^
+"        stacktraces on demand"                                                           ! todo^
+"        fail only"                                                                       ! todo^
+"        pending only"                                                                    ! todo^
 "        Fragments filter"                                                                ! todo^
 "    A specs file runner"                                                                 ^
 "      reporter all classes on the path"                                                  ! done^
@@ -45,7 +45,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      for Options/Patterns"                                                              ! todo^
 "      for Files"                                                                         ! todo^
 "      for Numerics"                                                                      ! todo^
-"      for xml"                                                              ! todo^
+"      for xml"                                                                           ! todo^
 "    Spec for before/after/around"                                                        ^
 "      before/after"                                                                      ! done^
 "      example isolation"                                                                 ! done^
@@ -69,7 +69,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "    A Console reporter"                                                                  ^
 "      with a timer"                                                                      ! todo^
 "      with colored output"                                                               ! todo^
-"      with intermediary stats where required"                                            ! todo^
+"      with intermediary stats when required"                                             ! todo^
 "    StackTraces"                                                                         ^
 "      for Fragments, to help with IDE navigation"                                        ! todo^
 "      for all results, even success"                                                     ! todo^
@@ -77,6 +77,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      sanitized"                                                                         ! done^
 "    Tags"                                                                                ^
 "      for examples, groups, specs"                                                       ! todo^
+"      with dependencies between tags"                                                    ! todo^
 "    Forms"                                                                               ^
 "      with a text display"                                                               ! todo^
 "    JMock"                                                                               ^
@@ -88,7 +89,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "    Timer"                                                                               ^
 "      see timer and WaitFor"                                                             ! todo^
 "    A ScalaInterpreter"                                                                  ^
-"      with appropriate matchers"                                                         ! done^
+"      with appropriate matchers"                                                         ! todo^
 "    ScalaCheck"                                                                          ^
 "      with all previous features"                                                        ! done^
 "      with the reporting of expectations"                                                ! done^
