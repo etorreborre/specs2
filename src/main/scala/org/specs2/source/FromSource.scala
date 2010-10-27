@@ -7,6 +7,7 @@ import control.Exceptionx._
 import control.LazyParameter
 import text.Trim._
 
+private[specs2]
 trait FromSource {
   val srcDir = "src/test/scala/"
   implicit def matchExample(expression: =>matcher.MatchResult[_]): Example = {
@@ -14,6 +15,9 @@ trait FromSource {
   }
   implicit def booleanExample(expression: =>Boolean): Example = {
     new Example(exampleDescription, () => toResult(expression))
+  }
+  implicit def resultExample(expression: =>execute.Result): Example = {
+    new Example(exampleDescription, () => expression)
   }
   def exampleDescription: String = {
     val stackTrace = new Exception().getStackTrace()

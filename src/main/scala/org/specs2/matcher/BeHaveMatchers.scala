@@ -7,4 +7,10 @@ trait BeHaveMatchers {
 	  }
   }
   def have[T] = be[T]
+  def not[T] = new NotMatcher[T] 
+}
+class NotMatcher[T] extends Matcher[T] {
+  def apply[S <: T](s: =>Expectable[S]): MatchResult[S] = {
+    NegatedMatch(s)
+  }
 }

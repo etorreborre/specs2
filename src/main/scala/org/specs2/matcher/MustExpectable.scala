@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class MustExpectable[T](t: =>T) extends Expectable[T](t) {
+class MustExpectable[T](t: =>T) extends Expectable[T](t) { outer =>
   def aka = new MustExpectable(t) {
     override protected val desc = Some(t.toString)
   } 

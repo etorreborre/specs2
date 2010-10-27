@@ -140,9 +140,8 @@ trait PropertyImplicits {
   private def asProperty[T](f: T => MatchResult[_])(implicit a: Arbitrary[T], s: Shrink[T]): Prop = {
 	  Prop.forAll { (t: T) =>
 	    f(t) match {
-	   	  case MatchSuccess(_, _ , _) => true  
 	   	  case MatchFailure(_, _ , _) => false  
-	   	  case MatchSkip(_, _) => true  
+	   	  case _ => true  
 	    } 	
 	  }
   }

@@ -4,7 +4,7 @@ import AnyMatchers._
 import specification._
 import control._
 
-trait IterableMatchers extends LazyParameters {
+trait IterableMatchers extends LazyParameters with IterableBeHaveMatchers {
   trait IterableMatcher[T] extends Matcher[Iterable[T]]
   
   def contain[T](t: LazyParameter[T]*): IterableMatcher[T] = new IterableMatcher[T] {
@@ -40,5 +40,24 @@ trait IterableMatchers extends LazyParameters {
   }
   def containPattern[T](t: =>String) = containLike(t, "pattern")
   def containMatch[T](t: =>String): IterableMatcher[T] = containLike(".*"+t+".*", "match")
+
+  def empty[T] = beEmpty[T]
+  def beEmpty[T] = new IterableMatcher[T] {
+    def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
+      val iterable = v
+      result(iterable.value.isEmpty, 
+             iterable.description + " is empty", 
+             iterable.description + " is not empty", iterable)
+    }
+  }
+  
 }
 object IterableMatchers extends IterableMatchers
+
+trait IterableBeHaveMatchers { outer: IterableMatchers =>
+  implicit def iterable[T](s: MatchResult[Iterable[T]]) = new IterableBeHaveMatchers(s)
+  class IterableBeHaveMatchers[T](s: MatchResult[Iterable[T]]) {
+    def contain(t: T) = s.and(outer.contain(t))
+    def empty = s.and(outer.beEmpty[T])
+  }
+}

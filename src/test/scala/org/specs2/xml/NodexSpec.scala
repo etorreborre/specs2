@@ -4,7 +4,7 @@ import Nodex._
 import scala.xml._
 import scala.xml.NodeSeq._
 
-class NodexSpec extends SpecificationWithJUnit with source.FromSource { def is =
+class NodexSpec extends SpecificationWithJUnit { def is =
   "An isSpaceNode function should verify"                                                 ^
     { ! <a/>.isSpaceNode }                                                                ^
     { <a> </a>.child.last.isSpaceNode }                                                   ^
@@ -12,7 +12,7 @@ class NodexSpec extends SpecificationWithJUnit with source.FromSource { def is =
       <a>
       </a>.child.last.isSpaceNode
     }                                                                                     ^
-    { Group(<a/><b/>).isSpaceNode must throwAn[UnsupportedOperationException].not  }      ^
+    { Group(<a/><b/>).isSpaceNode must throwAn[UnsupportedOperationException].not }      ^
                                                                                           p^
   "An isEqualIgnoringSpace function should verify"                                        ^
     { <a/> ==/ <a/> }                                                                     ^

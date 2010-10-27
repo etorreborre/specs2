@@ -5,4 +5,4 @@ import matcher._
 import control._
 
 trait Specification extends BaseSpecification with MustExpectations
-  with PredefinedFragments with StandardResults with Debug
+  with PredefinedFragments with StandardResults with Debug with AutoExamples
