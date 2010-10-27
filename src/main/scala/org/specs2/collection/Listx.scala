@@ -1,13 +1,25 @@
 package org.specs2
 package collection
 
+/**
+ * This trait provides additional methods on Lists and nested Lists
+ */
+private[specs2]
 trait Listx { outer =>
+  /** @return an extension for a nested list */
   implicit def extendNestedList[T](list: List[List[T]]): ExtendedNestedList[T] = new ExtendedNestedList(list)
+  /**
+   * Additional methods for nested lists
+   */
   class ExtendedNestedList[T](list: List[List[T]]) {
     def transpose = outer.transpose(list)
   }
   
+  /** @return an extension for a list */
   implicit def extendList[T](list: List[T]): ExtendedList[T] = new ExtendedList(list)
+  /**
+   * Additional methods for lists
+   */
   class ExtendedList[T](list: List[T]) {
     /**
      * remove the first element satisfying the predicate
@@ -40,4 +52,5 @@ trait Listx { outer =>
     else filtered.map(_.head) :: transpose(filtered.map(_.tail))
   }
 }
+private[specs2]
 object Listx extends Listx

@@ -55,6 +55,7 @@ trait Exceptionx {
   def exception(st: List[StackTraceElement]): Exception = exception("", st)
   /** location information from a stackTrace element */
   class Location(t: StackTraceElement) {
+    def path = className.replace(".", "/")+".scala"
     val fileName = t.getFileName
     val className = t.getClassName.split('$')(0)
     val lineNumber = t.getLineNumber

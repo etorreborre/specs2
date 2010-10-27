@@ -3,6 +3,6 @@ package control
 
 private[specs2] trait Debug {
   implicit def printAndPass[T](t: =>T) = new { 
-    def pp = Console.println(t); t 
+    def pp: T = { Console.println(t); t } 
   } 
 }

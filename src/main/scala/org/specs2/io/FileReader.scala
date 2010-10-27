@@ -7,7 +7,7 @@ import java.io._
  * It can be overriden if necessary to mock that behaviour
  */
 trait FileReader {
-
+  def readLines(path: String) = scala.io.Source.fromFile(path).getLines.toIndexedSeq
   /**
    * reads the content of a file
    * @param path the path of the file to read
@@ -32,3 +32,4 @@ trait FileReader {
    */
   def inputStream(filePath: String): java.io.InputStream = new java.io.FileInputStream(filePath)
 }
+object FileReader extends FileReader

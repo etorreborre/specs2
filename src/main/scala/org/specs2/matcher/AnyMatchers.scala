@@ -3,14 +3,10 @@ package matcher
 import execute._
 import reflect.Classes._
 import specification._
+
 trait AnyMatchers {
-  
   /** Matches if the expectable is true */
-  def beTrue = new Matcher[Boolean] {
-    def apply[S <: Boolean](v: =>Expectable[S]) = {
-      result(v.value, v.description + " is true", v.description + " is false", v) 
-    }
-  }
+  def beTrue = new BeTrueMatcher
   /** Matches if the expectable is false */
   def beFalse = beTrue.not
 
@@ -26,6 +22,11 @@ trait AnyMatchers {
   /** @return an object.toString() without quotes (used in messages creation) */
   private[specs2] def unq(a: Any)  = if (null == a) "null" else a.toString
 
+}
+class BeTrueMatcher extends Matcher[Boolean] {
+  def apply[S <: Boolean](v: =>Expectable[S]) = {
+    result(v.value, v.description + " is true", v.description + " is false", v) 
+  }
 }
 class BeEqualTo[T](t: =>T) extends Matcher[T] {
   import AnyMatchers._
@@ -45,5 +46,15 @@ class BeEqualTo[T](t: =>T) extends Matcher[T] {
     result(a == b.value, db + " is equal to " + qa, db + " is not equal to " + qa, b)
   }
 }
-
 object AnyMatchers extends AnyMatchers
+trait MatchersImplicits {
+  
+  /** 
+   * implicit definition to accept any boolean value as a Result
+   * This avoids writing b must beTrue 
+   */ 
+  implicit def toResult(b: Boolean): Result = {
+    new BeTrueMatcher().apply(new Expectable(b)).toResult
+  }
+}
+object MatchersImplicits extends MatchersImplicits

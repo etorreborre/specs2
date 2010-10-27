@@ -34,6 +34,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "    A JUnit4 reporter"                                                                   ^
 "      with nested suites"                                                                ! done^
 "      with proper display when the tests have the same name"                             ! done^
+"      with ComparisonFailure"                                                            ! done^
 "    Matchers"                                                                            ^
 "      with logical combinators"                                                          ! done^
 "      with adapters"                                                                     ! done^
@@ -95,6 +96,8 @@ class FeaturesSpec extends Specification with StandardResults {
 "      with the reporting of expectations"                                                ! done^
 "    Configuration"                                                                       ^
 "      specify its behavior"                                                              ! todo^
+"    A Step execution model?"                                                             ! todo^
+"    A Database facility?"                                                                ! todo^
 "    Command line arguments"                                                              ^
 "      implement an easy to maintain system coherent with the config"                     ! todo ^
                                                                                           end

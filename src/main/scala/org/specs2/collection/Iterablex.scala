@@ -2,59 +2,43 @@ package org.specs2
 package collection
 import Listx._
 
+private[specs2]
 trait Iterablex {
   /**
    * implicit definition to transform an iterable to an ExtendedIterable
    */
-  implicit def extend[A](xs : Iterable[A]) = new ExtendedIterable(xs)
+  implicit def extendIterable[T](xs : Iterable[T]): ExtendedIterable[T] = new ExtendedIterable(xs)
 
   /**
    * See the description of the ExtendedIterable object
    */
-  class ExtendedIterable[A](xs:Iterable[A]) {
+  class ExtendedIterable[T](xs:Iterable[T]) {
 
     /**
-     * @return true if the 2 iterables contain the same elements, in the same order, according to a function f
+     * @return true if the 2 iterables contain the same elements, in the same order, 
+     *         according to a function f
      */
-    def isSimilar[B >: A](that: Iterable[B], f: Function2[A, B, Boolean]): Boolean = {
-      val ita = xs.iterator
-      val itb = that.iterator
+    def isSimilar[S >: T](that: Iterable[S], f: Function2[T, S, Boolean]): Boolean = {
+      val it1 = xs.iterator
+      val it2 = that.iterator
       var res = true
-      while (res && ita.hasNext && itb.hasNext) {
-        res = f(ita.next, itb.next)
+      while (res && it1.hasNext && it2.hasNext) {
+        res = f(it1.next, it2.next)
       }
-      !ita.hasNext && !itb.hasNext && res
-    }
-    /**
-     * @return true if the second iterable elements are contained in the first, in order
-     */
-    def containsInOrder[A](l: A*): Boolean = {
-      val firstList = xs.toList
-      val secondList = l.toList
-      (firstList, secondList) match {
-         case (_, Nil) => true
-         case (Nil, _) => false
-         case (a :: Nil, b :: Nil) => a == b
-         case (a :: firstRest, b :: secondRest) => {
-           if (a != b)
-             firstRest.containsInOrder(secondList)
-           else
-             firstRest.containsInOrder(secondRest)
-         }
-      }
+      !it1.hasNext && !it2.hasNext && res
     }
     /**
      * @return true if the 2 iterables contain the same elements recursively, in any order
      */
-    def sameElementsAs(that: Iterable[A]): Boolean = sameElementsAs(that, (x, y) => x == y)
+    def sameElementsAs(that: Iterable[T]): Boolean = sameElementsAs(that, (x, y) => x == y)
     /**
      * @return true if the 2 iterables contain the same elements (according to a comparison function f) recursively, in any order
      */
-    def sameElementsAs(that: Iterable[A], f: (A, A) => Boolean): Boolean = {
+    def sameElementsAs(that: Iterable[T], f: (T, T) => Boolean): Boolean = {
       def isNotItsOwnIterable(a: Iterable[_]) = a.isEmpty || a.iterator.next != a
-      def matchTwo(x: A, y: A): Boolean = {
+      def matchTwo(x: T, y: T): Boolean = {
         (x, y) match {
-          case (a: Iterable[_], b:Iterable[_]) if (isNotItsOwnIterable(a)) => x.asInstanceOf[Iterable[A]].sameElementsAs(y.asInstanceOf[Iterable[A]], f)
+          case (a: Iterable[_], b:Iterable[_]) if (isNotItsOwnIterable(a)) => x.asInstanceOf[Iterable[T]].sameElementsAs(y.asInstanceOf[Iterable[T]], f)
           case _ => f(x, y)
         }
       }
@@ -76,6 +60,26 @@ trait Iterablex {
         case _ => ita == itb
       }
     }
+    /**
+     * @return true if the second iterable elements are contained in the first, in order
+     */
+    def containsInOrder(l: T*): Boolean = {
+      val firstList = xs.toList
+      val secondList = l.toList
+      (firstList, secondList) match {
+         case (_, Nil) => true
+         case (Nil, _) => false
+         case (a :: Nil, b :: Nil) => a == b
+         case (a :: firstRest, b :: secondRest) => {
+           if (a != b)
+             firstRest.containsInOrder(secondList:_*)
+           else
+             firstRest.containsInOrder(secondRest:_*)
+         }
+      }
+    }
+
   }
 }
+private[specs2]
 object Iterablex extends Iterablex
