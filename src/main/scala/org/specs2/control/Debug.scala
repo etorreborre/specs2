@@ -6,3 +6,4 @@ private[specs2] trait Debug {
     def pp: T = { Console.println(t); t } 
   } 
 }
+object Debug extends Debug

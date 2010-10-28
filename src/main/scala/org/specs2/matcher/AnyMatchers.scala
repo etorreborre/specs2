@@ -4,15 +4,26 @@ import execute._
 import reflect.Classes._
 import specification._
 
-trait AnyMatchers {
+trait AnyMatchers extends BeHaveAnyMatchers {
   /** Matches if the expectable is true */
   def beTrue = new BeTrueMatcher
   /** Matches if the expectable is false */
   def beFalse = beTrue.not
 
+  def be[T <: AnyRef](t: =>T) = new Matcher[T] {
+    def apply[S <: T](v: =>Expectable[S]) = {
+      val (a, b) = (v, t)
+      result(a.value eq b, a.description + " is " + q(b), a.description + " is not " + q(b), a) 
+    }
+  }
+
   def be_==[T](t: =>T) = beEqualTo(t)
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
+  def equalTo[T](t: =>T) = beEqualTo(t)
 
+  /** negate a matcher */
+  def not[T](m: Matcher[T]) = m.not
+  
   private[specs2] def q(a: Any) = "'"+a+"'" 
   def isBoolean(a: Any) = a match {
   	case b: Boolean => true
@@ -47,14 +58,10 @@ class BeEqualTo[T](t: =>T) extends Matcher[T] {
   }
 }
 object AnyMatchers extends AnyMatchers
-trait MatchersImplicits {
-  
-  /** 
-   * implicit definition to accept any boolean value as a Result
-   * This avoids writing b must beTrue 
-   */ 
-  implicit def toResult(b: Boolean): Result = {
-    new BeTrueMatcher().apply(new Expectable(b)).toResult
+
+trait BeHaveAnyMatchers { outer: AnyMatchers =>
+  implicit def anyMatcher[T](s: MatchResult[T]) = new AnyBeHaveMatchers(s)
+  class AnyBeHaveMatchers[T](s: MatchResult[T]) {
+    def equalTo(t: T) = outer.be_==(t)(s.expectable)
   }
 }
-object MatchersImplicits extends MatchersImplicits
