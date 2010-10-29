@@ -47,7 +47,7 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
     }
 	  def e3 = { 
 	    run(ex1Failure)
-	    Seq(there was one(notifier).fireTestStarted(desc("ex1")),
+	    Seq(there was one(notifier).fireTestStarted(desc("ex1(1)")),
 	        there was one(notifier).fireTestFailure(any[Failure]))
     }
 	  def e4 = { 

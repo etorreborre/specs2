@@ -9,6 +9,6 @@ class AnyMatchersSpec extends SpecificationWithJUnit {
                                                                                           p^
 "  beFalse"                                                                               ^
 "    when ok" !  { false must beFalse }                                                   ^
-"    when ko" !  { (true must beFalse).message must_==  "the value is true" }             ^
+"    when ko" !  { (true must beFalse).message must_== "the value is true" }             ^
                                                                                           end
 }
