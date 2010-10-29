@@ -36,14 +36,16 @@ sealed abstract class Result(val message: String = "", val expectationsNb: Int =
 	    case Pending(m) => Pending(msg)
 	  }
   }
-  def and(r: Result): Result = this
+  def and(r: =>Result): Result = this
+  def or(r2: =>Result) = this 
+   
   def isSuccess: Boolean = false
 }
 /** 
  * This class represents the success of an execution
  */
 case class Success(m: String = "")  extends Result(m) {
-  override def and(r: Result): Result = r match {
+  override def and(r: =>Result): Result = r match {
 	  case Success(m) => if (message == m) this else Success(message+" and "+m)
 	  case Failure(m, st) => r
 	  case _ => super.and(r)
@@ -66,6 +68,11 @@ object Success {
 case class Failure(m: String, stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList) 
   extends Result(m) with ResultStackTrace {
   def exception = Exceptionx.exception(m, stackTrace)
+  override def or(r: =>Result): Result = r match {
+    case Success(m) => if (message == m) r else Success(message+" and "+m)
+    case Failure(m, st) => this
+    case _ => super.or(r)
+  }
 }
 /** 
  * This class represents an exception occurring during an execution.
