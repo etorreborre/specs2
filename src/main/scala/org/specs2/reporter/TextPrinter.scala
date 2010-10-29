@@ -6,13 +6,14 @@ import text.Plural._
 
 trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
 
-  val print: Function[(Stats, ExecutedFragment), ExecutedFragment] = { p: (Stats, ExecutedFragment) => 
+  def print(implicit args: Args): Function[(Stats, ExecutedFragment), ExecutedFragment] = { p: (Stats, ExecutedFragment) => 
 	  p match { 
-  	  case (stats, ExecutedText(s)) => if (configuration.text) printText(s)
+      case (stats, ExecutedSpecStart(s)) => printText(s)
+  	  case (stats, ExecutedText(s)) => if (!args.xonly) printText(s)
 	    case (stats, ExecutedResult(s, result)) => printResult(s, result)
-	    case (_, ExecutedPar()) => if (configuration.text) printPar()
+	    case (_, ExecutedPar()) => if (!args.xonly) printPar()
 	    case (stats, end @ ExecutedSpecEnd(_)) => printStats(stats, end)
-	    case (stats, fragment) => if (configuration.text) printOther(stats, fragment)
+	    case (stats, fragment) => if (!args.xonly) printOther(stats, fragment)
     }
 	  p._2
   }
@@ -21,7 +22,7 @@ trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
   def statusAndDescription(s: String, result: Result) = {
 	  s.takeWhile(_ == ' ') + status(result) + " " + s.dropWhile(_ == ' ')
   }
-  def printResult(s: String, result: Result) = {
+  def printResult(s: String, result: Result)(implicit args: Args) = {
 	val description = statusAndDescription(s, result)
     result match {
 	    case e: ResultStackTrace => {
@@ -30,9 +31,9 @@ trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
 	 	    if (configuration.printStackTrace)
 	 	      e.stackTrace.foreach(t => printMessage(t.toString))
 	      }
-      case Success(_) => if (configuration.text) printMessage(description)
-      case Pending(_) => if (configuration.pending) printMessage(description + " " + result.message)
-      case Skipped(_) => if (configuration.text) {
+      case Success(_) => if (!args.xonly) printMessage(description)
+      case Pending(_) => if (!args.xonly) printMessage(description + " " + result.message)
+      case Skipped(_) => if (!args.xonly) {
       	printMessage(description)
 	 	    printMessage(result.message)
       }

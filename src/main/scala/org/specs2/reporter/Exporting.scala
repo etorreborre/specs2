@@ -4,11 +4,11 @@ import specification._
 
 trait Exporting {
   type ExportType
-  val export: List[ExecutedFragment] => ExportType
+  def export(implicit args: Args): List[ExecutedFragment] => ExportType
 }
 
 trait FolderExporting {
   val folder: Folder[ExecutedFragment]
   type ExportType = folder.T
-  val export = (fragments: List[ExecutedFragment]) => folder.fold(fragments)
+  def export(implicit args: Args) = (fragments: List[ExecutedFragment]) => folder.fold(fragments)
 }

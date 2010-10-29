@@ -19,10 +19,16 @@ import control.Exceptions._
  *
  */
 trait Reporter extends Output with Selection with ExecutionStrategy with Exporting {
-  def report(spec: BaseSpecification): this.type = 
-	  report(new Fragments(() => SpecStart(name(spec)) +: spec.content.fragments :+ SpecEnd(name(spec)), spec.content.arguments))
-	
+  def report(spec: BaseSpecification): this.type = {
+    val fragments = spec.content.fragments match {
+      case SpecStart(n) :: rest => spec.content.fragments
+      case rest => SpecStart(name(spec)) +: spec.content.Fragments
+    }
+	  report(new Fragments(() => fragments :+ SpecEnd(name(spec)), spec.content.arguments))
+  }
+   	  
   def report(fragments: Fragments): this.type = {
+    implicit val args = fragments.arguments 
     (select andThen execute andThen export)(fragments)
     this
   }

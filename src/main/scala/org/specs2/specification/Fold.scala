@@ -38,9 +38,9 @@ trait Fold {
 trait Folder[F] {
   type T
   def initial: T
-  val fold: Function2[T, F, T]
+  def fold(implicit args: Args): Function2[T, F, T]
   
-  def fold(fs: =>List[F]): T = trye {
+  def fold(fs: =>List[F])(implicit args: Args): T = trye {
     fs.foldLeft(initial)(fold)
   } ((e: Exception) => handleException(e)) match {
     case Right(e) => e

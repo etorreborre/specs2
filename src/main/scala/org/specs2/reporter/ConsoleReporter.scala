@@ -19,10 +19,10 @@ trait ConsoleReporter extends Reporter with FolderExporting with DefaultExecutio
   val folder = new Folder[ExecutedFragment] {
     type T = Stats
     def initial = Stats()
-    val fold: Function2[T, ExecutedFragment, T] = {
+    def fold(implicit args: Args): Function2[T, ExecutedFragment, T] = {
       case p @ (s, executed) => {
-        val newStats = stats((s, executed))
-        print((newStats, executed))
+        val newStats = stats(args)((s, executed))
+        print(args)((newStats, executed))
         newStats
       }
     }

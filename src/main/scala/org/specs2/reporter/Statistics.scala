@@ -5,13 +5,13 @@ import execute._
 
 trait Statistics {
   type S
-  val stats: Function[(S, ExecutedFragment), S]
+  def stats(implicit args: Args): Function[(S, ExecutedFragment), S]
 }
 trait TotalStatistics extends Statistics {
   type S = Stats
   case class Stats(Fragments: Int = 0, expectations: Int = 0, failures: Int = 0, errors: Int = 0, pending: Int = 0, skipped: Int = 0)
 
-  val stats: Function[(S, ExecutedFragment), S] = {
+  def stats(implicit args: Args): Function[(S, ExecutedFragment), S] = {
 	  case (s, ExecutedResult(_, r)) => {
 	    val u = s.copy(Fragments = s.Fragments + 1, expectations = s.expectations + r.expectationsNb)
 	    r match {

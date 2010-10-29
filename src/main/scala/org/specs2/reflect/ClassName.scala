@@ -12,11 +12,15 @@ trait ClassName {
    * <li>split on . and reverse: [MyClass, pack1, com]
    * <li>take the last element: MyClass</ul>
    */
-  def className(className: String): String = className.
+  def className(className: String): String = {
+   val kname = className
+   val c = className.
     split("\\$").reverse.
     dropWhile(isInteger(_))(0).
     split("\\.").
     reverse.toList(0)
+    c
+  }
     
   def isInteger(s: String): Boolean = { try {s.toInt} catch { case _ => return false }; true }
 }

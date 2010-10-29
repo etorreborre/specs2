@@ -20,8 +20,13 @@ case class Step(action: () => Result) extends Fragment with Executable {
   def execute = action()
   override def toString = "Step"
 }
-case class Args(ex: String = ".*") {
+case class Args(ex: String = ".*", xonly: Boolean = false) {
   def ^(f: Fragment) = new Fragments(() => List(f), this)
+}
+case object Args {
+  def apply(arguments: Array[String]) = {
+    new Args(xonly = arguments.exists(_.contains("xonly")))
+  }
 }
 object StandardFragments {
   case class End() extends Fragment
