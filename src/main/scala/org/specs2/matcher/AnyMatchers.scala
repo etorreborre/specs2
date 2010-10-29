@@ -62,6 +62,6 @@ object AnyMatchers extends AnyMatchers
 trait BeHaveAnyMatchers { outer: AnyMatchers =>
   implicit def anyMatcher[T](s: MatchResult[T]) = new AnyBeHaveMatchers(s)
   class AnyBeHaveMatchers[T](s: MatchResult[T]) {
-    def equalTo(t: T) = outer.be_==(t)(s.expectable)
+    def equalTo(t: T) = s.apply(outer.be_==(t))
   }
 }

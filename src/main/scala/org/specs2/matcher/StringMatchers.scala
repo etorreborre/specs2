@@ -185,8 +185,8 @@ trait StringBaseMatchers { outer =>
 trait StringBeHaveMatchers { outer: StringBaseMatchers =>
   implicit def toStringResultMatcher(result: MatchResult[String]) = new StringResultMatcher(result)
   class StringResultMatcher(result: MatchResult[String]) {
-    def matching(s: String) = result.expectable.applyMatcher(beMatching(s))
-    def startingWith(s: String) = result.expectable.applyMatcher(startWith(s))
+    def matching(s: String) = result.apply(beMatching(s))
+    def startingWith(s: String) = result.apply(startWith(s))
   }
 }
 

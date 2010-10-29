@@ -26,8 +26,8 @@ class LogicalMatcherSpec extends Specification {
   def or3 = "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
   def or4 = "eric" mustNot (beMatching("a.*") or beMatching(".*z"))
 
-  def and1 = "eric" must be matching("a.*") and be matching(".*c")
-  def and2 = ("eric" must be matching("a.*")) and ("torreborre" must be matching(".*tor.*"))
+  def and1 = "eric" must be matching("e.*") and be matching(".*c")
+  def and2 = ("eric" must be matching("e.*")) and ("torreborre" must be matching(".*tor.*"))
   def skip1 = 1 must be_==(1).orSkip
   def skip2 = (1 must be_==(2).orSkip).toResult must_== Skipped("'1' is not equal to '2'")
 }

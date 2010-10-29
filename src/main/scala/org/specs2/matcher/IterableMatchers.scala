@@ -57,7 +57,8 @@ object IterableMatchers extends IterableMatchers
 trait IterableBeHaveMatchers { outer: IterableMatchers =>
   implicit def iterable[T](s: MatchResult[Iterable[T]]) = new IterableBeHaveMatchers(s)
   class IterableBeHaveMatchers[T](s: MatchResult[Iterable[T]]) {
-    def contain(t: T) = s.and(outer.contain(t))
-    def empty = s.and(outer.beEmpty[T])
+    def contain(t: T) = s.apply(outer.contain(t))
+    def empty = s.apply(outer.beEmpty[T])
+    def beEmpty = s.apply(outer.beEmpty[T])
   }
 }
