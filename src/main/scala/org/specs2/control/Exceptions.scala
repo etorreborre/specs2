@@ -1,20 +1,56 @@
 package org.specs2
 package control
 
+/**
+ * This trait provides methods to catch exceptions and 
+ * transform them into values which can be passed to 
+ * further computations
+ *
+ * @see org.specs2.control.ExceptionsSpec for examples
+ */
 private[specs2]
 trait Exceptions {
   implicit def implicitUnit[T](t: T): Unit = ()
+  
+  /**
+   * try to evaluate an expression, returning an Option
+   * 
+   * A function Exception => Unit can be used to print the exception to the console
+   * for example.
+   * 
+   * The 'tryo' name comes from the lift project: http://liftweb.net
+   * 
+   * @return None if there is an exception, or Some(value)
+   */
   def tryo[T](a: =>T)(implicit f: Exception => Unit): Option[T] = {
 	  try { Some(a) }
 	  catch { case e: Exception => None }
   }
+  /**
+   * try to evaluate an expression, returning a value T
+   * 
+   * If the expression throws an Exception a function f is used to return a value
+   * of the expected type.
+   */
   def tryOr[T](a: =>T)(implicit f: Exception => T): T = {
 	  trye(a)(f).fold(identity, identity)
   }
+  /**
+   * try to evaluate an expression, returning Either
+   * 
+   * If the expression throws an Exception a function f is used to return the left value
+   * of the Either returned value.
+   */
   def trye[T, S](a: =>T)(implicit f: Exception =>S): Either[S, T] = {
 	  try { Right(a) }
 	  catch { case e: Exception => Left(f(e)) }
   }
+  /**
+   * try to evaluate an expression, returning Either
+   * 
+   * If the expression throws any Throwable a function f is used to return the left value
+   * of the Either returned value.
+   */
   def catchAll[T, S](a: =>T)(f: Throwable =>S): Either[S, T] = {
 	  try { Right(a) }
 	  catch { case e: Throwable => Left(f(e)) }

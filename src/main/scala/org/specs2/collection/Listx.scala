@@ -6,13 +6,14 @@ package collection
  */
 private[specs2]
 trait Listx { outer =>
+
   /** @return an extension for a nested list */
   implicit def extendNestedList[T](list: List[List[T]]): ExtendedNestedList[T] = new ExtendedNestedList(list)
   /**
    * Additional methods for nested lists
    */
   class ExtendedNestedList[T](list: List[List[T]]) {
-    def transpose = outer.transpose(list)
+    def safeTranspose = outer.transpose(list)
   }
   
   /** @return an extension for a list */
@@ -40,6 +41,9 @@ trait Listx { outer =>
   }
   
   /**
+   * This methods works like the transpose method defined on Traversable
+   * but it doesn't fail when the input is not formatted like a regular matrix
+   * 
    *  List(List("a",  "bb", "ccc"),
    *       List("dd", "e",  "fff")) =>
    *  List(List("a",  "dd"),

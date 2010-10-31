@@ -1,14 +1,17 @@
 package org.specs2
 package control
 
+/**
+ * Extension methods for Throwables
+ */
 trait Throwablex {
 
   /**
-   * Implicit method to add additional methods to Throwable objects
+   * implicit method to add additional methods to Throwable objects
    */
   implicit def toThrowablex[T <: Throwable](t: T) = new ExtendedThrowable(t)  
   /**
-   * See the ExtendedExceptions object description
+   * @see the ExtendedExceptions object description
    */
   class ExtendedThrowable[T <: Throwable](t: T) {
     /** @return the list of chained exceptions */

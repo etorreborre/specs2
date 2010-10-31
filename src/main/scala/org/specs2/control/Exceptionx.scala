@@ -55,15 +55,18 @@ trait Exceptionx {
   def exception(st: List[StackTraceElement]): Exception = exception("", st)
   /** location information from a stackTrace element */
   class Location(t: StackTraceElement) {
-    def path = className.replace(".", "/")+".scala"
-    val fileName = t.getFileName
-    val className = t.getClassName.split('$')(0)
-    val lineNumber = t.getLineNumber
-    def location: String = fileName + ":" + lineNumber
-    /** @return the class name and the line number where the Throwable was created */
-    def classLocation: String = className + ":" + lineNumber
-    /** @return the class name, file Name and the line number where the Throwable was created */
-    def fullLocation: String = className + " (" + location + ")"
+    /** path corresponding to the class name. This is an approximation corresponding to the
+     *  simple case of a top-level class in a file having the same name */
+    lazy val path = className.replace(".", "/")+".scala"
+    lazy val fileName = t.getFileName
+    lazy val className = t.getClassName.split('$')(0)
+    lazy val lineNumber = t.getLineNumber
+    lazy val location: String = fileName + ":" + lineNumber
+    /** the class name and the line number where the Throwable was created */
+    lazy val classLocation: String = className + ":" + lineNumber
+    /** the class name, file Name and the line number where the Throwable was created */
+    lazy val fullLocation: String = className + " (" + location + ")"
   }
 }
+private [specs2]
 object Exceptionx extends Exceptionx

@@ -2,7 +2,8 @@ package org.specs2
 package control
 
 /** 
- * This trait provides a stackTrace and a few utility methods on it
+ * This trait describes something which has a stackTrace
+ * and utility methods on it
  */
 trait HasStackTrace {
   def stackTrace: List[StackTraceElement]

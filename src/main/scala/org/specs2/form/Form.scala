@@ -28,7 +28,7 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
   def padText(size: Option[Int]): String = FormCell(this).padText(size)
   def header: List[Cell] = if (rows.isEmpty) Nil else rows(0).header.flatten
   lazy val allRows = title.map(t => Row.tr(TextCell(t))).toList ::: rows
-  lazy val maxSizes = extendNestedList(allRows.map(_.cells)).transpose.map(l => l.map(_.text.size).max[Int])
+  lazy val maxSizes = extendNestedList(allRows.map(_.cells)).safeTranspose.map(l => l.map(_.text.size).max[Int])
 
   def setSuccess = new Form(title, rows.map(_.setSuccess))
   def setFailure = new Form(title, rows.map(_.setFailure))

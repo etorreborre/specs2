@@ -2,6 +2,9 @@ package org.specs2
 package collection
 import Listx._
 
+/**
+ * This trait provides additional methods on Iterable
+ */
 private[specs2]
 trait Iterablex {
   /**

@@ -37,6 +37,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "      with ComparisonFailure"                                                            ! done^
 "    Matchers"                                                                            ^
 "      with logical combinators"                                                          ! done^
+"      with nice be, have, not syntax"                                                    ! done^
 "      with adapters"                                                                     ! done^
 "      for strings"                                                                       ! done^
 "      for iterables"                                                                     ! todo^
@@ -87,6 +88,8 @@ class FeaturesSpec extends Specification with StandardResults {
 "      with all features"                                                                 ! todo^
 "    Detailed diffs"                                                                      ^
 "      non mutable version"                                                               ! todo^
+"    Auto examples"                                                                       ^
+"      with the description taken from the source file"                                   ! todo^
 "    Timer"                                                                               ^
 "      see timer and WaitFor"                                                             ! todo^
 "    A ScalaInterpreter"                                                                  ^

@@ -22,7 +22,7 @@ trait Reporter extends Output with Selection with ExecutionStrategy with Exporti
   def report(spec: BaseSpecification): this.type = {
     val fragments = spec.content.fragments match {
       case SpecStart(n) :: rest => spec.content.fragments
-      case rest => SpecStart(name(spec)) +: spec.content.Fragments
+      case rest => SpecStart(name(spec)) +: spec.content.fragments
     }
 	  report(new Fragments(() => fragments :+ SpecEnd(name(spec)), spec.content.arguments))
   }
