@@ -1,6 +1,8 @@
 package org.specs2
 package specification
+
 import execute._
+
 /**
  * The Executed Fragments represent pieces of a Specification
  * which have already been executed to provide a Result

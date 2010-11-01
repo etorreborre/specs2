@@ -1,11 +1,12 @@
 package org.specs2
 package reporter
-import specification._
+
 import _root_.org.scalatools.testing.{ EventHandler, Logger, Event, Result }
 import control.Exceptionx._
 import io._
+import text._
 import execute.{ Success, Failure, Error, Skipped, Pending }
-
+import specification._
 /**
  * 
  */

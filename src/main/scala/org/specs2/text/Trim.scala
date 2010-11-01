@@ -1,6 +1,9 @@
 package org.specs2
 package text
 
+/**
+ * Utility methods for trimming text
+ */
 private[specs2]
 trait Trim {
   implicit def trimmed(s: String): Trimmed = new Trimmed(s)
@@ -14,4 +17,5 @@ trait Trim {
     def removeAll(toRemove: String*) = toRemove.foldLeft(s) { (res, cur) => res.replaceAll(cur, "") }
   }
 }
+private[specs2]
 object Trim extends Trim

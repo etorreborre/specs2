@@ -1,17 +1,16 @@
 package org.specs2
 package runner
-import reporter._
-import execute._
-import specification._
-import io._
-import reflect.Classes._
-import specification._
-import reporter._
+
 import _root_.org.junit.runner.notification.RunNotifier
 import _root_.org.junit.runners._
 import _root_.org.junit._
-import junit.framework._
 import _root_.org.junit.runner._
+import junit.framework._
+import io._
+import reflect.Classes._
+import execute._
+import reporter._
+import specification._
 
 /**
  * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation

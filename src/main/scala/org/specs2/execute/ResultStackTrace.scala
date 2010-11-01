@@ -1,5 +1,6 @@
 package org.specs2
 package execute
+
 import control._
 import Exceptionx._
 
@@ -8,6 +9,7 @@ import Exceptionx._
  * the library stacktrace elements from the total stacktrace
  * unless the "-Dfullstacktrace" system property is set (for specs2 debugging purposes)
  */
+private[specs2]
 trait ResultStackTrace extends HasStackTrace {
   /** @return the location (file and line number) of the topmost stackTraceElement */
   def location = exception(sanitized).location

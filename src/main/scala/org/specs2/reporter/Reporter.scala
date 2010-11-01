@@ -1,8 +1,9 @@
 package org.specs2
 package reporter
-import specification._
-import io._
+
 import control.Exceptions._
+import io._
+import specification._
 
 /**
  * A Reporter will report the execution of a Specification following 3 steps:
@@ -18,6 +19,7 @@ import control.Exceptions._
  *   * a file (html, xml, junit-report)
  *
  */
+private[specs2]
 trait Reporter extends Output with Selection with ExecutionStrategy with Exporting {
   def report(spec: BaseSpecification): this.type = {
     val fragments = spec.content.fragments match {
@@ -34,9 +36,9 @@ trait Reporter extends Output with Selection with ExecutionStrategy with Exporti
   }
   
   def name(spec: BaseSpecification) = ClassName.className(spec)
-  val configuration = new Configuration
 }
 
+private[specs2]
 trait AReporter {
   val reporter: Reporter
 }

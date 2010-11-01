@@ -1,6 +1,7 @@
 package org.specs2
 package specification
 
+private[specs2]
 trait ClassName {
   def className(any: AnyRef): String = className(any.getClass.getName)
   /**
@@ -24,4 +25,5 @@ trait ClassName {
     
   def isInteger(s: String): Boolean = { try {s.toInt} catch { case _ => return false }; true }
 }
+private[specs2]
 object ClassName extends ClassName

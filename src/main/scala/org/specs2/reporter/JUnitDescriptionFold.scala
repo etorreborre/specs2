@@ -1,10 +1,10 @@
 package org.specs2
 package reporter
-import io._
-import specification._
+
 import _root_.org.junit.runner._
 import scalaz._
 import Scalaz._
+import specification._
 
 /**
  * The JUnit description Fold transforms a list of fragments

@@ -1,7 +1,8 @@
 package org.specs2
 package xml
-import collection.Iterablex._
+
 import scala.xml._
+import collection.Iterablex._
 
 private[specs2]
 trait Nodex {

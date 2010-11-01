@@ -1,7 +1,6 @@
 package org.specs2
 package mock
-import matcher._
-import control.Exceptions._
+
 import org.mockito.InOrder
 import org.mockito.stubbing.Answer
 import org.mockito.internal.stubbing.StubberImpl
@@ -10,7 +9,8 @@ import org.mockito.internal.InOrderImpl
 import org.mockito.verification.{ VerificationMode }
 import org.mockito.internal.stubbing._
 import org.mockito.stubbing.{ OngoingStubbing, Stubber }
-
+import control.Exceptions._
+import matcher._
 
 trait Mockito extends MocksCreation with CalledMatchers with MockitoStubs with CapturedArgument
 /**

@@ -1,6 +1,6 @@
 package org.specs2
 package mock
-import specification._
+
 import org.hamcrest._
 import org.hamcrest.core._
 import matcher._

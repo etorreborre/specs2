@@ -1,11 +1,13 @@
 package org.specs2
 package io
+
 import java.io._
 
 /**
  * The FileReader trait provides functions to read files
- * It can be overriden if necessary to mock that behaviour
+ * It can be overridden if necessary to mock that behaviour
  */
+private[specs2]
 trait FileReader {
   def readLines(path: String) = scala.io.Source.fromFile(path).getLines.toIndexedSeq
   /**
@@ -32,4 +34,5 @@ trait FileReader {
    */
   def inputStream(filePath: String): java.io.InputStream = new java.io.FileInputStream(filePath)
 }
+private[specs2]
 object FileReader extends FileReader

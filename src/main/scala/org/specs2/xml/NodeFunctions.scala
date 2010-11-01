@@ -1,5 +1,6 @@
 package org.specs2
 package xml
+
 import scala.xml._
 import collection.Listx._
 import collection.Iterablex._

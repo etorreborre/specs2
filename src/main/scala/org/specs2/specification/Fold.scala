@@ -1,7 +1,9 @@
 package org.specs2
 package specification
+
 import control.Exceptions._
 import control.Throwablex._
+import main.Arguments
 /**
  * A Fold transforms a list of fragments to a given type T, starting from an initial value.
  * It is either used to:
@@ -38,9 +40,9 @@ trait Fold {
 trait Folder[F] {
   type T
   def initial: T
-  def fold(implicit args: Args): Function2[T, F, T]
+  def fold(implicit args: Arguments): Function2[T, F, T]
   
-  def fold(fs: =>List[F])(implicit args: Args): T = trye {
+  def fold(fs: =>List[F])(implicit args: Arguments): T = trye {
     fs.foldLeft(initial)(fold)
   } ((e: Exception) => handleException(e)) match {
     case Right(e) => e

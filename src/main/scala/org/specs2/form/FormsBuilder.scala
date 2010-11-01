@@ -1,13 +1,15 @@
 package org.specs2
 package form
+
 import execute._
 import matcher._
-import specification._
+
 
 /**
  * Utility methods to build Fields, Props and Forms to insert in other Forms or Fragments.
  */
-trait Forms extends FormFragments {
+private[specs2]
+trait FormsBuilder {
   /** a String can be added on a Form row as a TextCell */
   implicit def stringsAreTextCell(t: String) = new TextCell(t)  
   /** a Field can be added on a Form row as a FieldCell */
@@ -16,6 +18,7 @@ trait Forms extends FormFragments {
   implicit def propsAreCell(t: Prop[_, _]) = new PropCell(t)
   /** a Form can be added on a Form row as a FormCell */
   implicit def formsAreCell(t: Form) = new FormCell(t)
+  implicit def formsAreExecutable(f: Form): Result = f.execute
 
   /** @return a new Form with the given title */
   def form(title: String) = Form(title)
@@ -89,14 +92,5 @@ trait Forms extends FormFragments {
     form2.drop(form1.size).map(_.setFailure)
   }
 }
-object Forms extends Forms
-/**
- * Allow a Form to be inserted among Fragments as a Text Fragment
- * Allow a Form to be used as an example body and return a Result automatically
- */
-trait FormFragments {
-  class FormFragment(form: Form) extends specification.Text(FormCell(form).text)
-  implicit def formsAreFragments(f: Form): Fragment = new FormFragment(f)
-  implicit def formsAreExecutable(f: Form): Result = f.execute
-}
-object FormFragments extends FormFragments
+private[specs2]
+object FormsBuilder extends FormsBuilder

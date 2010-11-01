@@ -1,7 +1,9 @@
 package org.specs2
 package matcher
+
 import execute._
 
+private[specs2]
 trait MatchersImplicits {
   
   /** 
@@ -12,4 +14,5 @@ trait MatchersImplicits {
     new BeTrueMatcher().apply(new Expectable(b)).toResult
   }
 }
+private[specs2]
 object MatchersImplicits extends MatchersImplicits

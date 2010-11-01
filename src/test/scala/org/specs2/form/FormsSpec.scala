@@ -1,7 +1,8 @@
 package org.specs2
 package form
+import specification._
 
-class FormsSpec extends SpecificationWithJUnit with Forms {
+class FormsSpec extends SpecificationWithJUnit with FormsBuilder {
   def is = 
                                                                                           """
   The Forms object provides several utility functions for creating forms

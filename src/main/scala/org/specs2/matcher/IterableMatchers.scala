@@ -1,9 +1,10 @@
 package org.specs2
 package matcher
-import AnyMatchers._
-import specification._
-import control._
 
+import control._
+import AnyMatchers._
+
+private[specs2]
 trait IterableMatchers extends LazyParameters with IterableBeHaveMatchers {
   trait IterableMatcher[T] extends Matcher[Iterable[T]]
   
@@ -52,8 +53,10 @@ trait IterableMatchers extends LazyParameters with IterableBeHaveMatchers {
   }
   
 }
+private[specs2]
 object IterableMatchers extends IterableMatchers
 
+private[specs2]
 trait IterableBeHaveMatchers { outer: IterableMatchers =>
   implicit def iterable[T](s: MatchResult[Iterable[T]]) = new IterableBeHaveMatchers(s)
   class IterableBeHaveMatchers[T](s: MatchResult[Iterable[T]]) {

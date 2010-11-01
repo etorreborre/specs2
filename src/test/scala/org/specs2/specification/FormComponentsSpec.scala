@@ -1,9 +1,7 @@
 package org.specs2
-package form
-import Forms._
-import specification._
+package specification
 
-class FormComponentsSpec extends SpecificationWithJUnit { def is = 
+class FormComponentsSpec extends SpecificationWithJUnit with Forms { def is = 
                                                                                           """
   Forms can be used to represent domain objects or service, relating
   expected values to actual ones. Forms are also thought as being reusable components 

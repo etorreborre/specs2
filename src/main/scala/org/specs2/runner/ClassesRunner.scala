@@ -1,11 +1,12 @@
 package org.specs2
 package runner
+
 import reflect._
-import reporter._
 import io._
 import main.Main
 import control.Exceptions._
 import specification._
+import reporter._
 
 class ClassRunner extends Classes with ConsoleOutput with Main with AConsoleReporter {
 	

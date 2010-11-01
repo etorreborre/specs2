@@ -2,6 +2,9 @@ package org.specs2
 package matcher
 
 class ShouldExpectable[T](t: =>T) extends Expectable[T](t){
+  def aka = new ShouldExpectable(t) {
+    override protected val desc = Some(t.toString)
+  } 
   def aka(alias: String) = new ShouldExpectable(t) {
 	  override protected val desc = Some(alias)
   } 

@@ -1,12 +1,16 @@
 package org.specs2
 package matcher
-import AnyMatchers._
+
 import java.util.regex._
-import specification._
+import AnyMatchers._
+
 /**
  * The <code>StringMatchers</code> trait provides matchers which are applicable to String objects
  */
+private[specs2]
 trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers
+
+private[specs2]
 trait StringBaseMatchers { outer =>
   
   /**
@@ -182,6 +186,8 @@ trait StringBaseMatchers { outer =>
   def equalIgnoringCaseTo(a: String) = beEqualToIgnoringCase(a)
   def equalIgnoringSpaceTo(a: String) = beEqualToIgnoringSpace(a)
 }
+
+private[specs2]
 trait StringBeHaveMatchers { outer: StringBaseMatchers =>
   implicit def toStringResultMatcher(result: MatchResult[String]) = new StringResultMatcher(result)
   class StringResultMatcher(result: MatchResult[String]) {

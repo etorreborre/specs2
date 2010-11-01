@@ -1,5 +1,6 @@
 package org.specs2
 package matcher
+
 import org.scalacheck.{ Gen, Prop, Arg, Test, Arbitrary, Shrink }
 import org.scalacheck.util.StdRand
 import org.scalacheck.Prop._
@@ -8,8 +9,8 @@ import org.scalacheck.Pretty._
 import org.scalacheck.Pretty
 import org.scalacheck.ConsoleReporter._
 import scala.collection.Map
-import io.ConsoleOutput
 import text.Plural._
+import io.ConsoleOutput
 /**
  * The <code>ScalaCheckMatchers</code> trait provides matchers which allow to
  * assess properties multiple times with generated data.

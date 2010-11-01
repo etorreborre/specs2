@@ -1,7 +1,8 @@
 package org.specs2
 package matcher
-import AnyMatchers._
+
 import execute._
+import AnyMatchers._
 
 trait Expectations {
   type E[_] <: Expectable[_]

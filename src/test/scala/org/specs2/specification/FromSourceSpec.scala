@@ -1,5 +1,5 @@
 package org.specs2
-package source
+package specification
 
 class FromSourceSpec extends SpecificationWithJUnit with FromSource { def is = 
   

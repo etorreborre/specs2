@@ -1,7 +1,9 @@
 package org.specs2
 package matcher
+
 import control.Exceptions._
 
+private[specs2]
 trait ExceptionMatchers {
   /**
    * return a matcher which will be ok if an exception of that type is thrown

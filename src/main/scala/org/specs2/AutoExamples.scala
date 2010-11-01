@@ -1,3 +1,3 @@
 package org.specs2
 
-trait AutoExamples extends source.FromSource
+trait AutoExamples extends specification.FromSource

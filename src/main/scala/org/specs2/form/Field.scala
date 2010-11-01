@@ -1,5 +1,6 @@
 package org.specs2
 package form
+
 import execute._
 /**
  * A Field is a property which is used only to display input values or output values.

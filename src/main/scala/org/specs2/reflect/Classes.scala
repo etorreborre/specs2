@@ -1,14 +1,16 @@
 package org.specs2
 package reflect
-import io._
-import control.Exceptions._
-import control.Throwablex._
+
 import scala.reflect.ClassManifest
 import scala.reflect.NameTransformer
+import control.Exceptions._
+import control.Throwablex._
+import io._
 
 /**
  * This trait provides utility functions for classes.
  */
+private[specs2]
 trait Classes extends Output {
   /**
    * Create an instance of a given class, returning either the instance, or an exception
@@ -140,4 +142,5 @@ trait Classes extends Output {
 /**
  * This object provides simple functions to instantiate classes.
  */
+private[specs2]
 object Classes extends Classes with ConsoleOutput

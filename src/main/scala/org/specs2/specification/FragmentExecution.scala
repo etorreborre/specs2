@@ -1,11 +1,13 @@
 package org.specs2
 package specification
-import execute._
+
 import control.Exceptions._
+import execute._
 
 /**
- * Thi trait provides an Executor with a default implementation
+ * This trait provides an Executor with a default implementation
  */
+private[specs2]
 trait AnExecutor {
   val executor: FragmentExecution = new FragmentExecution {}
 }
@@ -15,6 +17,7 @@ trait AnExecutor {
  * It provides a method which executes fragments
  * and returns executed fragments
  */
+private[specs2]
 trait FragmentExecution {
   import StandardFragments._
   

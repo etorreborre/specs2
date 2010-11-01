@@ -1,5 +1,5 @@
 package org.specs2
-package reporter
+package text
 
 class AnsiColorsSpec extends SpecificationWithJUnit {
   def is = 

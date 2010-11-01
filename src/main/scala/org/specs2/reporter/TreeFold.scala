@@ -1,11 +1,13 @@
 package org.specs2
 package reporter
-import io._
-import specification._
+
 import scalaz._
 import Scalaz._
+import io._
+import specification._
 import FragmentsShow._
 
+private[specs2]
 trait TreeFold[S] extends Fold {
   import LevelsFold._
   def optFold: (T, Fragment) => Option[S]
@@ -60,12 +62,16 @@ trait TreeFold[S] extends Fold {
 	  }
   }
 }
+
+private[specs2]
 object TreeFold {
   def bottomUp[A, B](t: Tree[A], f: ((A, Stream[B]) => B)): Tree[B] = {
     val tbs = t.subForest.map(t => bottomUp(t, f))
     node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
   }
 }
+
+private[specs2]
 object FragmentsTree extends TreeFold[Fragment] {
   def optFold = (t: FragmentsTree.T, f: Fragment) => Some(f)
   def root = SpecStart("")

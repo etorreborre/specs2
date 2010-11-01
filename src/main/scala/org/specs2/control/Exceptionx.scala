@@ -1,8 +1,6 @@
 package org.specs2
 package control
 
-import java.io._
-
 /**
  * This trait allows to add some utility methods to </code>Exception</code> objects.
  */

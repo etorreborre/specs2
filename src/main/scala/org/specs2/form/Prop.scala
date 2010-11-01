@@ -1,8 +1,9 @@
 package org.specs2
 package form
+
 import execute._
-import matcher._
 import StandardResults._
+import matcher._
 
 /**
  * The Prop class is a named property which holds:

@@ -1,5 +1,6 @@
 package org.specs2
 package specification
+
 import execute._
 
 sealed trait Fragment {
@@ -20,14 +21,7 @@ case class Step(action: () => Result) extends Fragment with Executable {
   def execute = action()
   override def toString = "Step"
 }
-case class Args(ex: String = ".*", xonly: Boolean = false) {
-  def ^(f: Fragment) = new Fragments(() => List(f), this)
-}
-case object Args {
-  def apply(arguments: Array[String]) = {
-    new Args(xonly = arguments.exists(_.contains("xonly")))
-  }
-}
+private[specs2]
 object StandardFragments {
   case class End() extends Fragment
   case class Par() extends Fragment

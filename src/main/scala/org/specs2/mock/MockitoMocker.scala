@@ -1,5 +1,6 @@
 package org.specs2
 package mock
+
 import org.mockito.InOrder
 import org.mockito.stubbing.Answer
 import org.mockito.verification.VerificationMode

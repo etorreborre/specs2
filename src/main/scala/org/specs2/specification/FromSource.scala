@@ -1,10 +1,10 @@
 package org.specs2
-package source
-import specification._
-import matcher.MatchersImplicits._
+package specification
+
 import io.FileReader._
 import control.Exceptionx._
 import control.LazyParameter
+import matcher.MatchersImplicits._
 import text.Trim._
 
 private[specs2]

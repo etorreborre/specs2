@@ -1,20 +1,17 @@
 package org.specs2
 package io
+
 import java.io._
 import java.util.regex._
 import java.net.URL
 import java.util.zip._
 import scala.collection.JavaConversions._
 /**
- * The fs object offers a simple interface to the file system (see the description of the FileSystem trait)
- */
-object fs extends FileSystem
-
-/**
  * The FileSystem trait abstracts file system operations to allow easier mocking of file system related functionalities.
  * <p>
  * It mixes the <code>FileReader</code> and <code>FileWriter</code> traits to provide easy read/write operations.  
  */
+private[specs2]
 trait FileSystem extends FileReader with FileWriter {
   /**
    * @param path glob expression, for example: <code>./dir/**/*.xml</code>
@@ -249,3 +246,9 @@ trait FileSystem extends FileReader with FileWriter {
   }
 
 }
+/**
+ * The fs object offers a simple interface to the file system (see the description of the FileSystem trait)
+ */
+private[specs2]
+object fs extends FileSystem
+

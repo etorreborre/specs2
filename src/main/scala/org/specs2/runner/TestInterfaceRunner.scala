@@ -1,8 +1,9 @@
 package org.specs2
 package runner
-import reporter._
+
 import _root_.org.scalatools.testing._
 import control.Throwablex._
+import reporter._
 /**
  * Implementation of the Framework interface for the sbt tool.
  * It declares the classes which can be executed by the specs2 library.

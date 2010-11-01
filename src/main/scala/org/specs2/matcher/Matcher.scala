@@ -1,8 +1,7 @@
 package org.specs2
 package matcher
-import specification._
+
 import execute._
-import AnyMatchers._
 import Expectable._
 import MatchResult._
 /**

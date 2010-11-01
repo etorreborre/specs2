@@ -1,7 +1,8 @@
 package org.specs2
 package matcher
-import execute._
+
 import scalaz.Functor
+import execute._
 import Expectable._
 
 sealed trait MatchResult[+T] {
@@ -111,6 +112,8 @@ class OrNotMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends Mat
   def not: MatchResult[T] = AndMatch(m1.not, m2).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 or evaluate.apply(matcher.not)
 }
+
+private[specs2]
 object MatchResult {
   implicit def MatchResultFunctor[T](m: MatchResult[T]) = new Functor[MatchResult] {
     def fmap[A, B](m: MatchResult[A], f: A => B) = m match {

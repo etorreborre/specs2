@@ -1,7 +1,8 @@
 package org.specs2
 package specification
-import execute._
+
 import control.Exceptions._
+import execute._
 
 /**
  * The After trait can be inherited by classes representing a context 

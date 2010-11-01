@@ -3,8 +3,10 @@ package specification
 
 import control.LazyParameters._
 import execute._
+import main._
 import matcher._
 
+private[specs2]
 trait FragmentsBuilder {
 
   implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.reduceLeft(_ and _).toResult
@@ -23,9 +25,14 @@ trait FragmentsBuilder {
   }
   implicit def group(Fragments: Fragments) = Group(Fragments.fragments)
   implicit def group(fragments: List[Fragment]) = Group(fragments)
-  def args(ex: String = "") = Args(".*"+ex+".*")
+  def args(ex: String = "") = Arguments(".*"+ex+".*")
+  implicit def arguments(a: Arguments) = new ArgumentsFragment(a)
+  class ArgumentsFragment(a: Arguments) {
+    def ^(f: Fragment) = new Fragments(() => List(f), a)
+  }
 }
 
+private[specs2]
 trait FragmentsShow {
   implicit object showFragments extends scalaz.Show[Fragment] {
 	  def show(f: Fragment) = (f match {
@@ -34,4 +41,6 @@ trait FragmentsShow {
 	  }).toList
   }
 }
+
+private[specs2]
 object FragmentsShow extends FragmentsShow

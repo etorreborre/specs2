@@ -1,11 +1,12 @@
 package org.specs2
 package form
-import matcher._
-import execute._
-import StandardResults._
+
 import scalaz.{ NonEmptyList, Scalaz }
 import Scalaz.{ nel1 }
 import collection.Listx._
+import execute._
+import StandardResults._
+import matcher._
 
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).

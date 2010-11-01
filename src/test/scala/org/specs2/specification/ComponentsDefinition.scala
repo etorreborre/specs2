@@ -1,6 +1,7 @@
 package org.specs2
-package form
-import Forms._
+package specification
+import form._
+import FormsBuilder._
 
 trait ComponentsDefinitions {
   case class Address(street: String, number: Int) {
@@ -29,10 +30,10 @@ trait ComponentsDefinitions {
   case class Order(lines: List[OrderLine] = Nil) {
     def line(orderLine: OrderLine) = Order(lines :+ orderLine)
     def form = fillSubset(lines:_*)
-    def fillSubset(ls: OrderLine*) = Forms.form("Order", subset(lines, ls.toList))
-    def fillSubsequence(ls: OrderLine*) = Forms.form("Order", subsequence(lines, ls.toList))
-    def fillSet(ls: OrderLine*) = Forms.form("Order", set(lines, ls.toList))
-    def fillSequence(ls: OrderLine*) = Forms.form("Order", sequence(lines, ls.toList))
+    def fillSubset(ls: OrderLine*) = FormsBuilder.form("Order", subset(lines, ls.toList))
+    def fillSubsequence(ls: OrderLine*) = FormsBuilder.form("Order", subsequence(lines, ls.toList))
+    def fillSet(ls: OrderLine*) = FormsBuilder.form("Order", set(lines, ls.toList))
+    def fillSequence(ls: OrderLine*) = FormsBuilder.form("Order", sequence(lines, ls.toList))
   }
   case class OrderLine(name: String, quantity: Int) {
     def form = Form.tr(field("name", name), field("qty", quantity))

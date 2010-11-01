@@ -1,12 +1,15 @@
 package org.specs2
 package reporter
-import specification._
-import execute._
+
 import text.Plural._
+import main.Arguments
+import execute._
+import specification._
 
-trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
+private[specs2]
+trait TextPrinter extends Printer with TotalStatistics {
 
-  def print(implicit args: Args): Function[(Stats, ExecutedFragment), ExecutedFragment] = { p: (Stats, ExecutedFragment) => 
+  def print(implicit args: Arguments): Function[(Stats, ExecutedFragment), ExecutedFragment] = { p: (Stats, ExecutedFragment) => 
 	  p match { 
       case (stats, ExecutedSpecStart(s)) => printText(s)
   	  case (stats, ExecutedText(s)) => if (!args.xonly) printText(s)
@@ -22,15 +25,15 @@ trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
   def statusAndDescription(s: String, result: Result) = {
 	  s.takeWhile(_ == ' ') + status(result) + " " + s.dropWhile(_ == ' ')
   }
-  def printResult(s: String, result: Result)(implicit args: Args) = {
+  def printResult(s: String, result: Result)(implicit args: Arguments) = {
 	val description = statusAndDescription(s, result)
     result match {
 	    case e: ResultStackTrace => {
 	 	    printMessage(description)
 	 	    printMessage(s.takeWhile(_ == ' ') + "  " + result.message + " ("+e.location+")")
-	 	    if (configuration.printStackTrace)
+	 	    if (args.printStackTrace) 
 	 	      e.stackTrace.foreach(t => printMessage(t.toString))
-	      }
+	    }
       case Success(_) => if (!args.xonly) printMessage(description)
       case Pending(_) => if (!args.xonly) printMessage(description + " " + result.message)
       case Skipped(_) => if (!args.xonly) {
@@ -47,7 +50,7 @@ trait TextPrinter extends Printer with TotalStatistics with AConfiguration {
 	                 List(examples qty "example") ++ 
 	                 (if (expectations != examples) List(expectations qty "expectation") else Nil) ++
 	                 List(failures qty "failure", errors qty "error") ++
-	                 List(pending.qty_>("pending")(0), skipped.qty_>("skipped")(0)).flatten).mkString(", "))
+	                 List(pending optQty "pending", skipped optQty "skipped").flatten).mkString(", "))
 	        println(" ")
 	    }
 	  }

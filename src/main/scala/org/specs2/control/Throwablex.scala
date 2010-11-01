@@ -4,6 +4,7 @@ package control
 /**
  * Extension methods for Throwables
  */
+private[specs2]
 trait Throwablex {
 
   /**
@@ -23,4 +24,5 @@ trait Throwablex {
     def getFullStackTrace: List[java.lang.StackTraceElement] = (t :: chainedExceptions).flatMap(_.getStackTrace)
   }
 }
+private[specs2]
 object Throwablex extends Throwablex

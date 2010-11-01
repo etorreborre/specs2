@@ -1,10 +1,12 @@
 package org.specs2
 package reporter
-import specification._
-import io._
+
 import scalaz.Scalaz._
+import io._
+import specification._
 import main._
 
+private[specs2]
 trait ConsoleReporter extends Reporter with FolderExporting with DefaultExecutionStrategy with ConsoleOutput with TextPrinter
   with TotalStatistics {
   
@@ -19,7 +21,7 @@ trait ConsoleReporter extends Reporter with FolderExporting with DefaultExecutio
   val folder = new Folder[ExecutedFragment] {
     type T = Stats
     def initial = Stats()
-    def fold(implicit args: Args): Function2[T, ExecutedFragment, T] = {
+    def fold(implicit args: Arguments): Function2[T, ExecutedFragment, T] = {
       case p @ (s, executed) => {
         val newStats = stats(args)((s, executed))
         print(args)((newStats, executed))
@@ -29,8 +31,7 @@ trait ConsoleReporter extends Reporter with FolderExporting with DefaultExecutio
   }
 }
 
-trait AConsoleReporter extends AReporter with Arguments {
-  lazy val reporter: Reporter = new ConsoleReporter {
-	  override val configuration =  Configuration(arguments)
-  }
+private[specs2]
+trait AConsoleReporter extends AReporter {
+  lazy val reporter: Reporter = new ConsoleReporter {}
 }

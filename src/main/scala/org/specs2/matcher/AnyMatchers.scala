@@ -1,9 +1,10 @@
 package org.specs2
 package matcher
-import execute._
-import reflect.Classes._
-import specification._
 
+import reflect.Classes._
+import execute._
+
+private[specs2]
 trait AnyMatchers extends BeHaveAnyMatchers {
   /** Matches if the expectable is true */
   def beTrue = new BeTrueMatcher

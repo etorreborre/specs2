@@ -1,7 +1,7 @@
 package org.specs2
 package specification
+
 import matcher._
-import control._
 
 trait BaseSpecification extends SpecificationStructure with FragmentsBuilder with Matchers {
   def include(s: BaseSpecification) = group(s.content.fragments)

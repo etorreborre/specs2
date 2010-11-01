@@ -1,6 +1,6 @@
 package org.specs2
 package form
-import Forms._
+import FormsBuilder._
 
 class CellsSpec extends SpecificationWithJUnit {
   def is = 

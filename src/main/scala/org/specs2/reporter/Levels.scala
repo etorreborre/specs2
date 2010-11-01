@@ -1,7 +1,9 @@
 package org.specs2
 package reporter
+
 import specification._
 
+private[specs2]
 trait LevelsFold extends Fold {
   import StandardFragments._
 
@@ -37,11 +39,15 @@ trait LevelsFold extends Fold {
   }
  
 }
+private[specs2]
 sealed trait Direction
 case object Up extends Direction
 case object Down extends Direction
+
+private[specs2]
 sealed trait LastNode
 case object Ex extends LastNode
 case object Txt extends LastNode
 
+private[specs2]
 object LevelsFold extends LevelsFold

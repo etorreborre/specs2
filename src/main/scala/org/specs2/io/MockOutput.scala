@@ -1,10 +1,12 @@
 package org.specs2
 package io
+
 import scala.collection.mutable.ListBuffer
 
 /**
  * Mock implementation of the Output trait to gather messages
  */
+private[specs2]
 trait MockOutput extends Output {
   private val msgs: ListBuffer[String] = new ListBuffer
   /**  @return the list of stored messages */

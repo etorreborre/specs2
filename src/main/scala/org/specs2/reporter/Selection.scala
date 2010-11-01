@@ -1,5 +1,7 @@
 package org.specs2
 package reporter
+
+import main.Arguments
 import specification._
 import Fragments._
 /**
@@ -7,6 +9,7 @@ import Fragments._
  * and sorting them according to their dependencies 
  *
  */
+private[specs2]
 trait Selection {
   val select = (fragments: Fragments) => {
     sort(fragments)
@@ -25,7 +28,7 @@ trait Selection {
     }.reverse
   }
   
-  private def filter(arguments: Args) = (f: Fragment) => {
+  private def filter(arguments: Arguments) = (f: Fragment) => {
     f match {
       case e: Example => e.matches(arguments.ex)
       case _ => true

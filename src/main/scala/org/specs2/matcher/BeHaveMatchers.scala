@@ -1,5 +1,6 @@
 package org.specs2.matcher
 
+private[specs2]
 trait BeHaveMatchers {
   def be = new NeutralMatcher[Any]
   def have = be

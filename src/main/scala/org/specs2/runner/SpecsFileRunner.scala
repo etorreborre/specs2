@@ -1,21 +1,26 @@
 package org.specs2
 package runner
+
+import main.Arguments
 import specification._
 import reporter._
 
 object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
   def main(arguments: Array[String]): Unit = {
-	  val f = (e: Exception) => e.printStackTrace
-	  val srcDir = "src/test/scala"
-	  val pattern = ".*Spec"
-	  val totalSpec = new Specification {
-	    def is = new Fragments(() =>
-	      SpecStart("Specifications matching "+pattern+" in "+srcDir+"\n") +: 
-	   		specificationNames(srcDir, pattern).
-	        flatMap { s => 
-	          createSpecification(s)
-	        }.flatMap(s => (SpecStart(ClassName.className(s)) :: s.content.fragments) :+ end), Args(arguments))
-	  }
-	  reporter.report(totalSpec)
+	  implicit val args = Arguments(arguments)
+	    
+	  lazy val allFragments = Fragments {
+      SpecStart("Specifications matching "+args.specsFilePattern+" in "+args.srcDir+"\n") +: 
+      specifications.flatMap(include(_))
+    } 
+
+	  reporter.report(new Specification { def is = allFragments })
+  }
+
+  private def specifications(implicit args: Arguments) = {
+    specificationNames(args.srcDir, args.specsFilePattern).flatMap(createSpecification(_))
+  }
+  private def include(s: BaseSpecification) = {
+    (SpecStart(ClassName.className(s)) :: s.content.fragments) :+ SpecEnd("end")
   }
 }

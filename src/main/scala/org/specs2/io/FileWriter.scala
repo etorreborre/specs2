@@ -7,6 +7,7 @@ import java.io._
  * The FileWriter trait provides functions to write files
  * It can be overriden if necessary to mock that behaviour
  */
+private[specs2]
 trait FileWriter {
 
   /**

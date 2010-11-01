@@ -1,9 +1,9 @@
 package org.specs2
 package runner
 
-import io._
 import java.util.regex._
 import scala.collection.mutable.Queue
+import io._
 import reflect.Classes
 
 trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {

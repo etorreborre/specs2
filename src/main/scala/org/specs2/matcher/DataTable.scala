@@ -1,7 +1,8 @@
 package org.specs2
 package matcher
+
 import execute._
-object DataTables extends DataTables
+
 trait DataTables {
   implicit def toTableHeader(a: String) = new TableHeader(List(a))
   implicit def stringToDataRow(a: String) = StringDataRow1(a)
@@ -192,56 +193,59 @@ trait DataTables {
   
   }
 }
+private[specs2]
+object DataTables extends DataTables
+/**
 private object DataTablesGenerator {
   def main(args: Array[String]) = {
-	  println(all(10))  
+    println(all(10))  
   }
   def all(n: Int) = {
-	  List(tableHeader(n), 
-	       tableClasses(n), 
-	       dataRowClass(n), 
-	       dataRowClasses(n)).mkString("\n\n").replace("\n", "\n  ")
+    List(tableHeader(n), 
+         tableClasses(n), 
+         dataRowClass(n), 
+         dataRowClasses(n)).mkString("\n\n").replace("\n", "\n  ")
   }
 
   def tableHeader(n: Int) = {
-	  "case class TableHeader(titles: List[String]) {\n"+
+    "case class TableHeader(titles: List[String]) {\n"+
       "  def |(title: String) = copy(titles = this.titles :+ title)\n"+
       (1 to n).flatMap { i =>
         val addRow = types(i)+"(row: "+dataRow(i)+") = new "+table(i)+"(titles, List(row)"
         val addRowStill = "def |"+addRow 
         val addRowExecute = "def |>"+addRow 
-	    List(addRowStill, addRowExecute+", execute = true").map(_+")")
+      List(addRowStill, addRowExecute+", execute = true").map(_+")")
       }.mkString("  ", "\n  ", "\n") +
       "}"
   }
   
   def tableClasses(n: Int) = {
-	  (1 to n).map { i =>  
-	    List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false) extends "+ 
+    (1 to n).map { i =>  
+      List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false) extends "+ 
              "Table(titles, execute) { outer =>",
-	         "  def |(row: "+dataRow(i)+") = "+table(i)+"(titles, outer.rows :+ row, execute)",
-	         "  def |[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, execute)",
-	         "  def |>[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, true)",
-	         "  def executeRow[R <% Result](f: "+typesTuple(i)+" => R, exec: Boolean): Result = {", 
-	         "    if (exec)",
-	         "      collect(rows map { (d: "+dataRow(i)+") => (d.show, f("+(1 to i).map("d.t"+_).mkString(",")+")) })",
-	         "    else Success(\"ok\")",
-	         "  }",
-	         "}").mkString("\n") 		
-	  }.mkString("\n")
+           "  def |(row: "+dataRow(i)+") = "+table(i)+"(titles, outer.rows :+ row, execute)",
+           "  def |[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, execute)",
+           "  def |>[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, true)",
+           "  def executeRow[R <% Result](f: "+typesTuple(i)+" => R, exec: Boolean): Result = {", 
+           "    if (exec)",
+           "      collect(rows map { (d: "+dataRow(i)+") => (d.show, f("+(1 to i).map("d.t"+_).mkString(",")+")) })",
+           "    else Success(\"ok\")",
+           "  }",
+           "}").mkString("\n")    
+    }.mkString("\n")
   }
   def dataRowClass(n: Int) = {
-	  "abstract class DataRow"+types(n)+" extends Product {\n"+
-	  "  def show = productIterator.mkString(\"|\", \"|\", \"|\")\n"+
+    "abstract class DataRow"+types(n)+" extends Product {\n"+
+    "  def show = productIterator.mkString(\"|\", \"|\", \"|\")\n"+
       "}"
   }
   def dataRowClasses(n: Int) = {
-	  (1 to n).map { i =>  
+    (1 to n).map { i =>  
         List(
-        	"case class "+dataRow(i)+parametersList(i)+" extends DataRow["+typesList(i, n)+"] {",
+          "case class "+dataRow(i)+parametersList(i)+" extends DataRow["+typesList(i, n)+"] {",
           if (i < n) "  def ![S"+(i+1)+"](t"+(i+1)+": S"+(i+1)+") = "+"DataRow"+(i+1)+parameters(i+1) else "",
-	      "}").mkString("\n")
-	  }.mkString("\n")
+        "}").mkString("\n")
+    }.mkString("\n")
   }
   def parametersList(i: Int) = (1 to i).map(j => "t"+j+": T"+j).mkString("(",", ", ")")
   def parameters(i: Int) = (1 to i).map("t"+_).mkString("(",", ", ")")
@@ -252,3 +256,4 @@ private object DataTablesGenerator {
   def dataRow(i: Int) = "DataRow"+i+types(i)
   def table(i: Int) = "Table"+i
 }
+*/
