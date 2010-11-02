@@ -26,7 +26,7 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
                                                                                           end
   
   case class filter()  {
-    def e1 = select(args(ex = "ex1.*") ^ ex1 ^ ex2).toString must_== "List(List(Example(ex1)))"
+    def e1 = select(args(ex = "ex1") ^ ex1 ^ ex2).toString must_== "List(List(Example(ex1)))"
   }
 
   case class steps()  {

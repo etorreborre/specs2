@@ -7,7 +7,7 @@ case class Arguments (
   ,xonly: Boolean                  = false 
   ,printStackTrace: Boolean        = true
   ,srcDir: String                  = "src/test/scala/" 
-  ,specsFilePattern: String        = "*Spec.scala"
+  ,specNamePattern: String         = ".*Spec"
 )
 
 private[specs2]  
@@ -29,7 +29,7 @@ case object Arguments {
        xonly = bool("xonly", defaults.xonly)
       ,printStackTrace = bool("printStackTrace", defaults.printStackTrace)
       ,srcDir = value("srcDir", defaults.srcDir)
-      ,specsFilePattern = value("files", defaults.specsFilePattern)
+      ,specNamePattern = value("files", defaults.specNamePattern)
     )
   }
   

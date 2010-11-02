@@ -42,16 +42,18 @@ trait TextPrinter extends Printer with TotalStatistics {
       }
     }
   }
-  def printStats(stats: Stats, result: ExecutedSpecEnd) = {
+  def printStats(stats: Stats, result: ExecutedSpecEnd)(implicit args: Arguments) = {
 	  (stats, result) match {   
         case (stats @ Stats(examples, expectations, failures, errors, pending, skipped), ExecutedSpecEnd(n)) => {
-	        println("\nTotal for specification" + (if (n.isEmpty) n else " "+n))
-	        println((
-	                 List(examples qty "example") ++ 
-	                 (if (expectations != examples) List(expectations qty "expectation") else Nil) ++
-	                 List(failures qty "failure", errors qty "error") ++
-	                 List(pending optQty "pending", skipped optQty "skipped").flatten).mkString(", "))
-	        println(" ")
+          if (!args.xonly || stats.hasFailuresOrErrors) {
+	          println("\nTotal for specification" + (if (n.isEmpty) n else " "+n))
+	          println((
+	                   List(examples qty "example") ++ 
+	                   (if (expectations != examples) List(expectations qty "expectation") else Nil) ++
+	                   List(failures qty "failure", errors qty "error") ++
+	                   List(pending optQty "pending", skipped optQty "skipped").flatten).mkString(", "))
+	          println(" ")
+         }
 	    }
 	  }
   }

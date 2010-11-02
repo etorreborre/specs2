@@ -12,7 +12,9 @@ trait Statistics {
 }
 trait TotalStatistics extends Statistics {
   type S = Stats
-  case class Stats(Fragments: Int = 0, expectations: Int = 0, failures: Int = 0, errors: Int = 0, pending: Int = 0, skipped: Int = 0)
+  case class Stats(Fragments: Int = 0, expectations: Int = 0, failures: Int = 0, errors: Int = 0, pending: Int = 0, skipped: Int = 0) {
+    def hasFailuresOrErrors = failures + errors > 0
+  }
 
   def stats(implicit args: Arguments): Function[(S, ExecutedFragment), S] = {
 	  case (s, ExecutedResult(_, r)) => {

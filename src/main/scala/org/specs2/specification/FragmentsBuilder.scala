@@ -25,7 +25,15 @@ trait FragmentsBuilder {
   }
   implicit def group(Fragments: Fragments) = Group(Fragments.fragments)
   implicit def group(fragments: List[Fragment]) = Group(fragments)
-  def args(ex: String = "") = Arguments(".*"+ex+".*")
+
+  def args(  
+     ex: String                      = ".*" 
+    ,xonly: Boolean                  = false 
+    ,printStackTrace: Boolean        = true
+    ,srcDir: String                  = "src/test/scala/" 
+    ,specNamePattern: String         = ".*Spec"
+  ) = Arguments(".*"+ex+".*", xonly, printStackTrace, srcDir, specNamePattern)
+  
   implicit def arguments(a: Arguments) = new ArgumentsFragment(a)
   class ArgumentsFragment(a: Arguments) {
     def ^(f: Fragment) = new Fragments(() => List(f), a)
