@@ -7,7 +7,7 @@ import reporter._
 
 object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
   def main(arguments: Array[String]): Unit = {
-	  implicit val args = Arguments(arguments)
+	  implicit val args = Arguments(arguments:_*)
 	    
 	  lazy val allFragments = Fragments {
       SpecStart("Specifications matching "+args.specsFilePattern+" in "+args.srcDir+"\n") +: 
