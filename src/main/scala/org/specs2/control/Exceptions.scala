@@ -36,6 +36,18 @@ trait Exceptions {
 	  trye(a)(f).fold(identity, identity)
   }
   /**
+   * try to evaluate an expression and return ok if nothing fails.
+   * return ko otherwise
+   */
+  def tryMap[T, S](a: =>T)(ok: S)(ko: S): S = {
+    tryo(a).map(x => ok).getOrElse(ko)
+  }
+  /**
+   * try to evaluate an expression and return true if nothing fails.
+   * return false otherwise
+   */
+  def tryOk[T](a: =>T) = tryMap(a)(true)(false)
+  /**
    * try to evaluate an expression, returning Either
    * 
    * If the expression throws an Exception a function f is used to return the left value

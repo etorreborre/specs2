@@ -92,12 +92,12 @@ object Prop {
   def apply[T, S](label: String, act: =>T, c: (T, S) => Result) = new Prop[T, S](label, actual = Property(act), constraint = c)
   /** create a Prop with a label, an expected value, and a constraint */
   def apply[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = 
-    new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(new Expectable(t)).toResult)
+    new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
   /** create a Prop with an empty label and an actual value */
   def apply[T](value: =>T) = new Prop[T, T](actual = Property(value))
   
   /** default constraint function */
-  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeEqualTo(s).apply(new Expectable(t))).toResult
+  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeEqualTo(s).apply(Expectable(t))).toResult
 }
 /**
  * generic trait for anything having a label, to unify Props and Forms

@@ -15,6 +15,14 @@ class ExceptionsSpec extends SpecificationWithJUnit with Exceptions {  def is =
 "    the result if the expression doesn't throw an exception"                             ! tryOr1^
 "    a default value if the expression throws an exception"                               ! tryOr2^
                                                                                           p^
+"  tryMap executes an expression and return "                                             ^
+"    a 'ok' value if the expression doesn't throw an exception"                           ! tryMap1^
+"    a 'ko' value if the expression throws an exception"                                  ! tryMap2^
+                                                                                          p^
+"  tryOk executes an expression and return "                                              ^
+"    true if the expression doesn't throw an exception"                                   ! tryOk1^
+"    false if the expression throws an exception"                                         ! tryOk2^
+                                                                                          p^
 "  trye executes an expression and returns"                                               ^
 "    Right(result) if the expression doesn't throw an exception"                          ! trye1^
 "    Left(f(e)) if the expression failed, where f is a function of an exception"          ! trye2^
@@ -29,6 +37,12 @@ class ExceptionsSpec extends SpecificationWithJUnit with Exceptions {  def is =
 
   def tryOr1 = tryOr("a")((e:Exception) => e.getMessage) must_== "a"
   def tryOr2 = tryOr({error("boom");"a"})((e:Exception) => "bang") must_== "bang"
+
+  def tryMap1 = tryMap("a")(true)(false) must_== true
+  def tryMap2 = tryMap({error("boom");"a"})(true)(false) must_== false
+
+  def tryOk1 = tryOk("a") must_== true
+  def tryOk2 = tryOk({error("boom");"a"}) must_== false
 
   def trye1 = trye("a")((e:Exception) => e.getMessage) must_== Right("a")
   def trye2 = trye({error("boom");"a"})((e:Exception) => e.getMessage) must_== Left("boom")

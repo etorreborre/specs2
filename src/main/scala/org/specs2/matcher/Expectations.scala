@@ -10,10 +10,11 @@ trait Expectations {
 }
 trait MustExpectations extends Expectations {
   type E[_] = MustExpectable[_]
-  implicit def theValue[T](t: =>T): MustExpectable[T] = new MustExpectable(t)
-  implicit def theBlock(t: =>Nothing): MustExpectable[Nothing] = new MustExpectable(t)
+  implicit def theValue[T](t: =>T): MustExpectable[T] = new MustExpectable(() => t)
+  implicit def theBlock(t: =>Nothing): MustExpectable[Nothing] = new MustExpectable(() => t)
 }
 trait ShouldExpectations extends Expectations {
   type E[_] = ShouldExpectable[_]
-  implicit def theValue[T](t: =>T): ShouldExpectable[T] = new ShouldExpectable(t)
+  implicit def theValue[T](t: =>T): ShouldExpectable[T] = new ShouldExpectable(() => t)
+  implicit def theBlock(t: =>Nothing): ShouldExpectable[Nothing] = new ShouldExpectable(() => t)
 }

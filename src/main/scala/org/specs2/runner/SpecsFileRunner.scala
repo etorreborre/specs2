@@ -1,6 +1,7 @@
 package org.specs2
 package runner
 
+import reflect._
 import main.Arguments
 import specification._
 import reporter._

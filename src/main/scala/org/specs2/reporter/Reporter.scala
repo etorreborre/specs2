@@ -3,6 +3,7 @@ package reporter
 
 import control.Exceptions._
 import io._
+import reflect._
 import specification._
 
 /**

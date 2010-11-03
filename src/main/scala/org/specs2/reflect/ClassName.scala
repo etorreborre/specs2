@@ -1,8 +1,16 @@
 package org.specs2
-package specification
+package reflect
 
+import control.Exceptions._
+
+/**
+ * Utility reflection methods
+ */
 private[specs2]
 trait ClassName {
+  /**
+   * @return the class name of an instance
+   */
   def className(any: AnyRef): String = className(any.getClass.getName)
   /**
    * @return a description from the class name, taking the last name which doesn't contain a $ or a number.
@@ -14,16 +22,12 @@ trait ClassName {
    * <li>take the last element: MyClass</ul>
    */
   def className(className: String): String = {
-   val kname = className
-   val c = className.
+   className.
     split("\\$").reverse.
-    dropWhile(isInteger(_))(0).
+    dropWhile(i => tryOk(i.toInt))(0).
     split("\\.").
     reverse.toList(0)
-    c
   }
-    
-  def isInteger(s: String): Boolean = { try {s.toInt} catch { case _ => return false }; true }
 }
 private[specs2]
 object ClassName extends ClassName

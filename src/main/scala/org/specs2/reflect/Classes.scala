@@ -13,22 +13,25 @@ import io._
 private[specs2]
 trait Classes extends Output {
   /**
-   * Create an instance of a given class, returning either the instance, or an exception
+   * @return an instance of a given class, returning either the instance, or an exception
    */
   def create[T <: AnyRef](className: String = "", loader: ClassLoader = getClass.getClassLoader)(implicit m: ClassManifest[T]): Either[Throwable, T] = {
     trye(createInstanceFor(loadClassOf[T](className, loader)))
   }
   /**
-   * Create an instance of a given class.
+   * @return an instance of a given class.
    */
   def createObject[T <: AnyRef](className: String)(implicit m: ClassManifest[T]): Option[T] = createObject[T](className, false)(m)
   
   /**
-   * Create an instance of a given class and optionally print message if the class can't be loaded.
+   * @return an instance of a given class and optionally print message if the class can't be loaded.
    */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean)(implicit m: ClassManifest[T]): Option[T] = createObject(className, printMessage, false)(m)
   /**
-   * Create an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
+   * A system property 'debugCreateObject' can be set to override the printMessage and printStackTrace parameters
+   * so that the exception message and stacktrace are printed when the object can't be created
+   * 
+   * @return an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
    */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)(implicit m: ClassManifest[T]): Option[T] = {
     tryo(createInstanceOf[T](loadClass[T](className))) { (e: Exception) => 
@@ -37,45 +40,13 @@ trait Classes extends Output {
     }.flatMap(identity)
   }
   /**
-   * create an instance of a given class, checking that the created instance typechecks as expected
-   */
-  private[reflect] def createInstanceOf[T <: AnyRef](c: Option[Class[T]])(implicit m: ClassManifest[T]): Option[T] = {
-    c map { klass => createInstanceFor(klass) }
-  }
-  /**
-   * create an instance of a given class, checking that the created instance typechecks as expected
-   */
-  private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassManifest[T]) = {
-    val constructor = klass.getDeclaredConstructors()(0)
-	  constructor.setAccessible(true)
-    val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
-    if (!m.erasure.isInstance(instance)) error(instance + " is not an instance of " + m.erasure.getName)
-    instance.asInstanceOf[T]
-  }
-  /**
-   * Load a class, given the class name
-   */
-  private[reflect] def loadClass[T <: AnyRef](className: String): Option[Class[T]] = {
-    tryo(Some(loadClassOf(className).asInstanceOf[Class[T]])) { (e: Throwable) =>
-      if (System.getProperty("debugLoadClass") != null) {
-        println("Could not load class " + className)
-        e.getStackTrace() foreach (s => println(s.toString))
-      }
-    }.flatMap(identity)
-  }
-  /**
-   * Load a class, given the class name, without catching exceptions
-   */
-  private[reflect] def loadClassOf[T <: AnyRef](className: String = "", loader: ClassLoader = getClass.getClassLoader): Class[T] = {
-    loader.loadClass(className).asInstanceOf[Class[T]]
-  }
-  /**
    * Try to create an instance of a given class by using whatever constructor is available
    * and trying to instantiate the first parameter recursively if there is a parameter for that constructor.
    * 
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
-  def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)(implicit m: ClassManifest[T]): Option[T] = {
+  def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
+                                    (implicit m: ClassManifest[T]): Option[T] = {
     loadClass(className) match {
       case None => None
       case Some(c: Class[_]) => {
@@ -102,7 +73,10 @@ trait Classes extends Output {
     }
   }
   /** try to create object but print no messages */
-  def tryToCreateObject[T <: AnyRef](className: String)(implicit m: ClassManifest[T]): Option[T] = tryToCreateObject(className, false, false)(m)
+  def tryToCreateObject[T <: AnyRef](className: String)
+                                    (implicit m: ClassManifest[T]) : Option[T] = {
+    tryToCreateObject(className, false, false)(m)
+  }
   /**
    * @return the outer class name for a given class
    */
@@ -137,7 +111,41 @@ trait Classes extends Output {
    * @return the class name without the package name of any object
    */
   def getClassName[T](a: T): String = className(a.asInstanceOf[java.lang.Object].getClass)
-
+  /**
+   * @return an instance of a given class, checking that the created instance typechecks as expected
+   */
+  private[reflect] def createInstanceOf[T <: AnyRef](c: Option[Class[T]])(implicit m: ClassManifest[T]): Option[T] = {
+    c.map(createInstanceFor(_))
+  }
+  /**
+   * @return an instance of a given class, checking that the created instance typechecks as expected
+   */
+  private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassManifest[T]) = {
+    val constructor = klass.getDeclaredConstructors()(0)
+    constructor.setAccessible(true)
+    val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
+    if (!m.erasure.isInstance(instance)) error(instance + " is not an instance of " + m.erasure.getName)
+    instance.asInstanceOf[T]
+  }
+  /**
+   * Load a class, given the class name
+   * 
+   * If the 'debugLoadClass' property is set, then an error message is printed out to the Console
+   */
+  private[reflect] def loadClass[T <: AnyRef](className: String): Option[Class[T]] = {
+    tryo(Some(loadClassOf(className).asInstanceOf[Class[T]])) { (e: Throwable) =>
+      if (System.getProperty("debugLoadClass") != null) {
+        println("Could not load class " + className)
+        e.getStackTrace() foreach (s => println(s.toString))
+      }
+    }.flatMap(identity)
+  }
+  /**
+   * Load a class, given the class name, without catching exceptions
+   */
+  private[reflect] def loadClassOf[T <: AnyRef](className: String = "", loader: ClassLoader = getClass.getClassLoader): Class[T] = {
+    loader.loadClass(className).asInstanceOf[Class[T]]
+  }
 }
 /**
  * This object provides simple functions to instantiate classes.

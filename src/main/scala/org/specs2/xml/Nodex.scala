@@ -4,8 +4,12 @@ package xml
 import scala.xml._
 import collection.Iterablex._
 
+/**
+ * Extension methods for NodeSeqs and Nodes
+ */
 private[specs2]
 trait Nodex {
+  /** extend a NodeSeq */
   implicit def extendNodeSeq(ns: NodeSeq): ExtendedNodeSeq = new ExtendedNodeSeq(ns)
   /**
    * This class adds more methods to the NodeSeq class

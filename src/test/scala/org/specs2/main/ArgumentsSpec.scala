@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-class ArgumentsSpec extends SpecificationWithJUnit with AutoExamples { def is = 
+class ArgumentsSpec extends SpecificationWithJUnit { def is = 
                                                                                           """
   Arguments can be passed on the command line as an Array of Strings.
   There are 2 types of arguments:

@@ -11,7 +11,7 @@ trait MatchersImplicits {
    * This avoids writing b must beTrue 
    */ 
   implicit def toResult(b: Boolean): Result = {
-    new BeTrueMatcher().apply(new Expectable(b)).toResult
+    new BeTrueMatcher().apply(Expectable(b)).toResult
   }
 }
 private[specs2]

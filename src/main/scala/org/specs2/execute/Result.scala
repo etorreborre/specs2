@@ -36,9 +36,18 @@ sealed abstract class Result(val message: String = "", val expectationsNb: Int =
 	    case Pending(m) => Pending(msg)
 	  }
   }
+  /**
+   * @return the logical and combination of 2 results
+   */
   def and(r: =>Result): Result = this
+  /**
+   * @return the logical or combination of 2 results
+   */
   def or(r2: =>Result) = this 
    
+  /**
+   * @return true if the result is a Success instance
+   */
   def isSuccess: Boolean = false
 }
 /** 
@@ -58,7 +67,7 @@ case class Success(m: String = "")  extends Result(m) {
  */
 object Success {
   def apply(m: String, expNb: Int) = new Success(m) {
-	 override val expectationsNb = expNb
+	  override val expectationsNb = expNb
   }
 }
 /** 
@@ -67,11 +76,19 @@ object Success {
  */
 case class Failure(m: String, stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList) 
   extends Result(m) with ResultStackTrace {
+  /** @return an exception created from the message and the stackTraceElements */
   def exception = Exceptionx.exception(m, stackTrace)
   override def or(r: =>Result): Result = r match {
     case Success(m) => if (message == m) r else Success(message+" and "+m)
-    case Failure(m, st) => this
+    case Failure(m, st) => Failure(message+" and "+m, stackTrace ::: st)
     case _ => super.or(r)
+  }
+  override def toString = m
+  override def equals(o: Any) = {
+    o match {
+      case Failure(m2, _) => m == m2
+      case _ => false
+    }
   }
 }
 /** 
@@ -79,6 +96,7 @@ case class Failure(m: String, stackTrace: List[StackTraceElement] = new Exceptio
  */
 case class Error(m: String, stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList) 
   extends Result(m) with ResultStackTrace {
+  /** @return an exception created from the message and the stackTraceElements */
   def exception = Exceptionx.exception(m, stackTrace)
 }
 /** 
