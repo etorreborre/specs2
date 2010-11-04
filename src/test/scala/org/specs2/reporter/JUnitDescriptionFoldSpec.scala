@@ -98,7 +98,7 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
   def descriptionIs(f: Fragments)(tree: String*) = 
 	  showDescriptionTree(f.fragments) must_== tree.toList.mkString("\n")
   
-  def showDescriptionTree(fragments: List[Fragment]): String = {
+  def showDescriptionTree(fragments: Seq[Fragment]): String = {
 	  new JUnitDescriptionFold(getClass).toDescription(fragments:_*).drawTree
   }
 }

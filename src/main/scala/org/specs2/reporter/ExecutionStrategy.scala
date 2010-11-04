@@ -5,12 +5,12 @@ import specification._
 
 private[specs2]
 trait ExecutionStrategy {
-  val execute: List[List[Fragment]] => List[ExecutedFragment] 
+  val execute: Seq[Seq[Fragment]] => Seq[ExecutedFragment] 
 }
 
 private[specs2]
 trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution {
-  val execute = (fragments: List[List[Fragment]]) => {
+  val execute = (fragments: Seq[Seq[Fragment]]) => {
     import scalaz._; import Scalaz._; import concurrent._
     import java.util.concurrent.Executors
     import Strategy.Executor
@@ -25,7 +25,7 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
 
 private[specs2]
 trait SequentialExecutionStrategy extends ExecutionStrategy with FragmentExecution {
-  val execute = (fragments: List[List[Fragment]]) => {
+  val execute = (fragments: Seq[Seq[Fragment]]) => {
     fragments.map(l => l.map(f => executeFragment(f))).flatten
   }
   

@@ -8,7 +8,7 @@ sealed trait Fragment {
 }
 case class SpecStart(name: String) extends Fragment
 case class SpecEnd(name: String) extends Fragment
-case class Group(fragments: List[Fragment])
+case class Group(fragments: Seq[Fragment])
 case class Text(t: String) extends Fragment {
   override def matches(s: String) = t.matches(s)
 }

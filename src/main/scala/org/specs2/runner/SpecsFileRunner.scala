@@ -24,6 +24,6 @@ object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
     specificationNames(args.srcDir, args.specNamePattern).flatMap(createSpecification(_))
   }
   private def include(s: BaseSpecification) = {
-    (SpecStart(ClassName.className(s)) :: s.content.fragments) :+ SpecEnd(ClassName.className(s))
+    (SpecStart(ClassName.className(s)) +: s.content.fragments) :+ SpecEnd(ClassName.className(s))
   }
 }

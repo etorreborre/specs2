@@ -39,7 +39,7 @@ trait FragmentExecution {
   }
 
   private[specs2]
-  def executeBodies(exs: Fragments): List[Result] = {
+  def executeBodies(exs: Fragments): Seq[Result] = {
     exs.fragments.map(executeFragment(_)). collect { case r: ExecutedResult => r.result }
   }
   

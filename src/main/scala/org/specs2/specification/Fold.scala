@@ -35,14 +35,14 @@ trait Fold {
     Console.println("There was an exception during the building of fragments: " + e)
     e.getFullStackTrace.foreach(println(_))
   }
-  def fold(fragments: Fragment*): T = fold(new Fragments(() => fragments.toList))
+  def fold(fragments: Fragment*): T = fold(new Fragments(() => fragments))
 }
 trait Folder[F] {
   type T
   def initial: T
   def fold(implicit args: Arguments): Function2[T, F, T]
   
-  def fold(fs: =>List[F])(implicit args: Arguments): T = trye {
+  def fold(fs: =>Seq[F])(implicit args: Arguments): T = trye {
     fs.foldLeft(initial)(fold)
   } ((e: Exception) => handleException(e)) match {
     case Right(e) => e

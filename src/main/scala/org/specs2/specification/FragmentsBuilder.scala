@@ -24,7 +24,7 @@ trait FragmentsBuilder {
 	  def ![T <% Result](t: =>T) = new Example(s, body = () => t)
   }
   implicit def group(Fragments: Fragments) = Group(Fragments.fragments)
-  implicit def group(fragments: List[Fragment]) = Group(fragments)
+  implicit def group(fragments: Seq[Fragment]) = Group(fragments)
 
   def args(  
      ex: String                      = ".*" 
