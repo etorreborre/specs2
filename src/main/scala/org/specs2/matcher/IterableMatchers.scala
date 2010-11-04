@@ -72,7 +72,7 @@ private[specs2]
 trait IterableBeHaveMatchers extends LazyParameters { outer: IterableMatchers =>
   implicit def iterable[T](s: MatchResult[Iterable[T]]) = new IterableBeHaveMatchers(s)
   class IterableBeHaveMatchers[T](s: MatchResult[Iterable[T]]) {
-    def contain(t: LazyParameter[T]*) = s.apply(outer.contain(t))
+    def contain(ts: LazyParameter[T]*) = s.apply(outer.contain(ts:_*))
     def containInOrder(t: LazyParameter[T]*) = s.apply(outer.containInOrder(t))
     def containMatch(t: =>String) = s.apply(outer.containMatch(t))
     def containPattern(t: =>String) = s.apply(outer.containPattern(t))
