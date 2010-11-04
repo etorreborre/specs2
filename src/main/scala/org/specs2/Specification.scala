@@ -5,5 +5,18 @@ import execute._
 import matcher._
 import specification._
 
-trait Specification extends BaseSpecification with MustExpectations
-  with PredefinedFragments with StandardResults with Debug with AutoExamples
+/**
+ * The Specification trait provides BaseSpecification functionalities plus additional ones:
+ *  * MustExpectations: to create Expectations like `a must_== b` 
+ *  * PredefinedFragments: to use p, br, end to format the specification text
+ *  * StandardResults: to use todo, pending, success in example bodies
+ *  * AutoExamples: to allow the declaration use todo, pending, success in example bodies
+ *  * Debug: to allow the insertion of .pp to print any expression to the Console and pass
+ *           it to the rest of the program
+ */
+trait Specification extends BaseSpecification 
+      with MustExpectations
+      with PredefinedFragments 
+      with StandardResults 
+      with AutoExamples
+      with Debug 

@@ -5,8 +5,8 @@ import control.Exceptions._
 import execute._
 
 /**
- * An action create a Step fragment that will either return an
- * Error if there is an exception or a Success.
+ * An action creates a Step fragment that will either return an
+ * Error Result if there is an exception or a Success.
  * 
  * It is usually used to do some initialisation or cleanup before or after all
  * the Fragments.
@@ -24,7 +24,7 @@ object Action {
   def apply(a: =>Any) = new Action().apply(a)
 }
 /**
- * creates an Action that can create Step fragments as required with the apply method 
+ * creates an Action that can create a Step fragment as required with the apply method 
  */
 class Action {
   def apply(a: =>Any) = Step({() =>

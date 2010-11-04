@@ -9,9 +9,6 @@ import matcher._
 private[specs2]
 trait FragmentsBuilder {
 
-  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.reduceLeft(_ and _).toResult
-  implicit def asResult[T](r: MatchResult[T]): Result = r.toResult
-  
   implicit def fragments[T <: Fragment](f: T): Fragments = Fragments(f)
   
   implicit def start(s: String): Fragments = Fragments(Text(s))
