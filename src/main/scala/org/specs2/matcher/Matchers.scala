@@ -3,7 +3,14 @@ package matcher
 
 import execute._
 
-trait Matchers extends AnyMatchers with IterableMatchers with StringMatchers with BeHaveMatchers with
-      ExceptionMatchers with MatchersImplicits
+/**
+ * Trait aggregating all of specs2 matchers 
+ */
+trait Matchers extends AnyMatchers 
+                  with IterableMatchers 
+                  with StringMatchers 
+                  with BeHaveMatchers 
+                  with ExceptionMatchers 
+                  with MatchersImplicits
       
 object Matchers extends Matchers

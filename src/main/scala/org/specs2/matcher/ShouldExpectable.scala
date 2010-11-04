@@ -1,14 +1,24 @@
 package org.specs2
 package matcher
 
-class ShouldExpectable[T](tm: () => T) extends Expectable[T](tm){
-  def aka = new ShouldExpectable(tm) {
-    override protected val desc = Some(tm().toString)
-  } 
-  def aka(alias: String) = new ShouldExpectable(tm) {
+/**
+ * This kind of expectable can be followed by the verb should to apply a matcher:
+ * 
+ * `1 should beEqualTo(1)`
+ * 
+ * For convenience, several shouldMatcher methods have also been defined as shortcuts to equivalent:
+ * 
+ * `a should matcher`
+ */
+class ShouldExpectable[T] private (tm: () => T) extends Expectable[T](tm){
+  /** @return this expectable with an alias description */
+  override def aka(alias: String): ShouldExpectable[T] = new ShouldExpectable(tm) {
 	  override protected val desc = Some(alias)
   } 
   def should(m: =>Matcher[T]) = applyMatcher(m)
   def shouldNot(m: =>Matcher[T]) = applyMatcher(m.not)
-  def should_==(other: =>T) = should(new BeEqualTo(other))
+  def should_==(other: =>T) = applyMatcher(new BeEqualTo(other))
+}
+object ShouldExpectable {
+  def apply[T](t: =>T) = new ShouldExpectable(() => t)
 }

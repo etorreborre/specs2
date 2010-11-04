@@ -3,23 +3,77 @@ package matcher
 
 import execute._
 
+/**
+ * This trait provides implicit definitions and types to create DataTables.
+ * 
+ * A DataTable has a header defining column names and rows holding values.
+ * It is possible to apply a function taking the row values and returning a MatchResult.
+ * 
+ * A TableHeader is defined by separating the column names with '|':
+ * ` "a" | "b" | "c"`  
+ * 
+ * A DataRow is defined by separating the row values with '!':
+ * ` 1 ! 2 ! 3`  
+ * 
+ * Note that the '!' method can conflict with the creation of Examples when the value is a 
+ * string. In that case it is possible to use the '!!! method to disambiguate:
+ * 
+ * `"1" !! "2" ! "3"`
+ * 
+ * In that case the first column of the header can also be defined with '||' for pure
+ * symmetry reasons:
+ *  
+ * `"a" || "b" | "c"`  
+ * `"1" !! "2" ! "3"`
+ * 
+ *  
+ *  
+ *  
+ * @see org.specs2.matcher.DataTablesSpec for examples
+ */
 trait DataTables {
+  
+  /** @return a TableHeader with one heading only */
   implicit def toTableHeader(a: String) = new TableHeader(List(a))
+  /** @return a String DataRow with one column only */
   implicit def stringToDataRow(a: String) = StringDataRow1(a)
+  /** @return a DataRow with one value only */
   implicit def toDataRow[T](a: T) = DataRow1(a)
-  class Table(val titles: List[String], val execute: Boolean = false) {
+  
+  /**
+   * A DataTable with its header
+   * 
+   * Children of this class are parametrized with the types of values that their rows can 
+   * hold.
+   */
+  abstract class Table(val titles: List[String], val execute: Boolean = false) {
+    /**
+     * @return the header as a | separated string
+     */
 	  def showTitles = titles.mkString("|", "|", "|")
-	  def collect[R <% Result](results: List[(String, R)]): Result = {
-	    val totalSuccess = results.foldLeft(Success(""): Result)((res, cur) => res and cur._2)
-	    val collected = 
-	    results.map { (cur: (String, R)) => result(cur._1, cur._2) }.mkString("\n")
-	    val header = totalSuccess match {
+
+	  /**
+	   * Collect the results of each row
+	   * @param results list of (row description, row execution result)
+     * @return an aggregated Result from a list of results
+     */
+    protected def collect[R <% Result](results: List[(String, R)]): Result = {
+	    val result = allSuccess(results)
+	    val header = result match {
 	   	  case Success(_) => showTitles
 	   	  case other      => "  " + showTitles  
 	    }
-	    totalSuccess.updateMessage(header+"\n"+collected)
+	    result.updateMessage { 
+	      header+"\n"+
+        results.map((cur: (String, R)) => resultLine(cur._1, cur._2)).mkString("\n")
+	    }
 	  }
-	  private def result(desc: String, result: Result): String = {
+	  /** @return the logical and combination of all the results */
+    private def allSuccess[R <% Result](results: List[(String, R)]): Result = {
+      results.foldLeft(Success(""): Result)((res, cur) => res and cur._2)
+    }
+    /** @return the status of the row + the values + the failure message if any */
+	  private def resultLine(desc: String, result: Result): String = {
 	    result.status+" "+desc+{
 	   	  result match {
 	   	    case Success(_) => ""

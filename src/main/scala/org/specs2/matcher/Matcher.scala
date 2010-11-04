@@ -5,34 +5,42 @@ import execute._
 import Expectable._
 import MatchResult._
 /**
- * <p>The <code>Matcher</code> trait is the base trait for Matchers.
+ * The `Matcher` trait is the base trait for any Matcher.
  * 
  * This trait can be extended to provide an appropriate <code>apply</code> method that 
- * will check an expectable value <code>a: Expectable[T]</code></p>.
+ * will check an expectable value `a: Expectable[T]`.
+ *
+ * The result of a match is a MatchResult object (@see MatchResult).
  * 
- * Children of that class can use the optional description string to provide enhanced failure messages.
+ * Matchers can be composed
  * 
- * <i>Implementation notes</i>:<ul>
- * <li>the parameter to the apply method must be a by-name parameter. This allows some values to be evaluated
- * only when necessary. For example in <code>a must (m1(b) and m2(c))</code> m2(c) will not be evaluated if m1(b) is false</li>
- * <li>However in the implementation of the apply function, it must be taken care of not evaluating the parameter twice. 
- * Assigning it to a val is the solution to this issue.</li>
- * <li>2 messages are included in the result of the apply function, to allow the easy creation of the negation of matchers
- *  with the not method.</li>
- * </ul>
- * 
+ * Implementation notes:
+ *   * the parameter to the apply method must be a by-name parameter. 
+ *     This allows some values to be evaluated only when necessary. 
+ *     
+ *   * However in the implementation of the apply function, it must be taken care of not 
+ *     evaluating the parameter twice. Assigning it to a val is the solution to this issue.
  */
 trait Matcher[-T] { outer =>
 
+  /** 
+   * apply this matcher to an Expectable
+   * @return a MatchResult describing the outcome of the match
+   */
   def apply[S <: T](t: =>Expectable[S]): MatchResult[S]
   
+  /**
+   * This convenience method can be used to evaluate a boolean condition and return the 
+   * appropriate MatchResult, depending on the boolean value
+   * @return a MatchResult
+   */
   protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S]): MatchResult[S] = {
 	  Matcher.result(test, okMessage, koMessage, value) 
   }
  
   /** 
    * Adapts a matcher to another.
-   * ex: be_==("message") ^^ (_.getMessage)  
+   * ex: `be_==("message") ^^ (_.getMessage)` can be applied to an exception  
    */
   def ^^[S](f: S => T) = new Matcher[S] {
     def apply[U <: S](a: =>Expectable[U]) = {
@@ -41,15 +49,26 @@ trait Matcher[-T] { outer =>
     }
   }
 
+  /**
+   * negate a Matcher
+   * @see MatchResult.not
+   */
   def not = new Matcher[T] {
     def apply[U <: T](a: =>Expectable[U]) = outer(a).not
   }
+  /**
+   * the logical or between 2 matchers
+   * @see MatchResult.or
+   */
   def or[S <: T](m: =>Matcher[S]) = new Matcher[S] {
     def apply[U <: S](a: =>Expectable[U]) = {
       val value = a
       outer(value).or(m(value))
     }
   }
+  /**
+   * @return a Skip MatchResult if this matcher fails
+   */
   def orSkip: Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: =>Expectable[U]) = {
       val value = a

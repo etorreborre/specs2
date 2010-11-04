@@ -5,11 +5,57 @@ import scalaz.Functor
 import execute._
 import Expectable._
 
+/**
+ * Result of a Match.
+ * 
+ * A MatchResult contains several information about a match on an expectable:
+ * 
+ * * the expectable value, to allow the chaining of matches
+ * * a pair of messages ok message / ko message to allow the easy creation of the negation
+ *   of a match
+ * 
+ * A MatchResult can be transformed to a simple Result object to be the body of an Example.
+ * 
+ * There are different kinds of MatchResults, some of them being only created to support
+ * English-like combination of Matchers:
+ * 
+ * `1 must be equalTo(1) and not be equalTo(2)`
+ * 
+ * In an Expectation like the one above, there is a left to right evaluation:
+ * 
+ *  1. be is a NeutralMatcher, returning a NeutralMatch doing nothing yet, just storing
+ *     the expectable
+ *  
+ *  2. equalTo(1) is a real Matcher which is applied to the NeutralMatch MatchResult
+ *     thanks to an implicit definition in the BeHaveAnyMatchers trait. This yields a 
+ *     MatchSuccess result
+ *  
+ *  3. not creates a NotMatcher and can be and-ed with the previous MatchSuccess to 
+ *     yield a AndMatch(MatchSuccess, NotMatch), with NotMatch being the result of
+ *     applying the NotMatcher to the expectable. This AndMatch is evaluated to create a 
+ *     AndNotMatch(MatchSuccess, MatchSkip)
+ *     
+ *     Basically this is like forming an evaluation
+ *     structure which will be resolved when the next 'real' matcher will arrive
+ *     
+ *  4. the AndNotMatch get nows it be method called with the equalTo Matcher.
+ *     This results in equalTo being applied to the AndNotMatch, effectively doing:
+ *     MatchSuccess and MatchSkip.apply(equalTo(2).not), which is
+ *     MatchSuccess and expectable.applyMatcher(equalTo(2).not) which is MatchSuccess
+ * 
+ * @see org.specs2.matcher.BeHaveMatchersSpec for examples
+ */
 sealed trait MatchResult[+T] {
+  /** the value being matched */
   val expectable: Expectable[T]
   
-  protected[specs2] def evaluate[S >: T]: MatchResult[S] = this
+  /** 
+   * apply a Matcher to the expectable contained in that MatchResult
+   * 
+   * Depending on the exact type of the MatchResult, that logic may vary
+   */
   def apply(m: Matcher[T]): MatchResult[T]
+
   def not: MatchResult[T]
   def or[S >: T](m: =>MatchResult[S]): MatchResult[S] = new OrMatch(this, m).evaluate
   def and[S >: T](m: =>MatchResult[S]): MatchResult[S] = AndMatch(this, m).evaluate
@@ -17,8 +63,12 @@ sealed trait MatchResult[+T] {
   def and(m: Matcher[T]): MatchResult[T] = and(expectable.applyMatcher(m))
   def be(m: Matcher[T]) = apply(m)
   def have(m: Matcher[T]) = apply(m)
+  
   def compose[S](f: Expectable[T] => Expectable[S]): MatchResult[S]
   def toResult: Result = evaluate.toResult
+
+  /** the value being matched */
+  protected[specs2] def evaluate[S >: T]: MatchResult[S] = this
 }
 case class MatchSuccess[T](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
   def compose[S](f: Expectable[T] => Expectable[S]): MatchResult[S] = MatchSuccess(okMessage, koMessage, f(expectable))
