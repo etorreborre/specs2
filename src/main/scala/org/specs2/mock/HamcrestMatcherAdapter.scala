@@ -1,13 +1,13 @@
 package org.specs2
 package mock
 
-import org.hamcrest._
-import org.hamcrest.core._
+import org.hamcrest.{ Description, TypeSafeMatcher }
 import matcher._
 
-/** Adapter class to use specs matchers as Hamcrest matchers */
-case class HamcrestMatcherAdapter[T](m: org.specs2.matcher.Matcher[T]) extends org.hamcrest.TypeSafeMatcher[T] {
+/** Adapter class to use specs2 matchers as Hamcrest matchers */
+case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends TypeSafeMatcher[T] {
    var message = ""
+     
    def matchesSafely(item: T) = {
      m.apply(Expectable(item)) match {
        case MatchSuccess(m, _, _) => message = m; true
