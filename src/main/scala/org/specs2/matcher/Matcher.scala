@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import scalaz.Scalaz
+import scalaz.Scalaz._
 import execute._
 import Expectable._
 import MatchResult._
@@ -44,8 +46,8 @@ trait Matcher[-T] { outer =>
    */
   def ^^[S](f: S => T) = new Matcher[S] {
     def apply[U <: S](a: =>Expectable[U]) = {
-      val result = outer.apply(a.fmap[U, T](a, f))
-      result.compose((_:Expectable[T]) => a)
+      val result = outer.apply(a.map(f))
+      result.map((t: T) => a.value)
     }
   }
 

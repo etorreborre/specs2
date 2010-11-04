@@ -58,7 +58,7 @@ object Expectable {
     override val desc: Option[String] = d1
   }
   
-  implicit def ExpectableFunctor[T](e: Expectable[T]): Functor[Expectable] = new Functor[Expectable] {
+  implicit val ExpectableFunctor: Functor[Expectable] = new Functor[Expectable] {
     def fmap[A, B](r: Expectable[A], f: A => B) = Expectable(f(r.value), r.desc)
   }
 }
