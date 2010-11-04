@@ -2,15 +2,24 @@ package org.specs2
 package matcher
 
 import reflect.Classes._
+import text.Quote._
 import execute._
 
+/**
+ * This trait provides matchers which are applicable to any type of value
+ */
+trait AnyMatchers extends AnyBaseMatchers with AnyBeHaveMatchers
+object AnyMatchers extends AnyMatchers
+
 private[specs2]
-trait AnyMatchers extends BeHaveAnyMatchers {
-  /** Matches if the expectable is true */
+trait AnyBaseMatchers {
+
+  /** matches if a == true */
   def beTrue = new BeTrueMatcher
-  /** Matches if the expectable is false */
+  /** matches if a == false */
   def beFalse = beTrue.not
 
+  /** matches if a eq b */
   def be[T <: AnyRef](t: =>T) = new Matcher[T] {
     def apply[S <: T](v: =>Expectable[S]) = {
       val (a, b) = (v, t)
@@ -18,28 +27,28 @@ trait AnyMatchers extends BeHaveAnyMatchers {
     }
   }
 
+  /** matches if a == b */
   def be_==[T](t: =>T) = beEqualTo(t)
+  /** matches if a == b */
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
+  /** matches if a == b */
   def equalTo[T](t: =>T) = beEqualTo(t)
 
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not
   
-  private[specs2] def q(a: Any) = "'"+a+"'" 
-  def isBoolean(a: Any) = a match {
-  	case b: Boolean => true
-  	case _ => false
-  }
-
-  /** @return an object.toString() without quotes (used in messages creation) */
-  private[specs2] def unq(a: Any)  = if (null == a) "null" else a.toString
-
 }
+/**
+ * Matcher for a boolean value
+ */
 class BeTrueMatcher extends Matcher[Boolean] {
   def apply[S <: Boolean](v: =>Expectable[S]) = {
     result(v.value, v.description + " is true", v.description + " is false", v) 
   }
 }
+/**
+ * Equality Matcher
+ */
 class BeEqualTo[T](t: =>T) extends Matcher[T] {
   import AnyMatchers._
   def apply[S <: T](v: =>Expectable[S]) = {
@@ -58,10 +67,15 @@ class BeEqualTo[T](t: =>T) extends Matcher[T] {
     result(a == b.value, db + " is equal to " + qa, db + " is not equal to " + qa, b)
   }
 }
-object AnyMatchers extends AnyMatchers
 
-trait BeHaveAnyMatchers { outer: AnyMatchers =>
-  implicit def anyMatcher[T](s: MatchResult[T]) = new AnyBeHaveMatchers(s)
+/**
+ * This trait allows to write expressions like
+ * 
+ *  `1 must be equalTo(1)`
+ */
+trait AnyBeHaveMatchers { outer: AnyMatchers =>
+  implicit def anyBeHaveMatcher[T](s: MatchResult[T]) = new AnyBeHaveMatchers(s)
+  
   class AnyBeHaveMatchers[T](s: MatchResult[T]) {
     def equalTo(t: T) = s.apply(outer.be_==(t))
   }

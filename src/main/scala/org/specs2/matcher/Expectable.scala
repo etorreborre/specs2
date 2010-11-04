@@ -2,8 +2,9 @@ package org.specs2
 package matcher
 
 import scalaz._
+import reflect.Anyx._
 import execute._
-import AnyMatchers._
+import text.Quote._
 
 /**
  * The Expectable class models anything which can be checked by applying a Matcher
@@ -39,8 +40,8 @@ class Expectable[+T] protected (private val t: () => T) { outer =>
 
   /** @return the description of the matched value, quoted. */
   protected def d[T](value: =>T) = desc  match {
-    case None => if (isBoolean(value)) "the value" else q(value)
-    case Some(de: String) => de + (if (!value.toString.isEmpty && !isBoolean(value)) " " + q(value) else "")
+    case None => if (value.isBoolean) "the value" else q(value)
+    case Some(de: String) => de + (if (!value.toString.isEmpty && !value.isBoolean) " " + q(value) else "")
   }
   /** @return the description of the matched value, unquoted. */
   protected def dUnquoted[T](value: T) = desc match {

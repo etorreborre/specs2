@@ -2,29 +2,38 @@ package org.specs2
 package matcher
 
 import java.util.regex._
-import AnyMatchers._
+import text.Quote._
 
 /**
- * The <code>StringMatchers</code> trait provides matchers which are applicable to String objects
+ * The `StringMatchers` trait provides matchers which are applicable to String objects
  */
-private[specs2]
 trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers
 
 private[specs2]
 trait StringBaseMatchers { outer =>
   
-  /**
-   * Matches if (a.equalsIgnoreCase(b))
-   */   
-  def beEqualToIgnoringCase(a: String) = new BeEqualToIgnoringCase(a)
-  /**
-   * Matches if (a.equalsIgnoreCase(b))
-   */   
-  def be_==/(a: String) = beEqualToIgnoringCase(a)  
-  /**
-   * Matches if (a.trim == b.trim)
-   */   
-  def beEqualToIgnoringSpace(t: =>String) = new Matcher[String] { 
+  /** matches if (a.equalsIgnoreCase(b)) */   
+  def beEqualToIgnoreCase(a: String) = new BeEqualToIgnoreCase(a)
+  /** matches if (a.equalsIgnoreCase(b)) */   
+  def ==/(s: String) = be_==/(s)
+  /** matches if (a.notEqualIgnoreCase(b)) */   
+  def be_!=/(a: String) = notBeEqualToIgnoreCase(a)  
+  /** matches if (a.equalsIgnoreCase(b)) */   
+  def be_==/(a: String) = beEqualToIgnoreCase(a)  
+  /** matches if (a.equalsIgnoreCase(b)) */   
+  def equalIgnoreCase(a: String) = beEqualToIgnoreCase(a)
+  /** matches if (a.equalsIgnoreCase(b)) */   
+  def equalToIgnoreCase(a: String) = beEqualToIgnoreCase(a)
+  /** matches if (a.equalsIgnoreCase(b)) */   
+  def equalIgnoreCaseTo(a: String) = beEqualToIgnoreCase(a)
+  /** matches if !(a.equalsIgnoreCase(b)) */   
+  def !=/(s: String) = be_!=/(s)
+  /** matches if !(a.equalsIgnoreCase(b)) */   
+  def notBeEqualToIgnoreCase(a: String) = beEqualToIgnoreCase(a).not 
+  /** matches if !(a.equalsIgnoreSpace(b)) */   
+  def notBeEqualToIgnoreSpace(a: String) = beEqualToIgnoreSpace(a).not 
+  /** matches if (a.trim == b.trim) */   
+  def beEqualToIgnoreSpace(t: =>String) = new Matcher[String] { 
     def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v) 
       result(a != null && b.value != null && a.trim == b.value.trim, 
@@ -32,14 +41,14 @@ trait StringBaseMatchers { outer =>
              b.description + " is not equal ignoring space to " + q(a), b)
       }
   }
-  /**
-   * Matches if (a.trim == b.trim)
-   * @deprecated use beEqualToIgnoringSpace instead
-   */   
-  def equalIgnoreSpace(a: =>String) = beEqualToIgnoringSpace(a)
-  /**
-   * Matches if (b.indexOf(a) >= 0)
-   */   
+  /** matches if (a.trim == b.trim) */   
+  def equalIgnoreSpace(a: =>String) = beEqualToIgnoreSpace(a)
+  /** matches if (a.trim == b.trim) */   
+  def equalToIgnoreSpace(a: String) = beEqualToIgnoreSpace(a)
+  /** matches if (a.trim == b.trim) */   
+  def equalIgnoreSpaceTo(a: String) = beEqualToIgnoreSpace(a)
+
+  /** matches if (b.indexOf(a) >= 0) */   
   def contain(t: =>String) = new Matcher[String] { 
     def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
@@ -48,10 +57,9 @@ trait StringBaseMatchers { outer =>
              b.description + " doesn't contain " + q(a), b)
     } 
   }
-
-  /**
-   * Matches if b matches the regular expression a
-   */   
+  /** matches if !(b.indexOf(a) >= 0) */   
+  def notContain(a: String) = contain(a).not 
+  /** matches if b matches the regular expression a */   
   def beMatching(t: =>String) = new Matcher[String] {
     def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
@@ -60,9 +68,9 @@ trait StringBaseMatchers { outer =>
              b.description + " doesn't match " + q(a), b)
     }
   }
-  /**
-   * Matches if b.startsWith(a)
-   */   
+  /** matches if b doesn't match the regular expression a */   
+  def notBeMatching(a: String) = beMatching(a).not
+  /** matches if b.startsWith(a) */   
   def startWith(t: =>String) = new Matcher[String] { 
     def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
@@ -71,9 +79,9 @@ trait StringBaseMatchers { outer =>
              b.description + " doesn't start with " + q(a), b)
     }
   }
-  /**
-   * Matches if b.endsWith(a)
-   */   
+  /** matches if !b.startsWith(a) */   
+  def notStartWith(a: String) = startWith(a).not
+  /** matches if b.endsWith(a) */   
   def endWith(t: =>String) = new Matcher[String] { 
     def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
@@ -82,13 +90,13 @@ trait StringBaseMatchers { outer =>
              b.description  + " doesn't end with " + q(a), b)
     }
   }
-  /**
-   * Matches if the regexp a is found inside b
-   */   
+  /** matches if !b.endsWith(a) */   
+  def notEndWith(a: String) = endWith(a).not
+  /** matches if the regexp a is found inside b */   
   def find(a: String) = new FindMatcher(a)
 
-  /**
-   * Matcher to find if the regexp a is found inside b. 
+  /** 
+   * Matcher to find if the regexp a is found inside b.
    * This matcher can be specialized to a FindMatcherWithGroups which will also check the found groups
    */   
   class FindMatcher(t: =>String) extends Matcher[String] {
@@ -133,9 +141,7 @@ trait StringBaseMatchers { outer =>
              q(a) + " isn't found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")) + foundText, b)
     } 
   }
-  /**
-   * Matches if the length is n
-   */
+  /** matches if the length is n */
   def haveLength(n: Int) = new Matcher[String](){
     def apply[S <: String](v: =>Expectable[S]) = {
       val string = v
@@ -144,55 +150,21 @@ trait StringBaseMatchers { outer =>
     		 string.description  + " doesn't have length " + n, string)
     }
   }
-  /**
-   * Matches if (a.notEqualIgnoreCase(b))
-   */   
-  def be_!=/(a: String) = notEqualIgnoreCase(a)  
-
-  /**
-   * Matches if !(a.equalsIgnoreCase(b))
-   * @deprecated use notBeEqualToIgnoringCase instead
-   */   
-  def notEqualIgnoreCase(a: String) = beEqualToIgnoringCase(a).not 
-  /**
-   * Matches if !(a.equalsIgnoreCase(b))
-   */   
-  def notBeEqualToIgnoringCase(a: String) = beEqualToIgnoringCase(a).not 
-  /**
-   * Matches if !(a.equalsIgnoreSpace(b))
-   */   
-  def notBeEqualToIgnoringSpace(a: String) = beEqualToIgnoringSpace(a).not 
-  /**
-   * Matches if !(b.indexOf(a) >= 0)
-   */   
-  def notContain(a: String) = contain(a).not 
-  /**
-   * Matches if b doesn't match the regular expression a
-   */   
-  def notBeMatching(a: String) = beMatching(a).not
-  /**
-   * Matches if !b.startsWith(a)
-   */   
-  def notStartWith(a: String) = startWith(a).not
-  /**
-   * Matches if !b.endsWith(a)
-   */   
-  def notEndWith(a: String) = endWith(a).not
-  def !=/(s: String) = be_!=/(s)
-
-  def ==/(s: String) = be_==/(s)
-  def equalToIgnoringCase(a: String) = beEqualToIgnoringCase(a)
-  def equalToIgnoringSpace(a: String) = beEqualToIgnoringSpace(a)
-  def equalIgnoringCaseTo(a: String) = beEqualToIgnoringCase(a)
-  def equalIgnoringSpaceTo(a: String) = beEqualToIgnoringSpace(a)
 }
 
 private[specs2]
 trait StringBeHaveMatchers { outer: StringBaseMatchers =>
   implicit def toStringResultMatcher(result: MatchResult[String]) = new StringResultMatcher(result)
   class StringResultMatcher(result: MatchResult[String]) {
-    def matching(s: String) = result.apply(beMatching(s))
-    def startingWith(s: String) = result.apply(startWith(s))
+    def matching(s: String) = result(beMatching(s))
+    def containing(s: String) = result(contain(s))
+    def length(n: Int) = result(haveLength(n))
+    def startWith(s: String) = result(outer.startWith(s))
+    def endWith(s: String) = result(outer.endWith(s))
+    def startingWith(s: String) = result(outer.startWith(s))
+    def endingWith(s: String) = result(outer.endWith(s))
+    def equalIgnoreSpace(s: String) = result(outer.equalIgnoreSpace(s))
+    def equalIgnoreCase(s: String) = result(outer.equalIgnoreCase(s))
   }
 }
 
@@ -202,7 +174,7 @@ class StringEmptyMatcher extends Matcher[String] {
     result(b.value.isEmpty, b.description  + " is empty", b.description  + " is not empty", b)
   }
 }
-class BeEqualToIgnoringCase(t: =>String) extends Matcher[String] { 
+class BeEqualToIgnoreCase(t: =>String) extends Matcher[String] { 
   def apply[S <: String](v: =>Expectable[S]) = {
 	val (a, b) = (t, v)
 	result(a != null && b.value != null && a.equalsIgnoreCase(b.value), 
