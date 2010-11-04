@@ -108,7 +108,7 @@ class ContextSpec extends SpecificationWithJUnit with StandardResults with Fragm
     
   class FragmentsExecution extends MockOutput with ContextData {
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
-    case class Executed(r: List[Result]) {
+    case class Executed(r: Seq[Result]) {
       def prints(ms: String*): Result = {
         messages must_== List(ms:_*)
       }  
