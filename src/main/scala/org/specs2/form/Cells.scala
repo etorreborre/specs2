@@ -4,10 +4,9 @@ package form
 import execute._
 import StandardResults._
 /**
- * Base type for a Cell
- *
- * A Cell can be transformed to a text representation
- * and it can also be executed.
+ * A Cell is the Textual representation of a Form element.
+ * 
+ * It can be executed and converted to a String for display.
  */
 trait Cell extends Text with Executable {
   def header = List(this)

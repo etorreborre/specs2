@@ -11,49 +11,32 @@ import matcher._
  *   * an actual value
  *   * a constraint to check if the actual value conforms to the expected one
  * 
+ * This property can be executed and can be inserted in a Form.
  *
- * This property can then be executed and can be inserted in the Layout of a Form.
+ * A Prop is meant to be declared as "bound" to an actual value:
  *
- * A Prop property is meant to be declared as "bound" to an actual value:<code>
- *
- *   val customerName = Prop("Customer name", person.name)
- * </code>
+ *   `val customerName = Prop("Customer name", person.name)`
  * 
  * [the actual value is not evaluated until the Prop is executed]
  * 
  * Then it can be associated an expected value with the apply method (usually in a Form declaration):
- * <code>
- *   customerName("Bill")
- * </code>
  * 
- * Different constraints can be set on a Prop, by using the companion object factory methods:<code>
- *
- * // build a Prop with an AnyConstraint. The block will be executed if the property is executed 
- * val propWithABlock = Prop("label", actualValue, thisVariableInTheScope must_== thatVariableInTheScope)
- *
- * // build a Prop with a FunctionConstraint. The function will be executed with the actual and expected values if the property is executed
- * val propWithAFunction = Prop("label", actualValue, (actual, expected) => actual must_== expected)
- *
- * // build a Prop with a MatcherConstraint. The function will be executed with the default matcher (BeEqualTo)
- * //  if the property is executed
- * val propWithAMatcherExecutor = Prop("label", actualValue, m => actual must m)
- *
- * // Note that in that case the matcher set on the constraint can be changed with
- * propWithAMatcherExecutor.matchesWith(beGreaterThan(_))
- *
- * </code>
+ *   `customerName("Bill")`
  * 
- * Props can be temporarily commented out with the comment() method and thus won't be
- * executed:
- *   name("Eric").comment() // won't check the expected value
- *
+ * The actual and the expected values can have different types and the constraint which is 
+ * applied to them can be anything returning a result.
+ * 
+ * However the Prop companion object provides a method to create a Property with a constraint
+ * using a beEqualTo matcher:
+ * 
+ * `Prop("Name", "Eric")("Eric") must_== Success("'Eric' is equal to 'Eric'")`
  *
  */
-case class Prop[T, S](val label: String = "",
+case class Prop[T, S](
+              val label: String = "",
               val actual: Property[T] = Property[T](), 
               val expected: Property[S] = Property[S](),
-              val constraint: (T, S) => Result = Prop.checkProp) 
-              extends Executable {
+              val constraint: (T, S) => Result = Prop.checkProp) extends Executable {
   
   /**
    * The apply method sets the expected value and returns the Prop
@@ -67,7 +50,7 @@ case class Prop[T, S](val label: String = "",
   def get: S = expected.get
 
   /** execute the constraint set on this property, with the expected value */
-  def execute = expected.flatMap { e => 
+  def execute: Result = expected.flatMap { e => 
     actual.map(a => constraint(a, e)).toOption 
   }.getOrElse(pending)
 

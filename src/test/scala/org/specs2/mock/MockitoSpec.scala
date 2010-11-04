@@ -6,8 +6,7 @@ import org.hamcrest.core.{ IsNull }
 import org.mockito.Matchers.{ anyInt }
 import matcher._
 
-class MockitoSpec extends SpecificationWithJUnit with Mockito {
-  def is = 	
+class MockitoSpec extends SpecificationWithJUnit with Mockito {  def is = 	
                                                                                           """
   Mockito is a Java library for mocking.
 
@@ -30,7 +29,7 @@ class MockitoSpec extends SpecificationWithJUnit with Mockito {
 "     then when the mocked method is called, the exception will be thrown" 		            ! aMock().throw1^
 "     different successive exceptions can even be thrown" 						                    ! aMock().throw2^
                                                                                           p^
-"   The number of calls to a mocked method can be checked"^                               
+"   The number of calls to a mocked method can be checked"                                ^                               
 "     if the mocked method has been called once"                                          ! calls().calls1^
 "     if the mocked method has been called twice"                                         ! calls().calls2^
 "     if the mocked method has been called atLeast n times"                               ! calls().calls3^

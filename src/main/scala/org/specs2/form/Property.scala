@@ -2,9 +2,10 @@ package org.specs2
 package form
 
 /**
- * This class represent properties which can be updated and retrieved using customized getter and setter functions.
+ * This class represents values which are evaluated lazily and which may even
+ * be missing.
  * 
- * The held value is optional: it may not exist yet and it is lazy: it is evaluated only once on the first call to get
+ * It has Option-like function and can be also converted to an Either object
  */
 case class Property[T](value: () => Option[T], evaluated: Boolean = false, evaluatedValue: Option[T] = None) {
   /** change the value */
@@ -23,13 +24,6 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def update(newValue: =>T) = withValue(newValue)
   /** alial for update */
   def apply(newValue: =>T) = update(newValue)
-  /** @return the value as an Option */
-  def execute = {
-    if (!evaluated)
-      copy(value, true, evaluatedValue = value())
-    else 
-      this
-  }
   override def toString = optionalValue.toString
   /** @return an iterator containing the value if present */
   def iterator = optionalValue.iterator
@@ -56,6 +50,13 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   /** to a list */
   def toList = optionalValue.toList
   
+  /** @return execute the property */
+  private def execute = {
+    if (!evaluated)
+      copy(value, true, evaluatedValue = value())
+    else 
+      this
+  }
   
   override def equals(other: Any) = {
     other match {

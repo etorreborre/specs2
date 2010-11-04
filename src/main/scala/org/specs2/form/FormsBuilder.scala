@@ -4,12 +4,13 @@ package form
 import execute._
 import matcher._
 
-
 /**
- * Utility methods to build Fields, Props and Forms to insert in other Forms or Fragments.
+ * Utility methods to build Fields, Props and Forms and insert them in other Forms or 
+ * Fragments.
  */
 private[specs2]
 trait FormsBuilder {
+
   /** a String can be added on a Form row as a TextCell */
   implicit def stringsAreTextCell(t: String) = new TextCell(t)  
   /** a Field can be added on a Form row as a FieldCell */
@@ -22,6 +23,8 @@ trait FormsBuilder {
 
   /** @return a new Form with the given title */
   def form(title: String) = Form(title)
+
+  /** @return a new Form with the given title and rows */
   def form(title: String, lines: List[Form]) = {
     if (lines.isEmpty) Form(title)
     else {

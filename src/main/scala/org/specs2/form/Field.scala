@@ -4,12 +4,12 @@ package form
 import execute._
 /**
  * A Field is a property which is used only to display input values or output values.
- * The apply method can be used to retrieve the Fields value:<code>
- *   val f = Field(label, 1)
- *   f() must_== 1
- * </code>
  * 
- * The value is stored in a Property object so it will not be evaluated until explicitly queried.
+ * The apply method can be used to retrieve the Field value:
+ *   `Field(label, 1).apply() must_== 1`
+ * 
+ * The value is stored in a Property object so it will not be evaluated until explicitly 
+ * queried.
  */
 case class Field[T](label: String, value: Property[T]) extends Executable with StandardResults {
   /** executing a field does nothing */
@@ -17,10 +17,7 @@ case class Field[T](label: String, value: Property[T]) extends Executable with S
   /**
    * set a new value on the field. 
    */
-  def apply(v: =>T): this.type = {
-    value(v)
-    this
-  }
+  def apply(v: =>T) = Field(label, value(v))
   /** @return the field value */
   def apply(): T = value.get
   /** alias for apply() */
@@ -31,7 +28,8 @@ case class Field[T](label: String, value: Property[T]) extends Executable with S
   def toStringField = Field(label, value.get.toString)
 }
 /**
- * Factory methods for creating Fields. Fields values can also be concatenated to produce "summary" fields.
+ * Factory methods for creating Fields. Fields values can also be concatenated to produce 
+ * "summary" fields.
  * 
  * val f1 = Field(label, "hello")
  * val f2 = Field(label, "world")

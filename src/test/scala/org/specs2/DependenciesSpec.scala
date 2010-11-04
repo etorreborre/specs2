@@ -8,7 +8,7 @@ class DependenciesSpec extends SpecificationWithJUnit { def is =
   o    runner
   o    reporter 
   o    specification  
-  o    mock form
+  *    mock form
   *    matcher  
   *    execute  
   *               reflect            xml 

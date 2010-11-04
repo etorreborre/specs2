@@ -42,9 +42,9 @@ class PropertySpec extends SpecificationWithJUnit {
 
   case class exec() extends Before with MockOutput { 
     def before = clear()
-    def e1 = Property(1).execute.get must_== 1
+    def e1 = Property(1).toOption.get must_== 1
     def e2 = {  
-      val p = Property({print("one"); 1}).execute
+      val p = Property({print("one"); 1}).toOption
       p.get
       messages.size must_== 1
     }
