@@ -5,6 +5,7 @@ import io.FileReader._
 import control.Exceptionx._
 import control.LazyParameter
 import control.LazyParameters._
+import main.SystemProperties._
 import execute._
 import matcher.MatchersImplicits._
 import matcher._
@@ -12,7 +13,8 @@ import text.Trim._
 
 private[specs2]
 trait FromSource {
-  val srcDir = "src/test/scala/"
+  
+  lazy val srcDir = getOrElse("srcDir", "src/test/scala/")
 
   implicit def matchExample(expression: =>MatchResult[_]): Example = {
     createExample(exampleDescription, () => expression.toResult)
