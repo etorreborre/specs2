@@ -63,8 +63,11 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
 	  
 	  new AccumulatedDescription(newTreeLoc, newExamples)
   }
-  
-  def toDescription(fragments: Fragment*): Description = asOneDescription(descriptionTree.fold(fragments:_*).rootTree)
+
+  /** used in tests only */
+  def toDescription(fragments: Fragment*): Description = 
+    asOneDescription(descriptionTree.fold(Fragments(fragments)(main.Arguments())).rootTree)
+    
   def asOneDescription(descriptionTree: Tree[Description]): Description = {
     val addChildren = (d: Description, children: Stream[Description]) => { children.foreach(d.addChild(_)); d }
     TreeFold.bottomUp(descriptionTree, addChildren).rootLabel

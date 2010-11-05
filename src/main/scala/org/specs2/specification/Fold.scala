@@ -35,8 +35,8 @@ trait Fold {
     Console.println("There was an exception during the building of fragments: " + e)
     e.getFullStackTrace.foreach(println(_))
   }
-  def fold(fragments: Fragment*): T = fold(new Fragments(() => fragments))
 }
+
 trait Folder[F] {
   type T
   def initial: T

@@ -26,7 +26,7 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
                                                                                           end
   
   case class filter()  {
-    def e1 = select(args(ex = "ex1") ^ ex1 ^ ex2).toString must_== "List(List(Example(ex1)))"
+    def e1 = select(args(ex = "ex1") ^ ex1 ^ ex2).toString must not contain("ex2")
   }
 
   case class steps()  {
@@ -53,10 +53,10 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
     def e5 = {
       val fragments = "intro" ^ action("1") ^ ex1 ^ ex2 ^ action("2") ^ action("3") ^ ex1 ^ ex2
       select(fragments).map(l => l.map(_.toString)).mkString("\n") must_== List(
-      "List(Text(intro), Step)",
+      "List(SpecStart(anon), Text(intro), Step)",
       "List(Example(ex1), Example(ex2))",
       "List(Step, Step)",
-      "List(Example(ex1), Example(ex2))").mkString("\n")  
+      "List(Example(ex1), Example(ex2), SpecEnd(anon))").mkString("\n")  
     }
     def action(message: String) = Action(selection.println(message)) 
   }

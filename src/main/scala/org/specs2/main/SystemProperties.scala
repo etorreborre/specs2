@@ -13,8 +13,8 @@ trait SystemProperties {
   /** @return true if the system property p is defined */
   def isDefined(p: String) = getProperty(p) != null
   /** @return the value of the system property p or a default value */
-  def getOrElse(p: String, defaultValue: String) = 
-    Option(getProperty(p)).getOrElse(defaultValue)
+  def getOrElse(p: String, defaultValue: String): String = 
+    Option(getProperty(p)).getOrElse(defaultValue).toString
 }
 
 private[specs2]

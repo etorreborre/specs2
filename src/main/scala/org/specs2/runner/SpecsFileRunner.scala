@@ -2,6 +2,7 @@ package org.specs2
 package runner
 
 import reflect._
+import io.FromSource
 import main.Arguments
 import specification._
 import reporter._
@@ -15,13 +16,13 @@ object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
       specifications.flatMap(include(_)) :+
       SpecEnd(specName)
     } 
-    lazy val specName = "Specifications matching "+args.specNamePattern+" in "+args.srcDir+"\n"
+    lazy val specName = "Specifications matching "+args.specName+" in "+FromSource.srcDir+"\n"
     
 	  reporter.report(new Specification { def is = allFragments })
   }
 
   private def specifications(implicit args: Arguments) = {
-    specificationNames(args.srcDir, args.specNamePattern).flatMap(createSpecification(_))
+    specificationNames(FromSource.srcDir, args.specName).flatMap(createSpecification(_))
   }
   private def include(s: BaseSpecification) = {
     (SpecStart(ClassName.className(s)) +: s.content.fragments) :+ SpecEnd(ClassName.className(s))

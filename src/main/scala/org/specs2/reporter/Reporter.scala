@@ -23,11 +23,7 @@ import specification._
 private[specs2]
 trait Reporter extends Output with Selection with ExecutionStrategy with Exporting {
   def report(spec: BaseSpecification): this.type = {
-    val fragments = spec.content.fragments match {
-      case SpecStart(n) :: rest => spec.content.fragments
-      case rest => SpecStart(name(spec)) +: spec.content.fragments
-    }
-	  report(new Fragments(() => fragments :+ SpecEnd(name(spec)), spec.content.arguments))
+	  report(spec.content)
   }
    	  
   def report(fragments: Fragments): this.type = {
@@ -35,8 +31,6 @@ trait Reporter extends Output with Selection with ExecutionStrategy with Exporti
     (select andThen execute andThen export)(fragments)
     this
   }
-  
-  def name(spec: BaseSpecification) = ClassName.className(spec)
 }
 
 private[specs2]

@@ -1,13 +1,16 @@
 package org.specs2
 
 import control._
+import main.ArgumentsArgs
 import execute._
 import matcher._
 import specification._
 
 /**
  * The Specification trait provides BaseSpecification functionalities plus additional ones:
- *  * MustExpectations: to create Expectations like `a must_== b` 
+ *  * ArgumentArgs: arg method to create Arguments 
+ *  * Matchers: methods for creating expectations
+ *  * MustExpectations: to create Expectations with the `must` verb like `a must_== b` 
  *  * PredefinedFragments: to use p, br, end to format the specification text
  *  * StandardResults: to use todo, pending, success in example bodies
  *  * AutoExamples: to allow the declaration use todo, pending, success in example bodies
@@ -15,8 +18,10 @@ import specification._
  *           it to the rest of the program
  */
 trait Specification extends BaseSpecification 
-      with MustExpectations
-      with PredefinedFragments 
-      with StandardResults 
-      with AutoExamples
-      with Debug 
+   with ArgumentsArgs
+   with Matchers 
+   with MustExpectations
+   with PredefinedFragments 
+   with StandardResults 
+   with AutoExamples
+   with Debug 

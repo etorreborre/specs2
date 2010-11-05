@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import control.Exceptions._
+import control.LazyParameters._
 import execute._
 
 /**
@@ -27,7 +28,5 @@ object Action {
  * creates an Action that can create a Step fragment as required with the apply method 
  */
 class Action {
-  def apply(a: =>Any) = Step({() =>
-	  trye(a)(Error(_)).left.getOrElse(Success())  
-  })
+  def apply(a: =>Any) = Step(trye(a)(Error(_)).left.getOrElse(Success()))
 }

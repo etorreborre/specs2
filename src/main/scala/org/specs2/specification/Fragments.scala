@@ -9,7 +9,7 @@ import main.Arguments
  * A Fragments object is a list of fragments which can be related 
  * to other fragments by using the ^ method
  */
-case class Fragments(private val fragmentList: () => Seq[Fragment], arguments: Arguments = Arguments()) {
+case class Fragments private (private val fragmentList: () => Seq[Fragment], arguments: Arguments = Arguments()) {
   def fragments = fragmentList()
   import StandardFragments._
   override def toString = fragments.mkString("\n")
@@ -22,6 +22,7 @@ case class Fragments(private val fragmentList: () => Seq[Fragment], arguments: A
 case object Fragments {
   def apply(fragments: LazyParameter[Fragment]*) = new Fragments(() => fragments.map(_.value))
   def apply(fragments: Seq[Fragment])(implicit args: Arguments) = new Fragments(() => fragments, args)
+  
   def isExample: Function[Fragment, Boolean] = { case Example(_, _) => true; case _ => false }
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
 }

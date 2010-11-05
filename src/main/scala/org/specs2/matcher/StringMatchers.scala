@@ -157,7 +157,8 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
   implicit def toStringResultMatcher(result: MatchResult[String]) = new StringResultMatcher(result)
   class StringResultMatcher(result: MatchResult[String]) {
     def matching(s: String) = result(beMatching(s))
-    def containing(s: String) = result(contain(s))
+    def contain(s: String) = result(outer.contain(s))
+    def containing(s: String) = result(outer.contain(s))
     def length(n: Int) = result(haveLength(n))
     def startWith(s: String) = result(outer.startWith(s))
     def endWith(s: String) = result(outer.endWith(s))

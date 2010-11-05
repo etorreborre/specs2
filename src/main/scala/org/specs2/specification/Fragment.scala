@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import execute._
+import control.LazyParameter
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or 
@@ -20,14 +21,20 @@ case class Group(fragments: Seq[Fragment])
 case class Text(t: String) extends Fragment {
   override def matches(s: String) = t.matches(s)
 }
-case class Example(desc: String = "", body: () => Result) extends Fragment with Executable { 
+case class Example private (desc: String = "", body: () => Result) extends Fragment with Executable { 
   def execute = body()
   override def matches(s: String) = desc.matches(s)
   override def toString = "Example("+desc+")"
 }
-case class Step(action: () => Result) extends Fragment with Executable {
+case object Example {
+  def apply[T <% Result](desc: String, body: LazyParameter[T]) = new Example(desc, () => body.value)
+}
+case class Step private (action: () => Result) extends Fragment with Executable {
   def execute = action()
   override def toString = "Step"
+}
+case object Step {
+  def apply(action: LazyParameter[Result]) = new Step(() => action.value)
 }
 
 /**

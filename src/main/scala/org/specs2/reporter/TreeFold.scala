@@ -4,6 +4,7 @@ package reporter
 import scalaz._
 import Scalaz._
 import io._
+import main.Arguments
 import specification._
 import FragmentsShow._
 
@@ -39,8 +40,12 @@ trait TreeFold[S] extends Fold {
     new AccumulatedTree(newTreeLoc, newLevel)	
   }
 
-  def toTree(name: String, fragments: Fragments): Tree[S] = toTree(name, fragments.fragments)
-  def toTree(name: String, fragments: Seq[Fragment]): Tree[S] = fold((SpecStart(name) +: fragments):_*).rootTree
+  def toTree(name: String, fragments: Fragments): Tree[S] = toTree(name, fragments.fragments, fragments.arguments)
+  
+  /** used for testing */
+  private[specs2] def toTree(name: String, fragments: Seq[Fragment], arguments: Arguments = Arguments()): Tree[S] = 
+    fold(Fragments(SpecStart(name) +: fragments)(arguments)).rootTree
+  
   private def updateTreeLoc(level: Level, newLevel: Level, treeLoc: TreeLoc[S], f: S): TreeLoc[S] = {
 	  level.state match {
       case Up => { 

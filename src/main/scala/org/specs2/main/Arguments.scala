@@ -1,13 +1,25 @@
 package org.specs2
 package main
 
+private[specs2]
+trait ArgumentsArgs {
+    /** shorthand method to create an Arguments object */
+  def args(  
+     ex: String                      = ".*" 
+    ,xonly: Boolean                  = Arguments().xonly 
+    ,printStackTrace: Boolean        = Arguments().printStackTrace
+    ,specName: String                = Arguments().specName
+  ) = Arguments(".*"+ex+".*", xonly, printStackTrace, specName)
+}
+private[specs2]
+object ArgumentsArgs extends ArgumentsArgs
+
 private[specs2]  
 case class Arguments (
   ex: String                       = ".*" 
   ,xonly: Boolean                  = false 
   ,printStackTrace: Boolean        = true
-  ,srcDir: String                  = "src/test/scala/" 
-  ,specNamePattern: String         = ".*Spec"
+  ,specName: String                = ".*Spec"
 )
 
 private[specs2]  
@@ -28,8 +40,7 @@ case object Arguments {
     new Arguments (
        xonly = bool("xonly", defaults.xonly)
       ,printStackTrace = bool("printStackTrace", defaults.printStackTrace)
-      ,srcDir = value("srcDir", defaults.srcDir)
-      ,specNamePattern = value("files", defaults.specNamePattern)
+      ,specName= value("specName", defaults.specName)
     )
   }
   
