@@ -14,3 +14,6 @@ trait Matchers extends AnyMatchers
                   with MatchersImplicits
       
 object Matchers extends Matchers
+
+trait MustMatchers extends Matchers with MustExpectations
+trait ShouldMatchers extends Matchers with ShouldExpectations

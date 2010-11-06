@@ -9,8 +9,7 @@ import specification._
 /**
  * The Specification trait provides BaseSpecification functionalities plus additional ones:
  *  * ArgumentArgs: arg method to create Arguments 
- *  * Matchers: methods for creating expectations
- *  * MustExpectations: to create Expectations with the `must` verb like `a must_== b` 
+ *  * MustMatchers: methods for creating expectations with the `must` verb like `a must_== b` 
  *  * PredefinedFragments: to use p, br, end to format the specification text
  *  * StandardResults: to use todo, pending, success in example bodies
  *  * AutoExamples: to allow the declaration use todo, pending, success in example bodies
@@ -19,8 +18,7 @@ import specification._
  */
 trait Specification extends BaseSpecification 
    with ArgumentsArgs
-   with Matchers 
-   with MustExpectations
+   with MustMatchers
    with PredefinedFragments 
    with StandardResults 
    with AutoExamples

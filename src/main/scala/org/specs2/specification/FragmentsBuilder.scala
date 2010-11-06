@@ -6,18 +6,27 @@ import execute._
 import main._
 import matcher._
 
+/**
+ * This trait provides function to create specification Fragments:
+ *  * a SpecStart fragment with title
+ *  * a Text fragment with text
+ *  * an Example fragment with a body
+ *  * a group of fragments (when including another specification for example)
+ * 
+ */
 private[specs2]
 trait FragmentsBuilder {
   /** 
    * This method allows to add a title to the Specification
+   * It can be used as an operation on a String: `"spec title".title`
    * @return a SpecStart object from a string 
    */
-  def title(s: String): SpecStart = SpecStart(s)
+  implicit def title(s: String): SpecTitle = SpecTitle(s)
+  case class SpecTitle(name: String) {
+    def title = SpecStart(name)
+  }
+
   
-  /** @return a Fragments object from a single Fragment */
-  implicit def fragments(f: Fragment): Fragments = Fragments(f)
-  /** @return a Fragments object from a string */
-  implicit def textStart(s: String): Fragments = Fragments(Text(s))
   /** @return a Text Fragment from a string */
   implicit def textFragment(s: String): Text = Text(s)
   /** @return a Group of Fragments from an existing Fragments object */
@@ -42,10 +51,19 @@ trait FragmentsBuilder {
    *         fragments
    */
   implicit def argumentsFragment(a: Arguments) = new ArgumentsFragment(a)
-  
+  /** this class allows to start a Fragment list with an Arguments object */
   class ArgumentsFragment(a: Arguments) {
     def ^(f: Fragment) = Fragments(List(f))(a)
   }
+  
+  /** 
+   * Additional implicits to create a Fragments object from a simple String
+   * or an existing Fragment. This allows further chaining with the ^ method 
+   */
+  /** @return a Fragments object from a single Fragment */
+  implicit def fragments(f: Fragment): Fragments = Fragments(f)
+  /** @return a Fragments object from a string */
+  implicit def textStart(s: String): Fragments = Fragments(Text(s))
 
 }
 
