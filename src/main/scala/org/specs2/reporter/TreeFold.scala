@@ -47,7 +47,7 @@ trait TreeFold[S] extends FragmentFold {
     foldAll(SpecStart(name) +: fragments)(arguments).rootTree
   
   private def updateTreeLoc(level: Level, newLevel: Level, treeLoc: TreeLoc[S], f: S): TreeLoc[S] = {
-	  level.state match {
+	  level.direction match {
       case Up => { 
         if (level.level == 0 )
           treeLoc.root.insertDownLast(leaf(f))
