@@ -67,7 +67,7 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends FragmentFold {
 
   /** used in tests only */
   def toDescription(fragments: Fragment*): Description = 
-    asOneDescription(descriptionTree.foldAll(fragments).rootTree)
+    asOneDescription(descriptionTree.foldAll(fragments)(Arguments()).rootTree)
     
   def asOneDescription(descriptionTree: Tree[Description]): Description = {
     val addChildren = (d: Description, children: Stream[Description]) => { children.foreach(d.addChild(_)); d }

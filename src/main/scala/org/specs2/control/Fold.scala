@@ -15,12 +15,11 @@ import main.Arguments
 trait Fold[F] {
   type T
   def initial: T
-  implicit val arguments = Arguments()
   
   def fold(implicit args: Arguments): Function2[T, F, T]
   
   def foldAll(fs: =>Seq[F])(implicit args: Arguments): T = trye {
-    fs.foldLeft(initial)(fold(arguments))
+    fs.foldLeft(initial)(fold(args))
   } ((e: Exception) => handleException(e)) match {
     case Right(e) => e
     case Left(e) => initial

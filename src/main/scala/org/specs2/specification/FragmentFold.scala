@@ -19,6 +19,9 @@ import control.Fold
  * 
  */
 trait FragmentFold extends Fold[Fragment]
+/**
+ * Fold for Executed Fragments
+ */
 trait ExecutedFragmentFold extends Fold[ExecutedFragment]
 
 

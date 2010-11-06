@@ -12,7 +12,7 @@ trait LevelsFold extends FragmentFold {
   type T = Level
   lazy val initial = new Level()
   
-  val level: Function[(T, Fragment), (Int, T)] = {
+  def level(implicit arguments: Arguments) = (t: T, f: Fragment) => (t, f) match {
 	  case p => (currentLevel(p), fold.tupled(p))
   }
   val currentLevel: Function[(T, Fragment), Int] = { 
