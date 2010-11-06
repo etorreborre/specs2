@@ -3,11 +3,11 @@ package reporter
 
 import scalaz.Scalaz._
 import io._
-import specification._
 import main._
+import specification._
 
 private[specs2]
-trait ConsoleReporter extends Reporter with FolderExporting with DefaultExecutionStrategy with ConsoleOutput with TextPrinter
+trait ConsoleReporter extends Reporter with FoldExporting with DefaultExecutionStrategy with ConsoleOutput with TextPrinter
   with TotalStatistics {
   
   /**
@@ -18,7 +18,7 @@ trait ConsoleReporter extends Reporter with FolderExporting with DefaultExecutio
    *                     updated[T]                -> identity -> T
    * 
    */
-  val folder = new Folder[ExecutedFragment] {
+  val fold = new ExecutedFragmentFold {
     type T = Stats
     def initial = Stats()
     def fold(implicit args: Arguments): Function2[T, ExecutedFragment, T] = {

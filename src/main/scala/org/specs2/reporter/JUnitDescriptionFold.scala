@@ -4,6 +4,7 @@ package reporter
 import _root_.org.junit.runner._
 import scalaz._
 import Scalaz._
+import main.Arguments
 import specification._
 
 /**
@@ -19,7 +20,7 @@ import specification._
  * the necessary associations between the Description objects.
  *
  */
-class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
+class JUnitDescriptionFold(specificationClass: Class[_]) extends FragmentFold {
 	
   /** 
    * A TreeFold which maps nodes to Descriptions
@@ -51,9 +52,9 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
   override type T = AccumulatedDescription
   val initial = new AccumulatedDescription(descriptionTree.initial, Map.empty[Description, Fragment])
   
-  val fold = (descExamples: T, f: Fragment) => {
+  def fold(implicit arguments: Arguments) = (descExamples: T, f: Fragment) => {
 	  val AccumulatedDescription(treeLoc, examples) = descExamples
-	  val newTreeLoc = descriptionTree.fold(treeLoc, f)
+	  val newTreeLoc = descriptionTree.fold(arguments)(treeLoc, f)
 	  val newExamples = f match {
       case Step(action) => examples + (newTreeLoc.label -> f)
       case Text(t) => examples + (newTreeLoc.label -> f)
@@ -66,7 +67,7 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends Fold {
 
   /** used in tests only */
   def toDescription(fragments: Fragment*): Description = 
-    asOneDescription(descriptionTree.fold(Fragments(fragments)(main.Arguments())).rootTree)
+    asOneDescription(descriptionTree.foldAll(fragments).rootTree)
     
   def asOneDescription(descriptionTree: Tree[Description]): Description = {
     val addChildren = (d: Description, children: Stream[Description]) => { children.foreach(d.addChild(_)); d }

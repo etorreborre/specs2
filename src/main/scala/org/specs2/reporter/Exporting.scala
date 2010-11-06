@@ -11,8 +11,8 @@ trait Exporting {
 }
 
 private[specs2]
-trait FolderExporting {
-  val folder: Folder[ExecutedFragment]
-  type ExportType = folder.T
-  def export(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => folder.fold(fragments)
+trait FoldExporting {
+  val fold: ExecutedFragmentFold
+  type ExportType = fold.T
+  def export(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => fold.foldAll(fragments)
 }

@@ -22,6 +22,9 @@ trait Throwablex {
     }
     /** @return the list of all stacktrace elements */
     def getFullStackTrace: List[java.lang.StackTraceElement] = (t :: chainedExceptions).flatMap(_.getStackTrace)
+    /** print all the stacktrace for t, including the traces from its causes */
+    def printFullStackTrace = t.getFullStackTrace.foreach(println(_))
+
   }
 }
 private[specs2]

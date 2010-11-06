@@ -28,6 +28,12 @@ trait ClassName {
     split("\\.").
     reverse.toList(0)
   }
+  /**
+   * @return the simple name of a class
+   */
+  def simpleName(klass: Class[_]) = {
+    className(klass.getName).split("\\.").last
+  }
 }
 private[specs2]
 object ClassName extends ClassName

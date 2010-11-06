@@ -28,7 +28,8 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
   /** fold object used to create descriptions */
   private val descriptions = new JUnitDescriptionFold(klass)
   /** extract the root Description object and the examples to execute */
-  private lazy val descriptions.DescriptionAndExamples(desc, executions) = descriptions.fold(content)
+  private lazy val descriptions.DescriptionAndExamples(desc, executions) = 
+    descriptions.foldAll(content.fragments)(content.arguments)
   /** @return a Description for the TestSuite */
   def getDescription = desc
   

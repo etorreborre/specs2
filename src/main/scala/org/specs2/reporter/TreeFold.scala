@@ -9,7 +9,7 @@ import specification._
 import FragmentsShow._
 
 private[specs2]
-trait TreeFold[S] extends Fold {
+trait TreeFold[S] extends FragmentFold {
   import LevelsFold._
   def optFold: (T, Fragment) => Option[S]
   def root: S
@@ -29,9 +29,9 @@ trait TreeFold[S] extends Fold {
   type T = AccumulatedTree[S]
   val initial = AccumulatedTree.rootTree
 
-  val fold = (t: T, fragment: Fragment) => {
+  def fold(implicit arguments: Arguments) = (t: T, fragment: Fragment) => {
     val AccumulatedTree(treeLocation, l) = t
-    val newLevel = LevelsFold.fold(l, fragment)
+    val newLevel = LevelsFold.fold(arguments)(l, fragment)
     val newTreeLoc: TreeLoc[S] =     
       fragment match {
         case SpecStart(_) => optFold(t, fragment).map(leaf(_).loc).getOrElse(treeLocation)
@@ -44,7 +44,7 @@ trait TreeFold[S] extends Fold {
   
   /** used for testing */
   private[specs2] def toTree(name: String, fragments: Seq[Fragment], arguments: Arguments = Arguments()): Tree[S] = 
-    fold(Fragments(SpecStart(name) +: fragments)(arguments)).rootTree
+    foldAll(SpecStart(name) +: fragments)(arguments).rootTree
   
   private def updateTreeLoc(level: Level, newLevel: Level, treeLoc: TreeLoc[S], f: S): TreeLoc[S] = {
 	  level.state match {

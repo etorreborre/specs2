@@ -1,10 +1,11 @@
 package org.specs2
 package reporter
 
+import main.Arguments
 import specification._
 
 private[specs2]
-trait LevelsFold extends Fold {
+trait LevelsFold extends FragmentFold {
   import StandardFragments._
 
   case class Level(level: Int = 0, state: Direction = Up, lastNode: LastNode = Txt)
@@ -19,7 +20,7 @@ trait LevelsFold extends Fold {
 	  case (a, f) => a.level
   }
   
-  val fold: Function2[T, Fragment, T] = (t: T, f: Fragment) => (t, f) match {
+  def fold(implicit arguments: Arguments) = (t: T, f: Fragment) => (t, f) match {
 	  case (a, End()) => Level()
 	  case (a, Par()) => a
 	  case (a, Br()) => a
