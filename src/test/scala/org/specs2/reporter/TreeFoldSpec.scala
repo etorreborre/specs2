@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 import scalaz._
 import Scalaz._
+import main.Arguments
 import specification._
 import FragmentsShow._
 import FragmentsTree._
@@ -104,4 +105,7 @@ class TreeFoldSpec extends SpecificationWithJUnit {
 	    "ex1.2" ! success^
 	  end^
 	  "ex2.1" ! success
+
+  def toTree(name: String, fragments: Seq[Fragment]): Tree[Fragment] = 
+    FragmentsTree.foldAll(SpecStart(name) +: fragments)(Arguments()).rootTree
 }

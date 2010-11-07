@@ -3,6 +3,7 @@ package reporter
 
 import main.Arguments
 import specification._
+import StandardFragments._
 
 /**
  * This fold computes the 'level' of a given fragment. It is used to indent Fragments in
@@ -31,7 +32,6 @@ import specification._
  */
 private[specs2]
 trait LevelsFold extends FragmentFold {
-  import StandardFragments._
 
   type T = Level
   case class Level(level: Int = 0, direction: Direction = Up, lastNode: LastNode = Txt)
