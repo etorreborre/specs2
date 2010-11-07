@@ -1,5 +1,6 @@
 package org.specs2
 package reporter
+
 import specification._
 import io._
 import org.scalacheck._
@@ -62,9 +63,10 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
   }
   val ex1 = "ex1" ! success
   val ex2 = "ex2" ! success
-  val selection = new Selection with MockOutput
+  val selection = new DefaultSelection with MockOutput
+  
   def select(f: Fragments) = {
-    selection.select(new Specification { def is = f }.content).map(l => l.map(_.toString))
+    selection.select(f.arguments)(new Specification { def is = f }.content).map(l => l.map(_.toString))
   }
 
 }

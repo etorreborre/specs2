@@ -36,6 +36,13 @@ trait Exceptions {
 	  trye(a)(f).fold(identity, identity)
   }
   /**
+   * try to evaluate an expression and return it if nothing fails.
+   * return ko otherwise
+   */
+  def tryOrElse[T](a: =>T)(ko: T): T = {
+    tryo(a).map(identity).getOrElse(ko)
+  }
+  /**
    * try to evaluate an expression and return ok if nothing fails.
    * return ko otherwise
    */

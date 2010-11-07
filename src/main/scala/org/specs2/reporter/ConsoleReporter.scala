@@ -6,32 +6,28 @@ import io._
 import main._
 import specification._
 
+/**
+ * The console reporter executes a Specification and exports the results to the Console
+ * Output:
+ * 
+ * * DefaultSelection filters and sorts the Fragments
+ * * DefaultExecutionStrategy executes the Examples concurrently by default
+ * * TextExporting prints the results in a Tree manner
+ * * ConsoleOutput specifies that the output must be the standard output console
+ *
+ */
 private[specs2]
-trait ConsoleReporter extends Reporter with FoldExporting with DefaultExecutionStrategy with ConsoleOutput with TextPrinter
-  with TotalStatistics {
+trait ConsoleReporter extends Reporter 
+    with DefaultSelection
+    with DefaultExecutionStrategy
+    with TextExporting
+    with ConsoleOutput 
   
-  /**
-   *                     (Stats, ExecutedFragment) -> print
-   *                   /       
-   * (T, Fragment) ->                                   x
-   *                   \
-   *                     updated[T]                -> identity -> T
-   * 
-   */
-  val fold = new ExecutedFragmentFold {
-    type T = Stats
-    def initial = Stats()
-    def fold(implicit args: Arguments): Function2[T, ExecutedFragment, T] = {
-      case p @ (s, executed) => {
-        val newStats = stats(args)((s, executed))
-        print(args)((newStats, executed))
-        newStats
-      }
-    }
-  }
-}
 
+/**
+ * A trait holding a ConsoleReporter
+ */
 private[specs2]
-trait AConsoleReporter extends AReporter {
-  lazy val reporter: Reporter = new ConsoleReporter {}
+trait AConsoleReporter {
+  lazy val reporter = new ConsoleReporter {}
 }

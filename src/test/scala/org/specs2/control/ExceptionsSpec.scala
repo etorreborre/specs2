@@ -15,6 +15,10 @@ class ExceptionsSpec extends SpecificationWithJUnit with Exceptions {  def is =
 "    the result if the expression doesn't throw an exception"                             ! tryOr1^
 "    a default value if the expression throws an exception"                               ! tryOr2^
                                                                                           p^
+"  tryOrElse executes an expression and return "                                          ^
+"    the result if the expression doesn't throw an exception"                             ! tryOrElse1^
+"    another value if the expression throws an exception"                                 ! tryOrElse2^
+                                                                                          p^
 "  tryMap executes an expression and return "                                             ^
 "    a 'ok' value if the expression doesn't throw an exception"                           ! tryMap1^
 "    a 'ko' value if the expression throws an exception"                                  ! tryMap2^
@@ -37,6 +41,9 @@ class ExceptionsSpec extends SpecificationWithJUnit with Exceptions {  def is =
 
   def tryOr1 = tryOr("a")((e:Exception) => e.getMessage) must_== "a"
   def tryOr2 = tryOr({error("boom");"a"})((e:Exception) => "bang") must_== "bang"
+
+  def tryOrElse1 = tryOrElse("a")("b") must_== "a"
+  def tryOrElse2 = tryOrElse({error("boom");"a"})("bang") must_== "bang"
 
   def tryMap1 = tryMap("a")(true)(false) must_== true
   def tryMap2 = tryMap({error("boom");"a"})(true)(false) must_== false
