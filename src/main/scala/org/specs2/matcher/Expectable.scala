@@ -34,7 +34,10 @@ class Expectable[+T] protected (private val t: () => T) { outer =>
 
   /** @return this expectable with an alias description */
   def aka(alias: String) = Expectable(value, alias)
-
+  
+  /** equality matcher on Expectables */
+  def ===[S >: T](other: =>S) = applyMatcher(new BeEqualTo(other))
+  
   /** optional additional description */
   protected val desc: Option[String] = None
 

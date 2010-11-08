@@ -24,17 +24,6 @@ trait SpecificationStructure {
    * the Specification namespace.
    * SpecStart and SpecEnd fragments are added if the user haven't inserted any
    */
-  private[specs2] lazy val content: Fragments = {
-    val userFragments = is
-    val withStartFragments = userFragments.fragments.headOption match {
-      case Some(SpecStart(n)) => userFragments.fragments
-      case other => SpecStart(name(this)) +: userFragments.fragments
-    }
-    val withStartAndEndFragments = withStartFragments.lastOption match {
-      case Some(SpecEnd(n)) => withStartFragments
-      case other => withStartFragments :+ SpecEnd(name(this))
-    }
-    Fragments(withStartAndEndFragments)(userFragments.arguments)
-  }
+  private[specs2] lazy val content: Fragments = Fragments.withSpecStartEnd(is, name(this))
   private[specs2] def name(spec: AnyRef) = ClassName.className(spec)
 } 

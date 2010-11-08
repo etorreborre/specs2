@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 
 import main.Arguments
+import control.Fold
 import specification._
 import StandardFragments._
 
@@ -29,49 +30,58 @@ import StandardFragments._
  * "this third block"^
  *   "will not be nested thanks to the previous end marker" ! { true }^
  *
+ *  The BlockLevelsFold trait is generic and specialized for:
+ *    * Fragments => LevelsFold
+ *    * ExecutedFragments => ExecutedLevelsFold
+ *    
  */
 private[specs2]
-trait LevelsFold extends FragmentFold {
+trait BlockLevelsFold[F] extends Fold[F] {
 
   type T = Level
-  case class Level(level: Int = 0, direction: Direction = Up, lastNode: LastNode = Txt)
+  case class Level(level: Int = 0, direction: Direction = Up, lastNode: LastNode = Indent)
   lazy val initial = new Level()
   
+  def toBlock(f: F): Block
   /**
    * This returns a function which computes the current level and the next Level object
    * storing the current state
    */
-  def level(implicit arguments: Arguments): Function2[Level, Fragment, (Int, Level)] = 
-    (t: T, f: Fragment) => (t, f) match {
-	    case p => (currentLevel(p), fold.tupled(p))
+  def level(implicit arguments: Arguments): Function2[Level, F, (Int, Level)] = 
+    (t: T, f: F) => (t, f) match {
+      case p => (currentLevel(p), fold.tupled(p))
     }
   
   /**
    * This function computes the current level for a given Fragment
    */
-  val currentLevel: Function[(Level, Fragment), Int] = { 
-	  case (a, f @ Text(s)) if (a.direction == Down && a.lastNode == Ex) => (a.level - 1)
-	  case (a, f) => a.level
+  val currentLevel: Function[(Level, F), Int] = { 
+    case (a, BlockIndent()) if (a.direction == Down && a.lastNode == Terminal) => (a.level - 1)
+    case (a, f) => a.level
   }
   
-  def fold(implicit arguments: Arguments) = (t: T, f: Fragment) => (t, f) match {
+  def fold(implicit arguments: Arguments) = (t: T, f: F) => (t, toBlock(f)) match {
     // end resets the level
-	  case (a, End()) => Level()
-	  case (a, Text(s)) => {
-	    val newLevel = a.direction match {
-	   	  case Up => a.copy(level = a.level + 1)
-	   	  case Down if (a.lastNode != Ex) => a.copy(level = a.level + 1, direction = Up)
-	   	  case _ => a
-	    } 
-	    newLevel copy (lastNode = Txt)
-	  }
-	  case (a, e @ Example(s, body)) => a.copy(direction = Down, lastNode = Ex)
-	  case (t, f) => t
+    case (a, BlockReset()) => Level()
+    case (a, BlockIndent()) => {
+      val newLevel = a.direction match {
+        case Up => a.copy(level = a.level + 1)
+        case Down if (a.lastNode != Terminal) => a.copy(level = a.level + 1, direction = Up)
+        case _ => a
+      } 
+      newLevel copy (lastNode = Indent)
+    }
+    case (a, BlockTerminal()) => a.copy(direction = Down, lastNode = Terminal)
+    case (t, BlockNeutral()) => t
   }
  
 }
 private[specs2]
-object LevelsFold extends LevelsFold
+sealed trait Block
+case class BlockReset() extends Block
+case class BlockIndent() extends Block
+case class BlockTerminal() extends Block
+case class BlockNeutral() extends Block
 
 private[specs2]
 sealed trait Direction
@@ -80,6 +90,44 @@ case object Down extends Direction
 
 private[specs2]
 sealed trait LastNode
-case object Ex extends LastNode
-case object Txt extends LastNode
+case object Terminal extends LastNode
+case object Indent extends LastNode
 
+private[specs2]
+trait LevelsFold extends FragmentFold {
+  val blockFold = new BlockLevelsFold[Fragment] {
+    def toBlock(f: Fragment) = f match {
+      case Example(_, _) => BlockTerminal()
+      case Text(_)       => BlockIndent()
+      case SpecStart(_)  => BlockReset()
+      case SpecEnd(_)    => BlockReset()
+      case End()         => BlockReset()
+      case _             => BlockNeutral()
+    }
+  }
+  type T = blockFold.Level
+  type Level = blockFold.Level
+  def initial = blockFold.initial
+  def fold(implicit args: Arguments) = blockFold.fold(args)
+
+}
+private[specs2]
+object LevelsFold extends LevelsFold
+
+private[specs2]
+trait ExecutedLevelsFold extends ExecutedFragmentFold {
+  
+  val blockFold = new BlockLevelsFold[ExecutedFragment] {
+    def toBlock(f: ExecutedFragment) = f match {
+      case ExecutedResult(_, _) => BlockTerminal()
+      case ExecutedText(_)      => BlockIndent()
+      case ExecutedSpecStart(_) => BlockReset()
+      case ExecutedSpecEnd(_)   => BlockReset()
+      case ExecutedEnd()        => BlockReset()
+      case _                    => BlockNeutral()
+    }
+  }
+  type T = blockFold.Level
+  def initial = blockFold.initial
+  def fold(implicit args: Arguments) = blockFold.fold(args)
+}

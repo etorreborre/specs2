@@ -13,7 +13,7 @@ object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
 	    
 	  lazy val allFragments = Fragments {
       SpecStart(specName) +: 
-      specifications.flatMap(include(_)) :+
+      specifications.flatMap(_.content.fragments) :+
       SpecEnd(specName)
     } 
     lazy val specName = "Specifications matching "+args.specName+" in "+FromSource.srcDir+"\n"
@@ -23,8 +23,5 @@ object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
 
   private def specifications(implicit args: Arguments) = {
     specificationNames(FromSource.srcDir, args.specName).flatMap(createSpecification(_))
-  }
-  private def include(s: BaseSpecification) = {
-    (SpecStart(ClassName.className(s)) +: s.content.fragments) :+ SpecEnd(ClassName.className(s))
   }
 }

@@ -7,7 +7,7 @@ import io._
 import main.Arguments
 import specification._
 import FragmentsShow._
-  import LevelsFold._
+import LevelsFold._
 
 /**
  * A Tree Fold is a FragmentFold which takes a seq of Fragments and transforms it to
@@ -41,7 +41,7 @@ trait TreeFold[S] extends FragmentFold {
    *  * a Level, to update the current level
    */
   type T = AccumulatedTree[S]
-  val initial = new AccumulatedTree(leaf(root).loc, Level())
+  val initial = new AccumulatedTree(leaf(root).loc, LevelsFold.initial)
 
   /** Accumulated Tree */
   case class AccumulatedTree[S](private val treeLoc: TreeLoc[S], private val level: Level) {
@@ -81,15 +81,15 @@ trait TreeFold[S] extends FragmentFold {
       case Up => { 
         if (level.level == 0 )
           treeLoc.root.insertDownLast(s)
-        else if (level.lastNode != Ex)
+        else if (level.lastNode != Terminal)
           treeLoc.insertDownFirst(s)
         else
           treeLoc.parent.getOrElse(treeLoc).insertDownLast(s)
       }
       case Down => {
-     	  if (level.level == newLevel.level && level.lastNode == Ex && newLevel.lastNode != Txt)
+     	  if (level.level == newLevel.level && level.lastNode == Terminal && newLevel.lastNode != Indent)
      	 	  treeLoc.parent.getOrElse(treeLoc).insertDownLast(s)
-     	  else if (level.lastNode == Ex)
+     	  else if (level.lastNode == Terminal)
      	 	  treeLoc.parent.getOrElse(treeLoc).parent.getOrElse(treeLoc).insertDownLast(s)
      	  else
      	 	  treeLoc.insertDownLast(s)

@@ -6,6 +6,10 @@ import org.junit.runner.Description
 import scalaz._
 import Scalaz._
 
+/**
+ * Implementation of the Show trait to allow the drawing of Tree[Description] with
+ * scalaz
+ */
 private[specs2]
 trait ShowDescription {
   implicit object show extends scalaz.Show[Description] {

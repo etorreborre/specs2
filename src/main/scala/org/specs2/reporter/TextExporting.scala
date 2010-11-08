@@ -10,17 +10,21 @@ import specification._
  * at the end of the specification
  */
 private[specs2]
-trait TextExporting extends FoldExporting 
+trait TextExporting extends 
+         FoldExporting 
     with TextPrinter
-    with TotalStatistics 
-    with Output {
+    with Output { outer =>
 
-  val fold = new ExecutedFragmentFold {
-    type T = Stats
-    def initial = Stats()
+  /**
+   * Folding function to accumulate statistics and print the results to the output at
+   * the same time
+   */
+  val folder = new ExecutedFragmentFold {
+    type T = outer.T
+    def initial = outer.initial
     def fold(implicit args: Arguments): Function2[T, ExecutedFragment, T] = {
-      case p @ (s, executed) => {
-        val newStats = stats(args)((s, executed))
+      case (s, executed) => {
+        val newStats: T = outer.fold(args)(s, executed)
         print(args)((newStats, executed))
         newStats
       }

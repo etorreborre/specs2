@@ -29,15 +29,6 @@ import matcher._
  * 
  */
 trait AutoExamples {
-    implicit def matchExample(expression: =>MatchResult[_]): Example = {
-    Example(getCode(), expression.toResult)
-  }
-  implicit def booleanExample(expression: =>Boolean): Example = {
-    Example(getCode(), toResult(expression))
-  }
-  implicit def resultExample(expression: =>execute.Result): Example = {
-    Example(getCode(), expression)
-  }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragments(expression: =>MatchResult[_]): Fragments = {
     val desc = getCode()
@@ -52,6 +43,15 @@ trait AutoExamples {
   implicit def resultFragments(expression: =>Result): Fragments = {
     val desc = getCode()
     Fragments(Example(desc, expression))
+  }
+  implicit def matchExample(expression: =>MatchResult[_]): Example = {
+    Example(getCode(), expression.toResult)
+  }
+  implicit def booleanExample(expression: =>Boolean): Example = {
+    Example(getCode(), toResult(expression))
+  }
+  implicit def resultExample(expression: =>execute.Result): Example = {
+    Example(getCode(), expression)
   }
 }
 private[specs2]

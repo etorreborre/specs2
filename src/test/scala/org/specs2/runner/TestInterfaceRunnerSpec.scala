@@ -5,11 +5,11 @@ import io._
 import _root_.org.scalatools.testing._
 import reporter._
 
-class TestInterfaceRunnerSpec extends SpecificationWithJUnit {
-  def is = 
+class TestInterfaceRunnerSpec extends SpecificationWithJUnit { def is =
+  
                                                                                           """
-  A TestInterfaceRunner is responsible for instantiating Specification classes found by sbt
-  and executing them using a TestInterfaceReporter
+  A TestInterfaceRunner is responsible for instantiating Specification classes found by 
+  sbt and executing them using a TestInterfaceReporter
   
                                                                                           """                                                                                          ^
 " if the specification class is missing"                                                  ^
@@ -38,9 +38,12 @@ class TestInterfaceRunnerSpec extends SpecificationWithJUnit {
       val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
 	    runner.run("org.specs2.runner.SpecificationForSbtWithException", mock[TestFingerprint], mock[EventHandler], Array(""))
     }	  
-	  def e1 = run.logger.messages must contain("error: Could not create an instance of org.specs2.runner.SpecificationForSbtWithException\n")
-	  def e2 = run.logger.messages must contain("error:   caused by java.lang.reflect.InvocationTargetException")
-	  def e3 = run.logger.messages must contain("error:   caused by java.lang.Exception: fail")
+	  def e1 = run.logger.messages must 
+	           contain("error: Could not create an instance of org.specs2.runner.SpecificationForSbtWithException\n")
+	  def e2 = run.logger.messages must 
+	           contain("error:   caused by java.lang.reflect.InvocationTargetException")
+	  def e3 = run.logger.messages must 
+	           contain("error:   caused by java.lang.Exception: fail")
   }
 
   case class reporting() extends Mockito with matcher.MustExpectations {

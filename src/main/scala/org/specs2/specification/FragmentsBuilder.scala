@@ -5,6 +5,7 @@ import control.LazyParameters._
 import execute._
 import main._
 import matcher._
+import PredefinedFragments._
 
 /**
  * This trait provides function to create specification Fragments:
@@ -23,9 +24,8 @@ trait FragmentsBuilder {
    */
   implicit def title(s: String): SpecTitle = SpecTitle(s)
   case class SpecTitle(name: String) {
-    def title = SpecStart(name)
+    def title = SpecStart(name) ^ p
   }
-
   
   /** @return a Text Fragment from a string */
   implicit def textFragment(s: String): Text = Text(s)
