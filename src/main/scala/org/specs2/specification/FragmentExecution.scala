@@ -27,6 +27,8 @@ trait FragmentExecution {
 	  case Text(s) =>               ExecutedText(s)
 	  case Br() =>                  ExecutedBr()
 	  case Par() =>                 ExecutedPar()
+    case Tab() =>                 ExecutedTab()
+    case Untab() =>               ExecutedUntab()
 	  case End() =>                 ExecutedEnd()
 	  case SpecStart(n) =>          ExecutedSpecStart(n, new SimpleTimer().start, arguments)
 	  case SpecEnd(n) =>            ExecutedSpecEnd(n)

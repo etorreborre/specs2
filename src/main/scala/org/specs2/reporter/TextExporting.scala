@@ -12,20 +12,18 @@ import specification._
 private[specs2]
 trait TextExporting extends 
          FoldExporting 
-    with TextPrinter
     with Output { outer =>
 
   /**
    * Folding function to accumulate statistics and print the results to the output at
    * the same time
    */
-  val folder = new ExecutedFragmentFold {
-    type T = outer.T
-    def initial = outer.initial
+  val folder = new TextPrinter {
+    def printf(format: String, args: Any*) = outer.printf(format, args:_*)
     
-    def fold(implicit args: Arguments): Function2[T, ExecutedFragment, T] = {
+    override def fold(implicit args: Arguments): Function2[T, ExecutedFragment, T] = {
       case (s, executed) => {
-        val newStats: T = outer.fold(args)(s, executed)
+        val newStats: T = super.fold(args)(s, executed)
         print(args)(newStats, executed)
         newStats
       }

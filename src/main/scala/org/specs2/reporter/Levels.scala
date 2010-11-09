@@ -71,6 +71,14 @@ trait BlockLevelsFold[F] extends Fold[F] {
       } 
       newLevel copy (lastNode = Indent)
     }
+    case (a, BlockUnindent()) => {
+      val newLevel = a.direction match {
+        case Down => a.copy(level = a.level - 1)
+        case Up if (a.lastNode != Terminal) => a.copy(level = a.level - 1, direction = Up)
+        case _ => a
+      } 
+      newLevel copy (lastNode = Indent)
+    }
     case (a, BlockTerminal()) => a.copy(direction = Down, lastNode = Terminal)
     case (t, BlockNeutral()) => t
   }
@@ -80,6 +88,7 @@ private[specs2]
 sealed trait Block
 case class BlockReset() extends Block
 case class BlockIndent() extends Block
+case class BlockUnindent() extends Block
 case class BlockTerminal() extends Block
 case class BlockNeutral() extends Block
 
@@ -98,6 +107,8 @@ trait LevelsFold extends FragmentFold {
   val blockFold = new BlockLevelsFold[Fragment] {
     def toBlock(f: Fragment) = f match {
       case Example(_, _) => BlockTerminal()
+      case Tab()         => BlockIndent()
+      case Untab()       => BlockUnindent()
       case Text(_)       => BlockIndent()
       case SpecStart(_)  => BlockReset()
       case SpecEnd(_)    => BlockReset()
@@ -121,6 +132,8 @@ trait ExecutedLevelsFold extends ExecutedFragmentFold {
     def toBlock(f: ExecutedFragment) = f match {
       case ExecutedResult(_, _)       => BlockTerminal()
       case ExecutedText(_)            => BlockIndent()
+      case ExecutedTab()              => BlockIndent()
+      case ExecutedUntab()            => BlockUnindent()
       case ExecutedSpecStart(_, _, _) => BlockReset()
       case ExecutedSpecEnd(_)         => BlockReset()
       case ExecutedEnd()              => BlockReset()

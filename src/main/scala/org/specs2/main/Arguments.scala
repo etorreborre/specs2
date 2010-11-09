@@ -35,7 +35,21 @@ case class Arguments (
   specName: String          = ".*Spec",
   sequential: Boolean       = false,
   threadsNb: Int            = 4
-)
+) {
+  override def toString = {
+    "Arguments(" +
+    "ex"         +" = "+ ex         +", "+
+    "xonly"      +" = "+ xonly      +", "+
+    "failtrace"  +" = "+ failtrace  +", "+
+    "noindent"   +" = "+ noindent   +", "+
+    "specName"   +" = "+ specName   +", "+
+    "sequential" +" = "+ sequential +", "+
+    "threadsNb"  +" = "+ threadsNb  +
+    ") "
+    
+  }
+  
+} 
 
 private[specs2]  
 case object Arguments {

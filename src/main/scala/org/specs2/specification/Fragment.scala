@@ -48,5 +48,7 @@ object StandardFragments {
   case class End() extends Fragment
   case class Par() extends Fragment
   case class Br() extends Fragment
+  case class Tab() extends Fragment
+  case class Untab() extends Fragment
 }
 
