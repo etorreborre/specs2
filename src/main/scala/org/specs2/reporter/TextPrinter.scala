@@ -7,34 +7,51 @@ import execute._
 import specification._
 
 /**
- * This trait prints the result of the Fragment execution to the Printer output
- * It also prints statistics at the end of the execution
+ * This trait prints the results of Fragments execution.
+ * 
+ * It also prints:
+ *  * the description of the fragments
+ *  * the statistics of the execution
+ *    * the execution time
+ *    * the number of examples, failures, errors,...
+ *    
+ * The behavior of this trait changes depending on the arguments:
+ * 
+ *   - xonly (default = false): if true print only errors and failures
+ *   - failtrace (default = false): if true print the stacktrace of failures
+ *    
  */
 private[specs2]
-trait TextPrinter extends ExecutedFragmentFold with PrintMessages {
+trait TextPrinter extends ExecutedFragmentFold with ResultOutput {
   
-  val statistics = new Statistics {}
-  val levels     = new ExecutedLevelsFold {}
-  type T = (statistics.T, levels.T)
-  def initial = (statistics.initial, levels.initial)
+  /**
+   * Composition of statistics and a levels fold
+   */
+  val statistics  = new Statistics {}
+  val levels      = new ExecutedLevelsFold {}
+  val currentArgs = new ScopedArguments {}
+  
+  type T = (statistics.T, levels.T, currentArgs.T)
+  def initial = (statistics.initial, levels.initial, currentArgs.initial)
+  
   def fold(implicit args: Arguments) = (t: T, f: ExecutedFragment) => {
-    (statistics.fold(args)(t._1, f), levels.fold(args)(t._2, f))
+    (statistics.fold(args)(t._1, f), levels.fold(args)(t._2, f), currentArgs.fold(args)(t._3, f))
   }
   import statistics._
   
   
   /** print an ExecutedFragment and its associated statistics */
-  def print(implicit args: Arguments): Function[(T, ExecutedFragment), ExecutedFragment] = { p: (T, ExecutedFragment) => 
-	  p match { 
-      case ((stats, level), ExecutedSpecStart(s))      => printSpecStart(s, level)
-      case ((stats, level), ExecutedResult(s, result)) => printResult(s, level, result)
-      case ((stats, level), ExecutedText(s)) =>           printExecutedText(s, level)
-      case (_, ExecutedPar()) =>                          printExecutedPar
-      case (((total, current), level), 
-            end @ ExecutedSpecEnd(_)) =>                  printExecutedEnd(total, current, level, end)
-	    case (stats, fragment) =>                           printOther(stats, fragment)
+  def print(implicit arguments: Arguments): Function2[T, ExecutedFragment, ExecutedFragment] = { 
+    (t: T, f: ExecutedFragment) => (t, f) match { 
+      case ((stats, level, args), ExecutedSpecStart(s, _, _))=> printSpecStart(s, level)(args)
+      case ((stats, level, args), ExecutedResult(s, result)) => printResult(s, level, result)(args)
+      case ((stats, level, args), ExecutedText(s)) =>           printExecutedText(s, level)(args)
+      case (_, ExecutedPar()) =>                                printExecutedPar
+      case (((total, current), level, args), 
+            end @ ExecutedSpecEnd(_)) =>                        printExecutedEnd(total, current, level, end)(args)
+	    case (stats, fragment) =>                                 printOther(stats, fragment)
     }
-	  p._2
+	  f
   }
   
   def printSpecStart(s: String, level: levels.T)(implicit args: Arguments) = {
@@ -50,28 +67,35 @@ trait TextPrinter extends ExecutedFragmentFold with PrintMessages {
     if (!args.xonly) printPar()
   }
   def printExecutedEnd(total: Stats, current: Stats, level: levels.T, end: ExecutedSpecEnd)(implicit args: Arguments) = {
-    if (!args.xonly || current.hasFailuresOrErrors) {
-      if (!total.isEnd(end)) printEndStats(current, end)
-      else printEndStats(total, end)
-    }
+    if ((!args.xonly || current.hasFailuresOrErrors) && !total.isEnd(end)) 
+      printEndStats(current, end)
+    if (total.isEnd(end))
+      printEndStats(total, end)
   }
   
   
-  def leveledText(s: String, level: levels.T): String = ("  " * level.level) + s.trim
+  def leveledText(s: String, level: levels.T)(implicit args: Arguments): String = { 
+    if (args.noindent) s 
+   else (("  " * level.level) + s.trim)
+  }
+  
   /** print a piece of text */
   def printText(s: String)= printLine(s)
   /** print a paragraph */
   def printPar() = printLine(" ")
   
-  def printResult(s: String, result: Result)(implicit args: Arguments): Unit = {
-	  val description = statusAndDescription(s, result)
+  def printResult(desc: String, result: Result)(implicit args: Arguments): Unit = {
+	  val description = statusAndDescription(desc, result)
     result match {
-	    case e: ResultStackTrace => {
-	 	    printError(description)
-	 	    printError(s.takeWhile(_ == ' ') + "  " + result.message + " ("+e.location+")")
-	 	    if (args.printStackTrace) 
-	 	      e.stackTrace.foreach(t => printError(t.toString))
+	    case f: Failure => {
+        printFailureOrError(desc, f) 
+	 	    if (args.failtrace) 
+	 	      f.stackTrace.foreach(t => printError(t.toString))
 	    }
+      case e: Error => {
+        printFailureOrError(desc, e) 
+        e.stackTrace.foreach(t => printError(t.toString))
+      }
       case Success(_) => if (!args.xonly) printSuccess(description)
       case Pending(_) => if (!args.xonly) printPending(description + " " + result.message)
       case Skipped(_) => if (!args.xonly) {
@@ -79,6 +103,11 @@ trait TextPrinter extends ExecutedFragmentFold with PrintMessages {
 	 	    printSkipped(result.message)
       }
     }
+  }
+  def printFailureOrError(desc: String, f: Result with ResultStackTrace) = { 
+    val description = statusAndDescription(desc, f)
+    printError(description)
+    printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
   }
   def printEndStats(stats: Stats, result: ExecutedSpecEnd)(implicit args: Arguments) = (stats, result) match {   
     case (stats, ExecutedSpecEnd(n)) => printSpecStats(stats, n)
@@ -89,12 +118,15 @@ trait TextPrinter extends ExecutedFragmentFold with PrintMessages {
     printLine(" ")
   }
   def printStats(stats: Stats) = {
-    val statistics.Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart) = stats
-    printLine((
-                 List(examples qty "example") ++ 
-                 (if (expectations != examples) List(expectations qty "expectation") else Nil) ++
-                 List(failures qty "failure", errors qty "error") ++
-                 List(pending optQty "pending", skipped optQty "skipped").flatten).mkString(", "))
+    val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart) = stats
+    stats.start.map(s => printLine("Finished in " + s.timer.time))
+    printLine(
+        Seq(Some(examples qty "example"), 
+            if (expectations != examples) Some(expectations qty "expectation") else None,
+            Some(failures qty "failure"), 
+            Some(errors qty "error"),
+            pending optQty "pending", 
+            skipped optQty "skipped").flatten.mkString(", "))
   }
   
   /** don't print anything for now */

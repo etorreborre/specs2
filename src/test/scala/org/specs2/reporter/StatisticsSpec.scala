@@ -1,5 +1,6 @@
 package org.specs2
 package reporter
+import main.Arguments
 import execute._
 import specification._
 
@@ -31,14 +32,15 @@ class StatisticsSpec extends SpecificationWithJUnit { def is =
     "e5" ! skipped ^
          end
 
+  implicit val arguments = new Arguments()
   def statistics(spec: Fragments) = 
     new Statistics {}.
-    foldAll(Fragments.withSpecStartEnd(spec, "spec").fragments.map(execute(_)))(spec.arguments)
+    foldAll(Fragments.withSpecStartEnd(spec, "spec").fragments.map(f => execute(f)))(spec.arguments)
     
   def total(spec: Fragments) = statistics(spec)._1 
   def current(spec: Fragments) = statistics(spec)._2 
   
-  def execute(f: Fragment) = new FragmentExecution {}.executeFragment(f)  
+  def execute(f: Fragment)(implicit args: Arguments) = new FragmentExecution {}.executeFragment(args)(f)  
     
   def e1 = total(spec).fragments must_== 5                                                                                           
   def e2 = total(spec).expectations must_== 6                                                                                          

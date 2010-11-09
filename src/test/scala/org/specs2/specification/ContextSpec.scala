@@ -72,7 +72,7 @@ class ContextSpec extends SpecificationWithJUnit with StandardResults with Fragm
 "    if it executes ok, nothing is printed, it is a silent Success"                       ! c().e13^
 "    otherwise, it is reported as an Error"                                               ! c().e14^
                                                                                           end
-  
+  implicit val args = main.Arguments()
   case class c() extends FragmentsExecution {
     def e1 = executing(ex1Before).prints("before", "e1")
     def e2 = executing(ex1_2Before).prints("before", "e1", "before", "e2")

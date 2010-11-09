@@ -23,7 +23,7 @@ trait Selection {
 trait DefaultSelection {
   /** select function returning a filtered and ordered seq of seq of Fragments */
   def select(implicit arguments: Arguments) = (fragments: Fragments) => {
-    sort(fragments.fragments.view.filter(filter))
+    sort(fragments.fragments.view.filter(filter))(fragments.arguments)
   }
   
   /** 
@@ -44,6 +44,10 @@ trait DefaultSelection {
    * in a Specification 
    */
   protected def sort(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[Seq[Fragment]] = {
+    if (arguments.sequential) fragments.map(List(_))
+    else isolateSteps(fragments)  
+  }
+  protected def isolateSteps(fragments: Seq[Fragment]) = {
     fragments.foldLeft(Nil: List[List[Fragment]]) { (res, cur) =>
       res match {
         case Nil => List(List(cur))
@@ -55,5 +59,4 @@ trait DefaultSelection {
       }
     }.reverse
   }
-  
 }

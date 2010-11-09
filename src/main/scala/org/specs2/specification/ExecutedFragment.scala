@@ -1,6 +1,8 @@
 package org.specs2
 package specification
 
+import main.Arguments
+import time.SimpleTimer
 import execute._
 
 /**
@@ -13,7 +15,7 @@ case class ExecutedResult(text: String, result: Result) extends ExecutedFragment
 case class ExecutedBr() extends ExecutedFragment
 case class ExecutedPar() extends ExecutedFragment
 case class ExecutedEnd() extends ExecutedFragment
-case class ExecutedSpecStart(name: String) extends ExecutedFragment
+case class ExecutedSpecStart(name: String, timer: SimpleTimer, arguments: Arguments) extends ExecutedFragment
 case class ExecutedSpecEnd(name: String) extends ExecutedFragment
 /** 
  * This executed Fragment is used when no text must be displayed (for the successful

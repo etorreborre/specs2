@@ -11,7 +11,7 @@ class DependenciesSpec extends SpecificationWithJUnit { def is =
   *    mock form
   *    matcher  
   *    execute  
-  *               reflect            xml 
+  *               reflect  xml time
   *    collection control  io  text  main
                                                                                           """ ^
                                                                                           end

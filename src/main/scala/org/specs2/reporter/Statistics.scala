@@ -63,8 +63,8 @@ trait Statistics extends ExecutedFragmentFold {
 	    }
 	    (total, updatedCurrent)
 	  }
-	  case ((total, current), start @ ExecutedSpecStart(_)) => 
-	                                (total.copy(start = total.start.orElse(Some(start))), Stats())
+	  case ((total, current), start @ ExecutedSpecStart(name, timer, args)) => 
+	                                (total.copy(start = total.start.orElse(Some(ExecutedSpecStart(name, timer.stop, args)))), Stats())
     case ((total, current), ExecutedSpecEnd(_)) => (total add current, current)
     case ((total, current), _) => (total, current)
   }

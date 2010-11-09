@@ -23,8 +23,8 @@ class FeaturesSpec extends Specification with StandardResults {
 "      with statistics                                                                    "! done^
 "      with stacktraces                                                                   "! done^
 "      with output configuration                                                          "^
-"        stacktraces on demand                                                            "! todo^
-"        fail only                                                                        "! todo^
+"        stacktraces on demand                                                            "! done^
+"        fail only                                                                        "! done^
 "        pending only                                                                     "! todo^
 "        Fragments filter                                                                 "! todo^
 "    A specs file runner                                                                  "^
@@ -71,7 +71,6 @@ class FeaturesSpec extends Specification with StandardResults {
 "    A Console reporter                                                                   "^
 "      with a timer                                                                       "! todo^
 "      with colored output                                                                "! todo^
-"      with intermediary stats when required                                              "! todo^
 "    StackTraces                                                                          "^
 "      for Fragments, to help with IDE navigation                                         "! todo^
 "      for all results, even success                                                      "! todo^
@@ -91,7 +90,8 @@ class FeaturesSpec extends Specification with StandardResults {
 "    Auto examples                                                                        "^
 "      with the description taken from the source file                                    "! done^
 "    Timer                                                                                "^
-"      see timer and WaitFor                                                              "! todo^
+"      specs-like Timer                                                                   "! done^
+"      WaitFor                                                                            "! todo^
 "    A ScalaInterpreter                                                                   "^
 "      with appropriate matchers                                                          "! todo^
 "    ScalaCheck                                                                           "^
@@ -101,5 +101,12 @@ class FeaturesSpec extends Specification with StandardResults {
 "    A Database facility?                                                                 "! todo^
 "    Command line arguments                                                               "^
 "      implement an easy to maintain system coherent with the config                      "! done ^
+"    Examples                                                                             "^
+"      Stack                                                                              "! done^
+"      Specifications layouts                                                             "! done^
+"      Given/When/Then                                                                    "! done^
+"      Arguments                                                                          "! done^
+"      Runners                                                                            "! done^
+"      Expectations: boolean, matchers, properties                                        "! done^
                                                                                           end
 }

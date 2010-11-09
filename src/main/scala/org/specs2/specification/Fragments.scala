@@ -5,6 +5,7 @@ import execute.Executable
 import control.LazyParameters._
 import control.LazyParameter
 import main.Arguments
+import StandardFragments._
 /**
  * A Fragments object is a list of fragments which can be related 
  * to other fragments by using the ^ method
@@ -31,7 +32,7 @@ case object Fragments {
   def withSpecStartEnd(fragments: Fragments, name: String) = {
     val withStartFragments = fragments.fragments.headOption match {
       case Some(SpecStart(n)) => fragments.fragments
-      case other => SpecStart(name) +: fragments.fragments
+      case other => SpecStart(name) +: (Par() +: fragments.fragments)
     }
     val withStartAndEndFragments = withStartFragments.lastOption match {
       case Some(SpecEnd(n)) => withStartFragments

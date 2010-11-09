@@ -7,7 +7,7 @@ import Iterablex._
 class IterablexSpec extends SpecificationWithJUnit with IterableData { def is =
   
   "Specification for Iterables extensions".title                                          ^
-                                                                                          p^
+                                                                                          br^
   "A sameElementsAs function should return true"                                          ^
     "if 2 lists of lists contain the same elements in a different order" ! {
       List(List(1), List(2, 3)).sameElementsAs(List(List(3, 2), List(1)))

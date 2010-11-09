@@ -22,10 +22,11 @@ trait TextExporting extends
   val folder = new ExecutedFragmentFold {
     type T = outer.T
     def initial = outer.initial
+    
     def fold(implicit args: Arguments): Function2[T, ExecutedFragment, T] = {
       case (s, executed) => {
         val newStats: T = outer.fold(args)(s, executed)
-        print(args)((newStats, executed))
+        print(args)(newStats, executed)
         newStats
       }
     }

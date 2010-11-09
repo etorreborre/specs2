@@ -7,13 +7,13 @@ import main.Arguments
 import specification._
 
 /**
- * This traits provides specialized print methods which can be overriden to define more
- * specific behavior
+ * This traits provides specialized print methods for message representing
+ * different types of results. They can be overriden to define a more specific behavior.
  */
-trait PrintMessages extends Output {
+trait ResultOutput extends Output {
 
-  def printError(message: String) = printMessage(message)
   def printSuccess(message: String) = printMessage(message)
+  def printError(message: String) = printMessage(message)
   def printSkipped(message: String) = printMessage(message)
   def printPending(message: String) = printMessage(message)
   

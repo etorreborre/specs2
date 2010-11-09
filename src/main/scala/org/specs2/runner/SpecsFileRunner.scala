@@ -5,6 +5,7 @@ import reflect._
 import io.FromSource
 import main.Arguments
 import specification._
+import StandardFragments._
 import reporter._
 
 object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
@@ -12,7 +13,7 @@ object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
 	  implicit val args = Arguments(arguments:_*)
 	    
 	  lazy val allFragments = Fragments {
-      SpecStart(specName) +: 
+      SpecStart(specName) +: Par() +:
       specifications.flatMap(_.content.fragments) :+
       SpecEnd(specName)
     } 

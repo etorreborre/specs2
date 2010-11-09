@@ -5,26 +5,36 @@ import control.Exceptions._
 
 private[specs2]
 trait ArgumentsArgs {
-    /** shorthand method to create an Arguments object */
+  /** shorthand method to create an Arguments object */
   def args(  
-     ex: String                      = ".*" 
-    ,xonly: Boolean                  = Arguments().xonly 
-    ,printStackTrace: Boolean        = Arguments().printStackTrace
-    ,specName: String                = Arguments().specName
-    ,threadsNb: Int                  = Arguments().threadsNb
+     ex: String                = ".*",
+     xonly: Boolean            = Arguments().xonly,
+     failtrace: Boolean        = Arguments().failtrace,
+     noindent: Boolean         = Arguments().noindent,
+     specName: String          = Arguments().specName,
+     sequential: Boolean       = Arguments().sequential,
+     threadsNb: Int            = Arguments().threadsNb
     
-  ) = Arguments(".*"+ex+".*", xonly, printStackTrace, specName)
+  ) = Arguments(".*"+ex+".*", xonly, failtrace, noindent, specName, sequential, threadsNb)
+  
+  /** 
+   * @return arguments for a literate specification: no auto indent and a sequential
+   *         execution
+   */
+  def literate = args(noindent = true, sequential = true)  
 }
 private[specs2]
 object ArgumentsArgs extends ArgumentsArgs
 
 private[specs2]  
 case class Arguments (
-  ex: String                       = ".*" 
-  ,xonly: Boolean                  = false 
-  ,printStackTrace: Boolean        = true
-  ,specName: String                = ".*Spec"
-  ,threadsNb: Int                 = 4
+  ex: String                 = ".*",
+  xonly: Boolean            = false,
+  failtrace: Boolean        = false,
+  noindent: Boolean         = false,
+  specName: String          = ".*Spec",
+  sequential: Boolean       = false,
+  threadsNb: Int            = 4
 )
 
 private[specs2]  
@@ -43,10 +53,11 @@ case object Arguments {
   }
   private def extract(defaults: Arguments)(implicit arguments: Seq[String]): Arguments = {
     new Arguments (
-       xonly = bool("xonly", defaults.xonly)
-      ,printStackTrace = bool("printStackTrace", defaults.printStackTrace)
-      ,specName = value("specName", defaults.specName)
-      ,threadsNb = int("threadsNb", defaults.threadsNb)
+       xonly = bool("xonly", defaults.xonly),
+       failtrace = bool("failtrace", defaults.failtrace),
+       specName = value("specName", defaults.specName),
+       sequential = bool("sequential", defaults.sequential),
+       threadsNb = int("threadsNb", defaults.threadsNb)
     )
   }
   

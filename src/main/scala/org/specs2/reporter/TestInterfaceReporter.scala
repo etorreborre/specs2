@@ -3,6 +3,7 @@ package reporter
 
 import _root_.org.scalatools.testing.{ EventHandler, Logger, Event, Result }
 import control.Exceptionx._
+import main.Arguments
 import io._
 import text._
 import execute.{ Success, Failure, Error, Skipped, Pending }
@@ -18,8 +19,8 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
   with LoggedTextPrinter 
   with HandlerEvents {  
 	
-  override val executeFragment: Function[Fragment, ExecutedFragment] = (f: Fragment) => {
- 	  val executed = new FragmentExecution {}.executeFragment(f)
+  override def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = (f: Fragment) => {
+ 	  val executed = new FragmentExecution {}.executeFragment(arguments)(f)
     executed match {
       case ExecutedResult(text: String, result: org.specs2.execute.Result) => result match {
         case Success(text) => handler.handle(succeeded(text)) 	

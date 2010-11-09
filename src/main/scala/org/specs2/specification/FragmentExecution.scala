@@ -2,6 +2,8 @@ package org.specs2
 package specification
 
 import control.Exceptions._
+import main.Arguments
+import time.SimpleTimer
 import execute._
 import StandardFragments._
 
@@ -20,13 +22,13 @@ trait FragmentExecution {
    */
   def executeBody(body: =>Result): Result = tryOr(body)(Error(_))
 
-  val executeFragment: Function[Fragment, ExecutedFragment] = { 
+  def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = { 
 	  case e @ Example(s, _) =>     ExecutedResult(s, executeBody(e.execute))
 	  case Text(s) =>               ExecutedText(s)
 	  case Br() =>                  ExecutedBr()
 	  case Par() =>                 ExecutedPar()
 	  case End() =>                 ExecutedEnd()
-	  case SpecStart(n) =>          ExecutedSpecStart(n)
+	  case SpecStart(n) =>          ExecutedSpecStart(n, new SimpleTimer().start, arguments)
 	  case SpecEnd(n) =>            ExecutedSpecEnd(n)
     case s @ Step(a) => 
       executeBody(a()) match {
@@ -37,8 +39,8 @@ trait FragmentExecution {
   }
 
   /** this method is used in tests */
-  def executeBodies(exs: Fragments): Seq[Result] = {
-    exs.fragments.map(executeFragment(_)). collect { case r: ExecutedResult => r.result }
+  def executeBodies(exs: Fragments)(implicit arguments: Arguments): Seq[Result] = {
+    exs.fragments.map(f => executeFragment(arguments)(f)). collect { case r: ExecutedResult => r.result }
   }
 }
 

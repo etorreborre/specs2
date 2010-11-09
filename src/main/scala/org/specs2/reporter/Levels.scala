@@ -119,12 +119,12 @@ trait ExecutedLevelsFold extends ExecutedFragmentFold {
   
   val blockFold = new BlockLevelsFold[ExecutedFragment] {
     def toBlock(f: ExecutedFragment) = f match {
-      case ExecutedResult(_, _) => BlockTerminal()
-      case ExecutedText(_)      => BlockIndent()
-      case ExecutedSpecStart(_) => BlockReset()
-      case ExecutedSpecEnd(_)   => BlockReset()
-      case ExecutedEnd()        => BlockReset()
-      case _                    => BlockNeutral()
+      case ExecutedResult(_, _)       => BlockTerminal()
+      case ExecutedText(_)            => BlockIndent()
+      case ExecutedSpecStart(_, _, _) => BlockReset()
+      case ExecutedSpecEnd(_)         => BlockReset()
+      case ExecutedEnd()              => BlockReset()
+      case _                          => BlockNeutral()
     }
   }
   type T = blockFold.Level
