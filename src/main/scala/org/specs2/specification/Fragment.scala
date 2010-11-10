@@ -14,6 +14,7 @@ sealed trait Fragment {
 }
 case class SpecStart(name: String, arguments: Arguments = Arguments()) extends Fragment {
   override def matches(s: String) = name matches s
+  override def toString = "SpecStart("+name+")"
 }
 case class SpecEnd(name: String) extends Fragment {
   override def matches(s: String) = name matches s

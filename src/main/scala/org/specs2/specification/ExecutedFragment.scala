@@ -17,7 +17,9 @@ case class ExecutedPar() extends ExecutedFragment
 case class ExecutedEnd() extends ExecutedFragment
 case class ExecutedTab() extends ExecutedFragment
 case class ExecutedBacktab() extends ExecutedFragment
-case class ExecutedSpecStart(name: String, timer: SimpleTimer, arguments: Arguments) extends ExecutedFragment
+case class ExecutedSpecStart(name: String, timer: SimpleTimer, arguments: Arguments) extends ExecutedFragment {
+  override def toString = "ExecutedSpecStart("+name+")"
+}
 case class ExecutedSpecEnd(name: String) extends ExecutedFragment
 /** 
  * This executed Fragment is used when no text must be displayed (for the successful
