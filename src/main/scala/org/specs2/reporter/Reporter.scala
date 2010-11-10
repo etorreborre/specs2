@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 
 import control.Exceptions._
+import main.Arguments
 import io._
 import reflect._
 import specification._
@@ -31,7 +32,7 @@ trait Reporter extends Selection
    * report the Fragments of a BaseSpecification
    * @return the reporter
    */
-  def report(spec: BaseSpecification): this.type = report(spec.content)
+  def report(spec: BaseSpecification)(implicit arguments: Arguments): this.type = report(spec.content)
    	  
   /**
    * report Fragments by:
@@ -42,8 +43,7 @@ trait Reporter extends Selection
    *   
    * @return the reporter
    */
-  def report(fragments: Fragments): this.type = {
-    implicit val args = fragments.arguments 
+  def report(fragments: Fragments)(implicit arguments: Arguments): this.type = {
     (select andThen execute andThen export)(fragments)
     this
   }

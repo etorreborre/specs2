@@ -2,6 +2,7 @@ package org.specs2
 package runner
 
 import _root_.org.scalatools.testing._
+import main.Arguments
 import control.Throwablex._
 import reporter._
 /**
@@ -48,12 +49,12 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
         s.getStackTrace.foreach(t => logError("  " + t.toString))
       }
     }
-    run(specification.right.toOption, handler)
+    run(specification.right.toOption, handler, args)
   }
   
-  private def run(specification: Option[Specification], handler: EventHandler): Option[Specification] = {
+  private def run(specification: Option[Specification], handler: EventHandler, args: Array[String]): Option[Specification] = {
     specification map { s =>
-      reporter(handler).report(s)
+      reporter(handler).report(s)(Arguments(args:_*))
     }
     specification
   }

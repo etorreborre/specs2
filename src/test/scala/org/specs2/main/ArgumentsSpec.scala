@@ -25,7 +25,8 @@ class ArgumentsSpec extends SpecificationWithJUnit { def is =
   "If an argument is not provided, its default value is used"                             !
   { Arguments("xonly").specName must_== ".*Spec" }                                        ^
                                                                                           end^
-  "It is also possible to pass other default values, via an Arguments object"             ^
-  { Arguments(Arguments(specName = "spec"))("xonly").specName must_== "spec"   }          ^
+  "An argument can be overriden by another"                                               ^
+  { args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false }            ^
+  { args(xonly = true).overrideWith(args(plan = false)).xonly must_== true }              ^
                                                                                           end
 }

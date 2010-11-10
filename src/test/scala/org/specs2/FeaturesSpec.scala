@@ -101,6 +101,7 @@ class FeaturesSpec extends Specification with StandardResults {
 "    A Database facility?                                                                 "! todo^
 "    Command line arguments                                                               "^
 "      implement an easy to maintain system coherent with the config                      "! done ^
+"      can be overriden locally in a specification                                        "! done ^
 "    Examples                                                                             "^
 "      Stack                                                                              "! done^
 "      Specifications layouts                                                             "! done^

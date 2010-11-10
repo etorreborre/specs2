@@ -1,10 +1,11 @@
 package org.specs2
 package reporter
-import specification._
+import control.LazyParameters._
+import main.Arguments
 import io._
 import execute._
 import matcher._
-import control.LazyParameters._
+import specification._
 
 class ConsoleReporterSpec extends ConsoleReporterSpecImplementation { def is = 
                                                                                           """
@@ -82,7 +83,7 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
   def report(ex: Example): List[String] = report(Fragments(ex)) 
   def report(ex: Fragments): List[String] = {
 	val reporter = new ConsoleReporter with MockOutput
-	  reporter.report(ex)
+	  reporter.report(ex)(Arguments())
 	  reporter.messages.toList
   }
 }

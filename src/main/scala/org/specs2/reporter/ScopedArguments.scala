@@ -9,9 +9,9 @@ trait ScopedArguments extends ExecutedFragmentFold {
   type T = Arguments
   def initial = Arguments()
   
-  def fold(implicit args: Arguments) = { (args: Arguments, f: ExecutedFragment) => 
+  def fold(implicit arguments: Arguments) = { (args: Arguments, f: ExecutedFragment) => 
     f match {
-      case ExecutedSpecStart(_, _, currentArgs) => currentArgs
+      case ExecutedSpecStart(_, _, currentArgs) => arguments.overrideWith(currentArgs)
       case _ => args
     }
   }

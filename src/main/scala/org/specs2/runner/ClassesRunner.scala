@@ -3,7 +3,7 @@ package runner
 
 import reflect._
 import io._
-import main.Main
+import main.{ Main, Arguments }
 import control.Exceptions._
 import specification._
 import reporter._
@@ -22,7 +22,7 @@ class ClassRunner extends Classes with ConsoleOutput with Main with AConsoleRepo
   }
   
   protected[specs2] def run(args: Array[String], specification: BaseSpecification)(f: Exception => Unit) = {
-	  trye(reporter.report(specification))(f)
+	  trye(reporter.report(specification)(Arguments(args:_*)))(f)
   }
 
   private def createSpecification(className: String): Specification = {

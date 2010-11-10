@@ -1,8 +1,9 @@
 package org.specs2
 package runner
-import mock.Mockito
-import io._
 import _root_.org.scalatools.testing._
+import main.Arguments
+import io._
+import mock.Mockito
 import reporter._
 
 class TestInterfaceRunnerSpec extends SpecificationWithJUnit { def is =
@@ -55,7 +56,7 @@ class TestInterfaceRunnerSpec extends SpecificationWithJUnit { def is =
 	    }
 	    runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], Array(""))
     }
-	  def e1 = there was one(run.reporter).report(any[specification.BaseSpecification])
+	  def e1 = there was one(run.reporter).report(any[specification.BaseSpecification])(any[Arguments])
   }
 }
 
