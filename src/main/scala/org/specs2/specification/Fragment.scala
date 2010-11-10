@@ -1,6 +1,7 @@
 package org.specs2
 package specification
 
+import main.Arguments
 import execute._
 import control.LazyParameter
 
@@ -11,7 +12,7 @@ import control.LazyParameter
 sealed trait Fragment {
   def matches(s: String) = true
 }
-case class SpecStart(name: String) extends Fragment {
+case class SpecStart(name: String, arguments: Arguments = Arguments()) extends Fragment {
   override def matches(s: String) = name matches s
 }
 case class SpecEnd(name: String) extends Fragment {

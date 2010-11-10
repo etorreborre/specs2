@@ -66,7 +66,7 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
   val selection = new DefaultSelection with MockOutput
   
   def select(f: Fragments) = {
-    selection.select(f.arguments)(new Specification { def is = f }.content).map(l => l.map(_.toString))
+    selection.select(f.arguments)(new Specification { def is = f }.content).map(l => l.fragments.map(_.toString))
   }
 
 }

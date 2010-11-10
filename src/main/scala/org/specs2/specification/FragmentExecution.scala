@@ -26,21 +26,21 @@ trait FragmentExecution {
   }
 
   def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = { 
-	  case e @ Example(s, _) =>     ExecutedResult(s, executeBody(e.execute))
-	  case Text(s) =>               ExecutedText(s)
-	  case Br() =>                  ExecutedBr()
-	  case Par() =>                 ExecutedPar()
-    case Tab() =>                 ExecutedTab()
-    case Backtab() =>             ExecutedBacktab()
-	  case End() =>                 ExecutedEnd()
-	  case SpecStart(n) =>          ExecutedSpecStart(n, new SimpleTimer().start, arguments)
-	  case SpecEnd(n) =>            ExecutedSpecEnd(n)
-    case s @ Step(a) => 
+	  case e @ Example(s, _)     => ExecutedResult(s, executeBody(e.execute))
+	  case Text(s)               => ExecutedText(s)
+	  case Br()                  => ExecutedBr()
+	  case Par()                 => ExecutedPar()
+    case Tab()                 => ExecutedTab()
+    case Backtab()             => ExecutedBacktab()
+	  case End()                 => ExecutedEnd()
+	  case SpecStart(n, args)    => ExecutedSpecStart(n, new SimpleTimer().start, arguments.overrideWith(args))
+	  case SpecEnd(n)            => ExecutedSpecEnd(n)
+    case s @ Step(a)           => 
       executeBody(a()) match {
         case err @ Error(_, _) => ExecutedResult("action error", err)
         case _ =>                 ExecutedNoText()  
       }
-    case _ =>                     ExecutedNoText()
+    case _                     => ExecutedNoText()
   }
 
   /** this method is used in tests */

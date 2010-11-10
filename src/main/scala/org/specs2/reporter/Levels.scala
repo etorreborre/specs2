@@ -110,7 +110,7 @@ trait LevelsFold extends FragmentFold {
       case Tab()         => BlockIndent()
       case Backtab()       => BlockUnindent()
       case Text(_)       => BlockIndent()
-      case SpecStart(_)  => BlockReset()
+      case SpecStart(_, _)  => BlockReset()
       case SpecEnd(_)    => BlockReset()
       case End()         => BlockReset()
       case _             => BlockNeutral()

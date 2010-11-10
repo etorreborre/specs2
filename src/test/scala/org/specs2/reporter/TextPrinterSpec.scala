@@ -5,7 +5,7 @@ import main.Arguments
 import execute._
 import specification._
 
-class TextPrinterSpec extends SpecificationWithJUnit { def is = args(xonly=false)         ^
+class TextPrinterSpec extends SpecificationWithJUnit { def is = 
                                                                                           """
   The TextPrinter is folding Executed Fragments and exporting them
   to a ResultOutput trait knowing how to output successes, failures,...
@@ -121,7 +121,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is = args(xonly=false
     val execution = new DefaultExecutionStrategy() {}
     val exporter = new TextExporting with MockOutput {}
     val executed = execution.execute(fragments.arguments)(
-                     List(SpecStart("spec") +: fragments.fragments :+ SpecEnd("spec")))
+                     Seq(Fragments(SpecStart("spec") +: fragments.fragments :+ SpecEnd("spec"))(fragments.arguments)))
     exporter.export(fragments.arguments)(executed)
     exporter.messages
   }

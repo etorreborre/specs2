@@ -29,7 +29,7 @@ trait TextPrinter extends ExecutedFragmentFold with ResultOutput {
    */
   val statistics  = new Statistics {}
   val levels      = new ExecutedLevelsFold {}
-  val currentArgs = new ScopedArguments {}
+  val currentArgs = new ExecutedScopedArguments {}
   
   type T = (statistics.T, levels.T, currentArgs.T)
   def initial = (statistics.initial, levels.initial, currentArgs.initial)

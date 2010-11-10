@@ -60,7 +60,7 @@ trait TreeFold[S] extends FragmentFold {
     val newLevel = LevelsFold.fold(arguments)(level, fragment)
     val newTreeLoc: TreeLoc[S] = optFold(t, fragment) map { s =>
       fragment match {
-        case SpecStart(_) => leaf(s).loc
+        case SpecStart(_, _) => leaf(s).loc
         case other => updateTreeLoc(treeLocation, level, newLevel , leaf(s))
       }
     } getOrElse treeLocation

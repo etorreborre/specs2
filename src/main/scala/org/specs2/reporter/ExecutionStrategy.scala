@@ -14,7 +14,7 @@ import specification._
  */
 private[specs2]
 trait ExecutionStrategy {
-  def execute(implicit arguments: Arguments): Seq[Seq[Fragment]] => Seq[ExecutedFragment] 
+  def execute(implicit arguments: Arguments): Seq[Fragments] => Seq[ExecutedFragment] 
 }
 
 /**
@@ -26,11 +26,11 @@ trait ExecutionStrategy {
 private[specs2]
 trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution {
   
-  def execute(implicit arguments: Arguments) = (fragments: Seq[Seq[Fragment]]) => {
+  def execute(implicit arguments: Arguments) = (fragments: Seq[Fragments]) => {
     implicit val executor = Executors.newFixedThreadPool(arguments.threadsNb)
     try {
       fragments.map { fs => 
-        fs.map(f => promise(executeFragment(arguments)(f))).sequence.get
+        fs.fragments.map(f => promise(executeFragment(arguments.overrideWith(fs.arguments))(f))).sequence.get
       }.flatten
     } finally {
       executor.shutdown()

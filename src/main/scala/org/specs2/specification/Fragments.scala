@@ -31,7 +31,7 @@ case object Fragments {
   /** add a SpecStart and SpecEnd if there are none */
   def withSpecStartEnd(fragments: Fragments, name: String) = {
     val withStartFragments = fragments.fragments.headOption match {
-      case Some(SpecStart(n)) => fragments.fragments
+      case Some(SpecStart(n, _)) => fragments.fragments
       case other => SpecStart(name) +: (Par() +: fragments.fragments)
     }
     val withStartAndEndFragments = withStartFragments.lastOption match {
