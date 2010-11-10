@@ -3,34 +3,13 @@ package main
 
 import control.Exceptions._
 
-private[specs2]
-trait ArgumentsArgs {
-  /** shorthand method to create an Arguments object */
-  def args(  
-     ex: String                = ".*",
-     xonly: Boolean            = Arguments().xonly,
-     failtrace: Boolean        = Arguments().failtrace,
-     noindent: Boolean         = Arguments().noindent,
-     specName: String          = Arguments().specName,
-     sequential: Boolean       = Arguments().sequential,
-     threadsNb: Int            = Arguments().threadsNb
-    
-  ) = Arguments(".*"+ex+".*", xonly, failtrace, noindent, specName, sequential, threadsNb)
-  
-  /** 
-   * @return arguments for a literate specification: no auto indent and a sequential
-   *         execution
-   */
-  def literate = args(noindent = true, sequential = true)  
-}
-private[specs2]
-object ArgumentsArgs extends ArgumentsArgs
-
 private[specs2]  
 case class Arguments (
   ex: String                 = ".*",
   xonly: Boolean            = false,
+  plan: Boolean             = false,
   failtrace: Boolean        = false,
+  color: Boolean            = false,
   noindent: Boolean         = false,
   specName: String          = ".*Spec",
   sequential: Boolean       = false,
@@ -40,7 +19,9 @@ case class Arguments (
     "Arguments(" +
     "ex"         +" = "+ ex         +", "+
     "xonly"      +" = "+ xonly      +", "+
+    "plan"       +" = "+ plan       +", "+
     "failtrace"  +" = "+ failtrace  +", "+
+    "color"      +" = "+ color      +", "+
     "noindent"   +" = "+ noindent   +", "+
     "specName"   +" = "+ specName   +", "+
     "sequential" +" = "+ sequential +", "+
@@ -48,7 +29,6 @@ case class Arguments (
     ") "
     
   }
-  
 } 
 
 private[specs2]  
@@ -67,11 +47,13 @@ case object Arguments {
   }
   private def extract(defaults: Arguments)(implicit arguments: Seq[String]): Arguments = {
     new Arguments (
-       xonly = bool("xonly", defaults.xonly),
-       failtrace = bool("failtrace", defaults.failtrace),
-       specName = value("specName", defaults.specName),
+       xonly      = bool("xonly",      defaults.xonly),
+       plan       = bool("plan",       defaults.plan),
+       failtrace  = bool("failtrace",  defaults.failtrace),
+       color      = bool("color",      defaults.color),
+       specName   = value("specName",  defaults.specName),
        sequential = bool("sequential", defaults.sequential),
-       threadsNb = int("threadsNb", defaults.threadsNb)
+       threadsNb  = int("threadsNb",   defaults.threadsNb)
     )
   }
   
@@ -85,3 +67,29 @@ case object Arguments {
     tryOrElse(value(name, "")(args).toInt)(defaultValue)
   }
 }
+
+private[specs2]
+trait ArgumentsArgs {
+  /** shorthand method to create an Arguments object */
+  def args(  
+     ex: String                = ".*",
+     xonly: Boolean            = Arguments().xonly,
+     plan: Boolean             = Arguments().plan,
+     failtrace: Boolean        = Arguments().failtrace,
+     color: Boolean            = Arguments().color,
+     noindent: Boolean         = Arguments().noindent,
+     specName: String          = Arguments().specName,
+     sequential: Boolean       = Arguments().sequential,
+     threadsNb: Int            = Arguments().threadsNb
+    
+  ) = Arguments(".*"+ex+".*", xonly, plan, failtrace, color, noindent, specName, sequential, threadsNb)
+  
+  /** 
+   * @return arguments for a literate specification: no auto indent and a sequential
+   *         execution
+   */
+  def literate = args(noindent = true, sequential = true)  
+}
+private[specs2]
+object ArgumentsArgs extends ArgumentsArgs
+

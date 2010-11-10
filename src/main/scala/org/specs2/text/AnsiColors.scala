@@ -26,6 +26,10 @@ trait AnsiColors {
 	    res.replace(cur, "")
 	  }
   }	  
+  def color(s: String, color: String, doIt: Boolean = true) = {
+    if (doIt) color + s + reset
+    else s
+  }
 }
 private[specs2]
 object AnsiColors extends AnsiColors

@@ -108,7 +108,7 @@ trait LevelsFold extends FragmentFold {
     def toBlock(f: Fragment) = f match {
       case Example(_, _) => BlockTerminal()
       case Tab()         => BlockIndent()
-      case Untab()       => BlockUnindent()
+      case Backtab()       => BlockUnindent()
       case Text(_)       => BlockIndent()
       case SpecStart(_)  => BlockReset()
       case SpecEnd(_)    => BlockReset()
@@ -133,7 +133,7 @@ trait ExecutedLevelsFold extends ExecutedFragmentFold {
       case ExecutedResult(_, _)       => BlockTerminal()
       case ExecutedText(_)            => BlockIndent()
       case ExecutedTab()              => BlockIndent()
-      case ExecutedUntab()            => BlockUnindent()
+      case ExecutedBacktab()            => BlockUnindent()
       case ExecutedSpecStart(_, _, _) => BlockReset()
       case ExecutedSpecEnd(_)         => BlockReset()
       case ExecutedEnd()              => BlockReset()

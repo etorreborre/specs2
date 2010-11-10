@@ -20,7 +20,10 @@ trait FragmentExecution {
    * This method could be overriden to provide alternate behavior when executing an 
    * Example
    */
-  def executeBody(body: =>Result): Result = tryOr(body)(Error(_))
+  def executeBody(body: =>Result)(implicit arguments: Arguments): Result = {
+    if (arguments.plan) Success("plan")
+    else tryOr(body)(Error(_))
+  }
 
   def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = { 
 	  case e @ Example(s, _) =>     ExecutedResult(s, executeBody(e.execute))
@@ -28,7 +31,7 @@ trait FragmentExecution {
 	  case Br() =>                  ExecutedBr()
 	  case Par() =>                 ExecutedPar()
     case Tab() =>                 ExecutedTab()
-    case Untab() =>               ExecutedUntab()
+    case Backtab() =>             ExecutedBacktab()
 	  case End() =>                 ExecutedEnd()
 	  case SpecStart(n) =>          ExecutedSpecStart(n, new SimpleTimer().start, arguments)
 	  case SpecEnd(n) =>            ExecutedSpecEnd(n)

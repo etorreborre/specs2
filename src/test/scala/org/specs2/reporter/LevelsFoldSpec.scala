@@ -22,7 +22,7 @@ class LevelsFoldSpec extends SpecificationWithJUnit { def is =
   { level(t1 ^ ex1 ^ ex2) must_== 1 }                                                     ^
   { level(t1 ^ ex1 ^ ex2 ^ t2) must_== 1 }                                                ^
   { level(t1 ^ ex1 ^ t2 ^ ex2) must_== 1 }                                                ^
-  { level(t1 ^ ex1 ^ t ^ t2 ^ ex2 ^ u ^ ex1) must_== 1 }                                  ^
+  { level(t1 ^ ex1 ^ t ^ t2 ^ ex2 ^ bt ^ ex1) must_== 1 }                                  ^
                                                                                           end
   def fold(fs: Fragments) = LevelsFold.foldAll(fs.fragments)(fs.arguments)
   def level(fs: Fragments) = fold(fs).level

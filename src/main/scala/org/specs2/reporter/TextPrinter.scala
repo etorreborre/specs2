@@ -80,9 +80,9 @@ trait TextPrinter extends ExecutedFragmentFold with ResultOutput {
   }
   
   /** print a piece of text */
-  def printText(s: String)= printLine(s)
+  def printText(s: String)(implicit args: Arguments) = printMessage(s)
   /** print a paragraph */
-  def printPar() = printLine(" ")
+  def printPar()(implicit args: Arguments) = printLine(" ")
   
   def printResult(desc: String, result: Result)(implicit args: Arguments): Unit = {
 	  val description = statusAndDescription(desc, result)
@@ -104,7 +104,7 @@ trait TextPrinter extends ExecutedFragmentFold with ResultOutput {
       }
     }
   }
-  def printFailureOrError(desc: String, f: Result with ResultStackTrace) = { 
+  def printFailureOrError(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments) = { 
     val description = statusAndDescription(desc, f)
     printError(description)
     printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
@@ -117,7 +117,7 @@ trait TextPrinter extends ExecutedFragmentFold with ResultOutput {
     printStats(stats)
     printLine(" ")
   }
-  def printStats(stats: Stats) = {
+  def printStats(stats: Stats)(implicit args: Arguments) = {
     val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart) = stats
     stats.start.map(s => printLine("Finished in " + s.timer.time))
     printLine(
@@ -131,8 +131,11 @@ trait TextPrinter extends ExecutedFragmentFold with ResultOutput {
   
   /** don't print anything for now */
   def printOther(stats: T, fragment: ExecutedFragment)(implicit args: Arguments) = ()
-  def statusAndDescription(s: String, result: Result) = {
-    s.takeWhile(_ == ' ') + status(result) + " " + s.dropWhile(_ == ' ')
+  def statusAndDescription(s: String, result: Result)(implicit args: Arguments) = {
+    s.takeWhile(_ == ' ') + status(result) + s.dropWhile(_ == ' ')
   }
-  def status(result: Result): String = result.status
+  def status(result: Result)(implicit args: Arguments): String = {
+    if (args.plan) ""
+    else (result.status  + " ")
+  }
 }

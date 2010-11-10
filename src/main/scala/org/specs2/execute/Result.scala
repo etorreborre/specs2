@@ -20,11 +20,11 @@ import control.Exceptionx._
 sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1) {
   /** @return the textual status of the result */
   def status = this match {
-	  case Success(_) => "+"
+	  case Success(_)    => "+"
 	  case Failure(_, _) => "x"
 	  case Error(_, _)   => "!"
-	  case Pending(_) => "*"
-	  case Skipped(_) => "o"
+	  case Pending(_)    => "*"
+	  case Skipped(_)    => "o"
   }
   /** update the message of a result, keeping the subclass type */
   def updateMessage(msg: String) = { 

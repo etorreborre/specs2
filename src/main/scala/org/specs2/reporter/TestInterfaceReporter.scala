@@ -6,6 +6,7 @@ import control.Exceptionx._
 import main.Arguments
 import io._
 import text._
+import AnsiColors._
 import execute.{ Success, Failure, Error, Skipped, Pending }
 import specification._
 /**
@@ -35,9 +36,9 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
   }
 }
 trait LoggedTextPrinter extends TextPrinter with TestLoggers with Output {
-  override def printError(message: String) = logError(message)
-  override def printSuccess(message: String) = logInfo(message, AnsiColors.green)
-  override def printLine(message: String) = logInfo(message)
+  override def printError(message: String)(implicit args: Arguments) = logError(message)
+  override def printSuccess(message: String)(implicit args: Arguments) = logInfo(message, AnsiColors.green)
+  override def printLine(message: String)(implicit args: Arguments) = logInfo(message)
 }
 /**
  * Specific events which can be notified to sbt
@@ -66,17 +67,11 @@ trait HandlerEvents {
 
 trait TestLoggers {
   val loggers: Array[Logger]
-  def logError(message: String, color: String = AnsiColors.red) = loggers.foreach { logger =>
-    if (logger.ansiCodesSupported)
-      logger.error(color + message + AnsiColors.reset)
-    else
-      logger.error(message)
+  def logError(message: String, c: String = AnsiColors.red) = loggers.foreach { logger =>
+    logger.error(color(message, c, logger.ansiCodesSupported))
   }
-  def logInfo(message: String, color: String = AnsiColors.blue) = loggers.foreach { logger =>
-    if (logger.ansiCodesSupported)
-      logger.info(color + message + AnsiColors.reset)
-    else
-      logger.info(message)
+  def logInfo(message: String, c: String = AnsiColors.blue) = loggers.foreach { logger =>
+    logger.info(color(message, c, logger.ansiCodesSupported))
   }
   def logInfoStatus(name: String, color: String, status: String) = {
     logError(status + " " + name, color)
