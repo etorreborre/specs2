@@ -84,29 +84,30 @@ object Arguments {
   }
 }
 
+import control.Property
 private[specs2]
-trait ArgumentsArgs {
+trait ArgumentsArgs extends control.Properties {
   /** shorthand method to create an Arguments object */
   def args(  
-    ex:         =>String   = error(""),
-    xonly:      =>Boolean  = error(""),
-    plan:       =>Boolean  = error(""),
-    failtrace:  =>Boolean  = error(""),
-    color:      =>Boolean  = error(""),
-    noindent:   =>Boolean  = error(""),
-    specName:   =>String   = error(""),
-    sequential: =>Boolean  = error(""),
-    threadsNb:  =>Int      = error("") 
+    ex:         Property[String]   = Property[String](),
+    xonly:      Property[Boolean]  = Property[Boolean](),
+    plan:       Property[Boolean]  = Property[Boolean](),
+    failtrace:  Property[Boolean]  = Property[Boolean](),
+    color:      Property[Boolean]  = Property[Boolean](),
+    noindent:   Property[Boolean]  = Property[Boolean](),
+    specName:   Property[String]   = Property[String](),
+    sequential: Property[Boolean]  = Property[Boolean](),
+    threadsNb:  Property[Int]      = Property[Int]() 
   ) = new Arguments(
-     tryo(".*"+ex+".*"), 
-     tryo(xonly), 
-     tryo(plan), 
-     tryo(failtrace), 
-     tryo(color), 
-     tryo(noindent), 
-     tryo(specName), 
-     tryo(sequential), 
-     tryo(threadsNb)
+     ex.map(".*"+_+".*").toOption, 
+     xonly.toOption, 
+     plan.toOption, 
+     failtrace.toOption, 
+     color.toOption, 
+     noindent.toOption, 
+     specName.toOption, 
+     sequential.toOption, 
+     threadsNb.toOption
   )
   /** 
    * @return arguments for a literate specification: no auto indent and a sequential

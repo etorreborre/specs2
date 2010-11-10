@@ -1,5 +1,5 @@
 package org.specs2
-package form
+package control
 
 /**
  * This class represents values which are evaluated lazily and which may even
@@ -72,5 +72,9 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
 object Property {
   def apply[T](i: =>T) = new Property(() => Some(i))
   def apply[T]() = new Property[T](() => None)
+}
+private[specs2]
+trait Properties {
+  implicit def aProperty[T](t: T) = Property(t)
 }
 

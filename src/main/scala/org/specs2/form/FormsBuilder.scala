@@ -1,6 +1,7 @@
 package org.specs2
 package form
 
+import control.Property
 import execute._
 import matcher._
 

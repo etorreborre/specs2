@@ -1,5 +1,5 @@
 package org.specs2
-package form
+package control
 import io._
 import specification._
 

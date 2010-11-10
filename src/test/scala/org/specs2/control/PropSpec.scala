@@ -1,5 +1,6 @@
 package org.specs2
 package form
+import control.Property
 import execute._
 
 class PropSpec extends SpecificationWithJUnit {
@@ -41,7 +42,7 @@ class PropSpec extends SpecificationWithJUnit {
   val name = Prop("name", "eric")
   val noValues = new Prop("name")
   val actualOnly = Prop(18)
-  val constrained = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
+  val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
   val withMatcher = Prop("name", "eric", contain(_:String))
   
   object creation {
