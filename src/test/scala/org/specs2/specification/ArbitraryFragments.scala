@@ -2,13 +2,14 @@ package org.specs2
 package specification
 
 import org.scalacheck._
+import Arbitrary._
 import main.Arguments
 import control.LazyParameters._
 
 trait ArbitraryFragments extends execute.StandardResults with PredefinedFragments {
 
-  implicit def fragments: Arbitrary[Fragments] = Arbitrary {
-    val genFragment = Gen.frequency ( 
+  implicit def arbitraryFragment: Arbitrary[Fragment] = Arbitrary {
+    Gen.frequency ( 
       (1, Gen.value(Step(success))), 
       (1, Gen.value(SpecStart("specStart"))),
       (1, Gen.value(SpecEnd("specEnd"))),
@@ -17,8 +18,10 @@ trait ArbitraryFragments extends execute.StandardResults with PredefinedFragment
       (1, Gen.value(end)),
       (2, Gen.value(p)),
       (1, Gen.value(br)))
+  }
+  implicit def arbitraryFragments: Arbitrary[Fragments] = Arbitrary {
 
-    def genFragments(sz: Int): Gen[Fragments] = for (l <- Gen.listOfN(sz, genFragment)) yield Fragments(l)(Arguments())
+    def genFragments(sz: Int): Gen[Fragments] = for (l <- Gen.listOfN(sz, arbitrary[Fragment])) yield Fragments(l)(Arguments())
     def sizedList(sz: Int): Gen[Fragments] = {
       if (sz <= 0) genFragments(1)
       else genFragments(sz)

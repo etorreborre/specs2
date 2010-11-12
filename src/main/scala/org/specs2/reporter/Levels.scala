@@ -133,7 +133,7 @@ trait ExecutedLevelsFold extends ExecutedFragmentFold {
       case ExecutedResult(_, _)       => BlockTerminal()
       case ExecutedText(_)            => BlockIndent()
       case ExecutedTab()              => BlockIndent()
-      case ExecutedBacktab()            => BlockUnindent()
+      case ExecutedBacktab()          => BlockUnindent()
       case ExecutedSpecStart(_, _, _) => BlockReset()
       case ExecutedSpecEnd(_)         => BlockReset()
       case ExecutedEnd()              => BlockReset()
@@ -143,4 +143,82 @@ trait ExecutedLevelsFold extends ExecutedFragmentFold {
   type T = blockFold.Level
   def initial = blockFold.initial
   def fold(implicit args: Arguments) = blockFold.fold(args)
+}
+import scalaz._
+
+import Scalaz._
+case class LeveledBlocks(blocks: List[(Block, Int)] = Nil) {
+  def headOption = blocks.map(_._1).headOption
+  def lastOption = blocks.map(_._1).lastOption
+  def firstLevel = blocks.headOption.map(_._2).getOrElse(0)
+  def lastLevelOption = blocks.map(_._2).lastOption
+  def level = lastLevelOption.getOrElse(0)
+  def levels = blocks.map(_._2)
+  def elems = blocks.map(_._1)
+  def add(other: LeveledBlocks) = LeveledBlocks(this.blocks ++ other.blocks)
+  def resetLevel(f: Int => Int) = {
+    val breakAtFirstReset = blocks.span(b => !isReset(b)) 
+    LeveledBlocks(breakAtFirstReset._1).mapLevel(f) add 
+    LeveledBlocks(breakAtFirstReset._2) 
+  }
+  private def mapLevel(f: Int => Int) = LeveledBlocks(blocks.map((b: (Block, Int)) => (b._1, f(b._2))))
+  def increment(n: Int = 1) = mapLevel(_ + n)
+  def decrement(n: Int = 1) = mapLevel(_ - n)
+  private val isReset = (b: (Block, Int)) => b match { case (BlockReset(), _) => true; case _ => false }
+  override def equals(a: Any) = {
+    a match {
+      case l: LeveledBlocks => normalizeResets.blocks.equals(l.normalizeResets.blocks)
+      case _ => false
+    }
+  }
+  private def normalizeResets = {
+    new LeveledBlocks(blocks.map {
+      case (BlockReset(), _) => (BlockReset(), 0) 
+      case other             => other 
+    })
+  }
+}
+case object LeveledBlocks {
+  def apply(b: Block) = new LeveledBlocks(List((b, 0)))
+  implicit object LeveledBlocksMonoid extends Monoid[LeveledBlocks] {
+    def append(b1: LeveledBlocks, b2: =>LeveledBlocks) =
+      (b1.lastOption, b2.headOption) match {
+        case (None, _)                        => b2
+        case (Some(BlockReset()), _)          => b1 add b2.resetLevel(_ - b2.firstLevel)
+        case (_, Some(BlockReset()))          => b1 add b2.resetLevel(_ - b2.firstLevel)
+        case (Some(BlockIndent()), _)         => b1 add b2.resetLevel(b1.level + _ + 1)
+        case (Some(BlockUnindent()), _)       => b1 add b2.resetLevel(b1.level + _ - 1)
+        case _                                => b1 add b2.resetLevel(b1.level + _)
+      }
+    val zero = new LeveledBlocks()
+  }
+  
+  def foldAll[T](fs: Seq[T])(implicit convert: T => LeveledBlocks) = {
+    val foldable = implicitly[Foldable[Seq]]
+    val monoid = implicitly[Monoid[LeveledBlocks]] 
+    foldable.foldLeft(fs, monoid.zero, (b: LeveledBlocks, t: T) => monoid.append(b, convert(t)))
+  }
+
+  implicit def toBlock(f: ExecutedFragment): Block = f match {
+    case ExecutedResult(_, _)       => BlockTerminal() 
+    case ExecutedText(_)            => BlockIndent()   
+    case ExecutedTab()              => BlockIndent()   
+    case ExecutedBacktab()          => BlockUnindent() 
+    case ExecutedSpecStart(_, _, _) => BlockReset()    
+    case ExecutedSpecEnd(_)         => BlockReset()    
+    case ExecutedEnd()              => BlockReset()    
+    case _                          => BlockNeutral()  
+  }
+  implicit def toBlocks(f: ExecutedFragment): LeveledBlocks = LeveledBlocks(toBlock(f))
+  implicit def toBlock(f: Fragment): Block = f match {
+    case Example(_, _)   => BlockTerminal()     
+    case Tab()           => BlockIndent()       
+    case Backtab()       => BlockUnindent()   
+    case Text(_)         => BlockIndent()       
+    case SpecStart(_, _) => BlockReset()     
+    case SpecEnd(_)      => BlockReset()        
+    case End()           => BlockReset()        
+    case _               => BlockNeutral()        
+  }
+  implicit def toBlocks(f: Fragment): LeveledBlocks = LeveledBlocks(toBlock(f))
 }

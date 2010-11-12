@@ -1,6 +1,8 @@
 package org.specs2
 package reporter
 
+import scalaz._
+import Scalaz._
 import control.Exceptions._
 import main.Arguments
 import io._
@@ -44,7 +46,7 @@ trait Reporter extends Selection
    * @return the reporter
    */
   def report(fragments: Fragments)(implicit arguments: Arguments): this.type = {
-    (select andThen execute andThen export)(fragments)
+    fragments |> select |> execute |> export
     this
   }
 }

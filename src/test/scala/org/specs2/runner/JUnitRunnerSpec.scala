@@ -9,7 +9,7 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
   
                                                                                           """	  
   The JUnitRunner is meant to be used with the RunWith annotation.
-  It takes a Specification, execute it and notifies a RunNotifier object of the possible 
+  It takes a Specification, executes it and notifies a RunNotifier object of the possible 
   failures.
   
   The following examples show the result of running a Specification with different 

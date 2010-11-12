@@ -107,13 +107,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-compiler</artifactId>
       <version>${scala.version}</version>
-      <scope>provided</scope>
     </dependency>
 	<dependency>
       <groupId>org.hamcrest</groupId>
@@ -201,11 +199,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
           <includes>
             <include>**/*Unit.java</include>
             <include>**/*Spec.java</include>
-            <include>**/DependenciesSpec.java</include>
-            <include>**/FeaturesSpec.java</include>
           </includes>
           <excludes>
             <exclude>**/*Test.java</exclude>
+            <exclude>**/DependenciesSpec.java</exclude>
+            <exclude>**/FeaturesSpec.java</exclude>
           </excludes>
         </configuration>
       </plugin>

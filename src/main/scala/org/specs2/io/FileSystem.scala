@@ -238,7 +238,7 @@ trait FileSystem extends FileReader with FileWriter {
    */
   def getResourcesNamed(name: String): List[URL] = {
     val resource = ClassLoader.getSystemResource(name)
-    val resources = this.getClass.getClassLoader.getResources(name)
+    val resources = Thread.currentThread.getContextClassLoader.getResources(name)
     if (resource != null)
       resource :: resources.toList
     else

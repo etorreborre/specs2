@@ -15,7 +15,8 @@ trait Classes extends Output {
   /**
    * @return an instance of a given class, returning either the instance, or an exception
    */
-  def create[T <: AnyRef](className: String = "", loader: ClassLoader = getClass.getClassLoader)(implicit m: ClassManifest[T]): Either[Throwable, T] = {
+  def create[T <: AnyRef](className: String = "", loader: ClassLoader = Thread.currentThread.getContextClassLoader)
+                         (implicit m: ClassManifest[T]): Either[Throwable, T] = {
     trye(createInstanceFor(loadClassOf[T](className, loader)))
   }
   /**
@@ -26,14 +27,16 @@ trait Classes extends Output {
   /**
    * @return an instance of a given class and optionally print message if the class can't be loaded.
    */
-  def createObject[T <: AnyRef](className: String, printMessage: Boolean)(implicit m: ClassManifest[T]): Option[T] = createObject(className, printMessage, false)(m)
+  def createObject[T <: AnyRef](className: String, printMessage: Boolean)
+                               (implicit m: ClassManifest[T]): Option[T] = createObject(className, printMessage, false)(m)
   /**
    * A system property 'debugCreateObject' can be set to override the printMessage and printStackTrace parameters
    * so that the exception message and stacktrace are printed when the object can't be created
    * 
    * @return an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
    */
-  def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)(implicit m: ClassManifest[T]): Option[T] = {
+  def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
+                               (implicit m: ClassManifest[T]): Option[T] = {
     tryo(createInstanceOf[T](loadClass[T](className))) { (e: Exception) => 
       if (printMessage || System.getProperty("debugCreateObject") != null) println("Could not instantiate class " + className + ": " + e)
       if (printStackTrace || System.getProperty("debugCreateObject") != null) e.getFullStackTrace foreach (s => println(s.toString))
@@ -143,7 +146,7 @@ trait Classes extends Output {
   /**
    * Load a class, given the class name, without catching exceptions
    */
-  private[reflect] def loadClassOf[T <: AnyRef](className: String = "", loader: ClassLoader = getClass.getClassLoader): Class[T] = {
+  private[reflect] def loadClassOf[T <: AnyRef](className: String = "", loader: ClassLoader = Thread.currentThread.getContextClassLoader): Class[T] = {
     loader.loadClass(className).asInstanceOf[Class[T]]
   }
 }
