@@ -76,7 +76,17 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends FragmentFold {
    *         from a Tree[Description]
    */
   def asOneDescription(descriptionTree: Tree[Description]): Description = {
-    val addChildren = (d: Description, children: Stream[Description]) => { children.foreach(d.addChild(_)); d }
+    
+    val addChildren = (d: Description, children: Stream[Description]) => { 
+      children.foreach { c => 
+        d.addChild(c) 
+        if (!c.getChildren().isEmpty && c.getDisplayName().matches(".*\\(\\d*\\)")) {
+          c.getChildren().foreach(d.addChild(_))
+          c.getChildren().clear()
+        }
+      }
+      d
+    }
     TreeFold.bottomUp(descriptionTree, addChildren).rootLabel
   }
   

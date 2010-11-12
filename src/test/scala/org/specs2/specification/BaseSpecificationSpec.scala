@@ -2,7 +2,7 @@ package org.specs2
 package specification
 import reporter._
 
-class BaseSpecificationSpec extends Specification {
+class BaseSpecificationSpecSuite extends Specification {
    def is = 
 """A basic specification is just some pieces of text interleaved with some Fragments
    This is an example of such a specification:

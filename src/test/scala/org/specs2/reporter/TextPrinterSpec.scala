@@ -5,7 +5,7 @@ import main.Arguments
 import execute._
 import specification._
 
-class TextPrinterSpec extends SpecificationWithJUnit { def is = 
+class TextPrinterSpec extends SpecificationWithJUnit { def is =
                                                                                           """
   The TextPrinter is folding Executed Fragments and exporting them
   to a ResultOutput trait knowing how to output successes, failures,...
@@ -23,7 +23,9 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
 "      statistics shown"                                                                  ! xonly().e7^bt^
 "    if failtrace = true, failures stacktraces are shown"                                 ! failtrace().e1^
 "    if plan = true, nothing is executed"                                                 ! plan().e1^
-"    if color = true, the text is colorized"                                              ^
+"    if sequential = false examples are executed concurrently"                            ! sequential().e1^
+"    if sequential = true examples are executed sequentially"                             ! sequential().e2^
+"    if color = true, the text is colorized"                                              ^t^
 "      text is blue"                                                                      ! color().e1^
 "      success is green"                                                                  ! color().e2^
 "      failures are red"                                                                  ! color().e3^
@@ -100,6 +102,20 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     val plan: Arguments = args(plan = true)
     def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("  e1") and not containMatch("\\+ e1") 
   }
+  case class sequential() {
+    val sequential: Arguments = args(sequential = true)
+    val messages = new MockOutput {}
+    val slowex1 = "e1" ! { Thread.sleep(20); messages.println("e1"); success }
+    val fastex2 = "e2" ! { messages.println("e2"); success }
+    def e1 = {
+      print(args(noindent = true) ^ slowex1 ^ fastex2) 
+      messages.messages must containInOrder("e2", "e1")
+    }
+    def e2 = {
+      print(args(sequential = true, noindent = true) ^ slowex1 ^ fastex2)
+      messages.messages must containInOrder("e1", "e2")
+    }
+  }
   case class status() {
     def e1 = print(t1 ^ ex1) must containMatch("^\\s*t1") 
     def e2 = print(t1 ^ ex1) must contain("  + e1") 
@@ -118,10 +134,11 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
   }
 
   def print(fragments: Fragments): Seq[String] = {
+    val selection = new DefaultSelection() {}
     val execution = new DefaultExecutionStrategy() {}
     val exporter = new TextExporting with MockOutput {}
-    val executed = execution.execute(fragments.arguments)(
-                     Seq(Fragments(SpecStart("spec") +: fragments.fragments :+ SpecEnd("spec"))(fragments.arguments)))
+    val selected = selection.select(fragments.arguments)(Fragments(SpecStart("spec") +: fragments.fragments :+ SpecEnd("spec"))(fragments.arguments))
+    val executed = execution.execute(fragments.arguments)(selected)
     exporter.export(fragments.arguments)(executed)
     exporter.messages
   }

@@ -3,7 +3,7 @@ package matcher
 import execute._
 import specification._
 
-class StringMatcherSpec extends Specification { outer =>
+class StringMatcherSpec extends SpecificationWithJUnit { outer =>
   def is = 
 "  a string can be matched against a pattern using beMatching"  ! e1^
 "  a string can be matched against a pattern using be matching" ! e2

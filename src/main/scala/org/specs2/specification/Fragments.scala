@@ -9,6 +9,9 @@ import StandardFragments._
 /**
  * A Fragments object is a list of fragments which can be related 
  * to other fragments by using the ^ method
+ * 
+ * A Fragments object carries an Arguments instance containing options for selecting,
+ * executing and reporting Fragments
  */
 case class Fragments private (private val fragmentList: () => Seq[Fragment], arguments: Arguments = Arguments()) {
   def fragments = fragmentList()
@@ -28,11 +31,16 @@ case object Fragments {
   def isExample: Function[Fragment, Boolean] = { case Example(_, _) => true; case _ => false }
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
   
-  /** add a SpecStart and SpecEnd if there are none */
+  /** 
+   * add a SpecStart and SpecEnd if there are none
+   * 
+   * Makes sure that the arguments instance in the Fragments object and in the SpecStart
+   * fragment are the same 
+   */
   def withSpecStartEnd(fragments: Fragments, name: String) = {
     val withStartFragments = fragments.fragments.headOption match {
-      case Some(SpecStart(n, _)) => fragments.fragments
-      case other => SpecStart(name) +: (Par() +: fragments.fragments)
+      case Some(SpecStart(n, _)) => SpecStart(n, fragments.arguments) +: fragments.fragments.drop(1)
+      case other => SpecStart(name, fragments.arguments) +: (Par() +: fragments.fragments)
     }
     val withStartAndEndFragments = withStartFragments.lastOption match {
       case Some(SpecEnd(n)) => withStartFragments

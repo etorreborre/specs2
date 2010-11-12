@@ -16,8 +16,14 @@ trait Fold[F] {
   type T
   def initial: T
   
+  def foldMap[F1](implicit args: Arguments, fmap: F1 => F): Function2[T, F1, T] = {
+    (t: T, f1: F1) => fold(args)(t, fmap(f1))
+  } 
   def fold(implicit args: Arguments): Function2[T, F, T]
   
+  def foldMapAll[F1](fs: =>Seq[F1])(implicit args: Arguments, fmap: F1 => F): T = 
+    foldAll(fs.view.map(fmap))(args)
+    
   def foldAll(fs: =>Seq[F])(implicit args: Arguments): T = trye {
     fs.foldLeft(initial)(fold(args))
   } ((e: Exception) => handleException(e)) match {

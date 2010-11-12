@@ -3,7 +3,7 @@ package matcher
 import execute._
 import specification._
 
-class LogicalMatcherSpec extends Specification { 
+class LogicalMatcherSpec extends SpecificationWithJUnit { 
   def is = 
 "  a matcher can be or-ed with another one"                       ^
 "    if both matches are ok the result is ok"                     ! or1^

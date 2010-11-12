@@ -3,8 +3,8 @@ package specification
 import execute._
 import matcher._
 
-class ExampleIsolationSpec extends Specification with StandardResults with UserInteractions {
-  def is = 
+class ExampleIsolationSpec extends SpecificationWithJUnit 
+      with StandardResults with UserInteractions { def is = 
                                                                                           """ 
   This specification shows how to use case classes to ensure Fragments isolation.
   

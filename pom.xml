@@ -28,12 +28,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.scala-tools.testing</groupId>
-  <artifactId>specs2_2.8.0</artifactId>
+  <artifactId>specs2_2.8.1</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>${project.artifactId}</name>
-  <description>specs is a Behaviour-Driven-Design
-  framework</description>
+  <name>specs2</name>
+  <description>specs2 is a Behaviour-Driven-Design framework</description>
   <url>http://code.google.com/p/specs/</url>
   <inceptionYear>2010</inceptionYear>
   <licenses>
@@ -51,7 +50,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     </developer>
   </developers>
   <properties>
-    <scala.version>2.8.0</scala.version>
+    <scala.version>2.8.1</scala.version>
     <java.src.version>1.6</java.src.version>
   </properties>
   <repositories>
@@ -116,6 +115,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <version>${scala.version}</version>
       <scope>provided</scope>
     </dependency>
+	<dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-all</artifactId>
+      <version>1.1</version>
+    </dependency> 
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.8.5</version>
+      <optional>true</optional>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -123,94 +133,20 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.mylyn.wikitext</groupId>
-      <artifactId>wikitext</artifactId>
-      <version>0.9.4.I20090220-1600-e3x</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.mylyn.wikitext</groupId>
-      <artifactId>wikitext.textile</artifactId>
-      <version>0.9.4.I20090220-1600-e3x</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.markdownj</groupId>
-      <artifactId>markdownj</artifactId>
-      <version>0.3.0-1.0.2b4</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>org.scala-tools.testing</groupId>
       <artifactId>test-interface</artifactId>
       <version>0.5</version>
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.scala-tools.testing</groupId>
-      <artifactId>test-interface</artifactId>
-      <version>0.5</version>
-      <optional>true</optional>
-    </dependency>
- <dependency>
-    <groupId>com.googlecode.scalaz</groupId>
-    <artifactId>scalaz-core_2.8.0</artifactId>
-    <version>5.0</version>
-  </dependency>
-  <dependency>
-      <groupId>org.scalatest</groupId>
-      <artifactId>scalatest</artifactId>
-      <version>1.2</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <version>2.5.1</version>
-      <optional>true</optional>
-    </dependency>
-	<dependency>
-      <groupId>org.easymock</groupId>
-      <artifactId>easymockclassextension</artifactId>
-      <version>2.4</version>
-      <optional>true</optional>
+      <groupId>com.googlecode.scalaz</groupId>
+      <artifactId>scalaz-core_2.8.0</artifactId>
+      <version>5.0</version>
     </dependency>
     <dependency>
       <groupId>org.scala-tools.testing</groupId>
       <artifactId>scalacheck_2.8.0</artifactId>
       <version>1.7</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.jmock</groupId>
-      <artifactId>jmock</artifactId>
-      <version>2.5.1</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.jmock</groupId>
-      <artifactId>jmock-legacy</artifactId>
-      <version>2.5.1</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.8.4</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>cglib</groupId>
-      <artifactId>cglib</artifactId>
-      <version>2.1_3</version>
-      <scope>test</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.objenesis</groupId>
-      <artifactId>objenesis</artifactId>
-      <version>1.0</version>
-      <scope>test</scope>
       <optional>true</optional>
     </dependency>
   </dependencies>
@@ -265,6 +201,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
           <includes>
             <include>**/*Unit.java</include>
             <include>**/*Spec.java</include>
+            <include>**/DependenciesSpec.java</include>
+            <include>**/FeaturesSpec.java</include>
           </includes>
           <excludes>
             <exclude>**/*Test.java</exclude>
@@ -325,11 +263,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
         <configuration>
           <instrumentation>
             <excludes>
-              <exclude>org/specs/**/*anon*.class</exclude>
-              <exclude>org/specs/**/*$*.class</exclude>
-              <exclude>org/specs/**/*$*$*.class</exclude>
-              <exclude>org/specs/**/*$*$*$*.class</exclude>
-              <exclude>org/specs/**/*anonfun*.class</exclude>
+              <exclude>org/specs2/**/*anon*.class</exclude>
+              <exclude>org/specs2/**/*$*.class</exclude>
+              <exclude>org/specs2/**/*$*$*.class</exclude>
+              <exclude>org/specs2/**/*$*$*$*.class</exclude>
+              <exclude>org/specs2/**/*anonfun*.class</exclude>
             </excludes>
           </instrumentation>
         </configuration>
@@ -365,11 +303,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   </reporting>
   <distributionManagement>
     <repository>
-      <id>scala-tools.org</id>
+      <id>nexus.scala-tools.org</id>
       <url>http://nexus-direct.scala-tools.org/content/repositories/releases</url>
     </repository>
     <snapshotRepository>
-      <id>scala-tools.org</id>
+      <id>nexus.scala-tools.org</id>
       <url>http://nexus-direct.scala-tools.org/content/repositories/snapshots</url>
       <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>

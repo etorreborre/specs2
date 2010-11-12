@@ -30,6 +30,9 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
 "  2 grouped examples and a separate one are folded as 2 suites and one test case"        ! e6^
 "  if 2 fragments have the same name, they must have a different description"             ! e7^
                                                                                           p^
+"  An example followed by a text grouping 2 examples are folded as 1 suite, with one test"+
+"  and 1 suite with 2 test cases"                                                         ! e8^
+                                                                                          p^
                                                                                           end
 
   def e1 = descriptionIs(ex1)(
@@ -100,6 +103,18 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
          "+- ex1(1)",
          "|",
          "`- ex1(2)\n")
+
+  def e8 = descriptionIs(ex1 ^ "t1" ^ ex1 ^ ex2)(
+         "JUnitDescriptionFoldSpec",
+         "|",
+         "+- ex1(1)",
+         "|",
+         "`- t1",
+         "   |",
+         "   +- ex1(3)",
+         "   |",
+         "   `- ex2(4)\n")
+
 
   def descriptionIs(f: Fragments)(tree: String*) = 
 	  showDescriptionTree(f.fragments) must_== tree.toList.mkString("\n")

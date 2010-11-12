@@ -3,7 +3,7 @@ package control
 import execute._
 import specification._
 
-class ExceptionxSpec extends Specification with Exceptionx { def is =
+class ExceptionxSpec extends SpecificationWithJUnit with Exceptionx { def is =
   
                                                                                           """  
   The Exceptionx trait provides extensions to regular exceptions:                         
