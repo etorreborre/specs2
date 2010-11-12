@@ -2,6 +2,7 @@ package org.specs2
 package io
 
 import io.FileReader._
+import io.Paths._
 import control.Exceptionx._
 import main.SystemProperties
 import text.Trim._
@@ -18,7 +19,7 @@ import text.Trim._
 private[specs2]
 trait FromSource {
   
-  private[specs2] lazy val srcDir: String = SystemProperties.getOrElse("srcDir", "src/test/scala/")
+  private[specs2] lazy val srcDir: String = SystemProperties.getOrElse("srcDir", "src/test/scala").dirPath
 
   /**
    * get some source code by:
