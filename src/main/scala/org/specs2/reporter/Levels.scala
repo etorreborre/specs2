@@ -194,9 +194,7 @@ case object LeveledBlocks {
   }
   
   def foldAll[T](fs: Seq[T])(implicit convert: T => LeveledBlocks) = {
-    val foldable = implicitly[Foldable[Seq]]
-    val monoid = implicitly[Monoid[LeveledBlocks]] 
-    foldable.foldLeft(fs, monoid.zero, (b: LeveledBlocks, t: T) => monoid.append(b, convert(t)))
+    fs.foldMap(convert)
   }
 
   implicit def toBlock(f: ExecutedFragment): Block = f match {
@@ -208,7 +206,7 @@ case object LeveledBlocks {
     case ExecutedSpecEnd(_)         => BlockReset()    
     case ExecutedEnd()              => BlockReset()    
     case _                          => BlockNeutral()  
-  }
+  } 
   implicit def toBlocks(f: ExecutedFragment): LeveledBlocks = LeveledBlocks(toBlock(f))
   implicit def toBlock(f: Fragment): Block = f match {
     case Example(_, _)   => BlockTerminal()     

@@ -32,7 +32,7 @@ class LevelsFoldSpec extends SpecificationWithJUnit with ScalaCheck with Arbitra
    check { (b1: LeveledBlocks, b2: LeveledBlocks, b3: LeveledBlocks) => 
     (b1 |+| b2) |+| b3 must_== b1 |+| (b2 |+| b3) }                                       ^
                                                                                           end
-  implicit def params = set(maxSize -> 3)
+  implicit def params = set(maxSize -> 5, minTestsOk -> 1000)
 
   import Arbitrary._                                                                                       
   implicit val arbitraryBlock: Arbitrary[Block] = Arbitrary {
