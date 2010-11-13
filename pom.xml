@@ -223,15 +223,20 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>		
         <executions>
           <execution>
             <id>attach-sources</id>
             <phase>verify</phase>
             <goals>
-              <goal>jar</goal>
+              <goal>jar-no-fork</goal>
+              <goal>test-jar-no-fork</goal>
             </goals>
           </execution>
         </executions>
+        <configuration>
+		  <testSourceDirectory>src/test/scala</testSourceDirectory>	
+		</configuration>
       </plugin>
       <plugin>
         <groupId>com.google.code.maven-license-plugin</groupId>
