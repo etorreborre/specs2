@@ -94,16 +94,18 @@ case class Failure(m: String, stackTrace: List[StackTraceElement] = new Exceptio
 /** 
  * This class represents an exception occurring during an execution.
  */
-case class Error(m: String, stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList) 
+case class Error(m: String, e: Exception) 
   extends Result(m) with ResultStackTrace {
   /** @return an exception created from the message and the stackTraceElements */
-  def exception = Exceptionx.exception(m, stackTrace)
+  def exception = e
+  def stackTrace = e.getStackTrace.toList
 }
 /** 
  * This object allows to create an Error from an exception
  */
 case object Error {
-  def apply(e: Exception) = new Error(e.getMessage, e.getStackTrace.toList)	
+  def apply(e: Exception) = new Error(e.getMessage, e)	
+  def apply(m: String) = new Error(m, new Exception(m))  
 }
 /** 
  * Pending result

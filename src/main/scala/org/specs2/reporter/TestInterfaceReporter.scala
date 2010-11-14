@@ -3,6 +3,7 @@ package reporter
 
 import _root_.org.scalatools.testing.{ EventHandler, Logger, Event, Result }
 import control.Exceptionx._
+import control.Throwablex._
 import main.Arguments
 import io._
 import text._
@@ -79,10 +80,11 @@ trait TestLoggers {
   def logErrorStatus(name: String, color: String, status: String) = {
     logError(status + " " + name, color)
   }
-  def logErrorDetails(e: Exception) = {
+  def logErrorDetails(e: Throwable): Unit = {
     logErrorStatus(e.getMessage + " (" + e.location + ")", AnsiColors.red, " ")
-    e.getStackTrace().foreach { trace =>
+    e.getStackTrace.foreach { trace =>
       logErrorStatus(trace.toString, AnsiColors.red, " ")
     }
+    e.chainedExceptions.foreach(logErrorDetails(_))
   }
 }

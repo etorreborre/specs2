@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import control.Throwablex._
 import text.Plural._
 import main.Arguments
 import execute._
@@ -95,6 +96,10 @@ trait TextPrinter extends ExecutedFragmentFold with ResultOutput {
       case e: Error => {
         printFailureOrError(desc, e) 
         e.stackTrace.foreach(t => printError(t.toString))
+        e.exception.chainedExceptions.foreach { (t: Throwable) =>
+          printError(t.getMessage)
+          t.getStackTrace.foreach(st => printError(st.toString))
+        }
       }
       case Success(_) => if (!args.xonly) printSuccess(description)
       case Pending(_) => if (!args.xonly) printPending(description + " " + result.message)

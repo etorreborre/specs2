@@ -9,11 +9,11 @@ trait Exceptionx {
   /**
    * Implicit method to add additional methods to Exception objects
    */
-  implicit def extend[T <: Exception](t: T) = new ExtendedException(t)  
+  implicit def extend[T <: Throwable](t: T) = new ExtendedException(t)  
   /**
    * See the ExtendedExceptions object description
    */
-  class ExtendedException[T <: Exception](t: T) {
+  class ExtendedException[T <: Throwable](t: T) {
     private val topTrace = new Location(if (t.getStackTrace().isEmpty) stackTraceElement("specs2") else t.getStackTrace()(0)) 
     /** @return the file name and the line number where the Throwable was created */
     def location = topTrace.location
