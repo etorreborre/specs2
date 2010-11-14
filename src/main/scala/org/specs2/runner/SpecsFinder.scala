@@ -53,13 +53,13 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
   /**
    * @return a <code>Specification</code> object from a className if that class is a <code>Specification</code> class.<br>
    * Tries to load the class name and cast it to a specification
-   * @return None in case of an exception.
+   *         None in case of an exception.
    */
   def createSpecification(className: String): Option[Specification] = tryToCreateObject[Specification](className)
   /**
    * @return a <code>Specification</code> object from a className if that class is a <code>Specification</code> class.<br>
    * Tries to load the class name and cast it to a specification
-   * @return None in case of an exception.
+   *         None in case of an exception.
    */
   def createSpecification(className: String, printMessage: Boolean, printStackTrace: Boolean): Option[Specification] = createObject[Specification](className, printMessage, printStackTrace)
 }

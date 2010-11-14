@@ -44,7 +44,7 @@ trait FileWriter {
   /**
    * writes some content to a file.
    * @param path path of the file to read
-   * @content content of the file to write
+   * @param content content of the file to write
    */
   def writeFile(path: String, content: =>String): Unit = write(path) { out => out.write(content) }
 
