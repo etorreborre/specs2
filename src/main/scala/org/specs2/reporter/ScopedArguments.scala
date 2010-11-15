@@ -48,3 +48,4 @@ trait ExecutedScopedArguments extends ExecutedFragmentFold {
 }
 private[specs2]
 object ExecutedScopedArguments extends ExecutedScopedArguments
+
