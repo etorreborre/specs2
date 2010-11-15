@@ -47,10 +47,10 @@ trait TextPrinter extends ExecutedFragmentFold with ResultOutput {
       case ((stats, level, args), ExecutedSpecStart(s, _, _))=> printSpecStart(s, level)(args)
       case ((stats, level, args), ExecutedResult(s, result)) => printResult(s, level, result)(args)
       case ((stats, level, args), ExecutedText(s)) =>           printExecutedText(s, level)(args)
-      case (_, ExecutedPar()) =>                                printExecutedPar
+      case ((stats, level, args), ExecutedPar()) =>             printExecutedPar(args)
       case (((total, current), level, args), 
             end @ ExecutedSpecEnd(_)) =>                        printExecutedEnd(total, current, level, end)(args)
-	    case (stats, fragment) =>                                 printOther(stats, fragment)
+	    case (s @ (stats, level, args), fragment) =>              printOther(s, fragment)(args)
     }
 	  f
   }
