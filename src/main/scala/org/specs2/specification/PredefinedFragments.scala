@@ -9,7 +9,9 @@ trait PredefinedFragments {
   def br = StandardFragments.Br()
   def end = StandardFragments.End()
   def t = StandardFragments.Tab()
+  def t(n: Int) = StandardFragments.Tab(n)
   def bt = StandardFragments.Backtab()
+  def bt(n: Int) = StandardFragments.Backtab(n)
   def endp = Fragments(end, p)
 }
 private[specs2]

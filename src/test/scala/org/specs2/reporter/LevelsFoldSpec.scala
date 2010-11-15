@@ -1,36 +1,53 @@
 package org.specs2
 package reporter
 
-import org.scalacheck.{ Arbitrary, Gen, Prop }
+import org.scalacheck.{ Arbitrary, Shrink, Gen, Prop }
+import matcher.ScalazMatchers
 import scalaz._
 import Scalaz._
 import specification._
 import LeveledBlocks._
 
-class LevelsFoldSpec extends SpecificationWithJUnit with ScalaCheck with ArbitraryFragments { def is = 
-  
+class LevelsFoldSpec extends SpecificationWithJUnit with ScalaCheck 
+  with ScalazMatchers with ArbitraryFragments { def is = 
+    
+  args(xonly=true)^
                                                                                           """
   The LevelsFold trait is used to compute the 'level' of Fragments in a list of 
   Fragments.
                                                                                           """^
-  "The next examples will be indented to 1"                                               ^
+  "A simple piece of text has level 0"                                                    ^
   { level(t1) must_== List(0) }                                                           ^
                                                                                           p^
-  "The next examples will be indented to 2"                                               ^
+  "A new piece of text must be indented by 1"                                             ^
   { level(t1 ^ t2) must_== List(0, 1) }                                                   ^
-  { level(t1 ^ ex1 ^ ex2 ^ t2 ^ t3) must_== List(0, 1, 1, 1, 2) }                         ^
-  { level(t1 ^ ex1 ^ t ^ t2 ^ ex2) must_== List(0, 1, 1, 2, 3) }                          ^
                                                                                           p^
-  "The next examples will be indented to 1"                                               ^
+  "Examples or text following text must be indented by 1"                                 ^
+  { level(t1 ^ ex1 ^ ex2 ^ t2 ^ t3) must_== List(0, 1, 1, 1, 2) }                         ^
+                                                                                          p^
+  "Consecutive examples must have the same indentation"                                   ^
   { level(t1 ^ ex1) must_== List(0, 1) }                                                  ^
   { level(t1 ^ ex1 ^ ex2) must_== List(0, 1, 1) }                                         ^
   { level(t1 ^ ex1 ^ ex2 ^ t2) must_== List(0, 1, 1, 1) }                                 ^
   { level(t1 ^ ex1 ^ t2 ^ ex2) must_== List(0, 1, 1, 2) }                                 ^
-  { level(t1 ^ ex1 ^ t ^ t2 ^ ex2 ^ bt ^ ex1) must_== List(0, 1, 1, 2, 3, 3, 2) }         ^
+                                                                                          p^
+  "Tabs can be used to further indent a fragment"                                         ^
+  { level(t1 ^ ex1 ^ t ^ t2 ^ ex2) must_== List(0, 1, 1, 2, 3) }                          ^
+  { level(t1 ^ ex1 ^ t(2) ^ t2 ^ ex2) must_== List(0, 1, 1, 3, 4) }                       ^
+                                                                                          p^
+  "Backtabs can be used to further unindent a fragment"                                   ^
+  { level(t1 ^ ex1 ^ bt ^ t2 ^ ex2) must_== List(0, 1, 1, 1, 2) }                         ^
+  { level(t1 ^ ex1 ^ bt(2) ^ t2 ^ ex2 ^ bt ^ ex1) must_== List(0, 1, 1, 0, 1, 0, 1) }     ^
+                                                                                          p^
+  "A paragraph unindents the following fragments by 1"                                    ^
+  { level(t1 ^ ex1 ^ p ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1) }                          ^
+                                                                                          p^
+  "A end resets the following fragment to zero"                                           ^
+  { level(t1 ^ ex1 ^ end ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1) }                        ^
+  { level(t1 ^ ex1 ^ end ^ t1 ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1, 2) }                ^
                                                                                           p^
   "The LevelBlocks monoid must be associative"                                            !
-   check { (b1: LeveledBlocks, b2: LeveledBlocks, b3: LeveledBlocks) => 
-    (b1 |+| b2) |+| b3 must_== b1 |+| (b2 |+| b3) }                                       ^
+     isAssociative                                                                        ^
                                                                                           end
   implicit def params = set(maxSize -> 5, minTestsOk -> 1000)
 

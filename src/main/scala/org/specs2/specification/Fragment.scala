@@ -50,7 +50,7 @@ object StandardFragments {
   case class End() extends Fragment
   case class Par() extends Fragment
   case class Br() extends Fragment
-  case class Tab() extends Fragment
-  case class Backtab() extends Fragment
+  case class Tab(n: Int = 1) extends Fragment
+  case class Backtab(n: Int = 1) extends Fragment
 }
 
