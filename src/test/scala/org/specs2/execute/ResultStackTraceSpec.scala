@@ -30,7 +30,7 @@ class ResultStackTraceSpec extends SpecificationWithJUnit {  def is =
   case class stackTraceResult(msg: (String, String, Int)*) extends ResultStackTrace {
 	  def stackTrace = {
 	    msg.foldLeft(Nil: List[StackTraceElement]) { (res, cur) =>
-	      res :+ Exceptionx.stackTraceElement(cur._1, fileName = cur._2, lineNumber = cur._3)
+	      res :+ Throwablex.stackTraceElement(cur._1, fileName = cur._2, lineNumber = cur._3)
 	    }
 	  }
   } 

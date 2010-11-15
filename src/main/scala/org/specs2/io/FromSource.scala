@@ -3,7 +3,7 @@ package io
 
 import io.FileReader._
 import io.Paths._
-import control.Exceptionx._
+import control.Throwablex._
 import main.SystemProperties
 import text.Trim._
 

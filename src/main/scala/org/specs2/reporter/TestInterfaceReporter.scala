@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import _root_.org.scalatools.testing.{ EventHandler, Logger, Event, Result }
-import control.Exceptionx._
+import control.Throwablex._
 import control.Throwablex._
 import main.Arguments
 import io._

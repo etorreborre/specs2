@@ -2,7 +2,7 @@ package org.specs2
 package execute
 
 import control._
-import Exceptionx._
+import Throwablex._
 
 /**
  * This stackTrace is filtered to remove

@@ -1,7 +1,7 @@
 package org.specs2
 package execute
-import control.Exceptionx
-import control.Exceptionx._
+import control.Throwablex
+import control.Throwablex._
 
 /**
  * The result of an execution, either:
@@ -77,7 +77,7 @@ object Success {
 case class Failure(m: String, stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList) 
   extends Result(m) with ResultStackTrace {
   /** @return an exception created from the message and the stackTraceElements */
-  def exception = Exceptionx.exception(m, stackTrace)
+  def exception = Throwablex.exception(m, stackTrace)
   override def or(r: =>Result): Result = r match {
     case Success(m) => if (message == m) r else Success(message+" and "+m)
     case Failure(m, st) => Failure(message+" and "+m, stackTrace ::: st)
