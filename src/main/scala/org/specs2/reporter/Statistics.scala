@@ -1,6 +1,8 @@
 package org.specs2
 package reporter
 
+import scalaz.{ Scalaz, Monoid, Reducer }
+import Scalaz._
 import main.Arguments
 import execute._
 import specification._
@@ -28,7 +30,8 @@ trait Statistics extends ExecutedFragmentFold {
                    errors:       Int = 0, 
                    pending:      Int = 0, 
                    skipped:      Int = 0,
-                   start:        Option[ExecutedSpecStart] = None) {
+                   start:        Option[ExecutedSpecStart] = None,
+                   end:          Option[ExecutedSpecEnd] = None) {
     
     def isEnd(end: ExecutedSpecEnd) = {
       start.map(_.name == end.name).getOrElse(false)
@@ -70,4 +73,31 @@ trait Statistics extends ExecutedFragmentFold {
   }
 }
 private[specs2]
-object Statistics extends Statistics
+object Statistics extends Statistics {
+  case class SpecsStatistics(total: Stats, current: Stats)
+  implicit object StatsMonoid extends Monoid[SpecsStatistics] {
+    def append(s1: SpecsStatistics, s2: =>SpecsStatistics): SpecsStatistics = {
+      SpecsStatistics(s1.total.add(s2.total), s1.current.add(s2.current))
+    }
+    val zero = SpecsStatistics(Stats(), Stats()) 
+  }
+  implicit object ExecutedFragmentsStatisticsReducer extends Reducer[ExecutedFragment, SpecsStatistics] {
+    implicit override def unit(f: ExecutedFragment): SpecsStatistics = f match { 
+      case ExecutedResult(_, r) => {
+        val current = r match {
+          case Success(_)    => Stats(fragments = 1, expectations = 1, successes = 1)
+          case Failure(_, _) => Stats(fragments = 1, expectations = 1, failures = 1)
+          case Error(_,_)    => Stats(fragments = 1, expectations = 1, errors = 1)
+          case Pending(_)    => Stats(fragments = 1, expectations = 1, pending = 1)
+          case Skipped(_)    => Stats(fragments = 1, expectations = 1, skipped = 1)
+          case _             => Stats(fragments = 1, expectations = 1) 
+        }
+        SpecsStatistics(current, current)
+      }
+      case start @ ExecutedSpecStart(name, timer, args) => 
+        SpecsStatistics(Stats(start = Some(ExecutedSpecStart(name, timer.stop, args))), Stats())
+      case e @ ExecutedSpecEnd(_) => SpecsStatistics(Stats(end = Some(e)), Stats())
+      case _ => SpecsStatistics(Stats(), Stats())
+    }
+  }
+}

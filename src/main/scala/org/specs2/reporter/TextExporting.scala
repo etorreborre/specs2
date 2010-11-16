@@ -10,8 +10,7 @@ import specification._
  * at the end of the specification
  */
 private[specs2]
-trait TextExporting extends 
-         FoldExporting 
+trait TextExporting extends         FoldExporting 
     with Output { outer =>
 
   /**

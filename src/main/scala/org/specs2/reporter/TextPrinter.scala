@@ -123,7 +123,7 @@ trait TextPrinter extends ExecutedFragmentFold with ResultOutput {
     printLine(" ")
   }
   def printStats(stats: Stats)(implicit args: Arguments) = {
-    val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart) = stats
+    val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart, specEnd) = stats
     stats.start.map(s => printLine("Finished in " + s.timer.time))
     printLine(
         Seq(Some(examples qty "example"), 

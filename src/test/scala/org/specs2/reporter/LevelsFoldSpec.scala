@@ -7,6 +7,7 @@ import scalaz._
 import Scalaz._
 import specification._
 import LeveledBlocks._
+import FragmentLeveledBlocksReducer._
 
 class LevelsFoldSpec extends SpecificationWithJUnit with ScalaCheck 
   with ScalazMatchers with ArbitraryFragments { def is = 
@@ -36,8 +37,8 @@ class LevelsFoldSpec extends SpecificationWithJUnit with ScalaCheck
   { level(t1 ^ ex1 ^ t(2) ^ t2 ^ ex2) must_== List(0, 1, 1, 3, 4) }                       ^
                                                                                           p^
   "Backtabs can be used to further unindent a fragment"                                   ^
-  { level(t1 ^ ex1 ^ bt ^ t2 ^ ex2) must_== List(0, 1, 1, 1, 2) }                         ^
-  { level(t1 ^ ex1 ^ bt(2) ^ t2 ^ ex2 ^ bt ^ ex1) must_== List(0, 1, 1, 0, 1, 0, 1) }     ^
+  { level(t1 ^ ex1 ^ bt ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1) }                         ^
+  { level(t1 ^ t2 ^ ex1 ^ bt(2) ^ t2 ^ ex2) must_== List(0, 1, 2, 2, 0, 1) }              ^
                                                                                           p^
   "A paragraph unindents the following fragments by 1"                                    ^
   { level(t1 ^ ex1 ^ p ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1) }                          ^
@@ -46,15 +47,14 @@ class LevelsFoldSpec extends SpecificationWithJUnit with ScalaCheck
   { level(t1 ^ ex1 ^ end ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1) }                        ^
   { level(t1 ^ ex1 ^ end ^ t1 ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1, 2) }                ^
                                                                                           p^
-  "The LevelBlocks monoid must be associative"                                            !
-     isAssociative                                                                        ^
+  "The LevelBlocks monoid must respect the Monoid laws"                                   !
+    LeveledBlocksMonoid.isMonoid                                                         ^
                                                                                           end
   implicit def params = set(maxSize -> 5, minTestsOk -> 1000)
 
   import Arbitrary._                                                                                       
   implicit val arbitraryBlock: Arbitrary[Block] = Arbitrary {
-     for (f <- arbitrary[Fragment]) 
-       yield toBlock(f)
+     for (f <- arbitrary[Fragment]) yield f
   }
   implicit val arbitraryBlocks: Arbitrary[LeveledBlocks] = Arbitrary {
     
@@ -69,7 +69,7 @@ class LevelsFoldSpec extends SpecificationWithJUnit with ScalaCheck
     Gen.sized(sz => sizedList(sz))
   }
     
-  def fold(fs: Fragments) = LeveledBlocks.foldAll(fs.fragments)
+  def fold(fs: Fragments) = fs.fragments.foldMap(unit)
   def level(fs: Fragments) = fold(fs).levels
   
   def t1 = "t1"

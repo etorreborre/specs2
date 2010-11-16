@@ -3,6 +3,7 @@ package reporter
 import main.Arguments
 import execute._
 import specification._
+import Statistics._
 
 class StatisticsSpec extends SpecificationWithJUnit { def is =
                                                                                           """
