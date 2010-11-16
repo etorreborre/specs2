@@ -1,9 +1,12 @@
 package org.specs2
 package reporter
+import scalaz.Scalaz
+import Scalaz._
 import main.Arguments
 import execute._
 import specification._
 import Statistics._
+import Statistics.ExecutedFragmentsStatisticsReducer._
 
 class StatisticsSpec extends SpecificationWithJUnit { def is =
                                                                                           """
@@ -27,19 +30,19 @@ class StatisticsSpec extends SpecificationWithJUnit { def is =
   val spec = 
     "start" ^
     "e1" ! Success("ok", 2) ^
-    "e2" ! failure ^
-    "e3" ! anError ^
-    "e4" ! pending ^
-    "e5" ! skipped ^
-         end
+    "e2" ! failure          ^
+    "e3" ! anError          ^
+    "e4" ! pending          ^
+    "e5" ! skipped          ^ end
 
   implicit val arguments = new Arguments()
-  def statistics(spec: Fragments) = 
-    new Statistics {}.
-    foldAll(Fragments.withSpecStartEnd(spec, "spec").fragments.map(f => execute(f)))(spec.arguments)
+  def statistics(spec: Fragments) = {
+    val fragments = Fragments.withSpecStartEnd(spec, "spec").fragments.map(f => execute(f))
+    fragments.foldMap(unit)
+  }
     
-  def total(spec: Fragments) = statistics(spec)._1 
-  def current(spec: Fragments) = statistics(spec)._2 
+  def total(spec: Fragments) = statistics(spec).total 
+  def current(spec: Fragments) = statistics(spec).current
   
   def execute(f: Fragment)(implicit args: Arguments) = new FragmentExecution {}.executeFragment(args)(f)  
     
@@ -51,11 +54,11 @@ class StatisticsSpec extends SpecificationWithJUnit { def is =
   def e6 = total(spec).pending must_== 1                                                                                          
   def e7 = total(spec).skipped must_== 1
   
-  val spec2 = "start" ^
-    "e1" ! Success("ok", 2) ^
-    "e2" ! failure ^
+  val spec2 = "start"             ^
+    "e1" ! Success("ok", 2)       ^
+    "e2" ! failure                ^
     fragmentGroup(spec.fragments) ^
-           end
+                                  end
   
   def e8 = (current(spec).fragments must_== 5) and (current(spec2).fragments must_== 7)
   def e9 = total(spec2).fragments must_== 7
