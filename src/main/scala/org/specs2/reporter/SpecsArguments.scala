@@ -12,7 +12,14 @@ import specification._
  */
 private[specs2]
 case class SpecsArguments(arguments: List[(ArgumentsStart, Arguments)] = Nil) {
+  def update(args: Arguments) = SpecsArguments {
+    arguments.takeWhile(_._1 != StartOfArguments()).map(a => (a._1, args)) ++ 
+    arguments.dropWhile(_._1 != StartOfArguments())
+  }
+  def append(args: SpecsArguments) = SpecsArguments(arguments ++ args.arguments)
   def args = arguments.last._2
+  def headOption = arguments.headOption
+  def lastOption = arguments.lastOption
   def toList = arguments.map(_._2)
 }
 
@@ -20,14 +27,13 @@ private[specs2]
 case object SpecsArguments {
   def create(a: ArgumentsStart, args: Arguments = Arguments()) = new SpecsArguments(List((a, args)))
   
-  implicit def argumentsState(fragment: ExecutedFragment) = state { (a: Arguments) => (a, fragment) match {
-      case (_, f @ ExecutedSpecStart(_, _, args)) => (args, args)     
-      case (args, f)                              => (args, args)        
-    } 
-  }
-  
   implicit object SpecsArgumentsMonoid extends Monoid[SpecsArguments] {
-    def append(a1: SpecsArguments, a2: =>SpecsArguments) = new SpecsArguments(a1.arguments ++ a2.arguments)
+    def append(a1: SpecsArguments, a2: =>SpecsArguments) = {
+      a1.lastOption match {
+        case Some((s1, ar1)) => a1 append a2.update(ar1)
+        case None => a2
+      }
+    }
     val zero = new SpecsArguments()
   }
   implicit object FragmentSpecsArgumentsReducer extends Reducer[Fragment, SpecsArguments] {

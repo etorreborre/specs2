@@ -84,7 +84,7 @@ private[specs2]
 object Statistics extends Statistics {
   implicit object StatsMonoid extends Monoid[SpecsStatistics] {
     def append(s1: SpecsStatistics, s2: =>SpecsStatistics): SpecsStatistics = {
-      SpecsStatistics(s1.currents ++ s2.currents, s1.total.add(s2.total))
+      SpecsStatistics(s1.currents ++ s2.currents.map(_.add(s1.total)), s1.total.add(s2.total))
     }
     val zero = SpecsStatistics() 
   }

@@ -90,8 +90,8 @@ case object LeveledBlocks {
       case ExecutedResult(_, _)       => BlockTerminal() 
       case ExecutedText(_)            => BlockIndent()   
       case ExecutedPar()              => BlockUnindent()   
-      case ExecutedTab(n)              => BlockIndent(n)   
-      case ExecutedBacktab(n)          => BlockUnindent(n) 
+      case ExecutedTab(n)             => BlockIndent(n)   
+      case ExecutedBacktab(n)         => BlockUnindent(n) 
       case ExecutedSpecStart(_, _, _) => BlockReset()    
       case ExecutedSpecEnd(_)         => BlockReset()    
       case ExecutedEnd()              => BlockReset()    
@@ -103,9 +103,9 @@ case object LeveledBlocks {
   implicit object FragmentLeveledBlocksReducer extends Reducer[Fragment, LeveledBlocks] {
     implicit def toBlock(f: Fragment): Block = f match {
       case Example(_, _)   => BlockTerminal()     
-      case Par()              => BlockUnindent()   
-      case Tab(n)           => BlockIndent(n)       
-      case Backtab(n)       => BlockUnindent(n)   
+      case Par()           => BlockUnindent()   
+      case Tab(n)          => BlockIndent(n)       
+      case Backtab(n)      => BlockUnindent(n)   
       case Text(_)         => BlockIndent()       
       case SpecStart(_, _) => BlockReset()     
       case SpecEnd(_)      => BlockReset()        

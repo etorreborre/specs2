@@ -16,7 +16,6 @@ trait TextPrinterReducer extends ResultOutput {
   def print(fs: Seq[ExecutedFragment]) = {
     implicit val m = reducer.monoid 
     val toFlatten = fs.foldMap(reducer.unit)
-    Console.println(toFlatten)
     PrintLines(flatten(toFlatten)).print
   }
   
@@ -73,7 +72,7 @@ trait TextPrinterReducer extends ResultOutput {
       printResult(leveledText(r.text, level)(args), r.result)(args)
       
     def printResult(desc: String, result: Result)(implicit args: Arguments): Unit = {
-      val description = statusAndDescription(desc, result)
+      val description = statusAndDescription(desc, result)(args)
       result match {
         case f: Failure => {
           printFailureOrError(desc, f) 
@@ -102,7 +101,8 @@ trait TextPrinterReducer extends ResultOutput {
       printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
     }
     def statusAndDescription(s: String, result: Result)(implicit args: Arguments) = {
-      s.takeWhile(_ == ' ') + status(result) + s.dropWhile(_ == ' ')
+      (if (!args.plan) s.takeWhile(_ == ' ').dropRight(2) else s.takeWhile(_ == ' ')) + 
+      status(result) + s.dropWhile(_ == ' ')
     }
     def status(result: Result)(implicit args: Arguments): String = {
       if (args.plan) ""
@@ -111,7 +111,8 @@ trait TextPrinterReducer extends ResultOutput {
   }
   case class PrintText(t: ExecutedText)               extends Print {
     def print(stats: (Stats, Stats), level: Int, args: Arguments) =
-      if (!args.xonly) printMessage(leveledText(t.text, level)(args))(args)
+      if (!args.xonly) 
+        printMessage(leveledText(t.text, level)(args))(args)
   }        
   case class PrintPar()                               extends Print {
     def print(stats: (Stats, Stats), level: Int, args: Arguments) =

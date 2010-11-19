@@ -22,6 +22,7 @@ with ArbitraryFragments { def is =
   "Following a Text fragment with a SpecStart must change the arguments"                  ! e2^
   "Following a Text fragment with a Text Fragment must not change the arguments"          ! e3^
   "Following a SpecStart with another SpecStart must change the arguments"                ! e4^
+  "Following a SpecStart with several fragments must have the same args"                  ! e5^
                                                                                           p^
   "The SpecsArguments monoid must respect the Monoid laws"                                !
     SpecsArgumentsMonoid.isMonoid                                                         ^
@@ -36,6 +37,7 @@ with ArbitraryFragments { def is =
   def e2 = (t1 |+| s2).args must_== args(ex = "s2")
   def e3 = (t1 |+| t2).args must_== Arguments()
   def e4 = (s1 |+| s2).args must_== args(ex = "s2")
+  def e5 = (s1 |+| t1 |+| t2).args must_== args(ex = "s1")
                                                                                           
   implicit val arbitrarySpecsArguments: Arbitrary[SpecsArguments] = Arbitrary {
     for (f <- arbitrary[Fragment]) yield f

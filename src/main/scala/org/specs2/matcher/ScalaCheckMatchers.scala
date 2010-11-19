@@ -64,7 +64,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
    * and indicates if the generation should be verbose or not
    */
   private[matcher] def checkProperty(prop: =>Prop)(implicit p: Parameters): execute.Result = {
-    checkScalaCheckProperty(prop)(Params(p(minTestsOk), p(maxDiscarded), p(minSize), p(maxSize), StdRand, p(workers), p(wrkSize)), p.verbose)
+    checkScalaCheckProperty(prop)(Params(p(minTestsOk), p(maxDiscarded), p(minSize), p(maxSize), StdRand, p(workers)), p.verbose)
   }
 
   /**
@@ -73,17 +73,20 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
    */
   private [matcher] def checkScalaCheckProperty(prop: =>Prop)(params: Params, verbose: Boolean): execute.Result = {
     // will print the result of each test if verbose = true
-    def printResult(succeeded: Int, discarded: Int): Unit = {
-      if (!verbose) return
-      if (discarded == 0)
-        printf("\rPassed %d tests", succeeded)
-      else
-        printf("\rPassed %d tests; %d discarded", succeeded, discarded)
-      flush
+    val callback = new Test.TestCallback {
+      override def onPropEval(name: String, threadXdx: Int, succeeded: Int, discarded: Int): Unit = {
+        if (verbose) {
+          if (discarded == 0)
+            printf("\rPassed %d tests", succeeded)
+          else
+            printf("\rPassed %d tests; %d discarded", succeeded, discarded)
+          flush
+        }
+      }
     }
 
     // check the property with ScalaCheck
-    val results = checkProp(params, prop, printResult)
+    val results = checkProp(params, prop, callback)
 
     // display the final result if verbose = true
     if (verbose) {
@@ -91,17 +94,17 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       printf("\r%s %s%s\n", if (results.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
     }
     results match {
-      case Result(Proved(as), succeeded, discarded, _) => 
+      case Result(Proved(as), succeeded, discarded, _, _) => 
         execute.Success(noCounterExample(succeeded), succeeded)
-      case Result(Passed, succeeded, discarded, _) => 
+      case Result(Passed, succeeded, discarded, _, _) => 
         execute.Success(noCounterExample(succeeded), succeeded)
-      case r @ Result(GenException(e), n, _, _) => 
+      case r @ Result(GenException(e), n, _, _, _) => 
         execute.Failure(prettyTestRes(r)(defaultPrettyParams))
-      case r @ Result(Exhausted, n, _, _) => 
+      case r @ Result(Exhausted, n, _, _, _) => 
         execute.Failure(prettyTestRes(r)(defaultPrettyParams))
-      case Result(Failed(args, labels), n, _, _) =>
+      case Result(Failed(args, labels), n, _, _, _) =>
         execute.Failure("A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels))
-      case Result(PropException(args, ex, labels), n, _, _) =>
+      case Result(PropException(args, ex, labels), n, _, _, _) =>
         execute.Error("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels))
     }
   }
@@ -192,7 +195,7 @@ trait PropertyImplicits {
  * This trait is used to facilitate testing by mocking ScalaCheck functionalities
  */
 trait ScalaCheckFunctions {
-  def checkProp(params: Params, prop: =>Prop, printResult: (Int, Int) => Unit) = Test.check(params, prop, printResult)
+  def checkProp(params: Params, prop: =>Prop, callback: Test.TestCallback) = Test.check(params.copy(testCallback = callback), prop)
 }
 /**
  * This trait provides generation parameters to use with the <code>ScalaCheckMatchers</code>
@@ -205,7 +208,7 @@ trait ScalaCheckParameters {
    *  <li>maxDiscarded == maxDiscardedTests
    *  <li>minSize and maxSize keep their name <code><ul>
    */
-  val (minSize, maxSize, maxDiscarded, minTestsOk, workers, wrkSize) = ('minSize, 'maxSize, 'maxDiscarded, 'minTestsOk, 'workers, 'wrkSize)
+  val (minSize, maxSize, maxDiscarded, minTestsOk, workers) = ('minSize, 'maxSize, 'maxDiscarded, 'minTestsOk, 'workers)
    /**
     * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
     */
@@ -216,7 +219,7 @@ trait ScalaCheckParameters {
    /**
     * Default values for ScalaCheck parameters
     */
-   def defaultValues = Map(minTestsOk->100, maxDiscarded ->500, minSize->0, maxSize->100, workers->1, wrkSize->20)
+   def defaultValues = Map(minTestsOk->100, maxDiscarded ->500, minSize->0, maxSize->100, workers->1)
 
    /** factory object to create parameters with verbose = false */
    object set extends Parameters(setParams(Nil)) {
