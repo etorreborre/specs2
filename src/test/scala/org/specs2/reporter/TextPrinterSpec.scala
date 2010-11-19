@@ -1,9 +1,12 @@
 package org.specs2
 package reporter
+import scalaz.Scalaz
+import Scalaz._
 import io.MockOutput
 import main.Arguments
 import execute._
 import specification._
+import SpecsArguments._
 
 class TextPrinterSpec extends SpecificationWithJUnit { def is =
                                                                                           """
@@ -136,10 +139,14 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
   def print(fragments: Fragments): Seq[String] = {
     val selection = new DefaultSelection() {}
     val execution = new DefaultExecutionStrategy() {}
-    val exporter = new TextExporting with MockOutput {}
     val selected = selection.select(fragments.arguments)(Fragments(SpecStart("spec") +: fragments.fragments :+ SpecEnd("spec"))(fragments.arguments))
     val executed = execution.execute(fragments.arguments)(selected)
+    val exporter = new TextExporting with MockOutput {}
     exporter.export(fragments.arguments)(executed)
     exporter.messages
+    val printer = new TextPrinterReducer with MockOutput {}
+    printer.print(executed)
+    
+    printer.messages
   }
 }
