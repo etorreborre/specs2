@@ -36,7 +36,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
     executed
   }
 }
-trait LoggedTextPrinter extends TextPrinter with TestLoggers with Output {
+trait LoggedTextPrinter extends TextExporting with TestLoggers with Output {
   override def printError(message: String)(implicit args: Arguments) = logError(message)
   override def printSuccess(message: String)(implicit args: Arguments) = logInfo(message, AnsiColors.green)
   override def printLine(message: String)(implicit args: Arguments) = logInfo(message)

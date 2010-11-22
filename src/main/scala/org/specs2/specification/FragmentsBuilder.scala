@@ -24,7 +24,7 @@ trait FragmentsBuilder {
    */
   implicit def title(s: String): SpecTitle = SpecTitle(s)
   case class SpecTitle(name: String) {
-    def title = SpecStart(name) ^ p
+    def title = SpecStart(name)
   }
   
   /** @return a Text Fragment from a string */
@@ -54,6 +54,7 @@ trait FragmentsBuilder {
   /** this class allows to start a Fragment list with an Arguments object */
   class ArgumentsFragment(a: Arguments) {
     def ^(f: Fragment) = Fragments(List(f))(a)
+    def ^(f: Fragments) = f ^ a
   }
   
   /** 

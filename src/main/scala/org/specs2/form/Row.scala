@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 import scalaz.{ NonEmptyList, Scalaz }
-import Scalaz.{ nel1 }
+import Scalaz.{ nel }
 import execute._
 import StandardResults._
 import matcher._
@@ -58,5 +58,5 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable with
  * Companion object of a Row to create a Row with at least one cell
  */
 case object Row {
-  def tr(c1: Cell, cs: Cell*) = Row(nel1(c1, cs:_*))
+  def tr(c1: Cell, cs: Cell*) = Row(nel(c1, cs:_*))
 }

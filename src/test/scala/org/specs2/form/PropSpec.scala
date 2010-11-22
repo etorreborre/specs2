@@ -3,8 +3,7 @@ package form
 import control.Property
 import execute._
 
-class PropSpec extends SpecificationWithJUnit {
-  def is = 
+class PropSpec extends SpecificationWithJUnit {  def is = 
                                                                                           """  
   A Prop is a Field defining an expected and an actual value. 
   It embeddeds an optional constraint which allows to execute the Prop and see (by default) if 

@@ -41,5 +41,7 @@ trait ResultOutput extends Output {
   /**
    * print one line
    */
-  def printLine(message: String)(implicit args: Arguments) = println(message)
+  def printLine(message: String)(implicit args: Arguments) = {
+    println((" "*args.offset) + message)
+  }
 }

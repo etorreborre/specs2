@@ -13,6 +13,7 @@ trait PredefinedFragments {
   def bt = StandardFragments.Backtab()
   def bt(n: Int) = StandardFragments.Backtab(n)
   def endp = Fragments(end, p)
+  def endbr = Fragments(end, br)
 }
 private[specs2]
 object PredefinedFragments extends PredefinedFragments

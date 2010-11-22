@@ -1,13 +1,14 @@
 package org.specs2
 package execute
 
-class ResultStackTraceSpec extends SpecificationWithJUnit {  def is =
+class ResultStackTraceSpec extends SpecificationWithJUnit { def is =
   
-" A StackTrace for a Result must sanitize the stacktrace"                                 ^
-" to present only a relevant stacktrace element for the user"                             ^
-"   if it is a a user specification, the 'org.specs2' lines are filtered"                 ! e1^
-"   if it is a a specs2 specification, the 'org.specs2' lines are not filtered"           ! e2^
-"   if it is a a user specification, only the lines containing 'Result' are filtered"     ! e3^
+" A StackTrace for a Result must sanitize the stacktrace to present only a relevant"      ^
+" stacktrace elements to the user"                                                        ^
+                                                                                          br^t^
+  "if it is a a user specification, the 'org.specs2' lines are filtered"                  ! e1^
+  "if it is a a specs2 specification, the 'org.specs2' lines are not filtered"            ! e2^
+  "if it is a a specs2 specification, only the lines containing 'Result' are filtered"    ! e3^
                                                                                           end
 
   def e1 = locationMustBe(

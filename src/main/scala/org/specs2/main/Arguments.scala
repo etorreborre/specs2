@@ -11,6 +11,7 @@ case class Arguments (
   _failtrace:  Option[Boolean] = None,
   _color:      Option[Boolean] = None,
   _noindent:   Option[Boolean] = None,
+  _offset:     Option[Int]     = None,
   _specName:   Option[String]  = None,
   _sequential: Option[Boolean] = None,
   _threadsNb:  Option[Int]     = None
@@ -21,6 +22,7 @@ case class Arguments (
   def failtrace: Boolean        = _failtrace.getOrElse(false)
   def color: Boolean            = _color.getOrElse(false)
   def noindent: Boolean         = _noindent.getOrElse(false)
+  def offset: Int               = _offset.getOrElse(0)
   def specName: String          = _specName.getOrElse(".*Spec")
   def sequential: Boolean       = _sequential.getOrElse(false)
   def threadsNb: Int            = _threadsNb.getOrElse(4)
@@ -33,6 +35,7 @@ case class Arguments (
       other._failtrace  .orElse(_failtrace),
       other._color      .orElse(_color),
       other._noindent   .orElse(_noindent),
+      other._offset     .orElse(_offset),
       other._specName   .orElse(_specName),
       other._sequential .orElse(_sequential),
       other._threadsNb  .orElse(_threadsNb)
@@ -46,6 +49,7 @@ case class Arguments (
     "failtrace"  +" = "+ _failtrace  +", "+
     "color"      +" = "+ _color      +", "+
     "noindent"   +" = "+ _noindent   +", "+
+    "offset"     +" = "+ _offset     +", "+
     "specName"   +" = "+ _specName   +", "+
     "sequential" +" = "+ _sequential +", "+
     "threadsNb"  +" = "+ _threadsNb  +
@@ -67,6 +71,8 @@ object Arguments {
        _plan       = bool("plan"),
        _failtrace  = bool("failtrace"),
        _color      = bool("color"),
+       _noindent   = bool("noindent"),
+       _offset     = int("offset"),
        _specName   = value("specName"),
        _sequential = bool("sequential"),
        _threadsNb  = int("threadsNb")
@@ -95,6 +101,7 @@ trait ArgumentsArgs extends control.Properties {
     failtrace:  Property[Boolean]  = Property[Boolean](),
     color:      Property[Boolean]  = Property[Boolean](),
     noindent:   Property[Boolean]  = Property[Boolean](),
+    offset:     Property[Int]      = Property[Int](),
     specName:   Property[String]   = Property[String](),
     sequential: Property[Boolean]  = Property[Boolean](),
     threadsNb:  Property[Int]      = Property[Int]() 
@@ -105,6 +112,7 @@ trait ArgumentsArgs extends control.Properties {
      failtrace.toOption, 
      color.toOption, 
      noindent.toOption, 
+     offset.toOption, 
      specName.toOption, 
      sequential.toOption, 
      threadsNb.toOption

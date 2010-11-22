@@ -8,50 +8,50 @@ import execute._
 import specification._
 import SpecsArguments._
 
-class TextPrinterSpec extends SpecificationWithJUnit { def is = args(xonly=true)^
+class TextPrinterSpec extends SpecificationWithJUnit { def is = 
                                                                                           """
-  The TextPrinter is folding Executed Fragments and exporting them
-  to a ResultOutput trait knowing how to output successes, failures,...
-                                                                                          """^endp^
-"  Text presentation"                                                                     ^
-"    by default the Text and the examples are properly indented"                          ! prez().e1^
-"    if noindent = true then there is no automatic indenting"                             ! prez().e2^
-"    if xonly = true"                                                                     ^ 
-"      text is not shown"                                                                 ! xonly().e1^
-"      successful examples are not shown"                                                 ! xonly().e2^
-"      skipped examples are not shown"                                                    ! xonly().e3^
-"      pending examples are not shown"                                                    ! xonly().e4^
-"      failure examples are shown"                                                        ! xonly().e5^
-"      error examples are shown"                                                          ! xonly().e6^
-"      statistics shown"                                                                  ! xonly().e7^
-"    if failtrace = true, failures stacktraces are shown"                                 ! failtrace().e1^
-"    if plan = true, nothing is executed"                                                 ! plan().e1^
-"    if sequential = false examples are executed concurrently"                            ! sequential().e1^
-"    if sequential = true examples are executed sequentially"                             ! sequential().e2^
-"    if color = true, the text is colorized"                                              ^
-"      text is blue"                                                                      ! color().e1^
-"      success is green"                                                                  ! color().e2^
-"      failures are red"                                                                  ! color().e3^
-"      errors are red"                                                                    ! color().e4^
-"      others are white"                                                                  ! color().e5^
-                                                                                          end^
-"  Statuses"                                                                              ^
-"    regular text must have no status"                                                    ! status().e1^
-"    a successful example must be displayed with a +"                                     ! status().e2^
-"    a failed example must be displayed with a x"                                         ! status().e3^
-"    an error example must be displayed with a !"                                         ! status().e4^
-"    a skipped example must be displayed with a o"                                        ! status().e5^
-"    a pending example must be displayed with a *"                                        ! status().e6^
-                                                                                          end^
-"  Statistics must show"                                                                  ^
-"    the number of examples"                                                              ! stats().e1^
-"    the number of expectations"                                                          ^
-"      not if they are the same as the number of examples"                                ! stats().e2^
-"      if they are not the same as the number of examples"                                ! stats().e3^
-"    the number of failures"                                                              ! stats().e4^
-"    the number of errors"                                                                ! stats().e5^
-"    the execution time"                                                                  ! stats().e6^
-                                                                                          end
+The TextPrinter is folding Executed Fragments and exporting them
+to a ResultOutput trait knowing how to output successes, failures,...
+                                                                                          """^endbr^
+"Text presentation"                                                                       ^
+  "by default the Text and the examples are properly indented"                            ! prez().e1^
+  "if noindent = true then there is no automatic indenting"                               ! prez().e2^
+  "if xonly = true"                                                                       ^ 
+    "text is not shown"                                                                   ! xonly().e1^
+    "successful examples are not shown"                                                   ! xonly().e2^
+    "skipped examples are not shown"                                                      ! xonly().e3^
+    "pending examples are not shown"                                                      ! xonly().e4^
+    "failure examples are shown"                                                          ! xonly().e5^
+    "error examples are shown"                                                            ! xonly().e6^
+    "statistics shown"                                                                    ! xonly().e7^
+  "if failtrace = true, failures stacktraces are shown"                                   ! failtrace().e1^
+  "if plan = true, nothing is executed"                                                   ! plan().e1^
+  "if sequential = false examples are executed concurrently"                              ! sequential().e1^
+  "if sequential = true examples are executed sequentially"                               ! sequential().e2^
+  "if color = true, the text is colorized"                                                ^
+    "text is blue"                                                                        ! color().e1^
+    "success is green"                                                                    ! color().e2^
+    "failures are red"                                                                    ! color().e3^
+    "errors are red"                                                                      ! color().e4^
+    "others are white"                                                                    ! color().e5^
+                                                                                          endbr^
+"Statuses"                                                                                ^
+  "regular text must have no status"                                                      ! status().e1^
+  "a successful example must be displayed with a +"                                       ! status().e2^
+  "a failed example must be displayed with a x"                                           ! status().e3^
+  "an error example must be displayed with a !"                                           ! status().e4^
+  "a skipped example must be displayed with a o"                                          ! status().e5^
+  "a pending example must be displayed with a *"                                          ! status().e6^
+                                                                                          endbr^
+"Statistics must show"                                                                    ^
+  "the number of examples"                                                                ! stats().e1^
+  "the number of expectations"                                                            ^
+    "not if they are the same as the number of examples"                                  ! stats().e2^
+    "if they are not the same as the number of examples"                                  ! stats().e3^
+  "the number of failures"                                                                ! stats().e4^
+  "the number of errors"                                                                  ! stats().e5^
+  "the execution time"                                                                    ! stats().e6^
+                                                                                            end
 
   implicit val default = Arguments()
   val t1       = "t1"

@@ -15,15 +15,3 @@ trait Exporting {
   /** @return a function exporting ExecutedFragments */
   def export(implicit args: Arguments): Seq[ExecutedFragment] => ExportType
 }
-
-/**
- * This trait uses an ExecutedFragmentFold to produce the exported type
- */
-private[specs2]
-trait FoldExporting {
-  type ExportType = folder.T
-
-  val folder: ExecutedFragmentFold
-  /** @return a function exporting ExecutedFragments */
-  def export(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => folder.foldAll(fragments)
-}

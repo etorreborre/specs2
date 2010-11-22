@@ -84,13 +84,6 @@ trait BlockLevelsFold[F] extends Fold[F] {
   }
  
 }
-private[specs2]
-sealed trait Block
-case class BlockReset() extends Block
-case class BlockIndent(n: Int = 1) extends Block
-case class BlockUnindent(n: Int = 1) extends Block
-case class BlockTerminal() extends Block
-case class BlockNeutral() extends Block
 
 private[specs2]
 sealed trait Direction

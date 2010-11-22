@@ -9,14 +9,14 @@ import specification._
 import LeveledBlocks._
 import FragmentLeveledBlocksReducer._
 
+@org.junit.runner.RunWith(classOf[org.specs2.runner.JUnitRunner]) 
 class LevelsFoldSpec extends SpecificationWithJUnit with ScalaCheck 
   with ScalazMatchers with ArbitraryFragments { def is = 
     
-  args(xonly=true)^
                                                                                           """
   The LevelsFold trait is used to compute the 'level' of Fragments in a list of 
   Fragments.
-                                                                                          """^
+                                                                                          """^p^
   "A simple piece of text has level 0"                                                    ^
   { level(t1) must_== List(0) }                                                           ^
                                                                                           p^
@@ -24,6 +24,7 @@ class LevelsFoldSpec extends SpecificationWithJUnit with ScalaCheck
   { level(t1 ^ t2) must_== List(0, 1) }                                                   ^
                                                                                           p^
   "Examples or text following text must be indented by 1"                                 ^
+  { level(t1 ^ ex1 ^ t2 ^ t3) must_== List(0, 1, 1, 2) }                                  ^
   { level(t1 ^ ex1 ^ ex2 ^ t2 ^ t3) must_== List(0, 1, 1, 1, 2) }                         ^
                                                                                           p^
   "Consecutive examples must have the same indentation"                                   ^

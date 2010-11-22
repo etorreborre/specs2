@@ -1,8 +1,8 @@
 package org.specs2
 package reporter
 
-import scalaz.{ Monoid, Reducer, Scalaz, Const, State }
-import Scalaz._
+import scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable }
+import Generator._
 import control.Throwablex._
 import text.Plural._
 import execute._
@@ -14,9 +14,7 @@ import SpecsArguments._
 
 trait TextPrinterReducer extends ResultOutput {
   def print(fs: Seq[ExecutedFragment]) = {
-    implicit val m = reducer.monoid 
-    val toFlatten = fs.foldMap(reducer.unit)
-    PrintLines(flatten(toFlatten)).print
+    PrintLines(flatten(FoldrGenerator[Seq].reduce(reducer, fs))).print
   }
   
   private  val reducer = ExecutedFragmentPrintReducer &&& 
@@ -38,7 +36,7 @@ trait TextPrinterReducer extends ResultOutput {
     val levels = results._1._2.levels
     val args = results._2.toList
     (prints zip statistics zip levels zip args) map { 
-      case (((t: Print, s : (Stats, Stats)), l : Int), a : Arguments) => PrintLine(t, s, l, a) 
+      case (((t, s), l), a) => PrintLine(t, s, l, a)
     }
   }  
     
@@ -50,6 +48,7 @@ trait TextPrinterReducer extends ResultOutput {
       case result @ ExecutedResult(_, _)       => PrintResult(result)
       case text @ ExecutedText(s)              => PrintText(text)
       case par @ ExecutedPar()                 => PrintPar()
+      case par @ ExecutedBr()                  => PrintBr()
       case end @ ExecutedSpecEnd(_)            => PrintSpecEnd(end)
       case fragment                            => PrintOther(fragment)
     }
@@ -59,7 +58,7 @@ trait TextPrinterReducer extends ResultOutput {
     def print(stats: (Stats, Stats), level: Int, args: Arguments): Unit 
     protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = { 
       if (args.noindent) s 
-     else (("  " * level) + s.trim)
+      else (("  "*level) + s.trim)
     }
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
@@ -118,6 +117,10 @@ trait TextPrinterReducer extends ResultOutput {
     def print(stats: (Stats, Stats), level: Int, args: Arguments) =
       if (!args.xonly) printLine(" ")(args)
   }
+  case class PrintBr()                               extends Print {
+    def print(stats: (Stats, Stats), level: Int, args: Arguments) =
+      if (!args.xonly) printLine(" ")(args)
+  }
   case class PrintSpecEnd(end: ExecutedSpecEnd)       extends Print {
     def print(stats: (Stats, Stats), level: Int, args: Arguments) = {
       val (current, total) = stats
@@ -128,7 +131,8 @@ trait TextPrinterReducer extends ResultOutput {
     }
     def printEndStats(stats: Stats)(implicit args: Arguments) = {
       val name = end.name
-      printLine("\nTotal for specification" + (if (name.isEmpty) name.trim else " "+name.trim))
+      printLine(" ")
+      printLine("Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim))
       printStats(stats)
       printLine(" ")
     }

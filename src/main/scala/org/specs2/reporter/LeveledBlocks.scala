@@ -3,6 +3,7 @@ package reporter
 
 import scalaz._
 import Scalaz._
+import scala.math.max
 import main.Arguments
 import specification._
 import StandardFragments._
@@ -115,3 +116,9 @@ case object LeveledBlocks {
     implicit override def unit(f: Fragment): LeveledBlocks = LeveledBlocks(toBlock(f))
   }
 }
+sealed trait Block
+case class BlockTerminal() extends Block 
+case class BlockIndent(n: Int = 0)  extends Block
+case class BlockUnindent(n: Int = 0) extends Block
+case class BlockReset()    extends Block
+case class BlockNeutral()  extends Block
