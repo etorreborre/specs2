@@ -42,7 +42,7 @@ trait BlockLevelsFold[F] extends Fold[F] {
   case class Level(level: Int = 0, direction: Direction = Up, lastNode: LastNode = Indent)
   lazy val initial = new Level()
   
-  def toBlock(f: F): Block
+  def toBlock(f: F): Block[F]
   /**
    * This returns a function which computes the current level and the next Level object
    * storing the current state
@@ -56,14 +56,14 @@ trait BlockLevelsFold[F] extends Fold[F] {
    * This function computes the current level for a given Fragment
    */
   val currentLevel: Function[(Level, F), Int] = { 
-    case (a, BlockIndent(n)) if (a.direction == Down && a.lastNode == Terminal) => (a.level - 1)
+    case (a, BlockIndent(_, n)) if (a.direction == Down && a.lastNode == Terminal) => (a.level - 1)
     case (a, f) => a.level
   }
   
   def fold(implicit arguments: Arguments) = (t: T, f: F) => (t, toBlock(f)) match {
     // end resets the level
-    case (a, BlockReset()) => Level()
-    case (a, BlockIndent(n)) => {
+    case (a, BlockReset(_)) => Level()
+    case (a, BlockIndent(_, n)) => {
       val newLevel = a.direction match {
         case Up => a.copy(level = a.level + 1)
         case Down if (a.lastNode != Terminal) => a.copy(level = a.level + 1, direction = Up)
@@ -71,7 +71,7 @@ trait BlockLevelsFold[F] extends Fold[F] {
       } 
       newLevel copy (lastNode = Indent)
     }
-    case (a, BlockUnindent(n)) => {
+    case (a, BlockUnindent(_, n)) => {
       val newLevel = a.direction match {
         case Down => a.copy(level = a.level - 1)
         case Up if (a.lastNode != Terminal) => a.copy(level = a.level - 1, direction = Up)
@@ -79,8 +79,8 @@ trait BlockLevelsFold[F] extends Fold[F] {
       } 
       newLevel copy (lastNode = Indent)
     }
-    case (a, BlockTerminal()) => a.copy(direction = Down, lastNode = Terminal)
-    case (t, BlockNeutral()) => t
+    case (a, BlockTerminal(_)) => a.copy(direction = Down, lastNode = Terminal)
+    case (t, BlockNeutral(_)) => t
   }
  
 }
@@ -100,8 +100,8 @@ trait LevelsFold extends FragmentFold {
   val blockFold = new BlockLevelsFold[Fragment] {
     def toBlock(f: Fragment) = f match {
       case Example(_, _) => BlockTerminal()
-      case Tab(n)         => BlockIndent(n)
-      case Backtab(n)       => BlockUnindent(n)
+      case Tab(n)         => BlockIndent(null, n)
+      case Backtab(n)       => BlockUnindent(null, n)
       case Text(_)       => BlockIndent()
       case SpecStart(_, _)  => BlockReset()
       case SpecEnd(_)    => BlockReset()
@@ -125,8 +125,8 @@ trait ExecutedLevelsFold extends ExecutedFragmentFold {
     def toBlock(f: ExecutedFragment) = f match {
       case ExecutedResult(_, _)       => BlockTerminal()
       case ExecutedText(_)            => BlockIndent()
-      case ExecutedTab(n)              => BlockIndent(n)
-      case ExecutedBacktab(n)          => BlockUnindent(n)
+      case ExecutedTab(n)              => BlockIndent(null, n)
+      case ExecutedBacktab(n)          => BlockUnindent(null, n)
       case ExecutedSpecStart(_, _, _) => BlockReset()
       case ExecutedSpecEnd(_)         => BlockReset()
       case ExecutedEnd()              => BlockReset()
