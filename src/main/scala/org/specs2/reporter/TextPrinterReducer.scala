@@ -18,7 +18,7 @@ trait TextPrinterReducer extends ResultOutput {
   }
   
   private  val reducer = ExecutedFragmentPrintReducer &&& 
-    Statistics &&&
+    StatisticsReducer &&&
     ExecutedFragmentLeveledBlocksReducer  &&&
     ExecutedFragmentSpecsArgumentsReducer
   

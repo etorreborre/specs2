@@ -45,22 +45,9 @@ case class Stats(fragments:    Int = 0,
       skipped = this.skipped           + s.skipped    )
 }
 
-/**
- * The SpecsStatistics class stores the result of a specification execution, with the
- * a list of 'current' stats for each fragment execution and the total statistics 
- * for the whole specification
- */
-case class SpecsStatistics(currents: List[Stats] = Nil, total: Stats = Stats()) {
-  def current = currents.lastOption.getOrElse(Stats())
-  def toList = currents.map((_, total))
-}
-case object SpecsStatistics {
-  def apply(current: Stats) = new SpecsStatistics(List(current), current)
-}
-
 private[specs2]
-object Statistics extends Reducer[ExecutedFragment, SpecsStatistics] {
-  implicit val mm  = new Monoid[SpecsStatistics] {
+trait Statistics {
+  implicit val SpecsStatisticsMonoid  = new Monoid[SpecsStatistics] {
     def append(s1: SpecsStatistics, s2: =>SpecsStatistics): SpecsStatistics = {
       val (s2CurrentsToEnd, s2CurrentsFromEnd) = s2.currents.splitAfter(_.end.isDefined)
       SpecsStatistics(
@@ -71,21 +58,40 @@ object Statistics extends Reducer[ExecutedFragment, SpecsStatistics] {
     }
     val zero = SpecsStatistics() 
   }
-  implicit override def unit(f: ExecutedFragment): SpecsStatistics = f match { 
-    case ExecutedResult(_, r) => {
-      val current = r match {
-        case s @ Success(_) => Stats(fragments = 1, expectations = s.expectationsNb, successes = 1)
-        case Failure(_, _)  => Stats(fragments = 1, expectations = 1, failures = 1)
-        case Error(_,_)     => Stats(fragments = 1, expectations = 1, errors = 1)
-        case Pending(_)     => Stats(fragments = 1, expectations = 1, pending = 1)
-        case Skipped(_)     => Stats(fragments = 1, expectations = 1, skipped = 1)
-        case _              => Stats(fragments = 1) 
+
+  def foldAll(fs: Seq[ExecutedFragment]) = fs.foldMap(StatisticsReducer.unit)
+  
+  object StatisticsReducer extends Reducer[ExecutedFragment, SpecsStatistics] {
+    override def unit(f: ExecutedFragment): SpecsStatistics = f match { 
+      case ExecutedResult(_, r) => {
+        val current = r match {
+          case s @ Success(_) => Stats(fragments = 1, expectations = s.expectationsNb, successes = 1)
+          case Failure(_, _)  => Stats(fragments = 1, expectations = 1, failures = 1)
+          case Error(_,_)     => Stats(fragments = 1, expectations = 1, errors = 1)
+          case Pending(_)     => Stats(fragments = 1, expectations = 1, pending = 1)
+          case Skipped(_)     => Stats(fragments = 1, expectations = 1, skipped = 1)
+          case _              => Stats(fragments = 1) 
+        }
+        SpecsStatistics(current)
       }
-      SpecsStatistics(current)
+      case start @ ExecutedSpecStart(name, timer, args) => 
+        SpecsStatistics(Stats(start = Some(ExecutedSpecStart(name, timer.stop, args))))
+      case e @ ExecutedSpecEnd(_) => SpecsStatistics(Stats(end = Some(e)))
+      case _ => SpecsStatistics(Stats())
     }
-    case start @ ExecutedSpecStart(name, timer, args) => 
-      SpecsStatistics(Stats(start = Some(ExecutedSpecStart(name, timer.stop, args))))
-    case e @ ExecutedSpecEnd(_) => SpecsStatistics(Stats(end = Some(e)))
-    case _ => SpecsStatistics(Stats())
+  }
+  /**
+   * The SpecsStatistics class stores the result of a specification execution, with the
+   * a list of 'current' stats for each fragment execution and the total statistics 
+   * for the whole specification
+   */
+  case class SpecsStatistics(currents: List[Stats] = Nil, total: Stats = Stats()) {
+    def current = currents.lastOption.getOrElse(Stats())
+    def toList = currents.map((_, total))
+  }
+  case object SpecsStatistics {
+    def apply(current: Stats) = new SpecsStatistics(List(current), current)
   }
 }
+private [specs2]
+object Statistics extends Statistics

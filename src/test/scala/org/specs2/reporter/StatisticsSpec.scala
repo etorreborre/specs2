@@ -36,7 +36,7 @@ class StatisticsSpec extends SpecificationWithJUnit { def is =
 
   def statistics(spec: Fragments) = {
     val fragments = Fragments.withSpecStartEnd(spec, "spec").fragments.map(f => execute(f))
-    fragments.foldMap(unit)
+    foldAll(fragments)
   }
     
   def total(spec: Fragments) = statistics(spec).total 
