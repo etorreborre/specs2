@@ -41,7 +41,11 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
    *   junit failure or ignored event on the RunNotifier
    */
   def run(notifier: RunNotifier) {
-	  executions.toStream.collect { case (desc, ex) => (desc, executeFragment(Arguments())(ex)) }.
+	  executions.toStream.collect { 
+	    case (desc, f @ Example(_, _)) => (desc, executeFragment(Arguments())(f)) 
+      case (desc, f @ Text(_)) => (desc, executeFragment(Arguments())(f)) 
+      case (desc, f @ Step(_)) => (desc, executeFragment(Arguments())(f)) 
+	  }.
 	    foreach {
 	   	  case (desc, ExecutedResult(_, result)) => {
 	        notifier.fireTestStarted(desc)
