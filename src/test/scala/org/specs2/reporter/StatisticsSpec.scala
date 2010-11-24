@@ -6,7 +6,6 @@ import main.Arguments
 import execute._
 import specification._
 import Statistics._
-import Statistics.ExecutedFragmentsStatisticsReducer._
 
 class StatisticsSpec extends SpecificationWithJUnit { def is =
                                                                                           """
@@ -35,7 +34,6 @@ class StatisticsSpec extends SpecificationWithJUnit { def is =
     "e4" ! pending          ^
     "e5" ! skipped          ^ end
 
-  implicit val arguments = new Arguments()
   def statistics(spec: Fragments) = {
     val fragments = Fragments.withSpecStartEnd(spec, "spec").fragments.map(f => execute(f))
     fragments.foldMap(unit)
@@ -44,7 +42,7 @@ class StatisticsSpec extends SpecificationWithJUnit { def is =
   def total(spec: Fragments) = statistics(spec).total 
   def current(spec: Fragments) = statistics(spec).current
   
-  def execute(f: Fragment)(implicit args: Arguments) = new FragmentExecution {}.executeFragment(args)(f)  
+  def execute(f: Fragment) = new FragmentExecution {}.executeFragment(Arguments())(f)  
     
   def e1 = total(spec).fragments must_== 5                                                                                           
   def e2 = total(spec).expectations must_== 6                                                                                          

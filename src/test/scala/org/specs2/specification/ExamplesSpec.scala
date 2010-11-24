@@ -1,8 +1,7 @@
 package org.specs2
 package specification
 
-class ExamplesSpec extends SpecificationWithJUnit {
-  def is: Fragments =
+class ExamplesSpec extends SpecificationWithJUnit {  def is =
                                                                                           """
   In a Specification, the content variable stores an instance of the Fragments class,
   which is merely a list of fragments. Those fragments are either:
@@ -11,9 +10,10 @@ class ExamplesSpec extends SpecificationWithJUnit {
    * Example elements, with an executable block returning
    * SpecificationFragments elements which are Fragments coming from another 
      specification
-                                                                                          """                                                                                     ^
-"  an example is simply created with string ! e1 where e1 returns a Result"               ! success^
-"  an example is can also take its own description to return a Result"                    ! e1^
+                                                                                          """^
+                                                                                          p^
+  "an example is simply created with string ! e1 where e1 returns a Result"               ! success^
+  "an example is can also take its own description to return a Result"                    ! e1^
                                                                                           end
                                                                                         
   def e1 = {

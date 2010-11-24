@@ -55,20 +55,29 @@ case class LeveledBlocks[T](blocks: List[(Block[T], Int)] = Nil) {
   def increment(n: Int = 1) = mapLevel(_ + n)
   def decrement(n: Int = 1) = mapLevel(_ - n)
 
-  def toTree: Tree[T] = {
+  def toTree: Tree[T] = toTreeLoc.toTree
+  def toTree[S](m: (T, Int) => Option[S]): Tree[S] = toTreeLoc(m).toTree
+
+  def toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, i: Int) => Some(t))
+  def toTreeLoc[S](m: (T, Int) => Option[S]): TreeLoc[S] = {
     val bb = blocks
-    blocks.drop(1).foldLeft(leaf(blocks.head._1.t).loc) { (treeLoc, cur) =>
+    val initial = m(blocks.head._1.t, 0).get
+    blocks.drop(1).foldLeft(leaf(initial).loc) { (treeLoc, cur) =>
       val (block, level) = cur
-      val toInsert = leaf(block.t)
-      def parentLocs[A](t: TreeLoc[A], ps: List[TreeLoc[A]] = Nil): List[TreeLoc[A]] = t.parent match {
-        case Some(p) => parentLocs(p, p :: ps)
-        case None    => ps
+      m(block.t, treeLoc.root.toTree.flatten.size) match {
+        case Some(s) =>
+          parentLocs(treeLoc).drop(level).headOption.getOrElse(treeLoc).insertDownLast(leaf(s))
+        case None =>
+          treeLoc
       }
-      val parents = parentLocs(treeLoc)
-      val parentAtLevelN = parents.drop(level).headOption
-      parentAtLevelN.getOrElse(treeLoc).insertDownLast(toInsert)
-    }.toTree
+    }
   } 
+  private def parentLocs[A](t: TreeLoc[A], ps: List[TreeLoc[A]] = Nil): List[TreeLoc[A]] = t.parent match {
+    case Some(p) => parentLocs(p, p :: ps)
+    case None    => ps
+  }
+  
+
   
   private val isReset = (b: (Block[T], Int)) => b match { case (BlockReset(t), _) => true; case _ => false }
   override def equals(a: Any) = {
@@ -98,9 +107,9 @@ case object LeveledBlocks {
       }
     val zero = new LeveledBlocks[T]()
   }
-  
-  def foldAll[T](fs: Seq[T])(implicit convert: T => LeveledBlocks[T]) = {
-    fs.foldMap(convert)
+  import LeveledBlocks._
+  def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, LeveledBlocks[T]]) = {
+    fs.foldMap(reducer.unit)
   }
   implicit object ExecutedFragmentLeveledBlocksReducer extends Reducer[ExecutedFragment, LeveledBlocks[ExecutedFragment]] {
     implicit def toBlock(f: ExecutedFragment): Block[ExecutedFragment] = f match {

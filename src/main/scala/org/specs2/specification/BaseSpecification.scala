@@ -12,7 +12,7 @@ import reflect.ClassName
 trait BaseSpecification extends SpecificationStructure 
    with FragmentsBuilder {
   
-  def include(s: BaseSpecification) = fragmentGroup(s.content)
+  def include(s: SpecificationStructure) = fragmentGroup(s.content)
 }
 
 trait SpecificationStructure { 

@@ -21,75 +21,46 @@ import specification._
  * the necessary associations between the Description objects.
  *
  */
-class JUnitDescriptionFold(specificationClass: Class[_]) extends FragmentFold {
-	
-  /** 
-   * A TreeFold which maps nodes to Descriptions
-   * 
-   * It is important to note that only Text, Examples and Steps 
-   * are mapped to Description with the special case of Steps
-   * to be translated to "silent" Descriptions which will be executed but 
-   * not output as JUnit Description nodes when run 
-   */
-  lazy val descriptionTree = new TreeFold[Description] {
-    /**
-     * root of the tree: the class name
-     */
-	  def root = createSuiteDescription(specificationClass.getSimpleName)
-	  /**
-	   * map only Text, Examples and Steps to junit Descriptions
-	   */
-	  def optFold: Function2[T, Fragment, Option[Description]] = {
-	    case (a, Text(t)) => Some(createSuiteDescription(testName(t)))
-      case (a, Example(description, body)) =>  Some(createDescription(testName(description), a.rootTree.flatten.size))
-      case (a, Step(action)) => Some(createDescription("step", a.rootTree.flatten.size))
-      case other => None
-	  }
-  }
+class JUnitDescriptionFold(specificationClass: Class[_])  {
+	import JUnitDescriptionFold._
+	def foldAll(fs: Seq[Fragment]) = {
+	  import LeveledBlocks._
+	  val descriptionTree = LeveledBlocks.foldAll(fs).toTree(mapper)
+	  DescriptionAndExamples(asOneDescription(descriptionTree), Map(descriptionTree.flatten:_*))
+	}
 
   /** 
    * Enriched accumulator type: descriptions + fragment to execute for each Description 
    */
-  override type T = AccumulatedDescription
-  case class AccumulatedDescription(val description: descriptionTree.T, val executions: Map[Description, Fragment])
-  val initial = new AccumulatedDescription(descriptionTree.initial, Map.empty[Description, Fragment])
-  
-  /**
-   * @return a folding function which creates a tree of description objects and a map of 
-   *         Fragments to execute
-   */
-  def fold(implicit arguments: Arguments) = (descExamples: T, f: Fragment) => {
-	  val AccumulatedDescription(treeLoc, examples) = descExamples
-	  val newTreeLoc = descriptionTree.fold(arguments)(treeLoc, f)
-	  val newExamples = f match {
-      case Step(action) => examples + (newTreeLoc.label -> f)
-      case Text(t) => examples + (newTreeLoc.label -> f)
-      case Example(description, body) => examples + (newTreeLoc.label -> f)
-      case _ => examples
-    }
-	  
-	  new AccumulatedDescription(newTreeLoc, newExamples)
+  case class DescriptionAndExamples(val description: Description, executions: Map[Description, Fragment])
+}
+object JUnitDescriptionFold {
+  val mapper: (Fragment, Int) => Option[(Description, Fragment)] = (f: Fragment, nodeLabel: Int) => f match {
+    case (SpecStart(t, _)) => 
+      Some(createSuiteDescription(testName(t)) -> f)
+    case (Text(t)) => 
+      Some(createSuiteDescription(testName(t)) -> f)
+    case (Example(description, body)) =>  Some(createDescription(testName(description), nodeLabel) -> f)
+    case (Step(action)) => Some(createDescription("step", nodeLabel) -> f)
+    case other => None
   }
-
   /**
    * @return a Description with parent-child relationships to other Description objects
    *         from a Tree[Description]
    */
-  def asOneDescription(descriptionTree: Tree[Description]): Description = {
-    
-    val addChildren = (d: Description, children: Stream[Description]) => { 
-      children.foreach { c => 
-        d.addChild(c) 
-        if (!c.getChildren().isEmpty && c.getDisplayName().matches(".*\\(\\d*\\)")) {
-          c.getChildren().foreach(d.addChild(_))
-          c.getChildren().clear()
-        }
-      }
-      d
-    }
+  def asOneDescription(descriptionTree: Tree[(Description, Fragment)]): Description = {
     TreeFold.bottomUp(descriptionTree, addChildren).rootLabel
   }
-  
+  val addChildren = (d: (Description, Fragment), children: Stream[Description]) => { 
+    children.foreach { c =>
+      d._1.addChild(c) 
+      if (!c.getChildren().isEmpty && c.getDisplayName().matches(".*\\(\\d*\\)")) {
+        c.getChildren().foreach(d._1.addChild(_))
+        c.getChildren().clear()
+      }
+    }
+    d._1
+  }
   /** @return a test name with no newlines */
   private def testName(s: String)= s.trimNewLines
   /** @return replace () with [] because it cause display issues in JUnit plugins */
@@ -99,18 +70,6 @@ class JUnitDescriptionFold(specificationClass: Class[_]) extends FragmentFold {
     Description.createSuiteDescription(sanitize(s)+"("+e.toString+")")
   /** @return a suite description */
   private def createSuiteDescription(s: String) = Description.createSuiteDescription(sanitize(s))
-
-  /**
-   * Extractor object for a tree of descriptions and a map of executions
-   */
-  object DescriptionAndExamples {
-    def unapply(acc: AccumulatedDescription): Option[(Description, Map[Description, Fragment])] =
-      acc match {
-        case AccumulatedDescription(description, executions) => {
-          val descriptionTree.Tree(tree) = description
-          Some((asOneDescription(tree), executions)) 
-        }
-      }
-  }
-}
+  
+} 
 

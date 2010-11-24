@@ -71,7 +71,7 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
   		   "   |",
   		   "   `- ex2(6)\n")
 
-  def e5 = descriptionIs(level1ParLevel2)(
+  def e5 = descriptionIs("level1" ^ ex1 ^ ex2 ^ p ^ "level2" ^ ex1 ^ ex2)(
   		   "JUnitDescriptionFoldSpec",
   		   "|",
   		   "+- level1",
@@ -117,14 +117,16 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
 
 
   def descriptionIs(f: Fragments)(tree: String*) = 
-	  showDescriptionTree(f.fragments) must_== tree.toList.mkString("\n")
+	  showDescriptionTree(SpecStart("JUnitDescriptionFoldSpec") ^ f.fragments.fragments) must_== tree.toList.mkString("\n")
   
-  def showDescriptionTree(fragments: Seq[Fragment]): String = 
-    toDescription(fragments:_*).drawTree
+  def showDescriptionTree(fragments: Fragments): String = 
+    toDescription(fragments.fragments:_*).drawTree
   
   def toDescription(fragments: Fragment*): Description = {
     val fold = new JUnitDescriptionFold(getClass)
-    fold.asOneDescription(fold.descriptionTree.foldAll(fragments)(main.Arguments()).rootTree)
+    import LeveledBlocks._
+    val descriptionTree = foldAll(fragments).toTree(JUnitDescriptionFold.mapper)
+    JUnitDescriptionFold.asOneDescription(descriptionTree)
   }
     
 

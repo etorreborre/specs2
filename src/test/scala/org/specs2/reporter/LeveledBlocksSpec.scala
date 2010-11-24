@@ -56,6 +56,7 @@ class LeveledBlocksSpec extends SpecificationWithJUnit with ScalaCheck
     "for start ^ t1 ^ ex1 ^ ex2"                                                          ! tree().e1^
     "for start ^ t1 ^ ex1 ^ end ^ t2 ^ ex2"                                               ! tree().e2^
     "for start ^ t1 ^ ex1 ^ p ^ t2 ^ ex2"                                                 ! tree().e3^
+    "for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2"                                     ! tree().e4^
                                                                                           end
   
 
@@ -95,6 +96,23 @@ class LeveledBlocksSpec extends SpecificationWithJUnit with ScalaCheck
       "   |",
       "   `- Example(e2)")
     
+    def e4 = tree(start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2) must beDrawnAs(
+      "SpecStart(start)",
+      "|",
+      "+- Text(t1)",
+      "|  |",
+      "|  +- Example(e1)",
+      "|  |",
+      "|  +- Example(e2)",
+      "|  |",
+      "|  `- Par()",
+      "|",
+      "`- Text(t2)",
+      "   |",
+      "   +- Example(e1)",
+      "   |",
+      "   `- Example(e2)")
+
     def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ { 
       tree: Tree[Fragment] => tree.drawTree
     }

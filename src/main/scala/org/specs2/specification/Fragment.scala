@@ -19,10 +19,10 @@ case class SpecStart(name: String, arguments: Arguments = Arguments()) extends F
 case class SpecEnd(name: String) extends Fragment {
   override def matches(s: String) = name matches s
 }
-case class Group(fragments: Seq[Fragment])
 case class Text(t: String) extends Fragment {
   override def matches(s: String) = t.matches(s)
 }
+case class Group(fragments: Seq[Fragment])
 case class Example private (desc: String = "", body: () => Result) extends Fragment with Executable { 
   def execute = body()
   override def matches(s: String) = desc.matches(s)

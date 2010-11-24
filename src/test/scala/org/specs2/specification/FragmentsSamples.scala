@@ -19,7 +19,7 @@ trait FragmentsSamples extends FragmentsBuilder with StandardResults with Predef
   val level1 = "level1" ^ ex1 ^ ex2
   val level2 = "level2" ^ ex1 ^ ex2
   val level2WithFailure = "level2" ^ ex1Failure ^ ex2
-  val level1Level2 = level1 ^ level2 
+  val level1Level2 = level1 ^ end ^ level2 
   val level1ParLevel2 = level1 ^ p ^ level2 
   
 }

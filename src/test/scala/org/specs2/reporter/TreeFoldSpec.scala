@@ -5,10 +5,8 @@ import Scalaz._
 import main.Arguments
 import specification._
 import FragmentsShow._
-import FragmentsTree._
 
-class TreeFoldSpec extends SpecificationWithJUnit {
-  def is = 
+class TreeFoldSpec extends SpecificationWithJUnit { def is = 
   "a specification can be turned to a tree of fragments"^
   "if there is only one text fragment, the tree will have only one leaf" ! {
 	toTree("name", List(Text("description"))).drawTree.trim must_== 
@@ -106,6 +104,8 @@ class TreeFoldSpec extends SpecificationWithJUnit {
 	  end^
 	  "ex2.1" ! success
 
-  def toTree(name: String, fragments: Seq[Fragment]): Tree[Fragment] = 
-    FragmentsTree.foldAll(SpecStart(name) +: fragments)(Arguments()).rootTree
+  def toTree(name: String, fragments: Seq[Fragment]): Tree[Fragment] = {
+    import LeveledBlocks._
+    foldAll(SpecStart(name) +: fragments).toTree
+  }
 }

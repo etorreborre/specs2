@@ -33,7 +33,7 @@ trait FragmentsBuilder {
   implicit def fragmentGroup(Fragments: Fragments) = Group(Fragments.fragments)
   /** @return a Group of Fragments from an existing Fragments Seq */
   implicit def fragmentGroup(fragments: Seq[Fragment]) = Group(fragments)
-  
+
   /** 
    * @return an Example description from a string, to create a full Example once the
    *         body is defined 
