@@ -81,16 +81,6 @@ trait Iterablex {
          }
       }
     }
-    /**
-     * Split an iterable with:
-     *  * all elements satisfying a predicate then the element not satisfying it
-     *  * all the other elements after that 'pivot' element
-     */
-    def splitAfter(p: T => Boolean): (Iterable[T], Iterable[T]) = {
-      val (before, after) = (xs takeWhile { x => !p(x) }, xs dropWhile p)
-      (before ++ after.headOption.toList, after.drop(1))  
-    }
-
   }
 }
 private[specs2]

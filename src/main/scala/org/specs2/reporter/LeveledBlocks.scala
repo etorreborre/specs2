@@ -77,8 +77,6 @@ case class LeveledBlocks[T](blocks: List[(Block[T], Int)] = Nil) {
     case None    => ps
   }
   
-
-  
   private val isReset = (b: (Block[T], Int)) => b match { case (BlockReset(t), _) => true; case _ => false }
   override def equals(a: Any) = {
     a match {
@@ -107,7 +105,6 @@ case object LeveledBlocks {
       }
     val zero = new LeveledBlocks[T]()
   }
-  import LeveledBlocks._
   def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, LeveledBlocks[T]]) = {
     fs.foldMap(reducer.unit)
   }

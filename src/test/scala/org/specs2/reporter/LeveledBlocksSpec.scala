@@ -10,10 +10,8 @@ import LeveledBlocks._
 import FragmentLeveledBlocksReducer._
 import specification.FragmentsShow._
 
-@org.junit.runner.RunWith(classOf[org.specs2.runner.JUnitRunner]) 
 class LeveledBlocksSpec extends SpecificationWithJUnit with ScalaCheck 
-  with ScalazMatchers with ArbitraryFragments { def is = 
-    
+  with ScalazMatchers with ArbitraryFragments { def is =     
                                                                                           """
   The LeveledBlocks class is used to compute the 'level' of Fragments in a list of 
   Fragments.

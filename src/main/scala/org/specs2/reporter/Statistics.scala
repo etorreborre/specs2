@@ -35,26 +35,27 @@ case class Stats(fragments:    Int = 0,
   }
   /** @return true if there are errors or failures */
   def hasFailuresOrErrors = failures + errors > 0
-  def add(s: Stats) = copy(
-      fragments = this.fragments       + s.fragments,
-      successes = this.successes       + s.successes, 
-      expectations = this.expectations + s.expectations, 
-      failures = this.failures         + s.failures   , 
-      errors = this.errors             + s.errors     , 
-      pending = this.pending           + s.pending    , 
-      skipped = this.skipped           + s.skipped    )
 }
+case object Stats {
+  implicit object StatsMonoid extends Monoid[Stats] {
+    def append(s1: Stats, s2: =>Stats) = s1.copy(
+        fragments =    s1.fragments       + s2.fragments,
+        successes =    s1.successes       + s2.successes, 
+        expectations = s1.expectations    + s2.expectations, 
+        failures =     s1.failures        + s2.failures   , 
+        errors =       s1.errors          + s2.errors     , 
+        pending =      s1.pending         + s2.pending    , 
+        skipped =      s1.skipped         + s2.skipped    )
 
+    val zero = Stats()
+  }
+}
 private[specs2]
 trait Statistics {
-  implicit val SpecsStatisticsMonoid  = new Monoid[SpecsStatistics] {
+  import Stats._
+  implicit def SpecsStatisticsMonoid  = new Monoid[SpecsStatistics] {
     def append(s1: SpecsStatistics, s2: =>SpecsStatistics): SpecsStatistics = {
-      val (s2CurrentsToEnd, s2CurrentsFromEnd) = s2.currents.splitAfter(_.end.isDefined)
-      SpecsStatistics(
-          s1.currents ++ 
-          s2CurrentsToEnd.map(c2 => c2.add(s1.current)) ++
-          s2CurrentsFromEnd, 
-          s1.total.add(s2.total))
+      SpecsStatistics(s1.stats ++ s2.stats)
     }
     val zero = SpecsStatistics() 
   }
@@ -85,12 +86,21 @@ trait Statistics {
    * a list of 'current' stats for each fragment execution and the total statistics 
    * for the whole specification
    */
-  case class SpecsStatistics(currents: List[Stats] = Nil, total: Stats = Stats()) {
-    def current = currents.lastOption.getOrElse(Stats())
+  case class SpecsStatistics(stats: List[Stats] = Nil) {
+    import Stats._
+    
     def toList = currents.map((_, total))
+    def currents = stats.foldLeft(Nil: List[Stats]) { (res, cur) => 
+      cur.start match {
+        case Some(s) => res :+ Stats()
+        case None    => res :+ (res.lastOption.getOrElse(Stats()) |+| cur)
+      }
+    }
+    def total = stats.foldMap(identity)
+    def current = currents.lastOption.getOrElse(Stats())
   }
   case object SpecsStatistics {
-    def apply(current: Stats) = new SpecsStatistics(List(current), current)
+    def apply(current: Stats) = new SpecsStatistics(List(current))
   }
 }
 private [specs2]
