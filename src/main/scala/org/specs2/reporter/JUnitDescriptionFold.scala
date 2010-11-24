@@ -49,7 +49,7 @@ object JUnitDescriptionFold {
    *         from a Tree[Description]
    */
   def asOneDescription(descriptionTree: Tree[(Description, Fragment)]): Description = {
-    TreeFold.bottomUp(descriptionTree, addChildren).rootLabel
+    LeveledBlocks.bottomUp(descriptionTree, addChildren).rootLabel
   }
   val addChildren = (d: (Description, Fragment), children: Stream[Description]) => { 
     children.foreach { c =>

@@ -30,7 +30,7 @@ trait TextPrinterReducer extends ResultOutput {
     def print = lines foreach (_.print)
   }
   
-  def flatten(results: (((List[Print], SpecsStatistics), LeveledBlocks[ExecutedFragment]), SpecsArguments)): List[PrintLine] = {
+  def flatten(results: (((List[Print], SpecsStatistics), LeveledBlocks[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
     val prints = results._1._1._1
     val statistics = results._1._1._2.toList
     val levels = results._1._2.levels

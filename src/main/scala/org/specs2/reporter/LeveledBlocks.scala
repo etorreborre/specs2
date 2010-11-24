@@ -137,6 +137,10 @@ case object LeveledBlocks {
     }
     implicit override def unit(f: Fragment): LeveledBlocks[Fragment] = LeveledBlocks(toBlock(f))
   }
+  def bottomUp[A, B](t: Tree[A], f: ((A, Stream[B]) => B)): Tree[B] = {
+    val tbs = t.subForest.map(t => bottomUp(t, f))
+    node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
+  }
 }
 sealed trait Block[T] {
   val t: T

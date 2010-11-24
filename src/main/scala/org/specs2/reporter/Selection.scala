@@ -5,12 +5,12 @@ import main.Arguments
 import control.LazyParameters._
 import specification._
 import Fragments._
+import SpecsArguments._
 /**
  * The Selection trait implements the logic for filtering the fragments to execute
  * and sorting them according to their dependencies 
  *
  */
-//private[specs2]
 trait Selection {
   /** select function returning a filtered and ordered seq of seq of Fragments */
   def select(implicit arguments: Arguments): Fragments => Seq[Fragments]
@@ -24,30 +24,17 @@ trait Selection {
 trait DefaultSelection {
   /** select function returning a filtered and ordered seq of seq of Fragments */
   def select(implicit arguments: Arguments) = (fragments: Fragments) => {
-    val args = arguments.overrideWith(fragments.arguments)
-    sort(filterFold.foldAll(fragments.fragments.view)._2)(args)
+    val filtered = SpecsArguments.foldAll(fragments.fragments)(FragmentSpecsArgumentsReducer).
+      filterFragments(filter).view
+    sort(filtered)(arguments.overrideWith(fragments.arguments))
   }
-  private val filterFold = new FragmentFold {
-    val scopedArguments: ScopedArguments = new ScopedArguments {}
-    type T = (scopedArguments.T, Seq[Fragment])
-    def initial = (scopedArguments.initial, Seq[Fragment]())
-
-    def fold(implicit arguments: Arguments) = (argsAndResult: T, f: Fragment) => {
-      val (args, result) = argsAndResult
-      val newResult = 
-        if (filter(arguments.overrideWith(args))(f)) result :+ f
-        else result
-      (scopedArguments.fold(arguments)(args, f), newResult)
-    }
-  }
-  
   /** 
    * the filter method filters examples based on their description,
    * keeping only the ones matching the ex attribute of the arguments object
    */
-  protected def filter(implicit arguments: Arguments) = (f: Fragment) => {
+  protected def filter = (f: Fragment, args: Arguments) => {
     f match {
-      case e: Example => e.matches(arguments.ex)
+      case e @ Example(_, _) => e.matches(args.ex)
       case _ => true
     }
   }
@@ -60,23 +47,15 @@ trait DefaultSelection {
    */
   protected def sort(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[Fragments] = {
     if (arguments.sequential) fragments.map(f => Fragments(f))
-    else isolateSteps(fragments)(arguments)
+    else isolateSteps(fragments)(arguments).reverse
   }
   
   protected def isolateSteps(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[Fragments] = {
-    isolateFold.foldAll(fragments)._2.reverse
-  }
-  
-  private val isolateFold = new FragmentFold {
-    val scopedArguments: ScopedArguments = new ScopedArguments {}
-    type T = (scopedArguments.T, Seq[Fragments])
-    def initial = (scopedArguments.initial, Seq[Fragments]())
-
-    def fold(implicit arguments: Arguments) = (argsAndResult: T, f: Fragment) => {
-      val (args, result) = argsAndResult
+    val specsArguments = SpecsArguments.foldAll(fragments)(FragmentSpecsArgumentsReducer)
+    specsArguments.arguments.foldLeft(Nil: List[Fragments]) { (res, cur) => 
+      val (ArgumentsStart(f), args) = cur
       val overridenArgs = arguments.overrideWith(args)
-      
-      val newResult = result match {
+      res match {
         case Nil => List(Fragments(List(f))(overridenArgs))
         case last :: rest => f match {
           case Step(_) if last.fragments.exists(isExample) => Fragments(List(f))(overridenArgs) :: last :: rest 
@@ -84,7 +63,6 @@ trait DefaultSelection {
           case _ => Fragments(last.fragments :+ f)(overridenArgs):: rest 
         }
       }
-      (scopedArguments.fold(arguments)(args, f), newResult)
     }
   }
 

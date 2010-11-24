@@ -25,13 +25,13 @@ with ArbitraryFragments { def is =
   "Following a SpecStart with several fragments must have the same args"                  ! e5^
                                                                                           p^
   "The SpecsArguments monoid must respect the Monoid laws"                                !
-    SpecsArgumentsMonoid.isMonoid                                                         ^
+    SpecsArgumentsMonoid[Fragment].isMonoid                                               ^
                                                                                           end
 
-  val s1: SpecsArguments = SpecStart("start1", args(ex="s1"))
-  val s2: SpecsArguments = SpecStart("start2", args(ex="s2"))
-  val t1: SpecsArguments = Text("text1")
-  val t2: SpecsArguments = Text("text2")
+  val s1: SpecsArguments[Fragment] = SpecStart("start1", args(ex="s1"))
+  val s2: SpecsArguments[Fragment] = SpecStart("start2", args(ex="s2"))
+  val t1: SpecsArguments[Fragment] = Text("text1")
+  val t2: SpecsArguments[Fragment] = Text("text2")
   
   def e1 = (s1 |+| t2).args must_== args(ex = "s1")
   def e2 = (t1 |+| s2).args must_== args(ex = "s2")
@@ -39,7 +39,7 @@ with ArbitraryFragments { def is =
   def e4 = (s1 |+| s2).args must_== args(ex = "s2")
   def e5 = (s1 |+| t1 |+| t2).args must_== args(ex = "s1")
                                                                                           
-  implicit val arbitrarySpecsArguments: Arbitrary[SpecsArguments] = Arbitrary {
+  implicit val arbitrarySpecsArguments: Arbitrary[SpecsArguments[Fragment]] = Arbitrary {
     for (f <- arbitrary[Fragment]) yield f
   }
                                                                                           
