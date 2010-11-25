@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import io.ConsoleOutput
 import main.Arguments
 import text.Plural._
 import text.AnsiColors._
@@ -8,7 +9,7 @@ import text.AnsiColors._
 /**
  * Implementation of the ResultOutput trait as Text (to a console possibly with AnsiColors)
  */
-class TextResultOutput extends ResultOutput {
+class TextResultOutput extends ResultOutput with ConsoleOutput {
 
   def printSuccess(message: String)(implicit args: Arguments) = {
     printLines(color(message, green, args.color))

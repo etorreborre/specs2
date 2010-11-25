@@ -24,8 +24,10 @@ import SpecsArguments._
  *
  */
 trait TextPrinter {
+  val output: ResultOutput = new TextResultOutput
+  
   def print(klass: Class[_], fs: Seq[ExecutedFragment])(implicit args: Arguments) = 
-    printLines(fs).print(new TextResultOutput)
+    printLines(fs).print(output)
   
   def printLines(fs: Seq[ExecutedFragment]) = 
     PrintLines(flatten(FoldrGenerator[Seq].reduce(reducer, fs)))

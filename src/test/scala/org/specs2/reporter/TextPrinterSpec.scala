@@ -8,7 +8,7 @@ import execute._
 import specification._
 import SpecsArguments._
 
-class TextPrinterSpec extends SpecificationWithJUnit { def is = 
+class TextPrinterSpec extends SpecificationWithJUnit { def is = xonly^
                                                                                           """
 The TextPrinter is folding Executed Fragments and exporting them
 to a ResultOutput trait knowing how to output successes, failures,...
@@ -141,9 +141,11 @@ to a ResultOutput trait knowing how to output successes, failures,...
     val execution = new DefaultExecutionStrategy() {}
     val selected = selection.select(fragments.arguments)(Fragments(SpecStart("spec") +: fragments.fragments :+ SpecEnd("spec"))(fragments.arguments))
     val executed = execution.execute(fragments.arguments)(selected)
-    val printer = new TextPrinter {}
-    val output = new TextResultOutput with MockOutput
-    printer.print(getClass, executed)(fragments.arguments)(output)
-    output.messages
+    val mockOutput = new TextResultOutput with MockOutput
+    val printer = new TextPrinter {
+      override val output = mockOutput
+    }
+    printer.print(getClass, executed)(fragments.arguments)
+    mockOutput.messages
   }
 }
