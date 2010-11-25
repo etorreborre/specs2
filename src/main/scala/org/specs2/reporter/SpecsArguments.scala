@@ -53,7 +53,7 @@ case object SpecsArguments {
       case _                  => create(NoStartOfArguments(f))        
     }
   }
-  implicit object ExecutedFragmentSpecsArgumentsReducer extends Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] {
+  implicit object SpecsArgumentsReducer extends Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] {
     implicit override def unit(f: ExecutedFragment) = f match {
       case ExecutedSpecStart(_, _, args) => create(StartOfArguments(f), args)     
       case _                             => create(NoStartOfArguments(f))        

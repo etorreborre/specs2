@@ -104,7 +104,7 @@ case object LeveledBlocks {
   def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, LeveledBlocks[T]]) = {
     fs.foldMap(reducer.unit)
   }
-  implicit object ExecutedFragmentLeveledBlocksReducer extends Reducer[ExecutedFragment, LeveledBlocks[ExecutedFragment]] {
+  implicit object LeveledBlocksReducer extends Reducer[ExecutedFragment, LeveledBlocks[ExecutedFragment]] {
     implicit def toBlock(f: ExecutedFragment): Block[ExecutedFragment] = f match {
       case t @ ExecutedResult(_, _)       => BlockTerminal(t) 
       case t @ ExecutedText(_)            => BlockIndent(t)   

@@ -13,15 +13,26 @@ import Statistics._
 import LeveledBlocks._
 import SpecsArguments._
 
+/**
+ * This trait reduces a list of ExecutedFragments to a list of PrintLines.
+ * 
+ * Each line contains:
+ * * A description (text or example description)
+ * * A level, to work out the indenting
+ * * Some statistics, to print on SpecEnd
+ * * The current arguments, to control the conditional printing of text, statistics,...
+ *
+ */
 trait TextPrinterReducer extends ResultOutput {
   def print(fs: Seq[ExecutedFragment]) = {
     PrintLines(flatten(FoldrGenerator[Seq].reduce(reducer, fs))).print
   }
   
-  private  val reducer = ExecutedFragmentPrintReducer &&& 
+  private  val reducer = 
+    PrintReducer &&& 
     StatisticsReducer &&&
-    ExecutedFragmentLeveledBlocksReducer  &&&
-    ExecutedFragmentSpecsArgumentsReducer
+    LeveledBlocksReducer  &&&
+    SpecsArgumentsReducer
   
   case class PrintLine(text: Print = PrintPar(), stats: (Stats, Stats) = (Stats(), Stats()), level: Int = 0, args: Arguments = Arguments()) {
     def print = text.print(stats, level, args)
@@ -38,7 +49,7 @@ trait TextPrinterReducer extends ResultOutput {
     }
   }  
     
-  implicit object ExecutedFragmentPrintReducer extends Reducer[ExecutedFragment, List[Print]] {
+  implicit object PrintReducer extends Reducer[ExecutedFragment, List[Print]] {
     implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment) = fragment match { 
