@@ -141,9 +141,9 @@ to a ResultOutput trait knowing how to output successes, failures,...
     val execution = new DefaultExecutionStrategy() {}
     val selected = selection.select(fragments.arguments)(Fragments(SpecStart("spec") +: fragments.fragments :+ SpecEnd("spec"))(fragments.arguments))
     val executed = execution.execute(fragments.arguments)(selected)
-    val printer = new TextPrinterReducer {}
+    val printer = new TextPrinter {}
     val output = new TextResultOutput with MockOutput
-    printer.print(executed)(output)
+    printer.print(getClass, executed)(fragments.arguments)(output)
     output.messages
   }
 }
