@@ -56,26 +56,40 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    *         value
    */
   private def mapLevel(f: Int => Int) = Levels(blocks.map((b: (Block[T], Int)) => (b._1, f(b._2))))
-//  def increment(n: Int = 1) = mapLevel(_ + n)
-//  def decrement(n: Int = 1) = mapLevel(_ - n)
 
+  /**
+   * @return a Tree[T] based on the level of each block
+   */
   def toTree: Tree[T] = toTreeLoc.toTree
+  /**
+   * @return a Tree[S] based on the level of each block, mapping each node to value of type
+   *         S and possibly skipping nodes
+   */
   def toTree[S](m: (T, Int) => Option[S]): Tree[S] = toTreeLoc(m).toTree
 
+  /**
+   * @return a TreeLoc[T] based on the level of each block
+   */
   def toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, i: Int) => Some(t))
+  /**
+   * WARNING this method assumes that the Levels are not empty!!
+   * 
+   * @return a Tree[S] based on the level of each block, mapping each node to value of type
+   *         S and possibly skipping nodes, passing the numeric label of the current node. 
+   * @see JUnitDescriptions
+   */
   def toTreeLoc[S](m: (T, Int) => Option[S]): TreeLoc[S] = {
-    val bb = blocks
     val initial = m(blocks.head._1.t, 0).get
     blocks.drop(1).foldLeft(leaf(initial).loc) { (treeLoc, cur) =>
       val (block, level) = cur
       m(block.t, treeLoc.root.toTree.flatten.size) match {
         case Some(s) =>
           treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc).insertDownLast(leaf(s))
-        case None =>
-          treeLoc
+        case None =>  treeLoc
       }
     }
   } 
+  /** @return true if a Block is a Reset block */
   private val isReset = (b: (Block[T], Int)) => b match { case (BlockReset(t), _) => true; case _ => false }
   override def equals(a: Any) = {
     a match {
@@ -83,6 +97,9 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
       case _ => false
     }
   }
+  /**
+   * normalize resets so that BlockReset levels will not be compared
+   */
   private def normalizeResets = {
     new Levels(blocks.map {
       case (BlockReset(t), _) => (BlockReset(t), 0) 
@@ -91,7 +108,10 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   }
 }
 case object Levels {
+  /** @return a new Levels object for one Block */
   def apply[T](b: Block[T]) = new Levels(List((b, 0)))
+
+  /** monoid for Levels */
   implicit def LevelsMonoid[T] = new Monoid[Levels[T]] {
     def append(b1: Levels[T], b2: =>Levels[T]) =
       (b1.lastOption, b2.headOption) match {
@@ -104,6 +124,7 @@ case object Levels {
       }
     val zero = new Levels[T]()
   }
+  /** fold a list of T to a Levels object */
   def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, Levels[T]]) = {
     fs.foldMap(reducer.unit)
   }
@@ -137,6 +158,7 @@ case object Levels {
     implicit override def unit(f: Fragment): Levels[Fragment] = Levels(toBlock(f))
   }
 }
+/** this represent a fragment of a specification that needs to be indented as a block */
 sealed trait Block[T] {
   val t: T
 }
