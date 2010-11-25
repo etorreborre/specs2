@@ -83,9 +83,12 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
   }
   def report(ex: Example): List[String] = report(Fragments(ex)) 
   def report(ex: Fragments): List[String] = {
-	val reporter = new ConsoleReporter with MockOutput
+
+  val textOutput = new TextResultOutput with MockOutput
+  trait MockTextPrinter extends TextPrinter { override val output = textOutput } 
+	val reporter = new ConsoleReporter with MockTextPrinter
 	  reporter.report(getClass, ex)(Arguments())
-	  reporter.messages.toList
+	  textOutput.messages.toList
   }
 }
 trait ExpectedOutputs {
