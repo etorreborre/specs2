@@ -10,7 +10,7 @@ import execute._
 import main.Arguments
 import specification._
 import Statistics._
-import LeveledBlocks._
+import Levels._
 import SpecsArguments._
 
 /**
@@ -31,7 +31,7 @@ trait TextPrinterReducer extends ResultOutput {
   private  val reducer = 
     PrintReducer &&& 
     StatisticsReducer &&&
-    LeveledBlocksReducer  &&&
+    LevelsReducer  &&&
     SpecsArgumentsReducer
   
   case class PrintLine(text: Print = PrintPar(), stats: (Stats, Stats) = (Stats(), Stats()), level: Int = 0, args: Arguments = Arguments()) {
@@ -42,7 +42,7 @@ trait TextPrinterReducer extends ResultOutput {
     def print = lines foreach (_.print)
   }
   
-  def flatten(results: (((List[Print], SpecsStatistics), LeveledBlocks[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
+  def flatten(results: (((List[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
     val (prints, statistics, levels, args) = results.flatten
     (prints zip statistics.toList zip levels.levels zip args.toList) map { 
       case (((t, s), l), a) => PrintLine(t, s, l, a)

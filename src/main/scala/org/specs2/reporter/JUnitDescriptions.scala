@@ -25,8 +25,8 @@ import specification._
 class JUnitDescriptions(specificationClass: Class[_])  {
 	import JUnitDescriptions._
 	def foldAll(fs: Seq[Fragment]) = {
-	  import LeveledBlocks._
-	  val descriptionTree = LeveledBlocks.foldAll(fs).toTree(mapper)
+	  import Levels._
+	  val descriptionTree = Levels.foldAll(fs).toTree(mapper)
 	  DescriptionAndExamples(asOneDescription(descriptionTree), Map(descriptionTree.flatten:_*))
 	}
 

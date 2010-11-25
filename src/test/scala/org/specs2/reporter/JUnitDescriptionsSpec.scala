@@ -123,7 +123,7 @@ class JUnitDescriptionFoldSpec extends SpecificationWithJUnit with FragmentsSamp
     toDescription(fragments.fragments:_*).drawTree
   
   def toDescription(fragments: Fragment*): Description = {
-    import LeveledBlocks._
+    import Levels._
     val descriptionTree = foldAll(fragments).toTree(JUnitDescriptions.mapper)
     JUnitDescriptions.asOneDescription(descriptionTree)
   }

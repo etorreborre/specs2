@@ -6,14 +6,14 @@ import matcher.{ ScalazMatchers, Matcher, Expectable, MatchResult, MustExpectabl
 import scalaz._
 import Scalaz._
 import specification._
-import LeveledBlocks._
-import FragmentLeveledBlocksReducer._
+import Levels._
+import FragmentLevelsReducer._
 import specification.FragmentsShow._
 
-class LeveledBlocksSpec extends SpecificationWithJUnit with ScalaCheck 
+class LevelsSpec extends SpecificationWithJUnit with ScalaCheck 
   with ScalazMatchers with ArbitraryFragments { def is =     
                                                                                           """
-  The LeveledBlocks class is used to compute the 'level' of Fragments in a list of 
+  The Levels class is used to compute the 'level' of Fragments in a list of 
   Fragments.
                                                                                           """^p^
   "A simple piece of text has level 0"                                                    ^
@@ -48,7 +48,7 @@ class LeveledBlocksSpec extends SpecificationWithJUnit with ScalaCheck
   { level(t1 ^ ex1 ^ end ^ t1 ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1, 2) }                ^
                                                                                           p^
   "The LevelBlocks monoid must respect the Monoid laws"                                   !
-    LeveledBlocksMonoid.isMonoid                                                          ^
+    LevelsMonoid.isMonoid                                                          ^
                                                                                           p^
   "A tree of fragments can be created from the leveled blocks"                            ^
     "for start ^ t1 ^ ex1 ^ ex2"                                                          ! tree().e1^
@@ -122,13 +122,13 @@ class LeveledBlocksSpec extends SpecificationWithJUnit with ScalaCheck
   implicit val arbitraryBlock: Arbitrary[Block[Fragment]] = Arbitrary {
      for (f <- arbitrary[Fragment]) yield f
   }
-  implicit val arbitraryBlocks: Arbitrary[LeveledBlocks[Fragment]] = Arbitrary {
+  implicit val arbitraryBlocks: Arbitrary[Levels[Fragment]] = Arbitrary {
     
     def genBlockLevels(sz: Int) = for {
       l <- Gen.listOfN(sz, arbitrary[Block[Fragment]])
-    } yield l.foldMap(LeveledBlocks[Fragment](_))
+    } yield l.foldMap(Levels[Fragment](_))
     
-    def sizedList(sz: Int): Gen[LeveledBlocks[Fragment]] = {
+    def sizedList(sz: Int): Gen[Levels[Fragment]] = {
       if (sz <= 0) genBlockLevels(1)
       else genBlockLevels(sz)
     }

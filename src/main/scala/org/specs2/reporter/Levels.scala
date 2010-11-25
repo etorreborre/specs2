@@ -15,44 +15,31 @@ import StandardFragments._
  * 
  * It does so by considering that:
  * 
- * * when a Text fragment follows a Text fragment we're going up one
+ * * when a Text fragment follows a Text fragment we're going up one level
  *   (so the second text fragment can be indented relatively to the first one)
- * * when an Example fragment follows a Text fragment we're going up one
+ * * when an Example fragment follows a Text fragment we're going up one level
  * * when an Example fragment follows an Example fragment we're staying on the same level
  * * when a Text fragment follows an Example fragment we're going down one level
- *
- * There are some cases though where the user would have to explicitly reset the level by
- * inserting an 'end' marker:
+ * * when a paragraph follows anything, we're going down one level
+ * * when there is a end, we reset the levels to zero
+ * * when there is a tab we indent everything following the tab (1 level is the default)
+ * * when there is a backtab we unindent everything following the tab (1 level is the default)
  * 
- * "this block"^
- *   "has 1 example" ! { true }^
- * "this other block"^
- *   "has a nested text"^
- *     "with 1 example" ! { true }^
- *     end^
- * "this third block"^
- *   "will not be nested thanks to the previous end marker" ! { true }^
- *
- *  The BlockLevelsFold trait is generic and specialized for:
- *    * Fragments => LevelsFold
- *    * ExecutedFragments => ExecutedLevelsFold
- *    
  */
-case class LeveledBlocks[T](blocks: List[(Block[T], Int)] = Nil) {
+case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   def headOption = blocks.map(_._1).headOption
   def lastOption = blocks.map(_._1).lastOption
   def firstLevel = blocks.headOption.map(_._2).getOrElse(0)
   def lastLevelOption = blocks.map(_._2).lastOption
   def level = lastLevelOption.getOrElse(0)
   def levels = blocks.map(_._2)
-  def elems = blocks.map(_._1)
-  def add(other: LeveledBlocks[T]) = LeveledBlocks(this.blocks ++ other.blocks)
+  def add(other: Levels[T]) = Levels(this.blocks ++ other.blocks)
   def resetLevel(f: Int => Int) = {
     val breakAtFirstReset = blocks.span(b => !isReset(b)) 
-    LeveledBlocks(breakAtFirstReset._1).mapLevel(f) add 
-    LeveledBlocks(breakAtFirstReset._2) 
+    Levels(breakAtFirstReset._1).mapLevel(f) add 
+    Levels(breakAtFirstReset._2) 
   }
-  private def mapLevel(f: Int => Int) = LeveledBlocks(blocks.map((b: (Block[T], Int)) => (b._1, f(b._2))))
+  private def mapLevel(f: Int => Int) = Levels(blocks.map((b: (Block[T], Int)) => (b._1, f(b._2))))
   def increment(n: Int = 1) = mapLevel(_ + n)
   def decrement(n: Int = 1) = mapLevel(_ - n)
 
@@ -76,21 +63,21 @@ case class LeveledBlocks[T](blocks: List[(Block[T], Int)] = Nil) {
   private val isReset = (b: (Block[T], Int)) => b match { case (BlockReset(t), _) => true; case _ => false }
   override def equals(a: Any) = {
     a match {
-      case l: LeveledBlocks[_] => normalizeResets.blocks.equals(l.normalizeResets.blocks)
+      case l: Levels[_] => normalizeResets.blocks.equals(l.normalizeResets.blocks)
       case _ => false
     }
   }
   private def normalizeResets = {
-    new LeveledBlocks(blocks.map {
+    new Levels(blocks.map {
       case (BlockReset(t), _) => (BlockReset(t), 0) 
       case other              => other 
     })
   }
 }
-case object LeveledBlocks {
-  def apply[T](b: Block[T]) = new LeveledBlocks(List((b, 0)))
-  implicit def LeveledBlocksMonoid[T] = new Monoid[LeveledBlocks[T]] {
-    def append(b1: LeveledBlocks[T], b2: =>LeveledBlocks[T]) =
+case object Levels {
+  def apply[T](b: Block[T]) = new Levels(List((b, 0)))
+  implicit def LevelsMonoid[T] = new Monoid[Levels[T]] {
+    def append(b1: Levels[T], b2: =>Levels[T]) =
       (b1.lastOption, b2.headOption) match {
         case (None, _)                        => b2
         case (Some(BlockReset(t)), _)         => b1 add b2.resetLevel(_ - b2.firstLevel)
@@ -99,12 +86,12 @@ case object LeveledBlocks {
         case (Some(BlockUnindent(t, n)), _)   => b1 add b2.resetLevel(b1.level + _ - n)
         case _                                => b1 add b2.resetLevel(b1.level + _)
       }
-    val zero = new LeveledBlocks[T]()
+    val zero = new Levels[T]()
   }
-  def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, LeveledBlocks[T]]) = {
+  def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, Levels[T]]) = {
     fs.foldMap(reducer.unit)
   }
-  implicit object LeveledBlocksReducer extends Reducer[ExecutedFragment, LeveledBlocks[ExecutedFragment]] {
+  implicit object LevelsReducer extends Reducer[ExecutedFragment, Levels[ExecutedFragment]] {
     implicit def toBlock(f: ExecutedFragment): Block[ExecutedFragment] = f match {
       case t @ ExecutedResult(_, _)       => BlockTerminal(t) 
       case t @ ExecutedText(_)            => BlockIndent(t)   
@@ -116,10 +103,10 @@ case object LeveledBlocks {
       case t @ ExecutedEnd()              => BlockReset(t)    
       case t                              => BlockNeutral(t)  
     } 
-    implicit override def unit(f: ExecutedFragment): LeveledBlocks[ExecutedFragment] = LeveledBlocks[ExecutedFragment](toBlock(f))
+    implicit override def unit(f: ExecutedFragment): Levels[ExecutedFragment] = Levels[ExecutedFragment](toBlock(f))
     
   }
-  implicit object FragmentLeveledBlocksReducer extends Reducer[Fragment, LeveledBlocks[Fragment]] {
+  implicit object FragmentLevelsReducer extends Reducer[Fragment, Levels[Fragment]] {
     implicit def toBlock(f: Fragment): Block[Fragment] = f match {
       case t @ Example(_, _)   => BlockTerminal(t)     
       case t @ Par()           => BlockUnindent(t)   
@@ -131,7 +118,7 @@ case object LeveledBlocks {
       case t @ End()           => BlockReset(t)        
       case t                   => BlockNeutral(t)        
     }
-    implicit override def unit(f: Fragment): LeveledBlocks[Fragment] = LeveledBlocks(toBlock(f))
+    implicit override def unit(f: Fragment): Levels[Fragment] = Levels(toBlock(f))
   }
 }
 sealed trait Block[T] {
