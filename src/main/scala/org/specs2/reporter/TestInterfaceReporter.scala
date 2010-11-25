@@ -18,9 +18,10 @@ import specification._
  */
 class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends 
        ConsoleReporter 
-  with LoggedTextPrinter 
   with HandlerEvents {  
 	
+  override def print(klass: Class[_], fs: Seq[ExecutedFragment]) = printLines(fs).print(new TestInterfaceResultOutput(loggers))
+
   override def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = (f: Fragment) => {
  	  val executed = new FragmentExecution {}.executeFragment(arguments)(f)
     executed match {
@@ -36,7 +37,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
     executed
   }
 }
-trait LoggedTextPrinter extends TextExporting with TestLoggers with Output {
+class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
   override def printError(message: String)(implicit args: Arguments) = logError(message)
   override def printSuccess(message: String)(implicit args: Arguments) = logInfo(message, AnsiColors.green)
   override def printLine(message: String)(implicit args: Arguments) = logInfo(message)

@@ -13,5 +13,5 @@ trait Exporting {
   type ExportType
   
   /** @return a function exporting ExecutedFragments */
-  def export(implicit args: Arguments): Seq[ExecutedFragment] => ExportType
+  def export(klass: Class[_])(implicit args: Arguments): Seq[ExecutedFragment] => ExportType
 }

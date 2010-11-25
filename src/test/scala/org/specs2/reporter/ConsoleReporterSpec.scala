@@ -84,7 +84,7 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
   def report(ex: Example): List[String] = report(Fragments(ex)) 
   def report(ex: Fragments): List[String] = {
 	val reporter = new ConsoleReporter with MockOutput
-	  reporter.report(ex)(Arguments())
+	  reporter.report(getClass, ex)(Arguments())
 	  reporter.messages.toList
   }
 }

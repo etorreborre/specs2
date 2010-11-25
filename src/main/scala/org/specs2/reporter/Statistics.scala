@@ -56,7 +56,7 @@ trait Statistics {
    * for the whole specification
    */
   case class SpecsStatistics(stats: List[Stats] = Nil) {
-    import Stats._
+    private implicit val statsMonoid = Stats.StatsMonoid
     
     /** @return the list of all current stats, with the total on each line */
     def toList = currents.map((_, total))

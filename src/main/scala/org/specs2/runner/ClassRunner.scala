@@ -16,7 +16,7 @@ import reporter._
  * @see org.specs2.main.Arguments for other command line options
  */
 class ClassRunner extends Classes with ConsoleOutput with Main {
-	lazy val reporter = new ConsoleReporter {}
+	lazy val reporter: Reporter = new ConsoleReporter {}
 	
   def main(arguments: Array[String]) = {
     if (arguments.length == 0)

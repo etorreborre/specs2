@@ -35,7 +35,7 @@ trait Reporter extends
    * report the Fragments of a BaseSpecification
    * @return the reporter
    */
-  def report(spec: BaseSpecification)(implicit arguments: Arguments): this.type = report(spec.content)
+  def report(spec: BaseSpecification)(implicit arguments: Arguments): this.type = report(spec.getClass, spec.content)
    	  
   /**
    * report Fragments by:
@@ -46,8 +46,8 @@ trait Reporter extends
    *   
    * @return the reporter
    */
-  def report(fragments: Fragments)(implicit arguments: Arguments): this.type = {
-    fragments |> select |> execute |> export
+  def report(klass: Class[_], fragments: Fragments)(implicit arguments: Arguments): this.type = {
+    fragments |> select |> execute |> export(klass)
     this
   }
 }

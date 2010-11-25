@@ -23,11 +23,12 @@ import SpecsArguments._
  * * The current arguments, to control the conditional printing of text, statistics,...
  *
  */
-trait TextPrinterReducer {
-  implicit lazy val out = new TextResultOutput
-  def print(fs: Seq[ExecutedFragment]) = {
-    PrintLines(flatten(FoldrGenerator[Seq].reduce(reducer, fs))).print
-  }
+trait TextPrinter {
+  def print(klass: Class[_], fs: Seq[ExecutedFragment])(implicit args: Arguments) = 
+    printLines(fs).print(new TextResultOutput)
+  
+  def printLines(fs: Seq[ExecutedFragment]) = 
+    PrintLines(flatten(FoldrGenerator[Seq].reduce(reducer, fs)))
   
   private  val reducer = 
     PrintReducer &&& 

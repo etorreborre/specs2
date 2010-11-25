@@ -10,11 +10,11 @@ import specification._
  * at the end of the specification
  */
 private[specs2]
-trait TextExporting extends TextPrinterReducer with Exporting { outer =>
+trait TextExporting extends TextPrinter with Exporting { outer =>
 
   type ExportType = Unit
   
-  def export(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
-    print(fragments)(new TextResultOutput)
+  def export(klass: Class[_])(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+    print(klass, fragments)
   }
 } 

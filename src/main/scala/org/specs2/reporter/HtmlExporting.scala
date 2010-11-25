@@ -1,4 +1,4 @@
 package org.specs2
 package reporter
 
-trait HtmlExporting extends TextExporting with HtmlPrinterReducer
+trait HtmlExporting extends TextExporting with HtmlPrinter
