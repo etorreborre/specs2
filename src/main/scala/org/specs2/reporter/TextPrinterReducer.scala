@@ -23,7 +23,8 @@ import SpecsArguments._
  * * The current arguments, to control the conditional printing of text, statistics,...
  *
  */
-trait TextPrinterReducer extends ResultOutput {
+trait TextPrinterReducer {
+  implicit lazy val out = new TextResultOutput
   def print(fs: Seq[ExecutedFragment]) = {
     PrintLines(flatten(FoldrGenerator[Seq].reduce(reducer, fs))).print
   }
@@ -35,11 +36,11 @@ trait TextPrinterReducer extends ResultOutput {
     SpecsArgumentsReducer
   
   case class PrintLine(text: Print = PrintPar(), stats: (Stats, Stats) = (Stats(), Stats()), level: Int = 0, args: Arguments = Arguments()) {
-    def print = text.print(stats, level, args)
+    def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
   
   case class PrintLines(lines : List[PrintLine] = Nil) {
-    def print = lines foreach (_.print)
+    def print(implicit out: ResultOutput) = lines foreach (_.print)
   }
   
   def flatten(results: (((List[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
@@ -64,49 +65,50 @@ trait TextPrinterReducer extends ResultOutput {
   }
     
   sealed trait Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments): Unit 
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput): Unit
+    
     protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = { 
       if (args.noindent) s 
       else (("  "*level) + s.trim)
     }
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments) = {
-      printMessage(leveledText(start.name, level)(args))(args)
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) = {
+      out.printMessage(leveledText(start.name, level)(args))(args)
     } 
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments) =
-      printResult(leveledText(r.text, level)(args), r.result)(args)
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
+      printResult(leveledText(r.text, level)(args), r.result)(args, out)
       
-    def printResult(desc: String, result: Result)(implicit args: Arguments): Unit = {
+    def printResult(desc: String, result: Result)(implicit args: Arguments, out: ResultOutput): Unit = {
       val description = statusAndDescription(desc, result)(args)
       result match {
         case f: Failure => {
           printFailureOrError(desc, f) 
           if (args.failtrace) 
-            f.stackTrace.foreach(t => printError(t.toString))
+            f.stackTrace.foreach(t => out.printError(t.toString))
         }
         case e: Error => {
           printFailureOrError(desc, e) 
-          e.stackTrace.foreach(t => printError(t.toString))
+          e.stackTrace.foreach(t => out.printError(t.toString))
           e.exception.chainedExceptions.foreach { (t: Throwable) =>
-            printError(t.getMessage)
-            t.getStackTrace.foreach(st => printError(st.toString))
+            out.printError(t.getMessage)
+            t.getStackTrace.foreach(st => out.printError(st.toString))
           }
         }
-        case Success(_) => if (!args.xonly) printSuccess(description)
-        case Pending(_) => if (!args.xonly) printPending(description + " " + result.message)
+        case Success(_) => if (!args.xonly) out.printSuccess(description)
+        case Pending(_) => if (!args.xonly) out.printPending(description + " " + result.message)
         case Skipped(_) => if (!args.xonly) {
-          printSkipped(description)
-          printSkipped(result.message)
+          out.printSkipped(description)
+          out.printSkipped(result.message)
         }
       }
     }
-    def printFailureOrError(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments) = { 
+    def printFailureOrError(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments, out: ResultOutput) = { 
       val description = statusAndDescription(desc, f)
-      printError(description)
-      printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
+      out.printError(description)
+      out.printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
     }
     def statusAndDescription(s: String, result: Result)(implicit args: Arguments) = {
       (if (!args.plan) s.takeWhile(_ == ' ').dropRight(2) else s.takeWhile(_ == ' ')) + 
@@ -118,37 +120,37 @@ trait TextPrinterReducer extends ResultOutput {
     }
   }
   case class PrintText(t: ExecutedText)               extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments) =
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (!args.xonly) 
-        printMessage(leveledText(t.text, level)(args))(args)
+        out.printMessage(leveledText(t.text, level)(args))(args)
   }        
   case class PrintPar()                               extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments) =
-      if (!args.xonly) printLine(" ")(args)
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
+      if (!args.xonly) out.printLine(" ")(args)
   }
   case class PrintBr()                               extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments) =
-      if (!args.xonly) printLine(" ")(args)
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
+      if (!args.xonly) out.printLine(" ")(args)
   }
   case class PrintSpecEnd(end: ExecutedSpecEnd)       extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments) = {
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) = {
       val (current, total) = stats
       if ((!args.xonly || current.hasFailuresOrErrors) && !total.isEnd(end)) 
-        printEndStats(current)(args)
+        printEndStats(current)(args, out)
       if (total.isEnd(end))
-        printEndStats(total)(args)
+        printEndStats(total)(args, out)
     }
-    def printEndStats(stats: Stats)(implicit args: Arguments) = {
+    def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       val name = end.name
-      printLine(" ")
-      printLine("Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim))
+      out.printLine(" ")
+      out.printLine("Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim))
       printStats(stats)
-      printLine(" ")
+      out.printLine(" ")
     }
-    def printStats(stats: Stats)(implicit args: Arguments) = {
+    def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart, specEnd) = stats
-      stats.start.map(s => printLine("Finished in " + s.timer.time))
-      printLine(
+      stats.start.map(s => out.printLine("Finished in " + s.timer.time))
+      out.printLine(
           Seq(Some(examples qty "example"), 
               if (expectations != examples) Some(expectations qty "expectation") else None,
               Some(failures qty "failure"), 
@@ -158,7 +160,7 @@ trait TextPrinterReducer extends ResultOutput {
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments) = {}
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) = {}
   }
  
 }

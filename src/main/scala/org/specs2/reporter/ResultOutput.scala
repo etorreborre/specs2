@@ -11,7 +11,22 @@ import specification._
  * This traits provides specialised print methods for message representing
  * different types of results. They can be overridden to define a more specific behaviour.
  */
-trait ResultOutput extends Output {
+trait ResultOutput {
+
+  def printSuccess(message: String)(implicit args: Arguments)
+  def printError(message: String)(implicit args: Arguments)
+  def printSkipped(message: String)(implicit args: Arguments)
+  def printPending(message: String)(implicit args: Arguments)
+  /** print some text, splitting it on several lines */
+  def printMessage(message: String)(implicit args: Arguments)
+  def printLines(message: String)(implicit args: Arguments)
+  /** print one line */
+  def printLine(message: String)(implicit args: Arguments)
+}
+/**
+ * Implementation of the ResultOutput trait as Text (to a console possibly with AnsiColors)
+ */
+class TextResultOutput extends ResultOutput {
 
   def printSuccess(message: String)(implicit args: Arguments) = {
     printLines(color(message, green, args.color))

@@ -15,6 +15,6 @@ trait TextExporting extends TextPrinterReducer with Exporting { outer =>
   type ExportType = Unit
   
   def export(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
-    print(fragments)
+    print(fragments)(new TextResultOutput)
   }
 } 

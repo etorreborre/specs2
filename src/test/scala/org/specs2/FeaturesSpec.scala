@@ -2,7 +2,7 @@ package org.specs2
 import specification._
 import execute._
 
-class FeaturesSpec extends Specification with StandardResults { def is = args(noindent=true)^ 
+class FeaturesSpec extends Specification with StandardResults { def is = literate         ^ 
                                                                                           """
  These are the list of features todevelop / port for specs2.
 
@@ -24,11 +24,9 @@ class FeaturesSpec extends Specification with StandardResults { def is = args(no
       "with output configuration                                                          "^
         "stacktraces on demand                                                            "! done^
         "fail only                                                                        "! done^
-        "pending only                                                                     "! todo^
-        "Fragments filter                                                                 "! todo^
     "A specs file runner                                                                  "^
       "reporter all classes on the path                                                   "! done^
-      "according to a regular expression                                                  "! todo^
+      "according to a regular expression                                                  "! done^
       "reporting the final statistics                                                     "! done^
     "A JUnit4 reporter                                                                    "^
       "with nested suites                                                                 "! done^
@@ -55,6 +53,7 @@ class FeaturesSpec extends Specification with StandardResults { def is = args(no
       "beforeSpec/afterSpec                                                               "! done^
     "A literate specs environment                                                         "^
       "with an html reporter                                                              "! todo^
+      "supporting Markdown                                                                "! todo^
       "with non mutable forms                                                             "! done^
     "A sbt reporter                                                                       "^
       "based on the console reporter                                                      "! done^
@@ -68,8 +67,8 @@ class FeaturesSpec extends Specification with StandardResults { def is = args(no
                                                                                           p^    
   "Low priority                                                                           "^
     "A Console reporter                                                                   "^
-      "with a timer                                                                       "! todo^
-      "with colored output                                                                "! todo^
+      "with a timer                                                                       "! done^
+      "with colored output                                                                "! done^
     "StackTraces                                                                          "^
       "for Fragments, to help with IDE navigation                                         "! todo^
       "for all results, even success                                                      "! todo^
