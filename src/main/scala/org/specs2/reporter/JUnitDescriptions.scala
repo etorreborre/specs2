@@ -4,6 +4,7 @@ package reporter
 import _root_.org.junit.runner._
 import scalaz._
 import Scalaz._
+import data.Trees._
 import text.Trim._
 import main.Arguments
 import specification._
@@ -49,7 +50,7 @@ object JUnitDescriptions {
    *         from a Tree[Description]
    */
   def asOneDescription(descriptionTree: Tree[(Description, Fragment)]): Description = {
-    LeveledBlocks.bottomUp(descriptionTree, addChildren).rootLabel
+    descriptionTree.bottomUp(addChildren).rootLabel
   }
   val addChildren = (d: (Description, Fragment), children: Stream[Description]) => { 
     children.foreach { c =>

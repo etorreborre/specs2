@@ -4,6 +4,7 @@ package reporter
 import scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable }
 import Generator._
 import control.Throwablex._
+import data.Tuples._
 import text.Plural._
 import execute._
 import main.Arguments
@@ -31,11 +32,8 @@ trait TextPrinterReducer extends ResultOutput {
   }
   
   def flatten(results: (((List[Print], SpecsStatistics), LeveledBlocks[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
-    val prints = results._1._1._1
-    val statistics = results._1._1._2.toList
-    val levels = results._1._2.levels
-    val args = results._2.toList
-    (prints zip statistics zip levels zip args) map { 
+    val (prints, statistics, levels, args) = results.flatten
+    (prints zip statistics.toList zip levels.levels zip args.toList) map { 
       case (((t, s), l), a) => PrintLine(t, s, l, a)
     }
   }  

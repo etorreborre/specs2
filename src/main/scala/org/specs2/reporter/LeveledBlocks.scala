@@ -6,6 +6,7 @@ import Scalaz._
 import scala.math.max
 import main.Arguments
 import specification._
+import data.Trees._
 import StandardFragments._
 
 /**
@@ -66,17 +67,12 @@ case class LeveledBlocks[T](blocks: List[(Block[T], Int)] = Nil) {
       val (block, level) = cur
       m(block.t, treeLoc.root.toTree.flatten.size) match {
         case Some(s) =>
-          parentLocs(treeLoc).drop(level).headOption.getOrElse(treeLoc).insertDownLast(leaf(s))
+          treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc).insertDownLast(leaf(s))
         case None =>
           treeLoc
       }
     }
   } 
-  private def parentLocs[A](t: TreeLoc[A], ps: List[TreeLoc[A]] = Nil): List[TreeLoc[A]] = t.parent match {
-    case Some(p) => parentLocs(p, p :: ps)
-    case None    => ps
-  }
-  
   private val isReset = (b: (Block[T], Int)) => b match { case (BlockReset(t), _) => true; case _ => false }
   override def equals(a: Any) = {
     a match {
@@ -136,10 +132,6 @@ case object LeveledBlocks {
       case t                   => BlockNeutral(t)        
     }
     implicit override def unit(f: Fragment): LeveledBlocks[Fragment] = LeveledBlocks(toBlock(f))
-  }
-  def bottomUp[A, B](t: Tree[A], f: ((A, Stream[B]) => B)): Tree[B] = {
-    val tbs = t.subForest.map(t => bottomUp(t, f))
-    node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
   }
 }
 sealed trait Block[T] {
