@@ -8,7 +8,17 @@ import specification._
 import StandardFragments._
 import reporter._
 
-object SpecsFileRunner extends SpecificationsFinder with AConsoleReporter {
+/**
+ * This object finds specifications in the source directory, instantiate them as one big
+ * specification and report them using the ConsoleReporter
+ * 
+ * @see org.specs2.io.FromSource for the definition of the source directory
+ * @see org.specs2.main.Arguments for the regular expression defining the specification names
+ * to extract and other options
+ */
+object SpecsFileRunner extends SpecificationsFinder {
+  lazy val reporter = new ConsoleReporter {}
+  
   def main(arguments: Array[String]): Unit = {
 	  implicit val args = Arguments(arguments:_*)
 	    

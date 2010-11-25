@@ -8,11 +8,19 @@ import control.Exceptions._
 import specification._
 import reporter._
 
-class ClassRunner extends Classes with ConsoleOutput with Main with AConsoleReporter {
+/**
+ * This class can be used to executed a Specification in the Console
+ * by specifying its name as the first argument on the command line
+ * 
+ * @see specs2.run
+ * @see org.specs2.main.Arguments for other command line options
+ */
+class ClassRunner extends Classes with ConsoleOutput with Main {
+	lazy val reporter = new ConsoleReporter {}
 	
   def main(arguments: Array[String]) = {
     if (arguments.length == 0)
-      println("The first argument should be at least the specification class name")
+      println("The first argument should at least be the specification class name")
 
     run(arguments.drop(1), createSpecification(arguments(0))) {  case e =>
 	    println("\nAn error occurred. " +
