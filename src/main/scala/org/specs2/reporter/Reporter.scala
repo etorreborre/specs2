@@ -12,7 +12,7 @@ import specification._
 /**
  * A Reporter will report the execution of a Specification following 3 steps:
  * 
- * 1. an extraction of the Fragments to report (like creating Descriptions for junit)
+ * 1. an extraction of the Fragments to report (like creating Descriptions for JUnit)
  *   * filtering out some elements if necessary
  *   
  * 2. an ordering of the Fragments to execute:
@@ -27,7 +27,8 @@ import specification._
  *
  */
 private[specs2]
-trait Reporter extends Selection 
+trait Reporter extends 
+       Selection 
   with ExecutionStrategy 
   with Exporting {
   /**

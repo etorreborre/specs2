@@ -11,6 +11,7 @@ import io._
 import reflect.Classes._
 import execute._
 import reporter._
+import JUnitDescriptions._
 import specification._
 
 /**
@@ -27,10 +28,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
   protected lazy val specification = tryToCreateObject[BaseSpecification](klass.getName, true, true).get
   protected lazy val content = specification.content
   /** fold object used to create descriptions */
-  private val descriptions = new JUnitDescriptionFold(klass)
+  private val descriptions = new JUnitDescriptions(klass)
   /** extract the root Description object and the examples to execute */
-  private lazy val descriptions.DescriptionAndExamples(desc, executions) = 
-    descriptions.foldAll(content.fragments)
+  private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll(content.fragments)
   /** @return a Description for the TestSuite */
   def getDescription = desc
   

@@ -22,13 +22,17 @@ case class SpecsArguments[T](arguments: List[(ArgumentsStart[T], Arguments)] = N
   def lastOption = arguments.lastOption
   def toList = arguments.map(_._2)
   def fragments: List[T] = arguments.map(_._1.value)
-  def filterFragments(filter: (T, Arguments) => Boolean) = {
-    SpecsArguments(arguments.filter { case (fragment, args) => filter(fragment.value, args) }).fragments
+  def filter(f: (T, Arguments) => Boolean) = {
+    SpecsArguments(arguments.filter { case (fragment, args) => f(fragment.value, args) }).fragments
   }
 }
 
 private[specs2]
 case object SpecsArguments {
+  
+  def filter[T](ts: Seq[T])(f: (T, Arguments) => Boolean)(implicit r: Reducer[T, SpecsArguments[T]]) = 
+    foldAll(ts).filter(f).view
+
   def create[T](a: ArgumentsStart[T], args: Arguments = Arguments()) = new SpecsArguments(List((a, args)))
   
   implicit def SpecsArgumentsMonoid[T] = new Monoid[SpecsArguments[T]] {

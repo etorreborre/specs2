@@ -8,8 +8,8 @@ import main.Arguments
 import specification._
 
 /**
- * This traits provides specialized print methods for message representing
- * different types of results. They can be overriden to define a more specific behavior.
+ * This traits provides specialised print methods for message representing
+ * different types of results. They can be overridden to define a more specific behaviour.
  */
 trait ResultOutput extends Output {
 

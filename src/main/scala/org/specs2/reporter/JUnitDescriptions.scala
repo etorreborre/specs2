@@ -9,7 +9,7 @@ import main.Arguments
 import specification._
 
 /**
- * The JUnit description Fold transforms a list of fragments
+ * The JUnit descriptions class transforms a list of fragments
  * to:
  * 
  * * a Description object having children Descriptions. It is used by the JUnitRunner
@@ -21,20 +21,16 @@ import specification._
  * the necessary associations between the Description objects.
  *
  */
-class JUnitDescriptionFold(specificationClass: Class[_])  {
-	import JUnitDescriptionFold._
+class JUnitDescriptions(specificationClass: Class[_])  {
+	import JUnitDescriptions._
 	def foldAll(fs: Seq[Fragment]) = {
 	  import LeveledBlocks._
 	  val descriptionTree = LeveledBlocks.foldAll(fs).toTree(mapper)
 	  DescriptionAndExamples(asOneDescription(descriptionTree), Map(descriptionTree.flatten:_*))
 	}
 
-  /** 
-   * Enriched accumulator type: descriptions + fragment to execute for each Description 
-   */
-  case class DescriptionAndExamples(val description: Description, executions: Map[Description, Fragment])
 }
-object JUnitDescriptionFold {
+object JUnitDescriptions {
   val mapper: (Fragment, Int) => Option[(Description, Fragment)] = (f: Fragment, nodeLabel: Int) => f match {
     case (SpecStart(t, _)) => 
       Some(createSuiteDescription(testName(t)) -> f)
@@ -44,6 +40,10 @@ object JUnitDescriptionFold {
     case (Step(action)) => Some(createDescription("step", nodeLabel) -> f)
     case other => None
   }
+  /** 
+   * Utility class grouping the total description + fragments to execute for each Description 
+   */
+  case class DescriptionAndExamples(val description: Description, executions: Map[Description, Fragment])
   /**
    * @return a Description with parent-child relationships to other Description objects
    *         from a Tree[Description]

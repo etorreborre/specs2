@@ -24,9 +24,7 @@ trait Selection {
 trait DefaultSelection {
   /** select function returning a filtered and ordered seq of seq of Fragments */
   def select(implicit arguments: Arguments) = (fragments: Fragments) => {
-    val filtered = SpecsArguments.foldAll(fragments.fragments)(FragmentSpecsArgumentsReducer).
-      filterFragments(filter).view
-    sort(filtered)(arguments.overrideWith(fragments.arguments))
+    sort(SpecsArguments.filter(fragments.fragments)(filter))(arguments.overrideWith(fragments.arguments))
   }
   /** 
    * the filter method filters examples based on their description,
@@ -43,7 +41,10 @@ trait DefaultSelection {
    * the sort returns sequences of fragments which can be executed concurrently.
    * Among the constraints to respect, any Step Fragment must be executed before any 
    * following Example Fragment, so that "first" and "last" actions are executed properly
-   * in a Specification 
+   * in a Specification
+   * 
+   * If the arguments specify that the specification is sequential, then
+   * each fragment will be executed individually  
    */
   protected def sort(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[Fragments] = {
     if (arguments.sequential) fragments.map(f => Fragments(f))

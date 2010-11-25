@@ -21,7 +21,7 @@ trait ExecutionStrategy {
  * This trait uses Scalaz promises to execute Fragments concurrently
  * 
  * It uses a Fixed thread pool with a number of threads to execute the fragments.
- * The default number is 4.
+ * The default number is 4 but this can be overriden by providing different Arguments
  */
 private[specs2]
 trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution {
