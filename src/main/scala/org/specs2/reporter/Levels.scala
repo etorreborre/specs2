@@ -27,21 +27,37 @@ import StandardFragments._
  * 
  */
 case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
+  /** @return the first block */
   def headOption = blocks.map(_._1).headOption
+  /** @return the last block */
   def lastOption = blocks.map(_._1).lastOption
+  /** @return the first level or zero */
   def firstLevel = blocks.headOption.map(_._2).getOrElse(0)
-  def lastLevelOption = blocks.map(_._2).lastOption
-  def level = lastLevelOption.getOrElse(0)
+  /** @return the last level or zero */
+  def lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
+  /** @return alias for the last level */
+  def level = lastLevel
+  /** @return all the levels */
   def levels = blocks.map(_._2)
+  
+  /** @return the concatenation of 2 levels */
   def add(other: Levels[T]) = Levels(this.blocks ++ other.blocks)
+  /** 
+   * @return reset the levels of all blocks by incrementing or decrementing the level 
+   *         value, until a Reset block is met
+   */
   def resetLevel(f: Int => Int) = {
     val breakAtFirstReset = blocks.span(b => !isReset(b)) 
     Levels(breakAtFirstReset._1).mapLevel(f) add 
     Levels(breakAtFirstReset._2) 
   }
+  /** 
+   * @return reset all the levels of all blocks by incrementing or decrementing the level 
+   *         value
+   */
   private def mapLevel(f: Int => Int) = Levels(blocks.map((b: (Block[T], Int)) => (b._1, f(b._2))))
-  def increment(n: Int = 1) = mapLevel(_ + n)
-  def decrement(n: Int = 1) = mapLevel(_ - n)
+//  def increment(n: Int = 1) = mapLevel(_ + n)
+//  def decrement(n: Int = 1) = mapLevel(_ - n)
 
   def toTree: Tree[T] = toTreeLoc.toTree
   def toTree[S](m: (T, Int) => Option[S]): Tree[S] = toTreeLoc(m).toTree

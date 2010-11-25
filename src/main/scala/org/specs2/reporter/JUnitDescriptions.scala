@@ -17,10 +17,10 @@ import specification._
  *   to display the suites and tests to execute
  * * a Map of Fragments to execute, indexed by Description: Description -> Fragment 
  * 
- * The Description object creation works by using a TreeFold where each Fragment is mapped to a Description
- * to get a Tree[Description] that Tree is then folded bottom-up to create
- * the necessary associations between the Description objects.
- *
+ * The Description object creation works by using the Levels reducer to build a Tree[Description].
+ * That Tree is then folded bottom-up to create the necessary associations between the 
+ * Description objects. 
+ * 
  */
 class JUnitDescriptions(specificationClass: Class[_])  {
 	import JUnitDescriptions._
@@ -32,6 +32,14 @@ class JUnitDescriptions(specificationClass: Class[_])  {
 
 }
 object JUnitDescriptions {
+  /**
+   * This function is used to map each node in a Tree[Fragment] to a pair of 
+   * (Description, Fragment)
+   * 
+   * The Int argument is the numeric label of the current TreeNode being mapped.
+   * It is used to create a unique description of the example to executed which is required
+   * by JUnit
+   */
   val mapper: (Fragment, Int) => Option[(Description, Fragment)] = (f: Fragment, nodeLabel: Int) => f match {
     case (SpecStart(t, _)) => 
       Some(createSuiteDescription(testName(t)) -> f)
@@ -52,7 +60,32 @@ object JUnitDescriptions {
   def asOneDescription(descriptionTree: Tree[(Description, Fragment)]): Description = {
     descriptionTree.bottomUp(addChildren).rootLabel
   }
-  val addChildren = (d: (Description, Fragment), children: Stream[Description]) => { 
+  /** 
+   * unfolding function attaching children descriptions to a parent one 
+   * Note that:
+   * * the Fragment in d: (Description, Fragment) is not used
+   * * parent-child relations of the original tree are reworked to be JUnit-friendly and 
+   *   avoid to have an example being the ancestor of other examples like this:
+   * 
+   * text1
+   * |
+   * + ex1
+   *   |
+   *   ` text2
+   *     |
+   *     ` ex2
+   *   
+   * In that case the Description objects are arranged like this:
+   * text1
+   * |
+   * + ex1
+   * |
+   * ` text2
+   *   |
+   *   ` ex2
+   *    
+   */
+  private val addChildren = (d: (Description, Fragment), children: Stream[Description]) => { 
     children.foreach { c =>
       d._1.addChild(c) 
       if (!c.getChildren().isEmpty && c.getDisplayName().matches(".*\\(\\d*\\)")) {
