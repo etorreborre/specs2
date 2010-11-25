@@ -17,13 +17,13 @@ to a ResultOutput trait knowing how to output successes, failures,...
   "by default the Text and the examples are properly indented"                            ! prez().e1^
   "if noindent = true then there is no automatic indenting"                               ! prez().e2^
   "if xonly = true"                                                                       ^ 
-    "text is not shown"                                                                   ! xonly().e1^
-    "successful examples are not shown"                                                   ! xonly().e2^
-    "skipped examples are not shown"                                                      ! xonly().e3^
-    "pending examples are not shown"                                                      ! xonly().e4^
-    "failure examples are shown"                                                          ! xonly().e5^
-    "error examples are shown"                                                            ! xonly().e6^
-    "statistics shown"                                                                    ! xonly().e7^
+    "text is not shown"                                                                   ! xonlyargs().e1^
+    "successful examples are not shown"                                                   ! xonlyargs().e2^
+    "skipped examples are not shown"                                                      ! xonlyargs().e3^
+    "pending examples are not shown"                                                      ! xonlyargs().e4^
+    "failure examples are shown"                                                          ! xonlyargs().e5^
+    "error examples are shown"                                                            ! xonlyargs().e6^
+    "statistics shown"                                                                    ! xonlyargs().e7^
   "if failtrace = true, failures stacktraces are shown"                                   ! failtrace().e1^
   "if plan = true, nothing is executed"                                                   ! plan().e1^
   "if sequential = false examples are executed concurrently"                              ! sequential().e1^
@@ -75,7 +75,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
                      "+ e1",
                      "+ e2")
   }
-  case class xonly() {
+  case class xonlyargs() {
     val xonly: Arguments = args(xonly = true)
     
     def e1 = print(xonly ^ t1 ^ ex1 ^ fail3) must not containMatch("t1")

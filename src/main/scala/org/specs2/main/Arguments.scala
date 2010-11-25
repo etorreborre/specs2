@@ -121,7 +121,15 @@ trait ArgumentsArgs extends control.Properties {
    * @return arguments for a literate specification: no auto indent and a sequential
    *         execution
    */
-  def literate = args(noindent = true, sequential = true)  
+  def literate = args(noindent = true, sequential = true)
+  /**
+   * shortcut to print only failures and errors
+   */
+  def xonly = args(xonly = true)
+  /**
+   * shortcut to executed and print only some examples
+   */
+  def only(examples: String) = args(ex = examples)
 }
 private[specs2]
 object ArgumentsArgs extends ArgumentsArgs
