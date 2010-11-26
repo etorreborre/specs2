@@ -11,6 +11,9 @@ import text.AnsiColors._
  */
 class TextResultOutput extends ResultOutput with ConsoleOutput {
 
+  def printSpecStart(message: String)(implicit args: Arguments) = {
+    printLines(message)
+  }
   def printSuccess(message: String)(implicit args: Arguments) = {
     printLines(color(message, green, args.color))
   }

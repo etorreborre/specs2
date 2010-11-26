@@ -54,3 +54,9 @@ trait FileWriter {
    */
   def getWriter(path: String): Writer = new BufferedWriter(new java.io.FileWriter(path))
 }
+
+private[specs2]
+trait MockFileWriter extends FileWriter {
+  private val writer = new MockWriter {}
+  override def getWriter(path: String): Writer = writer
+}

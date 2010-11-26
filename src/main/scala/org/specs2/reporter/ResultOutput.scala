@@ -8,7 +8,7 @@ import main.Arguments
  * different types of results. They can be overridden to define a more specific behaviour.
  */
 trait ResultOutput {
-
+  def printSpecStart(message: String)(implicit args: Arguments)
   def printSuccess(message: String)(implicit args: Arguments)
   def printError(message: String)(implicit args: Arguments)
   def printSkipped(message: String)(implicit args: Arguments)

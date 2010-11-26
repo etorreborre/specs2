@@ -42,6 +42,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
   "an error example must be displayed with a !"                                           ! status().e4^
   "a skipped example must be displayed with a o"                                          ! status().e5^
   "a pending example must be displayed with a *"                                          ! status().e6^
+  "a multi-line description must be indented ok"                                          ! status().e7^
                                                                                           endbr^
 "Statistics must show"                                                                    ^
   "the number of examples"                                                                ! stats().e1^
@@ -126,6 +127,9 @@ to a ResultOutput trait knowing how to output successes, failures,...
     def e4 = print(t1 ^ error4) must contain("! error4") 
     def e5 = print(t1 ^ skipped5) must contain("o skip it") 
     def e6 = print(t1 ^ pending6) must containMatch("\\* todo") 
+    def e7 = print(t1 ^ "e1\nexample1" ! success) must contain(
+        "+ e1",
+        "  example1") 
   }
   case class stats() {
     def e1 = print(t1 ^ ex1) must containMatch("1 example") 

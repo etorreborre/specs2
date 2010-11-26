@@ -5,6 +5,11 @@ import java.io.Writer
 import main.Arguments
 
 class HtmlResultOutput(out: Writer) extends ResultOutput {
+  def printSpecStart(message: String)(implicit args: Arguments) = {
+    printLine(<title>{message}</title>.toString)
+    printLine(message)
+  }
+
   def printSuccess(message: String)(implicit args: Arguments) = {
     printLine(message)
   }
@@ -28,6 +33,9 @@ class HtmlResultOutput(out: Writer) extends ResultOutput {
   }
   /** print one line */
   def printLine(message: String)(implicit args: Arguments) = {
-    out.write(message + "<p/>")
+    print(message + "\n")
+  }
+  def print(message: String)(implicit args: Arguments) = {
+    out.write(message)
   }
 }

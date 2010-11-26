@@ -25,8 +25,8 @@ First example: Address entity
       * creates the form by putting each property on a new row
     * the Address class can be instantiated once with expected values, to be displayed as
       a Fragment
-    * then the form method can be used in a example to provide actual values
-                                                                                          """^                        
+    * then the form method can be used in a example to provide actual values              """^                        
+                                                                                          p^
     components.address.form                                                               ^
                                                                                           p^
 "   The Address form can then be used in an example and executed with actual values"      ! components.e1^
@@ -42,8 +42,8 @@ Second example: Aggregate entity
     * the Customer case class defines a name attribute and embeds an instance of the 
       Address class
     * the Customer Form is defined by setting the name on one row and the Address form 
-      on the second row
-                                                                                          """^                        
+      on the second row                                                                   """^                        
+                                                                                          p^
     components.customer.form                                                              ^
                                                                                           p^
 "   The Customer (and Address component) can then be used in an example"                  +
@@ -60,7 +60,7 @@ Third example: Decision table
     * the initials column specifies the expected values for a given first name and last name
       "eric" "torreborre" => "E.T."
                                                                                           """^                        
-    components.initialsTable.form                                                         ^
+    components.initialsTable.form.setSuccess                                              ^
                                                                                           p^
 " The table can then be used in an example and executed with actual values"               ! components.e3^
                                                                                           end^

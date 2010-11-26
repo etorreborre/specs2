@@ -3,6 +3,7 @@ package specification
 
 import main.Arguments
 import execute._
+import text.Trim._
 import control.LazyParameter
 
 /**
@@ -23,10 +24,16 @@ case class Text(t: String) extends Fragment {
   override def matches(s: String) = t.matches(s)
 }
 case class Group(fragments: Seq[Fragment])
-case class Example private (desc: String = "", body: () => Result) extends Fragment with Executable { 
+case class Example private[specification] (desc: String = "", body: () => Result) extends Fragment with Executable { 
   def execute = body()
-  override def matches(s: String) = desc.matches(s)
+  override def matches(s: String) = desc.removeAll("\\n").matches(s)
   override def toString = "Example("+desc+")"
+  override def equals(a: Any) = {
+    a match {
+      case e: Example => desc equals e.desc 
+      case _          => false
+    }
+  }
 }
 case object Example {
   def apply[T <% Result](desc: String, body: =>T) = new Example(desc, () => body)

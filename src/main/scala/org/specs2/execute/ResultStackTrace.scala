@@ -2,6 +2,7 @@ package org.specs2
 package execute
 
 import control._
+import main.SystemProperties
 import Throwablex._
 
 /**
@@ -19,16 +20,16 @@ trait ResultStackTrace extends HasStackTrace {
    *         Does not filter anything if the system property -Dfullstacktrace is set 
    */
   private[specs2] def sanitized = {
-	  if (System.getProperty("fullstacktrace") != null)
+	  if (SystemProperties.isDefined("fullstacktrace"))
 	    stackTrace
 	  else {
 	    // filter only if the specs comes from specs2
 	    val ex = 
 	    if (!stackTrace.exists(_.toString matches "(org.specs2.*Spec.*|org.specs2.*Unit.*)"))
-          exception(stackTrace).filterNot(".*org.specs2.*") 
+          exception(stackTrace).filterNot("org.specs2") 
         else 
-          exception(stackTrace).filterNot(".*\\.matcher\\..*")
-        ex.getStackTrace.toList
+          exception(stackTrace).filterNot("\\.matcher\\.")
+      ex.getStackTrace.toList
 	  }
   }
 }

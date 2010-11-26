@@ -70,14 +70,21 @@ trait TextPrinter {
   sealed trait Print {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput): Unit
     
+    /**
+     * indent the text to the wanted level.
+     * If the text contains several lines, each line is indented
+     */
     protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = { 
       if (args.noindent) s 
-      else (("  "*level) + s.trim)
+      else {
+        val indent = "  "*level
+        s.trim.split("\n").map(indent+_).mkString("\n")
+      }
     }
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      out.printMessage(leveledText(start.name, level)(args))(args)
+      out.printSpecStart(leveledText(start.name, level)(args))(args)
     } 
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
@@ -113,9 +120,18 @@ trait TextPrinter {
       out.printError(description)
       out.printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
     }
-    def statusAndDescription(s: String, result: Result)(implicit args: Arguments) = {
-      (if (!args.plan) s.takeWhile(_ == ' ').dropRight(2) else s.takeWhile(_ == ' ')) + 
-      status(result) + s.dropWhile(_ == ' ')
+    /**
+     * add the status to the description
+     * making sure that the description is still properly aligned, even with several lines
+     */
+    def statusAndDescription(text: String, result: Result)(implicit args: Arguments) = {
+      val textLines = text.split("\n") 
+      val firstLine = textLines.take(1).map { s =>
+        (if (!args.plan) s.takeWhile(_ == ' ').dropRight(2) else s.takeWhile(_ == ' ')) + 
+        status(result) + s.dropWhile(_ == ' ')
+      }
+      val rest = textLines.drop(1)
+      (firstLine ++ rest).mkString("\n")
     }
     def status(result: Result)(implicit args: Arguments): String = {
       if (args.plan) ""

@@ -8,7 +8,7 @@ class ResultStackTraceSpec extends SpecificationWithJUnit { def is =
                                                                                           br^t^
   "if it is a a user specification, the 'org.specs2' lines are filtered"                  ! e1^
   "if it is a a specs2 specification, the 'org.specs2' lines are not filtered"            ! e2^
-  "if it is a a specs2 specification, only the lines containing 'Result' are filtered"    ! e3^
+  "if it is a a specs2 specification, only the lines containing '.matcher.' are filtered" ! e3^
                                                                                           end
 
   def e1 = locationMustBe(
@@ -20,7 +20,7 @@ class ResultStackTraceSpec extends SpecificationWithJUnit { def is =
 		 	     ("org.specs2.runner",     "Runner.scala",     8)), "specs2Spec.scala:3")
 
   def e3 = locationMustBe(
-		  List(("org.specs2.Result",     "Runner.scala",     8), 
+		  List(("org.specs2.matcher.Result",     "Runner.scala",     8), 
 		       ("org.specs2.specs2Spec", "specs2Spec.scala", 3)), "specs2Spec.scala:3")
 
   def locationMustBe(messages: Seq[(String, String, Int)], expected: String) =
