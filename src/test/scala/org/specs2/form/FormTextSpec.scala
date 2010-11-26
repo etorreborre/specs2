@@ -2,23 +2,22 @@ package org.specs2
 package form
 import FormsBuilder._
 
-class FormTextSpec extends SpecificationWithJUnit { 
-  def is = 
+class FormTextSpec extends SpecificationWithJUnit { def is = 
                                                                                           """
   Forms can be displayed as text in the ConsoleReporter for example.
   This specification shows what's expected for different kind of forms.
                                                                                           """^
-" A simple form with 2 fields"+address1                                                   ^
-"   must align each end of row"                                                           !e1^
+  "A simple form with 2 fields" + address1                                                ^
+    "must align each end of row"                                                          !e1^
                                                                                           p^
-" A simple form with 3 fields, 2 on one row and one on the second row\n"+address2         ^
-"   must align each end of row"                                                           !e2^  
+  "A simple form with 3 fields, 2 on one row and one on the second row\n"+address2        ^
+    "must align each end of row"                                                          !e2^  
                                                                                           p^
-" A form with more fields and rows"+address3                                              ^
-"   must align each end of row"                                                           !e3^  
+  "A form with more fields and rows" + address3                                             ^
+    "must align each end of row"                                                          !e3^  
                                                                                           p^
-" A form with an embedded form"+address4                                                  ^
-"   must align each end of row"                                                           !e4^  
+  "A form with an embedded form" + address4                                               ^
+    "must align each end of row"                                                          !e4^  
                                                                                           end
   val street = field("street", "Rose Crescent")
   val number = field("number", 2)

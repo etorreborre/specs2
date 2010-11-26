@@ -5,14 +5,14 @@ import specification._
 
 class FormSpec extends SpecificationWithJUnit { def is = 
                                                                                           """
-A Form is a generic table which has a title (optional) and rows.
-Each row contains cells which can be created from Fields, Props or other Forms.
-
-A Form is usually created in a specification with expected values so that it
-can be displayed with the rest of the text (whereas a DataTable is only displayed
-when there are failures. It is then "implemented" with actual values in an example. 
-Upon execution a Form will return a Result value summarizing the execution of each 
-Prop it embeds.
+  A Form is a generic table which has a title (optional) and rows.
+  Each row contains cells which can be created from Fields, Props or other Forms.
+  
+  A Form is usually created in a specification with expected values so that it
+  can be displayed with the rest of the text (whereas a DataTable is only displayed
+  when there are failures. It is then "implemented" with actual values in an example. 
+  Upon execution a Form will return a Result value summarizing the execution of each 
+  Prop it embeds.
                                                                                           """^
                                                                                           br^                       
   "A Form can be created"                                                                 ^

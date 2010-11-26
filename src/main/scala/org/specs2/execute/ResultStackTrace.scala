@@ -27,7 +27,7 @@ trait ResultStackTrace extends HasStackTrace {
 	    if (!stackTrace.exists(_.toString matches "(org.specs2.*Spec.*|org.specs2.*Unit.*)"))
           exception(stackTrace).filterNot(".*org.specs2.*") 
         else 
-          exception(stackTrace).filterNot(".*Result.*")
+          exception(stackTrace).filterNot(".*\\.matcher\\..*")
         ex.getStackTrace.toList
 	  }
   }

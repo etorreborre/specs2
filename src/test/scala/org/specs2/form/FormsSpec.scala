@@ -2,40 +2,39 @@ package org.specs2
 package form
 import specification._
 
-class FormsSpec extends SpecificationWithJUnit with FormsBuilder {
-  def is = 
+class FormsSpec extends SpecificationWithJUnit with FormsBuilder { def is = 
                                                                                           """
   The Forms object provides several utility functions for creating forms
                                                                                           """                                                                                       ^
-"  The subset method allows to check if a list of forms is a subset of another one"       ^
-"    subset(l1, l1 + l2) == l1 - ok"                                                      ! subset.e1^
-"    subset(l1, l2) == l1 - ko"                                                           ! subset.e2^
-"    subset(l1 + l2, l1) == l1 - ok + l2 - ko"                                            ! subset.e3^
+  "The subset method allows to check if a list of forms is a subset of another one"       ^
+    "subset(l1, l1 + l2) == l1 - ok"                                                      ! subset.e1^
+    "subset(l1, l2) == l1 - ko"                                                           ! subset.e2^
+    "subset(l1 + l2, l1) == l1 - ok + l2 - ko"                                            ! subset.e3^
                                                                                           p^
-"  If the subset method fails, the form are shown as failed"                              ^
-"    subset(l1, l1 + l2) == l1 - ok"                                                      ! subset.e4^
-"    subset(l1, l2) == l1 - ko"                                                           ! subset.e5^
-"    subset(l1 + l2, l1) == l1 - ok + l2 - ko"                                            ! subset.e6^
+  "If the subset method fails, the form are shown as failed"                              ^
+    "subset(l1, l1 + l2) == l1 - ok"                                                      ! subset.e4^
+    "subset(l1, l2) == l1 - ko"                                                           ! subset.e5^
+    "subset(l1 + l2, l1) == l1 - ok + l2 - ko"                                            ! subset.e6^
                                                                                           p^
-"  The subsequence method allows to check if a list of forms is a subsequence "           +
-"  of another one"                                                                        ^ 
-"    subsequence(ab, ab + cd) == ab - ok"                                                 ! subsequence.e1^
-"    subsequence(abc, bac + d) == ab - ko + c - ok"                                       ! subsequence.e2^
-"    subsequence(ab, cd) == ab - ko"                                                      ! subsequence.e3^
-"    subsequence(ab + cd, ab) == ab - ok + cd - ko"                                       ! subsequence.e4^
-"    subsequence(ba + cd, ab) == ba - ko + cd - ko"                                       ! subsequence.e5^
+  "The subsequence method allows to check if a list of forms is a subsequence "           +
+  "of another one"                                                                        ^ 
+    "subsequence(ab, ab + cd) == ab - ok"                                                 ! subsequence.e1^
+    "subsequence(abc, bac + d) == ab - ko + c - ok"                                       ! subsequence.e2^
+    "subsequence(ab, cd) == ab - ko"                                                      ! subsequence.e3^
+    "subsequence(ab + cd, ab) == ab - ok + cd - ko"                                       ! subsequence.e4^
+    "subsequence(ba + cd, ab) == ba - ko + cd - ko"                                       ! subsequence.e5^
                                                                                           p^
-"  The set method allows to check if 2 lists of forms are the same, in no specific order" ^
-"    set(l1, l1 + l2) == l1 - ok + l2 ko"                                                 ! set.e1^
-"    set(l1 + l2, l2) == l1 - ko + l2 ok"                                                 ! set.e2^
-"    set(l1, l2) == l1 - ko"                                                              ! set.e3^
-"    set(l1, l1) == l1 - ok"                                                              ! set.e4^
+  "The set method allows to check if 2 lists of forms are the same, in no specific order" ^
+    "set(l1, l1 + l2) == l1 - ok + l2 ko"                                                 ! set.e1^
+    "set(l1 + l2, l2) == l1 - ko + l2 ok"                                                 ! set.e2^
+    "set(l1, l2) == l1 - ko"                                                              ! set.e3^
+    "set(l1, l1) == l1 - ok"                                                              ! set.e4^
                                                                                           p^
-"  The sequence method allows to check if 2 lists of forms are the same, in order"        ^
-"    sequence(ab, ab + cd) == ab - ok + cd - ko"                                          ! sequence.e1^
-"    sequence(ab, ba) == ab - ko"                                                         ! sequence.e2^
-"    sequence(ab, ba + c) == a - ok + bc - ko"                                            ! sequence.e3^
-"    sequence(abc, ba) == a - ok + bc - ko"                                               ! sequence.e4^
+  "The sequence method allows to check if 2 lists of forms are the same, in order"        ^
+    "sequence(ab, ab + cd) == ab - ok + cd - ko"                                          ! sequence.e1^
+    "sequence(ab, ba) == ab - ko"                                                         ! sequence.e2^
+    "sequence(ab, ba + c) == a - ok + bc - ko"                                            ! sequence.e3^
+    "sequence(abc, ba) == a - ok + bc - ko"                                               ! sequence.e4^
                                                                                           end
 
   def sameExecution(f1: List[Form], f2: List[Form]) = f1.map(_.execute.message) must_== f2.map(_.execute.message)

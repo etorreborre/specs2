@@ -29,7 +29,7 @@ case class Example private (desc: String = "", body: () => Result) extends Fragm
   override def toString = "Example("+desc+")"
 }
 case object Example {
-  def apply[T <% Result](desc: String, body: LazyParameter[T]) = new Example(desc, () => body.value)
+  def apply[T <% Result](desc: String, body: =>T) = new Example(desc, () => body)
 }
 case class Step private (action: () => Result) extends Fragment with Executable {
   def execute = action()
