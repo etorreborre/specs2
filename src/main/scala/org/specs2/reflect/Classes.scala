@@ -126,9 +126,13 @@ trait Classes extends Output {
   private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassManifest[T]) = {
     val constructor = klass.getDeclaredConstructors()(0)
     constructor.setAccessible(true)
-    val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
-    if (!m.erasure.isInstance(instance)) error(instance + " is not an instance of " + m.erasure.getName)
-    instance.asInstanceOf[T]
+	try {
+      val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
+      if (!m.erasure.isInstance(instance)) error(instance + " is not an instance of " + m.erasure.getName)
+      instance.asInstanceOf[T]
+	} catch {
+	  case e: java.lang.reflect.InvocationTargetException => throw e.getTargetException
+	}
   }
   /**
    * Load a class, given the class name
