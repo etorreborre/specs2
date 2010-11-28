@@ -37,9 +37,16 @@ trait Classes extends Output {
    */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
                                (implicit m: ClassManifest[T]): Option[T] = {
-    tryo(createInstanceOf[T](loadClass[T](className))) { (e: Exception) => 
-      if (printMessage || System.getProperty("debugCreateObject") != null) println("Could not instantiate class " + className + ": " + e)
-      if (printStackTrace || System.getProperty("debugCreateObject") != null) e.getFullStackTrace foreach (s => println(s.toString))
+    tryo(createInstanceOf[T](loadClass[T](className))) { (e: Exception) =>
+      val debugCreateObject = System.getProperty("debugCreateObject") != null
+      val shouldPrintStackTrace = printStackTrace || debugCreateObject
+      val shouldPrintMessage = printMessage || debugCreateObject
+      val msg = (shouldPrintMessage, shouldPrintStackTrace) match {
+        case (_, true) => "Could not instantiate class: " + e.getFullStackTraceAsString
+        case (true, false) => "Could not instantiate class: " + className + ": " + e.getMessage
+        case (false, false) => ""
+      }
+      println(msg)
     }.flatMap(identity)
   }
   /**

@@ -1,6 +1,8 @@
 package org.specs2
 package control
 
+import java.io. { StringWriter, PrintWriter }
+
 /**
  * This trait allows to add some utility methods to </code>Throwable</code> objects.
  */
@@ -46,6 +48,16 @@ trait Throwablex {
     }
     /** @return the list of all stacktrace elements */
     def getFullStackTrace: List[java.lang.StackTraceElement] = (t :: chainedExceptions).flatMap(_.getStackTrace)
+    /**
+     * @return the full stack trace as a string
+     */
+    def getFullStackTraceAsString: String = {
+       val stringWriter = new java.io.StringWriter
+       val pr = new PrintWriter(stringWriter)
+       try { t.printStackTrace(pr) } finally { pr.close }
+       stringWriter.toString
+    } 
+
     /** print all the stacktrace for t, including the traces from its causes */
     def printFullStackTrace = t.getFullStackTrace.foreach(println(_))
 
