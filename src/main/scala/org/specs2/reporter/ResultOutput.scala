@@ -10,6 +10,7 @@ import main.Arguments
 trait ResultOutput {
   def printSpecStart(message: String)(implicit args: Arguments)
   def printSuccess(message: String)(implicit args: Arguments)
+  def printFailure(message: String)(implicit args: Arguments)
   def printError(message: String)(implicit args: Arguments)
   def printSkipped(message: String)(implicit args: Arguments)
   def printPending(message: String)(implicit args: Arguments)

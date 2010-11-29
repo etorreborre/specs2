@@ -39,6 +39,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
   }
 }
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
+  override def printFailure(message: String)(implicit args: Arguments) = logFailure(message)
   override def printError(message: String)(implicit args: Arguments) = logError(message)
   override def printSuccess(message: String)(implicit args: Arguments) = logInfo(message, AnsiColors.green)
   override def printLine(message: String)(implicit args: Arguments) = logInfo(message)
@@ -70,6 +71,9 @@ trait HandlerEvents {
 
 trait TestLoggers {
   val loggers: Array[Logger]
+  def logFailure(message: String, c: String = AnsiColors.yellow) = loggers.foreach { logger =>
+    logger.error(color(message, c, logger.ansiCodesSupported))
+  }
   def logError(message: String, c: String = AnsiColors.red) = loggers.foreach { logger =>
     logger.error(color(message, c, logger.ansiCodesSupported))
   }

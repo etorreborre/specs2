@@ -17,6 +17,9 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   def printSuccess(message: String)(implicit args: Arguments) = {
     printLines(color(message, green, args.color))
   }
+  def printFailure(message: String)(implicit args: Arguments) = {
+    printLines(color(message, yellow, args.color))
+  }
   def printError(message: String)(implicit args: Arguments) = {
     printLines(color(message, red, args.color))
   }

@@ -95,12 +95,12 @@ trait TextPrinter {
       val description = statusAndDescription(desc, result)(args)
       result match {
         case f: Failure => {
-          printFailureOrError(desc, f) 
+          printFailure(desc, f) 
           if (args.failtrace) 
             f.stackTrace.foreach(t => out.printError(t.toString))
         }
         case e: Error => {
-          printFailureOrError(desc, e) 
+          printError(desc, e) 
           e.stackTrace.foreach(t => out.printError(t.toString))
           e.exception.chainedExceptions.foreach { (t: Throwable) =>
             out.printError(t.getMessage)
@@ -115,7 +115,12 @@ trait TextPrinter {
         }
       }
     }
-    def printFailureOrError(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments, out: ResultOutput) = { 
+    def printFailure(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments, out: ResultOutput) = { 
+      val description = statusAndDescription(desc, f)
+      out.printFailure(description)
+      out.printFailure(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
+    }
+    def printError(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments, out: ResultOutput) = { 
       val description = statusAndDescription(desc, f)
       out.printError(description)
       out.printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
