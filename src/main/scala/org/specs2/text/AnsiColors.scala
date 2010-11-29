@@ -28,7 +28,7 @@ trait AnsiColors {
   }	  
   def color(s: String, color: String, doIt: Boolean = true) = {
     if (doIt) 
-      color + s + reset
+      s.split("\n").map(color + _ + reset).mkString("\n")
     else s
   }
 }
