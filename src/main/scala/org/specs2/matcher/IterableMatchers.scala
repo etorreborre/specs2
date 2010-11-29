@@ -14,6 +14,13 @@ private[specs2]
 trait IterableBaseMatchers extends LazyParameters {
   trait IterableMatcher[T] extends Matcher[Iterable[T]]
   
+  /** 
+   * match if an iterable contains (t).
+   * This definition looks redundant with the one below but it is necessary to 
+   * avoid the implicit argThat method from Mockito to infer an improper matcher
+   * @see the HtmlPrinterSpec failing with a NPE if that method is missing 
+   */
+  def contain[T](t: =>T): IterableMatcher[T] = contain(lazyfy(t))
   /** match if iterable contains (t1, t2) */
   def contain[T](t: LazyParameter[T]*): IterableMatcher[T] = new IterableMatcher[T] {
     def apply[S <: Iterable[T]](it: =>Expectable[S]) = {

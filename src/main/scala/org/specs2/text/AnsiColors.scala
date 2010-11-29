@@ -27,7 +27,8 @@ trait AnsiColors {
 	  }
   }	  
   def color(s: String, color: String, doIt: Boolean = true) = {
-    if (doIt) color + s + reset
+    if (doIt) 
+      color + s + reset
     else s
   }
 }

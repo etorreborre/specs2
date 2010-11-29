@@ -42,7 +42,7 @@ class TestInterfaceRunnerSpec extends SpecificationWithJUnit { def is =
 	  def e1 = run.logger.messages must 
 	           contain("error: Could not create an instance of org.specs2.runner.SpecificationForSbtWithException\n")
 	  def e2 = run.logger.messages must 
-	           contain("error:   caused by java.lang.reflect.InvocationTargetException")
+	           contain("error:   caused by java.lang.IllegalArgumentException: cause")
 	  def e3 = run.logger.messages must 
 	           contain("error:   caused by java.lang.Exception: fail")
   }

@@ -66,7 +66,6 @@ trait MockitoStubs extends MocksCreation {
   implicit def argThat[T](m: org.specs2.matcher.Matcher[T]): T = org.mockito.Matchers.argThat(new org.specs2.mock.HamcrestMatcherAdapter(m))
   /** allows to use a hamcrest matchers to match parameters. */
   def argThat[T](m: org.hamcrest.Matcher[T]): T = org.mockito.Matchers.argThat(m)
-  def any[T : ClassManifest]: T = mocker.any[T]
 
   /** 
    * This class is an implementation of the Answer interface allowing to pass functions as an answer.

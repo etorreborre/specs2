@@ -98,7 +98,7 @@ case class Error(m: String, e: Exception)
   extends Result(m) with ResultStackTrace {
   /** @return an exception created from the message and the stackTraceElements */
   def exception = e
-  def stackTrace = e.getStackTrace.toList
+  def stackTrace = e.getFullStackTrace.toList
 }
 /** 
  * This object allows to create an Error from an exception

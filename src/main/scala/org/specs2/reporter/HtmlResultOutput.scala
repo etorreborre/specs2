@@ -1,10 +1,13 @@
 package org.specs2
 package reporter
-
+import scala.xml._
 import java.io.Writer
 import main.Arguments
 
-class HtmlResultOutput(out: Writer) extends ResultOutput {
+class HtmlResultOutput(out: Writer)  extends ResultOutput {
+  def printPar(text: String)(implicit args: Arguments) = 
+    printLine(<p>{text}</p>)
+
   def printSpecStart(message: String)(implicit args: Arguments) = {
     printLine(<title>{message}</title>.toString)
     printLine(message)
@@ -30,6 +33,9 @@ class HtmlResultOutput(out: Writer) extends ResultOutput {
     val splitted = message.split("\n")
     if (splitted.size > 1) splitted.foreach(m => printLine(m))
     else printLine(message)
+  }
+  def printLine(xml: Elem)(implicit args: Arguments) = {
+    print(xml.toString + "\n")
   }
   /** print one line */
   def printLine(message: String)(implicit args: Arguments) = {

@@ -3,5 +3,9 @@ package mock
 
 import mockito._
 
-trait Mockito extends MocksCreation with CalledMatchers with MockitoStubs with CapturedArgument
+trait Mockito extends MocksCreation
+  with CalledMatchers
+  with MockitoStubs 
+  with CapturedArgument 
+  with MockitoMatchers
 

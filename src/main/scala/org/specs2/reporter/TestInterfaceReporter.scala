@@ -73,7 +73,7 @@ trait TestLoggers {
   def logError(message: String, c: String = AnsiColors.red) = loggers.foreach { logger =>
     logger.error(color(message, c, logger.ansiCodesSupported))
   }
-  def logInfo(message: String, c: String = AnsiColors.blue) = loggers.foreach { logger =>
+  def logInfo(message: String, c: String = AnsiColors.white) = loggers.foreach { logger =>
     logger.info(color(message, c, logger.ansiCodesSupported))
   }
   def logInfoStatus(name: String, color: String, status: String) = {
