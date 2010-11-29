@@ -21,7 +21,7 @@ trait HtmlPrinter {
     SystemProperties.getOrElse("outDir", "target/specs2-reports/").dirPath
   
   def print(klass: Class[_], fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
-    fileSystem.copySpecResourcesDir("css", outputDir)
+    Seq("css", "images").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
     fileSystem.write(reportPath(klass)) { out => 
       printLines(fs).print(new HtmlResultOutput(out))
     }
@@ -40,11 +40,13 @@ trait HtmlPrinter {
     SpecsArgumentsReducer
   
   case class HtmlLine(text: Html = HtmlPar(), stats: (Stats, Stats) = (Stats(), Stats()), level: Int = 0, args: Arguments = Arguments()) {
-    def print(implicit out: HtmlResultOutput) = text.print(stats, level, args)
+    def print(implicit out: HtmlResultOutput): HtmlResultOutput = text.print(stats, level, args)
   }
   
   case class HtmlLines(lines : List[HtmlLine] = Nil) {
-    def print(implicit out: HtmlResultOutput) = lines foreach (_.print)
+    def print(implicit out: HtmlResultOutput) = {
+      lines.foldLeft(out) { (res, cur) => cur.print(res) }.flush
+    }
   }
   
   def flatten(results: (((List[Html], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[HtmlLine] = {
@@ -69,7 +71,7 @@ trait HtmlPrinter {
   }
     
   sealed trait Html {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput): Unit
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput): HtmlResultOutput
     
     /**
      * indent the text to the wanted level.
@@ -92,34 +94,35 @@ trait HtmlPrinter {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
       printResult(leveledText(r.text, level)(args), r.result)(args, out)
       
-    def printResult(desc: String, result: Result)(implicit args: Arguments, out: HtmlResultOutput): Unit = {
+    def printResult(desc: String, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
       val description = statusAndDescription(desc, result)(args)
       result match {
         case f: Failure => {
-          printFailureOrError(desc, f) 
+          val out2 = printFailureOrError(desc, f) 
           if (args.failtrace) 
-            f.stackTrace.foreach(t => out.printError(t.toString))
+            f.stackTrace.foldLeft(out2) { (res, cur) => res.printError(cur.toString) }
+          else out2
         }
         case e: Error => {
-          printFailureOrError(desc, e) 
-          e.stackTrace.foreach(t => out.printError(t.toString))
-          e.exception.chainedExceptions.foreach { (t: Throwable) =>
-            out.printError(t.getMessage)
-            t.getStackTrace.foreach(st => out.printError(st.toString))
+          val out2 = printFailureOrError(desc, e) 
+          val out3 = e.stackTrace.foldLeft(out2) { (res, cur) => out.printError(cur.toString) }
+          e.exception.chainedExceptions.foldLeft(out3) { (res, cur) =>
+            val res2 = res.printError(cur.getMessage)
+            cur.getStackTrace.foldLeft(res2) { (res3, st) => res3.printError(st.toString) }
           }
+          
         }
-        case Success(_) => if (!args.xonly) out.printSuccess(description)
-        case Pending(_) => if (!args.xonly) out.printPending(description + " " + result.message)
+        case Success(_) => if (!args.xonly) out.printSuccess(description) else out
+        case Pending(_) => if (!args.xonly) out.printPending(description + " " + result.message) else out
         case Skipped(_) => if (!args.xonly) {
-          out.printSkipped(description)
-          out.printSkipped(result.message)
-        }
+          out.printSkipped(description).printSkipped(result.message)
+        } else out
       }
     }
     def printFailureOrError(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = { 
       val description = statusAndDescription(desc, f)
-      out.printError(description)
-      out.printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
+      out.printError(description).
+          printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
     }
     /**
      * add the status to the description
@@ -141,36 +144,40 @@ trait HtmlPrinter {
   }
   case class HtmlText(t: ExecutedText)               extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-      if (!args.xonly) 
-        out.printPar(leveledText(t.text, level)(args))(args)
+      if (!args.xonly) out.printPar(leveledText(t.text, level)(args))(args)
+      else out
   }        
   case class HtmlPar()                               extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
       if (!args.xonly) out.printLine(" ")(args)
+      else out
   }
   case class HtmlBr()                               extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
       if (!args.xonly) out.printLine(" ")(args)
+      else out
   }
   case class HtmlSpecEnd(end: ExecutedSpecEnd)       extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
       val (current, total) = stats
-      if ((!args.xonly || current.hasFailuresOrErrors) && !total.isEnd(end)) 
+      val out2 = if ((!args.xonly || current.hasFailuresOrErrors) && !total.isEnd(end)) 
         printEndStats(current)(args, out)
+      else out
       if (total.isEnd(end))
-        printEndStats(total)(args, out)
+        printEndStats(total)(args, out2)
+      else out2
     }
     def printEndStats(stats: Stats)(implicit args: Arguments, out: HtmlResultOutput) = {
       val name = end.name
-      out.printLine(" ")
-      out.printLine("Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim))
-      printStats(stats)
-      out.printLine(" ")
+      val out2 = 
+        out.printLine(" ").
+            printLine("Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim))
+      printStats(stats)(args, out2).printLine(" ")
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: HtmlResultOutput) = {
       val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart, specEnd) = stats
-      stats.start.map(s => out.printLine("Finished in " + s.timer.time))
-      out.printLine(
+      val out2 = stats.start.foldLeft(out) { (res, s) => res.printLine("Finished in " + s.timer.time) }
+      out2.printLine(
           Seq(Some(examples qty "example"), 
               if (expectations != examples) Some(expectations qty "expectation") else None,
               Some(failures qty "failure"), 
@@ -180,7 +187,7 @@ trait HtmlPrinter {
     }
   }
   case class HtmlOther(fragment: ExecutedFragment)   extends Html {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {}
+    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = out
   }
   
     

@@ -20,6 +20,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is = //x
                                                                                           p^
   "Resources"                                                                             ^
     "there must be a directory for css files"                                             ! resources().css^
+    "there must be a directory for images files"                                          ! resources().images^
                                                                                           p^
   "Fragments"                                                                             ^
     "A text block must be printed as a paragraph"                                         ! fragments().text1^
@@ -46,10 +47,9 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is = //x
   }
   case class resources() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1"
-    def css = {
-      printer.print(getClass, spec.fragments.map(executeFragment))
-      there was one(fs).copySpecResourcesDir(equalTo("css"), anyString)
-    }
+    printer.print(getClass, spec.fragments.map(executeFragment))
+    def css = there was one(fs).copySpecResourcesDir(equalTo("css"), anyString)
+    def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)
   }
   case class fragments() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1"

@@ -4,11 +4,11 @@ import scala.xml._
 import java.io.Writer
 import main.Arguments
 
-class HtmlResultOutput(out: Writer)  extends ResultOutput {
+class HtmlResultOutput(out: Writer, xml: NodeSeq = NodeSeq.Empty) {
   def printPar(text: String)(implicit args: Arguments) = 
     printLine(<p>{text}</p>)
 
-  def printSpecStart(message: String)(implicit args: Arguments) = {
+  def printSpecStart(message: String)(implicit args: Arguments): HtmlResultOutput = {
     printLine(<title>{message}</title>.toString)
     printLine(message)
   }
@@ -34,14 +34,15 @@ class HtmlResultOutput(out: Writer)  extends ResultOutput {
     if (splitted.size > 1) splitted.foreach(m => printLine(m))
     else printLine(message)
   }
-  def printLine(xml: Elem)(implicit args: Arguments) = {
-    print(xml.toString + "\n")
+  def printLine(xml2: Elem)(implicit args: Arguments) = {
+    new HtmlResultOutput(out, xml ++ xml2)
   }
   /** print one line */
-  def printLine(message: String)(implicit args: Arguments) = {
+  def printLine(message: String)(implicit args: Arguments): HtmlResultOutput = {
     print(message + "\n")
   }
   def print(message: String)(implicit args: Arguments) = {
-    out.write(message)
+    new HtmlResultOutput(out, xml ++ new scala.xml.Text(message))
   }
+  def flush = out.write(xml.toString)
 }
