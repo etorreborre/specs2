@@ -97,7 +97,7 @@ trait TextPrinter {
         case f: Failure => {
           printFailure(desc, f) 
           if (args.failtrace) 
-            f.stackTrace.foreach(t => out.printError(t.toString))
+            f.stackTrace.foreach(t => out.printFailure(t.toString))
         }
         case e: Error => {
           printError(desc, e) 
