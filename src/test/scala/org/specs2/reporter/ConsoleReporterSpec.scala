@@ -1,7 +1,8 @@
 package org.specs2
 package reporter
 import control.LazyParameters._
-import main.Arguments
+import text.AnsiColors._
+import main._
 import io._
 import execute._
 import matcher._
@@ -88,7 +89,7 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
   trait MockTextPrinter extends TextPrinter { override val output = textOutput } 
 	val reporter = new ConsoleReporter with MockTextPrinter
 	  reporter.report(getClass, ex)(Arguments())
-	  textOutput.messages.toList
+	  textOutput.messages.toList.map(removeColors(_))
   }
 }
 trait ExpectedOutputs {

@@ -12,7 +12,7 @@ class NodexSpec extends SpecificationWithJUnit { def is =
       <a>
       </a>.child.last.isSpaceNode
     }                                                                                     ^
-    { Group(<a/><b/>).isSpaceNode must throwAn[UnsupportedOperationException].not }      ^
+    { Group(<a/><b/>).isSpaceNode must throwAn[UnsupportedOperationException].not }       ^
                                                                                           p^
   "An isEqualIgnoringSpace function should verify"                                        ^
     { <a/> ==/ <a/> }                                                                     ^

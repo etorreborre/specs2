@@ -42,7 +42,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is = //x
     val spec: Fragments = "Specification".title ^ "t1"
     def e1 = {
       val p = print(spec) 
-      p must contain("<title>Specification</title>")
+      p must \\(<title>Specification</title>)
     }
   }
   case class resources() extends MockHtmlPrinter {
@@ -53,7 +53,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is = //x
   }
   case class fragments() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1"
-    def text1 = print(spec) must contain("<p>t1</p>")
+    def text1 = print(spec) must \\(<p>t1</p>)
   }
 
   
@@ -64,9 +64,10 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is = //x
     }
     val out = new MockWriter {}
     
-    def print(spec: Fragments): List[String] = {
-      printer.printLines(spec.fragments.map(executeFragment)).print(new HtmlResultOutput(out))
-      out.messages.toList
+    def print(spec: Fragments) = {
+      val htmlOut = new HtmlResultOutput(out)
+      printer.printElems(spec.fragments.map(executeFragment)).print(htmlOut)
+      htmlOut
     }
   }
   def printer = new HtmlPrinter {}

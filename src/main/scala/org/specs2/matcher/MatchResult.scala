@@ -72,7 +72,8 @@ sealed trait MatchResult[+T] {
   /** apply the matcher */
   def have(m: Matcher[T]) = apply(m)
   def toResult: Result = evaluate.toResult
-
+  def isSuccess = toResult.isSuccess
+  def message = toResult.message
   /** the value being matched */
   protected[specs2] def evaluate[S >: T]: MatchResult[S] = this
 }
@@ -87,7 +88,7 @@ case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Exp
   def not: MatchResult[T] = MatchSuccess(okMessage, koMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 }
-case class MatchSkip[T](message: String, expectable: Expectable[T]) extends MatchResult[T] {
+case class MatchSkip[T](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
   def not: MatchResult[T] = this
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def toResult = Skipped(message)

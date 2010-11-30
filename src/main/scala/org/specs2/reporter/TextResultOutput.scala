@@ -5,9 +5,9 @@ import io.ConsoleOutput
 import main.Arguments
 import text.Plural._
 import text.AnsiColors._
-
+import execute.Result
 /**
- * Implementation of the ResultOutput trait as Text (to a console possibly with AnsiColors)
+ * Implementation of the ResultOutput trait as Text
  */
 class TextResultOutput extends ResultOutput with ConsoleOutput {
 
@@ -15,7 +15,7 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
     printLines(message)
   }
   def printSuccess(message: String)(implicit args: Arguments) = {
-    printLines(color(message, green, args.color))
+    printLines(message)
   }
   def printFailure(message: String)(implicit args: Arguments) = {
     printLines(color(message, yellow, args.color))
@@ -24,17 +24,22 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
     printLines(color(message, red, args.color))
   }
   def printSkipped(message: String)(implicit args: Arguments) = {
-    printLines(color(message, white, args.color))
+    printLines(message)
   }
   def printPending(message: String)(implicit args: Arguments) = {
-    printLines(color(message, white, args.color))
+    printLines(message)
   }
+  def status(result: Result)(implicit args: Arguments): String = {
+    if (args.plan) ""
+    else (result.status(args)  + " ")
+  }
+
   
   /**
    * print some text, splitting it on several lines
    */
   def printMessage(message: String)(implicit args: Arguments) = {
-    printLines(color(message, blue, args.color))
+    printLines(color(message, white, args.color))
   }
   
   def printLines(message: String)(implicit args: Arguments) = {

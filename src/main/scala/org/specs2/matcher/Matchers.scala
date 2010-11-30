@@ -9,6 +9,7 @@ import execute._
 trait Matchers extends AnyMatchers 
                   with IterableMatchers 
                   with StringMatchers 
+                  with XmlMatchers
                   with BeHaveMatchers 
                   with ExceptionMatchers 
                   with MatchersImplicits

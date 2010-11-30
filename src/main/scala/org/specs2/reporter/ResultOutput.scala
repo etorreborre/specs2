@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import main.Arguments
-
+import execute.Result
 /**
  * This traits provides specialised print methods for message representing
  * different types of results. They can be overridden to define a more specific behaviour.
@@ -19,4 +19,5 @@ trait ResultOutput {
   def printLines(message: String)(implicit args: Arguments)
   /** print one line */
   def printLine(message: String)(implicit args: Arguments)
+  def status(result: Result)(implicit args: Arguments): String
 }

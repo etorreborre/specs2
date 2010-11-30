@@ -20,7 +20,7 @@ case class Arguments (
   def xonly: Boolean            = _xonly.getOrElse(false)
   def plan: Boolean             = _plan.getOrElse(false)
   def failtrace: Boolean        = _failtrace.getOrElse(false)
-  def color: Boolean            = _color.getOrElse(false)
+  def color: Boolean            = _color.getOrElse(true)
   def noindent: Boolean         = _noindent.getOrElse(false)
   def offset: Int               = _offset.getOrElse(0)
   def specName: String          = _specName.getOrElse(".*Spec")

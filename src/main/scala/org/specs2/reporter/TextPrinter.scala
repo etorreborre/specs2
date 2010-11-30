@@ -6,6 +6,7 @@ import Generator._
 import control.Throwablex._
 import data.Tuples._
 import text.Plural._
+import text.AnsiColors._
 import execute._
 import main.Arguments
 import specification._
@@ -92,7 +93,7 @@ trait TextPrinter {
       printResult(leveledText(r.text, level)(args), r.result)(args, out)
       
     def printResult(desc: String, result: Result)(implicit args: Arguments, out: ResultOutput): Unit = {
-      val description = statusAndDescription(desc, result)(args)
+      val description = statusAndDescription(desc, result)(args, out)
       result match {
         case f: Failure => {
           printFailure(desc, f) 
@@ -129,18 +130,14 @@ trait TextPrinter {
      * add the status to the description
      * making sure that the description is still properly aligned, even with several lines
      */
-    def statusAndDescription(text: String, result: Result)(implicit args: Arguments) = {
+    def statusAndDescription(text: String, result: Result)(implicit args: Arguments, out: ResultOutput) = {
       val textLines = text.split("\n") 
       val firstLine = textLines.take(1).map { s =>
         (if (!args.plan) s.takeWhile(_ == ' ').dropRight(2) else s.takeWhile(_ == ' ')) + 
-        status(result) + s.dropWhile(_ == ' ')
+        out.status(result) + s.dropWhile(_ == ' ')
       }
       val rest = textLines.drop(1)
       (firstLine ++ rest).mkString("\n")
-    }
-    def status(result: Result)(implicit args: Arguments): String = {
-      if (args.plan) ""
-      else (result.status  + " ")
     }
   }
   case class PrintText(t: ExecutedText)               extends Print {
@@ -167,20 +164,20 @@ trait TextPrinter {
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       val name = end.name
       out.printLine(" ")
-      out.printLine("Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim))
+      out.printLine(color("Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim), blue, args.color))
       printStats(stats)
       out.printLine(" ")
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart, specEnd) = stats
-      stats.start.map(s => out.printLine("Finished in " + s.timer.time))
-      out.printLine(
+      stats.start.map(s => out.printLine(color("Finished in " + s.timer.time, blue, args.color)))
+      out.printLine(color(
           Seq(Some(examples qty "example"), 
               if (expectations != examples) Some(expectations qty "expectation") else None,
               Some(failures qty "failure"), 
               Some(errors qty "error"),
               pending optQty "pending", 
-              skipped optQty "skipped").flatten.mkString(", "))
+              skipped optQty "skipped").flatten.mkString(", "), blue, args.color))
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {

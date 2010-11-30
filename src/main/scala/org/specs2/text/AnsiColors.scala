@@ -18,13 +18,14 @@ trait AnsiColors {
     
   val reset   = "\033[0m"
     
-  val all = Seq(black, red, green, yellow, blue, magenta, cyan, white)
+  val all = Seq(black, red, green, yellow, blue, magenta, cyan, white, reset)
 	 
   /** @return a string with no color codes */
-  def removeColors(s: String): String = {
-	  all.foldLeft (s) { (res, cur) =>
-	    res.replace(cur, "")
-	  }
+  def removeColors(s: String, doIt: Boolean = true): String = {
+	  if (doIt) 
+	    all.foldLeft (s) { (res, cur) => res.replace(cur, "") }
+	  else
+	    s
   }	  
   def color(s: String, color: String, doIt: Boolean = true) = {
     if (doIt) 

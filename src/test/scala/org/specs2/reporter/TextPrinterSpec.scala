@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 import scalaz.Scalaz
 import Scalaz._
+import text.AnsiColors._
 import io.MockOutput
 import main.Arguments
 import execute._
@@ -28,12 +29,14 @@ to a ResultOutput trait knowing how to output successes, failures,...
   "if plan = true, nothing is executed"                                                   ! plan().e1^
   "if sequential = false examples are executed concurrently"                              ! sequential().e1^
   "if sequential = true examples are executed sequentially"                               ! sequential().e2^
-  "if color = true, the text is colorized"                                                ^
-    "text is blue"                                                                        ! color().e1^
-    "success is green"                                                                    ! color().e2^
-    "failures are red"                                                                    ! color().e3^
-    "errors are red"                                                                      ! color().e4^
-    "others are white"                                                                    ! color().e5^
+  "if color = true, the text output is colorized"                                         ^
+    "text is white"                                                                       ! color().e1^
+    "success status is green"                                                             ! color().e2^
+    "failures status is yellow"                                                           ! color().e3^
+    "errors status are red"                                                               ! color().e4^
+    "pending status is blue"                                                              ! color().e5^
+    "skipped status is cyan"                                                              ! color().e6^
+    "stats are blue"                                                                      ! color().e7^
                                                                                           endbr^
 "Statuses"                                                                                ^
   "regular text must have no status"                                                      ! status().e1^
@@ -64,7 +67,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
   val pending6 = "todo" ! pending
   
   case class prez() {
-    val noindent: Arguments = args(noindent = true)
+    val noindent = args(noindent = true)
     
     def e1 = print(t1 ^ ex1 ^ ex2) must 
              contain("t1",
@@ -88,15 +91,16 @@ to a ResultOutput trait knowing how to output successes, failures,...
     def e7 = print(xonly ^ t1 ^ ex1 ^ ex2) must containMatch("examples")
   }
   case class color() {
-    val color: Arguments = args(color = true)
     import text.AnsiColors._
     import text.Trim._
     
-    def e1 = print(color ^ t1) must containMatch(blue.remove("\033["))
-    def e2 = print(color ^ ex1) must containMatch(green.remove("\033["))
-    def e3 = print(color ^ fail3) must containMatch(red.remove("\033["))
-    def e4 = print(color ^ error4) must containMatch(red.remove("\033["))
-    def e5 = print(color ^ pending6) must containMatch(white.remove("\033["))
+    def e1 = printWithColors(t1) must containMatch(white.remove("\033["))
+    def e2 = printWithColors(ex1) must containMatch(green.remove("\033["))
+    def e3 = printWithColors(fail3) must containMatch(yellow.remove("\033["))
+    def e4 = printWithColors(error4) must containMatch(red.remove("\033["))
+    def e5 = printWithColors(pending6) must containMatch(blue.remove("\033["))
+    def e6 = printWithColors(skipped5) must containMatch(cyan.remove("\033["))
+    def e7 = printWithColors(t1) must containMatch(blue.remove("\033["))
   }
   case class failtrace() {
     val failtrace: Arguments = args(failtrace = true)
@@ -112,11 +116,11 @@ to a ResultOutput trait knowing how to output successes, failures,...
     val slowex1 = "e1" ! { Thread.sleep(20); messages.println("e1"); success }
     val fastex2 = "e2" ! { messages.println("e2"); success }
     def e1 = {
-      print(args(noindent = true) ^ slowex1 ^ fastex2) 
+      print(args(noindent = true, color = false) ^ slowex1 ^ fastex2) 
       messages.messages must containInOrder("e2", "e1")
     }
     def e2 = {
-      print(args(sequential = true, noindent = true) ^ slowex1 ^ fastex2)
+      print(args(sequential = true, noindent = true, color = false) ^ slowex1 ^ fastex2)
       messages.messages must containInOrder("e1", "e2")
     }
   }
@@ -140,7 +144,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
     def e6 = print(t1 ^ ex1) must containMatch("0 second") 
   }
 
-  def print(fragments: Fragments): Seq[String] = {
+  def printWithColors(fragments: Fragments): Seq[String] = {
     val selection = new DefaultSelection() {}
     val execution = new DefaultExecutionStrategy() {}
     val selected = selection.select(fragments.arguments)(Fragments(SpecStart("spec") +: fragments.fragments :+ SpecEnd("spec"))(fragments.arguments))
@@ -152,4 +156,5 @@ to a ResultOutput trait knowing how to output successes, failures,...
     printer.print(getClass, executed)(fragments.arguments)
     mockOutput.messages
   }
+  def print(fragments: Fragments): Seq[String] = printWithColors(fragments).map(removeColors(_))
 }

@@ -5,6 +5,7 @@ import _root_.org.scalatools.testing.{ EventHandler, Logger, Event, Result }
 import control.Throwablex._
 import control.Throwablex._
 import main.Arguments
+import main.ArgumentsArgs._
 import io._
 import text._
 import AnsiColors._
@@ -39,10 +40,16 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
   }
 }
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
-  override def printFailure(message: String)(implicit args: Arguments) = logFailure(message)
-  override def printError(message: String)(implicit args: Arguments) = logError(message)
-  override def printSuccess(message: String)(implicit args: Arguments) = logInfo(message, AnsiColors.green)
+  override def printFailure(message: String)(implicit args: Arguments) = 
+    logFailure(color(message, yellow))
+  override def printError(message: String)(implicit args: Arguments) = 
+    logError(color(message, red))
+  override def printSuccess(message: String)(implicit args: Arguments) = logInfo(message)
   override def printLine(message: String)(implicit args: Arguments) = logInfo(message)
+  override def status(result: execute.Result)(implicit arguments: Arguments): String = {
+    if (arguments.plan) ""
+    else (result.status(args(color = true))  + " ")
+  }
 }
 /**
  * Specific events which can be notified to sbt
@@ -71,26 +78,13 @@ trait HandlerEvents {
 
 trait TestLoggers {
   val loggers: Array[Logger]
-  def logFailure(message: String, c: String = AnsiColors.yellow) = loggers.foreach { logger =>
-    logger.error(color(message, c, logger.ansiCodesSupported))
+  def logFailure(message: String) = loggers.foreach { logger =>
+    logger.error(removeColors(message, !logger.ansiCodesSupported))
   }
-  def logError(message: String, c: String = AnsiColors.red) = loggers.foreach { logger =>
-    logger.error(color(message, c, logger.ansiCodesSupported))
+  def logError(message: String) = loggers.foreach { logger =>
+    logger.error(removeColors(message, !logger.ansiCodesSupported))
   }
-  def logInfo(message: String, c: String = AnsiColors.white) = loggers.foreach { logger =>
-    logger.info(color(message, c, logger.ansiCodesSupported))
-  }
-  def logInfoStatus(name: String, color: String, status: String) = {
-    logError(status + " " + name, color)
-  }
-  def logErrorStatus(name: String, color: String, status: String) = {
-    logError(status + " " + name, color)
-  }
-  def logErrorDetails(e: Throwable): Unit = {
-    logErrorStatus(e.getMessage + " (" + e.location + ")", AnsiColors.red, " ")
-    e.getStackTrace.foreach { trace =>
-      logErrorStatus(trace.toString, AnsiColors.red, " ")
-    }
-    e.chainedExceptions.foreach(logErrorDetails(_))
+  def logInfo(message: String) = loggers.foreach { logger =>
+    logger.info(removeColors(message, !logger.ansiCodesSupported))
   }
 }

@@ -2,6 +2,8 @@ package org.specs2
 package execute
 import control.Throwablex
 import control.Throwablex._
+import text.AnsiColors._
+import main.Arguments
 
 /**
  * The result of an execution, either:
@@ -19,12 +21,12 @@ import control.Throwablex._
  */
 sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1) {
   /** @return the textual status of the result */
-  def status = this match {
-	  case Success(_)    => "+"
-	  case Failure(_, _) => "x"
-	  case Error(_, _)   => "!"
-	  case Pending(_)    => "*"
-	  case Skipped(_)    => "o"
+  def status(implicit args: Arguments = Arguments()) = this match {
+	  case Success(_)    => color("+", green, args.color)
+	  case Failure(_, _) => color("x", yellow, args.color)
+	  case Error(_, _)   => color("!", red, args.color)
+	  case Pending(_)    => color("*", blue, args.color)
+	  case Skipped(_)    => color("o", cyan, args.color)
   }
   /** update the message of a result, keeping the subclass type */
   def updateMessage(msg: String) = { 
