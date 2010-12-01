@@ -28,6 +28,8 @@ trait Nodex {
      * @returns true if the Node represents some empty text (containing spaces or newlines)
      */
     def isSpaceNode: Boolean = NodeFunctions.isSpaceNode(n)
+    def matchNode(other: Node, attributes: List[String] = Nil, attributeValues: Map[String, String] = Map(), exactMatch: Boolean = false) =
+      NodeFunctions.matchNode(n, other, attributes, attributeValues, exactMatch)
   }
 }
 private[specs2]

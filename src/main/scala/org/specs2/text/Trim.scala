@@ -11,12 +11,16 @@ trait Trim {
 
   class Trimmed(s: String) {
     
-    def trimEnclosing(start: String, end: String) = {
-      val result = if (s.trim.startsWith(start)) s.trim.drop(start.size) else s.trim
-      if (result.endsWith(end)) result.dropRight(end.size)
-      else result
-    }
+    def trimStart(start: String) =
+      if (s.trim.startsWith(start)) s.trim.drop(start.size) else s.trim
+	  
+    def trimEnd(end: String) =
+      if (s.trim.endsWith(end)) s.trim.dropRight(end.size)  else s.trim
+    
+	def trimEnclosing(start: String, end: String) = trimStart(start).trimEnd(end)
+	  
     def trimNewLines = s.trim.removeAll("\r", "\n")
+	
     def trimReplace(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)
     } 

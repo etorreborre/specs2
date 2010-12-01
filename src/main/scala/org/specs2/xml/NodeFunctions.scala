@@ -2,6 +2,7 @@ package org.specs2
 package xml
 
 import scala.xml._
+import NodeSeq._
 import collection.Listx._
 import collection.Iterablex._
 /**
@@ -66,6 +67,43 @@ trait NodeFunctions {
       case (n1: NodeSeq, n2: NodeSeq) => iterableComparison(n1.filter(!isSpaceNode(_)), n2.filter(!isSpaceNode(_)))
     }
   }
+  
+  /**
+   * @return true if the node found with a label also satisfies the attributes and/or values requirement
+   */
+  def matchNode(node: Node, other: Node, attributes: List[String] = Nil, attributeValues: Map[String, String] = Map(), exactMatch: Boolean = false): Boolean = {
+    def attributesNamesExactMatch(m: MetaData) =  
+      m.map((a: MetaData) => a.key).toList.intersect(attributes) == attributes
+      
+    def attributesNamesPartialMatch(m: MetaData) = {
+      val attributesNames = m.map((a: MetaData) => a.key).toList
+      attributes.forall(attributesNames.contains(_))
+    } 
+
+    def attributesValuesNamesExactMatch(m: MetaData) =  
+      Map(m.map((a: MetaData) => a.key -> a.value.toString).toList: _*) == attributeValues
+    def attributesValuesNamesPartialMatch(m: MetaData) = {
+      val attributesNamesAndValues: Map[String, String] = Map(m.map((a: MetaData) => a.key -> a.value.toString).toList: _*)
+      attributeValues.forall((pair: (String, String)) =>  attributesNamesAndValues.isDefinedAt(pair._1) && attributesNamesAndValues(pair._1) == pair._2)
+    }
+
+    def attributesNamesMatch(m: MetaData) = 
+      attributes.isEmpty                            || 
+      exactMatch && attributesNamesExactMatch(m)    ||
+      !exactMatch && attributesNamesPartialMatch(m)   
+      
+    def attributesValuesMatch(m: MetaData) = 
+      attributeValues.isEmpty                             || 
+      exactMatch && attributesValuesNamesExactMatch(m)    ||
+      !exactMatch && attributesValuesNamesPartialMatch(m) 
+      
+    // returns true if the node matches the specified children
+    def childrenMatch(n: Node) = 
+      node.child.isEmpty || isEqualIgnoringSpace(fromSeq(n.child), fromSeq(node.child))
+
+    attributesNamesMatch(other.attributes) && attributesValuesMatch(other.attributes) && childrenMatch(other) 
+  }
+
 }
 private[specs2]
 object NodeFunctions extends NodeFunctions 

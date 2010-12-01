@@ -31,7 +31,15 @@ trait FromSource {
     val trace = stackTrace.apply(depth)
     val location = new Location(trace)
     val content = readLines(srcDir+location.path)
-    content(location.lineNumber - 1).trimEnclosing("^", "^").trimEnclosing("{", "}")
+    content(location.lineNumber - 1).
+	 trimEnd("^").
+	 trimEnd("^t").
+	 trimEnd("^bt").
+	 trimEnd("^p").
+	 trimEnd("^br").
+	 trimEnd("^end").
+	 trimEnd("^endp").
+	 trimEnclosing("{", "}")
   }
 }
 private[specs2]
