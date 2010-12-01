@@ -8,9 +8,9 @@ class TrimSpec extends SpecificationWithJUnit { def is =
   { " hello\rworld\n  ".trimNewLines === "helloworld" }                                   ^
   { " hello (world)  ".trimReplace("(" -> "[", ")" -> "]") === "hello [world]" }          ^
   { " hello world  ".trimReplaceAll("h" -> "H", "w" -> "W") === "Hello World" }           ^
-                                                                                          end^p^
+                                                                                          endp^
   "Trim enclosing"                                                                        ^ 
   { " (hello world)  ".trimEnclosing("(", ")") === "hello world" }                        ^
-  { " ( (hello world) )  ".trimEnclosing("(", ")") === " (hello world) " }                ^
+  { " ( (hello world) )  ".trimEnclosing("(", ")") === "(hello world)" }                  ^
                                                                                           end
 }

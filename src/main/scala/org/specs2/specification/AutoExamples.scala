@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import io.FromSource._
+import text.Trim._
 import control.LazyParameters._
 import execute._
 import matcher.MatchersImplicits._
@@ -31,27 +32,31 @@ import matcher._
 trait AutoExamples {
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragments(expression: =>MatchResult[_]): Fragments = {
-    val desc = getCode()
+    val desc = code()
     Fragments(Example(desc, expression.toResult))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragments(expression: =>Boolean): Fragments = {
-    val desc = getCode()
+    val desc = code()
     Fragments(Example(desc, toResult(expression)))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def resultFragments(expression: =>Result): Fragments = {
-    val desc = getCode()
+    val desc = code()
     Fragments(Example(desc, expression))
   }
   implicit def matchExample(expression: =>MatchResult[_]): Example = {
-    Example(getCode(), expression.toResult)
+    Example(code(), expression.toResult)
   }
   implicit def booleanExample(expression: =>Boolean): Example = {
-    Example(getCode(), toResult(expression))
+    Example(code(), toResult(expression))
   }
   implicit def resultExample(expression: =>execute.Result): Example = {
-    Example(getCode(), expression)
+    Example(code(), expression)
+  }
+  private def code() = {
+    List("^", "^t", "^bt", "^p", "^br", "^end", "^endp").foldLeft(getCode(5))(_ trimEnd _).
+    trimEnclosing("{", "}")
   }
 }
 private[specs2]

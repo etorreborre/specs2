@@ -5,7 +5,6 @@ import io.FileReader._
 import io.Paths._
 import control.Throwablex._
 import main.SystemProperties
-import text.Trim._
 
 /**
  * Get source code from the current point of execution
@@ -31,15 +30,7 @@ trait FromSource {
     val trace = stackTrace.apply(depth)
     val location = new Location(trace)
     val content = readLines(srcDir+location.path)
-    content(location.lineNumber - 1).
-	 trimEnd("^").
-	 trimEnd("^t").
-	 trimEnd("^bt").
-	 trimEnd("^p").
-	 trimEnd("^br").
-	 trimEnd("^end").
-	 trimEnd("^endp").
-	 trimEnclosing("{", "}")
+    content(location.lineNumber - 1)
   }
 }
 private[specs2]

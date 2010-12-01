@@ -22,8 +22,9 @@ trait HtmlPrinter {
   
   def print(klass: Class[_], fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     Seq("css", "images").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
-    fileSystem.write(reportPath(klass)) { out => 
-      printElems(fs).print(new HtmlResultOutput(out))
+    fileSystem.write(reportPath(klass)) { out =>
+      val output = new HtmlResultOutput(out).printHead
+      printElems(fs).print(output)
     }
   }
   def reportPath(klass: Class[_])(implicit args: Arguments) = {
@@ -44,9 +45,10 @@ trait HtmlPrinter {
   }
   
   case class HtmlLines(lines : List[HtmlLine] = Nil) {
-    def print(implicit out: HtmlResultOutput) = {
-      lines.foldLeft(out) { (res, cur) => cur.print(res) }.flush
-    }
+    def print(implicit out: HtmlResultOutput) =
+      printXml.flush
+    def printXml(implicit out: HtmlResultOutput) =
+      lines.foldLeft(out) { (res, cur) => cur.print(res) }
   }
   
   def flatten(results: (((List[Html], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[HtmlLine] = {
@@ -91,7 +93,7 @@ trait HtmlPrinter {
   }
   case class HtmlText(t: ExecutedText)               extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-      out.printPar(leveledText(t.text, level)(args), !args.xonly)(args)
+      out.printTextPar(leveledText(t.text, level)(args), !args.xonly)(args)
   }        
   case class HtmlPar()                               extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
