@@ -9,7 +9,7 @@ import collection.Iterablex._
  * This object provides useful functions for Nodes and NodeSeqs
  */
 private[specs2]
-trait NodeFunctions {
+trait NodeFunctions extends control.Debug {
   /**
    * @returns true if the Node represents some empty text (containing spaces or newlines)
    */
@@ -82,6 +82,7 @@ trait NodeFunctions {
 
     def attributesValuesNamesExactMatch(m: MetaData) =  
       Map(m.map((a: MetaData) => a.key -> a.value.toString).toList: _*) == attributeValues
+      
     def attributesValuesNamesPartialMatch(m: MetaData) = {
       val attributesNamesAndValues: Map[String, String] = Map(m.map((a: MetaData) => a.key -> a.value.toString).toList: _*)
       attributeValues.forall((pair: (String, String)) =>  attributesNamesAndValues.isDefinedAt(pair._1) && attributesNamesAndValues(pair._1) == pair._2)
@@ -99,9 +100,9 @@ trait NodeFunctions {
       
     // returns true if the node matches the specified children
     def childrenMatch(n: Node) = 
-      node.child.isEmpty || isEqualIgnoringSpace(fromSeq(n.child), fromSeq(node.child))
+      other.child.isEmpty || isEqualIgnoringSpace(fromSeq(n.child), fromSeq(other.child))
 
-    attributesNamesMatch(other.attributes) && attributesValuesMatch(other.attributes) && childrenMatch(other) 
+    attributesNamesMatch(node.attributes) && attributesValuesMatch(node.attributes) && childrenMatch(node)
   }
 
 }

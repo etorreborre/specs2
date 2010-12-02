@@ -9,7 +9,7 @@ import execute._
 import specification._
 import SpecsArguments._
 
-class TextPrinterSpec extends SpecificationWithJUnit { def is = xonly^
+class TextPrinterSpec extends SpecificationWithJUnit { def is = 
                                                                                           """
 The TextPrinter is folding Executed Fragments and exporting them
 to a ResultOutput trait knowing how to output successes, failures,...
@@ -25,10 +25,10 @@ to a ResultOutput trait knowing how to output successes, failures,...
     "failure examples are shown"                                                          ! xonlyargs().e5^
     "error examples are shown"                                                            ! xonlyargs().e6^
     "statistics shown"                                                                    ! xonlyargs().e7^
-  "if failtrace = true, failures stacktraces are shown"                                   ! failtrace().e1^
+  "if failtrace = true, failures stacktraces are shown"                                   ! failtrace().e1^bt^
   "if plan = true, nothing is executed"                                                   ! plan().e1^
-  "if sequential = false examples are executed concurrently"                              ! sequential().e1^
-  "if sequential = true examples are executed sequentially"                               ! sequential().e2^
+  "if sequential = false examples are executed concurrently"                              ! seq().e1^
+  "if sequential = true examples are executed sequentially"                               ! seq().e2^
   "if color = true, the text output is colorized"                                         ^
     "text is white"                                                                       ! color().e1^
     "success status is green"                                                             ! color().e2^
@@ -51,11 +51,16 @@ to a ResultOutput trait knowing how to output successes, failures,...
   "the number of examples"                                                                ! stats().e1^
   "the number of expectations"                                                            ^
     "not if they are the same as the number of examples"                                  ! stats().e2^
-    "if they are not the same as the number of examples"                                  ! stats().e3^
+    "if they are not the same as the number of examples"                                  ! stats().e3^bt^
   "the number of failures"                                                                ! stats().e4^
   "the number of errors"                                                                  ! stats().e5^
   "the execution time"                                                                    ! stats().e6^
-                                                                                            end
+                                                                                          endbr^
+"pending"                                                                    ! pending^
+"todo"                                                                    ! todo^
+"failure"                                                                    ! { 1 must be_==(2) }^
+"error"                                                                    ! { error("big boom!"); 1 must be_==(2) }^
+                                                                                          end
 
   implicit val default = Arguments()
   val t1       = "t1"
@@ -110,7 +115,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
     val plan: Arguments = args(plan = true)
     def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("  e1") and not containMatch("\\+ e1") 
   }
-  case class sequential() {
+  case class seq() {
     val sequential: Arguments = args(sequential = true)
     val messages = new MockOutput {}
     val slowex1 = "e1" ! { Thread.sleep(20); messages.println("e1"); success }

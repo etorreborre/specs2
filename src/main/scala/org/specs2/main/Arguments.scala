@@ -70,7 +70,7 @@ object Arguments {
        _xonly      = bool("xonly"),
        _plan       = bool("plan"),
        _failtrace  = bool("failtrace"),
-       _color      = bool("color"),
+       _color      = bool("nocolor", false) orElse bool("color"),
        _noindent   = bool("noindent"),
        _offset     = int("offset"),
        _specName   = value("specName"),
@@ -79,8 +79,8 @@ object Arguments {
     )
   }
   
-  private def bool(name: String)(implicit args: Seq[String]): Option[Boolean] = {
-    args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => true)
+  private def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String]): Option[Boolean] = {
+    args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue)
   }
   private def value(name: String)(implicit args: Seq[String]): Option[String] = {
     args.zip(args.drop(1)).find(_._1.toLowerCase.contains(name.toLowerCase)).map(_._2)
@@ -121,15 +121,19 @@ trait ArgumentsArgs extends control.Properties {
    * @return arguments for a literate specification: no auto indent and a sequential
    *         execution
    */
-  def literate = args(noindent = true, sequential = true)
+  def literate: Arguments = args(noindent = true, sequential = true)
+  /** 
+   * @return arguments for a specification where examples must be executed sequentially
+   */
+  def sequential: Arguments = args(sequential = true)
   /**
    * shortcut to print only failures and errors
    */
-  def xonly = args(xonly = true)
+  def xonly: Arguments = args(xonly = true)
   /**
    * shortcut to executed and print only some examples
    */
-  def only(examples: String) = args(ex = examples)
+  def only(examples: String): Arguments = args(ex = examples)
 }
 private[specs2]
 object ArgumentsArgs extends ArgumentsArgs

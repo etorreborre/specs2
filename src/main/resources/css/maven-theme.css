@@ -1,5 +1,5 @@
 body {
-  padding: 0px 0px 10px 0px;
+  padding: 10px 10px 10px 20px;
 }
 body, td, select, input, li{
   font-family: Verdana, Helvetica, Arial, sans-serif;
@@ -245,4 +245,29 @@ ex.error {
 }
 ex.skipped {
   background-color: #DDDDDD;
+}
+
+.level1 {
+  text-indent: 15px;
+}
+.level2 {
+  text-indent: 35px;
+}
+.level3 {
+  text-indent: 55px;
+}
+.level4 {
+  text-indent: 75px;
+}
+.level5 {
+  text-indent: 95px;
+}
+.level6 {
+  text-indent: 115px;
+}
+.level7 {
+  text-indent: 135px;
+}
+.level8 {
+  text-indent: 155px;
 }

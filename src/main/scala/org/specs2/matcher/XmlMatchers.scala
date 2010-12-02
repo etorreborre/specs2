@@ -190,7 +190,7 @@ class PathFunction(val node: Node, val function: XPathFunction, val attributes: 
    */
   def apply(nodes: Seq[Node]): Seq[Node] = 
     for { n     <- nodes
-          found <- function(n, node.label) if (node.matchNode(found, attributes, attributeValues, exactMatch)) } 
+          found <- function(n, node.label) if (found.matchNode(node, attributes, attributeValues, exactMatch)) } 
     yield found 
 
   def exactly = new PathFunction(node, function, attributes, attributeValues, true)

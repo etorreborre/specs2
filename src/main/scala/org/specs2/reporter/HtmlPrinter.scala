@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import scala.xml.NodeSeq
 import scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable }
 import Generator._
 import data.Tuples._
@@ -23,8 +24,12 @@ trait HtmlPrinter {
   def print(klass: Class[_], fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     Seq("css", "images").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
     fileSystem.write(reportPath(klass)) { out =>
-      val output = new HtmlResultOutput(out).printHead
-      printElems(fs).print(output)
+      val output = new HtmlResultOutput(out)
+      output.enclose((t: NodeSeq) => <html>{t}</html>) {
+        new HtmlResultOutput(out).printHead.enclose((t: NodeSeq) => <body>{t}</body>) {
+          printElems(fs).printXml(new HtmlResultOutput(out))
+        }
+      }.flush
     }
   }
   def reportPath(klass: Class[_])(implicit args: Arguments) = {
@@ -74,18 +79,6 @@ trait HtmlPrinter {
     
   sealed trait Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput): HtmlResultOutput
-    
-    /**
-     * indent the text to the wanted level.
-     * If the text contains several lines, each line is indented
-     */
-    protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = { 
-      if (args.noindent) s 
-      else {
-        val indent = "  "*level
-        s.trim.split("\n").map(indent+_).mkString("\n")
-      }
-    }
   }
   case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
@@ -93,7 +86,7 @@ trait HtmlPrinter {
   }
   case class HtmlText(t: ExecutedText)               extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-      out.printTextPar(leveledText(t.text, level)(args), !args.xonly)(args)
+      out.printText(t.text, level, !args.xonly)(args)
   }        
   case class HtmlPar()                               extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
@@ -101,39 +94,29 @@ trait HtmlPrinter {
   }
   case class HtmlBr()                               extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-      out.printElem(<br/>, !args.xonly)(args)
+      out.printPar("", !args.xonly)(args)
   }
   case class HtmlResult(r: ExecutedResult)           extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-      printResult(leveledText(r.text, level)(args), r.result)(args, out)
+      printResult(r.text, level, r.result)(args, out)
       
-    def printResult(desc: String, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
-      val description = statusAndDescription(desc, result)(args)
+    def printResult(desc: String, level: Int, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
+      val description = desc
       result match {
-        case f: Failure => {
-          val out2 = printFailureOrError(desc, f) 
-          if (args.failtrace) 
-            f.stackTrace.foldLeft(out2) { (res, cur) => res.printError(cur.toString) }
-          else out2
-        }
-        case e: Error => {
-          val out2 = printFailureOrError(desc, e) 
-          val out3 = e.stackTrace.foldLeft(out2) { (res, cur) => out.printError(cur.toString) }
-          e.exception.chainedExceptions.foldLeft(out3) { (res, cur) =>
-            val res2 = res.printError(cur.getMessage)
-            cur.getStackTrace.foldLeft(res2) { (res3, st) => res3.printError(st.toString) }
-          }
-          
-        }
-        case Success(_) => out.printSuccess(description)
-        case Pending(_) => out.printPending(description + " " + result.message)
-        case Skipped(_) => out.printSkipped(description).printSkipped(result.message)
+        case f: Failure => printFailure(desc, level, f).printStack(f, level + 1, args.failtrace) 
+        case e: Error   => printError(desc, level, e).printStack(e, level + 1) 
+        case Success(_) => out.printSuccess(description, level, !args.xonly)
+        case Pending(_) => out.printPending(description + " " + result.message, level, !args.xonly)
+        case Skipped(_) => out.printSkipped(description, level).printSkipped(result.message, level, !args.xonly)
       }
     }
-    def printFailureOrError(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = { 
-      val description = statusAndDescription(desc, f)
-      out.printError(description).
-          printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
+    def printFailure(desc: String, level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = { 
+      out.printFailure(desc, level).
+          printText("  " + f.message + " ("+f.location+")", level + 1)
+    }
+    def printError(desc: String, level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = { 
+      out.printError(desc, level).
+          printText(f.message + " ("+f.location+")", level + 1)
     }
     /**
      * add the status to the description
@@ -156,30 +139,36 @@ trait HtmlPrinter {
   case class HtmlSpecEnd(end: ExecutedSpecEnd)       extends Html {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
       val (current, total) = stats
-      val out2 = if ((!args.xonly || current.hasFailuresOrErrors) && !total.isEnd(end)) 
-        printEndStats(current)(args, out)
-      else out
-      if (total.isEnd(end))
-        printEndStats(total)(args, out2)
-      else out2
+      if (total.isEnd(end)) printEndStats(total)(args, printCurrentStats(stats, args))
+      else printCurrentStats(stats, args)
     }
+
+    def printCurrentStats(stats: (Stats, Stats), args: Arguments)(implicit out: HtmlResultOutput) = {
+      val (current, total) = stats
+      if ((!args.xonly || current.hasFailuresOrErrors) && !total.isEnd(end)) printEndStats(current)(args, out)
+      else out
+    }
+      
     def printEndStats(stats: Stats)(implicit args: Arguments, out: HtmlResultOutput) = {
       val name = end.name
-      val out2 = 
-        out.printPar().
-            printPar("Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim))
-      printStats(stats)(args, out2).printPar()
-    }
-    def printStats(stats: Stats)(implicit args: Arguments, out: HtmlResultOutput) = {
+      val title = "Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim)
       val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart, specEnd) = stats
-      val out2 = stats.start.foldLeft(out) { (res, s) => res.printPar("Finished in " + s.timer.time) }
-      out2.printPar(
-          Seq(Some(examples qty "example"), 
+      val classStatus = if (failures + errors > 0) "failure" else "success" 
+      val numbers = Seq(
+              Some(examples qty "example"), 
               if (expectations != examples) Some(expectations qty "expectation") else None,
               Some(failures qty "failure"), 
               Some(errors qty "error"),
               pending optQty "pending", 
-              skipped optQty "skipped").flatten.mkString(", "))
+              skipped optQty "skipped").flatten.mkString(", ")
+              
+      out.printBr().printElem {
+        <table class="dataTable">
+          <tr><th colSpan="2">{title}</th></tr>
+          <tr><td>Finished in</td><td class="info">{specStart.map(_.timer.time).getOrElse("0 second")}</td></tr>
+          <tr><td>Results</td><td class={classStatus}>{numbers}</td></tr>
+        </table>
+      }
     }
   }
   case class HtmlOther(fragment: ExecutedFragment)   extends Html {
