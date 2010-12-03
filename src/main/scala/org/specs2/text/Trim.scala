@@ -17,7 +17,7 @@ trait Trim {
     def trimEnd(end: String) =
       if (s.trim.endsWith(end)) s.trim.dropRight(end.size)  else s.trim
     
-	def trimEnclosing(start: String, end: String) = trimStart(start).trimEnd(end)
+	  def trimEnclosing(start: String, end: String) = trimStart(start).trimEnd(end).trim
 	  
     def trimNewLines = s.trim.removeAll("\r", "\n")
 	

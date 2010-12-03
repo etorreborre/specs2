@@ -24,8 +24,11 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
                                                                                           p^
   "Fragments"                                                                             ^
     "A text block must"                                                                   ^
-      "be printed as a paragraph"                                                         ! fragments().text1^
-      "have a css style"                                                                  ! fragments().text2^
+      "be printed as a div"                                                               ! fragments().text1^
+      "be indented to its level with a css property"                                      ! fragments().text2^
+	                                                                                      p^
+    "An example must"                                                                     ^
+      "have a success icon if successful"                                                 ! fragments().ex1^
                                                                                           end
                                                                                           
   implicit val argument = args()
@@ -48,9 +51,10 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
     def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)
   }
   case class fragments() extends MockHtmlPrinter {
-    val spec: Fragments = "Specification".title ^ "t1"
-    def text1 = print(spec) must \\(<p>t1</p>)
-    def text2 = print(spec) must \\(<p>t1</p>, "class"->"text")
+    val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success
+    def text1 = print(spec) must \\(<div>t1</div>)
+    def text2 = print(spec) must \\(<div>t2</div>, "class"->"level1")
+    def ex1 = print(spec) must \\("div", "class"->"level2") \("img", "src"->"./images/icon_success_sml.gif")
   }
   
   trait MockHtmlPrinter extends FragmentExecution {
@@ -59,7 +63,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
     val out = new MockWriter {}
     
     def print(spec: Fragments) = {
-      printer.printElems(spec.fragments.map(executeFragment)).
+      printer.reduce(spec.fragments.map(executeFragment)).
               printXml(new HtmlResultOutput(out)).xml
     }
   }

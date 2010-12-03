@@ -18,7 +18,9 @@ import reporter._
 class ClassRunner extends Classes with ConsoleOutput with Main {
 	lazy val reporter: Reporter = new ConsoleReporter {}
 	
-  def main(arguments: Array[String]) = {
+  def main(arguments: Array[String]) = start(arguments:_*)
+  
+  def start(arguments: String*) = {
     if (arguments.length == 0)
       println("The first argument should at least be the specification class name")
 
@@ -29,7 +31,7 @@ class ClassRunner extends Classes with ConsoleOutput with Main {
 	  }
   }
   
-  protected[specs2] def run(args: Array[String], specification: BaseSpecification)(f: Exception => Unit) = {
+  protected[specs2] def run(args: Seq[String], specification: BaseSpecification)(f: Exception => Unit) = {
 	  trye(reporter.report(specification)(Arguments(args:_*)))(f)
   }
 

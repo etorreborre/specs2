@@ -13,7 +13,8 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
                                                                                           """
 The TextPrinter is folding Executed Fragments and exporting them
 to a ResultOutput trait knowing how to output successes, failures,...
-                                                                                          """^endbr^
+                                                                                          """^
+																						  p^
 "Text presentation"                                                                       ^
   "by default the Text and the examples are properly indented"                            ! prez().e1^
   "if noindent = true then there is no automatic indenting"                               ! prez().e2^
@@ -37,7 +38,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
     "pending status is blue"                                                              ! color().e5^
     "skipped status is cyan"                                                              ! color().e6^
     "stats are blue"                                                                      ! color().e7^
-                                                                                          endbr^
+                                                                                          endp^
 "Statuses"                                                                                ^
   "regular text must have no status"                                                      ! status().e1^
   "a successful example must be displayed with a +"                                       ! status().e2^
@@ -46,7 +47,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
   "a skipped example must be displayed with a o"                                          ! status().e5^
   "a pending example must be displayed with a *"                                          ! status().e6^
   "a multi-line description must be indented ok"                                          ! status().e7^
-                                                                                          endbr^
+                                                                                          p^
 "Statistics must show"                                                                    ^
   "the number of examples"                                                                ! stats().e1^
   "the number of expectations"                                                            ^
@@ -55,11 +56,6 @@ to a ResultOutput trait knowing how to output successes, failures,...
   "the number of failures"                                                                ! stats().e4^
   "the number of errors"                                                                  ! stats().e5^
   "the execution time"                                                                    ! stats().e6^
-                                                                                          endbr^
-"pending"                                                                    ! pending^
-"todo"                                                                    ! todo^
-"failure"                                                                    ! { 1 must be_==(2) }^
-"error"                                                                    ! { error("big boom!"); 1 must be_==(2) }^
                                                                                           end
 
   implicit val default = Arguments()

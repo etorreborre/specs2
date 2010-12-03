@@ -3,7 +3,7 @@ package reporter
 
 import scalaz._
 import Scalaz._
-import scala.math.max
+import scala.math._
 import main.Arguments
 import specification._
 import data.Trees._
@@ -32,13 +32,17 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   /** @return the last block */
   def lastOption = blocks.map(_._1).lastOption
   /** @return the first level or zero */
-  def firstLevel = blocks.headOption.map(_._2).getOrElse(0)
+  def firstLevel = levels.headOption.getOrElse(0)
   /** @return the last level or zero */
-  def lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
+  def lastLevel = levels.lastOption.getOrElse(0)
   /** @return alias for the last level */
   def level = lastLevel
   /** @return all the levels */
-  def levels = blocks.map(_._2)
+  def levels = {
+    val minLevel = blocks.map(_._2).min
+	blocks.map(_._2 + min(0, minLevel))
+  }
+
   
   /** @return the concatenation of 2 levels */
   def add(other: Levels[T]) = Levels(this.blocks ++ other.blocks)
@@ -110,7 +114,6 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
 case object Levels {
   /** @return a new Levels object for one Block */
   def apply[T](b: Block[T]) = new Levels(List((b, 0)))
-
   /** monoid for Levels */
   implicit def LevelsMonoid[T] = new Monoid[Levels[T]] {
     def append(b1: Levels[T], b2: =>Levels[T]) =

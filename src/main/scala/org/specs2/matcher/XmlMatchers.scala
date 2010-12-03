@@ -130,12 +130,22 @@ case class XmlMatcher(functions: List[PathFunction]) extends Matcher[Seq[Node]] 
            nodes.description + koMessage, nodes) 
   }
 
-  def \(node: Node): XmlMatcher = new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _))
-  def \\(node: Node): XmlMatcher = new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _))
+  def \(node: Node, attributeNames: String*): XmlMatcher = 
+    new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, attributeNames.toList))
+  def \(node: Node, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher = 
+    new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList):_*)))
+  def \\(node: Node, attributeNames: String*): XmlMatcher = 
+    new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _, attributeNames.toList))
+  def \\(node: Node, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher = 
+    new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList):_*)))
   /** alias for \ using the node label only */
-  def \(label: String): XmlMatcher = \(label.toElem)
+  def \(label: String, attributeNames: String*): XmlMatcher = \(label.toElem, attributeNames:_*)
+  def \(label: String, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher = 
+    \(label.toElem, attributeValues, attributeValues2:_*)
   /** alias for \\ using the node label only */
-  def \\(label: String): XmlMatcher = \\(label.toElem)
+  def \\(label: String, attributeNames: String*): XmlMatcher = \\(label.toElem, attributeNames:_*)
+  def \\(label: String, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher = 
+    \\(label.toElem, attributeValues, attributeValues2:_*)
   
   /**
    * checks that the <code>nodes</code> satisfy the <code>functions</code>
