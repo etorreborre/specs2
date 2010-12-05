@@ -32,6 +32,13 @@ class Expectable[+T] protected (private val t: () => T) { outer =>
    */
   def description = d(value)
 
+  /** 
+   * @return this expectable with its toString method as an alias description
+   *         this is useful to preserve the original value when the matcher using
+   *         it is adapting the value 
+   */
+  def aka = Expectable(value, value.toString)
+  
   /** @return this expectable with an alias description */
   def aka(alias: String) = Expectable(value, alias)
   

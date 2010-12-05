@@ -26,7 +26,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
     "A text block must"                                                                   ^
       "be printed as a div"                                                               ! fragments().text1^
       "be indented to its level with a css property"                                      ! fragments().text2^
-	                                                                                      p^
+	                                                                                      endp^
     "An example must"                                                                     ^
       "have a success icon if successful"                                                 ! fragments().ex1^
                                                                                           end

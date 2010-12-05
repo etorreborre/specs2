@@ -69,11 +69,6 @@ class XmlMatchersSpec extends SpecificationWithJUnit { def is =
                                                                                           end^
                                                                                           end
 
-  implicit def ToReturns[T](t: =>MatchResult[T]): Returns[T] = new Returns(t)
-  class Returns[T](t: =>MatchResult[T]) {
-    def returns(m: String) = t must contain(m) ^^ { (m: MatchResult[T]) => m.message }
-  }
-
   case class eis() {
     def fail1 = (<a><b/></a> must ==/(<a> <c/></a>)) returns 
                 "'<a><b></b></a>' is not equal to '<a> <c></c></a>'"
@@ -120,25 +115,3 @@ class XmlMatchersSpec extends SpecificationWithJUnit { def is =
 	             "'<a><b>hello</b></a>' doesn't contain <b>world</b>"
   }
 }
-//class xmlMatchersUnit extends MatchersSpecification with XmlMatchers {
-//  "A \\\\ matcher" should {
-//    "not match two nodes if they don't contain the same text" in {
-//      expectation(<a><b>hello</b></a> must \\(<b>world</b>)) must failWith("<a><b>hello</b></a> doesn't contain <b>world</b>")
-//    }
-//    "not match two nodes if they don't contain the same text even if one is an Atom and the other one a Text" in {
-//      val h = "hello"
-//      val expected = <a><b>{h}</b></a>
-//      expectation(expected must \\(<b>world</b>)) must failWith("<a><b>hello</b></a> doesn't contain <b>world</b>")
-//    }
-//  }
-//  "\\ and \\\\ matchers" can {
-//    "be chained with \\ to provide full path searches" in {
-//      <a><b><c><d></d></c></b></a> must \("b").\("c")
-//    }
-//    "be chained with \\\\ to provide more full path searches" in {
-//      <a><b><c><d></d></c></b></a> must \\("c").\("d")
-//      <a><b><c><d></d></c></b></a> must \\("b").\\("d")
-//    }
-//  }
-//  }
-//}

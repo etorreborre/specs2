@@ -12,6 +12,10 @@ package matcher
  */
 class MustExpectable[T] private (tm: () => T) extends Expectable[T](tm) { outer =>
   /** @return this expectable with an alias description */
+  override def aka: MustExpectable[T] = new MustExpectable(tm) {
+    override protected val desc = Some(tm().toString)
+  } 
+  /** @return this expectable with an alias description */
   override def aka(alias: String): MustExpectable[T] = new MustExpectable(tm) {
 	  override protected val desc = Some(alias)
   } 

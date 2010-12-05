@@ -8,30 +8,32 @@ import text.Quote._
  * The `StringMatchers` trait provides matchers which are applicable to String objects
  */
 trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers
+object StringMatchers extends StringMatchers
 
+/** 
+ * This trait provides matchers for strings.
+ * 
+ * IgnoreCase and ignoreSpace matchers are created by adapting the BeEqualTo matcher.  
+ */
 private[specs2]
 trait StringBaseMatchers { outer =>
+  /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
+  implicit def stringMatcher(m: AdaptableMatcher[String]): StringMatcher = new StringMatcher(m)
+  class StringMatcher(m: AdaptableMatcher[String]) {
+    private val ignoringCase = (_:String) + ", ignoring case"
+    private val ignoringSpace = (_:String) + ", ignoring space"
+    def ignoreCase: AdaptableMatcher[String] = m.^^^((s: String) => s.toLowerCase, ignoringCase, ignoringCase)
+    def ignoreSpace: AdaptableMatcher[String] = m.^^^((s: String) => s.trim, ignoringSpace, ignoringSpace)
+  }
   
-  /** matches if (a.equalsIgnoreCase(b)) */   
-  def beEqualToIgnoreCase(a: String) = new BeEqualToIgnoreCase(a)
-  /** matches if (a.equalsIgnoreCase(b)) */   
+  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
   def ==/(s: String) = be_==/(s)
-  /** matches if (a.notEqualIgnoreCase(b)) */   
-  def be_!=/(a: String) = notBeEqualToIgnoreCase(a)  
-  /** matches if (a.equalsIgnoreCase(b)) */   
-  def be_==/(a: String) = beEqualToIgnoreCase(a)  
-  /** matches if (a.equalsIgnoreCase(b)) */   
-  def equalIgnoreCase(a: String) = beEqualToIgnoreCase(a)
-  /** matches if (a.equalsIgnoreCase(b)) */   
-  def equalToIgnoreCase(a: String) = beEqualToIgnoreCase(a)
-  /** matches if (a.equalsIgnoreCase(b)) */   
-  def equalIgnoreCaseTo(a: String) = beEqualToIgnoreCase(a)
-  /** matches if !(a.equalsIgnoreCase(b)) */   
+  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
+  def be_==/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace  
+  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
+  def be_!=/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace  
+  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
   def !=/(s: String) = be_!=/(s)
-  /** matches if !(a.equalsIgnoreCase(b)) */   
-  def notBeEqualToIgnoreCase(a: String) = beEqualToIgnoreCase(a).not 
-  /** matches if !(a.equalsIgnoreSpace(b)) */   
-  def notBeEqualToIgnoreSpace(a: String) = beEqualToIgnoreSpace(a).not 
   /** matches if (a.trim == b.trim) */   
   def beEqualToIgnoreSpace(t: =>String) = new Matcher[String] { 
     def apply[S <: String](v: =>Expectable[S]) = {
@@ -41,12 +43,6 @@ trait StringBaseMatchers { outer =>
              b.description + " is not equal ignoring space to " + q(a), b)
       }
   }
-  /** matches if (a.trim == b.trim) */   
-  def equalIgnoreSpace(a: =>String) = beEqualToIgnoreSpace(a)
-  /** matches if (a.trim == b.trim) */   
-  def equalToIgnoreSpace(a: String) = beEqualToIgnoreSpace(a)
-  /** matches if (a.trim == b.trim) */   
-  def equalIgnoreSpaceTo(a: String) = beEqualToIgnoreSpace(a)
 
   /** matches if (b.indexOf(a) >= 0) */   
   def contain(t: =>String) = new Matcher[String] { 
@@ -164,8 +160,7 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
     def endWith(s: String) = result(outer.endWith(s))
     def startingWith(s: String) = result(outer.startWith(s))
     def endingWith(s: String) = result(outer.endWith(s))
-    def equalIgnoreSpace(s: String) = result(outer.equalIgnoreSpace(s))
-    def equalIgnoreCase(s: String) = result(outer.equalIgnoreCase(s))
+    def ==/(s: String) = result(outer.be_==/(s))
   }
 }
 

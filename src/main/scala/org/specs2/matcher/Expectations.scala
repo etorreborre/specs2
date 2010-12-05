@@ -19,6 +19,7 @@ trait MustExpectations extends Expectations {
   implicit def theValue[T](t: =>T): MustExpectable[T] = MustExpectable(t)
   implicit def theBlock(t: =>Nothing): MustExpectable[Nothing] = MustExpectable(t)
 }
+object MustExpectations extends MustExpectations
 /**
  * This trait provides implicit definitions to transform any value into a ShouldExpectable
  */
@@ -27,3 +28,4 @@ trait ShouldExpectations extends Expectations {
   implicit def theValue[T](t: =>T): ShouldExpectable[T] = ShouldExpectable(t)
   implicit def theBlock(t: =>Nothing): ShouldExpectable[Nothing] = ShouldExpectable(t)
 }
+object ShouldExpectations extends ShouldExpectations

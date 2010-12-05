@@ -49,8 +49,19 @@ class BeTrueMatcher extends Matcher[Boolean] {
 /**
  * Equality Matcher
  */
-class BeEqualTo[T](t: =>T) extends Matcher[T] {
+class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
   import AnyMatchers._
+  protected val ok: String => String = identity
+  protected val ko: String => String = identity
+  
+  def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
+    val newMatcher = new BeEqualTo(f(t)) {
+      override protected val ok: String => String = okFunction compose outer.ok
+      override protected val ko: String => String = koFunction compose outer.ko
+    } 
+    newMatcher.^^((t: T) => f(t))
+  }
+  
   def apply[S <: T](v: =>Expectable[S]) = {
     val (a, b) = (t, v)
     val (db, qa) = (b.description, q(a)) match {
@@ -64,7 +75,7 @@ class BeEqualTo[T](t: =>T) extends Matcher[T] {
 	    }
       case other @ _ => other 
 	  }
-    result(a == b.value, db + " is equal to " + qa, db + " is not equal to " + qa, b)
+    result(a == b.value, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b)
   }
 }
 
