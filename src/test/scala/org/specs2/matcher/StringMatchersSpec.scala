@@ -3,13 +3,30 @@ package matcher
 import execute._
 import specification._
 
-class StringMatcherSpec extends SpecificationWithJUnit {  def is = 
+class StringMatchersSpec extends SpecificationWithJUnit {  def is = 
+  
   "A string can be matched against a pattern using"                                       ^
     "beMatching"                                                                          ^
     { "eric" must beMatching("e.*") }                                                     ^
                                                                                           p^
     "or 'be matching'"                                                                    ^
     { "eric" aka "ETO" must be matching("e.*") }                                          ^
+                                                                                          p^
+    "find ... withGroups, to check for groups"                                            ^
+    { "erirec" must find("(e|i).").withGroups("e", "i", "e") }                            ^
+                                                                                          endp^
+  "The length of a string can be checked"                                                 ^
+    "with have length"                                                                    ^
+    { "Eric" must haveLength(4) }                                                         ^
+    { "Eric" must have length(4) }                                                        ^
+                                                                                          p^
+    "or with haveSize because a String is also an Iterable[Char]"                         ^
+    { "Eric" must haveSize(4) }                                                           ^
+    { "Eric" must have size(4) }                                                          ^
+                                                                                          p^
+    "or with beEmpty because a String is also an Iterable[Char]"                          ^
+    { "" must beEmpty }                                                                   ^
+    { "" must be empty }                                                                  ^
                                                                                           endp^
   "2 strings can be checked for equality"                                                 ^  
     "ignoring case"                                                                       ^ 
@@ -24,7 +41,7 @@ class StringMatcherSpec extends SpecificationWithJUnit {  def is =
     { "  eric" must beEqualTo(" Eric ").ignoreSpace.ignoreCase }                          ^
       "the failure message must mention 'ignoring space, ignoring case'"                  ! e5^ 
                                                                                           p^
-    "alternately, ignoring case and space"                                                ^
+    "alternatively, ignoring case and space"                                                ^
     { "Eric".aka must beEqualTo(" eric ").ignoreCase.ignoreSpace }                        ^
                                                                                           endp^
   "It is possible to check if one string is contained in another one"                     ^

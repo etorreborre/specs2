@@ -118,11 +118,11 @@ to a ResultOutput trait knowing how to output successes, failures,...
     val fastex2 = "e2" ! { messages.println("e2"); success }
     def e1 = {
       print(args(noindent = true, color = false) ^ slowex1 ^ fastex2) 
-      messages.messages must containInOrder("e2", "e1")
+      messages.messages must contain("e2", "e1").inOrder
     }
     def e2 = {
       print(args(sequential = true, noindent = true, color = false) ^ slowex1 ^ fastex2)
-      messages.messages must containInOrder("e1", "e2")
+      messages.messages must contain("e1", "e2").inOrder
     }
   }
   case class status() {

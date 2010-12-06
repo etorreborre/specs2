@@ -32,15 +32,15 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   /** @return the last block */
   def lastOption = blocks.map(_._1).lastOption
   /** @return the first level or zero */
-  def firstLevel = levels.headOption.getOrElse(0)
+  private def firstLevel = blocks.map(_._2).headOption.getOrElse(0)
   /** @return the last level or zero */
-  def lastLevel = levels.lastOption.getOrElse(0)
+  private def lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
   /** @return alias for the last level */
   def level = lastLevel
-  /** @return all the levels */
+  /** @return all the levels, post-processing them so that there is no negative value */
   def levels = {
     val minLevel = blocks.map(_._2).min
-	blocks.map(_._2 + min(0, minLevel))
+	  blocks.map(_._2 + min(0, minLevel))
   }
 
   
