@@ -39,7 +39,12 @@ class IterablexSpec extends SpecificationWithJUnit with IterableData { def is =
     }                                                                                     ^
     "check that one iterable is contained inside another one, in the same order" ! {
       ! List(1, 2, 3).containsInOrder(2, 1)
-    }
+    }                                                                                     ^
+                                                                                          p^
+  "toDeepString uses recursively the toString method to display iterables in brackets"    ^
+    { List(List(1, 2), 3, List(4, 5)).toDeepString must_== "[[1, 2], 3, [4, 5]]" }        ^
+                                                                                          end
+                                                                                          
 }
 import org.scalacheck.{ Arbitrary, Gen }
 import org.scalacheck.Gen._

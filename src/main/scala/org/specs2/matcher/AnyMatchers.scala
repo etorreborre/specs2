@@ -37,6 +37,17 @@ trait AnyBaseMatchers {
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not
   
+  /** matches if a.isEmpty */
+  def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
+  /** matches if a.isEmpty */
+  def beEmpty[T <% Any { def isEmpty: Boolean }] = new Matcher[T] {
+    def apply[S <: T](v: =>Expectable[S]) = {
+      val iterable = v
+      result(iterable.value.isEmpty, 
+             iterable.description + " is empty", 
+             iterable.description + " is not empty", iterable)
+    }
+  }
 }
 /**
  * Matcher for a boolean value
@@ -90,4 +101,12 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   class AnyBeHaveMatchers[T](s: MatchResult[T]) {
     def equalTo(t: T) = s.apply(outer.be_==(t))
   }
+  
+  implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](s: MatchResult[T]) = 
+    new AnyWithEmptyMatchers(s)
+  class AnyWithEmptyMatchers[T <% Any { def isEmpty: Boolean }](s: MatchResult[T]) {
+    def empty = s.apply(outer.beEmpty[T])
+    def beEmpty = s.apply(outer.beEmpty[T])
+  }
+
 }

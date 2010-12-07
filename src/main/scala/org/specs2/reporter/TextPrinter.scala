@@ -133,8 +133,8 @@ trait TextPrinter {
     def statusAndDescription(text: String, result: Result)(implicit args: Arguments, out: ResultOutput) = {
       val textLines = text.split("\n") 
       val firstLine = textLines.take(1).map { s =>
-        (if (!args.plan) s.takeWhile(_ == ' ').dropRight(2) else s.takeWhile(_ == ' ')) + 
-        out.status(result) + s.dropWhile(_ == ' ')
+        s.takeWhile(_ == ' ').dropRight(2) + 
+        out.status(result)(args) + s.dropWhile(_ == ' ')
       }
       val rest = textLines.drop(1)
       (firstLine ++ rest).mkString("\n")

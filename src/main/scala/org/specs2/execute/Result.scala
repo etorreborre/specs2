@@ -21,15 +21,21 @@ import main.Arguments
  */
 sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1) {
   /** @return the textual status of the result */
-  def status(implicit args: Arguments = Arguments()) = this match {
-	  case Success(_)    => color("+", green, args.color)
-	  case Failure(_, _) => color("x", yellow, args.color)
-	  case Error(_, _)   => color("!", red, args.color)
-	  case Pending(_)    => color("*", blue, args.color)
-	  case Skipped(_)    => color("o", cyan, args.color)
-  }
+  def status(implicit args: Arguments = Arguments()) =
+    if (args.plan) 
+      color("*", blue, args.color)
+    else {
+      this match {
+    	  case Success(_)    => color("+", green, args.color)
+    	  case Failure(_, _) => color("x", yellow, args.color)
+    	  case Error(_, _)   => color("!", red, args.color)
+    	  case Pending(_)    => color("*", blue, args.color)
+    	  case Skipped(_)    => color("o", cyan, args.color)
+      }
+    }
+  
   /** update the message of a result, keeping the subclass type */
-  def updateMessage(msg: String) = { 
+  def updateMessage(msg: String) =
 	  this match {
 	    case Success(m) => Success(msg)
 	    case Failure(m, st) => Failure(msg, st)
@@ -37,7 +43,7 @@ sealed abstract class Result(val message: String = "", val expectationsNb: Int =
 	    case Skipped(m) => Skipped(msg)
 	    case Pending(m) => Pending(msg)
 	  }
-  }
+
   /**
    * @return the logical and combination of 2 results
    */

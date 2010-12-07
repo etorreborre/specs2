@@ -81,6 +81,21 @@ trait Iterablex {
          }
       }
     }
+    /**
+     * @return the representation of the elements of the iterable using the toString method recursively
+     */
+    def toDeepString: String = {
+      if (!xs.isEmpty && xs == xs.iterator.next)
+        xs.toString
+      else
+        "[" + xs.toList.map { x => 
+          x match {
+            case i: Iterable[_] => i.toDeepString
+            case _ => x.toString
+          }
+       }.mkString(", ") + "]"
+    }
+
   }
 }
 private[specs2]

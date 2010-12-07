@@ -39,6 +39,28 @@ trait Matcher[-T] { outer =>
   protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S]): MatchResult[S] = {
 	  Matcher.result(test, okMessage, koMessage, value) 
   }
+  /**
+   * This convenience method can be used to evaluate a boolean condition and return the 
+   * appropriate MatchResult, depending on the boolean value
+   * @return a MatchResult
+   */
+  protected def result[S <: T](other: MatchResult[_], value: Expectable[S]): MatchResult[S] = {
+    val (okMessage, koMessage) = other match {
+      case MatchSuccess(ok, ko, _) => (ok, ko)
+      case MatchFailure(ok, ko, _) => (ok, ko)
+      case _  => (other.message, other.message)
+    }
+    Matcher.result(other.isSuccess, okMessage, koMessage, value) 
+  }
+  protected def result[S <: T](other: MatchResultMessage, value: Expectable[S]): MatchResult[S] = {
+    val (okMessage, koMessage) = other match {
+      case SuccessMessage(ok, ko) => (ok, ko)
+      case FailureMessage(ok, ko) => (ok, ko)
+      case NeutralMessage(message)  => (message, message)
+      case EmptyMessage() => ("", "") 
+    }
+    Matcher.result(other.isSuccess, okMessage, koMessage, value) 
+  }
  
   /** 
    * Adapts a matcher to another.
@@ -80,6 +102,18 @@ trait Matcher[-T] { outer =>
       }
     }
   }
+  /**
+   *  The <code>lazily</code> operator returns a matcher which will match a function returning the expected value
+   */   
+  def lazily = new Matcher[() => T]() {
+    def apply[S <: () => T](a: =>Expectable[S]) = {
+      val function = a
+      val r = outer(Expectable(function.value()))
+      result(r, function)
+    } 
+      
+  }
+
 }
 trait AdaptableMatcher[T] extends Matcher[T] { outer =>
   /** 

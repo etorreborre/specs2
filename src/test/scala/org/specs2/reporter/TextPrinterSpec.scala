@@ -14,7 +14,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
 The TextPrinter is folding Executed Fragments and exporting them
 to a ResultOutput trait knowing how to output successes, failures,...
                                                                                           """^
-																						  p^
+																						                                              p^
 "Text presentation"                                                                       ^
   "by default the Text and the examples are properly indented"                            ! prez().e1^
   "if noindent = true then there is no automatic indenting"                               ! prez().e2^
@@ -109,7 +109,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
   }
   case class plan() {
     val plan: Arguments = args(plan = true)
-    def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("  e1") and not containMatch("\\+ e1") 
+    def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("* e1") and not containMatch("\\+ e1") 
   }
   case class seq() {
     val sequential: Arguments = args(sequential = true)

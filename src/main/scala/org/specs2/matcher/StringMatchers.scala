@@ -143,8 +143,8 @@ trait StringBaseMatchers { outer =>
     IterableMatchers.haveSize(n)  ^^ { (s: String) => (s:Iterable[Char]) }
 
   /** matches if the string is empty, when String is seen as an Iterable[Char] */
-  def beEmpty: Matcher[String] = 
-    IterableMatchers.beEmpty  ^^ { (s: String) => (s:Iterable[Char]) }
+//  def beEmpty: Matcher[String] = 
+//    IterableMatchers.beEmpty  ^^ { (s: String) => (s:Iterable[Char]) }
 }
 
 private[specs2]
@@ -156,7 +156,7 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
     def containing(s: String) = result(outer.contain(s))
     def length(n: Int) = result(haveLength(n))
     def size(n: Int) = result(outer.haveSize(n))
-    def empty = result(outer.beEmpty)
+//    def empty = result(outer.beEmpty)
     def startWith(s: String) = result(outer.startWith(s))
     def endWith(s: String) = result(outer.endWith(s))
     def startingWith(s: String) = result(outer.startWith(s))

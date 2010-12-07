@@ -3,7 +3,9 @@ package matcher
 
 import control._
 import text.Quote._
+import text.Plural._
 import collection.Iterablex._
+import MatchersImplicits._
 
 /**
  * Matchers for iterables 
@@ -27,21 +29,9 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
   def contain[T](t: LazyParameter[T]*): ContainMatcher[T] = new ContainMatcher(t:_*)
   
   /** match if iterable contains (x matches p) */
-  def containPattern[T](t: =>String): IterableMatcher[T] = containLike(t, "pattern")
+  def containPattern[T](t: =>String): ContainLikeMatcher[T] = containLike[T](t, "pattern")
   /** match if iterable contains (x matches .*+a+.*) */
-  def containMatch[T](t: =>String): IterableMatcher[T] = containLike(".*"+t+".*", "match")
-
-  /** match if iterable.isEmpty */
-  def empty[T] = beEmpty[T]
-  /** match if iterable.isEmpty */
-  def beEmpty[T] = new IterableMatcher[T] {
-    def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
-      val iterable = v
-      result(iterable.value.isEmpty, 
-             iterable.description + " is empty", 
-             iterable.description + " is not empty", iterable)
-    }
-  }
+  def containMatch[T](t: =>String): ContainLikeMatcher[T] = containLike[T](".*"+t+".*", "match")
 
   /** match if iterable has size n */
   def haveSize[T](n: Int) = new IterableMatcher[T] {
@@ -53,14 +43,31 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
     }
   }
   
-  private def containLike[T](pattern: =>String, matchType: String) = new IterableMatcher[T] {
+  /**
+   * Matches if there is one element in the iterable verifying the <code>function</code> parameter: <code>(iterable.exists(function(_))</code>
+   */
+  def have[T](function: T => Boolean) = new Matcher[Iterable[T]]{
     def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
-      val (a, iterable) = (pattern, v)
-      result(iterable.value.exists(_.toString.matches(a)), 
-    		     iterable.description + " contains "+matchType+ " " + q(a), 
-    		     iterable.description + " doesn't contain "+matchType+ " " + q(a), iterable)
+      val iterable = v; 
+      result(iterable.value.exists(function(_)), 
+             "at least one element verifies the property in " + iterable.description, 
+             "no element verifies the property in " + iterable.description,
+             iterable)
     }
   }
+  /**
+   * Matches if there l contains the same elements as the Iterable <code>iterable</code>.<br>
+   * This verification does not consider the order of the elements but checks the iterables recursively
+   */
+  def haveTheSameElementsAs[T](l: =>Iterable[T]) = new HaveTheSameElementsAs(l)
+
+  /**
+   * Matches if a sequence contains the same elements as s, using the equality (in the same order)
+   */
+  def beTheSameSeqAs[T](s: =>Seq[T]) = ((AnyMatchers.be_==(_:T)).toSeq).apply(s)
+
+  private def containLike[T](pattern: =>String, matchType: String) = 
+    new ContainLikeMatcher[T](pattern, matchType) 
 }
 
 private[specs2]
@@ -70,8 +77,6 @@ trait IterableBeHaveMatchers extends LazyParameters { outer: IterableMatchers =>
     def contain(ts: LazyParameter[T]*) = s.apply(outer.contain(ts:_*))
     def containMatch(t: =>String) = s.apply(outer.containMatch(t))
     def containPattern(t: =>String) = s.apply(outer.containPattern(t))
-    def empty = s.apply(outer.beEmpty[T])
-    def beEmpty = s.apply(outer.beEmpty[T])
     def size(n: Int) = s.apply(outer.haveSize(n))
   }
 }
@@ -94,4 +99,41 @@ class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]
   }
   
   private def inOrder[T](l1: List[T], l2: List[T]): Boolean = {
-   l1 match {      case Nil => l2 == Nil      case other => l2.headOption == l1.headOption && inOrder(l1.drop(1), l2.drop(1)) || inOrder(l1.drop(1), l2)    }  }}      
+   l1 match {      case Nil => l2 == Nil      case other => l2.headOption == l1.headOption && inOrder(l1.drop(1), l2.drop(1)) || inOrder(l1.drop(1), l2)    }  }}
+class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matcher[Iterable[T]] {
+  def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
+    val (a, iterable) = (pattern, v)
+    result(iterable.value.exists(_.toString.matches(a)), 
+           iterable.description + " contains "+matchType+ " " + q(a), 
+           iterable.description + " doesn't contain "+matchType+ " " + q(a), iterable)
+  }
+  def onlyOnce = new ContainLikeOnlyOnceMatcher[T](pattern, matchType)
+}
+
+class ContainLikeOnlyOnceMatcher[T](pattern: =>String, matchType: String) extends Matcher[Iterable[T]] {
+  def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
+    val (a, iterable) = (pattern, v)
+    val matchNumber = iterable.value.filter(_.toString.matches(a)).size
+    val koMessage = 
+      if (matchNumber == 0)
+        iterable.description + " doesn't contain "+matchType+ " " + q(a)
+      else
+        iterable.description + " contains "+matchType+ " " + q(a) + " "+ (matchNumber qty "time")
+        
+    result(matchNumber == 1, 
+           iterable.description + " contains "+matchType+ " " + q(a) + " only once", 
+           koMessage, 
+           iterable)
+  }
+}
+class HaveTheSameElementsAs[T] (l: =>Iterable[T]) extends Matcher[Iterable[T]] {
+  def apply[S <: Iterable[T]](it: =>Expectable[S]) = {
+    val iterable = it
+    result(l.sameElementsAs(iterable.value),
+      iterable.value.toDeepString + " has the same elements as " + q(l.toDeepString),
+      iterable.value.toDeepString + " doesn't have the same elements as " + q(l.toDeepString),
+      iterable)
+  }
+}
+
+  
