@@ -34,8 +34,8 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
   def containMatch[T](t: =>String): ContainLikeMatcher[T] = containLike[T](".*"+t+".*", "match")
 
   /** match if iterable has size n */
-  def haveSize[T](n: Int) = new IterableMatcher[T] {
-    def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
+  def haveSize[T <% { def size: Int }](n: Int) = new Matcher[T] {
+    def apply[S <: T](v: =>Expectable[S]) = {
       val iterable = v
       result(iterable.value.size == n, 
              iterable.description + " have size " + n, 
@@ -99,8 +99,14 @@ class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]
   }
   
   private def inOrder[T](l1: List[T], l2: List[T]): Boolean = {
-   l1 match {      case Nil => l2 == Nil      case other => l2.headOption == l1.headOption && inOrder(l1.drop(1), l2.drop(1)) || inOrder(l1.drop(1), l2)    }  }}
-class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matcher[Iterable[T]] {
+   l1 match {
+      case Nil => l2 == Nil
+      case other => l2.headOption == l1.headOption && inOrder(l1.drop(1), l2.drop(1)) || inOrder(l1.drop(1), l2)
+    }
+  }
+}
+
+class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matcher[Iterable[T]] {
   def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
     val (a, iterable) = (pattern, v)
     result(iterable.value.exists(_.toString.matches(a)), 

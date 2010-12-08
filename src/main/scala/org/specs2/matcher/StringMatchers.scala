@@ -35,7 +35,7 @@ trait StringBaseMatchers { outer =>
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
   def !=/(s: String) = be_!=/(s)
   /** matches if (b.indexOf(a) >= 0) */   
-  def contain(t: =>String) = new Matcher[String] { 
+  def contain(t: String) = new Matcher[String] { 
     def apply[S <: String](v: =>Expectable[S]) = {
       val (a, b) = (t, v)
       result(a != null && b.value != null && b.value.indexOf(a) >= 0, 
@@ -138,13 +138,6 @@ trait StringBaseMatchers { outer =>
     }
   }
   
-  /** matches if the size of a String is n, when String is seen as an Iterable[Char] */
-  def haveSize(n: Int): Matcher[String] = 
-    IterableMatchers.haveSize(n)  ^^ { (s: String) => (s:Iterable[Char]) }
-
-  /** matches if the string is empty, when String is seen as an Iterable[Char] */
-//  def beEmpty: Matcher[String] = 
-//    IterableMatchers.beEmpty  ^^ { (s: String) => (s:Iterable[Char]) }
 }
 
 private[specs2]
@@ -155,13 +148,18 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
     def contain(s: String) = result(outer.contain(s))
     def containing(s: String) = result(outer.contain(s))
     def length(n: Int) = result(haveLength(n))
-    def size(n: Int) = result(outer.haveSize(n))
-//    def empty = result(outer.beEmpty)
+    def size(n: Int) = result(IterableMatchers.haveSize(n))
     def startWith(s: String) = result(outer.startWith(s))
     def endWith(s: String) = result(outer.endWith(s))
     def startingWith(s: String) = result(outer.startWith(s))
     def endingWith(s: String) = result(outer.endWith(s))
     def ==/(s: String) = result(outer.be_==/(s))
   }
+  implicit def toNeutralStringMatcher(result: NeutralMatcher[Any]) : NeutralStringMatcher = 
+    new NeutralStringMatcher(result)
+  class NeutralStringMatcher(result: NeutralMatcher[Any]) {
+    def ==/(s: String) = outer.be_==/(s)
+  }
+
 }
 

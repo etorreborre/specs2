@@ -11,7 +11,10 @@ trait Matchers extends AnyMatchers
                   with StringMatchers 
                   with XmlMatchers
                   with BeHaveMatchers 
-                  with ExceptionMatchers 
+                  with ExceptionMatchers
+                  with NumericMatchers
+                  with OptionMatchers
+                  with EitherMatchers
                   with MatchersImplicits
       
 object Matchers extends Matchers

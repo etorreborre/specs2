@@ -48,6 +48,21 @@ trait AnyBaseMatchers {
              iterable.description + " is not empty", iterable)
     }
   }
+  def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
+    def apply[S <: T](v: =>Expectable[S]) = {
+      val a = v
+      
+      val r = if (a.value != null && pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
+      result(r.isSuccess,
+             a.description + " matches the given pattern " + r.message,
+             a.description + " doesn't match the expected pattern "  + r.message,
+             a)
+    }
+  }
+  def like[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
+  /** @alias for beLike */
+  def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
+  def likeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
 }
 /**
  * Matcher for a boolean value
@@ -97,7 +112,6 @@ class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
  */
 trait AnyBeHaveMatchers { outer: AnyMatchers =>
   implicit def anyBeHaveMatcher[T](s: MatchResult[T]) = new AnyBeHaveMatchers(s)
-  
   class AnyBeHaveMatchers[T](s: MatchResult[T]) {
     def equalTo(t: T) = s.apply(outer.be_==(t))
   }
@@ -108,5 +122,9 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
     def empty = s.apply(outer.beEmpty[T])
     def beEmpty = s.apply(outer.beEmpty[T])
   }
-
+  implicit def toBeLikeResultMatcher[T](result: MatchResult[T]) = new BeLikeResultMatcher(result)
+  class BeLikeResultMatcher[T](result: MatchResult[T]) {
+    def like(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
+    def likeA(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
+  }
 }

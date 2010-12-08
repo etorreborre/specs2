@@ -20,6 +20,7 @@ trait Specification extends BaseSpecification
    with ArgumentsArgs
    with MustMatchers
    with PredefinedFragments 
-   with StandardResults 
+   with StandardResults
+   with StandardMatchResults
    with AutoExamples
    with Debug 

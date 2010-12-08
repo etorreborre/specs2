@@ -1,5 +1,7 @@
 package org.specs2
 package matcher
+import java.util.Arrays._
+import scala.collection.JavaConversions.{ asScalaIterable }
 
 class IterableMatchersSpec extends SpecificationWithJUnit { def is = 
   
@@ -41,6 +43,11 @@ class IterableMatchersSpec extends SpecificationWithJUnit { def is =
   "we can check if an iterable has the same elements in the same order"                   ^
     { List("Hello", "World") must beTheSameSeqAs(List("Hello", "World")) }                ^
     "and show appropriate failure messages if one element doesn't match"                  ! sameSeq().e1 ^
+                                                                                          endp^
+  "Java collections can also be used with Iterable matchers"                              ^bt^
+  "But generally require explicit conversion"                                             ^
+    { asList("Hello", "World") must haveSize(2) }                                         ^
+    { asList("Hello", "World").toList must containMatch("ll") }                           ^
                                                                                           end
   case class order() {
     def fail1 = (List(1, 2, 3, 4) must contain(2, 5).inOrder) returns 
