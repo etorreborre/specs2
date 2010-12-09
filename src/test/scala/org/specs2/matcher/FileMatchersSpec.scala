@@ -5,8 +5,9 @@ import java.io.File
 class FileMatchersSpec extends SpecificationWithJUnit with TestFileSystem { def is = 
                                                                                           """
   The FileMatchers trait provides matchers to check files and paths.
-  In the following, okPath references a path which actually exists and koPath, a path
+  In the following, okPath references a path which actually exists and missingPath, a path
   which doesn't.
+  
                                                                                           """^
                                                                                           p^
   "The PathMatchers trait provide matchers for paths"                                     ^
@@ -15,128 +16,91 @@ class FileMatchersSpec extends SpecificationWithJUnit with TestFileSystem { def 
     { "c:\\temp\\hello" must beEqualToIgnoringSep("c:/temp/hello") }                      ^
                                                                                           p^
     "beAnExistingPath checks if a path exists"                                            ^
-    { okPath must be anExistingPath }                                                     ^
+    { okPath must beAnExistingPath }                                                      ^
+    { missingPath must not be anExistingPath }                                            ^
                                                                                           p^
+    "beAReadablePath checks if a path is readable"                                        ^
+    { setReadable(okPath) must beAReadablePath }                                          ^
+    { setNotReadable(okPath) must not be aReadablePath }                                  ^
+                                                                                          p^
+    "beAWritablePath checks if a path is writable"                                        ^
+    { setWritable(okPath) must beAWritablePath }                                          ^
+    { setNotWritable(okPath) must not be aWritablePath }                                  ^
+                                                                                          p^
+    "beAnAbsolutePath checks if a path is absolute"                                       ^
+    { "/tmp" must beAnAbsolutePath }                                                      ^
+    { "./tmp" must not be anAbsolutePath }                                                ^
+                                                                                          p^
+    "beAHiddenPath checks if a path is hidden"                                            ^
+    { ".tmp" must beAHiddenPath }                                                         ^
+    { "/tmp" must not be aHiddenPath }                                                    ^
+                                                                                          p^
+    "beAFilePath checks if a path is a file"                                              ^
+    { "c:/tmp.txt" must beAFilePath }                                                     ^
+    { "c:/tmp" must not be aFilePath }                                                    ^
+                                                                                          p^
+    "beADirectorPath checks if a path is a directory"                                     ^
+    { "c:/tmp" must beADirectoryPath }                                                    ^
+    { "c:/tmp.txt" must not be aDirectoryPath }                                           ^
+                                                                                          p^
+    "havePathName checks if a path has a given name"                                      ^
+    { "c:/tmp/test.txt" must havePathName("test.txt") }                                   ^
+    { "c:/tmp/test.txt" must not have pathName("name.txt") }                              ^
+                                                                                          p^
+    "haveAsAbsolutePath checks if a path has a given absolute path"                       ^
+    { "c:/tmp/test.txt" must haveAsAbsolutePath("c:/tmp/test.txt") }                      ^
+                                                                                          p^
+    "haveAsCanonicalPath checks if a path has a given canonical path"                     ^
+    { "c:/tmp/../test.txt" must haveAsCanonicalPath("c:/test.txt") }                      ^
+                                                                                          p^
+    "haveParentPath checks if a path has a given parent path"                             ^
+    { "c:/tmp/dir/test.txt" must haveParentPath("c:/tmp/dir") }                           ^
+                                                                                          p^
+    "listPaths checks if a path has a given list of children"                             ^
+    { addChild("c:/t/", "c:/t/test.txt"); "c:/t/" must listPaths("c:/t/test.txt") }       ^
+                                                                                          p^
+  "The FileMatchers trait provides similar matchers, but for files"                       ^
+    "exist checks if a file exists"                                                       ^
+    { file(okPath) must exist }                                                           ^
+                                                                                          p^
+    "beReadable checks if a file is readable"                                             ^
+    { file(setReadable(okPath)) must beReadable }                                         ^
+                                                                                          p^
+    "beWritable checks if a file is writable"                                             ^
+    { file(setWritable(okPath)) must beWritable }                                         ^
+                                                                                          p^
+    "beAbsolute checks if a file is absolute"                                             ^
+    { file("/tmp") must beAbsolute }                                                      ^
+                                                                                          p^
+    "beHidden checks if a file is hidden"                                                 ^
+    { file(".tmp") must beHidden }                                                        ^
+                                                                                          p^
+    "beAFile checks if a file is a file"                                                  ^
+    { file("c:/tmp.txt") must beAFile }                                                   ^
+                                                                                          p^
+    "beADirectory checks if a file is a directory"                                         ^
+    { file("c:/tmp") must beADirectory }                                                  ^
+                                                                                          p^
+    "haveName checks if a file has a given name"                                          ^
+    { file("c:/tmp/test.txt") must haveName("test.txt") }                                 ^
+                                                                                          p^
+    "haveAbsolutePath checks if a file has a given absolute path"                         ^
+    { file("c:/tmp/test.txt") must haveAbsolutePath("c:/tmp/test.txt") }                  ^
+                                                                                          p^
+    "haveCanonicalPath checks if afile has a given canonical path"                        ^
+    { file("c:/tmp/dir/../test.txt") must haveCanonicalPath("c:/tmp/test.txt") }          ^
+                                                                                          p^
+    "haveParent checks if a file has a given parent path"                                 ^
+    { file("c:/tmp/dir/test.txt") must haveParent("c:/tmp/dir") }                         ^
+                                                                                          p^
+    "haveList checks if a file has a given list of children"                              ^
+    { addChild("c:/t", "c:/t/test.txt"); file("c:/t/") must haveList("c:/t/test.txt") }  ^
                                                                                           end
-
+  def file(s: String) = new File(s)
 }
 
 
 //class fileMatchersSpec extends MatchersSpecification with TestFileSystem  {
-//
-//  "The PathMatchers trait" should {
-//    "provide an beEqualToIgnoringSep matcher checking if two paths are the same regardless of their separators" in {
-//      "c:\\temp\\hello" must beEqualToIgnoringSep("c:/temp/hello")
-//      expectation("c:\\temp\\hello" must beEqualToIgnoringSep("c:/temp2/hello")) must failWith("'c:\\temp\\hello' is not equal ignoring separators to 'c:/temp2/hello'")
-//    }
-//    "provide an existPath / beAnExistingPath matcher to check if a file exists" in {
-//      okPath must existPath
-//      okPath must beAnExistingPath
-//      expectation(missingPath must beAnExistingPath) must failWith("'absent' doesn't exist")
-//      expectation(missingPath aka "missing path" must beAnExistingPath) must failWith("missing path 'absent' doesn't exist")
-//    }
-//    "provide an beAReadablePath matcher to check if a file can be read" in {
-//      setReadable(okPath)
-//      okPath must beAReadablePath
-//
-//      setNotReadable(okPath)
-//      expectation(okPath must beAReadablePath) must failWith("'path' can't be read")
-//      expectation(okPath aka "existing path" must beAReadablePath) must failWith("existing path 'path' can't be read")
-//    }
-//    "provide an beAWritablePath matcher to check if a file can be written" in {
-//      setWritable(okPath)
-//      okPath must beAWritablePath
-//
-//      setNotWritable(okPath)
-//      expectation(okPath must beAWritablePath) must failWith("'path' can't be written")
-//      expectation(okPath aka "existing path" must beAWritablePath) must failWith("existing path 'path' can't be written")
-//    }
-//    "provide an beAnAbsolutePath matcher to check if a file is absolute" in {
-//      "/tmp" must beAnAbsolutePath
-//      expectation(okPath must beAnAbsolutePath) must failWith("'path' is not absolute")
-//      expectation(okPath aka "existing path" must beAnAbsolutePath) must failWith("existing path 'path' is not absolute")
-//    }
-//    "provide an beAHiddenPath matcher to check if a file is hidden" in {
-//      ".tmp" must beAHiddenPath
-//      expectation(okPath must beAHiddenPath) must failWith("'path' is not hidden")
-//      expectation(okPath aka "existing path" must beAHiddenPath) must failWith("existing path 'path' is not hidden")
-//    }
-//    "provide an beAFilePath matcher to check if a file is a file" in {
-//      "c:/tmp.txt" must beAFilePath
-//      expectation("tmp/" must beAFilePath) must failWith("'tmp/' is not a file")
-//      expectation("tmp/" aka "tmp path" must beAFilePath) must failWith("tmp path 'tmp/' is not a file")
-//    }
-//    "provide an beADirectoryPath matcher to check if a file is a directory" in {
-//      "c:/tmp/" must beADirectoryPath
-//      expectation("test.txt" must beADirectoryPath) must failWith("'test.txt' is not a directory")
-//      expectation("test.txt" aka "this file" must beADirectoryPath) must failWith("this file 'test.txt' is not a directory")
-//    }
-//    "provide an havePathName matcher to check if a file has a given name" in {
-//      "c:/tmp/test.txt" must havePathName("test.txt")
-//      expectation("c:/tmp/test.txt" must havePathName("tst.txt")) must failWith("'c:/tmp/test.txt' is not named 'tst.txt'")
-//      expectation("c:/tmp/test.txt" aka "the file" must havePathName("tst.txt")) must failWith("the file 'c:/tmp/test.txt' is not named 'tst.txt'")
-//    }
-//    "provide an haveAsAbsolutePath matcher to check if a file has a given absolute path" in {
-//      "c:/tmp/test.txt" must haveAsAbsolutePath("c:/tmp/test.txt")
-//      expectation("c:/tmp/test.txt" must haveAsAbsolutePath("tst.txt")) must failWithMatch("'c:/tmp/test.txt' doesn't have absolute path 'tst.txt' but .*")
-//      expectation("c:/tmp/test.txt" aka "the file" must haveAsAbsolutePath("tst.txt")) must failWithMatch("the file 'c:/tmp/test.txt' doesn't have absolute path 'tst.txt' but .*")
-//    }
-//    "provide an haveAsCanonicalPath matcher to check if a file has a given canonical path" in {
-//      "c:/tmp/dir/../test.txt" must haveAsCanonicalPath("c:/tmp/test.txt")
-//      expectation("c:/tmp/dir/test.txt" must haveAsCanonicalPath("c:/tmp/test.txt")) must failWithMatch("'c:/tmp/dir/test.txt' doesn't have canonical path 'c:/tmp/test.txt' but .*")
-//      expectation("c:/tmp/dir/test.txt" aka "the file" must haveAsCanonicalPath("c:/tmp/test.txt")) must failWithMatch("the file 'c:/tmp/dir/test.txt' doesn't have canonical path 'c:/tmp/test.txt' but .*")
-//    }
-//    "provide an haveParentPath matcher to check if a file has a given parent path" in {
-//      "c:/tmp/dir/test.txt" must haveParentPath("c:/tmp/dir")
-//      expectation("c:/tmp/dir/test.txt" must haveParentPath("c:/tmp/test.txt")) must failWithMatch("'c:/tmp/dir/test.txt' doesn't have parent path 'c:/tmp/test.txt' but .*")
-//      expectation("c:/tmp/dir/test.txt" aka "the file" must haveParentPath("c:/tmp/test.txt")) must failWithMatch("the file 'c:/tmp/dir/test.txt' doesn't have parent path 'c:/tmp/test.txt' but .*")
-//    }
-//    "provide an listPaths matcher to check if a file has a given children" in {
-//      addChild("c:/tmp", "c:/tmp/test.txt")
-//      "c:/tmp" must listPaths("c:/tmp/test.txt")
-//      expectation("c:/tmp" must listPaths("c:/tmp2/test.txt")) must failWith("'c:/tmp' doesn't have files 'c:/tmp2/test.txt' but 'c:/tmp/test.txt'")
-//      expectation("c:/tmp" aka "the dir" must listPaths("c:/tmp2/test.txt")) must failWith("the dir 'c:/tmp' doesn't have files 'c:/tmp2/test.txt' but 'c:/tmp/test.txt'")
-//    }
-//
-//    "provide an be equalToIgnoringSep matcher" in {
-//      "c:\\temp\\hello" must be equalToIgnoringSep("c:/temp/hello")
-//    }
-//    "provide an be an existingPath matcher to check if a file exists" in {
-//      okPath must be an existingPath
-//    }
-//    "provide an be a readablePath matcher to check if a file can be read" in {
-//      setReadable(okPath)
-//      okPath must be a readablePath
-//    }
-//    "provide an be a writablePath matcher to check if a file can be written" in {
-//      setWritable(okPath)
-//      okPath must be a writablePath
-//    }
-//    "provide an be an absolutePath matcher to check if a file is absolute" in {
-//      "/tmp" must be an absolutePath
-//    }
-//    "provide an be a hiddenPath matcher to check if a file is hidden" in {
-//      ".tmp" must be a hiddenPath
-//    }
-//    "provide an be a filePath matcher to check if a file is a file" in {
-//      "c:/tmp.txt" must be a filePath
-//    }
-//    "provide an be a directoryPath matcher to check if a file is a directory" in {
-//      "c:/tmp/" must be a directoryPath
-//    }
-//    "provide an have pathName matcher to check if a file has a given name" in {
-//      "c:/tmp/test.txt" must have pathName("test.txt")
-//    }
-//    "provide an have asAbsolutePath matcher to check if a file has a given absolute path" in {
-//      "c:/tmp/test.txt" must have asAbsolutePath("c:/tmp/test.txt")
-//    }
-//    "provide an have asCanonicalPath matcher to check if a file has a given canonical path" in {
-//      "c:/tmp/dir/../test.txt" must have asCanonicalPath("c:/tmp/test.txt")
-//    }
-//    "provide an have ParentPath matcher to check if a file has a given parent path" in {
-//      "c:/tmp/dir/test.txt" must have parentPath("c:/tmp/dir")
-//    }
-//  }
 //  "The File matchers" should { 
 //    "provide an exist matcher to check if a file exists" in {
 //      new File(okPath) must exist

@@ -49,15 +49,25 @@ trait MockFileSystem extends FileSystem {
     children.get(parent).get += child
   }
   /** sets a file as readable */
-  def setReadable(path: String) = if (!canRead(path)) (readableFiles ::= path)
+  def setReadable(path: String) = {
+    if (!canRead(path)) (readableFiles ::= path)
+    path
+  }
   /** sets a file as writable */
-  def setWritable(path: String) = if (!canWrite(path)) (writableFiles ::= path)
-
+  def setWritable(path: String) = {
+    if (!canWrite(path)) (writableFiles ::= path)
+    path
+  }
   /** sets a file as not readable */
-  def setNotReadable(path: String) = readableFiles = readableFiles.filterNot(_ == path)
+  def setNotReadable(path: String) = {
+    readableFiles = readableFiles.filterNot(_ == path)
+    path
+  }
   /** sets a file as not writable */
-  def setNotWritable(path: String) = writableFiles = writableFiles.filterNot(_ == path)
-
+  def setNotWritable(path: String) = {
+    writableFiles = writableFiles.filterNot(_ == path)
+    path
+  }
   /** overrides the canRead definition checking in the readableFiles list */
   override def canRead(path: String) = readableFiles.exists(_ == path)
   /** overrides the canWrite definition checking in the writableFiles list */

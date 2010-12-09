@@ -18,7 +18,7 @@ trait PathBaseMatchers extends FileSystem { outer =>
   /** matches if new File(path).canRead */   
   def beAReadablePath = new PathMatcher((s: String) => canRead(s), "is readable", "can't be read")
   /** matches if new File(path).canWrite */   
-  def beAWritablePath = new PathMatcher((s: String) => canRead(s), "is writable", "can't be written")
+  def beAWritablePath = new PathMatcher((s: String) => canWrite(s), "is writable", "can't be written")
   /** matches if new File(path).isAbsolute */   
   def beAnAbsolutePath = new PathMatcher((s: String) => isAbsolute(s), "is absolute", "is not absolute")
   /** matches if new File(path).isHidden */   
@@ -102,9 +102,9 @@ trait FileBaseMatchers extends PathMatchers {
   /** matches if file.isHidden */   
   def beHidden[T <: { def getPath(): String }] = (beAHiddenPath) ^^ ((_:T).getPath)
   /** matches if file.isFile */   
-  def beFile[T <: { def getPath(): String }] = (beAFilePath) ^^ ((_:T).getPath)
+  def beAFile[T <: { def getPath(): String }] = (beAFilePath) ^^ ((_:T).getPath)
   /** matches if file.isDirectory */   
-  def beDirectory[T <: { def getPath(): String }] = (beADirectoryPath) ^^ ((_:T).getPath)
+  def beADirectory[T <: { def getPath(): String }] = (beADirectoryPath) ^^ ((_:T).getPath)
   /** matches if file.getName == name */   
   def haveName[T <: { def getPath(): String }](name: String) = (havePathName(name)) ^^ ((_:T).getPath)
   /** matches if file.getAbsolutePath == path  */   
@@ -140,8 +140,8 @@ trait FileBeHaveMatchers { this: FileBaseMatchers =>
     def readable = result(beReadable)
     def writable = result(beWritable)
     def absolute = result(beAbsolute)
-    def file = result(beFile)
-    def directory = result(beDirectory)
+    def aFile = result(beAFile)
+    def aDirectory = result(beADirectory)
     def name(name: String) = result(haveName(name))
     def paths(list: String) = result(haveList(list))
     def absolutePath(path: String) = result(haveAbsolutePath(path))
@@ -152,8 +152,8 @@ trait FileBeHaveMatchers { this: FileBaseMatchers =>
   def readable[T <: { def getPath(): String }] = beReadable
   def writable[T <: { def getPath(): String }] = beWritable
   def absolute[T <: { def getPath(): String }] = beAbsolute
-  def file[T <: { def getPath(): String }] = beFile
-  def directory[T <: { def getPath(): String }] = beDirectory
+  def aFile[T <: { def getPath(): String }] = beAFile
+  def aDirectory[T <: { def getPath(): String }] = beADirectory
   def name[T <: { def getPath(): String }](name: String) = haveName(name)
   def paths[T <: { def getPath(): String }](list: String) = haveList(list)
   def absolutePath[T <: { def getPath(): String }](path: String) = haveAbsolutePath(path)
