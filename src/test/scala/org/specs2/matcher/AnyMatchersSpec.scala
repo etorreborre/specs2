@@ -13,6 +13,8 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
   "beLike matches objects against a pattern"                                              ^
   { List(1, 2) must beLike { case List(a, b) => ok } }                                    ^
   { List(1, 2) must beLike { case List(a, b) => (a + b) must_== 3 } }                     ^
+  "if the match succeeds but the condition after match fails, \n"                         +
+  "a precise failure message can be returned"                                             ! e1^
                                                                                           p^
   "toSeq allows to transform a single matcher to a matcher checking a Seq"                ^
   { List(1, 2, 3) must ((be_==(_:Int)).toSeq)(Seq(1, 2, 3)) }                             ^
@@ -20,4 +22,7 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
   "toSet allows to transform a single matcher to a matcher checking a Set"                ^
   { Set(1, 2, 3) must ((be_==(_:Int)).toSet)(Set(1, 2, 3)) }                              ^ 
                                                                                           end
+                                                                                          
+  def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
+           "'3' is not equal to '2'"
 }

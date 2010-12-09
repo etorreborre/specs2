@@ -1,6 +1,7 @@
 package org.specs2
 
 import control._
+import time._
 import main.ArgumentsArgs
 import execute._
 import matcher._
@@ -23,4 +24,5 @@ trait Specification extends BaseSpecification
    with StandardResults
    with StandardMatchResults
    with AutoExamples
+   with TimeConversions
    with Debug 

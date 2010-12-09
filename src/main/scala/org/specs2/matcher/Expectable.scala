@@ -16,7 +16,7 @@ import text.Quote._
  * value toString method and the additional description.
  *
  */
-class Expectable[+T] protected (private val t: () => T) { outer =>
+class Expectable[+T] protected (private[specs2] val t: () => T) { outer =>
   /** the value is only evaluated if necessary */
   lazy val value = t()
   
@@ -47,7 +47,8 @@ class Expectable[+T] protected (private val t: () => T) { outer =>
   
   /** optional additional description */
   protected val desc: Option[String] = None
-
+  /** evaluate the value once and return the same expectable */
+  private[specs2] def evaluate = Expectable(t(), desc)
   /** @return the description of the matched value, quoted. */
   protected def d[T](value: =>T) = desc  match {
     case None => if (value.isBoolean) "the value" else q(value)

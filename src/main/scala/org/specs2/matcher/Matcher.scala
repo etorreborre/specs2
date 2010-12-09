@@ -6,6 +6,7 @@ import scalaz.Scalaz._
 import execute._
 import Expectable._
 import MatchResult._
+import time.Duration
 /**
  * The `Matcher` trait is the base trait for any Matcher.
  * 
@@ -111,8 +112,17 @@ trait Matcher[-T] { outer =>
       val r = outer(Expectable(function.value()))
       result(r, function)
     } 
-      
   }
+  /** 
+   * @return a matcher that needs to eventually match, after 40 retries and a sleep time 
+   * of 100 milliseconds
+   */
+  def eventually: Matcher[T] = EventuallyMatchers.eventually(this)
+  /**
+   *  @return a matcher that needs to eventually match, after a given number of retries 
+   *  and a sleep time
+   */
+  def eventually(retries: Int, sleep: Duration): Matcher[T] = EventuallyMatchers.eventually(retries, sleep)(this)
 
 }
 trait AdaptableMatcher[T] extends Matcher[T] { outer =>
