@@ -28,19 +28,19 @@ import StandardFragments._
  */
 case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   /** @return the first block */
-  def headOption = blocks.map(_._1).headOption
+  private def headOption = blocks.map(_._1).headOption
   /** @return the last block */
-  def lastOption = blocks.map(_._1).lastOption
+  private def lastOption = blocks.map(_._1).lastOption
   /** @return the first level or zero */
   private def firstLevel = blocks.map(_._2).headOption.getOrElse(0)
   /** @return the last level or zero */
   private def lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
   /** @return alias for the last level */
-  def level = lastLevel
+  def level = levels.lastOption.getOrElse(0)
   /** @return all the levels, post-processing them so that there is no negative value */
   def levels = {
     val minLevel = blocks.map(_._2).min
-	  blocks.map(_._2 + min(0, minLevel))
+	  blocks.map(_._2 - min(0, minLevel))
   }
 
   
@@ -121,9 +121,9 @@ case object Levels {
         case (None, _)                        => b2
         case (Some(BlockReset(t)), _)         => b1 add b2.resetLevel(_ - b2.firstLevel)
         case (_, Some(BlockReset(t)))         => b1 add b2.resetLevel(_ - b2.firstLevel)
-        case (Some(BlockIndent(t, n)), _)     => b1 add b2.resetLevel(b1.level + _ + n)
-        case (Some(BlockUnindent(t, n)), _)   => b1 add b2.resetLevel(b1.level + _ - n)
-        case _                                => b1 add b2.resetLevel(b1.level + _)
+        case (Some(BlockIndent(t, n)), _)     => b1 add b2.resetLevel(b1.lastLevel + _ + n)
+        case (Some(BlockUnindent(t, n)), _)   => b1 add b2.resetLevel(b1.lastLevel + _ - n)
+        case _                                => b1 add b2.resetLevel(b1.lastLevel + _)
       }
     val zero = new Levels[T]()
   }

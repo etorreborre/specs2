@@ -136,7 +136,7 @@ trait TextPrinter {
         s.takeWhile(_ == ' ').dropRight(2) + 
         out.status(result)(args) + s.dropWhile(_ == ' ')
       }
-      val rest = textLines.drop(1).map("  "+_)
+      val rest = textLines.drop(1)
       (firstLine ++ rest).mkString("\n")
     }
   }

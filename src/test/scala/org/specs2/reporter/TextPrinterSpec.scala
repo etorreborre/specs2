@@ -9,7 +9,7 @@ import execute._
 import specification._
 import SpecsArguments._
 
-class TextPrinterSpec extends SpecificationWithJUnit { def is = 
+class TextPrinterSpec extends SpecificationWithJUnit { def is = args(showlevel=true)^
                                                                                           """
 The TextPrinter is folding Executed Fragments and exporting them
 to a ResultOutput trait knowing how to output successes, failures,...
