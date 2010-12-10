@@ -8,6 +8,7 @@ import execute._
  */
 trait Matchers extends AnyMatchers 
                   with IterableMatchers 
+                  with MapMatchers
                   with StringMatchers 
                   with XmlMatchers
                   with BeHaveMatchers 

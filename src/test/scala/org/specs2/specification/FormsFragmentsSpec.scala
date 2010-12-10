@@ -4,9 +4,9 @@ import form._
 
 class FormsFragmentsSpec extends SpecificationWithJUnit with Forms { def is = 
   
-" A Form can be added"                                                                    ^
 "   as a Fragment in a specification"                                                     ^
-"     creating a new Text Fragment"                                                       ! fragments.e1_1^
+  " A Form can be added"                                                                    ^
+  "     creating a new Text Fragment"                                                       ! fragments.e1_1^
 "     showing all expected values"                                                        ! fragments.e1_2^           
 "   to an example, returning success if the form is a success"                            ! fragments.e2 ^
 "   to an example, returning a failure if one property in the  form fails"                ! fragments.e3 ^

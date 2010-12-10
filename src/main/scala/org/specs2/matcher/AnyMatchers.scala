@@ -31,14 +31,10 @@ trait AnyBaseMatchers {
   def be_==[T](t: =>T) = beEqualTo(t)
   /** matches if a == b */
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
-  /** matches if a == b */
-  def equalTo[T](t: =>T) = beEqualTo(t)
-
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not
   
   /** matches if a.isEmpty */
-  def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
   /** matches if a.isEmpty */
   def beEmpty[T <% Any { def isEmpty: Boolean }] = new Matcher[T] {
     def apply[S <: T](v: =>Expectable[S]) = {
@@ -48,6 +44,37 @@ trait AnyBaseMatchers {
              iterable.description + " is not empty", iterable)
     }
   }
+  def beNull[T] = new Matcher[T] {
+    def apply[S <: T](v: =>Expectable[S]) = {
+      val value = v
+      result(value.value == null, 
+             value.description + " is null", 
+             value.description + " is not null", value)
+    }
+  }
+  /** matches if a is null when v is null and a is not null when v is not null */
+  def beAsNullAs[T](a: =>T) = new Matcher[T](){
+    def apply[S <: T](v: =>Expectable[S]) = {
+      val x = a;
+      val y = v;
+      result(x == null && y.value == null || x != null && y.value != null, 
+             "both values are null",
+             if (x == null) y.description + " is not null" else q(x) + " is not null" + 
+             y.optionalDescription.map(" but " + _ + " is null").getOrElse(""), 
+             y)
+    }
+  }
+  /** matches if t.toSeq.exists(_ == v) */
+  def beOneOf[T](t: T*): Matcher[T] = new Matcher[T] {
+    def apply[S <: T](v: =>Expectable[S]) = {
+      val (x, y) = (t.toSeq, v)
+      result(x.exists(_ == y.value), 
+             y.description + " is one of " + q(x.mkString(", ")), 
+             y.description + " is not one of " + q(x.mkString(", ")), 
+             y)
+    }
+  }
+
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
     def apply[S <: T](v: =>Expectable[S]) = {
       val a = v
@@ -59,10 +86,29 @@ trait AnyBaseMatchers {
              a)
     }
   }
-  def like[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
-  /** @alias for beLike */
-  def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
-  def likeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
+  /** matches if v.getClass == c */
+  def haveClass[T : ClassManifest] = new Matcher[Any] {
+    def apply[S <: Any](v: =>Expectable[S]) = {
+      val x = v
+      val c = implicitly[ClassManifest[T]].erasure
+      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      result(xClass == c, 
+             x.description + " has class" + q(c.getName), 
+             x.description + " doesn't have class " + q(c.getName) + " but " + q(xClass.getName),
+             x)
+    }
+  }
+  /** matches if v.isAssignableFrom(c) */
+  def beAssignableFrom[T : ClassManifest] = new Matcher[Class[_]] {
+    def apply[S <: Class[_]](v: =>Expectable[S]) = {
+      val x = v
+      val c = implicitly[ClassManifest[T]].erasure
+      result(x.value.isAssignableFrom(c), 
+             x.description + " is assignable from " + q(c.getName), 
+             x.description + " is not assignable from " + q(c.getName), 
+             x)
+    }
+  }
 }
 /**
  * Matcher for a boolean value
@@ -111,20 +157,47 @@ class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
  *  `1 must be equalTo(1)`
  */
 trait AnyBeHaveMatchers { outer: AnyMatchers =>
-  implicit def anyBeHaveMatcher[T](s: MatchResult[T]) = new AnyBeHaveMatchers(s)
-  class AnyBeHaveMatchers[T](s: MatchResult[T]) {
-    def equalTo(t: T) = s.apply(outer.be_==(t))
+  implicit def anyBeHaveMatcher[T](result: MatchResult[T]) = new AnyBeHaveMatchers(result)
+  class AnyBeHaveMatchers[T](result: MatchResult[T]) {
+    def equalTo(t: T) = result(outer.be_==(t))
+    def asNullAs[T](a: =>T) = result(outer.beAsNullAs(a))
+    def oneOf(t: T*) = result(beOneOf(t:_*))
+    def beNull = result(outer.beNull)
+  }
+
+  implicit def toAnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]) = new AnyRefMatcherResult(result)
+  class AnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]) {
+    def be(t: T) = result(outer.be(t))
+  }
+
+  implicit def toAnyMatcherResult(result: MatchResult[Any]) = new AnyMatcherResult(result)
+  class AnyMatcherResult(result: MatchResult[Any]) {
+    def haveClass[T : ClassManifest] = result(outer.haveClass[T])
+  }
+
+  implicit def toClassMatcherResult(result: MatchResult[Class[_]]) = new ClassMatcherResult(result)
+  class ClassMatcherResult(result: MatchResult[Class[_]]) {
+    def assignableFrom = result(outer.beAssignableFrom)
   }
   
-  implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](s: MatchResult[T]) = 
-    new AnyWithEmptyMatchers(s)
-  class AnyWithEmptyMatchers[T <% Any { def isEmpty: Boolean }](s: MatchResult[T]) {
-    def empty = s.apply(outer.beEmpty[T])
-    def beEmpty = s.apply(outer.beEmpty[T])
+  implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) = 
+    new AnyWithEmptyMatchers(result)
+  class AnyWithEmptyMatchers[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) {
+    def empty = result(outer.beEmpty[T])
+    def beEmpty = result(outer.beEmpty[T])
   }
   implicit def toBeLikeResultMatcher[T](result: MatchResult[T]) = new BeLikeResultMatcher(result)
   class BeLikeResultMatcher[T](result: MatchResult[T]) {
     def like(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
     def likeA(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
   }
+  def asNullAs[T](a: =>T) = beAsNullAs(a)
+  def like[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
+  def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
+  def likeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
+  def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
+  def equalTo[T](t: =>T) = beEqualTo(t)
+  def oneOf[T](t: T*) = (beOneOf(t:_*))
+  def klass[T : ClassManifest]: Matcher[Any] = outer.haveClass[T]
+  def assignableFrom[T : ClassManifest] = outer.beAssignableFrom[T]
 }

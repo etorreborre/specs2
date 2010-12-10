@@ -1,5 +1,6 @@
 package org.specs2
 package text
+import scala.util.matching.Regex
 
 /**
  * Utility methods for trimming text
@@ -19,8 +20,12 @@ trait Trim {
     
 	  def trimEnclosing(start: String, end: String) = trimStart(start).trimEnd(end).trim
 	  
+	  def trimEnclosingXmlTag(t: String) = trimFirst("<"+t+".*?>").trimEnd("</"+t+">")
+	  
     def trimNewLines = s.trim.removeAll("\r", "\n")
 	
+    def trimFirst(exp: String) = new Regex(exp).replaceFirstIn(s.trim, "")
+
     def trimReplace(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)
     } 

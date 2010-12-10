@@ -26,7 +26,8 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
     "A text block must"                                                                   ^
       "be printed as a div"                                                               ! fragments().text1^
       "be indented to its level with a css property"                                      ! fragments().text2^
-	                                                                                      endp^
+      "be formatted as some Mockito text"                                                 ! fragments().text3^
+	                                                                                        endp^
     "An example must"                                                                     ^
       "have a success icon if successful"                                                 ! fragments().ex1^
                                                                                           end
@@ -51,9 +52,10 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
     def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)
   }
   case class fragments() extends MockHtmlPrinter {
-    val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success
+    val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success ^ "*ex2*" ! success
     def text1 = print(spec) must \\(<div>t1</div>)
     def text2 = print(spec) must \\(<div>t2</div>, "class"->"level1")
+    def text3 = print(spec) must \\(<em>ex2</em>)
     def ex1 = print(spec) must \\("div", "class"->"level2") \("img", "src"->"./images/icon_success_sml.gif")
   }
   

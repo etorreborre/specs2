@@ -6,6 +6,7 @@ import Generator._
 import control.Throwablex._
 import data.Tuples._
 import text.Plural._
+import text.MarkupString._
 import text.AnsiColors._
 import execute._
 import main.Arguments
@@ -90,7 +91,7 @@ trait TextPrinter {
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
-      printResult(leveledText(r.text, level)(args), r.result)(args, out)
+      printResult(leveledText(asString(r.text), level)(args), r.result)(args, out)
       
     def printResult(desc: String, result: Result)(implicit args: Arguments, out: ResultOutput): Unit = {
       val description = statusAndDescription(desc, result)(args, out)

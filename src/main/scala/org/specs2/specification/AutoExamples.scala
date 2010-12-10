@@ -2,8 +2,9 @@ package org.specs2
 package specification
 
 import io.FromSource._
-import text.Trim._
 import control.LazyParameters._
+import text.Trim._
+import text._
 import execute._
 import matcher.MatchersImplicits._
 import matcher._
@@ -33,27 +34,27 @@ trait AutoExamples {
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragments(expression: =>MatchResult[_]): Fragments = {
     val desc = code()
-    Fragments(Example(desc, expression.toResult))
+    Fragments(Example(CodeMarkup(desc), expression.toResult))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragments(expression: =>Boolean): Fragments = {
     val desc = code()
-    Fragments(Example(desc, toResult(expression)))
+    Fragments(Example(CodeMarkup(desc), toResult(expression)))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def resultFragments(expression: =>Result): Fragments = {
     val desc = code()
-    Fragments(Example(desc, expression))
+    Fragments(Example(CodeMarkup(desc), expression))
   }
-  implicit def matchExample(expression: =>MatchResult[_]): Example = {
-    Example(code(), expression.toResult)
-  }
-  implicit def booleanExample(expression: =>Boolean): Example = {
-    Example(code(), toResult(expression))
-  }
-  implicit def resultExample(expression: =>execute.Result): Example = {
-    Example(code(), expression)
-  }
+  implicit def matchExample(expression: =>MatchResult[_]): Example =
+    Example(CodeMarkup(code()), expression.toResult)
+
+  implicit def booleanExample(expression: =>Boolean): Example =
+    Example(CodeMarkup(code()), toResult(expression))
+
+  implicit def resultExample(expression: =>execute.Result): Example =
+    Example(CodeMarkup(code()), expression)
+
   private def code() = {
     List("^", "^t", "^bt", "^p", "^br", "^end", "^endp").foldLeft(getCode(5))(_ trimEnd _).
     trimEnclosing("{", "}")

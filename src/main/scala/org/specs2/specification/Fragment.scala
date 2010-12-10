@@ -3,6 +3,8 @@ package specification
 
 import main.Arguments
 import execute._
+import text._
+import text.MarkupString._
 import text.Trim._
 import control.LazyParameter
 
@@ -24,9 +26,9 @@ case class Text(t: String) extends Fragment {
   override def matches(s: String) = t.matches(s)
 }
 case class Group(fragments: Seq[Fragment])
-case class Example private[specification] (desc: String = "", body: () => Result) extends Fragment with Executable { 
+case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable {
   def execute = body()
-  override def matches(s: String) = desc.removeAll("\\n").matches(s)
+  override def matches(s: String) = asString(desc).removeAll("\\n").matches(s)
   override def toString = "Example("+desc+")"
   override def equals(a: Any) = {
     a match {
@@ -36,7 +38,8 @@ case class Example private[specification] (desc: String = "", body: () => Result
   }
 }
 case object Example {
-  def apply[T <% Result](desc: String, body: =>T) = new Example(desc, () => body)
+  def apply[T <% Result](desc: String, body: =>T) = new Example(NoMarkup(desc), () => body)
+  def apply[T <% Result](markup: MarkupString, body: =>T) = new Example(markup, () => body)
 }
 case class Step private (action: () => Result) extends Fragment with Executable {
   def execute = action()

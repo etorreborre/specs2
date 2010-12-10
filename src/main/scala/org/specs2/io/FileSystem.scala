@@ -125,10 +125,8 @@ trait FileSystem extends FileReader with FileWriter {
    * copy the content of a directory to another.
    * @param path path of the directory to copy
    * @param dest destination directory path
-   * @param included names for included files
-   * @param excluded names for excluded files
    */
-  def copyDir(src: String, dest: String): Unit = listFiles(src).foreach { name => 
+  def copyDir(src: String, dest: String): Unit = listFiles(src).filterNot(_.contains(".svn")).foreach { name =>
     copyFile(src + "/" + name, dest) 
   }
   /** 

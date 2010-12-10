@@ -1,8 +1,12 @@
 package org.specs2
 package reporter
+import scala.io.Source
 import scala.xml._
+import parsing.XhtmlParser
 import java.io.Writer
 import main.Arguments
+import text.Markdown._
+import text._
 import execute.{ Result, ResultStackTrace }
 
 /**
@@ -32,40 +36,42 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
     else this
     
   def printPar(text: String = "", doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<p>{text}</p>)
+    if (doIt) printElem(<p>{wiki(text)}</p>)
     else this
 
   def printText(text: String = "", level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<div class={"level"+level}>{text}</div>)
+    if (doIt) printElem(<div class={"level"+level}>{wiki(text)}</div>)
     else this
 
   def printTextPar(text: String = "", level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<p class={"level"+level}>{text}</p>)
+    if (doIt) printElem(<p class={"level"+level}>{wiki(text)}</p>)
     else this
 
   def printSpecStart(message: String)(implicit args: Arguments): HtmlResultOutput = 
-    printElem(<title>{message}</title>).
-    printElem(<h2>{message}</h2>)
+    printElem(<title>{wiki(message)}</title>).
+    printElem(<h2>{wiki(message)}</h2>)
   
-  def printWithIcon(message: String, iconName: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<div class={"level"+level}><img src={icon(iconName)}/>{message}</div>)
+  def wiki(text: String) = XhtmlParser(Source.fromString("<text>"+toHtmlNoPar(text)+"</text>")).head.child
+  
+  def printWithIcon(message: MarkupString, iconName: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
+    if (doIt) printElem(<div class={"level"+level}><img src={icon(iconName)}/>{wiki(message.toHtml)}</div>)
     else this
     
   def icon(t: String) = "./images/icon_"+t+"_sml.gif"
 
-  def printSuccess(message: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
+  def printSuccess(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
     printWithIcon(message, "success", level, doIt)
   
-  def printFailure(message: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
+  def printFailure(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
     printWithIcon(message, "failure", level, doIt)
     
-  def printError(message: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
+  def printError(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
     printWithIcon(message, "error", level, doIt)
   
-  def printSkipped(message: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
+  def printSkipped(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments): HtmlResultOutput =
     printWithIcon(message, "skipped", level, doIt)
 
-  def printPending(message: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
+  def printPending(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
     printWithIcon(message, "info", level, doIt)
     
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {

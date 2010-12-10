@@ -37,14 +37,14 @@ class FeaturesSpec extends Specification with StandardResults { def is = literat
       "with nice be, have, not syntax                                                     "! done^
       "with adapters                                                                      "! done^
       "for strings                                                                        "! done^
-      "for iterables                                                                      "! todo^
-      "for maps                                                                           "! todo^
+      "for iterables                                                                      "! done^
+      "for maps                                                                           "! done^
       "for classes                                                                        "! todo^
-      "for Either                                                                         "! todo^
-      "for Options/Patterns                                                               "! todo^
-      "for Files                                                                          "! todo^
-      "for Numerics                                                                       "! todo^
-      "for xml                                                                            "! todo^
+      "for Either                                                                         "! done^
+      "for Options/Patterns                                                               "! done^
+      "for Files                                                                          "! done^
+      "for Numerics                                                                       "! done^
+      "for xml                                                                            "! done^
     "Spec for before/after/around                                                         "^
       "before/after                                                                       "! done^
       "example isolation                                                                  "! done^
@@ -52,9 +52,9 @@ class FeaturesSpec extends Specification with StandardResults { def is = literat
       "first/last                                                                         "! done^
       "beforeSpec/afterSpec                                                               "! done^
     "A literate specs environment                                                         "^
-      "with an html reporter                                                              "! todo^
+      "with an html reporter                                                              "! done^
       "supporting Markdown                                                                "! todo^
-      "with non mutable forms                                                             "! done^
+      "with non mutable forms                                                             "! todo^
     "A sbt reporter                                                                       "^
       "based on the console reporter                                                      "! done^
     "Data tables                                                                          "^

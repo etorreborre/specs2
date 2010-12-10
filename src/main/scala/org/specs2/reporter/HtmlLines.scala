@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 
 import text.Plural._
+import text._
 import main.Arguments
 import execute._
 import specification._
@@ -61,17 +62,16 @@ case class HtmlResult(r: ExecutedResult) extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     printResult(r.text, level, r.result)(args, out)
     
-  def printResult(desc: String, level: Int, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
-    val description = desc
+  def printResult(desc: MarkupString, level: Int, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
     result match {
       case f: Failure => printFailure(desc, level, f).printStack(f, level + 1, args.failtrace) 
       case e: Error   => printError(desc, level, e).printStack(e, level + 1) 
-      case Success(_) => out.printSuccess(description, level, !args.xonly)
-      case Pending(_) => out.printPending(description + " " + result.message, level, !args.xonly)
-      case Skipped(_) => out.printSkipped(description, level).printSkipped(result.message, level, !args.xonly)
+      case Success(_) => out.printSuccess(desc, level, !args.xonly)
+      case Pending(_) => out.printPending(desc.append(" " + result.message), level, !args.xonly)
+      case Skipped(_) => out.printSkipped(desc, level).printSkipped(NoMarkup(result.message), level, !args.xonly)
     }
   }
-  def printFailure(desc: String, level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = { 
+  def printFailure(desc: MarkupString, level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = {
     if (args.failtrace) 
       out.printFailure(desc, level).
           printCollapsibleExceptionMessage(f, level + 1)
@@ -79,7 +79,7 @@ case class HtmlResult(r: ExecutedResult) extends Html {
       out.printFailure(desc, level).
           printExceptionMessage(f, level + 1)
   }
-  def printError(desc: String, level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = { 
+  def printError(desc: MarkupString, level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = {
     out.printError(desc, level).
         printCollapsibleExceptionMessage(f, level + 1)
   }

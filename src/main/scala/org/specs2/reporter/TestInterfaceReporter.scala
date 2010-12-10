@@ -27,7 +27,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
   override def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = (f: Fragment) => {
  	  val executed = new FragmentExecution {}.executeFragment(arguments)(f)
     executed match {
-      case ExecutedResult(text: String, result: org.specs2.execute.Result) => result match {
+      case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result) => result match {
         case Success(text) => handler.handle(succeeded(text)) 	
         case r @ Failure(text, e) => handler.handle(failure(text, r.exception))
         case r @ Error(text, e) => handler.handle(error(text, r.exception))

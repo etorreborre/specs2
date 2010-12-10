@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import control.Exceptions._
+import text._
 import main.Arguments
 import time.SimpleTimer
 import execute._
@@ -37,7 +38,7 @@ trait FragmentExecution {
 	  case SpecEnd(n)            => ExecutedSpecEnd(n)
     case s @ Step(a)           => 
       executeBody(a()) match {
-        case err @ Error(_, _) => ExecutedResult("action error", err)
+        case err @ Error(_, _) => ExecutedResult(NoMarkup("action error"), err)
         case _ =>                 ExecutedNoText()  
       }
     case _                     => ExecutedNoText()

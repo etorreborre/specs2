@@ -43,8 +43,6 @@ trait StringBaseMatchers { outer =>
              b.description + " doesn't contain " + q(a), b)
     } 
   }
-  /** matches if !(b.indexOf(a) >= 0) */   
-  def notContain(a: String) = contain(a).not 
   /** matches if b matches the regular expression a */   
   def beMatching(t: =>String) = new Matcher[String] {
     def apply[S <: String](v: =>Expectable[S]) = {
@@ -54,8 +52,6 @@ trait StringBaseMatchers { outer =>
              b.description + " doesn't match " + q(a), b)
     }
   }
-  /** matches if b doesn't match the regular expression a */   
-  def notBeMatching(a: String) = beMatching(a).not
   /** matches if b.startsWith(a) */   
   def startWith(t: =>String) = new Matcher[String] { 
     def apply[S <: String](v: =>Expectable[S]) = {
@@ -65,8 +61,6 @@ trait StringBaseMatchers { outer =>
              b.description + " doesn't start with " + q(a), b)
     }
   }
-  /** matches if !b.startsWith(a) */   
-  def notStartWith(a: String) = startWith(a).not
   /** matches if b.endsWith(a) */   
   def endWith(t: =>String) = new Matcher[String] { 
     def apply[S <: String](v: =>Expectable[S]) = {
@@ -76,8 +70,6 @@ trait StringBaseMatchers { outer =>
              b.description  + " doesn't end with " + q(a), b)
     }
   }
-  /** matches if !b.endsWith(a) */   
-  def notEndWith(a: String) = endWith(a).not
   /** matches if the regexp a is found inside b */   
   def find(a: String) = new FindMatcher(a)
 
@@ -160,6 +152,10 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
   class NeutralStringMatcher(result: NeutralMatcher[Any]) {
     def ==/(s: String) = outer.be_==/(s)
   }
-
+  def matching(t: =>String) = beMatching(t)
+  def length(n: Int) = haveLength(n)
+  def containing(s: String) = outer.contain(s)
+  def startingWith(s: String) = outer.startWith(s)
+  def endingWith(s: String) = outer.endWith(s)
 }
 

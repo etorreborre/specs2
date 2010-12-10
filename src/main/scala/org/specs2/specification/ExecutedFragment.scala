@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import main.Arguments
+import text._
 import time.SimpleTimer
 import execute._
 
@@ -11,7 +12,7 @@ import execute._
  */
 sealed trait ExecutedFragment
 case class ExecutedText(text: String) extends ExecutedFragment
-case class ExecutedResult(text: String, result: Result) extends ExecutedFragment
+case class ExecutedResult(text: MarkupString, result: Result) extends ExecutedFragment
 case class ExecutedBr() extends ExecutedFragment
 case class ExecutedPar() extends ExecutedFragment
 case class ExecutedEnd() extends ExecutedFragment

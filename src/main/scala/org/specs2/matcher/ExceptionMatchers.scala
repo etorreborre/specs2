@@ -77,6 +77,7 @@ trait ExceptionMatchers {
   private def checkException[T](expectable: Expectable[T], f: Throwable => Boolean,
 		  someOk: Throwable => String, someKo: Throwable => String,
 		  noneOk: String, noneKo: String) = {
+    
     getException(expectable.value) match {
 	    case Some(e) => Matcher.result(f(e), someOk(e), someKo(e), expectable)
 	    case None    => Matcher.result(false, noneOk, noneKo, expectable)

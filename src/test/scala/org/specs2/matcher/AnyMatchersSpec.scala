@@ -1,7 +1,13 @@
 package org.specs2
 package matcher
+import java.io._
 
 class AnyMatchersSpec extends SpecificationWithJUnit { def is =
+  
+  "be() checks if a value is eq to another one"                                           ^
+  { aValue must be(aValue) }                                                              ^
+  { "a" must not be("b") }                                                                ^
+                                                                                          p^
   "beTrue matches true values"                                                            ^
   { true must beTrue }                                                                    ^
   { (false must beTrue).message must_==  "the value is false" }                           ^
@@ -21,8 +27,30 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
                                                                                           p^
   "toSet allows to transform a single matcher to a matcher checking a Set"                ^
   { Set(1, 2, 3) must ((be_==(_:Int)).toSet)(Set(1, 2, 3)) }                              ^ 
+                                                                                          p^
+  "beNull matches null values"                                                            ^
+  { (null:String) must beNull }                                                           ^
+  { "" must not beNull }                                                                  ^
+                                                                                          p^
+  "beAsNullAs checks if two values are null at the same time"                             ^
+  { (null:String) must beAsNullAs(null) }                                                 ^
+  { 1 must not be asNullAs(null) }                                                        ^
+  { (null:String) must not be asNullAs(1) }                                               ^
+  { 1 must be asNullAs(1) }                                                               ^
+                                                                                          p^
+  "beOneOf matches a value is amongs others"                                              ^
+  { 1 must beOneOf(1, 2, 3) }                                                             ^
+  { 4 must not be oneOf(1, 2, 3) }                                                        ^
+                                                                                          p^
+  "haveClass checks if a value has a given class as its type"                             ^
+  { 1 must haveClass[java.lang.Integer] }                                                 ^
+  { 1 must not have klass[String] }                                                       ^
+                                                                                          p^
+  "beAssignableFrom checks if a class is assignable from another"                         ^
+  { classOf[OutputStream] must beAssignableFrom[FileOutputStream] }                       ^
                                                                                           end
                                                                                           
   def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
            "'3' is not equal to '2'"
+  val aValue: String = "a value"
 }

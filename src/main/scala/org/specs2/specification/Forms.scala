@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import form._
+import text._
 
 /**
  * Allow a Form to be inserted among Fragments as a Text Fragment
@@ -9,7 +10,7 @@ import form._
  */
 private[specs2]
 trait Forms extends FormsBuilder {
-  class FormExample(form: Form) extends Example(FormCell(form).text, () => form.execute)
+  class FormExample(form: Form) extends Example(NoMarkup(FormCell(form).text), () => form.execute)
   implicit def formsAreExamples(f: Form): Example = new FormExample(f)
 }
 private[specs2]

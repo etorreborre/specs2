@@ -47,6 +47,7 @@ class Expectable[+T] protected (private[specs2] val t: () => T) { outer =>
   
   /** optional additional description */
   protected val desc: Option[String] = None
+  def optionalDescription = desc
   /** evaluate the value once and return the same expectable */
   private[specs2] def evaluate = Expectable(t(), desc)
   /** @return the description of the matched value, quoted. */
