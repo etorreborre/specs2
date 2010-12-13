@@ -22,7 +22,8 @@ case class ExecutedSpecStart(name: String, timer: SimpleTimer, arguments: Argume
   override def toString = "ExecutedSpecStart("+name+")"
 }
 case class ExecutedSpecEnd(name: String) extends ExecutedFragment
-/** 
+case class ExecutedSee(link: HtmlLink) extends ExecutedFragment
+/**
  * This executed Fragment is used when no text must be displayed (for the successful
  * execution of an Action for example)
  */

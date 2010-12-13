@@ -6,7 +6,7 @@ import scala.util.matching.Regex
  * Utility methods for trimming text
  */
 private[specs2]
-trait Trim {
+trait Trim extends control.Debug {
   /** add trimming methods to a String */
   implicit def trimmed(s: String): Trimmed = new Trimmed(s)
 
@@ -22,7 +22,9 @@ trait Trim {
 	  
 	  def trimEnclosingXmlTag(t: String) = trimFirst("<"+t+".*?>").trimEnd("</"+t+">")
 	  
-    def trimNewLines = s.trim.removeAll("\r", "\n")
+    def trimNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
+      res.trimStart(cur).trimEnd(cur)
+    }
 	
     def trimFirst(exp: String) = new Regex(exp).replaceFirstIn(s.trim, "")
 

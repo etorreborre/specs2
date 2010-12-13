@@ -25,4 +25,4 @@ trait Specification extends BaseSpecification
    with StandardMatchResults
    with AutoExamples
    with TimeConversions
-   with Debug 
+   with Debug

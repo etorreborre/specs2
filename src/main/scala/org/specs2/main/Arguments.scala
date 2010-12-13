@@ -5,17 +5,19 @@ import control.Exceptions._
 
 private[specs2]  
 case class Arguments (
-  _ex:         Option[String]  = None,
-  _xonly:      Option[Boolean] = None,
-  _plan:       Option[Boolean] = None,
-  _failtrace:  Option[Boolean] = None,
-  _color:      Option[Boolean] = None,
-  _noindent:   Option[Boolean] = None,
-  _showlevel:  Option[Boolean] = None,
-  _offset:     Option[Int]     = None,
-  _specName:   Option[String]  = None,
-  _sequential: Option[Boolean] = None,
-  _threadsNb:  Option[Int]     = None
+  _ex:            Option[String]  = None,
+  _xonly:         Option[Boolean] = None,
+  _plan:          Option[Boolean] = None,
+  _failtrace:     Option[Boolean] = None,
+  _color:         Option[Boolean] = None,
+  _noindent:      Option[Boolean] = None,
+  _showlevel:     Option[Boolean] = None,
+  _offset:        Option[Int]     = None,
+  _specName:      Option[String]  = None,
+  _sequential:    Option[Boolean] = None,
+  _threadsNb:     Option[Int]     = None,
+  _markdown:      Option[Boolean] = None,
+  _debugMarkdown: Option[Boolean] = None
 ) {
   def ex: String                = _ex.getOrElse(".*")
   def xonly: Boolean            = _xonly.getOrElse(false)
@@ -28,35 +30,41 @@ case class Arguments (
   def specName: String          = _specName.getOrElse(".*Spec")
   def sequential: Boolean       = _sequential.getOrElse(false)
   def threadsNb: Int            = _threadsNb.getOrElse(4)
-  
+  def markdown: Boolean         = _markdown.getOrElse(true)
+  def debugMarkdown: Boolean    = _debugMarkdown.getOrElse(false)
+
   def overrideWith(other: Arguments) = {
     new Arguments(
-      other._ex         .orElse(_ex),
-      other._xonly      .orElse(_xonly),
-      other._plan       .orElse(_plan),
-      other._failtrace  .orElse(_failtrace),
-      other._color      .orElse(_color),
-      other._noindent   .orElse(_noindent),
-      other._showlevel  .orElse(_showlevel),
-      other._offset     .orElse(_offset),
-      other._specName   .orElse(_specName),
-      other._sequential .orElse(_sequential),
-      other._threadsNb  .orElse(_threadsNb)
+      other._ex              .orElse(_ex),
+      other._xonly           .orElse(_xonly),
+      other._plan            .orElse(_plan),
+      other._failtrace       .orElse(_failtrace),
+      other._color           .orElse(_color),
+      other._noindent        .orElse(_noindent),
+      other._showlevel       .orElse(_showlevel),
+      other._offset          .orElse(_offset),
+      other._specName        .orElse(_specName),
+      other._sequential      .orElse(_sequential),
+      other._threadsNb       .orElse(_threadsNb),
+      other._markdown        .orElse(_markdown),
+      other._debugMarkdown   .orElse(_debugMarkdown)
     )
   }
   override def toString = {
-    "Arguments(" +
-    "ex"         +" = "+ _ex         +", "+
-    "xonly"      +" = "+ _xonly      +", "+
-    "plan"       +" = "+ _plan       +", "+
-    "failtrace"  +" = "+ _failtrace  +", "+
-    "color"      +" = "+ _color      +", "+
-    "noindent"   +" = "+ _noindent   +", "+
-    "showlevel"  +" = "+ _showlevel  +", "+
-    "offset"     +" = "+ _offset     +", "+
-    "specName"   +" = "+ _specName   +", "+
-    "sequential" +" = "+ _sequential +", "+
-    "threadsNb"  +" = "+ _threadsNb  +
+    "Arguments("      +
+    "ex"              +" = "+ _ex              +", "+
+    "xonly"           +" = "+ _xonly           +", "+
+    "plan"            +" = "+ _plan            +", "+
+    "failtrace"       +" = "+ _failtrace       +", "+
+    "color"           +" = "+ _color           +", "+
+    "noindent"        +" = "+ _noindent        +", "+
+    "showlevel"       +" = "+ _showlevel       +", "+
+    "offset"          +" = "+ _offset          +", "+
+    "specName"        +" = "+ _specName        +", "+
+    "sequential"      +" = "+ _sequential      +", "+
+    "threadsNb"       +" = "+ _threadsNb       +", "+
+    "markdown"        +" = "+ _markdown        +", "+
+    "debugMarkdown"   +" = "+ _debugMarkdown   +
     ") "
     
   }
@@ -71,16 +79,18 @@ object Arguments {
   }
   private def extract(implicit arguments: Seq[String]): Arguments = {
     new Arguments (
-       _xonly      = bool("xonly"),
-       _plan       = bool("plan"),
-       _failtrace  = bool("failtrace"),
-       _color      = bool("nocolor", false) orElse bool("color"),
-       _noindent   = bool("noindent"),
-       _showlevel  = bool("showlevel"),
-       _offset     = int("offset"),
-       _specName   = value("specName"),
-       _sequential = bool("sequential"),
-       _threadsNb  = int("threadsNb")
+       _xonly         = bool("xonly"),
+       _plan          = bool("plan"),
+       _failtrace     = bool("failtrace"),
+       _color         = bool("nocolor", false) orElse bool("color"),
+       _noindent      = bool("noindent"),
+       _showlevel     = bool("showlevel"),
+       _offset        = int("offset"),
+       _specName      = value("specName"),
+       _sequential    = bool("sequential"),
+       _threadsNb     = int("threadsNb"),
+       _markdown      = bool("nomarkdown", false) orElse bool("markdown"),
+       _debugMarkdown = bool("debugmarkdown")
     )
   }
   
@@ -100,17 +110,19 @@ private[specs2]
 trait ArgumentsArgs extends control.Properties {
   /** shorthand method to create an Arguments object */
   def args(  
-    ex:         Property[String]   = Property[String](),
-    xonly:      Property[Boolean]  = Property[Boolean](),
-    plan:       Property[Boolean]  = Property[Boolean](),
-    failtrace:  Property[Boolean]  = Property[Boolean](),
-    color:      Property[Boolean]  = Property[Boolean](),
-    noindent:   Property[Boolean]  = Property[Boolean](),
-    showlevel:   Property[Boolean] = Property[Boolean](),
-    offset:     Property[Int]      = Property[Int](),
-    specName:   Property[String]   = Property[String](),
-    sequential: Property[Boolean]  = Property[Boolean](),
-    threadsNb:  Property[Int]      = Property[Int]() 
+    ex:            Property[String]   = Property[String](),
+    xonly:         Property[Boolean]  = Property[Boolean](),
+    plan:          Property[Boolean]  = Property[Boolean](),
+    failtrace:     Property[Boolean]  = Property[Boolean](),
+    color:         Property[Boolean]  = Property[Boolean](),
+    noindent:      Property[Boolean]  = Property[Boolean](),
+    showlevel:     Property[Boolean]  = Property[Boolean](),
+    offset:        Property[Int]      = Property[Int](),
+    specName:      Property[String]   = Property[String](),
+    sequential:    Property[Boolean]  = Property[Boolean](),
+    threadsNb:     Property[Int]      = Property[Int](),
+    markdown:      Property[Boolean]  = Property[Boolean](),
+    debugMarkdown: Property[Boolean]  = Property[Boolean]()
   ) = new Arguments(
      ex.map(".*"+_+".*").toOption, 
      xonly.toOption, 
@@ -122,7 +134,9 @@ trait ArgumentsArgs extends control.Properties {
      offset.toOption, 
      specName.toOption, 
      sequential.toOption, 
-     threadsNb.toOption
+     threadsNb.toOption,
+     markdown.toOption,
+     debugMarkdown.toOption
   )
   /** 
    * @return arguments for a literate specification: no auto indent and a sequential

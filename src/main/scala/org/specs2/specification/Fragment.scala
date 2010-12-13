@@ -13,6 +13,7 @@ import control.LazyParameter
  * an Example
  */
 sealed trait Fragment {
+  val linkedTo: Option[SpecificationStructure] = None
   def matches(s: String) = true
 }
 case class SpecStart(name: String, arguments: Arguments = Arguments()) extends Fragment {
@@ -48,6 +49,7 @@ case class Step private (action: () => Result) extends Fragment with Executable 
 case object Step {
   def apply(action: LazyParameter[Result]) = new Step(() => action.value)
 }
+case class See(link: HtmlLink) extends Fragment
 
 /**
  * Those standard Fragments are used to format the specification text:

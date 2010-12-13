@@ -13,11 +13,12 @@ import specification._
  * It can be written ('flushed') to an HtmlResultOuput by printing then one by one to this output
  *
  */
-case class HtmlLines(lines : List[HtmlLine] = Nil) {
-  def print(implicit out: HtmlResultOutput) =
+case class HtmlLines(lines : List[HtmlLine] = Nil, link: Option[HtmlLink] = None) {
+  def print(implicit out: HtmlResultOutput, args: Arguments) =
     printXml.flush
   def printXml(implicit out: HtmlResultOutput) =
     lines.foldLeft(out) { (res, cur) => cur.print(res) }
+  def add(line: HtmlLine) = HtmlLines(lines :+ line, link)
 }
 
 /** 
@@ -118,6 +119,10 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
       </table>
     }
   }
+}
+case class HtmlSee(see: ExecutedSee) extends Html {
+  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
+    out.printStatusLink(see.link, level)(args)
 }
 case class HtmlOther(fragment: ExecutedFragment)   extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = out

@@ -41,6 +41,7 @@ trait FragmentExecution {
         case err @ Error(_, _) => ExecutedResult(NoMarkup("action error"), err)
         case _ =>                 ExecutedNoText()  
       }
+    case See(link)             => ExecutedSee(link)
     case _                     => ExecutedNoText()
   }
 

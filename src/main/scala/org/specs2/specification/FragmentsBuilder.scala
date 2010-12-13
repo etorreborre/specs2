@@ -66,6 +66,21 @@ trait FragmentsBuilder {
   /** @return a Fragments object from a string */
   implicit def textStart(s: String): Fragments = Fragments(Text(s))
 
+  /**
+   * This implicits allows to create links to other specifications
+   * @see org.specs2.UserGuide
+   */
+  implicit def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = new HtmlLinkFragments(HtmlLink("", s, "", "", "", Success()))
+  class HtmlLinkFragments(link: HtmlLink) {
+    def ~(p: (String, SpecificationStructure)) =
+      See(HtmlLink(p._2, link.beforeText, p._1)) ^ fragmentGroup(p._2.content)
+
+    def ~(p: (String, SpecificationStructure, String)) =
+      See(HtmlLink(p._2, link.beforeText, p._1, p._3)) ^ fragmentGroup(p._2.content)
+
+    def ~(p: (String, SpecificationStructure, String, String)) =
+      See(HtmlLink(p._2, link.beforeText, p._1, p._3, p._4)) ^ fragmentGroup(p._2.content)
+  }
 }
 
 /**

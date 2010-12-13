@@ -1,14 +1,16 @@
 package org.specs2
 package reporter
+import java.io.Writer
 import scala.io.Source
 import scala.xml._
 import parsing.XhtmlParser
-import java.io.Writer
 import main.Arguments
+import control.Exceptions._
 import text.Markdown._
 import text._
+import text.Trim._
 import execute.{ Result, ResultStackTrace }
-
+import specification.HtmlLink
 /**
  * This class stores the html to print to a file (as a NodeSeq object)
  * 
@@ -48,11 +50,23 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
     else this
 
   def printSpecStart(message: String)(implicit args: Arguments): HtmlResultOutput = 
-    printElem(<title>{wiki(message)}</title>).
-    printElem(<h2>{wiki(message)}</h2>)
+    printElem(<title>{message}</title>).
+    printElem(<h2>{message}</h2>)
   
-  def wiki(text: String) = XhtmlParser(Source.fromString("<text>"+toHtmlNoPar(text)+"</text>")).head.child
-  
+  def wiki(text: String)(implicit args: Arguments) = {
+    if (!args.markdown) text
+    else {
+      val html = toHtmlNoPar(text)
+      val f = (e: Exception) => if (args.debugMarkdown) e.printStackTrace
+      tryo(XhtmlParser(Source.fromString("<text>"+html+"</text>")).head.child)(f) match {
+        case Some(f) => f
+        case None => if (args.debugMarkdown) html else text
+      }
+    }
+  }
+  def printStatusLink(link: HtmlLink, level: Int = 0)(implicit args: Arguments) = {
+    printElem(<div class={"level"+level}><img src={icon(link.result.statusName)}/>{link.beforeText}<a href={link.url} tooltip={link.tip}>{link.linkText}</a>{link.afterText}</div>)
+  }
   def printWithIcon(message: MarkupString, iconName: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
     if (doIt) printElem(<div class={"level"+level}><img src={icon(iconName)}/>{wiki(message.toHtml)}</div>)
     else this

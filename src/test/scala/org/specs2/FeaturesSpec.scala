@@ -85,6 +85,7 @@ class FeaturesSpec extends Specification with StandardResults { def is = literat
       "with all features                                                                  "! todo^
     "Detailed diffs                                                                       "^
       "non mutable version                                                                "! todo^
+    "Package dependencies specification                                                   "! todo^
     "Auto examples                                                                        "^
       "with the description taken from the source file                                    "! done^
     "Timer                                                                                "^

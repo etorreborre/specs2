@@ -4,8 +4,8 @@ import io._
 import execute._
 import reporter._
 
-class ContextSpec extends SpecificationWithJUnit with StandardResults with FragmentExecution {
-  def is =                                                                           """
+class ContextSpec extends SpecificationWithJUnit with StandardResults with FragmentExecution { def is =
+                                                                                                                        """
   It is sometimes necessary to provide functions to "prepare" the specification before
   executing the Fragments and clean it up afterwards. This may be for example:
 

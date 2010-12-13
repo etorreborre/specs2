@@ -34,6 +34,20 @@ sealed abstract class Result(val message: String = "", val expectationsNb: Int =
       }
     }
   
+  /** @return the textual status of the result */
+  def statusName(implicit args: Arguments = Arguments()) =
+    if (args.plan)
+      "info"
+    else {
+      this match {
+    	  case Success(_)    => "success"
+    	  case Failure(_, _) => "failure"
+    	  case Error(_, _)   => "error"
+    	  case Pending(_)    => "pending"
+    	  case Skipped(_)    => "skipped"
+      }
+    }
+
   /** update the message of a result, keeping the subclass type */
   def updateMessage(msg: String) =
 	  this match {

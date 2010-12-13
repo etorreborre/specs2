@@ -34,10 +34,10 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
                                                                                           
   implicit val argument = args()
   case class filepath() {
-    def e1 = printer.reportPath(getClass) must startWith("target/specs2-reports")
-    def e2 = new HtmlPrinter { override lazy val outputDir = "output/" }.reportPath(getClass) must 
+    def e1 = printer.reportPath("") must startWith("target/specs2-reports")
+    def e2 = new HtmlPrinter { override lazy val outputDir = "output/" }.reportPath("") must
              startWith("output/")
-    def e3 =  printer.reportPath(getClass) must endWith(getClass.getName + ".html")
+    def e3 = HtmlLink.fromClass(getClass) must endWith(getClass.getName + ".html")
   }
 
   case class title() extends MockHtmlPrinter {
@@ -65,7 +65,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
     val out = new MockWriter {}
     
     def print(spec: Fragments) = {
-      printer.reduce(spec.fragments.map(executeFragment)).
+      printer.reduce(spec.fragments.map(executeFragment)).head.
               printXml(new HtmlResultOutput(out)).xml
     }
   }
