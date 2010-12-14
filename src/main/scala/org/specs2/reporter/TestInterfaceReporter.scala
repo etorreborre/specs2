@@ -21,7 +21,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
        ConsoleReporter 
   with HandlerEvents {  
 	
-  override def print(klass: Class[_], fs: Seq[ExecutedFragment])(implicit arguments: Arguments) = 
+  override def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit arguments: Arguments) =
     printLines(fs).print(new TestInterfaceResultOutput(loggers))
 
   override def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = (f: Fragment) => {

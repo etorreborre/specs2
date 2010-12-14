@@ -27,7 +27,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
     "error examples are shown"                                                            ! xonlyargs().e6^
     "statistics shown"                                                                    ! xonlyargs().e7^
   "if failtrace = true, failures stacktraces are shown"                                   ! failtrace().e1^bt^
-  "if plan = true, nothing is executed"                                                   ! plan().e1^
+  "if plan = true, nothing is executed"                                                   ! planargs().e1^
   "if sequential = false examples are executed concurrently"                              ! seq().e1^
   "if sequential = true examples are executed sequentially"                               ! seq().e2^
   "if color = true, the text output is colorized"                                         ^
@@ -107,7 +107,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
     val failtrace: Arguments = args(failtrace = true)
     def e1 = print(failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
   }
-  case class plan() {
+  case class planargs() {
     val plan: Arguments = args(plan = true)
     def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("* e1") and not containMatch("\\+ e1") 
   }
@@ -154,7 +154,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
     val printer = new TextPrinter {
       override val output = mockOutput
     }
-    printer.print(getClass, executed)(fragments.arguments)
+    printer.print(this, executed)(fragments.arguments)
     mockOutput.messages
   }
   def print(fragments: Fragments): Seq[String] = printWithColors(fragments).map(removeColors(_))

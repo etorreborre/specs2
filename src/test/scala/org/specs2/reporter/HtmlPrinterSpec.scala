@@ -4,7 +4,8 @@ import io._
 import mock._
 import specification._
 
-class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is = 
+class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer =>
+  def is =
                                                                                           """
   The HtmlPrinter class is responsible for opening an html file and writing
   the specification text.
@@ -37,7 +38,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
     def e1 = printer.reportPath("") must startWith("target/specs2-reports")
     def e2 = new HtmlPrinter { override lazy val outputDir = "output/" }.reportPath("") must
              startWith("output/")
-    def e3 = HtmlLink.fromClass(getClass) must endWith(getClass.getName + ".html")
+    def e3 = SpecName(outer).url must endWith(outer.getClass.getName + ".html")
   }
 
   case class title() extends MockHtmlPrinter {
@@ -46,7 +47,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { def is =
   }
   case class resources() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1"
-    printer.print(getClass, spec.fragments.map(executeFragment))
+    printer.print(outer, spec.fragments.map(executeFragment))
     
     def css = there was one(fs).copySpecResourcesDir(equalTo("css"), anyString)
     def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)

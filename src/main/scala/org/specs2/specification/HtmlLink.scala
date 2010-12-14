@@ -3,13 +3,27 @@ package specification
 
 import execute._
 
+abstract class HtmlLink(val url: String, val beforeText: String, val linkText: String, val afterText: String, val tip: String) {
+  def is(name: SpecName) = false
+}
+case class SpecHtmlLink(val name: SpecName,
+                        override val beforeText: String,
+                        override val linkText: String,
+                        override val afterText: String,
+                        override val tip: String, result: Result) extends
+   HtmlLink(name.url, beforeText, linkText, afterText, tip) {
+  override def is(n: SpecName) = name.equals(n)
+}
 
-case class HtmlLink(url: String, beforeText: String, linkText: String, afterText: String, tip: String, result: Result)
+case class UrlHtmlLink(override val url: String,
+                       override val beforeText: String,
+                       override val linkText: String,
+                       override val afterText: String,
+                       override val tip: String) extends
+   HtmlLink(url, beforeText, linkText, afterText, tip)
+
 
 object HtmlLink {
- def apply(s: SpecificationStructure, beforeText: String = "", linkText: String = "", afterText: String = "", tip: String = "", result: Result = Success()): HtmlLink  =
-   HtmlLink.fromClass(s.getClass, beforeText, linkText, afterText, tip, result)
-
- def fromClass(klass: Class[_], beforeText: String = "", linkText: String = "", afterText: String = "", tip: String = "", result: Result = Success()): HtmlLink  =
-   new HtmlLink(klass.getName + ".html", beforeText, linkText, afterText, if (tip.isEmpty) klass.getSimpleName else tip, result)
+ def apply(name: SpecName, beforeText: String = "", linkText: String = "", afterText: String = "", tip: String = "", result: Result = Success()): HtmlLink  =
+   new SpecHtmlLink(name, beforeText, linkText, afterText, tip, result)
 }

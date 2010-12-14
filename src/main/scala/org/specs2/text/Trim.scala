@@ -22,11 +22,26 @@ trait Trim extends control.Debug {
 	  
 	  def trimEnclosingXmlTag(t: String) = trimFirst("<"+t+".*?>").trimEnd("</"+t+">")
 	  
+    def removeStart(start: String) =
+      if (s.startsWith(start)) s.drop(start.size) else s
+
+    def removeEnd(end: String) =
+      if (s.endsWith(end)) s.dropRight(end.size)  else s
+
+	  def removeEnclosing(start: String, end: String) = removeStart(start).removeEnd(end)
+
+	  def removeEnclosingXmlTag(t: String) = removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
+
     def trimNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
       res.trimStart(cur).trimEnd(cur)
     }
 	
+    def removeNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
+      res.removeStart(cur).removeEnd(cur)
+    }
+
     def trimFirst(exp: String) = new Regex(exp).replaceFirstIn(s.trim, "")
+    def removeFirst(exp: String) = new Regex(exp).replaceFirstIn(s, "")
 
     def trimReplace(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)

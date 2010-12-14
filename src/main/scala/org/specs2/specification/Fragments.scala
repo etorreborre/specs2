@@ -19,7 +19,7 @@ case class Fragments private (private val fragmentList: () => Seq[Fragment], arg
   import StandardFragments._
   override def toString = fragments.mkString("\n")
   def ^(e: =>Fragment) = add(e)
-  def ^(e: Group) = copy(fragmentList = () => this.fragments ++ e.fragments) 
+  def ^(g: Group) = copy(fragmentList = () => this.fragments ++ g.fragments)
   def ^(a: Arguments) = copy(fragmentList = () => this.fragments, arguments = a)
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
@@ -37,7 +37,7 @@ case object Fragments {
    * Makes sure that the arguments instance in the Fragments object and in the SpecStart
    * fragment are the same 
    */
-  def withSpecStartEnd(fragments: Fragments, name: String) = {
+  def withSpecStartEnd(fragments: Fragments, name: SpecName): Fragments = {
     val withStartFragments = fragments.fragments.headOption match {
       case Some(SpecStart(n, _)) => SpecStart(n, fragments.arguments) +: fragments.fragments.drop(1)
       case other => SpecStart(name, fragments.arguments) +: (Par() +: fragments.fragments)
@@ -47,7 +47,8 @@ case object Fragments {
       case other => withStartFragments :+ SpecEnd(name)
     }
     Fragments(withStartAndEndFragments)(fragments.arguments)
-
   }
+  def withSpecStartEnd(fragments: Fragments, name: String): Fragments = withSpecStartEnd(fragments, SpecName(name))
+
 }
 

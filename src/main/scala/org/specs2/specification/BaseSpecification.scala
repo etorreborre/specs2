@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import reflect.ClassName
+import main.Arguments
 /**
  * A Base specification contains the minimum elements for a Specification
  * 
@@ -12,7 +13,11 @@ import reflect.ClassName
 trait BaseSpecification extends SpecificationStructure 
    with FragmentsBuilder {
   
-  def include(s: SpecificationStructure) = fragmentGroup(s.content)
+  def include(s: SpecificationStructure): Group = fragmentGroup(s.content)
+  def include(f: Fragments): Group = fragmentGroup(f)
+  def include(args: Arguments, s: SpecificationStructure): Group = {
+    fragmentGroup(Fragments.withSpecStartEnd(s.is.copy(arguments = args), name(s)))
+  }
 }
 
 trait SpecificationStructure { 
@@ -25,5 +30,22 @@ trait SpecificationStructure {
    * SpecStart and SpecEnd fragments are added if the user haven't inserted any
    */
   private[specs2] lazy val content: Fragments = Fragments.withSpecStartEnd(is, name(this))
-  private[specs2] def name(spec: AnyRef = this) = ClassName.className(spec)
+  private[specs2] def name(spec: SpecificationStructure = this) = SpecName(spec)
 } 
+trait SpecName {
+  def name: String
+  def url: String
+  def matches(p: String) = name matches p
+}
+object SpecName {
+  def apply(s: SpecificationStructure): SpecificationName = SpecificationName(s)
+  def apply(s: String): SpecificationTitle = SpecificationTitle(s)
+}
+case class SpecificationName(s: SpecificationStructure) extends SpecName {
+  def name =  ClassName.className(s)
+  def url = s.getClass.getName + ".html"
+}
+case class SpecificationTitle(s: String) extends SpecName {
+  def name = s
+  def url = s + ".html"
+}

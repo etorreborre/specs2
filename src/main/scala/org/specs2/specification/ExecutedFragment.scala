@@ -18,10 +18,12 @@ case class ExecutedPar() extends ExecutedFragment
 case class ExecutedEnd() extends ExecutedFragment
 case class ExecutedTab(n: Int = 1) extends ExecutedFragment
 case class ExecutedBacktab(n: Int = 1) extends ExecutedFragment
-case class ExecutedSpecStart(name: String, timer: SimpleTimer, arguments: Arguments) extends ExecutedFragment {
-  override def toString = "ExecutedSpecStart("+name+")"
+case class ExecutedSpecStart(name: SpecName, timer: SimpleTimer, arguments: Arguments) extends ExecutedFragment {
+  override def toString = "ExecutedSpecStart("+name.name+")"
 }
-case class ExecutedSpecEnd(name: String) extends ExecutedFragment
+case class ExecutedSpecEnd(name: SpecName) extends ExecutedFragment {
+  override def toString = "ExecutedSpecEnd("+name.name+")"
+}
 case class ExecutedSee(link: HtmlLink) extends ExecutedFragment
 /**
  * This executed Fragment is used when no text must be displayed (for the successful

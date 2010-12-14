@@ -10,7 +10,7 @@ import text.Markdown._
 import text._
 import text.Trim._
 import execute.{ Result, ResultStackTrace }
-import specification.HtmlLink
+import specification._
 /**
  * This class stores the html to print to a file (as a NodeSeq object)
  * 
@@ -42,17 +42,19 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
     else this
 
   def printText(text: String = "", level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<div class={"level"+level}>{wiki(text)}</div>)
+    if (doIt) printElem(<div class={l(level)}>{wiki(text)}</div>)
     else this
 
   def printTextPar(text: String = "", level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<p class={"level"+level}>{wiki(text)}</p>)
+    if (doIt) printElem(<p class={l(level)}>{wiki(text)}</p>)
     else this
 
-  def printSpecStart(message: String)(implicit args: Arguments): HtmlResultOutput = 
-    printElem(<title>{message}</title>).
-    printElem(<h2>{message}</h2>)
-  
+  def printSpecStart(name: SpecName)(implicit args: Arguments): HtmlResultOutput =
+    printElem(<title>{name.name}</title>).
+    printElem(<h2>{name.name}</h2>)
+
+  def l(level: Int)(implicit args: Arguments) = "level" + (if (args.noindent) 0 else level)
+
   def wiki(text: String)(implicit args: Arguments) = {
     if (!args.markdown) text
     else {
@@ -64,11 +66,16 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
       }
     }
   }
-  def printStatusLink(link: HtmlLink, level: Int = 0)(implicit args: Arguments) = {
-    printElem(<div class={"level"+level}><img src={icon(link.result.statusName)}/>{link.beforeText}<a href={link.url} tooltip={link.tip}>{link.linkText}</a>{link.afterText}</div>)
+  def printLink(link: HtmlLink, level: Int = 0)(implicit args: Arguments) = {
+    link match {
+      case slink @ SpecHtmlLink(name, before, link, after, tip, result) =>
+        printElem(<div class={l(level)}><img src={icon(result.statusName)}/> {wiki(before)}<a href={slink.url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div>)
+      case UrlHtmlLink(url, before, link, after, tip) =>
+        printElem(<div class={l(level)}>{before}<a href={url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div>)
+    }
   }
   def printWithIcon(message: MarkupString, iconName: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
-    if (doIt) printElem(<div class={"level"+level}><img src={icon(iconName)}/>{wiki(message.toHtml)}</div>)
+    if (doIt) printElem(<div class={l(level)}><img src={icon(iconName)}/> {wiki(message.toHtml)}</div>)
     else this
     
   def icon(t: String) = "./images/icon_"+t+"_sml.gif"
@@ -91,7 +98,7 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
       val message = "  "+e.message+" ("+e.location+")"
-      printElem(<div class={"level"+level}>{message}</div>)
+      printElem(<div class={l(level)}>{message}</div>)
     } else this
   }
   
@@ -99,7 +106,7 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
     if (doIt) {
       val message = "  "+e.message+" ("+e.location+")"
       val onclick = "toggleImage(this); showHide('"+System.identityHashCode(e)+"')"
-      printElem(<div class={"level"+level}><img src="images/collapsed.gif"  onclick={onclick}/>
+      printElem(<div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick}/>
                  {message}
                 </div>)
     } else this
@@ -166,11 +173,5 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
     }</script>
 
 
-  def flush = {
-    val toPrint = 
-      if (xml.size == 1) new scala.xml.PrettyPrinter(10000, 2).format(xml(0))
-      else if (xml.size > 1) new scala.xml.PrettyPrinter(10000, 2).format(Group(xml))
-      else xml.toString
-    out.write(toPrint)
-  }
+  def flush = out.write(xml.toString)
 }

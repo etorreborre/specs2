@@ -19,6 +19,7 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: Option[HtmlLink] = None
   def printXml(implicit out: HtmlResultOutput) =
     lines.foldLeft(out) { (res, cur) => cur.print(res) }
   def add(line: HtmlLine) = HtmlLines(lines :+ line, link)
+  def is(name: SpecName) = link.map(_.is(name)).getOrElse(false)
 }
 
 /** 
@@ -45,23 +46,23 @@ sealed trait Html {
 }
 case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    out.printSpecStart(start.name)(args)
+    if (!args.xonly) out.printSpecStart(start.name)(args) else out
 }
 case class HtmlText(t: ExecutedText) extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    out.printText(t.text, level, !args.xonly)(args)
+    if (!args.xonly) out.printText(t.text, level, !args.xonly)(args) else out
 }        
 case class HtmlPar() extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    out.printElem(<p/>, !args.xonly)(args)
+    if (!args.xonly) out.printElem(<p/>, !args.xonly)(args) else out
 }
 case class HtmlBr() extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    out.printPar("", !args.xonly)(args)
+    if (!args.xonly) out.printPar("", !args.xonly)(args) else out
 }
 case class HtmlResult(r: ExecutedResult) extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    printResult(r.text, level, r.result)(args, out)
+    if (!args.xonly || !r.result.isSuccess) printResult(r.text, level, r.result)(args, out) else out
     
   def printResult(desc: MarkupString, level: Int, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
     result match {
@@ -99,8 +100,8 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
   }
     
   def printEndStats(stats: Stats)(implicit args: Arguments, out: HtmlResultOutput) = {
-    val name = end.name
-    val title = "Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim)
+    val n = end.name
+    val title = "Total for specification" + (if (n.name.isEmpty) n.name.trim else " "+n.name.trim)
     val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart, specEnd) = stats
     val classStatus = if (failures + errors > 0) "failure" else "success" 
     val numbers = Seq(
@@ -122,7 +123,7 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
 }
 case class HtmlSee(see: ExecutedSee) extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    out.printStatusLink(see.link, level)(args)
+    if (!args.xonly) out.printLink(see.link, level)(args) else out
 }
 case class HtmlOther(fragment: ExecutedFragment)   extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = out

@@ -24,13 +24,13 @@ trait FragmentsBuilder {
    */
   implicit def title(s: String): SpecTitle = SpecTitle(s)
   case class SpecTitle(name: String) {
-    def title = SpecStart(name)
+    def title = SpecStart(SpecName(name))
   }
   
   /** @return a Text Fragment from a string */
   implicit def textFragment(s: String): Text = Text(s)
   /** @return a Group of Fragments from an existing Fragments object */
-  implicit def fragmentGroup(Fragments: Fragments) = Group(Fragments.fragments)
+  implicit def fragmentGroup(fs: Fragments) = Group(fs.fragments, fs.arguments)
   /** @return a Group of Fragments from an existing Fragments Seq */
   implicit def fragmentGroup(fragments: Seq[Fragment]) = Group(fragments)
 
@@ -70,16 +70,16 @@ trait FragmentsBuilder {
    * This implicits allows to create links to other specifications
    * @see org.specs2.UserGuide
    */
-  implicit def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = new HtmlLinkFragments(HtmlLink("", s, "", "", "", Success()))
+  implicit def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = new HtmlLinkFragments(HtmlLink(SpecName(""), s, "", "", "", Success()))
   class HtmlLinkFragments(link: HtmlLink) {
     def ~(p: (String, SpecificationStructure)) =
-      See(HtmlLink(p._2, link.beforeText, p._1)) ^ fragmentGroup(p._2.content)
+      See(HtmlLink(SpecName(p._2), link.beforeText, p._1)) ^ fragmentGroup(p._2.content)
 
     def ~(p: (String, SpecificationStructure, String)) =
-      See(HtmlLink(p._2, link.beforeText, p._1, p._3)) ^ fragmentGroup(p._2.content)
+      See(HtmlLink(SpecName(p._2), link.beforeText, p._1, p._3)) ^ fragmentGroup(p._2.content)
 
     def ~(p: (String, SpecificationStructure, String, String)) =
-      See(HtmlLink(p._2, link.beforeText, p._1, p._3, p._4)) ^ fragmentGroup(p._2.content)
+      See(HtmlLink(SpecName(p._2), link.beforeText, p._1, p._3, p._4)) ^ fragmentGroup(p._2.content)
   }
 }
 

@@ -16,17 +16,24 @@ sealed trait Fragment {
   val linkedTo: Option[SpecificationStructure] = None
   def matches(s: String) = true
 }
-case class SpecStart(name: String, arguments: Arguments = Arguments()) extends Fragment {
+case class SpecStart(name: SpecName, arguments: Arguments = Arguments()) extends Fragment {
   override def matches(s: String) = name matches s
-  override def toString = "SpecStart("+name+")"
+  override def toString = "SpecStart("+name.name+")"
 }
-case class SpecEnd(name: String) extends Fragment {
+object SpecStart {
+  def apply(name: String): SpecStart  = new SpecStart(SpecName(name))
+  def apply(name: String, args: Arguments): SpecStart = new SpecStart(SpecName(name), args)
+}
+case class SpecEnd(name: SpecName) extends Fragment {
   override def matches(s: String) = name matches s
+}
+object SpecEnd {
+  def apply(name: String): SpecEnd = new SpecEnd(SpecName(name))
 }
 case class Text(t: String) extends Fragment {
   override def matches(s: String) = t.matches(s)
 }
-case class Group(fragments: Seq[Fragment])
+case class Group(fragments: Seq[Fragment], args: Arguments = Arguments())
 case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable {
   def execute = body()
   override def matches(s: String) = asString(desc).removeAll("\\n").matches(s)

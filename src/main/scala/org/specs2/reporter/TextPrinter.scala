@@ -28,7 +28,7 @@ import SpecsArguments._
 trait TextPrinter {
   val output: ResultOutput = new TextResultOutput
   
-  def print(klass: Class[_], fs: Seq[ExecutedFragment])(implicit args: Arguments) = 
+  def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) =
     printLines(fs).print(output)
   
   def printLines(fs: Seq[ExecutedFragment]) = 
@@ -86,7 +86,7 @@ trait TextPrinter {
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      out.printSpecStart(leveledText(start.name, level)(args))(args)
+      out.printSpecStart(leveledText(start.name.name, level)(args))(args)
     } 
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
@@ -163,9 +163,9 @@ trait TextPrinter {
         printEndStats(total)(args, out)
     }
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
-      val name = end.name
+      val n = end.name
       out.printLine(" ")
-      out.printLine(color("Total for specification" + (if (name.isEmpty) name.trim else " "+name.trim), blue, args.color))
+      out.printLine(color("Total for specification" + (if (n.name.isEmpty) n.name.trim else " "+n.name.trim), blue, args.color))
       printStats(stats)
       out.printLine(" ")
     }

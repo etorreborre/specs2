@@ -31,12 +31,7 @@ trait Reporter extends
        Selection 
   with ExecutionStrategy 
   with Exporting {
-  /**
-   * report the Fragments of a BaseSpecification
-   * @return the reporter
-   */
-  def report(spec: BaseSpecification)(implicit arguments: Arguments): this.type = report(spec.getClass, spec.content)
-   	  
+
   /**
    * report Fragments by:
    *   * extracting arguments from the Fragments
@@ -46,8 +41,8 @@ trait Reporter extends
    *   
    * @return the reporter
    */
-  def report(klass: Class[_], fragments: Fragments)(implicit arguments: Arguments): this.type = {
-    fragments |> select |> execute |> export(klass)
+  def report(spec: SpecificationStructure)(implicit arguments: Arguments): this.type = {
+    spec.content |> select |> execute |> export(spec)
     this
   }
 }

@@ -42,11 +42,11 @@ trait HtmlPrinter {
    * file
    * the name of the html file is the full class name
    */
-  def print(klass: Class[_], fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
+  def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     copyResources
     
     reduce(fs).foreach { lines =>
-      fileSystem.write(reportPath(lines.link.getOrElse(HtmlLink.fromClass(klass)).url)) { out =>
+      fileSystem.write(reportPath(lines.link.getOrElse(HtmlLink(SpecName(s))).url)) { out =>
         printHtml(new HtmlResultOutput(out), lines).flush
       }
     }
@@ -75,9 +75,10 @@ trait HtmlPrinter {
   def reduce(fs: Seq[ExecutedFragment]) = {
     flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (List(HtmlLines())) { (res, cur) =>
       cur match {
-        case HtmlLine(HtmlSee(see), _, _, _)   => HtmlLines(link = Some(see.link)) :: (res.head.add(cur)) :: res.drop(1)
-        case HtmlLine(HtmlSpecEnd(_), _, _, _) => res.drop(1) :+ res.head.add(cur)
-        case other                             => res.head.add(cur) :: res.drop(1)
+        case HtmlLine(HtmlSee(see), _, _, _)          => HtmlLines(link = Some(see.link)) :: (res.head.add(cur)) :: res.drop(1)
+        case HtmlLine(HtmlSpecEnd(end), _, _, _)
+          if (res.head.is(end.name))                  => res.drop(1) :+ res.head.add(cur)
+        case other                                    => res.head.add(cur) :: res.drop(1)
       }
     }
   }

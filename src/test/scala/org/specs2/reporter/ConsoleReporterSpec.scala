@@ -87,8 +87,8 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
 
   val textOutput = new TextResultOutput with MockOutput
   trait MockTextPrinter extends TextPrinter { override val output = textOutput } 
-	val reporter = new ConsoleReporter with MockTextPrinter
-	  reporter.report(getClass, ex)(Arguments())
+	  val reporter = new ConsoleReporter with MockTextPrinter
+	  reporter.report(new Specification { def is = ex })(Arguments())
 	  textOutput.messages.toList.map(removeColors(_))
   }
 }

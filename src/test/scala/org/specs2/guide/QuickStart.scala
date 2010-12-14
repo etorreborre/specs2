@@ -1,42 +1,79 @@
 package org.specs2
 package guide
 
-class QuickStart extends Specification { def is = args(noindent = true, debugMarkdown=true)^
-  "Here is your first specification with specs2:                                              "^
-                                                                                              """
-      import org.specs2._
+class QuickStart extends Specification { def is = literate                                                              ^
+"#### First specification"                                                                                              ^
+"Here is your first specification with ***specs2***                                                                     "^
+                                                                                                                        """
+    import org.specs2._
 
-      class HelloWorldSpec extends Specification { def is =
+    class HelloWorldSpec extends Specification { def is =
 
-        "This is a specification to check the 'Hello world' string"                    ^
-        "'Hello world' contains 11 characters"                                         ! e1^
-        "'Hello world' starts with 'Hello'"                                            ! e2^
-        "'Hello world' ends with 'world'"                                              ! e3^
-                                                                                       end
-        def e1 = "Hello world" must have size(11)
-        def e2 = "Hello world" must startWith("Hello")
-        def e3 = "Hello world" must endWith("World")
-      }
+      "This is a specification to check the 'Hello world' string"                 ^
+                                                                                  p^
+      "'Hello world' contains 11 characters"                                      ! e1^
+      "'Hello world' starts with 'Hello'"                                         ! e2^
+      "'Hello world' ends with 'world'"                                           ! e3^
+                                                                                  end
+      def e1 = "Hello world" must have size(11)
+      def e2 = "Hello world" must startWith("Hello")
+      def e3 = "Hello world" must endWith("World")
+    }
 
-  The class above extends *org.specs2.Specification* and must define a method called `is`.
-  This methods lists specification fragments which are:
-  * simple text fragments: 'This is a specification to check the 'Hello world' string'
-  * examples: a String followed by ! and a method returning a `Result`
+The class containing our specification must extend `org.specs2.Specification` and must define a method called `is`.
 
-  `Result`s are usually created by defining expectations with `Matchers`:
-  * `"Hello world" must startWith("Hello")`                                                         
-                                                                                                 """^
-                                                                                                 end
-  class HelloWorldSpec extends Specification { def is =
+That `is` method lists *specification fragments* which can be:
 
-    "This is a specification to check the 'Hello world' string"                    ^
-    "'Hello world' contains 11 characters"                                         ! e1^
-    "'Hello world' starts with 'Hello'"                                            ! e2^
-    "'Hello world' ends with 'world'"                                              ! e3^
-                                                                                   end
-    def e1 = "Hello world" must have size(11)
-    def e2 = "Hello world" must startWith("Hello")
-    def e3 = "Hello world" must endWith("World")
-  }
+* some text: like a description of the system you're specifying
+* an example: a description and some executable code returning a result
+* formatting fragments: to enhance the display of the specification by adding line breaks or indentation
 
+You can notice also that fragments are separated by the `^` character in order to build a list of them.
+                                                                                                                        """^
+"#### Execution"                                                                                                        ^
+                                                                                                                        """
+And this is it! Now to execute your specification, you use a *runner* which will display the
+results:
+
+    > scala -cp ... specs2.run HelloWorldSpec
+
+    HelloWorldSpec
+
+    This is a specification to check the 'Hello world' string
+
+    + 'Hello world' contains 11 characters
+    + 'Hello world' starts with 'Hello'
+    + 'Hello world' ends with 'world'
+
+    Total for specification HelloWorldSpec
+    Finished in 0 second, 78 ms
+    3 examples, 0 failure, 0 error
+                                                                                                                        """^
+"#### Where to go from here"                                                                                            ^
+                                                                                                                        """
+You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide") to learn how to:
+
+ * display your text and examples nicely
+ * define _contexts_ to setup/teardown data for your examples
+ * export your specification as an html document (like this one!)
+ * use sbt/maven/junit to execute a specification
+ * use the many ***specs2*** matchers to specify precise expectations
+ * use Mockito
+ * use ScalaCheck
+ * include / link specifications and reuse examples
+                                                                                                                        """^
+  include(xonly, new HelloWorldSpec)                                                                                    ^
+                                                                                                                        end
 }
+class HelloWorldSpec extends Specification { def is =
+
+   "This is a specification to check the 'Hello world' string"                    ^
+                                                                                  p^
+   "'Hello world' contains 11 characters"                                         ! e1^
+   "'Hello world' starts with 'Hello'"                                            ! e2^
+   "'Hello world' ends with 'world'"                                              ! e3^
+                                                                                  end
+   def e1 = "Hello world" must have size(11)
+   def e2 = "Hello world" must startWith("Hello")
+   def e3 = "Hello world" must endWith("world")
+ }

@@ -42,7 +42,7 @@ object JUnitDescriptions {
    */
   val mapper: (Fragment, Int) => Option[(Description, Fragment)] = (f: Fragment, nodeLabel: Int) => f match {
     case (SpecStart(t, _)) => 
-      Some(createSuiteDescription(testName(t)) -> f)
+      Some(createSuiteDescription(testName(t.name)) -> f)
     case (Text(t)) => 
       Some(createSuiteDescription(testName(t)) -> f)
     case (Example(description, body)) =>  Some(createDescription(testName(description), nodeLabel) -> f)

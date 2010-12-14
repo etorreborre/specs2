@@ -33,7 +33,8 @@ case class Arguments (
   def markdown: Boolean         = _markdown.getOrElse(true)
   def debugMarkdown: Boolean    = _debugMarkdown.getOrElse(false)
 
-  def overrideWith(other: Arguments) = {
+  def <|(other: Arguments) = overrideWith(other)
+  def overrideWith(other: Arguments): Arguments = {
     new Arguments(
       other._ex              .orElse(_ex),
       other._xonly           .orElse(_xonly),
@@ -147,6 +148,14 @@ trait ArgumentsArgs extends control.Properties {
    * @return arguments for a specification where examples must be executed sequentially
    */
   def sequential: Arguments = args(sequential = true)
+  /**
+   * shortcut to show only the text without any execution
+   */
+  def plan: Arguments = args(plan = true)
+  /**
+   * shortcut to show only the text without automatic indentation
+   */
+  def freetext: Arguments = plan <| args(noindent = true)
   /**
    * shortcut to print only failures and errors
    */
