@@ -109,6 +109,8 @@ case class Stats(fragments:    Int = 0,
   }
   /** @return true if there are errors or failures */
   def hasFailuresOrErrors = failures + errors > 0
+  /** @return true if there are expectations */
+  def hasExpectations = expectations > 0
 }
 case object Stats {
   implicit object StatsMonoid extends Monoid[Stats] {

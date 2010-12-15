@@ -16,14 +16,14 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
     * tagged examples with dependencies must respect their specified ordering
                                                                                           """^
   "It is possible to filter the examples to execute by giving args"                       ^
-  "  specifying a regular expression: ex = ex1.*"                                         ! filter().e1^
+    "specifying a regular expression: ex = ex1.*"                                         ! filter().e1^
                                                                                           p^
   "If a specification contains steps they must be grouped before the examples"            ^
-  "  2 consecutive steps must be in the same list"                                        ! steps().e1^
-  "  2 consecutive examples must be in the same list"                                     ! steps().e2^
-  "  an example followed by a steps must not be in the same list"                         ! steps().e3^
-  "  a step followed by an example must not be in the same list"                          ! steps().e4^
-  "  so that steps and examples are always separate"                                      ! steps().e5^
+    "2 consecutive steps must be in the same list"                                        ! steps().e1^
+    "2 consecutive examples must be in the same list"                                     ! steps().e2^
+    "an example followed by a steps must not be in the same list"                         ! steps().e3^
+    "a step followed by an example must not be in the same list"                          ! steps().e4^
+    "so that steps and examples are always separate"                                      ! steps().e5^
                                                                                           end
   
   case class filter()  {

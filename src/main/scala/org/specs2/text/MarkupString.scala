@@ -10,10 +10,12 @@ sealed trait MarkupString {
 case class CodeMarkup(text: String) extends MarkupString {
   def toHtml = (<code class="prettyprint">{text}</code>).toString
   def append(s: String) = CodeMarkup(text+s)
+  override def toString = text
 }
 case class NoMarkup(text: String) extends MarkupString {
   def toHtml: String = text
   def append(s: String) = NoMarkup(text+s)
+  override def toString = text
 }
 
 object MarkupString {
