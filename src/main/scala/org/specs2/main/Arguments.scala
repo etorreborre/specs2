@@ -53,22 +53,23 @@ case class Arguments (
   }
   override def toString = {
     "Arguments("      +
-    "ex"              +" = "+ _ex              +", "+
-    "xonly"           +" = "+ _xonly           +", "+
-    "plan"            +" = "+ _plan            +", "+
-    "failtrace"       +" = "+ _failtrace       +", "+
-    "color"           +" = "+ _color           +", "+
-    "noindent"        +" = "+ _noindent        +", "+
-    "showlevel"       +" = "+ _showlevel       +", "+
-    "offset"          +" = "+ _offset          +", "+
-    "specName"        +" = "+ _specName        +", "+
-    "sequential"      +" = "+ _sequential      +", "+
-    "threadsNb"       +" = "+ _threadsNb       +", "+
-    "markdown"        +" = "+ _markdown        +", "+
-    "debugMarkdown"   +" = "+ _debugMarkdown   +
-    ") "
-    
+    List(
+    "ex"             -> _ex           ,
+    "xonly"          -> _xonly        ,
+    "plan"           -> _plan         ,
+    "failtrace"      -> _failtrace    ,
+    "color"          -> _color        ,
+    "noindent"       -> _noindent     ,
+    "showlevel"      -> _showlevel    ,
+    "offset"         -> _offset       ,
+    "specName"       -> _specName     ,
+    "sequential"     -> _sequential   ,
+    "threadsNb"      -> _threadsNb    ,
+    "markdown"       -> _markdown     ,
+    "debugMarkdown"  -> _debugMarkdown
+    ).flatMap(showArg).mkString(", ") + ") "
   }
+  private def showArg(a: (String, Option[_])) = a._2.map(a._1 +" = "+_)
 } 
 
 private[specs2]  
