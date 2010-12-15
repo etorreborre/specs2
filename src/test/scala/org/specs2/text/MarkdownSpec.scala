@@ -14,8 +14,9 @@ class MarkdownSpec extends SpecificationWithJUnit { def is =
   { toHtmlNoPar("***hello***") must_== "<strong><em>hello</em></strong>" }                ^
                                                                                           p^
   "Multi-line text must preserve newlines"                                                ^
-  { toHtmlNoPar("hello\nworld") must contain("hello\nworld") }                            ^
-  "with code tags"                                                                        ! e1^
+  { toHtmlNoPar("hello\nworld") must contain("hello<br/>world") }                            ^
+                                                                                          p^
+  "Embedded code"                                                                         ! e1^
                                                                                           end
 
   val someCode = """
@@ -25,6 +26,6 @@ This is a paragraph presenting some code:
     Console.println("Hello world")
 
 and no more code here"""
+
   def e1 = toHtmlNoPar(someCode) must contain("<pre>") and contain("<code class='prettyprint'>")
-  
 }

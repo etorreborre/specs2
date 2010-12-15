@@ -10,7 +10,7 @@ class TrimSpec extends SpecificationWithJUnit { def is =
                                                                                           """^
                                                                                           p^
   "Trim lines and replace characters"                                                     ^
-  { " hello\rworld\n  ".trimNewLines === "helloworld" }                                   ^
+  { " hello\rworld\n  ".trimNewLines === "hello\rworld" }                                   ^
   { " hello (world)  ".trimReplace("(" -> "[", ")" -> "]") === "hello [world]" }          ^
   { " hello world  ".trimReplaceAll("h" -> "H", "w" -> "W") === "Hello World" }           ^
                                                                                           p^
@@ -18,8 +18,13 @@ class TrimSpec extends SpecificationWithJUnit { def is =
   { " (hello world)  ".trimEnclosing("(", ")") === "hello world" }                        ^
   { " ( (hello world) )  ".trimEnclosing("(", ")") === "(hello world)" }                  ^
                                                                                           p^
-  "Trim enclosing xml tags"                                                                ^
+  "Trim enclosing xml tags"                                                               ^
   { "<p>hello</p>".trimEnclosingXmlTag("p") === "hello" }                                 ^
   { "<p a=\"2\">hello</p>".trimEnclosingXmlTag("p") === "hello" }                         ^
+                                                                                          p^
+  "Remove some groups"                                                                    !e1^
                                                                                           end
+  def e1 = "<li><p>hello\ndear\nworld</p></li>".
+           replaceAll("<p>((.|\n)*)</p>", (s: String) => s.replace("\n", "<br/>")) ===
+           "<li><p>hello<br/>dear<br/>world</p></li>"
 }

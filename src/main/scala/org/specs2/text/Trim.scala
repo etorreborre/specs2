@@ -1,6 +1,7 @@
 package org.specs2
 package text
 import scala.util.matching.Regex
+import Regex.Match
 
 /**
  * Utility methods for trimming text
@@ -51,7 +52,19 @@ trait Trim extends control.Debug {
     } 
     def replaceAll(pairs: Pair[String, String]*) = pairs.foldLeft(s) { (res, cur) =>
       res.replaceAll(cur._1, cur._2)
-    } 
+    }
+    def replaceInsideTag(tag: String, p: Pair[String, String]*) = {
+      replaceAll("<"+tag+">(.(.|\n)*?)</"+tag+">", (s: String) => s.replaceAll(p:_*))
+    }
+    def replaceInsideTags(tags: String*)(p: Pair[String, String]*) = {
+      tags.foldLeft(s) { (res, tag) =>
+        res.replaceAll("<"+tag+">(.(.|\n)*?)</"+tag+">", (s: String) => s.replaceAll(p:_*))
+      }
+    }
+    /** replace each group with something else */
+    def replaceAll(exp: String, f: String => String) = {
+      new Regex(exp).replaceAllIn(s, (m: Match) => f(m.group(0)))
+    }
     def remove(toRemove: String*) = toRemove.foldLeft(s) { (res, cur) => res.replace(cur, "") }
     def removeAll(toRemove: String*) = toRemove.foldLeft(s) { (res, cur) => res.replaceAll(cur, "") }
   }

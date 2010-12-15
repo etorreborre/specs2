@@ -1,11 +1,8 @@
 package org.specs2
 package reporter
 import java.io.Writer
-import scala.io.Source
 import scala.xml._
-import parsing.XhtmlParser
 import main.Arguments
-import control.Exceptions._
 import text.Markdown._
 import text._
 import text.Trim._
@@ -55,17 +52,7 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
 
   def l(level: Int)(implicit args: Arguments) = "level" + (if (args.noindent) 0 else level)
 
-  def wiki(text: String)(implicit args: Arguments) = {
-    if (!args.markdown) text
-    else {
-      val html = toHtmlNoPar(text)
-      val f = (e: Exception) => if (args.debugMarkdown) e.printStackTrace
-      tryo(XhtmlParser(Source.fromString("<text>"+html+"</text>")).head.child)(f) match {
-        case Some(f) => f
-        case None => if (args.debugMarkdown) html else text
-      }
-    }
-  }
+  def wiki(text: String)(implicit args: Arguments) = toXhtml(text)
   def printLink(link: HtmlLink, level: Int = 0)(implicit args: Arguments) = {
     link match {
       case slink @ SpecHtmlLink(name, before, link, after, tip, result) =>
@@ -172,6 +159,9 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
     """
     }</script>
 
-
-  def flush = out.write(xml.toString)
+  /**
+   * writing to the output and doing <br></br> replacement by <br/> to avoid newlines to be inserted after the Xhtml
+   * parsing
+   */
+  def flush = out.write(Xhtml.toXhtml(xml))
 }
