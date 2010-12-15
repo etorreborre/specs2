@@ -102,6 +102,16 @@ trait MatchersImplicits {
     }
   }
 
+  /**
+   * This method transform a function to a Matcher
+   */
+  implicit def functionToMatcher[T](f: T => (Boolean, String, String)) = new Matcher[T] {
+    def apply[S <: T](s: =>Expectable[S]) = {
+      val expectable = s
+      val functionResult = f(expectable.value)
+      result(functionResult._1,  functionResult._2, functionResult._3, expectable)
+    }
+  }
   
 }
 private[specs2]
