@@ -95,7 +95,7 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
 
   def printCurrentStats(stats: (Stats, Stats), args: Arguments)(implicit out: HtmlResultOutput) = {
     val (current, total) = stats
-    if ((!args.xonly || current.hasFailuresOrErrors) && !total.isEnd(end)) printEndStats(current)(args, out)
+    if ((!args.xonly || current.hasFailuresOrErrors) && current.hasExpectations && !total.isEnd(end)) printEndStats(current)(args, out)
     else out
   }
     
@@ -122,8 +122,9 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
   }
 }
 case class HtmlSee(see: ExecutedSee) extends Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
+  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if (!args.xonly) out.printLink(see.link, level)(args) else out
+  }
 }
 case class HtmlOther(fragment: ExecutedFragment)   extends Html {
   def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = out
