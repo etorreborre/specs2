@@ -49,6 +49,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
         s.getStackTrace.foreach(t => logError("  " + t.toString))
       }
     }
+    if (args.contains("html")) specs2.html.main(Array(classname) ++ args)
     run(specification.right.toOption, handler, args)
   }
   
@@ -61,4 +62,3 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   def reporter(handler: EventHandler) = new TestInterfaceReporter(handler, loggers)
 
 }
- 
