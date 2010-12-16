@@ -66,6 +66,12 @@ h5 {
   color: #36a;
   font-size: medium;
 }
+h6 {
+  margin: 0px 0px 0px 0px;
+  font-style: italic;
+  color: #36a;
+  font-size: small;
+}
 p {
   line-height: 1.3em;
   font-size: small;
