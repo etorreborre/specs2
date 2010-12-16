@@ -36,6 +36,7 @@ trait SpecName {
   def name: String
   def url: String
   def matches(p: String) = name matches p
+  override def toString = name
 }
 object SpecName {
   def apply(s: SpecificationStructure): SpecificationName = SpecificationName(s)

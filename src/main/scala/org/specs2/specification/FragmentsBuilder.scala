@@ -24,7 +24,7 @@ trait FragmentsBuilder {
    */
   implicit def title(s: String): SpecTitle = SpecTitle(s)
   case class SpecTitle(name: String) {
-    def title = SpecStart(SpecName(name))
+    def title = Fragments(SpecStart(SpecName(name)))
   }
   
   /** @return a Text Fragment from a string */
