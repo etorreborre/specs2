@@ -9,34 +9,34 @@ class PropSpec extends SpecificationWithJUnit {  def is =
   It embeddeds an optional constraint which allows to execute the Prop and see (by default) if 
   the actual value is equal to the expected value. 
                                                                                           """                                                                                       ^
-" A Prop can be created"                                                                  ^
-"   with a single label"                                                                  ! creation.e1^
-"   with a single value (the actual one)"                                                 ! creation.e2^
-"   with a label and actual value"                                                        ! creation.e3^
-"   with a label, the actual value and a binary function returning a result"              ! creation.e4^
-"   with a label, the actual value and a matcher"                                         ! creation.e5^
-                                                                                          p^
-" A Prop can be displayed"                                                                ^ 
-"   with only the expected value"                                                         ! display.e1^
-"   with only the actual value"                                                           ! display.e2^ 
-"   with only one value when expected == actual"                                          ! display.e3^
-                                                                                          p^
-" A Prop can be updated"                                                                  ^
-"   with the expected value"                                                              ! update.e1^
-                                                                                          p^
-" A Prop can be executed"                                                                  ^
-"   it returns pending if it has no values at all"                                        ! exec.e1^
-"   it returns pending if it only has an actual value"                                    ! exec.e2^
-"   it returns pending if it only has an expected value"                                  ! exec.e3^
-"   it returns success if expected == actual"                                             ! exec.e4^
-"   it returns a failure if expected != actual"                                           ! exec.e5^
-"   it works with a general constraint"                                                   ^
-"     and returns a success if constraint(actual, expected) == success"                   ! exec.e6^
-"     and returns a failure if constraint(actual, expected) fails"                        ! exec.e7^
-"   it works with a matcher constraint"                                                   ^
-"     and returns a success if (actual matcher expected) == success"                      ! exec.e8^
-"     and returns a failure if (actual matcher expected) fails"                           ! exec.e9^
-                                                                                          end
+  "A Prop can be created"                                                                  ^
+    "with a single label"                                                                  ! creation.e1^
+    "with a single value (the actual one)"                                                 ! creation.e2^
+    "with a label and actual value"                                                        ! creation.e3^
+    "with a label, the actual value and a binary function returning a result"              ! creation.e4^
+    "with a label, the actual value and a matcher"                                         ! creation.e5^
+                                                                                           p^
+  "A Prop can be displayed"                                                                ^
+    "with only the expected value"                                                         ! display.e1^
+    "with only the actual value"                                                           ! display.e2^
+    "with only one value when expected == actual"                                          ! display.e3^
+                                                                                           p^
+  "A Prop can be updated"                                                                  ^
+    "with the expected value"                                                              ! update.e1^
+                                                                                           p^
+  "A Prop can be executed"                                                                  ^
+    "it returns pending if it has no values at all"                                        ! exec.e1^
+    "it returns pending if it only has an actual value"                                    ! exec.e2^
+    "it returns pending if it only has an expected value"                                  ! exec.e3^
+    "it returns success if expected == actual"                                             ! exec.e4^
+    "it returns a failure if expected != actual"                                           ! exec.e5^
+    "it works with a general constraint"                                                   ^
+      "and returns a success if constraint(actual, expected) == success"                   ! exec.e6^
+      "and returns a failure if constraint(actual, expected) fails"                        ! exec.e7^
+    "it works with a matcher constraint"                                                   ^p^
+      "and returns a success if (actual matcher expected) == success"                      ! exec.e8^
+      "and returns a failure if (actual matcher expected) fails"                           ! exec.e9^
+                                                                                           end
 
   val name = Prop("name", "eric")
   val noValues = new Prop("name")
