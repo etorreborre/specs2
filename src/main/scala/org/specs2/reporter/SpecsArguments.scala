@@ -19,8 +19,8 @@ case class SpecsArguments[T](argumentsFragments: List[ArgumentsStart[T]] = Nil) 
       val (fragmentsArgs, currentArgs) = res
       cur match {
         case StartOfArguments(f, name, args) => (fragmentsArgs :+ args, args :: currentArgs)
-        case NoStartOfArguments(f)           => (fragmentsArgs ++ currentArgs.headOption.toList, currentArgs)
-        case EndOfArguments(f, name)         => (fragmentsArgs ++ currentArgs.headOption.toList, currentArgs.drop(1))
+        case NoStartOfArguments(f)           => (fragmentsArgs :+ currentArgs.headOption.getOrElse(Arguments()), currentArgs)
+        case EndOfArguments(f, name)         => (fragmentsArgs :+ currentArgs.headOption.getOrElse(Arguments()), currentArgs.drop(1))
       }
     }._1
   }
