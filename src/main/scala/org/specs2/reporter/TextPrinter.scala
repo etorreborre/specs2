@@ -8,6 +8,7 @@ import data.Tuples._
 import text.Plural._
 import text.MarkupString._
 import text.AnsiColors._
+import text.NotNullStrings._
 import execute._
 import main.Arguments
 import specification._
@@ -105,7 +106,7 @@ trait TextPrinter {
           printError(desc, e) 
           e.stackTrace.foreach(t => out.printError(t.toString))
           e.exception.chainedExceptions.foreach { (t: Throwable) =>
-            out.printError(t.getMessage)
+            out.printError(t.getMessage.notNull)
             t.getStackTrace.foreach(st => out.printError(st.toString))
           }
         }

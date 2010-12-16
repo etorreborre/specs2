@@ -5,6 +5,7 @@ import scala.xml._
 import main.Arguments
 import text.Markdown._
 import text._
+import NotNullStrings._
 import text.Trim._
 import execute.{ Result, ResultStackTrace }
 import specification._
@@ -91,7 +92,7 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
   
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
-      val message = "  "+e.message+" ("+e.location+")"
+      val message = "  "+e.message.notNull+" ("+e.location+")"
       val onclick = "toggleImage(this); showHide('"+System.identityHashCode(e)+"')"
       printElem(<div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick}/>
                  {message}
