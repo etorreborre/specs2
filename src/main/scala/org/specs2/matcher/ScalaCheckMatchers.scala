@@ -156,11 +156,13 @@ trait PropertyImplicits {
     def forAll(implicit a: Arbitrary[T], s: Shrink[T]): Prop = asProperty(f)
   }
   /** transform a function returning a MatchResult to a property */
-  protected def asProperty[T](f: T => MatchResult[_])(implicit a: Arbitrary[T], s: Shrink[T]): Prop = {
+  protected def asProperty[T](f: T => MatchResult[_])
+  (implicit a: Arbitrary[T], s: Shrink[T]
+  ): Prop = {
 	  Prop.forAll { (t: T) =>
 	    f(t) match {
-	   	  case MatchFailure(_, _ , _) => false  
-	   	  case _ => true  
+	   	  case MatchFailure(_, ko, _) => false :| ko
+	   	  case _ => true :| ""
 	    } 	
 	  }
   }
@@ -171,8 +173,8 @@ trait PropertyImplicits {
   ): Prop = {
     Prop.forAll { (t1: T1, t2: T2) =>
       f(t1, t2) match {
-        case MatchFailure(_, _ , _) => false  
-        case _ => true  
+        case MatchFailure(_, ko, _) => false :| ko
+        case _ => true :| ""
       }   
     }
   }
