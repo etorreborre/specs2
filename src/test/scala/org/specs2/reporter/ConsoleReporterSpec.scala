@@ -74,7 +74,7 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
 	  report(Fragments).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
   }
   def descriptionMustBe(body: =>Result, description: String) = {
-	  report("this example" ! body).head must_== description 
+	  report("this example" ! body)(2) must_== description
   }
   def messageMustBe(body: Result, message: String) = {
 	  report("this example" ! body)(1) must_== message 
