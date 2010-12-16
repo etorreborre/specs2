@@ -31,7 +31,6 @@ trait Markdown {
     if (!args.markdown) text
     else {
       val html = toHtmlNoPar(text)
-      val f = (e: Exception) => if (args.debugMarkdown) e.printStackTrace
       parse(html) match {
         case Some(f) => f
         case None => if (args.debugMarkdown) html else text

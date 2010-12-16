@@ -5,7 +5,7 @@ import mock._
 import specification._
 
 class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer =>
-  def is =
+  def is = sequential ^
                                                                                           """
   The HtmlPrinter class is responsible for opening an html file and writing
   the specification text.

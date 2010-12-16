@@ -2,7 +2,7 @@ package org.specs2
 package text
 import Markdown._
 
-class MarkdownSpec extends SpecificationWithJUnit { def is =
+class MarkdownSpec extends SpecificationWithJUnit { def is = sequential ^
                                                                                           """
   Markdown text can be transformed to an html equivalent.
                                                                                           """^
