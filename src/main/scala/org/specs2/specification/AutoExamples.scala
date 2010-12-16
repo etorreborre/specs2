@@ -55,8 +55,9 @@ trait AutoExamples {
   implicit def resultExample(expression: =>execute.Result): Example =
     Example(CodeMarkup(code()), expression)
 
-  private def code() = {
-    List("^", "^t", "^bt", "^p", "^br", "^end", "^endp").foldLeft(getCode(5))(_ trimEnd _).
+  private[specs2] def code() = {
+    val codeDepth = 6
+    List("^", "^t", "^bt", "^p", "^br", "^end", "^endp").foldLeft(getCode(codeDepth))(_ trimEnd _).
     trimEnclosing("{", "}")
   }
 }
