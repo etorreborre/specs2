@@ -15,49 +15,54 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
     * steps must be executed before examples as specified
     * tagged examples with dependencies must respect their specified ordering
                                                                                           """^
+                                                                                            p^
   "It is possible to filter the examples to execute by giving args"                       ^
     "specifying a regular expression: ex = ex1.*"                                         ! filter().e1^
+    "if no filter is specified, nothing must be filtered out"                             ! filter().e2^
                                                                                           p^
   "If a specification contains steps they must be grouped before the examples"            ^
     "2 consecutive steps must be in the same list"                                        ! steps().e1^
     "2 consecutive examples must be in the same list"                                     ! steps().e2^
-    "an example followed by a steps must not be in the same list"                         ! steps().e3^
+    "an example followed by a step must not be in the same list"                          ! steps().e3^
     "a step followed by an example must not be in the same list"                          ! steps().e4^
     "so that steps and examples are always separate"                                      ! steps().e5^
                                                                                           end
   
   case class filter()  {
     def e1 = select(args(ex = "ex1") ^ ex1 ^ ex2).toString must not contain("ex2")
+    def e2 = select(ex1 ^ ex2).toString must contain("ex1")
   }
 
-  case class steps()  {
-    def e1 = Prop.forAll { (fs: Fragments) =>
+  case class steps() extends ScalaCheck {
+    implicit val params = set(maxSize -> 3)
+
+    def e1 = check { (fs: Fragments) =>
       val selected = select(fs ^ action("1"))
       val selected2 = select(fs ^ action("1") ^ action("2"))
-      selected2.size == selected.size
+      selected2 must have size(selected.size)
     }           
-    def e2 = Prop.forAll { (fs: Fragments) =>
+    def e2 = check { (fs: Fragments) =>
       val selected = select(fs ^ ex1)
       val selected2 = select(fs ^ ex1 ^ ex2)
-      selected2.size == selected.size
-    }           
-    def e3 = Prop.forAll { (fs: Fragments) =>
+      selected2 must have size(selected.size)
+    }
+    def e3 = check { (fs: Fragments) =>
       val selected = select(fs ^ ex1)
       val selected2 = select(fs ^ ex1 ^ action("1"))
-      selected2.size == selected.size + 1
-    }           
-    def e4 = Prop.forAll { (fs: Fragments) =>
+      selected2 must have size(selected.size + 1)
+    }
+    def e4 = check { (fs: Fragments) =>
       val selected = select(fs ^ action("1"))
       val selected2 = select(fs ^ action("1") ^ ex2)
-      selected2.size == selected.size + 1
-    }           
+      selected2 must have size(selected.size + 1)
+    }
     def e5 = {
-      val fragments = "intro" ^ action("1") ^ ex1 ^ ex2 ^ action("2") ^ action("3") ^ ex1 ^ ex2
+      val fragments = "s".title ^ "intro" ^ action("1") ^ ex1 ^ ex2 ^ action("2") ^ action("3") ^ ex1 ^ ex2 ^ SpecEnd("s")
       select(fragments).map(l => l.map(_.toString).toString) must contain(
-      "List(SpecStart(anon), Par(), Text(intro), Step)",
+      "List(SpecStart(s), Text(intro), Step)",
       "List(Example(ex1), Example(ex2))",
       "List(Step, Step)",
-      "List(Example(ex1), Example(ex2), SpecEnd(anon))").inOrder  
+      "List(Example(ex1), Example(ex2), SpecEnd(s))").inOrder
     }
     def action(message: String) = Action(selection.println(message)) 
   }
