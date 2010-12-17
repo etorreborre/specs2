@@ -12,6 +12,7 @@ case class Arguments (
   _color:         Option[Boolean] = None,
   _noindent:      Option[Boolean] = None,
   _showlevel:     Option[Boolean] = None,
+  _showtimes:     Option[Boolean] = None,
   _offset:        Option[Int]     = None,
   _specName:      Option[String]  = None,
   _sequential:    Option[Boolean] = None,
@@ -26,6 +27,7 @@ case class Arguments (
   def color: Boolean            = _color.getOrElse(true)
   def noindent: Boolean         = _noindent.getOrElse(false)
   def showlevel: Boolean        = _showlevel.getOrElse(false)
+  def showtimes: Boolean        = _showtimes.getOrElse(false)
   def offset: Int               = _offset.getOrElse(0)
   def specName: String          = _specName.getOrElse(".*Spec")
   def sequential: Boolean       = _sequential.getOrElse(false)
@@ -33,7 +35,12 @@ case class Arguments (
   def markdown: Boolean         = _markdown.getOrElse(true)
   def debugMarkdown: Boolean    = _debugMarkdown.getOrElse(false)
 
+  /** @alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
+  
+  /**
+   * @return a new Argumentns object where the values of this are overriden with the values of other if defined
+   */
   def overrideWith(other: Arguments): Arguments = {
     new Arguments(
       other._ex              .orElse(_ex),
@@ -43,6 +50,7 @@ case class Arguments (
       other._color           .orElse(_color),
       other._noindent        .orElse(_noindent),
       other._showlevel       .orElse(_showlevel),
+      other._showtimes       .orElse(_showtimes),
       other._offset          .orElse(_offset),
       other._specName        .orElse(_specName),
       other._sequential      .orElse(_sequential),
@@ -61,6 +69,7 @@ case class Arguments (
     "color"          -> _color        ,
     "noindent"       -> _noindent     ,
     "showlevel"      -> _showlevel    ,
+    "showtimes"      -> _showtimes    ,
     "offset"         -> _offset       ,
     "specName"       -> _specName     ,
     "sequential"     -> _sequential   ,
@@ -87,6 +96,7 @@ object Arguments {
        _color         = bool("nocolor", false) orElse bool("color"),
        _noindent      = bool("noindent"),
        _showlevel     = bool("showlevel"),
+       _showtimes     = bool("showtimes"),
        _offset        = int("offset"),
        _specName      = value("specName"),
        _sequential    = bool("sequential"),
@@ -119,6 +129,7 @@ trait ArgumentsArgs extends control.Properties {
     color:         Property[Boolean]  = Property[Boolean](),
     noindent:      Property[Boolean]  = Property[Boolean](),
     showlevel:     Property[Boolean]  = Property[Boolean](),
+    showtimes:     Property[Boolean]  = Property[Boolean](),
     offset:        Property[Int]      = Property[Int](),
     specName:      Property[String]   = Property[String](),
     sequential:    Property[Boolean]  = Property[Boolean](),
@@ -133,7 +144,8 @@ trait ArgumentsArgs extends control.Properties {
      color.toOption, 
      noindent.toOption, 
      showlevel.toOption, 
-     offset.toOption, 
+     showtimes.toOption,
+     offset.toOption,
      specName.toOption, 
      sequential.toOption, 
      threadsNb.toOption,

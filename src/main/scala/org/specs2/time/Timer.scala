@@ -64,8 +64,10 @@ trait HmsTimer[T <: HmsTimer[T]] {
    */
   def time: String = {
     val (hours, minutes, seconds, millis) = hourMinutesSecondsMillis
-    hms + ", " + millis + " ms"
+    (if (hms != "0 second") hms + ", " else "") +
+    millis + " ms"
   }
+
   /**
    * this method can be overriden for testing
    */
@@ -77,4 +79,5 @@ class SimpleTimer extends HmsTimer[SimpleTimer] {
       override val elapsed = e
       override val millis = m
     }
+  def add(t: SimpleTimer) = copy(elapsed + t.elapsed, millis ++ t.millis)
 }
