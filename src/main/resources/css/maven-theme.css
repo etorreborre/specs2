@@ -62,12 +62,12 @@ h4 {
   font-size: large;
 }
 h5 {
-  padding: 4px 4px 4px 6px;
+  margin: 0px 0px 5px 0px;
   color: #36a;
   font-size: medium;
 }
 h6 {
-  margin: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 10px;
   font-style: italic;
   color: #36a;
   font-size: small;
