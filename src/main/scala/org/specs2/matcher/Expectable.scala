@@ -32,21 +32,11 @@ class Expectable[+T] protected (private[specs2] val t: () => T) { outer =>
    */
   def description = d(value)
 
-  /** 
-   * @return this expectable with its toString method as an alias description
-   *         this is useful to preserve the original value when the matcher using
-   *         it is adapting the value 
-   */
-  def aka = Expectable(value, value.toString)
-  
-  /** @return this expectable with an alias description */
-  def aka(alias: String) = Expectable(value, alias)
-  
   /** equality matcher on Expectables */
   def ===[S >: T](other: =>S) = applyMatcher(new BeEqualTo(other))
   
   /** optional additional description */
-  protected val desc: Option[String] = None
+  private[specs2] val desc: Option[String] = None
   def optionalDescription = desc
   /** evaluate the value once and return the same expectable */
   private[specs2] def evaluate = Expectable(t(), desc)

@@ -10,14 +10,7 @@ package matcher
  * 
  * `a should matcher`
  */
-class ShouldExpectable[T] private (tm: () => T) extends Expectable[T](tm){
-  override def aka: ShouldExpectable[T] = new ShouldExpectable(tm) {
-    override protected val desc = Some(tm().toString)
-  } 
-  /** @return this expectable with an alias description */
-  override def aka(alias: String): ShouldExpectable[T] = new ShouldExpectable(tm) {
-	  override protected val desc = Some(alias)
-  } 
+class ShouldExpectable[T] private[specs2] (tm: () => T) extends Expectable[T](tm){
   def should(m: =>Matcher[T]) = applyMatcher(m)
   def shouldNot(m: =>Matcher[T]) = applyMatcher(m.not)
   def should_==(other: =>T) = applyMatcher(new BeEqualTo(other))
