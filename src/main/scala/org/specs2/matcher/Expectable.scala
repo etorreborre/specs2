@@ -32,9 +32,6 @@ class Expectable[+T] protected (private[specs2] val t: () => T) { outer =>
    */
   def description = d(value)
 
-  /** equality matcher on Expectables */
-  def ===[S >: T](other: =>S) = applyMatcher(new BeEqualTo(other))
-  
   /** optional additional description */
   private[specs2] val desc: Option[String] = None
   def optionalDescription = desc

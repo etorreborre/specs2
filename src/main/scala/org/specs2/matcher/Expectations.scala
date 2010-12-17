@@ -11,14 +11,19 @@ trait Expectations {
   implicit def describe[T](t: =>T): Descriptible[T] = new Descriptible(t)
   class Descriptible[T](value: =>T) {
     /**
-     * @return this expectable with its toString method as an alias description
+     * @return an expectable with its toString method as an alias description
      *         this is useful to preserve the original value when the matcher using
      *         it is adapting the value
      */
     def aka = Expectable(value, value.toString)
 
-    /** @return this expectable with an alias description */
+    /** @return an expectable with an alias description */
     def aka(alias: String) = Expectable(value, alias)
+  }
+  implicit def canEqual[T](t: =>T) = new CanEqual(t)
+  class CanEqual[T](t: =>T) {
+    /** equality matcher on Expectables */
+    def ===[S >: T](other: =>S) = Expectable(t).applyMatcher(new BeEqualTo(other))
   }
 
 }
