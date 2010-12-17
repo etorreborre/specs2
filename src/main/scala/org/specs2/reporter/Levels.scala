@@ -133,12 +133,12 @@ case object Levels {
   }
   implicit object LevelsReducer extends Reducer[ExecutedFragment, Levels[ExecutedFragment]] {
     implicit def toBlock(f: ExecutedFragment): Block[ExecutedFragment] = f match {
-      case t @ ExecutedResult(_, _)       => BlockTerminal(t) 
+      case t @ ExecutedResult(_, _, _)    => BlockTerminal(t)
       case t @ ExecutedText(_)            => BlockIndent(t)   
       case t @ ExecutedPar()              => BlockUnindent(t)   
       case t @ ExecutedTab(n)             => BlockIndent(t, n)   
       case t @ ExecutedBacktab(n)         => BlockUnindent(t, n) 
-      case t @ ExecutedSpecStart(_, _, _) => BlockReset(t)    
+      case t @ ExecutedSpecStart(_, _)    => BlockReset(t)
       case t @ ExecutedSpecEnd(_)         => BlockReset(t)    
       case t @ ExecutedEnd()              => BlockReset(t)    
       case t                              => BlockNeutral(t)  

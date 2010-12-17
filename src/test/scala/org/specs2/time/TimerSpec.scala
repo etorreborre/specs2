@@ -1,10 +1,12 @@
 package org.specs2
 package time
 
-class TimerSpec extends SpecificationWithJUnit { def is = 
+class TimerSpec extends SpecificationWithJUnit { def is =
+
   "A timer should"                                                                        ^
     "display 0 seconds if not stopped after being started"                                ! e1^
-                                                                                          p^ 
+    "not display 0 seconds if there are millis"                                           ! e1_1^
+                                                                                          p^
   "When started and stopped, it can"                                                      ^
     "display the elapsed time in hour-minute-second"                                      ! e2^ 
     "display the elapsed time in hms and millis"                                          ! e3^
@@ -14,7 +16,10 @@ class TimerSpec extends SpecificationWithJUnit { def is =
                                                                                           end 
     
   def e1 = TestTimer().start.hms must_== "0 second"
-    
+  def e1_1 = TestTimer().set(currentTime = 0L).start.
+                         set(currentTime = 500L).stop.
+           time must_== "500 ms"
+
   def e2 = TestTimer().set(currentTime = 1000L).start.
                        set(currentTime = 2000L).stop.
            hms must_== "1 second"

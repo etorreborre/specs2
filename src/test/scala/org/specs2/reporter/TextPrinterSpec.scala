@@ -9,7 +9,7 @@ import execute._
 import specification._
 import SpecsArguments._
 
-class TextPrinterSpec extends SpecificationWithJUnit { def is = args(showlevel=true)^
+class TextPrinterSpec extends SpecificationWithJUnit { def is =
                                                                                           """
 The TextPrinter is folding Executed Fragments and exporting them
 to a ResultOutput trait knowing how to output successes, failures,...
@@ -47,6 +47,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
   "a skipped example must be displayed with a o"                                          ! status().e5^
   "a pending example must be displayed with a *"                                          ! status().e6^
   "a multi-line description must be indented ok"                                          ! status().e7^
+  "if showtimes is true, each individual time must be shown"                              ! status().e8^
                                                                                           p^
 "Statistics must show"                                                                    ^
   "the number of examples"                                                                ! stats().e1^
@@ -135,6 +136,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
     def e7 = print(t1 ^ "e1\nexample1" ! success) must contain(
         "+ e1",
         "  example1") 
+    def e8 = print(args(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
   }
   case class stats() {
     def e1 = print(t1 ^ ex1) must containMatch("1 example") 
@@ -142,7 +144,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
     def e3 = print(t1 ^ "ex1"!Success("ok", 2)) must containMatch("2 expectations") 
     def e4 = print(t1 ^ fail3) must containMatch("1 failure") 
     def e5 = print(t1 ^ error4) must containMatch("1 error") 
-    def e6 = print(t1 ^ ex1) must containMatch("0 second") 
+    def e6 = print(t1 ^ ex1) must containMatch("0 ms")
   }
 
   def printWithColors(fragments: Fragments): Seq[String] = {

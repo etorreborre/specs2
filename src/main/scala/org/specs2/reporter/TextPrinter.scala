@@ -5,6 +5,7 @@ import scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable }
 import Generator._
 import control.Throwablex._
 import data.Tuples._
+import time._
 import text.Plural._
 import text.MarkupString._
 import text.AnsiColors._
@@ -60,8 +61,8 @@ trait TextPrinter {
     implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment) = fragment match { 
-      case start @ ExecutedSpecStart(_, _, _)  => PrintSpecStart(start)
-      case result @ ExecutedResult(_, _)       => PrintResult(result)
+      case start @ ExecutedSpecStart(_, _)     => PrintSpecStart(start)
+      case result @ ExecutedResult(_, _, _)    => PrintResult(result)
       case text @ ExecutedText(s)              => PrintText(text)
       case par @ ExecutedPar()                 => PrintPar()
       case par @ ExecutedBr()                  => PrintBr()
@@ -92,18 +93,18 @@ trait TextPrinter {
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
     def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
-      printResult(leveledText(asString(r.text), level)(args), r.result)(args, out)
+      printResult(leveledText(asString(r.text), level)(args), r.result, r.timer)(args, out)
       
-    def printResult(desc: String, result: Result)(implicit args: Arguments, out: ResultOutput): Unit = {
-      val description = statusAndDescription(desc, result)(args, out)
+    def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
+      val description = statusAndDescription(desc, result, timer)(args, out)
       result match {
         case f: Failure => {
-          printFailure(desc, f) 
+          printFailure(desc, f, timer)
           if (args.failtrace) 
             f.stackTrace.foreach(t => out.printFailure(t.toString))
         }
         case e: Error => {
-          printError(desc, e) 
+          printError(desc, e, timer)
           e.stackTrace.foreach(t => out.printError(t.toString))
           e.exception.chainedExceptions.foreach { (t: Throwable) =>
             out.printError(t.getMessage.notNull)
@@ -118,13 +119,13 @@ trait TextPrinter {
         }
       }
     }
-    def printFailure(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments, out: ResultOutput) = { 
-      val description = statusAndDescription(desc, f)
+    def printFailure(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
+      val description = statusAndDescription(desc, f, timer)
       out.printFailure(description)
       out.printFailure(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
     }
-    def printError(desc: String, f: Result with ResultStackTrace)(implicit args: Arguments, out: ResultOutput) = { 
-      val description = statusAndDescription(desc, f)
+    def printError(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
+      val description = statusAndDescription(desc, f, timer)
       out.printError(description)
       out.printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
     }
@@ -132,11 +133,12 @@ trait TextPrinter {
      * add the status to the description
      * making sure that the description is still properly aligned, even with several lines
      */
-    def statusAndDescription(text: String, result: Result)(implicit args: Arguments, out: ResultOutput) = {
-      val textLines = text.split("\n") 
+    def statusAndDescription(text: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
+      val textLines = text.split("\n")
+      def time = if (args.showtimes) " ("+timer.time+")" else ""
       val firstLine = textLines.take(1).map { s =>
-        s.takeWhile(_ == ' ').dropRight(2) + 
-        out.status(result)(args) + s.dropWhile(_ == ' ')
+        s.takeWhile(_ == ' ').dropRight(2) +
+        out.status(result)(args) + s.dropWhile(_ == ' ') + time
       }
       val rest = textLines.drop(1)
       (firstLine ++ rest).mkString("\n")
@@ -171,8 +173,8 @@ trait TextPrinter {
       out.printLine(" ")
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
-      val Stats(examples, successes, expectations, failures, errors, pending, skipped, specStart, specEnd) = stats
-      stats.start.map(s => out.printLine(color("Finished in " + s.timer.time, blue, args.color)))
+      val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer, specStart, specEnd) = stats
+      out.printLine(color("Finished in " + timer.time, blue, args.color))
       out.printLine(color(
           Seq(Some(examples qty "example"), 
               if (expectations != examples) Some(expectations qty "expectation") else None,

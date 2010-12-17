@@ -12,13 +12,13 @@ import execute._
  */
 sealed trait ExecutedFragment
 case class ExecutedText(text: String) extends ExecutedFragment
-case class ExecutedResult(text: MarkupString, result: Result) extends ExecutedFragment
+case class ExecutedResult(text: MarkupString, result: Result, timer: SimpleTimer) extends ExecutedFragment
 case class ExecutedBr() extends ExecutedFragment
 case class ExecutedPar() extends ExecutedFragment
 case class ExecutedEnd() extends ExecutedFragment
 case class ExecutedTab(n: Int = 1) extends ExecutedFragment
 case class ExecutedBacktab(n: Int = 1) extends ExecutedFragment
-case class ExecutedSpecStart(name: SpecName, timer: SimpleTimer, arguments: Arguments) extends ExecutedFragment {
+case class ExecutedSpecStart(name: SpecName, arguments: Arguments) extends ExecutedFragment {
   override def toString = "ExecutedSpecStart("+name.name+")"
 }
 case class ExecutedSpecEnd(name: SpecName) extends ExecutedFragment {
@@ -29,4 +29,4 @@ case class ExecutedSee(link: HtmlLink) extends ExecutedFragment
  * This executed Fragment is used when no text must be displayed (for the successful
  * execution of an Action for example)
  */
-case class ExecutedNoText() extends ExecutedFragment
+case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer) extends ExecutedFragment

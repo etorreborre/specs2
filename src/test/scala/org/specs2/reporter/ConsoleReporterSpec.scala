@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 import control.LazyParameters._
 import text.AnsiColors._
+import text.Trim._
 import main._
 import io._
 import execute._
@@ -49,7 +50,7 @@ The following Fragments specify the behavior for:
                                                                                           end
 }
 
-abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit with FragmentsSamples with ExpectedOutputs with ReportExpectations {
+abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit with FragmentsSamples with ReportExpectations {
   def single1 = descriptionMustBe(1 must_== 1, "+ this example")
   def single2 = descriptionMustBe(1 must_== 1, "+ this example")
   def single3 = descriptionMustBe(1 must_== 2, "x this example")
@@ -59,16 +60,16 @@ abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit 
   def single6 = messagesContain(1 must_== 2, "'1' is not equal to '2'")
   def single7 = messagesContain(1 must_== 2, "ConsoleReporterSpec.scala")
   
-  def stat1 = reportEndsWith(level1 ^ SpecEnd(""))(level1Stats)
-  def stat2 = reportEndsWith(level2WithFailure ^ SpecEnd(""))(level2WithFailureStats)
-  def stat3 = reportEndsWith("level1" ^ exampleWithExpectations ^ SpecEnd(""))(exampleWithExpectationsStats)
+  def stat1 = reportEndsWith(level1 ^ SpecEnd(""))("2 examples, 0 failure, 0 error")
+  def stat2 = reportEndsWith(level2WithFailure ^ SpecEnd(""))("2 examples, 1 failure, 0 error")
+  def stat3 = reportEndsWith("level1" ^ exampleWithExpectations ^ SpecEnd(""))("1 example, 2 expectations, 0 failure, 0 error")
 }
 trait ReportExpectations extends MustExpectations with FragmentsBuilder with Matchers {
   def reportStartsWith(Fragments: Fragments)(output: List[String]) = {
 	  report(Fragments).mkString("\n", "\n", "\n") must startWith(output.mkString("\n", "\n", "\n"))
   }
-  def reportEndsWith(Fragments: Fragments)(output: List[String]) = {
-	  report(Fragments).mkString("\n", "\n", "\n") must endWith(output.mkString("\n", "\n", "\n"))
+  def reportEndsWith(Fragments: Fragments)(output: String) = {
+	  report(Fragments).mkString("\n", "\n", "").trimNewLines must endWith(output)
   }
   def reportIs(Fragments: Fragments)(output: List[String]) = {
 	  report(Fragments).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
@@ -92,18 +93,3 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
 	  textOutput.messages.toList.map(removeColors(_))
   }
 }
-trait ExpectedOutputs {
-
-  val level1Stats = List(
-    "Total for specification",
-    "2 examples, 0 failure, 0 error",
-    " ")
-    
-  val level2WithFailureStats = List(
-	  "Total for specification",
-    "2 examples, 1 failure, 0 error",
-    " ")
-  val exampleWithExpectationsStats = List(
-    "Total for specification",
-    "1 example, 2 expectations, 0 failure, 0 error",
-    " ")}

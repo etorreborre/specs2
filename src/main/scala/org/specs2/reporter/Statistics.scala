@@ -6,6 +6,7 @@ import Scalaz._
 import collection.Iterablex._
 import main.Arguments
 import execute._
+import time._
 import specification._
 
 /**
@@ -33,7 +34,7 @@ trait Statistics {
   
   object StatisticsReducer extends Reducer[ExecutedFragment, SpecsStatistics] {
     override def unit(f: ExecutedFragment): SpecsStatistics = f match { 
-      case ExecutedResult(_, r) => {
+      case ExecutedResult(_, r, t) => {
         val current = r match {
           case s @ Success(_) => Stats(fragments = 1, expectations = s.expectationsNb, successes = 1)
           case Failure(_, _)  => Stats(fragments = 1, expectations = 1, failures = 1)
@@ -42,12 +43,12 @@ trait Statistics {
           case Skipped(_)     => Stats(fragments = 1, expectations = 1, skipped = 1)
           case _              => Stats(fragments = 1) 
         }
-        SpecsStatistics(current)
+        SpecsStatistics(current.copy(timer = t))
       }
-      case start @ ExecutedSpecStart(name, timer, args) => 
-        SpecsStatistics(Stats(start = Some(ExecutedSpecStart(name, timer.stop, args))))
-      case e @ ExecutedSpecEnd(_) => SpecsStatistics(Stats(end = Some(e)))
-      case _ => SpecsStatistics(Stats())
+      case start @ ExecutedSpecStart(name, args) => SpecsStatistics(Stats(start = Some(start)))
+      case e @ ExecutedSpecEnd(_)                => SpecsStatistics(Stats(end = Some(e)))
+      case ExecutedNoText(t)                     => SpecsStatistics(Stats(timer = t))
+      case _                                     => SpecsStatistics(Stats())
     }
   }
   /**
@@ -100,6 +101,7 @@ case class Stats(fragments:    Int = 0,
                  errors:       Int = 0, 
                  pending:      Int = 0, 
                  skipped:      Int = 0,
+                 timer:        SimpleTimer = new SimpleTimer,
                  start:        Option[ExecutedSpecStart] = None,
                  end:          Option[ExecutedSpecEnd] = None) {
   
@@ -122,8 +124,9 @@ case object Stats {
         errors       = s1.errors          + s2.errors, 
         pending      = s1.pending         + s2.pending, 
         skipped      = s1.skipped         + s2.skipped,
-        start        = s1.start      orElse s2.start,
-        end          = s1.end        orElse s2.end)
+        timer        = s1.timer           add s2.timer,
+        start        = s1.start           orElse s2.start,
+        end          = s1.end             orElse s2.end)
 
     val zero = Stats()
   }

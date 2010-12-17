@@ -27,19 +27,23 @@ trait FragmentExecution {
   }
 
   def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = { 
-	  case e @ Example(s, _)     => ExecutedResult(s, executeBody(e.execute))
+	  case e @ Example(s, _)     => {
+      val timer = new SimpleTimer().start
+      ExecutedResult(s, executeBody(e.execute), timer.stop)
+    }
 	  case Text(s)               => ExecutedText(s)
 	  case Br()                  => ExecutedBr()
 	  case Par()                 => ExecutedPar()
     case Tab(n)                => ExecutedTab(n)
     case Backtab(n)            => ExecutedBacktab(n)
 	  case End()                 => ExecutedEnd()
-	  case SpecStart(n, args)    => ExecutedSpecStart(n, new SimpleTimer().start, arguments.overrideWith(args))
+	  case SpecStart(n, args)    => ExecutedSpecStart(n, arguments.overrideWith(args))
 	  case SpecEnd(n)            => ExecutedSpecEnd(n)
     case s @ Step(a)           => 
+      val timer = new SimpleTimer().start
       executeBody(a()) match {
-        case err @ Error(_, _) => ExecutedResult(NoMarkup("action error"), err)
-        case _ =>                 ExecutedNoText()  
+        case err @ Error(_, _) => ExecutedResult(NoMarkup("action error"), err, timer.stop)
+        case _ =>                 ExecutedNoText(timer.stop)
       }
     case See(link)             => ExecutedSee(link)
     case _                     => ExecutedNoText()

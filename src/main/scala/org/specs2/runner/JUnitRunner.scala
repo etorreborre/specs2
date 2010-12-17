@@ -47,7 +47,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
       case (desc, f @ Step(_)) => (desc, executeFragment(Arguments())(f)) 
 	  }.
 	    foreach {
-	   	  case (desc, ExecutedResult(_, result)) => {
+	   	  case (desc, ExecutedResult(_, result, timer)) => {
 	        notifier.fireTestStarted(desc)
 	        result match {
             case f @ Failure(m, st) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f.exception)))

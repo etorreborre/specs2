@@ -52,7 +52,7 @@ case object SpecsArguments {
   }
   implicit object SpecsArgumentsReducer extends Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] {
     implicit override def unit(f: ExecutedFragment) = f match {
-      case ExecutedSpecStart(name, _, args) => SpecsArguments(StartOfArguments(f, name, args))
+      case ExecutedSpecStart(name, args)    => SpecsArguments(StartOfArguments(f, name, args))
       case ExecutedSpecEnd(name)            => SpecsArguments(EndOfArguments(f, name))
       case _                                => SpecsArguments(NoStartOfArguments(f))
     }
