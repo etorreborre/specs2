@@ -3,8 +3,7 @@ package specification
 import execute._
 import matcher._
 
-class ExampleIsolationSpec extends SpecificationWithJUnit 
-      with StandardResults with UserInteractions { def is = 
+class ExampleIsolationSpec extends SpecificationWithJUnit with UserInteractions { def is =
                                                                                           """ 
   This specification shows how to use case classes to ensure Fragments isolation.
   
@@ -12,21 +11,23 @@ class ExampleIsolationSpec extends SpecificationWithJUnit
   variables are renitialized for each example by the sheer virtue of creating a fresh 
   context object
                                                                                           """                                                                                      ^
-"  Those 2 first Fragments show that they are not sharing variables"                      ^
-"    This one modifies a local variable"                                                  ! c().e1^
-"    This other one 'reuses' the same local variable, but the variable is "               +
-"    reinitialized"                                                                       ! c().e2^
+  "Those 2 first Fragments show that they are not sharing variables"                      ^
+    "This one modifies a local variable"                                                  ! c().e1^
+    "This other one 'reuses' the same local variable, but the variable is "               +
+    "reinitialized"                                                                       ! c().e2^
                                                                                           p^
-"  The next 2 Fragments show that it is possible to 'nest' context by inheriting them"    ^
-"    This example uses new local variables + the one from the parent context"             ! c1().e3^
-"    And isolation is still ok for another example"                                       ! c1().e4^
+  "The next 2 Fragments show that it is possible to 'nest' context by inheriting them"    ^
+    "This example uses new local variables + the one from the parent context"             ! c1().e3^
+    "And isolation is still ok for another example"                                       ! c1().e4^
                                                                                           p^
-"  Now these Fragments model a fictive customer interaction"                              ^
-"  The user logs in"                                                                      ^ 
-"    if he selects a car, then his favorite must be displayed"                            ! select.favoriteCar^
-"    if he selects an hotel, then his favorite must be displayed"                         ! select.favoriteHotel^
-"  The user logs out"                                                                     ^ 
-"    if he has selected a car, then it must be displayed"                                 ! summary.carSelection^
+  "Now these Fragments model a fictive customer interaction"                              ^
+  "When the user logs in"                                                                 ^
+    "his past history must be shown"                                                      ! history().isShown^
+    "if he selects tickets"                                                               ^
+      "the list must be displayed"                                                        ! tickets().list^
+      "the total amount must be displayed"                                                ! tickets().total^
+      "if he buys tickets"                                                                ^
+        "his favorite payment type is shown"                                              ! buy().favorite^
                                                                                           end
 
   trait Env {
@@ -42,23 +43,23 @@ class ExampleIsolationSpec extends SpecificationWithJUnit
 	  def e4 = { local must_== 0; local2 must_== 0 } 
   }
 }
-trait UserInteractions extends StandardResults with MustExpectations with Matchers {
-  class Login {
+trait UserInteractions extends StandardResults with MustMatchers  {
+  trait Login {
     var loggedIn = false
-	  def login = loggedIn = true
-	  def logout = loggedIn = false
+    def login = loggedIn = true
+    def logout = loggedIn = false
   }
-  def select = new Select
-  class Select extends Login {
-	  login
-	  var selection = ""
-	  def favoriteCar = { selection = "car"; loggedIn must_== true }
-	  def favoriteHotel = { selection = "hotel"; loggedIn must_== true }
+  case class history() extends Login {
+    login
+    def isShown = loggedIn must beTrue
   }
-  def summary = new Summary
-  class Summary extends Select {
-	  favoriteCar
-	  logout
-	  def carSelection = loggedIn must beFalse
+  case class tickets() extends Login {
+    login
+    def list = success
+    def total = success
+  }
+  case class buy() extends Login {
+    tickets()
+    def favorite = success
   }
 }

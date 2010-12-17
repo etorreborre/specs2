@@ -18,11 +18,12 @@ Among the very first objectives of specs were:
 
  * configuration: there should sensible defaults and an easy way to override those values
 
- * clear implementation: since this is an open-source project with no business constraint, I should have ample time to
-   refine the implementation until it's crystal clear, right?
+ * clear implementation: since this is an open-source project with no business constraint, there's no excuse for not having
+   a crystal clear implementation, right?
 
  * great user support: it's not because something is free that it should be buggy! Moreover this is also a good test on the
    design. A good design should be easy to fix and evolve
+
                                                                                                                         """^
                                                                                                                         """
 ### The score
@@ -32,7 +33,7 @@ After a few years of use, let's have a look at what worked and what didn't.
 ###### Conciseness
 
 This objective was achieved thanks to the incredible power of implicits in Scala which provide lots of way to create
-an elegant syntax for specifying software. The following points must however be noted:
+an elegant syntax for specifying software. However, the implementation of that syntactic support has several drawbacks:
 
   *  ***specs*** provides implicits by inheriting methods from the `Specification` class. While this is very convenient
      this is also considerably polluting the namespace of the user code _inside_ the specification. This pollution leads
@@ -40,7 +41,7 @@ an elegant syntax for specifying software. The following points must however be 
 
   *  some "reserved" words like `should`, `can`, `in` come from previous BDD libraries like rspec. But they are not always
      convenient and sometimes one wants to write `"my example should provide"` just to avoid having every example under
-    `"my example" should` start with `"provide..."`.
+    "`"my example" should`" start with `"provide..."`.
      There is a way to do this in ***specs*** but this requires the creation of an ad-hoc method
 
   *  some people like to structure their specifications with other keywords like Given-When-Then which require
@@ -48,9 +49,9 @@ an elegant syntax for specifying software. The following points must however be 
 
 ###### Readability
 
-The readability of a specification written with ***specs*** largely depends on the writer of the specification.
-Since a specification is created by interleaving text and code, if the amount of code is too large then the
-textual content of the specification is largely lost and the developer cannot read it with just one glance.
+The readability of a specification written with ***specs*** largely depends on the writer of the specification. Since a
+specification is created by interleaving text and code, if the amount of code is too large then the textual content of
+the specification is largely lost and the developer cannot read it with just one glance.
 
 Something was prototyped in ***specs*** to alleviate this issue: [LiterateSpecifications](http://code.google.com/p/specs/wiki/LiterateSpecifications#A_short_example).
 The idea was to use Scala support for XML literal to allow the writer to write pure text and insert, at the right places,
@@ -92,42 +93,40 @@ from the cloned specification to the original one. More than *20* issues were cr
 
 ###### User support
 
-The user support has always been responsive, in terms of bug fixing and enhancements. However the object-oriented nature
-of ***specs*** with a lot of variables and side-effects around made some bugs difficult to diagnose and render some enhancements
+The user support has always been responsive, in terms of bug fixes and enhancements. However the object-oriented nature
+of ***specs*** with lots of variables and side-effects around made some bugs difficult to diagnose and render some enhancements
 downright impossible. The best example of an "impossible" feature to implement is the concurrent execution of examples.
 With shared variables all around the place, there's little chance to ever get it right.
 
+
+
 ### A new compromise
 
-The heart of ***specs2*** is a brand new set of design rules, forming a new compromise:
+The redesign of ***specs2*** was precisely started to fight the complexities and issues of ***specs***. In order to do
+that while remaining true to the original vision for ***specs***, a new design compromise was necessary:
 
  1. Functional orientation / no mutable variables
-
  2. There is no explicit structure
+ 3. Control the dependencies (no cycles)
+ 4. Control the implicits scopes
 
- 3. The default Specification style should encourage the readability of the full specification text, without
-    having too much interleaved code
-
- 4. Be mostly on par with the existing features and adding new powerful ones
-
- 5. Control the dependencies (no cycles)
-
- 6. Control the implicits scopes
+As we will see in the paragraphs below, this is a compromise in the sense that there is a bit more burden on the developer
+who has to write a bit more code for things to happen.
 
 ##### Functional / immutable
 
-####### Chaining everything
+###### Chaining everything
 
 Mutable variables were the subject of enough grief, I decided it was high time to do without them. This decision has a
-big impact on the user. A specification can not anymore be a set of unrelated "blocks" where each block is added to the
-parent specification through a side effect:
+big impact on the way a user writes a specification. A specification can not anymore be a set of unrelated "blocks"
+ where each block is added to the parent specification through a side effect:
 
-      "my example is ok" in { 1 must_== 1 }
-      "my other example is ok" in { 2 must_== 2 }
+      "my example is ok" in { 1 must_== 1 }        // those examples are added to the specification by mutating a
+      "my other example is ok" in { 2 must_== 2 }  // variable
 
 Now the "blocks" have to form a sequence:
 
-      "my example is ok"       ! e1^ // notice the ^ operator here
+      "my example is ok"       ! e1^               // notice the ^ operator here
       "my other example is ok" ! e2
 
       def e1 = { 1 must_== 1 }
@@ -135,29 +134,206 @@ Now the "blocks" have to form a sequence:
 
 The same thing applies to an Example body and has a major consequence: you have to explicitly chain expectations!
 
-      "my example on strings" ! e1  // will never fail!
-
+      "my example on strings" ! e1                // will never fail!
       def e1 = {
-        "hello" must have size(10000)  // because this expectation will not be returned,...
+        "hello" must have size(10000)             // because this expectation will not be returned,...
         "hello" must startWith("hell")
       }
 
       // the correct way of writing the example is
+      "my example on strings" ! e1               // will fail
+      def e1 = "hello" must have size(10000) and
+                            startWith("hell")
 
-      "my example on strings" ! e1  // will fail
+That point itself is interesting. It's been advocated in several places that there should be only one expectation per
+example, now the design of ***specs2*** actually encourages it!
 
-      def e1 = "hello" must have size(10000) and must startWith("hell")
+The other, very positive, consequence of that decision is that debugging the library is almost brainless. Functional
+Programming is like having a pipe-line. If you don't like the output, you just cut the pipeline in smaller pieces, examine
+the ins and outs of each and decide where things went wrong.
 
-####### No structure
+###### Arguments have to be supplied
 
-This principal comes from a new approach on "nesting" and "composition". In
+The "local configuration" of a Specification in ***specs*** is realized with side-effects too. If you want to declare
+that the examples in a specification will share variables you can add `shareVariables()` at the top of the specification.
+
+This is not possible anymore in specs2, so you have to explicitly pass arguments at the top of your specification and
+chain them with the rest:
+
+      new Specification { def is =  args(color=false)   ^ // will not output colors
+        "the rest of the specs"                         ^ end
+      }
+
+##### No explicit structure
+
+This principle comes from the desire to unite the traditional ***specs*** approach of using blocks with `should` and `in`
+keywords with a more *literate* approach of having just free text.
+
+In other words, there is no fundamental difference between an "Acceptance Testing" specification and a "Unit Test"
+specification. This is just a matter of the scale at which you're looking at things.
+
+Moreover I found that having restrictions on the words I was supposed to use for my specification text didn't help me
+write the most appropriate descriptions of the system behavior or features.
+
+The application of this principle is that a specification is composed of "Fragments" which can be some "Text" or some
+"Example" *simply appended together*. You can use whatever words you want to describe the examples `should`, `can`, `must`,
+whatever.
+
+But wait! Nested structures serve 2 important purposes in ***specs***! They are used to control the scopes of variables
+that are applicable to examples and to compute the indentation when displaying the results.
+
+How can this be done in ***specs2***?
+
+###### Contexts
+
+Setting up a proper context for an example, with "fresh" variables, which can be possibly inherited from a "parent" context,
+does not require any support from the library (difficult to get bugs with that, right :-) ?).
+
+We simply use case class instances for each Example. Here is a demonstration:
+
+      "When the user logs in"                      ^
+        "his past history must be shown"           ! history().isShown^
+        "if he selects tickets"                    ^
+          "the list must be displayed"             ! tickets().list^
+          "the total amount must be displayed"     ! tickets().total^
+          "if he buys tickets"                     ^
+            "his favorite payment type is shown"   ! buy().favorite
+
+      trait Login {
+        var loggedIn = false
+        def login = loggedIn = true
+        def logout = loggedIn = false
+      }
+      case class history() extends Login {
+        login
+        def isShown = loggedIn must beTrue
+      }
+      case class tickets() extends Login {
+        login
+        def list = pending
+        def total = pending
+      }
+      case class buy() extends Login {
+        val tickets = new tickets()
+        def favorite = pending
+      }
+
+In the specification above, each example is using its own instance of a case class, having its own local variables which
+will never be overwritten by another example. Parent context is inherited by means of delegation. For example, in the
+"buy" context, there is an available `tickets` instance placing the system in the desired context.
+
+We can also notice the point about having "No structure". There is no need for adding curly braces `{...}` to separate
+the specification elements so the specification text is remarkably close to what's going to be displayed when reported.
+
+###### Indentation
+
+In specs2, indentation is a feature but it doesn't have to be. For example you could just write the specification above as:
+
+      "When the user logs in"                      ^
+      "  his past history must be shown"           ! history().isShown^
+      "  if he selects tickets"                    ^
+      "    the list must be displayed"             ! tickets().list^
+      "    the total amount must be displayed"     ! tickets().total^
+      "    if he buys tickets"                     ^
+      "      his favorite payment type is shown"   ! buy().favorite
+
+Or you can leave ***specs2*** compute something reasonable for the indentation along the following rules:
+
+  * when a text follows some text, it is indented
+  * when a text follows an example, the indentation stays at the same level
+  * when an example follows a text, it is indented
+  * when an example follows an example, it is not indented
+
+This strategy is most likely to bring appropriate results but there are additional formatting elements which can be
+inserted in order to adjust the indentation or just skip lines: `br, p, t, bt, end, endbr, endp`.
+
+###### Operators
+
+There are 2 major operators used by ***specs2*** when building a Specification: `^` and `!`. `^` is used to "link" specification
+fragments together and `!` is used to declare the body of an example. The choice of those 2 symbols is mostly the result
+of the precedence rules in Scala. `+` binds more strongly than `!` and `!` more strongly than `^`. This means that you
+don't need to add brackets to:
+
+  * add strings with `+`: `"this is"+"my string" ^ "ok?"`
+  * declare an example: `"this is some text" ^ "and this is an example description" ! success`
+
+##### Dependencies control
+
+One classical impediment to software evolution is circular dependencies between packages in a project. The new ***specs2***
+design makes sure that a layered architecture is maintained, from low-level packages to high-level ones:
+
+  +    runner
+  +    reporter
+  +    specification
+  +    mock form
+  +    matcher
+  +    execute
+  +               reflect  xml time
+  +    collection control  io  text  main data
+
+In this scheme, a specification is no longer executable on its own, contrary to the ***specs*** design. It always need a
+runner.
+
+One of the features on the ***specs2*** features list is a way to specify and check that those constraints actually hold.
+
+##### Implicit definitions control
+
+There is a real tension to be solved here. On one hand, I want to encourage conciseness so that one should not have to
+stack too many traits on top of the Specification declaration to get the desired features. On the other hand, the more
+traits you add, the more implicits you bring in.
+
+So the compromise is the following:
+
+ * The `BaseSpecification` class only allows to build Text fragments and Examples, without even any Matchers
+ * On top of it the `Specification` class stacks lots of convenient functionalities to:
+    * have a concise notation for arguments
+    * have matchers
+    * have predefined fragments and results (like `success`, `pending`,...)
+    * and more
+
+This way, if there is any conflict with the `Specification` class inherited definitions it should be possible to downgrade
+to the `BaseSpecification` and add the non-conflicting trait
+
+ - - -
+
+<br/>
 
                                                                                                                         """^
                                                                                                                         end
 
-      val examples = new Specification { def is =
+  val chaining = new Specification { def is =  args(color=false) ^
+    "my example on strings" ! e1             // will fail
+    def e1 = "hello" must have size(10000) and
+                               startWith("hell")
+  }
 
-        "my example on strings" ! e1  // will fail
-        def e1 = "hello" must have size(10000) and must startWith("hell")
-      }
+  val context = new Specification { def is =
+    "When the user logs in"                      ^
+      "his past history must be shown"           ! history().isShown^
+      "if he selects tickets"                    ^
+        "the list must be displayed"             ! tickets().list^
+        "the total amount must be displayed"     ! tickets().total^
+        "if he buys tickets"                     ^
+          "his favorite payment type is shown"   ! buy().favorite
+
+    trait Login {
+      var loggedIn = false
+      def login = loggedIn = true
+      def logout = loggedIn = false
+    }
+    case class history() extends Login {
+      login
+      def isShown = loggedIn must beTrue
+    }
+    case class tickets() extends Login {
+      login
+      def list = success
+      def total = success
+    }
+    case class buy() extends Login {
+      val tickets = new tickets()
+      def favorite = success
+    }
+
+  }
 }

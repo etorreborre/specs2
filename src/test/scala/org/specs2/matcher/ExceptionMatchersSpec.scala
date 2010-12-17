@@ -26,7 +26,7 @@ class ExceptionMatchersSpec extends SpecificationWithJUnit {
 
   def e1 = ("hello" must throwAn[Error]).message must_== "Expected: java.lang.Error. Got nothing"
 
-  def e2 = (theBlock(error("boom")) must throwA[RuntimeException]).message must_== 
+  def e2 = (theBlock(error("boom")) must throwA[RuntimeException]).message must_==
 	        "Got the exception java.lang.RuntimeException: boom"
 	  
   def e3 = (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must_== 

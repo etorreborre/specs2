@@ -2,13 +2,13 @@ package org.specs2
 import specification._
 import execute._
 
-class FeaturesSpec extends Specification with StandardResults { def is = literate         ^ 
+class FeaturesSpec extends Specification { def is = literate ^
                                                                                           """
  These are the list of features todevelop / port for specs2.
 
  The prioritization idea is to:
 
-  * check the feasability of old features in a fully functional setting
+  * check the feasability of specs features in a fully functional programming approach
   * re-evaluate the necessity of some existing features and provide the most important 
     ones first including the ones necessary for a proper development of specs2 itself
   * make sure that
@@ -53,7 +53,8 @@ class FeaturesSpec extends Specification with StandardResults { def is = literat
       "beforeSpec/afterSpec                                                               "! done^
     "A literate specs environment                                                         "^
       "with an html reporter                                                              "! done^
-      "supporting Markdown                                                                "! todo^
+      "supporting Markdown                                                                "! done^
+      "with a table of content                                                            "! todo^
       "with non mutable forms                                                             "! todo^
     "A sbt reporter                                                                       "^
       "based on the console reporter                                                      "! done^
@@ -103,10 +104,10 @@ class FeaturesSpec extends Specification with StandardResults { def is = literat
       "can be overriden locally in a specification                                        "! done ^
     "Examples                                                                             "^
       "Stack                                                                              "! done^
-      "Specifications layouts                                                             "! done^
-      "Given/When/Then                                                                    "! done^
-      "Arguments                                                                          "! done^
-      "Runners                                                                            "! done^
-      "Expectations: boolean, matchers, properties                                        "! done^
+      "Specifications layouts                                                             "! todo^
+      "Given/When/Then                                                                    "! todo^
+      "Arguments                                                                          "! todo^
+      "Runners                                                                            "! todo^
+      "Expectations: boolean, matchers, properties                                        "! todo^
                                                                                           end
 }

@@ -10,7 +10,7 @@ import control.Exceptions._
 
 
 trait Markdown {
-  lazy val processor = new PegDownProcessor
+  def processor = new PegDownProcessor
   /**
    * parse the markdown string and return html.
    * code tags are prettified and newlines in paragraphs are
