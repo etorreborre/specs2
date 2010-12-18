@@ -286,13 +286,13 @@ So the compromise is the following:
 
  * The `BaseSpecification` class only allows to build Text fragments and Examples, without even any Matchers
  * On top of it the `Specification` class stacks lots of convenient functionalities to:
-    * have a concise notation for arguments
-    * have matchers
-    * have predefined fragments and results (like `success`, `pending`,...)
+    * use a concise notation for arguments
+    * use matchers (with both `must` and `should`)
+    * use predefined fragments and results (like `p`, `br`, `success`, `pending`,...)
     * and more
 
 This way, if there is any conflict with the `Specification` class inherited definitions it should be possible to downgrade
-to the `BaseSpecification` and add the non-conflicting trait
+to the `BaseSpecification` and add the non-conflicting traits.
 
  - - -
 

@@ -166,9 +166,13 @@ trait ArgumentsArgs extends control.Properties {
    */
   def plan: Arguments = args(plan = true)
   /**
-   * shortcut to show only the text without automatic indentation
+   * shortcut to avoid automatic indentation
    */
-  def freetext: Arguments = plan <| args(noindent = true)
+  def noindent = args(noindent = true)
+  /**
+   * shortcut to not executing the text and avoid automatic indentation
+   */
+  def freetext: Arguments = plan <| noindent
   /**
    * shortcut to print only failures and errors
    */

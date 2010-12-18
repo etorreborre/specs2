@@ -12,13 +12,13 @@ import main.SystemProperties
  * * An important limitation is that only the content of one line will be returned *
  * 
  * The source dir is assumed to be "src/test/scala/" by default but this can be modified
- * by setting the "specs2.srcDir" System property
+ * by setting the "specs2.srcTestDir" System property
  *
  */
 private[specs2]
 trait FromSource {
   
-  private[specs2] lazy val srcDir: String = SystemProperties.getOrElse("srcDir", "src/test/scala").dirPath
+  private[specs2] lazy val srcDir: String = SystemProperties.getOrElse("srcTestDir", "src/test/scala").dirPath
 
   /**
    * get some source code by:
