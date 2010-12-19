@@ -40,7 +40,7 @@ case object Fragments {
   def withSpecStartEnd(fragments: Fragments, name: SpecName): Fragments = {
     val withStartFragments = fragments.fragments.headOption match {
       case Some(SpecStart(n, _)) => SpecStart(n, fragments.arguments) +: fragments.fragments.drop(1)
-      case other => SpecStart(name, fragments.arguments) +: (Par() +: fragments.fragments)
+      case other => SpecStart(name, fragments.arguments) +: (Par() +: End() +: fragments.fragments)
     }
     val withStartAndEndFragments = withStartFragments.lastOption match {
       case Some(SpecEnd(n)) => withStartFragments
