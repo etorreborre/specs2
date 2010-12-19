@@ -132,7 +132,12 @@ Now the "blocks" have to form a sequence:
       def e1 = { 1 must_== 1 }
       def e2 = { 2 must_== 2 }
 
-The same thing applies to an Example body and has a major consequence: you have to explicitly chain expectations!
+This is clearly a drawback of not having side-effects. The presence of `^` everywhere produces unwanted syntactic noise
+in the specification. One way of minimizing that noise is to make good use of an editor with column editing and align
+those symbols on the print margin of the screen. The specification can then be read as having 2 columns, one with the text,
+one with the implementation and the formatting directives.
+
+The same principle applies to the Examples bodies and has a major consequence: you have to explicitly chain expectations!
 
       "my example on strings" ! e1                // will never fail!
       def e1 = {
@@ -145,12 +150,13 @@ The same thing applies to an Example body and has a major consequence: you have 
       def e1 = "hello" must have size(10000) and
                             startWith("hell")
 
-That point itself is interesting. It's been advocated in several places that there should be only one expectation per
-example, now the design of ***specs2*** actually encourages it!
+This can be seen as a limitation as well but also as an opportunity for writing better specifications. It's been indeed
+advocated in several places that there should be only one expectation per example, now the design of ***specs2*** actually
+encourages it!
 
-The other, very positive, consequence of that decision is that debugging the library is almost brainless. Functional
-Programming is like having a pipe-line. If you don't like the output, you just cut the pipeline in smaller pieces, examine
-the ins and outs of each and decide where things went wrong.
+In any case the very positive consequence of that design decision is that debugging the library should be almost brainless.
+Functional Programming is like having a pipe-line. If you don't like the output, you just cut the pipeline in smaller
+pieces, examine the ins and outs of each and decide where things went wrong.
 
 ###### Arguments have to be supplied
 
@@ -257,6 +263,8 @@ don't need to add brackets to:
   * add strings with `+`: `"this is"+"my string" ^ "ok?"`
   * declare an example: `"this is some text" ^ "and this is an example description" ! success`
 
+`^` also has a connotation of "end of line" as the equivalent symbol used in regular expressions.
+
 ##### Dependencies control
 
 One classical impediment to software evolution is circular dependencies between packages in a project. The new ***specs2***
@@ -284,12 +292,12 @@ traits you add, the more implicits you bring in.
 
 So the compromise is the following:
 
- * The `BaseSpecification` class only allows to build Text fragments and Examples, without even any Matchers
- * On top of it the `Specification` class stacks lots of convenient functionalities to:
-    * use a concise notation for arguments
-    * use matchers (with both `must` and `should`)
-    * use predefined fragments and results (like `p`, `br`, `success`, `pending`,...)
-    * and more
+ + The `BaseSpecification` class only allows to build Text fragments and Examples, without even any Matchers
+ + On top of it, the `Specification` class stacks lots of convenient functionalities to
+     . use a concise notation for arguments
+     . use matchers (with both `must` and `should`)
+     . use predefined fragments and results (like `p`, `br`, `success`, `pending`,...)
+     . and more
 
 This way, if there is any conflict with the `Specification` class inherited definitions it should be possible to downgrade
 to the `BaseSpecification` and add the non-conflicting traits.
