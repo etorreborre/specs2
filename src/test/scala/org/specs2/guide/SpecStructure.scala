@@ -11,8 +11,8 @@ In this chapter you will learn how to:
  * declare examples
  * format the layout of your specification
  * include / link to other specifications
+ * give a title to your specification
  * define contexts and actions to execute before/after examples
- * use Forms
 
 ### Declare examples
 
@@ -131,7 +131,6 @@ collect the successive states of the system:
         }
       }
 
-
 ### Layout
 
 The layout of text in ***specs2*** is mostly done automatically so that the text in the source code should look like the
@@ -247,10 +246,137 @@ If, for whatever reason, you wish to have more or less indentation, you can use 
 
  The number of indentation levels (characterized as 2 spaces on screen) can also be specified by using `t(n)` or `bt(n)`.
 
- - - -
+### Include / link specifications
 
-<br/>
+###### Include specifications
+
+There is a simple mechanism for including "children" specification in a given specification. You use the `include` method,
+as if you were adding a new fragment:
+
+    "This is an included specification"     ^
+      include(childSpec)
+
+The effect of doing so is that all the fragments of the children specification will be inlined in the parent one. This
+is exactly what is done in this page of the user guide, but with a twist
+
+    include(xonly, exampleTextExtraction)        ^
+    include(xonly, new GivenWhenThenSpec)        ^
+    include(xonly, exampleTextIndentation)       ^
+    include(xonly, resetTextIndentation)         ^
+
+In this case I give specific arguments to the included specification so that it is only displayed when there are failures.
+
+###### Link specifications
+
+In order to create a User Guide such as this one, you might want to have the "included" specification being written to
+another html file. The syntax to do this is the following:
+
+    "a " ~ ("quick start guide", new QuickStart)                                            ^
+    "how to " ~ ("structure your specification", new SpecStructure)                         ^
+    "how to use " ~ ("matchers", new Matchers)                                              ^
+    "how to use " ~ ("mock objects", new Mocks)                                             ^
+
+In this case the `~` operator is used to create a HtmlLink where:
+
+ * "a" is the beginning of the text
+ * "quick start guide" is the text that will be highlighted as a url link
+ * new QuickStart is the specification to include, the url being derived from the specification class name
+
+Note that if you want to add some text after the url link, you can use the more general form:
+
+     "before text" ~ ("text to highlight", specification, "after text")
+     // or
+     "before text" ~ ("text to highlight", specification, "after text", "tooltip")
+
+### Specification title
+
+Usually the title of a specification is derived from the specification class name. However if you want to give a more
+readable name to your specification report you can do the following:
+
+     class MySpec extends Specification { def is =
+        "My beautiful specifications".title                           ^
+                                                                      p^
+        "The rest of the spec goes here"                              ^end
+     }
+
+### Contexts
+
+There are some situations when we want to make sure that some actions are always done before or after each example, like
+opening a database connection or deleting a file. ***specs2*** offers a support for those actions with specific traits:
+
+ * `Before`
+ * `After`
+ * `Around`
+ * and all combinations of the above traits
+
+Let's see how to use them.
+
+##### Defining `Before` actions
+
+Let's say that you want to create a specific file before executing each example of your specification. You define a class
+inheriting from the `Before` trait and containing your examples:
+
+    case class withFile extends Before {
+      def before = createFile("test")
+    }
+
+The `Before` trait requires you to define a `before` method defining an action to do before every call to the `apply`
+method. Then, there are many ways to use this context class. Here's one of them:
+
+    "this is a first example where I need a file"          ! withFile(e1)
+    "and another one"                                      ! withFile(e2)
+
+    def e1 = readFile("test") must_== "success"
+    def e2 = readFile("missing") must_== "failed"
+
+Or if you need "local variables" as well in your examples:
+
+    "this is a first example where I need a file"          ! withFile(c().e1)
+    "and another one"                                      ! withFile(c().e2)
+
+    case class c() {
+      val (okFile, koFile = ("test", "missing")
+      def e1 = readFile(okFile) must_== "success"
+      def e2 = readFile(koFile) must_== "failed"
+    }
+
+##### Defining `After` actions
+
+Actions to execute after examples are not declared very differently from `Before` ones. Just extend the `After` trait:
+
+    case class withCleanup extends After {
+      def after = deleteFile("test")
+    }
+
+##### Defining `Around` actions
+
+Another use case for "contextual" actions are actions which must executed in a given context like an Http session. In order
+to define this type of action you must extend the `Around` trait and specify a `around` function:
+
+    case class http extends Around {
+      def around[T <% Result](t: =>T) = openHttpSession("test") {
+        t  // execute t inside a http session
+      }
+    }
+
+##### Composing contexts
+
+Note that you can also compose contexts in order to reuse them to build more complex scenarios:
+
+    case class withFile extends Before {
+      def before = createFile("test")
+    }
+    case class withDatabase extends Before {
+      def before = openDatabase("test")
+    }
+    val init = withFile() compose withDatabase()
+
+    "Do something on the full system"                   ! init(success)
+
+
+ - - -
                                                                                                                         """^
+                                                                                                                        br^
   include(xonly, exampleTextExtraction)                                                                                 ^
   include(xonly, new GivenWhenThenSpec)                                                                                 ^
   include(xonly, exampleTextIndentation)                                                                                ^

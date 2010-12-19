@@ -13,8 +13,8 @@ import main.Arguments
 trait BaseSpecification extends SpecificationStructure 
    with FragmentsBuilder {
   
-  def include(s: SpecificationStructure): Group = fragmentGroup(s.content)
   def include(f: Fragments): Group = fragmentGroup(f)
+  def include(s: SpecificationStructure): Group = fragmentGroup(s.content)
   def include(args: Arguments, s: SpecificationStructure): Group = {
     fragmentGroup(Fragments.withSpecStartEnd(s.is.copy(arguments = args), name(s)))
   }
