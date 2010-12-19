@@ -41,7 +41,7 @@ trait FragmentsBuilder {
   implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s)
   /** transient class to hold an example description before creating a full Example */
   class ExampleDesc(s: String) {
-    def ![T](function: String => MatchResult[T]) = Example(s, function(s).toResult)
+    def ![T <% Result](function: String => T) = Example(s, function(s))
 	  def ![T](t: =>MatchResult[T]) = Example(s, t.toResult)
 	  def ![T <% Result](t: =>T) = Example(s, t)
   }
