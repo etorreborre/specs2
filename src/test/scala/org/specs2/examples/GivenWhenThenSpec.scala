@@ -1,22 +1,35 @@
 package org.specs2
 package examples
 
-class GivenWhenThenSpec extends SpecificationWithJUnit { def is = noindent^
+class GivenWhenThenSpec extends SpecificationWithJUnit { def is = sequential                       ^
                                                                                                    """
-  This specification shows how to write examples in a Given-When-Then style
+  This specification shows how to write examples in a Given/When/Then style using a mutable
+  system.
+
+  Note that the arguments specify that the specification is sequential because each example has
+  to be executed in order.
                                                                                                    """^
-//   "Given an employee named Bob making $12 per hour."                                              ! e1^
-//   "When Bob works 40 hours in one week"                                                           ! e2^
-//   "Then Bob will be paid $480 on Friday evening"                                                  ! e3^
+                                                                                                   p^
+  "Given that the customer buys 3 books at 10 dollars each"                                        ! c1.buyBook^
+  "Given that the customer buys 1 book at 20 dollars"                                              ! c1.buyBook^
+  "When he checks out"                                                                             ! c1.checkout^
+  "Then the total price must be 50 dollars"                                                        ! c1.total^
                                                                                                    end
 
-  def e1 = (s: String) => {
-    success
-  }
-  def e2 = (s: String) => {
-    success
-  }
-  def e3 = (s: String) => {
-    success
+  case object c1 {
+    val BuyBooks = ".* buys (\\d+) book.? at (\\d+) .*".r     // a regular expression for extracting the quantity and price
+    val TotalBooks = ".* must be (\\d+) .*".r                 // a regular expression for extracting the total price
+    val books: scala.collection.mutable.Map[Int, Int] = new scala.collection.mutable.HashMap[Int, Int]()
+
+    def buyBook = (s: String) => {
+      val BuyBooks(qty, price) = s
+      books += qty.toInt -> price.toInt
+      success
+    }
+    def checkout = books must not be empty
+    def total = (s: String) => {
+      val TotalBooks(total) = s
+      books.foldLeft(0)((res, cur) => res + cur._1 * cur._2) must_== total.toInt
+    }
   }
 }
