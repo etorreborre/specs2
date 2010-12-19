@@ -1,5 +1,6 @@
 package org.specs2
 package guide
+import examples._
 
 class SpecStructure extends Specification { def is =
                                                                                                                         """
@@ -93,34 +94,210 @@ repeating oneself:
     "Bob should pay 12"   ! e1
 
     val toPay = Map("Bob"->"12", "Bill"->"10")           // a "database" of expected values
+    val ShouldPay = "(.*) should pay (\\d+)".r           // a regular expression for extracting the name and price
 
     def e1 = (s: String) => {
-      val ShouldPay = "(.*) should pay (\\d+)".r      // a regular expression for extracting the name and price
       val ShouldPay(name, price) = s                     // extracting the values
       toPay(name) must_== price                          // using them for the expectation
     }
 
 In that case the argument passed to the `!` method is a function taking a String and returning a Result.
 
+###### Given / When / Then
+
+In the same fashion, the Given/When/Then style of writing specifications is supported, albeit using a mutable object to
+collect the successive states of the system:
+
+      "Given that the customer buys 3 books at 10 dollars each"                                        ! c1.buyBook^
+      "Given that the customer buys 1 book at 20 dollars"                                              ! c1.buyBook^
+      "When he checks out"                                                                             ! c1.checkout^
+      "Then the total price must be 50 dollars"                                                        ! c1.total^
+                                                                                                   end
+
+      case object c1 {
+        val BuyBooks = ".* buys (\\d+) book.? at (\\d+) .*".r     // a regular expression for extracting the quantity and price
+        val TotalBooks = ".* must be (\\d+) .*".r                 // a regular expression for extracting the total price
+        val books: scala.collection.mutable.Map[Int, Int] = new scala.collection.mutable.HashMap[Int, Int]()
+
+        def buyBook = (s: String) => {
+          val BuyBooks(qty, price) = s
+          books += qty.toInt -> price.toInt
+          success
+        }
+        def checkout = books.pp must not be empty
+        def total = (s: String) => {
+          val TotalBooks(total) = s
+          books.foldLeft(0)((res, cur) => res + cur._1 * cur._2) must_== total.toInt
+        }
+      }
+
+
 ### Layout
 
+The layout of text in ***specs2*** is mostly done automatically so that the text in the source code should look like the
+displayed text after execution. You can turn off that automatic layout by adding the `noindent` arguments at the beginning
+of your specification
+
+      class MySpecWithNoIndent extends Specification {
+        def is = noindent ^ ....
+      }
+
+##### The rules
+
+By default the layout of a specification will be computed automatically based on a few rules:
+
+  * when a text follows some text, it is indented
+  * when a text follows an example, the indentation stays at the same level
+  * when an example follows a text, it is indented
+  * when an example follows an example, it is not indented
+
+Let's see a standard example of this. The following fragments:
+
+    "this is some presentation text"      ^
+      "and the first example"             ! success^
+      "and the second example"            ! success
+
+will be executed and displayed as:
+
+    this is some presentation text
+      + and the first example
+      + and the second example
+
+##### The formatting fragments
+
+Given the rules above, you might need to use some *formatting fragments* to adjust the display
+
+###### Reset the levels
+
+Following the rules, if you add some text after an example, this means that you want to describe a "nested" context for
+your specification:
+
+    "There are several options for displaying the text"      ^
+      "xonly displays nothing but failures"                  ! success^
+      "there is also a color option"                         ^              // this text will be indented
+        "rgb=value uses that value to color the text"        ! rgb^         // and the following examples as well
+        "nocolor dont color anything"                        ! nocolor^
+    "There are different ways of hiding the text"            ^              // this text follows an example, it will
+        "by tagging the text"                                ! hideTag      // be indented :-(
+
+However in the example above the intention is to start a new group of examples at level 0 for `"There are different ways
+of hiding the text"`.
+
+In order to do that you can use the `end` fragment:
+
+    "There are several options for displaying the text"      ^
+      "xonly displays nothing but failures"                  ! success^
+      "there is also a color option"                         ^              // this text will be indented
+        "rgb=value uses that value to color the text"        ! rgb^         // and the following examples as well
+        "nocolor dont color anything"                        ! nocolor^ end^
+    "There are different ways of hiding the text"            ^              // this text will be properly indented now
+      "by tagging the text"                                  ! hideTag^
+                                                             end
+
+This will be displayed as:
+
+    There are several options for displaying the text
+      + xonly displays nothing but failures
+      there is also a color option
+        + rgb=value uses that value to color the text
+        + nocolor dont color anything
+    There are different ways of hiding the text
+      + by tagging the text
+
+
+###### Adding blank lines
+
+A better way to separate blocks of examples though is to add blank lines in between. One possibility is to use `p` (as in
+"paragraph") to both add a newline and unindent a text block:
+
+    "this is some presentation text"      ^
+      "and the first example"             ! success^
+      "and the second example"            ! success^
+                                          p^
+    "And another block of examples"       ^
+      "with this example"                 ! success^
+      "and that example"                  ! success
+
+This will be displayed as:
+
+    this is some presentation text
+      + and the first example
+      + and the second example
+
+    And another block of examples
+      + with this example
+      + and that example
+
+That looks remarkably similar to the specification code, doesn't it?
+
+There are other possibilities for adding blank lines:
+
+ * use the `br` element: simply adds a blank line, not changing the indentation level
+ * combine `end` and `br` in one fragment: `endbr` (`endp` is also available)
+
+###### Changing the indentation level
+
+If, for whatever reason, you wish to have more or less indentation, you can use the `t` and `bt` fragments:
+
+    "this text"                                     ^ bt
+    "doesn't actually have an indented example"     ! success
+
+    "this text"                                     ^ t
+        "has a very indented example"               ! success
+
+ The number of indentation levels (characterized as 2 spaces on screen) can also be specified by using `t(n)` or `bt(n)`.
 
  - - -
 
 <br/>
                                                                                                                         """^
-  include(xonly, exampleText)                                                                                           ^
+  include(xonly, exampleTextExtraction)                                                                                 ^
+  include(xonly, new GivenWhenThenSpec)                                                                                 ^
+  include(xonly, exampleTextIndentation)                                                                                ^
+  include(xonly, resetTextIndentation)                                                                                  ^
+  include(xonly, pTextIndentation)                                                                                      ^
                                                                                                                         end
 
-  val exampleText = new Specification { def is =
+  val exampleTextExtraction = new Specification { def is =
     "Bob should pay 12"   ! e1
 
     val toPay = Map("Bob"->"12", "Bill"->"10")           // a "database" of expected values
+    val ShouldPay = "(.*) should pay (\\d+)".r           // a regular expression for extracting the name and price
 
     def e1 = (s: String) => {
-      val ShouldPay = "(.*) should pay (\\d+)".r      // a regular expression for extracting the name and price
       val ShouldPay(name, price) = s                     // extracting the values
       toPay(name) must_== price                          // using them for the expectation
     }
+  }
+
+  val exampleTextIndentation = new Specification { def is =
+    "this is some presentation text"      ^
+      "and the first example"             ! success^
+      "and the second example"            ! success
+  }
+
+  val resetTextIndentation = new Specification { def is =
+    "There are several options for displaying the text"      ^
+      "xonly displays nothing but failures"                  ! success^
+      "there is also a color option"                         ^              // this text will be indented
+        "rgb=value uses that value to color the text"        ! rgb^         // and the following examples as well
+        "nocolor dont color anything"                        ! nocolor^ end^
+    "There are different ways of hiding the text"            ^              // this text will be properly indented now
+        "by tagging the text"                                ! hideTag^
+                                                             end
+    def rgb = success
+    def nocolor = success
+    def hideTag = success
+  }
+
+  val pTextIndentation = new Specification { def is =
+    "this is some presentation text"      ^
+      "and the first example"             ! success^
+      "and the second example"            ! success^
+                                          p^
+    "And another block of examples"       ^
+      "with this example"                 ! success^
+      "and that example"                  ! success^
+                                          end
   }
 }
