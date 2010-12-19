@@ -138,8 +138,8 @@ case object Levels {
       case t @ ExecutedPar()              => BlockUnindent(t)   
       case t @ ExecutedTab(n)             => BlockIndent(t, n)   
       case t @ ExecutedBacktab(n)         => BlockUnindent(t, n) 
-      case t @ ExecutedSpecStart(_, _)    => BlockReset(t)
-      case t @ ExecutedSpecEnd(_)         => BlockReset(t)    
+      case t @ ExecutedSpecStart(_, _)    => BlockNeutral(t)
+      case t @ ExecutedSpecEnd(_)         => BlockNeutral(t)
       case t @ ExecutedEnd()              => BlockReset(t)    
       case t                              => BlockNeutral(t)  
     } 
@@ -153,8 +153,8 @@ case object Levels {
       case t @ Tab(n)          => BlockIndent(t, n)       
       case t @ Backtab(n)      => BlockUnindent(t, n)   
       case t @ Text(_)         => BlockIndent(t)       
-      case t @ SpecStart(_, _) => BlockReset(t)     
-      case t @ SpecEnd(_)      => BlockReset(t)        
+      case t @ SpecStart(_, _) => BlockNeutral(t)
+      case t @ SpecEnd(_)      => BlockNeutral(t)
       case t @ End()           => BlockReset(t)        
       case t                   => BlockNeutral(t)        
     }
