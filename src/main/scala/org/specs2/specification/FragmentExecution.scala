@@ -41,9 +41,11 @@ trait FragmentExecution {
 	  case SpecEnd(n)            => ExecutedSpecEnd(n)
     case s @ Step(a)           => 
       val timer = new SimpleTimer().start
-      executeBody(a()) match {
+      executeBody(s.execute) match {
         case err @ Error(_, _) => ExecutedResult(NoMarkup("action error"), err, timer.stop)
-        case _ =>                 ExecutedNoText(timer.stop)
+        case f @ Failure(_, _) => ExecutedResult(NoMarkup("action failure"), f, timer.stop)
+        case sk @ Skipped(_)   => ExecutedResult(NoMarkup("skipped action"), sk, timer.stop)
+        case _ =>                 ExecutedNoText()
       }
     case See(link)             => ExecutedSee(link)
     case _                     => ExecutedNoText()
