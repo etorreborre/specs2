@@ -16,7 +16,7 @@ trait BaseSpecification extends SpecificationStructure
   def include(f: Fragments): Group = fragmentGroup(f)
   def include(s: SpecificationStructure): Group = fragmentGroup(s.content)
   def include(args: Arguments, s: SpecificationStructure): Group = {
-    fragmentGroup(Fragments.withSpecStartEnd(s.is.copy(arguments = args), name(s)))
+    fragmentGroup(s.content.overrideArgs(args))
   }
 }
 
@@ -37,6 +37,12 @@ trait SpecName {
   def url: String
   def matches(p: String) = name matches p
   override def toString = name
+  override def equals(o: Any) = {
+    o match {
+      case s: SpecName => s.name == this.name
+      case _ => false
+    }
+  }
 }
 object SpecName {
   def apply(s: SpecificationStructure): SpecificationName = SpecificationName(s)

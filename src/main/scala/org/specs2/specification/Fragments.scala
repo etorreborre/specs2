@@ -23,6 +23,10 @@ case class Fragments private (private val fragmentList: () => Seq[Fragment], arg
   def ^(a: Arguments) = copy(fragmentList = () => this.fragments, arguments = a)
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
+  def overrideArgs(args: Arguments) = {
+    val overridenStart = fragments.headOption.map { case SpecStart(n, a) => SpecStart(n, a.overrideWith(args)) }
+    Fragments(() => overridenStart.toList ++ fragments.drop(1), arguments.overrideWith(args))
+  }
 }
 case object Fragments {
   def apply(fragments: LazyParameter[Fragment]*) = new Fragments(() => fragments.map(_.value))
@@ -39,7 +43,7 @@ case object Fragments {
    */
   def withSpecStartEnd(fragments: Fragments, name: SpecName): Fragments = {
     val (withStartFragments, specName) = fragments.fragments.headOption match {
-      case Some(SpecStart(n, _)) => (SpecStart(n, fragments.arguments) +: fragments.fragments.drop(1), n)
+      case Some(SpecStart(n, args)) => (SpecStart(n, args) +: fragments.fragments.drop(1), n)
       case other => (SpecStart(name, fragments.arguments) +: (Br() +: End() +: fragments.fragments), name)
     }
     val withStartAndEndFragments = withStartFragments.lastOption match {
