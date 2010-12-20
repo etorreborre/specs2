@@ -54,13 +54,15 @@ trait Trim extends control.Debug {
       res.replaceAll(cur._1, cur._2)
     }
     def replaceInsideTag(tag: String, p: Pair[String, String]*) = {
-      replaceAll("<"+tag+">(.(.|\n)*?)</"+tag+">", (s: String) => s.replaceAll(p:_*))
+      replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
     }
     def replaceInsideTags(tags: String*)(p: Pair[String, String]*) = {
       tags.foldLeft(s) { (res, tag) =>
-        res.replaceAll("<"+tag+">(.(.|\n)*?)</"+tag+">", (s: String) => s.replaceAll(p:_*))
+        res.replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
       }
     }
+    private def tagPattern(tag: String) = "<"+tag+">(.(.|\n)*?)</"+tag+">"
+
     /** replace each group with something else */
     def replaceAll(exp: String, f: String => String) = {
       new Regex(exp).replaceAllIn(s, (m: Match) => f(m.group(0)))
