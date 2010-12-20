@@ -91,12 +91,13 @@ An non-exhaustive list of those matchers:
 
 ##### With a better description
 
-
+Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information
+is sometimes necessary to get a better diagnostic on
 
 #### Matchers for Option / Either
 
                                                                                                                         """ ^
-  include(xonly, examples)
+  include(xonly, examples)                                                                                              ^
                                                                                                                         end
 
   val examples = new Specification { def is = "Examples".title ^

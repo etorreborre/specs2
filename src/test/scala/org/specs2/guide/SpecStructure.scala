@@ -1,6 +1,7 @@
 package org.specs2
 package guide
 import examples._
+import specification._
 
 class SpecStructure extends Specification { def is =
                                                                                                                         """
@@ -296,7 +297,7 @@ readable name to your specification report you can do the following:
      class MySpec extends Specification { def is =
         "My beautiful specifications".title                           ^
                                                                       p^
-        "The rest of the spec goes here"                              ^end
+        "The rest of the spec goes here"                              ^ end
      }
 
 ### Contexts
@@ -373,6 +374,22 @@ Note that you can also compose contexts in order to reuse them to build more com
 
     "Do something on the full system"                   ! init(success)
 
+##### Actions
+
+Some setup actions are very time consuming and should be executed only once for the whole specification. This can be achieved
+by inserting some silent `Action` in between fragements:
+
+    class DatabaseSpec extends Specification { def is =
+
+      "This specification opens a database and execute some tests"     ^ Action(openDatabase) ^
+        "example 1"                                                    ! success ^
+        "example 2"                                                    ! success ^
+                                                                       Action(closeDatabase)^
+                                                                       end
+    }
+
+The examples are (by default) executed concurrently between the 2 actions and the "result" of actions will never be
+reported unless if there is a failure.
 
  - - -
                                                                                                                         """^
@@ -382,10 +399,12 @@ Note that you can also compose contexts in order to reuse them to build more com
   include(xonly, exampleTextIndentation)                                                                                ^
   include(xonly, resetTextIndentation)                                                                                  ^
   include(xonly, pTextIndentation)                                                                                      ^
+  include(xonly, databaseSpec)                                                                                          ^
                                                                                                                         end
 
   val exampleTextExtraction = new Specification { def is =
-    "Bob should pay 12"   ! e1
+    "Text extraction".title     ^
+    "Bob should pay 12"         ! e1
 
     val toPay = Map("Bob"->"12", "Bill"->"10")           // a "database" of expected values
     val ShouldPay = "(.*) should pay (\\d+)".r           // a regular expression for extracting the name and price
@@ -397,12 +416,14 @@ Note that you can also compose contexts in order to reuse them to build more com
   }
 
   val exampleTextIndentation = new Specification { def is =
+    "Text indentation".title              ^
     "this is some presentation text"      ^
       "and the first example"             ! success^
       "and the second example"            ! success
   }
 
   val resetTextIndentation = new Specification { def is =
+    "Reset indentation".title                                ^
     "There are several options for displaying the text"      ^
       "xonly displays nothing but failures"                  ! success^
       "there is also a color option"                         ^              // this text will be indented
@@ -417,6 +438,7 @@ Note that you can also compose contexts in order to reuse them to build more com
   }
 
   val pTextIndentation = new Specification { def is =
+    "Text paragraph".title                ^
     "this is some presentation text"      ^
       "and the first example"             ! success^
       "and the second example"            ! success^
@@ -426,4 +448,16 @@ Note that you can also compose contexts in order to reuse them to build more com
       "and that example"                  ! success^
                                           end
   }
+
+  val databaseSpec = new  Specification { def is =
+    "Database specification".title                                   ^
+    "This specification opens a database and execute some tests"     ^ Action(openDatabase) ^
+      "example 1"                                                    ! success ^
+      "example 2"                                                    ! success ^
+                                                                     Action(closeDatabase)^
+                                                                     end
+    def openDatabase = success
+    def closeDatabase = success
+  }
+
 }

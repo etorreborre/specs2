@@ -311,7 +311,7 @@ to the `BaseSpecification` and add the non-conflicting traits.
 
   val chaining = new Specification { def is =  args(color=false) ^
     "my example on strings" ! e1             // will fail
-    def e1 = "hello" must have size(10000) and
+    def e1 = "hello" must  have size(10000) and
                                startWith("hell")
   }
 
