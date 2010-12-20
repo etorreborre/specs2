@@ -53,15 +53,14 @@ trait DefaultSelection {
   
   protected def isolateSteps(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[Fragments] = {
     val specsArguments = SpecsArguments.foldAll(fragments)(FragmentSpecsArgumentsReducer)
-    specsArguments.arguments.foldLeft(Nil: List[Fragments]) { (res, cur) => 
+    specsArguments.arguments.foldLeft(Nil: List[Fragments]) { (res, cur) =>
       val (ArgumentsStart(f), args) = cur
-      val overridenArgs = arguments.overrideWith(args)
       res match {
-        case Nil => List(Fragments(List(f))(overridenArgs))
+        case Nil => List(Fragments(List(f)))
         case last :: rest => f match {
-          case Step(_) if last.fragments.exists(isExample) => Fragments(List(f))(overridenArgs) :: last :: rest 
-          case Example(_, _) if last.fragments.exists(isStep) => Fragments(List(f))(overridenArgs) :: last :: rest 
-          case _ => Fragments(last.fragments :+ f)(overridenArgs):: rest 
+          case Step(_) if last.fragments.exists(isExample) => Fragments(List(f)) :: last :: rest
+          case Example(_, _) if last.fragments.exists(isStep) => Fragments(List(f)) :: last :: rest
+          case _ => Fragments(last.fragments :+ f) :: rest
         }
       }
     }
