@@ -19,6 +19,9 @@ sealed trait Fragment {
 case class SpecStart(name: SpecName, arguments: Arguments = Arguments()) extends Fragment {
   override def matches(s: String) = name matches s
   override def toString = "SpecStart("+name.name+")"
+  def withArgs(args: Arguments) = SpecStart(name, args)
+  def withName(n: SpecName) = if (name.name.isEmpty) SpecStart(n, arguments) else this
+  def overrideArgs(args: Arguments) = SpecStart(name, arguments.overrideWith(args))
 }
 object SpecStart {
   def apply(name: String): SpecStart  = new SpecStart(SpecName(name))
@@ -26,6 +29,7 @@ object SpecStart {
 }
 case class SpecEnd(name: SpecName) extends Fragment {
   override def matches(s: String) = name matches s
+  def withName(n: SpecName) = SpecEnd(n)
 }
 object SpecEnd {
   def apply(name: String): SpecEnd = new SpecEnd(SpecName(name))
@@ -60,9 +64,9 @@ case class See(link: HtmlLink) extends Fragment
 
 /**
  * Those standard Fragments are used to format the specification text:
- *  * End() can be used to "reset" the indentation of text  
- *  * Br() can be used to insert a newline  
- *  * Par() can be used to insert 2 newlines  
+ *  * End() can be used to "reset" the indentation of text
+ *  * Br() can be used to insert a newline
+ *  * Par() can be used to insert 2 newlines
  */
 private[specs2]
 object StandardFragments {

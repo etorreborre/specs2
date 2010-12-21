@@ -34,17 +34,17 @@ trait AutoExamples {
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragments(expression: =>MatchResult[_]): Fragments = {
     val desc = code()
-    Fragments(Example(CodeMarkup(desc), expression.toResult))
+    Fragments.create(Example(CodeMarkup(desc), expression.toResult))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragments(expression: =>Boolean): Fragments = {
     val desc = code()
-    Fragments(Example(CodeMarkup(desc), toResult(expression)))
+    Fragments.create(Example(CodeMarkup(desc), toResult(expression)))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def resultFragments(expression: =>Result): Fragments = {
     val desc = code()
-    Fragments(Example(CodeMarkup(desc), expression))
+    Fragments.create(Example(CodeMarkup(desc), expression))
   }
   implicit def matchExample(expression: =>MatchResult[_]): Example =
     Example(CodeMarkup(code()), expression.toResult)

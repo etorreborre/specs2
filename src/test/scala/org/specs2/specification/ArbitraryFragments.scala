@@ -6,7 +6,7 @@ import Arbitrary._
 import main.Arguments
 import control.LazyParameters._
 
-trait ArbitraryFragments extends execute.StandardResults with PredefinedFragments {
+trait ArbitraryFragments extends execute.StandardResults with FormattingFragments {
 
   implicit def arbitraryFragment: Arbitrary[Fragment] = Arbitrary {
     Gen.frequency ( 
@@ -21,7 +21,7 @@ trait ArbitraryFragments extends execute.StandardResults with PredefinedFragment
   }
   implicit def arbitraryFragments: Arbitrary[Fragments] = Arbitrary {
 
-    def genFragments(sz: Int): Gen[Fragments] = for (l <- Gen.listOfN(sz, arbitrary[Fragment])) yield Fragments(l)(Arguments())
+    def genFragments(sz: Int): Gen[Fragments] = for (l <- Gen.listOfN(sz, arbitrary[Fragment])) yield Fragments(l)
     def sizedList(sz: Int): Gen[Fragments] = {
       if (sz <= 0) genFragments(1)
       else genFragments(sz)

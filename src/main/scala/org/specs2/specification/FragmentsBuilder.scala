@@ -5,7 +5,7 @@ import control.LazyParameters._
 import execute._
 import main._
 import matcher._
-import PredefinedFragments._
+import FormattingFragments._
 
 /**
  * This trait provides function to create specification Fragments:
@@ -24,7 +24,7 @@ trait FragmentsBuilder {
    */
   implicit def title(s: String): SpecTitle = SpecTitle(s)
   case class SpecTitle(name: String) {
-    def title = Fragments(SpecStart(SpecName(name)))
+    def title = Fragments.create(SpecStart(SpecName(name)))
   }
   
   /** @return a Text Fragment from a string */
@@ -53,7 +53,7 @@ trait FragmentsBuilder {
   implicit def argumentsFragment(a: Arguments) = new ArgumentsFragment(a)
   /** this class allows to start a Fragment list with an Arguments object */
   class ArgumentsFragment(a: Arguments) {
-    def ^(f: Fragment) = Fragments(List(f))(a)
+    def ^(f: Fragment) = Fragments.create(f).overrideArgs(a)
     def ^(f: Fragments) = f ^ a
   }
   
@@ -62,9 +62,9 @@ trait FragmentsBuilder {
    * or an existing Fragment. This allows further chaining with the ^ method 
    */
   /** @return a Fragments object from a single Fragment */
-  implicit def fragments(f: Fragment): Fragments = Fragments(f)
+  implicit def fragments(f: Fragment): Fragments = Fragments.create(f)
   /** @return a Fragments object from a string */
-  implicit def textStart(s: String): Fragments = Fragments(Text(s))
+  implicit def textStart(s: String): Fragments = Fragments.create(Text(s))
 
   /**
    * This implicits allows to create links to other specifications

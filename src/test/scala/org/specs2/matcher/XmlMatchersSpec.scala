@@ -3,7 +3,8 @@ package matcher
 import scala.xml._
 import execute.Result
 
-class XmlMatchersSpec extends SpecificationWithJUnit { def is = 
+class XmlMatchersSpec extends SpecificationWithJUnit { def is =
+
   "A equals ignore spaces matcher should"                                                 ^
     "match nodes, even if there are spaces"                                               ^
     { <a><b/></a> must ==/(<a> <b/></a>) }                                                ^

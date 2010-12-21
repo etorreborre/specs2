@@ -5,6 +5,8 @@ import java.text.{ ParsePosition, SimpleDateFormat }
  
 /**
  * This object provides functions to describe units of time
+ *
+ * hat tip to @robey (http://robey.lag.net)
  */
 trait TimeConversions {
   

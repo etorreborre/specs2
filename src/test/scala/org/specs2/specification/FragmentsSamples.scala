@@ -5,7 +5,7 @@ import execute._
 /**
  * This trait provides fragments to use for specifying folds and reporters
  */
-trait FragmentsSamples extends FragmentsBuilder with StandardResults with PredefinedFragments {
+trait FragmentsSamples extends FragmentsBuilder with StandardResults with FormattingFragments {
   val text = Text("text")
   val ex1 = "ex1" ! success 
   val ex2 = "ex2" ! success

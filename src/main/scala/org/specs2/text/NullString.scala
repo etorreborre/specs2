@@ -1,6 +1,9 @@
 package org.specs2
 package text
 
+/**
+ * Utility method to replace a null String with ""
+ */
 private[specs2]
 trait NotNullStrings {
   implicit def stringToNotNull(s: String) = new NotNullString(s)

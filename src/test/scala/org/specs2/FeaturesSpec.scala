@@ -4,6 +4,17 @@ import execute._
 
 class FeaturesSpec extends Specification { def is = literate ^
                                                                                           """
+  Todo before beta:
+
+  * tests must pass                                      DONE
+  * fix the bugs with
+    . the display of stats for html nested specs
+    . the computing of levels with links
+  * package and test as a user
+    .
+  * prepare an email
+
+
  These are the list of features todevelop / port for specs2.
 
  The prioritization idea is to:

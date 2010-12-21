@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 import execute._
-import matcher._
+
 /**
  * Base class for constraints executed on an expected value.
  */

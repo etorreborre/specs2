@@ -8,10 +8,13 @@ import xml.Nodex._
 import text.Quote._
 import org.specs2.xml.NodeFunctions._
 import StringToElem._
+
 /**
- * The <code>XmlMatchers</code> trait provides matchers which are applicable to xml nodes
+ * The XmlMatchers trait provides matchers which are applicable to xml nodes
  */
-trait XmlMatchers extends XmlBaseMatchers with XmlBeHaveMatchers 
+trait XmlMatchers extends XmlBaseMatchers with XmlBeHaveMatchers
+
+private[specs2]
 trait XmlBaseMatchers { outer =>
   
   /** 
@@ -70,6 +73,7 @@ trait XmlBaseMatchers { outer =>
   private def firstMatch(node: Node, attributes: Map[String, String]) =
     new XmlMatcher(List(new PathFunction(node, firstNodeSearch _, attributeValues = attributes)))
 }
+
 private[specs2]
 trait XmlBeHaveMatchers { outer: XmlBaseMatchers =>
   implicit def toXmlResultMatcher(result: MatchResult[Seq[Node]]) : XmlResultMatcher = new XmlResultMatcher(result)

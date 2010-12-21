@@ -5,6 +5,7 @@ import _root_.org.scalatools.testing._
 import main.Arguments
 import control.Throwablex._
 import reporter._
+
 /**
  * Implementation of the Framework interface for the sbt tool.
  * It declares the classes which can be executed by the specs2 library.

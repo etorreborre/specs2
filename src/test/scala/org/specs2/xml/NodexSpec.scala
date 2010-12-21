@@ -5,6 +5,7 @@ import scala.xml._
 import scala.xml.NodeSeq._
 
 class NodexSpec extends SpecificationWithJUnit { def is =
+
   "An isSpaceNode function should verify"                                                 ^
     { ! <a/>.isSpaceNode }                                                                ^
     { <a> </a>.child.last.isSpaceNode }                                                   ^

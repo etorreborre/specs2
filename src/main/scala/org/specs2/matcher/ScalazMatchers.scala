@@ -5,6 +5,9 @@ import org.scalacheck.{ Arbitrary, Shrink }
 import scalaz._
 import Scalaz._
 
+/**
+ * This trait provides matchers for some Scalaz (http://code.google.com/p/scalaz) datatypes.
+ */
 trait ScalazMatchers extends ScalaCheckMatchers { outer: AnyMatchers =>
 
   implicit def toSemigroupProperty[T](s: Semigroup[T]): SemigroupProperty[T] = new SemigroupProperty(s)

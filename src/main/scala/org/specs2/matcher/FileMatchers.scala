@@ -5,8 +5,9 @@ import java.io.File
 import text.Quote._
 import io.{ FileSystem, ConsoleOutput }
 import execute.Result
+
 /**
- * The <code>PathMatchers</code> trait provides matchers which are applicable to strings representing paths
+ * The PathMatchers trait provides matchers which are applicable to strings representing paths
  */
 trait PathMatchers extends PathBaseMatchers with PathBeHaveMatchers
 object PathMatchers extends PathMatchers
@@ -50,6 +51,7 @@ trait PathBaseMatchers extends FileSystem { outer =>
   /** @return true if the 2 paths are equal, ignoring separators */
   private def isEqualIgnoringSep(path: String, other: String) = path != null && other != null&& getCanonicalPath(path).replaceAll("\\\\", "/") == getCanonicalPath(other).replaceAll("\\\\", "/") 
 }
+
 trait PathBeHaveMatchers { outer: PathBaseMatchers =>
   /** 
    * matcher aliases and implicits to use with be / have + matcher 
@@ -84,7 +86,7 @@ trait PathBeHaveMatchers { outer: PathBaseMatchers =>
   def equalToIgnoringSep(other: String) = beEqualToIgnoringSep(other)
 }
 /**
- * The <code>FileMatchers</code> trait provides matchers which are applicable to files
+ * The FileMatchers trait provides matchers which are applicable to files
  */
 trait FileMatchers extends FileBaseMatchers with FileBeHaveMatchers
 object FileMatchers extends FileMatchers
@@ -130,6 +132,7 @@ trait FileBaseMatchers extends PathMatchers {
     def getPath(): String = p
   }
 }
+private[specs2]
 trait FileBeHaveMatchers { this: FileBaseMatchers =>
   /** 
    * matcher aliases and implicits to use with BeVerb and HaveVerb 

@@ -2,8 +2,12 @@ package org.specs2
 package matcher
 import text.Quote._
 
+/**
+ * Matchers for the Either datatype
+ */
 trait EitherMatchers extends EitherBaseMatchers with EitherBeHaveMatchers
 object EitherMatchers extends EitherMatchers
+
 private[specs2]
 trait EitherBaseMatchers {
   
@@ -30,6 +34,7 @@ trait EitherBaseMatchers {
   }
   def left[T](t: =>T) = beLeft(t)
 }
+
 private[specs2]
 trait EitherBeHaveMatchers { outer: EitherBaseMatchers =>
   implicit def toEitherResultMatcher[L, R](result: MatchResult[Either[L, R]]) = new EitherResultMatcher(result)

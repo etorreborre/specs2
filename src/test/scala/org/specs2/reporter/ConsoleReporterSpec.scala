@@ -75,7 +75,7 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
 	  report(Fragments).mkString("\n", "\n", "\n") must_== output.mkString("\n", "\n", "\n") 
   }
   def descriptionMustBe(body: =>Result, description: String) = {
-	  report("this example" ! body)(2) must_== description
+	  report("this example" ! body)(1) must_== description
   }
   def messageMustBe(body: Result, message: String) = {
 	  report("this example" ! body)(1) must_== message 
@@ -83,11 +83,12 @@ trait ReportExpectations extends MustExpectations with FragmentsBuilder with Mat
   def messagesContain(body: Result, message: String) = {
 	  report("this example" ! body) must containMatch(message) 
   }
-  def report(ex: Example): List[String] = report(Fragments(ex)) 
+  def report(ex: Example): List[String] = report(Fragments.create(ex))
   def report(ex: Fragments): List[String] = {
 
-  val textOutput = new TextResultOutput with MockOutput
-  trait MockTextPrinter extends TextPrinter { override val output = textOutput } 
+    val textOutput = new TextResultOutput with MockOutput
+    trait MockTextPrinter extends TextPrinter { override val output = textOutput }
+
 	  val reporter = new ConsoleReporter with MockTextPrinter
 	  reporter.report(new Specification { def is = ex })(Arguments())
 	  textOutput.messages.toList.map(removeColors(_))

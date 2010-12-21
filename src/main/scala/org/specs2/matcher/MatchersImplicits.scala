@@ -8,10 +8,15 @@ import Scalaz._
 import Generator._
 import text.Quote._
 import MatchResult._
+
 /**
- * This trait provides implicit definitions from MatchResults and Booleans to Results
+ * This trait provides implicit definitions from MatchResults and Booleans to Results.
+ *
+ * It also allows to:
+ *
+ * * create matchers from functions
+ * * create matchers for seqs and sets from single matchers
  */
-private[specs2]
 trait MatchersImplicits {
   /** 
    * implicit definition to transform a Seq of MatchResults to a Result

@@ -4,6 +4,11 @@ package matcher
 import time.Duration
 import time.TimeConversions._
 
+/**
+ * This trait adds the possibility to retry a given matcher until it succeeds.
+ *
+ * This was contributed by @robey (http://robey.lag.net)
+ */
 trait EventuallyMatchers {
   
   /**

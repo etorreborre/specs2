@@ -3,8 +3,12 @@ package matcher
 import text.Quote._
 import text.Plural._
 
+/**
+ * Matchers for Maps
+ */
 trait MapMatchers extends MapBaseMatchers with MapBeHaveMatchers
 object MapMatchers extends MapMatchers
+
 private[specs2]
 trait MapBaseMatchers {
   

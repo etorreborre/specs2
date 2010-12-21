@@ -11,7 +11,7 @@ trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers
 object StringMatchers extends StringMatchers
 
 /** 
- * This trait provides matchers for strings.
+ * This trait provides base matchers for strings.
  * 
  * IgnoreCase and ignoreSpace matchers are created by adapting the BeEqualTo matcher.  
  */

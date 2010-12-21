@@ -2,6 +2,7 @@ package org.specs2
 package guide
 
 class Philosophy extends Specification { def is = freetext                                                              ^
+  "Philosophy".title ^
                                                                                                                         """
 ### The origins
 
@@ -10,19 +11,19 @@ class Philosophy extends Specification { def is = freetext                      
 ***specs*** started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).
 Among the very first objectives of specs were:
 
- * conciseness: it should be possible to express with the least amount of ceremony a software specification
+ * **conciseness**: it should be possible to express a software specification with the least amount of ceremony
 
- * readability: an _executable_ specification should read like a purely textual one, by a non-programmer
+ * **readability**: an _executable_ specification should read like a purely textual one, by a non-programmer
 
- * extensibility: it should be possible to add new matchers, new runners,...
+ * **extensibility**: it should be possible to add new matchers, new runners,...
 
- * configuration: there should sensible defaults and an easy way to override those values
+ * **configuration**: there should sensible defaults and an easy way to override those values
 
- * clear implementation: since this is an open-source project with no business constraint, there's no excuse for not having
-   a crystal clear implementation, right?
+ * **clear implementation**: since this is an open-source project with no business constraint, there's no excuse for not
+   having a crystal clear implementation, right?
 
- * great user support: it's not because something is free that it should be buggy! Moreover this is also a good test on the
-   design. A good design should be easy to fix and evolve
+ * **great user support**: it's not because something is free that it should be buggy! Moreover this is also a good test
+   on the design. A good design should be easy to fix and evolve
 
                                                                                                                         """^
                                                                                                                         """
@@ -71,19 +72,21 @@ idea of the future requirements!
 
 ###### Configuration
 
-The "sensible" defaults have been debated and some "opiniated" decisions have been taken, like the decision to mark
-any example without expectation as "Pending" for example. I must say that the Configuration mechanism offered in
-exchange was not really appealing (a mix of properties-file-reflection-system-properties) and there is few evidence that
-anyone actually used it.
+The "sensible" defaults have been debated and some "opinionated" decisions have been taken, like the decision to mark any
+example without expectation as "Pending" for example. I must say that the Configuration mechanism offered in exchange
+(to change the defaults) was not really appealing (a mix of properties-file-reflection-system-properties) and there is
+few evidence that anyone actually used it.
 
 ###### Clear implementation
 
 This objective was certainly *not* achieved. There are several reasons for this. The design of the examples execution is
-certainly the main one. In ***specs*** the examples are executed "on-demand" when a runner "asks" the specification for
+certainly the main one.
+
+In ***specs*** the examples are executed "on-demand" when a runner "asks" the specification for
 its successes and failures. The specification then asks each example for its status and an example knows that by executing
-himself. The trouble is, the example doesn't really enough information to know it's full execution context. Do we have
-some code to executed beforehand for data setup? Or afterwards, because it's the last example of the specification and
-a database disconnection is required then?
+himself. The trouble is, the example doesn't really have enough information to know it's full execution context: is there
+some code to execute beforehand for data setup? Or after all other examples, because it's the last example of the specification
+and a database disconnection is required then?
 
 This design is aggravated by a "magic" feature provided by ***specs***: [the automatic reset of local variables](http://code.google.com/p/specs/wiki/DeclareSpecifications#Execution_model).
 This feature is _very_ convenient for the user but the implementation is a nightmare! In order to make as if each example
@@ -94,7 +97,7 @@ from the cloned specification to the original one. More than *20* issues were cr
 ###### User support
 
 The user support has always been responsive, in terms of bug fixes and enhancements. However the object-oriented nature
-of ***specs*** with lots of variables and side-effects around made some bugs difficult to diagnose and render some enhancements
+of ***specs*** with lots of variables and side-effects around made some bugs difficult to diagnose and made some enhancements
 downright impossible. The best example of an "impossible" feature to implement is the concurrent execution of examples.
 With shared variables all around the place, there's little chance to ever get it right.
 
@@ -103,15 +106,16 @@ With shared variables all around the place, there's little chance to ever get it
 ### A new compromise
 
 The redesign of ***specs2*** was precisely started to fight the complexities and issues of ***specs***. In order to do
-that while remaining true to the original vision for ***specs***, a new design compromise was necessary:
+that while remaining true to the original vision for ***specs***, a new design compromise was necessary with new design
+principles:
 
- 1. Functional orientation / no mutable variables
+ 1. Do not use mutable variables!
  2. There is no explicit structure
  3. Control the dependencies (no cycles)
  4. Control the implicits scopes
 
 As we will see in the paragraphs below, this is a compromise in the sense that there is a bit more burden on the developer
-who has to write a bit more code for things to happen.
+who has to write more code to get his specification into shape.
 
 ##### Functional / immutable
 
@@ -169,6 +173,13 @@ chain them with the rest:
       new Specification { def is =  args(color=false)   ^ // will not output colors
         "the rest of the specs"                         ^ end
       }
+
+###### Concurrency is a breeze
+
+This is one of the expected advantages of using functional programming techniques and thanks to Scalaz awesomeness the
+concurrent execution of examples is just one line of code!
+
+      fs.fragments.map(f => promise(executeFragment(arguments <| fs.arguments)(f))).sequence.get
 
 ##### No explicit structure
 
@@ -228,6 +239,9 @@ In the specification above, each example is using its own instance of a case cla
 will never be overwritten by another example. Parent context is inherited by means of delegation. For example, in the
 "buy" context, there is an available `tickets` instance placing the system in the desired context.
 
+There is a clear win here because the library doesn't have to propose new concepts, a new API to offer context management
+functionalites to: create contexts, share them, reuse them,...
+
 We can also notice the point about having "No structure". There is no need for adding curly braces `{...}` to separate
 the specification elements so the specification text is remarkably close to what's going to be displayed when reported.
 
@@ -257,13 +271,11 @@ inserted in order to adjust the indentation or just skip lines: `br, p, t, bt, e
 
 There are 2 major operators used by ***specs2*** when building a Specification: `^` and `!`. `^` is used to "link" specification
 fragments together and `!` is used to declare the body of an example. The choice of those 2 symbols is mostly the result
-of the precedence rules in Scala. `+` binds more strongly than `!` and `!` more strongly than `^`. This means that you
+of the precedence rules in Scala. `+` binds more strongly than `!`, and `!` more strongly than `^`. This means that you
 don't need to add brackets to:
 
   * add strings with `+`: `"this is"+"my string" ^ "ok?"`
   * declare an example: `"this is some text" ^ "and this is an example description" ! success`
-
-`^` also has a connotation of "end of line" as the equivalent symbol used in regular expressions.
 
 ##### Dependencies control
 
@@ -282,7 +294,8 @@ design makes sure that a layered architecture is maintained, from low-level pack
 In this scheme, a specification is no longer executable on its own, contrary to the ***specs*** design. It always need a
 runner.
 
-One of the features on the ***specs2*** features list is a way to specify and check that those constraints actually hold.
+Unfortunately this dependency specification is not yet enforced automatically in ***specs2*** test suite, but it is
+certainly on the features list.
 
 ##### Implicit definitions control
 

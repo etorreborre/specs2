@@ -1,6 +1,9 @@
 package org.specs2
 package text
 
+/**
+ * Abstraction of some text which may, or may not support a Markup syntax
+ */
 private[specs2]
 sealed trait MarkupString {
   def asString = MarkupString.asString(this)
@@ -17,7 +20,7 @@ case class NoMarkup(text: String) extends MarkupString {
   def append(s: String) = NoMarkup(text+s)
   override def toString = text
 }
-
+private[specs2]
 object MarkupString {
   implicit def asString(m: MarkupString) = m match {
     case CodeMarkup(t) => t

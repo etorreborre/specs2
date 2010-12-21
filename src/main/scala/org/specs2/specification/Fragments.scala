@@ -13,24 +13,42 @@ import StandardFragments._
  * A Fragments object carries an Arguments instance containing options for selecting,
  * executing and reporting Fragments
  */
-case class Fragments private (private val fragmentList: () => Seq[Fragment], arguments: Arguments = Arguments()) {
-  def fragments = fragmentList()
-  def add(e: =>Fragment) = copy(fragmentList = () => this.fragments :+ e) 
+case class Fragments (fragments: Seq[Fragment]) {
+  def add(e: =>Fragment) = copy(fragments = fragments :+ e)
   import StandardFragments._
   override def toString = fragments.mkString("\n")
-  def ^(e: =>Fragment) = add(e)
-  def ^(g: Group) = copy(fragmentList = () => this.fragments ++ g.fragments)
-  def ^(a: Arguments) = copy(fragmentList = () => this.fragments, arguments = a)
+  def ^(e: =>Fragment) = e match {
+    case s @ SpecStart(n, a) => Fragments(s.withArgs(arguments) +: minusStart())
+    case _                   => add(e)
+  }
+  def ^(g: Group) = copy(fragments = fragments ++ g.fragments)
+  def ^(a: Arguments) = copy(fragments = start.withArgs(a) +: minusStart())
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
-  def overrideArgs(args: Arguments) = {
-    val overridenStart = fragments.headOption.map { case SpecStart(n, a) => SpecStart(n, a.overrideWith(args)) }
-    Fragments(() => overridenStart.toList ++ fragments.drop(1), arguments.overrideWith(args))
+  def overrideArgs(args: Arguments) = Fragments(start.overrideArgs(args) +: minusStart())
+
+  def start = fragments.headOption match {
+    case Some(s @ SpecStart(n, a)) => s
+    case _                         => SpecStart("")
   }
+  def arguments = start.arguments
+  def end = fragments.lastOption match {
+    case Some(e @ SpecEnd(n)) if (n == start.name) => e
+    case _                    => SpecEnd("")
+  }
+  def minusStart(fs: Seq[Fragment] = fragments) = fs.headOption match {
+    case Some(SpecStart(_, _)) => fs.drop(1)
+    case _                     => fs
+  }
+  def minusEnd(fs: Seq[Fragment] = fragments) = fs.lastOption match {
+    case Some(SpecEnd(_)) => fs.dropRight(1)
+    case _                => fs
+  }
+  private def middle = minusEnd(minusStart())
+
 }
 case object Fragments {
-  def apply(fragments: LazyParameter[Fragment]*) = new Fragments(() => fragments.map(_.value))
-  def apply(fragments: Seq[Fragment])(implicit args: Arguments) = new Fragments(() => fragments, args)
+  def create(fs: Fragment*) = new Fragments(fs)
   
   def isExample: Function[Fragment, Boolean] = { case Example(_, _) => true; case _ => false }
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
@@ -42,15 +60,8 @@ case object Fragments {
    * fragment are the same 
    */
   def withSpecStartEnd(fragments: Fragments, name: SpecName): Fragments = {
-    val (withStartFragments, specName) = fragments.fragments.headOption match {
-      case Some(SpecStart(n, args)) => (SpecStart(n, args) +: fragments.fragments.drop(1), n)
-      case other => (SpecStart(name, fragments.arguments) +: (Br() +: End() +: fragments.fragments), name)
-    }
-    val withStartAndEndFragments = withStartFragments.lastOption match {
-      case Some(SpecEnd(n)) if (n == specName) => withStartFragments
-      case other => withStartFragments :+ SpecEnd(specName)
-    }
-    Fragments(withStartAndEndFragments)(fragments.arguments)
+    val specStart = fragments.start.withName(name)
+    Fragments(specStart +: fragments.middle :+ fragments.end.withName(specStart.name))
   }
   def withSpecStartEnd(fragments: Fragments, name: String): Fragments = withSpecStartEnd(fragments, SpecName(name))
 

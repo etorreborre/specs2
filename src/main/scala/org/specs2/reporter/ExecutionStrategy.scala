@@ -30,7 +30,7 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     implicit val executor = Executors.newFixedThreadPool(arguments.threadsNb)
     try {
       fragments.map { fs => 
-        fs.fragments.map(f => promise(executeFragment(arguments.overrideWith(fs.arguments))(f))).sequence.get
+        fs.fragments.map(f => promise(executeFragment(arguments <| fs.arguments)(f))).sequence.get
       }.flatten
     } finally {
       executor.shutdown()

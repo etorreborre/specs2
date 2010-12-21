@@ -6,6 +6,7 @@ import control.LazyParameters._
 import specification._
 import Fragments._
 import SpecsArguments._
+
 /**
  * The Selection trait implements the logic for filtering the fragments to execute
  * and sorting them according to their dependencies 
@@ -24,7 +25,7 @@ trait Selection {
 trait DefaultSelection {
   /** select function returning a filtered and ordered seq of seq of Fragments */
   def select(implicit arguments: Arguments) = (fragments: Fragments) => {
-    sort(SpecsArguments.filter(fragments.fragments)(filter))(arguments.overrideWith(fragments.arguments))
+    sort(SpecsArguments.filter(fragments.fragments)(filter))(arguments)
   }
   /** 
    * the filter method filters examples based on their description,
@@ -47,19 +48,17 @@ trait DefaultSelection {
    * each fragment will be executed individually  
    */
   protected def sort(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[Fragments] = {
-    if (arguments.sequential) fragments.map(f => Fragments(f))
+    if (arguments.sequential) fragments.map(f => Fragments.create(f))
     else isolateSteps(fragments)(arguments).reverse
   }
   
   protected def isolateSteps(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[Fragments] = {
-    val specsArguments = SpecsArguments.foldAll(fragments)(FragmentSpecsArgumentsReducer)
-    specsArguments.arguments.foldLeft(Nil: List[Fragments]) { (res, cur) =>
-      val (ArgumentsStart(f), args) = cur
+    fragments.foldLeft(Nil: List[Fragments]) { (res, f) =>
       res match {
-        case Nil => List(Fragments(List(f)))
+        case Nil => List(Fragments.create(f))
         case last :: rest => f match {
-          case Step(_) if last.fragments.exists(isExample) => Fragments(List(f)) :: last :: rest
-          case Example(_, _) if last.fragments.exists(isStep) => Fragments(List(f)) :: last :: rest
+          case Step(_) if last.fragments.exists(isExample) => Fragments.create(f) :: last :: rest
+          case Example(_, _) if last.fragments.exists(isStep) => Fragments.create(f) :: last :: rest
           case _ => Fragments(last.fragments :+ f) :: rest
         }
       }

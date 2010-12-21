@@ -3,6 +3,9 @@ package main
 
 import control.Exceptions._
 
+/**
+ * This class holds all the options that are relevant for specs2 execution and reporting.
+ */
 private[specs2]  
 case class Arguments (
   _ex:            Option[String]  = None,
@@ -39,7 +42,7 @@ case class Arguments (
   def <|(other: Arguments) = overrideWith(other)
   
   /**
-   * @return a new Argumentns object where the values of this are overriden with the values of other if defined
+   * @return a new Arguments object where the values of this are overriden with the values of other if defined
    */
   def overrideWith(other: Arguments): Arguments = {
     new Arguments(
@@ -116,72 +119,4 @@ object Arguments {
     tryo(value(name)(args).map(_.toInt).get)
   }
 }
-
-import control.Property
-private[specs2]
-trait ArgumentsArgs extends control.Properties {
-  /** shorthand method to create an Arguments object */
-  def args(  
-    ex:            Property[String]   = Property[String](),
-    xonly:         Property[Boolean]  = Property[Boolean](),
-    plan:          Property[Boolean]  = Property[Boolean](),
-    failtrace:     Property[Boolean]  = Property[Boolean](),
-    color:         Property[Boolean]  = Property[Boolean](),
-    noindent:      Property[Boolean]  = Property[Boolean](),
-    showlevel:     Property[Boolean]  = Property[Boolean](),
-    showtimes:     Property[Boolean]  = Property[Boolean](),
-    offset:        Property[Int]      = Property[Int](),
-    specName:      Property[String]   = Property[String](),
-    sequential:    Property[Boolean]  = Property[Boolean](),
-    threadsNb:     Property[Int]      = Property[Int](),
-    markdown:      Property[Boolean]  = Property[Boolean](),
-    debugMarkdown: Property[Boolean]  = Property[Boolean]()
-  ) = new Arguments(
-     ex.map(".*"+_+".*").toOption, 
-     xonly.toOption, 
-     plan.toOption, 
-     failtrace.toOption, 
-     color.toOption, 
-     noindent.toOption, 
-     showlevel.toOption, 
-     showtimes.toOption,
-     offset.toOption,
-     specName.toOption, 
-     sequential.toOption, 
-     threadsNb.toOption,
-     markdown.toOption,
-     debugMarkdown.toOption
-  )
-  /** 
-   * @return arguments for a literate specification: no auto indent and a sequential
-   *         execution
-   */
-  def literate: Arguments = args(noindent = true, sequential = true)
-  /** 
-   * @return arguments for a specification where examples must be executed sequentially
-   */
-  def sequential: Arguments = args(sequential = true)
-  /**
-   * shortcut to show only the text without any execution
-   */
-  def plan: Arguments = args(plan = true)
-  /**
-   * shortcut to avoid automatic indentation
-   */
-  def noindent = args(noindent = true)
-  /**
-   * shortcut to not executing the text and avoid automatic indentation
-   */
-  def freetext: Arguments = plan <| noindent
-  /**
-   * shortcut to print only failures and errors
-   */
-  def xonly: Arguments = args(xonly = true)
-  /**
-   * shortcut to executed and print only some examples
-   */
-  def only(examples: String): Arguments = args(ex = examples)
-}
-private[specs2]
-object ArgumentsArgs extends ArgumentsArgs
 

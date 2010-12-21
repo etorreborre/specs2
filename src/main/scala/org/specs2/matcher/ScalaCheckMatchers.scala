@@ -11,8 +11,10 @@ import org.scalacheck.ConsoleReporter._
 import scala.collection.Map
 import text.Plural._
 import io.ConsoleOutput
+
+
 /**
- * The <code>ScalaCheckMatchers</code> trait provides matchers which allow to
+ * The ScalaCheckMatchers trait provides matchers which allow to
  * assess properties multiple times with generated data.
  * @see the <a href="http://code.google.com/p/scalacheck/">ScalaCheck project</a>
  */

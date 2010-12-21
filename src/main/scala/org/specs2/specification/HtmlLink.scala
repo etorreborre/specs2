@@ -3,6 +3,10 @@ package specification
 
 import execute._
 
+/**
+ * The HtmlLink class represents a link in a specification with an identifier (either a spec name, or a string) and
+ * link elements.
+ */
 abstract class HtmlLink(val url: String, val beforeText: String, val linkText: String, val afterText: String, val tip: String) {
   def is(name: SpecName) = false
 }

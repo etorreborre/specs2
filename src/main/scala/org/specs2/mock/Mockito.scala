@@ -3,6 +3,9 @@ package mock
 
 import mockito._
 
+/**
+ * This trait can be used to access Mockito functionalities.
+ */
 trait Mockito extends MocksCreation
   with CalledMatchers
   with MockitoStubs 

@@ -11,8 +11,7 @@ import specification._
 import SpecsArguments._
 import FragmentSpecsArgumentsReducer._
 
-class SpecsArgumentsSpec extends SpecificationWithJUnit with ScalazMatchers
-with ArbitraryFragments { def is =
+class SpecsArgumentsSpec extends SpecificationWithJUnit with ScalazMatchers with ArbitraryFragments { def is =
                                                                                           """
   The Specs Arguments class is a monoid which, when folding over fragments, keeps the 
   arguments that are declared by the latest SpecStart. When a new SpecStart is 'appended'

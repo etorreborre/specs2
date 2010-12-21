@@ -2,8 +2,12 @@ package org.specs2
 package matcher
 import text.Quote._
 
+/**
+ * Matchers for Numerical values
+ */
 trait NumericMatchers extends NumericBaseMatchers with NumericBeHaveMatchers
 object NumericMatchers extends NumericMatchers
+
 private[specs2]
 trait NumericBaseMatchers {
   /** matches if x <= n */   

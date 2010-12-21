@@ -12,6 +12,7 @@ import time._
 import AnsiColors._
 import execute.{ Success, Failure, Error, Skipped, Pending }
 import specification._
+
 /**
  * Reporter for the test interface defined for sbt
  * 

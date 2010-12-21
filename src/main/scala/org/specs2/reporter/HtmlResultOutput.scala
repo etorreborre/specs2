@@ -9,6 +9,7 @@ import NotNullStrings._
 import text.Trim._
 import execute.{ Result, ResultStackTrace }
 import specification._
+
 /**
  * This class stores the html to print to a file (as a NodeSeq object)
  * 

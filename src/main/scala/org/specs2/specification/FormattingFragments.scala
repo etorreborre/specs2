@@ -3,8 +3,10 @@ package specification
 
 import control.LazyParameters._
 
-private[specs2]
-trait PredefinedFragments {
+/**
+ * Set of fragments which can be used for formatting
+ */
+trait FormattingFragments {
   def p = StandardFragments.Par()
   def br = StandardFragments.Br()
   def end = StandardFragments.End()
@@ -12,9 +14,9 @@ trait PredefinedFragments {
   def t(n: Int) = StandardFragments.Tab(n)
   def bt = StandardFragments.Backtab()
   def bt(n: Int) = StandardFragments.Backtab(n)
-  def endp = Fragments(end, p)
-  def endbr = Fragments(end, br)
+  def endp = Fragments.create(end, p)
+  def endbr = Fragments.create(end, br)
 }
 private[specs2]
-object PredefinedFragments extends PredefinedFragments
+object FormattingFragments extends FormattingFragments
 

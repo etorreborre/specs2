@@ -6,7 +6,6 @@ import control.Exceptions._
 /**
  * These matchers can be used to check if exceptions are thrown or not
  */
-private[specs2]
 trait ExceptionMatchers {
   /**
    * return a matcher which will be ok if an exception of that type is thrown

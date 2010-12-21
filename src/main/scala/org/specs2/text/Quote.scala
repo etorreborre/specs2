@@ -1,8 +1,7 @@
 package org.specs2.text
 
 /**
- * Quote and unquote functions
- * @author Eric
+ * Quote and unquote strings
  *
  */
 private[specs2] 

@@ -3,6 +3,7 @@ package time
 
 import java.util.Calendar
 import text.Plural._
+
 /**
  * This trait provides Timer functionalities based on the Java Calendar milliseconds
  */

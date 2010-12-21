@@ -8,7 +8,9 @@ import Trim._
 import main.Arguments
 import control.Exceptions._
 
-
+/**
+ * This trait can process strings formatted using the Markdown syntax and output html
+ */
 trait Markdown {
   def processor = new PegDownProcessor
   /**

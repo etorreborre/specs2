@@ -4,6 +4,8 @@ import NodeFunctions._
 import Nodex._
 
 class NodeFunctionsSpec extends SpecificationWithJUnit { def is = sequential^
+  "Node functions".title                                                                  ^
+                                                                                          br^
   "The matchNode function must return true if"                                            ^
     "there is a match on the node label"                                                  ! e1^
     "and a match on one attribute name"                                                   ! e2^

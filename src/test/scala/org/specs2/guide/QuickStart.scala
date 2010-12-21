@@ -3,7 +3,7 @@ package guide
 
 class QuickStart extends Specification { def is = literate                                                              ^
 "#### First specification"                                                                                              ^
-"Here is your first specification with ***specs2***                                                                     "^
+"Here is your first specification with ***specs2***:                                                                     "^
                                                                                                                         """
     import org.specs2._
 
@@ -20,9 +20,9 @@ class QuickStart extends Specification { def is = literate                      
       def e3 = "Hello world" must endWith("World")
     }
 
-The class containing our specification must extend `org.specs2.Specification` and must define a method called `is`.
+The class containing your specification must extend `org.specs2.Specification` and must define a method called `is`.
 
-That `is` method lists *specification fragments* which can be:
+The `is` method lists *specification fragments* which can be:
 
 * some text: like a description of the system you're specifying
 * an example: a description and some executable code returning a result
@@ -32,8 +32,7 @@ You can notice also that fragments are separated by the `^` character in order t
                                                                                                                         """^
 "#### Execution"                                                                                                        ^
                                                                                                                         """
-And this is it! Now to execute your specification, you use a *runner* which will display the
-results:
+And this is it! Now to execute your specification, you use a *runner* which will display the results:
 
     > scala -cp ... specs2.run HelloWorldSpec
 
@@ -55,12 +54,11 @@ You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide")
 
  * display your text and examples nicely
  * define _contexts_ to setup/teardown data for your examples
- * export your specification as an html document (like this one!)
- * use sbt/maven/junit to execute a specification
- * use the many ***specs2*** matchers to specify precise expectations
- * use Mockito
- * use ScalaCheck
  * include / link specifications and reuse examples
+ * use the many ***specs2*** matchers to specify precise expectations
+ * use Mockito or ScalaCheck
+ * use sbt/maven/junit to execute a specification
+ * export your specification as an html document (like this one!)
                                                                                                                         """^
   include(xonly, new HelloWorldSpec)                                                                                    ^
                                                                                                                         end

@@ -7,6 +7,7 @@ import execute._
 import Expectable._
 import MatchResult._
 import time.Duration
+
 /**
  * The `Matcher` trait is the base trait for any Matcher.
  * 
@@ -53,6 +54,7 @@ trait Matcher[-T] { outer =>
     }
     Matcher.result(other.isSuccess, okMessage, koMessage, value) 
   }
+
   protected def result[S <: T](other: MatchResultMessage, value: Expectable[S]): MatchResult[S] = {
     val (okMessage, koMessage) = other match {
       case SuccessMessage(ok, ko) => (ok, ko)
@@ -125,6 +127,10 @@ trait Matcher[-T] { outer =>
   def eventually(retries: Int, sleep: Duration): Matcher[T] = EventuallyMatchers.eventually(retries, sleep)(this)
 
 }
+
+/**
+ * Inherit this trait to provide a Matcher where both the actual and the expected values can be adapted with a function.
+ */
 trait AdaptableMatcher[T] extends Matcher[T] { outer =>
   /** 
    * @return a matcher changing its expected value, possibly adding more information to
@@ -155,9 +161,12 @@ trait AdaptableMatcher[T] extends Matcher[T] { outer =>
       result.map((t: T) => a.value)
     }
   }
-
 }
+
 object Matcher {
+  /**
+   * Utility method for creating a MatchResult[T]
+   */
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: =>Expectable[T]): MatchResult[T] = {
 	  if (test) new MatchSuccess(okMessage, koMessage, value) 
 	  else new MatchFailure(okMessage, koMessage, value)

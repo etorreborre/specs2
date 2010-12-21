@@ -2,8 +2,12 @@ package org.specs2
 package matcher
 import text.Quote._
 
+/**
+ * Matchers for Options
+ */
 trait OptionMatchers extends OptionBaseMatchers with OptionBeHaveMatchers
 object OptionMatchers extends OptionMatchers
+
 private[specs2]
 trait OptionBaseMatchers {
   

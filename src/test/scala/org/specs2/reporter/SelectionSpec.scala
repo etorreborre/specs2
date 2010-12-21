@@ -57,12 +57,12 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
       selected2 must have size(selected.size + 1)
     }
     def e5 = {
-      val fragments = "s".title ^ "intro" ^ action("1") ^ ex1 ^ ex2 ^ action("2") ^ action("3") ^ ex1 ^ ex2 ^ SpecEnd("s")
-      select(fragments).map(l => l.map(_.toString).toString) must contain(
-      "List(SpecStart(s), Text(intro), Step)",
+      val fragments: Fragments = "intro" ^ action("1") ^ ex1 ^ ex2 ^ action("2") ^ action("3") ^ ex1 ^ ex2
+      select(fragments).map(l => l.toList.map(_.toString).toString) must contain(
+      "List(SpecStart(anon), Text(intro), Step)",
       "List(Example(ex1), Example(ex2))",
       "List(Step, Step)",
-      "List(Example(ex1), Example(ex2), SpecEnd(s))").inOrder
+      "List(Example(ex1), Example(ex2), SpecEnd(anon))").inOrder
     }
     def action(message: String) = Action(selection.println(message)) 
   }

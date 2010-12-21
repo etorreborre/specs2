@@ -7,26 +7,26 @@ import _root_.org.junit.runner.Description
 
 class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with FragmentsSamples {  def is =
   
-                                                                                          """	  
+                                                                                                    """
   The JUnitRunner is meant to be used with the RunWith annotation.
-  It takes a Specification, executes it and notifies a RunNotifier object of the possible 
+  It takes a Specification, executes it and notifies a RunNotifier object of the possible
   failures.
-  
-  The following examples show the result of running a Specification with different 
+
+  The following examples show the result of running a Specification with different
   successes or failures:
-                                                                                          """^
-                                                                                          p^
-  "if the specification has 1 ok example, there must be a testStarted/testFinished"       +
-  "notification"                                                                          ! notified().e1^
-  "if the specification has 2 ok examples, there must be a testStarted/testFinished"      +
-  "notification for each"                                                                 ! notified().e2^
-  "if the specification has 1 failing example, there must be a testStarted/testFailure"   +
-  " notification"                                                                         ! notified().e3^
-  "if the specification has 1 failing example, the failure message must be reported"      ! notified().e4^
-  "if the specification has 1 example with an error, the error message must be reported"  ! notified().e5^
-  "if the specification has 1 skipped example, a test ignored must be reported"           ! notified().e6^
-  "if the specification has 1 pending example, a test ignored must be reported"           ! notified().e7^
-                                                                                          end
+                                                                                                    """^
+                                                                                                    p^
+  "if the specification has 1 ok example, there must be a testStarted/testFinished"                 +
+  "notification"                                                                                    ! notified().e1^
+  "if the specification has 2 ok examples, there must be a testStarted/testFinished"                +
+  "notification for each"                                                                           ! notified().e2^
+  "if the specification has 1 failing example, there must be a testStarted/testFailure"             +
+  " notification"                                                                                   ! notified().e3^
+  "if the specification has 1 failing example, the failure message must be reported"                ! notified().e4^
+  "if the specification has 1 example with an error, the error message must be reported"            ! notified().e5^
+  "if the specification has 1 skipped example, a test ignored must be reported"                     ! notified().e6^
+  "if the specification has 1 pending example, a test ignored must be reported"                     ! notified().e7^
+                                                                                                    end
 
   case class notified() {
 	  val notifier = mock[RunNotifier]

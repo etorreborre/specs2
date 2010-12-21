@@ -1,8 +1,8 @@
 package org.specs2
 package specification
 
-import reflect.ClassName
 import main.Arguments
+
 /**
  * A Base specification contains the minimum elements for a Specification
  * 
@@ -20,6 +20,9 @@ trait BaseSpecification extends SpecificationStructure
   }
 }
 
+/**
+ * The structure of a Specification is simply defined as a sequence of fragments
+ */
 trait SpecificationStructure { 
   /** declaration of Fragments from the user */
   def is: Fragments
@@ -32,27 +35,3 @@ trait SpecificationStructure {
   private[specs2] lazy val content: Fragments = Fragments.withSpecStartEnd(is, name(this))
   private[specs2] def name(spec: SpecificationStructure = this) = SpecName(spec)
 } 
-trait SpecName {
-  def name: String
-  def url: String
-  def matches(p: String) = name matches p
-  override def toString = name
-  override def equals(o: Any) = {
-    o match {
-      case s: SpecName => s.name == this.name
-      case _ => false
-    }
-  }
-}
-object SpecName {
-  def apply(s: SpecificationStructure): SpecificationName = SpecificationName(s)
-  def apply(s: String): SpecificationTitle = SpecificationTitle(s)
-}
-case class SpecificationName(s: SpecificationStructure) extends SpecName {
-  def name =  ClassName.className(s)
-  def url = s.getClass.getName + ".html"
-}
-case class SpecificationTitle(s: String) extends SpecName {
-  def name = s
-  def url = s + ".html"
-}

@@ -45,7 +45,7 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
   "A end resets the following fragment to zero"                                           ^
   { level(t1 ^ ex1 ^ end ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1) }                        ^
   { level(t1 ^ ex1 ^ end ^ t1 ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1, 2) }                ^
-  { level("s".title ^ t1 ^ ex1 ^ end ^ t1 ^ SpecEnd("")) must_== List(0, 0, 1, 0, 0, 0) } ^
+  { level("s".title ^ t1 ^ ex1 ^ end ^ t1 ^ SpecEnd("")) must_== List(0, 0, 1, 0, 0, 1) } ^
                                                                                           p^
   "The LevelBlocks monoid must respect the Monoid laws"                                   !
     LevelsMonoid.isMonoid                                                          ^
