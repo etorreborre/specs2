@@ -650,7 +650,4 @@ can use the `!!` operator to disambiguate (and `||` in the header for good visua
        2    !  2  !  4  |
        1    !  1  !  2  |> { (a, b, c) =>  a + b must_== c }
   }
-
-
-
 }

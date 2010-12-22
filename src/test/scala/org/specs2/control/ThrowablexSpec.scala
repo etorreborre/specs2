@@ -3,13 +3,14 @@ package control
 import execute._
 import specification._
 
-class ThrowablexSpec extends SpecificationWithJUnit with Throwablex { def is = t^
+class ThrowablexSpec extends SpecificationWithJUnit with Throwablex { def is =
                                                                                           """  
   The Throwablex trait provides extensions to regular throwables:                         
-                                                                                          """^br^
+                                                                                          """^
+                                                                                          br^
   "It provides methods to access nested exceptions"						                            ^
     "chainedExceptions returns a list of nested exceptions" 			                        ! chained().e1^
-    "getFullStackTrace returns a list of all nested stackTraceElements"                   ! chained().e2^
+    "getFullStackTrace returns a list of all nested stackTraceEl ements"                  ! chained().e2^
                                                                                           p^
   "It has location methods"                                                               ^
     "to get the name of the file and the line from an exception"                          ! c().e1^

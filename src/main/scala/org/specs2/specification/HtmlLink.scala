@@ -16,7 +16,7 @@ case class SpecHtmlLink(val name: SpecName,
                         override val afterText: String,
                         override val tip: String, result: Result) extends
    HtmlLink(name.url, beforeText, linkText, afterText, tip) {
-  override def is(n: SpecName) = name.equals(n)
+  override def is(n: SpecName) = name.id == n.id
 }
 
 case class UrlHtmlLink(override val url: String,

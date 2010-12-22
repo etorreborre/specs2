@@ -4,6 +4,7 @@ import examples._
 import specification._
 
 class SpecStructure extends Specification { def is =
+  "Specification structure".title                                                                                       ^
                                                                                                                         """
 ### Presentation
 

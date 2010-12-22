@@ -81,4 +81,5 @@ class SimpleTimer extends HmsTimer[SimpleTimer] {
       override val millis = m
     }
   def add(t: SimpleTimer) = copy(elapsed + t.elapsed, millis ++ t.millis)
+  override def toString = hms
 }

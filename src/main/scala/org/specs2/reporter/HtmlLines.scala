@@ -30,7 +30,7 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: Option[HtmlLink] = None
  * * the current level
  * * the current arguments
  */
-case class HtmlLine(text: Html = HtmlPar(), stats: (Stats, Stats) = (Stats(), Stats()), level: Int = 0, args: Arguments = Arguments()) {
+case class HtmlLine(text: Html = HtmlPar(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
   def print(implicit out: HtmlResultOutput): HtmlResultOutput = text.print(stats, level, args)
 }
 
@@ -42,26 +42,26 @@ case class HtmlLine(text: Html = HtmlPar(), stats: (Stats, Stats) = (Stats(), St
  *
  */
 sealed trait Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput): HtmlResultOutput
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput): HtmlResultOutput
 }
 case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printSpecStart(start.name)(args) else out
 }
 case class HtmlText(t: ExecutedText) extends Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printText(t.text, level, !args.xonly)(args) else out
 }        
 case class HtmlPar() extends Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printElem(<p/>, !args.xonly)(args) else out
 }
 case class HtmlBr() extends Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printPar("", !args.xonly)(args) else out
 }
 case class HtmlResult(r: ExecutedResult) extends Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly || !r.result.isSuccess) printResult(r.text, level, r.result)(args, out) else out
     
   def printResult(desc: MarkupString, level: Int, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
@@ -87,18 +87,12 @@ case class HtmlResult(r: ExecutedResult) extends Html {
   }
 }
 case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
-    val (current, total) = stats
-    if (total.isEnd(end)) printEndStats(total)(args, printCurrentStats(stats, args))
-    else printCurrentStats(stats, args)
-  }
-
-  def printCurrentStats(stats: (Stats, Stats), args: Arguments)(implicit out: HtmlResultOutput) = {
-    val (current, total) = stats
-    if ((!args.xonly || current.hasFailuresOrErrors) && current.hasExpectations && !total.isEnd(end)) printEndStats(current)(args, out)
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
+    if ((!args.xonly || stats.hasFailuresOrErrors) && stats.hasExpectations && stats.isEnd(end))
+      printEndStats(stats)(args, out)
     else out
   }
-    
+
   def printEndStats(stats: Stats)(implicit args: Arguments, out: HtmlResultOutput) = {
     val n = end.name
     val title = "Total for specification" + (if (n.name.isEmpty) n.name.trim else " "+n.name.trim)
@@ -122,10 +116,10 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
   }
 }
 case class HtmlSee(see: ExecutedSee) extends Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if (!args.xonly) out.printLink(see.link, level)(args) else out
   }
 }
 case class HtmlOther(fragment: ExecutedFragment)   extends Html {
-  def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: HtmlResultOutput) = out
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = out
 }

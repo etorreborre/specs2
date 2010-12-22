@@ -60,9 +60,9 @@ abstract class ConsoleReporterSpecImplementation extends SpecificationWithJUnit 
   def single6 = messagesContain(1 must_== 2, "'1' is not equal to '2'")
   def single7 = messagesContain(1 must_== 2, "ConsoleReporterSpec.scala")
   
-  def stat1 = reportEndsWith(level1 ^ SpecEnd(""))("2 examples, 0 failure, 0 error")
-  def stat2 = reportEndsWith(level2WithFailure ^ SpecEnd(""))("2 examples, 1 failure, 0 error")
-  def stat3 = reportEndsWith("level1" ^ exampleWithExpectations ^ SpecEnd(""))("1 example, 2 expectations, 0 failure, 0 error")
+  def stat1 = reportEndsWith(level1)("2 examples, 0 failure, 0 error")
+  def stat2 = reportEndsWith(level2WithFailure)("2 examples, 1 failure, 0 error")
+  def stat3 = reportEndsWith("level1" ^ exampleWithExpectations)("1 example, 2 expectations, 0 failure, 0 error")
 }
 trait ReportExpectations extends MustExpectations with FragmentsBuilder with Matchers {
   def reportStartsWith(Fragments: Fragments)(output: List[String]) = {

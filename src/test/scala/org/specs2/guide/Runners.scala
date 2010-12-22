@@ -23,12 +23,13 @@ There are 4 ways to execute ***specs2*** specifications:
  * `"org.hamcrest" % "hamcrest-all" % "1.1"`
  * `"org.mockito" % "mockito-all" % "1.8.5"`
  * `"junit" % "junit" % "4.7"`
+ * `"org.parboiled" % "parboiled4j" % "0.9.9.0"`
+ * `"org.pegdown" % "pegdown" % "0.8.5.4"`
 
-It also uses Pegdown and Parboiled libraries for Markdown parsing which can not yet be found in a maven repository:
+The last 2 jars are the Pegdown and Parboiled libraries for Markdown parsing. They cannot yet be found in an official maven
+repository, so you'll need to add the specs temporary Maven repository to your configuration:
 
- * [Pegdown](https://github.com/downloads/sirthias/pegdown/pegdown-0.8.5.4.jar)
- * [Parboiled](http://github.com/downloads/sirthias/parboiled/parboiled4j-0.9.9.0.jar)
-
+  `val specsRepo = "specs-repo" at "http://specs.googlecode.com/svn/maven2"`
 
 #### Arguments
 
@@ -100,6 +101,16 @@ In order to use ***specs2*** with sbt you need first to add the following lines 
 Then, depending on the naming of your specification, you have to specify which classes you want to include for reporting:
 
       override def includeTest(s: String) = { s.endsWith("Spec") || s.contains("UserGuide") }
+
+##### arguments
+
+When you execute one test only, you can pass the arguments on the command line:
+
+      > test-only org.specs2.UserGuide -- xonly
+
+The `html` argument is also available with sbt to allow the creation of the html report from the command line.
+
+      > test-only org.specs2.UserGuide -- html
 
 ##### Colors
 

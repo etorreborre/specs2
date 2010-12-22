@@ -22,43 +22,44 @@ class StatisticsSpec extends SpecificationWithJUnit { def is =
     "the number of skipped"                                                               ! e7^
                                                                                           endp^
   "If there are included specifications"                                                  ^
-    "the current statistics must be available"                                            ! e8^
-    "the total statistics must be available"                                              ! e9^
+    "the total of an inner spec must be ok"                                               ! e8^
+    "the total of the outer spec must be ok"                                              ! e9^
                                                                                           end
                                                                                           
-  val spec = 
-    "start" ^
+  val spec1 = new Specification { def is =
+    "spec1.title"           ^
     "e1" ! Success("ok", 2) ^
     "e2" ! failure          ^
     "e3" ! anError          ^
     "e4" ! pending          ^
     "e5" ! skipped          ^ end
-
-  def statistics(spec: Fragments) = {
-    val fragments = Fragments.withSpecStartEnd(spec, "spec").fragments.map(f => execute(f))
-    foldAll(fragments)
   }
+
+  def statistics(s: SpecificationStructure) = foldAll(s.content.fragments.map(f => execute(f)))
+  def total(s: SpecificationStructure) = statistics(s).total
+  def totals(s: SpecificationStructure) = statistics(s).totals
+  def execute(f: Fragment) = new FragmentExecution {}.executeFragment(Arguments())(f)
     
-  def total(spec: Fragments) = statistics(spec).total 
-  def current(spec: Fragments) = statistics(spec).current
+  def e1 = total(spec1).fragments must_== 5
+  def e2 = total(spec1).expectations must_== 6
+  def e3 = total(spec1).successes must_== 1
+  def e4 = total(spec1).failures must_== 1
+  def e5 = total(spec1).errors must_== 1
+  def e6 = total(spec1).pending must_== 1
+  def e7 = total(spec1).skipped must_== 1
   
-  def execute(f: Fragment) = new FragmentExecution {}.executeFragment(Arguments())(f)  
-    
-  def e1 = total(spec).fragments must_== 5                                                                                           
-  def e2 = total(spec).expectations must_== 6                                                                                          
-  def e3 = total(spec).successes must_== 1                                                                                          
-  def e4 = total(spec).failures must_== 1                                                                                          
-  def e5 = total(spec).errors must_== 1                                                                                          
-  def e6 = total(spec).pending must_== 1                                                                                          
-  def e7 = total(spec).skipped must_== 1
-  
-  val spec2 = "start"             ^
+  val spec2 = new Specification { def is =
+    "spec2".title                 ^
     "e1" ! Success("ok", 2)       ^
     "e2" ! failure                ^
-    fragmentGroup(spec.fragments) ^
+    include(spec1)                ^
                                   end
+  }
   
-  def e8 = (current(spec).fragments must_== 5) and (current(spec2).fragments must_== 7)
-  def e9 = total(spec2).fragments must_== 7
+  def e8 = {
+    val endOfSpecStats = totals(spec2).apply(11) // the end stat for the inner specification
+    (endOfSpecStats.fragments must_== 5) and (endOfSpecStats.successes must_== 1)
+  }
+  def e9 = (total(spec2).fragments must_== 7) and (total(spec2).successes must_== 2)
   
 }

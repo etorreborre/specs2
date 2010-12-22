@@ -42,7 +42,7 @@ trait TextPrinter {
     LevelsReducer  &&&
     SpecsArgumentsReducer
   
-  case class PrintLine(text: Print = PrintPar(), stats: (Stats, Stats) = (Stats(), Stats()), level: Int = 0, args: Arguments = Arguments()) {
+  case class PrintLine(text: Print = PrintPar(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
     def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
   
@@ -52,7 +52,7 @@ trait TextPrinter {
   
   def flatten(results: (((List[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
     val (prints, statistics, levels, args) = results.flatten
-    (prints zip statistics.toList zip levels.levels zip args.toList) map { 
+    (prints zip statistics.totals zip levels.levels zip args.toList) map {
       case (((t, s), l), a) => PrintLine(t, s, l, a)
     }
   }  
@@ -72,7 +72,7 @@ trait TextPrinter {
   }
     
   sealed trait Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput): Unit
+    def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput): Unit
     
     /**
      * indent the text to the wanted level.
@@ -87,12 +87,12 @@ trait TextPrinter {
     }
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) = {
+    def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
       out.printSpecStart(leveledText(start.name.name, level)(args))(args)
     } 
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
+    def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       printResult(leveledText(asString(r.text), level)(args), r.result, r.timer)(args, out)
       
     def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
@@ -145,25 +145,24 @@ trait TextPrinter {
     }
   }
   case class PrintText(t: ExecutedText)               extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
+    def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (!args.xonly) 
         out.printMessage(leveledText(t.text, level)(args))(args)
   }        
   case class PrintPar()                               extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
+    def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (!args.xonly) out.printLine(" ")(args)
   }
   case class PrintBr()                               extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) =
+    def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (!args.xonly) out.printLine(" ")(args)
   }
   case class PrintSpecEnd(end: ExecutedSpecEnd)       extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      val (current, total) = stats
-      if ((!args.xonly || current.hasFailuresOrErrors) && !total.isEnd(end)) 
-        printEndStats(current)(args, out)
-      if (total.isEnd(end))
-        printEndStats(total)(args, out)
+    def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
+      if (!stats.isEnd(end) && args.xonly && stats.hasFailuresOrErrors)
+        printEndStats(stats)(args, out)
+      if (stats.isEnd(end))
+        printEndStats(stats)(args, out)
     }
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       val n = end.name
@@ -185,7 +184,7 @@ trait TextPrinter {
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {
-    def print(stats: (Stats, Stats), level: Int, args: Arguments)(implicit out: ResultOutput) = {}
+    def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {}
   }
  
 }

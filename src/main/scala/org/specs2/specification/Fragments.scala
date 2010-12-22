@@ -33,7 +33,7 @@ case class Fragments (fragments: Seq[Fragment]) {
   }
   def arguments = start.arguments
   def end = fragments.lastOption match {
-    case Some(e @ SpecEnd(n)) if (n == start.name) => e
+    case Some(e @ SpecEnd(n)) if (n.id == start.name.id) => e
     case _                    => SpecEnd("")
   }
   def minusStart(fs: Seq[Fragment] = fragments) = fs.headOption match {
@@ -63,7 +63,7 @@ case object Fragments {
     val specStart = fragments.start.withName(name)
     Fragments(specStart +: fragments.middle :+ fragments.end.withName(specStart.name))
   }
-  def withSpecStartEnd(fragments: Fragments, name: String): Fragments = withSpecStartEnd(fragments, SpecName(name))
+  def withSpecStartEnd(fragments: Fragments, s: SpecificationStructure): Fragments = withSpecStartEnd(fragments, SpecName(s))
 
 }
 

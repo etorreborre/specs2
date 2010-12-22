@@ -78,6 +78,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <url>http://download.java.net/maven/2/</url>
       <layout>default</layout>
     </repository>
+    <repository>
+      <id>specs repository</id>
+      <name>specs repository</name>
+      <url>http://specs.googlecode.com/svn/maven2</url>
+      <layout>default</layout>
+    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -109,11 +115,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <version>${scala.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-compiler</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-	<dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
       <version>1.1</version>
@@ -138,13 +139,25 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     </dependency>
     <dependency>
       <groupId>com.googlecode.scalaz</groupId>
-      <artifactId>scalaz-core_2.8.0</artifactId>
-      <version>5.0</version>
+      <artifactId>scalaz-core_2.8.1</artifactId>
+      <version>5.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.scala-tools.testing</groupId>
-      <artifactId>scalacheck_2.8.0</artifactId>
-      <version>1.7</version>
+      <artifactId>scalacheck_2.8.1</artifactId>
+      <version>1.8</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.parboiled</groupId>
+      <artifactId>parboiled4j</artifactId>
+      <version>0.9.9.0</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.pegdown</groupId>
+      <artifactId>pegdown</artifactId>
+      <version>0.8.5.4</version>
       <optional>true</optional>
     </dependency>
   </dependencies>
@@ -293,7 +306,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
-        <version>2.14-SNAPSHOT</version>
+<!--        <version>2.14-SNAPSHOT</version> -->
         <configuration>
           <jvmArgs>
             <jvmArg>-Xmx512m</jvmArg>

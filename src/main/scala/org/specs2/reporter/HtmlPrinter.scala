@@ -71,7 +71,14 @@ trait HtmlPrinter {
     }
   }
   
-  /** @return the HtmlLines to print */  
+  /**
+   * Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
+   * into a single block that will be reported on a different html page
+   *
+   * This works by using a List of HtmlLines as a stack where the head of the list is the current block of lines
+   *
+   * @return the HtmlLines to print
+   */
   def reduce(fs: Seq[ExecutedFragment]) = {
     flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (List(HtmlLines())) { (res, cur) =>
       cur match {
@@ -86,7 +93,7 @@ trait HtmlPrinter {
   /** flatten the results of the reduction to a list of Html lines */
   private def flatten(results: (((List[Html], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[HtmlLine] = {
     val (prints, statistics, levels, args) = results.flatten
-    (prints zip statistics.toList zip levels.levels zip args.toList) map { 
+    (prints zip statistics.totals zip levels.levels zip args.toList) map {
       case (((t, s), l), a) => HtmlLine(t, s, l, a)
     }
   }  

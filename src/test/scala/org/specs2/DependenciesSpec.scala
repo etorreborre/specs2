@@ -1,6 +1,6 @@
 package org.specs2
 
-class DependenciesSpec extends Specification { def is = 
+class DependenciesSpec extends Specification { def is = freetext ^
                                                                                           """
   The following dependencies must be enforced in specs2:
                                                                                           """ ^

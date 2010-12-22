@@ -20,7 +20,7 @@ case class SpecStart(name: SpecName, arguments: Arguments = Arguments()) extends
   override def matches(s: String) = name matches s
   override def toString = "SpecStart("+name.name+")"
   def withArgs(args: Arguments) = SpecStart(name, args)
-  def withName(n: SpecName) = if (name.name.isEmpty) SpecStart(n, arguments) else this
+  def withName(n: SpecName) = copy(name = name.overrideWith(n))
   def overrideArgs(args: Arguments) = SpecStart(name, arguments.overrideWith(args))
 }
 object SpecStart {

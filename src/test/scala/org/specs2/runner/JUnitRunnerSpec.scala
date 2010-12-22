@@ -31,7 +31,7 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
   case class notified() {
 	  val notifier = mock[RunNotifier]
 	  abstract class DummySpec extends Specification 
-	  def run(f: Fragments) = JUnitRunner[DummySpec](Fragments.withSpecStartEnd(f, "DummySpec")).run(notifier)
+	  def run(f: Fragments) = JUnitRunner[DummySpec](Fragments.withSpecStartEnd(f, SpecName("DummySpec"))).run(notifier)
 	  def desc(s: String) = Description.createSuiteDescription(s)
 	  
 	  def e1 = { 

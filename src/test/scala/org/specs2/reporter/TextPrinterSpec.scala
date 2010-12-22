@@ -25,7 +25,7 @@ to a ResultOutput trait knowing how to output successes, failures,...
       "pending examples are not shown"                                                      ! xonlyargs().e4^
       "failure examples are shown"                                                          ! xonlyargs().e5^
       "error examples are shown"                                                            ! xonlyargs().e6^
-      "statistics shown"                                                                    ! xonlyargs().e7^
+      "statistics are shown"                                                                ! xonlyargs().e7^
     "if failtrace = true, failures stacktraces are shown"                                   ! failtrace().e1^bt^
     "if plan = true, nothing is executed"                                                   ! planargs().e1^
     "if sequential = false examples are executed concurrently"                              ! seq().e1^
@@ -147,16 +147,16 @@ to a ResultOutput trait knowing how to output successes, failures,...
     def e6 = print(t1 ^ ex1) must containMatch("0 ms")
   }
 
-  def printWithColors(fragments: Fragments): Seq[String] = {
+  def printWithColors(fs: Fragments): Seq[String] = {
     val selection = new DefaultSelection() {}
     val execution = new DefaultExecutionStrategy() {}
-    val selected = selection.select(fragments.arguments)(Fragments(SpecStart("spec") +: fragments.fragments :+ SpecEnd("spec")))
-    val executed = execution.execute(fragments.arguments)(selected)
+    val selected = selection.select(fs.arguments)((new Specification { def is = fs }).content )
+    val executed = execution.execute(fs.arguments)(selected)
     val mockOutput = new TextResultOutput with MockOutput
     val printer = new TextPrinter {
       override val output = mockOutput
     }
-    printer.print(this, executed)(fragments.arguments)
+    printer.print(this, executed)(fs.arguments)
     mockOutput.messages
   }
   def print(fragments: Fragments): Seq[String] = printWithColors(fragments).map(removeColors(_))

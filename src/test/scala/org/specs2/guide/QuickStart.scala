@@ -2,6 +2,7 @@ package org.specs2
 package guide
 
 class QuickStart extends Specification { def is = literate                                                              ^
+  "Quick Start".title ^
 "#### First specification"                                                                                              ^
 "Here is your first specification with ***specs2***:                                                                     "^
                                                                                                                         """

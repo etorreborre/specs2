@@ -46,7 +46,7 @@ trait Statistics {
         SpecsStatistics(current.copy(timer = t))
       }
       case start @ ExecutedSpecStart(name, args) => SpecsStatistics(Stats(start = Some(start)))
-      case e @ ExecutedSpecEnd(_)                => SpecsStatistics(Stats(end = Some(e)))
+      case end @ ExecutedSpecEnd(_)              => SpecsStatistics(Stats(end = Some(end)))
       case ExecutedNoText(t)                     => SpecsStatistics(Stats(timer = t))
       case _                                     => SpecsStatistics(Stats())
     }
@@ -60,21 +60,24 @@ trait Statistics {
     private implicit val statsMonoid = Stats.StatsMonoid
     
     /** @return the list of all current stats, with the total on each line */
-    def toList = currents.map((_, total))
-    /** 
-     * @return the list of all current stats, by summing each current Stat until
-     *         a new specification starts 
-     */
-    def currents = stats.foldLeft(Nil: List[Stats]) { (res, cur) => 
-      cur.start match {
-        case Some(s) => res :+ Stats()
-        case None    => res :+ (res.lastOption.getOrElse(Stats()) |+| cur)
+    def totals: List[Stats] = {
+      def addToLast(ss: List[Stats], s: Stats) = ss.dropRight(1) :+ (last(ss) |+| s)
+
+      val (totaledStats, stack) = stats.foldLeft((List[Stats](), List[Stats]())) { (res, cur) =>
+        val (fragmentStats, statsStack) = res
+        val (newStat, newStack) = cur.start match {
+          case Some(s) => (cur, statsStack :+ cur)
+          case None    => cur.end match {
+            case Some(e) => (last(statsStack), addToLast(statsStack.dropRight(1), last(statsStack)))
+            case None    => (cur, addToLast(statsStack,  cur))
+          }
+        }
+        (fragmentStats :+ newStat, newStack)
       }
+      totaledStats
     }
-    /** @return the total of all current stats */
-    def total = stats.foldMap(identity)
-    /** @return the stats for the last fragment encountered */
-    def current = currents.lastOption.getOrElse(Stats())
+    def total = last(totals)
+    def last(ss: List[Stats]) = ss.lastOption.getOrElse(Stats())
   }
   case object SpecsStatistics {
     def apply(current: Stats) = new SpecsStatistics(List(current))
@@ -116,17 +119,20 @@ case class Stats(fragments:    Int = 0,
 }
 case object Stats {
   implicit object StatsMonoid extends Monoid[Stats] {
-    def append(s1: Stats, s2: =>Stats) = s1.copy(
+    def append(s1: Stats, s2: =>Stats) = {
+      s1.copy(
         fragments    = s1.fragments       + s2.fragments,
-        successes    = s1.successes       + s2.successes, 
-        expectations = s1.expectations    + s2.expectations, 
-        failures     = s1.failures        + s2.failures, 
-        errors       = s1.errors          + s2.errors, 
-        pending      = s1.pending         + s2.pending, 
+        successes    = s1.successes       + s2.successes,
+        expectations = s1.expectations    + s2.expectations,
+        failures     = s1.failures        + s2.failures,
+        errors       = s1.errors          + s2.errors,
+        pending      = s1.pending         + s2.pending,
         skipped      = s1.skipped         + s2.skipped,
         timer        = s1.timer           add s2.timer,
         start        = s1.start           orElse s2.start,
-        end          = s1.end             orElse s2.end)
+        end          = s2.end             orElse s1.end
+      )
+    }
 
     val zero = Stats()
   }

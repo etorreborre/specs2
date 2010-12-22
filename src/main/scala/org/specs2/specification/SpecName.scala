@@ -14,23 +14,40 @@ trait SpecName {
   override def toString = name
   override def equals(o: Any) = {
     o match {
-      case s: SpecName => s.name == this.name
+      case s: SpecName => s.id == this.id
       case _ => false
     }
   }
+  def id = System.identityHashCode(this)
+  def overrideWith(n: SpecName): SpecName
 }
 private[specs2]
 object SpecName {
-  def apply(s: SpecificationStructure): SpecificationName = SpecificationName(s)
+  def apply(s: SpecificationStructure): SpecName = SpecificationName(s)
   def apply(s: String): SpecificationTitle = SpecificationTitle(s)
 }
 private[specs2]
 case class SpecificationName(s: SpecificationStructure) extends SpecName {
   def name =  ClassName.className(s)
   def url = s.getClass.getName + ".html"
+
+  def overrideWith(n: SpecName) = n match {
+    case SpecificationName(s)  => n
+    case SpecificationTitle(t) => new SpecificationName(s) {
+      override def name =  t
+    }
+  }
 }
 private[specs2]
-case class SpecificationTitle(s: String) extends SpecName {
-  def name = s
-  def url = s + ".html"
+case class SpecificationTitle(t: String) extends SpecName {
+  def name = t
+  def url = t + ".html"
+
+  def overrideWith(n: SpecName) = n match {
+    case SpecificationTitle(t)  => n
+    case SpecificationName(s) => new SpecificationName(s) {
+      override def name = t
+    }
+  }
+
 }
