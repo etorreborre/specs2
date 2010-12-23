@@ -90,11 +90,10 @@ trait XmlBeHaveMatchers { outer: XmlBaseMatchers =>
  * Matcher for equalIgnoreSpace comparison, ignoring the nodes order
  */   
 class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]]  { 
-  def apply[S <: Seq[Node]](other: =>Expectable[S]) = {
-    val n = other
-    result(isEqualIgnoringSpace(node.toList, n.value.toList), 
-        n.description + " is equal to " + q(node), 
-        n.description + " is not equal to " + q(node), n) 
+  def apply[S <: Seq[Node]](n: Expectable[S]) = {
+    result(isEqualIgnoringSpace(node.toList, n.value.toList),
+           n.description + " is equal to " + q(node),
+           n.description + " is not equal to " + q(node), n)
   }
   def ordered = new EqualIgnoringSpaceMatcherOrdered(node)
 }
@@ -102,11 +101,10 @@ class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]]  {
  * Matcher for equalIgnoreSpace comparison, considering the node order
  */   
 class EqualIgnoringSpaceMatcherOrdered(node: Seq[Node]) extends Matcher[Seq[Node]]  { 
-  def apply[S <: Seq[Node]](other: =>Expectable[S]) = {
-    val n = other
-    result(isEqualIgnoringSpaceOrdered(node.toList, n.value.toList), 
-        n.description + " is equal to " + q(node), 
-        n.description + " is not equal to " + q(node), n) 
+  def apply[S <: Seq[Node]](n: Expectable[S]) = {
+    result(isEqualIgnoringSpaceOrdered(node.toList, n.value.toList),
+           n.description + " is equal to " + q(node),
+           n.description + " is not equal to " + q(node), n)
   }
 }
 
@@ -126,7 +124,7 @@ case class XmlMatcher(functions: List[PathFunction]) extends Matcher[Seq[Node]] 
   /**
    * checks that the <code>nodes</code> satisfy the <code>functions</code>
    */
-  def apply[S <: Seq[Node]](n: =>Expectable[S]) = {
+  def apply[S <: Seq[Node]](n: Expectable[S]) = {
     val nodes = n
     val (success, okMessage, koMessage) = checkFunctions(functions, nodes.value, (true, "", ""))
     result(success, 

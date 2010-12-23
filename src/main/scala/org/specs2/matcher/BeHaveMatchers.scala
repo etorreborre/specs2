@@ -16,7 +16,7 @@ trait BeHaveMatchers {
  * This special matcher always return a NeutralMatch MatchResult (an implicit Success)
  */
 class NeutralMatcher[T] extends Matcher[T] {
-  def apply[S <: T](s: =>Expectable[S]): MatchResult[S] = 
+  def apply[S <: T](s: Expectable[S]): MatchResult[S] =
     NeutralMatch(MatchSuccess("ok", "ko", s))
 }
 
@@ -24,6 +24,6 @@ class NeutralMatcher[T] extends Matcher[T] {
  * This special matcher always return a NotMatch MatchResult (an implicit Success)
  */
 class NotMatcher[T] extends Matcher[T] {
-  def apply[S <: T](s: =>Expectable[S]): MatchResult[S] = 
+  def apply[S <: T](s: Expectable[S]): MatchResult[S] =
     NotMatch(MatchSuccess("ok", "ko", s))
 }

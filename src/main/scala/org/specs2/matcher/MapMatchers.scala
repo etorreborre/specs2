@@ -14,9 +14,8 @@ trait MapBaseMatchers {
   
   /** matches if map.contains(k) */   
   def haveKey[K](k: K) = new Matcher[Iterable[(K, Any)]] { 
-    def apply[S <: Iterable[(K, Any)]](m: =>Expectable[S]) = {
-      val map = m
-      result(map.value.exists(_._1 == k), 
+    def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
+      result(map.value.exists(_._1 == k),
              map.description + " has the key " + q(k), 
              map.description + " doesn't have the key " + q(k), 
              map)
@@ -24,9 +23,8 @@ trait MapBaseMatchers {
   } 
   /** matches if map contains a pair (key, value) with value == v */   
   def haveValue[V](v: V) = new Matcher[Iterable[(Any, V)]] { 
-    def apply[S <: Iterable[(Any, V)]](m: =>Expectable[S]) = {
-      val map = m
-      result(map.value.exists(_._2 == v), 
+    def apply[S <: Iterable[(Any, V)]](map: Expectable[S]) = {
+      result(map.value.exists(_._2 == v),
              map.description + " has the value " + q(v), 
              map.description + " doesn't have the value " + q(v),
              map)
@@ -35,9 +33,8 @@ trait MapBaseMatchers {
 
   /** matches if map contains a pair (key, value) == (k, v) */   
   def havePair[K, V](p: (K, V)) = new Matcher[Iterable[(K, V)]] {
-    def apply[S <: Iterable[(K, V)]](m: =>Expectable[S]) = {
-       val map = m
-       result(map.value.exists(_ == p), 
+    def apply[S <: Iterable[(K, V)]](map: Expectable[S]) = {
+       result(map.value.exists(_ == p),
               map.description + " has the pair " + q(p), 
               map.description + " doesn't have the pair " + q(p),
               map)
@@ -45,9 +42,8 @@ trait MapBaseMatchers {
   }
   /** matches if map contains all the specified pairs */   
   def havePairs[K, V](pairs: (K, V)*) = new Matcher[Iterable[(K, V)]] {
-    def apply[S <: Iterable[(K, V)]](m: =>Expectable[S]) = {
-       val map = m
-       result(pairs.forall(pair => map.value.exists(_ == pair)), 
+    def apply[S <: Iterable[(K, V)]](map: Expectable[S]) = {
+       result(pairs.forall(pair => map.value.exists(_ == pair)),
               map.description + " has the pairs " + q(pairs.mkString(", ")), 
               map.description + " doesn't have the pairs " + q(pairs.mkString(", ")),
               map)
@@ -56,7 +52,7 @@ trait MapBaseMatchers {
 
   /** matches if the partial function is defined at those values */   
   def beDefinedAt[K](values: K*) = new Matcher[PartialFunction[K, Any]] {
-    def apply[S <: PartialFunction[K, Any]](f: =>Expectable[S]) = {
+    def apply[S <: PartialFunction[K, Any]](f: Expectable[S]) = {
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v)))
       val undefined = isDefined.filter(!_._2).map(_._1)
       result(isDefined.map(_._2).forall(_ == true), 
@@ -68,7 +64,7 @@ trait MapBaseMatchers {
   
   /** matches if the partial function is defined at those values and return expected values */   
   def beDefinedBy[K, V](values: (K, V)*) = new Matcher[PartialFunction[K, V]] {
-    def apply[S <: PartialFunction[K, V]](f: =>Expectable[S]) = {
+    def apply[S <: PartialFunction[K, V]](f: Expectable[S]) = {
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v._1) && f.value(v._1) == v._2))
       val undefined = isDefined.filter(!_._2).map(_._1)
       result(isDefined.map(_._2).forall(_ == true), 

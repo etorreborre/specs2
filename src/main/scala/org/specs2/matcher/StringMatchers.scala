@@ -36,8 +36,8 @@ trait StringBaseMatchers { outer =>
   def !=/(s: String) = be_!=/(s)
   /** matches if (b.indexOf(a) >= 0) */   
   def contain(t: String) = new Matcher[String] { 
-    def apply[S <: String](v: =>Expectable[S]) = {
-      val (a, b) = (t, v)
+    def apply[S <: String](b: Expectable[S]) = {
+      val a = t
       result(a != null && b.value != null && b.value.indexOf(a) >= 0, 
              b.description + " contains " + q(a), 
              b.description + " doesn't contain " + q(a), b)
@@ -45,27 +45,27 @@ trait StringBaseMatchers { outer =>
   }
   /** matches if b matches the regular expression a */   
   def beMatching(t: =>String) = new Matcher[String] {
-    def apply[S <: String](v: =>Expectable[S]) = {
-      val (a, b) = (t, v)
-      result(b.value matches a, 
+    def apply[S <: String](b: Expectable[S]) = {
+      val a = t
+      result(b.value matches a,
              b.description + " matches " + q(a), 
              b.description + " doesn't match " + q(a), b)
     }
   }
   /** matches if b.startsWith(a) */   
   def startWith(t: =>String) = new Matcher[String] { 
-    def apply[S <: String](v: =>Expectable[S]) = {
-      val (a, b) = (t, v)
-      result(b.value!= null && a!= null && b.value.startsWith(a), 
+    def apply[S <: String](b: Expectable[S]) = {
+      val a = t
+      result(b.value!= null && a!= null && b.value.startsWith(a),
              b.description + " starts with " + q(a), 
              b.description + " doesn't start with " + q(a), b)
     }
   }
   /** matches if b.endsWith(a) */   
   def endWith(t: =>String) = new Matcher[String] { 
-    def apply[S <: String](v: =>Expectable[S]) = {
-      val (a, b) = (t, v)
-      result(b.value!= null && a!= null && b.value.endsWith(a), 
+    def apply[S <: String](b: Expectable[S]) = {
+      val a = t
+      result(b.value!= null && a!= null && b.value.endsWith(a),
              b.description  + " ends with " + q(a), 
              b.description  + " doesn't end with " + q(a), b)
     }
@@ -84,9 +84,9 @@ trait StringBaseMatchers { outer =>
     }
     def withGroup(group: String) = new FindMatcherWithGroups(t, group)
     def withGroups(groups: String*) = new FindMatcherWithGroups(t, groups:_*)
-    def apply[S <: String](v: =>Expectable[S]) = {
-      val (a, b) = (t, v)
-      result(a != null && b.value != null && found(a, b.value), 
+    def apply[S <: String](b: Expectable[S]) = {
+      val a = t
+      result(a != null && b.value != null && found(a, b.value),
              q(a) + " is found in " + b.description, 
              q(a) + " isn't found in " + b.description, b)
       } 
@@ -103,8 +103,8 @@ trait StringBaseMatchers { outer =>
       while (matcher.find) { groupsFound += matcher.group(1) }
       groupsFound.toList
     }
-    def apply[S <: String](v: =>Expectable[S]) = {
-      val (a, b) = (t, v)
+    def apply[S <: String](b: Expectable[S]) = {
+      val a = t
       val groupsFound = found(a, b.value)
       val withGroups = if (groups.size > 1) " with groups " else " with group "
       def foundText = {
@@ -122,11 +122,10 @@ trait StringBaseMatchers { outer =>
   
   /** matches if the length is n */
   def haveLength(n: Int) = new Matcher[String](){
-    def apply[S <: String](v: =>Expectable[S]) = {
-      val string = v
-      result(string.value.length == n, 
-    		 string.description  + " has length " + n,
-    		 string.description  + " doesn't have length " + n, string)
+    def apply[S <: String](string: Expectable[S]) = {
+      result(string.value.length == n,
+         		 string.description  + " has length " + n,
+        		 string.description  + " doesn't have length " + n, string)
     }
   }
   

@@ -165,9 +165,8 @@ trait FileBeHaveMatchers { this: FileBaseMatchers =>
 }
 private[specs2]
 class PathMatcher(test: String => Boolean, ok: String, ko: String) extends Matcher[String] { 
-  def apply[S <: String](v: =>Expectable[S]) = {
-    val path = v
-    result(path.value != null && test(path.value), 
+  def apply[S <: String](path: Expectable[S]) = {
+    result(path.value != null && test(path.value),
            path.description + " " + ok, 
            path.description  + " " + ko,
            path)

@@ -36,7 +36,7 @@ import matcher._
 trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectations {
   /** this matcher evaluates an expression containing mockito calls verification */
   private class CallsMatcher extends Matcher[Any] {
-    def apply[S <: Any](calls: =>Expectable[S]) = checkCalls[S](calls)
+    def apply[S <: Any](calls: Expectable[S]) = checkCalls[S](calls)
   }
   private def checkCalls[T](expectable: Expectable[T]): MatchResult[T] = {
     catchAll { expectable.value } { identity } match {

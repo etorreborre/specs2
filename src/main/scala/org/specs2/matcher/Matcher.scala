@@ -31,7 +31,7 @@ trait Matcher[-T] { outer =>
    * apply this matcher to an Expectable
    * @return a MatchResult describing the outcome of the match
    */
-  def apply[S <: T](t: =>Expectable[S]): MatchResult[S]
+  def apply[S <: T](t: Expectable[S]): MatchResult[S]
   
   /**
    * This convenience method can be used to evaluate a boolean condition and return the 
@@ -70,7 +70,7 @@ trait Matcher[-T] { outer =>
    * ex: `be_==("message") ^^ (_.getMessage)` can be applied to an exception  
    */
   def ^^[S](f: S => T) = new Matcher[S] {
-    def apply[U <: S](a: =>Expectable[U]) = {
+    def apply[U <: S](a: Expectable[U]) = {
       val result = outer.apply(a.map(f))
       result.map((t: T) => a.value)
     }
@@ -81,14 +81,14 @@ trait Matcher[-T] { outer =>
    * @see MatchResult.not
    */
   def not = new Matcher[T] {
-    def apply[U <: T](a: =>Expectable[U]) = outer(a).not
+    def apply[U <: T](a: Expectable[U]) = outer(a).not
   }
   /**
    * the logical or between 2 matchers
    * @see MatchResult.or
    */
   def or[S <: T](m: =>Matcher[S]) = new Matcher[S] {
-    def apply[U <: S](a: =>Expectable[U]) = {
+    def apply[U <: S](a: Expectable[U]) = {
       val value = a
       outer(value).or(m(value))
     }
@@ -97,7 +97,7 @@ trait Matcher[-T] { outer =>
    * @return a Skip MatchResult if this matcher fails
    */
   def orSkip: Matcher[T] = new Matcher[T] {
-    def apply[U <: T](a: =>Expectable[U]) = {
+    def apply[U <: T](a: Expectable[U]) = {
       val value = a
       outer(value) match {
     	  case MatchFailure(_, ko, _) => MatchSkip(ko, value)
@@ -109,7 +109,7 @@ trait Matcher[-T] { outer =>
    *  The <code>lazily</code> operator returns a matcher which will match a function returning the expected value
    */   
   def lazily = new Matcher[() => T]() {
-    def apply[S <: () => T](a: =>Expectable[S]) = {
+    def apply[S <: () => T](a: Expectable[S]) = {
       val function = a
       val r = outer(Expectable(function.value()))
       result(r, function)
@@ -147,7 +147,7 @@ trait AdaptableMatcher[T] extends Matcher[T] { outer =>
       def adapt(g: T => T, okFunction: String => String, koFunction: String => String): AdaptableMatcher[T] = 
         outer.adapt(g compose f, okFunction compose ok, koFunction compose ko)
         
-      def apply[U <: T](a: =>Expectable[U]) = {
+      def apply[U <: T](a: Expectable[U]) = {
         val result = outer.adapt(f, ok, ko).apply(a.map(f))
         result.map((t: T) => a.value)
       }
@@ -156,7 +156,7 @@ trait AdaptableMatcher[T] extends Matcher[T] { outer =>
     def adapt(f2: T => T, ok: String => String = identity, ko: String => String = identity) = 
       outer.adapt(f2, ok, ko)
       
-    def apply[U <: T](a: =>Expectable[U]) = {
+    def apply[U <: T](a: Expectable[U]) = {
       val result = outer.apply(a.map(f))
       result.map((t: T) => a.value)
     }
@@ -167,7 +167,7 @@ object Matcher {
   /**
    * Utility method for creating a MatchResult[T]
    */
-  def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: =>Expectable[T]): MatchResult[T] = {
+  def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T]): MatchResult[T] = {
 	  if (test) new MatchSuccess(okMessage, koMessage, value) 
 	  else new MatchFailure(okMessage, koMessage, value)
   }

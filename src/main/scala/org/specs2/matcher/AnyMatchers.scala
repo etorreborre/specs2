@@ -21,9 +21,9 @@ trait AnyBaseMatchers {
 
   /** matches if a eq b */
   def be[T <: AnyRef](t: =>T) = new Matcher[T] {
-    def apply[S <: T](v: =>Expectable[S]) = {
-      val (a, b) = (v, t)
-      result(a.value eq b, a.description + " is " + q(b), a.description + " is not " + q(b), a) 
+    def apply[S <: T](a: Expectable[S]) = {
+      val b = t
+      result(a.value eq b, a.description + " is " + q(b), a.description + " is not " + q(b), a)
     }
   }
 
@@ -37,27 +37,24 @@ trait AnyBaseMatchers {
   /** matches if a.isEmpty */
   /** matches if a.isEmpty */
   def beEmpty[T <% Any { def isEmpty: Boolean }] = new Matcher[T] {
-    def apply[S <: T](v: =>Expectable[S]) = {
-      val iterable = v
-      result(iterable.value.isEmpty, 
+    def apply[S <: T](iterable: Expectable[S]) = {
+      result(iterable.value.isEmpty,
              iterable.description + " is empty", 
              iterable.description + " is not empty", iterable)
     }
   }
   def beNull[T] = new Matcher[T] {
-    def apply[S <: T](v: =>Expectable[S]) = {
-      val value = v
-      result(value.value == null, 
+    def apply[S <: T](value: Expectable[S]) = {
+      result(value.value == null,
              value.description + " is null", 
              value.description + " is not null", value)
     }
   }
   /** matches if a is null when v is null and a is not null when v is not null */
   def beAsNullAs[T](a: =>T) = new Matcher[T](){
-    def apply[S <: T](v: =>Expectable[S]) = {
+    def apply[S <: T](y: Expectable[S]) = {
       val x = a;
-      val y = v;
-      result(x == null && y.value == null || x != null && y.value != null, 
+      result(x == null && y.value == null || x != null && y.value != null,
              "both values are null",
              if (x == null) y.description + " is not null" else q(x) + " is not null" + 
              y.optionalDescription.map(" but " + _ + " is null").getOrElse(""), 
@@ -66,8 +63,8 @@ trait AnyBaseMatchers {
   }
   /** matches if t.toSeq.exists(_ == v) */
   def beOneOf[T](t: T*): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](v: =>Expectable[S]) = {
-      val (x, y) = (t.toSeq, v)
+    def apply[S <: T](y: Expectable[S]) = {
+      val x = t.toSeq
       result(x.exists(_ == y.value), 
              y.description + " is one of " + q(x.mkString(", ")), 
              y.description + " is not one of " + q(x.mkString(", ")), 
@@ -76,9 +73,7 @@ trait AnyBaseMatchers {
   }
 
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
-    def apply[S <: T](v: =>Expectable[S]) = {
-      val a = v
-      
+    def apply[S <: T](a: Expectable[S]) = {
       val r = if (a.value != null && pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
       result(r.isSuccess,
              a.description + " matches the given pattern " + r.message,
@@ -88,8 +83,7 @@ trait AnyBaseMatchers {
   }
   /** matches if v.getClass == c */
   def haveClass[T : ClassManifest] = new Matcher[Any] {
-    def apply[S <: Any](v: =>Expectable[S]) = {
-      val x = v
+    def apply[S <: Any](x: Expectable[S]) = {
       val c = implicitly[ClassManifest[T]].erasure
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
       result(xClass == c, 
@@ -100,8 +94,7 @@ trait AnyBaseMatchers {
   }
   /** matches if v.isAssignableFrom(c) */
   def beAssignableFrom[T : ClassManifest] = new Matcher[Class[_]] {
-    def apply[S <: Class[_]](v: =>Expectable[S]) = {
-      val x = v
+    def apply[S <: Class[_]](x: Expectable[S]) = {
       val c = implicitly[ClassManifest[T]].erasure
       result(x.value.isAssignableFrom(c), 
              x.description + " is assignable from " + q(c.getName), 
@@ -114,7 +107,7 @@ trait AnyBaseMatchers {
  * Matcher for a boolean value
  */
 class BeTrueMatcher extends Matcher[Boolean] {
-  def apply[S <: Boolean](v: =>Expectable[S]) = {
+  def apply[S <: Boolean](v: Expectable[S]) = {
     result(v.value, v.description + " is true", v.description + " is false", v) 
   }
 }
@@ -134,8 +127,8 @@ class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
     newMatcher.^^((t: T) => f(t))
   }
   
-  def apply[S <: T](v: =>Expectable[S]) = {
-    val (a, b) = (t, v)
+  def apply[S <: T](b: Expectable[S]) = {
+    val a = t
     val (db, qa) = (b.description, q(a)) match {
       case (x, y) if (a != b && q(a) == q(b)) => {
 	      val aClass = getClassName(x)

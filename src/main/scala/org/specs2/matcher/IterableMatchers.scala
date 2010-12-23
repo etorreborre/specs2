@@ -35,9 +35,8 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
 
   /** match if iterable has size n */
   def haveSize[T <% { def size: Int }](n: Int) = new Matcher[T] {
-    def apply[S <: T](v: =>Expectable[S]) = {
-      val iterable = v
-      result(iterable.value.size == n, 
+    def apply[S <: T](iterable: Expectable[S]) = {
+      result(iterable.value.size == n,
              iterable.description + " have size " + n, 
              iterable.description + " doesn't have size " + n, iterable)
     }
@@ -47,9 +46,8 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
    * Matches if there is one element in the iterable verifying the <code>function</code> parameter: <code>(iterable.exists(function(_))</code>
    */
   def have[T](function: T => Boolean) = new Matcher[Iterable[T]]{
-    def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
-      val iterable = v; 
-      result(iterable.value.exists(function(_)), 
+    def apply[S <: Iterable[T]](iterable: Expectable[S]) = {
+      result(iterable.value.exists(function(_)),
              "at least one element verifies the property in " + iterable.description, 
              "no element verifies the property in " + iterable.description,
              iterable)
@@ -82,7 +80,7 @@ trait IterableBeHaveMatchers extends LazyParameters { outer: IterableMatchers =>
 }
 
 class ContainMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
-  def apply[S <: Iterable[T]](it: =>Expectable[S]) = {
+  def apply[S <: Iterable[T]](it: Expectable[S]) = {
     val (expected, iterable) = (t.toList.map(_.value), it)
     result(iterable.value.toList.intersect(expected).sameElementsAs(expected), 
            iterable.description + " contains " + q(expected.mkString(", ")), 
@@ -91,8 +89,8 @@ class ContainMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
   def inOrder = new ContainInOrderMatcher(t:_*)
 }
 class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
-  def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
-    val (expected, iterable) = (t.toList.map(_.value), v)
+  def apply[S <: Iterable[T]](iterable: Expectable[S]) = {
+    val expected= t.toList.map(_.value)
     result(inOrder(iterable.value.toList, expected), 
            iterable.description + " contains in order " + q(expected.mkString(", ")), 
            iterable.description + " doesn't contain in order " + q(expected.mkString(", ")), iterable)
@@ -107,8 +105,8 @@ class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]
 }
 
 class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matcher[Iterable[T]] {
-  def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
-    val (a, iterable) = (pattern, v)
+  def apply[S <: Iterable[T]](iterable: Expectable[S]) = {
+    val a = pattern
     result(iterable.value.exists(_.toString.matches(a)), 
            iterable.description + " contains "+matchType+ " " + q(a), 
            iterable.description + " doesn't contain "+matchType+ " " + q(a), iterable)
@@ -117,8 +115,8 @@ class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matche
 }
 
 class ContainLikeOnlyOnceMatcher[T](pattern: =>String, matchType: String) extends Matcher[Iterable[T]] {
-  def apply[S <: Iterable[T]](v: =>Expectable[S]) = {
-    val (a, iterable) = (pattern, v)
+  def apply[S <: Iterable[T]](iterable: Expectable[S]) = {
+    val a = pattern
     val matchNumber = iterable.value.filter(_.toString.matches(a)).size
     val koMessage = 
       if (matchNumber == 0)
@@ -133,12 +131,11 @@ class ContainLikeOnlyOnceMatcher[T](pattern: =>String, matchType: String) extend
   }
 }
 class HaveTheSameElementsAs[T] (l: =>Iterable[T]) extends Matcher[Iterable[T]] {
-  def apply[S <: Iterable[T]](it: =>Expectable[S]) = {
-    val iterable = it
+  def apply[S <: Iterable[T]](iterable: Expectable[S]) = {
     result(l.sameElementsAs(iterable.value),
-      iterable.value.toDeepString + " has the same elements as " + q(l.toDeepString),
-      iterable.value.toDeepString + " doesn't have the same elements as " + q(l.toDeepString),
-      iterable)
+           iterable.value.toDeepString + " has the same elements as " + q(l.toDeepString),
+           iterable.value.toDeepString + " doesn't have the same elements as " + q(l.toDeepString),
+           iterable)
   }
 }
 

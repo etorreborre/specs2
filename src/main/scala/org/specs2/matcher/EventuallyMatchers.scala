@@ -15,9 +15,9 @@ trait EventuallyMatchers {
    * @return a matcher that will retry the nested matcher a given number of times
    */
   def eventually[T](retries: Int, sleep: Duration)(nested: =>Matcher[T]): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](a: =>Expectable[S]) = retry(retries, sleep, a)
+    def apply[S <: T](a: Expectable[S]) = retry(retries, sleep, a)
 
-    def retry[S <: T](retries: Int, sleep: Duration, a: =>Expectable[S]): MatchResult[S] = {
+    def retry[S <: T](retries: Int, sleep: Duration, a: Expectable[S]): MatchResult[S] = {
       val result = nested(a.evaluate)
       if (result.isSuccess || retries == 1)
         result

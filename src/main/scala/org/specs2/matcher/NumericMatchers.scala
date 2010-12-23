@@ -101,9 +101,8 @@ trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
 }
 
 class BeLessThanOrEqualTo[T <% Ordered[T]](n: T) extends Matcher[T] { 
-  def apply[S <: T](v: =>Expectable[S]) = {
-    val a = v
-    val r = a.value <= n  
+  def apply[S <: T](a: Expectable[S]) = {
+    val r = a.value <= n
     val isEqual = a.value == n  
     result(r, 
            if (isEqual) a.value.toString + " is equal to " + n.toString else a.value.toString + " is less than " + n.toString, 
@@ -112,9 +111,8 @@ class BeLessThanOrEqualTo[T <% Ordered[T]](n: T) extends Matcher[T] {
   }
 }
 class BeLessThan[T <% Ordered[T]](n: T) extends Matcher[T] { 
-  def apply[S <: T](v: =>Expectable[S]) = {
-    val a = v
-    val r = a.value < n  
+  def apply[S <: T](a: Expectable[S]) = {
+    val r = a.value < n
     result(r, 
            a.value.toString + " is less than " + n.toString, 
            a.value.toString + " is not less than " + n.toString,
@@ -122,8 +120,7 @@ class BeLessThan[T <% Ordered[T]](n: T) extends Matcher[T] {
   }
 }
 class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T] {
-  def apply[S <: T](v: =>Expectable[S]) = {
-    val x = v
+  def apply[S <: T](x: Expectable[S]) = {
     val num = implicitly[Numeric[T]]
     result(num.lteq(num.minus(n, delta), x.value) && num.lteq(x.value, num.plus(n, delta)), 
            x.description + " is close to " + n.toString + " +/- " + delta, 
