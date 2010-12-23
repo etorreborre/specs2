@@ -5,7 +5,6 @@ import _root_.org.junit.runner._
 import scalaz._
 import Scalaz._
 import data.Trees._
-import text.Trim._
 import main.Arguments
 import specification._
 
@@ -95,10 +94,15 @@ object JUnitDescriptions {
     }
     d._1
   }
+  import text.Trim._
   /** @return a test name with no newlines */
-  private def testName(s: String)= s.trimNewLines
+  private def testName(s: String)= Trimmed(s).trimNewLines
   /** @return replace () with [] because it cause display issues in JUnit plugins */
-  private def sanitize(s: String) = s.trimReplace("(" -> "[",  ")" -> "]")
+  private def sanitize(s: String) = {
+    val trimmed = Trimmed(s).trimReplace("(" -> "[",  ")" -> "]")
+    if (trimmed.isEmpty) " "
+    else trimmed
+  }
   /** @return a test description */
   private def createDescription(s: String, e: Any) = 
     Description.createSuiteDescription(sanitize(s)+"("+e.toString+")")

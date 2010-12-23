@@ -11,7 +11,7 @@ trait Trim extends control.Debug {
   /** add trimming methods to a String */
   implicit def trimmed(s: String): Trimmed = new Trimmed(s)
 
-  class Trimmed(s: String) {
+  case class Trimmed(s: String) {
     
     def trimStart(start: String) =
       if (s.trim.startsWith(start)) s.trim.drop(start.size) else s.trim
