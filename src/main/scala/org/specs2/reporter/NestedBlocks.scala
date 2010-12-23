@@ -31,9 +31,9 @@ trait NestedBlocks {
       }
     }._1
   }
-  def addToTop[T : Monoid](stack: List[T], value: T) = (top(stack) |+| value) :: pop(stack)
 
-  def totalContext[T : Monoid](blocks: Seq[SpecBlock[T]]): Seq[T] = sumContext(blocks, identity[T])
+  def addToTop[T : Monoid](stack: List[T], value: T) = (top(stack) |+| value) :: pop(stack)
+  def totalContext[T : Monoid](blocks: Seq[SpecBlock[T]]): Seq[T] = totalContext(blocks, identity[T])
   def totalContext[T : Monoid, S](blocks: Seq[SpecBlock[T]], f: T => S): Seq[S] = {
     blocks.foldLeft((Nil: List[S], Nil: List[T])) { (res, cur) =>
       val (result, stack) = res
