@@ -35,12 +35,25 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   private def firstLevel = blocks.map(_._2).headOption.getOrElse(0)
   /** @return the last level or zero */
   private def lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
+  /** @return the last level block in a Levels object */
+  private def lastAsLevel = Levels(blocks.lastOption.toList)
   /** @return alias for the last level */
   def level = levels.lastOption.getOrElse(0)
   /** @return all the levels, post-processing them so that there is no negative value */
   def levels = {
-    val minLevel = blocks.map(_._2).min
-	  blocks.map(_._2 - min(0, minLevel))
+    import NestedBlocks._
+    def toNestedBlock(bl: (Block[T], Int)) = bl match {
+      case (b @ Block(SpecStart(_,_)), l)         => BlockStart(Levels(List(bl)))
+      case (b @ Block(ExecutedSpecStart(_,_)), l) => BlockStart(Levels(List(bl)))
+      case (b @ Block(SpecEnd(_)), l)             => BlockEnd(Levels(List(bl)))
+      case (b @ Block(ExecutedSpecEnd(_)), l)     => BlockEnd(Levels(List(bl)))
+      case (b, l)                                 => BlockBit(Levels(List(bl)))
+    }
+    import Levels._
+    val m = LevelsAggregationMonoid[T]
+    val all = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel).foldLeft(m.zero)(m append (_, _)).blocks
+    val minLevel = all.map(_._2).min
+	  all.map(_._2 - min(0, minLevel))
   }
 
   
@@ -51,11 +64,12 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    *         value, until a Reset block is met
    */
   def resetLevel(f: Int => Int) = {
-    val breakAtFirstReset = blocks.span(b => !isReset(b)) 
-    Levels(breakAtFirstReset._1).mapLevel(f) add 
-    Levels(breakAtFirstReset._2) 
+    val breakAtFirstReset = blocks.span(b => !isReset(b))
+    Levels(breakAtFirstReset._1).mapLevel(f) add
+    Levels(breakAtFirstReset._2)
   }
-  /** 
+
+  /**
    * @return reset all the levels of all blocks by incrementing or decrementing the level 
    *         value
    */
@@ -115,7 +129,7 @@ case object Levels {
   /** @return a new Levels object for one Block */
   def apply[T](b: Block[T]) = new Levels(List((b, 0)))
   /** monoid for Levels */
-  implicit def LevelsMonoid[T] = new Monoid[Levels[T]] {
+  def LevelsMonoid[T] = new Monoid[Levels[T]] {
     def append(b1: Levels[T], b2: =>Levels[T]) =
       (b1.lastOption, b2.headOption) match {
         case (None, _)                        => b2
@@ -124,6 +138,19 @@ case object Levels {
         case (Some(BlockIndent(t, n)), _)     => b1 add b2.resetLevel(b1.lastLevel + _ + n)
         case (Some(BlockUnindent(t, n)), _)   => b1 add b2.resetLevel(b1.lastLevel + _ - n)
         case _                                => b1 add b2.resetLevel(b1.lastLevel + _)
+      }
+    val zero = new Levels[T]()
+  }
+  /** monoid for Levels, doing a simple aggregation */
+  implicit def LevelsAggregationMonoid[T] = new Monoid[Levels[T]] {
+    def append(b1: Levels[T], b2: =>Levels[T]) =
+      (b1.lastOption, b2.headOption) match {
+        case (None, _)                        => b2
+        case (Some(BlockReset(t)), _)         => b1 add b2
+        case (_, Some(BlockReset(t)))         => b1 add b2
+        case (Some(BlockIndent(t, n)), _)     => b1 add b2
+        case (Some(BlockUnindent(t, n)), _)   => b1 add b2
+        case _                                => b1 add b2
       }
     val zero = new Levels[T]()
   }
@@ -164,6 +191,9 @@ case object Levels {
 /** this represent a fragment of a specification that needs to be indented as a block */
 sealed trait Block[T] {
   val t: T
+}
+object Block {
+  def unapply[T](b: Block[T]) = Some(b.t)
 }
 case class BlockTerminal[T](t: T = null) extends Block[T] 
 case class BlockIndent[T](t: T = null, n: Int = 1)  extends Block[T]

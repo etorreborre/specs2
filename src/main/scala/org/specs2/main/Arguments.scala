@@ -1,6 +1,7 @@
 package org.specs2
 package main
 
+import scalaz.Monoid
 import control.Exceptions._
 
 /**
@@ -117,6 +118,11 @@ object Arguments {
   }
   private def int(name: String)(implicit args: Seq[String]): Option[Int] = {
     tryo(value(name)(args).map(_.toInt).get)
+  }
+
+  implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments] {
+    def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
+    val zero = Arguments()
   }
 }
 

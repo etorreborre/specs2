@@ -12,17 +12,46 @@ import SpecsArguments._
 import FragmentSpecsArgumentsReducer._
 
 class SpecsArgumentsSpec extends SpecificationWithJUnit with ScalazMatchers with ArbitraryFragments { def is =
-                                                                                          """
-  The Specs Arguments class is a monoid which, when folding over fragments, keeps the 
-  arguments that are declared by the latest SpecStart. When a new SpecStart is 'appended'
-  then the current arguments change.                                                                                         
-                                                                                          """^
-  "Two specs one after the other"                                                         ! ex1^
-  "One spec included into the other"                                                      ! ex2^
-                                                                                          p^
-  "The SpecsArguments monoid must respect the Monoid laws"                                !
-    SpecsArgumentsMonoid[Fragment].isMonoid                                               ^
-                                                                                          end
+                                                                                                            """
+The Specs Arguments class maps a seq of fragments to their applicable arguments.
+
+The first arguments value is given by the SpecStart element at the beginning of the specification and is
+applied to each following fragment until an included specification starts. At that point the included
+fragments get the "parent" arguments overriden with their own arguments values, until the included specification
+ends.
+
+Let's see a few examples
+                                                                                                            """^
+                                                                                                            endbr^
+ "The arguments on a simple specification must be propagated to each fragment"                              ! simple().e1^
+                                                                                                            p^
+  "The arguments on a parent specification must be propagated to a nested one"                              ! nestedOne().e1^
+  "The arguments of the nested specification must override the parent ones"                                 ! nestedOne().e2^
+                                                                                                            p^
+  "Two specs one after the other"                                                                           ! ex1^
+  "One spec included into the other"                                                                        ! ex2^
+                                                                                                            p^
+  "The SpecsArguments monoid must respect the Monoid laws"                                                  !
+    SpecsArgumentsMonoid[Fragment].isMonoid                                                                 ^
+                                                                                                            end
+
+  case class simple() {
+    val parent = xonly ^ "s1".title ^ "t1" ^ "e1" ! success
+    def e1 = xonlyArgs(parent) must_== List(true, true, true, true)
+  }
+  case class nestedOne() {
+    val child1 = sequential ^ "c1".title ^ "t2"
+    val nested1 = simple().parent ^ include(child1)
+
+    def e1 = xonlyArgs(nested1) must_== List(true, true, true, true, true, true)
+    def e2 = sequentialArgs(nested1) must_== List(false, false, false, true, true, true)
+  }
+
+  def spec(fs: Fragments) = new Specification { def is = fs }
+  def argumentsList(fs: Fragments) = foldAll(spec(fs).content.fragments).toList
+  def arguments(fs: Fragments) = argumentsList(fs).map(_.toString)
+  def xonlyArgs(fs: Fragments) = argumentsList(fs).map(_.xonly)
+  def sequentialArgs(fs: Fragments) = argumentsList(fs).map(_.sequential)
 
   val s1: SpecsArguments[Fragment] = SpecStart("spec1", args(ex="s1"))
   val s2: SpecsArguments[Fragment] = SpecStart("spec2", args(ex="s2"))
@@ -41,6 +70,7 @@ class SpecsArgumentsSpec extends SpecificationWithJUnit with ScalazMatchers with
                   args(ex = "s2"),
                 args(ex = "s1"),
                 args(ex = "s1"))
+
 
   implicit val arbitrarySpecsArguments: Arbitrary[SpecsArguments[Fragment]] = Arbitrary {
     for (f <- arbitrary[Fragment]) yield f

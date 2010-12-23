@@ -45,10 +45,10 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
   "A end resets the following fragment to zero"                                           ^
   { level(t1 ^ ex1 ^ end ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1) }                        ^
   { level(t1 ^ ex1 ^ end ^ t1 ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1, 2) }                ^
-  { level("s".title ^ t1 ^ ex1 ^ end ^ t1 ^ SpecEnd("")) must_== List(0, 0, 1, 0, 0, 1) } ^
+  { level("s".title ^ t1 ^ ex1 ^ end ^ t1) must_== List(0, 0, 1, 0, 0) }                  ^
                                                                                           p^
   "The LevelBlocks monoid must respect the Monoid laws"                                   !
-    LevelsMonoid.isMonoid                                                          ^
+    LevelsMonoid.isMonoid                                                                 ^
                                                                                           p^
   "A tree of fragments can be created from the leveled blocks"                            ^
     "for start ^ t1 ^ ex1 ^ ex2"                                                          ! tree().e1^
@@ -59,16 +59,18 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
   
 
   case class tree() {
-    def e1 = tree(start ^ t1 ^ ex1 ^ ex2) must beDrawnAs(
+    def e1 = tree(t1 ^ ex1 ^ ex2) must beDrawnAs(
       "SpecStart(start)",
       "|",
       "`- Text(t1)",
       "   |",
       "   +- Example(e1)",
       "   |",
-      "   `- Example(e2)")
-    
-    def e2 = tree(start ^ t1 ^ ex1 ^ end ^ t2 ^ ex2) must beDrawnAs(
+      "   +- Example(e2)",
+      "   |",
+      "   `- SpecEnd(start)")
+
+    def e2 = tree(t1 ^ ex1 ^ end ^ t2 ^ ex2) must beDrawnAs(
       "SpecStart(start)",
       "|",
       "+- Text(t1)",
@@ -79,9 +81,11 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
       "|",
       "`- Text(t2)",
       "   |",
-      "   `- Example(e2)")
+      "   +- Example(e2)",
+      "   |",
+      "   `- SpecEnd(start)")
 
-    def e3 = tree(start ^ t1 ^ ex1 ^ p ^ t2 ^ ex2) must beDrawnAs(
+    def e3 = tree(t1 ^ ex1 ^ p ^ t2 ^ ex2) must beDrawnAs(
       "SpecStart(start)",
       "|",
       "+- Text(t1)",
@@ -92,9 +96,11 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
       "|",
       "`- Text(t2)",
       "   |",
-      "   `- Example(e2)")
-    
-    def e4 = tree(start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2) must beDrawnAs(
+      "   +- Example(e2)",
+      "   |",
+      "   `- SpecEnd(start)")
+
+    def e4 = tree(t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2) must beDrawnAs(
       "SpecStart(start)",
       "|",
       "+- Text(t1)",
@@ -109,7 +115,9 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
       "   |",
       "   +- Example(e1)",
       "   |",
-      "   `- Example(e2)")
+      "   +- Example(e2)",
+      "   |",
+      "   `- SpecEnd(start)")
 
     def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ { 
       tree: Tree[Fragment] => tree.drawTree
@@ -135,9 +143,10 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
     Gen.sized(sz => sizedList(sz))
   }
     
-  def fold(fs: Fragments) = fs.fragments.foldMap(unit)
+  def fold(fs: Fragments) = fs.fragments.foldMap(unit)(implicitly[Foldable[Seq]], LevelsMonoid[Fragment])
   def level(fs: Fragments) = fold(fs).levels
-  def tree(fs: Fragments) = fold(fs).toTree
+  def tree(fs: Fragments) = fold(spec(fs)).toTree
+  def spec(fs: Fragments) = new Specification { def is = "start".title ^ fs }.content
   
   def start = SpecStart("start")
   def t1 = "t1"

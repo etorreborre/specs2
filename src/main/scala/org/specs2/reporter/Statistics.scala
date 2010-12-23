@@ -61,23 +61,15 @@ trait Statistics {
     
     /** @return the list of all current stats, with the total on each line */
     def totals: List[Stats] = {
-      def addToLast(ss: List[Stats], s: Stats) = ss.dropRight(1) :+ (last(ss) |+| s)
+      import NestedBlocks._
 
-      val (totaledStats, stack) = stats.foldLeft((List[Stats](), List[Stats]())) { (res, cur) =>
-        val (fragmentStats, statsStack) = res
-        val (newStat, newStack) = cur.start match {
-          case Some(s) => (cur, statsStack :+ cur)
-          case None    => cur.end match {
-            case Some(e) => (last(statsStack), addToLast(statsStack.dropRight(1), last(statsStack)))
-            case None    => (cur, addToLast(statsStack,  cur))
-          }
-        }
-        (fragmentStats :+ newStat, newStack)
+      def toBlock(s: Stats) = s match {
+        case Stats(_,_,_,_,_,_,_,_,Some(_), _) => BlockStart(s)
+        case Stats(_,_,_,_,_,_,_,_,_, Some(_)) => BlockEnd(s)
+        case _                                 => BlockBit(s)
       }
-      totaledStats
+      totalContext(stats.map(toBlock)).toList
     }
-    def total = last(totals)
-    def last(ss: List[Stats]) = ss.lastOption.getOrElse(Stats())
   }
   case object SpecsStatistics {
     def apply(current: Stats) = new SpecsStatistics(List(current))
