@@ -2,7 +2,7 @@ package org.specs2
 import specification._
 import execute._
 
-class FeaturesSpec extends Specification { def is =
+class FeaturesSpec extends Specification { def is = literate ^
                                                                                           """
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
@@ -10,9 +10,9 @@ class FeaturesSpec extends Specification { def is =
                                                                                           """^
  "1.0 features                                                                            "^
    "Implementation                                                                        "^
-     "fix the level issue with nested specs (see UserGuide)                               "! todo^
+     "fix the level issue with nested specs (see UserGuide)                               "! done^
+     "think of a way to generalize the nested management                                  "! done^
      "review all the code and specifications                                              "! todo^
-     "think of a way to generalize the nested management                                  "! todo^
      "add scalacheck properties on fragments well formedness                              "! todo^
    "Html reporter                                                                         "^
      "with a table of content                                                             "! todo^
