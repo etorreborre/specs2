@@ -136,7 +136,7 @@ collect the successive states of the system:
 
 ### Declare examples
 
-In a given specification you some examples may look similar enough that you would like to "factor" them out and share
+In a given specification some examples may look similar enough that you would like to "factor" them out and share
 them between different parts of your specification. The best example of this situation is a specification for a Stack of
 limited size:
 

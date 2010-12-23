@@ -43,7 +43,7 @@ Two additional results are also available to track the progress of features:
 
 ### Match results
 
-This is by far the largest category of Results in ***specs2***. They cover many data types, can composed and adapted to
+This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to
 create new ones or be created from scratch by the user. Let's have a look at some of them and refer the reader to the
 API for the complete list:
 
@@ -130,9 +130,8 @@ If this is not enough you can transform a function, returning a Boolean and 2 me
 And if you want absolute power over matching, you can define your own matcher:
 
       class MyOwn extends Matcher[String] {
-        def apply[S <: String](s: =>Expectable[S]) = {
-          val actual = s.value
-          result(actual.isEmpty,
+        def apply[S <: String](s: Expectable[S]) = {
+          result(s.value.isEmpty,
                  s.description + " is empty",
                  s.description + " is not empty",
                  s)
@@ -142,7 +141,6 @@ And if you want absolute power over matching, you can define your own matcher:
 In the code above you have to:
 
  * define the `apply` method (and its somewhat complex signature)
- * make sure you don't evaluate s several times by assigning it to a variable
  * use the protected `result` method to return: a Boolean condition, a message when the match is ok, a message when the
    match is not ok, the "expectable" value
  * note that the description method on the `Expectable` class is the one returning the optional description that you
@@ -582,9 +580,8 @@ can use the `!!` operator to disambiguate (and `||` in the header for good visua
   import org.specs2.matcher._
 
   class MyOwn extends Matcher[String] {
-    def apply[S <: String](s: =>Expectable[S]) = {
-      val actual = s.value
-      result(actual.isEmpty,
+    def apply[S <: String](s: Expectable[S]) = {
+      result(s.value.isEmpty,
              s.description + " is empty",
              s.description + " is not empty",
              s)

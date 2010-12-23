@@ -2,28 +2,36 @@ package org.specs2
 import specification._
 import execute._
 
-class FeaturesSpec extends Specification { def is = literate ^
+class FeaturesSpec extends Specification { def is =
                                                                                           """
-  Todo before beta:
+ This is a features / TODO list for specs2. It is an informal list of offers no guarantee
+ of implementation!
 
-  * tests must pass                                      DONE
-  * package and test as a user
-  * prepare an email
-
-
- These are the list of features todevelop / port for specs2.
-
- The prioritization idea is to:
-
-  * check the feasability of specs features in a fully functional programming approach
-  * re-evaluate the necessity of some existing features and provide the most important 
-    ones first including the ones necessary for a proper development of specs2 itself
-  * make sure that
-    ** at each step that everything is well specified
-    ** dependencies are well-controled
-    ** implicits visibility is reduced
-    ** specs2 API is kept private unless necessary
                                                                                           """^
+ "1.0 features                                                                            "^
+   "Implementation                                                                        "^
+     "fix the level issue with nested specs (see UserGuide)                               "! todo^
+     "review all the code and specifications                                              "! todo^
+     "think of a way to generalize the nested management                                  "! todo^
+     "add scalacheck properties on fragments well formedness                              "! todo^
+   "Html reporter                                                                         "^
+     "with a table of content                                                             "! todo^
+     "with breadcrumbs                                                                    "! todo^
+     "with non mutable forms                                                              "! todo^
+   "ScalaInterpreter                                                                      "^
+     "with appropriate matchers                                                           "! todo^
+   "Detailed diffs                                                                        "! todo^
+   "Lift                                                                                  "^
+     "specify an example webapp                                                           "! todo^
+   "Publish                                                                               "^
+     "pass the tests with Maven                                                           "! todo^
+     "use sbt to publish                                                                  "! todo^
+     "deploy the user guide automatically                                                 "! todo^
+                                                                                          p^
+  "1.1 features                                                                           "^
+    "Package dependencies specification                                                   "! todo^
+                                                                                          p^
+  "Preview features                                                                       "^
   "High priority                                                                          "^
     "A Console reporter                                                                   "^
       "with statistics                                                                    "! done^
@@ -46,7 +54,7 @@ class FeaturesSpec extends Specification { def is = literate ^
       "for strings                                                                        "! done^
       "for iterables                                                                      "! done^
       "for maps                                                                           "! done^
-      "for classes                                                                        "! todo^
+      "for classes                                                                        "! done^
       "for Either                                                                         "! done^
       "for Options/Patterns                                                               "! done^
       "for Files                                                                          "! done^
@@ -61,8 +69,6 @@ class FeaturesSpec extends Specification { def is = literate ^
     "A literate specs environment                                                         "^
       "with an html reporter                                                              "! done^
       "supporting Markdown                                                                "! done^
-      "with a table of content                                                            "! todo^
-      "with non mutable forms                                                             "! todo^
     "A sbt reporter                                                                       "^
       "based on the console reporter                                                      "! done^
     "Data tables                                                                          "^
@@ -78,43 +84,38 @@ class FeaturesSpec extends Specification { def is = literate ^
       "with a timer                                                                       "! done^
       "with colored output                                                                "! done^
     "StackTraces                                                                          "^
-      "for Fragments, to help with IDE navigation                                         "! todo^
-      "for all results, even success                                                      "! todo^
+      "for Fragments, to help with IDE navigation                                         "! wontdo^
+      "for all results, even success                                                      "! wontdo^
       "with source code location                                                          "! done^
       "sanitized                                                                          "! done^
     "Tags                                                                                 "^
-      "for examples, groups, specs                                                        "! todo^
-      "with dependencies between tags                                                     "! todo^
+      "for examples, groups, specs                                                        "! wontdo^
+      "with dependencies between tags                                                     "! wontdo^
     "Forms                                                                                "^
       "with a text display                                                                "! done^
     "JMock                                                                                "^
-      "with all features                                                                  "! todo^
+      "with all features                                                                  "! wontdo^
     "EasyMock                                                                             "^
-      "with all features                                                                  "! todo^
-    "Detailed diffs                                                                       "^
-      "non mutable version                                                                "! todo^
-    "Package dependencies specification                                                   "! todo^
+      "with all features                                                                  "! wontdo^
     "Auto examples                                                                        "^
       "with the description taken from the source file                                    "! done^
     "Timer                                                                                "^
       "specs-like Timer                                                                   "! done^
-      "WaitFor                                                                            "! todo^
-    "A ScalaInterpreter                                                                   "^
-      "with appropriate matchers                                                          "! todo^
+      "WaitFor                                                                            "! wontdo^
     "ScalaCheck                                                                           "^
       "with all previous features                                                         "! done^
       "with the reporting of expectations                                                 "! done^
-    "A Step execution model?                                                              "! todo^
-    "A Database facility?                                                                 "! todo^
+    "A Step execution model?                                                              "! wontdo^
+    "A Database facility?                                                                 "! wontdo^
     "Command line arguments                                                               "^
       "implement an easy to maintain system coherent with the config                      "! done ^
       "can be overriden locally in a specification                                        "! done ^
-    "Examples                                                                             "^
+    "Examples / User guide                                                                "^
       "Stack                                                                              "! done^
-      "Specifications layouts                                                             "! todo^
-      "Given/When/Then                                                                    "! todo^
-      "Arguments                                                                          "! todo^
-      "Runners                                                                            "! todo^
-      "Expectations: boolean, matchers, properties                                        "! todo^
+      "Specifications layouts                                                             "! done^
+      "Given/When/Then                                                                    "! done^
+      "Arguments                                                                          "! done^
+      "Runners                                                                            "! done^
+      "Expectations: boolean, matchers, properties                                        "! done^
                                                                                           end
 }
