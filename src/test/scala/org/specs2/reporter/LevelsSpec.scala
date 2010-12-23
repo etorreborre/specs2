@@ -143,12 +143,11 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
     Gen.sized(sz => sizedList(sz))
   }
     
-  def fold(fs: Fragments) = fs.fragments.foldMap(unit)(implicitly[Foldable[Seq]], LevelsMonoid[Fragment])
+  def fold(fs: Fragments) = fs.fragments.foldMap(unit)(implicitly[Foldable[Seq]], LevelsAggregationMonoid[Fragment])
   def level(fs: Fragments) = fold(fs).levels
   def tree(fs: Fragments) = fold(spec(fs)).toTree
   def spec(fs: Fragments) = new Specification { def is = "start".title ^ fs }.content
   
-  def start = SpecStart("start")
   def t1 = "t1"
   def t2 = "t2"
   def t3 = "t3"

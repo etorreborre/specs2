@@ -21,11 +21,10 @@ trait NestedBlocks {
 
   def overrideContext[T : Monoid](blocks: Seq[SpecBlock[T]]): Seq[T] = overrideContext(blocks, identity[T])
   def overrideContext[T : Monoid, S](blocks: Seq[SpecBlock[T]], f: T => S): Seq[S] = {
-    val monoid = implicitly[Monoid[T]]
     blocks.foldLeft((Nil: List[S], Nil: List[T])) { (res, cur) =>
       val (result, stack) = res
       cur match {
-        case BlockStart(value)       => (result :+ f(value), value :: stack)
+        case BlockStart(value)       => (result :+ f(top(addToTop(stack, value))), addToTop(stack, value))
         case BlockBit(value)         => (result :+ f(top(stack)), stack)
         case BlockEnd(value)         => (result :+ f(top(stack)), pop(stack))
       }
@@ -39,8 +38,8 @@ trait NestedBlocks {
       val (result, stack) = res
       cur match {
         case BlockStart(value)       => (result :+ f(value), value :: stack)
-        case BlockEnd(value)         => (result :+ f(top(stack)), addToTop(pop(stack), top(stack)))
         case BlockBit(value)         => (result :+ f(value), addToTop(stack, value))
+        case BlockEnd(value)         => (result :+ f(top(stack)), addToTop(pop(stack), top(stack)))
       }
     }._1
   }
@@ -51,8 +50,8 @@ trait NestedBlocks {
       val (result, stack) = res
       cur match {
         case BlockStart(value)       => (result :+ f(value), value :: stack)
-        case BlockEnd(value)         => (result :+ f(top(stack)), pop(stack))
         case BlockBit(value)         => (result :+ f(top(addToTop(stack, value))), addToTop(stack, value))
+        case BlockEnd(value)         => (result :+ f(top(addToTop(stack, value))), pop(stack))
       }
     }._1
   }

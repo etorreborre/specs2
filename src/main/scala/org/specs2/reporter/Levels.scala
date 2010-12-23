@@ -40,7 +40,7 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   /** @return alias for the last level */
   def level = levels.lastOption.getOrElse(0)
   /** @return all the levels, post-processing them so that there is no negative value */
-  def levels = {
+  def allLevels = {
     import NestedBlocks._
     def toNestedBlock(bl: (Block[T], Int)) = bl match {
       case (b @ Block(SpecStart(_,_)), l)         => BlockStart(Levels(List(bl)))
@@ -50,13 +50,14 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
       case (b, l)                                 => BlockBit(Levels(List(bl)))
     }
     import Levels._
+    val summed = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T])
     val m = LevelsAggregationMonoid[T]
-    val all = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T]).foldLeft(m.zero)(m append (_, _)).blocks
+    val all = summed.foldLeft(m.zero)(m append (_, _)).blocks
     val minLevel = all.map(_._2).min
-	  all.map(_._2 - min(0, minLevel))
+	  all.map { case (b, l) => (b, l - min(0, minLevel)) }
   }
+  def levels = allLevels.map(_._2)
 
-  
   /** @return the concatenation of 2 levels */
   def add(other: Levels[T]) = Levels(this.blocks ++ other.blocks)
   /** 
@@ -97,8 +98,9 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    * @see JUnitDescriptions
    */
   def toTreeLoc[S](m: (T, Int) => Option[S]): TreeLoc[S] = {
-    val initial = m(blocks.head._1.t, 0).get
-    blocks.drop(1).foldLeft(leaf(initial).loc) { (treeLoc, cur) =>
+    val all = allLevels
+    val initial = m(all.head._1.t, 0).get
+    all.drop(1).foldLeft(leaf(initial).loc) { (treeLoc, cur) =>
       val (block, level) = cur
       m(block.t, treeLoc.root.toTree.flatten.size) match {
         case Some(s) =>

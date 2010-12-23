@@ -11,7 +11,7 @@ import specification._
 import SpecsArguments._
 import FragmentSpecsArgumentsReducer._
 
-class SpecsArgumentsSpec extends SpecificationWithJUnit with ScalazMatchers with ArbitraryFragments { def is =
+class SpecsArgumentsSpec extends SpecificationWithJUnit with ScalazMatchers with ArbitraryFragments { def is = only("propagated to a nested")^
                                                                                                             """
 The Specs Arguments class maps a seq of fragments to their applicable arguments.
 
@@ -22,8 +22,8 @@ ends.
 
 Let's see a few examples
                                                                                                             """^
-                                                                                                            endbr^
- "The arguments on a simple specification must be propagated to each fragment"                              ! simple().e1^
+                                                                                                            p^
+  "The arguments on a simple specification must be propagated to each fragment"                             ! simple().e1^
                                                                                                             p^
   "The arguments on a parent specification must be propagated to a nested one"                              ! nestedOne().e1^
   "The arguments of the nested specification must override the parent ones"                                 ! nestedOne().e2^
