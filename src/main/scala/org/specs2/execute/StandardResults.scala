@@ -7,6 +7,7 @@ package execute
  */
 trait StandardResults {
   def done = Success("DONE")
+  def wontdo = Success("WONT DO")
   def todo = Pending("TODO")
   def pending = Pending("PENDING")
   def anError = Error("error")

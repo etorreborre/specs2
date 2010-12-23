@@ -46,7 +46,7 @@ class StackSpec extends SpecificationWithJUnit { def is =
     def e1 = !stack.isEmpty
     def e2 = stack.top must_== stack.size
     def e3 = { 
-      stack.top must_== stack.size
+      stack.top
       stack.top must_== stack.size
     }
     def e4 = {
