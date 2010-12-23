@@ -51,7 +51,7 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
     }
     import Levels._
     val m = LevelsAggregationMonoid[T]
-    val all = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel).foldLeft(m.zero)(m append (_, _)).blocks
+    val all = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T]).foldLeft(m.zero)(m append (_, _)).blocks
     val minLevel = all.map(_._2).min
 	  all.map(_._2 - min(0, minLevel))
   }
