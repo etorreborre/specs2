@@ -13,9 +13,8 @@ class FileWriterSpec extends SpecificationWithJUnit {  def is =
 
   case class c() extends After {
     val out = new MockWriter {}
-    val fw = new  FileWriter {
-      override def getWriter(path: String) = out
-    }
+    val fw = new  FileWriter { override def getWriter(path: String) = out  }
+
     def e1 = this {
       fw.write("filePath")(_.write("hello world"))
       out.messages must_== List("hello world")

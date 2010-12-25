@@ -1,32 +1,51 @@
 package org.specs2
 package main
 
-class ArgumentsSpec extends SpecificationWithJUnit { def is = 
-                                                                                          """
-  Arguments can be passed on the command line as an Array of Strings.                     
-  There are 2 types of arguments:                                                         
-                                                                                          
-    * boolean arguments which only presence means that their value is true                
-      e.g. -xonly to show only failures and errors                                        
-                                                                                          
-    * string arguments which have a specific value                                        
-      e.g. -srcDir src/test to specify the directory holding the source files             
-                                                                                          
-                                                                                          """^
-                                                                                          p^
-  { Arguments(Seq[String]():_*).xonly must beFalse }                                      ^
-  { Arguments("xonly").xonly must beTrue }                                                ^
-  { Arguments("xonly", "specName", "spec").specName must_== "spec" }                      ^
-                                                                                          p^
-  "The argument names can be capitalized or not"                                          ^
-  { Arguments("specname", "spec").specName must_== "spec" }                               ^
-  { Arguments("xOnly").xonly must beTrue}                                                 ^
-                                                                                          end^
-  "If an argument is not provided, its default value is used"                             !
-  { Arguments("xonly").specName must_== ".*Spec" }                                        ^
-                                                                                          end^
-  "An argument can be overriden by another"                                               ^
-  { args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false }            ^
-  { args(xonly = true).overrideWith(args(plan = false)).xonly must_== true }              ^
-                                                                                          end
+class ArgumentsSpec extends SpecificationWithJUnit { def is =
+                                                                                                     """
+Arguments can be passed on the command line as an Array of Strings. There are 2 types of arguments:
+
+ * boolean arguments which only presence means that their value is true
+   e.g. `-xonly` to show only failures and errors
+
+ * string arguments which have a specific value
+   e.g. `-srcDir src/test` to specify the directory holding the source files
+                                                                                                     """^
+                                                                                                     p^
+  "If an argument is specified, that  value is returned"                                             ^
+    "for a boolean argument, like xonly"                                                             ! e1^
+    "for a string argument"                                                                          ! e2^
+                                                                                                     p^
+  "If an argument is not specified, its default value is returned"                                   ^
+    "for a boolean argument, like xonly"                                                             ! e3^
+    "for a string argument"                                                                          ! e4^
+                                                                                                     p^
+  "The argument names can be capitalized or not"                                                     ^
+    "for a boolean argument"                                                                         ! e5^
+    "for a string argument"                                                                          ! e6^
+                                                                                                     p^
+  "Some boolean arguments have negated names, like nocolor, meaning !color"                          ! e7^
+                                                                                                     p^
+  "An argument can be overriden by another, `a <| b`"                                                ^
+    "if there's no corresponding value in b, the value in a stays"                                   ! e8^
+    "there is a corresponding value in b, the value in a is overriden when there is one"             ! e9^
+    "there is a corresponding value in b, the value in b is kept"                                    ! e10^
+                                                                                                     end
+
+
+  def e1 = Arguments("xonly").xonly must beTrue
+  def e2 = Arguments("specName", "spec").specName must_== "spec"
+
+  def e3 = Arguments("").xonly must beFalse
+  def e4 = Arguments("").specName must_== ".*Spec"
+
+  def e5 = Arguments("xOnly").xonly must beTrue
+  def e6 = Arguments("specname", "spec").specName must_== "spec"
+
+  def e7 = Arguments("nocolor").color must beFalse
+
+  def e8 = (args(xonly = true) <| args(plan = false)).xonly must_== true
+  def e9 = args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
+  def e10 = (args(xonly = true) <| args(plan = true)).plan must_== true
+
 }

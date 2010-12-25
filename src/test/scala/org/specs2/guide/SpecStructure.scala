@@ -134,7 +134,34 @@ collect the successive states of the system:
         }
       }
 
-### Declare examples
+###### For ***specs*** afficionados
+
+If you come from a ***specs*** background, it might seem difficult at first to "translate" the way you used to write
+specifications to the new way. Here a quickstart, you need to:
+
+ * replace `should` by `^` and `in` by `!`
+ * chain examples with `^`
+ * separate blocks of examples with `p^`
+
+      "'Hello world' should" ^ {
+        "contain 11 characters" ! {
+          "Hello world" must have size(11)
+        }^
+        "start with 'Hello'" ! {
+          "Hello world" must startWith("Hello")
+        }^
+        "with 'world'" ! {
+          "Hello world" must endWith("world")
+        }
+      }^
+      p^
+      "'Hey you' should" ^ {
+        "contain 7 characters" ! {
+          "Hey you" must have size(7)
+        }
+      }
+
+## Declare examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share
 them between different parts of your specification. The best example of this situation is a specification for a Stack of

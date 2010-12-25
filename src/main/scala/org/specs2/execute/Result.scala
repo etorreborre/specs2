@@ -7,6 +7,7 @@ import main.Arguments
 
 /**
  * The result of an execution, either:
+ *
  *  * a success: the execution is ok
  *  * a failure: an expectation is not met
  *  * an error: an exception occurred
@@ -15,8 +16,7 @@ import main.Arguments
  *    the execution is not performed 
  * 
  * A Result has a message describing it more precisely and possibly a number of expectations
- * when it is the outcome of several checks (this is used for the reporting of ScalaCheck 
- * properties.
+ * when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).
  * 
  */
 sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1) {

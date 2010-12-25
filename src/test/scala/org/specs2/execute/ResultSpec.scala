@@ -5,13 +5,14 @@ class ResultSpec extends SpecificationWithJUnit { def is =
                                                                                           """
   Results are the outcome of some execution. There are several kinds of Results, all
   having a message describing them more precisely:
+
     * Success: everything is ok
     * Failure: an expectation is not met
     * Error: something completely unexpected happened
     * Skipped: the user decided to skip the execution for some reason
     * Pending: the user decided that the execution was not yet implemented
                                                                                           """^
-                                                                                          br^t^
+                                                                                          p^
   "Results can be combined with and"                                                      ^
   { (success1 and success2) must_== Success("s1 and s2") }                                ^
   { (success1 and success1) must_== Success("s1") }                                       ^

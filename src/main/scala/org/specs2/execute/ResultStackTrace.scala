@@ -6,8 +6,7 @@ import main.SystemProperties
 import Throwablex._
 
 /**
- * This stackTrace is filtered to remove
- * the library stacktrace elements from the total stacktrace
+ * This stackTrace is filtered to remove the library stacktrace elements from the total stacktrace
  * unless the "-Dfullstacktrace" system property is set (for specs2 debugging purposes)
  */
 private[specs2]

@@ -2,10 +2,11 @@ package org.specs2
 package data
 
 /**
- * Utililty methods for tuples
+ * Utility methods for tuples to flatten 3-tuples and 4-tuples
  */
 private[specs2]
-trait Tuples { outer => 
+trait Tuples { outer =>
+
   implicit def toFlattenedTuple3[T1, T2, T3](t: ((T1, T2), T3)) = new FlattenedTuple3(t)
   case class FlattenedTuple3[T1, T2, T3](t: ((T1, T2), T3)) {
     def flatten = outer.flatten(t)

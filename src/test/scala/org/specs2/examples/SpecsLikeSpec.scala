@@ -2,15 +2,14 @@ package org.specs2
 package examples
 
 class SpecsLikeSpec extends Specification { def is =
-
-"""
+                                                                                          """
   This specification shows how to write a specification in the specs style.
   You need to:
    * replace `should` by `^` and `in` by `!`
    * chain examples with `^`
    * separate blocks of examples with `p^`
-"""^
-  p^
+                                                                                          """^
+                                                                                          p^
   "'Hello world' should" ^ {
     "contain 11 characters" ! {
       "Hello world" must have size(11)
