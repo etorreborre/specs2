@@ -14,7 +14,6 @@ sealed trait ExecutedFragment
 case class ExecutedText(text: String) extends ExecutedFragment
 case class ExecutedResult(text: MarkupString, result: Result, timer: SimpleTimer) extends ExecutedFragment
 case class ExecutedBr() extends ExecutedFragment
-case class ExecutedPar() extends ExecutedFragment
 case class ExecutedEnd() extends ExecutedFragment
 case class ExecutedTab(n: Int = 1) extends ExecutedFragment
 case class ExecutedBacktab(n: Int = 1) extends ExecutedFragment

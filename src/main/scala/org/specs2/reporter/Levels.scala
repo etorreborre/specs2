@@ -51,10 +51,11 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
     }
     import Levels._
     val summed = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T])
-    val m = LevelsAggregationMonoid[T]
+    implicit val m = LevelsConcatMonoid[T]
     val all = summed.foldLeft(m.zero)(m append (_, _)).blocks
     val minLevel = all.map(_._2).min
-	  all.map { case (b, l) => (b, l - min(0, minLevel)) }
+    val (before, after) = all.span(b => b._2 >= 0)
+	  before ++ after.map { case (b, l) => (b, l - min(0, minLevel)) }
   }
   def levels = allLevels.map(_._2)
 
@@ -64,13 +65,13 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    * @return reset the levels of all blocks by incrementing or decrementing the level 
    *         value, until a Reset block is met
    */
-  def resetLevel(f: Int => Int) = {
-    val breakAtFirstReset = blocks.span(b => !isReset(b))
+  def resetLevel(f: Int => Int, stopCondition: Int => Boolean = (_:Int) => false) = {
+    val breakAtFirstReset = blocks.span(b => !isReset(b) && !stopCondition(b._2))
     Levels(breakAtFirstReset._1).mapLevel(f) add
     Levels(breakAtFirstReset._2)
   }
 
-  /**
+  /** =
    * @return reset all the levels of all blocks by incrementing or decrementing the level 
    *         value
    */
@@ -110,7 +111,10 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
     }
   } 
   /** @return true if a Block is a Reset block */
-  private val isReset = (b: (Block[T], Int)) => b match { case (BlockReset(t), _) => true; case _ => false }
+  private val isReset = (b: (Block[T], Int)) => b match {
+    case (BlockReset(t), l) => true
+    case (b, l) => false
+  }
   override def equals(a: Any) = {
     a match {
       case l: Levels[_] => normalizeResets.blocks.equals(l.normalizeResets.blocks)
@@ -144,16 +148,8 @@ case object Levels {
     val zero = new Levels[T]()
   }
   /** monoid for Levels, doing a simple aggregation */
-  implicit def LevelsAggregationMonoid[T] = new Monoid[Levels[T]] {
-    def append(b1: Levels[T], b2: =>Levels[T]) =
-      (b1.lastOption, b2.headOption) match {
-        case (None, _)                        => b2
-        case (Some(BlockReset(t)), _)         => b1 add b2
-        case (_, Some(BlockReset(t)))         => b1 add b2
-        case (Some(BlockIndent(t, n)), _)     => b1 add b2
-        case (Some(BlockUnindent(t, n)), _)   => b1 add b2
-        case _                                => b1 add b2
-      }
+  implicit def LevelsConcatMonoid[T] = new Monoid[Levels[T]] {
+    def append(b1: Levels[T], b2: =>Levels[T]) = b1 add b2
     val zero = new Levels[T]()
   }
   /** fold a list of T to a Levels object */
@@ -164,8 +160,7 @@ case object Levels {
     implicit def toBlock(f: ExecutedFragment): Block[ExecutedFragment] = f match {
       case t @ ExecutedResult(_, _, _)    => BlockTerminal(t)
       case t @ ExecutedText(_)            => BlockIndent(t)   
-      case t @ ExecutedPar()              => BlockUnindent(t)   
-      case t @ ExecutedTab(n)             => BlockIndent(t, n)   
+      case t @ ExecutedTab(n)             => BlockIndent(t, n)
       case t @ ExecutedBacktab(n)         => BlockUnindent(t, n) 
       case t @ ExecutedSpecStart(_, _)    => BlockNeutral(t)
       case t @ ExecutedSpecEnd(_)         => BlockNeutral(t)
@@ -178,8 +173,7 @@ case object Levels {
   implicit object FragmentLevelsReducer extends Reducer[Fragment, Levels[Fragment]] {
     implicit def toBlock(f: Fragment): Block[Fragment] = f match {
       case t @ Example(_, _)   => BlockTerminal(t)     
-      case t @ Par()           => BlockUnindent(t)   
-      case t @ Tab(n)          => BlockIndent(t, n)       
+      case t @ Tab(n)          => BlockIndent(t, n)
       case t @ Backtab(n)      => BlockUnindent(t, n)   
       case t @ Text(_)         => BlockIndent(t)       
       case t @ SpecStart(_, _) => BlockNeutral(t)

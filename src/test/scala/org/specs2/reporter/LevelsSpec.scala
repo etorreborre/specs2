@@ -40,7 +40,7 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
   { level(t1 ^ t2 ^ ex1 ^ bt(2) ^ t2 ^ ex2) must_== List(0, 1, 2, 2, 0, 1) }              ^
                                                                                           p^
   "A paragraph unindents the following fragments by 1"                                    ^
-  { level(t1 ^ ex1 ^ p ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1) }                          ^
+  { level(t1 ^ ex1 ^ p ^ t2 ^ ex2) must_== List(0, 1, 1, 1, 0, 1) }                          ^
                                                                                           p^
   "A end resets the following fragment to zero"                                           ^
   { level(t1 ^ ex1 ^ end ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1) }                        ^
@@ -92,7 +92,9 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
       "|  |",
       "|  +- Example(e1)",
       "|  |",
-      "|  `- Par()",
+      "|  +- Br()",
+      "|  |",
+      "|  `- Backtab(1)",
       "|",
       "`- Text(t2)",
       "   |",
@@ -109,7 +111,9 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
       "|  |",
       "|  +- Example(e2)",
       "|  |",
-      "|  `- Par()",
+      "|  +- Br()",
+      "|  |",
+      "|  `- Backtab(1)",
       "|",
       "`- Text(t2)",
       "   |",
@@ -142,12 +146,18 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
     }
     Gen.sized(sz => sizedList(sz))
   }
-    
-  def fold(fs: Fragments) = fs.fragments.foldMap(unit)(implicitly[Foldable[Seq]], LevelsAggregationMonoid[Fragment])
+
+  def fold(fs: Fragments) = fs.fragments.foldMap(unit)(implicitly[Foldable[Seq]], LevelsConcatMonoid[Fragment])
   def level(fs: Fragments) = fold(fs).levels
   def tree(fs: Fragments) = fold(spec(fs)).toTree
   def spec(fs: Fragments) = new Specification { def is = "start".title ^ fs }.content
-  
+  import StandardFragments._
+  def isNotFormatting = (f: Tree[Fragment]) => f.rootLabel match {
+    case Br() => false
+    case Tab(_) => false
+    case Backtab(_) => false
+    case _ => true
+  }
   def t1 = "t1"
   def t2 = "t2"
   def t3 = "t3"

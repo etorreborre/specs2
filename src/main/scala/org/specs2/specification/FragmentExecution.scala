@@ -33,7 +33,6 @@ trait FragmentExecution {
     }
 	  case Text(s)               => ExecutedText(s)
 	  case Br()                  => ExecutedBr()
-	  case Par()                 => ExecutedPar()
     case Tab(n)                => ExecutedTab(n)
     case Backtab(n)            => ExecutedBacktab(n)
 	  case End()                 => ExecutedEnd()

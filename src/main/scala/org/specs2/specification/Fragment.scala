@@ -66,12 +66,12 @@ case class See(link: HtmlLink) extends Fragment
  * Those standard Fragments are used to format the specification text:
  *  * End() can be used to "reset" the indentation of text
  *  * Br() can be used to insert a newline
- *  * Par() can be used to insert 2 newlines
+ *  * Tab() can be used to increment the indentation level
+ *  * Backtab() can be used to decrement the indentation level
  */
 private[specs2]
 object StandardFragments {
   case class End() extends Fragment
-  case class Par() extends Fragment
   case class Br() extends Fragment
   case class Tab(n: Int = 1) extends Fragment
   case class Backtab(n: Int = 1) extends Fragment

@@ -16,7 +16,7 @@ trait ArbitraryFragments extends execute.StandardResults with FormattingFragment
       (10, Gen.value(Text("text"))),
       (8, Gen.value(Example("ex1", success))),
       (1, Gen.value(end)),
-      (2, Gen.value(p)),
+      (2, Gen.value(bt)),
       (1, Gen.value(br)))
   }
   implicit def arbitraryFragments: Arbitrary[Fragments] = Arbitrary {

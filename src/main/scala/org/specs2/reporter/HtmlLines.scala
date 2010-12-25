@@ -30,7 +30,7 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: Option[HtmlLink] = None
  * * the current level
  * * the current arguments
  */
-case class HtmlLine(text: Html = HtmlPar(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
+case class HtmlLine(text: Html = HtmlBr(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
   def print(implicit out: HtmlResultOutput): HtmlResultOutput = text.print(stats, level, args)
 }
 
@@ -52,10 +52,6 @@ case class HtmlText(t: ExecutedText) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printText(t.text, level, !args.xonly)(args) else out
 }        
-case class HtmlPar() extends Html {
-  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    if (!args.xonly) out.printElem(<p/>, !args.xonly)(args) else out
-}
 case class HtmlBr() extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printPar("", !args.xonly)(args) else out

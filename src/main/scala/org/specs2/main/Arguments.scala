@@ -94,10 +94,11 @@ object Arguments {
   }
   private def extract(implicit arguments: Seq[String]): Arguments = {
     new Arguments (
+       _ex            = value("ex", ".*"+(_:String)+".*"),
        _xonly         = bool("xonly"),
        _plan          = bool("plan"),
        _failtrace     = bool("failtrace"),
-       _color         = bool("nocolor", false) orElse bool("color"),
+       _color         = bool("color", "nocolor"),
        _noindent      = bool("noindent"),
        _showlevel     = bool("showlevel"),
        _showtimes     = bool("showtimes"),
@@ -105,7 +106,7 @@ object Arguments {
        _specName      = value("specName"),
        _sequential    = bool("sequential"),
        _threadsNb     = int("threadsNb"),
-       _markdown      = bool("nomarkdown", false) orElse bool("markdown"),
+       _markdown      = bool("markdown", "nomarkdown"),
        _debugMarkdown = bool("debugmarkdown")
     )
   }
@@ -113,9 +114,13 @@ object Arguments {
   private def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String]): Option[Boolean] = {
     args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue)
   }
-  private def value(name: String)(implicit args: Seq[String]): Option[String] = {
-    args.zip(args.drop(1)).find(_._1.toLowerCase.contains(name.toLowerCase)).map(_._2)
+  private def bool(name: String, negatedName: String)(implicit args: Seq[String]): Option[Boolean] = {
+    bool(negatedName, false) orElse bool(name)
   }
+  private def value(name: String, f: String => String)(implicit args: Seq[String]): Option[String] = {
+    args.zip(args.drop(1)).find(_._1.toLowerCase.contains(name.toLowerCase)).map(s => f(s._2))
+  }
+  private def value(name: String)(implicit args: Seq[String]): Option[String] = value(name, identity _)
   private def int(name: String)(implicit args: Seq[String]): Option[Int] = {
     tryo(value(name)(args).map(_.toInt).get)
   }

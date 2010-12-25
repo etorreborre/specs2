@@ -111,7 +111,6 @@ trait HtmlPrinter {
       case start @ ExecutedSpecStart(_, _)     => HtmlSpecStart(start)
       case result @ ExecutedResult(_, _, _)    => HtmlResult(result)
       case text @ ExecutedText(s)              => HtmlText(text)
-      case par @ ExecutedPar()                 => HtmlPar()
       case par @ ExecutedBr()                  => HtmlBr()
       case end @ ExecutedSpecEnd(_)            => HtmlSpecEnd(end)
       case see @ ExecutedSee(_)                => HtmlSee(see)

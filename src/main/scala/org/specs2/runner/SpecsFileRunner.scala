@@ -23,7 +23,7 @@ object SpecsFileRunner extends SpecificationsFinder {
 	  implicit val args = Arguments(arguments:_*)
 	    
 	  lazy val allFragments = Fragments {
-      SpecStart(specName) +: Par() +:
+      SpecStart(specName) +: Br() +: Backtab() +:
       specifications.flatMap(_.content.fragments) :+
       SpecEnd(specName)
     } 

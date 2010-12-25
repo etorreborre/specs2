@@ -42,7 +42,7 @@ trait TextPrinter {
     LevelsReducer  &&&
     SpecsArgumentsReducer
   
-  case class PrintLine(text: Print = PrintPar(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
+  case class PrintLine(text: Print = PrintBr(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
     def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
   
@@ -64,7 +64,6 @@ trait TextPrinter {
       case start @ ExecutedSpecStart(_, _)     => PrintSpecStart(start)
       case result @ ExecutedResult(_, _, _)    => PrintResult(result)
       case text @ ExecutedText(s)              => PrintText(text)
-      case par @ ExecutedPar()                 => PrintPar()
       case par @ ExecutedBr()                  => PrintBr()
       case end @ ExecutedSpecEnd(_)            => PrintSpecEnd(end)
       case fragment                            => PrintOther(fragment)
@@ -149,10 +148,6 @@ trait TextPrinter {
       if (!args.xonly) 
         out.printMessage(leveledText(t.text, level)(args))(args)
   }        
-  case class PrintPar()                               extends Print {
-    def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      if (!args.xonly) out.printLine(" ")(args)
-  }
   case class PrintBr()                               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (!args.xonly) out.printLine(" ")(args)
