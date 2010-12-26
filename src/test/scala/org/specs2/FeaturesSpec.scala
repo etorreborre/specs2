@@ -21,6 +21,9 @@ class FeaturesSpec extends Specification { def is = literate ^
    "ScalaInterpreter                                                                      "^
      "with appropriate matchers                                                           "! todo^
    "Detailed diffs                                                                        "! todo^
+   "Split matcher messages on 2 lines when too long                                       "! todo^
+   "JUnit matchers                                                                        "! todo^
+   "review the contain matchers                                                           "! todo^
    "Lift                                                                                  "^
      "specify an example webapp                                                           "! todo^
    "Publish                                                                               "^

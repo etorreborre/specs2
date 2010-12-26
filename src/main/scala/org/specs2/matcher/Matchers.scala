@@ -24,3 +24,5 @@ object Matchers extends Matchers
 
 trait MustMatchers extends Matchers with MustExpectations
 trait ShouldMatchers extends Matchers with ShouldExpectations
+trait JUnitMustMatchers extends Matchers with JUnitMustExpectations
+trait JUnitShouldMatchers extends Matchers with JUnitShouldExpectations

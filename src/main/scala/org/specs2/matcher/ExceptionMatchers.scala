@@ -85,7 +85,7 @@ trait ExceptionMatchers {
   
   private def message(exception: Any) = {
     exception match {
-      case e: Class[_] => e.toString.replaceFirst("class ", "")
+      case e: Class[_] => e.getName
       case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage
       case other => other.toString
     }

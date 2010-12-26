@@ -235,6 +235,12 @@ We simply use case class instances for each Example. Here is a demonstration:
         def favorite = pending
       }
 
+  LogsIn().showsHistory
+  SelectsTickets().showsSelectedTickets
+  SelectsTickets().showsTotalAmount
+  BuysTickes().showsFavoritePaymentType
+
+
 In the specification above, each example is using its own instance of a case class, having its own local variables which
 will never be overwritten by another example. Parent context is inherited by means of delegation. For example, in the
 "buy" context, there is an available `tickets` instance placing the system in the desired context.
