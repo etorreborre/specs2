@@ -1,7 +1,7 @@
 package org.specs2
 package examples
 
-class SpecsLikeSpec extends Specification { def is =
+class SpecsLikeSpec extends SpecificationWithJUnit { def is =
                                                                                           """
   This specification shows how to write a specification in the specs style.
   You need to:

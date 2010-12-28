@@ -539,9 +539,9 @@ can use the `!!` operator to disambiguate (and `||` in the header for good visua
   include(xonly, examples)                                                                                              ^
   include(xonly, akaExpectations)                                                                                       ^
   include(xonly, scalaCheckExamples)                                                                                    ^
-  include(xonly, new MockitoSpec)                                                                                       ^
+  include(xonly, new MockitoSpecification)                                                                                       ^
   include(xonly, mockitoExamples)                                                                                       ^
-  include(xonly, new DataTableSpec)                                                                                     ^
+  include(xonly, new DataTableSpecification)                                                                                     ^
   end
 
   val examples = new Specification { def is = "Examples".title ^
@@ -589,7 +589,7 @@ can use the `!!` operator to disambiguate (and `||` in the header for good visua
   }
   
   import org.specs2.mock._
-  class MockitoSpec extends Specification { def is =
+  class MockitoSpecification extends Specification { def is =
 
      "A java list can be mocked"                                                    ^
        "You can make it return a stubbed value"                                     ! c().stub^
@@ -639,7 +639,7 @@ can use the `!!` operator to disambiguate (and `||` in the header for good visua
    }
 
   import matcher._
-  class DataTableSpec extends Specification with DataTables { def is =
+  class DataTableSpecification extends Specification with DataTables { def is =
     "adding integers should just work in scala"  ! e1
 
     def e1 =
