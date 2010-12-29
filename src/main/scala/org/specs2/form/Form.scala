@@ -9,7 +9,7 @@ import StandardResults._
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
  * It has an optional title and possibly no rows.
  * 
- * A Form can be executed by executing each row and collecting the results. 
+ * A Form can be executed by executing each row and collecting the results.
  */
 case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Row])) extends Executable with Text {
 

@@ -10,7 +10,7 @@ class MockitoSpec extends SpecificationWithJUnit with Mockito {  def is =
                                                                                           """
   Mockito is a Java library for mocking.
 
-  The following samples are taken from the main documentation which can be found 
+  The following samples are taken from the main documentation which can be found
   here: http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
                                                                                           """                                                                               ^
   "When a mock is created with the mock method"                                          ^

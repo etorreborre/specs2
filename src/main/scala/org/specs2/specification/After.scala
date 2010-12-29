@@ -5,7 +5,7 @@ import control.Exceptions._
 import execute._
 
 /**
- * The After trait can be inherited by classes representing a context 
+ * The After trait can be inherited by classes representing a context
  * where an action must be executing after the main executable action
  * 
  * @see Example to understand why the type T must <% Result

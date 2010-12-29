@@ -7,10 +7,10 @@ class ThrowablexSpec extends SpecificationWithJUnit with Throwablex { def is =
                                                                                           """  
   The Throwablex trait provides extensions to regular throwables:                         
                                                                                           """^
-                                                                                          br^
+                                                                                          p^
   "It provides methods to access nested exceptions"						                            ^
     "chainedExceptions returns a list of nested exceptions" 			                        ! chained().e1^
-    "getFullStackTrace returns a list of all nested stackTraceEl ements"                  ! chained().e2^
+    "getFullStackTrace returns a list of all nested stackTraceElements"                   ! chained().e2^
                                                                                           p^
   "It has location methods"                                                               ^
     "to get the name of the file and the line from an exception"                          ! c().e1^
@@ -22,7 +22,7 @@ class ThrowablexSpec extends SpecificationWithJUnit with Throwablex { def is =
     "to filter all the lines not matching a given pattern"                                ! c().e5^
                                                                                           p^
   "It provides utility functions for stacktrace elements"                                 ^
-    "apply returns the ith element"                                                       ! c().e6^
+    "apply returns the nth element"                                                       ! c().e6^
     "headOption returns the first element as an option"                                   ! c().e7^
                                                                                           end
 

@@ -22,12 +22,12 @@ class FeaturesSpec extends Specification { def is = literate ^
      "with appropriate matchers                                                           "! todo^
    "Detailed diffs                                                                        "! todo^
    "Split matcher messages on 2 lines when too long                                       "! todo^
-   "JUnit matchers                                                                        "! todo^
-   "review the contain matchers                                                           "! todo^
+   "JUnit matchers                                                                        "! done^
+   "review the contain matchers                                                           "! done^
    "Lift                                                                                  "^
-     "specify an example webapp                                                           "! todo^
+     "specify the example webapp                                                          "! todo^
    "Publish                                                                               "^
-     "pass the tests with Maven                                                           "! todo^
+     "pass the tests with Maven                                                           "! done^
      "use sbt to publish                                                                  "! todo^
      "deploy the user guide automatically                                                 "! todo^
                                                                                           p^

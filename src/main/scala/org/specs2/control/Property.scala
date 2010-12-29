@@ -2,8 +2,7 @@ package org.specs2
 package control
 
 /**
- * This class represents values which are evaluated lazily and which may even
- * be missing.
+ * This class represents values which are evaluated lazily and which may even be missing.
  * 
  * It has Option-like function and can be also converted to an Either object
  */
@@ -24,6 +23,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def update(newValue: =>T) = withValue(newValue)
   /** alial for update */
   def apply(newValue: =>T) = update(newValue)
+  /** @return an Option-like representation */
   override def toString = optionalValue.toString
   /** @return an iterator containing the value if present */
   def iterator = optionalValue.iterator

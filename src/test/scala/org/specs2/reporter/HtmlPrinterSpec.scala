@@ -4,34 +4,33 @@ import io._
 import mock._
 import specification._
 
-class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer =>
-  def is = sequential ^
-                                                                                          """
-  The HtmlPrinter class is responsible for opening an html file and writing
-  the specification text.
-                                                                                          """^
-                                                                                          p^
-  "The file path must"                                                                    ^
-    "use target/specs-reports as a default value for the output directory"                ! filepath().e1^
-    "use the outDir system variable if set"                                               ! filepath().e2^
-    "use class name of the specification as file name"                                    ! filepath().e3^
-                                                                                          p^
-  "The page title"                                                                        ^
-    "must be the title of the specification"                                              ! title().e1^
-                                                                                          p^
-  "Resources"                                                                             ^
-    "there must be a directory for css files"                                             ! resources().css^
-    "there must be a directory for images files"                                          ! resources().images^
-                                                                                          p^
-  "Fragments"                                                                             ^
-    "A text block must"                                                                   ^
-      "be printed as a div"                                                               ! fragments().text1^
-      "be indented to its level with a css property"                                      ! fragments().text2^
-      "be formatted as some Mockito text"                                                 ! fragments().text3^
-	                                                                                        endp^
-    "An example must"                                                                     ^
-      "have a success icon if successful"                                                 ! fragments().ex1^
-                                                                                          end
+class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is =       sequential ^
+                                                                                             """
+  The HtmlPrinter class is responsible for opening an html file and writing the
+  specification text.
+                                                                                             """^
+                                                                                             p^
+  "The file path must"                                                                       ^
+    "use target/specs-reports as a default value for the output directory"                   ! filepath().e1^
+    "use the `outDir` system variable if set"                                                ! filepath().e2^
+    "use class name of the specification as file name"                                       ! filepath().e3^
+                                                                                             p^
+  "The page title"                                                                           ^
+    "must be the title of the specification"                                                 ! title().e1^
+                                                                                             p^
+  "Resources"                                                                                ^
+    "there must be a directory for css files"                                                ! resources().css^
+    "there must be a directory for images files"                                             ! resources().images^
+                                                                                             p^
+  "Fragments"                                                                                ^
+    "A text block must"                                                                      ^
+      "be printed as a div"                                                                  ! fragments().text1^
+      "be indented to its level with a css property"                                         ! fragments().text2^
+      "be formatted as some Mockito text"                                                    ! fragments().text3^
+	                                                                                           p^
+    "An example must"                                                                        ^
+      "have a success icon if successful"                                                    ! fragments().ex1^
+                                                                                             end
                                                                                           
   implicit val argument = args()
   case class filepath() {

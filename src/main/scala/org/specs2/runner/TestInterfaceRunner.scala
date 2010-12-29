@@ -50,8 +50,10 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
         s.getStackTrace.foreach(t => logError("  " + t.toString))
       }
     }
-    if (args.contains("html")) specs2.html.main(Array(classname) ++ args)
-    run(specification.right.toOption, handler, args)
+    if (args.contains("html"))
+      specs2.html.main(Array(classname) ++ args)
+    else
+      run(specification.right.toOption, handler, args)
   }
   
   private def run(specification: Option[Specification], handler: EventHandler, args: Array[String]): Option[Specification] = {

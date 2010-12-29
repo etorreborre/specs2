@@ -10,7 +10,7 @@ import execute._
  * The apply method can be used to retrieve the Field value:
  *   `Field(label, 1).apply() must_== 1`
  * 
- * The value is stored in a Property object so it will not be evaluated until explicitly 
+ * The value is stored in a Property object so it will not be evaluated until explicitly
  * queried.
  */
 case class Field[T](label: String, value: Property[T]) extends Executable with StandardResults {
@@ -30,7 +30,7 @@ case class Field[T](label: String, value: Property[T]) extends Executable with S
   def toStringField = Field(label, value.get.toString)
 }
 /**
- * Factory methods for creating Fields. Fields values can also be concatenated to produce 
+ * Factory methods for creating Fields. Fields values can also be concatenated to produce
  * "summary" fields.
  * 
  * val f1 = Field(label, "hello")

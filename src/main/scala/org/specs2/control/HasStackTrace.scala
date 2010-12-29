@@ -3,7 +3,7 @@ package control
 
 /** 
  * This trait describes something which has a stackTrace
- * and utility methods on it
+ * and utility methods for it
  */
 private[specs2]
 trait HasStackTrace {

@@ -15,7 +15,7 @@ import matcher._
  * { 1 must_== 1 } ^
  *                 end
  *                 
- * will be simply reported as 
+ * will be simply reported as
  * 
  * + 1 must_== 1
  *                 

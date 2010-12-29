@@ -5,7 +5,7 @@ class FormComponentsSpec extends SpecificationWithJUnit with Forms { def is =
                                                                                           """
   Forms can be used to represent domain objects or service, relating
   expected values to actual ones. Forms are also thought as being reusable components 
-  which can be reused between specifications. In the following examples, we'll see several 
+  which can be reused between specifications. In the following examples, we'll see several
   ways of creating forms to support the specification of domain objects or services:
     
     1. for a simple Address entity 
@@ -25,7 +25,7 @@ First example: Address entity
       * creates the form by putting each property on a new row
     * the Address class can be instantiated once with expected values, to be displayed as
       a Fragment
-    * then the form method can be used in a example to provide actual values              """^                        
+    * then the form method can be used in a example to provide actual values              """^
                                                                                           p^
     components.address.form                                                               ^
                                                                                           p^

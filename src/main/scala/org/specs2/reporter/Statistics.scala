@@ -15,7 +15,7 @@ import specification._
  * 
  * Some stats objects embed their corresponding ExecutedSpecStart or ExecutedSpecEnd
  * fragment to be able to determine when the total Stats corresponding to all executed
- * specifications must be displayed 
+ * specifications must be displayed
  * 
  * @see Stats.isEnd
  *

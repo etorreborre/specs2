@@ -18,7 +18,7 @@ private[specs2]
 trait FragmentExecution {
   
   /** 
-   * This method could be overriden to provide alternate behavior when executing an 
+   * This method could be overriden to provide alternate behavior when executing an
    * Example
    */
   def executeBody(body: =>Result)(implicit arguments: Arguments): Result = {

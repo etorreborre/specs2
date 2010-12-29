@@ -31,7 +31,7 @@ import Expectable._
  *     thanks to an implicit definition in the BeHaveAnyMatchers trait. This yields a 
  *     MatchSuccess result
  *  
- *  3. not creates a NotMatcher and can be and-ed with the previous MatchSuccess to 
+ *  3. not creates a NotMatcher and can be and-ed with the previous MatchSuccess to
  *     yield a AndMatch(MatchSuccess, NotMatch), with NotMatch being the result of
  *     applying the NotMatcher to the expectable. This AndMatch is evaluated to create a 
  *     AndNotMatch(MatchSuccess, MatchSkip)
@@ -46,7 +46,8 @@ import Expectable._
  * 
  * @see org.specs2.matcher.BeHaveMatchersSpec for examples
  */
-sealed trait MatchResult[+T] {
+protected[specs2]
+trait MatchResult[+T] {
   /** the value being matched */
   val expectable: Expectable[T]
   

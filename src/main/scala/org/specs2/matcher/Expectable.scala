@@ -22,7 +22,7 @@ class Expectable[+T] protected (private[specs2] val t: () => T) { outer =>
   
   /** 
    * apply a matcher on the value an return a MatchResult
-   * which can later on be transformed to a simple Result 
+   * which can later on be transformed to a simple Result
    */
   def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = m.apply(this)
 

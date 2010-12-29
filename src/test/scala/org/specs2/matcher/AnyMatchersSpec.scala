@@ -4,9 +4,9 @@ import java.io._
 
 class AnyMatchersSpec extends SpecificationWithJUnit { def is =
   
-  "be() checks if a value is eq to another one"                                           ^
-  { aValue must be(aValue) }                                                              ^
-  { "a" must not be("b") }                                                                ^
+  "beTheSameAs checks if a value is eq to another one"                                    ^
+  { aValue must beTheSameAs(aValue) }                                                     ^
+  { "a" must not beTheSameAs("b") }                                                       ^
                                                                                           p^
   "beTrue matches true values"                                                            ^
   { true must beTrue }                                                                    ^

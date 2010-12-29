@@ -4,6 +4,7 @@ package io
 /**
  * The MockWriter writes all the content written with the Writer interface to a list of messages
  */
+private[specs2]
 trait MockWriter extends java.io.Writer with MockOutput {
   /** is the Writer closed? */
   var closed = false

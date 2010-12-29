@@ -63,7 +63,7 @@ object JUnitDescriptions {
    * unfolding function attaching children descriptions to a parent one 
    * Note that:
    * * the Fragment in d: (Description, Fragment) is not used
-   * * parent-child relations of the original tree are reworked to be JUnit-friendly and 
+   * * parent-child relations of the original tree are reworked to be JUnit-friendly and
    *   avoid to have an example being the ancestor of other examples like this:
    * 
    * text1

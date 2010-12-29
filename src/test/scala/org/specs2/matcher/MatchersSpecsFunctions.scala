@@ -2,6 +2,9 @@ package org.specs2
 import matcher.MustExpectations._
 import matcher.StringMatchers._
 
+/**
+ * Those definitions help specifying the result messages for matchers
+ */
 package object matcher {
   
   implicit def ToReturns[T](t: =>MatchResult[T]): Returns[T] = new Returns(t)

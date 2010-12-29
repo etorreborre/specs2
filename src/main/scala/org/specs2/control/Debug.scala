@@ -12,7 +12,9 @@ package control
 private[specs2] 
 trait Debug {
   
-  implicit def debug[T](t: =>T) = new { 
+  implicit def debug[T](t: =>T): Debuggable[T] = new Debuggable(t)
+  class Debuggable[T](t: =>T) {
+    /** print the object to the console and return it */
     def pp: T = {
       Console.println(t)
       t 

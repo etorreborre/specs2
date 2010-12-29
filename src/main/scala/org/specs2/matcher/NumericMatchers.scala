@@ -64,7 +64,7 @@ trait NumericBaseMatchers {
 private[specs2]
 trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
   /** 
-   * matcher aliases and implicits to use with be + matcher 
+   * matcher aliases and implicits to use with be + matcher
    */
   implicit def toOrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) = new OrderedResultMatcher(result)
   class OrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) {

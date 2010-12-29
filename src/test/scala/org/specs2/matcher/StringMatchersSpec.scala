@@ -9,7 +9,7 @@ class StringMatchersSpec extends SpecificationWithJUnit {  def is =
     "beMatching"                                                                          ^
     { "eric" must beMatching("e.*") }                                                     ^
                                                                                           p^
-    "or 'be matching'"                                                                    ^
+    "or ' be matching'"                                                                    ^
     { "eric" aka "ETO" must be matching("e.*") }                                          ^
                                                                                           p^
     "find ... withGroups, to check for groups"                                            ^
@@ -28,7 +28,7 @@ class StringMatchersSpec extends SpecificationWithJUnit {  def is =
     { "" must beEmpty }                                                                   ^
     { "" must be empty }                                                                  ^
                                                                                           endp^
-  "2 strings can be checked for equality"                                                 ^  
+  "2 strings can be checked for equality"                                                 ^
     "ignoring case"                                                                       ^ 
     { "eric" must beEqualTo("Eric").ignoreCase }                                          ^  
       "the failure message must mention 'ignoring case'"                                  ! e3^

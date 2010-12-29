@@ -10,7 +10,7 @@ import matcher._
 /**
  * A Row is a non-empty list of Cells
  * 
- * A Row can be executed by executing each Cell and collecting the results. 
+ * A Row can be executed by executing each Cell and collecting the results.
  */
 case class Row(private val cellList: NonEmptyList[Cell]) extends Executable with Text {
   /** @return all the cells */

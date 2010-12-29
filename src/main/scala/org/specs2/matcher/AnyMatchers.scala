@@ -20,7 +20,7 @@ trait AnyBaseMatchers {
   def beFalse = beTrue.not
 
   /** matches if a eq b */
-  def be[T <: AnyRef](t: =>T) = new Matcher[T] {
+  def beTheSameAs[T <: AnyRef](t: =>T) = new Matcher[T] {
     def apply[S <: T](a: Expectable[S]) = {
       val b = t
       result(a.value eq b, a.description + " is " + q(b), a.description + " is not " + q(b), a)
@@ -160,7 +160,7 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
 
   implicit def toAnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]) = new AnyRefMatcherResult(result)
   class AnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]) {
-    def be(t: T) = result(outer.be(t))
+    def beTheSameAs(t: T) = result(outer.beTheSameAs(t))
   }
 
   implicit def toAnyMatcherResult(result: MatchResult[Any]) = new AnyMatcherResult(result)

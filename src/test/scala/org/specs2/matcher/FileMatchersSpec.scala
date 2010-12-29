@@ -8,11 +8,12 @@ import io._
 class FileMatchersSpec extends SpecificationWithJUnit with TestFiles with MockFileSystem { def is =
                                                                                           """
   The FileMatchers trait provides matchers to check files and paths.
+
   In the following, okPath references a path which actually exists and missingPath, a path
   which doesn't.
   
                                                                                           """^
-                                                                                          endp^
+                                                                                          p^
   "The PathMatchers trait provide matchers for paths"                                     ^
     "beEqualToIgnoringSep checks if 2 paths are the same regardless of"                   ^bt^
     "their separators"                                                                    ^

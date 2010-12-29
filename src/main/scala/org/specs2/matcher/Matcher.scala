@@ -11,7 +11,7 @@ import time.Duration
 /**
  * The `Matcher` trait is the base trait for any Matcher.
  * 
- * This trait can be extended to provide an appropriate <code>apply</code> method that 
+ * This trait can be extended to provide an appropriate <code>apply</code> method that
  * will check an expectable value `a: Expectable[T]`.
  *
  * The result of a match is a MatchResult object (@see MatchResult).
@@ -19,10 +19,10 @@ import time.Duration
  * Matchers can be composed
  * 
  * Implementation notes:
- *   * the parameter to the apply method must be a by-name parameter. 
- *     This allows some values to be evaluated only when necessary. 
+ *   * the parameter to the apply method must be a by-name parameter.
+ *     This allows some values to be evaluated only when necessary.
  *     
- *   * However in the implementation of the apply function, it must be taken care of not 
+ *   * However in the implementation of the apply function, it must be taken care of not
  *     evaluating the parameter twice. Assigning it to a val is the solution to this issue.
  */
 trait Matcher[-T] { outer =>
@@ -34,7 +34,7 @@ trait Matcher[-T] { outer =>
   def apply[S <: T](t: Expectable[S]): MatchResult[S]
   
   /**
-   * This convenience method can be used to evaluate a boolean condition and return the 
+   * This convenience method can be used to evaluate a boolean condition and return the
    * appropriate MatchResult, depending on the boolean value
    * @return a MatchResult
    */
@@ -42,7 +42,7 @@ trait Matcher[-T] { outer =>
 	  Matcher.result(test, okMessage, koMessage, value) 
   }
   /**
-   * This convenience method can be used to evaluate a boolean condition and return the 
+   * This convenience method can be used to evaluate a boolean condition and return the
    * appropriate MatchResult, depending on the boolean value
    * @return a MatchResult
    */
@@ -67,7 +67,7 @@ trait Matcher[-T] { outer =>
  
   /** 
    * Adapts a matcher to another.
-   * ex: `be_==("message") ^^ (_.getMessage)` can be applied to an exception  
+   * ex: `be_==("message") ^^ (_.getMessage)` can be applied to an exception
    */
   def ^^[S](f: S => T) = new Matcher[S] {
     def apply[U <: S](a: Expectable[U]) = {
@@ -84,23 +84,26 @@ trait Matcher[-T] { outer =>
     def apply[U <: T](a: Expectable[U]) = outer(a).not
   }
   /**
+   * the logical and between 2 matchers
+   * @see MatchResult.and
+   */
+  def and[S <: T](m: =>Matcher[S]): Matcher[S] = new Matcher[S] {
+    def apply[U <: S](a: Expectable[U]) = outer(a).and(m(a))
+  }
+  /**
    * the logical or between 2 matchers
    * @see MatchResult.or
    */
   def or[S <: T](m: =>Matcher[S]) = new Matcher[S] {
-    def apply[U <: S](a: Expectable[U]) = {
-      val value = a
-      outer(value).or(m(value))
-    }
+    def apply[U <: S](a: Expectable[U]) = outer(a).or(m(a))
   }
   /**
    * @return a Skip MatchResult if this matcher fails
    */
   def orSkip: Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
-      val value = a
-      outer(value) match {
-    	  case MatchFailure(_, ko, _) => MatchSkip(ko, value)
+      outer(a) match {
+    	  case MatchFailure(_, ko, _) => MatchSkip(ko, a)
     	  case other => other
       }
     }
@@ -109,8 +112,7 @@ trait Matcher[-T] { outer =>
    *  The <code>lazily</code> operator returns a matcher which will match a function returning the expected value
    */   
   def lazily = new Matcher[() => T]() {
-    def apply[S <: () => T](a: Expectable[S]) = {
-      val function = a
+    def apply[S <: () => T](function: Expectable[S]) = {
       val r = outer(Expectable(function.value()))
       result(r, function)
     } 

@@ -3,7 +3,7 @@ package runner
 
 import reflect._
 import io._
-import main.{ Main, Arguments }
+import main.Arguments
 import control.Exceptions._
 import specification._
 import reporter._
@@ -15,7 +15,7 @@ import reporter._
  * @see specs2.run
  * @see org.specs2.main.Arguments for other command line options
  */
-class ClassRunner extends Classes with ConsoleOutput with Main {
+class ClassRunner extends Classes with ConsoleOutput {
 	lazy val reporter: Reporter = new ConsoleReporter {}
 	
   def main(arguments: Array[String]) = start(arguments:_*)

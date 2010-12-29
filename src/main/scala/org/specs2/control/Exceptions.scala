@@ -3,12 +3,11 @@ package control
 import scala.util.control.Exception._                                                                                          
 
 /**
- * This trait provides methods to catch exceptions and 
- * transform them into values which can be passed to 
- * further computations
+ * This trait provides methods to catch exceptions and transform them into values which can be passed to
+ * further computations.
  *
- * It uses the facilities found in the scala.util.control.Exception object
- * while providing a more concise api on some use cases.
+ * It uses the facilities found in the scala.util.control.Exception object while providing
+ * a more concise api on some use cases.
  *
  * @see org.specs2.control.ExceptionsSpec for examples
  */
@@ -19,7 +18,7 @@ trait Exceptions {
   /**
    * try to evaluate an expression, returning an Option
    * 
-   * A function Exception => Unit can be used as a side-effect to print the exception 
+   * A function Exception => Unit can be used as a side-effect to print the exception
    * to the console for example.
    * 
    * The 'tryo' name comes from the lift project: http://liftweb.net

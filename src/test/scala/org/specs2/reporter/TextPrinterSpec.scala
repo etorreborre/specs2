@@ -10,13 +10,18 @@ import specification._
 import SpecsArguments._
 
 class TextPrinterSpec extends SpecificationWithJUnit { def is =
-                                                                                          """
-The TextPrinter is folding Executed Fragments and exporting them
-to a ResultOutput trait knowing how to output successes, failures,...
-                                                                                          """^
-																						                                              p^
-  "Text presentation"                                                                       ^
-    "by default the Text and the examples are properly indented"                            ! prez().e1^
+                                                                                            """
+  The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
+  and outputs them using a `TextResultOutput`.
+
+  In the following examples the TextResultOutput is mocked so that the results are saved in
+  a buffer of Strings.
+
+  Arguments
+  =========                                                                                """^
+																						                                                p^
+  "Several arguments can be used to modify the text presentation"                           ^
+    "by default the Text and the examples are automatically indented"                       ! prez().e1^
     "if noindent = true then there is no automatic indenting"                               ! prez().e2^
     "if xonly = true"                                                                       ^
       "text is not shown"                                                                   ! xonlyargs().e1^
@@ -39,15 +44,22 @@ to a ResultOutput trait knowing how to output successes, failures,...
       "skipped status is cyan"                                                              ! color().e6^
       "stats are blue"                                                                      ! color().e7^
                                                                                             endp^
-  "Statuses"                                                                                ^
-    "regular text must have no status"                                                      ! status().e1^
-    "a successful example must be displayed with a +"                                       ! status().e2^
-    "a failed example must be displayed with a x"                                           ! status().e3^
-    "an error example must be displayed with a !"                                           ! status().e4^
-    "a skipped example must be displayed with a o"                                          ! status().e5^
-    "a pending example must be displayed with a *"                                          ! status().e6^
-    "a multi-line description must be indented ok"                                          ! status().e7^
-    "if showtimes is true, each individual time must be shown"                              ! status().e8^
+                                                                                            """
+  Examples presentation
+  =====================                                                                     """^
+                                                                                            p^
+  "regular text must have no status"                                                        ! status().e1^
+  "a successful example must be displayed with a +"                                         ! status().e2^
+  "a failed example must be displayed with a x"                                             ! status().e3^
+  "an error example must be displayed with a !"                                             ! status().e4^
+  "a skipped example must be displayed with a o"                                            ! status().e5^
+  "a pending example must be displayed with a *"                                            ! status().e6^
+  "a multi-line description must be indented ok"                                            ! status().e7^
+  "if showtimes is true, each individual time must be shown"                                ! status().e8^
+                                                                                            p^
+                                                                                            """
+  Statistics
+  =====================                                                                     """^
                                                                                             p^
   "Statistics must show"                                                                    ^
     "the number of examples"                                                                ! stats().e1^

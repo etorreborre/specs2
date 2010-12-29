@@ -16,16 +16,14 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
   successes or failures:
                                                                                                     """^
                                                                                                     p^
-  "if the specification has 1 ok example, there must be a testStarted/testFinished"                 +
-  "notification"                                                                                    ! notified().e1^
-  "if the specification has 2 ok examples, there must be a testStarted/testFinished"                +
-  "notification for each"                                                                           ! notified().e2^
-  "if the specification has 1 failing example, there must be a testStarted/testFailure"             +
-  " notification"                                                                                   ! notified().e3^
-  "if the specification has 1 failing example, the failure message must be reported"                ! notified().e4^
-  "if the specification has 1 example with an error, the error message must be reported"            ! notified().e5^
-  "if the specification has 1 skipped example, a test ignored must be reported"                     ! notified().e6^
-  "if the specification has 1 pending example, a test ignored must be reported"                     ! notified().e7^
+  "If the specification has"                                                                        ^
+    "1 ok example, there must be a testStarted/testFinished notification"                           ! notified().e1^
+    "2 ok examples, there must be a testStarted/testFinished notification for each"                 ! notified().e2^
+    "1 failing example, there must be a testStarted/testFailure notification"                       ! notified().e3^
+    "1 failing example, the failure message must be reported"                                       ! notified().e4^
+    "1 example with an error, the error message must be reported"                                   ! notified().e5^
+    "1 skipped example, a test ignored must be reported"                                            ! notified().e6^
+    "1 pending example, a test ignored must be reported"                                            ! notified().e7^
                                                                                                     end
 
   case class notified() {

@@ -13,7 +13,7 @@ class GivenWhenThenSpec extends SpecificationWithJUnit { def is = sequential    
   "Given that the customer buys 3 books at 10 dollars each"                                        ! c1.buyBook^
   "Given that the customer buys 1 book at 20 dollars"                                              ! c1.buyBook^
   "When he checks out"                                                                             ! c1.checkout^
-  "Then the total price must be 50 dollars"                                                        ! c1.total^
+  "Then the total price must be 50 dollars"                                               ! c1.total^
                                                                                                    end
 
   case object c1 {

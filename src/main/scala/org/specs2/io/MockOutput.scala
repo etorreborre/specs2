@@ -4,7 +4,9 @@ package io
 import scala.collection.mutable.ListBuffer
 
 /**
- * Mock implementation of the Output trait to gather messages
+ * Mock implementation of the Output trait to gather messages.
+ *
+ * !! This implementation is mutable, so it is not thread-safe !!
  */
 private[specs2]
 trait MockOutput extends Output {

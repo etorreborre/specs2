@@ -7,7 +7,7 @@ import control.LazyParameter
 import main.Arguments
 import StandardFragments._
 /**
- * A Fragments object is a list of fragments which can be related 
+ * A Fragments object is a list of fragments which can be related
  * to other fragments by using the ^ method
  * 
  * A Fragments object carries an Arguments instance containing options for selecting,

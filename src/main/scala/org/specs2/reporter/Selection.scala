@@ -40,12 +40,12 @@ trait DefaultSelection {
 
   /** 
    * the sort returns sequences of fragments which can be executed concurrently.
-   * Among the constraints to respect, any Step Fragment must be executed before any 
+   * Among the constraints to respect, any Step Fragment must be executed before any
    * following Example Fragment, so that "first" and "last" actions are executed properly
    * in a Specification
    * 
    * If the arguments specify that the specification is sequential, then
-   * each fragment will be executed individually  
+   * each fragment will be executed individually
    */
   protected def sort(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[Fragments] = {
     if (arguments.sequential) fragments.map(f => Fragments.create(f))

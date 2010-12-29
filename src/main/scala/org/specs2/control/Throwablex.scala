@@ -4,12 +4,12 @@ package control
 import java.io. { StringWriter, PrintWriter }
 
 /**
- * This trait allows to add some utility methods to </code>Throwable</code> objects.
+ * This trait allows to add some utility methods to `Throwable` objects.
  */
 private [specs2]
 trait Throwablex {
   /**
-   * Implicit method to add additional methods to Exception objects
+   * Implicit method to add additional methods to Throwable objects
    */
   implicit def extend[T <: Throwable](t: T) = new ExtendedThrowable(t)  
   /**

@@ -27,7 +27,7 @@ class PluralSpec extends SpecificationWithJUnit with Plural with DataTables { de
     }
   }                                                                                       ^
                                                                                           p^
-  "A integer can be optionally described by a pluralized string:"+ 
+  "A integer can be optionally described by a pluralized string:"+
   "3 qty 'apple' == Some(3 apples)" ! {
 
     "quantity"   | "description"   | "result"                               |>

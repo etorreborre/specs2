@@ -9,7 +9,7 @@ import text.Trim._
 import control.LazyParameter
 
 /**
- * A Fragment is a piece of a specification. It can be a piece of text, an action or 
+ * A Fragment is a piece of a specification. It can be a piece of text, an action or
  * an Example
  */
 sealed trait Fragment {

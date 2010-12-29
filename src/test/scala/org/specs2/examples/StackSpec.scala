@@ -25,7 +25,7 @@ class StackSpec extends SpecificationWithJUnit { def is =
     "throw an exception when sent #pop"                                                   ! empty().e2^p
   
   def nonEmptyStack(s: =>SizedStack) =                                                                                           
-    "not be empty"                                                                        ! nonempty(s).e1^ 
+    "not be empty"                                                                        ! nonempty(s).e1^
     "return the top item when sent #top"                                                  ! nonempty(s).e2^ 
     "not remove the top item when sent #top"                                              ! nonempty(s).e3^ 
     "return the top item when sent #pop"                                                  ! nonempty(s).e4^ 

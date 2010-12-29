@@ -74,12 +74,12 @@ You can see on the examples above several things which are applicable to all mat
  * the general form for using a matcher is `a must matcher`
  * you can use `should` instead of `must` if you prefer
  * there are only 2 shortcuts provided because the equality matcher is so ubiquitous `must_==` and `===`
- * for most of the matchers you can use a form where the `be` word (or the `have` word) is detached
+ * for most of the matchers you can use a form where the ` be` word (or the `have` word) is detached
  * you can as well negate a matcher by adding not before (but also after as a method on the matcher)
 
 An non-exhaustive list of those matchers:
 
- * `be` for checking if `a eq b`
+ * ` be` for checking if `a eq b`
  * `beTrue, beFalse`
  * `beLike { case exp => ok }`: to check if an object is like a given pattern
  * `beLike { case exp => exp must beXXX }`: to check if an object is like a given pattern, and verifies a condition
@@ -160,11 +160,11 @@ There are several matchers to check Option and Either instances:
 
 Matching on strings is very common. Here are the matchers which can help you:
 
- * `beMatching` (or `be matching`) checks if a string matches a regular expression
+ * `beMatching` (or ` be matching`) checks if a string matches a regular expression
  * `find(exp).withGroups(a, b, c) checks if some groups are found in a string
  * `have length` checks the length of a string
  * `have size` checks the size of a string (seen as an `Iterable[Char]`)
- * `be empty` checks if a string is empty
+ * ` be empty` checks if a string is empty
  * `beEqualTo(b).ignoreCase` checks if 2 strings are equal regardless of casing
  * `beEqualTo(b).ignoreSpace` checks if 2 strings are equal when trimmed
  * `beEqualTo(b).ignoreSpace.ignoreCase` you can compose them
@@ -205,6 +205,8 @@ Less often you need to do comparisons on Numerical values:
     same message
  * `throwA[ExceptionType].like { case e => e must matchSomething }` or
    `throwA(exception).like { case e => e must matchSomething }` allow to verify that the thrown exception satisfies a property
+ * `throwA[ExceptionType](me.like { case e => e must matchSomething }` or
+   `throwA(exception).like { case e => e must matchSomething }` allow to verify that the thrown exception satisfies a property
 
 #### Iterable matchers
 
@@ -215,6 +217,12 @@ Iterables can be checked with several matchers:
 
   * to check if some elements are contained in the iterable in the same order
     `List(1, 2, 3, 4) must contain(2, 4).inOrder
+
+  * to check if only some elements are contained in the iterable
+    `List(4, 2) must contain(2, 4).only
+
+  * to check if only some elements are contained in the iterable and in the same order
+    `List(2, 4) must contain(2, 4).only.inOrder
 
   * to check the size of an iterable
     `List(1, 2) must have size(2)`

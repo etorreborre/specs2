@@ -44,15 +44,8 @@ trait StringBaseMatchers { outer =>
     } 
   }
   /** matches if b matches the regular expression a */   
-  def beMatching(t: =>String) = new Matcher[String] {
-    def apply[S <: String](b: Expectable[S]) = {
-      val a = t
-      result(b.value matches a,
-             b.description + " matches " + q(a), 
-             b.description + " doesn't match " + q(a), b)
-    }
-  }
-  /** matches if b.startsWith(a) */   
+  def beMatching(t: =>String) = new BeMatching(t)
+  /** matches if b.startsWith(a) */
   def startWith(t: =>String) = new Matcher[String] { 
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
@@ -156,5 +149,14 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
   def containing(s: String) = outer.contain(s)
   def startingWith(s: String) = outer.startWith(s)
   def endingWith(s: String) = outer.endWith(s)
+}
+protected[specs2]
+class BeMatching(t: =>String) extends Matcher[String] {
+  def apply[S <: String](b: Expectable[S]) = {
+    val a = t
+    result(b.value matches a,
+           b.description + " matches " + q(a),
+           b.description + " doesn't match " + q(a), b)
+  }
 }
 

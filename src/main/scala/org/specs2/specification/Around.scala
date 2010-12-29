@@ -4,7 +4,7 @@ package specification
 import execute._
 
 /**
- * The Around trait can be inherited by classes which will 
+ * The Around trait can be inherited by classes which will
  * execute some code inside the around method provided by the context.
  * 
  * This can be used for example to execute some code inside a webapp session

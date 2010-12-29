@@ -27,7 +27,9 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
   def contain[T](t: =>T): ContainMatcher[T] = contain(lazyfy(t))
   /** match if iterable contains (t1, t2) */
   def contain[T](t: LazyParameter[T]*): ContainMatcher[T] = new ContainMatcher(t:_*)
-  
+  /** match if iterable contains one of (t1, t2) */
+  def containAnyOf[T](t: LazyParameter[T]*): ContainAnyOfMatcher[T] = new ContainAnyOfMatcher(t:_*)
+
   /** match if iterable contains (x matches p) */
   def containPattern[T](t: =>String): ContainLikeMatcher[T] = containLike[T](t, "pattern")
   /** match if iterable contains (x matches .*+a+.*) */
@@ -59,12 +61,7 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
    */
   def haveTheSameElementsAs[T](l: =>Iterable[T]) = new HaveTheSameElementsAs(l)
 
-  /**
-   * Matches if a sequence contains the same elements as s, using the equality (in the same order)
-   */
-  def beTheSameSeqAs[T](s: =>Seq[T]) = ((AnyMatchers.be_==(_:T)).toSeq).apply(s)
-
-  private def containLike[T](pattern: =>String, matchType: String) = 
+  private def containLike[T](pattern: =>String, matchType: String) =
     new ContainLikeMatcher[T](pattern, matchType) 
 }
 
@@ -72,28 +69,64 @@ private[specs2]
 trait IterableBeHaveMatchers extends LazyParameters { outer: IterableMatchers =>
   implicit def iterable[T](s: MatchResult[Iterable[T]]) = new IterableBeHaveMatchers(s)
   class IterableBeHaveMatchers[T](s: MatchResult[Iterable[T]]) {
-    def contain(ts: LazyParameter[T]*) = s.apply(outer.contain(ts:_*))
+    def contain(t: LazyParameter[T], ts: LazyParameter[T]*) = new ContainMatchResult(s, outer.contain((t +: ts):_*))
     def containMatch(t: =>String) = s.apply(outer.containMatch(t))
     def containPattern(t: =>String) = s.apply(outer.containPattern(t))
     def size(n: Int) = s.apply(outer.haveSize(n))
   }
 }
+class ContainMatchResult[T](val s: MatchResult[Iterable[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+  val matcher = containMatcher
+  def only = new ContainOnlyMatchResult(s, containMatcher.only)
+  def inOrder = new ContainInOrderMatchResult(s, containMatcher.inOrder)
+}
+class ContainOnlyMatchResult[T](val s: MatchResult[Iterable[T]], containMatcher: ContainOnlyMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+  val matcher = containMatcher
+  def inOrder = new ContainOnlyInOrderMatchResult(s, containMatcher.inOrder)
+}
+class ContainInOrderMatchResult[T](val s: MatchResult[Iterable[T]], containMatcher: ContainInOrderMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+  val matcher = containMatcher
+  def only = new ContainOnlyInOrderMatchResult(s, containMatcher.only)
+}
+class ContainOnlyInOrderMatchResult[T](val s: MatchResult[Iterable[T]], containMatcher: Matcher[Iterable[T]]) extends AbstractContainMatchResult[T] { outer =>
+  val matcher = containMatcher
+}
+trait AbstractContainMatchResult[T] extends MatchResult[Iterable[T]] {
+  val matcher: Matcher[Iterable[T]]
+  protected val s: MatchResult[Iterable[T]]
+  val expectable = s.expectable
+  lazy val matchResult = s.apply(matcher)
 
+  override def toResult = matchResult.toResult
+  def not: MatchResult[Iterable[T]] = matchResult.not
+  def apply(matcher: Matcher[Iterable[T]]): MatchResult[Iterable[T]] = matchResult.apply(matcher)
+}
 class ContainMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
-  def apply[S <: Iterable[T]](it: Expectable[S]) = {
-    val (expected, iterable) = (t.toList.map(_.value), it)
-    result(iterable.value.toList.intersect(expected).sameElementsAs(expected), 
-           iterable.description + " contains " + q(expected.mkString(", ")), 
-           iterable.description + " doesn't contain " + q(expected.mkString(", ")), iterable)
+  def apply[S <: Iterable[T]](actual: Expectable[S]) = {
+    val expected = t.toList.map(_.value)
+    result(actual.value.toList.intersect(expected).sameElementsAs(expected),
+           actual.description + " contains " + q(expected.mkString(", ")),
+           actual.description + " doesn't contain " + q(expected.mkString(", ")), actual)
   }
   def inOrder = new ContainInOrderMatcher(t:_*)
+  def only = new ContainOnlyMatcher(t:_*)
 }
+
+class ContainAnyOfMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
+  def apply[S <: Iterable[T]](actual: Expectable[S]) = {
+    val expected = t.toList.map(_.value)
+    result(actual.value.toList.intersect(expected).nonEmpty,
+           actual.description + " contains at least one of " + q(expected.mkString(", ")),
+           actual.description + " doesn't contain any of " + q(expected.mkString(", ")), actual)
+  }
+}
+
 class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
-  def apply[S <: Iterable[T]](iterable: Expectable[S]) = {
-    val expected= t.toList.map(_.value)
-    result(inOrder(iterable.value.toList, expected), 
-           iterable.description + " contains in order " + q(expected.mkString(", ")), 
-           iterable.description + " doesn't contain in order " + q(expected.mkString(", ")), iterable)
+  def apply[S <: Iterable[T]](actual: Expectable[S]) = {
+    val expected = t.toList.map(_.value)
+    result(inOrder(actual.value.toList, expected),
+           actual.description + " contains in order " + q(expected.mkString(", ")),
+           actual.description + " doesn't contain in order " + q(expected.mkString(", ")), actual)
   }
   
   private def inOrder[T](l1: List[T], l2: List[T]): Boolean = {
@@ -102,6 +135,19 @@ class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]
       case other => l2.headOption == l1.headOption && inOrder(l1.drop(1), l2.drop(1)) || inOrder(l1.drop(1), l2)
     }
   }
+
+  def only: Matcher[Iterable[T]] = (this and new ContainOnlyMatcher(t:_*))
+}
+
+class ContainOnlyMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
+  def apply[S <: Iterable[T]](iterable: Expectable[S]) = {
+    val expected = t.toList.map(_.value)
+    val actual = iterable.value
+    result(actual.toList.intersect(expected).sameElementsAs(expected) && expected.size == actual.size,
+           iterable.description + " contains only " + q(expected.mkString(", ")),
+           iterable.description + " doesn't contain only " + q(expected.mkString(", ")), iterable)
+  }
+  def inOrder: Matcher[Iterable[T]] = (this and new ContainInOrderMatcher(t:_*))
 }
 
 class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matcher[Iterable[T]] {

@@ -2,10 +2,13 @@ package org.specs2
 package matcher
 
 class MatcherSpec extends SpecificationWithJUnit { def is =
-
-  "a matcher can be adapted with a function"                                            ! e1^
-  "a matcher can be defined by a function"                                              ! e2^
-                                                                                         end
+                                                                                       """
+  Matchers can be created in different ways
+                                                                                       """^
+                                                                                       p^
+  "a matcher can be adapted with a function"                                           ! e1^
+  "a matcher can be defined by a function"                                             ! e2^
+                                                                                        end
 
   def e1 = new Exception("message")  must be_==("message") ^^ ((_:Exception).getMessage)
   def e2 = {

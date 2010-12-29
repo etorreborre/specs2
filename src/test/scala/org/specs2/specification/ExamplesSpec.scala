@@ -3,21 +3,29 @@ package specification
 
 class ExamplesSpec extends SpecificationWithJUnit {  def is =
                                                                                           """
-  In a Specification, the content variable stores an instance of the Fragments class,
-  which is merely a list of fragments. Those fragments are either:
+  In a Specification, the `contents` variable stores an instance of the Fragments class,
+  which is merely a list of fragments. Those fragments are:
   
-   * Text elements
-   * Example elements, with an executable block returning
-   * SpecificationFragments elements which are Fragments coming from another 
-     specification
-                                                                                          """^
-                                                                                          p^
-  "an example is simply created with string ! e1 where e1 returns a Result"               ! success^
-  "an example is can also take its own description to return a Result"                    ! e1^
-  "an example has a matches method to match its description against a regexp"             ^ 
-    "it return true if there is a match"                                                  !matches().e1^
-    "it return true even skipping newlines if there are any in the description"           !matches().e2^
-                                                                                          end
+   * `SpecStart` / `SpecEnd` elements. A `SpecStart` contains the arguments applicable to all the specification
+     fragments, and an identifier for the Specification (`SpecName`)
+
+   * `Text` elements. Mostly a String, but they can be translated to html using a Markup notation
+
+   * `Example` elements, with an executable block returning a `Result` (a `Success`, a `Failure`,...)
+
+   * `Step` fragments which are not reported but execute an action
+
+   * `See` fragments to create a link to another specification
+
+   How to create an Example
+   ========================                                                                      """^
+                                                                                                  p^
+  "An example is simply created with `string ! e1` where e1 returns a `Result`"                   ! success^
+  "An example is can also take its own description to return a Result"                            ! e1^
+  "An example has a matches method to match its description against a regexp"                     ^
+    "it returns true if there is a match"                                                         !matches().e1^
+    "it works even if there are newlines in the description"                                      !matches().e2^
+                                                                                                  end
                                                                                         
   def e1 = {
   	val ex = "name: eric, age: 18" ! function

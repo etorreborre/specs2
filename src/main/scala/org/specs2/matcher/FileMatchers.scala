@@ -54,7 +54,7 @@ trait PathBaseMatchers extends FileSystem { outer =>
 
 trait PathBeHaveMatchers { outer: PathBaseMatchers =>
   /** 
-   * matcher aliases and implicits to use with be / have + matcher 
+   * matcher aliases and implicits to use with be / have + matcher
    */
   implicit def toPathResultMatcher(result: MatchResult[String]) = new PathResultMatcher(result)
   class PathResultMatcher(result: MatchResult[String]) {
