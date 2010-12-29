@@ -190,6 +190,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
           <jvmArgs>
             <jvmArg>-Xmx512m</jvmArg>
             <jvmArg>-Xms64m</jvmArg>
+            <jvmArg>-Xss4m</jvmArg>
           </jvmArgs>
         </configuration>
       </plugin>
@@ -310,6 +311,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
         <configuration>
           <jvmArgs>
             <jvmArg>-Xmx512m</jvmArg>
+            <jvmArg>-Xss4m</jvmArg>
           </jvmArgs>
         <!--  <vscaladocVersion>1.2-SNAPSHOT</vscaladocVersion> -->
           <scalaVersion>${scala.version}</scalaVersion>
