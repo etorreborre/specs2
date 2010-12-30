@@ -13,6 +13,10 @@ class IterableMatchersSpec extends SpecificationWithJUnit { def is =
   "we can check if at least one or several elements are present in an iterable"           ^
     { List(1, 2) must containAnyOf(1, 4) }                                                ^
                                                                                           p^
+  "we can check the iterable contains another element exactly once"                       ^
+    { List(1, 2) must contain(1).exactlyOnce }                                            ^
+    { List(1, 1) must contain(1).exactlyOnce.not }                                        ^
+                                                                                          p^
   "we can check if an iterable contains other elements in the same order"                 ^
     { List(1, 2, 3, 4) must contain(2, 4).inOrder }                                       ^
     "and fails when one element is missing"                                               ! order().fail1^ 

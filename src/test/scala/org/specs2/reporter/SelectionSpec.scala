@@ -64,10 +64,10 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
     def e5 = {
       val fragments: Fragments = "intro" ^ action("1") ^ ex1 ^ ex2 ^ action("2") ^ action("3") ^ ex1 ^ ex2
       select(fragments).map(l => l.toList.map(_.toString).toString) must contain(
-      "List(SpecStart(), Text(intro), Step)",
+      "List(SpecStart(anon), Text(intro), Step)",
       "List(Example(ex1), Example(ex2))",
       "List(Step, Step)",
-      "List(Example(ex1), Example(ex2), SpecEnd())").inOrder
+      "List(Example(ex1), Example(ex2), SpecEnd(anon))").inOrder
     }
     def action(message: String) = Action(selection.println(message)) 
   }

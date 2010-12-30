@@ -14,7 +14,7 @@ import specification._
  */
 private[specs2]
 trait ExecutionStrategy {
-  def execute(implicit arguments: Arguments): Seq[Fragments] => Seq[ExecutedFragment] 
+  def execute(implicit arguments: Arguments): Seq[FragmentSeq] => Seq[ExecutedFragment]
 }
 
 /**
@@ -26,7 +26,7 @@ trait ExecutionStrategy {
 private[specs2]
 trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution {
   
-  def execute(implicit arguments: Arguments) = (fragments: Seq[Fragments]) => {
+  def execute(implicit arguments: Arguments) = (fragments: Seq[FragmentSeq]) => {
     implicit val executor = Executors.newFixedThreadPool(arguments.threadsNb)
     try {
       fragments.map { fs => 

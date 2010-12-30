@@ -37,7 +37,6 @@ object SpecEnd {
 case class Text(t: String) extends Fragment {
   override def matches(s: String) = t.matches(s)
 }
-case class Group(fragments: Seq[Fragment], args: Arguments = Arguments())
 case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable {
   def execute = body()
   override def matches(s: String) = asString(desc).removeAll("\\n").matches(s)

@@ -37,19 +37,19 @@ class SpecsArgumentsSpec extends SpecificationWithJUnit with ScalazMatchers with
                                                                                                        end
 
   case class simple() {
-    val parent = xonly ^ "s1".title ^ "t1" ^ "e1" ! success
+    val parent = spec(xonly ^ "s1".title ^ "t1" ^ "e1" ! success)
     def e1 = xonlyArgs(parent) must_== List(true, true, true, true)
   }
   case class nested() {
-    val child1 = sequential ^ "c1".title ^ "t2"
-    val nested1 = simple().parent ^ include(child1)
+    val child1 = spec(sequential ^ "c1".title ^ "t2")
+    val nested1 = spec(simple().parent ^ include(child1))
 
-    def e1 = xonlyArgs(nested1) must_== List(true, true, true, true, true, true)
-    def e2 = sequentialArgs(nested1) must_== List(false, false, false, true, true, true)
+    def e1 = xonlyArgs(nested1) must_== List(true, true, true, true, true, true, true)
+    def e2 = sequentialArgs(nested1) must_== List(false, false, false, true, true, true, false)
   }
 
-  def spec(fs: Fragments) = new Specification { def is = fs }
-  def argumentsList(fs: Fragments) = foldAll(spec(fs).content.fragments).toList
+  def spec(fs: Fragments) = new Specification { def is = fs }.content
+  def argumentsList(fs: Fragments) = foldAll(fs.fragments).toList
   def arguments(fs: Fragments) = argumentsList(fs).map(_.toString)
   def xonlyArgs(fs: Fragments) = argumentsList(fs).map(_.xonly)
   def sequentialArgs(fs: Fragments) = argumentsList(fs).map(_.sequential)

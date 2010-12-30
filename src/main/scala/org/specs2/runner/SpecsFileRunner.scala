@@ -22,11 +22,12 @@ object SpecsFileRunner extends SpecificationsFinder {
   def main(arguments: Array[String]): Unit = {
 	  implicit val args = Arguments(arguments:_*)
 	    
-	  lazy val allFragments = Fragments {
-      SpecStart(specName) +: Br() +: Backtab() +:
-      specifications.flatMap(_.content.fragments) :+
-      SpecEnd(specName)
-    } 
+	  lazy val allFragments = {
+      val start = SpecStart(specName)
+      val end = SpecEnd(specName)
+      val middle = Br() +: Backtab() +: specifications.flatMap(_.content.fragments)
+      new Fragments(Some(start), middle, Some(end))
+    }
     lazy val specName = "Specifications matching "+args.specName+" in "+FromSource.srcDir+"\n"
     
 	  reporter.report(new Specification { def is = allFragments })

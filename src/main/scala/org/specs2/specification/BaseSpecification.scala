@@ -13,11 +13,9 @@ import main.Arguments
 trait BaseSpecification extends SpecificationStructure 
    with FragmentsBuilder {
   
-  def include(f: Fragments): Group = fragmentGroup(f)
-  def include(s: SpecificationStructure): Group = fragmentGroup(s.content)
-  def include(args: Arguments, s: SpecificationStructure): Group = {
-    fragmentGroup(s.content.overrideArgs(args))
-  }
+  def include(f: Fragments): FragmentsFragment = fragmentsFragments(f)
+  def include(s: SpecificationStructure): FragmentsFragment = include(s.content)
+  def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(s.content.overrideArgs(args))
 }
 
 /**

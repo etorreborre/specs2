@@ -7,10 +7,12 @@ import reflect._
  * Name declaration for a specification
  */
 private[specs2]
-trait SpecName {
+sealed trait SpecName {
   def name: String
   def url: String
   def matches(p: String) = name matches p
+  def show = name+"("+id+")"
+
   override def toString = name
   override def equals(o: Any) = {
     o match {
@@ -46,7 +48,8 @@ case class SpecificationTitle(t: String) extends SpecName {
   def overrideWith(n: SpecName) = n match {
     case SpecificationTitle(t)  => n
     case SpecificationName(s) => new SpecificationName(s) {
-      override def name = t
+      override def id = n.id
+      override def name = if (t.isEmpty) n.name else t
     }
   }
 

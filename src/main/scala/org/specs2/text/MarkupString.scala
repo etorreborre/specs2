@@ -2,7 +2,9 @@ package org.specs2
 package text
 
 /**
- * Abstraction of some text which may, or may not support a Markup syntax
+ * Abstraction of some text which may, or may not support a Markup syntax.
+ *
+ * It is primarily used for the html rendering of code in Example descriptions
  */
 private[specs2]
 sealed trait MarkupString {

@@ -7,62 +7,62 @@ import control.LazyParameter
 import main.Arguments
 import StandardFragments._
 /**
- * A Fragments object is a list of fragments which can be related
- * to other fragments by using the ^ method
- * 
- * A Fragments object carries an Arguments instance containing options for selecting,
- * executing and reporting Fragments
+ * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-case class Fragments (fragments: Seq[Fragment]) {
-  def add(e: =>Fragment) = copy(fragments = fragments :+ e)
-  import StandardFragments._
-  override def toString = fragments.mkString("\n")
-  def ^(e: =>Fragment) = e match {
-    case s @ SpecStart(n, a) => Fragments(s.withArgs(arguments) +: minusStart())
-    case _                   => add(e)
-  }
-  def ^(g: Group) = copy(fragments = fragments ++ g.fragments)
-  def ^(a: Arguments) = copy(fragments = start.withArgs(a) +: minusStart())
+class Fragments (specStart: Option[SpecStart] = None, val middle: Seq[Fragment] = Nil, specEnd: Option[SpecEnd] = None) {
+  def fragments = if (middle.isEmpty) Seq() else (start +: middle :+ end)
+
+  private def append(e: Fragment) = new Fragments(specStart, middle :+ e, specEnd)
+  def specTitleIs(s: SpecStart): Fragments = new Fragments(Some(start.withName(s.name)), middle, specEnd)
+  def add(e: Fragment): Fragments = append(e)
+  def add(fs: Seq[Fragment]): Fragments =  new Fragments(specStart, middle ++ fs, specEnd)
+  def add(fs: Fragments): Fragments = add(fs.fragments)
+  def add(a: Arguments): Fragments = new Fragments(Some(start.withArgs(a)), middle, specEnd)
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
-  def overrideArgs(args: Arguments) = Fragments(start.overrideArgs(args) +: minusStart())
+  def overrideArgs(args: Arguments) = new Fragments(Some(start.overrideArgs(args)), middle, specEnd)
 
-  def start = fragments.headOption match {
-    case Some(s @ SpecStart(n, a)) => s
-    case _                         => SpecStart("")
-  }
+  import StandardFragments._
+  override def toString = fragments.mkString("\n")
+
   def arguments = start.arguments
-  def end = fragments.lastOption match {
-    case Some(e @ SpecEnd(n)) if (n.id == start.name.id) => e
-    case _                    => SpecEnd("")
-  }
-  def minusStart(fs: Seq[Fragment] = fragments) = fs.headOption match {
-    case Some(SpecStart(_, _)) => fs.drop(1)
-    case _                     => fs
-  }
-  def minusEnd(fs: Seq[Fragment] = fragments) = fs.lastOption match {
-    case Some(SpecEnd(_)) => fs.dropRight(1)
-    case _                => fs
-  }
-  private def middle = minusEnd(minusStart())
-
+  def start = specStart.getOrElse(SpecStart(""))
+  def end = specEnd.getOrElse(SpecEnd("").withName(start.name))
 }
-case object Fragments {
-  def create(fs: Fragment*) = new Fragments(fs)
-  
+
+/**
+ * Utility methods for fragments
+ */
+object Fragments {
+  /**
+   * @return a Fragments object containing only a seq of Fragments.
+   */
+  def createList(fs: Fragment*) = new Fragments(middle = fs)
+  /**
+   * @return a Fragments object, where the SpecStart might be provided by the passed fragments
+   */
+  def create(fs: Fragment*) = {
+    fs.toList match {
+      case (s @ SpecStart(n, a)) :: rest => new Fragments(Some(s), middle = rest)
+      case _                             => createList(fs:_*)
+    }
+  }
+
+  /** @return true if the Fragment is an Example */
   def isExample: Function[Fragment, Boolean] = { case Example(_, _) => true; case _ => false }
+  /** @return true if the Fragment is a step */
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
   
-  /** 
-   * add a SpecStart and SpecEnd if there are none
-   * 
-   * Makes sure that the arguments instance in the Fragments object and in the SpecStart
-   * fragment are the same 
-   */
+  /** @return a Fragments object with the appropriate name set on the SpecStart fragment */
   def withSpecStartEnd(fragments: Fragments, name: SpecName): Fragments = {
     val specStart = fragments.start.withName(name)
-    Fragments(specStart +: fragments.middle :+ fragments.end.withName(specStart.name))
+    new Fragments(Some(specStart), fragments.middle, Some(fragments.end.withName(specStart.name)))
   }
+  /**
+   * @return a Fragments object with the appropriate name set on the SpecStart fragment
+   *
+   * That name is derived from the specification structure name
+   */
   def withSpecStartEnd(fragments: Fragments, s: SpecificationStructure): Fragments = withSpecStartEnd(fragments, SpecName(s))
 
 }

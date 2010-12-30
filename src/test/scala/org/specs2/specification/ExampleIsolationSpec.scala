@@ -10,7 +10,7 @@ class ExampleIsolationSpec extends SpecificationWithJUnit with UserInteractions 
   The main idea is to create a inheritance tree of classes to model nested contexts where
   variables are renitialized for each example by the sheer virtue of creating a fresh 
   context object
-                                                                                          """                                                                                      ^
+                                                                                          """^
   "Those 2 first Fragments show that they are not sharing variables"                      ^
     "This one modifies a local variable"                                                  ! c().e1^
     "This other one 'reuses' the same local variable, but the variable is "               +

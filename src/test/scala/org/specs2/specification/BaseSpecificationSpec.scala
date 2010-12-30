@@ -30,7 +30,7 @@ There are 3 steps in executing a specification:
   3. printing the results to the Console
                                                                                           """^
                                                                                           p^
-   include(new ExamplesSpec)                                                              ^
+   include(new FragmentsBuilderSpec)                                                      ^
    include(new FragmentsExecutionSpec)                                                    ^
    include(new TextPrinterSpec)                                                           ^
                                                                                           end
