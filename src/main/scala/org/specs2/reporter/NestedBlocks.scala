@@ -24,7 +24,7 @@ trait NestedBlocks {
     blocks.foldLeft((Nil: List[S], Nil: List[T])) { (res, cur) =>
       val (result, stack) = res
       cur match {
-        case BlockStart(value)       => (result :+ f(top(addToTop(stack, value))), addToTop(stack, value))
+        case BlockStart(value)       => (result :+ f(top(stack) |+| value), (top(stack) |+| value) :: stack)
         case BlockBit(value)         => (result :+ f(top(stack)), stack)
         case BlockEnd(value)         => (result :+ f(top(stack)), pop(stack))
       }
