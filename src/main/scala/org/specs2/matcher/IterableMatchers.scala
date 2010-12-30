@@ -110,6 +110,16 @@ class ContainMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
   }
   def inOrder = new ContainInOrderMatcher(t:_*)
   def only = new ContainOnlyMatcher(t:_*)
+  def exactlyOnce = new ContainExactlyOnceMatcher(t:_*)
+}
+
+class ContainExactlyOnceMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
+  def apply[S <: Iterable[T]](actual: Expectable[S]) = {
+    val expected = t.toList.map(_.value)
+    result(expected.forall(e => actual.value.toList.filter(_ == e).size == 1),
+           actual.description + " contains exactly once " + q(expected.mkString(", ")),
+           actual.description + " doesn't contain exactly once " + q(expected.mkString(", ")), actual)
+  }
 }
 
 class ContainAnyOfMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {

@@ -23,7 +23,7 @@ trait AnyBaseMatchers {
   def beTheSameAs[T <: AnyRef](t: =>T) = new Matcher[T] {
     def apply[S <: T](a: Expectable[S]) = {
       val b = t
-      result(a.value eq b, a.description + " is " + q(b), a.description + " is not " + q(b), a)
+      result(a.value eq b, a.description + " is the same as " + q(b), a.description + " is not the same as " + q(b), a)
     }
   }
 
