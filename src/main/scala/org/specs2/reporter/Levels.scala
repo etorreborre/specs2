@@ -53,9 +53,7 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
     val summed = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T])
     implicit val m = LevelsConcatMonoid[T]
     val all = summed.foldLeft(m.zero)(m append (_, _)).blocks
-    val minLevel = all.map(_._2).min
-    val (before, after) = all.span(b => b._2 >= 0)
-	  before ++ after.map { case (b, l) => (b, l - min(0, minLevel)) }
+    all map { case (b, l) => if (l < 0) (b, 0) else (b, l) }
   }
   def levels = allLevels.map(_._2)
 
@@ -65,9 +63,10 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    * @return reset the levels of all blocks by incrementing or decrementing the level 
    *         value, until a Reset block is met
    */
-  def resetLevel(f: Int => Int, stopCondition: Int => Boolean = (_:Int) => false) = {
-    val breakAtFirstReset = blocks.span(b => !isReset(b) && !stopCondition(b._2))
-    Levels(breakAtFirstReset._1).mapLevel(f) add
+  def resetLevel(f: Int => Int) = {
+    val setLevel = (b: Block[T], l: Int) => (b, f(l))
+    val breakAtFirstReset = blocks.span(b => !isReset(b))
+    Levels(breakAtFirstReset._1).mapLevel(setLevel) add
     Levels(breakAtFirstReset._2)
   }
 
@@ -75,7 +74,7 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    * @return reset all the levels of all blocks by incrementing or decrementing the level 
    *         value
    */
-  private def mapLevel(f: Int => Int) = Levels(blocks.map((b: (Block[T], Int)) => (b._1, f(b._2))))
+  private def mapLevel(f: (Block[T], Int) => (Block[T], Int)) = Levels(blocks.map(f.tupled))
 
   /**
    * @return a Tree[T] based on the level of each block
@@ -104,17 +103,16 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
     all.drop(1).foldLeft(leaf(initial).loc) { (treeLoc, cur) =>
       val (block, level) = cur
       m(block.t, treeLoc.root.toTree.flatten.size) match {
-        case Some(s) =>
-          treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc).insertDownLast(leaf(s))
-        case None =>  treeLoc
+        case Some(s) => treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc).insertDownLast(leaf(s))
+        case None    => treeLoc
       }
     }
   } 
-  /** @return true if a Block is a Reset block */
-  private val isReset = (b: (Block[T], Int)) => b match {
-    case (BlockReset(t), l) => true
-    case (b, l) => false
+  private val isReset = (b: (Block[T], Int)) => b._1 match {
+    case BlockReset(t) => true
+    case other         => false
   }
+
   override def equals(a: Any) = {
     a match {
       case l: Levels[_] => normalizeResets.blocks.equals(l.normalizeResets.blocks)
@@ -126,8 +124,8 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    */
   private def normalizeResets = {
     new Levels(blocks.map {
-      case (BlockReset(t), _) => (BlockReset(t), 0) 
-      case other              => other 
+      case (BlockReset(t), _)      => (BlockReset(t), 0)
+      case other                   => other
     })
   }
 }
@@ -191,7 +189,7 @@ sealed trait Block[T] {
 object Block {
   def unapply[T](b: Block[T]) = Some(b.t)
 }
-case class BlockTerminal[T](t: T = null) extends Block[T] 
+case class BlockTerminal[T](t: T = null) extends Block[T]
 case class BlockIndent[T](t: T = null, n: Int = 1)  extends Block[T]
 case class BlockUnindent[T](t: T = null, n: Int = 1) extends Block[T]
 case class BlockReset[T](t: T = null)    extends Block[T]

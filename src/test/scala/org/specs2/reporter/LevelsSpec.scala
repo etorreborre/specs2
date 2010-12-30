@@ -10,10 +10,10 @@ import Levels._
 import FragmentLevelsReducer._
 import specification.FragmentsShow._
 
-class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatchers with ArbitraryFragments { def is =
+class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatchers with ArbitraryFragments { def is = sequential^
                                                                                                  """
   The Levels class is used to compute the 'level' of Fragments in a list of Fragments.
-                                                                                                 """^
+                                                                                                 """^p^
   "A simple piece of text has level 0"                                                           ^
   { level(t1) must_== List(0) }                                                                  ^
                                                                                                  p^
@@ -40,11 +40,15 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
                                                                                                  p^
   "A paragraph unindents the following fragments by 1"                                           ^
   { level(t1 ^ ex1 ^ p ^ t2 ^ ex2) must_== List(0, 1, 1, 1, 0, 1) }                              ^
+  { level(t1 ^ ex1 ^ p ^ p ^ t2 ^ ex2 ^ p ^ ex1) must_== List(0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0) } ^
+  { level(ex1 ^ p ^ ex2 ^ p) must_== List(0, 0, 0, 0, 0, 0) }                                    ^
+  { level(ex1 ^ p ^ ex2 ^ p ^ p ^ ex3) must_== List(0, 0, 0, 0, 0, 0, 0, 0, 0) }                 ^
+  { level(t1 ^ p ^ ex1 ^ p ^ ex2 ^ end) must_== List(0, 1, 1, 0, 0, 0, 0, 0) }                   ^
                                                                                                  p^
   "A end resets the following fragment to zero"                                                  ^
   { level(t1 ^ ex1 ^ end ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1) }                               ^
   { level(t1 ^ ex1 ^ end ^ t1 ^ t2 ^ ex2) must_== List(0, 1, 0, 0, 1, 2) }                       ^
-  { level("s".title ^ t1 ^ ex1 ^ end ^ t1) must_== List(0, 0, 1, 0, 0) }                         ^
+  { level("s".title ^ t1 ^ ex1 ^ end ^ t1) must_== List(0, 1, 0, 0) }                            ^
                                                                                                  p^
   "The LevelBlocks monoid must respect the Monoid laws"                                          !
     LevelsMonoid.isMonoid                                                                        ^
@@ -56,6 +60,14 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
     "for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2"                                            ! tree().e4^
                                                                                                  end
   
+
+  def tryAppend = {
+    implicit val l = Levels.LevelsMonoid[String]
+    val (a, b, c) = (Levels(BlockIndent("t")), Levels(BlockTerminal("")), Levels(BlockIndent("t2")))
+    val r = l.append(a, l.append(b, c))
+    val r2 = l.append(l.append(a, b), c)
+    success
+  }
 
   case class tree() {
     def e1 = tree(t1 ^ ex1 ^ ex2) must beDrawnAs(
@@ -146,10 +158,11 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
     Gen.sized(sz => sizedList(sz))
   }
 
-  def fold(fs: Fragments) = fs.fragments.foldMap(unit)(implicitly[Foldable[Seq]], LevelsConcatMonoid[Fragment])
-  def level(fs: Fragments) = fold(fs).levels
-  def tree(fs: Fragments) = fold(spec(fs)).toTree
+  def fold(fs: Seq[Fragment]) = fs.foldMap(unit)(implicitly[Foldable[Seq]], LevelsConcatMonoid[Fragment])
+  def level(fs: Fragments) = fold(fs.middle).levels
+  def tree(fs: Fragments) = fold(spec(fs).fragments).toTree
   def spec(fs: Fragments) = new Specification { def is = "start".title ^ fs }.content
+
   import StandardFragments._
   def isNotFormatting = (f: Tree[Fragment]) => f.rootLabel match {
     case Br() => false
@@ -162,4 +175,5 @@ class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatch
   def t3 = "t3"
   def ex1 = "e1" ! success
   def ex2 = "e2" ! success
+  def ex3 = "e3" ! success
 }
