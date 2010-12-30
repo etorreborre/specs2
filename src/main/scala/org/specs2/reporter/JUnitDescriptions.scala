@@ -40,13 +40,11 @@ object JUnitDescriptions {
    * by JUnit
    */
   val mapper: (Fragment, Int) => Option[(Description, Fragment)] = (f: Fragment, nodeLabel: Int) => f match {
-    case (SpecStart(t, _)) => 
-      Some(createSuiteDescription(testName(t.name)) -> f)
-    case (Text(t)) => 
-      Some(createSuiteDescription(testName(t)) -> f)
-    case (Example(description, body)) =>  Some(createDescription(testName(description), nodeLabel) -> f)
-    case (Step(action)) => Some(createDescription("step", nodeLabel) -> f)
-    case other => None
+    case (SpecStart(t, _))            => Some(createSuiteDescription(testName(t.name)) -> f)
+    case (Text(t))                    => Some(createSuiteDescription(testName(t)) -> f)
+    case (Example(description, body)) => Some(createDescription(testName(description), nodeLabel) -> f)
+    case (Step(action))               => Some(createDescription("step", nodeLabel) -> f)
+    case other                        => None
   }
   /** 
    * Utility class grouping the total description + fragments to execute for each Description 
@@ -84,10 +82,14 @@ object JUnitDescriptions {
    *   ` ex2
    *    
    */
-  private val addChildren = (d: (Description, Fragment), children: Stream[Description]) => { 
+  private val addChildren = (d: (Description, Fragment), children: Stream[Description]) => {
+    def isAnExample(child: Description) = child.getDisplayName.matches(".*\\(\\d*\\)$")
+    def isText(child: Description) = !isAnExample(child)
+
     children.foreach { c =>
-      d._1.addChild(c) 
-      if (!c.getChildren().isEmpty && c.getDisplayName().matches(".*\\(\\d*\\)")) {
+      if (!c.getChildren().isEmpty || !isText(c))
+        d._1.addChild(c)
+      if (!c.getChildren().isEmpty && isAnExample(c)) {
         c.getChildren().foreach(d._1.addChild(_))
         c.getChildren().clear()
       }
@@ -104,8 +106,7 @@ object JUnitDescriptions {
     else trimmed
   }
   /** @return a test description */
-  private def createDescription(s: String, e: Any) = 
-    Description.createSuiteDescription(sanitize(s)+"("+e.toString+")")
+  private def createDescription(s: String, e: Any) = Description.createSuiteDescription(sanitize(s)+"("+e.toString+")")
   /** @return a suite description */
   private def createSuiteDescription(s: String) = Description.createSuiteDescription(sanitize(s))
   
