@@ -3,39 +3,42 @@ package examples
 
 class StackSpec extends SpecificationWithJUnit { def is = 
   
-  "Specification for a Stack with a limited capacity".title                               ^
-                                                                                          br^
-  "An empty stack should"                                                                 ^
-    "behave like an empty stack"                                                          ^ emptyStack^
-                                                                                          end^
-  "A non-empty stack should"                                                              ^
-    "behave like a non empty stack"                                                       ^ nonEmptyStack(Stack(10, 2))^                                          
-                                                                                          end^
-  "A stack below full capacity should"                                                    ^
-    "behave like a non empty stack"                                                       ^ nonEmptyStack(Stack(10, 2))^                                          
-    "behave like a stack below capacity"                                                  ^ belowCapacity(Stack(10, 2))^  
-                                                                                          end^
-  "A full stack should"                                                                   ^
-    "behave like a non empty stack"                                                       ^ nonEmptyStack(Stack(10, 10))^                                         
-    "behave like a full stack"                                                            ^ fullStack(Stack(10, 10))^
-                                                                                          end
-                                                                                          
-  def emptyStack = 
-    "throw an exception when sent #top"                                                   ! empty().e1^ 
-    "throw an exception when sent #pop"                                                   ! empty().e2^p
+  "Specification for a Stack with a limited capacity".title                 ^
+                                                                            p^
+  "An empty stack should"                                                   ^
+    "behave like an empty stack"                                            ^ isEmpty^
+                                                                            endp^
+  "A non-empty stack should"                                                ^
+    "behave like a non empty stack"                                         ^ isNonEmpty(normal)^
+                                                                            endp^
+  "A stack below full capacity should"                                      ^
+    "behave like a non empty stack"                                         ^ isNonEmpty(normal)^
+    "behave like a stack below capacity"                                    ^ isNotFull(normal)^
+                                                                            endp^
+  "A full stack should"                                                     ^
+    "behave like a non empty stack"                                         ^ isNonEmpty(full)^
+    "behave like a full stack"                                              ^ isFull(full)^
+                                                                            end
+
+  def normal = Stack(10, 2)
+  def full = Stack(10, 10)
+
+  def isEmpty =
+    "throw an exception when sent #top"                                     ! empty().e1^
+    "throw an exception when sent #pop"                                     ! empty().e2
   
-  def nonEmptyStack(s: =>SizedStack) =                                                                                           
-    "not be empty"                                                                        ! nonempty(s).e1^
-    "return the top item when sent #top"                                                  ! nonempty(s).e2^ 
-    "not remove the top item when sent #top"                                              ! nonempty(s).e3^ 
-    "return the top item when sent #pop"                                                  ! nonempty(s).e4^ 
-    "remove the top item when sent #pop"                                                  ! nonempty(s).e5^p
+  def isNonEmpty(s: =>SizedStack) =
+    "not be empty"                                                          ! nonempty(s).size^
+    "return the top item when sent #top"                                    ! nonempty(s).top1^
+    "not remove the top item when sent #top"                                ! nonempty(s).top2^
+    "return the top item when sent #pop"                                    ! nonempty(s).pop1^
+    "remove the top item when sent #pop"                                    ! nonempty(s).pop2
 
-  def belowCapacity(s: =>SizedStack) = 
-    "add to the top when sent #push"                                                      ! notfull(s).e1^p 
+  def isNotFull(s: =>SizedStack) =
+    "add to the top when sent #push"                                        ! notfull(s).e1
 
-  def fullStack(s: =>SizedStack) = 
-    "throw an exception when sent #push"                                                  ! full(s).e1^p
+  def isFull(s: =>SizedStack) =
+    "throw an exception when sent #push"                                    ! fullStack(s).e1
 
   case class empty() {
     val stack = new SizedStack(10)
@@ -43,17 +46,17 @@ class StackSpec extends SpecificationWithJUnit { def is =
     def e2 = stack.pop must throwA[NoSuchElementException]
   }
   case class nonempty(stack: SizedStack) {
-    def e1 = !stack.isEmpty
-    def e2 = stack.top must_== stack.size
-    def e3 = { 
+    def size = !stack.isEmpty
+    def top1 = stack.top must_== stack.size
+    def top2 = {
       stack.top
       stack.top must_== stack.size
     }
-    def e4 = {
+    def pop1 = {
       val topElement = stack.size 
       stack.pop must_== topElement
     }
-    def e5 = { 
+    def pop2 = {
       stack.pop
       stack.top must_== stack.size 
     }
@@ -64,7 +67,7 @@ class StackSpec extends SpecificationWithJUnit { def is =
       stack.top must_== stack.size
     }
   }
-  case class full(stack: SizedStack) {
+  case class fullStack(stack: SizedStack) {
     def e1 = stack push (stack.size + 1) must throwAn[Error]
   }
 }
