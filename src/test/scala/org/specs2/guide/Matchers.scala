@@ -87,6 +87,7 @@ An non-exhaustive list of those matchers:
  * `beAsNullAs`: when 2 objects must be null at the same time if one of them is null
  * `beOneOf(a, b, c)`: to check if an object is one of a given list
  * `haveClass`: to check the class of an object
+ * `haveSuperclass`: to check if the class of an object as another class as one of its ancestors
  * `beAssignableFrom`: to check if a class is assignable from another
 
 ##### With a better description
@@ -110,22 +111,34 @@ There is also a shortcut for `value aka value.toString` which is simply `value.a
 There are many ways to create matchers for your specific usage. The simplest thing is to combine existing one:
 
  * using logical operators
-   `def m3 = m1 and m2`
 
- * adapting the actual value. This matcher adapts the existing `be_<=` matcher to a matcher applicable to any
-   `def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size }`
+        def m3 = m1 and m2
+
+ * adapting the actual value. This matcher adapts the existing `be_<=` matcher to a matcher applicable to `Any`
+
+        def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size }
+
+ * adapting the actual and expected values. This matcher compares 2 `Human` objects but set their `wealth` field to 0
+   so that the equals method will not fail on that field:
+
+        def beMostlyEqualTo = (be_==(_:Human)) ^^^ ((_:Human).copy(wealth = 0))
+        // then
+        Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) toResult // success
 
  * using `eventually` to try a match a number of times until it succeeds:
-   `val iterator = List(1, 2, 3).iterator`
-   `iterator.next must be_==(3).eventually`
-   Use `eventually(retries, n.millis)` to modify the default settings
+
+        val iterator = List(1, 2, 3).iterator
+        iterator.next must be_==(3).eventually
+         // Use eventually(retries, n.millis) to modify the default settings
 
  * using `orSkip` to return a `Skipped` result instead of a Failure if the condition is not met
-   `1 must be_==(2).orSkip
+
+        1 must be_==(2).orSkip
+        1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
 
 If this is not enough you can transform a function, returning a Boolean and 2 messages, into a Matcher:
 
-   `val m: Matcher[String] = (s: String) => (s.startsWith("hello"), "ok string", "ko string")`
+     val m: Matcher[String] = (s: String) => (s.startsWith("hello"), "ok string", "ko string")
 
 And if you want absolute power over matching, you can define your own matcher:
 
@@ -161,7 +174,7 @@ There are several matchers to check Option and Either instances:
 Matching on strings is very common. Here are the matchers which can help you:
 
  * `beMatching` (or ` be matching`) checks if a string matches a regular expression
- * `find(exp).withGroups(a, b, c) checks if some groups are found in a string
+ * `find(exp).withGroups(a, b, c)` checks if some groups are found in a string
  * `have length` checks the length of a string
  * `have size` checks the size of a string (seen as an `Iterable[Char]`)
  * `be empty` checks if a string is empty

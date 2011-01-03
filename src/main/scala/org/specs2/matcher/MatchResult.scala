@@ -83,10 +83,10 @@ case class MatchSuccess[T](okMessage: String, koMessage: String, expectable: Exp
   def not: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 }
-case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
+case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Expectable[T], details: Details = NoDetails()) extends MatchResult[T] {
   /** an exception having the same stacktrace */
   val exception = new Exception(koMessage)
-  override def toResult = Failure(koMessage, exception.getStackTrace.toList)
+  override def toResult = Failure(koMessage, exception.getStackTrace.toList, details)
   def not: MatchResult[T] = MatchSuccess(okMessage, koMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 }
@@ -116,8 +116,8 @@ case class AndMatch[T](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResu
     case (NotMatch(_), NotMatch(_)) => AndNotMatch(m1.evaluate, m2.evaluate) 
     case (_, NotMatch(_)) => AndNotMatch(m1, MatchSkip("", expectable))
     case (NotMatch(_), _) => AndMatch(m1.evaluate, m2).evaluate
-    case (MatchSuccess(_, _, _), MatchFailure(_, _, _)) => m2 
-    case (MatchFailure(_, _, _), MatchSuccess(_, _, _)) => m1 
+    case (MatchSuccess(_, _, _), MatchFailure(_, _, _, _)) => m2
+    case (MatchFailure(_, _, _, _), MatchSuccess(_, _, _)) => m1
     case (MatchSuccess(_, _, _), _) => m1 
     case (_, MatchSuccess(_, _, _)) => m2 
     case (_, _) => m1 
@@ -171,7 +171,7 @@ object MatchResult {
   implicit def MatchResultMessageReducer[T] = new Reducer[MatchResult[T], MatchResultMessage] {
     override def unit(r: MatchResult[T]) = r match {
       case MatchSuccess(ok, ko, e) => SuccessMessage(ok, ko)
-      case MatchFailure(ok, ko, e) => FailureMessage(ok, ko)
+      case MatchFailure(ok, ko, e, d) => FailureMessage(ok, ko)
       case _ => NeutralMessage(r.message)
     }
   }

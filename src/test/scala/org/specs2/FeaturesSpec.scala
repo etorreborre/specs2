@@ -7,13 +7,17 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
+ Note: the detailled diffs is going to be added as an expansion of the failure message with
+ details. Then the reporter can choose how to display those details best, especially on
+ beEqualsTo when the strings to display are big.
+ Note2: in JUnit this could be also translated to a comparison failure.
+
                                                                                           """^
  "1.0 features                                                                            "^
    "Implementation                                                                        "^
      "fix the level issue with nested specs (see UserGuide)                               "! done^
      "think of a way to generalize the nested management                                  "! done^
      "review all the code and specifications                                              "! todo^
-     "add scalacheck properties on fragments well formedness                              "! todo^
    "Html reporter                                                                         "^
      "with a table of content                                                             "! todo^
      "with breadcrumbs                                                                    "! todo^
@@ -21,7 +25,7 @@ class FeaturesSpec extends Specification { def is = literate ^
    "ScalaInterpreter                                                                      "^
      "with appropriate matchers                                                           "! todo^
    "Detailed diffs                                                                        "! todo^
-   "Split matcher messages on 2 lines when too long                                       "! todo^
+     "Split matcher messages on 2 lines when too long                                     "! todo^
    "JUnit matchers                                                                        "! done^
    "review the contain matchers                                                           "! done^
    "Lift                                                                                  "^

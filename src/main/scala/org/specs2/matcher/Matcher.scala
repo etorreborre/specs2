@@ -5,6 +5,7 @@ import scalaz.Scalaz
 import scalaz.Scalaz._
 import execute._
 import Expectable._
+import text.Quote._
 import MatchResult._
 import time.Duration
 
@@ -46,13 +47,21 @@ trait Matcher[-T] { outer =>
    * appropriate MatchResult, depending on the boolean value
    * @return a MatchResult
    */
+  protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S], expected: String, actual: String): MatchResult[S] = {
+	  Matcher.result(test, okMessage, koMessage, value, expected, actual)
+  }
+  /**
+   * This convenience method can be used to evaluate a boolean condition and return the
+   * appropriate MatchResult, depending on the boolean value
+   * @return a MatchResult
+   */
   protected def result[S <: T](other: MatchResult[_], value: Expectable[S]): MatchResult[S] = {
-    val (okMessage, koMessage) = other match {
-      case MatchSuccess(ok, ko, _) => (ok, ko)
-      case MatchFailure(ok, ko, _) => (ok, ko)
-      case _  => (other.message, other.message)
+    other match {
+      case MatchSuccess(ok, ko, _) => Matcher.result(true, ok, ko, value)
+      case MatchFailure(ok, ko, _, NoDetails()) => Matcher.result(false, ok, ko, value)
+      case MatchFailure(ok, ko, _, FailureDetails(expected, actual)) => Matcher.result(false, ok, ko, value, expected, actual)
+      case _  => Matcher.result(other.isSuccess, other.message, other.message, value)
     }
-    Matcher.result(other.isSuccess, okMessage, koMessage, value) 
   }
 
   protected def result[S <: T](other: MatchResultMessage, value: Expectable[S]): MatchResult[S] = {
@@ -100,10 +109,15 @@ trait Matcher[-T] { outer =>
   /**
    * @return a Skip MatchResult if this matcher fails
    */
-  def orSkip: Matcher[T] = new Matcher[T] {
+  def orSkip: Matcher[T] = orSkip("")
+  /**
+   * @return a Skip MatchResult if this matcher fails, prefixing the failure message with a skip message.
+   * If the skip message is empty, only the failure message is printed
+   */
+  def orSkip(m: String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
       outer(a) match {
-    	  case MatchFailure(_, ko, _) => MatchSkip(ko, a)
+    	  case MatchFailure(_, ko, _, d) => MatchSkip(m prefix(": ", ko), a)
     	  case other => other
       }
     }
@@ -146,7 +160,7 @@ trait AdaptableMatcher[T] extends Matcher[T] { outer =>
    */
   def ^^^(f: T => T, ok: String => String = identity, ko: String => String = identity): AdaptableMatcher[T] =
     new AdaptableMatcher[T] {
-      def adapt(g: T => T, okFunction: String => String, koFunction: String => String): AdaptableMatcher[T] = 
+      def adapt(g: T => T, okFunction: String => String, koFunction: String => String): AdaptableMatcher[T] =
         outer.adapt(g compose f, okFunction compose ok, koFunction compose ko)
         
       def apply[U <: T](a: Expectable[U]) = {
@@ -172,5 +186,13 @@ object Matcher {
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T]): MatchResult[T] = {
 	  if (test) new MatchSuccess(okMessage, koMessage, value) 
 	  else new MatchFailure(okMessage, koMessage, value)
+  }
+  /**
+   * Utility method for creating a MatchResult[T], with the actual and expected strings to enable better failure
+   * messages
+   */
+  def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] = {
+	  if (test) new MatchSuccess(okMessage, koMessage, value)
+	  else new MatchFailure(okMessage, koMessage, value, FailureDetails(expected, actual))
   }
 }

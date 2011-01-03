@@ -1,16 +1,18 @@
 package org.specs2
 package specification
 import execute._
+import matcher._
 
 /**
  * This trait provides fragments to use for specifying folds and reporters
  */
-trait FragmentsSamples extends FragmentsBuilder with StandardResults with FormattingFragments {
+trait FragmentsSamples extends FragmentsBuilder with StandardResults with FormattingFragments with MustMatchers {
   val text = Text("text")
   val ex1 = "ex1" ! success 
   val ex2 = "ex2" ! success
   val ex3 = "ex3" ! success
   val ex1Failure = "ex1" ! failure
+  val ex1BeEqualToFailure = "ex1" ! { 1 must_== 2 }
   val ex1Error = "ex1" ! anError
   val ex1Skipped  = "ex1" ! skipped 
   val ex1Pending  = "ex1" ! pending 

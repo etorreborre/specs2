@@ -4,6 +4,7 @@ import mock._
 import specification._
 import _root_.org.junit.runner.notification.{ RunNotifier, Failure }
 import _root_.org.junit.runner.Description
+import _root_.org.junit.ComparisonFailure
 
 class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with FragmentsSamples {  def is =
   
@@ -24,6 +25,7 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
     "1 example with an error, the error message must be reported"                                   ! notified().e5^
     "1 skipped example, a test ignored must be reported"                                            ! notified().e6^
     "1 pending example, a test ignored must be reported"                                            ! notified().e7^
+    "1 failing example with be_==, a ComparisonFailure message must be reported"                    ! notified().e8^
                                                                                                     end
 
   case class notified() {
@@ -66,6 +68,12 @@ class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with Fragments
 	  def e7 = { 
 	    run(ex1Pending)
 	    there was one(notifier).fireTestIgnored(desc("ex1(1)"))
+    }
+    def e8 = {
+      run(ex1BeEqualToFailure)
+      val c = capture[Failure]
+      there was one(notifier).fireTestFailure(c)
+      c.value.getException must haveSuperclass[ComparisonFailure]
     }
   }
   

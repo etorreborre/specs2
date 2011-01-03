@@ -46,6 +46,10 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
   { 1 must haveClass[java.lang.Integer] }                                                 ^
   { 1 must not have klass[String] }                                                       ^
                                                                                           p^
+  "haveSuperclass checks if a value has a given class as one of its ancestors"            ^
+  { new BufferedInputStream(null) must haveSuperclass[InputStream] }                      ^
+  { 1 must not have superClass[String] }                                                  ^
+                                                                                          p^
   "beAssignableFrom checks if a class is assignable from another"                         ^
   { classOf[OutputStream] must beAssignableFrom[FileOutputStream] }                       ^
                                                                                           end

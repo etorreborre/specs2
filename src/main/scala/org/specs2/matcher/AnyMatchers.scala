@@ -86,9 +86,20 @@ trait AnyBaseMatchers {
     def apply[S <: Any](x: Expectable[S]) = {
       val c = implicitly[ClassManifest[T]].erasure
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
-      result(xClass == c, 
+      result(xClass == c,
              x.description + " has class" + q(c.getName), 
              x.description + " doesn't have class " + q(c.getName) + " but " + q(xClass.getName),
+             x)
+    }
+  }
+  /** matches if c.isAssignableFrom(v.getClass.getSuperclass) */
+  def haveSuperclass[T : ClassManifest] = new Matcher[Any] {
+    def apply[S <: Any](x: Expectable[S]) = {
+      val c = implicitly[ClassManifest[T]].erasure
+      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      result(c.isAssignableFrom(xClass.getSuperclass),
+             x.description + " has super class" + q(c.getName),
+             x.description + " doesn't have super class " + q(c.getName) + " but " + q(xClass.getSuperclass.getName),
              x)
     }
   }
@@ -140,7 +151,7 @@ class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
 	    }
       case other @ _ => other 
 	  }
-    result(a == b.value, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b)
+    result(a == b.value, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b, a.toString, b.value.toString)
   }
 }
 
@@ -192,5 +203,6 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   def equalTo[T](t: =>T) = beEqualTo(t)
   def oneOf[T](t: T*) = (beOneOf(t:_*))
   def klass[T : ClassManifest]: Matcher[Any] = outer.haveClass[T]
+  def superClass[T : ClassManifest]: Matcher[Any] = outer.haveSuperclass[T]
   def assignableFrom[T : ClassManifest] = outer.beAssignableFrom[T]
 }

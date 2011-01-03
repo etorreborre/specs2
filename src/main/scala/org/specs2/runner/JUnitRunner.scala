@@ -5,7 +5,7 @@ import _root_.org.junit.runner.notification.RunNotifier
 import _root_.org.junit.runners._
 import _root_.org.junit._
 import _root_.org.junit.runner._
-import junit.framework._
+import junit.framework.AssertionFailedError
 import main.Arguments
 import io._
 import reflect.Classes._
@@ -50,7 +50,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
 	   	  case (desc, ExecutedResult(_, result, timer)) => {
 	        notifier.fireTestStarted(desc)
 	        result match {
-            case f @ Failure(m, st) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f.exception)))
+            case f @ Failure(m, st, d) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
             case e @ Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
             case Pending(_) | Skipped(_)  => notifier.fireTestIgnored(desc)
             case _ => ()
@@ -61,7 +61,17 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
 	    }
   }
   /** @return a Throwable expected by JUnit Failure object */
-  private def junitFailure(e: Exception): Throwable = new SpecFailureAssertionFailedError(e)
+  private def junitFailure(f: Failure): Throwable = f match {
+    case Failure(m, st, NoDetails()) => new SpecFailureAssertionFailedError(f.exception)
+    case Failure(m, st, FailureDetails(expected, actual)) => new ComparisonFailure(m, expected, actual) {
+      private val e = f.exception
+      override def getStackTrace = e.getStackTrace
+      override def getCause = e.getCause
+      override def printStackTrace = e.printStackTrace
+      override def printStackTrace(w: java.io.PrintStream) = e.printStackTrace(w)
+      override def printStackTrace(w: java.io.PrintWriter) = e.printStackTrace(w)
+    }
+  }
 }
 /**
  * Factory methods to help with testing
