@@ -10,7 +10,6 @@ private[specs2]
 trait Trim extends control.Debug {
   /** add trimming methods to a String */
   implicit def trimmed(s: String): Trimmed = new Trimmed(s)
-
   case class Trimmed(s: String) {
     
     def trimStart(start: String) =
@@ -68,7 +67,8 @@ trait Trim extends control.Debug {
       new Regex(exp).replaceAllIn(s, (m: Match) => f(m.group(0)))
     }
     def remove(toRemove: String*) = toRemove.foldLeft(s) { (res, cur) => res.replace(cur, "") }
-    def removeAll(toRemove: String*) = toRemove.foldLeft(s) { (res, cur) => res.replaceAll(cur, "") }
+    def removeAll(remove: String) = s.replaceAll(toReplace(remove), "")
+    private def toReplace(c: String) = c.map { letter => if ("()[]{}+-\\^$|?.*".contains(letter)) ("\\" + letter) else letter }.mkString("")
   }
 }
 private[specs2]
