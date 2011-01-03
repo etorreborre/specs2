@@ -27,7 +27,7 @@ The `is` method lists *specification fragments* which can be:
 
 * some text: like a description of the system you're specifying
 * an example: a description and some executable code returning a result
-* formatting fragments: to enhance the display of the specification by adding line breaks or indentation
+* formatting fragments: `p` adds a blank line and allows to start a new block of examples
 
 You can notice also that fragments are separated by the `^` character in order to build a list of them.
                                                                                                                         """^

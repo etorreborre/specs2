@@ -9,6 +9,7 @@ class HelloWorldSpec extends SpecificationWithJUnit { def is =
   "'Hello world' starts with 'Hello'"                                            ! e2^
   "'Hello world' ends with 'world'"                                              ! e3^
                                                                                  end
+
   def e1 = "Hello world" must have size(11)
   def e2 = "Hello world" must startWith("Hello")
   def e3 = "Hello world" must endWith("world")
