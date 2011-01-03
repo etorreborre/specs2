@@ -163,7 +163,7 @@ trait PropertyImplicits {
   ): Prop = {
 	  Prop.forAll { (t: T) =>
 	    f(t) match {
-	   	  case MatchFailure(_, ko, _) => false :| ko
+	   	  case MatchFailure(_, ko, _, _) => false :| ko
 	   	  case _ => true :| ""
 	    } 	
 	  }
@@ -175,7 +175,7 @@ trait PropertyImplicits {
   ): Prop = {
     Prop.forAll { (t1: T1, t2: T2) =>
       f(t1, t2) match {
-        case MatchFailure(_, ko, _) => false :| ko
+        case MatchFailure(_, ko, _, _) => false :| ko
         case _ => true :| ""
       }   
     }
@@ -188,7 +188,7 @@ trait PropertyImplicits {
   ): Prop = {
     Prop.forAll { (t1: T1, t2: T2, t3: T3) =>
       f(t1, t2, t3) match {
-        case MatchFailure(ok, ko , _) => false :| ko  
+        case MatchFailure(ok, ko , _, _) => false :| ko
         case _ => true :| ""
       }   
     }

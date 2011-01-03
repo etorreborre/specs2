@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 import AnyMatchers._
-import junit.framework.AssertionFailedError
+import junit.framework.{ ComparisonFailure, AssertionFailedError }
 
 /**
  * This trait provides implicit definitions to transform any value into an Expectable
@@ -40,7 +40,14 @@ trait JUnitExpectations extends Expectations {
   }
   protected def checkFailure[T](m: =>MatchResult[T]) = {
     m match {
-      case f @ MatchFailure(ok, ko, _) => throw new AssertionFailedError(ko) {
+      case f @ MatchFailure(ok, ko, _, NoDetails()) => throw new AssertionFailedError(ko) {
+        override def getStackTrace = f.exception.getStackTrace
+        override def getCause = f.exception.getCause
+        override def printStackTrace = f.exception.printStackTrace
+        override def printStackTrace(w: java.io.PrintStream) = f.exception.printStackTrace(w)
+        override def printStackTrace(w: java.io.PrintWriter) = f.exception.printStackTrace(w)
+      }
+      case f @ MatchFailure(ok, ko, _, FailureDetails(expected, actual)) => throw new ComparisonFailure(ko, expected, actual) {
         override def getStackTrace = f.exception.getStackTrace
         override def getCause = f.exception.getCause
         override def printStackTrace = f.exception.printStackTrace

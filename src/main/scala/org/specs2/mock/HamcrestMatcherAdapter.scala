@@ -13,7 +13,7 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends TypeSafeMatcher[T] {
     
   def matchesSafely(item: T): Boolean = {
     m.apply(Expectable(item)) match {
-      case MatchFailure(_, m, _) => message = m; false
+      case MatchFailure(_, m, _, _) => message = m; false
       case _ => true
     }
     

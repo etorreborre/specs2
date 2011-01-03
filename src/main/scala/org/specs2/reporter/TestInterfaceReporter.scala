@@ -30,11 +30,11 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
  	  val executed = new FragmentExecution {}.executeFragment(arguments)(f)
     executed match {
       case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer) => result match {
-        case Success(text) => handler.handle(succeeded(text)) 	
-        case r @ Failure(text, e) => handler.handle(failure(text, r.exception))
-        case r @ Error(text, e) => handler.handle(error(text, r.exception))
-        case Skipped(text) => handler.handle(skipped(text))
-        case Pending(text) => handler.handle(skipped(text))
+        case Success(text)           => handler.handle(succeeded(text))
+        case r @ Failure(text, e, d) => handler.handle(failure(text, r.exception))
+        case r @ Error(text, e)      => handler.handle(error(text, r.exception))
+        case Skipped(text)           => handler.handle(skipped(text))
+        case Pending(text)           => handler.handle(skipped(text))
       }
       case _ => ()
     }

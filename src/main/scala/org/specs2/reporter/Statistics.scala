@@ -36,12 +36,12 @@ trait Statistics {
     override def unit(f: ExecutedFragment): SpecsStatistics = f match { 
       case ExecutedResult(_, r, t) => {
         val current = r match {
-          case s @ Success(_) => Stats(fragments = 1, expectations = s.expectationsNb, successes = 1)
-          case Failure(_, _)  => Stats(fragments = 1, expectations = 1, failures = 1)
-          case Error(_,_)     => Stats(fragments = 1, expectations = 1, errors = 1)
-          case Pending(_)     => Stats(fragments = 1, expectations = 1, pending = 1)
-          case Skipped(_)     => Stats(fragments = 1, expectations = 1, skipped = 1)
-          case _              => Stats(fragments = 1) 
+          case s @ Success(_)    => Stats(fragments = 1, expectations = s.expectationsNb, successes = 1)
+          case Failure(_, _, _)  => Stats(fragments = 1, expectations = 1, failures = 1)
+          case Error(_,_)        => Stats(fragments = 1, expectations = 1, errors = 1)
+          case Pending(_)        => Stats(fragments = 1, expectations = 1, pending = 1)
+          case Skipped(_)        => Stats(fragments = 1, expectations = 1, skipped = 1)
+          case _                => Stats(fragments = 1)
         }
         SpecsStatistics(current.copy(timer = t))
       }
