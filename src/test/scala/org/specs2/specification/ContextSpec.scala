@@ -3,24 +3,23 @@ package specification
 import io._
 import execute._
 import reporter._
+import matcher._
 
 class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is =
                                                                                                                         """
-  It is sometimes necessary to provide functions to "prepare" the specification before
-  executing the Fragments and clean it up afterwards. This may be for example:
+  It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments
+  and clean it up afterwards. This may be for example:
 
      * opening a database connection
      * inserting some data
      * executing the example
      * closing the connection after each example
      
-  It may also be very convenient to have each example executed "inside" a specific
-  context, like a  web application session. Finally, some setups or cleanups are very 
-  expensive so one might want to add arbitrary actions that will be executed only once,
-  at the beginning of the specification or the end.
+  It may also be very convenient to have each example executed "inside" a specific context, like a  web application
+  session. Finally, some setups or cleanups are very expensive so one might want to add arbitrary actions that will
+  be executed only once, at the beginning of the specification or the end.
   
-  All of this can be achieved in specs2 by using case classes which extend the following
-  traits:
+  All of this can be achieved in specs2 by using case classes which extend the following traits:
 
      * Before
      * After
@@ -28,12 +27,20 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
      * BeforeAfter or BeforeAfterAround for combined functionality
                                                                                                   """                                                                                 ^
   "The Before trait can be used to execute methods before Fragments"                              ^
-    "the before method is executed before a first example"                                        ! c().e1^
-    "the before method is executed before the second example"                                     ! c().e2^
+    "the before method is executed before a first example"                                        ! before().e1^
+    "the before method is executed before the second example"                                     ! before().e2^
                                                                                                   p^
   "If the before method throws an exception"                                                      ^
-    "the first example will not execute"                                                          ! c().e3^
-    "and it will be reported as an error"                                                         ! c().e4^
+    "the first example will not execute"                                                          ! before().e3^
+    "and it will be reported as an error"                                                         ! before().e4^
+                                                                                                  p^
+  "If the before method returns Skipped"                                                          ^
+    "the first example will not execute"                                                          ! before().e5^
+    "and it will be reported as skipped with the reason"                                          ! before().e6^
+                                                                                                  p^
+  "If the before method returns a MatchFailure"                                                   ^
+    "the first example will not execute"                                                          ! before().e7^
+    "and it will be reported as failed with the reason"                                           ! before().e8^
                                                                                                   p^
   "The After trait can be used to execute methods after Fragments"                                ^
     "the after method is executed after a first example"                                          ! c().e5^
@@ -73,12 +80,17 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     "otherwise, it is reported as an Error"                                                       ! c().e14^
                                                                                                   end
   implicit val args = main.Arguments()
-  case class c() extends FragmentsExecution {
+  case class before() extends FragmentsExecution {
     def e1 = executing(ex1Before).prints("before", "e1")
     def e2 = executing(ex1_2Before).prints("before", "e1", "before", "e2")
     def e3 = executing(ex1_beforeFail).prints()
     def e4 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
-    
+    def e5 = executing(ex1_beforeSkipped).prints()
+    def e6 = executeBodies(ex1_beforeSkipped).map(_.message) must_== List("skipped")
+    def e7 = executing(ex1_beforeMatchFailed).prints()
+    def e8 = executeBodies(ex1_beforeMatchFailed).map(_.message) must_== List("'1' is not equal to '2'")
+  }
+  case class c() extends FragmentsExecution {
     def e5 = executing(ex1After).prints("e1", "after")
     def e6 = executing(ex1_2After).prints("e1", "after", "e2", "after")
     def e7 = executing(ex1_afterFail).prints("e1")
@@ -135,6 +147,8 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1BeforeAfterAroundThenBefore2After2Around2 = "ex1" ! (beforeAfterAround then before2After2Around2)(ok1)  
 
   def ex1_beforeFail = "ex1" ! beforeWithError(ok1) 
+  def ex1_beforeSkipped = "ex1" ! beforeWithSkipped(ok1)
+  def ex1_beforeMatchFailed = "ex1" ! beforeWithMatchFailed(ok1)
   def ex1_2Before = ex1Before ^ "ex2" ! before(ok2)
 
   def ex1After = "ex1" ! after(ok1) 
@@ -159,6 +173,12 @@ trait ContextsForFragments extends MockOutput {
   }
   object beforeWithError extends Before with MockOutput {
 	  def before = Predef.error("error")
+  }
+  object beforeWithSkipped extends Before with MockOutput {
+	  def before = Skipped("skipped")
+  }
+  object beforeWithMatchFailed extends Before with MockOutput with MustMatchers {
+	  def before = 1 must_== 2
   }
   object after extends After {
 	  def after = println("after")

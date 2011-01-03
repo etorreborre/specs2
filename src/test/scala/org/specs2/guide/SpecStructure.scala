@@ -115,7 +115,7 @@ collect the successive states of the system:
       "Given that the customer buys 1 book at 20 dollars"                                              ! c1.buyBook^
       "When he checks out"                                                                             ! c1.checkout^
       "Then the total price must be 50 dollars"                                                        ! c1.total^
-                                                                                                   end
+                                                                                                       end
 
       case object c1 {
         val BuyBooks = ".* buys (\\d+) book.? at (\\d+) .*".r     // a regular expression for extracting the quantity and price
@@ -143,100 +143,99 @@ specifications to the new way. Here a quickstart, you need to:
  * chain examples with `^`
  * separate blocks of examples with `p^`
 
-      "'Hello world' should" ^ {
-        "contain 11 characters" ! {
-          "Hello world" must have size(11)
+        "'Hello world' should" ^ {
+          "contain 11 characters" ! {
+            "Hello world" must have size(11)
+          }^
+          "start with 'Hello'" ! {
+            "Hello world" must startWith("Hello")
+          }^
+          "with 'world'" ! {
+            "Hello world" must endWith("world")
+          }
         }^
-        "start with 'Hello'" ! {
-          "Hello world" must startWith("Hello")
-        }^
-        "with 'world'" ! {
-          "Hello world" must endWith("world")
+        p^
+        "'Hey you' should" ^ {
+          "contain 7 characters" ! {
+            "Hey you" must have size(7)
+          }
         }
-      }^
-      p^
-      "'Hey you' should" ^ {
-        "contain 7 characters" ! {
-          "Hey you" must have size(7)
-        }
-      }
 
-## Declare examples
+### Share examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share
 them between different parts of your specification. The best example of this situation is a specification for a Stack of
 limited size:
 
-      class StackSpec extends SpecificationWithJUnit { def is =
+        class StackSpec extends SpecificationWithJUnit { def is =
+          "Specification for a Stack with a limited capacity".title                 ^
+                                                                                    p^
+          "An empty stack should"                                                   ^
+            "behave like an empty stack"                                            ^ isEmpty^
+                                                                                    endp^
+          "A non-empty stack should"                                                ^
+            "behave like a non empty stack"                                         ^ isNonEmpty(normal)^
+                                                                                    endp^
+          "A stack below full capacity should"                                      ^
+            "behave like a non empty stack"                                         ^ isNonEmpty(normal)^
+            "behave like a stack below capacity"                                    ^ isNotFull(normal)^
+                                                                                    endp^
+          "A full stack should"                                                     ^
+            "behave like a non empty stack"                                         ^ isNonEmpty(full)^
+            "behave like a full stack"                                              ^ isFull(full)^
+                                                                                    end
 
-        "Specification for a Stack with a limited capacity".title                               ^
-                                                                                                br^
-        "An empty stack should"                                                                 ^
-          "behave like an empty stack"                                                          ^ emptyStack^
-                                                                                                end^
-        "A non-empty stack should"                                                              ^
-          "behave like a non empty stack"                                                       ^ nonEmptyStack(Stack(10, 2))^
-                                                                                                end^
-        "A stack below full capacity should"                                                    ^
-          "behave like a non empty stack"                                                       ^ nonEmptyStack(Stack(10, 2))^
-          "behave like a stack below capacity"                                                  ^ belowCapacity(Stack(10, 2))^
-                                                                                                end^
-        "A full stack should"                                                                   ^
-          "behave like a non empty stack"                                                       ^ nonEmptyStack(Stack(10, 10))^
-          "behave like a full stack"                                                            ^ fullStack(Stack(10, 10))^
-                                                                                                end
+          def normal = Stack(10, 2)
+          def full = Stack(10, 10)
 
-        // declare shared examples for an empty stack
-        def emptyStack =
-          "throw an exception when sent #top"                                                   ! empty().e1^
-          "throw an exception when sent #pop"                                                   ! empty().e2^p
+          def isEmpty =
+            "throw an exception when sent #top"                                     ! empty().e1^
+            "throw an exception when sent #pop"                                     ! empty().e2
 
-        // declare shared examples for an nen empty stack
-        // those examples can be reused with a different stack
-        def nonEmptyStack(s: =>SizedStack) =
-          "not be empty"                                                                        ! nonempty(s).e1^
-          "return the top item when sent #top"                                                  ! nonempty(s).e2^
-          "not remove the top item when sent #top"                                              ! nonempty(s).e3^
-          "return the top item when sent #pop"                                                  ! nonempty(s).e4^
-          "remove the top item when sent #pop"                                                  ! nonempty(s).e5^p
+          def isNonEmpty(s: =>SizedStack) =
+            "not be empty"                                                          ! nonempty(s).size^
+            "return the top item when sent #top"                                    ! nonempty(s).top1^
+            "not remove the top item when sent #top"                                ! nonempty(s).top2^
+            "return the top item when sent #pop"                                    ! nonempty(s).pop1^
+            "remove the top item when sent #pop"                                    ! nonempty(s).pop2
 
-        def belowCapacity(s: =>SizedStack) =
-          "add to the top when sent #push"                                                      ! notfull(s).e1^p
+          def isNotFull(s: =>SizedStack) =
+            "add to the top when sent #push"                                        ! notfull(s).e1
 
-        def fullStack(s: =>SizedStack) =
-          "throw an exception when sent #push"                                                  ! full(s).e1^p
+          def isFull(s: =>SizedStack) =
+            "throw an exception when sent #push"                                    ! fullStack(s).e1
 
-        case class empty() {
-          val stack = new SizedStack(10)
-          def e1 = stack.top must throwA[NoSuchElementException]
-          def e2 = stack.pop must throwA[NoSuchElementException]
-        }
-        case class nonempty(stack: SizedStack) {
-          def e1 = !stack.isEmpty
-          def e2 = stack.top must_== stack.size
-          def e3 = {
-            stack.top must_== stack.size
-            stack.top must_== stack.size
+          case class empty() {
+            val stack = new SizedStack(10)
+            def e1 = stack.top must throwA[NoSuchElementException]
+            def e2 = stack.pop must throwA[NoSuchElementException]
           }
-          def e4 = {
-            val topElement = stack.size
-            stack.pop must_== topElement
+          case class nonempty(stack: SizedStack) {
+            def size = !stack.isEmpty
+            def top1 = stack.top must_== stack.size
+            def top2 = {
+              stack.top
+              stack.top must_== stack.size
+            }
+            def pop1 = {
+              val topElement = stack.size
+              stack.pop must_== topElement
+            }
+            def pop2 = {
+              stack.pop
+              stack.top must_== stack.size
+            }
           }
-          def e5 = {
-            stack.pop
-            stack.top must_== stack.size
+          case class notfull(stack: SizedStack) {
+            def e1 = {
+              stack push (stack.size + 1)
+              stack.top must_== stack.size
+            }
+          }
+          case class fullStack(stack: SizedStack) {
+            def e1 = stack push (stack.size + 1) must throwAn[Error]
           }
         }
-        case class notfull(stack: SizedStack) {
-          def e1 = {
-            stack push (stack.size + 1)
-            stack.top must_== stack.size
-          }
-        }
-        case class full(stack: SizedStack) {
-          def e1 = stack push (stack.size + 1) must throwAn[Error]
-        }
-      }
 
 
 ### Layout
@@ -251,12 +250,12 @@ of your specification
 
 ##### The rules
 
-By default the layout of a specification will be computed automatically based on a few rules:
+By default the layout of a specification will be computed automatically based on intuitive rules:
 
-  * when a text follows some text, it is indented
-  * when a text follows an example, the indentation stays at the same level
   * when an example follows a text, it is indented
-  * when an example follows an example, it is not indented
+  * 2 successive examples will be at the same indentation level
+  * when a text follows an example, this means that you want to describe a "subcontext", so the next examples will be
+    indented with one more level
 
 Let's see a standard example of this. The following fragments:
 
@@ -270,52 +269,29 @@ will be executed and displayed as:
       + and the first example
       + and the second example
 
+If you specify a "subcontext", you will get one more indentation level:
+
+    "this is some presentation text"      ^
+      "and the first example"             ! success^
+      "and the second example"            ! success^
+      "and in this specific context"      ^
+        "one more example"                ! success^
+
+will be executed and displayed as:
+
+    this is some presentation text
+      + and the first example
+      + and the second example
+        and in this specific context
+        + one more example
+
 ##### The formatting fragments
 
 Given the rules above, you might need to use some *formatting fragments* to adjust the display
 
-###### Reset the levels
+###### Separating groups of examples
 
-Following the rules, if you add some text after an example, this means that you want to describe a "nested" context for
-your specification:
-
-    "There are several options for displaying the text"      ^
-      "xonly displays nothing but failures"                  ! success^
-      "there is also a color option"                         ^              // this text will be indented
-        "rgb=value uses that value to color the text"        ! rgb^         // and the following examples as well
-        "nocolor dont color anything"                        ! nocolor^
-    "There are different ways of hiding the text"            ^              // this text follows an example, it will
-        "by tagging the text"                                ! hideTag      // be indented :-(
-
-However in the example above the intention is to start a new group of examples at level 0 for `"There are different ways
-of hiding the text"`.
-
-In order to do that you can use the `end` fragment:
-
-    "There are several options for displaying the text"      ^
-      "xonly displays nothing but failures"                  ! success^
-      "there is also a color option"                         ^              // this text will be indented
-        "rgb=value uses that value to color the text"        ! rgb^         // and the following examples as well
-        "nocolor dont color anything"                        ! nocolor^ end^
-    "There are different ways of hiding the text"            ^              // this text will be properly indented now
-      "by tagging the text"                                  ! hideTag^
-                                                             end
-
-This will be displayed as:
-
-    There are several options for displaying the text
-      + xonly displays nothing but failures
-      there is also a color option
-        + rgb=value uses that value to color the text
-        + nocolor dont color anything
-    There are different ways of hiding the text
-      + by tagging the text
-
-
-###### Adding blank lines
-
-A better way to separate blocks of examples though is to add blank lines in between. One possibility is to use `p` (as in
-"paragraph") to both add a newline and unindent a text block:
+The best way to separate blocks of examples is to add a blank line between them by using `p` (as in "paragraph"):
 
     "this is some presentation text"      ^
       "and the first example"             ! success^
@@ -335,24 +311,69 @@ This will be displayed as:
       + with this example
       + and that example
 
-That looks remarkably similar to the specification code, doesn't it?
+That looks remarkably similar to the specification code, doesn't it? What `p` does is:
 
-There are other possibilities for adding blank lines:
+ * add a blank line (this can also be done with a simple `br`)
+ * decrement the current indentation level by 1 (Otherwise the new Text would be seen as a subcontext)
 
- * use the `br` element: simply adds a blank line, not changing the indentation level
- * combine `end` and `br` in one fragment: `endbr` (`endp` is also available)
+###### Reset the levels
+
+When you start having deep levels of indentation, you might need to start the next group of examples at level 0. For
+example, in this specification
+
+    "There are several options for displaying the text"      ^
+      "xonly displays nothing but failures"                  ! success^
+      "there is also a color option"                         ^
+        "rgb=value uses that value to color the text"        ! rgb^
+        "nocolor dont color anything"                        ! nocolor^
+                                                             p^
+    "There are different ways of hiding the text"            ^
+        "by tagging the text"                                ! hideTag
+
+Even with `p` the next group of examples will not start at level 0. What you need to do in that case is use `end`:
+
+    "There are several options for displaying the text"      ^
+      "xonly displays nothing but failures"                  ! success^
+      "there is also a color option"                         ^              // this text will be indented
+        "rgb=value uses that value to color the text"        ! rgb^         // and the following examples as well
+        "nocolor dont color anything"                        ! nocolor^
+                                                             end^
+    "There are different ways of hiding the text"            ^              // this text will be properly indented now
+      "by tagging the text"                                  ! hideTag^
+                                                             end
+
+This will be displayed as:
+
+    There are several options for displaying the text
+      + xonly displays nothing but failures
+      there is also a color option
+        + rgb=value uses that value to color the text
+        + nocolor dont color anything
+    There are different ways of hiding the text
+      + by tagging the text
+
+And if you want to reset the indentation level *and* add a blank line you can use `end ^ br` (or `endbr` as seen in
+"Combinations" below).
 
 ###### Changing the indentation level
 
 If, for whatever reason, you wish to have more or less indentation, you can use the `t` and `bt` fragments:
 
-    "this text"                                     ^ bt
+    "this text"                                     ^ bt^
     "doesn't actually have an indented example"     ! success
 
-    "this text"                                     ^ t
+    "this text"                                     ^ t^
         "has a very indented example"               ! success
 
  The number of indentation levels (characterized as 2 spaces on screen) can also be specified by using `t(n)` or `bt(n)`.
+
+###### Combinations
+
+Some formatting elements can be combined:
+
+ * `p` is actually `br ^ bt`
+ * `endbr` is `end ^ br`
+ * `endp` is `end ^ p`  (same effect as `endbr` but shorter :-))
 
 ### Include / link specifications
 
@@ -447,6 +468,18 @@ Or if you need "local variables" as well in your examples:
       def e1 = readFile(okFile) must_== "success"
       def e2 = readFile(koFile) must_== "failed"
     }
+
+`Before` actions can also fail for several reasons. When that happens examples are not executed and their result instead
+is the result of the `before` action:
+
+ * if an exception occurs during the `before` action, an `Error` is created
+ * if some prerequisites are not met (not the right type of database for example), you can return a `Skipped` result to
+   abort the execution of all the examples:
+
+          def before = {
+            val db = openDatabase
+            db.databaseType must be oneOf("H2", "Oracle").orSkip("not the appropriate database type")
+          }
 
 ##### Defining `After` actions
 

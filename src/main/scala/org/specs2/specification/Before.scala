@@ -3,6 +3,7 @@ package specification
 
 import control.Exceptions._
 import execute._
+import matcher.MatchResult
 
 /**
  * The Before trait can be inherited by classes representing a context
@@ -17,10 +18,22 @@ trait Before { outer =>
    * execute an action returning a Result
    * and finally the before action.
    * 
-   * The action will be aborted if the before block fails
+   * The action will be aborted if the before block fails:
+   *
+   * * with an exception
+   * * with a non-Success result
+   * * with a non-Success match result
    */
-  def apply[T <% Result](a: =>T): Result = { 
-	  trye(before)(Error(_)).left.getOrElse(a)
+  def apply[T <% Result](a: =>T): Result = {
+	  val executed = trye(before)(Error(_))
+    executed.left.toOption match {
+      case Some(e) => e
+      case None => executed.right.toOption match {
+        case Some(m : MatchResult[_]) if !m.isSuccess => m.toResult
+        case Some(r : Result) if !r.isSuccess => r
+        case _ => a
+      }
+    }
   }
   
   /** compose the actions of 2 Before traits */
