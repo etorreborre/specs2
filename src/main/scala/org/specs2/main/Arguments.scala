@@ -22,7 +22,8 @@ case class Arguments (
   _sequential:    Option[Boolean] = None,
   _threadsNb:     Option[Int]     = None,
   _markdown:      Option[Boolean] = None,
-  _debugMarkdown: Option[Boolean] = None
+  _debugMarkdown: Option[Boolean] = None,
+  _diffs:         Option[Diffs]   = None
 ) {
   def ex: String                = _ex.getOrElse(".*")
   def xonly: Boolean            = _xonly.getOrElse(false)
@@ -38,6 +39,7 @@ case class Arguments (
   def threadsNb: Int            = _threadsNb.getOrElse(4)
   def markdown: Boolean         = _markdown.getOrElse(true)
   def debugMarkdown: Boolean    = _debugMarkdown.getOrElse(false)
+  def diffs: Diffs              = _diffs.getOrElse(Diffs())
 
   /** @alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
@@ -60,7 +62,8 @@ case class Arguments (
       other._sequential      .orElse(_sequential),
       other._threadsNb       .orElse(_threadsNb),
       other._markdown        .orElse(_markdown),
-      other._debugMarkdown   .orElse(_debugMarkdown)
+      other._debugMarkdown   .orElse(_debugMarkdown),
+      other._diffs           .orElse(_diffs)
     )
   }
   override def toString = {
@@ -79,7 +82,8 @@ case class Arguments (
     "sequential"     -> _sequential   ,
     "threadsNb"      -> _threadsNb    ,
     "markdown"       -> _markdown     ,
-    "debugMarkdown"  -> _debugMarkdown
+    "debugMarkdown"  -> _debugMarkdown,
+    "diffs"          -> _diffs
     ).flatMap(showArg).mkString(", ") + ") "
   }
   private def showArg(a: (String, Option[_])) = a._2.map(a._1 +" = "+_)
@@ -129,5 +133,12 @@ object Arguments {
     def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
     val zero = Arguments()
   }
+}
+
+/**
+ * The Diffs class holds all the required parameters to show differences between 2 strings
+ */
+case class Diffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, shortenSize: Int = 5, full: Boolean = false) {
+  def show(expected: String, actual: String): Boolean = show && Seq(expected, actual).exists(_.size >= triggerSize)
 }
 

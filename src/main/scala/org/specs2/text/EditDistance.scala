@@ -117,10 +117,6 @@ trait EditDistance {
     (r: Any, s1: String, s2: String) => new EditMatrix(s1, s2).print }
   )
 
-  /** @return a (String, String) displaying the differences between each input strings. The used separators are brackets: '(' and ')'*/
-  def showDistance(s1: String, s2: String): (String, String) = showDistance(s1, s2, "[]", 20)
-  /** @return a (String, String) displaying the differences between each input strings. The string is shortened before and after differences if necessary. */
-  def showDistance(s1: String, s2: String, sep: String): (String, String) = showDistance(s1, s2, sep, 20)
   /**
    * @param sep separators used to hightlight differences. If sep is empty, then no separator is used. If sep contains
    * one character, it is taken as the unique separator. If sep contains 2 or more characters, the first half of the characters are taken as
@@ -129,7 +125,7 @@ trait EditDistance {
    * @return a (String, String) displaying the differences between each input strings.
    * The used separators are specified by the caller. The string is shortened before and after differences if necessary. <p>
    */
-  def showDistance(s1: String, s2: String, sep: String, shortenSize: Int): (String, String) = {
+  def showDistance(s1: String, s2: String, sep: String = "[]", shortenSize: Int = 20): (String, String) = {
     foldSplittedStrings(s1, s2, ("", ""), { (r: (String, String), s1: String, s2: String) =>
         val showDistance = EditMatrix(s1, s2).showDistance(sep, shortenSize)
         def skipLine(s: String) = if (s.isEmpty) s else (s + "\n")
@@ -148,8 +144,7 @@ trait EditDistance {
  */
 private[specs2]
 object DiffShortener {
-  def shorten(s: String): String = shorten(s, "(", ")", 5)
-  def shorten(s: String, firstSep: String, secondSep: String, size: Int): String = {
+  def shorten(s: String, firstSep: String = "[", secondSep: String = "]", size: Int = 5): String = {
     def shortenLeft(s: String) = if (s.size > size) ("..." + s.slice(s.size - size, s.size)) else s
     def shortenRight(s: String) = if (s.size > size) (s.slice(0, size) + "...") else s
     def shortenCenter(s: String) = if (s.size > size) (s.slice(0, size / 2) + "..." + s.slice(s.size - size / 2, s.size)) else s

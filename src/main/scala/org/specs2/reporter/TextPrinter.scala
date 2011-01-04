@@ -6,10 +6,13 @@ import Generator._
 import control.Throwablex._
 import data.Tuples._
 import time._
-import text.Plural._
-import text.MarkupString._
-import text.AnsiColors._
-import text.NotNullStrings._
+import text._
+import Plural._
+import MarkupString._
+import AnsiColors._
+import NotNullStrings._
+import EditDistance._
+import DiffShortener._
 import execute._
 import main.Arguments
 import specification._
@@ -97,10 +100,9 @@ trait TextPrinter {
     def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
       val description = statusAndDescription(desc, result, timer)(args, out)
       result match {
-        case f: Failure => {
+        case f @ Failure(m, st, d) => {
           printFailure(desc, f, timer)
-          if (args.failtrace) 
-            f.stackTrace.foreach(t => out.printFailure(t.toString))
+          printFailureDetails(d)
         }
         case e: Error => {
           printError(desc, e, timer)
@@ -122,6 +124,23 @@ trait TextPrinter {
       val description = statusAndDescription(desc, f, timer)
       out.printFailure(description)
       out.printFailure(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
+      if (args.failtrace)
+        f.stackTrace.foreach(t => out.printFailure(t.toString))
+    }
+    def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
+      d match {
+        case FailureDetails(expected, actual) if (args.diffs.show(expected, actual)) => {
+          val (expectedDiff, actualDiff) = showDistance(expected, actual, args.diffs.separators, args.diffs.shortenSize)
+          out.printFailure("Expected: " + expectedDiff)
+          out.printFailure("Actual: " + actualDiff)
+          if (args.diffs.full) {
+            out.printFailure("Expected (full): " + expected)
+            out.printFailure("Actual (full): " + actual)
+          }
+          out.printLine("")
+        }
+        case _ => ()
+      }
     }
     def printError(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
       val description = statusAndDescription(desc, f, timer)

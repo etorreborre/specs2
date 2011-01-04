@@ -31,10 +31,12 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
       "failure examples are shown"                                                          ! xonlyargs().e5^
       "error examples are shown"                                                            ! xonlyargs().e6^
       "statistics are shown"                                                                ! xonlyargs().e7^
-    "if failtrace = true, failures stacktraces are shown"                                   ! failtrace().e1^bt^
+                                                                                            p^
+    "if failtrace = true, failures stacktraces are shown"                                   ! failtrace().e1^
     "if plan = true, nothing is executed"                                                   ! planargs().e1^
     "if sequential = false examples are executed concurrently"                              ! seq().e1^
     "if sequential = true examples are executed sequentially"                               ! seq().e2^
+                                                                                            p^
     "if color = true, the text output is colorized"                                         ^
       "text is white"                                                                       ! color().e1^
       "success status is green"                                                             ! color().e2^
@@ -43,6 +45,14 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
       "pending status is blue"                                                              ! color().e5^
       "skipped status is cyan"                                                              ! color().e6^
       "stats are blue"                                                                      ! color().e7^
+                                                                                            p^
+    "when doing equals comparisons, differences are shown"                                  ^
+      "the differences show up after the failure message"                                   ! diffs().e1^
+      "the separators can be modified with diffs(separators='<>')"                          ! diffs().e2^
+      "the trigger size can be modified with diffs(triggerSize=30)"                         ! diffs().e3^
+      "the shorten size can be modified with diffs(shortenSize=10)"                         ! diffs().e4^
+      "the full strings can be shown on 2 lines with line numbers with diffs(full=true)"    ! diffs().e5^
+      "they can be disabled with diffs(show = false)"                                       ! diffs().e6^
                                                                                             endp^
                                                                                             """
   Examples presentation
@@ -56,7 +66,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
   "a pending example must be displayed with a *"                                            ! status().e6^
   "a multi-line description must be indented ok"                                            ! status().e7^
   "if showtimes is true, each individual time must be shown"                                ! status().e8^
-                                                                                            p^
+                                                                                            endp^
                                                                                             """
   Statistics
   =====================                                                                     """^
@@ -79,6 +89,9 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
   val error4   = "error4" ! anError
   val skipped5 = "skip it" ! skipped
   val pending6 = "todo" ! pending
+  val bigString1 = "abcdefghijklmnopqrstuvwxyz"
+  val bigString2 = "abcdefghijklnmopqrstuvwxyz"
+  val bigFail = "with diffs" ! { bigString1 must_== bigString2 }
   
   case class prez() {
     val noindent = args(noindent = true)
@@ -115,6 +128,15 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     def e5 = printWithColors(pending6) must containMatch(blue.remove("\033["))
     def e6 = printWithColors(skipped5) must containMatch(cyan.remove("\033["))
     def e7 = printWithColors(t1) must containMatch(blue.remove("\033["))
+  }
+  case class diffs() {
+    def test = bigString1 must_== bigString2
+    def e1 = print(bigFail) must containMatch("hijkl\\[mn\\]opqrs")
+    def e2 = print(diffs(separators="<>") ^ bigFail) must containMatch("...jkl<mn>opq...")
+    def e3 = print(diffs(triggerSize=25) ^ bigFail) must containMatch("[mn]")
+    def e4 = print(diffs(shortenSize=3) ^ bigFail) must containMatch("\\.jkl\\[mn\\]opq\\.")
+    def e5 = print(diffs(full=true) ^ bigFail) must containMatch("jklmnopq")
+    def e6 = print(diffs(show=false) ^ bigFail) must not containMatch("kl[mn]op")
   }
   case class failtrace() {
     val failtrace: Arguments = args(failtrace = true)

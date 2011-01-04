@@ -30,6 +30,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
 	                                                                                           p^
     "An example must"                                                                        ^
       "have a success icon if successful"                                                    ! fragments().ex1^
+      "show detailed failures if any"                                                        ! fragments().ex2^
                                                                                              end
                                                                                           
   implicit val argument = args()
@@ -52,11 +53,14 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
     def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)
   }
   case class fragments() extends MockHtmlPrinter {
-    val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success ^ "*ex2*" ! success
+    val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success ^ "*ex2*" ! success ^
+                          "ex2" ! { "abcdefghijklmnopqrstuvwxyz" must_== "abcdefghijklnmopqrstuvwxyz" }
     def text1 = print(spec) must \\(<div>t1</div>)
     def text2 = print(spec) must \\(<div>t2</div>, "class"->"level1")
     def text3 = print(spec) must \\(<em>ex2</em>)
+
     def ex1 = print(spec) must \\("div", "class"->"level2") \("img", "src"->"./images/icon_success_sml.gif")
+    def ex2 = print(spec) must \\("div", "class"->"level2") \("img", "src"->"./images/icon_success_sml.gif")
   }
   
   trait MockHtmlPrinter extends FragmentExecution {

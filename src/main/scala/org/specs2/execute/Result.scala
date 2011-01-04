@@ -119,7 +119,7 @@ case class Failure(m: String, stackTrace: List[StackTraceElement] = new Exceptio
  */
 sealed trait Details
 case class FailureDetails(expected: String, actual: String) extends Details
-case class NoDetails extends Details
+case class NoDetails() extends Details
 /** 
  * This class represents an exception occurring during an execution.
  */

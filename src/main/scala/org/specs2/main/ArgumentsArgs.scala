@@ -22,7 +22,8 @@ trait ArgumentsArgs extends control.Properties {
     sequential:    Property[Boolean]  = Property[Boolean](),
     threadsNb:     Property[Int]      = Property[Int](),
     markdown:      Property[Boolean]  = Property[Boolean](),
-    debugMarkdown: Property[Boolean]  = Property[Boolean]()
+    debugMarkdown: Property[Boolean]  = Property[Boolean](),
+    diffs:         Property[Diffs]    = Property[Diffs]()
   ) = new Arguments(
      ex.map(".*"+_+".*").toOption,
      xonly.toOption,
@@ -37,7 +38,8 @@ trait ArgumentsArgs extends control.Properties {
      sequential.toOption,
      threadsNb.toOption,
      markdown.toOption,
-     debugMarkdown.toOption
+     debugMarkdown.toOption,
+     diffs.toOption
   )
   /**
    * @return arguments for a literate specification: no auto indent and a sequential
@@ -65,8 +67,13 @@ trait ArgumentsArgs extends control.Properties {
    */
   def xonly: Arguments = args(xonly = true)
   /**
-   * shortcut to executed and print only some examples
+   * shortcut to execute and print only some examples
    */
   def only(examples: String): Arguments = args(ex = examples)
+  /**
+   * shortcut to display the differences with some specific parameters
+   */
+  def diffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, shortenSize: Int = 5, full: Boolean = false): Arguments =
+    args(diffs = Diffs(show, separators, triggerSize, shortenSize, full))
 }
 object ArgumentsArgs extends ArgumentsArgs

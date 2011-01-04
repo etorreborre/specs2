@@ -69,13 +69,15 @@ case class HtmlResult(r: ExecutedResult) extends Html {
       case Skipped(_) => out.printSkipped(desc, level).printSkipped(NoMarkup(result.message), level, !args.xonly)
     }
   }
-  def printFailure(desc: MarkupString, level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = {
+  def printFailure(desc: MarkupString, level: Int, f: Failure)(implicit args: Arguments, out: HtmlResultOutput) = {
     if (args.failtrace) 
       out.printFailure(desc, level).
-          printCollapsibleExceptionMessage(f, level + 1)
+          printCollapsibleExceptionMessage(f, level + 1).
+          printCollapsibleDetailedFailure(f.details, level + 1, args.diffs.show)
     else
       out.printFailure(desc, level).
-          printExceptionMessage(f, level + 1)
+          printExceptionMessage(f, level + 1).
+          printCollapsibleDetailedFailure(f.details, level + 1, args.diffs.show)
   }
   def printError(desc: MarkupString, level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) = {
     out.printError(desc, level).

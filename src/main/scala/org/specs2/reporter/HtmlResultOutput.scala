@@ -5,9 +5,10 @@ import scala.xml._
 import main.Arguments
 import text.Markdown._
 import text._
+import EditDistance._
 import NotNullStrings._
 import text.Trim._
-import execute.{ Result, ResultStackTrace }
+import execute._
 import specification._
 
 /**
@@ -94,10 +95,33 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
       val message = "  "+e.message.notNull+" ("+e.location+")"
-      val onclick = "toggleImage(this); showHide('"+System.identityHashCode(e)+"')"
-      printElem(<div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick}/>
+      printElem(<div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(e)}/>
                  {message}
                 </div>)
+    } else this
+  }
+  private def onclick(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
+  private def id(a: Any) = System.identityHashCode(a).toString
+
+  def printCollapsibleDetailedFailure(d: Details, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
+    if (doIt) {
+      d match {
+        case NoDetails() => this
+        case FailureDetails(expected, actual) => {
+          val (expectedDiff, actualDiff) = showDistance(expected, actual, args.diffs.separators, args.diffs.shortenSize)
+          val (expectedMessage, actualMessage) = ("  Expected: " + expectedDiff, "  Actual: " + actualDiff)
+          val (expectedFull, actualFull) = ("  Expected (full): " + expected, "  Actual (full): " + actual)
+
+          printElem(<div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(d)}/>details<br/>
+                     <div class={l(level)} id={id(d)} display="none">
+                       <t class={l(level)}>{ expectedMessage }<br/></t>
+                       <t class={l(level)}>{ actualMessage }<br/></t>
+                       { if (args.diffs.full) <t>{expectedFull}</t><br/> else <t/> }
+                       { if (args.diffs.full) <t>{actualFull}</t><br/> else <t/> }
+                     </div>
+                    </div>)
+        }
+      }
     } else this
   }
 
