@@ -50,7 +50,7 @@ trait BaseSpecification extends specification.BaseSpecification {
   /**
    * add a new action to the Fragments
    */
-  override def action(a: =>Any) = {
+  def action(a: =>Any) = {
     val newAction = Action(a)
     addFragments(newAction)
     newAction

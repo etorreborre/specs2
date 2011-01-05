@@ -15,7 +15,7 @@ trait EventuallyMatchers {
    * @return a matcher that will retry the nested matcher a given number of times
    */
   def eventually[T](retries: Int, sleep: Duration)(nested: =>Matcher[T]): Matcher[T] = new Matcher[T] {
-    override protected val userDefinedName = nested.userDefinedName
+    override val nameOption = nested.nameOption
 
     def apply[S <: T](a: Expectable[S]) = retry(retries, sleep, a)
 

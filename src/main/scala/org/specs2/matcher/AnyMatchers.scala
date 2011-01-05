@@ -121,7 +121,7 @@ trait AnyBaseMatchers {
  * Matcher for a boolean value
  */
 class BeTrueMatcher extends Matcher[Boolean] {
-  override protected val userDefinedName = Some("BeTrue")
+  override val nameOption = Some("BeTrue")
   def apply[S <: Boolean](v: Expectable[S]) = {
     result(v.value, v.description + " is true", v.description + " is false", v) 
   }
@@ -130,14 +130,14 @@ class BeTrueMatcher extends Matcher[Boolean] {
  * Equality Matcher
  */
 class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
-  override protected val userDefinedName = Some("BeEqualTo")
+  override val nameOption = Some("BeEqualTo")
   import AnyMatchers._
   protected val ok: String => String = identity
   protected val ko: String => String = identity
   
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
     val newMatcher = new BeEqualTo(f(t)) {
-      override protected val userDefinedName = outer.userDefinedName
+      override val nameOption = outer.nameOption
       override protected val ok: String => String = okFunction compose outer.ok
       override protected val ko: String => String = koFunction compose outer.ko
     } 
