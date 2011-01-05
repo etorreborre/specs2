@@ -29,8 +29,7 @@ trait Expectations {
   protected def createExpectable[T](t: =>T) = Expectable(t)
   protected def createExpectable[T](t: =>T, alias: String) = Expectable(t, alias)
 }
-
-trait JUnitExpectations extends Expectations {
+trait ThrownExpectations extends Expectations {
   override protected def createExpectable[T](t: =>T) = new Expectable(() => t) {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
   }
@@ -39,6 +38,17 @@ trait JUnitExpectations extends Expectations {
     override val desc: Option[String] = Some(alias)
   }
   protected def checkFailure[T](m: =>MatchResult[T]) = {
+    m match {
+      case f @ MatchFailure(ok, ko, _, _) => throw new FailureException(f.toResult)
+      case _ => ()
+    }
+    m
+  }
+}
+case class FailureException(f: Failure) extends Exception
+
+trait JUnitExpectations extends ThrownExpectations {
+  override protected def checkFailure[T](m: =>MatchResult[T]) = {
     m match {
       case f @ MatchFailure(ok, ko, _, NoDetails()) => throw new AssertionFailedError(ko) {
         override def getStackTrace = f.exception.getStackTrace
@@ -72,7 +82,8 @@ trait MustExpectations extends Expectations {
   protected def createMustExpectable[T](t: =>T) = MustExpectable(t)
 }
 object MustExpectations extends MustExpectations
-trait JUnitMustExpectations extends JUnitExpectations with MustExpectations {
+
+trait MustThrownExpectations extends ThrownExpectations with MustExpectations {
   override implicit def akaMust[T](tm: Expectable[T]) = new MustExpectable(() => tm.value) {
     override private[specs2] val desc = tm.desc
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
@@ -81,6 +92,8 @@ trait JUnitMustExpectations extends JUnitExpectations with MustExpectations {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
   }
 }
+
+trait JUnitMustExpectations extends MustThrownExpectations with JUnitExpectations
 /**
  * This trait provides implicit definitions to transform any value into a ShouldExpectable
  */
@@ -94,7 +107,8 @@ trait ShouldExpectations extends Expectations {
   protected def createShouldExpectable[T](t: =>T) = ShouldExpectable(t)
 }
 object ShouldExpectations extends ShouldExpectations
-trait JUnitShouldExpectations extends JUnitExpectations with ShouldExpectations {
+
+trait ShouldThrownExpectations extends ThrownExpectations with ShouldExpectations {
   override implicit def akaShould[T](tm: Expectable[T]) = new ShouldExpectable(() => tm.value) {
     override private[specs2] val desc = tm.desc
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
@@ -103,3 +117,4 @@ trait JUnitShouldExpectations extends JUnitExpectations with ShouldExpectations 
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
   }
 }
+trait JUnitShouldExpectations extends ShouldThrownExpectations with JUnitExpectations

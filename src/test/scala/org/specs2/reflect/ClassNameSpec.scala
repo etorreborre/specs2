@@ -19,5 +19,15 @@ class ClassNameSpec extends SpecificationWithJUnit { def is =
   "The class name of a String should be String" ! {
     className("1".getClass.getName) must_== "String"
   }                                                                                       ^
+  "The human name of a class should uncamel case it" ! {
+    humanName(classOf[ThisClass]) must_== "this class"
+  }                                                                                       ^
+  "The human name of a class should get the parent if the class is an anonymous class" ! {
+    humanName(anonymous.getClass) must_== "this class"
+  }                                                                                       ^
                                                                                           end
+  trait MyTrait
+  class ThisClass extends MyTrait
+  val anonymous = new ThisClass {
+  }
 }

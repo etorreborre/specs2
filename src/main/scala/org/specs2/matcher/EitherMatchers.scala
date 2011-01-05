@@ -19,7 +19,8 @@ trait EitherBaseMatchers {
              value.description + " is not Right with value" + q(expected),
              value)
     }
-  }
+  }.withName("BeRight")
+
   def right[T](t: =>T) = beRight(t)
   def beLeft[T](t: =>T) = new Matcher[Either[T, _]] {
     def apply[S <: Either[T, _]](value: Expectable[S]) = {
@@ -29,7 +30,8 @@ trait EitherBaseMatchers {
              value.description + " is not Left with value" + q(expected),
              value)
     }
-  }
+  }.withName("BeLeft")
+
   def left[T](t: =>T) = beLeft(t)
 }
 

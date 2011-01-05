@@ -25,7 +25,7 @@ trait AnyBaseMatchers {
       val b = t
       result(a.value eq b, a.description + " is the same as " + q(b), a.description + " is not the same as " + q(b), a)
     }
-  }
+  }.withName("BeTheSameAs")
 
   /** matches if a == b */
   def be_==[T](t: =>T) = beEqualTo(t)
@@ -42,14 +42,16 @@ trait AnyBaseMatchers {
              iterable.description + " is empty", 
              iterable.description + " is not empty", iterable)
     }
-  }
+  }.withName("BeEmpty")
+
   def beNull[T] = new Matcher[T] {
     def apply[S <: T](value: Expectable[S]) = {
       result(value.value == null,
              value.description + " is null", 
              value.description + " is not null", value)
     }
-  }
+  }.withName("BeNull")
+
   /** matches if a is null when v is null and a is not null when v is not null */
   def beAsNullAs[T](a: =>T) = new Matcher[T](){
     def apply[S <: T](y: Expectable[S]) = {
@@ -60,7 +62,8 @@ trait AnyBaseMatchers {
              y.optionalDescription.map(" but " + _ + " is null").getOrElse(""), 
              y)
     }
-  }
+  }.withName("BeAsNullAs")
+
   /** matches if t.toSeq.exists(_ == v) */
   def beOneOf[T](t: T*): Matcher[T] = new Matcher[T] {
     def apply[S <: T](y: Expectable[S]) = {
@@ -70,7 +73,7 @@ trait AnyBaseMatchers {
              y.description + " is not one of " + q(x.mkString(", ")), 
              y)
     }
-  }
+  }.withName("BeOneOf")
 
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
     def apply[S <: T](a: Expectable[S]) = {
@@ -80,7 +83,7 @@ trait AnyBaseMatchers {
              a.description + " doesn't match the expected pattern "  + r.message,
              a)
     }
-  }
+  }.withName("BeLike")
   /** matches if v.getClass == c */
   def haveClass[T : ClassManifest] = new Matcher[Any] {
     def apply[S <: Any](x: Expectable[S]) = {
@@ -91,7 +94,7 @@ trait AnyBaseMatchers {
              x.description + " doesn't have class " + q(c.getName) + " but " + q(xClass.getName),
              x)
     }
-  }
+  }.withName("HaveClass")
   /** matches if c.isAssignableFrom(v.getClass.getSuperclass) */
   def haveSuperclass[T : ClassManifest] = new Matcher[Any] {
     def apply[S <: Any](x: Expectable[S]) = {
@@ -102,7 +105,7 @@ trait AnyBaseMatchers {
              x.description + " doesn't have super class " + q(c.getName) + " but " + q(xClass.getSuperclass.getName),
              x)
     }
-  }
+  }.withName("HaveSuperClass")
   /** matches if v.isAssignableFrom(c) */
   def beAssignableFrom[T : ClassManifest] = new Matcher[Class[_]] {
     def apply[S <: Class[_]](x: Expectable[S]) = {
@@ -112,12 +115,13 @@ trait AnyBaseMatchers {
              x.description + " is not assignable from " + q(c.getName), 
              x)
     }
-  }
+  }.withName("BeAssignableFrom")
 }
 /**
  * Matcher for a boolean value
  */
 class BeTrueMatcher extends Matcher[Boolean] {
+  override protected val userDefinedName = Some("BeTrue")
   def apply[S <: Boolean](v: Expectable[S]) = {
     result(v.value, v.description + " is true", v.description + " is false", v) 
   }
@@ -126,12 +130,14 @@ class BeTrueMatcher extends Matcher[Boolean] {
  * Equality Matcher
  */
 class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
+  override protected val userDefinedName = Some("BeEqualTo")
   import AnyMatchers._
   protected val ok: String => String = identity
   protected val ko: String => String = identity
   
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
     val newMatcher = new BeEqualTo(f(t)) {
+      override protected val userDefinedName = outer.userDefinedName
       override protected val ok: String => String = okFunction compose outer.ok
       override protected val ko: String => String = koFunction compose outer.ko
     } 

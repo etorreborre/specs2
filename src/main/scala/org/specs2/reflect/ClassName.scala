@@ -2,6 +2,7 @@ package org.specs2
 package reflect
 
 import control.Exceptions._
+import text.CamelCase._
 
 /**
  * Utility reflection methods
@@ -33,6 +34,18 @@ trait ClassName {
    */
   def simpleName(klass: Class[_]) = {
     className(klass.getName).split("\\.").last
+  }
+  /**
+   * @return the uncamelcased name of the class (or its parent if it is an anonymous class)
+   */
+  def humanName(c: Class[_]): String = {
+    if (c.getSimpleName.contains("$")) {
+val types = c.getComponentType
+      val t2 = c.getDeclaringClass
+      humanName(c.getSuperclass)
+    }
+    else
+      c.getSimpleName.camelCaseToWords
   }
 }
 private[specs2]

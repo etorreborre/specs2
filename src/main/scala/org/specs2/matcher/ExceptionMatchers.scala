@@ -10,7 +10,8 @@ trait ExceptionMatchers {
   /**
    * @return a matcher checking the type of an Exception
    */
-  def throwA[E <: Throwable](implicit m: ClassManifest[E]): ExceptionClassMatcher = new ExceptionClassMatcher(m.erasure)
+  def throwA[E <: Throwable](implicit m: ClassManifest[E]): ExceptionClassMatcher = new ExceptionClassMatcher(m.erasure).
+    withName("ThrowA"+m.erasure.getSimpleName)
   /**
    * @return a matcher checking the type of an Exception and its message (as a regexp)
    */
@@ -20,26 +21,28 @@ trait ExceptionMatchers {
   /**
    * @return a matcher checking the value of an Exception
    */
-  def throwA[E <: Throwable](e: E): ExceptionMatcher[E] = new ExceptionMatcher(e)
+  def throwA[E <: Throwable](e: E): ExceptionMatcher[E] = new ExceptionMatcher(e).withName("ThrowA"+e.getClass.getSimpleName)
   /**
    * @alias for throwA
    */
-  def throwAn[E <: Throwable](implicit m: ClassManifest[E]) = throwA[E](m)
+  def throwAn[E <: Throwable](implicit m: ClassManifest[E]) = throwA[E](m).withName("ThrowAn"+m.erasure.getSimpleName)
   /**
    * @alias for throwA
    */
-  def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]): Matcher[Any] = throwA(message)(m)
+  def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]): Matcher[Any] = throwA(message)(m).
+    withName("ThrowAn"+m.erasure.getSimpleName+"WithMessage "+message)
   /**
    * @alias for throwA
    */
-  def throwAn[E <: Throwable](e: E) = throwA(e)
+  def throwAn[E <: Throwable](e: E) = throwA(e).withName("ThrowAn"+e.getClass.getSimpleName)
   /**
    * Exception matcher checking the type of a thrown exception.
    */
-  class ExceptionClassMatcher(klass: Class[_]) extends Matcher[Any] {
+  class ExceptionClassMatcher(klass: Class[_]) extends Matcher[Any] { outer =>
     def apply[S <: Any](value: Expectable[S]) = checkBoolean(value, (e: Throwable) => classType(e))
 
     def like[T](f: PartialFunction[Throwable, MatchResult[Any]]) = new Matcher[T] {
+      override protected val userDefinedName = outer.userDefinedName.map(_+" like a partial function")
       def apply[S <: T](value: Expectable[S]) = {
     	  checkMatchResult(value, (e: Throwable) => classType(e), f)
       }
@@ -63,11 +66,12 @@ trait ExceptionMatchers {
    * This matchers matches exception instances.
    * @see throwA
    */
-  class ExceptionMatcher[E <: Throwable](exception: E) extends Matcher[Any] {
+  class ExceptionMatcher[E <: Throwable](exception: E) extends Matcher[Any] { outer =>
     def apply[S <: Any](value: Expectable[S]) = {
       checkBoolean(value, (e: Throwable) => classAndMessage(e))
     }
     def like(f: PartialFunction[E, MatchResult[Any]]) = new Matcher[Any] {
+      override protected val userDefinedName = outer.userDefinedName.map(_+" like a partial function")
       def apply[S <: Any](value: Expectable[S]) =
     	  checkMatchResult(value, (e: Throwable) => classAndMessage(e), f)
     }

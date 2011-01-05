@@ -39,8 +39,8 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
   def haveSize[T <% { def size: Int }](n: Int) = new Matcher[T] {
     def apply[S <: T](iterable: Expectable[S]) = {
       result(iterable.value.size == n,
-             iterable.description + " have size " + n, 
-             iterable.description + " doesn't have size " + n, iterable)
+             iterable.description + " have size " + n,
+             iterable.description + " doesn't have size " + n + " but size " + iterable.value.size, iterable)
     }
   }
   
