@@ -283,6 +283,38 @@ don't need to add brackets to:
   * add strings with `+`: `"this is"+"my string" ^ "ok?"`
   * declare an example: `"this is some text" ^ "and this is an example description" ! success`
 
+###### But if you STILL want mutable specifications
+
+There's at least one very good reason for that. You want a smooth migration path from ***specs*** to ***specs2*** because
+rewriting specifications from scratch, with a new syntax, does not bring a lot of value to your project.
+
+Well, Scala is not a black-or-white language and mutation is definitely part of the toolbox. In the case of a specification
+DSL, we know the advantages: less syntax, and the drawbacks: uncontrolled side-effects.
+
+Thus, in ***specs2*** it is possible to create specifications which look almost like the ones which can be created with
+***specs***, with a bit less functionalities:
+
+        import org.specs2.mutable._   // similar to the mutable package for Scala collections
+
+        class MyMutableSpecification extends Specification {
+          "This specification" should {
+            "build examples with side-effects" in { success }
+            "even use side-effects to avoid chaining expectations" in {
+               1 must_== 2
+               // the rest won't be executed
+               success
+            }
+          }
+        }
+
+The important things to know are:
+
+  * side-effects are only used to build the specification fragments, by mutating a variable
+  * they are also used to short-circuit the execution of an example as soon as there is a failure (by throwing an exception)
+  * if you still build fragments in the body of examples, the sky should fall down
+  * "context" management is to be done with case classes (see `org.specs2.examples.MutableSpec`)
+
+
 ##### Dependencies control
 
 One classical impediment to software evolution is circular dependencies between packages in a project. The new ***specs2***

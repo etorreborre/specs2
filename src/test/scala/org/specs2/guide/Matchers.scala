@@ -553,6 +553,21 @@ addition of integers by providing one example on each row of a table:
 Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you
 can use the `!!` operator to disambiguate (and `||` in the header for good visual balance).
 
+### Reusing matchers outside of specs2
+
+The ***specs2*** matchers are a well-delimited piece of functionality that you should be able to reuse in your own test
+framework. You can reuse the following traits:
+
+ * `org.specs2.matcher.MustMatchers` (or `org.specs2.matcher.MustMatchers`) to write anything like `1 must be_==(1)` and
+   get a `Result` back
+
+ * You can also use the side-effecting version of that trait called `org.specs2.matcher.MustThrownMatchers` which throws
+   a `FailureException` as soon as an expectation is failing
+
+ * Finally, in a JUnit-like library you can use the `org.specs2.matcher.JUnitMustMatchers` trait which throws
+   `AssertionFailureError`s
+
+
    - - -
 
            	                                                                                                            """ ^

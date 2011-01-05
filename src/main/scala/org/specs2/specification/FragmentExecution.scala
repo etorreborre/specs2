@@ -7,6 +7,8 @@ import main.Arguments
 import time.SimpleTimer
 import execute._
 import StandardFragments._
+import matcher.FailureException
+import junit.framework.AssertionFailedError
 
 /**
  * This trait executes Fragments
@@ -23,7 +25,13 @@ trait FragmentExecution {
    */
   def executeBody(body: =>Result)(implicit arguments: Arguments): Result = {
     if (arguments.plan) Success("plan")
-    else tryOr(body)(Error(_))
+    else try {
+      body
+    } catch {
+      case FailureException(f) => f
+      case e: Exception        => Error(e)
+      case other               => throw other
+    }
   }
 
   def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = { 

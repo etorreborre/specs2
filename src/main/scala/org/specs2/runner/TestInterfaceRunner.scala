@@ -5,6 +5,7 @@ import _root_.org.scalatools.testing._
 import main.Arguments
 import control.Throwablex._
 import reporter._
+import specification._
 
 /**
  * Implementation of the Framework interface for the sbt tool.
@@ -38,9 +39,9 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   import reflect.Classes._
 
   def run(classname: String, fingerprint: TestFingerprint, handler: EventHandler, args: Array[String]) = {
-    val specification: Either[Throwable, Specification] = create[Specification](classname + "$", loader) match {
+    val specification: Either[Throwable, BaseSpecification] = create[BaseSpecification](classname + "$", loader) match {
       case Right(s) => Right(s)
-      case Left(e) => create[Specification](classname, loader)
+      case Left(e) => create[BaseSpecification](classname, loader)
     }
     specification.left.map { e =>
       handler.handle(error(classname, e))
@@ -56,7 +57,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
       run(specification.right.toOption, handler, args)
   }
   
-  private def run(specification: Option[Specification], handler: EventHandler, args: Array[String]): Option[Specification] = {
+  private def run(specification: Option[BaseSpecification], handler: EventHandler, args: Array[String]): Option[BaseSpecification] = {
     specification map { s =>
       reporter(handler).report(s)(Arguments(args:_*))
     }
