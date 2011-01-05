@@ -132,10 +132,10 @@ trait TextPrinter {
         case FailureDetails(expected, actual) if (args.diffs.show(expected, actual)) => {
           val (expectedDiff, actualDiff) = showDistance(expected, actual, args.diffs.separators, args.diffs.shortenSize)
           out.printFailure("Expected: " + expectedDiff)
-          out.printFailure("Actual: " + actualDiff)
+          out.printFailure("Actual:   " + actualDiff)
           if (args.diffs.full) {
             out.printFailure("Expected (full): " + expected)
-            out.printFailure("Actual (full): " + actual)
+            out.printFailure("Actual (full):   " + actual)
           }
           out.printLine("")
         }

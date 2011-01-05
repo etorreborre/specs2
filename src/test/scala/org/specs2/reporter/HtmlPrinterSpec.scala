@@ -60,7 +60,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
     def text3 = print(spec) must \\(<em>ex2</em>)
 
     def ex1 = print(spec) must \\("div", "class"->"level2") \("img", "src"->"./images/icon_success_sml.gif")
-    def ex2 = print(spec) must \\("div", "class"->"level2") \("img", "src"->"./images/icon_success_sml.gif")
+    def ex2 = print(spec).toString must contain("details")
   }
   
   trait MockHtmlPrinter extends FragmentExecution {

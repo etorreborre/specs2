@@ -70,14 +70,14 @@ class EditDistanceSpec extends SpecificationWithJUnit with EditDistance with Dat
 
   import DiffShortener._
   def d1 = shorten("abcd") must_== "abcd"
-  def d2 = shorten("abcdefghijkl(mn)opqr") must_== "...hijkl(mn)opqr"
-  def d3 = shorten("abcdefghijkl(mn)") must_== "...hijkl(mn)"
-  def d4 = shorten("(mn)abcdefghijkl") must_== "(mn)abcde..."
-  def d5 = shorten("abcdefghijkl(mn)opqrstuv") must_== "...hijkl(mn)opqrs..."
-  def d6 = shorten("hijkl(zz)abcdefghijklmno(xx)abcde") must_== "hijkl(zz)ab...no(xx)abcde"
-  def d7 = shorten("hijkl()xxabcdefghijklmno()xxabcde") must_== "hijkl()xx...no()xxabc..."
-  def d8 = shorten("abcdef()ghijkl") must_== "...bcdef()ghijk..."
-  def d9 = shorten("abcdefg(zz)abcdefghijklmno(xx)abcdefg") must_== "...cdefg(zz)ab...no(xx)abcde..."
+  def d2 = shorten("abcdefghijkl[mn]opqr") must_== "...hijkl[mn]opqr"
+  def d3 = shorten("abcdefghijkl[mn]") must_== "...hijkl[mn]"
+  def d4 = shorten("[mn]abcdefghijkl") must_== "[mn]abcde..."
+  def d5 = shorten("abcdefghijkl[mn]opqrstuv") must_== "...hijkl[mn]opqrs..."
+  def d6 = shorten("hijkl[zz]abcdefghijklmno[xx]abcde") must_== "hijkl[zz]ab...no[xx]abcde"
+  def d7 = shorten("hijkl[]xxabcdefghijklmno[]xxabcde") must_== "hijkl[]xx...no[]xxabc..."
+  def d8 = shorten("abcdef[]ghijkl") must_== "...bcdef[]ghijk..."
+  def d9 = shorten("abcdefg[zz]abcdefghijklmno[xx]abcdefg") must_== "...cdefg[zz]ab...no[xx]abcde..."
 
   val factor = 1000
   def a1 = {

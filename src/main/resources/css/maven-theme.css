@@ -277,3 +277,11 @@ ex.skipped {
 .level8 {
   text-indent: 155px;
 }
+.details {
+  font-family: Courier, monospace;
+  font-size: 13px;
+  border: 1px #900 dashed;
+  background-color: #FFFF99;
+  color: #900;
+  padding: 2px 2px 2px 2px;
+}

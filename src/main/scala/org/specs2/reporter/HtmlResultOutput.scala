@@ -106,21 +106,18 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
   def printCollapsibleDetailedFailure(d: Details, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
       d match {
-        case NoDetails() => this
-        case FailureDetails(expected, actual) => {
+        case FailureDetails(expected, actual) if args.diffs.show(expected, actual) => {
           val (expectedDiff, actualDiff) = showDistance(expected, actual, args.diffs.separators, args.diffs.shortenSize)
-          val (expectedMessage, actualMessage) = ("  Expected: " + expectedDiff, "  Actual: " + actualDiff)
-          val (expectedFull, actualFull) = ("  Expected (full): " + expected, "  Actual (full): " + actual)
-
-          printElem(<div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(d)}/>details<br/>
-                     <div class={l(level)} id={id(d)} display="none">
-                       <t class={l(level)}>{ expectedMessage }<br/></t>
-                       <t class={l(level)}>{ actualMessage }<br/></t>
-                       { if (args.diffs.full) <t>{expectedFull}</t><br/> else <t/> }
-                       { if (args.diffs.full) <t>{actualFull}</t><br/> else <t/> }
-                     </div>
-                    </div>)
+          val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
+          val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
+          printElem(<t>
+<div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(d)}/>details</div>
+  <div id={id(d)} style="display:none">
+    <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
+    { if (args.diffs.full) <pre class="details">{expectedFull+"\n"+actualFull}</pre> else NodeSeq.Empty }
+  </div></t>)
         }
+        case _ => this
       }
     } else this
   }
