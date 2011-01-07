@@ -70,6 +70,12 @@ All those arguments are usually set in a specification with `args(name=value)` b
     for specifications were text must not be indented and examples be executed in order
   * `freetext`: `plan = true && noindent = true`
     for specifications with no examples at all and free display of text
+  * `diffs(show, separators, triggerSize, shortenSize, full)` to display the differences when doing equality comparison
+     . `show` will not show anything (default is true)
+     . `separators` allows to change the separators used to show the differences (default is "[]")
+     . `triggerSize` controls the size above which the differences must be shown (default is 20)
+     . `shortenSize` controls the number of characters to display around each difference (default is 5)
+     . `full` displays the full original expected and actual strings
 
 ### Console output
 
