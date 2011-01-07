@@ -570,10 +570,9 @@ reported unless if there is a failure.
 
 #### Mutable Specifications
 
-If you've read the [Philosophy](org.specs2.guide.Philosophy.html) page you're fully aware of the danger of using side effects
-to create and execute specifications. However assuming that you know won't try to execute the same Specification concurrently,
-There is a way to create Specifications which almost look like ***specs*** specifications. Here is a fully commented example
-showing how to do it:
+If you've read the [Philosophy](org.specs2.guide.Philosophy.html) page you're fully aware of the danger of using side effects to create and execute specifications.
+However assuming that you know won't try to execute the same Specification concurrently, there is a way to create Specifications
+which almost look like ***specs*** specifications. Here is a fully commented example showing how to do it:
 
       import mutable._
       import specification._
