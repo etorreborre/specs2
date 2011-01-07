@@ -23,7 +23,8 @@ trait ArgumentsArgs extends control.Properties {
     threadsNb:     Property[Int]      = Property[Int](),
     markdown:      Property[Boolean]  = Property[Boolean](),
     debugMarkdown: Property[Boolean]  = Property[Boolean](),
-    diffs:         Property[Diffs]    = Property[Diffs]()
+    diffs:         Property[Diffs]    = Property[Diffs](),
+    fromSource:    Property[Boolean]  = Property[Boolean]()
   ) = new Arguments(
      ex.map(".*"+_+".*").toOption,
      xonly.toOption,
@@ -39,7 +40,8 @@ trait ArgumentsArgs extends control.Properties {
      threadsNb.toOption,
      markdown.toOption,
      debugMarkdown.toOption,
-     diffs.toOption
+     diffs.toOption,
+     fromSource.toOption
   )
   /**
    * @return arguments for a literate specification: no auto indent and a sequential
@@ -75,5 +77,9 @@ trait ArgumentsArgs extends control.Properties {
    */
   def diffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, shortenSize: Int = 5, full: Boolean = false): Arguments =
     args(diffs = Diffs(show, separators, triggerSize, shortenSize, full))
+  /**
+   * shortcut to display the example descriptions from the expectations ok messages
+   */
+  def descFromExpectations = args(fromSource = false)
 }
 object ArgumentsArgs extends ArgumentsArgs

@@ -12,7 +12,10 @@ trait Anyx { outer =>
   }
 
   /** @return true if a is a Boolean object */
-  def isBoolean(a: Any) = a match { case b: Boolean => true; case _ => false }
+  def isBoolean(a: Any) = a match {
+    case b: Boolean => true;
+    case _ => false
+  }
 }
 private[specs2] 
 object Anyx extends Anyx 

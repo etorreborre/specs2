@@ -50,9 +50,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
 	   	  case (desc, ExecutedResult(_, result, timer)) => {
 	        notifier.fireTestStarted(desc)
 	        result match {
-            case f @ Failure(m, st, d) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
+            case f @ Failure(m, e, st, d) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
             case e @ Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
-            case Pending(_) | Skipped(_)  => notifier.fireTestIgnored(desc)
+            case Pending(_) | Skipped(_, _)  => notifier.fireTestIgnored(desc)
             case _ => ()
           }
 	        notifier.fireTestFinished(desc)
@@ -62,8 +62,8 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
   }
   /** @return a Throwable expected by JUnit Failure object */
   private def junitFailure(f: Failure): Throwable = f match {
-    case Failure(m, st, NoDetails()) => new SpecFailureAssertionFailedError(f.exception)
-    case Failure(m, st, FailureDetails(expected, actual)) => new ComparisonFailure(m, expected, actual) {
+    case Failure(m, e, st, NoDetails()) => new SpecFailureAssertionFailedError(f.exception)
+    case Failure(m, e, st, FailureDetails(expected, actual)) => new ComparisonFailure(m, expected, actual) {
       private val e = f.exception
       override def getStackTrace = e.getStackTrace
       override def getCause = e.getCause

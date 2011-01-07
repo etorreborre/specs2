@@ -23,7 +23,8 @@ case class Arguments (
   _threadsNb:     Option[Int]     = None,
   _markdown:      Option[Boolean] = None,
   _debugMarkdown: Option[Boolean] = None,
-  _diffs:         Option[Diffs]   = None
+  _diffs:         Option[Diffs]   = None,
+  _fromSource:    Option[Boolean] = None
 ) {
   def ex: String                = _ex.getOrElse(".*")
   def xonly: Boolean            = _xonly.getOrElse(false)
@@ -40,6 +41,7 @@ case class Arguments (
   def markdown: Boolean         = _markdown.getOrElse(true)
   def debugMarkdown: Boolean    = _debugMarkdown.getOrElse(false)
   def diffs: Diffs              = _diffs.getOrElse(Diffs())
+  def fromSource: Boolean       = _fromSource.getOrElse(true)
 
   /** @alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
@@ -63,7 +65,8 @@ case class Arguments (
       other._threadsNb       .orElse(_threadsNb),
       other._markdown        .orElse(_markdown),
       other._debugMarkdown   .orElse(_debugMarkdown),
-      other._diffs           .orElse(_diffs)
+      other._diffs           .orElse(_diffs),
+      other._fromSource      .orElse(_fromSource)
     )
   }
   override def toString = {
@@ -83,7 +86,8 @@ case class Arguments (
     "threadsNb"      -> _threadsNb    ,
     "markdown"       -> _markdown     ,
     "debugMarkdown"  -> _debugMarkdown,
-    "diffs"          -> _diffs
+    "diffs"          -> _diffs,
+    "fromSource"     -> _fromSource
     ).flatMap(showArg).mkString(", ") + ") "
   }
   private def showArg(a: (String, Option[_])) = a._2.map(a._1 +" = "+_)
@@ -111,7 +115,8 @@ object Arguments {
        _sequential    = bool("sequential"),
        _threadsNb     = int("threadsNb"),
        _markdown      = bool("markdown", "nomarkdown"),
-       _debugMarkdown = bool("debugmarkdown")
+       _debugMarkdown = bool("debugmarkdown"),
+       _fromSource    = bool("fromsource")
     )
   }
   

@@ -95,12 +95,12 @@ trait TextPrinter {
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      printResult(leveledText(asString(r.text), level)(args), r.result, r.timer)(args, out)
+      printResult(leveledText(asString(r.text(args)), level)(args), r.result, r.timer)(args, out)
       
     def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
       val description = statusAndDescription(desc, result, timer)(args, out)
       result match {
-        case f @ Failure(m, st, d) => {
+        case f @ Failure(m, e, st, d) => {
           printFailure(desc, f, timer)
           printFailureDetails(d)
         }
@@ -112,9 +112,9 @@ trait TextPrinter {
             t.getStackTrace.foreach(st => out.printError(st.toString))
           }
         }
-        case Success(_) => if (!args.xonly) out.printSuccess(description)
-        case Pending(_) => if (!args.xonly) out.printPending(description + " " + result.message)
-        case Skipped(_) => if (!args.xonly) {
+        case Success(_)    => if (!args.xonly) out.printSuccess(description)
+        case Pending(_)    => if (!args.xonly) out.printPending(description + " " + result.message)
+        case Skipped(_, _) => if (!args.xonly) {
           out.printSkipped(description)
           out.printSkipped(result.message)
         }

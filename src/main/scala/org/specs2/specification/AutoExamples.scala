@@ -58,7 +58,8 @@ trait AutoExamples {
   private[specs2] def code() = {
     val codeDepth = 6
     List("^", "^t", "^bt", "^p", "^br", "^end", "^endp").foldLeft(getCode(codeDepth))(_ trimEnd _).
-    trimEnclosing("{", "}")
+    trimEnclosing("{", "}").
+    trimEnclosing("`", "`")
   }
 }
 private[specs2]

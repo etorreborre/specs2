@@ -58,15 +58,15 @@ case class HtmlBr() extends Html {
 }
 case class HtmlResult(r: ExecutedResult) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    if (!args.xonly || !r.result.isSuccess) printResult(r.text, level, r.result)(args, out) else out
+    if (!args.xonly || !r.result.isSuccess) printResult(r.text(args), level, r.result)(args, out) else out
     
   def printResult(desc: MarkupString, level: Int, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
     result match {
-      case f: Failure => printFailure(desc, level, f).printStack(f, level + 1, args.failtrace) 
-      case e: Error   => printError(desc, level, e).printStack(e, level + 1) 
-      case Success(_) => out.printSuccess(desc, level, !args.xonly)
-      case Pending(_) => out.printPending(desc.append(" " + result.message), level, !args.xonly)
-      case Skipped(_) => out.printSkipped(desc, level).printSkipped(NoMarkup(result.message), level, !args.xonly)
+      case f: Failure    => printFailure(desc, level, f).printStack(f, level + 1, args.failtrace)
+      case e: Error      => printError(desc, level, e).printStack(e, level + 1)
+      case Success(_)    => out.printSuccess(desc, level, !args.xonly)
+      case Pending(_)    => out.printPending(desc.append(" " + result.message), level, !args.xonly)
+      case Skipped(_, _) => out.printSkipped(desc, level).printSkipped(NoMarkup(result.message), level, !args.xonly)
     }
   }
   def printFailure(desc: MarkupString, level: Int, f: Failure)(implicit args: Arguments, out: HtmlResultOutput) = {

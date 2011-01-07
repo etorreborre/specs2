@@ -25,7 +25,8 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: BaseSpecification =>
     threadsNb:     Property[Int]      = Property[Int](),
     markdown:      Property[Boolean]  = Property[Boolean](),
     debugMarkdown: Property[Boolean]  = Property[Boolean](),
-    diffs:         Property[Diffs]    = Property[Diffs]()
+    diffs:         Property[Diffs]    = Property[Diffs](),
+    fromSource:    Property[Boolean]  = Property[Boolean]()
   ) = {
     addArguments(super.args(
       ex,
@@ -42,7 +43,8 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: BaseSpecification =>
       threadsNb,
       markdown,
       debugMarkdown,
-      diffs))
+      diffs,
+      fromSource))
   }
 
 }
