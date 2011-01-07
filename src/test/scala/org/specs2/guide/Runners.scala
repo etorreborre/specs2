@@ -6,6 +6,8 @@ class Runners extends Specification { def is = freetext ^
                                                                                                                         """
 ### Presentation
 
+<toc/>
+
 There are 4 ways to execute ***specs2*** specifications:
 
  * on the command line, with a console output, and the `specs2.run` runner

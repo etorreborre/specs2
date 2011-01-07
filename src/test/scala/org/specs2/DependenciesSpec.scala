@@ -11,7 +11,7 @@ class DependenciesSpec extends Specification { def is = freetext ^
   +    mock form
   +    matcher  
   +    execute  
-  +               reflect  xml time
+  +               reflect  xml time  html
   +    collection control  io  text  main data
                                                                                           """ ^
                                                                                           end

@@ -15,17 +15,19 @@ class FeaturesSpec extends Specification { def is = literate ^
      "think of a way to generalize the nested management                                  "! done^
      "review all the code and specifications                                              "! todo^
    "Html reporter                                                                         "^
-     "with a table of content                                                             "! todo^
+     "with a table of content                                                             "! done^
+     "fix the toc bug on SpecStructure                                                    "! todo^
      "with breadcrumbs                                                                    "! todo^
      "with non mutable forms                                                              "! todo^
    "ScalaInterpreter                                                                      "^
      "with appropriate matchers                                                           "! todo^
    "Detailed diffs                                                                        "! done^
+     "Document the new arguments                                                          "! todo^
      "Split matcher messages on 2 lines when too long                                     "! done^
    "JUnit matchers                                                                        "! done^
      "Using a comparison failure for == mismatches                                        "! done^
    "Specs-like specification                                                              "! done^
-   "Auto-examples by using the matcher name                                               "! todo^
+   "Auto-examples by using the expectation ok message                                     "! done^
    "review the contain matchers                                                           "! done^
    "Lift                                                                                  "^
      "specify the example webapp                                                          "! todo^

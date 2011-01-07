@@ -4,6 +4,8 @@ package guide
 class Philosophy extends Specification { def is = freetext                                                              ^
   "Philosophy".title ^
                                                                                                                         """
+<toc/>
+                                                                                                                        
 ### The origins
 
 ***specs2*** has been created as an evolution of the [***specs***](http://code.google.com/p/specs) project.

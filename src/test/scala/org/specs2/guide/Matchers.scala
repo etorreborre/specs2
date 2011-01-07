@@ -2,6 +2,7 @@ package org.specs2
 package guide
 
 class Matchers extends Specification { def is =  "Matchers guide".title ^                                               """
+<toc/>
 
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns
 a `Result`:
@@ -105,6 +106,12 @@ If you wish to get a more precise failure message you can set an alias with the 
       machine.tickets aka "the created tickets" must haveSize(3)
 
 There is also a shortcut for `value aka value.toString` which is simply `value.aka`.
+
+And when you want to other ways to customize the description, you can use:
+
+ * `post`: `"a" post " is the first letter"` prints `a is the first letter`
+ * `as`: `"b" as ((s:String) => "a"+s+"c")` prints `abc`
+
 
 #### Matchers creation
 

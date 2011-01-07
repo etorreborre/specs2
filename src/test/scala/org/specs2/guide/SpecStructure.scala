@@ -8,6 +8,8 @@ class SpecStructure extends Specification { def is =
                                                                                                                         """
 ### Presentation
 
+<toc/>
+
 In this chapter you will learn how to:
 
  * declare examples
@@ -21,9 +23,34 @@ In this chapter you will learn how to:
 
 As seen in the [Quick Start](org.specs2.guide.QuickStart.html), a specification is a list of *fragments* separated by `^`:
 
-    "this is my specification"                          ^
-      "and example 1"                                   ! e1^
-      "and example 2"                                   ! e2^
+      "this is my specification"                          ^
+        "and example 1"                                   ! e1^
+        "and example 2"                                   ! e2
+
+      def e1 = success
+      def e2 = success
+
+In this style of specification, the "body" of these examples is provided by 2 methods, separated from the specification
+text. There is no specific recommendation on how you should name those methods but note that you can use the backtick notation
+for better readability:
+
+      "this is my specification"                          ^
+        "and example 1"                                   ! `first example`^
+        "and example 2"                                   ! `second example`
+
+      def `first example` = success
+      def `second example` = success
+
+You can even push this idea further by writing:
+
+      "this is my specification"                          ^
+        `and example 1`                                   ^
+        `and example 2`
+
+      def `and example 1` = success
+      def `and example 2` = success
+
+*(an IDE with good refactoring capabilities is a must-have in that case,...)*
 
 ###### Standard results
 
@@ -88,6 +115,16 @@ A few things to remember about this feature:
    This can be overriden by specifying the `specs2.srcTestDir` system property
 
  * the extraction of the source code is very rudimentary and will just extract one line of code.
+
+ * for more robustness, but different results, you can use the `descFromExpectations` arguments (creates an
+   `args(fromSource=false)`) to take the "ok message" from the expectation as the example description:
+
+         // outputs: List(1, 2) must contain(1)
+         { List(1, 2) must contain(1) }
+
+         // outputs: 'List(1, 2)' contains '1'
+         descFromExpectations ^
+         { List(1, 2) must contain(1) }
 
 ###### Using the text of the Example
 

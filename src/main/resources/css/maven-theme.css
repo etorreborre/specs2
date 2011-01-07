@@ -285,3 +285,11 @@ ex.skipped {
   color: #900;
   padding: 2px 2px 2px 2px;
 }
+ul {
+  margin-left: 10;
+  padding-left: 10;
+}
+li {
+  margin-left: 10;
+  padding-left: 0;
+}

@@ -1,9 +1,13 @@
 package org.specs2
 package reporter
 
-import scala.xml.NodeSeq
-import scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable }
+import scala.xml.transform._
+import scala.xml. {UnprefixedAttribute, Node, NodeSeq, Elem, Null}
+import scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable, TreeLoc }
+import Scalaz._
+import html.TableOfContents._
 import Generator._
+import data.Trees._
 import data.Tuples._
 import io._
 import io.Paths._
@@ -65,12 +69,12 @@ trait HtmlPrinter {
    */  
   def printHtml(output: HtmlResultOutput, lines: HtmlLines)(implicit args: Arguments) = {
     output.enclose((t: NodeSeq) => <html>{t}</html>) {
-      output.blank.printHead.enclose((t: NodeSeq) => <body>{t}</body>) {
+      output.blank.printHead.enclose((t: NodeSeq) => addToc(<body>{t}</body>)) {
         lines.printXml(output.blank)
       }
     }
   }
-  
+
   /**
    * Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
    * into a single block that will be reported on a different html page
