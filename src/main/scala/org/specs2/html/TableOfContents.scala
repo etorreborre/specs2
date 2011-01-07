@@ -22,6 +22,10 @@ trait TableOfContents {
   /** collect all the headers as a Tree */
   private[specs2]
   def headersToTree(body: NodeSeq, headers: TreeLoc[Header] = leaf(Header(1, "")).loc): TreeLoc[Header] = {
+    def goUpUntil(headers: TreeLoc[Header], level: Int): TreeLoc[Header] =
+      if (headers.tree.rootLabel.level > level) headers.parent.map(goUpUntil(_, level)).getOrElse(headers)
+      else headers
+
     body.toList match {
       case e :: rest if isHeader(e, (_: Int) > 2) => {
         val eLevel = headerNumber(e)
@@ -32,7 +36,7 @@ trait TableOfContents {
         else if (eLevel > currentLevel)
           headers.insertDownLast(header)
         else
-          headers.parent.getOrElse(headers).insertRight(header)
+          goUpUntil(headers, eLevel).insertRight(header)
         headersToTree(rest, newHeaders)
       }
       case e :: rest => headersToTree(rest, headersToTree(e.child, headers))
@@ -52,7 +56,7 @@ trait TableOfContents {
     headersToTree(body).toTree.
     bottomUp { (h: Header, s: Stream[NodeSeq]) =>
       { if (h.name.isEmpty) NodeSeq.Empty else <li><a href={anchorName(h.name)}>{h.name}</a></li> } ++
-        ( if (s.isEmpty) NodeSeq.Empty else <ul>{s.toSeq}</ul>)
+      ( if (s.isEmpty) NodeSeq.Empty else <ul>{s.toSeq}</ul>)
     }.rootLabel
   }
 
