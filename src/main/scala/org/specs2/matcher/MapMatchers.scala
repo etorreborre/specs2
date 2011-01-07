@@ -20,7 +20,7 @@ trait MapBaseMatchers {
              map.description + " doesn't have the key " + q(k), 
              map)
     }
-  } 
+  }
   /** matches if map contains a pair (key, value) with value == v */   
   def haveValue[V](v: V) = new Matcher[Iterable[(Any, V)]] { 
     def apply[S <: Iterable[(Any, V)]](map: Expectable[S]) = {
@@ -72,7 +72,7 @@ trait MapBaseMatchers {
              f.optionalDescription.getOrElse("the function") + " is not defined by the value".plural(undefined.size) + " " + q(undefined.mkString(", ")),
              f)
     }
- }
+  }
 
 }
 private[specs2]

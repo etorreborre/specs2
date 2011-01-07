@@ -20,6 +20,10 @@ trait Expectations {
 
     /** @return an expectable with an alias description */
     def aka(alias: String): Expectable[T] = createExpectable(value, alias)
+    /** @return an expectable with an alias description, after the value string */
+    def post(alias: String): Expectable[T] = as((_:String) + alias)
+    /** @return an expectable with an alias description, after the value string */
+    def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
   }
   implicit def canEqual[T](t: =>T) = new CanEqual(t)
   class CanEqual[T](t: =>T) {
@@ -28,6 +32,7 @@ trait Expectations {
   }
   protected def createExpectable[T](t: =>T) = Expectable(t)
   protected def createExpectable[T](t: =>T, alias: String) = Expectable(t, alias)
+  protected def createExpectable[T](t: =>T, alias: String => String) = Expectable(t, Some(alias))
 }
 trait ThrownExpectations extends Expectations {
   override protected def createExpectable[T](t: =>T) = new Expectable(() => t) {
@@ -35,7 +40,11 @@ trait ThrownExpectations extends Expectations {
   }
   override protected def createExpectable[T](t: =>T, alias: String) = new Expectable(() => t) {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
-    override val desc: Option[String] = Some(alias)
+    override val desc = Some((_:String) => alias)
+  }
+  override protected def createExpectable[T](t: =>T, alias: String => String) = new Expectable(() => t) {
+    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
+    override val desc = Some(alias)
   }
   protected def checkFailure[T](m: =>MatchResult[T]) = {
     m match {

@@ -32,29 +32,34 @@ class Expectable[+T] protected (private[specs2] val t: () => T) { outer =>
   def description = d(value)
 
   /** optional additional description */
-  private[specs2] val desc: Option[String] = None
+  private[specs2] val desc: Option[String => String] = None
   def optionalDescription = desc
   /** evaluate the value once and return the same expectable */
   private[specs2] def evaluate = Expectable(t(), desc)
   /** @return the description of the matched value, quoted. */
   protected def d[T](value: =>T) = desc  match {
     case None => if (value.isBoolean) "the value" else q(value)
-    case Some(de: String) => de + (if (!value.toString.isEmpty && !value.isBoolean) " " + q(value) else "")
+    case Some(de) => de(value.toString)
   }
   /** @return the description of the matched value, unquoted. */
   protected def dUnquoted[T](value: T) = desc match {
     case None => unq(value)
-    case Some(de) => de + " " + unq(value)  
+    case Some(de) => de(unq(value))
   }
 }
 
 object Expectable {
   def apply[T](t: =>T) = new Expectable(() => t)
   def apply[T](t: =>T, d1: String) = new Expectable(() => t) {
-    override val desc: Option[String] = Some(d1)
+    override val desc: Option[String => String] = {
+      val display = (s: String) => d1 +
+        (if (!s.isEmpty && !Seq("true", "false").contains(s)) " " + q(s)
+         else "")
+      Some(display)
+    }
   }
-  def apply[T](t: =>T, d1: Option[String]) = new Expectable(() => t) {
-    override val desc: Option[String] = d1
+  def apply[T](t: =>T, d1: Option[String => String]) = new Expectable(() => t) {
+    override val desc: Option[String => String] = d1
   }
   
   implicit val ExpectableFunctor: Functor[Expectable] = new Functor[Expectable] {

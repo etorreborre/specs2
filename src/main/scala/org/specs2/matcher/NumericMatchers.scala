@@ -25,7 +25,7 @@ trait NumericBaseMatchers {
   /** @alias for beLessThan */   
   def <[S <% Ordered[S]](n: S) = beLessThan(n)
   /** matches if x >= n */   
-  def beGreaterThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThan(n).not.withName("BeGreaterThanOrEqualTo")
+  def beGreaterThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThan(n).not
   def greaterThanOrEqualTo[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
   /** @alias for beGreaterThanOrEqualTo */   
   def be_>=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)

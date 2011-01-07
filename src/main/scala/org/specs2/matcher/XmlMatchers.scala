@@ -85,6 +85,25 @@ trait XmlBeHaveMatchers { outer: XmlBaseMatchers =>
   class NeutralMatcherElem(result: NeutralMatcher[Any]) {
     def ==/(node: Seq[Node]) = outer.==/(node) ^^ { (e: Elem) => e.toSeq }
   }
+  implicit def toNotMatcherElem(result: NotMatcher[Any]) : NotMatcherElem = new NotMatcherElem(result)
+  class NotMatcherElem(result: NotMatcher[Any]) {
+    def ==/(node: Seq[Node]) = (outer.==/(node) ^^ { (e: Elem) => e.toSeq }).not
+    def \\(node: Node, attributes: String*) = outer.\\(node, attributes:_*).not
+    def \\(node: Node) = outer.\\(node).not
+    def \\(label: String, attributes: String*) = outer.\\(label, attributes:_*).not
+    def \\(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*) =
+      outer.\\(node, attributeValues1, attributeValues:_*).not
+    def \\(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) =
+      outer.\\(label, attributeValues1, attributeValues:_*).not
+
+    def \(node: Node, attributes: String*) = outer.\(node, attributes:_*).not
+    def \(node: Node) = outer.\(node).not
+    def \(label: String, attributes: String*) = outer.\(label, attributes:_*).not
+    def \(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*) =
+      outer.\(node, attributeValues1, attributeValues:_*).not
+    def \(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) =
+      outer.\(label, attributeValues1, attributeValues:_*).not
+  }
 }
 /**
  * Matcher for equalIgnoreSpace comparison, ignoring the nodes order

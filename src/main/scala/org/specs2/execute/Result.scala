@@ -15,22 +15,25 @@ import main.Arguments
  *  * a skipped execution: based on dynamic conditions (a database not available for instance)
  *    the execution is not performed 
  * 
- * A Result has a message describing it more precisely and possibly a number of expectations
- * when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).
+ * A Result has:
+ *  * a message describing the outcome
+ *  * a message describing the expectation
+ *  * possibly a number of expectations
+ *    when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).
  * 
  */
-sealed abstract class Result(val message: String = "", val expectationsNb: Int = 1) {
+sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1) {
   /** @return the textual status of the result */
   def status(implicit args: Arguments = Arguments()) =
     if (args.plan) 
       color("*", blue, args.color)
     else {
       this match {
-    	  case Success(_)       => color("+", green, args.color)
-    	  case Failure(_, _, _) => color("x", yellow, args.color)
-    	  case Error(_, _)      => color("!", red, args.color)
-    	  case Pending(_)       => color("*", blue, args.color)
-    	  case Skipped(_)       => color("o", cyan, args.color)
+    	  case Success(_)          => color("+", green, args.color)
+    	  case Failure(_, _, _, _) => color("x", yellow, args.color)
+    	  case Error(_, _)         => color("!", red, args.color)
+    	  case Pending(_)          => color("*", blue, args.color)
+    	  case Skipped(_, _)       => color("o", cyan, args.color)
       }
     }
   
@@ -40,22 +43,22 @@ sealed abstract class Result(val message: String = "", val expectationsNb: Int =
       "info"
     else {
       this match {
-    	  case Success(_)       => "success"
-    	  case Failure(_, _, _) => "failure"
-    	  case Error(_, _)      => "error"
-    	  case Pending(_)       => "pending"
-    	  case Skipped(_)       => "skipped"
+    	  case Success(_)          => "success"
+    	  case Failure(_, _, _, _) => "failure"
+    	  case Error(_, _)         => "error"
+    	  case Pending(_)          => "pending"
+    	  case Skipped(_, _)       => "skipped"
       }
     }
 
   /** update the message of a result, keeping the subclass type */
   def updateMessage(msg: String) =
 	  this match {
-	    case Success(m)        => Success(msg)
-	    case Failure(m, st, d) => Failure(msg, st, d)
-	    case Error(m, st)      => Error(msg, st)
-	    case Skipped(m)        => Skipped(msg)
-	    case Pending(m)        => Pending(msg)
+	    case Success(m)           => Success(msg)
+	    case Failure(m, e, st, d) => Failure(msg, e, st, d)
+	    case Error(m, st)         => Error(msg, st)
+	    case Skipped(m, e)        => Skipped(msg, e)
+	    case Pending(m)           => Pending(msg)
 	  }
 
   /**
@@ -75,10 +78,10 @@ sealed abstract class Result(val message: String = "", val expectationsNb: Int =
 /** 
  * This class represents the success of an execution
  */
-case class Success(m: String = "")  extends Result(m) {
+case class Success(m: String = "")  extends Result(m, m) {
   override def and(r: =>Result): Result = r match {
 	  case Success(m) => if (message == m) this else Success(message+" and "+m)
-	  case Failure(m, st, _) => r
+	  case Failure(m, _, _, _) => r
 	  case _ => super.and(r)
   }
   override def isSuccess = true
@@ -96,19 +99,19 @@ object Success {
  * This class represents the failure of an execution.
  * It has a message and a stacktrace
  */
-case class Failure(m: String, stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList, details: Details = NoDetails())
-  extends Result(m) with ResultStackTrace {
+case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList, details: Details = NoDetails())
+  extends Result(m, e) with ResultStackTrace {
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
   override def or(r: =>Result): Result = r match {
     case Success(m) => if (message == m) r else Success(message+" and "+m)
-    case Failure(m, st, d) => Failure(message+" and "+m, stackTrace ::: st, d)
+    case Failure(m, e, st, d) => Failure(message+" and "+m, e, stackTrace ::: st, d)
     case _ => super.or(r)
   }
   override def toString = m
   override def equals(o: Any) = {
     o match {
-      case Failure(m2, _, _) => m == m2
+      case Failure(m2, _, _, _) => m == m2
       case _ => false
     }
   }
@@ -123,7 +126,7 @@ case class NoDetails() extends Details
 /** 
  * This class represents an exception occurring during an execution.
  */
-case class Error(m: String, e: Exception) 
+case class Error(m: String, e: Exception)
   extends Result(m) with ResultStackTrace {
   /** @return an exception created from the message and the stackTraceElements */
   def exception = e
@@ -145,5 +148,5 @@ case class Pending(m: String = "")  extends Result(m)
  * Skipped result
  * @see Result for description 
  */
-case class Skipped(m: String = "")  extends Result(m)
+case class Skipped(m: String = "", e: String = "")  extends Result(m, e)
 

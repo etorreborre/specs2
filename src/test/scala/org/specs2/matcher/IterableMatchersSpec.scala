@@ -4,7 +4,7 @@ import java.util.Arrays._
 import scala.collection.JavaConversions.{ asScalaIterable }
 
 class IterableMatchersSpec extends SpecificationWithJUnit { def is = 
-  
+//  descFromExpectations ^
   "we can check if one or several elements are present in an iterable"                    ^
     { List(1, 2) must contain(1) }                                                        ^
     { List(1, 2, 3) must contain(3, 2) }                                                  ^

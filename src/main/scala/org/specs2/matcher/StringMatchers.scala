@@ -41,7 +41,7 @@ trait StringBaseMatchers { outer =>
       result(a != null && b.value != null && b.value.indexOf(a) >= 0, 
              b.description + " contains " + q(a), 
              b.description + " doesn't contain " + q(a), b)
-    } 
+    }
   }
   /** matches if b matches the regular expression a */   
   def beMatching(t: =>String) = new BeMatching(t)

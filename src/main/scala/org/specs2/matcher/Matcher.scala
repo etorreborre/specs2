@@ -80,7 +80,6 @@ trait Matcher[-T] { outer =>
    * ex: `be_==("message") ^^ (_.getMessage)` can be applied to an exception
    */
   def ^^[S](f: S => T) = new Matcher[S] {
-    override val nameOption = outer.nameOption
     def apply[U <: S](a: Expectable[U]) = {
       val result = outer.apply(a.map(f))
       result.map((t: T) => a.value)
@@ -92,7 +91,6 @@ trait Matcher[-T] { outer =>
    * @see MatchResult.not
    */
   def not = new Matcher[T] {
-    override val nameOption = outer.nameOption.map("not "+_)
     def apply[U <: T](a: Expectable[U]) = outer(a).not
   }
   /**
@@ -100,7 +98,6 @@ trait Matcher[-T] { outer =>
    * @see MatchResult.and
    */
   def and[S <: T](m: =>Matcher[S]): Matcher[S] = new Matcher[S] {
-    override val nameOption = outer.nameOption.map(_+" and "+m.name)
     def apply[U <: S](a: Expectable[U]) = outer(a).and(m(a))
   }
   /**
@@ -108,7 +105,6 @@ trait Matcher[-T] { outer =>
    * @see MatchResult.or
    */
   def or[S <: T](m: =>Matcher[S]) = new Matcher[S] {
-    override val nameOption = outer.nameOption.map(_+" or "+m.name)
     def apply[U <: S](a: Expectable[U]) = outer(a).or(m(a))
   }
   /**
@@ -120,7 +116,6 @@ trait Matcher[-T] { outer =>
    * If the skip message is empty, only the failure message is printed
    */
   def orSkip(m: String): Matcher[T] = new Matcher[T] {
-    override val nameOption = outer.nameOption
     def apply[U <: T](a: Expectable[U]) = {
       outer(a) match {
     	  case MatchFailure(_, ko, _, d) => MatchSkip(m prefix(": ", ko), a)
@@ -132,7 +127,6 @@ trait Matcher[-T] { outer =>
    *  The <code>lazily</code> operator returns a matcher which will match a function returning the expected value
    */   
   def lazily = new Matcher[() => T]() {
-    override val nameOption = outer.nameOption
     def apply[S <: () => T](function: Expectable[S]) = {
       val r = outer(Expectable(function.value()))
       result(r, function)
@@ -148,24 +142,6 @@ trait Matcher[-T] { outer =>
    *  and a sleep time
    */
   def eventually(retries: Int, sleep: Duration): Matcher[T] = EventuallyMatchers.eventually(retries, sleep)(this)
-
-  /**
-   * @return the name of the matcher based on the class name of its first parent which is not an anonymous class
-   */
-  def name = nameOption.getOrElse(humanName(getClass))
-
-  /**
-   * this can be provided with the withName method
-   */
-  val nameOption: Option[String] = None
-
-  /**
-   * give a name to the matcher when it's built from another one
-   */
-  def withName(name: String) = new Matcher[T] {
-    override val nameOption = Some(name)
-    def apply[U <: T](a: Expectable[U]) = outer(a)
-  }
 }
 
 /**
@@ -184,8 +160,6 @@ trait AdaptableMatcher[T] extends Matcher[T] { outer =>
    */
   def ^^^(f: T => T, ok: String => String = identity, ko: String => String = identity): AdaptableMatcher[T] =
     new AdaptableMatcher[T] {
-      override val nameOption = outer.nameOption
-
       def adapt(g: T => T, okFunction: String => String, koFunction: String => String): AdaptableMatcher[T] =
         outer.adapt(g compose f, okFunction compose ok, koFunction compose ko)
         
@@ -195,8 +169,6 @@ trait AdaptableMatcher[T] extends Matcher[T] { outer =>
       }
     }
   def ^^(f: T => T) = new AdaptableMatcher[T] {
-    override val nameOption = outer.nameOption
-
     def adapt(f2: T => T, ok: String => String = identity, ko: String => String = identity) =
       outer.adapt(f2, ok, ko)
       

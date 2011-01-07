@@ -86,7 +86,7 @@ case class MatchSuccess[T](okMessage: String, koMessage: String, expectable: Exp
 case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Expectable[T], details: Details = NoDetails()) extends MatchResult[T] {
   /** an exception having the same stacktrace */
   val exception = new Exception(koMessage)
-  override def toResult = Failure(koMessage, exception.getStackTrace.toList, details)
+  override def toResult = Failure(koMessage, okMessage, exception.getStackTrace.toList, details)
   def not: MatchResult[T] = MatchSuccess(okMessage, koMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 }
