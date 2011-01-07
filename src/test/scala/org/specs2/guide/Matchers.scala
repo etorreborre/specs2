@@ -221,6 +221,8 @@ Less often you need to do comparisons on Numerical values:
 ***specs2*** offers very compact ways of checking that some exceptions are thrown:
 
  * `throwA[ExceptionType]` or `throwAn[ExceptionType]` checks if a block of code throws an exception of the given type
+ * `throwA[ExceptionType](message = "boom")` or `throwAn[ExceptionType](message = "boom")` additional checks if the exception
+   message is as expected
  * `throwA(exception)` or `throwAn(exception)` checks if a block of code throws an exception of the same type, with the
     same message
  * `throwA[ExceptionType].like { case e => e must matchSomething }` or
