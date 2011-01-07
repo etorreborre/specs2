@@ -568,7 +568,7 @@ by inserting some silent `Action` in between fragements:
 The examples are (by default) executed concurrently between the 2 actions and the "result" of actions will never be
 reported unless if there is a failure.
 
-##### Mutable Specifications
+#### Mutable Specifications
 
 If you've read the [Philosophy](org.specs2.guide.Philosophy.html) page you're fully aware of the danger of using side effects
 to create and execute specifications. However assuming that you know won't try to execute the same Specification concurrently,

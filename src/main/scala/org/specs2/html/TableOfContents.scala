@@ -12,7 +12,7 @@ trait TableOfContents {
   /**
    * create anchors for each header element and add a table of content to the node if the <toc/> tag is present
    */
-  def addToc(body: Node): NodeSeq = anchor.addTo(body) |> addToc
+  def addToc(body: Node): NodeSeq = anchor.addTo(body) |> insertToc
 
   /** sanitize a string so that it can be used as a href */
   def sanitize(s: String) = java.net.URLEncoder.encode(s, "UTF-8")
@@ -27,7 +27,7 @@ trait TableOfContents {
       else headers
 
     body.toList match {
-      case e :: rest if isHeader(e, (_: Int) > 2) => {
+      case e :: rest if isHeader(e) => {
         val eLevel = headerNumber(e)
         val currentLevel = headers.tree.rootLabel.level
         val header = leaf(Header(eLevel, childText(e)))
@@ -62,13 +62,14 @@ trait TableOfContents {
 
   /** @return the text of the first child of a Node */
   private def childText(n: Node) = n.text//child.headOption.map(_.text).getOrElse("")
+  /** regular expression for a Header Tag */
+  private val HeaderTag = "h(\\d)".r
   /** @return true if the element is a header and its number satisfies a function */
-  private[specs2] def isHeader(e: Node, number: Int => Boolean) = number(headerNumber(e))
+  private[specs2] def isHeader(e: Node) = e.label match { case HeaderTag(i) => true; case _ => false }
   /** @return the header number if any. By convention -1 means "no header" */
   private[specs2] def headerNumber(e: Node) = {
-    val Header = "h(\\d)".r
     e.label match {
-      case Header(i) => Integer.valueOf(i).intValue
+      case HeaderTag(i) => Integer.valueOf(i).intValue
       case _         => -1
     }
   }
@@ -76,21 +77,30 @@ trait TableOfContents {
   /** This rule can be used to add anchors to header elements */
   private object anchor extends RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
-      case e: Elem if isHeader(e, (_:Int) > 1) => <a name={sanitize(childText(e))}/> ++ e
+      case e: Elem if isHeader(e) => <a name={sanitize(childText(e))}/> ++ e
       case other => other
     }
     def addTo(n: Node) = new RuleTransformer(this).apply(n)
   }
+  private[specs2]
+  def headers(body: NodeSeq): NodeSeq = {
+    body.toList match {
+      case e :: rest if isHeader(e) => e ++ headers(rest)
+      case (e:Elem) :: rest => headers(e.child) ++ headers(rest)
+      case e :: rest => headers(rest)
+      case Nil => Nil
+    }
+  }
 
-  /** This rule can be replace the toc element with a table of contents derived from the body */
+  /** This rule can replace the toc element with a table of contents derived from the body */
   private def tableOfContents(body: Node) = new RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
-      case <toc/> => toc(body)
+      case <toc/> => toc(headers(body).drop(1))
       case other => other
     }
     def add = new RuleTransformer(this).apply(body)
   }
-  private val addToc = (n: Node) => tableOfContents(n).add
+  private val insertToc = (n: Node) => tableOfContents(n).add
 }
 private[specs2]
 object TableOfContents extends TableOfContents

@@ -1,15 +1,12 @@
 package org.specs2
 package html
 import TableOfContents._
-import scalaz.Scalaz._
+import matcher.DataTables
 
-class TableOfContentsSpec extends SpecificationWithJUnit { def is =
-
+class TableOfContentsSpec extends SpecificationWithJUnit with DataTables { def is =
   "Creating a table of content for a body with"                                      ^
     `no toc elements creates nothing`                                                ^
-    `no headers creates nothing`                                                     ^
-    `one h1 header creates nothing`                                                  ^
-    `one h2 header creates nothing`                                                  ^
+    `no headers except the title creates nothing`                                    ^
                                                                                      p^
     "one h2 header"                                                                  ^
       `creates one anchor`                                                           ^
@@ -23,18 +20,18 @@ class TableOfContentsSpec extends SpecificationWithJUnit { def is =
       `create links to the anchors with a nested <ul> element`                       ^
                                                                                      endp^
   "support functions"                                                                ^
-    { isHeader(<h1/>, (_:Int) >1) must beFalse }                                     ^
-    { isHeader(<h2/>, (_:Int) >1) must beTrue }                                      ^
+    { isHeader(<h1/>) must beTrue }                                                  ^
+    { isHeader(<h2/>) must beTrue }                                                  ^
     `headersToTree builds a Tree of headers`                                         ^
                                                                                      end
 
-  val aBodyWithHeadersButNoToc           = <body>text with <h2>a header</h2></body>
-  val aBodyWithNoHeaders                 = <body>text with <toc/><i>other nodes</i></body>
-  val aBodyWithH1HeadersOnly             = <body>text with <toc/><h1>a h1 header</h1></body>
-  val aBodyWithH2HeadersOnly             = <body>text with <toc/><h2>a h2 header</h2></body>
-  val aBodyWithOneH3Header               = <body>text with <toc/><h3>a h3 header</h3></body>
-  val aBodyWithTwoH3Headers              = <body>text with <toc/><h3>a h3 header</h3>other text<h3>another h3 header</h3></body>
-  val aBodyWithTwoH3HeadersAndOneH4Each  = <body>text with <toc/>
+  val aBodyWithHeadersButNoToc           = <body><h1>title</h1>text with <h2>a header</h2></body>
+  val aBodyWithNoHeaders                 = <body><h1>title</h1>text with <toc/><i>other nodes</i></body>
+  val aBodyWithH1HeadersOnly             = <body><h1>title</h1>text with <toc/><h1>a h1 header</h1></body>
+  val aBodyWithH2HeadersOnly             = <body><h1>title</h1>text with <toc/><h2>a h2 header</h2></body>
+  val aBodyWithOneH3Header               = <body><h1>title</h1>text with <toc/><h3>a h3 header</h3></body>
+  val aBodyWithTwoH3Headers              = <body><h1>title</h1>text with <toc/><h3>a h3 header</h3>other text<h3>another h3 header</h3></body>
+  val aBodyWithTwoH3HeadersAndOneH4Each  = <body><h1>title</h1>text with <toc/>
     <h3>a h3 header</h3>
       text
       <h4>first h4</h4>
@@ -46,9 +43,7 @@ class TableOfContentsSpec extends SpecificationWithJUnit { def is =
   </body>
 
   def `no toc elements creates nothing` = addToc(aBodyWithHeadersButNoToc) must not \\(<li/>)
-  def `no headers creates nothing` = addToc(aBodyWithNoHeaders) must not \\(<li/>)
-  def `one h1 header creates nothing` = addToc(aBodyWithH1HeadersOnly) must not \\(<li/>)
-  def `one h2 header creates nothing` = addToc(aBodyWithH2HeadersOnly) must not \\(<li/>)
+  def `no headers except the title creates nothing` = addToc(aBodyWithNoHeaders) must not \\(<li/>)
 
   def `creates one anchor` = addToc(aBodyWithOneH3Header) must \\("a", "name"->"a+h3+header")
   def `create 2 anchors` = addToc(aBodyWithTwoH3Headers) must \\("a", "name"->"another+h3+header")
@@ -67,7 +62,8 @@ class TableOfContentsSpec extends SpecificationWithJUnit { def is =
     }
 
   def `headersToTree builds a Tree of headers` = headersToTree(aBodyWithTwoH3HeadersAndOneH4Each).toTree.drawTree.trim must_==
-    """.|
+    """title
+       .|
        .+- a h3 header
        .|  |
        .|  `- first h4
@@ -75,4 +71,5 @@ class TableOfContentsSpec extends SpecificationWithJUnit { def is =
        .`- another h3 header
        .   |
        .   `- second h4""".stripMargin('.').replace("\r", "")
+
 }
