@@ -580,12 +580,12 @@ which almost look like ***specs*** specifications. Here is a fully commented exa
 
       /**
        * This specification shows how to use the mutable.Specification trait to create a specs-like Specification
-       * where the fragments are built using a mutate variable
+       * where the fragments are built using a mutable variable
        */
       class MutableSpec extends SpecificationWithJUnit {
         // arguments are simply declared at the beginning of the specification if needed
         args(xonly=true)
-        // action to execute before the specification must be done at the beginning
+        // an action to execute before the specification must be declared before any example
         action {
           // setup database here
           success
@@ -602,7 +602,7 @@ which almost look like ***specs*** specifications. Here is a fully commented exa
            * a failing example will stop right away, without having to "chain" expectations
            */
           "with 'world'" in {
-            // uncommenting this will stop the execution right away with a Failure
+            // uncommenting this line will stop the execution right away with a Failure
             // "Hello world" must startWith("Hi")
             "Hello world" must endWith("world")
           }
@@ -615,7 +615,7 @@ which almost look like ***specs*** specifications. Here is a fully commented exa
           "contain 7 characters" in context {
             "Hey you" must have size(7)
           }
-          // System is a Success. If the expectations fail when building the object the example will fail
+          // System is a Success result. If the expectations fail when building the object, the example will fail
           "contain 7 characters" in new system {
             string must have size(7)
           }
@@ -627,7 +627,7 @@ which almost look like ***specs*** specifications. Here is a fully commented exa
         // you can include other specifications with `include`
         include(new HelloWorldSpec)
 
-        // action to execute after the specification must be done at the end
+        // an action to execute after the specification must be declared after all examples
         action {
           // close the database here
           success
