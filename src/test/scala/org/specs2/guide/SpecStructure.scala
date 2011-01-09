@@ -15,7 +15,7 @@ In this chapter you will learn how to:
  * declare examples
  * share examples
  * format the layout of your specification
- * include / link to other specifications
+ * include or link specifications
  * give a title to your specification
  * define contexts and actions to execute before/after examples
 
@@ -30,9 +30,9 @@ As seen in the [Quick Start](org.specs2.guide.QuickStart.html), a specification 
       def e1 = success
       def e2 = success
 
-In this style of specification, the "body" of these examples is provided by 2 methods, separated from the specification
-text. There is no specific recommendation on how you should name those methods but note that you can use the backtick notation
-for better readability:
+In this style of specification, the "body" of each example is provided by 2 methods, separated from the specification
+text. There is no specific recommendation on how you should name those methods but you can either use short names or
+use the backtick notation for better readability:
 
       "this is my specification"                          ^
         "and example 1"                                   ! `first example`^
@@ -55,7 +55,7 @@ You can even push this idea further by writing:
 ###### Standard results
 
 So the first way to create an Example is to follow a piece of text with `!` and provide anything of type `org.specs2.execute.Result`.
-The simplest results values are provided by the `StandardResults` trait, and match the 5 types of results provided by ***specs2***:
+The simplest `Result` values are provided by the `StandardResults` trait, and match the 5 types of results provided by ***specs2***:
 
   * success: the example is ok
   * failure: there is a non-met expectation
@@ -74,12 +74,12 @@ Usually the body of an example is made of *expectations* using matchers:
 
      def e1 = 1 must_== 1
 
-You can refer to the [Matchers](org.specs2.guide.Matchers.html) guide to learn all about matchers and how to create
-expectations. There is however one important point to note here. Because of the functional nature of ***specs2*** the
-result of an example is always the last statement of its body. This example will never fail because the first expectation
-is "lost":
+You can refer to the [Matchers](org.specs2.guide.Matchers.html)  guide to learn all about matchers and how to create expectations. There is however one
+important point to note here. Because of the functional nature of ***specs2*** the result of an example is always the last
+statement of its body. This example will never fail because the first expectation is "lost":
 
       "my example on strings" ! e1                // will never fail!
+
       def e1 = {
         "hello" must have size(10000)             // because this expectation will not be returned,...
         "hello" must startWith("hell")
@@ -88,11 +88,12 @@ is "lost":
 So the correct way of writing the example is:
 
       "my example on strings" ! e1               // will fail
+
       def e1 = "hello" must have size(10000) and
                             startWith("hell")
 
 This can be seen as a restriction but this actually encourages a specification style where every expectation is carefully
-specified.
+specified (see [Mutable Specifications](#Mutable+Specifications) if you really can't live with that).
 
 ###### Auto-Examples
 
@@ -174,7 +175,7 @@ collect the successive states of the system:
 ###### For ***specs*** afficionados
 
 If you come from a ***specs*** background, it might seem difficult at first to "translate" the way you used to write
-specifications to the new way. Here a quickstart, you need to:
+specifications to the new way. Here's a quickstart, you need to:
 
  * replace `should` by `^` and `in` by `!`
  * chain examples with `^`
@@ -303,8 +304,8 @@ Let's see a standard example of this. The following fragments:
 will be executed and displayed as:
 
     this is some presentation text
-      + and the first example
-      + and the second example
+    + and the first example
+    + and the second example
 
 If you specify a "subcontext", you will get one more indentation level:
 
@@ -317,10 +318,10 @@ If you specify a "subcontext", you will get one more indentation level:
 will be executed and displayed as:
 
     this is some presentation text
-      + and the first example
-      + and the second example
-        and in this specific context
-        + one more example
+    + and the first example
+    + and the second example
+      and in this specific context
+      + one more example
 
 ##### The formatting fragments
 
@@ -341,12 +342,12 @@ The best way to separate blocks of examples is to add a blank line between them 
 This will be displayed as:
 
     this is some presentation text
-      + and the first example
-      + and the second example
+    + and the first example
+    + and the second example
 
     And another block of examples
-      + with this example
-      + and that example
+    + with this example
+    + and that example
 
 That looks remarkably similar to the specification code, doesn't it? What `p` does is:
 
@@ -382,19 +383,20 @@ Even with `p` the next group of examples will not start at level 0. What you nee
 This will be displayed as:
 
     There are several options for displaying the text
-      + xonly displays nothing but failures
+    + xonly displays nothing but failures
       there is also a color option
-        + rgb=value uses that value to color the text
-        + nocolor dont color anything
+      + rgb=value uses that value to color the text
+      + nocolor dont color anything
     There are different ways of hiding the text
-      + by tagging the text
+    + by tagging the text
 
 And if you want to reset the indentation level *and* add a blank line you can use `end ^ br` (or `endbr` as seen in
 "Combinations" below).
 
 ###### Changing the indentation level
 
-If, for whatever reason, you wish to have more or less indentation, you can use the `t` and `bt` fragments:
+If, for whatever reason, you wish to have more or less indentation, you can use the `t` and `bt` fragments (as in "tab" and
+"backtab"):
 
     "this text"                                     ^ bt^
     "doesn't actually have an indented example"     ! success
@@ -412,7 +414,7 @@ Some formatting elements can be combined:
  * `endbr` is `end ^ br`
  * `endp` is `end ^ p`  (same effect as `endbr` but shorter :-))
 
-### Include / link specifications
+### Include or link specifications
 
 ###### Include specifications
 
@@ -571,7 +573,7 @@ reported unless if there is a failure.
 #### Mutable Specifications
 
 If you've read the [Philosophy](org.specs2.guide.Philosophy.html) page you're fully aware of the danger of using side effects to create and execute specifications.
-However assuming that you know won't try to execute the same Specification concurrently, there is a way to create Specifications
+However assuming that you won't try to execute the same Specification concurrently, there is a way to create Specifications
 which almost look like ***specs*** specifications. Here is a fully commented example showing how to do it:
 
       import mutable._
@@ -646,7 +648,9 @@ which almost look like ***specs*** specifications. Here is a fully commented exa
         }
       }
 
-
+As you can see in the specification above, any failing expectation will stop the evaluation of an Example. This behavior
+is provided by a trait named `org.specs2.matcher.MustThrownMatchers` that you can reuse in a regular Specification if you
+want the same behavior.
 
 
  - - -
