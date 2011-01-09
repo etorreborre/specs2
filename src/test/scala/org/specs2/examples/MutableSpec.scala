@@ -71,5 +71,4 @@ class MutableSpec extends SpecificationWithJUnit {
     def e1 = string must have size(7)
   }
 }
-}
 
