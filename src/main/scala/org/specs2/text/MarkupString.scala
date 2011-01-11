@@ -7,25 +7,17 @@ package text
  * It is primarily used for the html rendering of code in Example descriptions
  */
 private[specs2]
-sealed trait MarkupString {
-  def asString = MarkupString.asString(this)
-  def toHtml: String
-  def append(s: String): MarkupString
+trait MarkupString {
+  def toXml: scala.xml.Elem
+  def toHtml: String = toXml.toString
 }
 case class CodeMarkup(text: String) extends MarkupString {
-  def toHtml = (<code class="prettyprint">{text}</code>).toString
-  def append(s: String) = CodeMarkup(text+s)
+  def asString = text
+  def toXml = <code class="prettyprint">{text}</code>
   override def toString = text
 }
 case class NoMarkup(text: String) extends MarkupString {
-  def toHtml: String = text
-  def append(s: String) = NoMarkup(text+s)
+  def toXml = <t>{text}</t>
+  override def toHtml: String = text
   override def toString = text
 }
-private[specs2]
-object MarkupString {
-  implicit def asString(m: MarkupString) = m match {
-    case CodeMarkup(t) => t
-    case NoMarkup(t) => t
-  }
-} 

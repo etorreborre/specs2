@@ -77,11 +77,11 @@ p {
   font-size: small;
 }
 #breadcrumbs {
-  border-top: 1px solid #aaa;
-  border-bottom: 1px solid #aaa;
-  background-color: #ccc;
-  font-size: small;
-  font-weight: bold;
+  border-top: 1px dashed #aaa;
+  border-bottom: 1px dashed #aaa;
+  background-color: #eee;
+  font-size: 12px;
+  font-style: italic;
 }
 #leftColumn {
   margin: 10px 0 0 5px;
@@ -112,11 +112,13 @@ table.dataTable th {
 	border: solid #AAAAAA;
 	border-width: 0px 1px 1px 0px;
 	padding: 2px 6px 2px 6px;
+    text-indent: 0px;
 }
 table.dataTable td {
 	border: solid #AAAAAA;
 	border-width: 0px 1px 1px 0px;
 	padding: 1px 3px 1px 3px;
+    text-indent: 0px;
 }
 table.dataTable tr.success {
   background-color: #CCFFCC;
@@ -292,4 +294,26 @@ ul {
 li {
   margin-left: 10;
   padding-left: 0;
+}
+table {
+    table-layout: auto;
+	width: auto;
+    border-collapse: collapse;
+    empty-cells: show;
+    margin: 8px 0px 8px 0px;
+	padding: 0px;
+	border: solid #AAAAAA;
+	border-width: 1px 0px 0px 1px;
+	font-size: 0.9em;
+}
+table th {
+	border: solid #AAAAAA;
+	background: #EEEEEE;
+	border-width: 0px 1px 1px 0px;
+	padding: 2px 6px 2px 6px;
+}
+table td {
+	border: solid #AAAAAA;
+	border-width: 0px 1px 1px 0px;
+	padding: 1px 3px 1px 3px;
 }

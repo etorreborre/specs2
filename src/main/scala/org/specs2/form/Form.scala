@@ -2,6 +2,7 @@ package org.specs2
 package form
 
 import collection.Listx._
+import xml.Nodex._
 import execute._
 import StandardResults._
 
@@ -42,9 +43,16 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
    * @return a logical and on all results 
    */
   def execute = rows.foldLeft(success: Result) { (res, cur) => res and cur.execute }
+  /**
+   * execute all rows
+   * @return a logical and on all results
+   */
+  def executeForm = Form(title, rows.map(_.executeRow))
 
   /** @return the printed form with a padding space size to use for each cell */
   def padText(size: Option[Int]): String = FormCell(this).padText(size)
+
+  def toXml = Form.toXml(this)
 }
 /**
  * Companion object of a Form to create:
@@ -57,4 +65,36 @@ case object Form {
   def apply() = new Form(None, Nil)
   def apply(title: String) = new Form(Some(title), Nil)
   def tr(c1: Cell, c: Cell*) = new Form().tr(c1, c:_*)
+
+  def toXml(form: Form) = {
+    val colnumber = FormCell(form).colnumber
+    <table  class="dataTable">
+      {title(form, colnumber)}
+      {rows(form, colnumber)}
+    </table>
+  }
+  import scala.xml._
+  def title(form: Form, colnumber: Int) = form.title.map(t => <tr><th colspan={colnumber.toString}>{t}</th></tr>).toList.reduce
+  def rows(form: Form, colnumber: Int) = form.rows.map(row(_, colnumber)).reduce
+  def row(r: Row, colnumber: Int) = {
+    val spanned = r.cells.dropRight(1).map(cell(_)) ++ cell(r.cells.last, colnumber - r.cells.size)
+    <tr>{spanned}</tr>
+  }
+  import ::>._
+  def cell(c: Cell, colnumber: Int = 0) = {
+    if (colnumber > 1) {
+      c.xml.toList match {
+      case start ::> (e: Elem) => start ++ (e % new UnprefixedAttribute("colspan", colnumber.toString, Null))
+        case other                         => other
+      }
+    } else
+      c.xml.toList
+  }
+
+  object ::> {
+    def unapply[A] (l: List[A]) = l match {
+      case Nil => None
+      case _ => Some( (l.init, l.last) )
+    }
+  }
 }

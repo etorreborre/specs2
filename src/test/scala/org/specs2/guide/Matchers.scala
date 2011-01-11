@@ -1,8 +1,11 @@
 package org.specs2
 package guide
+import form._
+import specification._
 
-class Matchers extends Specification { def is =  "Matchers guide".title ^                                               """
-<toc/>
+
+class Matchers extends Specification with Forms { def is = literate ^ "Matchers guide".title ^
+""" <toc/>
 
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns
 a `Result`:
@@ -13,6 +16,7 @@ a `Result`:
   * Scalacheck property
   * Mock expectation
   * DataTable
+  * Forms
 
 ### Boolean results
 
@@ -80,7 +84,7 @@ You can see on the examples above several things which are applicable to all mat
 
 An non-exhaustive list of those matchers:
 
- * ` be` for checking if `a eq b`
+ * ` beTheSameAs` for checking if `a eq b`
  * `beTrue, beFalse`
  * `beLike { case exp => ok }`: to check if an object is like a given pattern
  * `beLike { case exp => exp must beXXX }`: to check if an object is like a given pattern, and verifies a condition
@@ -115,7 +119,7 @@ And when you want to other ways to customize the description, you can use:
 
 #### Matchers creation
 
-There are many ways to create matchers for your specific usage. The simplest thing is to combine existing one:
+There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:
 
  * using logical operators
 
@@ -145,7 +149,7 @@ There are many ways to create matchers for your specific usage. The simplest thi
 
 If this is not enough you can transform a function, returning a Boolean and 2 messages, into a Matcher:
 
-     val m: Matcher[String] = (s: String) => (s.startsWith("hello"), "ok string", "ko string")
+       val m: Matcher[String] = (s: String) => (s.startsWith("hello"), "ok string", "ko string")
 
 And if you want absolute power over matching, you can define your own matcher:
 
@@ -163,8 +167,8 @@ In the code above you have to:
  * define the `apply` method (and its somewhat complex signature)
  * use the protected `result` method to return: a Boolean condition, a message when the match is ok, a message when the
    match is not ok, the "expectable" value
- * note that the description method on the `Expectable` class is the one returning the optional description that you
-   can setup using the `aka` method
+ * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
+   the optional description you can setup using the `aka` method
 
 #### Matchers for Option / Either
 
@@ -220,15 +224,17 @@ Less often you need to do comparisons on Numerical values:
 
 ***specs2*** offers very compact ways of checking that some exceptions are thrown:
 
- * `throwA[ExceptionType]` or `throwAn[ExceptionType]` checks if a block of code throws an exception of the given type
- * `throwA[ExceptionType](message = "boom")` or `throwAn[ExceptionType](message = "boom")` additional checks if the exception
-   message is as expected
+ * `throwA[ExceptionType]` checks if a block of code throws an exception of the given type
+ * `throwA[ExceptionType](message = "boom")` additionally checks if the exception message is as expected
  * `throwA(exception)` or `throwAn(exception)` checks if a block of code throws an exception of the same type, with the
     same message
  * `throwA[ExceptionType].like { case e => e must matchSomething }` or
    `throwA(exception).like { case e => e must matchSomething }` allow to verify that the thrown exception satisfies a property
  * `throwA[ExceptionType](me.like { case e => e must matchSomething }` or
    `throwA(exception).like { case e => e must matchSomething }` allow to verify that the thrown exception satisfies a property
+
+For all the above matchers you can use `throwAn` instead of `throwA` if the exception name starts with a vowel for better
+readability.
 
 #### Iterable matchers
 
@@ -262,9 +268,6 @@ Iterables can be checked with several matchers:
   * to check if an iterable has the same elements as another one, regardless of the order
     `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"))`
 
-  * to check if an iterable has the same elements as another one, with the same order
-    `List("Hello", "World") must haveTheSameSeqAs(List("World", "Hello"))`
-
 #### Map matchers
 
 Maps have their own matchers as well, to check keys and values:
@@ -276,7 +279,7 @@ Maps have their own matchers as well, to check keys and values:
      `Map(1 -> "1") must haveValue("1")`
 
   * `havePair` checks if a Map has a given pair of values
-    `Map(1 -> "1") must havePair(1 -> "1")
+    `Map(1 -> "1") must havePair(1 -> "1")`
 
   * `havePairs` checks if a Map has some pairs of values
     `Map(1->"1", 2->"2", 3->"3") must havePairs(1->"1", 2->"2")`
@@ -301,8 +304,8 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
   * `beEqualToIgnoringSpace` can also do an ordered comparison
     `<a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered`
 
-  * `\` is an XPath-like matcher matching if a node is a direct child of another"
-    `<a><b/></a> must \("b")`}
+  * `\` is an XPath-like matcher matching if a node is a direct child of another
+    `<a><b/></a> must \("b")`
 
   * You can also check attribute names
     `<a><b name="value"></b></a> must \("b", "name")`
@@ -356,10 +359,10 @@ Note that you need to extend the `ScalaCheck` trait if you want to use these mat
 
 ### ScalaCheck properties
 
-A very clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
-There are many ways to create ScalaCheck properties but none of them will work unless you first import the `ScalaCheck` trait.
+A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
 
-First of all you can define a ScalaCheck property and add it to the body of an example:
+To declare ScalaCheck properties you first need to import the `ScalaCheck` trait. Then you can define a ScalaCheck property
+ and add it to the body of an example:
 
       "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }
 
@@ -562,20 +565,104 @@ addition of integers by providing one example on each row of a table:
 Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you
 can use the `!!` operator to disambiguate (and `||` in the header for good visual balance).
 
+### Forms
+
+Forms are a way to represent domain objects or service, and declare expected values in a tabular format. Forms can be designed
+as reusable pieces of specification where complex forms can be built out of simple ones.
+
+Forms are built by creating "Fields" or "Properties" and placing them on rows.
+
+The following examples show, by order of complexity, the creation of:
+
+    1. fields
+    2. properties
+    3. a simple Form using properties
+    4. a simple Address entity encapsulating the above form
+    5. a composite Customer entity using the Address instance
+    6. a decision table having some related columns
+    7. a composite Order - OrderLine entity (1-n) relationship
+
+For all the code samples below you need to import the `org.specs2.form.FormsBuilder` trait.
+
+#### Field
+
+A `Field` is simply a label and a value. It is used in forms to display relevant information. You can create a `Field` with
+these methods:
+
+  * `field(value)`: creates a field for a value, where the label is empty
+  * `field(label, value)`: creates a field with a label and a value
+  * `field(label, field1, field2, ...)`: creates a field with a label and values coming from other fields
+
+When the form is displayed, here's how the fields are displayed:
+""" ^
+  form("Fields").
+    tr(field("value")).
+    tr(field("label", "value")).
+    tr(field("label", field("value1"), field("value2"))) ^
+"""
+#### Properties and fields
+
+A Property can be created by importing the `org.specs2.form.FormsBuilder` trait and using one of these methods:
+
+  /** @return a new Prop with an actual value only */
+  def prop[T](value: =>T) = new Prop[T, T](actual = Property(value))
+  /** @return a new Prop with a label and an actual value only */
+  def prop[T](label: String, actual: =>T) = Prop[T](label, actual)
+  /** @return a new Prop with a label, an actual value and expected value */
+  def prop[T, S](label: String, actual: =>Option[T], exp: =>Option[S]) =
+    new Prop[T, S](label, new Property(() => actual), new Property(() => exp))
+  /** @return a new Prop with a label, an actual value and a constraint to apply to values */
+  def prop[T, S](label: String, act: =>T, c: (T, S) => Result) = Prop(label, act, c)
+  /** @return a new Prop with a label, an actual value and a matcher to apply to values */
+  def prop[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = Prop(label, act, c)
+
+ *
+
+#### Simple form
+
+Let's create a simple form representing an address entity:
+
+        import org.specs2.form._
+        import FormsBuilder._
+
+        Form("Address").
+          tr(prop("street", actualStreet)(expectedStreet)).
+          tr(prop("number", actualNumber)(expectedNumber))
+
+This form has a title, "Address", and two rows, each row containing a property
+
+        case class Address(street: String, number: Int) {
+          def form = fill(street, number)
+          def fill(s: String, n: Int) =
+        }
+
+The case class above:
+
+    * declares its expected values as member values
+    * has a
+    * it has a form method which
+      * has default parameters for the actual values of the form
+      * creates the form by putting each property on a new row
+    * the Address class can be instantiated once with expected values, to be displayed as
+      a Fragment
+    * then the form method can be used in a example to provide actual values
+
+
+
 ### Reusing matchers outside of specs2
 
 The ***specs2*** matchers are a well-delimited piece of functionality that you should be able to reuse in your own test
 framework. You can reuse the following traits:
 
- * `org.specs2.matcher.MustMatchers` (or `org.specs2.matcher.MustMatchers`) to write anything like `1 must be_==(1)` and
+ * `org.specs2.matcher.MustMatchers` (or `org.specs2.matcher.ShouldMatchers`) to write anything like `1 must be_==(1)` and
    get a `Result` back
 
- * You can also use the side-effecting version of that trait called `org.specs2.matcher.MustThrownMatchers` which throws
-   a `FailureException` as soon as an expectation is failing
+ * You can also use the side-effecting version of that trait called `org.specs2.matcher.MustThrownMatchers` (or `ShouldThrownMatchers)
+   which throws a `FailureException` as soon as an expectation is failing. Those traits can also be used in a regular
+   Specification if you have several expectations per example and if you don't want to chain them with `and`.
 
  * Finally, in a JUnit-like library you can use the `org.specs2.matcher.JUnitMustMatchers` trait which throws
    `AssertionFailureError`s
-
 
    - - -
 

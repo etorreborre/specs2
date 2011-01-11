@@ -75,7 +75,7 @@ idea of the future requirements!
 ###### Configuration
 
 The "sensible" defaults have been debated and some "opinionated" decisions have been taken, like the decision to mark any
-example without expectation as "Pending" for example. I must say that the Configuration mechanism offered in exchange
+example without expectation as "Pending" for example. Unfortunately the configuration mechanism offered in exchange
 (to change the defaults) was not really appealing (a mix of properties-file-reflection-system-properties) and there is
 few evidence that anyone actually used it.
 
@@ -237,11 +237,6 @@ We simply use case class instances for each Example. Here is a demonstration:
         def favorite = pending
       }
 
-  LogsIn().showsHistory
-  SelectsTickets().showsSelectedTickets
-  SelectsTickets().showsTotalAmount
-  BuysTickes().showsFavoritePaymentType
-
 
 In the specification above, each example is using its own instance of a case class, having its own local variables which
 will never be overwritten by another example. Parent context is inherited by means of delegation. For example, in the
@@ -267,13 +262,13 @@ In specs2, indentation is a feature but it doesn't have to be. For example you c
 
 Or you can leave ***specs2*** compute something reasonable for the indentation along the following rules:
 
-  * when a text follows some text, it is indented
-  * when a text follows an example, the indentation stays at the same level
   * when an example follows a text, it is indented
-  * when an example follows an example, it is not indented
+  * 2 successive examples will be at the same indentation level
+  * when a text follows an example, this means that you want to describe a "subcontext", so the next examples will be
+    indented with one more level
 
 This strategy is most likely to bring appropriate results but there are additional formatting elements which can be
-inserted in order to adjust the indentation or just skip lines: `br, p, t, bt, end, endbr, endp`.
+inserted in order to adjust the indentation or just skip lines: `p, br, t, bt, end, endbr, endp`.
 
 ###### Operators
 
@@ -313,7 +308,7 @@ The important things to know are:
 
   * side-effects are only used to build the specification fragments, by mutating a variable
   * they are also used to short-circuit the execution of an example as soon as there is a failure (by throwing an exception)
-  * if you still build fragments in the body of examples, the sky should fall down
+  * if you build fragments in the body of examples or execute the same specification concurrently, the sky should fall down
   * "context" management is to be done with case classes (see `org.specs2.examples.MutableSpec`)
 
 
@@ -328,7 +323,7 @@ design makes sure that a layered architecture is maintained, from low-level pack
   +    mock form
   +    matcher
   +    execute
-  +               reflect  xml time
+  +               reflect  xml html  time
   +    collection control  io  text  main data
 
 In this scheme, a specification is no longer executable on its own, contrary to the ***specs*** design. It always need a

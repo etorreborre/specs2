@@ -32,7 +32,7 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
 
   /** match if iterable contains (x matches p) */
   def containPattern[T](t: =>String): ContainLikeMatcher[T] = containLike[T](t, "pattern")
-  /** match if iterable contains (x matches .*+a+.*) */
+  /** match if iterable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String): ContainLikeMatcher[T] = containLike[T](".*"+t+".*", "match")
 
   /** match if iterable has size n */

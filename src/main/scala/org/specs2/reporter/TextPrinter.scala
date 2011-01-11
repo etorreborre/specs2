@@ -8,7 +8,6 @@ import data.Tuples._
 import time._
 import text._
 import Plural._
-import MarkupString._
 import AnsiColors._
 import NotNullStrings._
 import EditDistance._
@@ -95,7 +94,7 @@ trait TextPrinter {
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      printResult(leveledText(asString(r.text(args)), level)(args), r.result, r.timer)(args, out)
+      printResult(leveledText(r.text(args).toString, level)(args), r.result, r.timer)(args, out)
       
     def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
       val description = statusAndDescription(desc, result, timer)(args, out)

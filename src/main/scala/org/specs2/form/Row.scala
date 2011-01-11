@@ -28,6 +28,7 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable with
    * @return a logical and on all results 
    */
   def execute = cells.foldLeft(success: Result) { (res, cur) => res and cur.execute }
+  def executeRow = Row(cellList.map(_.executeCell))
 
   /** @return the printed Row with a padding space size to use for each cell */
   def padText(size: Option[Int]) = cells.map(_.padText(size)).mkString("| ", " | ", " |")

@@ -57,6 +57,8 @@ trait FileWriter {
 
 private[specs2]
 trait MockFileWriter extends FileWriter {
+  override def createFile(path: String) = {}
   private val writer = new MockWriter {}
+  def getWriter: MockWriter = writer
   override def getWriter(path: String): Writer = writer
 }

@@ -1,6 +1,6 @@
 package org.specs2
 package text
-import org.pegdown.PegDownProcessor
+import org.pegdown.{ PegDownProcessor, Extensions }
 import scala.io.Source
 import scala.xml._
 import parsing.XhtmlParser
@@ -12,7 +12,7 @@ import control.Exceptions._
  * This trait can process strings formatted using the Markdown syntax and output html
  */
 trait Markdown {
-  def processor = new PegDownProcessor
+  def processor = new PegDownProcessor(Extensions.ALL & ~Extensions.QUOTES)
   /**
    * parse the markdown string and return html.
    * code tags are prettified and newlines in paragraphs are
@@ -20,8 +20,7 @@ trait Markdown {
    */
   def toHtml(text: String) = {
     processor.markdownToHtml(text).
-      replaceAll("<code>" -> "<code class='prettyprint'>").
-      replaceInsideTags("p", "li")("\n" -> "<br/>")
+      replaceAll("<code>" -> "<code class='prettyprint'>")
   }
   def toHtmlNoPar(text: String) = {
     val html = toHtml(text)

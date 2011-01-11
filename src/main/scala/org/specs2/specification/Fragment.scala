@@ -4,7 +4,6 @@ package specification
 import main.Arguments
 import execute._
 import text._
-import text.MarkupString._
 import text.Trim._
 import control.LazyParameter
 
@@ -70,7 +69,7 @@ case class Text(t: String) extends Fragment {
  */
 case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable {
   def execute = body()
-  override def matches(s: String) = asString(desc).removeAll("\n").matches(s)
+  override def matches(s: String) = desc.toString.removeAll("\n").matches(s)
   override def toString = "Example("+desc+")"
 
   override def equals(a: Any) = {

@@ -14,6 +14,7 @@ In this chapter you will learn how to:
 
  * declare examples
  * share examples
+ * add arguments for execution and reporting
  * format the layout of your specification
  * include or link specifications
  * give a title to your specification
@@ -275,6 +276,19 @@ limited size:
           }
         }
 
+### Declare arguments
+
+At the beginning of a specification you can declare arguments which configure the execution and reporting of the specification.
+For example, you can turn off the concurrent execution of examples with the `args` method:
+
+       class ExamplesOneByOne extends Specification { def is =
+         args(sequential=true)              ^
+         "first example"                    ! e1 ^
+         "the the second one"               ! e2 ^
+                                            end
+       }
+
+For the complete list of arguments and shortcut methods read the [Runners](org.specs2.guide.Runners.html) page.
 
 ### Layout
 

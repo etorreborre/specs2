@@ -31,9 +31,11 @@ import SpecsArguments._
  *
  */
 trait HtmlPrinter {
-  /** the file system is used to copy resources and open the file to write */
+  /** the file system is used to open the file to write */
   private[specs2] lazy val fileSystem = new FileSystem {}
-  
+  /** the file writer is used to open the file to write */
+  private[specs2] lazy val fileWriter = new FileWriter {}
+
   /** 
    * the output directory is either defined by a specs2 system variable
    * or chosen as a reports directory in the standard maven "target" directory
@@ -47,10 +49,10 @@ trait HtmlPrinter {
    * the name of the html file is the full class name
    */
   def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
-    copyResources
-    
-    reduce(fs).foreach { lines =>
-      fileSystem.write(reportPath(lines.link.getOrElse(HtmlLink(SpecName(s))).url)) { out =>
+    copyResources()
+    val parentLink = HtmlLink(SpecName(s), "", SpecName(s).name)
+    reduce(fs, parentLink).foreach { lines =>
+      fileWriter.write(reportPath(lines.link.url)) { out =>
         printHtml(new HtmlResultOutput(out), lines).flush
       }
     }
@@ -60,7 +62,7 @@ trait HtmlPrinter {
   def reportPath(url: String) = outputDir + url
 
   /** copy css and images file to the output directory */
-  def copyResources = 
+  def copyResources() =
     Seq("css", "images").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
     
   /**
@@ -69,12 +71,13 @@ trait HtmlPrinter {
    */  
   def printHtml(output: HtmlResultOutput, lines: HtmlLines)(implicit args: Arguments) = {
     output.enclose((t: NodeSeq) => <html>{t}</html>) {
-      output.blank.printHead.enclose((t: NodeSeq) => addToc(<body>{t}</body>)) {
+      output.blank.printHead.enclose((t: NodeSeq) => addToc(<body>{breadcrumbs(lines)}{t}</body>)) {
         lines.printXml(output.blank)
       }
     }
   }
 
+  def breadcrumbs(lines: HtmlLines) = lines.breadcrumbs
   /**
    * Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
    * into a single block that will be reported on a different html page
@@ -83,10 +86,10 @@ trait HtmlPrinter {
    *
    * @return the HtmlLines to print
    */
-  def reduce(fs: Seq[ExecutedFragment]) = {
-    flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (List(HtmlLines())) { (res, cur) =>
+  def reduce(fs: Seq[ExecutedFragment], parentLink: HtmlLink) = {
+    flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (List(HtmlLines(Nil, parentLink, None))) { (res, cur) =>
       cur match {
-        case HtmlLine(HtmlSee(see), _, _, _)          => HtmlLines(link = Some(see.link)) :: (res.head.add(cur)) :: res.drop(1)
+        case HtmlLine(HtmlSee(see), _, _, _)          => HtmlLines(link = see.link, parent = Some(res.head)) :: (res.head.add(cur)) :: res.drop(1)
         case HtmlLine(HtmlSpecEnd(end), _, _, _)
           if (res.head.is(end.name))                  => res.drop(1) :+ res.head.add(cur)
         case other                                    => res.head.add(cur) :: res.drop(1)

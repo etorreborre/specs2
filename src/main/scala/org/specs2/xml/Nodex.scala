@@ -31,6 +31,11 @@ trait Nodex {
     def matchNode(other: Node, attributes: List[String] = Nil, attributeValues: Map[String, String] = Map(), exactMatch: Boolean = false) =
       NodeFunctions.matchNode(n, other, attributes, attributeValues, exactMatch)
   }
+
+  implicit def reducable(ns: Seq[NodeSeq]) = new Reducable(ns)
+  class Reducable(ns: Seq[NodeSeq]) {
+    def reduce = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ cur}
+  }
 }
 private[specs2]
 object Nodex extends Nodex

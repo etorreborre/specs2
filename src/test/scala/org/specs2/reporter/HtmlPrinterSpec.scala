@@ -18,6 +18,9 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
   "The page title"                                                                           ^
     "must be the title of the specification"                                                 ! title().e1^
                                                                                              p^
+  "If there are children pages"                                                              ^
+    "there must be breadcrumbs on top of the children pages"                                 ! breadcrumbs().e1^
+                                                                                             p^
   "Resources"                                                                                ^
     "there must be a directory for css files"                                                ! resources().css^
     "there must be a directory for images files"                                             ! resources().images^
@@ -52,6 +55,12 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
     def css = there was one(fs).copySpecResourcesDir(equalTo("css"), anyString)
     def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)
   }
+  case class breadcrumbs() extends MockHtmlPrinter {
+    val child = new Specification { def is = "t2" }
+    val spec = new Specification { def is = "t1" ! success ^ "child" ~ ("child", child) }
+
+    def e1 = printSpec(spec) must contain("div id=\"breadcrumbs\"")
+  }
   case class fragments() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success ^ "*ex2*" ! success ^
                           "ex2" ! { "abcdefghijklmnopqrstuvwxyz" must_== "abcdefghijklnmopqrstuvwxyz" }
@@ -63,14 +72,22 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
     def ex2 = print(spec).toString must contain("details")
   }
   
-  trait MockHtmlPrinter extends FragmentExecution {
+  trait MockHtmlPrinter extends FragmentExecution { outer =>
     val fs = mock[FileSystem]
-    def printer = new HtmlPrinter { override lazy val fileSystem = fs }
-    val out = new MockWriter {}
-    
+    val fileWriter = new MockFileWriter {}
+    val out = fileWriter.getWriter
+    def printer = new HtmlPrinter {
+      override lazy val fileSystem = fs
+      override lazy val fileWriter = outer.fileWriter
+    }
+
     def print(spec: Fragments) = {
-      printer.reduce(spec.fragments.map(executeFragment)).head.
+      printer.reduce(spec.fragments.map(executeFragment), HtmlLink(SpecName("spec"))).head.
               printXml(new HtmlResultOutput(out)).xml
+    }
+    def printSpec(spec: SpecificationStructure) = {
+      printer.print(spec, spec.content.fragments.map(executeFragment))
+      out.messages.mkString("\n")
     }
   }
   def printer = new HtmlPrinter {}

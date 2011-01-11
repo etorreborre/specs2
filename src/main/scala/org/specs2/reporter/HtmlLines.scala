@@ -1,8 +1,10 @@
 package org.specs2
 package reporter
 
+import scala.xml._
 import text.Plural._
 import text._
+import form._
 import main.Arguments
 import execute._
 import specification._
@@ -10,16 +12,30 @@ import specification._
 /**
  * The HtmlLines groups a list of HtmlLine to print
  * 
- * It can be written ('flushed') to an HtmlResultOuput by printing then one by one to this output
+ * It can be written ('flushed') to an HtmlResultOuput by printing them one by one to this output
  *
  */
-case class HtmlLines(lines : List[HtmlLine] = Nil, link: Option[HtmlLink] = None) {
+case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink, parent: Option[HtmlLines] = None) {
   def print(implicit out: HtmlResultOutput, args: Arguments) =
     printXml.flush
   def printXml(implicit out: HtmlResultOutput) =
     lines.foldLeft(out) { (res, cur) => cur.print(res) }
-  def add(line: HtmlLine) = HtmlLines(lines :+ line, link)
-  def is(name: SpecName) = link.map(_.is(name)).getOrElse(false)
+  def add(line: HtmlLine) = HtmlLines(lines :+ line, link, parent)
+  def is(name: SpecName) = link.is(name)
+
+  def breadcrumbs: NodeSeq = {
+    if (parent.isDefined) <div id="breadcrumbs">{breadcrumbsLinks}</div>
+    else NodeSeq.Empty
+  }
+
+  private def breadcrumbsLinks: NodeSeq = {
+    val result = parent map { (p: HtmlLines) =>
+      val separator = if (!p.breadcrumbsLinks.isEmpty) <t> / </t> else NodeSeq.Empty
+      p.breadcrumbsLinks ++ separator ++ <a href={p.link.url}>{p.link.linkText}</a>
+    }
+    result.getOrElse(NodeSeq.Empty)
+  }
+
 }
 
 /** 
@@ -57,15 +73,24 @@ case class HtmlBr() extends Html {
     if (!args.xonly) out.printPar("", !args.xonly)(args) else out
 }
 case class HtmlResult(r: ExecutedResult) extends Html {
-  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    if (!args.xonly || !r.result.isSuccess) printResult(r.text(args), level, r.result)(args, out) else out
-    
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
+    if (!args.xonly || !r.result.isSuccess) {
+      r match {
+        case ExecutedResult(FormMarkup(form), _, _) => printFormResult(form)(args, out)
+        case _                                      => printResult(r.text(args), level, r.result)(args, out)
+      }
+
+    }
+    else out
+  }
+  def printFormResult(form: Form)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = out.printElem(form.toXml)
+
   def printResult(desc: MarkupString, level: Int, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
     result match {
       case f: Failure    => printFailure(desc, level, f).printStack(f, level + 1, args.failtrace)
       case e: Error      => printError(desc, level, e).printStack(e, level + 1)
       case Success(_)    => out.printSuccess(desc, level, !args.xonly)
-      case Pending(_)    => out.printPending(desc.append(" " + result.message), level, !args.xonly)
+      case Pending(_)    => out.printPending(desc, level).printPending(NoMarkup(result.message), level, !args.xonly)
       case Skipped(_, _) => out.printSkipped(desc, level).printSkipped(NoMarkup(result.message), level, !args.xonly)
     }
   }

@@ -16,7 +16,7 @@ case class ExecutedText(text: String) extends ExecutedFragment
 case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer) extends ExecutedFragment {
   def text(implicit args: Arguments) = s match {
     case CodeMarkup(s) if (!result.expected.isEmpty && !args.fromSource) => CodeMarkup(result.expected)
-    case _                                           => s
+    case _                                                               => s
   }
 }
 case class ExecutedBr() extends ExecutedFragment

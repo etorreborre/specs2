@@ -9,6 +9,8 @@ import execute._
 import StandardFragments._
 import matcher.FailureException
 import junit.framework.AssertionFailedError
+import form.Form
+import scala.Either
 
 /**
  * This trait executes Fragments
@@ -34,7 +36,17 @@ trait FragmentExecution {
     }
   }
 
+  /**
+   * execute a Fragment.
+   *
+   * A Form is executed separately by executing each row and cell, setting the results on each cell
+   */
   def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = { 
+    case Example(FormMarkup(form), _)     => {
+      val timer = new SimpleTimer().start
+      val executed = if (arguments.plan) form else form.executeForm
+      ExecutedResult(FormMarkup(executed), executed.execute, timer.stop)
+    }
 	  case e @ Example(s, _)     => {
       val timer = new SimpleTimer().start
       ExecutedResult(s, executeBody(e.execute), timer.stop)

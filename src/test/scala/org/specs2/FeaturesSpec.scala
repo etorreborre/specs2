@@ -7,7 +7,6 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
-
                                                                                           """^
  "1.0 features                                                                            "^
    "Implementation                                                                        "^
@@ -16,10 +15,13 @@ class FeaturesSpec extends Specification { def is = literate ^
      "review all the code and specifications                                              "! todo^
    "Html reporter                                                                         "^
      "with a table of content                                                             "! done^
-     "with breadcrumbs                                                                    "! todo^
+     "with breadcrumbs                                                                    "! done^
      "with non mutable forms                                                              "! todo^
    "ScalaInterpreter                                                                      "^
      "with appropriate matchers                                                           "! todo^
+   "Reporters                                                                             "^
+    "Teamcity                                                                             "! todo^
+    "junit-xml                                                                            "! todo^
    "Detailed diffs                                                                        "! done^
      "Document the new arguments                                                          "! done^
      "Split matcher messages on 2 lines when too long                                     "! done^

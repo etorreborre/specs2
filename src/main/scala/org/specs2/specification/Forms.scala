@@ -10,8 +10,17 @@ import text._
  */
 private[specs2]
 trait Forms extends FormsBuilder {
-  class FormExample(form: Form) extends Example(NoMarkup(FormCell(form).text), () => form.execute)
+  class FormExample(form: Form) extends Example(FormMarkup(form), () => form.execute)
   implicit def formsAreExamples(f: Form): Example = new FormExample(f)
 }
+
+/**
+ * The FormMarkup embbeds the description of a form as text or as Xml
+ */
+case class FormMarkup(form: Form) extends MarkupString {
+  def toXml = form.toXml
+  override def toString = new FormCell(form).text
+}
+
 private[specs2]
 object Forms extends Forms

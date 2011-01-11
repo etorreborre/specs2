@@ -12,8 +12,11 @@ class FormSpec extends SpecificationWithJUnit with Forms { def is =
                                                                                           """^
                                                                                           p^
  "A person object must have proper initials"                                              ^
- "A person object must have proper initials"                                              ^
    person("Eric", "Torreborre", initials = "E.T.")                                        ^
+                                                                                          p^
+ "The address should be as expected"                                                      ^
+   Address("Oxford St", 12).
+     fill("Oxford St", 12)                                                                ^
                                                                                           end
                                                                                           
   def person(first: String, last: String, initials: String) =  
@@ -25,5 +28,14 @@ class FormSpec extends SpecificationWithJUnit with Forms { def is =
   case class Person(firstName: String, lastName: String) {
     def initials = firstName.take(1).capitalize+"."+lastName.take(1).capitalize+"."      
   }              
+
+
+  case class Address(street: String, number: Int) {
+    def form = fill(street, number)
+    def fill(s: String, n: Int) =
+      Form("Address").
+          tr(prop("street", s)(street)).
+          tr(prop("number", n)(number))
+  }
 
 }
