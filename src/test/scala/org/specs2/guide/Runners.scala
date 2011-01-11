@@ -17,26 +17,19 @@ There are 4 ways to execute ***specs2*** specifications:
 
 ### Dependencies
 
- ***specs2*** is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the sbt dsl:
+ ***specs2*** is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the [sbt dsl](http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies):
 
- * `"org.scala-tools.testing" %% "scalacheck" % "1.8"`
- * `"org.scala-tools.testing" % "test-interface" % "0.5"`
- * `"com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"`
- * `"org.hamcrest" % "hamcrest-all" % "1.1"`
- * `"org.mockito" % "mockito-all" % "1.8.5"`
- * `"junit" % "junit" % "4.7"`
- * `"org.parboiled" % "parboiled4j" % "0.9.9.0"`
- * `"org.pegdown" % "pegdown" % "0.8.5.4"`
+ <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"`</td><td class="info">mandatory</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.8"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.parboiled" % "parboiled4j" % "0.9.9.0"`</td><td class="info">only if using the html runner</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "0.8.5.4"`</td><td class="info">only if using the html runner</td></tr></table>
 
 The last 2 jars are the Pegdown and Parboiled libraries for Markdown parsing. They cannot yet be found in an official maven
-repository, so you'll need to add the specs temporary Maven repository to your configuration:
+repository, so you'll need to add the specs temporary Maven repository to your sbt project:
 
   `val specsRepo = "specs-repo" at "http://specs.googlecode.com/svn/maven2"`
 
 #### Arguments
 
-For each of these methods, you can pass arguments which will control the execution and reporting. The arguments can be
-passed on the command line, or specified inside the specification:
+You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared
+inside the specification:
 
       class MySpec extends Specification { def is = args(noindent=true) ^
         "Clever spec title"                                             ^
@@ -46,36 +39,44 @@ passed on the command line, or specified inside the specification:
 
 The available arguments are the following:
 
- * `ex`: regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line.
- * `xonly` (false): only reports failures and errors
- * `plan` (false): only report the text of the specification without executing anything
- * `failtrace` (false): report the stacktrace for failures
- * `color` (true): use colors in the output (`nocolor` can also be used on the command line)
- * `noindent` (false): don't indent automatically text and examples
- * `showtimes` (false): show individual execution times
- * `sequential` (false) don't execute examples concurrently
- * `threadsNb` (0): number of threads to use for concurrent execution
- * `markdown` (true): interpret text as Markdown in the html reporter
- * `debugMarkdown` (false): print more information when Markdown formatting fails
- * `html` (false): only to be passed on the command line to get console + html reporting at once
+  Name           | Default value | Description
+ --------------- | ------------- | -------------------------------------------------------------------------------------------
+ `ex`            | .*            | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
+ `xonly`         | false         | only reports failures and errors
+ `plan`          | true          | only report the text of the specification without executing anything
+ `failtrace`     | false         | report the stacktrace for failures
+ `color`         | true          | use colors in the output (`nocolor` can also be used on the command line)
+ `noindent`      | false         | don't indent automatically text and examples
+ `showtimes`     | false         | show individual execution times
+ `sequential`    | false         | don't execute examples concurrently
+ `threadsNb`     | 0             | number of threads to use for concurrent execution
+ `markdown`      | true          | interpret text as Markdown in the html reporter
+ `debugMarkdown` | false         | print more information when Markdown formatting fails
+ `html`          | false         | only to be passed on the command line to get console + html reporting at once
+ `fromSource`    | true          | when using AutoExamples takes the description of the Example from the source file
+
 
 All those arguments are usually set in a specification with `args(name=value)` but there are some available shortcuts:
 
-  * `plan`: `args(plan = true)`
-  * `noindent`: `args(noindent = true)`
-  * `xonly`: `args(xonly = true)`
-  * `only(examples: String)`:  `args(ex = examples)`
-  * `sequential`: `args(sequential = true)`
-  * `literate`: `noindent = true && sequential = true`
-    for specifications were text must not be indented and examples be executed in order
-  * `freetext`: `plan = true && noindent = true`
-    for specifications with no examples at all and free display of text
-  * `diffs(show, separators, triggerSize, shortenSize, full)` to display the differences when doing equality comparison
-     . `show` will not show anything (default is true)
-     . `separators` allows to change the separators used to show the differences (default is "[]")
-     . `triggerSize` controls the size above which the differences must be shown (default is 20)
-     . `shortenSize` controls the number of characters to display around each difference (default is 5)
-     . `full` displays the full original expected and actual strings
+ Name                                                      | Equivalent                                                           | Description                                                                                      |
+ ---------------                                           | -----------------------                                              | -----------                                                                                      |
+ `plan`                                                    | `args(plan=true)`                                                    |                                                                                                  |
+ `noindent`                                                | `args(noindent=true)`                                                |                                                                                                  |
+ `xonly`                                                   | `args(xonly=true)`                                                   |                                                                                                  |
+ `only(examples: String)`                                  | `args(ex=examples)`                                                  |                                                                                                  |
+ `sequential`                                              | `args(sequential=true)`                                              |                                                                                                  |
+ `literate`                                                | `args(noindent=true, sequential=true)`                               | for specifications were text must not be indented and examples be executed in order              |
+ `freetext`                                                | `args(plan=true, noindent=true)`                                     | for specifications with no examples at all and free display of text                              |
+ `descFromExpectations`                                    | `args(fromSource=false)`                                             | create the example description for the ok message of the expectation instead of the source file  |
+ `diffs(show, separators, triggerSize, shortenSize, full)` | `args(diffs=Diffs(show, separators, triggerSize, shortenSize, full)` | to display the differences when doing equality comparison                                        |
+
+For the diffs arguments the values you can specify are:
+
+  * `show` will not show anything (default is true)
+  * `separators` allows to change the separators used to show the differences (default is "[]")
+  * `triggerSize` controls the size above which the differences must be shown (default is 20)
+  * `shortenSize` controls the number of characters to display around each difference (default is 5)
+  * `full` displays the full original expected and actual strings
 
 ### Console output
 
@@ -88,7 +89,7 @@ Executing a specification `com.company.SpecName` in the console is very easy:
 By default, the reporting will output colors. If you're running on windows you might either:
 
  * use the [following tip](http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) to install colors in the DOS console
- * or pass `nocolor` as command line argument
+ * or pass `nocolor` as a command line argument
 
 ### Html output
 
