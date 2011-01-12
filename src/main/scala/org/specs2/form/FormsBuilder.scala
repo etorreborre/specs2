@@ -13,8 +13,8 @@ import scala.xml.NodeSeq
 private[specs2]
 trait FormsBuilder {
 
-  /** a String can be added on a Form row as a TextCell */
-  implicit def stringsAreTextCell(t: String) = new TextCell(t)  
+  /** anything can be added on a Form row as a TextCell */
+  implicit def anyAreTextCell(t: Any) = new TextCell(t.toString)
   /** a Field can be added on a Form row as a FieldCell */
   implicit def fieldsAreTextCell(t: Field[_]) = new FieldCell(t)  
   /** a Prop can be added on a Form row as a PropCell */
@@ -22,6 +22,7 @@ trait FormsBuilder {
   /** a Form can be added on a Form row as a FormCell */
   implicit def formsAreCell(t: Form) = new FormCell(t)
   implicit def formsAreExecutable(f: Form): Result = f.execute
+  implicit def formsHoldersAreForms(f: { def form: Form }): Form = f.form
 
   /** @return a new Form with the given title */
   def form(title: String) = Form(title)

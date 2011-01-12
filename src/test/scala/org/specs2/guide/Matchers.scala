@@ -692,7 +692,7 @@ Now that we know how to create Fields and Properties, creating a `Form` is as ea
           tr(prop("number", actualNumber(123), 20))
 
 The form has a title `"Address"` and 2 properties, each one on a distinct row. The `actualStreet()` and `actualNumber()`
-methods are supposed to do retrieve the relevant values from a database.
+methods are supposed to retrieve the relevant values from a database.
 
 Inserting the form in a Specification is also very simple, you just chain it with the `^` operator:
 
@@ -729,13 +729,14 @@ And to use it like this:
                                                                                               end
         }
 
-### Aggregating forms
+#### Aggregating forms
 
 Now that we've defined a form for a simple entity, let's see how we can reuse it with a larger entity:
 
  * the Customer form defines a name attribute and embeds an instance of the Address form
  * it is defined by setting the name on one row and the Address form on the second row
- * [and for this example, we define a slightly different Address form]
+
+   *[and for this example, we define a slightly different Address form]*
 
        case class Address(street: String, number: Int) {
          def actualIs(address: AddressEntity) = {
@@ -766,6 +767,35 @@ Now that we've defined a form for a simple entity, let's see how we can reuse it
 
 As you also see above, named arguments can bring more readibility to the expected values.
 
+#### Decision tables
+
+One very popular type of Forms are *decision tables*. A decision table is a Form where, on each row several values are
+used for a computation and the result must be equal to other values on the same row. A very simple example of this is a
+calculator:
+
+        import Form._
+        case class Calculator(form: Form = tr("a", "b", "a + b", "a - b")) {
+          def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = Calculator {
+            def plus = prop(a + b)(a_plus_b)
+            def minus = prop(a - b)(a_minus_b)
+
+            form.tr(a, b, plus, minus)
+          }
+        }
+
+And you use it like this
+
+        class CalculatorSpecification extends Specification with Forms { def is  =
+          "A calculator must add and subtract Ints" ^
+            Calculator().
+            tr(1, 2, 3, -1).
+            tr(2, 2, 4, 0)
+        }
+
+Note that the Calculator class is not, in itself a Form. But there is an implicit definition automatically transforming
+`Any { def form: Form }` to `Form` so that an explicit call to `.form` is not necessary in order to include the Form in the
+example.
+
 ### Reusing matchers outside of specs2
 
 The ***specs2*** matchers are a well-delimited piece of functionality that you should be able to reuse in your own test
@@ -788,9 +818,10 @@ framework. You can reuse the following traits:
   include(xonly, examples)                                                                                              ^
   include(xonly, akaExpectations)                                                                                       ^
   include(xonly, scalaCheckExamples)                                                                                    ^
-  include(xonly, new MockitoSpecification)                                                                                       ^
+  include(xonly, new MockitoSpecification)                                                                              ^
   include(xonly, mockitoExamples)                                                                                       ^
-  include(xonly, new DataTableSpecification)                                                                                     ^
+  include(xonly, new DataTableSpecification)                                                                            ^
+  include(new CalculatorSpecification)                                                                                  ^
   end
 
   val examples = new Specification { def is = "Examples".title ^
@@ -896,4 +927,23 @@ framework. You can reuse the following traits:
        2    !  2  !  4  |
        1    !  1  !  2  |> { (a, b, c) =>  a + b must_== c }
   }
+
+  class CalculatorSpecification extends Specification with Forms { def is  =
+    "A calculator must add and subtract Ints" ^
+      Calculator().
+      tr(1, 2, 3, -1).
+      tr(2, 2, 4, 0)
+
+
+    import Form._
+    case class Calculator(form: Form = tr("a", "b", "a + b", "a - b")) {
+      def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = Calculator {
+        def plus = prop(a + b)(a_plus_b)
+        def minus = prop(a - b)(a_minus_b)
+
+        form.tr(a, b, plus, minus)
+      }
+    }
+  }
+
 }
