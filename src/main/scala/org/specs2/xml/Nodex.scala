@@ -36,6 +36,11 @@ trait Nodex {
   class Reducable(ns: Seq[NodeSeq]) {
     def reduce = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ cur}
   }
+
+  implicit def unless(ns: NodeSeq) = UnlessEmpty(ns)
+  case class UnlessEmpty(ns: NodeSeq) {
+    def unless(b: Boolean) = if (!b) ns else NodeSeq.Empty
+  }
 }
 private[specs2]
 object Nodex extends Nodex

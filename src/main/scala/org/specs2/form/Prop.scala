@@ -1,6 +1,7 @@
 package org.specs2
 package form
 
+import scala.xml._
 import control.Property
 import execute._
 import StandardResults._
@@ -34,10 +35,11 @@ import matcher._
  *
  */
 case class Prop[T, S](
-              val label: String = "",
-              val actual: Property[T] = Property[T](), 
-              val expected: Property[S] = Property[S](),
-              val constraint: (T, S) => Result = Prop.checkProp) extends Executable {
+              label: String = "",
+              actual: Property[T] = Property[T](),
+              expected: Property[S] = Property[S](),
+              constraint: (T, S) => Result = Prop.checkProp,
+              decorator: Decorator = Decorator()) extends Executable with DecoratedProperty[Prop[T, S]] {
   
   /**
    * The apply method sets the expected value and returns the Prop
@@ -51,8 +53,14 @@ case class Prop[T, S](
   def get: S = expected.get
 
   /** execute the constraint set on this property, with the expected value */
-  def execute: Result = expected.flatMap { e => 
-    actual.map(a => constraint(a, e)).toOption 
+  def execute: Result = expected.flatMap { e =>
+    try {
+      actual.map(a => constraint(a, e)).toOption
+    } catch {
+      case FailureException(f) => Some(f)
+      case e: Exception        => Some(Error(e))
+      case other               => throw other
+    }
   }.getOrElse(pending)
 
   /**
@@ -65,6 +73,20 @@ case class Prop[T, S](
     expected.getOrElse("_") + 
     (if (expected == actual) "" else (" (actual: " + actual.getOrElse("_") + ")"))
   }
+  /** set a new Decorator */
+  def decorateWith(f: Any => Any) = Prop(label, actual, expected, constraint, decorator.decorateWith(f))
+  /** set a new Decorator for the label */
+  def decorateLabelWith(f: Any => Any) = Prop(label, actual, expected, constraint, decorator.decorateLabelWith(f))
+  /** set a new Decorator for the value */
+  def decorateValueWith(f: Any => Any) = Prop(label, actual, expected, constraint, decorator.decorateValueWith(f))
+
+  /** set a new style */
+  def styleWith(s: (String, String)) = Prop(label, actual, expected, constraint, decorator.styleWith(s))
+  /** set a new style for the label */
+  def styleLabelWith(s: (String, String)) = Prop(label, actual, expected, constraint, decorator.styleLabelWith(s))
+  /** set a new style for the value */
+  def styleValueWith(s: (String, String)) = Prop(label, actual, expected, constraint, decorator.styleValueWith(s))
+
 }
 /**
  * Companion object with factory methods

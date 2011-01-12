@@ -2,6 +2,7 @@ package org.specs2
 package form
 
 import scala.xml._
+import xml.Nodex._
 import execute._
 import StandardResults._
 /**
@@ -57,7 +58,11 @@ case class FieldCell(f: Field[_], result: Result = skipped) extends Cell {
       case Some(s) => f.toString.padTo(s, ' ')
     }
   }
-  def xml = (<td>{f.label}</td><td class="info">{f.get}</td>)
+  def xml = if (f.label.nonEmpty)
+              <td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> ++ <td class="info" style={f.valueStyles}>{f.decorateValue(f.get)}</td>
+            else
+              <td class="info" style={f.valueStyles}>{f.decorateValue(f.get)}</td>
+
   def colnumber = 2
 
   def execute = result
@@ -78,14 +83,14 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
   }
   def xml = {
     val executed = result.getOrElse(skipped)
-    <td>{p.label}</td><td class={executed.statusName}>{p.expected.map(_.toString).getOrElse("")}</td> ++
-    (if (!executed.isSuccess) <td class={executed.statusName}>{executed.message}</td> else NodeSeq.Empty)
+    (<td>{p.decorateLabel(p.label)}</td> unless p.label.isEmpty) ++
+     <td class={executed.statusName}>{p.decorateValue(p.expected.map(_.toString).getOrElse(""))}</td> ++
+    (<td class={executed.statusName}>{executed.message}</td> unless executed.isSuccess)
   }
   def colnumber = 2 + (if (result.map(_.isSuccess).getOrElse(false)) 2 else 0)
 
   def execute = result.getOrElse(p.execute)
   def executeCell = PropCell(p, result.orElse(Some(p.execute)))
-
   override def header = List(TextCell(p.label))
   def setSuccess = PropCell(p, Some(success))
   def setFailure = PropCell(p, Some(failure))
@@ -99,7 +104,7 @@ case class FormCell(form: Form) extends Cell {
     form.allRows.map(_.padText(form.maxSizes)).mkString("\n")
   }
   def xml = form.toXml
-  def colnumber = form.rows.map(_.cells.map(c => c.colnumber).max).max
+  def colnumber = form.rows.map(_.cells.map(c => c.colnumber).sum).max
 
   def execute = form.execute
   def executeCell = FormCell(form.executeForm)

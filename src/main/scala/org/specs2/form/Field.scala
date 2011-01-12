@@ -1,6 +1,7 @@
 package org.specs2
 package form
 
+import scala.xml._
 import control.Property
 import execute._
 
@@ -13,7 +14,8 @@ import execute._
  * The value is stored in a Property object so it will not be evaluated until explicitly
  * queried.
  */
-case class Field[T](label: String, value: Property[T]) extends Executable with StandardResults {
+case class Field[T](label: String, value: Property[T], decorator: Decorator = Decorator()) extends Executable with StandardResults
+  with DecoratedProperty[Field[T]] {
   /** executing a field does nothing */
   override def execute = success
   /**
@@ -25,9 +27,21 @@ case class Field[T](label: String, value: Property[T]) extends Executable with S
   /** alias for apply() */
   def get: T = apply()
   /** @return "label: value" */
-  override def toString = label + ": " + this.get
+  override def toString = if (label.nonEmpty) label + ": " + this.get else this.get.toString
   /** transforms this typed Field as a Field containing the toString value of the Fields value*/
   def toStringField = Field(label, value.get.toString)
+  /** set a new Decorator */
+  def decorateWith(f: Any => Any) = Field(label, value, decorator.decorateWith(f))
+  /** set a new Decorator for the label */
+  def decorateLabelWith(f: Any => Any) = Field(label, value, decorator.decorateLabelWith(f))
+  /** set a new Decorator for the value */
+  def decorateValueWith(f: Any => Any) = Field(label, value, decorator.decorateValueWith(f))
+  /** set a new style */
+  def styleWith(s: (String, String)) = Field(label, value, decorator.styleWith(s))
+  /** set a new style for the label */
+  def styleLabelWith(s: (String, String)) = Field(label, value, decorator.styleLabelWith(s))
+  /** set a new style for the value */
+  def styleValueWith(s: (String, String)) = Field(label, value, decorator.styleValueWith(s))
 }
 /**
  * Factory methods for creating Fields. Fields values can also be concatenated to produce
@@ -54,3 +68,36 @@ case object Field {
   }
 }
 
+trait DecoratedProperty[T] {
+  val decorator: Decorator
+  /** set a new Decorator */
+  def decorateWith(f: Any => Any): T
+  /** set a new Decorator for the label */
+  def decorateLabelWith(f: Any => Any): T
+  /** set a new Decorator for the value */
+  def decorateValueWith(f: Any => Any): T
+  /** do the decoration */
+  def decorateLabel(ns: Any) = decorator.label(ns)
+  /** do the decoration */
+  def decorateValue(ns: Any) = decorator.value(ns)
+  /** set a new style */
+  def styleWith(s: (String, String)): T
+  /** set a new style for the label */
+  def styleLabelWith(s: (String, String)): T
+  /** set a new style for the value */
+  def styleValueWith(s: (String, String)): T
+
+  def labelStyles = decorator.labelStyles.mkString("; ")
+  def valueStyles = decorator.valueStyles.mkString("; ")
+
+}
+case class Decorator(label: Any => Any = identity, value: Any => Any = identity,
+                     labelStyles: List[String] = Nil, valueStyles: List[String] = Nil) {
+  def decorateWith(f: Any => Any) = copy(label = f compose label, value = f compose value)
+  def decorateLabelWith(f: Any => Any) = copy(label = f compose label)
+  def decorateValueWith(f: Any => Any) = copy(value = f compose value)
+
+  def styleWith     (s: (String, String)) = copy(labelStyles = labelStyles :+ (s._1+":"+s._2), valueStyles = valueStyles :+ (s._1+":"+s._2))
+  def styleLabelWith(s: (String, String)) = copy(labelStyles = labelStyles :+ (s._1+":"+s._2))
+  def styleValueWith(s: (String, String)) = copy(valueStyles = valueStyles :+ (s._1+":"+s._2))
+}
