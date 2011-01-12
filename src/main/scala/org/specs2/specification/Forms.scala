@@ -12,6 +12,7 @@ private[specs2]
 trait Forms extends FormsBuilder {
   class FormExample(form: Form) extends Example(FormMarkup(form), () => form.execute)
   implicit def formsAreExamples(f: Form): Example = new FormExample(f)
+  implicit def formsHoldersAreExamples(f: { def form: Form }): Example = formsAreExamples(f.form)
 }
 
 /**

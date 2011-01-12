@@ -7,6 +7,11 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
+ There is a bug when including a specification without xonly, this breaks the toc!!!
+ Add a paragraph in Philosophy explaining why Forms are good (Fitnesse but composable and
+ statically compiled)
+
+
                                                                                           """^
  "1.0 features                                                                            "^
    "Implementation                                                                        "^

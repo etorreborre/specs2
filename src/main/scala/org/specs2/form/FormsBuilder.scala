@@ -22,7 +22,6 @@ trait FormsBuilder {
   /** a Form can be added on a Form row as a FormCell */
   implicit def formsAreCell(t: Form) = new FormCell(t)
   implicit def formsAreExecutable(f: Form): Result = f.execute
-  implicit def formsHoldersAreForms(f: { def form: Form }): Form = f.form
 
   /** @return a new Form with the given title */
   def form(title: String) = Form(title)
