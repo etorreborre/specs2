@@ -27,19 +27,23 @@ trait TableOfContents {
       else headers
 
     body.toList match {
-      case e :: rest if isHeader(e) => {
+      case e :: rest => {
         val eLevel = headerNumber(e)
         val currentLevel = headers.tree.rootLabel.level
-        val header = leaf(Header(eLevel, childText(e)))
+        val header = leaf(Header(eLevel, nodeText(e)))
         val newHeaders = if (eLevel == currentLevel)
           headers.insertRight(header)
         else if (eLevel > currentLevel)
           headers.insertDownLast(header)
-        else
-          goUpUntil(headers, eLevel).insertRight(header)
+        else {
+          val parent = goUpUntil(headers, eLevel)
+          if (parent.tree.rootLabel.level == 1)
+            parent.insertDownLast(header)
+          else
+            parent.insertRight(header)
+        }
         headersToTree(rest, newHeaders)
       }
-      case e :: rest => headersToTree(rest, headersToTree(e.child, headers))
       case Nil       => headers
     }
   }
@@ -61,7 +65,7 @@ trait TableOfContents {
   }
 
   /** @return the text of the first child of a Node */
-  private def childText(n: Node) = n.text//child.headOption.map(_.text).getOrElse("")
+  private def nodeText(n: Node) = n.text
   /** regular expression for a Header Tag */
   private val HeaderTag = "h(\\d)".r
   /** @return true if the element is a header and its number satisfies a function */
@@ -77,7 +81,7 @@ trait TableOfContents {
   /** This rule can be used to add anchors to header elements */
   private object anchor extends RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
-      case e: Elem if isHeader(e) => <a name={sanitize(childText(e))}/> ++ e
+      case e: Elem if isHeader(e) => <a name={sanitize(nodeText(e))}/> ++ e
       case other => other
     }
     def addTo(n: Node) = new RuleTransformer(this).apply(n)
