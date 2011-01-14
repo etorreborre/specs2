@@ -7,7 +7,7 @@ class FormsSpec extends SpecificationWithJUnit with FormsBuilder { def is =
   The Forms object provides several utility functions for creating forms
                                                                                           """                                                                                       ^
   "The subset method allows to check if a list of forms is a subset of another one"       ^
-    "subset(l1, l1 + l2) == l1 - ok"                                                      ! subset.e1^
+    "subset(l1 + l2, l1) == l1 + l2 - ok"                                                 ! subset.e1^
     "subset(l1, l2) == l1 - ko"                                                           ! subset.e2^
     "subset(l1 + l2, l1) == l1 - ok + l2 - ko"                                            ! subset.e3^
                                                                                           p^
@@ -18,11 +18,11 @@ class FormsSpec extends SpecificationWithJUnit with FormsBuilder { def is =
                                                                                           p^
   "The subsequence method allows to check if a list of forms is a subsequence "           +
   "of another one"                                                                        ^ 
-    "subsequence(ab, ab + cd) == ab - ok"                                                 ! subsequence.e1^
-    "subsequence(abc, bac + d) == ab - ko + c - ok"                                       ! subsequence.e2^
-    "subsequence(ab, cd) == ab - ko"                                                      ! subsequence.e3^
-    "subsequence(ab + cd, ab) == ab - ok + cd - ko"                                       ! subsequence.e4^
-    "subsequence(ba + cd, ab) == ba - ko + cd - ko"                                       ! subsequence.e5^
+    "subsequence(ab + cd, ab) == abcd - ok"                                               ! subsequence.e1^
+    "subsequence(bac + d, abc) == b - ko + a - ok + c - ko + d - ok"                      ! subsequence.e2^
+    "subsequence(cd, ab) == cd - ok + ab - ko"                                            ! subsequence.e3^
+    "subsequence(ab, ab + cd) == ab - ok + cd - ko"                                       ! subsequence.e4^
+    "subsequence(ab, ba + cd) == ax - ko + cd - ko"                                       ! subsequence.e5^
                                                                                           p^
   "The set method allows to check if 2 lists of forms are the same, in no specific order" ^
     "set(l1, l1 + l2) == l1 - ok + l2 ko"                                                 ! set.e1^
@@ -37,20 +37,20 @@ class FormsSpec extends SpecificationWithJUnit with FormsBuilder { def is =
     "sequence(abc, ba) == a - ok + bc - ko"                                               ! sequence.e4^
                                                                                           end
 
-  def sameExecution(f1: List[Form], f2: List[Form]) = f1.map(_.execute.message) must_== f2.map(_.execute.message)
+  def sameExecution(f1: Seq[Form], f2: Seq[Form]) = f1.map(_.execute.message) must_== f2.map(_.execute.message)
   
   object subset {
     val set1 = List(Form.tr("a"), Form.tr("b"))
     val set2 = List(Form.tr("c"), Form.tr("d"))
     
-    def e1 = executeSubset(set1, set1 ++ set2) must_== set1.map(_.setSuccess)
-    def e2 = executeSubset(set1, set2).map(_.text) must_== set1.map(_.text) 
-    def e3 = executeSubset(set1 ++ set2, set1).map(_.text) must_== set1.map(_.text) ++ set2.map(_.text)
+    def e1 = FormDiffs.subset(set1 ++ set2, set2) must_== set1 ++ ok(set2)
+    def e2 = FormDiffs.subset(set1, set2) must_== set1 ++ ko(set2)
+    def e3 = FormDiffs.subset(set1, set1 ++ set2) must_== ok(set1) ++ ko(set2)
     
-    def e4 = executeSubset(set1, set1 ++ set2).forall(_.isSuccess) must beTrue
-    def e5 = executeSubset(set1, set2).forall(_.isSuccess)  must_== false
-    def e6 = executeSubset(set1 ++ set2, set1).exists(_.isSuccess) &&  
-             executeSubset(set1 ++ set2, set1).exists(!_.isSuccess) must beTrue
+    def e4 = FormDiffs.subset(set1 ++ set2, set1).forall(_.isSuccess) must beTrue
+    def e5 = FormDiffs.subset(set1, set2).forall(_.isSuccess)  must_== false
+    def e6 = FormDiffs.subset(set1, set1 ++ set2).exists(_.isSuccess) &&
+             FormDiffs.subset(set1, set1 ++ set2).exists(!_.isSuccess) must beTrue
   }
 
   val a = List(Form.tr("a"))
@@ -66,29 +66,32 @@ class FormsSpec extends SpecificationWithJUnit with FormsBuilder { def is =
 
   object subsequence {
     
-    def e1 = sameExecution(executeSubsequence(ab, ab ++ cd), ab.map(_.setSuccess))
-    def e2 = sameExecution(executeSubsequence(abc, bac ++ d), ab.map(_.setFailure) ++ c.map(_.setSuccess)) 
-    def e3 = sameExecution(executeSubsequence(ab, cd), ab.map(_.setFailure))
+    def e1 = sameExecution(FormDiffs.subsequence(ab ++ cd, ab), ok(ab ++ cd))
+    def e2 = sameExecution(FormDiffs.subsequence(bac ++ d, abc), ko(b) ++ ok(a) ++ ko(c) ++ ok(d))
+    def e3 = sameExecution(FormDiffs.subsequence(cd, ab), cd ++ ko(ab))
                          
-    def e4 = sameExecution(executeSubsequence(ab ++ cd, ab), ab.map(_.setSuccess) ++ cd.map(_.setFailure))
-    def e5 = sameExecution(executeSubsequence(ba ++ cd, ab), ba.map(_.setFailure) ++ cd.map(_.setFailure))
+    def e4 = sameExecution(FormDiffs.subsequence(ab, ab ++ cd), ok(ab) ++ ko(cd))
+    def e5 = sameExecution(FormDiffs.subsequence(ab, ba ++ cd), ko(a) ++ ok(b) ++ ko(cd))
   }
 
   object set {
     val set1 = List(Form.tr("a"), Form.tr("b"))
     val set2 = List(Form.tr("c"), Form.tr("d"))
     
-    def e1 = sameExecution(executeSet(set1, set1 ++ set2), set1.map(_.setSuccess) ++ set2.map(_.setFailure))
-    def e2 = sameExecution(executeSet(set1 ++ set2, set2), set2.map(_.setSuccess) ++ set1.map(_.setFailure))
-    def e3 = sameExecution(executeSet(set1, set2), set1.map(_.setFailure) ++ set2.map(_.setFailure))
-    def e4 = sameExecution(executeSet(set1, set1), set1.map(_.setSuccess))
+    def e1 = sameExecution(FormDiffs.set(set1, set1 ++ set2), ok(set1) ++ ko(set2))
+    def e2 = sameExecution(FormDiffs.set(set1 ++ set2, set2), ko(set1) ++ ok(set2))
+    def e3 = sameExecution(FormDiffs.set(set1, set2), ko(set1 ++ set2))
+    def e4 = sameExecution(FormDiffs.set(set1, set1), ok(set1))
   }
   
   object sequence {
     
-    def e1 = sameExecution(executeSequence(ab, ab ++ cd), ab.map(_.setSuccess) ++ cd.map(_.setFailure))
-    def e2 = sameExecution(executeSequence(ab, ba), ab.map(_.setFailure)) 
-    def e3 = sameExecution(executeSequence(ab, ba ++ c), bac.map(_.setFailure))
-    def e4 = sameExecution(executeSequence(abc, ba), abc.map(_.setFailure))
+    def e1 = sameExecution(FormDiffs.sequence(ab, ab ++ cd), ok(ab) ++ ko(cd))
+    def e2 = sameExecution(FormDiffs.sequence(ab, ba), ko(a) ++ ok(b))
+    def e3 = sameExecution(FormDiffs.sequence(ab, ba ++ c), ko(a) ++ ok(b) ++ ko(c))
+    def e4 = sameExecution(FormDiffs.sequence(abc, ba), ko(a) ++ ok(b) ++ ko(c))
   }
+
+  def ok(f: Seq[Form]) = f.map(_.setSuccess)
+  def ko(f: Seq[Form]) = f.map(_.setFailure)
 }

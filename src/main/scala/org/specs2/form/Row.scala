@@ -25,9 +25,13 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable with
   
   /** 
    * execute all cells
-   * @return a logical and on all results 
+   * @return a logical `and` on all results
    */
   def execute = cells.foldLeft(success: Result) { (res, cur) => res and cur.execute }
+  /**
+   * execute the row
+   * @return the Row with executed cells
+   */
   def executeRow = Row(cellList.map(_.executeCell))
 
   /** @return the printed Row with a padding space size to use for each cell */
@@ -59,5 +63,8 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable with
  * Companion object of a Row to create a Row with at least one cell
  */
 case object Row {
+  /**
+   * create a row from cells
+   */
   def tr(c1: Cell, cs: Cell*) = Row(nel(c1, cs:_*))
 }

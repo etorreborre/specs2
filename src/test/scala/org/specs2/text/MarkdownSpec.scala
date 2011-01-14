@@ -14,7 +14,7 @@ class MarkdownSpec extends SpecificationWithJUnit { def is =
   { toHtmlNoPar("***hello***") must_== "<strong><em>hello</em></strong>" }                ^
                                                                                           p^
   "Multi-line text must preserve newlines"                                                ^
-  { toHtmlNoPar("hello\nworld") must contain("hello<br/>world") }                            ^
+  { toHtmlNoPar("hello\nworld") must contain("hello<br/>\nworld") }                            ^
                                                                                           p^
   "Embedded code"                                                                         ! e1^
                                                                                           end

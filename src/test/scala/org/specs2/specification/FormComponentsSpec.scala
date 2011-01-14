@@ -80,25 +80,25 @@ Fourth example: 1-n relationship
     * the expected rows are exactly the actual rows, in the same order
                                                                                           """^                        
     components.order.form                                                                 ^
-                                                                                          p^
-" It is possible to check if expected rows are a subset of actual rows"                   ^
-"   if the expected rows are contained in the actual rows, it succeeds"                   ! components.e4^
-"   if the expected rows are not contained in the actual rows, it fails"                  ! components.e5^
-                                                                                          p^
-" It is possible to check if expected rows are a subsequence of actual rows,"             +
-" (in the same order)"                                                                    ^
-"   if the expected rows are in the same order, it succeeds"                              ! components.e6^
-"   if the expected rows are in a different order, it fails"                              ! components.e7^
-                                                                                          p^
-" It is possible to check if expected rows are the actual rows, in any order"             ^
-"   if the expected rows are the same, it succeeds"                                       ! components.e8^
-"   if the expected rows are not same, it fails"                                          ! components.e9^
-                                                                                          p^
-" It is possible to check if expected rows are the actual rows,"                          +
-" (in the same order)"                                                                    ^
-"   if the expected rows are the same, in the same order, it succeeds"                    ! components.e10^
-"   if the expected rows are the same, in an other order, it fails"                       ! components.e11^
-                                                                                          end
+                                                                                         p^
+"It is possible to check if expected rows are a subset of actual rows"                   ^
+  "if the expected rows are contained in the actual rows, it succeeds"                   ! components.e4^
+  "if the expected rows are not contained in the actual rows, it fails"                  ! components.e5^
+                                                                                         p^
+"It is possible to check if expected rows are a subsequence of actual rows,"             +
+"(in the same order)"                                                                    ^
+  "if the expected rows are in the same order, it succeeds"                              ! components.e6^
+  "if the expected rows are in a different order, it fails"                              ! components.e7^
+                                                                                         p^
+"It is possible to check if expected rows are the actual rows, in any order"             ^
+  "if the expected rows are the same, it succeeds"                                       ! components.e8^
+  "if the expected rows are not same, it fails"                                          ! components.e9^
+                                                                                         p^
+"It is possible to check if expected rows are the actual rows,"                          +
+"(in the same order)"                                                                    ^
+  "if the expected rows are the same, in the same order, it succeeds"                    ! components.e10^
+  "if the expected rows are the same, in an other order, it fails"                       ! components.e11^
+                                                                                         end
   object components extends ComponentsDefinitions {
     val address = Address(street = "Rose Crescent", number = 2)
     val customer = Customer(name = "Eric", address = Address(street = "Rose Crescent", number = 2))
@@ -109,6 +109,7 @@ Fourth example: 1-n relationship
    
     val order = Order().
       line(OrderLine("PIS", 1)).            
+      line(OrderLine("PS", 2)).
       line(OrderLine("Beginning Scala", 3))
     
     def e1 = address.fill("Rose Crescent", 5).execute.message must_== "'5' is not equal to '2'" 
@@ -119,20 +120,18 @@ Fourth example: 1-n relationship
     def e4 = {
       order.fillSubset(
         OrderLine("PIS", 1),
-        OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)
       ).execute must_== success
     }
     def e5 = {
       order.fillSubset( 
         OrderLine("PS", 2),
-        OrderLine("Beginning Scala", 3)
+        OrderLine("BS", 3)
       ).execute.isSuccess must beFalse
     }
     def e6 = order.fillSubsequence(
-        OrderLine("PIS", 1),
-        OrderLine("Beginning Scala", 3),
-        OrderLine("PS", 2)
+        OrderLine("PS", 2),
+        OrderLine("Beginning Scala", 3)
       ).execute must_== success
 
     def e7 = order.fillSubsequence(
@@ -143,6 +142,7 @@ Fourth example: 1-n relationship
       
     def e8 = order.fillSet(
         OrderLine("Beginning Scala", 3),
+        OrderLine("PS", 2),
         OrderLine("PIS", 1)
       ).execute.isSuccess must beTrue
       

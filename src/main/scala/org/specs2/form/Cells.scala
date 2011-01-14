@@ -3,6 +3,8 @@ package form
 
 import scala.xml._
 import xml.Nodex._
+import text.NotNullStrings._
+import main.Arguments
 import execute._
 import StandardResults._
 /**
@@ -27,7 +29,8 @@ trait Text {
  * Base type for anything returning some xml
  */
 trait Xml {
-  def xml: NodeSeq
+  def xml(implicit args: Arguments): NodeSeq
+  def stacktraces(implicit args: Arguments): NodeSeq
   def colnumber: Int
 }
 
@@ -41,7 +44,9 @@ case class TextCell(s: String, result: Result = skipped) extends Cell {
       case Some(n) => s.toString.padTo(n, ' ')
     }
   }
-  def xml = <td class={execute.statusName}>{s}</td>
+  def xml(implicit args: Arguments) = <td class={execute.statusName}>{s}</td>
+  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
+
   def colnumber = 1
   def execute = result
   def setSuccess = TextCell(s, success)
@@ -58,10 +63,16 @@ case class FieldCell(f: Field[_], result: Result = skipped) extends Cell {
       case Some(s) => f.toString.padTo(s, ' ')
     }
   }
-  def xml = if (f.label.nonEmpty)
-              <td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> ++ <td class="info" style={f.valueStyles}>{f.decorateValue(f.get)}</td>
-            else
-              <td class="info" style={f.valueStyles}>{f.decorateValue(f.get)}</td>
+  def xml(implicit args: Arguments) =
+    (<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> unless f.label.isEmpty) ++
+    <td class={statusName(result)} style={f.valueStyles}>{f.decorateValue(f.get)}</td>
+
+  private def statusName(r: Result) = r match {
+    case Skipped(_, _) => "info"
+    case _             => r.statusName
+  }
+
+  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
 
   def colnumber = 2
 
@@ -70,6 +81,7 @@ case class FieldCell(f: Field[_], result: Result = skipped) extends Cell {
   def setSuccess = FieldCell(f, success)
   def setFailure = FieldCell(f, failure)
   def executeCell = this
+
 }
 /**
  * Cell embedding a Field
@@ -81,12 +93,7 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
       case Some(s) => p.toString.padTo(s, ' ')
     }
   }
-  def xml = {
-    val executed = result.getOrElse(skipped)
-    (<td>{p.decorateLabel(p.label)}</td> unless p.label.isEmpty) ++
-     <td class={executed.statusName}>{p.decorateValue(p.expected.map(_.toString).getOrElse(""))}</td> ++
-    (<td class={executed.statusName}>{executed.message}</td> unless executed.isSuccess)
-  }
+
   def colnumber = 2 + (if (result.map(_.isSuccess).getOrElse(false)) 2 else 0)
 
   def execute = result.getOrElse(p.execute)
@@ -94,6 +101,25 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
   override def header = List(TextCell(p.label))
   def setSuccess = PropCell(p, Some(success))
   def setFailure = PropCell(p, Some(failure))
+
+  def xml(implicit args: Arguments): NodeSeq = {
+    val executed = result.getOrElse(skipped)
+    (<td>{p.decorateLabel(p.label)}</td> unless p.label.isEmpty) ++
+     <td class={executed.statusName}>{p.decorateValue(p.expected.map(_.toString).getOrElse(""))}</td> ++
+    (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td> unless executed.isSuccess)
+  }
+
+  def stacktraces(implicit args: Arguments): NodeSeq = result match {
+    case Some(e @ Error(_, _))                           => stacktraces(e)
+    case Some(f @ Failure(_, _, _, _)) if args.failtrace => stacktraces(f)
+    case _                                               => NodeSeq.Empty
+  }
+
+  private def stacktraces(e: Result with ResultStackTrace): NodeSeq =
+    <div class="formstacktrace details" id={System.identityHashCode(e).toString}>
+      {e.message.notNull+" ("+e.location+")"}
+      {e.stackTrace.map(st => <div>{st}</div>)}
+    </div>
 }
 /**
  * Cell embedding a Form
@@ -103,8 +129,8 @@ case class FormCell(form: Form) extends Cell {
   def padText(size: Option[Int]): String = {
     form.allRows.map(_.padText(form.maxSizes)).mkString("\n")
   }
-  def xml = form.toXml
-  def colnumber = form.rows.map(_.cells.map(c => c.colnumber).sum).max
+  def xml(implicit args: Arguments) = form.toXml(args)
+  def colnumber = if (form.rows.isEmpty) 1 else form.rows.map(_.cells.map(c => c.colnumber).sum).max
 
   def execute = form.execute
   def executeCell = FormCell(form.executeForm)
@@ -112,6 +138,6 @@ case class FormCell(form: Form) extends Cell {
   override def header = form.header
   def setSuccess = FormCell(form.setSuccess)
   def setFailure = FormCell(form.setFailure)
-  
+  def stacktraces(implicit args: Arguments) = Form.stacktraces(form)(args)
 }
 

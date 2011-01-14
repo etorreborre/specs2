@@ -31,9 +31,9 @@ class FormsFragmentsSpec extends SpecificationWithJUnit with Forms { def is =
     }.form
     
     def e1_1 = ("This is the expected customer" ^ form).middle.size must_== 2
-    def e1_2 = ("This is the expected customer" ^ form).middle(1) must_== Example(
-                "| Customer             |\n"+
-                "| name: eric | age: 20 |", success)
+    def e1_2 = ("This is the expected customer" ^ form).middle(1).text must_==
+                "Example(| Customer             |\n"+
+                        "| name: eric | age: 20 |)"
     def e2 = {
       val example = "the customer must be as expected" ! form
       example.execute.isSuccess must beTrue

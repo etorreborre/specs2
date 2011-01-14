@@ -462,13 +462,22 @@ In this case the `~` operator is used to create a HtmlLink where:
 
  * "a" is the beginning of the text
  * "quick start guide" is the text that will be highlighted as a url link
- * new QuickStart is the specification to include, the url being derived from the specification class name
+ * `new QuickStart` is the specification to include, the url being derived from the specification class name
 
 Note that if you want to add some text after the url link, you can use the more general form:
 
      "before text" ~ ("text to highlight", specification, "after text")
      // or
      "before text" ~ ("text to highlight", specification, "after text", "tooltip")
+
+And if there's no "before text":
+
+     "text to highlight" ~ specification
+     // or
+     "text to highlight" ~ (specification, "after text")
+     // or
+     "text to highlight" ~ (specification, "after text", "tooltip")
+
 
 ### Specification title
 

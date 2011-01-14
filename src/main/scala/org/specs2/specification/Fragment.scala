@@ -74,7 +74,7 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
 
   override def equals(a: Any) = {
     a match {
-      case e: Example => desc equals e.desc 
+      case e: Example => desc == e.desc
       case _          => false
     }
   }

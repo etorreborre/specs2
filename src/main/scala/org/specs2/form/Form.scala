@@ -1,9 +1,12 @@
 package org.specs2
 package form
 
+import scala.xml._
 import collection.Listx._
+import ::>._
 import xml.Nodex._
 import execute._
+import main.Arguments
 import StandardResults._
 
 /**
@@ -28,6 +31,10 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
   /** @return a Form where every Row is executed with a Failure */
   def setFailure = new Form(title, rows.map(_.setFailure))
 
+  /** add a new Header, with at least one Field */
+  def th(h1: Field[_], hs: Field[_]*): Form = tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*)
+  /** add a new Header, with at least one Field */
+  def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_)):_*)
   /** add a new Row, with at least one Cell */
   def tr(c1: Cell, cs: Cell*): Form = {
     new Form(title, this.rows :+ Row.tr(c1, cs:_*))
@@ -52,7 +59,27 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
   /** @return the printed form with a padding space size to use for each cell */
   def padText(size: Option[Int]): String = FormCell(this).padText(size)
 
-  def toXml = Form.toXml(this)
+  /** @return an xml description of this form */
+  def toXml(implicit args: Arguments = Arguments()) = Form.toXml(this)(args)
+
+  def subset[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+    addLines(FormDiffs.subset(f1.map(_.form), f2.map(_.form)))
+  }
+  def subsequence[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+    addLines(FormDiffs.subsequence(f1.map(_.form), f2.map(_.form)))
+  }
+  def set[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+    addLines(FormDiffs.set(f1.map(_.form), f2.map(_.form)))
+  }
+  def sequence[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+    addLines(FormDiffs.sequence(f1.map(_.form), f2.map(_.form)))
+  }
+  private def addLines(fs: Seq[Form]) = fs.foldLeft(this) { (res, cur) =>  res.tr(cur) }
+
+  override def equals(a: Any) = a match {
+    case f: Form => f.title == title && rows == f.rows
+    case _       => false
+  }
 }
 /**
  * Companion object of a Form to create:
@@ -62,39 +89,62 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
  *
  */
 case object Form {
-  def apply() = new Form(None, Nil)
-  def apply(title: String) = new Form(Some(title), Nil)
-  def tr(c1: Cell, c: Cell*) = new Form().tr(c1, c:_*)
 
-  def toXml(form: Form) = {
+  /** @return an empty form */
+  def apply() = new Form(None, Nil)
+  /** @return an empty form with a title */
+  def apply(title: String) = new Form(Some(title), Nil)
+  /** @return a Form with one row */
+  def tr(c1: Cell, c: Cell*) = new Form().tr(c1, c:_*)
+  /** @return a Form with one row and cells formatted as header cells */
+  def th(h1: Field[_], hs: Field[_]*) = new Form().th(h1, hs:_*)
+  /** @return a Form with one row and cells formatted as header cells */
+  def th(h1: String, hs: String*) = new Form().th(h1, hs:_*)
+
+  /**
+   * This method creates an xml representation of a Form as an Html table
+   *
+   * If the Form has issues, stacktraces are written and hidden under the table
+   *
+   * @return the xml representation of a Form
+   */
+  def toXml(form: Form)(implicit args: Arguments) = {
     val colnumber = FormCell(form).colnumber
-    <table  class="dataTable">
-      {title(form, colnumber)}
-      {rows(form, colnumber)}
-    </table>
+    val formStacktraces = stacktraces(form)
+    <form>
+      <table  class="dataTable">
+        {title(form, colnumber)}
+        {rows(form, colnumber)}
+      </table>
+      {<i>[click on failed cells to see the stacktraces]</i> unless formStacktraces.isEmpty}
+      {formStacktraces}
+    </form>
   }
-  import scala.xml._
-  def title(form: Form, colnumber: Int) = form.title.map(t => <tr><th colspan={colnumber.toString}>{t}</th></tr>).toList.reduce
-  def rows(form: Form, colnumber: Int) = form.rows.map(row(_, colnumber)).reduce
-  def row(r: Row, colnumber: Int) = {
+
+  /**
+   * Private methods for building the Form xml
+   */
+  private def title(form: Form, colnumber: Int) = form.title.map(t => <tr><th colspan={colnumber.toString}>{t}</th></tr>).toList.reduce
+  private def rows(form: Form, colnumber: Int)(implicit args: Arguments) = form.rows.map(row(_, colnumber)).reduce
+  private def row(r: Row, colnumber: Int)(implicit args: Arguments) = {
     val spanned = r.cells.dropRight(1).map(cell(_)) ++ cell(r.cells.last, colnumber - r.cells.size)
     <tr>{spanned}</tr>
   }
-  import ::>._
-  def cell(c: Cell, colnumber: Int = 0) = {
+
+  private def cell(c: Cell, colnumber: Int = 0)(implicit args: Arguments) = {
     if (colnumber > 1) {
-      c.xml.toList match {
+      c.xml(args).toList match {
       case start ::> (e: Elem) => start ++ (e % new UnprefixedAttribute("colspan", colnumber.toString, Null))
         case other                         => other
       }
     } else
-      c.xml.toList
+      c.xml(args).toList
   }
 
-  object ::> {
-    def unapply[A] (l: List[A]) = l match {
-      case Nil => None
-      case _ => Some( (l.init, l.last) )
-    }
-  }
+  /** @return the stacktraces for a Form */
+  def stacktraces(form: Form)(implicit args: Arguments): NodeSeq = form.rows.map(stacktraces(_)(args)).reduce
+
+  private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq   = row.cells.map(stacktraces(_)(args)).reduce
+  private def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell.stacktraces(args)
+
 }

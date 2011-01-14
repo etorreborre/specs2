@@ -55,6 +55,17 @@ trait Listx { outer =>
     if (filtered.isEmpty) Nil
     else filtered.map(_.head) :: transpose(filtered.map(_.tail))
   }
+
+  /**
+   * This object allows to extract the last element of a List
+   */
+  object ::> {
+    def unapply[A] (l: List[A]) = l match {
+      case Nil => None
+      case _ => Some( (l.init, l.last) )
+    }
+  }
+
 }
 private[specs2]
 object Listx extends Listx

@@ -1,10 +1,8 @@
 package org.specs2
 package guide
-import form._
-import specification._
 
 
-class Matchers extends Specification with Forms { def is = literate ^ "Matchers guide".title ^
+class Matchers extends Specification { def is = literate ^ "Matchers guide".title ^
 """ <toc/>
 
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns
@@ -570,231 +568,9 @@ can use the `!!` operator to disambiguate (and `||` in the header for good visua
 Forms are a way to represent domain objects or service, and declare expected values in a tabular format. Forms can be designed
 as reusable pieces of specification where complex forms can be built out of simple ones.
 
-Forms are built by creating "Fields" or "Properties" and placing them on rows.
-
-The following examples show, by order of complexity, the creation of:
-
-    1. fields
-    2. properties
-    3. a simple Form using properties
-    4. a simple Address entity encapsulating the above form
-    5. a composite Customer entity using the Address instance
-    6. a decision table having some related columns
-    7. a composite Order - OrderLine entity (1-n) relationship
-
-For all the code samples below you need to import the `org.specs2.form.FormsBuilder` trait.
-
-#### Fields
-
-A `Field` is simply a label and a value. It is used in forms to display relevant information. You can create a `Field` with
-these methods:
-
-  * `field(value)`: creates a field for a value, where the label is empty
-  * `field(label, value)`: creates a field with a label and a value
-  * `field(label, field1, field2, ...)`: creates a field with a label and values coming from other fields
-
-When the form is displayed, here's how the fields are displayed:
 """ ^
-  form("Fields").
-    tr(field("code").bold.center, field("is displayed as").bold.center).
-    tr(field("""field("value")""").code, field("value")).
-    tr(field("""field("label", "value")""").code, field("label", "value")).
-    tr(field("""field("label", field("value1"), field("value2"))""").code, field("label", field("value1"), field("value2"))) ^
+  "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms)                                                                 ^
 """
-#### Properties
-
-A `Prop` is like a `Field`, it has a label. But you can give it 2 values, an "actual" one and an "expected" one. When
-executing the property, both values are compared to get a result. You can create a `Prop` with the following functions:
-
-  * `prop(value)`: a property with no label
-
-  * `prop(label, actual)`: a property with a label and an actual value
-
-  * `prop(label, actual, expected)`: a property with a label, an actual value and an expected one
-
-  * `prop(label, actual, constraint)`: a property with a label, an actual value and a function taking the actual value,
-     an expected one and returning a `Result`
-
-        `prop("label", "actual", (a: String, b: String) => (a === b).toResult)
-
-  * `prop(label, actual, matcher constraint)`: a property with a label, an actual value and a function taking the expected value,
-     returning a Matcher that will be applied to the actual one
-
-        `prop("label", "expected", (s: String) => beEqualTo(s))
-
-If the expected value is not provided when building the property, it can be given with the `apply` method:
-
-        // apply "sets" the expected value
-        prop.apply("expected")
-        // or
-        prop("expected")
-
-Let's look at a few examples:
-""" ^
-  form("Properties").
-    tr(field("code").bold.center, field("is displayed as").bold.center).
-    tr(field("""prop("expected")("expected")""").code, prop("expected")("expected")).
-    tr(field("""prop("label", "expected")("expected")""").code, prop("label", "expected")("expected")).
-    tr(field("""prop("label", "actual")("expected")""").code, prop("label", "actual")("expected")).
-    tr(field("""prop("label", { error("but got an error"); "actual" })("expected")""").code, prop("label", { error("but got an error"); "actual" })("expected")).
-    tr(field("""prop("label", "expected", "expected")""").code, prop("label", "expected", "expected")).
-    tr(field("""prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")""").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
-    tr(field("""prop("label", "expected", (s: String) => beEqualTo(s))("expected")""").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).
-    executeForm.toXml.toString ^
-"""
-
-##### Styles
-
-Most of the time, the display of Fields and Properties can be left as it is but sometimes you want to style the output
-of labels and values. You can do this by using `decorateWith` and `styleWith` methods, or some equivalent shortcuts:
-
-""" ^
-  form("Style").
-    tr(field("code").bold.center, field("is displayed as").bold.center).
-    tr(field("decorate with").bkGrey.bold).
-    tr(field("""field("label", "value").decorateWith(f: Any => <em>{f}</em>)""").code, field("label", "value").decorateWith((ns: Any) => <em>{ns}</em>)).
-    tr(field("""field("label", "value").bold""").code, field("label", "value").bold).
-    tr(field("""field("label", "value").boldLabel""").code, field("label", "value").boldLabel).
-    tr(field("""field("label", "value").boldValue""").code, field("label", "value").boldValue).
-    tr(field("""field("label", "value").italics""").code,      field("label", "value").italics).
-    tr(field("""field("label", "value").italics.bold""").code,      field("label", "value").italics.bold).
-    tr(field("""field("1 must_== 1").code""").code, field("1 must_== 1").code).
-    tr(field("style with").bkGrey.bold).
-    tr(field("""field("label", "value").styleWith("text-color"->"#FF1493")""").code, field("label", "value").styleWith("text-color"->"#FF1493")).
-    tr(field("""field("label", "value").color("#FF1493")""").code, field("label", "value").color("#FF1493")).
-    tr(field("""field("label", "value").bkColor("#FF1493")""").code, field("label", "value").bkColor("#FF1493")).
-    tr(field("""field("label", "value").green""").code, field("label", "value").green).
-    tr(field("""field("label", "value").bkGreen""").code, field("label", "value").bkGreen).
-    executeForm.toXml.toString ^
-"""
-
-All the methods above, when named `xxx` are available as `xxxLabel` and `xxxValue` to do the formatting for the label or
-the value only. The available colors are:
-""" ^
-  form("Colors").
-    tr(field("name").bold.center, field("code").bold.center, field("color").bold.center).
-    tr(field("blue"), field("#1E90FF"), field("").bkBlue).
-    tr(field("red"), field("#FF9999"), field("").bkRed).
-    tr(field("green"), field("#CCFFCC"), field("").bkGreen).
-    tr(field("yellow"), field("#FFFF99"), field("").bkYellow).
-    tr(field("grey"), field("#EEEEEE"), field("").bkGrey) ^
-"""
-
-#### Simple form
-
-Now that we know how to create Fields and Properties, creating a `Form` is as easy as putting them on separate lines:
-
-        import org.specs2.form._
-        import FormsBuilder._
-
-        Form("Address").
-          tr(prop("street", actualStreet(123), "Oxford St")).
-          tr(prop("number", actualNumber(123), 20))
-
-The form has a title `"Address"` and 2 properties, each one on a distinct row. The `actualStreet()` and `actualNumber()`
-methods are supposed to retrieve the relevant values from a database.
-
-Inserting the form in a Specification is also very simple, you just chain it with the `^` operator:
-
-        import org.specs2.specification._
-
-        class SpecificationWithForms extends Specification with Forms { def is =
-
-          "The address must be retrieved from the database with the proper street and number" ^
-            Form("Address").
-              tr(prop("street", actualStreet(123), "Oxford St")).
-              tr(prop("number", actualNumber(123), 20))                                       ^
-                                                                                              end
-        }
-
-One way to encapsulate and reuse this form across specifications is to define a case class:
-
-        case class Address(street: String, number: Int) {
-          def retrieve(addressId: Int) = {
-            val address = actualAddress(addressId)
-            Form("Address").
-              tr(prop("street", address.street, street)).
-              tr(prop("number", address.number, number))
-          }
-          def actualAddress(addressId: Int): AddressEntity  = ...
-        }
-
-And to use it like this:
-
-        class AddressSpecification extends Specification with Forms { def is =
-
-          "The address must be retrieved from the database with the proper street and number" ^
-            Address("Oxford St", 20).                      /** expected values */
-              retrieve(123)                                /** actual address id */           ^
-                                                                                              end
-        }
-
-#### Aggregating forms
-
-Now that we've defined a form for a simple entity, let's see how we can reuse it with a larger entity:
-
- * the Customer form defines a name attribute and embeds an instance of the Address form
- * it is defined by setting the name on one row and the Address form on the second row
-
-   *[and for this example, we define a slightly different Address form]*
-
-       case class Address(street: String, number: Int) {
-         def actualIs(address: AddressEntity) = {
-           Form("Address").
-             tr(prop("street", address.street, street)).
-             tr(prop("number", address.number, number))
-         }
-       }
-
-       case class Customer(name: String, address: Address) {
-         def retrieve(customerId: Int) = {
-           val customer = actualCustomer(customerId)
-           Form("Customer").
-             tr(prop("name", customer.name)(name)).
-             tr(address.actualIs(customer.address))
-         }
-         def actualCustomer(customerId: Int) = ... // fetch from the database
-       }
-
-       class CustomerSpecification extends Specification with Forms { def is =
-
-         "The customer must be retrieved from the database with a proper name and address" ^
-           Customer(name = "Eric",
-                    address = Address(street = "Rose Crescent", number = 2)).
-                    retrieve(123)                                                          ^
-                                                                                           end
-       }
-
-As you also see above, named arguments can bring more readibility to the expected values.
-
-#### Decision tables
-
-One very popular type of Forms are *decision tables*. A decision table is a Form where, on each row several values are
-used for a computation and the result must be equal to other values on the same row. A very simple example of this is a
-calculator:
-
-        import Form._
-        case class Calculator(form: Form = tr("a", "b", "a + b", "a - b")) {
-          def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = Calculator {
-            def plus = prop(a + b)(a_plus_b)
-            def minus = prop(a - b)(a_minus_b)
-
-            form.tr(a, b, plus, minus)
-          }
-        }
-
-And you use it like this
-
-        class CalculatorSpecification extends Specification with Forms { def is  =
-          "A calculator must add and subtract Ints" ^
-            Calculator().
-            tr(1, 2, 3, -1).
-            tr(2, 2, 4, 0)
-        }
-
-Note that the Calculator class is not, in itself a Form. But there is an implicit definition automatically transforming
-`Any { def form: Form }` to `Form` so that an explicit call to `.form` is not necessary in order to include the Form in the
-example.
 
 ### Reusing matchers outside of specs2
 
@@ -819,9 +595,8 @@ framework. You can reuse the following traits:
   include(xonly, akaExpectations)                                                                                       ^
   include(xonly, scalaCheckExamples)                                                                                    ^
   include(xonly, new MockitoSpecification)                                                                              ^
-  include(xonly, mockitoExamples)                                                                                       ^
   include(xonly, new DataTableSpecification)                                                                            ^
-  include(new CalculatorSpecification)                                                                                  ^
+  include(xonly, mockitoExamples)                                                                                       ^
   end
 
   val examples = new Specification { def is = "Examples".title ^
@@ -927,23 +702,4 @@ framework. You can reuse the following traits:
        2    !  2  !  4  |
        1    !  1  !  2  |> { (a, b, c) =>  a + b must_== c }
   }
-
-  class CalculatorSpecification extends Specification with Forms { def is  =
-    "A calculator must add and subtract Ints" ^
-      Calculator().
-      tr(1, 2, 3, -1).
-      tr(2, 2, 4, 0)
-
-
-    import Form._
-    case class Calculator(form: Form = tr("a", "b", "a + b", "a - b")) {
-      def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = Calculator {
-        def plus = prop(a + b)(a_plus_b)
-        def minus = prop(a - b)(a_minus_b)
-
-        form.tr(a, b, plus, minus)
-      }
-    }
-  }
-
 }

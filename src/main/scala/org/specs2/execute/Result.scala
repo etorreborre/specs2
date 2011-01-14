@@ -111,10 +111,11 @@ case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement
   override def toString = m
   override def equals(o: Any) = {
     o match {
-      case Failure(m2, _, _, _) => m == m2
+      case Failure(m2, e2, _, _) => m == m2 && e == e2
       case _ => false
     }
   }
+  override def hashCode = m.hashCode + e.hashCode
 }
 
 /**
@@ -131,6 +132,13 @@ case class Error(m: String, e: Exception)
   /** @return an exception created from the message and the stackTraceElements */
   def exception = e
   def stackTrace = e.getFullStackTrace.toList
+  override def equals(o: Any) = {
+    o match {
+      case Error(m2, e2) => m == m2 && e.getMessage == e2.getMessage
+      case _ => false
+    }
+  }
+  override def hashCode = m.hashCode
 }
 /** 
  * This object allows to create an Error from an exception
@@ -149,4 +157,3 @@ case class Pending(m: String = "")  extends Result(m)
  * @see Result for description 
  */
 case class Skipped(m: String = "", e: String = "")  extends Result(m, e)
-

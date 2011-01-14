@@ -87,6 +87,9 @@ trait FragmentsBuilder {
    */
   implicit def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = new HtmlLinkFragments(HtmlLink(SpecName(""), s, "", "", "", Success()))
   class HtmlLinkFragments(link: HtmlLink) {
+    def ~(s: SpecificationStructure) =
+      See(HtmlLink(s.content.start.name, "", link.beforeText)) ^ s.content.fragments
+
     def ~(p: (String, SpecificationStructure)) =
       See(HtmlLink(p._2.content.start.name, link.beforeText, p._1)) ^ p._2.content.fragments
 
@@ -95,6 +98,15 @@ trait FragmentsBuilder {
 
     def ~(p: (String, SpecificationStructure, String, String)) =
       See(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3, p._4)) ^ p._2.content.fragments
+  }
+
+  implicit def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = new HtmlLinkFragments2(HtmlLink(SpecName(""), s, "", "", "", Success()))
+  class HtmlLinkFragments2(link: HtmlLink) {
+    def ~(p: (SpecificationStructure, String)) =
+      See(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2)) ^ p._1.content.fragments
+
+    def ~(p: (SpecificationStructure, String, String)) =
+      See(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2, p._3)) ^ p._1.content.fragments
   }
 }
 

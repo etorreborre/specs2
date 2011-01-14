@@ -4,7 +4,7 @@ package form
 import scala.xml._
 import control.Property
 import execute._
-
+import DecoratedProperties._
 /**
  * A Field is a property which is used only to display input values or output values.
  * 
@@ -42,6 +42,14 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   def styleLabelWith(s: (String, String)) = Field(label, value, decorator.styleLabelWith(s))
   /** set a new style for the value */
   def styleValueWith(s: (String, String)) = Field(label, value, decorator.styleValueWith(s))
+  /** use this Field as a header in a table */
+  def header = this.center.bold.bkGrey
+
+  override def equals(a: Any) = a match {
+    case Field(l, v, _) => label == l && value == v
+    case other          => false
+  }
+  override def hashCode = label.hashCode + value.hashCode
 }
 /**
  * Factory methods for creating Fields. Fields values can also be concatenated to produce

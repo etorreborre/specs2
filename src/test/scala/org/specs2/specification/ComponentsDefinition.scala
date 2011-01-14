@@ -26,14 +26,14 @@ trait ComponentsDefinitions {
       form.tr(firstName, lastName, prop(computeInitials(firstName, lastName))(expected))
     }
   }
-  
+
   case class Order(lines: List[OrderLine] = Nil) {
     def line(orderLine: OrderLine) = Order(lines :+ orderLine)
-    def form = fillSubset(lines:_*)
-    def fillSubset(ls: OrderLine*) = FormsBuilder.form("Order", subset(lines, ls.toList))
-    def fillSubsequence(ls: OrderLine*) = FormsBuilder.form("Order", subsequence(lines, ls.toList))
-    def fillSet(ls: OrderLine*) = FormsBuilder.form("Order", set(lines, ls.toList))
-    def fillSequence(ls: OrderLine*) = FormsBuilder.form("Order", sequence(lines, ls.toList))
+    def form: Form = fillSubset(lines:_*)
+    def fillSubset(ls: OrderLine*) = Form("Order").subset(lines, ls.toList)
+    def fillSubsequence(ls: OrderLine*) = Form("Order").subsequence(lines, ls.toList)
+    def fillSet(ls: OrderLine*) = Form("Order").set(lines, ls.toList)
+    def fillSequence(ls: OrderLine*) = Form("Order").sequence(lines, ls.toList)
   }
   case class OrderLine(name: String, quantity: Int) {
     def form = Form.tr(field("name", name), field("qty", quantity))

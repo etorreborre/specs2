@@ -280,6 +280,29 @@ don't need to add brackets to:
   * add strings with `+`: `"this is"+"my string" ^ "ok?"`
   * declare an example: `"this is some text" ^ "and this is an example description" ! success`
 
+###### Forms
+
+Having no explicit structure but just a "flow" of Fragments allows to insert other types of Fragments at will in a ***specs2***
+specification.
+
+Notably the "description - expectation" format for specifying software is sometimes too verbose and tables are a much more
+effective way of packing up descriptions and expectations. This idea is  not new and a tool like [Fitnesse](http://fitnesse.org) has been offering
+this way of writing specifications for years now.
+
+***specs2*** takes this idea further with 3 features:
+
+ * the tables (called "Forms") are statically compiled so adding a new column in a decision table will not fail at runtime
+   (and IDEs provide refactoring tools for better productivity)
+
+ * the Forms are not limited to simple n x m grids and can be nested inside each other. This helps a lot in specifying
+   domain objects where you have aggregates and lists of items
+
+ * the Forms presentation and implementation can be encapsulated in the same class to be reused as a coherent block in
+   other specifications
+
+The main drawback (for now) of this approach is that it is not possible to see, in real-time, a modification done on a Form.
+There needs to be a compilation step, which in Scala, is not instantaneous.
+
 ###### But if you STILL want mutable specifications
 
 There's at least one very good reason for that. You want a smooth migration path from ***specs*** to ***specs2*** because

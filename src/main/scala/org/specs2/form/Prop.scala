@@ -87,6 +87,11 @@ case class Prop[T, S](
   /** set a new style for the value */
   def styleValueWith(s: (String, String)) = Prop(label, actual, expected, constraint, decorator.styleValueWith(s))
 
+  override def equals(a: Any) = a match {
+    case Prop(l, a, e, c, d) => label == l && actual == a && expected == e
+    case other               => false
+  }
+  override def hashCode = label.hashCode + actual.hashCode + expected.hashCode
 }
 /**
  * Companion object with factory methods

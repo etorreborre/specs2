@@ -83,7 +83,7 @@ case class HtmlResult(r: ExecutedResult) extends Html {
     }
     else out
   }
-  def printFormResult(form: Form)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = out.printElem(form.toXml)
+  def printFormResult(form: Form)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = out.printElem(form.toXml(args))
 
   def printResult(desc: MarkupString, level: Int, result: Result)(implicit args: Arguments, out: HtmlResultOutput): HtmlResultOutput = {
     result match {

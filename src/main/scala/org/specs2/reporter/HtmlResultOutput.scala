@@ -95,7 +95,7 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
       val message = "  "+e.message.notNull+" ("+e.location+")"
-      printElem(<div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(e)}/>
+      printElem(<div class={l(level)}><img src="images/collapsed.gif" onclick={onclick(e)}/>
                  {message}
                 </div>)
     } else this

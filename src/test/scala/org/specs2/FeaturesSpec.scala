@@ -8,8 +8,6 @@ class FeaturesSpec extends Specification { def is = literate ^
  of implementation!
 
  There is a bug when including a specification without xonly, this breaks the toc!!!
- Add a paragraph in Philosophy explaining why Forms are good (Fitnesse but composable and
- statically compiled)
 
 
                                                                                           """^
@@ -21,7 +19,7 @@ class FeaturesSpec extends Specification { def is = literate ^
    "Html reporter                                                                         "^
      "with a table of content                                                             "! done^
      "with breadcrumbs                                                                    "! done^
-     "with non mutable forms                                                              "! todo^
+     "with non mutable forms                                                              "! done^
    "ScalaInterpreter                                                                      "^
      "with appropriate matchers                                                           "! todo^
    "Reporters                                                                             "^

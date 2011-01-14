@@ -9,7 +9,7 @@ import text._
  * Allow a Form to be used as an example body and return a Result automatically
  */
 private[specs2]
-trait Forms extends FormsBuilder {
+trait Forms extends FormsBuilder with DecoratedProperties {
   class FormExample(form: Form) extends Example(FormMarkup(form), () => form.execute)
   implicit def formsAreExamples(f: Form): Example = new FormExample(f)
   implicit def formsHoldersAreExamples(f: { def form: Form }): Example = formsAreExamples(f.form)
