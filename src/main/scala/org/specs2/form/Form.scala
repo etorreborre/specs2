@@ -62,6 +62,18 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
   /** @return an xml description of this form */
   def toXml(implicit args: Arguments = Arguments()) = Form.toXml(this)(args)
 
+  def subset(f1: Traversable[Form], f2: Traversable[Form]): Form = {
+    addLines(FormDiffs.subset(f1.toSeq, f2.toSeq))
+  }
+  def subsequence(f1: Traversable[Form], f2: Traversable[Form]): Form = {
+    addLines(FormDiffs.subsequence(f1.toSeq, f2.toSeq))
+  }
+  def set(f1: Traversable[Form], f2: Traversable[Form]): Form = {
+    addLines(FormDiffs.set(f1.toSeq, f2.toSeq))
+  }
+  def sequence(f1: Traversable[Form], f2: Traversable[Form]): Form = {
+    addLines(FormDiffs.sequence(f1.toSeq, f2.toSeq))
+  }
   def subset[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
     addLines(FormDiffs.subset(f1.map(_.form), f2.map(_.form)))
   }
