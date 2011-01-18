@@ -124,7 +124,7 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
 /**
  * Cell embedding a Form
  */
-case class FormCell(form: Form) extends Cell {
+class FormCell(form: =>Form) extends Cell {
   /** ignore the passed size and compute the max size on each row */
   def padText(size: Option[Int]): String = {
     form.allRows.map(_.padText(form.maxSizes)).mkString("\n")
@@ -133,11 +133,11 @@ case class FormCell(form: Form) extends Cell {
   def colnumber = if (form.rows.isEmpty) 1 else form.rows.map(_.cells.map(c => c.colnumber).sum).max
 
   def execute = form.execute
-  def executeCell = FormCell(form.executeForm)
+  def executeCell = new FormCell(form.executeForm)
 
   override def header = form.header
-  def setSuccess = FormCell(form.setSuccess)
-  def setFailure = FormCell(form.setFailure)
+  def setSuccess = new FormCell(form.setSuccess)
+  def setFailure = new FormCell(form.setFailure)
   def stacktraces(implicit args: Arguments) = Form.stacktraces(form)(args)
 }
 

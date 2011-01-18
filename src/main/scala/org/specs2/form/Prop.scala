@@ -44,7 +44,7 @@ case class Prop[T, S](
   /**
    * The apply method sets the expected value and returns the Prop
    */
-  def apply(e: S): Prop[T, S] = new Prop(label, actual, expected(e), constraint)
+  def apply(e: =>S): Prop[T, S] = new Prop(label, actual, expected(e), constraint)
   def actualValue = actual.optionalValue
   /** 
    * shortcut method for this().get returning the contained expected value.
@@ -53,15 +53,19 @@ case class Prop[T, S](
   def get: S = expected.get
 
   /** execute the constraint set on this property, with the expected value */
-  def execute: Result = expected.flatMap { e =>
-    try {
-      actual.map(a => constraint(a, e)).toOption
+  def execute: Result = {
+    val result = try {
+      for {
+        a <- actual.toOption
+        e <- expected.toOption
+      } yield constraint(a, e)
     } catch {
       case FailureException(f) => Some(f)
       case e: Exception        => Some(Error(e))
       case other               => throw other
     }
-  }.getOrElse(pending)
+    result getOrElse pending
+  }
 
   /**
    * Display the property:

@@ -57,7 +57,7 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
   def executeForm = Form(title, rows.map(_.executeRow))
 
   /** @return the printed form with a padding space size to use for each cell */
-  def padText(size: Option[Int]): String = FormCell(this).padText(size)
+  def padText(size: Option[Int]): String = new FormCell(this).padText(size)
 
   /** @return an xml description of this form */
   def toXml(implicit args: Arguments = Arguments()) = Form.toXml(this)(args)
@@ -121,7 +121,7 @@ case object Form {
    * @return the xml representation of a Form
    */
   def toXml(form: Form)(implicit args: Arguments) = {
-    val colnumber = FormCell(form).colnumber
+    val colnumber = new FormCell(form).colnumber
     val formStacktraces = stacktraces(form)
     <form>
       <table  class="dataTable">

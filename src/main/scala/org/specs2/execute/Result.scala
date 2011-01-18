@@ -3,6 +3,7 @@ package execute
 import control.Throwablex
 import control.Throwablex._
 import text.AnsiColors._
+import text.NotNullStrings._
 import main.Arguments
 
 /**
@@ -144,7 +145,7 @@ case class Error(m: String, e: Exception)
  * This object allows to create an Error from an exception
  */
 case object Error {
-  def apply(e: Exception) = new Error(e.getMessage, e)	
+  def apply(e: Exception) = new Error(e.getMessage.notNull, e)
   def apply(m: String) = new Error(m, new Exception(m))  
 }
 /** 

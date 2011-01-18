@@ -38,10 +38,18 @@ trait FragmentExecution {
 
   /**
    * execute a Fragment.
+   */
+  def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = {
+    val timer = new SimpleTimer().start
+    (f: Fragment) => tryOr(execute(f))((e: Exception) => ExecutedResult(NoMarkup("Fragment evaluation error"), Error(e), timer.stop))
+  }
+
+  /**
+   * execute a Fragment.
    *
    * A Form is executed separately by executing each row and cell, setting the results on each cell
    */
-  def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = { 
+  protected def execute(f: Fragment)(implicit arguments: Arguments) = f match {
     case Example(FormMarkup(form), _)     => {
       val timer = new SimpleTimer().start
       val executed = if (arguments.plan) form else form.executeForm

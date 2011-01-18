@@ -30,15 +30,16 @@ class PropSpec extends SpecificationWithJUnit {  def is =
     "it returns pending if it only has an expected value"                                  ! exec.e3^
     "it returns success if expected == actual"                                             ! exec.e4^
     "it returns a failure if expected != actual"                                           ! exec.e5^
+    "it returns an error if there's an exception"                                          ! exec.e6^
     "it works with a general constraint"                                                   ^
-      "and returns a success if constraint(actual, expected) == success"                   ! exec.e6^
-      "and returns a failure if constraint(actual, expected) fails"                        ! exec.e7^
+      "and returns a success if constraint(actual, expected) == success"                   ! exec.e7^
+      "and returns a failure if constraint(actual, expected) fails"                        ! exec.e8^
     "it works with a matcher constraint"                                                   ^p^
-      "and returns a success if (actual matcher expected) == success"                      ! exec.e8^
-      "and returns a failure if (actual matcher expected) fails"                           ! exec.e9^
+      "and returns a success if (actual matcher expected) == success"                      ! exec.e9^
+      "and returns a failure if (actual matcher expected) fails"                           ! exec.e10^
                                                                                            end
 
-  val name = Prop("name", "eric")
+  val nameProp = Prop("name", "eric")
   val noValues = new Prop("name")
   val actualOnly = Prop(18)
   val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
@@ -47,7 +48,7 @@ class PropSpec extends SpecificationWithJUnit {  def is =
   object creation {
     def e1 = noValues.label must_== "name"
     def e2 = actualOnly.actual.get must_== 18
-    def e3 = name.actual.get must_== "eric"
+    def e3 = nameProp.actual.get must_== "eric"
     def e4 = constrained.label must_== "name"
     def e5 = withMatcher("e").execute must_== Success("'eric' contains 'e'")
   }
@@ -60,15 +61,16 @@ class PropSpec extends SpecificationWithJUnit {  def is =
   object update {
     def e1 = Prop("name", "eric")("paolo").expected.get must_== "paolo"
   }
-  object exec {
+  object exec extends specification.Forms {
     def e1 = noValues.execute must_== pending
     def e2 = actualOnly.execute must_== pending
-    def e3 = name.execute must_== pending
-    def e4 = name("eric").execute must_== Success("'eric' is equal to 'eric'")
-    def e5 = name("eric2").execute.message must_== "'eric' is not equal to 'eric2'"
-    def e6 = constrained("e").execute.isSuccess must beTrue
-    def e7 = constrained("a").execute.message must_== "'eric' doesn't contain 'a'"
-    def e8 = withMatcher("e").execute.isSuccess must beTrue
-    def e9 = withMatcher("a").execute.message must_== "'eric' doesn't contain 'a'"
+    def e3 = nameProp.execute must_== pending
+    def e4 = nameProp("eric").execute must_== Success("'eric' is equal to 'eric'")
+    def e5 = nameProp("eric2").execute.message must_== "'eric' is not equal to 'eric2'"
+    def e6 = nameProp.apply(error("bad")).execute.message must_== "bad"
+    def e7 = constrained("e").execute.isSuccess must beTrue
+    def e8 = constrained("a").execute.message must_== "'eric' doesn't contain 'a'"
+    def e9 = withMatcher("e").execute.isSuccess must beTrue
+    def e10 = withMatcher("a").execute.message must_== "'eric' doesn't contain 'a'"
   }
 }    
