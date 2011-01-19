@@ -177,7 +177,7 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
       };
       function showHide(id) {
         element = document.getElementById(id);
-        element.style.display = (element.style.display == 'none')? 'block' : 'none';
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
     """
     }</script>
