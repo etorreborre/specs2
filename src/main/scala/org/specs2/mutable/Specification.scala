@@ -26,4 +26,5 @@ trait Specification extends BaseSpecification
    with StandardResults
    with StandardMatchResults
    with TimeConversions
+   with PendingUntilFixed
    with Debug

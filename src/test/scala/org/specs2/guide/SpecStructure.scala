@@ -96,6 +96,24 @@ So the correct way of writing the example is:
 This can be seen as a restriction but this actually encourages a specification style where every expectation is carefully
 specified (see [Mutable Specifications](#Mutable+Specifications) if you really can't live with that).
 
+###### Set an example Pending until fixed
+
+Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples.
+Instead of commenting them out and then forgetting about those examples when the code is fixed, you can use `pendingUntilFixed`:
+
+      "this example fails for now" ! {
+        1 must_== 2
+      }.pendingUntilFixed
+
+      // or, with a more specific message
+      "this example fails for now" ! {
+        1 must_== 2
+      }.pendingUntilFixed("ISSUE-123")
+
+
+The example above will be reported as `Pending` until it succeeds. Then it is marked as a failure so that you can remember
+to remove the `pendingUntilFixed` marker.
+
 ###### Auto-Examples
 
 There is a handy functionality when your specification is about showing the use of a DSL or of an API. If your expectation
@@ -734,7 +752,7 @@ want the same behavior.
                                           end
   }
 
-  val databaseSpec = new  Specification { def is =
+  val databaseSpec = new Specification { def is =
     "Database specification".title                                   ^
     "This specification opens a database and execute some tests"     ^
                                                                      Action(openDatabase) ^
@@ -745,5 +763,13 @@ want the same behavior.
     def openDatabase = success
     def closeDatabase = success
   }
-
+  val pendindUntilFixedSpec = new Specification { def is =
+    "this example fails for now" ! {
+      1 must_== 2
+    }.pendingUntilFixed^
+    "this example fails for now" ! {
+      1 must_== 2
+    }.pendingUntilFixed("ISSUE-123")^
+    end
+  }
 }
