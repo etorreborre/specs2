@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import control.Exceptions._
 import execute._
 import Expectable._
 import scalaz._
@@ -79,7 +80,13 @@ trait MatchersImplicits {
     def apply[U <: Seq[T]](t: Expectable[U]) = {
       val bothSequences = t.value.toList zip s.toList
       val results = bothSequences.map { case (t1, s1) => f(s1).apply(Expectable(t1)) }
-      result(FoldrGenerator[List].reduce(MatchResultMessageReducer[T], results), t)
+      if (s.size != t.value.size)
+        result(false,
+               "the seqs contain the same number of elements",
+                t.description + " contains " + t.value.size + " elements while " + q(s) + " contains " + s.size + " elements",
+                t)
+      else
+        result(FoldrGenerator[List].reduce(MatchResultMessageReducer[T], results), t)
     }
   }
 
@@ -117,7 +124,7 @@ trait MatchersImplicits {
       result(functionResult._1,  functionResult._2, functionResult._3, expectable)
     }
   }
-  
+
 }
 private[specs2]
 object MatchersImplicits extends MatchersImplicits
