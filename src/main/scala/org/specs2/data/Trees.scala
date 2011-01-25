@@ -1,6 +1,7 @@
 package org.specs2
 package data
-import scalaz.{ Tree, TreeLoc }
+import scalaz.{ Tree, TreeLoc, Scalaz }
+import Scalaz._
 
 /**
  * Utility methods for scalaz Trees
@@ -24,7 +25,7 @@ trait Trees { outer =>
    */
   def bottomUp[A, B](t: Tree[A], f: ((A, Stream[B]) => B)): Tree[B] = {
     val tbs = t.subForest.map(t => bottomUp(t, f))
-    new scalaz.Trees{}.node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
+    node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
   }
 
   /**
