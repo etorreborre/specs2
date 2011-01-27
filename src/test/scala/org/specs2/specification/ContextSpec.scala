@@ -159,10 +159,9 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1BeforeAfter = "ex1" ! beforeAfter(ok1) 
   def ex1BeforeAfterAround = "ex1" ! beforeAfterAround(ok1)
   
-  val first = new Action
-  def firstThenEx1 = first(println("first")) ^ ex1
-  def silentFirstThenEx1 = first("first") ^ ex1
-  def failingFirstThenEx1 = first(Predef.error("error")) ^ ex1
+  def firstThenEx1 = Step(println("first")) ^ ex1
+  def silentFirstThenEx1 = Step("first") ^ ex1
+  def failingFirstThenEx1 = Step { Predef.error("error"); 1 } ^ ex1
 }
 trait ContextsForFragments extends MockOutput {
   object before extends Before {

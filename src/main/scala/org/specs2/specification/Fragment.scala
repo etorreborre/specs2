@@ -1,11 +1,13 @@
 package org.specs2
 package specification
 
+import control._
+import Exceptions._
+import LazyParameters._
 import main.Arguments
 import execute._
 import text._
 import text.Trim._
-import control.LazyParameter
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
@@ -85,14 +87,35 @@ case object Example {
 }
 
 /**
- * An "invisible" fragment executing an action but only reporting errors
+ * An Step creates a fragment that will either return an
+ * Error Result if there is an exception or a Success.
+ *
+ * It is usually used to do some initialisation or cleanup before or after all
+ * the Fragments.
+ *
+ * Note that a Step fragment will not be reported in the output.
+ *
+ * @see the ContextSpec specification
+ *
  */
-case class Step private (action: () => Result) extends Fragment with Executable {
-  def execute = action()
+case class Step (step: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable {
+  def execute = step.value
   override def toString = "Step"
 }
 case object Step {
-  def apply(action: LazyParameter[Result]) = new Step(() => action.value)
+  def apply(r: =>Any) = new Step(lazyfy(trye(r)(Error(_)).left.getOrElse(Success())))
+}
+/**
+ * An Action is similar to a Step but can be executed concurrently with other examples.
+ *
+ * It is only reported in case of a failure
+ */
+case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable {
+  def execute = action.value
+  override def toString = "Action"
+}
+case object Action {
+  def apply(r: =>Any) = new Action(lazyfy(trye(r)(Error(_)).left.getOrElse(Success())))
 }
 
 /**

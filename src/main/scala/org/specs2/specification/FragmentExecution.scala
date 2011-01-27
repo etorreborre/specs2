@@ -66,16 +66,20 @@ trait FragmentExecution {
 	  case End()                 => ExecutedEnd()
 	  case SpecStart(n, args)    => ExecutedSpecStart(n, arguments.overrideWith(args))
 	  case SpecEnd(n)            => ExecutedSpecEnd(n)
-    case s @ Step(a)           => 
-      val timer = new SimpleTimer().start
-      executeBody(s.execute) match {
-        case err @ Error(_, _)       => ExecutedResult(NoMarkup("action error"), err, timer.stop)
-        case f @ Failure(_,_ , _, _) => ExecutedResult(NoMarkup("action failure"), f, timer.stop)
-        case sk @ Skipped(_, _)      => ExecutedResult(NoMarkup("skipped action"), sk, timer.stop)
-        case _                       => ExecutedNoText()
-      }
-    case See(link)                => ExecutedSee(link)
-    case _                        => ExecutedNoText()
+    case s @ Step(_)           => executeStep("step", s)
+    case s @ Action(_)         => executeStep("action", s)
+    case See(link)             => ExecutedSee(link)
+    case _                     => ExecutedNoText()
+  }
+
+  private def executeStep(stepName: String, s: Executable)(implicit args: Arguments) = {
+    val timer = new SimpleTimer().start
+    executeBody(s.execute) match {
+      case err @ Error(_, _)       => ExecutedResult(NoMarkup(stepName+" error"), err, timer.stop)
+      case f @ Failure(_,_ , _, _) => ExecutedResult(NoMarkup(stepName+" failure"), f, timer.stop)
+      case sk @ Skipped(_, _)      => ExecutedResult(NoMarkup("skipped "+stepName), sk, timer.stop)
+      case _                       => ExecutedNoText()
+    }
   }
 
   /** this method is used in tests */

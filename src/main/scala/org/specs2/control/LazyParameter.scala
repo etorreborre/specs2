@@ -1,5 +1,6 @@
 package org.specs2
 package control
+import Exceptions._
 
 /**
  * This trait can be used to allow some function to be called with varargs, with values being
@@ -29,7 +30,7 @@ class LazyParameter[T](private val v: () => T) {
    */
   private[specs2] def value = evaluated
   
-  override def toString = value.toString
+  override def toString = tryOrElse(value.toString)("Evaluation error")
   override def equals(o: Any) = value == o
   override def hashCode = value.hashCode
 }

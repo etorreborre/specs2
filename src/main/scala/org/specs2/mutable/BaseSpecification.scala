@@ -56,6 +56,14 @@ trait BaseSpecification extends specification.BaseSpecification {
     newAction
   }
   /**
+   * add a new step to the Fragments
+   */
+  def step(a: =>Any) = {
+    val newStep = Step(a)
+    addFragments(newStep)
+    newStep
+  }
+  /**
    * add a new link to the Fragments
    */
   def link(f: Fragments) = addFragments(f)

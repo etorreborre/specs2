@@ -594,22 +594,35 @@ Note that you can also compose contexts in order to reuse them to build more com
 
     "Do something on the full system"                   ! init(success)
 
-##### Actions
+##### Steps and Actions
 
 Some setup actions are very time consuming and should be executed only once for the whole specification. This can be achieved
-by inserting some silent `Action` in between fragements:
+by inserting some silent `Step`s in between fragments:
 
     class DatabaseSpec extends Specification { def is =
 
-      "This specification opens a database and execute some tests"     ^ Action(openDatabase) ^
+      "This specification opens a database and execute some tests"     ^ Step(openDatabase) ^
         "example 1"                                                    ! success ^
         "example 2"                                                    ! success ^
-                                                                       Action(closeDatabase)^
+                                                                       Step(closeDatabase)^
                                                                        end
     }
 
-The examples are (by default) executed concurrently between the 2 actions and the "result" of actions will never be
+The examples are (by default) executed concurrently between the 2 steps and the "result" of those steps will never be
 reported unless if there is a failure.
+
+`Step` are very useful because they will really be executed sequentially, before anything else, but if you need to execute
+some actions which are completely independent of the rest of the specification, there is an equivalent to `Step` adequately
+called `Action`:
+
+    class DatabaseSpec extends Specification { def is =
+
+      "This specification opens a database and execute some tests"     ^ Step(openDatabase) ^
+        "example 1"                                                    ! success ^
+        "add 1 to the number of specification executions"              ^ Action(db.executionsNb += 1)^
+        "example 2"                                                    ! success ^
+                                                                       Step(closeDatabase)^
+                                                                       end
 
 #### Mutable Specifications
 
@@ -755,10 +768,10 @@ want the same behavior.
   val databaseSpec = new Specification { def is =
     "Database specification".title                                   ^
     "This specification opens a database and execute some tests"     ^
-                                                                     Action(openDatabase) ^
+                                                                     Step(openDatabase) ^
       "example 1"                                                    ! success ^
       "example 2"                                                    ! success ^
-                                                                     Action(closeDatabase)^
+                                                                     Step(closeDatabase)^
                                                                      end
     def openDatabase = success
     def closeDatabase = success

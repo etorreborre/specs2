@@ -40,7 +40,7 @@ The following examples specify the functionalities for such a mutable specificat
     val output = new MockOutput {}
     def spec = new Specification {
       xonly
-      action(output.println("hello"))
+      step(output.println("hello"))
       "it" should {
         "have one example" in { 1 must_== 1 }
         "have failing example" in {
