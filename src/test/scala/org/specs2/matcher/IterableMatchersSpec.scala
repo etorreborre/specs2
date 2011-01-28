@@ -3,12 +3,13 @@ package matcher
 import java.util.Arrays._
 import scala.collection.JavaConversions.{ asScalaIterable }
 
-class IterableMatchersSpec extends SpecificationWithJUnit { def is = 
-//  descFromExpectations ^
+class IterableMatchersSpec extends SpecificationWithJUnit { def is =
+
   "we can check if one or several elements are present in an iterable"                    ^
     { List(1, 2) must contain(1) }                                                        ^
     { List(1, 2, 3) must contain(3, 2) }                                                  ^
     { (List(1, 2) must contain(0)) returns "'List(1, 2)' doesn't contain '0'" }           ^
+    "with a subclass"                                                                     ! subclass().e1^
                                                                                           p^
   "we can check if at least one or several elements are present in an iterable"           ^
     { List(1, 2) must containAnyOf(1, 4) }                                                ^
@@ -59,6 +60,13 @@ class IterableMatchersSpec extends SpecificationWithJUnit { def is =
     { asList("Hello", "World").toList must containMatch("ll") }                           ^
                                                                                           end
 
+  case class subclass() {
+    class Food
+    case class Pizza extends Food
+    case class Fruit extends Food
+    val diner = List(Pizza(), new Fruit())
+    def e1 = diner  must contain(Pizza())
+  }
   case class order() {
     def fail1 = (List(1, 2, 3, 4) must contain(2, 5).inOrder) returns 
                 "'List(1, 2, 3, 4)' doesn't contain in order '2, 5'"
