@@ -43,16 +43,16 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
   def run(notifier: RunNotifier) {
 	  executions.toStream.collect { 
 	    case (desc, f @ Example(_, _)) => (desc, executeFragment(Arguments())(f)) 
-      case (desc, f @ Text(_)) => (desc, executeFragment(Arguments())(f)) 
-      case (desc, f @ Step(_)) => (desc, executeFragment(Arguments())(f)) 
+      case (desc, f @ Text(_))       => (desc, executeFragment(Arguments())(f))
+      case (desc, f @ Step(_))       => (desc, executeFragment(Arguments())(f))
 	  }.
 	    foreach {
 	   	  case (desc, ExecutedResult(_, result, timer)) => {
 	        notifier.fireTestStarted(desc)
 	        result match {
-            case f @ Failure(m, e, st, d) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-            case e @ Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
-            case Pending(_) | Skipped(_, _)  => notifier.fireTestIgnored(desc)
+            case f @ Failure(m, e, st, d)   => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
+            case e @ Error(m, st)           => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
+            case Pending(_) | Skipped(_, _) => notifier.fireTestIgnored(desc)
             case _ => ()
           }
 	        notifier.fireTestFinished(desc)

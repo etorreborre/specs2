@@ -24,8 +24,10 @@ trait Selection {
  */
 trait DefaultSelection {
   /** select function returning a filtered and ordered seq of seq of Fragments */
-  def select(implicit arguments: Arguments) = (fragments: Fragments) => {
-    sort(SpecsArguments.filter(fragments.fragments)(filter))(arguments)
+  def select(implicit arguments: Arguments): Fragments => Seq[FragmentSeq] = (fragments: Fragments) => select(fragments.fragments)(arguments)
+  /** select function returning a filtered and ordered seq of seq of Fragments from a list of fragments */
+  def select(fragments: Seq[Fragment])(implicit arguments: Arguments = Arguments()): Seq[FragmentSeq] = {
+    sort(SpecsArguments.filter(fragments)(filter))(arguments)
   }
   /** 
    * the filter method filters examples based on their description,
