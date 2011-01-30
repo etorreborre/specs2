@@ -6,7 +6,9 @@ import control.Exceptions._
 /**
  * These matchers can be used to check if exceptions are thrown or not
  */
-trait ExceptionMatchers {
+trait ExceptionMatchers extends ExceptionBaseMatchers with ExceptionBeHaveMatchers
+
+trait ExceptionBaseMatchers {
   /**
    * @return a matcher checking the type of an Exception
    */
@@ -141,5 +143,18 @@ trait ExceptionMatchers {
     	  case _ => value 
       } 
     }(identity).left.toOption
+  }
+}
+
+trait ExceptionBeHaveMatchers { outer: ExceptionBaseMatchers =>
+  implicit def toExceptionMatcher[T](result: MatchResult[T]) = new ExceptionMatcherResult(result)
+  class ExceptionMatcherResult[T](result: MatchResult[T]) {
+    def throwA[E <: Throwable](implicit m: ClassManifest[E]) = result(outer.throwA(m))
+    def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]) = result(outer.throwA(message)(m))
+    def throwA[E <: Throwable](e: E) = result(outer.throwA(e))
+
+    def throwAn[E <: Throwable](implicit m: ClassManifest[E]) = result(outer.throwA(m))
+    def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]) = result(outer.throwA(message)(m))
+    def throwAn[E <: Throwable](e: E) = result(outer.throwA(e))
   }
 }

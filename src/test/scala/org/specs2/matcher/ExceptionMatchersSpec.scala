@@ -8,6 +8,7 @@ class ExceptionMatchersSpec extends SpecificationWithJUnit { def is =
       "it must fail if the exception is not thrown" 													                              ! e1^
       "it must succeed if the exception is thrown with the expected type" 								                  ! e2^
       "it must fail if the exception is thrown with the wrong type" 									                      ! e3^
+      "it must not fail if the exception is not thrown and the matcher is negated" 									        ! e3_1^
   																									                                                        p^
     "it is also possible to specify that the thrown exception is ok according to a PartialFunction"	        ^
       "'error(boom) must throwA[RuntimeException].like(e => e.getMessage(0) === 'b')"					              ! e4^
@@ -34,6 +35,8 @@ class ExceptionMatchersSpec extends SpecificationWithJUnit { def is =
   def e3 = (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must_== 
 	        "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead"
 	  
+  def e3_1 = (1 must not throwA(new Exception)).toResult must beSuccessful
+
   def e4 = (theBlock(error("boom")) must throwA[RuntimeException].like { case e => e.getMessage()(0) === 'b' }).message must_==
 	        "Got the exception java.lang.RuntimeException: boom ('b' is equal to 'b')"
 	  
