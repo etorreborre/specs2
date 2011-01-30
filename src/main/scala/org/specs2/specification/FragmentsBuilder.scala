@@ -36,7 +36,12 @@ trait FragmentsBuilder {
       case _ => fs add f
     }
     def ^(other: Seq[Fragment]) = fs add other
-    def ^(other: Fragments) = fs add other.middle
+    def ^(other: Fragments) = {
+      other.specStart match {
+        case Some(s) => (fs add other.middle).specTitleIs(s)
+        case _       => fs add other.middle
+      }
+    }
     def ^(other: FragmentsFragment) = fs add other.fs
     def ^(a: Arguments) = fs add a
   }

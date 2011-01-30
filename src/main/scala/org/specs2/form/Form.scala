@@ -136,10 +136,10 @@ case object Form {
   /**
    * Private methods for building the Form xml
    */
-  private def title(form: Form, colnumber: Int) = form.title.map(t => <tr><th colspan={colnumber.toString}>{t}</th></tr>).toList.reduce
+  private def title(form: Form, colnumber: Int) = form.title.map(t => <tr><th colspan={(colnumber+1).toString}>{t}</th></tr>).toList.reduce
   private def rows(form: Form, colnumber: Int)(implicit args: Arguments) = form.rows.map(row(_, colnumber)).reduce
   private def row(r: Row, colnumber: Int)(implicit args: Arguments) = {
-    val spanned = r.cells.dropRight(1).map(cell(_)) ++ cell(r.cells.last, colnumber - r.cells.size)
+    val spanned = r.cells.dropRight(1).map(cell(_)) ++ cell(r.cells.last, colnumber - r.cells.size + 1)
     <tr>{spanned}</tr>
   }
 

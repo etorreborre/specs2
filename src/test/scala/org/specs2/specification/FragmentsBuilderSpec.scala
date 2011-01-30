@@ -29,7 +29,10 @@ SpecStart/SpecEnd
     "the SpecStart object contains the specification arguments"                                   ! startEnd().e2^
     "SpecStart and SpecEnd have the same name"                                                    ! startEnd().e3^
     "The SpecStart element can be created by adding a title to the specification"                 ! startEnd().e4^
-    "When a title is created there is only one SpecStart in the specification"                    ! startEnd().e5^endp^
+    "When a title is created there is only one SpecStart in the specification"                    ! startEnd().e5^
+    "A title can be added before arguments are declared"                                          ! startEnd().e6^
+    "A title can be added after arguments are declared"                                           ! startEnd().e7^
+                                                                                                  endp^
                                                                                                   """
 How to create an Example
 ========================                                                                          """^
@@ -50,12 +53,16 @@ Other elements
 
   case class startEnd() {
     lazy val content = new Specification { def is = "title".title ^ xonly ^ "text" }.content
+    lazy val content2 = new Specification { def is = xonly ^ "title".title ^ "text" }.content
+
     def fragments = content.fragments
     def e1 = (fragments.head must haveClass[SpecStart]) and (fragments.last must haveClass[SpecEnd])
     def e2 = content.start.arguments.xonly
     def e3 = content.start.name must beTheSameAs(content.end.name)
     def e4 = content.start.name.toString must_== "title"
     def e5 = content.fragments.map(_.toString) must contain(lazyfy("SpecStart(title)")).exactlyOnce
+    def e6 = content.start.arguments.xonly must beTrue
+    def e7 = (content2.start.name.toString must_== "title") and (content2.start.arguments.xonly must beTrue)
   }
 
   case class ex() {

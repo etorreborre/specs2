@@ -9,13 +9,13 @@ import StandardFragments._
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-class Fragments (specStart: Option[SpecStart] = None, val middle: Seq[Fragment] = Nil, specEnd: Option[SpecEnd] = None) {
+class Fragments (val specStart: Option[SpecStart] = None, val middle: Seq[Fragment] = Nil, val specEnd: Option[SpecEnd] = None) {
   def fragments = if (middle.isEmpty) Seq() else (start +: middle :+ end)
 
   private def append(e: Fragment) = new Fragments(specStart, middle :+ e, specEnd)
   def specTitleIs(s: SpecStart): Fragments = new Fragments(Some(start.withName(s.name)), middle, specEnd)
   def add(e: Fragment): Fragments = append(e)
-  def add(fs: Seq[Fragment]): Fragments =  new Fragments(specStart, middle ++ fs, specEnd)
+  def add(fs: Seq[Fragment]): Fragments = new Fragments(specStart, middle ++ fs, specEnd)
   def add(fs: Fragments): Fragments = add(fs.fragments)
   def add(a: Arguments): Fragments = new Fragments(Some(start.withArgs(a)), middle, specEnd)
 
