@@ -508,6 +508,11 @@ readable name to your specification report you can do the following:
         "The rest of the spec goes here"                              ^ end
      }
 
+The title can be defined either:
+
+ * at the beginning of the specification
+ * just after the arguments of the specification
+
 ### Contexts
 
 There are some situations when we want to make sure that some actions are always done before or after each example, like
