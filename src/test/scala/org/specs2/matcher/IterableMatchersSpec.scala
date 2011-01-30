@@ -62,8 +62,8 @@ class IterableMatchersSpec extends SpecificationWithJUnit { def is =
 
   case class subclass() {
     class Food
-    case class Pizza extends Food
-    case class Fruit extends Food
+    case class Pizza() extends Food
+    case class Fruit() extends Food
     val diner = List(Pizza(), new Fruit())
     def e1 = diner  must contain(Pizza())
   }
