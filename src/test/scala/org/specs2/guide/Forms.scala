@@ -58,6 +58,10 @@ executing the property, both values are compared to get a result. You can create
 
          `prop("label", "expected", (s: String) => beEqualTo(s))
 
+   * `prop(label, actual, matcher)`: a property with a label, an actual value and a matcher to apply to that value
+
+         `prop("label", Some(1), beSome)
+
 If the expected value is not provided when building the property, it can be given with the `apply` method:
 
         // apply "sets" the expected value

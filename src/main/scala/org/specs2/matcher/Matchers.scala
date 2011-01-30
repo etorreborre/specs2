@@ -18,6 +18,7 @@ trait Matchers extends AnyMatchers
                   with EitherMatchers
                   with EventuallyMatchers
                   with FileMatchers
+                  with ResultMatchers
                   with MatchersImplicits
       
 object Matchers extends Matchers
