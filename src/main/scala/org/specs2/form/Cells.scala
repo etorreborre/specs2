@@ -74,7 +74,7 @@ case class FieldCell(f: Field[_], result: Result = skipped) extends Cell {
 
   def stacktraces(implicit args: Arguments) = NodeSeq.Empty
 
-  def colnumber = 2
+  def colnumber = xml(Arguments()).size
 
   def execute = result
   override def header = List(TextCell(f.label))
@@ -94,7 +94,7 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
     }
   }
 
-  def colnumber = 2 + (if (result.map(_.isSuccess).getOrElse(false)) 2 else 0)
+  def colnumber = xml(Arguments()).size
 
   def execute = result.getOrElse(p.execute)
   def executeCell = PropCell(p, result.orElse(Some(p.execute)))

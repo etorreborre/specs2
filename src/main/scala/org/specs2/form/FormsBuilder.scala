@@ -41,24 +41,50 @@ trait FormsBuilder {
   }
 
   /** @return a new Field with no label and a value */
-  def field[T](value: =>T): Field[T] = Field(value)
+  def field[T](value: =>T): Field[T] = {
+    lazy val v = value
+    Field(v)
+  }
   /** @return a new Field with a label and a value */
-  def field[T](label: String, value: =>T): Field[T] = Field(label, value)
+  def field[T](label: String, value: =>T): Field[T] = {
+    lazy val v = value
+    Field(label, v)
+  }
   /** @return a new Field with a label and several values */
   def field(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, value1, values:_*)
   
   /** @return a new Prop with an actual value only */
-  def prop[T](value: =>T) = new Prop[T, T](actual = Property(value))
+  def prop[T](value: =>T) = {
+    lazy val v = value
+    new Prop[T, T](actual = Property(v))
+  }
   /** @return a new Prop with a label and an actual value only */
-  def prop[T](label: String, actual: =>T) = Prop[T](label, actual)
+  def prop[T](label: String, actual: =>T) = {
+    lazy val a = actual
+    Prop[T](label, a)
+  }
   /** @return a new Prop with a label, an actual value and expected value */
-  def prop[T, S](label: String, actual: =>T, exp: =>S) =
-    new Prop[T, S](label, new Property(() => Some(actual)), new Property(() => Some(exp)))
+  def prop[T, S](label: String, actual: =>T, exp: =>S) = {
+    lazy val a = actual
+    lazy val e = exp
+    new Prop[T, S](label, new Property(() => Some(a)), new Property(() => Some(e)))
+  }
   /** @return a new Prop with a label, an actual value and a constraint to apply to values */
-  def prop[T, S](label: String, act: =>T, c: (T, S) => Result) = Prop(label, act, c)
+  def prop[T, S](label: String, actual: =>T, c: (T, S) => Result) = {
+    lazy val a = actual
+    Prop(label, a, c)
+  }
   /** @return a new Prop with a label, an actual value and a matcher to apply to values */
-  def prop[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = Prop(label, act, c)
-  
+  def prop[T, S](label: String, actual: =>T, c: (S) => Matcher[T]) = {
+    lazy val a = actual
+    Prop(label, actual, c)
+  }
+  /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
+  def prop[T, S](label: String, actual: =>T, c: Matcher[T]) = {
+    lazy val a = actual
+    Prop(label, actual, c)
+  }
+
 }
 private[specs2]
 object FormsBuilder extends FormsBuilder

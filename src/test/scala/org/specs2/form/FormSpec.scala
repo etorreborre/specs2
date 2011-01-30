@@ -47,6 +47,9 @@ class FormSpec extends SpecificationWithJUnit { def is =
   "Forms rows and cells have equals/hashcode methods"                                     ^
     "row1 == row1"                                                                        ! equality.e1^
     "cell1 == cell1"                                                                      ! equality.e2^
+                                                                                          p^
+  "Forms can be displayed as xhtml"                                                       ^
+    "the title must span all columns"                                                     ! xhtml.e1^
                                                                                           end
                                                                                
   object creation {
@@ -85,5 +88,12 @@ class FormSpec extends SpecificationWithJUnit { def is =
   object equality {
     def e1 = Row.tr(TextCell("a")) must_== Row.tr(TextCell("a"))   
     def e2 = TextCell("a") must_== TextCell("a")   
+ }
+
+  object xhtml {
+    def e1 = new FormCell(Form.th("title").
+      tr(field(1)).
+      tr(field("n", "v"), field("n", "v")).
+      tr(prop("p", 1)(2))).colnumber must_== 4
  }
 }

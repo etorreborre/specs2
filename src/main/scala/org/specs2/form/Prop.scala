@@ -3,6 +3,7 @@ package form
 
 import scala.xml._
 import control.Property
+import control.Exceptions._
 import execute._
 import StandardResults._
 import matcher._
@@ -45,8 +46,11 @@ case class Prop[T, S](
    * The apply method sets the expected value and returns the Prop
    */
   def apply(e: =>S): Prop[T, S] = new Prop(label, actual, expected(e), constraint)
+  /** @return the actual value as an option */
   def actualValue = actual.optionalValue
-  /** 
+  /** @return the expected value as an option */
+  def expectedValue = expected.optionalValue
+  /**
    * shortcut method for this().get returning the contained expected value.
    * @return the expected value if set and throws an exception otherwise
    */
@@ -56,15 +60,15 @@ case class Prop[T, S](
   def execute: Result = {
     val result = try {
       for {
-        a <- actual.toOption
-        e <- expected.toOption
+        a <- actualValue
+        e <- expectedValue
       } yield constraint(a, e)
     } catch {
       case FailureException(f) => Some(f)
       case e: Exception        => Some(Error(e))
       case other               => throw other
     }
-    result getOrElse pending
+    result getOrElse (if (expected.isDefined) Pending("No actual value") else Pending("No expected value"))
   }
 
   /**
@@ -74,8 +78,8 @@ case class Prop[T, S](
    */
   override def toString = {
     (if (label.isEmpty) "" else (label + ": ")) + 
-    expected.getOrElse("_") + 
-    (if (expected == actual) "" else (" (actual: " + actual.getOrElse("_") + ")"))
+    tryOrElse(expected.getOrElse("_"))("_") +
+    (if (expected == actual) "" else (" (actual: " + tryOrElse(actual.getOrElse("_"))("_") + ")"))
   }
   /** set a new Decorator */
   def decorateWith(f: Any => Any) = Prop(label, actual, expected, constraint, decorator.decorateWith(f))
@@ -102,14 +106,30 @@ case class Prop[T, S](
  */
 object Prop {
   /** create a Prop with a label and an expected value */
-  def apply[T](label: String, actual: =>T) = new Prop(label, Property(actual), Property[T](), checkProp)
+  def apply[T](label: String, actual: =>T) = {
+    lazy val a = actual
+    new Prop(label, Property(a), Property[T](), checkProp)
+  }
   /** create a Prop with a label, an expected value, and a constraint */
-  def apply[T, S](label: String, act: =>T, c: (T, S) => Result) = new Prop[T, S](label, actual = Property(act), constraint = c)
+  def apply[T, S](label: String, act: =>T, c: (T, S) => Result) = {
+    lazy val a = act
+    new Prop[T, S](label, actual = Property(a), constraint = c)
+  }
   /** create a Prop with a label, an expected value, and a constraint */
-  def apply[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = 
-    new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
+  def apply[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = {
+    lazy val a = act
+    new Prop[T, S](label, actual = Property(a), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
+  }
+  /** create a Prop with a label, an expected value, and a constraint */
+  def apply[T](label: String, act: =>T, c: Matcher[T]) = {
+    lazy val a = act
+    new Prop[T, String](label, actual = Property(a), constraint = (t: T, s: String) => c(Expectable(t)).toResult)("success")
+  }
   /** create a Prop with an empty label and an actual value */
-  def apply[T](value: =>T) = new Prop[T, T](actual = Property(value))
+  def apply[T](act: =>T) = {
+    lazy val a = act
+    new Prop[T, T](actual = Property(a))
+  }
   
   /** default constraint function */
   private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeEqualTo(s).apply(Expectable(t))).toResult

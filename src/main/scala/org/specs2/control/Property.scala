@@ -1,5 +1,6 @@
 package org.specs2
 package control
+import Exceptions._
 
 /**
  * This class represents values which are evaluated lazily and which may even be missing.
@@ -23,8 +24,6 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def update(newValue: =>T) = withValue(newValue)
   /** alial for update */
   def apply(newValue: =>T) = update(newValue)
-  /** @return an Option-like representation */
-  override def toString = optionalValue.toString
   /** @return an iterator containing the value if present */
   def iterator = optionalValue.iterator
   /** return the property with the value being filtered according to a predicate */
@@ -51,7 +50,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def toList = optionalValue.toList
   
   /** @return execute the property */
-  private def execute = {
+  private def execute: Property[T] = {
     if (!evaluated)
       copy(value, true, evaluatedValue = value())
     else 
@@ -59,12 +58,27 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   }
   
   override def equals(other: Any) = {
-    other match {
-      case o: Property[_] => o.optionalValue == optionalValue
-      case _ => false
+    try {
+      other match {
+        case o: Property[_] => o.optionalValue == optionalValue
+        case _ => false
+      }
+    } catch {
+      case e: Exception => false
     }
   }
-  override def hashCode = optionalValue.hashCode
+  override def hashCode =
+    try {
+      optionalValue.hashCode
+    } catch {
+      case e: Exception => e.hashCode
+    }
+  /** @return an Option-like representation */
+  override def toString = try {
+    optionalValue.toString
+  } catch {
+    case e: Exception => "Evaluation error " + e.getMessage
+  }
 }
 /**
  * Companion object to create properties with possibly no initial value
