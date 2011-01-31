@@ -32,7 +32,7 @@ class ClassRunner extends Classes with ConsoleOutput {
   }
   
   protected[specs2] def run(args: Seq[String], specification: BaseSpecification)(f: Exception => Unit) = {
-	  trye(reporter.report(specification)(Arguments(args:_*)))(f)
+	  trye(reporter.report(specification)(Arguments(args:_*).overrideWith(specification.content.arguments)))(f)
   }
 
   private def createSpecification(className: String): Specification = {
