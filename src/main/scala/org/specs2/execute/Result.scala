@@ -82,8 +82,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
 case class Success(m: String = "")  extends Result(m, m) {
   override def and(r: =>Result): Result = r match {
 	  case Success(m) => if (message == m) this else Success(message+" and "+m)
-	  case Failure(m, _, _, _) => r
-	  case _ => super.and(r)
+	  case _ => r
   }
   override def isSuccess = true
 }
@@ -104,6 +103,10 @@ case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement
   extends Result(m, e) with ResultStackTrace {
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
+  override def and(r: =>Result): Result = r match {
+	  case Error(_, _) => r
+	  case _ => super.and(r)
+  }
   override def or(r: =>Result): Result = r match {
     case Success(m) => if (message == m) r else Success(message+" and "+m)
     case Failure(m, e, st, d) => Failure(message+" and "+m, e, stackTrace ::: st, d)

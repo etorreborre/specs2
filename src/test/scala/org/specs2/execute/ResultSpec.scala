@@ -17,17 +17,22 @@ class ResultSpec extends SpecificationWithJUnit { def is =
   { (success1 and success2) must_== Success("s1 and s2") }                                ^
   { (success1 and success1) must_== Success("s1") }                                       ^
   { (success1 and failure1) must_== failure1 }                                            ^
+  { (success1 and error1)   must_== error1 }                                              ^
   { (failure1 and success1) must_== failure1 }                                            ^
   { (failure1 and failure2) must_== failure1 }                                            ^
+  { (failure1 and error1)   must_== error1 }                                              ^
                                                                                           p^
   "Results can be combined with or"                                                       ^
   { (success1 or success2) must_== Success("s1") }                                        ^
+  { (success1 or failure1) must_== success1 }                                             ^
   { (failure1 or success1) must_== Success("f1 and s1") }                                 ^
   { (success1 or failure1) must_== Success("s1") }                                        ^
   { (failure1 or failure2) must_== Failure("f1 and f2") }                                 ^
+  { (failure1 or error1)   must_== failure1 }                                             ^
                                                                                           end
   val success1 = Success("s1")                                                                                          
   val success2 = Success("s2")                                                                                          
   val failure1 = Failure("f1")                                                                                          
-  val failure2 = Failure("f2")                                                                                          
+  val failure2 = Failure("f2")
+  val error1   = Error("e1")
 }    
