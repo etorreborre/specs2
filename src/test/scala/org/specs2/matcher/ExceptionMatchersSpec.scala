@@ -25,6 +25,8 @@ class ExceptionMatchersSpec extends SpecificationWithJUnit { def is =
       "it can be refined with a 'like' expression"														                              ^
         "failing if the catched expression doesn't satisfy the partial function" 					                  ! e10^
         "succeeding otherwise" 																			                                        ! e11^
+                                                                                                            p^
+    "negating a throw matcher must return the proper success message"	                                      !e12^
 																										                                                        end
 
   def e1 = ("hello" must throwAn[Error]).message must_== "Expected: java.lang.Error. Got nothing"
@@ -65,4 +67,5 @@ class ExceptionMatchersSpec extends SpecificationWithJUnit { def is =
   def e11 = (theBlock(throw UserError("me", "boom")) must throwAn(UserError("me2", "boom")).
 		     like { case UserError(name, _) => name must startWith("m") }).message must beMatching("Got the exception .*")
 		    	
+  def e12 = (1 must not(throwAn[Exception])).toResult.message must_== "Expected: java.lang.Exception. Got nothing"
 }

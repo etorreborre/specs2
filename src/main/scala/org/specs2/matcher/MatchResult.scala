@@ -80,14 +80,14 @@ trait MatchResult[+T] {
 }
 case class MatchSuccess[T](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
   override def toResult = Success(okMessage)
-  def not: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
+  def not: MatchResult[T] = MatchFailure(okMessage, koMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 }
 case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Expectable[T], details: Details = NoDetails()) extends MatchResult[T] {
   /** an exception having the same stacktrace */
   val exception = new Exception(koMessage)
   override def toResult = Failure(koMessage, okMessage, exception.getStackTrace.toList, details)
-  def not: MatchResult[T] = MatchSuccess(okMessage, koMessage, expectable)
+  def not: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 }
 case class MatchSkip[T](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
