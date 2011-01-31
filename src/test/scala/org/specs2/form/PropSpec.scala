@@ -42,6 +42,7 @@ class PropSpec extends SpecificationWithJUnit {  def is =
   val nameProp = Prop("name", "eric")
   val noValues = new Prop("name")
   val actualOnly = Prop(18)
+  val expectedOnly = new Prop("", Property(), Property(18))
   val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
   val withMatcher = Prop("name", "eric", contain(_:String))
   
@@ -62,9 +63,9 @@ class PropSpec extends SpecificationWithJUnit {  def is =
     def e1 = Prop("name", "eric")("paolo").expected.get must_== "paolo"
   }
   object exec extends specification.Forms {
-    def e1 = noValues.execute must_== pending
-    def e2 = actualOnly.execute must_== pending
-    def e3 = nameProp.execute must_== pending
+    def e1 = noValues.execute must_== Pending("No expected value")
+    def e2 = actualOnly.execute must_== Pending("No expected value")
+    def e3 = expectedOnly.execute must_== Pending("No actual value")
     def e4 = nameProp("eric").execute must_== Success("'eric' is equal to 'eric'")
     def e5 = nameProp("eric2").execute.message must_== "'eric' is not equal to 'eric2'"
     def e6 = nameProp.apply(error("bad")).execute.message must_== "bad"
