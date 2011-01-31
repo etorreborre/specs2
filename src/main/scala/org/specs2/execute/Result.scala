@@ -81,8 +81,10 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
  */
 case class Success(m: String = "")  extends Result(m, m) {
   override def and(r: =>Result): Result = r match {
-	  case Success(m) => if (message == m) this else Success(message+" and "+m)
-	  case _ => r
+	  case Success(m)          => if (message == m) this else Success(message+" and "+m)
+    case Error(_, _)         => r
+	  case Failure(_, _, _, _) => r
+    case _                   => super.and(r)
   }
   override def isSuccess = true
 }
