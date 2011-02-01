@@ -13,6 +13,7 @@ Forms are built by creating "Fields" or "Properties" and placing them on rows.
 The following examples show, by order of complexity, the creation of:
 
   1. fields
+  1. effects
   1. properties
   1. a simple Form using properties
   1. a simple Address entity encapsulating the above form
@@ -40,6 +41,20 @@ these methods:
     tr(field("""field("label", "value")""").code, field("label", "value")).
     tr(field("""field("label", field("value1"), field("value2"))""").code, field("label", field("value1"), field("value2"))) ^
 """
+
+In terms of execution, the value is only evaluated when the `Field` is executed (when executing the parent Form for example).
+If an exception is thrown during that evaluation, the exception message will be displayed in place of the value.
+
+### Effects
+
+An `Effect` is almost like a `Field` but it never shows its value. The value is supposed to have some kind of side-effect,
+like clicking on a webpage, and only the label is displayed (except when there is an exception). You can create an `Effect` with
+these methods:
+
+  * `effect(value)`: creates an effect with no label
+  * `effect(label, value)`: creates an effect with a label and a value that will be evaluated when the Effect is executed
+  * `effect(effect1, effect2, ...)`: creates an effect with all the effects labels and a side-effect sequencing all side-effects
+
 ### Properties
 
 A `Prop` is like a `Field`, it has a label. But you can give it 2 values, an "actual" one and an "expected" one. When

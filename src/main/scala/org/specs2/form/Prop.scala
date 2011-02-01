@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 import scala.xml._
-import control.Property
+import control.{ Property }
 import control.Exceptions._
 import execute._
 import StandardResults._
@@ -72,6 +72,10 @@ case class Prop[T, S](
   }
 
   /**
+   * set a specific result on the property
+   */
+  def resultIs(r: =>Result): Prop[T, S] = copy(constraint = (t: T, s: S) => r)
+  /**
    * Display the property:
    * 
    * label: "this" (actual: "that")
@@ -82,18 +86,7 @@ case class Prop[T, S](
     (if (expected == actual) "" else (" (actual: " + tryOrElse(actual.getOrElse("_"))("_") + ")"))
   }
   /** set a new Decorator */
-  def decorateWith(f: Any => Any) = Prop(label, actual, expected, constraint, decorator.decorateWith(f))
-  /** set a new Decorator for the label */
-  def decorateLabelWith(f: Any => Any) = Prop(label, actual, expected, constraint, decorator.decorateLabelWith(f))
-  /** set a new Decorator for the value */
-  def decorateValueWith(f: Any => Any) = Prop(label, actual, expected, constraint, decorator.decorateValueWith(f))
-
-  /** set a new style */
-  def styleWith(s: (String, String)) = Prop(label, actual, expected, constraint, decorator.styleWith(s))
-  /** set a new style for the label */
-  def styleLabelWith(s: (String, String)) = Prop(label, actual, expected, constraint, decorator.styleLabelWith(s))
-  /** set a new style for the value */
-  def styleValueWith(s: (String, String)) = Prop(label, actual, expected, constraint, decorator.styleValueWith(s))
+  def decoratorIs(d: Decorator) = copy(decorator = d)
 
   override def equals(a: Any) = a match {
     case Prop(l, a, e, c, d) => label == l && actual == a && expected == e
@@ -106,7 +99,7 @@ case class Prop[T, S](
  */
 object Prop {
   /** create a Prop with a label and an expected value */
-  def apply[T](label: String, actual: =>T) = {
+  def apply[T](label: String, actual: =>T): Prop[T, T] = {
     lazy val a = actual
     new Prop(label, Property(a), Property[T](), checkProp)
   }
@@ -126,7 +119,7 @@ object Prop {
     new Prop[T, String](label, actual = Property(a), constraint = (t: T, s: String) => c(Expectable(t)).toResult)("success")
   }
   /** create a Prop with an empty label and an actual value */
-  def apply[T](act: =>T) = {
+  def apply[T](act: =>T): Prop[T, T] = {
     lazy val a = act
     new Prop[T, T](actual = Property(a))
   }

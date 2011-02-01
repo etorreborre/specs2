@@ -56,35 +56,81 @@ case class TextCell(s: String, result: Result = skipped) extends Cell {
 /**
  * Cell embedding a Field
  */
-case class FieldCell(f: Field[_], result: Result = skipped) extends Cell {
+case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
   def padText(size: Option[Int]) = {
     size match {
       case None => f.toString
       case Some(s) => f.toString.padTo(s, ' ')
     }
   }
-  def xml(implicit args: Arguments) =
+  def xml(implicit args: Arguments) = {
+    val executed = f.valueOrResult match {
+      case Left(e)  => e
+      case Right(e) => e
+    }
+    val executedResult = execute
     (<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> unless f.label.isEmpty) ++
-    <td class={statusName(result)} style={f.valueStyles}>{f.decorateValue(f.get)}</td>
+     <td class={statusName(executedResult)} style={f.valueStyles}>{f.decorateValue(executed)}</td> ++
+    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless executedResult.isSuccess)
+  }
 
   private def statusName(r: Result) = r match {
     case Skipped(_, _) => "info"
+    case Success(_)    => "info"
     case _             => r.statusName
   }
 
   def stacktraces(implicit args: Arguments) = NodeSeq.Empty
 
-  def colnumber = xml(Arguments()).size
+  def colnumber = 3
 
-  def execute = result
+  def execute = result.getOrElse(f.execute)
   override def header = List(TextCell(f.label))
-  def setSuccess = FieldCell(f, success)
-  def setFailure = FieldCell(f, failure)
-  def executeCell = this
+  def setSuccess = FieldCell(f, Some(success))
+  def setFailure = FieldCell(f, Some(failure))
+  def executeCell = FieldCell(f, result.orElse(Some(f.execute)))
 
 }
 /**
- * Cell embedding a Field
+ * Cell embedding a Eff
+ */
+case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell {
+  def padText(size: Option[Int]) = {
+    size match {
+      case None => e.toString
+      case Some(s) => e.toString.padTo(s, ' ')
+    }
+  }
+  def xml(implicit args: Arguments) = {
+    val executed = e.valueOrResult match {
+      case Left(r)  => r
+      case Right(r) => r
+    }
+    val executedResult = execute
+    <td style={e.labelStyles} class="info">{e.decorateLabel(e.label)}</td> ++
+    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless executedResult.isSuccess)
+  }
+
+  private def statusName(r: Result) = r match {
+    case Skipped(_, _) => "info"
+    case Success(_)    => "info"
+    case _             => r.statusName
+  }
+
+  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
+
+  def colnumber = 2
+
+  def execute = result.getOrElse(e.execute)
+  override def header = List(TextCell(e.label))
+  def setSuccess = EffectCell(e, Some(success))
+  def setFailure = EffectCell(e, Some(failure))
+  def executeCell = EffectCell(e, result.orElse(Some(e.execute)))
+
+}
+
+/**
+ * Cell embedding a Prop
  */
 case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
   def padText(size: Option[Int]) = {
@@ -94,7 +140,7 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
     }
   }
 
-  def colnumber = xml(Arguments()).size
+  def colnumber = 3
 
   def execute = result.getOrElse(p.execute)
   def executeCell = PropCell(p, result.orElse(Some(p.execute)))

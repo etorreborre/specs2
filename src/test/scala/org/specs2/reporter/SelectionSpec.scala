@@ -5,7 +5,7 @@ import specification._
 import io._
 import org.scalacheck._
 
-class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with ArbitraryFragments { def is =
+class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with ArbitraryFragments { def is = only("with a Reporter")^
                                                                                              """
   Before executing and reporting a specification, the fragments must be selected and
   sorted:
@@ -31,14 +31,18 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
     "an example followed by a step must not be in the same list"                             ! steps().e3^
     "a step followed by an example must not be in the same list"                             ! steps().e4^
     "so that steps and examples are always separate"                                         ! steps().e5^
+                                                                                             p^
+  "If a specification contains the 'sequential' argument"                                    ^
+    "all examples must be executed in a sequence"                                            ! seq().e1^
+    "with a Reporter"                                                                        ! seq().e2^
                                                                                              end
   
-  case class filter()  {
+  case class filter() extends WithSelection {
     def e1 = select(args(ex = "ex1") ^ ex1 ^ ex2).toString must not contain("ex2")
     def e2 = select(ex1 ^ ex2).toString must contain("ex1")
   }
 
-  case class steps() extends ScalaCheck {
+  case class steps() extends ScalaCheck with WithSelection {
     implicit val params = set(maxSize -> 3)
 
     def e1 = check { (fs: Fragments) =>
@@ -69,15 +73,37 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
       "List(Step, Step)",
       "List(Example(ex1), Example(ex2), SpecEnd(anon))").inOrder
     }
-    def step(message: String) = Step(selection.println(message))
   }
+
+  case class seq() extends WithSelection {
+    def e1 = {
+      val fragments: Fragments = sequential ^ example("e1") ^ step("s1") ^ example("e2")
+      select(fragments).toList.flatten.toString must_== "List(SpecStart(anon), Example(e1), Step, Example(e2), SpecEnd(anon))"
+    }
+    def e2 = {
+      val spec = new Specification { def is = sequential ^ example("e1") ^ step("s1") ^ example("e2") }
+      reporter.report(spec)(main.Arguments())
+      reporter.messages must contain("e1", "s1", "e2").inOrder
+    }
+  }
+
   val ex1 = "ex1" ! success
   val ex2 = "ex2" ! success
-  val selection = new DefaultSelection with MockOutput
-  
-  def select(f: Fragments) = {
-    val fs = new Specification { def is = f }.content
-    selection.select(f.arguments)(fs).map(l => l.fragments.map(_.toString))
+
+  trait WithSelection {
+    val selection = new DefaultSelection with MockOutput
+
+    def select(f: Fragments) = {
+      val fs = new Specification { def is = f }.content
+      selection.select(f.arguments)(fs).map(l => l.fragments.map(_.toString))
+    }
+    def step(message: String) = Step({selection.println(message); reporter.println(message)})
+    def example(message: String) = message ! { selection.println(message); reporter.println(message); success }
+    val reporter = new Reporter with DefaultSelection with DefaultExecutionStrategy with Exporting with MockOutput {
+      type ExportType = Unit
+
+      def export(s: SpecificationStructure)(implicit args: main.Arguments) = (fragments: Seq[ExecutedFragment]) => ()
+    }
   }
 
 }
