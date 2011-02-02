@@ -130,6 +130,7 @@ the value only. The available colors are:
 """ ^
   form("Colors").
     tr(field("name").bold.center, field("code").bold.center, field("color").bold.center).
+    tr(field("white"), field("#FFFFFF"), field("").bkWhite).
     tr(field("blue"), field("#1E90FF"), field("").bkBlue).
     tr(field("red"), field("#FF9999"), field("").bkRed).
     tr(field("green"), field("#CCFFCC"), field("").bkGreen).
@@ -186,6 +187,29 @@ And then you can use it like this:
                retrieve(123)                                /** actual address id */           ^
                                                                                                end
          }
+
+#### Embedding a Form into an Effect or a Prop
+
+When using Forms in specifications we can describe different levels of abstraction. If we consider the specification of
+a website for example, we want to be able to use a Form having 2 rows and describing the exact actions to do on the Login
+page:
+
+          val loginForm = Form("login").
+                          tr(effect("click on login", clickOn("login"))).
+                          tr(effect("enter name",     enter("name", "me"))).
+                          tr(effect("enter password", enter("password", "pw"))).
+                          tr(effect("submit", submit))
+
+However in a "purchase" scenario we want all the steps above to represent the login actions as just one step. One way to
+do this is to transform the login Form to an Effect or a Prop:
+
+          Form("purchase").
+          tr(loginForm.toEffect("login")).
+          tr(selectForm.toEffect("select goods")).
+          tr(checkTotalForm.toProp("the total must be computed ok"))
+
+When embedding the Form into an Effect, it will be executed and only Errors will be reported, whereas when embedding it
+in a Prop, the full Form will be displayed in case of a Failure.
 
 ### Aggregating forms
 Now that we've defined a form for a simple entity, let's see how we can reuse it with a larger entity:

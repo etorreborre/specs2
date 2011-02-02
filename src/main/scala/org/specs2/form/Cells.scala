@@ -150,8 +150,8 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
 
   def xml(implicit args: Arguments): NodeSeq = {
     val executed = result.getOrElse(skipped)
-    (<td>{p.decorateLabel(p.label)}</td> unless p.label.isEmpty) ++
-     <td class={executed.statusName}>{p.decorateValue(p.expected.map(_.toString).getOrElse(""))}</td> ++
+    (<td style={p.labelStyles}>{p.decorateLabel(p.label)}</td> unless p.label.isEmpty) ++
+     <td class={executed.statusName}>{p.decorateValue(p.expected.getOrElse(""))}</td> ++
     (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td> unless executed.isSuccess)
   }
 

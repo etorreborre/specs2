@@ -100,28 +100,25 @@ case class Prop[T, S](
 object Prop {
   /** create a Prop with a label and an expected value */
   def apply[T](label: String, actual: =>T): Prop[T, T] = {
-    lazy val a = actual
-    new Prop(label, Property(a), Property[T](), checkProp)
+    new Prop(label, Property(actual), Property[T](), checkProp)
   }
   /** create a Prop with a label, an expected value, and a constraint */
   def apply[T, S](label: String, act: =>T, c: (T, S) => Result) = {
-    lazy val a = act
-    new Prop[T, S](label, actual = Property(a), constraint = c)
+    new Prop[T, S](label, actual = Property(act), constraint = c)
   }
   /** create a Prop with a label, an expected value, and a constraint */
   def apply[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = {
-    lazy val a = act
-    new Prop[T, S](label, actual = Property(a), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
+    new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
   }
-  /** create a Prop with a label, an expected value, and a constraint */
-  def apply[T](label: String, act: =>T, c: Matcher[T]) = {
-    lazy val a = act
-    new Prop[T, String](label, actual = Property(a), constraint = (t: T, s: String) => c(Expectable(t)).toResult)("success")
+  /** create a Prop with a label, an actual value, and a matcher on the actual value */
+  def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, String] = Prop(label, act, "success", c)
+  /** create a Prop with a label, an actual value, an expected value, and a constraint on the actual value*/
+  def apply[T, S](label: String, act: =>T, exp: =>S, c: Matcher[T]): Prop[T, S] = {
+    new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(Expectable(t)).toResult)
   }
   /** create a Prop with an empty label and an actual value */
   def apply[T](act: =>T): Prop[T, T] = {
-    lazy val a = act
-    new Prop[T, T](actual = Property(a))
+    new Prop[T, T](actual = Property(act))
   }
   
   /** default constraint function */

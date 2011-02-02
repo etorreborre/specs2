@@ -137,7 +137,11 @@ case class Decorator(label: Any => Any = identity, value: Any => Any = identity,
   def colorLabel(c: String) = styleLabelWith("color"->c)
   def colorValue(c: String) = styleValueWith("color"->c)
 
-  def blue = color("#1E90FF")
+  def white      = color     ("#FFFFFF")
+  def whiteLabel = colorLabel("#FFFFFF")
+  def whiteValue = colorValue("#FFFFFF")
+
+  def blue      = color("#1E90FF")
   def blueLabel = colorLabel("#1E90FF")
   def blueValue = colorValue("#1E90FF")
 
@@ -152,6 +156,10 @@ case class Decorator(label: Any => Any = identity, value: Any => Any = identity,
   def yellow      = color("#FFFF99")
   def yellowLabel = colorLabel("#FFFF99")
   def yellowValue = colorValue("#FFFF99")
+
+  def bkWhite      = bkColor     ("#FFFFFF")
+  def bkWhiteLabel = bkColorLabel("#FFFFFF")
+  def bkWhiteValue = bkColorValue("#FFFFFF")
 
   def bkBlue = bkColor("#1E90FF")
   def bkBlueLabel = bkColorLabel("#1E90FF")

@@ -8,6 +8,7 @@ import xml.Nodex._
 import execute._
 import main.Arguments
 import StandardResults._
+import matcher.ResultMatchers
 
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
@@ -86,6 +87,31 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
   def sequence[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
     addLines(FormDiffs.sequence(f1.map(_.form), f2.map(_.form)))
   }
+
+  /**
+   * encapsulate this form into an effect
+   */
+  def toEffect(label: String) = Effect(label, executeForm)
+
+  /**
+   * encapsulate this form into a Prop
+   */
+  def toProp(label: String) = {
+    lazy val executed = executeForm
+    lazy val executedResult = executed.execute match {
+      case s @ Success(_)   => s
+      case Failure(_,_,_,_) => Failure("failed")
+      case Error(_,_)       => Error("error")
+      case other            => other
+    }
+    Prop[Form, Any](label, executed, (f: Form, s: Any) => executedResult) {
+      if (executedResult.isSuccess)
+        "success"
+      else
+        new FormCell(executed).xml(Arguments())
+    }
+  }
+
   private def addLines(fs: Seq[Form]) = fs.foldLeft(this) { (res, cur) =>  res.tr(cur) }
 
   override def equals(a: Any) = a match {
@@ -93,8 +119,9 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
     case _       => false
   }
 }
+
 /**
- * Companion object of a Form to create:
+ *  Companion object of a Form to create:
  *   * an empty Form
  *   * a Form with no rows but a title
  *   * a Form with no title but one row
