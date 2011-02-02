@@ -37,8 +37,8 @@ trait Nodex {
     def reduce = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ cur }
   }
 
-  implicit def unless(ns: NodeSeq) = UnlessEmpty(ns)
-  case class UnlessEmpty(ns: NodeSeq) {
+  implicit def unless(ns: =>NodeSeq): UnlessEmpty = new UnlessEmpty(ns)
+  class UnlessEmpty(ns: =>NodeSeq) {
     def unless(b: Boolean) = if (!b) ns else NodeSeq.Empty
   }
 }
