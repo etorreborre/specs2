@@ -32,6 +32,10 @@ trait DecoratedProperties {
     def colorLabel(c: String) = d.decoratorIs(d.decorator.colorLabel(c))
     def colorValue(c: String) = d.decoratorIs(d.decorator.colorValue(c))
 
+    def white      = d.decoratorIs(d.decorator.white)
+    def whiteLabel = d.decoratorIs(d.decorator.whiteLabel)
+    def whiteValue = d.decoratorIs(d.decorator.whiteValue)
+
     def blue      = d.decoratorIs(d.decorator.blue)
     def blueLabel = d.decoratorIs(d.decorator.blueLabel)
     def blueValue = d.decoratorIs(d.decorator.blueValue)
@@ -47,6 +51,14 @@ trait DecoratedProperties {
     def yellow      = d.decoratorIs(d.decorator.yellow)
     def yellowLabel = d.decoratorIs(d.decorator.yellowLabel)
     def yellowValue = d.decoratorIs(d.decorator.yellowValue)
+
+    def bkWhite      = d.decoratorIs(d.decorator.bkWhite)
+    def bkWhiteLabel = d.decoratorIs(d.decorator.bkWhiteLabel)
+    def bkWhiteValue = d.decoratorIs(d.decorator.bkWhiteValue)
+
+    def bkRed      = d.decoratorIs(d.decorator.bkRed)
+    def bkRedLabel = d.decoratorIs(d.decorator.bkRedLabel)
+    def bkRedValue = d.decoratorIs(d.decorator.bkRedValue)
 
     def bkBlue      = d.decoratorIs(d.decorator.bkBlue)
     def bkBlueLabel = d.decoratorIs(d.decorator.bkBlueLabel)
