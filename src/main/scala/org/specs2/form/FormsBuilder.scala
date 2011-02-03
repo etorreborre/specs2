@@ -92,6 +92,11 @@ trait FormsBuilder {
     lazy val a = actual
     Prop(label, a, c)
   }
+
+  /** @return a new Tabs object */
+  def tabs = new Tabs()
+  /** @return a new Tabs object with a first tab */
+  def tab(label: String, form: Form) = tabs.tab(label, form)
 }
 private[specs2]
 object FormsBuilder extends FormsBuilder

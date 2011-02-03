@@ -211,6 +211,23 @@ do this is to transform the login Form to an Effect or a Prop:
 When embedding the Form into an Effect, it will be executed and only Errors will be reported, whereas when embedding it
 in a Prop, the full Form will be displayed in case of a Failure.
 
+#### Using tabs
+
+If there are too many fields to be displayed on a Form you can use tabs:
+
+        "A person can have 2 addresses"                     ^
+          Form("Addresses").tr {
+            tab("home",
+              Address("Oxford St", 12).
+              fill("Oxford St", 12)).
+            tab("work",
+              Address("Rose Cr.", 3).
+              fill("Rose Cr.", 3))
+          }
+
+The first `tab` call will create a `Tabs` object containing the a first tab with "home" as the title and an Address form
+as its content. Then every subsequent `tab` calls on the `Tabs` object will create new tabs.
+
 ### Aggregating forms
 Now that we've defined a form for a simple entity, let's see how we can reuse it with a larger entity:
 

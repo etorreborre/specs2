@@ -4,20 +4,30 @@ import specification._
 import form._
 
 class FormSpec extends SpecificationWithJUnit with Forms { def is =                 
-                                                                                          """
+                                                                                                                        """
   This shows an example of forms in a specification.
   You can run this specification by executing `specs2.html org.specs2.examplesFormSpec`.
-  
+
   This will create a html file in the target/specs2-reports directory
-                                                                                          """^
-                                                                                          p^
- "A person object must have proper initials"                                              ^
-   person("Eric", "Torreborre", initials = "E.T.")                                        ^
-                                                                                          p^
- "The address should be as expected"                                                      ^
+                                                                                                                        """^
+                                                                                                                        p^
+ "A person object must have proper initials"                                                                            ^
+   person("Eric", "Torreborre", initials = "E.T.")                                                                      ^
+                                                                                                                        p^
+ "The address should be as expected"                                                                                    ^
    Address("Oxford St", 12).
-     fill("Oxford St", 12)                                                                ^
-                                                                                          end
+     fill("Oxford St", 12)                                                                                              ^
+                                                                                                                        p^
+ "A person can have 2 addresses"                                                                                        ^
+   Form("Addresses").tr {
+     tab("home",
+       Address("Oxford St", 12).
+       fill("Oxford St", 12)).
+     tab("work",
+       Address("Rose Cr.", 3).
+       fill("Rose Cr.", 3))
+   }                                                                                                                    ^
+                                                                                                                        end
                                                                                           
   def person(first: String, last: String, initials: String) =  
      Form("Person").
