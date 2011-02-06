@@ -25,8 +25,8 @@ trait Expectations {
     /** @return an expectable with an alias description, after the value string */
     def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
   }
-  implicit def canEqual[T](t: =>T) = new CanEqual(t)
-  class CanEqual[T](t: =>T) {
+  implicit def canBeEqual[T](t: =>T) = new CanBeEqual(t)
+  class CanBeEqual[T](t: =>T) {
     /** equality matcher on Expectables */
     def ===[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeEqualTo(other))
   }

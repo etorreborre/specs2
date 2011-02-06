@@ -16,7 +16,7 @@ import text.Quote._
  * value toString method and the additional description.
  *
  */
-class Expectable[+T] protected (private[specs2] val t: () => T) { outer =>
+class Expectable[+T](t: () => T) { outer =>
   /** the value is only evaluated if necessary */
   lazy val value = t()
   
