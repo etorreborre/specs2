@@ -91,9 +91,10 @@ class FormSpec extends SpecificationWithJUnit { def is =
  }
 
   object xhtml {
+    // count 3 per prop or field
     def e1 = new FormCell(Form.th("title").
       tr(field(1)).
       tr(field("n", "v"), field("n", "v")).
-      tr(prop("p", 1)(2))).colnumber must_== 4
+      tr(prop("p", 1)(2))).colnumber must_== 6
  }
 }
