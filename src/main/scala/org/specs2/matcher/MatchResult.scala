@@ -80,7 +80,7 @@ trait MatchResult[+T] {
 }
 case class MatchSuccess[T](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
   override def toResult = Success(okMessage)
-  def not: MatchResult[T] = MatchFailure(okMessage, koMessage, expectable)
+  def not: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 }
 case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Expectable[T], details: Details = NoDetails()) extends MatchResult[T] {
