@@ -25,8 +25,15 @@ trait FormsBuilder {
   /** a Prop can be added on a Form row as a PropCell */
   implicit def propsAreCell(t: Prop[_, _]) = new PropCell(t)
   /** a Form can be added on a Form row as a FormCell */
-  implicit def formsAreCell(t: Form) = new FormCell(t)
+  implicit def formsAreCell(t: Form): FormCell = new FormCell(t)
   implicit def formsAreExecutable(f: Form): Result = f.execute
+  /** a cell can be added lazily to a row. It will only be evaluated when necessary */
+  def asLazy(c: =>Cell) = new LazyCell(c)
+  /** the rows of a Form can be added as a cell */
+  implicit def toLazyRows(f: =>Form): LazyFormRows = new LazyFormRows(f)
+  class LazyFormRows(f: =>Form) {
+    def toRows = new LazyCell(new XmlCell(Form.titleAndRows(f.executeForm)))
+  }
 
   /** @return a new Form with the given title */
   def form(title: String) = Form(title)
