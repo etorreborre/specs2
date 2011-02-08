@@ -9,7 +9,7 @@ package form
 trait FormDiffs {
 
   def subset(form1: Seq[Form], form2: Seq[Form]): Seq[Form] = {
-    val intersection = form1 intersect form2
+    val intersection = form1.toSet intersect form2.toSet
     form1.map { f =>
       if  (intersection contains f)  f.setSuccess
       else f
@@ -31,11 +31,11 @@ trait FormDiffs {
       }
     } ++
     (rest drop form2.size) ++
-    (form2 diff form1).map(_.setFailure)
+    (form2.toSet diff form1.toSet).map(_.setFailure)
   }
 
   def set(form1: Seq[Form], form2: Seq[Form]): Seq[Form] = {
-    val intersection = form1 intersect form2
+    val intersection = form1.toSet intersect form2.toSet
     form1.collect { case f =>
       if  (intersection contains f)  f.setSuccess
       else f.setFailure
@@ -53,7 +53,7 @@ trait FormDiffs {
       }
     } ++
     (rest drop form2.size).map(_.setFailure) ++
-    (form2 diff form1).map(_.setFailure)
+    (form2.toSet diff form1.toSet).map(_.setFailure)
   }
 }
 object FormDiffs extends FormDiffs
