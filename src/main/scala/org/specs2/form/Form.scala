@@ -16,7 +16,7 @@ import matcher.ResultMatchers
  * 
  * A Form can be executed by executing each row and collecting the results.
  */
-case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Row])) extends Executable with Text {
+class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Row]),  val result: Option[Result] = None) extends Executable with Text {
 
   /** @return the labels of all rows to build a header for the form */
   def header: List[Cell] = if (rows.isEmpty) Nil else rows(0).header.flatten
@@ -42,20 +42,27 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
   }
   /** add the rows of a form */
   def tr(f: Form): Form = {
-    val oldRowsAndTitle = f.title.map(t => tr(new TextCell(t))).getOrElse(this).rows
-    new Form(title, oldRowsAndTitle ++ f.rows)
+    val oldRowsAndTitle = f.title.map(th(_)).getOrElse(this).rows
+    new Form(title, oldRowsAndTitle ++ f.rows, result)
   }
   
   /** 
    * execute all rows
    * @return a logical and on all results 
    */
-  def execute = rows.foldLeft(success: Result) { (res, cur) => res and cur.execute }
+  def execute = result getOrElse (executeForm.result getOrElse success)
+  def executeRows = rows.map(_.executeRow)
   /**
    * execute all rows
-   * @return a logical and on all results
+   * @return an executed Form
    */
-  def executeForm = Form(title, rows.map(_.executeRow))
+  def executeForm = {
+    if (result.isDefined) this
+    else {
+      val executedRows = executeRows
+      new Form(title, executedRows, Some(executedRows.foldLeft(success: Result) { (res, cur) => res and cur.execute }))
+    }
+  }
 
   /** @return the printed form with a padding space size to use for each cell */
   def padText(size: Option[Int]): String = new FormCell(this).padText(size)
@@ -128,11 +135,10 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
  *
  */
 case object Form {
-
   /** @return an empty form */
-  def apply() = new Form(None, Nil)
+  def apply() = new Form()
   /** @return an empty form with a title */
-  def apply(title: String) = new Form(Some(title), Nil)
+  def apply(title: String) = new Form(Some(title))
   /** @return a Form with one row */
   def tr(c1: Cell, c: Cell*) = new Form().tr(c1, c:_*)
   /** @return a Form with one row and cells formatted as header cells */
@@ -152,14 +158,23 @@ case object Form {
     val formStacktraces = stacktraces(form)
     <form>
       <table  class="dataTable">
-        {title(form, colnumber)}
-        {rows(form, colnumber)}
+        {titleAndRows(form)}
       </table>
       {<i>[click on failed cells to see the stacktraces]</i> unless formStacktraces.isEmpty}
       {formStacktraces}
     </form>
   }
-
+  /**
+   * This method creates an xml representation of a Form as an Html table rows,
+   * ready to be embedded in a table
+   *
+   * @return the xml representation of a Form
+   */
+  def titleAndRows(form: Form)(implicit args: Arguments = Arguments()) = {
+    val colnumber = new FormCell(form).colnumber
+    title(form, colnumber) ++
+    rows(form, colnumber)
+  }
   /**
    * Private methods for building the Form xml
    */
