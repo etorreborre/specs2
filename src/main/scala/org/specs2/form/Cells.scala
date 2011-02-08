@@ -71,7 +71,8 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
     val executedResult = execute
     (<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> unless f.label.isEmpty) ++
      <td class={statusName(executedResult)} style={f.valueStyles}>{f.decorateValue(executed)}</td> ++
-    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless executedResult.isSuccess)
+    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless
+      (executedResult.isSuccess || executedResult == failure))
   }
 
   private def statusName(r: Result) = r match {
@@ -185,5 +186,30 @@ class FormCell(form: =>Form) extends Cell {
   def setSuccess = new FormCell(form.setSuccess)
   def setFailure = new FormCell(form.setFailure)
   def stacktraces(implicit args: Arguments) = Form.stacktraces(form)(args)
+}
+
+/** Proxy to a cell that's not evaluated right away when added to a row */
+class LazyCell(_cell: =>Cell) extends Cell {
+  lazy val cell = _cell
+  def padText(size: Option[Int]): String = cell.padText(size)
+  def xml(implicit args: Arguments) = cell.xml(args)
+  def colnumber = cell.colnumber
+  def execute = cell.execute
+  def executeCell = cell.executeCell
+  override def header = cell.header
+  def setSuccess = cell.setSuccess
+  def setFailure = cell.setFailure
+  def stacktraces(implicit args: Arguments) = cell.stacktraces(args)
+}
+class XmlCell(_theXml: =>NodeSeq) extends Cell {
+  lazy val theXml = _theXml
+  def padText(size: Option[Int]): String = theXml.text
+  def xml(implicit args: Arguments) = theXml
+  def colnumber = 100
+  def execute = success
+  def executeCell = this
+  def setSuccess = this
+  def setFailure = this
+  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
 }
 
