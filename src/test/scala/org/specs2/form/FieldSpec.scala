@@ -4,7 +4,7 @@ package form
 class FieldSpec extends SpecificationWithJUnit { def is =
                                                                                           """
   A Field is a labelled property with can be embedded in a Form.
-                                                                                          """                                                               ^
+                                                                                          """^
   "A Field can be created"                                                                ^
     "from just a value (then its name is empty)"                                          ! creation.e1^
     "from a name and a value"                                                             ! creation.e2^

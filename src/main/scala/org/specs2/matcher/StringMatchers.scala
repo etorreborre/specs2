@@ -132,7 +132,6 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
     def contain(s: String) = result(outer.contain(s))
     def containing(s: String) = result(outer.contain(s))
     def length(n: Int) = result(haveLength(n))
-    def size(n: Int) = result(IterableMatchers.haveSize(n))
     def startWith(s: String) = result(outer.startWith(s))
     def endWith(s: String) = result(outer.endWith(s))
     def startingWith(s: String) = result(outer.startWith(s))
