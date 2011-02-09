@@ -21,7 +21,7 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   override def execute = {
     valueOrResult match {
       case Left(e)  => e
-      case Right(v) => success
+      case Right(v) => skipped
     }
   }
   def valueOrResult: Either[Result, T] = {

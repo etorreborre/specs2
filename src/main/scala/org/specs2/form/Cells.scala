@@ -72,7 +72,7 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
     (<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> unless f.label.isEmpty) ++
      <td class={statusName(executedResult)} style={f.valueStyles}>{f.decorateValue(executed)}</td> ++
     (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless
-      (executedResult.isSuccess || executedResult == failure))
+      !executedResult.isError)
   }
 
   private def statusName(r: Result) = r match {

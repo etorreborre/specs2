@@ -75,6 +75,14 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return true if the result is a Success instance
    */
   def isSuccess: Boolean = false
+  /**
+   * @return true if the result is an Error instance
+   */
+  def isError: Boolean = false
+  /**
+   * @return true if the result is a Failure instance
+   */
+  def isFailure: Boolean = false
 }
 /** 
  * This class represents the success of an execution
@@ -122,6 +130,7 @@ case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement
     }
   }
   override def hashCode = m.hashCode + e.hashCode
+  override def isFailure: Boolean = true
 }
 
 /**
@@ -145,6 +154,7 @@ case class Error(m: String, e: Exception)
     }
   }
   override def hashCode = m.hashCode
+  override def isError: Boolean = true
 }
 /** 
  * This object allows to create an Error from an exception
