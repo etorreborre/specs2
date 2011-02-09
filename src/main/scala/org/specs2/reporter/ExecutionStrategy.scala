@@ -29,8 +29,11 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
   def execute(implicit arguments: Arguments) = (fragments: Seq[FragmentSeq]) => {
     implicit val executor = Executors.newFixedThreadPool(arguments.threadsNb)
     try {
-      fragments.map { fs => 
-        fs.fragments.map(f => promise(executeFragment(arguments <| fs.arguments)(f))).sequence.get
+      fragments.map { fs =>
+        if (fs.fragments.size > 1)
+          fs.fragments.map(f => promise(executeFragment(arguments <| fs.arguments)(f))).sequence.get
+        else
+          fs.fragments.map(f => executeFragment(arguments <| fs.arguments)(f))
       }.flatten
     } finally {
       executor.shutdown()
