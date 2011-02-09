@@ -77,7 +77,6 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
 
   private def statusName(r: Result) = r match {
     case Skipped(_, _) => "info"
-    case Success(_)    => "info"
     case _             => r.statusName
   }
 
@@ -171,7 +170,9 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
 /**
  * Cell embedding a Form
  */
-class FormCell(form: =>Form) extends Cell {
+class FormCell(_form: =>Form) extends Cell {
+  lazy val form = _form
+
   /** ignore the passed size and compute the max size on each row */
   def padText(size: Option[Int]): String = {
     form.allRows.map(_.padText(form.maxSizes)).mkString("\n")
@@ -201,6 +202,7 @@ class LazyCell(_cell: =>Cell) extends Cell {
   def setFailure = cell.setFailure
   def stacktraces(implicit args: Arguments) = cell.stacktraces(args)
 }
+/** This cell can contain any xml */
 class XmlCell(_theXml: =>NodeSeq) extends Cell {
   lazy val theXml = _theXml
   def padText(size: Option[Int]): String = theXml.text

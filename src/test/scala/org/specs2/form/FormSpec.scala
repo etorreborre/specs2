@@ -3,7 +3,7 @@ package form
 import FormsBuilder._
 import specification._
 
-class FormSpec extends SpecificationWithJUnit { def is = 
+class FormSpec extends SpecificationWithJUnit { def is =
                                                                                           """
   A Form is a generic table which has a title (optional) and rows.
   Each row contains cells which can be created from Fields, Props or other Forms.
@@ -50,6 +50,9 @@ class FormSpec extends SpecificationWithJUnit { def is =
                                                                                           p^
   "Forms can be displayed as xhtml"                                                       ^
     "the title must span all columns"                                                     ! xhtml.e1^
+                                                                                          p^
+  "A form can be added to another"                                                        ^
+      "inlined"                                                                           ! nested.e1^
                                                                                           end
                                                                                
   object creation {
@@ -96,5 +99,20 @@ class FormSpec extends SpecificationWithJUnit { def is =
       tr(field(1)).
       tr(field("n", "v"), field("n", "v")).
       tr(prop("p", 1)(2))).colnumber must_== 6
- }
+  }
+
+  object nested {
+    def e1 = Form("title").
+             tr(Form.tr("hello").inline).toXml must ==/(
+              <form>
+               <table class="dataTable">
+                 <tr><th colspan="4">title</th></tr>
+                 <tr>
+                   <td colspan="3">
+                     <tr><td class="success" style="" colspan="3">hello</td></tr>
+                   </td>
+                 </tr>
+               </table>
+              </form>)
+  }
 }

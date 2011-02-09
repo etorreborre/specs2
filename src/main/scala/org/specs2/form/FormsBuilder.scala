@@ -18,6 +18,8 @@ trait FormsBuilder {
   implicit def anyAreField[T](t: =>T) = Field(t)
   /** anything can be added on a Form row as a TextCell */
   implicit def anyAreFieldCell[T](t: =>T) = fieldsAreTextCell(Field(t))
+  /** any xml can be injected as a cell */
+  implicit def xmlIsACell[T](xml: =>NodeSeq) = new XmlCell(xml)
   /** a Field can be added on a Form row as a FieldCell */
   implicit def fieldsAreTextCell[T](t: Field[T]) = new FieldCell(t)
   /** a Effect can be added on a Form row as a EffectCell */
@@ -25,15 +27,10 @@ trait FormsBuilder {
   /** a Prop can be added on a Form row as a PropCell */
   implicit def propsAreCell(t: Prop[_, _]) = new PropCell(t)
   /** a Form can be added on a Form row as a FormCell */
-  implicit def formsAreCell(t: Form): FormCell = new FormCell(t)
+  implicit def formsAreCell(t: =>Form): FormCell = new FormCell(t)
   implicit def formsAreExecutable(f: Form): Result = f.execute
   /** a cell can be added lazily to a row. It will only be evaluated when necessary */
-  def asLazy(c: =>Cell) = new LazyCell(c)
-  /** the rows of a Form can be added as a cell */
-  implicit def toLazyRows(f: =>Form): LazyFormRows = new LazyFormRows(f)
-  class LazyFormRows(f: =>Form) {
-    def toRows = new LazyCell(new XmlCell(Form.titleAndRows(f.executeForm)))
-  }
+  def lazyfy(c: =>Cell) = new LazyCell(c)
 
   /** @return a new Form with the given title */
   def form(title: String) = Form(title)

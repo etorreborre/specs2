@@ -27,10 +27,13 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   /** @return the maximum cell size, column by column */
   lazy val maxSizes = allRows.map(_.cells).safeTranspose.map(l => l.map(_.text.size).max[Int])
 
+  /** @return a new Form. This method can be overriden to return a more accurate subtype */
+  protected def newForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) =
+    new Form(title, rows, result)
   /** @return a Form where every Row is executed with a Success */
-  def setSuccess = new Form(title, rows.map(_.setSuccess))
+  def setSuccess = newForm(title, rows.map(_.setSuccess), Some(success))
   /** @return a Form where every Row is executed with a Failure */
-  def setFailure = new Form(title, rows.map(_.setFailure))
+  def setFailure = newForm(title, rows.map(_.setFailure), Some(failure))
 
   /** add a new Header, with at least one Field */
   def th(h1: Field[_], hs: Field[_]*): Form = tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*)
@@ -38,15 +41,16 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_)):_*)
   /** add a new Row, with at least one Cell */
   def tr(c1: Cell, cs: Cell*): Form = {
-    new Form(title, this.rows :+ Row.tr(c1, cs:_*))
+    newForm(title, this.rows :+ Row.tr(c1, cs:_*), result)
   }
+
   /** add the rows of a form */
-  def tr(f: Form): Form = {
+  private def addRows(f: Form): Form = {
     val oldRowsAndTitle = f.title.map(th(_)).getOrElse(this).rows
-    new Form(title, oldRowsAndTitle ++ f.rows, result)
+    newForm(title, oldRowsAndTitle ++ f.rows, result)
   }
-  
-  /** 
+
+  /**
    * execute all rows
    * @return a logical and on all results 
    */
@@ -60,7 +64,7 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
     if (result.isDefined) this
     else {
       val executedRows = executeRows
-      new Form(title, executedRows, Some(executedRows.foldLeft(success: Result) { (res, cur) => res and cur.execute }))
+      newForm(title, executedRows, Some(executedRows.foldLeft(success: Result) { (res, cur) => res and cur.execute }))
     }
   }
 
@@ -119,7 +123,12 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
     }
   }
 
-  private def addLines(fs: Seq[Form]) = fs.foldLeft(this) { (res, cur) =>  res.tr(cur) }
+  /**
+   * transform this form to a form that will be added as a <td> element inside another form
+   */
+  def inline: InlinedForm = new InlinedForm(title, rows, result)
+
+  private def addLines(fs: Seq[Form]) = fs.foldLeft(this) { (res, cur) =>  res.addRows(cur) }
 
   override def equals(a: Any) = a match {
     case f: Form => f.title == title && rows == f.rows
@@ -154,14 +163,11 @@ case object Form {
    * @return the xml representation of a Form
    */
   def toXml(form: Form)(implicit args: Arguments) = {
-    val colnumber = new FormCell(form).colnumber
-    val formStacktraces = stacktraces(form)
     <form>
       <table  class="dataTable">
         {titleAndRows(form)}
       </table>
-      {<i>[click on failed cells to see the stacktraces]</i> unless formStacktraces.isEmpty}
-      {formStacktraces}
+      {formStacktraces(form)}
     </form>
   }
   /**
@@ -174,6 +180,16 @@ case object Form {
     val colnumber = new FormCell(form).colnumber
     title(form, colnumber) ++
     rows(form, colnumber)
+  }
+  /**
+   * This method creates a div to display the exceptions of a form
+   * ready to be embedded in a table
+   *
+   */
+  def formStacktraces(form: Form)(implicit args: Arguments = Arguments()) = {
+    val traces = stacktraces(form)
+    (<i>[click on failed cells to see the stacktraces]</i> unless traces.isEmpty) ++
+    traces
   }
   /**
    * Private methods for building the Form xml
@@ -201,4 +217,11 @@ case object Form {
   private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq   = row.cells.map(stacktraces(_)(args)).reduce
   private def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell.stacktraces(args)
 
+}
+
+class InlinedForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) extends Form(title, rows, result) {
+  /** @return an xml description of this form */
+  override def toXml(implicit args: Arguments = Arguments()) = <div>{Form.titleAndRows(this)(args) ++ Form.formStacktraces(this)(args) }</div>
+  override protected def newForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) =
+    new InlinedForm(title, rows, result)
 }
