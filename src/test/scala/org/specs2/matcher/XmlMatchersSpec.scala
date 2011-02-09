@@ -3,75 +3,82 @@ package matcher
 import scala.xml._
 import execute.Result
 
-class XmlMatchersSpec extends SpecificationWithJUnit { def is =
-
-  "A equals ignore spaces matcher should"                                                 ^
-    "match nodes, even if there are spaces"                                               ^
-    { <a><b/></a> must ==/(<a> <b/></a>) }                                                ^
-    "have an beEqualToIgnoringSpace as an alias"                                          !
-    { <a><b/></a> must beEqualToIgnoringSpace(<a> <b/></a>) }                             ^
-                                                                                          p^
-    "match if the nodes are not in the same order"                                        ^
-    { <a><b/><c/></a> must ==/(<a> <c/><b/></a>) }                                        ^
-    "provide a way to specify that the comparison should be ordered"                      ^
-    { <a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered }                               ^
-                                                                                          p^
-    "fail if 2 nodes are not equal, even ignoring spaces"                                 ! eis().fail1^
-    "fail if 2 nodes are a Text and an Atom with different data"                          ! eis().fail2^
-                                                                                          p^
-    "provide be + matchers forms"                                                         ^
-    { <a><b/></a> must be equalToIgnoringSpace(<a> <b/></a>) }                            ^
-    { <a><b/></a> must be ==/(<a> <b/></a>) }                                             ^
-    { <a><b/></a> must not be ==/(<b></b>) }                                              ^
-                                                                                          endp^
-  "A \\ matcher should match if a node is a direct child of another"                      ^
-    { <a><b/></a> must \("b") }                                                           ^
-    { <a><b></b></a> must \("b") }                                                        ^
-    { <a><b><c></c></b></a> must \(<b><c></c></b>) }                                      ^t^
-    "checking attribute names"                                                            ^
-    { <a><b name="value"></b></a> must \("b", "name") }                                   ^
-    { <a><b name="value" name2="value"></b></a> must \("b", "name2", "name") }            ^bt^
-    "checking attribute values"                                                           ^
-    { <a><b name="value"></b></a> must \("b", "name"->"value") }                          ^
-    { <a><b n="v" n2="v2" n3="v3"></b></a> must \("b", "n"->"v", "n2"->"v2") }            ^
-                                                                                          endp^
-  "A \\ matcher should not match a node"                                                  ^
-    "when the source has no children"                                                     ! firstChild().fail1^
-    "when the searched node is not a direct child"                                        ! firstChild().fail2^
-    "when an attribute name is missing"                                                   ! firstChild().fail3^
-    "when the attribute is ok, but the value is ko"                                       ! firstChild().fail4^
-    "when the attribute is ko, but the value is ok"                                       ! firstChild().fail5^
-    "when the attribute is ko, and the value is ko"                                       ! firstChild().fail6^
-    "when matching exactly and an attribute is missing"                                   ! firstChild().fail7^
-    "when the searched node contains unmatching nodes"                                    ! firstChild().fail8^
-                                                                                          endp^
-  "A \\\\ matcher should match if a node is a nested child of another"                    ^
-    { <a></a> must \\("a") }                                                              ^
-    { <a><b/></a> must \\("b") }                                                          ^
-    { <a><b></b></a> must \\("b") }                                                       ^
-    { <a><b><c></c></b></a> must \\(<b><c></c></b>) }                                     ^
-    { <a><s><c></c></s></a> must \\("c") }                                                ^t^
-    "checking attribute names"                                                            ^
-    { <a><b name="value"></b></a> must \\("b", "name") }                                  ^
-    { <a><b name="value" name2="value"></b></a> must \\("b", "name2", "name") }           ^bt^
-    "checking attribute values"                                                           ^
-    { <a><b name="value"></b></a> must \\("b", "name"->"value") }                         ^
-    { <a><b n="v" n2="v2" n3="v3"></b></a> must \\("b", "n"->"v", "n2"->"v2") }           ^
-                                                                                          endp^
-  "A \\\\ matcher should not match a node"                                                ^
-    "when an attribute name is missing"                                                   ! deepChild().fail3^
-    "when the attribute is ok, but the value is ko"                                       ! deepChild().fail4^
-    "when the attribute is ko, but the value is ok"                                       ! deepChild().fail5^
-    "when the attribute is ko, and the value is ko"                                       ! deepChild().fail6^
-    "when matching exactly and an attribute is missing"                                   ! deepChild().fail7^
-    "when the searched node contains unmatching nodes"                                    ! deepChild().fail8^
-    "when it doesn't contain the same text"                                               ! deepChild().fail9^
-    "when it doen't contain the same text even when one is an Atom and the other a Text"  ! deepChild().fail10^
-                                                                                          end^
-                                                                                          end
+class XmlMatchersSpec extends SpecificationWithJUnit { def is = 
+  "A equals ignore spaces matcher should"                                                                               ^
+    "match nodes, even if there are spaces"                                                                             ^
+    { <a><b/></a> must ==/(<a> <b/></a>) }                                                                              ^
+    "have an beEqualToIgnoringSpace as an alias"                                                                        !
+    { <a><b/></a> must beEqualToIgnoringSpace(<a> <b/></a>) }                                                           ^
+                                                                                                                        p^
+    "match if the nodes are not in the same order"                                                                      ^
+    { <a><b/><c/></a> must ==/(<a> <c/><b/></a>) }                                                                      ^
+    "provide a way to specify that the comparison should be ordered"                                                    ^
+    { <a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered }                                                             ^
+                                                                                                                        p^
+    "match if there are newlines"                                                                                       ! eis().e1^
+    "match if attributes are not in the right order"                                                                    ! eis().e2^
+    "fail if 2 nodes are not equal, even ignoring spaces"                                                               ! eis().fail1^
+    "fail if 2 nodes are a Text and an Atom with different data"                                                        ! eis().fail2^
+                                                                                                                        p^
+    "provide be + matchers forms"                                                                                       ^
+    { <a><b/></a> must be equalToIgnoringSpace(<a> <b/></a>) }                                                          ^
+    { <a><b/></a> must be ==/(<a> <b/></a>) }                                                                           ^
+    { <a><b/></a> must not be ==/(<b></b>) }                                                                            ^
+                                                                                                                        endp^
+  "A \\ matcher should match if a node is a direct child of another"                                                    ^
+    { <a><b/></a> must \("b") }                                                                                         ^
+    { <a><b></b></a> must \("b") }                                                                                      ^
+    { <a><b><c></c></b></a> must \(<b><c></c></b>) }                                                                    ^t^
+    "checking attribute names"                                                                                          ^
+    { <a><b name="value"></b></a> must \("b", "name") }                                                                 ^
+    { <a><b name="value" name2="value"></b></a> must \("b", "name2", "name") }                                          ^bt^
+    "checking attribute values"                                                                                         ^
+    { <a><b name="value"></b></a> must \("b", "name"->"value") }                                                        ^
+    { <a><b n="v" n2="v2" n3="v3"></b></a> must \("b", "n"->"v", "n2"->"v2") }                                          ^
+                                                                                                                        endp^
+  "A \\ matcher should not match a node"                                                                                ^
+    "when the source has no children"                                                                                   ! firstChild().fail1^
+    "when the searched node is not a direct child"                                                                      ! firstChild().fail2^
+    "when an attribute name is missing"                                                                                 ! firstChild().fail3^
+    "when the attribute is ok, but the value is ko"                                                                     ! firstChild().fail4^
+    "when the attribute is ko, but the value is ok"                                                                     ! firstChild().fail5^
+    "when the attribute is ko, and the value is ko"                                                                     ! firstChild().fail6^
+    "when matching exactly and an attribute is missing"                                                                 ! firstChild().fail7^
+    "when the searched node contains unmatching nodes"                                                                  ! firstChild().fail8^
+                                                                                                                        endp^
+  "A \\\\ matcher should match if a node is a nested child of another"                                                  ^
+    { <a></a> must \\("a") }                                                                                            ^
+    { <a><b/></a> must \\("b") }                                                                                        ^
+    { <a><b></b></a> must \\("b") }                                                                                     ^
+    { <a><b><c></c></b></a> must \\(<b><c></c></b>) }                                                                   ^
+    { <a><s><c></c></s></a> must \\("c") }                                                                              ^t^
+    "checking attribute names"                                                                                          ^
+    { <a><b name="value"></b></a> must \\("b", "name") }                                                                ^
+    { <a><b name="value" name2="value"></b></a> must \\("b", "name2", "name") }                                         ^bt^
+    "checking attribute values"                                                                                         ^
+    { <a><b name="value"></b></a> must \\("b", "name"->"value") }                                                       ^
+    { <a><b n="v" n2="v2" n3="v3"></b></a> must \\("b", "n"->"v", "n2"->"v2") }                                         ^
+                                                                                                                        endp^
+  "A \\\\ matcher should not match a node"                                                                              ^
+    "when an attribute name is missing"                                                                                 ! deepChild().fail3^
+    "when the attribute is ok, but the value is ko"                                                                     ! deepChild().fail4^
+    "when the attribute is ko, but the value is ok"                                                                     ! deepChild().fail5^
+    "when the attribute is ko, and the value is ko"                                                                     ! deepChild().fail6^
+    "when matching exactly and an attribute is missing"                                                                 ! deepChild().fail7^
+    "when the searched node contains unmatching nodes"                                                                  ! deepChild().fail8^
+    "when it doesn't contain the same text"                                                                             ! deepChild().fail9^
+    "when it doen't contain the same text even when one is an Atom and the other a Text"                                ! deepChild().fail10^
+                                                                                                                        end
 
   case class eis() {
-    def fail1 = (<a><b/></a> must ==/(<a> <c/></a>)) returns 
+    def e1 = <a> <b/></a> must ==/ {<a>
+               <b/>
+
+             </a>}
+
+    def e2 = <a><b n1="n1" n2="n2"/></a> must ==/(<a><b n2="n2" n1="n1"/></a>)
+
+    def fail1 = (<a><b/></a> must ==/(<a> <c/></a>)) returns
                 "'<a><b></b></a>' is not equal to '<a> <c></c></a>'"
     def fail2 = (new Atom("hello").toSeq aka "the seq" must ==/(new Text("world").toSeq)) returns 
                 "the seq 'hello' is not equal to 'world'"

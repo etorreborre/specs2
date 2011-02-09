@@ -49,7 +49,8 @@ trait NodeFunctions extends control.Debug {
       (n1.takeWhile(isAtom), n2) match { 
          case (Nil, _) => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
          case (atoms, (n2: Text) :: rest2) => {
-           atoms.mkString.trim == n2.toString.trim && iterableComparison(NodeSeq.fromSeq(n1.dropWhile(isAtom)), NodeSeq.fromSeq(rest2))
+           atoms.mkString.trim == n2.toString.trim &&
+           iterableComparison(NodeSeq.fromSeq(n1.dropWhile(isAtom)), NodeSeq.fromSeq(rest2))
          }
          case _ => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
       } 
@@ -62,7 +63,7 @@ trait NodeFunctions extends control.Debug {
       case (n1: Atom[_], n2:Text) => n1.text.trim == n2.text.trim
       case (n1: Node, n2:Node) => (isSpaceNode(n1) && isSpaceNode(n2)) ||
                                   n1.prefix == n2.prefix && 
-                                  n1.attributes.toSet == n2.attributes.toSet && 
+                                  n1.attributes.toSet.map((n:MetaData) => (n.key, n.value.mkString(","))) == n2.attributes.toSet.map((n:MetaData) => (n.key, n.value.mkString(","))) &&
                                   n1.label == n2.label &&
                                   compareChildren(n1.child.toList.filter(!isSpaceNode(_)), n2.child.toList.filter(!isSpaceNode(_)))
       case (n1: NodeSeq, n2: NodeSeq) => iterableComparison(n1.filter(!isSpaceNode(_)), n2.filter(!isSpaceNode(_)))
