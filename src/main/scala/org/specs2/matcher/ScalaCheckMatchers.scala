@@ -29,32 +29,29 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
   }
   /** 
    * execute a Function returning a MatchResult as a ScalaCheck property
-   * This implicit is only added because the most powerful type inference of the check method 
-   * defined hereafter doesn't work and check has to be used explicitly in the case
-   * where the input type of the function is different from the MatchResult type
    */
   implicit def checkResult[T](result: T => MatchResult[T])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	  checkProp(result.forAll(a, s))(p)
+    checkProp(result.forAll(a, s))(p)
   }
-  /** 
+  /**
    * execute a Function returning a MatchResult as a ScalaCheck property
    * this must be used when the input type of the function is different from the MatchResult type
    */
-  implicit def check[T, S](result: T => MatchResult[S])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
-	   checkProp(result.forAll(a, s))(p)
+  def check[T](result: T => MatchResult[_])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
+    checkProp(result.forAll(a, s))(p)
   }
-  implicit def check[T1, T2, S](result: Function2[T1, T2, MatchResult[S]])
+  implicit def check2[T1, T2, S](result: Function2[T1, T2, MatchResult[S]])
     (implicit 
         a1: Arbitrary[T1], s1: Shrink[T1], 
         a2: Arbitrary[T2], s2: Shrink[T2], 
         p: Parameters): execute.Result = {
      checkProp(asProperty(result))(p)
   }
-  implicit def check[T1, T2, T3, S](result: Function3[T1, T2, T3, MatchResult[S]])
-    (implicit 
-        a1: Arbitrary[T1], s1: Shrink[T1], 
-        a2: Arbitrary[T2], s2: Shrink[T2], 
-        a3: Arbitrary[T3], s3: Shrink[T3], 
+  implicit def check3[T1, T2, T3, S](result: Function3[T1, T2, T3, MatchResult[S]])
+    (implicit
+        a1: Arbitrary[T1], s1: Shrink[T1],
+        a2: Arbitrary[T2], s2: Shrink[T2],
+        a3: Arbitrary[T3], s3: Shrink[T3],
         p: Parameters): execute.Result = {
      checkProp(asProperty(result))(p)
   }
