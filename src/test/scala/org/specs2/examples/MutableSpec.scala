@@ -53,8 +53,8 @@ class MutableSpec extends SpecificationWithJUnit {
   // you can include other specifications with `include`
   include(new HelloWorldSpec)
 
-  // an action to execute after the specification must be declared after all examples
-  action {
+  // a step to execute after the specification must be declared at the end
+  step {
     // close the database here
     success
   }
