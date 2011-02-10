@@ -22,7 +22,9 @@ import specification._
  * of Description objects and a Map relating each Description to a Fragment to execute. 
  *
  */
-class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
+class JUnitRunner(klass: Class[_]) extends Runner {
+
+  private val executor = new FragmentExecution {}
   
   /** specification to execute */
   protected lazy val specification = tryToCreateObject[BaseSpecification](klass.getName, true, true).get
@@ -42,9 +44,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with FragmentExecution {
    */
   def run(notifier: RunNotifier) {
 	  executions.toStream.collect { 
-	    case (desc, f @ Example(_, _)) => (desc, executeFragment(Arguments())(f)) 
-      case (desc, f @ Text(_))       => (desc, executeFragment(Arguments())(f))
-      case (desc, f @ Step(_))       => (desc, executeFragment(Arguments())(f))
+	    case (desc, f @ Example(_, _)) => (desc, executor.executeFragment(Arguments())(f))
+      case (desc, f @ Text(_))       => (desc, executor.executeFragment(Arguments())(f))
+      case (desc, f @ Step(_))       => (desc, executor.executeFragment(Arguments())(f))
 	  }.
 	    foreach {
 	   	  case (desc, ExecutedResult(_, result, timer)) => {

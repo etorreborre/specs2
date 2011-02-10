@@ -104,7 +104,7 @@ object Prop {
   }
   /** create a Prop with a label, an expected value, and a constraint */
   def apply[T, S](label: String, act: =>T, c: (T, S) => Result) = {
-    new Prop[T, S](label, actual = Property(act), constraint = (t, s) => c(t, s))
+    new Prop[T, S](label, actual = Property(act), constraint = c)
   }
   /** create a Prop with a label, an expected value, and a constraint */
   def apply[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = {

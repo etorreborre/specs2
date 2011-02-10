@@ -35,15 +35,6 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
   /** match if iterable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String): ContainLikeMatcher[T] = containLike[T](".*"+t+".*", "match")
 
-  /** match if iterable has size n */
-  def haveSize[T <% { def size: Int }](n: Int) = new Matcher[T] {
-    def apply[S <: T](iterable: Expectable[S]) = {
-      result(iterable.value.size == n,
-             iterable.description + " have size " + n,
-             iterable.description + " doesn't have size " + n + " but size " + iterable.value.size, iterable)
-    }
-  }
-  
   /**
    * Matches if there is one element in the iterable verifying the <code>function</code> parameter: <code>(iterable.exists(function(_))</code>
    */
@@ -63,6 +54,30 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
 
   private def containLike[T](pattern: =>String, matchType: String) =
     new ContainLikeMatcher[T](pattern, matchType) 
+
+  /** match if there is a way to size T */
+  def haveSize[T : Sized](n: Int) = new Matcher[T] {
+    def apply[S <: T](iterable: Expectable[S]) = {
+      val s = implicitly[Sized[T]]
+      val valueSize = s.size(iterable.value)
+      result(valueSize == n,
+             iterable.description + " have size " + n,
+             iterable.description + " doesn't have size " + n + " but size " + valueSize, iterable)
+    }
+  }
+
+  implicit def scalaTraversableIsSized[I <: TraversableOnce[_]] = new Sized[I] {
+    def size(t: I) = t.size
+  }
+  implicit def stringIsSized: Sized[String] = new Sized[String] {
+    def size(t: String) = t.size
+  }
+  implicit def javaCollectionIsSized[T <: java.util.Collection[_]]  = new Sized[T] {
+    def size(t: T) = t.size()
+  }
+  trait Sized[T] {
+    def size(t: T) : Int
+  }
 }
 
 private[specs2]
@@ -72,7 +87,10 @@ trait IterableBeHaveMatchers extends LazyParameters { outer: IterableMatchers =>
     def contain(t: LazyParameter[T], ts: LazyParameter[T]*) = new ContainMatchResult(s, outer.contain((t +: ts):_*))
     def containMatch(t: =>String) = s.apply(outer.containMatch(t))
     def containPattern(t: =>String) = s.apply(outer.containPattern(t))
-    def size(n: Int) = s.apply(outer.haveSize(n))
+  }
+  implicit def sized[T : Sized](s: MatchResult[T]) = new HasSize(s)
+  class HasSize[T : Sized](s: MatchResult[T]) {
+    def size(n: Int) : MatchResult[T] = s.apply(outer.haveSize[T](n))
   }
 }
 class ContainMatchResult[T](val s: MatchResult[Iterable[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
