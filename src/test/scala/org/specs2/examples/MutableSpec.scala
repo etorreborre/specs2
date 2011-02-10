@@ -11,7 +11,7 @@ import execute.Success
 class MutableSpec extends SpecificationWithJUnit {
   // arguments are simply declared at the beginning of the specification if needed
   args(xonly=true)
-  // a step to execute before the specification must be declared before any example
+  // a step to execute before the specification must be declared first
   step {
     // setup database here
     success
