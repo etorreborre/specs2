@@ -3,22 +3,22 @@ package form
 import FormsBuilder._
 
 class FormTextSpec extends SpecificationWithJUnit { def is = 
-                                                                                          """
+                                                                                                                        """
   Forms can be displayed as text in the ConsoleReporter for example.
   This specification shows what's expected for different kind of forms.
-                                                                                          """^
-  "A simple form with 2 fields" + address1                                                ^
-    "must align each end of row"                                                          !e1^
-                                                                                          p^
-  "A simple form with 3 fields, 2 on one row and one on the second row\n"+address2        ^
-    "must align each end of row"                                                          !e2^  
-                                                                                          p^
-  "A form with more fields and rows" + address3                                             ^
-    "must align each end of row"                                                          !e3^  
-                                                                                          p^
-  "A form with an embedded form" + address4                                               ^
-    "must align each end of row"                                                          !e4^  
-                                                                                          end
+                                                                                                                        """^
+  "A simple form with 2 fields" + address1                                                                              ^
+    "must align each end of row"                                                                                        !e1^
+                                                                                                                        p^
+  "A simple form with 3 fields, 2 on one row and one on the second row\n"+address2                                      ^
+    "must align each end of row"                                                                                        !e2^
+                                                                                                                        p^
+  "A form with more fields and rows" + address3                                                                           ^
+    "must align each end of row"                                                                                        !e3^
+                                                                                                                        p^
+  "A form with an inlined form" + address4                                                                              ^
+    "must align each end of row"                                                                                        !e4^
+                                                                                                                        end
   val street = field("street", "Rose Crescent")
   val number = field("number", 2)
   val town = field("town", "Mosman")
@@ -40,7 +40,7 @@ class FormTextSpec extends SpecificationWithJUnit { def is =
 
   val address4 = quote(Form.
                        tr(town).
-                       tr(address).text)
+                       tr(address.inline).text)
 
   def e1 = compare(address1, 
            "| Address               |",                                                                                            

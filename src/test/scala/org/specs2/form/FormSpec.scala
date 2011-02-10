@@ -105,14 +105,9 @@ class FormSpec extends SpecificationWithJUnit { def is =
     def e1 = Form("title").
              tr(Form.tr("hello").inline).toXml must ==/(
               <form>
-               <table class="dataTable">
-                 <tr><th colspan="4">title</th></tr>
-                 <tr>
-                   <td colspan="3">
-                     <tr><td class="success" style="" colspan="3">hello</td></tr>
-                   </td>
-                 </tr>
-               </table>
+                <table class="dataTable">
+                  <tr><th colspan="4">title</th></tr><tr><div colspan="3"><tr><td style="" class="info" colspan="3">hello</td></tr></div></tr>
+                </table>
               </form>)
   }
 }

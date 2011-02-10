@@ -1,5 +1,6 @@
 package org.specs2
 package form
+import execute._
 
 class FieldSpec extends SpecificationWithJUnit { def is =
                                                                                           """
@@ -11,15 +12,17 @@ class FieldSpec extends SpecificationWithJUnit { def is =
     "from existing fields, concatenating them"                                            ! creation.e3^
                                                                                           p^ 
   "A Field can be executed"                                                               ^
-    "it returns a Success"                                                                ! execute.e1^
-                                                                                          p^ 
+    "it returns skipped if the value is ok"                                               ! execute.e1^
+    "it returns an error if the value throws an exception"                                ! execute.e2^
+                                                                                          p^
   "A Field can be modified"                                                               ^
     "to a string Field"                                                                   ! modify.e1^
                                                                                           end
 
   val name = Field("name", "eric")
   val age = Field("age", 18)
-  
+  val ageError = Field("age", {error("error"); 18})
+
   case object creation {
     def e1 = Field(18).label must_== ""
     def e2 = age() must_== 18 
@@ -28,7 +31,8 @@ class FieldSpec extends SpecificationWithJUnit { def is =
     }
   }
   case object execute {
-    def e1 = age.execute must_== success
+    def e1 = age.execute must_== skipped
+    def e2 = ageError.execute must be like { case Error(_, _) => ok }
   }
   case object modify {
     def e1 = age.toStringField() must_== "18"

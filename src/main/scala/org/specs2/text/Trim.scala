@@ -30,6 +30,7 @@ trait Trim extends control.Debug {
     def removeEnd(end: String) =
       if (s.endsWith(end)) s.dropRight(end.size)  else s
 
+    def removeEnclosing(toRemove: String) = removeStart(toRemove).removeEnd(toRemove)
 	  def removeEnclosing(start: String, end: String) = removeStart(start).removeEnd(end)
 
 	  def removeEnclosingXmlTag(t: String) = removeFirst("<"+t+".*?>").trimEnd("</"+t+">")

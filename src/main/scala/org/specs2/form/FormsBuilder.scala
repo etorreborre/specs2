@@ -48,57 +48,39 @@ trait FormsBuilder {
   }
 
   /** @return a new Field with no label and a value */
-  def field[T](value: =>T): Field[T] = {
-    lazy val v = value
-    Field(v)
-  }
+  def field[T](value: =>T): Field[T] = Field(value)
+
   /** @return a new Field with a label and a value */
-  def field[T](label: String, value: =>T): Field[T] = {
-    lazy val v = value
-    Field(label, v)
-  }
+  def field[T](label: String, value: =>T): Field[T] = Field(label, value)
+
   /** @return a new EffectCell with a label and a value */
-  def effect[T](label: String, value: =>T): Effect[T] = {
-    lazy val v = value
-    Effect(label, v)
-  }
+  def effect[T](label: String, value: =>T): Effect[T] = Effect(label, value)
+
   /** @return a new Field with a label and several values */
   def field(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, value1, values:_*)
   
   /** @return a new Prop with an actual value only */
-  def prop[T](act: =>T) = {
-    lazy val a = act
-    new Prop[T, T](actual = Property(act))
-  }
+  def prop[T](act: =>T) = new Prop[T, T](actual = Property(act))
+
   /** @return a new Prop with a label and an actual value only */
-  def prop[T](label: String, actual: =>T): Prop[T, T] = {
-    lazy val a = actual
-    Prop[T](label, a)
-  }
+  def prop[T](label: String, actual: =>T): Prop[T, T] = Prop[T](label, actual)
+
   /** @return a new Prop with a label, an actual value and expected value */
-  def prop[T, S](label: String, actual: =>T, exp: =>S) = {
-    lazy val a = actual
-    lazy val e = exp
-    new Prop[T, S](label, new Property(() => Some(a)), new Property(() => Some(e)))
-  }
+  def prop[T, S](label: String, actual: =>T, exp: =>S) =
+    new Prop[T, S](label, new Property(() => Some(actual)), new Property(() => Some(exp)))
+
   /** @return a new Prop with a label, an actual value and a constraint to apply to values */
-  def prop[T, S](label: String, actual: =>T, c: (T, S) => Result) = {
-    lazy val a = actual
-    Prop(label, a, c)
-  }
+  def prop[T, S](label: String, actual: =>T, c: (T, S) => Result) = Prop(label, actual, c)
+
   /** @return a new Prop with a label, an actual value and a matcher to apply to values */
-  def prop[T, S](label: String, actual: =>T, c: (S) => Matcher[T]) = {
-    lazy val a = actual
-    Prop(label, a, c)
-  }
+  def prop[T, S](label: String, actual: =>T, c: (S) => Matcher[T]) = Prop(label, actual, c)
+
   /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
-  def prop[T, S](label: String, actual: =>T, c: Matcher[T]) = {
-    lazy val a = actual
-    Prop(label, a, c)
-  }
+  def prop[T, S](label: String, actual: =>T, c: Matcher[T]) = Prop(label, actual, c)
 
   /** @return a new Tabs object */
   def tabs = new Tabs()
+
   /** @return a new Tabs object with a first tab */
   def tab(label: String, form: Form) = tabs.tab(label, form)
 }

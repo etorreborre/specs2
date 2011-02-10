@@ -5,6 +5,7 @@ import scala.xml._
 import collection.Listx._
 import ::>._
 import xml.Nodex._
+import text.Trim._
 import execute._
 import main.Arguments
 import StandardResults._
@@ -25,7 +26,7 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   lazy val allRows = title.map(t => Row.tr(TextCell(t))).toList ::: rows
 
   /** @return the maximum cell size, column by column */
-  lazy val maxSizes = allRows.map(_.cells).safeTranspose.map(l => l.map(_.text.size).max[Int])
+  lazy val maxSizes = allRows.map(_.cells).safeTranspose.map(l => l.map(_.width).max[Int])
 
   /** @return a new Form. This method can be overriden to return a more accurate subtype */
   protected def newForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) =
@@ -69,10 +70,14 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   }
 
   /** @return the printed form with a padding space size to use for each cell */
-  def padText(size: Option[Int]): String = new FormCell(this).padText(size)
+  def padText(size: Option[Int]): String = {
+    allRows.map(_.padText(maxSizes)).mkString("\n")
+  }
 
   /** @return an xml description of this form */
   def toXml(implicit args: Arguments = Arguments()) = Form.toXml(this)(args)
+  /** @return an xml description of this form, to be embedded in a Cell */
+  def toCellXml(implicit args: Arguments = Arguments()) = <td class="info">{Form.toXml(this)(args)}</td>
 
   def subset(f1: Traversable[Form], f2: Traversable[Form]): Form = {
     addLines(FormDiffs.subset(f1.toSeq, f2.toSeq))
@@ -222,6 +227,14 @@ case object Form {
 class InlinedForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) extends Form(title, rows, result) {
   /** @return an xml description of this form */
   override def toXml(implicit args: Arguments = Arguments()) = <div>{Form.titleAndRows(this)(args) ++ Form.formStacktraces(this)(args) }</div>
+  /** @return an xml description of this form, to be embedded in a Cell */
+  override def toCellXml(implicit args: Arguments = Arguments()) = toXml(args)
+
   override protected def newForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) =
     new InlinedForm(title, rows, result)
+
+  override def padText(size: Option[Int]): String = {
+    allRows.map(_.padText(maxSizes)).mkString("\n").removeStart("| ").removeEnd(" |")
+  }
+
 }

@@ -188,7 +188,40 @@ And then you can use it like this:
                                                                                                end
          }
 
-#### Embedding a Form into an Effect or a Prop
+#### Nesting a Form into another Form
+
+Forms can be composed of other Forms to display composite information:
+
+        val address = Form("Address").
+                       tr(field("street", "Rose Crescent")).
+                       tr(field("number", 3))
+
+        val person = Form("Person").
+                       tr(field("name", "Eric")).
+                       tr(address)
+""" +
+  Form("Person").
+    tr(field("name", "Eric")).
+    tr(address).toXml +
+  """
+
+This will be displayed with the address as a nested table inside the main one on the last row. However in some case, it's
+preferable to have the rows of that Form to be included directly in the outer table. This can be done by *inlining* the
+nesting Form:
+
+        val person = Form("Person").
+                       tr(field("name", "Eric")).
+                       tr(address.inline)            // address is inlined
+
+And the result is:
+""" +
+  Form("Person").
+    tr(field("name", "Eric")).
+    tr(address.inline).toXml +
+  """
+
+
+#### Nesting a Form into an Effect or a Prop
 
 When using Forms in specifications we can describe different levels of abstraction. If we consider the specification of
 a website for example, we want to be able to use a Form having 2 rows and describing the exact actions to do on the Login
@@ -535,4 +568,8 @@ specification.
   object WrongCalculator {
     def th(title1: String, titles: String*) = WrongCalculator(Form.th(title1, titles:_*))
   }
+
+  val address = Form("Address").
+                  tr(field("street", "Rose Crescent")).
+                  tr(field("number", 3))
 }

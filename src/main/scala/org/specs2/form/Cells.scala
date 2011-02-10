@@ -21,9 +21,10 @@ trait Cell extends Text with Xml with Executable {
 /**
  * Base type for anything returning some text
  */
-trait Text { 
+trait Text {
   def text: String = padText(None)
-  def padText(size: Option[Int]): String 
+  def width: Int = text.size
+  def padText(size: Option[Int]): String
 }
 /**
  * Base type for anything returning some xml
@@ -175,9 +176,9 @@ class FormCell(_form: =>Form) extends Cell {
 
   /** ignore the passed size and compute the max size on each row */
   def padText(size: Option[Int]): String = {
-    form.allRows.map(_.padText(form.maxSizes)).mkString("\n")
+    form.padText(size)
   }
-  def xml(implicit args: Arguments) = form.toXml(args)
+  def xml(implicit args: Arguments) = form.toCellXml(args)
   def colnumber = if (form.rows.isEmpty) 1 else form.rows.map(_.cells.map(c => c.colnumber).sum).max
 
   def execute = form.execute
@@ -187,6 +188,12 @@ class FormCell(_form: =>Form) extends Cell {
   def setSuccess = new FormCell(form.setSuccess)
   def setFailure = new FormCell(form.setFailure)
   def stacktraces(implicit args: Arguments) = Form.stacktraces(form)(args)
+
+  /**
+   * @return the width of a form when inlined.
+   *         It is the width of its text size minus 4, which is the size of the borders "| " and " |"
+   */
+  override def width = text.split("\n").map((_:String).size).max[Int] - 4
 }
 
 /** Proxy to a cell that's not evaluated right away when added to a row */
