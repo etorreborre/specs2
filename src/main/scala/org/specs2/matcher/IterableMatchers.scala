@@ -2,10 +2,12 @@ package org.specs2
 package matcher
 
 import control._
+import data.Sized
 import text.Quote._
 import text.Plural._
 import collection.Iterablex._
 import MatchersImplicits._
+
 
 /**
  * Matchers for iterables 
@@ -66,17 +68,17 @@ trait IterableBaseMatchers extends LazyParameters { outer =>
     }
   }
 
+  /** any scala collection has a size */
   implicit def scalaTraversableIsSized[I <: TraversableOnce[_]] = new Sized[I] {
     def size(t: I) = t.size
   }
-  implicit def stringIsSized: Sized[String] = new Sized[String] {
-    def size(t: String) = t.size
-  }
+  /** any java collection has a size */
   implicit def javaCollectionIsSized[T <: java.util.Collection[_]]  = new Sized[T] {
     def size(t: T) = t.size()
   }
-  trait Sized[T] {
-    def size(t: T) : Int
+  /** a regular string has a size, without having to be converted to an Iterable */
+  implicit def stringIsSized: Sized[String] = new Sized[String] {
+    def size(t: String) = t.size
   }
 }
 
