@@ -646,8 +646,8 @@ which almost look like ***specs*** specifications. Here is a fully commented exa
       class MutableSpec extends SpecificationWithJUnit {
         // arguments are simply declared at the beginning of the specification if needed
         args(xonly=true)
-        // an action to execute before the specification must be declared before any example
-        action {
+        // a step to execute before the specification must be declared before any example
+        step {
           // setup database here
           success
         }
