@@ -35,8 +35,8 @@ class ClassRunner extends Classes with ConsoleOutput {
 	  trye(reporter.report(specification)(Arguments(args:_*).overrideWith(specification.content.arguments)))(f)
   }
 
-  private def createSpecification(className: String): Specification = {
-    tryToCreateObject[Specification](className, true, true) match {
+  private def createSpecification(className: String): BaseSpecification = {
+    tryToCreateObject[BaseSpecification](className, true, true) match {
       case Some(s) => s
       case None => error("can not create specification: "+className)
     }
