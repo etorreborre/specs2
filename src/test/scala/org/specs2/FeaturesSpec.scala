@@ -7,12 +7,13 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
- junit annotation not visible in a user project
- review and document the lazy cells api
- split the tables in the Expense spec
-
-
                                                                                           """^
+  "1.1 features                                                                           "^
+    "Package dependencies specification                                                   "! todo^
+    "Reporters                                                                            "^
+      "Teamcity                                                                           "! todo^
+      "junit-xml                                                                          "! todo^
+                                                                                          p^
  "1.0 features                                                                            "^
    "Implementation                                                                        "^
      "fix the level issue with nested specs (see UserGuide)                               "! done^
@@ -23,10 +24,7 @@ class FeaturesSpec extends Specification { def is = literate ^
      "with breadcrumbs                                                                    "! done^
      "with non mutable forms                                                              "! done^
    "ScalaInterpreter                                                                      "^
-     "with appropriate matchers                                                           "! todo^
-   "Reporters                                                                             "^
-    "Teamcity                                                                             "! todo^
-    "junit-xml                                                                            "! todo^
+     "with appropriate matchers                                                           "! done^
    "Detailed diffs                                                                        "! done^
      "Document the new arguments                                                          "! done^
      "Split matcher messages on 2 lines when too long                                     "! done^
@@ -41,9 +39,6 @@ class FeaturesSpec extends Specification { def is = literate ^
      "pass the tests with Maven                                                           "! done^
      "use sbt to publish                                                                  "! todo^
      "deploy the user guide automatically                                                 "! todo^
-                                                                                          p^
-  "1.1 features                                                                           "^
-    "Package dependencies specification                                                   "! todo^
                                                                                           p^
   "Preview features                                                                       "^
   "High priority                                                                          "^
@@ -73,6 +68,7 @@ class FeaturesSpec extends Specification { def is = literate ^
       "for Options/Patterns                                                               "! done^
       "for Files                                                                          "! done^
       "for Numerics                                                                       "! done^
+      "for Results                                                                        "! done^
       "for xml                                                                            "! done^
     "Spec for before/after/around                                                         "^
       "before/after                                                                       "! done^
@@ -98,29 +94,17 @@ class FeaturesSpec extends Specification { def is = literate ^
       "with a timer                                                                       "! done^
       "with colored output                                                                "! done^
     "StackTraces                                                                          "^
-      "for Fragments, to help with IDE navigation                                         "! wontdo^
-      "for all results, even success                                                      "! wontdo^
       "with source code location                                                          "! done^
       "sanitized                                                                          "! done^
-    "Tags                                                                                 "^
-      "for examples, groups, specs                                                        "! wontdo^
-      "with dependencies between tags                                                     "! wontdo^
     "Forms                                                                                "^
       "with a text display                                                                "! done^
-    "JMock                                                                                "^
-      "with all features                                                                  "! wontdo^
-    "EasyMock                                                                             "^
-      "with all features                                                                  "! wontdo^
     "Auto examples                                                                        "^
       "with the description taken from the source file                                    "! done^
     "Timer                                                                                "^
       "specs-like Timer                                                                   "! done^
-      "WaitFor                                                                            "! wontdo^
     "ScalaCheck                                                                           "^
       "with all previous features                                                         "! done^
       "with the reporting of expectations                                                 "! done^
-    "A Step execution model?                                                              "! wontdo^
-    "A Database facility?                                                                 "! wontdo^
     "Command line arguments                                                               "^
       "implement an easy to maintain system coherent with the config                      "! done ^
       "can be overriden locally in a specification                                        "! done ^

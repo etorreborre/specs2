@@ -20,7 +20,7 @@ trait Matchers extends AnyMatchers
                   with FileMatchers
                   with ResultMatchers
                   with MatchersImplicits
-      
+
 object Matchers extends Matchers
 
 trait MustMatchers extends Matchers with MustExpectations

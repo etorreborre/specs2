@@ -45,6 +45,8 @@ trait StringBaseMatchers { outer =>
   }
   /** matches if b matches the regular expression a */   
   def beMatching(t: =>String) = new BeMatching(t)
+  /** alias for beMatching but matching just a fragment of the string*/
+  def =~(t: =>String) = new BeMatching(".*"+t+".*")
   /** matches if b.startsWith(a) */
   def startWith(t: =>String) = new Matcher[String] { 
     def apply[S <: String](b: Expectable[S]) = {
@@ -138,10 +140,15 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
     def endingWith(s: String) = result(outer.endWith(s))
     def ==/(s: String) = result(outer.be_==/(s))
   }
-  implicit def toNeutralStringMatcher(result: NeutralMatcher[Any]) : NeutralStringMatcher = 
-    new NeutralStringMatcher(result)
+  implicit def toNeutralStringMatcher(result: NeutralMatcher[Any]) : NeutralStringMatcher = new NeutralStringMatcher(result)
   class NeutralStringMatcher(result: NeutralMatcher[Any]) {
     def ==/(s: String) = outer.be_==/(s)
+    def =~(s: String) = outer.=~(s)
+  }
+  implicit def toNotStringMatcher(result: NotMatcher[Any]) : NotStringMatcher = new NotStringMatcher(result)
+  class NotStringMatcher(result: NotMatcher[Any]) {
+    def ==/(s: String) = outer.be_==/(s).not
+    def =~(s: String) = outer.=~(s).not
   }
   def matching(t: =>String) = beMatching(t)
   def length(n: Int) = haveLength(n)

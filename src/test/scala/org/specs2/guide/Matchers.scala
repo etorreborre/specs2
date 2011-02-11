@@ -60,6 +60,8 @@ API for the complete list:
  * Xml matchers
  * File matchers
  * Scalaz matchers
+ * Result matchers
+ * Interpreter matchers
 
 #### Matchers for Any
 
@@ -183,6 +185,7 @@ There are several matchers to check Option and Either instances:
 Matching on strings is very common. Here are the matchers which can help you:
 
  * `beMatching` (or ` be matching`) checks if a string matches a regular expression
+ * `=~(s)` is a shortcut for `beMatching(".*"+s+".*")`
  * `find(exp).withGroups(a, b, c)` checks if some groups are found in a string
  * `have length` checks the length of a string
  * `have size` checks the size of a string (seen as an `Iterable[Char]`)
@@ -354,6 +357,28 @@ It was useful to check some Scalaz properties during the development of ***specs
  * `monoid.isMonoid` checks if a `Monoid` has a neutral element and respects the associativity rule
 
 Note that you need to extend the `ScalaCheck` trait if you want to use these matchers in a specification.
+
+#### Result matchers
+
+That's only if you want to match the result of other matchers!
+
+        ("Hello" must beMatching("h.*")) must beSuccessful
+
+#### Scala Interpreter matchers
+
+This trait is not included in the default specification so you'll have to add it in the rare case where you want to use
+the Scala interpreter and execute a script:
+
+        class ScalaInterpreterMatchersSpec extends SpecificationWithJUnit with ScalaInterpreterMatchers {
+
+           "A script" can {
+             "be interpreted" in {
+               """
+               1 + 1
+               """ >| "2"
+             }
+           }
+
 
 ### ScalaCheck properties
 
