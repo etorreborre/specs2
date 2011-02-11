@@ -46,8 +46,8 @@ case class Tab(title: String, form: Form, result: Option[Result] = None) extends
   def colnumber = new FormCell(form).colnumber
 
   def padText(size: Option[Int]): String = {
-    (List(title) ++
-     new FormCell(form).padText(size)).mkString("\n")
+    title + "\n" +
+    new FormCell(form).padText(size)
   }
   def xml(implicit args: Arguments) =
     <div class="tabbertab" title={title}>{new FormCell(form.executeForm).xml}</div>
