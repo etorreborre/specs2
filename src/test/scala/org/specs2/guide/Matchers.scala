@@ -624,7 +624,7 @@ framework. You can reuse the following traits:
   include(xonly, mockitoExamples)                                                                                       ^
   end
 
-  val examples = new Specification { def is = "Examples".title ^
+ lazy val examples = new Specification { def is = "Examples".title ^
     "This is hopefully true"         ! (1 != 2)     ^
     { 1 must beEqualTo(1)      }                    ^
     { 1 must_== 1              }                    ^ // my favorite!
@@ -636,7 +636,7 @@ framework. You can reuse the following traits:
     def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size }
   }
 
-  val akaExpectations = new Specification { def is = "Aka".title ^
+ lazy val akaExpectations = new Specification { def is = "Aka".title ^
     "without description"                                        ! {
       machine.tickets must have size(3)
     }^
@@ -647,7 +647,7 @@ framework. You can reuse the following traits:
     val machine = Machine(List("ticket1", "ticket2", "ticket3"))
   }
 
-  val scalaCheckExamples = new Specification with ScalaCheck {
+ lazy val scalaCheckExamples = new Specification with ScalaCheck {
     import org.scalacheck._
     implicit val params = set(minTestsOk -> 20)
 
@@ -690,7 +690,7 @@ framework. You can reuse the following traits:
        def verify2 = there was no(m).get(0)      // verify that the call never happened
      }
    }
-   val mockitoExamples = new Specification { def is =
+  lazy val mockitoExamples = new Specification { def is =
      "returned values"                         ! c().e1 ^
      "consecutive returns"                     ! c().e2 ^
      "matchers"                                ! c().e3 ^
