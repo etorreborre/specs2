@@ -1,6 +1,5 @@
 package org.specs2
 package control
-import scala.util.control.Exception._                                                                                          
 
 /**
  * This trait provides methods to catch exceptions and transform them into values which can be passed to

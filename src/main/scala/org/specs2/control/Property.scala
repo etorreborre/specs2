@@ -91,4 +91,4 @@ private[specs2]
 trait Properties {
   implicit def aProperty[T](t: T) = Property(t)
 }
-
+object Properties extends Properties
