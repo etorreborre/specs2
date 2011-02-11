@@ -28,6 +28,7 @@ trait FormsBuilder {
   implicit def propsAreCell(t: Prop[_, _]) = new PropCell(t)
   /** a Form can be added on a Form row as a FormCell */
   implicit def formsAreCell(t: =>Form): FormCell = new FormCell(t)
+  /** a Form can be implicitly executed if necessary */
   implicit def formsAreExecutable(f: Form): Result = f.execute
   /** a cell can be added lazily to a row. It will only be evaluated when necessary */
   def lazyfy(c: =>Cell) = new LazyCell(c)

@@ -297,6 +297,25 @@ Now that we've defined a form for a simple entity, let's see how we can reuse it
 
 As you also see above, named arguments can bring more readibility to the expected values.
 
+#### Lazy cells
+
+Fields, Props and Forms are added right away to a row when building a Form with the `tr` method. If it is necessary to add
+them with a "call-by-name" behavior, the `lazyfy` method can be used:
+
+            def address = ... // build an Address Form
+            Form("Customer").
+              tr(prop("name", customer.name)(name)).
+              // the address Form will be built only when the Customer Form is rendered
+              tr(lazyfy(address.actualIs(customer.address)))
+
+#### Xml cells
+
+Any xml can be "injected" on a row by using an `XmlCell`:
+
+            Form("Customer").
+              tr(prop("name", customer.name)(name)).
+              tr(XmlCell(<div><b>this is a bold statement</b><div>))
+
 ### 1-n relationships
 
 When there are 1 - n relationships between entities the situation gets bit more complex.
