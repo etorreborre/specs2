@@ -5,10 +5,10 @@ import form._
 
 class FormSpec extends SpecificationWithJUnit with Forms { def is =                 
                                                                                                                         """
-  This shows an example of forms in a specification.
-  You can run this specification by executing `specs2.html org.specs2.examplesFormSpec`.
+This shows an example of Forms in a specification.
+You can run this specification by executing `specs2.html org.specs2.examplesFormSpec`.
 
-  This will create a html file in the target/specs2-reports directory
+This will create a html file in the target/specs2-reports directory
                                                                                                                         """^
                                                                                                                         p^
  "A person object must have proper initials"                                                                            ^

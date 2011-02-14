@@ -3,7 +3,7 @@ package examples
 
 class HelloWorldSpec extends SpecificationWithJUnit { def is =
 
-  "This is a specification to check the 'Hello world' string"                    ^
+"This is a specification to check the 'Hello world' string"                      ^
                                                                                  p^
   "'Hello world' contains 11 characters"                                         ! e1^
   "'Hello world' starts with 'Hello'"                                            ! e2^

@@ -4,11 +4,11 @@ import specification._
 
 class SpecsLikeSpec extends SpecificationWithJUnit { def is =
                                                                                           """
-  This specification shows how to write a specification in the specs style.
-  You need to:
-   * replace `should` by `^` and `in` by `!`
-   * chain examples with `^`
-   * separate blocks of examples with `p^`
+This specification shows how to write a specification in the specs style.
+You need to:
+ * replace `should` by `^` and `in` by `!`
+ * chain examples with `^`
+ * separate blocks of examples with `p^`
                                                                                           """^
                                                                                           p^
   "'Hello world' should" ^ {
