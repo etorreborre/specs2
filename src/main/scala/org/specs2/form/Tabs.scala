@@ -18,7 +18,6 @@ case class Tabs(tabs: List[Tab] = Nil, result: Option[Result] = None) extends Ce
   def setFailure = copy(result = Some(failure))
   def execute = result.getOrElse(executeTabs)
   def executeCell = copy(result = result.orElse(Some(executeTabs)))
-  override def header = List(TextCell("tabs"))
   def stacktraces(implicit args: Arguments) = NodeSeq.Empty
   def colnumber = tabs.size
 
@@ -38,8 +37,7 @@ case class Tabs(tabs: List[Tab] = Nil, result: Option[Result] = None) extends Ce
 case class Tab(title: String, form: Form, result: Option[Result] = None) extends Cell {
   def setSuccess = copy(result = Some(success))
   def setFailure = copy(result = Some(failure))
-  override def header = List(TextCell(title))
-
+  
   def execute = result.getOrElse(form.execute)
   def executeCell = copy(result = result.orElse(Some(form.execute)))
   def stacktraces(implicit args: Arguments) = NodeSeq.Empty

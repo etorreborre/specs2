@@ -19,9 +19,6 @@ import matcher.ResultMatchers
  */
 class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Row]),  val result: Option[Result] = None) extends Executable with Text {
 
-  /** @return the labels of all rows to build a header for the form */
-  def header: List[Cell] = if (rows.isEmpty) Nil else rows(0).header.flatten
-  
   /** @return all rows, including the header */
   lazy val allRows = title.map(t => Row.tr(TextCell(t))).toList ::: rows
 

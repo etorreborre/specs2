@@ -7,13 +7,16 @@ import text.NotNullStrings._
 import main.Arguments
 import execute._
 import StandardResults._
+
 /**
- * A Cell is the Textual representation of a Form element.
+ * A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.
+ * A more general XmlCell is also available to be able to input any kind of Xml inside a Form
  * 
- * It can be executed and converted to a String for display.
+ * A Cell can be executed by executing the underlying element but also set to a specific result (success or failure).
+ * This feature is used to display rows of values with were expected and found ok in Forms.
+ *
  */
 trait Cell extends Text with Xml with Executable {
-  def header = List(this)
   def setSuccess: Cell
   def setFailure: Cell
   def executeCell : Cell
@@ -86,7 +89,6 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
   def colnumber = 3
 
   def execute = result.getOrElse(f.execute)
-  override def header = List(TextCell(f.label))
   def setSuccess = FieldCell(f, Some(success))
   def setFailure = FieldCell(f, Some(failure))
   def executeCell = FieldCell(f, result.orElse(Some(f.execute)))
@@ -123,7 +125,6 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell 
   def colnumber = 2
 
   def execute = result.getOrElse(e.execute)
-  override def header = List(TextCell(e.label))
   def setSuccess = EffectCell(e, Some(success))
   def setFailure = EffectCell(e, Some(failure))
   def executeCell = EffectCell(e, result.orElse(Some(e.execute)))
@@ -145,7 +146,6 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
 
   def execute = result.getOrElse(p.execute)
   def executeCell = PropCell(p, result.orElse(Some(p.execute)))
-  override def header = List(TextCell(p.label))
   def setSuccess = PropCell(p, Some(success))
   def setFailure = PropCell(p, Some(failure))
 
@@ -184,7 +184,6 @@ class FormCell(_form: =>Form) extends Cell {
   def execute = form.execute
   def executeCell = new FormCell(form.executeForm)
 
-  override def header = form.header
   def setSuccess = new FormCell(form.setSuccess)
   def setFailure = new FormCell(form.setFailure)
   def stacktraces(implicit args: Arguments) = Form.stacktraces(form)(args)
@@ -204,7 +203,6 @@ class LazyCell(_cell: =>Cell) extends Cell {
   def colnumber = cell.colnumber
   def execute = cell.execute
   def executeCell = cell.executeCell
-  override def header = cell.header
   def setSuccess = cell.setSuccess
   def setFailure = cell.setFailure
   def stacktraces(implicit args: Arguments) = cell.stacktraces(args)

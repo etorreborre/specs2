@@ -36,18 +36,6 @@ trait FormsBuilder {
   /** @return a new Form with the given title */
   def form(title: String) = Form(title)
 
-  /** @return a new Form with the given title and rows */
-  def form(title: String, lines: Seq[Form]) = {
-    if (lines.isEmpty) Form(title)
-    else {
-      val header = lines(0).header.map(_.text) match {
-        case Nil => Form(title)
-        case h :: rest => Form(title).th(h, rest:_*)
-      }
-      lines.foldLeft(header) { (res, cur) => res.tr(cur) }
-    }
-  }
-
   /** @return a new Field with no label and a value */
   def field[T](value: =>T): Field[T] = Field(value)
 

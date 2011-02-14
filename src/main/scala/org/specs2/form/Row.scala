@@ -16,8 +16,6 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable with
   /** @return all the cells */
   def cells = cellList.list
   
-  /** @return the labels of all cells to build a header for the row */
-  def header = cells.map(_.header)
   /** @return a Row where every cell is executed with a Success */
   def setSuccess = new Row(cellList.map(_.setSuccess))
   /** @return a Row where every cell is executed with a Failure */
