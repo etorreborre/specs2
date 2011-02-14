@@ -63,12 +63,15 @@ trait NodeFunctions extends control.Debug {
       case (n1: Atom[_], n2:Text) => n1.text.trim == n2.text.trim
       case (n1: Node, n2:Node) => (isSpaceNode(n1) && isSpaceNode(n2)) ||
                                   n1.prefix == n2.prefix && 
-                                  n1.attributes.toSet.map((n:MetaData) => (n.key, n.value.mkString(","))) == n2.attributes.toSet.map((n:MetaData) => (n.key, n.value.mkString(","))) &&
+                                  attributesSet(n1) == attributesSet(n2) &&
                                   n1.label == n2.label &&
                                   compareChildren(n1.child.toList.filter(!isSpaceNode(_)), n2.child.toList.filter(!isSpaceNode(_)))
       case (n1: NodeSeq, n2: NodeSeq) => iterableComparison(n1.filter(!isSpaceNode(_)), n2.filter(!isSpaceNode(_)))
     }
   }
+
+  /** @return the set of attributes as a set of key/value */
+  private def attributesSet(n: Node): Set[(String, String)] = n.attributes.toSet.map((n:MetaData) => (n.key, n.value.mkString(",")))
   
   /**
    * @return true if the node found with a label also satisfies the attributes and/or values requirement
