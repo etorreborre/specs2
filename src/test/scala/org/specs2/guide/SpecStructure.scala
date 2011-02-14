@@ -644,6 +644,9 @@ which almost look like ***specs*** specifications. Here is a fully commented exa
        * where the fragments are built using a mutable variable
        */
       class MutableSpec extends SpecificationWithJUnit {
+        // A title can be added at the beginning of the specification
+        "MutableSpec".title
+
         // arguments are simply declared at the beginning of the specification if needed
         args(xonly=true)
         // a step to execute before the specification must be declared first
