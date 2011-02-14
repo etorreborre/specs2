@@ -59,8 +59,8 @@ trait FragmentsBuilder {
    *
    * @return a SpecStart object from a string 
    */
-  implicit def title(s: String): SpecTitle = SpecTitle(s)
-  case class SpecTitle(name: String) {
+  implicit def title(s: String): SpecTitle = new SpecTitle(s)
+  class SpecTitle(name: String) {
     def title = new Fragments().specTitleIs(SpecStart(SpecName(name)))
   }
 

@@ -11,7 +11,7 @@ class NodeFunctionsSpec extends SpecificationWithJUnit { def is = sequential^
     "and a match on one attribute name"                                                   ! e2^
     "and a match on a list of attribute names"                                            ! e3^
     "and a match on some attribute names and values"                                      ! e4^
-    "with exactMatch = true, it must return true if"                                      ^t^
+    "with exactMatch = true, it must return true if"                                      ^
       "there is a match on the node label"                                                ! e5^
       "and a match on all attribute names"                                                ! e6^
       "and a match on all attribute names and values"                                     ! e7^

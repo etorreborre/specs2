@@ -3,14 +3,22 @@ package control
 
 class ExceptionsSpec extends SpecificationWithJUnit with Exceptions {  def is =
                                                                                                     """
-  The Exceptions trait provide functional ways to catch exceptions and to deal with them
+The Exceptions trait provide functional ways to catch exceptions and deal with them:
+
+ * tryo returns the result in an Option
+ * trye returns the result in an Either with the Left value being a function of the exception
+ * catchAll is similar to trye but even catches Throwables
+ * tryOr returns the result or a value built from the thrown exception
+ * tryOrElse returns the result or a default value
+ * tryMap returns different values depending on the success of the expression
+ * tryOk returns true iff the expression doesn't throw an Exception
                                                                                                     """^
                                                                                                     p^
   "tryo executes an expression and returns an Option"                                               ^
     "Some(result) if the expression doesn't throw an exception"                                     ! tryo1^
     "None if the expression failed"                                                                 ! tryo2^
                                                                                                     p^
-  "tryOr executes an expression and returns a result or a default value. It returns"                ^
+  "tryOr executes an expression and returns the result or a default value. It returns"              ^
     "the result if the expression doesn't throw an exception"                                       ! tryOr1^
     "a default value if the expression throws an exception"                                         ! tryOr2^
                                                                                                     p^

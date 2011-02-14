@@ -12,6 +12,7 @@ package control
  */
 private[specs2]
 trait Exceptions {
+  /** this implicit avoids having to pass a function when no effect is desired on the Exception being thrown */
   implicit def implicitUnit[T](t: T): Unit = ()
   
   /**

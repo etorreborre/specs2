@@ -17,6 +17,11 @@ trait BaseSpecification extends specification.BaseSpecification {
 
   def is = specFragments
 
+  override implicit def title(s: String): MutableSpecTitle = new MutableSpecTitle(s)
+  class MutableSpecTitle(s: String) extends SpecTitle(s) {
+    override def title = addFragments(super.title)
+  }
+
   implicit def described(s: String): Described = new Described(s)
   class Described(s: String) {
     def should(fs: =>Example) = addFragments(s, fs, "should")
