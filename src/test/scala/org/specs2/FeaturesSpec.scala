@@ -7,7 +7,7 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
-faire la doc du specs file runner
+\faire la doc du specs file runner
                                                                                           """^
   "1.1 features                                                                           "^
     "Package dependencies specification                                                   "! todo^
