@@ -26,9 +26,6 @@ import execute._
  * `"a" || "b" | "c"`  
  * `"1" !! "2" ! "3"`
  * 
- *  
- *  
- *  
  * @see org.specs2.matcher.DataTablesSpec for examples
  */
 trait DataTables {

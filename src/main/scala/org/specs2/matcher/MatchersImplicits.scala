@@ -8,7 +8,7 @@ import scalaz._
 import Scalaz._
 import Generator._
 import text.Quote._
-import MatchResult._
+import MatchResultMessages._
 
 /**
  * This trait provides implicit definitions from MatchResults and Booleans to Results.

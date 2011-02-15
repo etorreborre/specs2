@@ -44,6 +44,7 @@ trait AnyBaseMatchers {
     }
   }
 
+  /** matches if the value is null */
   def beNull[T] = new Matcher[T] {
     def apply[S <: T](value: Expectable[S]) = {
       result(value.value == null,
@@ -75,6 +76,7 @@ trait AnyBaseMatchers {
     }
   }
 
+  /** matches if the value returns a successful result when applied to a PartialFunction */
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
     def apply[S <: T](a: Expectable[S]) = {
       val r = if (a.value != null && pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
@@ -118,7 +120,7 @@ trait AnyBaseMatchers {
   }
 }
 /**
- * Matcher for a boolean value
+ * Matcher for a boolean value which must be true
  */
 class BeTrueMatcher extends Matcher[Boolean] {
   def apply[S <: Boolean](v: Expectable[S]) = {

@@ -8,7 +8,6 @@ import text.Plural._
 import collection.Iterablex._
 import MatchersImplicits._
 
-
 /**
  * Matchers for iterables 
  */

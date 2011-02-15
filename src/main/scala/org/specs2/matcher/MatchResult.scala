@@ -164,60 +164,15 @@ class OrNotMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends Mat
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 or evaluate.apply(matcher.not)
 }
 
+/**
+ * Utility functions for MatchResult.
+ *
+ * A MatchResult is a Functor where the fmap function acts on the embedded Expectable value (which itself is a Functor)
+ */
 private[specs2]
 object MatchResult {
   import Expectable._
 
-  implicit def MatchResultMessageReducer[T] = new Reducer[MatchResult[T], MatchResultMessage] {
-    override def unit(r: MatchResult[T]) = r match {
-      case MatchSuccess(ok, ko, e) => SuccessMessage(ok, ko)
-      case MatchFailure(ok, ko, e, d) => FailureMessage(ok, ko)
-      case _ => NeutralMessage(r.message)
-    }
-  }
-  implicit val MatchResultMessageMonoid = new Monoid[MatchResultMessage] {
-    val zero = new EmptyMessage()
-    def append(r1: MatchResultMessage, r2: =>MatchResultMessage) = r1 append r2
-  }
-  sealed trait MatchResultMessage {
-    def append(m2: MatchResultMessage): MatchResultMessage
-    def isSuccess: Boolean = true
-  }
-  case class SuccessMessage(okMessage: String, koMessage: String) extends MatchResultMessage {
-    def append(m2: MatchResultMessage) = {
-      m2 match {
-        case SuccessMessage(ok, ko) => SuccessMessage(okMessage+"; "+ok, koMessage+"; "+ko) 
-        case FailureMessage(ok, ko) => FailureMessage(okMessage+"; "+ok, koMessage+"; "+ko) 
-        case NeutralMessage(m) => SuccessMessage(okMessage+"; "+m, koMessage+"; "+m) 
-        case _ => this 
-      }
-    } 
-  }
-  case class FailureMessage(okMessage: String, koMessage: String) extends MatchResultMessage {
-    def append(m2: MatchResultMessage) = {
-      m2 match {
-        case SuccessMessage(ok, ko) => FailureMessage(okMessage+"; "+ok, koMessage+"; "+ko) 
-        case FailureMessage(ok, ko) => FailureMessage(okMessage+"; "+ok, koMessage+"; "+ko) 
-        case NeutralMessage(m) => FailureMessage(okMessage+"; "+m, koMessage+"; "+m) 
-        case _ => this 
-      }
-    } 
-    override def isSuccess: Boolean = false
-  }
-  case class NeutralMessage(message: String) extends MatchResultMessage {
-    def append(m2: MatchResultMessage) = {
-      m2 match {
-        case SuccessMessage(ok, ko) => SuccessMessage(message+"; "+ok, message+"; "+ko) 
-        case FailureMessage(ok, ko) => FailureMessage(message+"; "+ok, message+"; "+ko) 
-        case NeutralMessage(m) => NeutralMessage(message+"; "+m) 
-        case _ => this 
-      }
-    } 
-  }
-  case class EmptyMessage() extends MatchResultMessage {
-    def append(m2: MatchResultMessage) = m2
-  }
-  
   implicit val MatchResultFunctor: Functor[MatchResult] = new Functor[MatchResult] {
     def fmap[A, B](m: MatchResult[A], f: A => B) = m match {
       case success: MatchSuccess[_] => success.map(f)
