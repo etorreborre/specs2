@@ -95,10 +95,10 @@ Prop it embeds.
 
   object xhtml {
     // count 3 per prop or field
-    def e1 = new FormCell(Form.th("title").
+    def e1 = Xml.colnumber(new FormCell(Form.th("title").
       tr(field(1)).
       tr(field("n", "v"), field("n", "v")).
-      tr(prop("p", 1)(2))).colnumber must_== 6
+      tr(prop("p", 1)(2)))) must_== 6
   }
 
   object nested {

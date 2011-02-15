@@ -31,15 +31,48 @@ trait Cell extends Text with Xml with Executable {
 trait Text {
   /** @return a text representation */
   def text: String
+
+  /** @return the width of the cell, without borders when it's a FormCell */
   def width: Int = text.size
 }
 /**
  * Base type for anything returning some xml
  */
 trait Xml {
+  /** @return an xml representation */
   def xml(implicit args: Arguments): NodeSeq
-  def stacktraces(implicit args: Arguments): NodeSeq
-  def colnumber: Int
+}
+
+/**
+ * utility functions for creating xml for Cells
+ */
+object Xml {
+  /** @return the stacktraces of a Cell depending on its type and execution result */
+  def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell match {
+    case FormCell(f: Form)                          => f.rows.map(stacktraces(_)).reduce
+    case PropCell(_, Some(e @ Error(_, _)))         => stacktraces(e)
+    case PropCell(_, Some(f @ Failure(_, _, _, _))) => stacktraces(f)
+    case other                                      => NodeSeq.Empty
+  }
+
+  private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq = row.cells.map(stacktraces(_)).reduce
+
+  private def stacktraces(e: Result with ResultStackTrace): NodeSeq =
+    <div class="formstacktrace details" id={System.identityHashCode(e).toString}>
+      {e.message.notNull+" ("+e.location+")"}
+      {e.stackTrace.map(st => <div>{st}</div>)}
+    </div>
+
+  /** @return  the number of columns for a given cell */
+  def colnumber(cell: Cell): Int = cell match {
+    case TextCell(_, _)   => 1 // just the string
+    case FieldCell(_, _)  => 3 // label + value + optional error
+    case PropCell(_, _)   => 3 // label + value + optional error/failure
+    case EffectCell(_, _) => 2 // label + optional error
+    case FormCell(form)   => if (form.rows.isEmpty) 1 else form.rows.map(_.cells.map(c => colnumber(c)).sum).max
+    case LazyCell(c)      => colnumber(c)
+    case XmlCell(c)       => 100 // not known by default, so a max value is chosen
+  }
 }
 
 /**
@@ -50,9 +83,7 @@ case class TextCell(s: String, result: Result = skipped) extends Cell {
   def text = s
 
   def xml(implicit args: Arguments) = <td class={execute.statusName}>{s}</td>
-  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
 
-  def colnumber = 1
   def execute = result
   def setSuccess = TextCell(s, success)
   def setFailure = TextCell(s, failure)
@@ -80,10 +111,6 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
     case Skipped(_, _) => "info"
     case _             => r.statusName
   }
-
-  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
-
-  def colnumber = 3
 
   def execute = result.getOrElse(f.execute)
   def setSuccess = FieldCell(f, Some(success))
@@ -113,10 +140,6 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell 
     case _             => r.statusName
   }
 
-  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
-
-  def colnumber = 2
-
   def execute = result.getOrElse(e.execute)
   def setSuccess = EffectCell(e, Some(success))
   def setFailure = EffectCell(e, Some(failure))
@@ -130,8 +153,6 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell 
 case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
   def text = p.toString
 
-  def colnumber = 3
-
   def execute = result.getOrElse(p.execute)
   def executeCell = PropCell(p, result.orElse(Some(p.execute)))
   def setSuccess = PropCell(p, Some(success))
@@ -143,18 +164,6 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
      <td class={executed.statusName}>{p.decorateValue(p.expected.getOrElse(""))}</td> ++
     (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td> unless executed.isSuccess)
   }
-
-  def stacktraces(implicit args: Arguments): NodeSeq = result match {
-    case Some(e @ Error(_, _))                           => stacktraces(e)
-    case Some(f @ Failure(_, _, _, _)) if args.failtrace => stacktraces(f)
-    case _                                               => NodeSeq.Empty
-  }
-
-  private def stacktraces(e: Result with ResultStackTrace): NodeSeq =
-    <div class="formstacktrace details" id={System.identityHashCode(e).toString}>
-      {e.message.notNull+" ("+e.location+")"}
-      {e.stackTrace.map(st => <div>{st}</div>)}
-    </div>
 }
 /**
  * Cell embedding a Form
@@ -165,14 +174,12 @@ class FormCell(_form: =>Form) extends Cell {
   def text: String = form.text
 
   def xml(implicit args: Arguments) = form.toCellXml(args)
-  def colnumber = if (form.rows.isEmpty) 1 else form.rows.map(_.cells.map(c => c.colnumber).sum).max
 
   def execute = form.execute
   def executeCell = new FormCell(form.executeForm)
 
   def setSuccess = new FormCell(form.setSuccess)
   def setFailure = new FormCell(form.setFailure)
-  def stacktraces(implicit args: Arguments) = Form.stacktraces(form)(args)
 
   /**
    * @return the width of a form when inlined.
@@ -180,29 +187,33 @@ class FormCell(_form: =>Form) extends Cell {
    */
   override def width = text.split("\n").map((_:String).size).max[Int] - 4
 }
-
+object FormCell {
+  def unapply(cell: FormCell): Option[Form] = Some(cell.form)
+}
 /** Proxy to a cell that's not evaluated right away when added to a row */
 class LazyCell(_cell: =>Cell) extends Cell {
   lazy val cell = _cell
   def text: String = cell.text
   def xml(implicit args: Arguments) = cell.xml(args)
-  def colnumber = cell.colnumber
   def execute = cell.execute
   def executeCell = cell.executeCell
   def setSuccess = cell.setSuccess
   def setFailure = cell.setFailure
-  def stacktraces(implicit args: Arguments) = cell.stacktraces(args)
+}
+object LazyCell {
+  def unapply(cell: LazyCell): Option[Cell] = Some(cell.cell)
 }
 /** This cell can contain any xml */
 class XmlCell(_theXml: =>NodeSeq) extends Cell {
   lazy val theXml = _theXml
   def text: String = theXml.text
   def xml(implicit args: Arguments) = theXml
-  def colnumber = 100
   def execute = success
   def executeCell = this
   def setSuccess = this
   def setFailure = this
-  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
+}
+object XmlCell {
+  def unapply(cell: XmlCell): Option[NodeSeq] = Some(cell.theXml)
 }
 

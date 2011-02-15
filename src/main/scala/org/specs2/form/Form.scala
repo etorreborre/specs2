@@ -177,7 +177,7 @@ case object Form {
    * @return the xml representation of a Form
    */
   def titleAndRows(form: Form)(implicit args: Arguments = Arguments()) = {
-    val colnumber = new FormCell(form).colnumber
+    val colnumber = Xml.colnumber(new FormCell(form))
     title(form, colnumber) ++
     rows(form, colnumber)
   }
@@ -187,7 +187,7 @@ case object Form {
    *
    */
   def formStacktraces(form: Form)(implicit args: Arguments = Arguments()) = {
-    val traces = stacktraces(form)
+    val traces = Xml.stacktraces(new FormCell(form))
     (<i>[click on failed cells to see the stacktraces]</i> unless traces.isEmpty) ++
     traces
   }
@@ -210,12 +210,7 @@ case object Form {
     } else
       c.xml(args).toList
   }
-
   /** @return the stacktraces for a Form */
-  def stacktraces(form: Form)(implicit args: Arguments): NodeSeq = form.rows.map(stacktraces(_)(args)).reduce
-
-  private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq   = row.cells.map(stacktraces(_)(args)).reduce
-  private def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell.stacktraces(args)
 
 }
 

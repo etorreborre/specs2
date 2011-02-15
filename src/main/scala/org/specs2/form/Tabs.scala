@@ -38,8 +38,6 @@ case class Tab(title: String, form: Form, result: Option[Result] = None) extends
   
   def execute = result.getOrElse(form.execute)
   def executeCell = copy(result = result.orElse(Some(form.execute)))
-  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
-  def colnumber = new FormCell(form).colnumber
 
   def text: String = {
     title + "\n" +
