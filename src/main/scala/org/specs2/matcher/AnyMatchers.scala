@@ -147,8 +147,8 @@ class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
     val a = t
     val (db, qa) = (b.description, q(a)) match {
       case (x, y) if (a != b && q(a) == q(b)) => {
-	      val aClass = getClassName(x)
-	      val bClass = getClassName(y)
+	      val aClass = className(x)
+	      val bClass = className(y)
 	      if (aClass != bClass)
           (y + ": " + bClass, x + ": " + aClass)
         else

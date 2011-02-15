@@ -11,11 +11,9 @@ import text.CamelCase._
 private[specs2]
 trait ClassName {
   /** @return the class name of an instance */
-  def className(any: AnyRef): String = className(any.getClass.getName)
-  /** @return the simple name of a class */
-  def simpleName(klass: Class[_]) = {
-    className(klass.getName).split("\\.").last
-  }
+  def simpleClassName(any: AnyRef): String = simpleName(any.getClass)
+  /** @return the class name of an instance */
+  def className(any: AnyRef): String = className(any.getClass)
   /**
    * @return the outer class name for a given class
    */
@@ -23,7 +21,7 @@ trait ClassName {
     c.getDeclaredConstructors.toList(0).getParameterTypes.toList(0).getName
   }
   /**
-   * @return the decoded class name
+   * @return the decoded class name, with its package
    */
   def className(name: String): String = {
     val decoded = NameTransformer.decode(name)
@@ -37,19 +35,17 @@ trait ClassName {
     result
   }
   /**
+   * @return the class name
+   */
+  def className(klass: Class[_]): String = className(klass.getName)
+  /**
    * @return the class name without the package name
    */
-  def className(klass: Class[_]): String = {
+  def simpleName(klass: Class[_]): String = {
     val result = className(klass.getSimpleName)
-    if (result.contains("anon") && klass.getSuperclass != null)
-      className(klass.getSuperclass)
-    else
-      result
+    if (result.contains("anon") && klass.getSuperclass != null) simpleName(klass.getSuperclass)
+    else result
   }
-  /**
-   * @return the class name without the package name of any object
-   */
-  def getClassName[T](a: T): String = className(a.asInstanceOf[java.lang.Object].getClass)
   /**
    * @return the uncamelcased name of the class (or its parent if it is an anonymous class)
    */
