@@ -1,11 +1,9 @@
 package org.specs2
 package form
 
-import scala.xml._
 import control.{ Property }
 import control.Exceptions._
 import execute._
-import StandardResults._
 import matcher._
 
 /**

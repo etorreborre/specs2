@@ -18,13 +18,10 @@ case class Tabs(tabs: List[Tab] = Nil, result: Option[Result] = None) extends Ce
   def setFailure = copy(result = Some(failure))
   def execute = result.getOrElse(executeTabs)
   def executeCell = copy(result = result.orElse(Some(executeTabs)))
-  def stacktraces(implicit args: Arguments) = NodeSeq.Empty
-  def colnumber = tabs.size
 
   def text: String = tabs.map(_.text).mkString("\n")
 
-  def xml(implicit args: Arguments) =
-    <td class="info"><div class="tabber">{tabs.map(_.xml).reduce}</div></td>
+  def xml(implicit args: Arguments) = <td class="info"><div class="tabber">{tabs.map(_.xml).reduce}</div></td>
 
   def executeTabs = tabs.foldLeft(success: Result){ (res, cur) => res and cur.execute }
 }
@@ -39,11 +36,8 @@ case class Tab(title: String, form: Form, result: Option[Result] = None) extends
   def execute = result.getOrElse(form.execute)
   def executeCell = copy(result = result.orElse(Some(form.execute)))
 
-  def text: String = {
-    title + "\n" +
-    new FormCell(form).text
-  }
-  def xml(implicit args: Arguments) =
-    <div class="tabbertab" title={title}>{new FormCell(form.executeForm).xml}</div>
+  def text: String = title + "\n" + new FormCell(form).text
+
+  def xml(implicit args: Arguments) = <div class="tabbertab" title={title}>{new FormCell(form.executeForm).xml}</div>
 
 }

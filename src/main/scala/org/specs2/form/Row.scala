@@ -5,7 +5,6 @@ import scalaz.{ NonEmptyList, Scalaz }
 import Scalaz.{ nel }
 import execute._
 import StandardResults._
-import matcher._
 
 /**
  * A Row is a non-empty list of Cells

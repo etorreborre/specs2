@@ -1,11 +1,11 @@
 package org.specs2
 package form
 
-import scala.xml._
 import control.Exceptions._
 import control.Property
 import execute._
 import DecoratedProperties._
+
 /**
  * An Effect is a property which is used to display names corresponding to side-effects.
  *

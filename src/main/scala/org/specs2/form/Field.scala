@@ -1,11 +1,11 @@
 package org.specs2
 package form
 
-import scala.xml._
 import control.Exceptions._
 import control.Property
 import execute._
 import DecoratedProperties._
+
 /**
  * A Field is a property which is used only to display input values or output values.
  * 
