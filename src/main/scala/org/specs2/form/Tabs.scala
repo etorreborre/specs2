@@ -21,9 +21,7 @@ case class Tabs(tabs: List[Tab] = Nil, result: Option[Result] = None) extends Ce
   def stacktraces(implicit args: Arguments) = NodeSeq.Empty
   def colnumber = tabs.size
 
-  def padText(size: Option[Int]): String = {
-     tabs.map(_.padText(size)).mkString("\n")
-  }
+  def text: String = tabs.map(_.text).mkString("\n")
 
   def xml(implicit args: Arguments) =
     <td class="info"><div class="tabber">{tabs.map(_.xml).reduce}</div></td>
@@ -43,9 +41,9 @@ case class Tab(title: String, form: Form, result: Option[Result] = None) extends
   def stacktraces(implicit args: Arguments) = NodeSeq.Empty
   def colnumber = new FormCell(form).colnumber
 
-  def padText(size: Option[Int]): String = {
+  def text: String = {
     title + "\n" +
-    new FormCell(form).padText(size)
+    new FormCell(form).text
   }
   def xml(implicit args: Arguments) =
     <div class="tabbertab" title={title}>{new FormCell(form.executeForm).xml}</div>

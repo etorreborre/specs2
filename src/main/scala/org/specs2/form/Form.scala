@@ -67,9 +67,7 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   }
 
   /** @return the printed form with a padding space size to use for each cell */
-  def padText(size: Option[Int]): String = {
-    allRows.map(_.padText(maxSizes)).mkString("\n")
-  }
+  def text: String = allRows.map(_.text(maxSizes)).mkString("\n")
 
   /** @return an xml description of this form */
   def toXml(implicit args: Arguments = Arguments()) = Form.toXml(this)(args)
@@ -230,8 +228,8 @@ class InlinedForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row
   override protected def newForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) =
     new InlinedForm(title, rows, result)
 
-  override def padText(size: Option[Int]): String = {
-    allRows.map(_.padText(maxSizes)).mkString("\n").removeStart("| ").removeEnd(" |")
+  override def text: String = {
+    super.text.removeStart("| ").removeEnd(" |")
   }
 
 }

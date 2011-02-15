@@ -19,15 +19,19 @@ import StandardResults._
 trait Cell extends Text with Xml with Executable {
   def setSuccess: Cell
   def setFailure: Cell
+
+  /**
+   * execute the Cell and returns it
+   */
   def executeCell : Cell
 }
 /**
  * Base type for anything returning some text
  */
 trait Text {
-  def text: String = padText(None)
+  /** @return a text representation */
+  def text: String
   def width: Int = text.size
-  def padText(size: Option[Int]): String
 }
 /**
  * Base type for anything returning some xml
@@ -42,12 +46,9 @@ trait Xml {
  * Simple Cell embedding an arbitrary String
  */
 case class TextCell(s: String, result: Result = skipped) extends Cell {
-  def padText(size: Option[Int]) = {
-    size match {
-      case None => s.toString
-      case Some(n) => s.toString.padTo(n, ' ')
-    }
-  }
+
+  def text = s
+
   def xml(implicit args: Arguments) = <td class={execute.statusName}>{s}</td>
   def stacktraces(implicit args: Arguments) = NodeSeq.Empty
 
@@ -61,12 +62,8 @@ case class TextCell(s: String, result: Result = skipped) extends Cell {
  * Cell embedding a Field
  */
 case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
-  def padText(size: Option[Int]) = {
-    size match {
-      case None => f.toString
-      case Some(s) => f.toString.padTo(s, ' ')
-    }
-  }
+  def text = f.toString
+
   def xml(implicit args: Arguments) = {
     val executed = f.valueOrResult match {
       case Left(e)  => e
@@ -98,12 +95,8 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
  * Cell embedding a Eff
  */
 case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell {
-  def padText(size: Option[Int]) = {
-    size match {
-      case None => e.toString
-      case Some(s) => e.toString.padTo(s, ' ')
-    }
-  }
+  def text = e.toString
+
   def xml(implicit args: Arguments) = {
     val executed = e.valueOrResult match {
       case Left(r)  => r
@@ -135,12 +128,7 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell 
  * Cell embedding a Prop
  */
 case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
-  def padText(size: Option[Int]) = {
-    size match {
-      case None => p.toString
-      case Some(s) => p.toString.padTo(s, ' ')
-    }
-  }
+  def text = p.toString
 
   def colnumber = 3
 
@@ -174,10 +162,8 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
 class FormCell(_form: =>Form) extends Cell {
   lazy val form = _form
 
-  /** ignore the passed size and compute the max size on each row */
-  def padText(size: Option[Int]): String = {
-    form.padText(size)
-  }
+  def text: String = form.text
+
   def xml(implicit args: Arguments) = form.toCellXml(args)
   def colnumber = if (form.rows.isEmpty) 1 else form.rows.map(_.cells.map(c => c.colnumber).sum).max
 
@@ -198,7 +184,7 @@ class FormCell(_form: =>Form) extends Cell {
 /** Proxy to a cell that's not evaluated right away when added to a row */
 class LazyCell(_cell: =>Cell) extends Cell {
   lazy val cell = _cell
-  def padText(size: Option[Int]): String = cell.padText(size)
+  def text: String = cell.text
   def xml(implicit args: Arguments) = cell.xml(args)
   def colnumber = cell.colnumber
   def execute = cell.execute
@@ -210,7 +196,7 @@ class LazyCell(_cell: =>Cell) extends Cell {
 /** This cell can contain any xml */
 class XmlCell(_theXml: =>NodeSeq) extends Cell {
   lazy val theXml = _theXml
-  def padText(size: Option[Int]): String = theXml.text
+  def text: String = theXml.text
   def xml(implicit args: Arguments) = theXml
   def colnumber = 100
   def execute = success
