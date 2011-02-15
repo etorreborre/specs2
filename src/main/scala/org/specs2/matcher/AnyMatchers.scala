@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import reflect.Classes._
+import reflect.ClassName._
 import text.Quote._
 import execute._
 

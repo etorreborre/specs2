@@ -5,6 +5,7 @@ package org.specs2.reflect
  */
 private[specs2] 
 trait Anyx { outer =>
+
   /** @return an ExtendedAny object */
   implicit def extendAny(a: Any): ExtendedAny = new ExtendedAny(a)
   class ExtendedAny(a: Any) {
