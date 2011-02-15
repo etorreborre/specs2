@@ -6,7 +6,8 @@ import main._
 import specification.Fragments
 
 /**
- * This trait provides shortcuts to create Arguments instances
+ * This trait provides shortcuts to create Arguments instances and adding them to the BaseSpecification by mutating its
+ * current content
  */
 trait ArgumentsArgs extends main.ArgumentsArgs { this: BaseSpecification =>
   /** shorthand method to create an Arguments object */
