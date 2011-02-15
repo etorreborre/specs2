@@ -19,16 +19,14 @@ import specification._
  * It prints out the result to the output defined by the sbt loggers
  * and publishes events to sbt event handlers
  */
-class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends 
-       ConsoleReporter 
+class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends ConsoleReporter
   with HandlerEvents {  
 	
   override def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit arguments: Arguments) =
     printLines(fs).print(new TestInterfaceResultOutput(loggers))
 
-  override def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = (f: Fragment) => {
- 	  val executed = new FragmentExecution {}.executeFragment(arguments)(f)
-    executed match {
+  override def export(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+    fragments foreach {
       case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer) => result match {
         case Success(text)               => handler.handle(succeeded(text))
         case r @ Failure(text, e, st, d) => handler.handle(failure(text, r.exception))
@@ -38,7 +36,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
       }
       case _ => ()
     }
-    executed
+    print(s, fragments)
   }
 }
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
