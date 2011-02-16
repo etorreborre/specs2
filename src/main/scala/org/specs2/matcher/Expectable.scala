@@ -57,9 +57,7 @@ object Expectable {
   /** @return an Expectable with t as a value, and a constant string for its description */
   def apply[T](t: =>T, d1: String) = new Expectable(() => t) {
     override val desc: Option[String => String] = {
-      val display = (s: String) => d1 +
-        (if (!s.isEmpty && !Seq("true", "false").contains(s)) " " + q(s)
-         else "")
+      val display = (s: String) => d1 + (if (!s.isEmpty && !Seq("true", "false").contains(s)) " " + q(s) else "")
       Some(display)
     }
   }

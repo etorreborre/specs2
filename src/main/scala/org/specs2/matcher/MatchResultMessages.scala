@@ -17,7 +17,7 @@ trait MatchResultMessages {
     }
   }
   implicit val MatchResultMessageMonoid = new Monoid[MatchResultMessage] {
-    val zero = new EmptyMessage()
+    val zero = new EmptySuccessMessage()
     def append(r1: MatchResultMessage, r2: =>MatchResultMessage) = r1 append r2
   }
 
@@ -35,7 +35,7 @@ trait MatchResultMessages {
       m2 match {
         case SuccessMessage(ok, ko) => SuccessMessage(okMessage+"; "+ok, koMessage+"; "+ko)
         case FailureMessage(ok, ko) => FailureMessage(okMessage+"; "+ok, koMessage+"; "+ko)
-        case NeutralMessage(m) => SuccessMessage(okMessage+"; "+m, koMessage+"; "+m)
+        case NeutralMessage(m)      => SuccessMessage(okMessage+"; "+m, koMessage+"; "+m)
         case _ => this
       }
     }
@@ -45,7 +45,7 @@ trait MatchResultMessages {
       m2 match {
         case SuccessMessage(ok, ko) => FailureMessage(okMessage+"; "+ok, koMessage+"; "+ko)
         case FailureMessage(ok, ko) => FailureMessage(okMessage+"; "+ok, koMessage+"; "+ko)
-        case NeutralMessage(m) => FailureMessage(okMessage+"; "+m, koMessage+"; "+m)
+        case NeutralMessage(m)      => FailureMessage(okMessage+"; "+m, koMessage+"; "+m)
         case _ => this
       }
     }
@@ -56,12 +56,12 @@ trait MatchResultMessages {
       m2 match {
         case SuccessMessage(ok, ko) => SuccessMessage(message+"; "+ok, message+"; "+ko)
         case FailureMessage(ok, ko) => FailureMessage(message+"; "+ok, message+"; "+ko)
-        case NeutralMessage(m) => NeutralMessage(message+"; "+m)
+        case NeutralMessage(m)      => NeutralMessage(message+"; "+m)
         case _ => this
       }
     }
   }
-  case class EmptyMessage() extends MatchResultMessage {
+  case class EmptySuccessMessage() extends MatchResultMessage {
     def append(m2: MatchResultMessage) = m2
   }
 }

@@ -1,11 +1,11 @@
 package org.specs2
 package matcher
 
-import scalaz.Scalaz
 import scalaz.Scalaz._
 import execute._
 import Expectable._
 import text.Quote._
+import text.Plural._
 import reflect.ClassName._
 import MatchResultMessages._
 import time.Duration
@@ -69,7 +69,7 @@ trait Matcher[-T] { outer =>
       case SuccessMessage(ok, ko)  => (ok, ko)
       case FailureMessage(ok, ko)  => (ok, ko)
       case NeutralMessage(message) => (message, message)
-      case EmptyMessage()          => ("", "")
+      case EmptySuccessMessage()          => ("", "")
     }
     Matcher.result(other.isSuccess, okMessage, koMessage, value)
   }
@@ -141,11 +141,43 @@ trait Matcher[-T] { outer =>
    * and a sleep time
    */
   def eventually(retries: Int, sleep: Duration): Matcher[T] = EventuallyMatchers.eventually(retries, sleep)(this)
+
+  /**
+   * @return a Matcher matching all the elements of a sequence against the current matcher
+   */
+  def forall = new Matcher[Seq[T]] {
+    def apply[S <: Seq[T]](seq: Expectable[S]) = {
+      val r = seq.value.foldLeft(new MatchSuccess("ok", "ko", null: Expectable[T]): MatchResult[T]) { (res, cur) =>
+        if (res.isSuccess) outer.apply(Expectable(cur))
+        else res
+      }
+      result(r.isSuccess,
+             "All elements of "+q(seq.value.mkString(", "))+" are matching ok",
+             "In the sequence "+q(seq.value.mkString(", "))+", the "+(seq.value.indexOf(r.expectable.value)+1).th+" element is failing: "+r.message,
+             seq)
+    }
+  }
+
+  /**
+   * @return a Matcher matching at least one element of a sequence against the current matcher
+   */
+  def atLeastOnce = new Matcher[Seq[T]] {
+    def apply[S <: Seq[T]](seq: Expectable[S]) = {
+      val r = seq.value.foldLeft(new MatchFailure("ok", "ko", null: Expectable[T]): MatchResult[T]) { (res, cur) =>
+        if (res.isSuccess) res
+        else outer.apply(Expectable(cur))
+      }
+      result(r.isSuccess,
+             "In the sequence "+q(seq.value.mkString(", "))+", the "+(seq.value.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
+             "No element of "+q(seq.value.mkString(", "))+" is matching ok",
+             seq)
+    }
+  }
 }
 
 object Matcher {
   /**
-   * Utility method for creating a MatchResult[T]
+   *  Utility method for creating a MatchResult[T]
    */
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T]): MatchResult[T] = {
 	  if (test) new MatchSuccess(okMessage, koMessage, value) 

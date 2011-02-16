@@ -12,22 +12,23 @@ import specification.Fragments
 trait ArgumentsArgs extends main.ArgumentsArgs { this: BaseSpecification =>
   /** shorthand method to create an Arguments object */
   override def args(
-    ex:            Property[String]   = Property[String](),
-    xonly:         Property[Boolean]  = Property[Boolean](),
-    plan:          Property[Boolean]  = Property[Boolean](),
-    failtrace:     Property[Boolean]  = Property[Boolean](),
-    color:         Property[Boolean]  = Property[Boolean](),
-    noindent:      Property[Boolean]  = Property[Boolean](),
-    showlevel:     Property[Boolean]  = Property[Boolean](),
-    showtimes:     Property[Boolean]  = Property[Boolean](),
-    offset:        Property[Int]      = Property[Int](),
-    specName:      Property[String]   = Property[String](),
-    sequential:    Property[Boolean]  = Property[Boolean](),
-    threadsNb:     Property[Int]      = Property[Int](),
-    markdown:      Property[Boolean]  = Property[Boolean](),
-    debugMarkdown: Property[Boolean]  = Property[Boolean](),
-    diffs:         Property[Diffs]    = Property[Diffs](),
-    fromSource:    Property[Boolean]  = Property[Boolean]()
+    ex:            Property[String]       = Property[String](),
+    xonly:         Property[Boolean]      = Property[Boolean](),
+    plan:          Property[Boolean]      = Property[Boolean](),
+    failtrace:     Property[Boolean]      = Property[Boolean](),
+    color:         Property[Boolean]      = Property[Boolean](),
+    noindent:      Property[Boolean]      = Property[Boolean](),
+    showlevel:     Property[Boolean]      = Property[Boolean](),
+    showtimes:     Property[Boolean]      = Property[Boolean](),
+    offset:        Property[Int]          = Property[Int](),
+    specName:      Property[String]       = Property[String](),
+    sequential:    Property[Boolean]      = Property[Boolean](),
+    threadsNb:     Property[Int]          = Property[Int](),
+    markdown:      Property[Boolean]      = Property[Boolean](),
+    debugMarkdown: Property[Boolean]      = Property[Boolean](),
+    diffs:         Property[Diffs]        = Property[Diffs](),
+    fromSource:    Property[Boolean]      = Property[Boolean](),
+    commandLine:   Seq[String]            = Nil
   ) = {
     addArguments(super.args(
       ex,
@@ -45,7 +46,8 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: BaseSpecification =>
       markdown,
       debugMarkdown,
       diffs,
-      fromSource))
+      fromSource,
+      commandLine))
   }
 
 }

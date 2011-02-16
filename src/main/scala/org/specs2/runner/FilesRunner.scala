@@ -20,28 +20,47 @@ import reporter._
 trait FilesRunner extends SpecificationsFinder {
 
   def main(arguments: Array[String]): Unit = {
-    implicit val args = Arguments(arguments:_*) <| ArgumentsArgs.args(offset=2)
-    println("\nExecuting specifications matching "+args.specName+" in "+FromSource.srcDir+"\n")
+    implicit val args = createArguments(arguments)
+    beforeExecution
 
-    val reporter =
+    reporter match {
+      case Some(r) => {
+        val specs = specifications
+        specs.foreach(execute(_, r))
+        afterExecution(specs)
+      }
+      case None => println("No file to run because the arguments don't contain 'console' or 'html'\n")
+    }
+  }
+
+  /** print a message before the execution */
+  protected def beforeExecution(implicit args: Arguments) = println("\nExecuting specifications matching "+args.specName+" in "+FromSource.srcDir+"\n")
+  /** report a specification */
+  protected def execute(s: BaseSpecification, r: Reporter)(implicit args: Arguments) = r.report(s)
+  /** print a message after the execution based on the number of specifications */
+  protected def afterExecution(specs: Seq[BaseSpecification])(implicit args: Arguments) = {
+    if (specs.size > 1)
+      println("Finished the execution of "+specs.size+" specifications\n")
+    else
+      println("No specification found matching "+args.specName+" in "+FromSource.srcDir+"\n")
+  }
+
+  /** @return the Arguments object depending on the command-line options */
+  protected def createArguments(arguments: Array[String]) = Arguments(arguments:_*) <| ArgumentsArgs.args(offset=2)
+
+  /** @return a reporter depending on the provided arguments */
+  protected def reporter(implicit arguments: Arguments) =
       if (arguments.contains("html"))
         Some(new HtmlReporter {})
       else if (arguments.contains("console"))
         Some(new ConsoleReporter {})
       else None
 
-    reporter match {
-      case Some(r) => {
-        val specs = specifications
-        specs.foreach(r.report)
-        println("Finished the execution of "+specs.size+" specifications\n")
-      }
-      case None => println("No file to run because the arguments don't contain 'console' or 'html'\n")
-    }
-  }
+  /** @return the specifications to execute */
+  protected def specifications(implicit args: Arguments): Seq[BaseSpecification] =
+    specificationClassNames(args).flatMap(createSpecification(_))
 
-  private def specifications(implicit args: Arguments) =
-    specificationNames(FromSource.srcDir, args.specName).flatMap(createSpecification(_))
+  /** @return the specifications class names to execute */
+  protected def specificationClassNames(implicit args: Arguments) = specificationNames(FromSource.srcDir, args.specName)
 
 }
-object FilesRunner extends FilesRunner

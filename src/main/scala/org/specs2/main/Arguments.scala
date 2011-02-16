@@ -24,8 +24,9 @@ case class Arguments (
   _markdown:      Option[Boolean] = None,
   _debugMarkdown: Option[Boolean] = None,
   _diffs:         Option[Diffs]   = None,
-  _fromSource:    Option[Boolean] = None
-) {
+  _fromSource:    Option[Boolean] = None,
+  _commandLine:   Seq[String]     = Nil
+ ) {
   def ex: String                = _ex.getOrElse(".*")
   def xonly: Boolean            = _xonly.getOrElse(false)
   def plan: Boolean             = _plan.getOrElse(false)
@@ -42,7 +43,10 @@ case class Arguments (
   def debugMarkdown: Boolean    = _debugMarkdown.getOrElse(false)
   def diffs: Diffs              = _diffs.getOrElse(Diffs())
   def fromSource: Boolean       = _fromSource.getOrElse(true)
+  def commandLine: Seq[String]  = _commandLine
 
+  /** @return true if the command line contains a given string */
+  def contains(a: String) = commandLine contains a
   /** @alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
   
@@ -66,7 +70,8 @@ case class Arguments (
       other._markdown        .orElse(_markdown),
       other._debugMarkdown   .orElse(_debugMarkdown),
       other._diffs           .orElse(_diffs),
-      other._fromSource      .orElse(_fromSource)
+      other._fromSource      .orElse(_fromSource),
+      if (other._commandLine.isEmpty) _commandLine else other._commandLine
     )
   }
   override def toString = {
@@ -87,9 +92,11 @@ case class Arguments (
     "markdown"       -> _markdown     ,
     "debugMarkdown"  -> _debugMarkdown,
     "diffs"          -> _diffs,
-    "fromSource"     -> _fromSource
+    "fromSource"     -> _fromSource,
+    "commandLine"    -> (if (_commandLine.isEmpty) None else Some(_commandLine.mkString(", ")))
     ).flatMap(showArg).mkString(", ") + ") "
   }
+
   private def showArg(a: (String, Option[_])) = a._2.map(a._1 +" = "+_)
 } 
 
@@ -116,7 +123,8 @@ object Arguments {
        _threadsNb     = int("threadsNb"),
        _markdown      = bool("markdown", "nomarkdown"),
        _debugMarkdown = bool("debugmarkdown"),
-       _fromSource    = bool("fromsource")
+       _fromSource    = bool("fromsource"),
+       _commandLine   = arguments
     )
   }
   

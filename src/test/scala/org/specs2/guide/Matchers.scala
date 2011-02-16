@@ -123,7 +123,11 @@ There are many ways to create matchers for your specific usage. The simplest way
 
  * using logical operators
 
-        def m3 = m1 and m2
+        def beBetween(i: Int, j: Int) = be_>=(i) and be_<=(j)
+
+        // create a Seq Matcher from a Matcher
+        def allBeGreaterThan2: Matcher[Seq[Int]]   = be_>=(2).forall
+        def haveOneGreaterThan2: Matcher[Seq[Int]] = be_>=(2).atLeastOnce
 
  * adapting the actual value. This matcher adapts the existing `be_<=` matcher to a matcher applicable to `Any`
 

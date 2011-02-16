@@ -28,6 +28,18 @@ trait Plural {
      */
 	  def optQty(s: String): Option[String] = if (i > 0) Some(qty(s)) else None
   }
+  /** @return an Ordinal which can have a rank in a sequence */
+  implicit def ordinal(i: Int) = Ordinal(i)
+  case class Ordinal(i: Int) {
+    /**
+     * @return the proper postfix for an ordinal number
+     */
+    def th = i.toString +
+      (if      (i == 1) "st"
+       else if (i == 2) "nd"
+       else if (i == 3) "rd"
+       else             "th")
+  }
 }
 private[specs2] 
 object Plural extends Plural

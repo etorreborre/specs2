@@ -11,7 +11,8 @@ class Runners extends Specification { def is = freetext ^
 There are 4 ways to execute ***specs2*** specifications:
 
  * on the command line, with a console output, and the `specs2.run` runner
- * on the command line, with an html output,  and the `specs2.html` runner
+ * on the command line, with an html output, and the `specs2.html` runner
+ * on the command line, with a console or an html output, and the `specs2.files` runner
  * using [sbt](http://code.google.com/p/simple-build-tool)
  * using [JUnit](http://www.junit.org)
 
@@ -100,6 +101,18 @@ If you want html pages to be produced for your specification you'll need to exec
 By default the files will be created in the `target/specs-report` directory but you can change that by setting the
 `-Dspecs2.outDir` system property.
 
+### Files Runner
+
+The `specs2.files` object will, by default, select and execute Specifications found in the test source directory:
+
+ * the source directory is defined as `src/test/scala` but can be changed by adjusting the system property `specs2.srcTestDir`
+ * the specifications files are selected as classes or object which names match `.*Spec`. This value can be changed by
+   passing a different `specName` value as a command-line argument
+ * `console` or `html` has to be passed on the command-line to specify the required output
+
+You can also extend the `org.specs2.runner.FilesRunner` and override its behavior to implement something more appropriate to
+your environment if necessary.
+
 ### Simple build tool
 
 In order to use ***specs2*** with sbt you need first to add the following lines to your sbt project:
@@ -120,6 +133,12 @@ When you execute one test only, you can pass the arguments on the command line:
 The `html` argument is also available with sbt to allow the creation of the html report from the command line.
 
       > test-only org.specs2.UserGuide -- html
+
+##### Files runner
+
+Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console` or `html` on the command line:
+
+      > test-only allSpecs -- console
 
 ##### Colors
 
