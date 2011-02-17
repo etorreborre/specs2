@@ -109,7 +109,7 @@ case class NeutralMatch[T](m: MatchResult[T]) extends MatchResult[T] {
 }
 case class AndMatch[T](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResult[T] {
   val expectable = m1.expectable
-  override def evaluate[S >: T] = 
+  override def evaluate[S >: T] =
     (m1, m2) match {
     case (_, NeutralMatch(_)) => AndMatch(m1, MatchSkip("", expectable))
     case (NeutralMatch(_), _) => AndMatch(m2, MatchSkip("", expectable))
@@ -146,7 +146,8 @@ class OrMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends MatchR
           case (_, NotMatch(_)) => new OrNotMatch(m1, m2) 
           case (NotMatch(_), _) => new OrMatch(m1.evaluate, m2).evaluate
           case (_, MatchSuccess(_, _, _)) => m2
-          case (_, _) => m1 
+          case (MatchFailure(ok,ko,e,d), MatchFailure(ok2,ko2,e2,d2)) => MatchFailure(ok+"; "+ok2,ko+"; "+ko2,e,d)
+          case (_, _) => m1
         }
       }
     }

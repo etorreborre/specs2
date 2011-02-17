@@ -11,7 +11,6 @@ package matcher
  * `a must matcher`
  */
 class MustExpectable[T] private[specs2] (tm: () => T) extends Expectable[T](tm) { outer =>
-  def mustNot(m: =>Matcher[T]) = applyMatcher(m.not)
   def must(m: =>Matcher[T]) = applyMatcher(m)
   def must_==(other: =>T) = applyMatcher(new BeEqualTo(other))
 }

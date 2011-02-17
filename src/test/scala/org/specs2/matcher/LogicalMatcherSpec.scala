@@ -10,6 +10,7 @@ class LogicalMatcherSpec extends SpecificationWithJUnit { def is =
     "if both matches are ko the result is ko"                                 ! or2^
     "if the first matcher is ok, the second one is not evaluated"             ! or3^
     "if both matchers are ko the combination is ko"                           ! or4^
+    "if the first matcher is ko, and the second ok, the combination is ok"    ! or5^
                                                                               p^
   "a matcher can be and-ed with another one"                                  ^
     "if both matches are ok the result is ok"                                 ! and1^
@@ -25,7 +26,9 @@ class LogicalMatcherSpec extends SpecificationWithJUnit { def is =
   def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
   def or2 = "eric" must (beMatching("a.*") or beMatching(".*z")).not
   def or3 = "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
-  def or4 = "eric" mustNot (beMatching("a.*") or beMatching(".*z"))
+  def or4 = "eric" must not (beMatching("a.*") or beMatching(".*z"))
+  def or5 = ("eric" must (beMatching("a.*") or beMatching("z.*"))) returns
+            "'eric' doesn't match 'a.*'; 'eric' doesn't match 'z.*'"
 
   def and1 = "eric" must be matching("e.*") and be matching(".*c")
   def and2 = ("eric" must be matching("e.*")) and ("torreborre" must be matching(".*tor.*"))
