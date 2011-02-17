@@ -51,7 +51,7 @@ class FeaturesSpec extends Specification { def is = literate ^
     "A specs file runner                                                                  "^
       "reporter all classes on the path                                                   "! done^
       "according to a regular expression                                                  "! done^
-      "reporting the final statistics                                                     "! done^
+      "integrated to sbt                                                                  "! done^
     "A JUnit4 reporter                                                                    "^
       "with nested suites                                                                 "! done^
       "with proper display when the tests have the same name                              "! done^
@@ -70,6 +70,7 @@ class FeaturesSpec extends Specification { def is = literate ^
       "for Numerics                                                                       "! done^
       "for Results                                                                        "! done^
       "for xml                                                                            "! done^
+      "for json                                                                           "! done^
     "Spec for before/after/around                                                         "^
       "before/after                                                                       "! done^
       "example isolation                                                                  "! done^

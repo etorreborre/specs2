@@ -7,10 +7,10 @@ package matcher
 trait Matchers extends AnyMatchers 
                   with IterableMatchers 
                   with MapMatchers
-                  with StringMatchers 
+                  with StringMatchers
                   with XmlMatchers
                   with JsonMatchers
-                  with BeHaveMatchers 
+                  with BeHaveMatchers
                   with ExceptionMatchers
                   with NumericMatchers
                   with OptionMatchers

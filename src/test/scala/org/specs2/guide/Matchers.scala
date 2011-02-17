@@ -58,6 +58,7 @@ API for the complete list:
  * Iterable matchers
  * Map matchers
  * Xml matchers
+ * Json matchers
  * File matchers
  * Scalaz matchers
  * Result matchers
@@ -320,6 +321,43 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
 
   * The equivalent of `\` for a "deep" match is simply `\\`
     `<a><s><c></c></s></a> must \\("c")`
+
+#### Json matchers
+
+[Json](www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be
+used to verify the presence of appropriate values in Strings representing Json documents:
+
+  * `/(value)` checks if a value is present at the root of the document. This can only be the case if that document is
+    an Array
+
+  * `/(key -> value)` checks if a pair is present at the root of the document. This can only be the case if that document is
+    a Map
+
+  * `*/(value)` checks if a value is present anywhere in the document, either as an entry in an Array, or as the value
+    for a key in a Map
+
+  * `*/(key -> value)` checks if a pair is present anywhere in a Map of thedocument
+
+Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document.
+For example, for the following document:
+
+        // taken from an example in the Lift project
+        val person = {
+          "person": {
+            "name": "Joe",
+            "age": 35,
+            "spouse": {
+              "person": {
+                "name": "Marilyn",
+                "age": 33
+              }
+            }
+          }
+        }
+
+You can use these combinations:
+
+       person must /("person") */("person") /("age" -> 33.0) // by default numbers are parsed as Doubles
 
 #### File matchers
 
@@ -626,6 +664,7 @@ framework. You can reuse the following traits:
   include(xonly, new MockitoSpecification)                                                                              ^
   include(xonly, new DataTableSpecification)                                                                            ^
   include(xonly, mockitoExamples)                                                                                       ^
+  include(xonly, jsonExamples)                                                                                          ^
   end
 
  lazy val examples = new Specification { def is = "Examples".title ^
@@ -731,4 +770,23 @@ framework. You can reuse the following traits:
        2    !  2  !  4  |
        1    !  1  !  2  |> { (a, b, c) =>  a + b must_== c }
   }
+
+  lazy val jsonExamples = new JsonExamples
+}
+class JsonExamples extends SpecificationWithJUnit {
+    val person = """{
+      "person": {
+        "name": "Joe",
+        "age": 35,
+        "spouse": {
+          "person": {
+            "name": "Marilyn",
+            "age": 33
+          }
+        }
+      }
+    }"""
+
+    def is =
+    "1" ! { person must /("person") */("person") /("age" -> 33.0) }
 }
