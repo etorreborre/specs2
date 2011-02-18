@@ -4,6 +4,7 @@ import execute._
 import main._
 import specification._
 import FormattingFragments._
+import matcher.MatchResult
 
 /**
  * Adding new implicits to support specs-like naming: "the system" should "do this" in { ... }
@@ -29,13 +30,22 @@ trait BaseSpecification extends specification.BaseSpecification {
     def can(fs: =>Example) = addFragments(s, fs, "can")
   }
   /**
-   * add a new example using the 'in' or the '>>' method
+   * add a new example using 'in' or '>>' or '!'
    */
   implicit def inExample(s: String): InExample = new InExample(s)
+  /** transient class to hold an example description before creating a full Example */
   class InExample(s: String) {
-    def in[T <% Result](r: =>T) = addExample(s, r)
-    def >>[T <% Result](r: =>T) = in(r)
-    def >>(e: =>Example) = addFragments(s, e, "")
+    def in[T <% Result](r: =>T): Example = addExample(s, r)
+    def >>[T <% Result](r: =>T): Example = in(r)
+    def >>(e: =>Example)        = addFragments(s, e, "")
+  }
+
+  override implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s, mutableExampleFactory)
+  
+  private val mutableExampleFactory = new ExampleFactory {
+    def newExample[T <% Result](s: String, function: String => T): Example = addExample(s, function(s))
+	  def newExample[T](s: String, t: =>MatchResult[T]): Example             = addExample(s, t.toResult)
+	  def newExample[T <% Result](s: String, t: =>T): Example                = addExample(s, t)
   }
 
   /**
@@ -84,7 +94,7 @@ trait BaseSpecification extends specification.BaseSpecification {
     a
   }
   protected def addExample[T <% Result](s: String, r: =>T): Example = {
-    val ex = s ! r
+    val ex = Example(s, r)
     specFragments = specFragments ^ ex
     ex
   }
