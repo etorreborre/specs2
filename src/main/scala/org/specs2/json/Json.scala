@@ -70,6 +70,7 @@ trait Json {
         case None                      => findDeepSeq(JSONArray(map.values.toList))
       }
       case JSONArray((o @ JSONObject(m)) :: rest)   => findDeepSeq(o) ++ findDeepSeq(JSONArray(rest))
+      case JSONArray((o @ JSONArray(a)) :: rest)    => findDeepSeq(o) ++ findDeepSeq(JSONArray(rest))
       case JSONArray(other :: rest)                 => findDeepSeq(JSONArray(rest))
       case JSONArray(list)                          => Nil
     }

@@ -1,33 +1,43 @@
 package org.specs2
 package json
 
+import mutable.SpecificationWithJUnit
 import matcher._
 import util.parsing.json._
 import org.scalacheck._
 import JsonGen._
 
 class JsonSpec extends SpecificationWithJUnit with ScalaCheck {
-  implicit val jsonParams = set(maxSize -> 3); def is =
+  implicit val jsonParams = set(maxSize -> 3)
   
-  "The pairs of a json document must beEmpty or have values with a terminal type" ! check { (json: JSONType) =>
+  "The pairs of a json document must have values with a terminal type" ! check { (json: JSONType) =>
     Json.pairs(json) must haveTerminalValues
-  }^
-  "The values of a json document must beEmpty or have values with a terminal type" ! check { (json: JSONType) =>
+  }
+  "The values of a json document must have values with a terminal type" ! check { (json: JSONType) =>
     Json.values(json) must beTerminalValues
+  }
+  "The find method returns None if a key is not present at the first level of a document" ! check { (json: JSONType) =>
+    Json.find("xx", json) must beNone
+  }
+  "The find method returns Some(value) if a key is present at the first level of a document" ! check { (json: JSONType) =>
+    Json.find("key", new JSONObject(Map("key"->json))) must beSome(json)
+  }
+  "The findDeep method returns Some(value) if a key is present somewhere in a document and points to a JSON object" ! check { (json: JSONType) =>
+    if (json.toString.contains("a : "))
+      Json.findDeep("a", json) must beSome
+    else
+      Json.findDeep("a", json) must beNone
+  }
+
+  def isTerminal(a: Any) = a match {
+    case JSONArray(_)  => false
+    case JSONObject(_) => false
+    case other         => true
   }
 
   def beTerminalValues: Matcher[Seq[Any]] = beTerminalValue.forall
-  def beTerminalValue = new Matcher[Any] {
-    def apply[S <: Any](v: Expectable[S]) = {
-      val value = v.value
-      result(isTerminal(value), value+" is terminal", value+" is not terminal", v)
-    }
-    def isTerminal(a: Any) = a match {
-      case JSONArray(_)  => false
-      case JSONObject(_) => false
-      case other         => true
-    }
-  }
+  def beTerminalValue: Matcher[Any] = (isTerminal(_:Any), (_:Any)+" is not terminal")
+
   def haveTerminalValues: Matcher[Seq[(Any, Any)]] = haveTerminalValue.forall
   def haveTerminalValue = beTerminalValue ^^ ((p:(Any, Any)) => p._2)
 }
