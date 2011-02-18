@@ -147,14 +147,18 @@ trait Matcher[-T] { outer =>
    */
   def forall = new Matcher[Seq[T]] {
     def apply[S <: Seq[T]](seq: Expectable[S]) = {
-      val r = seq.value.foldLeft(new MatchSuccess("ok", "ko", null: Expectable[T]): MatchResult[T]) { (res, cur) =>
-        if (res.isSuccess) outer.apply(Expectable(cur))
-        else res
+      if (seq.value.isEmpty)
+        result(true, "ok", "ko", seq)
+      else {
+        val r = seq.value.drop(1).foldLeft(outer.apply(Expectable(seq.value.head))) { (res, cur) =>
+          if (res.isSuccess) outer.apply(Expectable(cur))
+          else res
+        }
+        result(r.isSuccess,
+               "All elements of "+q(seq.value.mkString(", "))+" are matching ok",
+               "In the sequence "+q(seq.value.mkString(", "))+", the "+(seq.value.indexOf(r.expectable.value)+1).th+" element is failing: "+r.message,
+               seq)
       }
-      result(r.isSuccess,
-             "All elements of "+q(seq.value.mkString(", "))+" are matching ok",
-             "In the sequence "+q(seq.value.mkString(", "))+", the "+(seq.value.indexOf(r.expectable.value)+1).th+" element is failing: "+r.message,
-             seq)
     }
   }
 
@@ -163,14 +167,18 @@ trait Matcher[-T] { outer =>
    */
   def atLeastOnce = new Matcher[Seq[T]] {
     def apply[S <: Seq[T]](seq: Expectable[S]) = {
-      val r = seq.value.foldLeft(new MatchFailure("ok", "ko", null: Expectable[T]): MatchResult[T]) { (res, cur) =>
-        if (res.isSuccess) res
-        else outer.apply(Expectable(cur))
+      if (seq.value.isEmpty)
+        result(false, "ok", "ko", seq)
+      else {
+        val r = seq.value.drop(1).foldLeft(outer.apply(Expectable(seq.value.head))) { (res, cur) =>
+          if (res.isSuccess) res
+          else outer.apply(Expectable(cur))
+        }
+        result(r.isSuccess,
+          "In the sequence "+q(seq.value.mkString(", "))+", the "+(seq.value.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
+          "No element of "+q(seq.value.mkString(", "))+" is matching ok",
+          seq)
       }
-      result(r.isSuccess,
-             "In the sequence "+q(seq.value.mkString(", "))+", the "+(seq.value.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
-             "No element of "+q(seq.value.mkString(", "))+" is matching ok",
-             seq)
     }
   }
 }
