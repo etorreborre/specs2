@@ -117,11 +117,21 @@ trait MatchersImplicits {
   /**
    * This method transform a function to a Matcher
    */
-  implicit def functionToMatcher[T](f: T => (Boolean, String, String)) = new Matcher[T] {
+  implicit def functionToMatcher[T](f: (T => Boolean, String, String)): Matcher[T] =
+    functionAndMessagesToMatcher[T]((f._1, (t:T) => f._2, (t:T) => f._3))
+  /**
+   * This method transform a function to a Matcher
+   */
+  implicit def functionAndKoMessageToMatcher[T](f: (T => Boolean, T => String)): Matcher[T] =
+    functionAndMessagesToMatcher[T]((f._1, (t:T) => "not ("+f._2(t)+")", f._2))
+  /**
+   * This method transform a function, with function descriptors to a Matcher
+   */
+  implicit def functionAndMessagesToMatcher[T](f: (T => Boolean, T => String, T => String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
       val expectable = s
-      val functionResult = f(expectable.value)
-      result(functionResult._1,  functionResult._2, functionResult._3, expectable)
+      val functionResult = f._1(expectable.value)
+      result(functionResult,  f._2(s.value), f._3(s.value), expectable)
     }
   }
 
