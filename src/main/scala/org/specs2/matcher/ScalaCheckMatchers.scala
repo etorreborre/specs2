@@ -104,7 +104,14 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       case Result(Failed(args, labels), n, _, _, _) =>
         execute.Failure("A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels))
       case Result(PropException(args, ex, labels), n, _, _, _) =>
-        execute.Error("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels))
+        ex match {
+          case matcher.FailureException(f) =>
+            execute.Failure("A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels+f.message))
+          case e: java.lang.Exception         =>
+            execute.Error("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels), e)
+          case throwable    => throw ex
+        }
+
     }
   }
   // depending on the result, return the appropriate success status and messages
