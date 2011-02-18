@@ -2,14 +2,16 @@ package org.specs2
 package matcher
 
 class MatcherSpec extends SpecificationWithJUnit { def is =
-                                                                                                         """
+                                                                                                                        """
   Matchers can be created in different ways
-                                                                                                         """^
-                                                                                                         p^
-  "a matcher can be adapted with a function"                                                             ! e1^
-  "a matcher can be adapted with a function for both expected and actual values"                         ! e2^
-  "a matcher can be defined by a function"                                                               ! e3^
-                                                                                                          end
+                                                                                                                        """^
+                                                                                                                        p^
+  "a matcher can be adapted with a function"                                                                            ! e1^
+  "a matcher can be adapted with a function for both expected and actual values"                                        ! e2^
+  "a matcher can be defined by a function with 2 messages"                                                              ! e3^
+  "a matcher can be defined by a function with a function for the ko message"                                           ! e4^
+  "a matcher can be defined by a function with 2 functions for the messages"                                            ! e5^
+                                                                                                                        end
 
   def e1 = new Exception("message")  must be_==("message") ^^ ((_:Exception).getMessage)
   def e2 = {
@@ -18,7 +20,15 @@ class MatcherSpec extends SpecificationWithJUnit { def is =
     Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) toResult
   }
   def e3 = {
-    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, i + " is even", i + " is not even")
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, "even", "odd")
+    2 must beEven
+  }
+  def e4 = {
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is odd")
+    2 must beEven
+  }
+  def e5 = {
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
     2 must beEven
   }
 }

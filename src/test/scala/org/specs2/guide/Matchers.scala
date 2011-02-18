@@ -85,7 +85,7 @@ You can see on the examples above several things which are applicable to all mat
 
 An non-exhaustive list of those matchers:
 
- * ` beTheSameAs` for checking if `a eq b`
+ * `beTheSameAs` for checking if `a eq b`
  * `beTrue, beFalse`
  * `beLike { case exp => ok }`: to check if an object is like a given pattern
  * `beLike { case exp => exp must beXXX }`: to check if an object is like a given pattern, and verifies a condition
@@ -152,9 +152,11 @@ There are many ways to create matchers for your specific usage. The simplest way
         1 must be_==(2).orSkip
         1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
 
-If this is not enough you can transform a function, returning a Boolean and 2 messages, into a Matcher:
+If this is not enough, you can use tuplets to create Matchers:
 
-       val m: Matcher[String] = (s: String) => (s.startsWith("hello"), "ok string", "ko string")
+       val m: Matcher[String]  = ((_: String).startsWith("hello"), "starts with hello", "doesn't start with hello")
+       val m2: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ "doesn't start with hello")
+       val m3: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ "starts with hello", (s:String) => s+ "doesn't start with hello")
 
 And if you want absolute power over matching, you can define your own matcher:
 
