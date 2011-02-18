@@ -17,72 +17,67 @@ trait Json {
   /**
    * @return the list of pairs in the json document where the value is a terminal type
    */
-  def pairs(json: JSONType): Seq[(Any, Any)] = json match {
-    case JSONObject(map) => map.toList.flatMap { v => v match {
-        case (k, o @ JSONObject(map)) => pairs(o)
-        case (k, o @ JSONArray(list)) => pairs(o)
-        case (key, value)             => Seq((key, value))
-      }
-    }
-    case JSONArray((o @ JSONObject(map)) :: rest) => pairs(o) ++ pairs(JSONArray(rest))
-    case JSONArray(other :: rest)                 => pairs(JSONArray(rest))
-    case JSONArray(list)                          => Nil
-  }
+  def pairs(json: JSONType): Seq[(Any, Any)] = collect(json)(keyedValues = {
+    case (key, value) => Seq((key,value))
+    case other        => Nil
+  })
 
   /**
    * @return the list of values in the json document where the value is a terminal type
    */
-  def values(json: JSONType): Seq[Any] = json match {
-    case JSONObject(map) => map.toList.flatMap { v => v match {
-        case (k, o @ JSONObject(map)) => values(o)
-        case (k, o @ JSONArray(list)) => values(o)
-        case (key, value)             => Seq(value)
-      }
-    }
-    case JSONArray((o @ JSONObject(map)) :: rest) => values(o) ++ values(JSONArray(rest))
-    case JSONArray((o @ JSONArray(list)) :: rest) => values(o) ++ values(JSONArray(rest))
-    case JSONArray(other :: rest)                 => Seq(other) ++ values(JSONArray(rest))
-    case JSONArray(Nil)                           => Nil
-  }
-
-  /**
-   * @return the JSON object that's addressed by a key if the document is a Map
-   */
-  def find(key: String, json: JSONType): Option[JSONType] = json match {
-    case JSONObject(map) => map.get(key) match {
-      case Some(o @ JSONObject(m)) => Some(o)
-      case Some(o @ JSONArray(a))  => Some(o)
-      case other                   => None
-    }
-    case other           => None
-  }
+  def values(json: JSONType): Seq[Any] = collect(json)(keyedValues = {
+    case (key, value) => Seq(value)
+    case other        => Seq(other)
+  })
 
   /**
    * @return all the JSON objects or values that are addressed by a key in the document.
    *         if there is only one it is returned directly, otherwise the elements are put in a JSONArray
    */
   def findDeep(key: String, json: JSONType): Option[JSONType] = {
-    def findDeepSeq(json: JSONType): Seq[Any] = json match {
-      case JSONObject(map) => map.get(key) match {
-        case Some(o @ JSONObject(m))   => Seq(o) ++ findDeepSeq(o)
-        case Some(o @ JSONArray(list)) => Seq(o) ++ findDeepSeq(o)
-        case Some(other)               => Seq(other)
-        case None                      => findDeepSeq(JSONArray(map.values.toList))
-      }
-      case JSONArray((o @ JSONObject(m)) :: rest)   => findDeepSeq(o) ++ findDeepSeq(JSONArray(rest))
-      case JSONArray((o @ JSONArray(a)) :: rest)    => findDeepSeq(o) ++ findDeepSeq(JSONArray(rest))
-      case JSONArray(other :: rest)                 => findDeepSeq(JSONArray(rest))
-      case JSONArray(list)                          => Nil
-    }
-    val seq = findDeepSeq(json)
+    val seq = collect(json)( keyedValues = {
+      case (k, v) if (k == key) => Seq(v)
+      case other                => Nil
+    }, keyedObjects = {
+      case (k, o) if (k == key) => Seq(o)
+      case other                => Nil
+    })
     seq match {
-      case Nil                        => None
-      case (o @ JSONArray(_)) :: Nil  => Some(o)
-      case (o @ JSONObject(_)) :: Nil => Some(o)
-      case other                      => Some(JSONArray(seq.toList))
+      case Nil                   => None
+      case (o: JSONType) :: Nil  => Some(o)
+      case other                 => Some(JSONArray(seq.toList))
     }
   }
 
+  /**
+   * @return the JSON object that's addressed by a key if the document is a Map
+   */
+  def find(key: String, json: JSONType): Option[JSONType] = json match {
+    case JSONObject(map) => map.get(key) map { case (o: JSONType) => o }
+    case other           => None
+  }
+
+  /**
+   * generic collect operation to iterate through the JSON tree and get values and objects
+   */
+  private def collect[T](json: JSONType)(values: Any => Seq[T] = vs, objects: JSONType => Seq[T] = os,
+                         keyedValues: (Any, Any)  => Seq[T] = kvs, keyedObjects: (Any, Any) => Seq[T] = kvs): Seq[T] = json match {
+    case JSONObject(map) => map.toList.flatMap { v => v match {
+        case (k, (o: JSONType)) => objects(o) ++ keyedObjects(k, o) ++ collect(o)(values, objects, keyedValues, keyedObjects)
+        case (k, v)             => values(v)  ++ keyedValues(k, v)
+      }
+    }
+    case JSONArray((o: JSONType) :: rest) => objects(o) ++
+                                             collect(o)(values, objects, keyedValues, keyedObjects) ++
+                                             collect(JSONArray(rest))(values, objects, keyedValues, keyedObjects)
+    case JSONArray(other :: rest)         => values(other) ++
+                                             collect(JSONArray(rest))(values, objects, keyedValues, keyedObjects)
+    case JSONArray(Nil)                   => Nil
+  }
+
+  private def vs[T]  = (a: Any) => (Nil:Seq[T])
+  private def os[T]  = (a: JSONType) => (Nil:Seq[T])
+  private def kvs[T] = (k: Any, v: Any) => (Nil:Seq[T])
 }
 private[specs2]
 object Json extends Json
