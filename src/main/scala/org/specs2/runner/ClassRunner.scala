@@ -31,12 +31,12 @@ class ClassRunner extends Classes with ConsoleOutput {
 	  }
   }
   
-  protected[specs2] def run(args: Seq[String], specification: BaseSpecification)(f: Exception => Unit) = {
+  protected[specs2] def run(args: Seq[String], specification: SpecificationStructure)(f: Exception => Unit) = {
 	  trye(reporter.report(specification)(Arguments(args:_*).overrideWith(specification.content.arguments)))(f)
   }
 
-  private def createSpecification(className: String): BaseSpecification = {
-    tryToCreateObject[BaseSpecification](className, true, true) match {
+  private def createSpecification(className: String): SpecificationStructure = {
+    tryToCreateObject[SpecificationStructure](className, true, true) match {
       case Some(s) => s
       case None => error("can not create specification: "+className)
     }

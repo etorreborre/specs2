@@ -36,9 +36,9 @@ trait FilesRunner extends SpecificationsFinder {
   /** print a message before the execution */
   protected def beforeExecution(implicit args: Arguments) = println("\nExecuting specifications matching "+args.specName+" in "+FromSource.srcDir+"\n")
   /** report a specification */
-  protected def execute(s: BaseSpecification, r: Reporter)(implicit args: Arguments) = r.report(s)
+  protected def execute(s: SpecificationStructure, r: Reporter)(implicit args: Arguments) = r.report(s)
   /** print a message after the execution based on the number of specifications */
-  protected def afterExecution(specs: Seq[BaseSpecification])(implicit args: Arguments) = {
+  protected def afterExecution(specs: Seq[SpecificationStructure])(implicit args: Arguments) = {
     if (specs.size > 1)
       println("Finished the execution of "+specs.size+" specifications\n")
     else
@@ -57,7 +57,7 @@ trait FilesRunner extends SpecificationsFinder {
       else None
 
   /** @return the specifications to execute */
-  protected def specifications(implicit args: Arguments): Seq[BaseSpecification] =
+  protected def specifications(implicit args: Arguments): Seq[SpecificationStructure] =
     specificationClassNames(args).flatMap(createSpecification(_))
 
   /** @return the specifications class names to execute */

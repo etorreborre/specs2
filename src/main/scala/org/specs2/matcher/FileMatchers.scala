@@ -123,14 +123,15 @@ trait FileBaseMatchers extends PathMatchers {
    */
   private implicit def asPath(p: String) = Path(p)
 
-  /** 
-   * This case class is used to provide the getPath() method,
-   * so that all FileMatchers can be used on Strings.
-   */
-  private case class Path(p: String) {
-    def path = this
-    def getPath(): String = p
-  }
+}
+/**
+ * This case class is used to provide the getPath() method,
+ * so that all FileMatchers can be used on Strings.
+ */
+private[specs2]
+case class Path(p: String) {
+  def path = this
+  def getPath(): String = p
 }
 private[specs2]
 trait FileBeHaveMatchers { this: FileBaseMatchers =>

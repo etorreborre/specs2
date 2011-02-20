@@ -8,16 +8,19 @@ import main.Arguments
  * 
  * * a Seq of Fragments, available through the SpecificationStructure trait
  * * methods for creating Fragments from the FragmentsBuilder trait
+ * * methods to include other specifications
  *
  */
-trait BaseSpecification extends SpecificationStructure 
-   with FragmentsBuilder {
-  
+trait BaseSpecification extends SpecificationStructure with FragmentsBuilder with SpecificationInclusion
+
+/**
+ * additional methods to include other specifications or Fragments
+ */
+trait SpecificationInclusion { this: FragmentsBuilder =>
   def include(f: Fragments): FragmentsFragment = fragmentsFragments(f)
   def include(s: SpecificationStructure): FragmentsFragment = include(s.content)
   def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(s.content.overrideArgs(args))
 }
-
 /**
  * The structure of a Specification is simply defined as a sequence of fragments
  */

@@ -55,7 +55,7 @@ class TestInterfaceRunnerSpec extends SpecificationWithJUnit { def is =
 	    }
 	    runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], Array(""))
     }
-	  def e1 = there was one(run.reporter).report(any[specification.BaseSpecification])(any[Arguments])
+	  def e1 = there was one(run.reporter).report(any[specification.SpecificationStructure])(any[Arguments])
   }
 }
 

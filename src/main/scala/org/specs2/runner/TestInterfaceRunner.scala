@@ -26,7 +26,7 @@ object Fingerprints {
 }
 
 trait Specs2Fingerprint extends TestFingerprint {
-  def superClassName = "org.specs2.specification.BaseSpecification"
+  def superClassName = "org.specs2.specification.SpecificationStructure"
 }
 trait FilesRunnerFingerprint extends TestFingerprint {
   def superClassName = "org.specs2.runner.FilesRunner"
@@ -49,7 +49,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     }
 
   def runSpecification(classname: String, handler: EventHandler, args: Array[String]): Any = {
-    toRun[BaseSpecification](classname, handler).right.toOption map { s =>
+    toRun[SpecificationStructure](classname, handler).right.toOption map { s =>
       if (args.contains("html")) specs2.html.main(Array(classname) ++ args)
       else                       runSpecification(s, handler, args)
     }
@@ -73,7 +73,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     }
     runner
   }
-  private def runSpecification(specification: BaseSpecification, handler: EventHandler, args: Array[String]): Unit = {
+  private def runSpecification(specification: SpecificationStructure, handler: EventHandler, args: Array[String]): Unit = {
     reporter(handler).report(specification)(Arguments(args:_*))
   }
 

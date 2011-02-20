@@ -13,11 +13,9 @@ import matcher.MatchResult
  * is created.
  *
  */
-trait BaseSpecification extends specification.BaseSpecification {
+trait FragmentsBuilder extends specification.FragmentsBuilder {
   /** local mutable contents of the specification */
-  private var specFragments: Fragments = new Fragments()
-
-  def is = specFragments
+  protected[specs2] var specFragments: Fragments = new Fragments()
 
   override implicit def title(s: String): MutableSpecTitle = new MutableSpecTitle(s)
   class MutableSpecTitle(s: String) extends SpecTitle(s) {
@@ -69,17 +67,6 @@ trait BaseSpecification extends specification.BaseSpecification {
    */
   def link(f: Fragments) = addFragments(f)
 
-  /**
-   * include other specifications
-   */
-  override def include(s: SpecificationStructure): FragmentsFragment = {
-    val fs = s.content
-    addFragments(fs)
-    super.include(fs)
-  }
-
-  override def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(s.content.overrideArgs(args))
-
   protected def addFragments[T](s: String, fs: =>T, word: String): Unit = {
     addFragments(s + " " + word)
     fs
@@ -98,5 +85,5 @@ trait BaseSpecification extends specification.BaseSpecification {
     specFragments = specFragments ^ ex
     ex
   }
-
 }
+

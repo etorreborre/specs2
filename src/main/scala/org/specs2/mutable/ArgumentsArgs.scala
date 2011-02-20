@@ -6,10 +6,10 @@ import main._
 import specification.Fragments
 
 /**
- * This trait provides shortcuts to create Arguments instances and adding them to the BaseSpecification by mutating its
+ * This trait provides shortcuts to create Arguments instances and adding them to the SpecificationStructure by mutating its
  * current content
  */
-trait ArgumentsArgs extends main.ArgumentsArgs { this: BaseSpecification =>
+trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
   /** shorthand method to create an Arguments object */
   override def args(
     ex:            Property[String]       = Property[String](),

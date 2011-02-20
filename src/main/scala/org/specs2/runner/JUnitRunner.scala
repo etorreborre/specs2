@@ -27,7 +27,7 @@ class JUnitRunner(klass: Class[_]) extends Runner {
   private val executor = new FragmentExecution {}
   
   /** specification to execute */
-  protected lazy val specification = tryToCreateObject[BaseSpecification](klass.getName, true, true).get
+  protected lazy val specification = tryToCreateObject[SpecificationStructure](klass.getName, true, true).get
   protected lazy val content = specification.content
   /** fold object used to create descriptions */
   private val descriptions = new JUnitDescriptions(klass)
@@ -79,11 +79,11 @@ class JUnitRunner(klass: Class[_]) extends Runner {
  * Factory methods to help with testing
  */
 object JUnitRunner {
-  def apply[T <: BaseSpecification](implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure)
-  def apply[T <: BaseSpecification](s: T)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
+  def apply[T <: SpecificationStructure](implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure)
+  def apply[T <: SpecificationStructure](s: T)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
     override protected lazy val specification = s	  
   }
-  def apply[T <: BaseSpecification](fragments: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
+  def apply[T <: SpecificationStructure](fragments: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
     override protected lazy val content = fragments	  
   }
 }

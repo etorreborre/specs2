@@ -41,15 +41,7 @@ trait NumericBaseMatchers {
   
   /** implicit definition to create delta for the beCloseTo matcher */
   implicit def ToDelta[S : Numeric](n: S): CanHaveDelta[S] = CanHaveDelta(n)
-  /** transient class allowing the creation of a delta */
-  private[specs2]
-  case class CanHaveDelta[S : Numeric](n: S) {
-    def +/-(delta: S) = Delta(n, delta)
-  }
-  /** class representing a numeric range */
-  private[specs2]
-  case class Delta[S](n: S, delta: S)
-  /** matches if x = n +/- delta */   
+  /** matches if x = n +/- delta */
   def beCloseTo[S : Numeric](n: S, delta: S): Matcher[S] = new BeCloseTo(n, delta)
   def closeTo[S : Numeric](n: S, delta: S): Matcher[S] = beCloseTo(n, delta)
   /** matches if x = n +/- delta */   
@@ -61,6 +53,15 @@ trait NumericBaseMatchers {
   def ~[S : Numeric](delta: Delta[S]): Matcher[S] = beCloseTo(delta)
 
 }
+/** transient class allowing the creation of a delta */
+private[specs2]
+case class CanHaveDelta[S : Numeric](n: S) {
+  def +/-(delta: S) = Delta(n, delta)
+}
+/** class representing a numeric range */
+private[specs2]
+case class Delta[S](n: S, delta: S)
+
 private[specs2]
 trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
   /** 
