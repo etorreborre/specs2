@@ -15,6 +15,7 @@ The following examples specify the functionalities for such a mutable specificat
     "every example in a should block creates examples fragments following the `should` text"                        ! fragments().e2^
     "an action can be created with the `action` keyword"                                                            ! fragments().e3^
     "arguments can be created with the `args` keyword"                                                              ! fragments().e4^
+    "examples can be nested"                                                                                        ! fragments().e5^
                                                                                                                     p^
   "Execution"                                                                                                       ^
     "the first failing expectation stops an Example execution"                                                      ! execution().e1^
@@ -27,6 +28,7 @@ The following examples specify the functionalities for such a mutable specificat
     def e2 = contentList must contain("Text(it should)", "Example(have one example)", "Example(have failing example)").inOrder
     def e3 = contentList must contain("Step", "Text(it should)").inOrder
     def e4 = fragments.toList must beLike { case SpecStart(_, a) :: other => a.xonly must beTrue }
+    def e5 = contentList must contain("Text(examples can)", "Text(be nested)", "Example(at level 1)", "Example(at level 2)").inOrder
   }
 
   case class execution() extends FragmentExecution with HasAMutableSpec {
@@ -47,6 +49,12 @@ The following examples specify the functionalities for such a mutable specificat
           1 must_== 2
           output.println("statement executed after failing expectation")
           1 must_== 1
+        }
+      }
+      "examples" can {
+        "be nested" >> {
+          "at level 1" in { success }
+          "at level 2" in { success }
         }
       }
     }

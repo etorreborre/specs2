@@ -35,8 +35,13 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
   class InExample(s: String) {
     def in[T <% Result](r: =>T): Example = addExample(s, r)
     def >>[T <% Result](r: =>T): Example = in(r)
-    def >>(e: =>Example)       : Example = addExample(e)
-    def in(e: =>Example)       : Example = addExample(e)
+    def >>(e: =>Example)       : Example = in(e)
+    def in(e: =>Example)       : Example = {
+      addFragments(s)
+      val ex = e
+      addFragments(p)
+      ex
+    }
   }
 
   override implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s, mutableExampleFactory)
@@ -83,9 +88,10 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
   }
   protected def addExample[T <% Result](s: String, r: =>T): Example = addExample(Example(s, r))
 
-  protected def addExample[T <% Result](ex: Example): Example = {
-    specFragments = specFragments ^ ex
-    ex
+  protected def addExample[T <% Result](ex: =>Example): Example = {
+    val example = ex
+    specFragments = specFragments ^ example
+    example
   }
 
 }
