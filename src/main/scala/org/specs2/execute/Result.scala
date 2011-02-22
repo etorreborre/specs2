@@ -88,11 +88,14 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
  * This class represents the success of an execution
  */
 case class Success(m: String = "")  extends Result(m, m) {
-  override def and(r: =>Result): Result = r match {
-	  case Success(m)          => if (message == m) this else Success(message+" and "+m)
-    case Error(_, _)         => r
-	  case Failure(_, _, _, _) => r
-    case _                   => super.and(r)
+  override def and(res: =>Result): Result = {
+    val r = res
+    r match {
+      case Success(m)          => if (message == m) this else Success(message+" and "+m)
+      case e @ Error(_, _)     => r
+      case Failure(_, _, _, _) => r
+      case _                   => super.and(r)
+    }
   }
   override def isSuccess = true
 }
@@ -113,14 +116,20 @@ case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement
   extends Result(m, e) with ResultStackTrace {
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
-  override def and(r: =>Result): Result = r match {
-	  case Error(_, _) => r
-	  case _ => super.and(r)
+  override def and(res: =>Result): Result = {
+    val r = res
+    r match {
+      case Error(_, _) => r
+      case _ => super.and(r)
+    }
   }
-  override def or(r: =>Result): Result = r match {
-    case Success(m) => if (message == m) r else Success(message+" and "+m)
-    case Failure(m, e, st, d) => Failure(message+" and "+m, e, stackTrace ::: st, d)
-    case _ => super.or(r)
+  override def or(res: =>Result): Result = {
+    val r = res
+    r match {
+      case Success(m) => if (message == m) r else Success(message+" and "+m)
+      case Failure(m, e, st, d) => Failure(message+" and "+m, e, stackTrace ::: st, d)
+      case _ => super.or(r)
+    }
   }
   override def toString = m
   override def equals(o: Any) = {
