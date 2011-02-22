@@ -142,7 +142,10 @@ Any `FilesRunner` object can also be invoked by sbt, but you need to specify `co
 
 ##### Colors
 
-Note the the color support for sbt on Windows is still a bit [tricky](http://code.google.com/p/simple-build-tool/issues/detail?id=134).
+Note the the color support for sbt on Windows is a bit tricky. You need to follow the instructions [here](http://
+www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) then add to your script launching sbt:
+
+        -Djline.terminal=jline.UnsupportedTerminal
 
 ##### Parallel execution
 
