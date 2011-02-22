@@ -26,7 +26,7 @@ class JUnitDescriptions(specificationClass: Class[_]) extends DefaultSelection {
 	def foldAll(fs: Seq[Fragment]) = {
 	  import Levels._
 	  val descriptionTree = Levels.foldAll(select(fs).flatMap(_.fragments)).toTree(mapper)
-	  DescriptionAndExamples(asOneDescription(descriptionTree), Map(descriptionTree.flatten:_*))
+	  DescriptionAndExamples(asOneDescription(descriptionTree), descriptionTree.flatten)
 	}
 
 }
@@ -41,6 +41,7 @@ object JUnitDescriptions {
    */
   val mapper: (Fragment, Int) => Option[(Description, Fragment)] = (f: Fragment, nodeLabel: Int) => f match {
     case (SpecStart(t, _))            => Some(createSuiteDescription(testName(t.name)) -> f)
+    case (SpecEnd(t))                 => Some(createSuiteDescription(testName(t.name)) -> f)
     case (Text(t))                    => Some(createSuiteDescription(testName(t)) -> f)
     case (Example(description, body)) => Some(createDescription(testName(description.toString), nodeLabel) -> f)
     case (Step(action))               => Some(createDescription("step", nodeLabel) -> f)
@@ -49,7 +50,7 @@ object JUnitDescriptions {
   /** 
    * Utility class grouping the total description + fragments to execute for each Description 
    */
-  case class DescriptionAndExamples(val description: Description, executions: Map[Description, Fragment])
+  case class DescriptionAndExamples(val description: Description, executions: Stream[(Description, Fragment)])
   /**
    * @return a Description with parent-child relationships to other Description objects
    *         from a Tree[Description]
@@ -106,9 +107,13 @@ object JUnitDescriptions {
     else trimmed
   }
   /** @return a test description */
-  private def createDescription(s: String, e: Any) = Description.createSuiteDescription(sanitize(s)+"("+e.toString+")")
+  private def createDescription(s: String, e: Any) = {
+    Description.createSuiteDescription(sanitize(s)+"("+e.toString+")")
+  }
   /** @return a suite description */
-  private def createSuiteDescription(s: String) = Description.createSuiteDescription(sanitize(s))
+  private def createSuiteDescription(s: String) = {
+    Description.createSuiteDescription(sanitize(s))
+  }
   
 } 
 
