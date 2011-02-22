@@ -2,8 +2,7 @@ package org.specs2
 package reporter
 
 import java.util.concurrent.Executors
-import scalaz._ 
-import Scalaz._ 
+import scalaz._, Scalaz._
 import concurrent._
 import Strategy.Executor
 import main.Arguments

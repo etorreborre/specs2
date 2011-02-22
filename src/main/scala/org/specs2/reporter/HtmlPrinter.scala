@@ -1,19 +1,14 @@
 package org.specs2
 package reporter
 
-import scala.xml.transform._
-import scala.xml. {UnprefixedAttribute, Node, NodeSeq, Elem, Null}
-import scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable, TreeLoc }
-import Scalaz._
+import scala.xml.NodeSeq
+import scalaz.{ Reducer, Scalaz, Generator }, Scalaz._
 import html.TableOfContents._
 import Generator._
-import data.Trees._
 import data.Tuples._
 import io._
 import io.Paths._
-import control.Throwablex._
 import main.{ Arguments, SystemProperties }
-import execute._
 import specification._
 import Statistics._
 import Levels._

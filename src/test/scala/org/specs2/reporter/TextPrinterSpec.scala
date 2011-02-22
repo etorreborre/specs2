@@ -7,7 +7,6 @@ import io.MockOutput
 import main.Arguments
 import execute._
 import specification._
-import SpecsArguments._
 
 class TextPrinterSpec extends SpecificationWithJUnit { def is =
                                                                                             """

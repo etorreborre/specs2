@@ -4,8 +4,7 @@ package matcher
 import control.Exceptions._
 import execute._
 import Expectable._
-import scalaz._
-import Scalaz._
+import scalaz._, Scalaz._
 import Generator._
 import text.Quote._
 import MatchResultMessages._
