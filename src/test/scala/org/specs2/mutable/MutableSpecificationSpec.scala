@@ -4,22 +4,23 @@ import io._
 import specification.{ SpecStart, FragmentExecution }
 
 class MutableSpecificationSpec extends org.specs2.SpecificationWithJUnit { def is =
-                                                                                                                     """
-To ease the migration for specs users, from specs to specs2, it is possible to write specifications which look
-almost like specs specifications, with `should` blocks and `in` examples.
+                                                                                                                        """
+A Specification can be written in the specs style using should/in blocks. This works by building the fragments
+and mutating a local variable
 
 The following examples specify the functionalities for such a mutable specification.
-                                                                                                                    """^
-  "Fragments creation"                                                                                              ^
-    "a `should` block creates a text fragment"                                                                      ! fragments().e1^
-    "every example in a should block creates examples fragments following the `should` text"                        ! fragments().e2^
-    "an action can be created with the `action` keyword"                                                            ! fragments().e3^
-    "arguments can be created with the `args` keyword"                                                              ! fragments().e4^
-    "examples can be nested"                                                                                        ! fragments().e5^
-                                                                                                                    p^
-  "Execution"                                                                                                       ^
-    "the first failing expectation stops an Example execution"                                                      ! execution().e1^
-                                                                                                                    end
+                                                                                                                        """^
+  "Fragments creation"                                                                                                  ^
+    "a `should` block creates a text fragment"                                                                          ! fragments().e1^
+    "every example in a should block creates examples fragments following the `should` text"                            ! fragments().e2^
+    "an action can be created with the `action` keyword"                                                                ! fragments().e3^
+    "arguments can be created with the `args` keyword"                                                                  ! fragments().e4^
+    "examples can be nested"                                                                                            ! fragments().e5^
+    "should expectations can be used"                                                                                   ! fragments().e6^
+                                                                                                                        p^
+  "Execution"                                                                                                           ^
+    "the first failing expectation stops an Example execution"                                                          ! execution().e1^
+                                                                                                                        end
 
 
   case class fragments() extends HasAMutableSpec {
@@ -29,6 +30,7 @@ The following examples specify the functionalities for such a mutable specificat
     def e3 = contentList must contain("Step", "Text(it should)").inOrder
     def e4 = fragments.toList must beLike { case SpecStart(_, a) :: other => a.xonly must beTrue }
     def e5 = contentList must contain("Text(examples can)", "Text(be nested)", "Example(at level 1)", "Example(at level 2)").inOrder
+    def e6 = contentString must contain("should expectation")
   }
 
   case class execution() extends FragmentExecution with HasAMutableSpec {
@@ -49,6 +51,9 @@ The following examples specify the functionalities for such a mutable specificat
           1 must_== 2
           output.println("statement executed after failing expectation")
           1 must_== 1
+        }
+        "have an example using a should expectation" in {
+          1 should be_==(1)
         }
       }
       "examples" can {
