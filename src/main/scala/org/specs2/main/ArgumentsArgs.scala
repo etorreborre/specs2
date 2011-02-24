@@ -6,28 +6,28 @@ import control.Property
 /**
  * This trait provides shortcuts to create Arguments instances
  */
-trait ArgumentsArgs extends control.Properties {
+trait ArgumentsArgs extends ArgProperties {
   /** shorthand method to create an Arguments object */
   def args(
-    ex:            Property[String]      = Property[String](),
-    xonly:         Property[Boolean]     = Property[Boolean](),
-    plan:          Property[Boolean]     = Property[Boolean](),
-    failtrace:     Property[Boolean]     = Property[Boolean](),
-    color:         Property[Boolean]     = Property[Boolean](),
-    noindent:      Property[Boolean]     = Property[Boolean](),
-    showlevel:     Property[Boolean]     = Property[Boolean](),
-    showtimes:     Property[Boolean]     = Property[Boolean](),
-    offset:        Property[Int]         = Property[Int](),
-    specName:      Property[String]      = Property[String](),
-    sequential:    Property[Boolean]     = Property[Boolean](),
-    threadsNb:     Property[Int]         = Property[Int](),
-    markdown:      Property[Boolean]     = Property[Boolean](),
-    debugMarkdown: Property[Boolean]     = Property[Boolean](),
-    diffs:         Property[Diffs]       = Property[Diffs](),
-    fromSource:    Property[Boolean]     = Property[Boolean](),
-    commandLine:   Seq[String]           = Nil
+    ex:            ArgProperty[String]      = ArgProperty[String](),
+    xonly:         ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    plan:          ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    failtrace:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    color:         ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    noindent:      ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    showlevel:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    showtimes:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    offset:        ArgProperty[Int]         = ArgProperty[Int](),
+    specName:      ArgProperty[String]      = ArgProperty[String](),
+    sequential:    ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    threadsNb:     ArgProperty[Int]         = ArgProperty[Int](),
+    markdown:      ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    debugMarkdown: ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    diffs:         ArgProperty[Diffs]       = ArgProperty[Diffs](),
+    fromSource:    ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    commandLine:   Seq[String]              = Nil
   ) = new Arguments(
-     ex.map(".*"+_+".*").toOption,
+     ex.toOption.map(".*"+_+".*"),
      xonly.toOption,
      plan.toOption,
      failtrace.toOption,
@@ -85,3 +85,15 @@ trait ArgumentsArgs extends control.Properties {
   def descFromExpectations = args(fromSource = false)
 }
 object ArgumentsArgs extends ArgumentsArgs
+
+private[specs2]
+trait ArgProperties {
+  implicit def anyToArgProperty[T](t: =>T): ArgProperty[T] = ArgProperty(Property(t))
+}
+private[specs2]
+object ArgProperties extends ArgProperties
+
+private[specs2]
+case class ArgProperty[T](p: Property[T] = Property[T]()) {
+  def toOption: Option[T] = p.toOption
+}

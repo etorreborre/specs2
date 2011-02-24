@@ -4,7 +4,7 @@ package runner
 import reflect._
 import io.FromSource
 import main._
-import control.Properties._
+import ArgProperties._
 import specification._
 import StandardFragments._
 import reporter._
