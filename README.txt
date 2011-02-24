@@ -1,18 +1,17 @@
+_This project has been made public to facilitate its review before official release, but it's not released yet! _
+
 ======================================
 Installation instructions
 ======================================
 
-You need to download and install Maven 2.0.9.
+You need to download and install sbt (simple build tool)
 Then execute the following command:
 
-> mvn install
+> sbt update publish-local
 
-This will download the necessary dependent jars, build specs-<VERSION>.jar and install it in your local repository (you can also get the built jar in the target directory created by Maven at the root of your specs checkout).
+Then you can generate the User Guide with:
 
-For more instructions about using specs and its dependencies, please refer to the website: 
+sbt
+> test-ony org.specs2.UserGuide -- html
 
-http://code.google.com/p/specs/wiki/RunningSpecs
-
-Thanks!
-
-Eric.
+This should create html files in the target/specs2-reports directory. 
