@@ -177,13 +177,13 @@ object MatchResult {
     def fmap[A, B](m: MatchResult[A], f: A => B) = m match {
       case success: MatchSuccess[_] => success.map(f)
       case failure: MatchFailure[_] => failure.map(f)
-      case skip: MatchSkip[_] => skip.map(f)
-      case neg: NotMatch[_] => neg.map(f)
+      case skip: MatchSkip[_]       => skip.map(f)
+      case neg: NotMatch[_]         => neg.map(f)
       case neutral: NeutralMatch[_] => neutral.map(f)
-      case and: AndMatch[_] => and.map(f)
-      case andnot: AndNotMatch[_] => andnot.map(f)
-      case or: OrMatch[_] => or.map(f)
-      case ornot: OrNotMatch[_] => ornot.map(f)
+      case and: AndMatch[_]         => and.map(f)
+      case andnot: AndNotMatch[_]   => andnot.map(f)
+      case or: OrMatch[_]           => or.map(f)
+      case ornot: OrNotMatch[_]     => ornot.map(f)
     }
   } 
   implicit val MatchSuccessFunctor: Functor[MatchSuccess] = new Functor[MatchSuccess] {
