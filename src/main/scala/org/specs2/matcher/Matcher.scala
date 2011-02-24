@@ -143,43 +143,27 @@ trait Matcher[-T] { outer =>
   def eventually(retries: Int, sleep: Duration): Matcher[T] = EventuallyMatchers.eventually(retries, sleep)(this)
 
   /**
-   * @return a Matcher matching all the elements of a sequence against the current matcher
+   * @return a Matcher matching all the elements of a sequence against the current matcher, stopping after the first
+   * failure
    */
   def forall = new Matcher[Seq[T]] {
-    def apply[S <: Seq[T]](seq: Expectable[S]) = {
-      if (seq.value.isEmpty)
-        result(true, "ok", "ko", seq)
-      else {
-        val r = seq.value.drop(1).foldLeft(outer.apply(Expectable(seq.value.head))) { (res, cur) =>
-          if (res.isSuccess) outer.apply(Expectable(cur))
-          else res
-        }
-        result(r.isSuccess,
-               "All elements of "+q(seq.value.mkString(", "))+" are matching ok",
-               "In the sequence "+q(seq.value.mkString(", "))+", the "+(seq.value.indexOf(r.expectable.value)+1).th+" element is failing: "+r.message,
-               seq)
-      }
-    }
+    def apply[S <: Seq[T]](seq: Expectable[S]) =
+      MatchersImplicits.verifyFunction((t: T) => outer.apply(Expectable(t))).forall(seq.value)
+  }
+  /**
+   * @return a Matcher matching all the elements of a sequence against the current matcher, cumulating all failures
+   */
+  def foreach = new Matcher[Seq[T]] {
+    def apply[S <: Seq[T]](seq: Expectable[S]) =
+      MatchersImplicits.verifyFunction((t: T) => outer.apply(Expectable(t))).foreach(seq.value)
   }
 
   /**
    * @return a Matcher matching at least one element of a sequence against the current matcher
    */
   def atLeastOnce = new Matcher[Seq[T]] {
-    def apply[S <: Seq[T]](seq: Expectable[S]) = {
-      if (seq.value.isEmpty)
-        result(false, "ok", "ko", seq)
-      else {
-        val r = seq.value.drop(1).foldLeft(outer.apply(Expectable(seq.value.head))) { (res, cur) =>
-          if (res.isSuccess) res
-          else outer.apply(Expectable(cur))
-        }
-        result(r.isSuccess,
-          "In the sequence "+q(seq.value.mkString(", "))+", the "+(seq.value.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
-          "No element of "+q(seq.value.mkString(", "))+" is matching ok",
-          seq)
-      }
-    }
+    def apply[S <: Seq[T]](seq: Expectable[S]) =
+      MatchersImplicits.verifyFunction((t: T) => outer.apply(Expectable(t))).atLeastOnce(seq.value)
   }
 }
 

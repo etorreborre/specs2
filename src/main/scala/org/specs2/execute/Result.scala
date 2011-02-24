@@ -5,6 +5,7 @@ import control.Throwablex._
 import text.AnsiColors._
 import text.NotNullStrings._
 import main.Arguments
+import scalaz.Monoid
 
 /**
  * The result of an execution, either:
@@ -83,6 +84,36 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return true if the result is a Failure instance
    */
   def isFailure: Boolean = false
+}
+object Result {
+  implicit val ResultMonoid: Monoid[Result] = new Monoid[Result] {
+    val zero = Success()
+    def append(m1: Result, m2: =>Result) = (m1, m2) match {
+      case (Success(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
+      case (Success(msg1),               Skipped(msg2, e2))          => Success(msg1+"; "+msg2)
+      case (Skipped(msg1, e2),           Success(msg2))              => Success(msg1+"; "+msg2)
+      case (Pending(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
+      case (Success(msg1),               Pending(msg2))              => Success(msg1+"; "+msg2)
+
+      case (Success(msg1),               Failure(msg2, e2, st1, d2)) => m2
+      case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2, e1+"; "+e2, st1, NoDetails())
+
+      case (Success(msg1),               Error(msg2, st1))           => m2
+      case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+"; "+msg2, st1)
+      case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+"; "+msg2, st1)
+
+      case (Skipped(msg1, e1),           Skipped(msg2, e2))          => Skipped(msg1+"; "+msg2, e1+"; "+e2)
+      case (Skipped(msg1, e1),           Pending(msg2))              => Pending(msg1+"; "+msg2)
+      case (Pending(msg1),               Skipped(msg2, e2))          => Pending(msg1+"; "+msg2)
+      case (Pending(msg1),               Pending(msg2))              => Pending(msg1+"; "+msg2)
+
+      case (Failure(msg1, e1, st, d),    _)                          => m1
+      case (Error(msg1, st),          _)                             => m1
+      case (_,                           Failure(msg1, e1, st, d))   => m2
+      case (_,                           Error(msg1, st))            => m2
+
+    }
+  }
 }
 /** 
  * This class represents the success of an execution

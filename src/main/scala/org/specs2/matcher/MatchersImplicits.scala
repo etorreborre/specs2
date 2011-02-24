@@ -7,6 +7,7 @@ import Expectable._
 import scalaz._, Scalaz._
 import Generator._
 import text.Quote._
+import text.Plural._
 import MatchResultMessages._
 
 /**
@@ -134,6 +135,53 @@ trait MatchersImplicits {
     }
   }
 
+  implicit def verifyFunction[U, T](t: U => MatchResult[T]) = new MatchResultFunctionVerification(t)
+  class MatchResultFunctionVerification[U, T](t: U => MatchResult[T]) {
+    def forall[S <: Seq[U]](seq: S) = {
+      if (seq.isEmpty)
+        Matcher.result(true, "ok", "ko", Expectable(seq))
+      else {
+        val r = seq.drop(1).foldLeft(t.apply(seq.head)) { (res, cur) =>
+          if (res.isSuccess) t.apply(cur)
+          else res
+        }
+        Matcher.result(r.isSuccess,
+               "All elements of "+q(seq.mkString(", "))+" are matching ok",
+               "In the sequence "+q(seq.mkString(", "))+", the "+(seq.indexOf(r.expectable.value)+1).th+" element is failing: "+r.message,
+               Expectable(seq))
+      }
+    }
+
+    def foreach[S <: Seq[U]](seq: S) = {
+      if (seq.isEmpty)
+        Matcher.result(true, "ok", "ko", Expectable(seq))
+      else {
+        val r = seq.drop(1).foldLeft(t.apply(seq.head).toResult) { (res, cur) =>
+          res |+| t.apply(cur).toResult
+        }
+        Matcher.result(r.isSuccess,
+                       "All elements of "+q(seq.mkString(", "))+" are matching ok",
+                       r.message,
+                       Expectable(seq))
+
+      }
+    }
+
+    def atLeastOnce[S <: Seq[U]](seq: S) = {
+      if (seq.isEmpty)
+        Matcher.result(false, "ok", "ko", Expectable(seq))
+      else {
+        val r = seq.drop(1).foldLeft(t.apply(seq.head)) { (res, cur) =>
+          if (res.isSuccess) res
+          else t.apply(cur)
+        }
+        Matcher.result(r.isSuccess,
+          "In the sequence "+q(seq.mkString(", "))+", the "+(seq.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
+          "No element of "+q(seq.mkString(", "))+" is matching ok",
+          Expectable(seq))
+      }
+    }
+  }
 }
 private[specs2]
 object MatchersImplicits extends MatchersImplicits
