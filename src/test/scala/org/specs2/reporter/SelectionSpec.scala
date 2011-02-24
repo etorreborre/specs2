@@ -91,7 +91,7 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
   val ex2 = "ex2" ! success
 
   trait WithSelection {
-    val selection = new DefaultSelection with MockOutput
+    val selection = new DefaultSelection with DefaultSequence with MockOutput
 
     def select(f: Fragments) = {
       val fs = new Specification { def is = f }.content
@@ -99,7 +99,7 @@ class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with Arbitrar
     }
     def step(message: String) = Step({selection.println(message); reporter.println(message)})
     def example(message: String) = message ! { selection.println(message); reporter.println(message); success }
-    val reporter = new Reporter with DefaultSelection with DefaultExecutionStrategy with Exporting with MockOutput {
+    val reporter = new Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with Exporting with MockOutput {
       type ExportType = Unit
 
       def export(s: SpecificationStructure)(implicit args: main.Arguments) = (fragments: Seq[ExecutedFragment]) => ()

@@ -2,11 +2,13 @@ package org.specs2
 package reporter
 
 import java.util.concurrent.Executors
-import scalaz._, Scalaz._
+import scalaz._
+import Scalaz._
 import concurrent._
 import Strategy.Executor
 import main.Arguments
 import specification._
+import control.NamedThreadFactory
 
 /**
  * Generic trait for executing Fragments, which are sorted according to their dependencies
@@ -26,7 +28,7 @@ private[specs2]
 trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution {
   
   def execute(implicit arguments: Arguments) = (fragments: Seq[FragmentSeq]) => {
-    implicit val executor = Executors.newFixedThreadPool(arguments.threadsNb)
+    implicit val executor = Executors.newFixedThreadPool(arguments.threadsNb, new NamedThreadFactory("specs2.DefaultExecutionStrategy"))
     try {
       fragments.map { fs =>
         if (fs.fragments.size > 1)

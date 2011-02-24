@@ -25,7 +25,7 @@ class JUnitDescriptions(specificationClass: Class[_]) extends DefaultSelection {
 	import JUnitDescriptions._
 	def foldAll(fs: Seq[Fragment]) = {
 	  import Levels._
-	  val descriptionTree = Levels.foldAll(select(fs).flatMap(_.fragments)).toTree(mapper)
+	  val descriptionTree = Levels.foldAll(select(fs)).toTree(mapper)
 	  DescriptionAndExamples(asOneDescription(descriptionTree), descriptionTree.flatten)
 	}
 

@@ -18,6 +18,7 @@ import specification._
  */
 trait ConsoleReporter extends Reporter 
     with DefaultSelection
+    with DefaultSequence
     with DefaultExecutionStrategy
     with TextExporting
     with ConsoleOutput 

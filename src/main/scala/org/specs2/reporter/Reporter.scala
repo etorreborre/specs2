@@ -28,21 +28,23 @@ import specification._
  */
 private[specs2]
 trait Reporter extends 
-       Selection 
+       Selection
+  with Sequence
   with ExecutionStrategy 
   with Exporting {
 
   /**
    * report Fragments by:
    *   * extracting arguments from the Fragments
-   *   * selecting / ordering fragments
+   *   * selecting them
+   *   * sequencing fragments in groups
    *   * executing fragments
    *   * exporting the results to the output format 
    *   
    * @return the reporter
    */
   def report(spec: SpecificationStructure)(implicit arguments: Arguments): this.type = {
-    spec.content |> select |> execute |> export(spec)
+    spec.content |> select |> sequence |> execute |> export(spec)
     this
   }
 }

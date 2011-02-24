@@ -81,16 +81,16 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
                                                                                             end
 
   implicit val default = Arguments()
-  val t1       = "t1"
-  val ex1      = "e1" ! success
-  val ex2      = "e2" ! success
-  val fail3    = "fail3" ! failure
-  val error4   = "error4" ! anError
-  val skipped5 = "skip it" ! skipped
-  val pending6 = "todo" ! pending
+  val t1         = "t1"
+  val ex1        = "e1" ! success
+  val ex2        = "e2" ! success
+  val fail3      = "fail3" ! failure
+  val error4     = "error4" ! anError
+  val skipped5   = "skip it" ! skipped
+  val pending6   = "todo" ! pending
   val bigString1 = "abcdefghijklmnopqrstuvwxyz"
   val bigString2 = "abcdefghijklnmopqrstuvwxyz"
-  val bigFail = "with diffs" ! { bigString1 must_== bigString2 }
+  val bigFail    = "with diffs" ! { bigString1 must_== bigString2 }
   
   case class prez() {
     val noindent = args(noindent = true)
@@ -181,16 +181,17 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
   }
 
   def printWithColors(fs: Fragments): Seq[String] = {
-    val selection = new DefaultSelection() {}
-    val execution = new DefaultExecutionStrategy() {}
-    val selected = selection.select(fs.arguments)((new Specification { def is = fs }).content )
-    val executed = execution.execute(fs.arguments)(selected)
-    val mockOutput = new TextResultOutput with MockOutput
-    val printer = new TextPrinter {
-      override val output = mockOutput
-    }
-    printer.print(this, executed)(fs.arguments)
+    printer.print(this, preReporter.exec(fs))(fs.arguments)
     mockOutput.messages
+  }
+  val preReporter = new DefaultSelection with DefaultSequence with DefaultExecutionStrategy {
+    def exec(fs:Fragments)(implicit arguments: Arguments): Seq[ExecutedFragment] = {
+      fs |> select(arguments) |> sequence(arguments) |> execute(arguments)
+    }
+  }
+  val mockOutput = new TextResultOutput with MockOutput
+  val printer = new TextPrinter {
+    override val output = mockOutput
   }
   def print(fragments: Fragments): Seq[String] = printWithColors(fragments).map(removeColors(_))
 }

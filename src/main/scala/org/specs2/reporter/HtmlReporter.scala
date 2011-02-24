@@ -9,6 +9,7 @@ import io.ConsoleOutput
 private[specs2]
 trait HtmlReporter extends Reporter 
     with DefaultSelection
+    with DefaultSequence
     with DefaultExecutionStrategy
     with HtmlExporting
     with ConsoleOutput 
