@@ -13,6 +13,8 @@ import execute._
 import reporter._
 import JUnitDescriptions._
 import specification._
+import text.AnsiColors
+import control.Throwablex
 
 /**
  * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
@@ -48,6 +50,7 @@ class JUnitRunner(klass: Class[_]) extends Runner {
 	    case (desc, f @ Example(_, _))   => (desc, executor.executeFragment(Arguments())(f))
       case (desc, f @ Text(_))         => (desc, executor.executeFragment(Arguments())(f))
       case (desc, f @ Step(_))         => (desc, executor.executeFragment(Arguments())(f))
+      case (desc, f @ Action(_))       => (desc, executor.executeFragment(Arguments())(f))
       case (desc, f @ SpecEnd(_))      => (desc, executor.executeFragment(Arguments())(f))
 	  }.
 	    foreach {
@@ -68,15 +71,17 @@ class JUnitRunner(klass: Class[_]) extends Runner {
   }
   /** @return a Throwable expected by JUnit Failure object */
   private def junitFailure(f: Failure): Throwable = f match {
-    case Failure(m, e, st, NoDetails()) => new SpecFailureAssertionFailedError(f.exception)
-    case Failure(m, e, st, FailureDetails(expected, actual)) => new ComparisonFailure(m, expected, actual) {
-      private val e = f.exception
-      override def getStackTrace = e.getStackTrace
-      override def getCause = e.getCause
-      override def printStackTrace = e.printStackTrace
-      override def printStackTrace(w: java.io.PrintStream) = e.printStackTrace(w)
-      override def printStackTrace(w: java.io.PrintWriter) = e.printStackTrace(w)
-    }
+    case Failure(m, e, st, NoDetails())                      =>
+      new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), st))
+    case Failure(m, e, st, FailureDetails(expected, actual)) =>
+      new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {
+        private val e = f.exception
+        override def getStackTrace = e.getStackTrace
+        override def getCause = e.getCause
+        override def printStackTrace = e.printStackTrace
+        override def printStackTrace(w: java.io.PrintStream) = e.printStackTrace(w)
+        override def printStackTrace(w: java.io.PrintWriter) = e.printStackTrace(w)
+      }
   }
 }
 /**
