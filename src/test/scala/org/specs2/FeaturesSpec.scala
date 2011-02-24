@@ -7,7 +7,8 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
- Cookbook + design
+ Cookbook + Design
+ Maven pom file
 
 
                                                                                           """^
