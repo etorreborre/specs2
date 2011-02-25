@@ -4,12 +4,16 @@ package io
 import io.FileReader._
 import io.Paths._
 import control.Throwablex._
+import control.Exceptions._
 import main.SystemProperties
 
 /**
  * Get source code from the current point of execution
  * 
  * * An important limitation is that only the content of one line will be returned *
+ *
+ * It must also be noted that this only work if the code being executed is in a file which has the same name as
+ * the class containing the code.
  * 
  * The source dir is assumed to be "src/test/scala/" by default but this can be modified
  * by setting the "specs2.srcTestDir" System property
@@ -29,8 +33,10 @@ trait FromSource {
     val stackTrace = new Exception().getStackTrace()
     val trace = stackTrace.apply(depth)
     val location = new Location(trace)
-    val content = readLines(srcDir+location.path)
-    content(location.lineNumber - 1)
+    tryOr {
+      val content = readLines(srcDir+location.path)
+      content(location.lineNumber - 1)
+    } (e => "No source file found at "+srcDir+location.path)
   }
 }
 private[specs2]

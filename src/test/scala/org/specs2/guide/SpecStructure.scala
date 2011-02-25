@@ -134,7 +134,8 @@ A few things to remember about this feature:
  * the source file is expected to be found in the `src/test/scala` directory.
    This can be overriden by specifying the `specs2.srcTestDir` system property
 
- * the extraction of the source code is very rudimentary and will just extract one line of code.
+ * the extraction of the source code is very rudimentary and will just extract one line of code. It also expects
+   the code to extract is in a class which has the same name as the file it's in.
 
  * for more robustness, but different results, you can use the `descFromExpectations` arguments (creates an
    `args(fromSource=false)`) to take the "ok message" from the expectation as the example description:
