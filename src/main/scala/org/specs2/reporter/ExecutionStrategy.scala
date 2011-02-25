@@ -31,10 +31,11 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     implicit val executor = Executors.newFixedThreadPool(arguments.threadsNb, new NamedThreadFactory("specs2.DefaultExecutionStrategy"))
     try {
       fragments.map { fs =>
-        if (fs.fragments.size > 1)
-          fs.fragments.map(f => promise(executeFragment(arguments <| fs.arguments)(f))).sequence.get
+        val args = arguments <| fs.arguments
+        if (fs.fragments.size > 1 && !args.sequential)
+          fs.fragments.map(f => promise(executeFragment(args)(f))).sequence.get
         else
-          fs.fragments.map(f => executeFragment(arguments <| fs.arguments)(f))
+          fs.fragments.map(f => executeFragment(args)(f))
       }.flatten
     } finally {
       executor.shutdown()
