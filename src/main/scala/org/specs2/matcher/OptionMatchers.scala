@@ -22,7 +22,7 @@ trait OptionBaseMatchers {
   }
   def some[T](t: =>T) = beSome(t)
   def beSome[T] = new SomeMatcher[T]
-  def some[T] = beSome
+  def some[T] = beSome[T]
   def beNone = new Matcher[Option[Any]] {
     def apply[S <: Option[Any]](value: Expectable[S]) = {
       result(value.value == None,
@@ -47,6 +47,9 @@ private[specs2]
 trait OptionBeHaveMatchers { outer: OptionBaseMatchers =>
   implicit def toOptionResultMatcher[T](result: MatchResult[Option[T]]) = new OptionResultMatcher(result)
   class OptionResultMatcher[T](result: MatchResult[Option[T]]) {
+    def beSome = result(outer.beSome)
+    def beSome(t: =>T) = result(outer.beSome(t))
+    def beNone = result(outer.beNone)
     def some = result(outer.beSome)
     def some(t: =>T) = result(outer.beSome(t))
     def none = result(outer.beNone)

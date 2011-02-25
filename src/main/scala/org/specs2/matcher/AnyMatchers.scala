@@ -20,12 +20,9 @@ trait AnyBaseMatchers {
   def beFalse = beTrue.not
 
   /** matches if a eq b */
-  def beTheSameAs[T <: AnyRef](t: =>T) = new Matcher[T] {
-    def apply[S <: T](a: Expectable[S]) = {
-      val b = t
-      result(a.value eq b, a.description + " is the same as " + q(b), a.description + " is not the same as " + q(b), a)
-    }
-  }
+  def beTheSameAs[T <: AnyRef](t: =>T) = new BeTheSameAs(t)
+  /** @alias for beTheSameAs */
+  def be[T <: AnyRef](t: =>T) = beTheSameAs(t)
 
   /** matches if a == b */
   def be_==[T](t: =>T) = beEqualTo(t)
@@ -45,13 +42,7 @@ trait AnyBaseMatchers {
   }
 
   /** matches if the value is null */
-  def beNull[T] = new Matcher[T] {
-    def apply[S <: T](value: Expectable[S]) = {
-      result(value.value == null,
-             value.description + " is null", 
-             value.description + " is not null", value)
-    }
-  }
+  def beNull[T] = new BeNull[T]
 
   /** matches if a is null when v is null and a is not null when v is not null */
   def beAsNullAs[T](a: =>T) = new Matcher[T](){
@@ -192,6 +183,7 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   
   implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) = 
     new AnyWithEmptyMatchers(result)
+
   class AnyWithEmptyMatchers[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) {
     def empty = result(outer.beEmpty[T])
     def beEmpty = result(outer.beEmpty[T])
@@ -211,4 +203,17 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   def klass[T : ClassManifest]: Matcher[Any] = outer.haveClass[T]
   def superClass[T : ClassManifest]: Matcher[Any] = outer.haveSuperclass[T]
   def assignableFrom[T : ClassManifest] = outer.beAssignableFrom[T]
+}
+class BeTheSameAs[T <: AnyRef](t: =>T) extends Matcher[T] {
+  def apply[S <: T](a: Expectable[S]) = {
+    val b = t
+    result(a.value eq b, a.description + " is the same as " + q(b), a.description + " is not the same as " + q(b), a)
+  }
+}
+class BeNull[T] extends Matcher[T] {
+  def apply[S <: T](value: Expectable[S]) = {
+    result(value.value == null,
+           value.description + " is null",
+           value.description + " is not null", value)
+  }
 }

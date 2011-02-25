@@ -51,7 +51,7 @@ class XmlMatchersSpec extends SpecificationWithJUnit { def is =
     { <a><b/></a> must \\("b") }                                                                                        ^
     { <a><b></b></a> must \\("b") }                                                                                     ^
     { <a><b><c></c></b></a> must \\(<b><c></c></b>) }                                                                   ^
-    { <a><s><c></c></s></a> must \\("c") }                                                                              ^t^
+    { <a><s><c></c></s></a> must \\("c") }                                                                              ^
     "checking attribute names"                                                                                          ^
     { <a><b name="value"></b></a> must \\("b", "name") }                                                                ^
     { <a><b name="value" name2="value"></b></a> must \\("b", "name2", "name") }                                         ^bt^

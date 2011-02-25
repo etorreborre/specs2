@@ -68,7 +68,13 @@ trait MatchResult[+T] {
   /** apply the matcher and return the logical and of two results */
   def and(m: Matcher[T]): MatchResult[T] = and(expectable.applyMatcher(m))
   /** apply the matcher */
-  def be(m: Matcher[T]) = apply(m)
+  def be(m: Matcher[T]) = {
+    if (m == null) apply(new BeNull)
+    else apply(m)
+  }
+  def be[S >: T <: AnyRef](s: S) = {
+    apply(new BeTheSameAs(s))
+  }
   /** apply the matcher */
   def have(m: Matcher[T]) = apply(m)
   def toResult: Result = evaluate.toResult
@@ -98,23 +104,23 @@ case class NotMatch[T](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
   def not: MatchResult[T] = NeutralMatch(m)
-  def apply(matcher: Matcher[T]): MatchResult[T] = m.apply(matcher.not)
+  def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher.not)
 }
 case class NeutralMatch[T](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
   def not: MatchResult[T] = NotMatch(m)
-  def apply(matcher: Matcher[T]): MatchResult[T] = m.apply(matcher)
+  def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher)
 }
 case class AndMatch[T](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResult[T] {
   val expectable = m1.expectable
   override def evaluate[S >: T] =
     (m1, m2) match {
-    case (_, NeutralMatch(_)) => AndMatch(m1, MatchSkip("", expectable))
-    case (NeutralMatch(_), _) => AndMatch(m2, MatchSkip("", expectable))
+    case (_, NeutralMatch(_))       => AndMatch(m1, MatchSkip("", expectable))
+    case (NeutralMatch(_), _)       => AndMatch(m2, MatchSkip("", expectable))
     case (NotMatch(_), NotMatch(_)) => AndNotMatch(m1.evaluate, m2.evaluate) 
-    case (_, NotMatch(_)) => AndNotMatch(m1, MatchSkip("", expectable))
-    case (NotMatch(_), _) => AndMatch(m1.evaluate, m2).evaluate
+    case (_, NotMatch(_))           => AndNotMatch(m1, MatchSkip("", expectable))
+    case (NotMatch(_), _)           => AndMatch(m1.evaluate, m2).evaluate
     case (MatchSuccess(_, _, _), MatchFailure(_, _, _, _)) => m2
     case (MatchFailure(_, _, _, _), MatchSuccess(_, _, _)) => m1
     case (MatchSuccess(_, _, _), _) => m1 
@@ -122,13 +128,13 @@ case class AndMatch[T](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResu
     case (_, _) => m1 
   }
   def not: MatchResult[T] = new OrMatch(m1.not, m2.not).evaluate
-  def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2.apply(matcher)
+  def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2(matcher)
 }
 case class AndNotMatch[T](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResult[T] {
   val expectable = m1.expectable
   override def evaluate[S >: T] = m1 and m2.not
   def not: MatchResult[T] = new OrMatch(m1.not, m2).evaluate
-  def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2.apply(matcher.not)
+  def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2(matcher.not)
 }
 class OrMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
   val expectable = m1.expectable
@@ -152,7 +158,7 @@ class OrMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends MatchR
     }
   }
   def not: MatchResult[T] = AndMatch(m1.not, m2.not).evaluate
-  def apply(matcher: Matcher[T]): MatchResult[T] = m1 or m2.apply(matcher)
+  def apply(matcher: Matcher[T]): MatchResult[T] = m1 or m2(matcher)
   override def toResult = m1.toResult or m2.toResult
 }
 class OrNotMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
@@ -161,7 +167,7 @@ class OrNotMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends Mat
   val expectable = m1.expectable
   override def evaluate[S >: T] = m1 or m2.not
   def not: MatchResult[T] = AndMatch(m1.not, m2).evaluate
-  def apply(matcher: Matcher[T]): MatchResult[T] = m1 or evaluate.apply(matcher.not)
+  def apply(matcher: Matcher[T]): MatchResult[T] = m1 or evaluate(matcher.not)
 }
 
 /**

@@ -86,12 +86,12 @@ trait IterableBeHaveMatchers extends LazyParameters { outer: IterableMatchers =>
   implicit def iterable[T](s: MatchResult[Iterable[T]]) = new IterableBeHaveMatchers(s)
   class IterableBeHaveMatchers[T](s: MatchResult[Iterable[T]]) {
     def contain(t: LazyParameter[T], ts: LazyParameter[T]*) = new ContainMatchResult(s, outer.contain((t +: ts):_*))
-    def containMatch(t: =>String) = s.apply(outer.containMatch(t))
-    def containPattern(t: =>String) = s.apply(outer.containPattern(t))
+    def containMatch(t: =>String) = s(outer.containMatch(t))
+    def containPattern(t: =>String) = s(outer.containPattern(t))
   }
   implicit def sized[T : Sized](s: MatchResult[T]) = new HasSize(s)
   class HasSize[T : Sized](s: MatchResult[T]) {
-    def size(n: Int) : MatchResult[T] = s.apply(outer.haveSize[T](n))
+    def size(n: Int) : MatchResult[T] = s(outer.haveSize[T](n))
   }
 }
 class ContainMatchResult[T](val s: MatchResult[Iterable[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
@@ -114,11 +114,11 @@ trait AbstractContainMatchResult[T] extends MatchResult[Iterable[T]] {
   val matcher: Matcher[Iterable[T]]
   protected val s: MatchResult[Iterable[T]]
   val expectable = s.expectable
-  lazy val matchResult = s.apply(matcher)
+  lazy val matchResult = s(matcher)
 
   override def toResult = matchResult.toResult
   def not: MatchResult[Iterable[T]] = matchResult.not
-  def apply(matcher: Matcher[Iterable[T]]): MatchResult[Iterable[T]] = matchResult.apply(matcher)
+  def apply(matcher: Matcher[Iterable[T]]): MatchResult[Iterable[T]] = matchResult(matcher)
 }
 class ContainMatcher[T](t: LazyParameter[T]*) extends Matcher[Iterable[T]] {
   def apply[S <: Iterable[T]](actual: Expectable[S]) = {

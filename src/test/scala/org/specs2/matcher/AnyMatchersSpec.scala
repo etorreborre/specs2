@@ -8,6 +8,10 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
   { aValue must beTheSameAs(aValue) }                                                                                   ^
   { "a" must not beTheSameAs("b") }                                                                                     ^
                                                                                                                         p^
+  "be is an alias for beTheSameAs"                                                                                      ^
+  { aValue must be(aValue) }                                                                                            ^
+  { "a" must not be("b") }                                                                                              ^
+                                                                                                                        p^
   "beTrue matches true values"                                                                                          ^
   { true must beTrue }                                                                                                  ^
   { (false must beTrue).message must_==  "the value is false" }                                                         ^
@@ -19,8 +23,7 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
   "beLike matches objects against a pattern"                                                                            ^
   { List(1, 2) must beLike { case List(a, b) => ok } }                                                                  ^
   { List(1, 2) must beLike { case List(a, b) => (a + b) must_== 3 } }                                                   ^
-  "if the match succeeds but the condition after match fails, \n"                                                       +
-  "a precise failure message can be returned"                                                                           ! e1^
+  "if the match succeeds but the condition after match fails, a precise failure message can be returned"                ! e1^
                                                                                                                         p^
   "toSeq allows to transform a single matcher to a matcher checking a Seq"                                              ^
   { List(1, 2, 3) must ((be_==(_:Int)).toSeq)(Seq(1, 2, 3)) }                                                           ^
@@ -45,6 +48,7 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
   "beNull matches null values"                                                                                          ^
   { (null:String) must beNull }                                                                                         ^
   { "" must not beNull }                                                                                                ^
+  { "" must not be(null) }                                                                                              ^
                                                                                                                         p^
   "beAsNullAs checks if two values are null at the same time"                                                           ^
   { (null:String) must beAsNullAs(null) }                                                                               ^

@@ -39,7 +39,7 @@ private[specs2]
 trait EitherBeHaveMatchers { outer: EitherBaseMatchers =>
   implicit def toEitherResultMatcher[L, R](result: MatchResult[Either[L, R]]) = new EitherResultMatcher(result)
   class EitherResultMatcher[L, R](result: MatchResult[Either[L, R]]) {
-    def right(r: =>R) = result.apply(outer.beRight(r))
-    def left(l: =>L) = result.apply(outer.beLeft(l))
+    def right(r: =>R) = result(outer.beRight(r))
+    def left(l: =>L) = result(outer.beLeft(l))
   }
 }

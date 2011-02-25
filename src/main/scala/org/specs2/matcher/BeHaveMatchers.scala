@@ -10,7 +10,7 @@ private[specs2]
 trait BeHaveMatchers {
   def be = new NeutralMatcher[Any]
   def have = be
-  def not = new NotMatcher[Any] 
+  def not = new NotMatcher[Any]
 }
 /**
  * This special matcher always return a NeutralMatch MatchResult (an implicit Success)

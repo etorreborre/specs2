@@ -69,21 +69,21 @@ trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
    */
   implicit def toOrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) = new OrderedResultMatcher(result)
   class OrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) {
-    def <=(n: S) = result.apply(beLessThanOrEqualTo(n)) 
-    def lessThanOrEqualTo(n: S) = result.apply(beLessThanOrEqualTo(n)) 
-    def <(n: S) = result.apply(beLessThan(n)) 
-    def lessThan(n: S) = result.apply(beLessThan(n)) 
-    def >=(n: S) = result.apply(beGreaterThanOrEqualTo(n)) 
-    def greaterThanOrEqualTo(n: S) = result.apply(beGreaterThanOrEqualTo(n)) 
-    def >(n: S) = result.apply(beGreaterThan(n)) 
-    def greaterThan(n: S) = result.apply(beGreaterThan(n)) 
+    def <=(n: S) = result(beLessThanOrEqualTo(n))
+    def lessThanOrEqualTo(n: S) = result(beLessThanOrEqualTo(n))
+    def <(n: S) = result(beLessThan(n))
+    def lessThan(n: S) = result(beLessThan(n))
+    def >=(n: S) = result(beGreaterThanOrEqualTo(n))
+    def greaterThanOrEqualTo(n: S) = result(beGreaterThanOrEqualTo(n))
+    def >(n: S) = result(beGreaterThan(n))
+    def greaterThan(n: S) = result(beGreaterThan(n))
   }
   implicit def toNumericResultMatcher[S : Numeric](result: MatchResult[S]) = new NumericResultMatcher(result)
   class NumericResultMatcher[S : Numeric](result: MatchResult[S]) {
-    def closeTo(n: S, delta: S) = result.apply(outer.beCloseTo(n, delta))
-    def closeTo(delta: Delta[S]) = result.apply(outer.beCloseTo(delta))
-    def ~(n: S, delta: S) = result.apply(outer.beCloseTo(n, delta))
-    def ~(delta: Delta[S]) = result.apply(outer.beCloseTo(delta))
+    def closeTo(n: S, delta: S) = result(outer.beCloseTo(n, delta))
+    def closeTo(delta: Delta[S]) = result(outer.beCloseTo(delta))
+    def ~(n: S, delta: S) = result(outer.beCloseTo(n, delta))
+    def ~(delta: Delta[S]) = result(outer.beCloseTo(delta))
   }
   implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered = 
     new NeutralMatcherOrdered(result)
