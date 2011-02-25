@@ -47,8 +47,9 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
                                                                                                                         p^
   "beNull matches null values"                                                                                          ^
   { (null:String) must beNull }                                                                                         ^
+  { (null:String) must be(null) }                                                                                       ^
   { "" must not beNull }                                                                                                ^
-  { "" must not be(null) }                                                                                              ^
+  { "" must not be null }                                                                                               ^
                                                                                                                         p^
   "beAsNullAs checks if two values are null at the same time"                                                           ^
   { (null:String) must beAsNullAs(null) }                                                                               ^
