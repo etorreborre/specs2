@@ -85,7 +85,7 @@ You can see on the examples above several things which are applicable to all mat
 
 An non-exhaustive list of those matchers:
 
- * `beTheSameAs` for checking if `a eq b`
+ * `beTheSameAs` for checking if `a eq b` (`a must be(b)` also works)
  * `beTrue, beFalse`
  * `beLike { case exp => ok }`: to check if an object is like a given pattern
  * `beLike { case exp => exp must beXXX }`: to check if an object is like a given pattern, and verifies a condition

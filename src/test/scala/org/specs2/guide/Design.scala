@@ -90,6 +90,23 @@ The execution is triggered by the various reporters and goes through 3 steps:
 
 ### Specification reporting
 
+All the reporters start of with a sequence of `ExecutedFragments`. A list of `Reducers` is used to collect relevant information:
+
+ * The text and results to display
+ * The "level" of the text i.e. its indentation. The rules for this are given in the `org.specs2.guide.SpecStructure#The Rules`
+ * The statistics and execution times
+ * The applicable arguments (where the arguments of an included specification must override the arguments of its parent)
+
+One of the main difficulties in this 'reduction' is the fact that included specifications change the context of what needs
+to be accumulated. The `reporter.NestedBlocks` trait proveides
+
+This builds a list of objects containing all the text to display:
+
+ * for a console output, `PrintLines`: `PrintSpecStart`, `PrintText`, `PrintResult`,...
+ * for a Html output, `HtmlLines`: `HtmlSpecStart`, `HtmlText`, `HtmlResult`,...
+ * for a JUnit output, a tree of JUnit `Description` objects with the corresponding code to execute (in JUnit the Descriptions
+    are built first, then the examples are executed)
+
 
                                                                                                                         """^
                                                                                                                         end

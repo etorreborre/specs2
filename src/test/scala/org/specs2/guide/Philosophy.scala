@@ -305,8 +305,13 @@ There needs to be a compilation step, which in Scala, is not instantaneous.
 
 ###### But if you STILL want mutable specifications
 
-There's at least one very good reason for that. You want a smooth migration path from ***specs*** to ***specs2*** because
-rewriting specifications from scratch, with a new syntax, does not bring a lot of value to your project.
+There are at least 2 very good reason for that.
+
+ 1. you want a smooth migration path from ***specs*** to ***specs2*** because rewriting specifications from scratch,
+    with a new syntax, does not bring a lot of value to your project
+
+ 2. chaining fragments hides the implementation of the examples and you have to navigate too much between the text and
+    the example code to understand what's going on
 
 Well, Scala is not a black-or-white language and mutation is definitely part of the toolbox. In the case of a specification
 DSL, we know the advantages: less syntax, and the drawbacks: uncontrolled side-effects.

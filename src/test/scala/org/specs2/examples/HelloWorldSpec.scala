@@ -3,12 +3,13 @@ package examples
 
 class HelloWorldSpec extends SpecificationWithJUnit { def is =
 
-"This is a specification to check the 'Hello world' string"                      ^
-                                                                                 p^
-  "'Hello world' contains 11 characters"                                         ! e1^
-  "'Hello world' starts with 'Hello'"                                            ! e2^
-  "'Hello world' ends with 'world'"                                              ! e3^
-                                                                                 end
+  "This is a specification to check the 'Hello world' string"                 ^
+                                                                              p^
+  "The 'Hello world' string should"                                           ^
+    "contain 11 characters"                                                   ! e1^
+    "start with 'Hello'"                                                      ! e2^
+    "end with 'world'"                                                        ! e3^
+                                                                              end
 
   def e1 = "Hello world" must have size(11)
   def e2 = "Hello world" must startWith("Hello")

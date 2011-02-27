@@ -7,21 +7,37 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
+ The main features of specs2 are:
+
+ * The possibility to write unit specs *and* acceptance specs (using free text or Given/When/Then)
+ * Forms for writing Fit-like specifications (with Markdown markup)
+ * An Html reporter to create documentation: acceptance tests, User Guide,...
+ * Integration with sbt (with color reporting by default)
+ * Integration with JUnit tools (maven, IDEs,...)
+ * The concurrent execution of examples by default
+ * ScalaCheck properties
+ * Mocks with Mockito
+ * AutoExamples, where the source code is extracted to describe the example
+ * Rich matchers which are easy to create and compose (new! JSON matchers, Scalaz matchers)
+   * Matchers be used with `must` and `should`
+   * The results can be fully functional or throw exceptions
+   * They can be reused outside of specs2 (in JUnit tests for example)
+
  Design + Cookbook
- Matchers implicit issue
-
-
                                                                                           """^
  "1.1 features                                                                            "^
     "Package dependencies specification                                                   "! todo^
     "Reporters                                                                            "^
       "Teamcity                                                                           "! todo^
       "junit-xml                                                                          "! todo^
+   "Lift                                                                                  "^
+     "specify the example webapp                                                          "! todo^
                                                                                           p^
  "1.0 features                                                                            "^
+   "Publish                                                                               "^
+     "use sbt to publish                                                                  "! todo^
+     "deploy the user guide automatically                                                 "! todo^
    "Implementation                                                                        "^
-     "fix the level issue with nested specs (see UserGuide)                               "! done^
-     "think of a way to generalize the nested management                                  "! done^
      "review all the code and specifications                                              "! todo^
    "Html reporter                                                                         "^
      "with a table of content                                                             "! done^
@@ -37,12 +53,6 @@ class FeaturesSpec extends Specification { def is = literate ^
    "Specs-like specification                                                              "! done^
    "Auto-examples by using the expectation ok message                                     "! done^
    "review the contain matchers                                                           "! done^
-   "Lift                                                                                  "^
-     "specify the example webapp                                                          "! todo^
-   "Publish                                                                               "^
-     "pass the tests with Maven                                                           "! done^
-     "use sbt to publish                                                                  "! todo^
-     "deploy the user guide automatically                                                 "! todo^
                                                                                           p^
   "Preview features                                                                       "^
   "High priority                                                                          "^

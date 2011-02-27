@@ -76,4 +76,5 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
   def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
            "'3' is not equal to '2'"
   val aValue: String = "a value"
+
 }

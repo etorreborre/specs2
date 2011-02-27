@@ -22,7 +22,11 @@ In this chapter you will learn how to:
 
 ### Declare examples
 
-As seen in the [Quick Start](org.specs2.guide.QuickStart.html), a specification is a list of *fragments* separated by `^`:
+The [Quick Start](org.specs2.guide.QuickStart.html) guide describes 2 styles of specifications, the "unit" style and the "acceptance" style.
+Both styles are actually using the same specification structure as a list of *fragments*. So we'll start by describing the
+"acceptance" style first.
+
+In the specification below there is a Text Fragment and 2 Examples, linked with the `^` operator:
 
       "this is my specification"                          ^
         "and example 1"                                   ! e1^
@@ -31,9 +35,9 @@ As seen in the [Quick Start](org.specs2.guide.QuickStart.html), a specification 
       def e1 = success
       def e2 = success
 
-In this style of specification, the "body" of each example is provided by 2 methods, separated from the specification
-text. There is no specific recommendation on how you should name those methods but you can either use short names or
-use the backtick notation for better readability:
+The "body" of each example is provided by 2 methods, separated from the specification text. There is no
+specific recommendation on how you should name those methods but you can either use short names or use the backtick notation
+for better readability:
 
       "this is my specification"                          ^
         "and example 1"                                   ! `first example`^
@@ -192,32 +196,40 @@ collect the successive states of the system:
         }
       }
 
-###### For ***specs*** afficionados
+###### Unit specifications
 
-If you come from a ***specs*** background, it might seem difficult at first to "translate" the way you used to write
-specifications to the new way. Here's a quickstart, you need to:
+In this style of specification you extending the `org.specs2.mutable.Specification` class and get additional methods for
+building the specification Fragments by adding them to a mutable variable:
 
- * replace `should` by `^` and `in` by `!`
- * chain examples with `^`
- * separate blocks of examples with `p^`
-
-        "'Hello world' should" ^ {
-          "contain 11 characters" ! {
-            "Hello world" must have size(11)
-          }^
-          "start with 'Hello'" ! {
-            "Hello world" must startWith("Hello")
-          }^
-          "with 'world'" ! {
-            "Hello world" must endWith("world")
-          }
-        }^
-        p^
-        "'Hey you' should" ^ {
-          "contain 7 characters" ! {
-            "Hey you" must have size(7)
-          }
+      "The 'Hello world' string" should {
+        "contain 11 characters" in {
+          "Hello world" must have size(11)
         }
+        "start with 'Hello'" in {
+          "Hello world" must startWith("Hello")
+        }
+        "end with 'world'" in {
+          "Hello world" must endWith("world")
+        }
+      }
+
+In a mutable specification you can use the following methods:
+
+ * `"My spec title".title` to give a title to the Specification
+
+ * `args(...)` to create arguments for the specification
+
+ * `should` or `can` to create a group of Examples, with a the preceding text appended with `should` or `can`
+ * `>>` to create a group of examples with the preceding text alone
+ * `in` or `>>` to create an Example containing a `Result`
+
+ * `step(s)` to create a `Step`
+ * `action(a)` to create an `Action`
+
+ * `link("how" ~ ("to do hello world", new HelloWorldSpec))` to create a link to another specification
+ * `include(new HelloWorldSpec)` to include another specification
+
+To make things more concrete you can have a look at a full example here: `org.specs2.examples.MutableSpec`
 
 ### Share examples
 
