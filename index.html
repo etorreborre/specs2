@@ -2,29 +2,46 @@
 <html>
 <head>
   <meta charset='utf-8'>
-
   <title>etorreborre/specs2 @ GitHub</title>
-
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #026fcf;
-      font-family: "Helvetica,Arial,FreeSans";
-      color: #ffffff;
-    }
+      <style type="text/css" media="all"> 
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style> 
+      <link href="./css/prettify.css" rel="stylesheet" type="text/css" /> 
+      <script type="text/javascript" src="./css/prettify.js"></script> 
+      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" /> 
+      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" /> 
+      <script type="text/javascript" src="./css/tooltip.js"></script> 
+      <script language="javascript"> 
+      function init() {  prettyPrint(); };   
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = 'images/collapsed.gif';
+        else 
+          image.src = 'images/expanded.gif';
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+    </script> 
+      <script language="javascript">window.onload=init;</script> 
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code --> 
+      <script type="text/javascript" src="./css/tabber.js"></script> 
+      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" />   
+    <style type="text/css">
     #container {
       margin: 0 auto;
-      width: 700px;
+      width: 1000px;
     }
-    h1 { font-size: 3.8em; color: #fd9030; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #fd9030; }
-    h3 { text-align: center; color: #fd9030; }
-    a { color: #fd9030; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .description { font-size: 1.1em; margin-bottom: 30px; margin-top: 0px; font-style: italic;}
     .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
+	s2 { font-style: italic; }
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
   </style>
@@ -37,25 +54,81 @@
 
     <div class="download">
       <a href="http://github.com/etorreborre/specs2/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+        <img border="0" width="50" src="http://github.com/images/modules/download/zip.png"></a>
       <a href="http://github.com/etorreborre/specs2/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+        <img border="0" width="50" src="http://github.com/images/modules/download/tar.png"></a>
     </div>
 
-    <h1><a href="http://github.com/etorreborre/specs2">specs2</a>
-      <span class="small">by <a href="http://github.com/etorreborre">etorreborre</a></span></h1>
+    <h1><a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./images/specs2.png" alt="specs2" /></a></h1>
 
     <div class="description">
-      new ideas for BDD specifications in Scala
+      Software Specifications for Scala
     </div>
+    <h3>This is unreleased software, this site is still under construction!</h3>
 
-    <h2>Authors</h2>
-<p>etorreborre (etorreborre@yahoo.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>etorreborre (etorreborre@yahoo.com)<br/>      </p>
+    <s2>specs2</s2> is a library for writing executable software specifications.
+	<p/>
+	With <s2>specs2</s2> you can write software specifications for one class (<i>unit</i> specifications) or a full system (<i>acceptance</i> specifications):
 
+	<div class="tabber">
+	  <div class="tabbertab" title="Unit">
+	    <code class="prettyprint">   import org.specs2.mutable._
 
-    <h2>Download</h2>
+  class HelloWorldSpec extends Specification {
+
+    "The 'Hello world' string" should {
+      "contain 11 characters" in {
+        "Hello world" must have size(11)
+      }
+      "start with 'Hello'" in {
+        "Hello world" must startWith("Hello")
+      }
+      "end with 'world'" in {
+        "Hello world" must endWith("world")
+      }
+    }
+  }</code>
+	  </div>
+	  <div class="tabbertab" title="Acceptance">
+	    <code class="prettyprint">   import org.specs2._
+
+  class HelloWorldSpec extends Specification { def is =
+
+    "This is a specification to check the 'Hello world' string"                 ^
+                                                                                p^
+    "The 'Hello world' string should"                                           ^
+      "contain 11 characters"                                                   ! e1^
+      "start with 'Hello'"                                                      ! e2^
+      "end with 'world'"                                                        ! e3^
+                                                                                end
+    
+    def e1 = "Hello world" must have size(11)
+    def e2 = "Hello world" must startWith("Hello")
+    def e3 = "Hello world" must endWith("world")
+  }</code>
+	  </div>
+	</div>
+	<p/>
+
+  Some of the features of <s2>specs2</s2> are:
+  <ul>
+  <li>Forms for writing Fit-like specifications (with Markdown markup)</li>
+  <li>An Html reporter to create documentation for acceptance tests, User Guide,...</li>
+  <li>Integration with sbt and JUnit tools (maven, IDEs,...)</li>
+  <li>The concurrent execution of examples by default</li>
+  <li>ScalaCheck properties</li>
+  <li>Mocks with Mockito</li>
+  <li>AutoExamples, where the source code is extracted to describe the example</li>
+  <li>A rich matchers library which are easy to create and compose
+    <ul>
+      <li>Matchers be used with <code>must</code> and <code>should</code></li>
+      <li>The results can be fully functional or throw exceptions</li>
+      <li>They can be reused outside of specs2 (in JUnit tests for example)</li>
+	</ul>
+  </li>
+  </ul>
+	
+    <h3>Download</h3>
     <p>
       You can download this project in either
       <a href="http://github.com/etorreborre/specs2/zipball/master">zip</a> or
@@ -71,7 +144,6 @@
     </div>
 
   </div>
-
   
 </body>
 </html>
