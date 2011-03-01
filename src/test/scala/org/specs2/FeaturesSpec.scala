@@ -7,21 +7,10 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
- The main features of specs2 are:
-
- * The possibility to write unit specs *and* acceptance specs (using free text or Given/When/Then)
- * Forms for writing Fit-like specifications (with Markdown markup)
- * An Html reporter to create documentation: acceptance tests, User Guide,...
- * Integration with sbt (with color reporting by default)
- * Integration with JUnit tools (maven, IDEs,...)
- * The concurrent execution of examples by default
- * ScalaCheck properties
- * Mocks with Mockito
- * AutoExamples, where the source code is extracted to describe the example
- * Rich matchers which are easy to create and compose (new! JSON matchers, Scalaz matchers)
-   * Matchers be used with `must` and `should`
-   * The results can be fully functional or throw exceptions
-   * They can be reused outside of specs2 (in JUnit tests for example)
+ read the doc
+ integrate the doc on the website
+ + google list
+ + wikipages
 
  Design + Cookbook
                                                                                           """^

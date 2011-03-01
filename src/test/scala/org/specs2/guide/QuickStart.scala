@@ -4,14 +4,17 @@ package guide
 class QuickStart extends Specification { def is = literate                                                              ^
 "Quick Start".title ^
 """
-Two major styles of specifications are available with ***specs2***:
+There are 2 major styles of specifications with ***specs2***:
 
- * 'unit' specifications when you want the text and the example code to be interleaved (generally for a single class)
- * 'acceptance' specifications when you want to read the full text as one piece and have the implementation elsewhere
+ * _unit_ specifications where the specification text is interleaved with the specification code. It is generally used for
+   a single class
+ 
+ * _acceptance_ specifications where all the specification text stands as one and the implementation code is elsewhere.
+   It is generally used for acceptance or integration scenarios
 
 #### Unit specification
 
-Unit specifications extend `org.specs2.mutable.Specification` and are using the `should/in` format:
+Unit specifications extend the `org.specs2.mutable.Specification` trait and are using the `should/in` format:
 
       import org.specs2.mutable._
 
@@ -32,7 +35,7 @@ Unit specifications extend `org.specs2.mutable.Specification` and are using the 
 
 #### Acceptance specification
 
-Acceptance specifications extend `org.specs2.Specification` and must define a method called `is`:
+Acceptance specifications extend the `org.specs2.Specification` trait and must define a method called `is`:
 
       import org.specs2._
 
@@ -53,7 +56,7 @@ Acceptance specifications extend `org.specs2.Specification` and must define a me
 
 The `is` method lists *specification fragments* which can be:
 
-* some text: like a description of the system you're specifying
+* simple text, to describe in the system you're specifying
 * an example: a description and some executable code returning a result
 * formatting fragments: `p` adds a blank line and starts a new block of examples
 
@@ -82,10 +85,9 @@ And this is it! Now to execute your specification, you use a *runner* which will
 
 You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide") to learn how to:
 
- * display your text and examples nicely
+ * use the many ***specs2*** matchers to specify precise expectations
  * define _contexts_ to setup/teardown data for your examples
  * include / link specifications and reuse examples
- * use the many ***specs2*** matchers to specify precise expectations
  * use Mockito or ScalaCheck
  * use sbt/maven/junit to execute a specification
  * export your specification as an html document (like this one!)

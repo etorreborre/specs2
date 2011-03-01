@@ -22,11 +22,14 @@ In this chapter you will learn how to:
 
 ### Declare examples
 
-The [Quick Start](org.specs2.guide.QuickStart.html) guide describes 2 styles of specifications, the "unit" style and the "acceptance" style.
-Both styles are actually using the same specification structure as a list of *fragments*. So we'll start by describing the
-"acceptance" style first.
+#### Structure of a Specification
 
-In the specification below there is a Text Fragment and 2 Examples, linked with the `^` operator:
+The [Quick Start](org.specs2.guide.QuickStart.html) guide describes 2 styles of specifications, the _unit_ style and the _acceptance_ style.
+Both styles actually build a specification as a list of *fragments*.
+
+##### _Acceptance_ specification
+
+In an _acceptance_ specification you build a list of _fragments_ with the `^` operator:
 
       "this is my specification"                          ^
         "and example 1"                                   ! e1^
@@ -35,9 +38,11 @@ In the specification below there is a Text Fragment and 2 Examples, linked with 
       def e1 = success
       def e2 = success
 
-The "body" of each example is provided by 2 methods, separated from the specification text. There is no
-specific recommendation on how you should name those methods but you can either use short names or use the backtick notation
-for better readability:
+What we have here is a list of 3 fragments, a Text fragment and 2 example fragments. The examples are declared using the
+format `"description" ! body` their "bodies" are provided by 2 methods, separated from the specification text.
+
+There is no specific recommendation on how you should name those methods but you can either use short names or use the backtick
+notation for better readability:
 
       "this is my specification"                          ^
         "and example 1"                                   ! `first example`^
@@ -57,9 +62,45 @@ You can even push this idea further by writing:
 
 *(an IDE with good refactoring capabilities is a must-have in that case,...)*
 
-###### Standard results
+##### _Unit_ specification
 
-So the first way to create an Example is to follow a piece of text with `!` and provide anything of type `org.specs2.execute.Result`.
+A _unit_ specification uses `should/in` blocks which actually build the Fragments by adding them to a mutable variable:
+
+      "The 'Hello world' string" should {
+        "contain 11 characters" in {
+          "Hello world" must have size(11)
+        }
+        "start with 'Hello'" in {
+          "Hello world" must startWith("Hello")
+        }
+        "end with 'world'" in {
+          "Hello world" must endWith("world")
+        }
+      }
+
+In that specification the following methods are used:
+
+ * `in` to create an Example containing a `Result`
+ * `should` to create a group of Examples, with a the preceding Text fragment appended with `should`
+
+It is completely equivalent to writing:
+
+      "The 'Hello world' string should" ^
+        "contain 11 characters" ! {
+          "Hello world" must have size(11)
+        }^
+        "start with 'Hello'" ! {
+          "Hello world" must startWith("Hello")
+        }^
+        "end with 'world'" ! {
+          "Hello world" must endWith("world")
+        }
+
+You can look at the bottom of this page for the other methods you can use to build unit specifications.
+
+##### Standard results
+
+The first way to create an Example is to follow a piece of text with `!` and provide anything of type `org.specs2.execute.Result`.
 The simplest `Result` values are provided by the `StandardResults` trait, and match the 5 types of results provided by ***specs2***:
 
   * success: the example is ok
@@ -73,7 +114,7 @@ Two additional results are also available to track the progress of features:
   * done: a Success with the message "DONE"
   * todo: a Pending with the message "TODO"
 
-###### Matcher results
+##### Matcher results
 
 Usually the body of an example is made of *expectations* using matchers:
 
@@ -97,10 +138,15 @@ So the correct way of writing the example is:
       def e1 = "hello" must have size(10000) and
                             startWith("hell")
 
-This can be seen as a restriction but this actually encourages a specification style where every expectation is carefully
-specified (see [Mutable Specifications](#Mutable+Specifications) if you really can't live with that).
+##### Thrown Expectations
 
-###### Set an example Pending until fixed
+This rule above encourages a specification style where every expectation is carefully specified and is considered good practice
+by some. However you might see it as an annoying restriction which you can avoid by extending the `org.specs2.matcher.MustThrownMatchers`
+trait. With that trait, any failing expectation will throw an exception and the rest of the example will not be executed.
+
+Note that this is also the default behavior for the `mutable.Specification` trait.
+
+##### Set an example Pending until fixed
 
 Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples.
 Instead of commenting them out and then forgetting about those examples when the code is fixed, you can use `pendingUntilFixed`:
@@ -118,7 +164,7 @@ Instead of commenting them out and then forgetting about those examples when the
 The example above will be reported as `Pending` until it succeeds. Then it is marked as a failure so that you can remember
 to remove the `pendingUntilFixed` marker.
 
-###### Auto-Examples
+##### Auto-Examples
 
 There is a handy functionality when your specification is about showing the use of a DSL or of an API. If your expectation
 fits on one line, you can use it directly, as if it was an example. This is used in ***specs2*** to specify matchers:
@@ -151,7 +197,7 @@ A few things to remember about this feature:
          descFromExpectations ^
          { List(1, 2) must contain(1) }
 
-###### Using the text of the Example
+##### Using the text of the Example
 
 It is possible to use the text of an example to extract meaningful values, use them in the example body and avoid
 repeating oneself:
@@ -168,7 +214,7 @@ repeating oneself:
 
 In that case the argument passed to the `!` method is a function taking a String and returning a Result.
 
-###### Given / When / Then
+##### Given / When / Then
 
 In the same fashion, the Given/When/Then style of writing specifications is supported, albeit using a mutable object to
 collect the successive states of the system:
@@ -195,41 +241,6 @@ collect the successive states of the system:
           books.foldLeft(0)((res, cur) => res + cur._1 * cur._2) must_== total.toInt
         }
       }
-
-###### Unit specifications
-
-In this style of specification you extending the `org.specs2.mutable.Specification` class and get additional methods for
-building the specification Fragments by adding them to a mutable variable:
-
-      "The 'Hello world' string" should {
-        "contain 11 characters" in {
-          "Hello world" must have size(11)
-        }
-        "start with 'Hello'" in {
-          "Hello world" must startWith("Hello")
-        }
-        "end with 'world'" in {
-          "Hello world" must endWith("world")
-        }
-      }
-
-In a mutable specification you can use the following methods:
-
- * `"My spec title".title` to give a title to the Specification
-
- * `args(...)` to create arguments for the specification
-
- * `should` or `can` to create a group of Examples, with a the preceding text appended with `should` or `can`
- * `>>` to create a group of examples with the preceding text alone
- * `in` or `>>` to create an Example containing a `Result`
-
- * `step(s)` to create a `Step`
- * `action(a)` to create an `Action`
-
- * `link("how" ~ ("to do hello world", new HelloWorldSpec))` to create a link to another specification
- * `include(new HelloWorldSpec)` to include another specification
-
-To make things more concrete you can have a look at a full example here: `org.specs2.examples.MutableSpec`
 
 ### Share examples
 
@@ -642,18 +653,31 @@ called `Action`:
                                                                        Step(closeDatabase)^
                                                                        end
 
-#### Mutable Specifications
+#### Other unit specification methods
 
-If you've read the [Philosophy](org.specs2.guide.Philosophy.html) page you're fully aware of the danger of using side effects to create and execute specifications.
-However assuming that you won't try to execute the same Specification concurrently, there is a way to create Specifications
-which almost look like ***specs*** specifications. Here is a fully commented example showing how to do it:
+Other methods can be used to create fragments in a unit specification:
+
+ * `can` to create a group of Examples, with a the preceding Text fragment appended with `can`
+ * `>>` to create an Example or a group of Examples (with no appended text)
+
+ * `"My spec title".title` to give a title to the Specification
+
+ * `args(...)` to create arguments for the specification
+
+ * `step(s)` to create a `Step`
+ * `action(a)` to create an `Action`
+
+ * `link("how" ~ ("to do hello world", new HelloWorldSpec))` to create a link to another specification
+ * `include(new HelloWorldSpec)` to include another specification
+
+To make things more concrete here is a full example:
 
       import mutable._
       import specification._
       import execute.Success
 
       /**
-       * This specification shows how to use the mutable.Specification trait to create a specs-like Specification
+       * This specification shows how to use the mutable.Specification trait to create a unit Specification
        * where the fragments are built using a mutable variable
        */
       class MutableSpec extends SpecificationWithJUnit {
@@ -722,11 +746,6 @@ which almost look like ***specs*** specifications. Here is a fully commented exa
           def e1 = string must have size(7)
         }
       }
-
-As you can see in the specification above, any failing expectation will stop the evaluation of an Example. This behavior
-is provided by a trait named `org.specs2.matcher.MustThrownMatchers` that you can reuse in a regular Specification if you
-want the same behavior.
-
 
  - - -
                                                                                                                         """^
