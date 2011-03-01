@@ -39,27 +39,19 @@
       margin: 0 auto;
       width: 1000px;
     }
+	.console { font-family:Courier; color: #CCCCCC; background: #000000; border: 1px #CCCCCC; padding: 10px; }
     .description { font-size: 1.1em; margin-bottom: 30px; margin-top: 0px; font-style: italic;}
+    .footer { text-align:center; padding-top:30px; font-style: italic; }
     .download { float: right; }
 	s2 { font-style: italic; }
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
   </style>
-</head>
+  </head>
 
 <body>
-  <a href="http://github.com/etorreborre/specs2"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-
   <div id="container">
 
-    <div class="download">
-      <a href="http://github.com/etorreborre/specs2/zipball/master">
-        <img border="0" width="50" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/etorreborre/specs2/tarball/master">
-        <img border="0" width="50" src="http://github.com/images/modules/download/tar.png"></a>
-    </div>
-
-    <h1><a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./images/specs2.png" alt="specs2" /></a></h1>
+    <a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./images/specs2.png" alt="specs2" /></a>
 
     <div class="description">
       Software Specifications for Scala
@@ -119,6 +111,7 @@
   <div class="level1"><img src="images/collapsed.gif">Concurrent execution of examples by default</img></div>
   <div class="level1"><img src="images/collapsed.gif">ScalaCheck properties</img></div>
   <div class="level1"><img src="images/collapsed.gif">Mocks with Mockito</img></div>
+  <div class="level1"><img src="images/collapsed.gif">Data tables</img></div>
   <div class="level1"><img src="images/collapsed.gif">AutoExamples, where the source code is extracted to describe the example</img></div>
   <div class="level1"><img src="images/collapsed.gif">A rich library of matchers</img></div>
     <div class="level2"><img src="images/collapsed.gif">Easy to create and compose</img></div>
@@ -126,15 +119,62 @@
     <div class="level2"><img src="images/collapsed.gif">Returning "functional" results or throwing exceptions</img></div>
     <div class="level2"><img src="images/collapsed.gif">Reusable outside of specs2 (in <a href="http://junit.org">JUnit</a> tests for example)</img></div>
   
-    <h3>Download</h3>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/etorreborre/specs2/zipball/master">zip</a> or
-      <a href="http://github.com/etorreborre/specs2/tarball/master">tar</a> formats.
-    </p>
+    <h3>Dependencies</h3>
+    The <s2>specs2</s2> jar is available with both sbt and maven
+
+	<div class="tabber">
+	  <div class="tabbertab" title="sbt">
+  	    <code class="prettyprint">
+ val specs2 = "org.specs2" %% "specs2" % "1.0"
+
+ val snapshots = "snapshots" at "http://scala-tools.org/repo-snapshots"
+ val releases  = "releases" at "http://scala-tools.org/repo-releases"
+</code>
+      </div>
+	  <div class="tabbertab" title="maven">
+  	    <code class="prettyprint">  &lt;dependency>
+   &lt;groupId>org.specs2&lt;/groupId> 
+   &lt;artifactId>specs2&lt;/artifactId> 
+   &lt;version>1.0&lt;/version> 
+ &lt;/dependency>
+ 
+ &lt;repository>
+   &lt;id>scala-tools.org&lt;/id> 
+   &lt;name>releases&lt;/name> 
+   &lt;url>http://scala-tools.org/repo-releases&lt;/url> 
+ &lt;/repository>
+ 
+ &lt;repository>
+   &lt;id>scala-tools.org - snapshots&lt;/id> 
+   &lt;name>snapshots&lt;/name> 
+   &lt;url>http://scala-tools.org/repo-snapshots&lt;/url> 
+ &lt;/repository></code>
+      </div>
+	</div>  
+    <h3>Downloads</h3>
+    You can download the project here
+	<table width="800">
+	  <tr><th width="80">Version</th><th width="280">Files</th></tr>
+	  <tr>
+	      <td class="info">Snapshot</td>
+	      <td class="info">
+		    <a href="http://scala-tools.org/repo-releases/org/specs2/specs2/1.1">binaries (jar)</a>, 
+            <a href="http://github.com/etorreborre/specs2/zipball/master">project (zip)</a>,
+            <a href="http://github.com/etorreborre/specs2/tarball/master">project (tar)</a>
+		  </td>
+	  </tr>
+	  <tr>
+	      <td class="info">Released</td>
+	      <td class="info">
+		    <a href="http://scala-tools.org/repo-releases/org/specs2/specs2/1.0">binaries (jar)</a>, 
+            <a href="http://github.com/etorreborre/specs2/zipball/SPECS2-1.0">project (zip)</a>,
+            <a href="http://github.com/etorreborre/specs2/tarball/SPECS2-1.0">project (tar)</a>
+		  </td>
+	  </tr>
+	<table>
     <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
       by running:
-      <pre style="background-color: #AAAAAA; ">$ git clone git://github.com/etorreborre/specs2</pre>
+      <div class="console">$ git clone git://github.com/etorreborre/specs2</div>
     </p>
 
     <div class="footer">
