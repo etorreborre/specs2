@@ -117,8 +117,13 @@ trait MatchersImplicits {
   /**
    * This method transform a function to a Matcher
    */
-  implicit def functionToMatcher[T](f: (T => Boolean, String, String)): Matcher[T] =
-    functionAndMessagesToMatcher[T]((f._1, (t:T) => f._2, (t:T) => f._3))
+  implicit def functionToMatcher[T](f: (T => Boolean, String)): Matcher[T] =
+    functionAndMessagesToMatcher[T]((f._1, (t:T) => "not ("+q(t)+" "+f._2+")", (t:T) => q(t)+" "+f._2))
+  /**
+   * This method transform a function to a Matcher
+   */
+  implicit def functionToMatcher2[T](f: (T => Boolean, String, String)): Matcher[T] =
+    functionAndMessagesToMatcher[T]((f._1, (t:T) => q(t)+" "+f._2, (t:T) => q(t)+" "+f._3))
   /**
    * This method transform a function to a Matcher
    */

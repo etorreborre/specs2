@@ -45,6 +45,7 @@ object JUnitDescriptions {
     case (Text(t))                    => Some(createSuiteDescription(testName(t)) -> f)
     case (Example(description, body)) => Some(createDescription(testName(description.toString), nodeLabel) -> f)
     case (Step(action))               => Some(createDescription("step", nodeLabel) -> f)
+    case (Action(action))             => Some(createDescription("action", nodeLabel) -> f)
     case other                        => None
   }
   /** 

@@ -155,7 +155,8 @@ There are many ways to create matchers for your specific usage. The simplest way
 
 If this is not enough, you can use tuplets to create Matchers:
 
-       val m: Matcher[String]  = ((_: String).startsWith("hello"), "starts with hello", "doesn't start with hello")
+       val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")
+       val m1: Matcher[String]  = ((_: String).startsWith("hello"), "starts with hello", "doesn't start with hello")
        val m2: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ "doesn't start with hello")
        val m3: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ "starts with hello", (s:String) => s+ "doesn't start with hello")
 
