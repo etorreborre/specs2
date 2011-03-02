@@ -1,0 +1,47 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style>
+      <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
+      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript"> 
+      function init() {  prettyPrint(); };   
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = 'images/collapsed.gif';
+        else 
+          image.src = 'images/expanded.gif';
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script> 
+      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" /> 
+    </head><body><title>User Guide</title><a name="User+Guide"></a><h2>User Guide</h2><div class="level0"><p><strong><em>specs2</em></strong> is a library for writing executable software specifications in Scala.</p>
+<p>With <em>specs2</em> you can write:</p>
+<ul>
+  <li>specifications for simple classes (<em>unit</em> specifications)
+</li>
+  <li>specifications for full features (<em>acceptance</em> specifications)
+</li>
+</ul>
+<p>In the following user guide, you will find:</p>
+</div><p></p><div class="level0"><img src="./images/icon_success_sml.gif" /> a <a href="org.specs2.guide.QuickStart.html" tooltip="">quick start guide</a></div><div class="level0"><img src="./images/icon_success_sml.gif" /> how to <a href="org.specs2.guide.SpecStructure.html" tooltip="">structure your specification</a></div><div class="level0"><img src="./images/icon_success_sml.gif" /> how to use <a href="org.specs2.guide.Matchers.html" tooltip="">matchers</a></div><div class="level0"><img src="./images/icon_success_sml.gif" /> how to <a href="org.specs2.guide.Runners.html" tooltip="">execute a specification</a></div><div class="level0"><img src="./images/icon_success_sml.gif" /> the <strong><em>specs2</em></strong> <a href="org.specs2.guide.Philosophy.html" tooltip="">philosophy</a></div><div class="level0"><img src="./images/icon_success_sml.gif" /> the <strong><em>specs2</em></strong> <a href="org.specs2.guide.Design.html" tooltip="">design</a></div><br /><table class="dataTable">
+        <tr><th colSpan="2">Total for specification User Guide</th></tr>
+        <tr><td>Finished in</td><td class="info">3 seconds, 643 ms</td></tr>
+        <tr><td>Results</td><td class="success">53 examples, 110 expectations, 0 failure, 0 error</td></tr>
+      </table></body></html>

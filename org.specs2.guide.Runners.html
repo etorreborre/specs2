@@ -1,0 +1,272 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style>
+      <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
+      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript"> 
+      function init() {  prettyPrint(); };   
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = 'images/collapsed.gif';
+        else 
+          image.src = 'images/expanded.gif';
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script> 
+      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" /> 
+    </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a></div><title>Runners guide</title><a name="Runners+guide"></a><h2>Runners guide</h2><div class="level0"><a name="Presentation"></a><h3>Presentation</h3>
+<p><ul><li><a href="#Presentation">Presentation</a></li><li><a href="#Dependencies">Dependencies</a></li><ul><li><a href="#Arguments">Arguments</a></li></ul><li><a href="#Console+output">Console output</a></li><ul><li><a href="#Colors">Colors</a></li></ul><li><a href="#Html+output">Html output</a></li><li><a href="#Files+Runner">Files Runner</a></li><li><a href="#Simple+build+tool">Simple build tool</a></li><ul><li><a href="#arguments">arguments</a></li><li><a href="#Files+runner">Files runner</a></li><li><a href="#Colors">Colors</a></li></ul><li><a href="#JUnit">JUnit</a></li></ul></p>
+<p>There are 4 ways to execute <strong><em>specs2</em></strong> specifications:</p>
+<ul>
+  <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner
+</li>
+  <li>on the command line, with an html output, and the <code class="prettyprint">specs2.html</code> runner
+</li>
+  <li>on the command line, with a console or an html output, and the <code class="prettyprint">specs2.files</code> runner
+</li>
+  <li>using <a href="http://code.google.com/p/simple-build-tool">sbt</a>
+</li>
+  <li>using <a href="http://www.junit.org">JUnit</a>
+</li>
+</ul><a name="Dependencies"></a><h3>Dependencies</h3>
+<p><strong><em>specs2</em></strong> is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the <a href="http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies">sbt dsl</a>:</p>
+<p><table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info"><code class="prettyprint">&quot;com.googlecode.scalaz&quot; %% &quot;scalaz-core&quot; % &quot;5.1-SNAPSHOT&quot;</code></td><td class="info">mandatory</td></tr><tr><td class="info"> <code class="prettyprint">&quot;org.scala-tools.testing&quot; %% &quot;scalacheck&quot; % &quot;1.8&quot;</code></td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.mockito&quot; % &quot;mockito-all&quot; % &quot;1.8.5&quot;</code></td><td class="info">only if using Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.hamcrest&quot; % &quot;hamcrest-all&quot; % &quot;1.1&quot;</code></td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;junit&quot; % &quot;junit&quot; % &quot;4.7&quot;</code></td><td class="info">only if using JUnit</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-tools.testing&quot; % &quot;test-interface&quot; % &quot;0.5&quot;</code></td><td class="info">provided by sbt when using it</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.parboiled&quot; % &quot;parboiled4j&quot; % &quot;0.9.9.0&quot;</code></td><td class="info">only if using the html runner</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.pegdown&quot; % &quot;pegdown&quot; % &quot;0.8.5.4&quot;</code></td><td class="info">only if using the html runner</td></tr></table></p>
+<p>The last 2 jars are the Pegdown and Parboiled libraries for Markdown parsing. They cannot yet be found in an official maven<br />
+repository, so you'll need to add the specs temporary Maven repository to your sbt project:</p>
+<p><code class="prettyprint">val specsRepo = &quot;specs-repo&quot; at &quot;http://specs.googlecode.com/svn/maven2&quot;</code></p><a name="Arguments"></a><h4>Arguments</h4>
+<p>You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared<br />
+inside the specification:</p>
+<pre><code class="prettyprint">  class MySpec extends Specification { def is = args(noindent=true) ^
+    &quot;Clever spec title&quot;                                             ^
+    &quot;this will not be indented&quot;                                     ^
+    &quot;brilliant expectation&quot;                                         ! success
+  }
+</code></pre>
+<p>The available arguments are the following:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Name </th>
+      <th>Default value </th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="prettyprint">ex</code> </td>
+      <td>.* </td>
+      <td>regular expression specifying the examples to execute. Use <code class="prettyprint">ex .*brilliant.*</code> on the command line</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">xonly</code> </td>
+      <td>false </td>
+      <td>only reports failures and errors</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">plan</code> </td>
+      <td>true </td>
+      <td>only report the text of the specification without executing anything</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">failtrace</code> </td>
+      <td>false </td>
+      <td>report the stacktrace for failures</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color</code> </td>
+      <td>true </td>
+      <td>use colors in the output (<code class="prettyprint">nocolor</code> can also be used on the command line)</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">noindent</code> </td>
+      <td>false </td>
+      <td>don't indent automatically text and examples</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">showtimes</code> </td>
+      <td>false </td>
+      <td>show individual execution times</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">sequential</code> </td>
+      <td>false </td>
+      <td>don't execute examples concurrently</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">threadsNb</code> </td>
+      <td>0 </td>
+      <td>number of threads to use for concurrent execution</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">markdown</code> </td>
+      <td>true </td>
+      <td>interpret text as Markdown in the html reporter</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">debugMarkdown</code> </td>
+      <td>false </td>
+      <td>print more information when Markdown formatting fails</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">html</code> </td>
+      <td>false </td>
+      <td>only to be passed on the command line to get console + html reporting at once</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">fromSource</code> </td>
+      <td>true </td>
+      <td>true takes an AutoExample description from the file, false from the expectation ok message</td>
+    </tr>
+  </tbody>
+</table>
+<p>All those arguments are usually set in a specification with <code class="prettyprint">args(name=value)</code> but there are some available shortcuts:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Name </th>
+      <th>Equivalent </th>
+      <th>Description </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="prettyprint">plan</code> </td>
+      <td><code class="prettyprint">args(plan=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">noindent</code> </td>
+      <td><code class="prettyprint">args(noindent=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">xonly</code> </td>
+      <td><code class="prettyprint">args(xonly=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">only(examples: String)</code> </td>
+      <td><code class="prettyprint">args(ex=examples)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">sequential</code> </td>
+      <td><code class="prettyprint">args(sequential=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">literate</code> </td>
+      <td><code class="prettyprint">args(noindent=true, sequential=true)</code> </td>
+      <td>for specifications where text must not be indented and examples be executed in order </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">freetext</code> </td>
+      <td><code class="prettyprint">args(plan=true, noindent=true)</code> </td>
+      <td>for specifications with no examples at all and free display of text </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">descFromExpectations</code> </td>
+      <td><code class="prettyprint">args(fromSource=false)</code> </td>
+      <td>create the example description for the ok message of the expectation instead of the source file </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">diffs(show, separators, triggerSize, shortenSize, full)</code> </td>
+      <td><code class="prettyprint">args(diffs=Diffs(show, separators, triggerSize, shortenSize, full)</code> </td>
+      <td>to display the differences when doing equality comparison </td>
+    </tr>
+  </tbody>
+</table>
+<p>For the diffs arguments the values you can specify are:</p>
+<ul>
+  <li><code class="prettyprint">show</code> will not show anything (default is true)
+</li>
+  <li><code class="prettyprint">separators</code> allows to change the separators used to show the differences (default is &quot;[]&quot;)
+</li>
+  <li><code class="prettyprint">triggerSize</code> controls the size above which the differences must be shown (default is 20)
+</li>
+  <li><code class="prettyprint">shortenSize</code> controls the number of characters to display around each difference (default is 5)
+</li>
+  <li><code class="prettyprint">full</code> displays the full original expected and actual strings
+</li>
+</ul><a name="Console+output"></a><h3>Console output</h3>
+<p>Executing a specification <code class="prettyprint">com.company.SpecName</code> in the console is very easy:</p>
+<p><code class="prettyprint">scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]</code></p><a name="Colors"></a><h5>Colors</h5>
+<p>By default, the reporting will output colors. If you're running on windows you might either:</p>
+<ul>
+  <li>use the <a href="http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows">following tip</a> to install colors in the DOS console
+</li>
+  <li>or pass <code class="prettyprint">nocolor</code> as a command line argument
+</li>
+</ul><a name="Html+output"></a><h3>Html output</h3>
+<p>If you want html pages to be produced for your specification you'll need to execute:</p>
+<p><code class="prettyprint">scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]</code></p>
+<p>By default the files will be created in the <code class="prettyprint">target/specs-report</code> directory but you can change that by setting the<br />
+<code class="prettyprint">-Dspecs2.outDir</code> system property.</p><a name="Files+Runner"></a><h3>Files Runner</h3>
+<p>The <code class="prettyprint">specs2.files</code> object will, by default, select and execute Specifications found in the test source directory:</p>
+<ul>
+  <li>the source directory is defined as <code class="prettyprint">src/test/scala</code> but can be changed by adjusting the system property <code class="prettyprint">specs2.srcTestDir</code>
+</li>
+  <li>the specifications files are selected as classes or object which names match <code class="prettyprint">.*Spec</code>. This value can be changed by<br />
+ passing a different <code class="prettyprint">specName</code> value as a command-line argument
+</li>
+  <li><code class="prettyprint">console</code> or <code class="prettyprint">html</code> has to be passed on the command-line to specify which kind of output you want
+</li>
+</ul>
+<p>You can also extend the <code class="prettyprint">org.specs2.runner.FilesRunner</code> trait and override its behavior to implement something more appropriate<br />
+to your environment if necessary.</p><a name="Simple+build+tool"></a><h3>Simple build tool</h3>
+<p>In order to use <strong><em>specs2</em></strong> with sbt you need first to add the following lines to your sbt project:</p>
+<pre><code class="prettyprint">  def specs2Framework = new TestFramework(&quot;org.specs2.runner.SpecsFramework&quot;)
+  override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
+</code></pre>
+<p>Then, depending on the naming of your specification, you have to specify which classes you want to include for reporting:</p>
+<pre><code class="prettyprint">  override def includeTest(s: String) = { s.endsWith(&quot;Spec&quot;) || s.contains(&quot;UserGuide&quot;) }
+</code></pre><a name="arguments"></a><h5>arguments</h5>
+<p>When you execute one test only, you can pass the arguments on the command line:</p>
+<pre><code class="prettyprint">  &gt; test-only org.specs2.UserGuide -- xonly
+</code></pre>
+<p>The <code class="prettyprint">html</code> argument is also available with sbt to allow the creation of the html report from the command line.</p>
+<pre><code class="prettyprint">  &gt; test-only org.specs2.UserGuide -- html
+</code></pre><a name="Files+runner"></a><h5>Files runner</h5>
+<p>Any <code class="prettyprint">FilesRunner</code> object can also be invoked by sbt, but you need to specify <code class="prettyprint">console</code> or <code class="prettyprint">html</code> on the command line:</p>
+<pre><code class="prettyprint">  &gt; test-only allSpecs -- console
+</code></pre><a name="Colors"></a><h5>Colors</h5>
+<p>Note the the color support for sbt on Windows is a bit tricky. You need to follow the instructions <a href="http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows">here</a> then add to your script launching sbt:</p>
+<pre><code class="prettyprint">    -Djline.terminal=jline.UnsupportedTerminal
+</code></pre><a name="JUnit"></a><h3>JUnit</h3>
+<p>It is possible to have <em><strong>specs2</strong></em> specifications executed as JUnit tests. This enables the integration of <strong><em>specs2</em></strong> with<br />
+Maven and the JUnit runners of your IDE of choice.</p>
+<p>There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The<br />
+simple one is to extend <code class="prettyprint">SpecificationWithJUnit</code>:</p>
+<pre><code class="prettyprint">   class MySpecification extends SpecificationWithJUnit {
+     def is = // as usual....
+   }
+</code></pre>
+<p>You can use the second one if your IDE doesn't work with the first one:</p>
+<pre><code class="prettyprint">  import org.junit.runner._
+  import runner._
+
+  @RunWith(classOf[JUnitRunner])
+  class MySpecification extends Specification {
+     def is = // as usual....
+  }
+</code></pre>
+<p>[<em>some <a href="http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse">tricks</a> described on the specs website can still be useful there</em>]</p>
+<hr />
+</div><p></p></body></html>

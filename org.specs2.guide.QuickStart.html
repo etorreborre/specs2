@@ -1,0 +1,125 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style>
+      <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
+      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript"> 
+      function init() {  prettyPrint(); };   
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = 'images/collapsed.gif';
+        else 
+          image.src = 'images/expanded.gif';
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script> 
+      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" /> 
+    </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a></div><title>Quick Start</title><a name="Quick+Start"></a><h2>Quick Start</h2><div class="level0"><p>There are 2 major styles of specifications with <strong><em>specs2</em></strong>:</p>
+<ul>
+  <li>
+    <p><em>unit</em> specifications where the specification text is interleaved with the specification code. It is generally used for<br />
+ a single class</p>
+  </li>
+  <li>
+    <p><em>acceptance</em> specifications where all the specification text stands as one and the implementation code is elsewhere.<br />
+ It is generally used for acceptance or integration scenarios</p>
+  </li>
+</ul><a name="Unit+specification"></a><h4>Unit specification</h4>
+<p>Unit specifications extend the <code class="prettyprint">org.specs2.mutable.Specification</code> trait and are using the <code class="prettyprint">should/in</code> format:</p>
+<pre><code class="prettyprint">  import org.specs2.mutable._
+
+  class HelloWorldSpec extends Specification {
+
+    &quot;The 'Hello world' string&quot; should {
+      &quot;contain 11 characters&quot; in {
+        &quot;Hello world&quot; must have size(11)
+      }
+      &quot;start with 'Hello'&quot; in {
+        &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
+      }
+      &quot;end with 'world'&quot; in {
+        &quot;Hello world&quot; must endWith(&quot;world&quot;)
+      }
+    }
+  }
+</code></pre><a name="Acceptance+specification"></a><h4>Acceptance specification</h4>
+<p>Acceptance specifications extend the <code class="prettyprint">org.specs2.Specification</code> trait and must define a method called <code class="prettyprint">is</code>:</p>
+<pre><code class="prettyprint">  import org.specs2._
+
+  class HelloWorldSpec extends Specification { def is =
+
+    &quot;This is a specification to check the 'Hello world' string&quot;                 ^
+                                                                                p^
+    &quot;The 'Hello world' string should&quot;                                           ^
+      &quot;contain 11 characters&quot;                                                   ! e1^
+      &quot;start with 'Hello'&quot;                                                      ! e2^
+      &quot;end with 'world'&quot;                                                        ! e3^
+                                                                                end
+    def e1 = &quot;Hello world&quot; must have size(11)
+    def e2 = &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
+    def e3 = &quot;Hello world&quot; must endWith(&quot;world&quot;)
+  }
+</code></pre>
+<p>The <code class="prettyprint">is</code> method lists <em>specification fragments</em> which can be:</p>
+<ul>
+  <li>simple text, to describe in the system you're specifying
+</li>
+  <li>an example: a description and some executable code returning a result
+</li>
+  <li>formatting fragments: <code class="prettyprint">p</code> adds a blank line and starts a new block of examples
+</li>
+</ul>
+<p>Fragments are separated by the <code class="prettyprint">^</code> character in order to build a list of them.</p><a name="Execution"></a><h4>Execution</h4>
+<p>And this is it! Now to execute your specification, you use a <em>runner</em> which will display the results:</p>
+<pre><code class="prettyprint">  &gt; scala -cp ... specs2.run HelloWorldSpec
+
+  HelloWorldSpec
+
+  This is a specification to check the 'Hello world' string
+
+  The 'Hello world' string should
+  + contain 11 characters
+  + start with 'Hello'
+  + end with 'world'
+
+  Total for specification HelloWorldSpec
+  Finished in 0 second, 78 ms
+  3 examples, 0 failure, 0 error
+</code></pre><a name="Where+to+go+from+here"></a><h4>Where to go from here</h4>
+<p>You can explore the rest of this <a title="Guide" href="org.specs2.UserGuide.html">User Guide</a> to learn how to:</p>
+<ul>
+  <li>use the many <strong><em>specs2</em></strong> matchers to specify precise expectations
+</li>
+  <li>define <em>contexts</em> to setup/teardown data for your examples
+</li>
+  <li>include / link specifications and reuse examples
+</li>
+  <li>use Mockito or ScalaCheck
+</li>
+  <li>use sbt/maven/junit to execute a specification
+</li>
+  <li>export your specification as an html document (like this one!)
+</li>
+</ul>
+</div><br /><table class="dataTable">
+        <tr><th colSpan="2">Total for specification Quick Start</th></tr>
+        <tr><td>Finished in</td><td class="info">418 ms</td></tr>
+        <tr><td>Results</td><td class="success">6 examples, 0 failure, 0 error</td></tr>
+      </table></body></html>
