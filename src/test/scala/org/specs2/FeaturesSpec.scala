@@ -7,12 +7,12 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
- read the doc
- integrate the doc on the website
- + google list
- + wikipages
+ add the links to: the google user list, the blog
+ integrate the User Guide on the website
 
- Design + Cookbook
+ read on git workflow
+
+ Cookbook
                                                                                           """^
  "1.1 features                                                                            "^
     "Package dependencies specification                                                   "! todo^

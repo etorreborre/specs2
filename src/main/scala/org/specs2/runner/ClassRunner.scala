@@ -26,7 +26,7 @@ class ClassRunner extends Classes with ConsoleOutput {
 
     run(arguments.drop(1), createSpecification(arguments(0))) {  case e =>
 	    println("\nAn error occurred. " +
-              "Please create an issue on the http://code.google.com/specs2 website with the stacktrace below. Thanks.")
+              "Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.")
 	    e.printStackTrace 
 	  }
   }

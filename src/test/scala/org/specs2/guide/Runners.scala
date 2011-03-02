@@ -54,7 +54,7 @@ The available arguments are the following:
  `markdown`      | true          | interpret text as Markdown in the html reporter
  `debugMarkdown` | false         | print more information when Markdown formatting fails
  `html`          | false         | only to be passed on the command line to get console + html reporting at once
- `fromSource`    | true          | when using AutoExamples takes the description of the Example from the source file
+ `fromSource`    | true          | true takes an AutoExample description from the file, false from the expectation ok message
 
 
 All those arguments are usually set in a specification with `args(name=value)` but there are some available shortcuts:
@@ -66,7 +66,7 @@ All those arguments are usually set in a specification with `args(name=value)` b
  `xonly`                                                   | `args(xonly=true)`                                                   |                                                                                                  |
  `only(examples: String)`                                  | `args(ex=examples)`                                                  |                                                                                                  |
  `sequential`                                              | `args(sequential=true)`                                              |                                                                                                  |
- `literate`                                                | `args(noindent=true, sequential=true)`                               | for specifications were text must not be indented and examples be executed in order              |
+ `literate`                                                | `args(noindent=true, sequential=true)`                               | for specifications where text must not be indented and examples be executed in order              |
  `freetext`                                                | `args(plan=true, noindent=true)`                                     | for specifications with no examples at all and free display of text                              |
  `descFromExpectations`                                    | `args(fromSource=false)`                                             | create the example description for the ok message of the expectation instead of the source file  |
  `diffs(show, separators, triggerSize, shortenSize, full)` | `args(diffs=Diffs(show, separators, triggerSize, shortenSize, full)` | to display the differences when doing equality comparison                                        |
@@ -108,10 +108,10 @@ The `specs2.files` object will, by default, select and execute Specifications fo
  * the source directory is defined as `src/test/scala` but can be changed by adjusting the system property `specs2.srcTestDir`
  * the specifications files are selected as classes or object which names match `.*Spec`. This value can be changed by
    passing a different `specName` value as a command-line argument
- * `console` or `html` has to be passed on the command-line to specify the required output
+ * `console` or `html` has to be passed on the command-line to specify which kind of output you want
 
-You can also extend the `org.specs2.runner.FilesRunner` and override its behavior to implement something more appropriate to
-your environment if necessary.
+You can also extend the `org.specs2.runner.FilesRunner` trait and override its behavior to implement something more appropriate
+to your environment if necessary.
 
 ### Simple build tool
 
@@ -142,14 +142,9 @@ Any `FilesRunner` object can also be invoked by sbt, but you need to specify `co
 
 ##### Colors
 
-Note the the color support for sbt on Windows is a bit tricky. You need to follow the instructions [here](http://
-www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) then add to your script launching sbt:
+Note the the color support for sbt on Windows is a bit tricky. You need to follow the instructions [here](http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) then add to your script launching sbt:
 
         -Djline.terminal=jline.UnsupportedTerminal
-
-##### Parallel execution
-
-From time to time you may experience a stacktrace in sbt output. This is documented [here](http://code.google.com/p/simple-build-tool/issues/detail?id=133).
 
 ### JUnit
 
@@ -163,7 +158,7 @@ simple one is to extend `SpecificationWithJUnit`:
          def is = // as usual....
        }
 
-The second one is equivalent and shows what really happens:
+You can use the second one if your IDE doesn't work with the first one:
 
       import org.junit.runner._
       import runner._

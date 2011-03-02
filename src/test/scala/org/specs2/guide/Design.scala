@@ -14,6 +14,7 @@ This page explains the overall design of _specs2_:
  * how the specification is built
  * how the specification is executed
  * how the reporting works
+ * the packages dependencies
 
 ### Specification structure
 
@@ -106,6 +107,20 @@ This builds a list of objects containing all the text to display:
  * for a Html output, `HtmlLines`: `HtmlSpecStart`, `HtmlText`, `HtmlResult`,...
  * for a JUnit output, a tree of JUnit `Description` objects with the corresponding code to execute (in JUnit the Descriptions
     are built first, then the examples are executed)
+
+### Packages dependencies
+
+The following dependencies should be always verified, from low-level packages to high-level ones, where no package on a
+low layer can depend on a package on a higher layer:
+
+      + runner
+      + reporter
+      + specification
+      + mock form
+      + matcher
+      + execute
+      +            reflect  xml html  time json
+      + collection control  io  text  main data
 
 
                                                                                                                         """^

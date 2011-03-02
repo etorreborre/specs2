@@ -6,10 +6,10 @@ import form._
 class Forms extends SpecificationWithJUnit with specification.Forms { def is = literate^
   """ <toc/>
 
-Forms are a way to represent domain objects or service, and declare expected values in a tabular format. Forms can be designed
+Forms are a way to represent domain objects or services, and declare expected values in a tabular format. Forms can be designed
 as reusable pieces of specification where complex forms can be built out of simple ones.
 
-Forms are built by creating "Fields" or "Properties" and placing them on rows.
+Forms are built by creating `Fields` or `Props` and placing them on rows.
 The following examples show, by order of complexity, the creation of:
 
   1. fields
@@ -21,11 +21,11 @@ The following examples show, by order of complexity, the creation of:
   1. a decision table having some related columns
   1. a composite Order - OrderLine entity (1-n) relationship
 
- For all the code samples below you need to import the `org.specs2.form.FormsBuilder` trait.
+ For all the code samples below you need to extend the `org.specs2.specification.Forms` trait.
 
 ### Fields
 
-A `Field` is simply a label and a value. It is used in forms to display relevant information. You can create a `Field` with
+A `Field` is simply a label and a value. It is used in forms to display regular information. You can create a `Field` with
 these methods:
 
   * `field(value)`: creates a field for a value, where the label is empty
@@ -47,12 +47,12 @@ If an exception is thrown during that evaluation, the exception message will be 
 
 ### Effects
 
-An `Effect` is almost like a `Field` but it never shows its value. The value is supposed to have some kind of side-effect,
-like clicking on a webpage, and only the label is displayed (except when there is an exception). You can create an `Effect` with
-these methods:
+An `Effect` is almost like a `Field` but it never shows its value, unless there's an exception when executed. The value of
+an `Effect` is supposed to have some kind of side-effect, like clicking on a webpage, and only the effect label will be displayed
+(except when there is an exception, in that case the exception message is added). You can create an `Effect` with these methods:
 
   * `effect(value)`: creates an effect with no label
-  * `effect(label, value)`: creates an effect with a label and a value that will be evaluated when the Effect is executed
+  * `effect(label, value)`: creates an effect with a label and a value that will be evaluated when the `Effect` is executed
   * `effect(effect1, effect2, ...)`: creates an effect with all the effects labels and a side-effect sequencing all side-effects
 
 ### Properties
@@ -95,8 +95,7 @@ Let's look at a few examples:
     tr(field("""prop("label", "actual")("expected")""").code, prop("label", "actual")("expected")).
     tr(field("""prop("label", { error("but got an error"); "actual" })("expected")""").code, prop("label", { error("but got an error"); "actual" })("expected")).
     tr(field("""prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")""").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
-    tr(field("""prop("label", "expected", (s: String) => beEqualTo(s))("expected")""").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).
-    executeForm.toXml.toString ^
+    tr(field("""prop("label", "expected", (s: String) => beEqualTo(s))("expected")""").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).executeForm.toXml.toString^
 """
 
 ### Styles
@@ -120,8 +119,7 @@ of labels and values. You can do this by using `decorateWith` and `styleWith` me
     tr(field("""field("label", "value").color("#FF1493")""").code, field("label", "value").color("#FF1493")).
     tr(field("""field("label", "value").bkColor("#FF1493")""").code, field("label", "value").bkColor("#FF1493")).
     tr(field("""field("label", "value").green""").code, field("label", "value").green).
-    tr(field("""field("label", "value").bkGreen""").code, field("label", "value").bkGreen).
-    executeForm.toXml.toString ^
+    tr(field("""field("label", "value").bkGreen""").code, field("label", "value").bkGreen)^
 """
 
  All the methods above, when named `xxx` are available as `xxxLabel` and `xxxValue` to do the formatting for the label or
@@ -135,8 +133,9 @@ the value only. The available colors are:
     tr(field("red"), field("#FF9999"), field("").bkRed).
     tr(field("green"), field("#CCFFCC"), field("").bkGreen).
     tr(field("yellow"), field("#FFFF99"), field("").bkYellow).
-    tr(field("grey"), field("#EEEEEE"), field("").bkGrey) ^
+    tr(field("grey"), field("#EEEEEE"), field("").bkGrey)^
 """
+
 ### Simple form
 
 Now that we know how to create Fields and Properties, creating a `Form` is as easy as putting them on separate lines:
@@ -158,16 +157,16 @@ In some cases (see the Calculator example below) you can create a header row usi
 
 Inserting the form in a Specification is also very simple, you just chain it with the `^` operator:
 
-         import org.specs2.specification._
          class SpecificationWithForms extends Specification with Forms { def is =
+
            "The address must be retrieved from the database with the proper street and number" ^
             Form("Address").
               tr(prop("street", actualStreet(123), "Oxford St")).
               tr(prop("number", actualNumber(123), 20))                                        ^
                                                                                                end
-        }
+         }
 
-One way to encapsulate and reuse this form across specifications is to define a case class:
+One way to encapsulate and reuse this Form across specifications is to define a case class:
 
          case class Address(street: String, number: Int) {
            def retrieve(addressId: Int) = {
@@ -199,11 +198,10 @@ Forms can be composed of other Forms to display composite information:
         val person = Form("Person").
                        tr(field("name", "Eric")).
                        tr(address)
-""" +
+"""^
   Form("Person").
-    tr(field("name", "Eric")).
-    tr(address).toXml +
-  """
+    tr(field("name", "Eric"))^
+"""
 
 This will be displayed with the address as a nested table inside the main one on the last row. However in some case, it's
 preferable to have the rows of that Form to be included directly in the outer table. This can be done by *inlining* the
@@ -214,10 +212,10 @@ nesting Form:
                        tr(address.inline)            // address is inlined
 
 And the result is:
-""" +
+"""^
   Form("Person").
     tr(field("name", "Eric")).
-    tr(address.inline).toXml +
+    tr(address.inline)^
   """
 
 
@@ -228,27 +226,48 @@ a website for example, we want to be able to use a Form having 2 rows and descri
 page:
 
           val loginForm = Form("login").
-                          tr(effect("click on login", clickOn("login"))).
-                          tr(effect("enter name",     enter("name", "me"))).
-                          tr(effect("enter password", enter("password", "pw"))).
-                          tr(effect("submit", submit))
+                            tr(effect("click on login", clickOn("login"))).
+                            tr(effect("enter name",     enter("name", "me"))).
+                            tr(effect("enter password", enter("password", "pw"))).
+                            tr(effect("submit", submit))
+"""^
+  loginForm^
+"""
 
 However in a "purchase" scenario we want all the steps above to represent the login actions as just one step. One way to
 do this is to transform the login Form to an Effect or a Prop:
 
           Form("purchase").
-          tr(loginForm.toEffect("login")).
-          tr(selectForm.toEffect("select goods")).
-          tr(checkTotalForm.toProp("the total must be computed ok"))
+            tr(loginForm.toEffect("login")).
+            tr(selectForm.toEffect("select goods")).
+            tr(checkTotalForm.toProp("the total must be computed ok").bkWhiteLabel)
 
-When embedding the Form into an Effect, it will be executed and only Errors will be reported, whereas when embedding it
-in a Prop, the full Form will be displayed in case of a Failure.
+If everything goes fine, the detailed nested form is not shown:
+"""^
+  Form("purchase").
+    tr(loginForm.toEffect("login")).
+    tr(selectForm.toEffect("select goods")).
+    tr(checkTotalForm.toProp("the total must be computed ok").bkWhiteLabel)^
+"""
+
+Otherwise:
+
+  * if the Form is embedded into an Effect, Errors will be reported
+  * if the Form is embedded into a Prop, Failures will be reported, like that
+
+"""^
+  Form("purchase").
+    tr(loginForm.toEffect("login")).
+    tr(selectForm.toEffect("select goods")).
+    tr(checkKoTotalForm.toProp("the total must be computed ok").bkWhiteLabel).executeForm.toXml.toString^
+"""
+
 
 #### Using tabs
 
 If there are too many fields to be displayed on a Form you can use tabs:
 
-        "A person can have 2 addresses"                     ^
+        "A person can have 2 addresses"^
           Form("Addresses").tr {
             tab("home",
               Address("Oxford St", 12).
@@ -259,7 +278,17 @@ If there are too many fields to be displayed on a Form you can use tabs:
           }
 
 The first `tab` call will create a `Tabs` object containing the a first tab with "home" as the title and an Address form
-as its content. Then every subsequent `tab` calls on the `Tabs` object will create new tabs.
+as its content. Then every subsequent `tab` calls on the `Tabs` object will create new tabs:
+
+"""^
+  Form("Addresses").tr(
+    tab("home", Form("Address").
+                  tr(prop("street", "Oxford St")("Oxford St")).
+                  tr(prop("number", 12)(12))).
+    tab("work", Form("Address").
+                  tr(prop("street", "Rose Cr.")("Rose Cr.")).
+                  tr(prop("number", 2)(2))))^
+"""
 
 ### Aggregating forms
 Now that we've defined a form for a simple entity, let's see how we can reuse it with a larger entity:
@@ -591,4 +620,21 @@ specification.
   val address = Form("Address").
                   tr(field("street", "Rose Crescent")).
                   tr(field("number", 3))
+
+  val loginForm = Form("login").
+                    tr(effect("click on login", "login")).
+                    tr(effect("enter name",     "name")).
+                    tr(effect("enter password", "password")).
+                    tr(effect("submit", "submit"))
+
+  val selectForm = Form("select").tr(field("selection step"))
+  
+  val checkTotalForm = Form("Check Total").
+                         tr(effect("Compute total", 100)).
+                         tr(prop("Total", 100)(100))
+
+  val checkKoTotalForm = Form("Check Total").
+                         tr(effect("Compute total", 100)).
+                         tr(prop("Total", 100)(200))
+
 }

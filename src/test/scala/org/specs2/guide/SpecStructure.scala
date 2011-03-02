@@ -38,8 +38,8 @@ In an _acceptance_ specification you build a list of _fragments_ with the `^` op
       def e1 = success
       def e2 = success
 
-What we have here is a list of 3 fragments, a Text fragment and 2 example fragments. The examples are declared using the
-format `"description" ! body` their "bodies" are provided by 2 methods, separated from the specification text.
+What we have here is a list of 3 fragments, a Text fragment and 2 Example fragments. The examples are declared using the
+format `"description" ! body` their "bodies" are provided by 2 methods returning a `Result`, separated from the specification text.
 
 There is no specific recommendation on how you should name those methods but you can either use short names or use the backtick
 notation for better readability:
@@ -96,12 +96,20 @@ It is completely equivalent to writing:
           "Hello world" must endWith("world")
         }
 
-You can look at the bottom of this page for the other methods you can use to build unit specifications.
+You can look at the bottom of this page for the other methods which are used to build unit specifications.
+
+##### Results
+
+An Example is created by following a piece of text with `!` and providing anything convertible to an `org.specs2.execute.Result`:
+
+ * a standard result
+ * a Matcher result
+ * a boolean value
 
 ##### Standard results
 
-The first way to create an Example is to follow a piece of text with `!` and provide anything of type `org.specs2.execute.Result`.
-The simplest `Result` values are provided by the `StandardResults` trait, and match the 5 types of results provided by ***specs2***:
+The simplest `Result` values are provided by the `StandardResults` trait (mixed-in with `Specification`), and match the 5
+types of results provided by ***specs2***:
 
   * success: the example is ok
   * failure: there is a non-met expectation
@@ -120,9 +128,12 @@ Usually the body of an example is made of *expectations* using matchers:
 
      def e1 = 1 must_== 1
 
-You can refer to the [Matchers](org.specs2.guide.Matchers.html)  guide to learn all about matchers and how to create expectations. There is however one
-important point to note here. Because of the functional nature of ***specs2*** the result of an example is always the last
-statement of its body. This example will never fail because the first expectation is "lost":
+You can refer to the [Matchers](org.specs2.guide.Matchers.html)  guide to learn all about matchers and how to create expectations.
+
+##### Functional expectations
+
+The default `Specification` trait in ***specs2*** is functional: the Result of an example is always given by the last statement
+of its body. This example will never fail because the first expectation is "lost":
 
       "my example on strings" ! e1                // will never fail!
 
@@ -140,16 +151,17 @@ So the correct way of writing the example is:
 
 ##### Thrown Expectations
 
-This rule above encourages a specification style where every expectation is carefully specified and is considered good practice
-by some. However you might see it as an annoying restriction which you can avoid by extending the `org.specs2.matcher.MustThrownMatchers`
+The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice
+by some. However you might see it as an annoying restriction. You can avoid it by extending the `org.specs2.matcher.MustThrownMatchers`
 trait. With that trait, any failing expectation will throw an exception and the rest of the example will not be executed.
 
-Note that this is also the default behavior for the `mutable.Specification` trait.
+Note that this is also the default behavior for the `mutable.Specification` trait used for _unit_ specifications.
 
 ##### Set an example Pending until fixed
 
-Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples.
-Instead of commenting them out and then forgetting about those examples when the code is fixed, you can use `pendingUntilFixed`:
+Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.
+Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed`
+to the Example body:
 
       "this example fails for now" ! {
         1 must_== 2
@@ -166,8 +178,8 @@ to remove the `pendingUntilFixed` marker.
 
 ##### Auto-Examples
 
-There is a handy functionality when your specification is about showing the use of a DSL or of an API. If your expectation
-fits on one line, you can use it directly, as if it was an example. This is used in ***specs2*** to specify matchers:
+If your specification is about showing the use of a DSL or of an API and all expectations fit on one line, you can elid
+a description for the Example. This functionality is used in ***specs2*** to specify matchers:
 
      "beNone checks if an element is None"                             ^
      { None must beNone }                                              ^
@@ -185,7 +197,7 @@ A few things to remember about this feature:
    This can be overriden by specifying the `specs2.srcTestDir` system property
 
  * the extraction of the source code is very rudimentary and will just extract one line of code. It also expects
-   the code to extract is in a class which has the same name as the file it's in.
+   the code to extract to be in a class which has the same name as the file it's in.
 
  * for more robustness, but different results, you can use the `descFromExpectations` arguments (creates an
    `args(fromSource=false)`) to take the "ok message" from the expectation as the example description:
@@ -219,6 +231,8 @@ In that case the argument passed to the `!` method is a function taking a String
 In the same fashion, the Given/When/Then style of writing specifications is supported, albeit using a mutable object to
 collect the successive states of the system:
 
+      // the execution needs to be sequential
+      sequential                                                                                       ^
       "Given that the customer buys 3 books at 10 dollars each"                                        ! c1.buyBook^
       "Given that the customer buys 1 book at 20 dollars"                                              ! c1.buyBook^
       "When he checks out"                                                                             ! c1.checkout^
@@ -242,11 +256,10 @@ collect the successive states of the system:
         }
       }
 
-### Share examples
+### Shared examples
 
-In a given specification some examples may look similar enough that you would like to "factor" them out and share
-them between different parts of your specification. The best example of this situation is a specification for a Stack of
-limited size:
+In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
+different parts of your specification. The best example of this situation is a specification for a Stack of limited size:
 
         class StackSpec extends SpecificationWithJUnit { def is =
           "Specification for a Stack with a limited capacity".title                 ^
@@ -324,6 +337,8 @@ At the beginning of a specification you can declare arguments which configure th
 For example, you can turn off the concurrent execution of examples with the `args` method:
 
        class ExamplesOneByOne extends Specification { def is =
+
+         // there is a shortcut for this argument called 'sequential'
          args(sequential=true)              ^
          "first example"                    ! e1 ^
          "the the second one"               ! e2 ^
@@ -334,15 +349,12 @@ For the complete list of arguments and shortcut methods read the [Runners](org.s
 
 ### Layout
 
-The layout of text in ***specs2*** is mostly done automatically so that the text in the source code should look like the
-displayed text after execution. You can turn off that automatic layout by adding the `noindent` arguments at the beginning
-of your specification
-
-      class MySpecWithNoIndent extends Specification {
-        def is = noindent ^ ....
-      }
+For an _acceptance_ specification you can tweak out the layout of Texts and Examples.
 
 ##### The rules
+
+The layout of text in ***specs2*** is mostly done automatically so that the text in the source code should look like the
+displayed text after execution.
 
 By default the layout of a specification will be computed automatically based on intuitive rules:
 
@@ -470,6 +482,14 @@ Some formatting elements can be combined:
  * `endbr` is `end ^ br`
  * `endp` is `end ^ p`  (same effect as `endbr` but shorter :-))
 
+###### Turning-off the automatic layout
+
+You can turn off that automatic layout by adding the `noindent` argument at the beginning of your specification:
+
+      class MySpecWithNoIndent extends Specification {
+        def is = noindent ^ ....
+      }
+
 ### Include or link specifications
 
 ###### Include specifications
@@ -500,7 +520,7 @@ another html file. The syntax to do this is the following:
     "how to use " ~ ("matchers", new Matchers)                                              ^
     "how to use " ~ ("mock objects", new Mocks)                                             ^
 
-In this case the `~` operator is used to create a HtmlLink where:
+In this case the `~` operator is used to create a `HtmlLink` where:
 
  * "a" is the beginning of the text
  * "quick start guide" is the text that will be highlighted as a url link
@@ -573,12 +593,13 @@ Or if you need "local variables" as well in your examples:
     "and another one"                                      ! withFile(c().e2)
 
     case class c() {
-      val (okFile, koFile = ("test", "missing")
+      val (okFile, koFile) = ("test", "missing")
+
       def e1 = readFile(okFile) must_== "success"
       def e2 = readFile(koFile) must_== "failed"
     }
 
-`Before` actions can also fail for several reasons. When that happens examples are not executed and their result instead
+`Before` actions can also fail for several reasons. When that happens examples are not executed and the Example result becomes
 is the result of the `before` action:
 
  * if an exception occurs during the `before` action, an `Error` is created
@@ -601,7 +622,7 @@ Actions to execute after examples are not declared very differently from `Before
 ##### Defining `Around` actions
 
 Another use case for "contextual" actions are actions which must executed in a given context like an Http session. In order
-to define this type of action you must extend the `Around` trait and specify a `around` function:
+to define this type of action you must extend the `Around` trait and specify an `around` function:
 
     case class http extends Around {
       def around[T <% Result](t: =>T) = openHttpSession("test") {
@@ -652,21 +673,58 @@ called `Action`:
         "example 2"                                                    ! success ^
                                                                        Step(closeDatabase)^
                                                                        end
+##### In _unit_ specifications
+
+If you want to inline the example code with the text you'll need another way to manage contexts. If you just need to setup
+data the simplest thing to do is to create a trait holding this data for you:
+
+        // this needs to be a Success to be the body of an Example
+        trait context extends Success {
+          val data: Data = createData
+        }
+
+and instantiate that trait for each example:
+
+        "this example uses some data" in new context {
+           data must beReady
+        }
+
+This way, you get access to the context scope and the data variable, but also, because a new trait is instantiated all the
+time, you can easily add any type of "before" functionality that you need.
+
+If you need some "after" functionality, the syntax gets a bit heavier. You have 2 choices, the first one is to extend After:
+
+        trait context extends Success with After {
+          val data: Data = createData
+          def after = cleanData
+        }
+
+        "this example uses some data" in new context {
+           // the expectation call has to be in the 'apply' method of 'this' so that the after method will be called
+           this { data must beReady }
+        }
+
+The other option is to use the After implicit which is available on any `Result`:
+
+        trait context extends Success {
+          val data: Data = createData
+        }
+
+        "this example uses some data" in new context {
+          data must beReady        
+        }.after(cleanData)
+
 
 #### Other unit specification methods
 
 Other methods can be used to create fragments in a unit specification:
 
  * `can` to create a group of Examples, with a the preceding Text fragment appended with `can`
- * `>>` to create an Example or a group of Examples (with no appended text)
-
+ * <code>>></code> to create an Example or a group of Examples (with no appended text)
  * `"My spec title".title` to give a title to the Specification
-
  * `args(...)` to create arguments for the specification
-
  * `step(s)` to create a `Step`
  * `action(a)` to create an `Action`
-
  * `link("how" ~ ("to do hello world", new HelloWorldSpec))` to create a link to another specification
  * `include(new HelloWorldSpec)` to include another specification
 

@@ -32,17 +32,17 @@ This can be useful for simple expectations but a failure will give few informati
 
 Some standard results can be used when you need specific result meanings:
 
-  * success: the example is ok
-  * failure: there is a non-met expectation
-  * anError: a non-expected exception occurred
-  * skipped: the example is skipped possibly at runtime because some conditions are not met. A more specific message can
+  * `success`: the example is ok
+  * `failure`: there is a non-met expectation
+  * `anError`: a non-expected exception occurred
+  * `skipped`: the example is skipped possibly at runtime because some conditions are not met. A more specific message can
     be created with `Skipped("my message")`
-  * pending: usually means "not implemented yet", but a specific message can be created with `Pending("my message")`
+  * `pending`: usually means "not implemented yet", but a specific message can be created with `Pending("my message")`
 
 Two additional results are also available to track the progress of features:
 
-  * done: a Success with the message "DONE"
-  * todo: a Pending with the message "TODO"
+  * `done`: a `Success` with the message "DONE"
+  * `todo`: a `Pending` with the message "TODO"
 
 ### Match results
 
@@ -81,13 +81,13 @@ You can see on the examples above several things which are applicable to all mat
  * you can use `should` instead of `must` if you prefer
  * there are only 2 shortcuts provided because the equality matcher is so ubiquitous `must_==` and `===`
  * for most of the matchers you can use a form where the ` be` word (or the `have` word) is detached
- * you can as well negate a matcher by adding not before (but also after as a method on the matcher)
+ * you can as well negate a matcher by adding not before it (or after it, as a method call)
 
 An non-exhaustive list of those matchers:
 
  * `beTheSameAs` for checking if `a eq b` (`a must be(b)` also works)
  * `beTrue, beFalse`
- * `beLike { case exp => ok }`: to check if an object is like a given pattern
+ * `beLike { case exp => ok }`: to check if an object is like a given pattern (`ok` is a predefined value, `ko` is the opposite)
  * `beLike { case exp => exp must beXXX }`: to check if an object is like a given pattern, and verifies a condition
  * `beNull`
  * `beAsNullAs`: when 2 objects must be null at the same time if one of them is null
@@ -96,7 +96,7 @@ An non-exhaustive list of those matchers:
  * `haveSuperclass`: to check if the class of an object as another class as one of its ancestors
  * `beAssignableFrom`: to check if a class is assignable from another
 
-##### With a better description
+#### With a better description
 
 Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information
 is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a
@@ -127,7 +127,7 @@ There are many ways to create matchers for your specific usage. The simplest way
         def beBetween(i: Int, j: Int) = be_>=(i) and be_<=(j)
 
         // create a Seq Matcher from a Matcher
-        def allBeGreaterThan2: Matcher[Seq[Int]]   = be_>=(2).forall     // fails after the first failure
+        def allBeGreaterThan2: Matcher[Seq[Int]]   = be_>=(2).forall     // fail after the first failure
         def allBeGreaterThan3: Matcher[Seq[Int]]   = be_>=(2).foreach    // like forall but execute all matchers and collect the results
         def haveOneGreaterThan2: Matcher[Seq[Int]] = be_>=(2).atLeastOnce
 
@@ -146,14 +146,14 @@ There are many ways to create matchers for your specific usage. The simplest way
 
         val iterator = List(1, 2, 3).iterator
         iterator.next must be_==(3).eventually
-         // Use eventually(retries, n.millis) to modify the default settings
+         // Use eventually(retries, n.millis) to use another number of tries and waiting time
 
  * using `orSkip` to return a `Skipped` result instead of a Failure if the condition is not met
 
         1 must be_==(2).orSkip
         1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
 
-If this is not enough, you can use tuplets to create Matchers:
+Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
        val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")
        val m1: Matcher[String]  = ((_: String).startsWith("hello"), "starts with hello", "doesn't start with hello")
@@ -177,7 +177,7 @@ In the code above you have to:
  * use the protected `result` method to return: a Boolean condition, a message when the match is ok, a message when the
    match is not ok, the "expectable" value
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
-   the optional description you can setup using the `aka` method
+   the optional description you setup using the `aka` method
 
 #### Matchers for Option / Either
 
@@ -251,16 +251,16 @@ readability.
 Iterables can be checked with several matchers:
 
   * to check if some elements are contained in the iterable
-    `List(1, 2, 3) must contain(3, 2)
+    `List(1, 2, 3) must contain(3, 2)`
 
   * to check if some elements are contained in the iterable in the same order
-    `List(1, 2, 3, 4) must contain(2, 4).inOrder
+    `List(1, 2, 3, 4) must contain(2, 4).inOrder`
 
   * to check if only some elements are contained in the iterable
-    `List(4, 2) must contain(2, 4).only
+    `List(4, 2) must contain(2, 4).only`
 
   * to check if only some elements are contained in the iterable and in the same order
-    `List(2, 4) must contain(2, 4).only.inOrder
+    `List(2, 4) must contain(2, 4).only.inOrder`
 
   * to check the size of an iterable
     `List(1, 2) must have size(2)`
@@ -417,21 +417,20 @@ the Scala interpreter and execute a script:
 
         class ScalaInterpreterMatchersSpec extends SpecificationWithJUnit with ScalaInterpreterMatchers {
 
-           "A script" can {
-             "be interpreted" in {
-               """
-               1 + 1
-               """ >| "2"
-             }
-           }
+          "A script" can {
+            "be interpreted" in {
+               "1 + 1" >| "2"
+            }
+          }
+        }
 
 
 ### ScalaCheck properties
 
 A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
 
-To declare ScalaCheck properties you first need to import the `ScalaCheck` trait. Then you can define a ScalaCheck property
- and add it to the body of an example:
+To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can define a ScalaCheck property
+ and add it to the body of your example:
 
       "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }
 
@@ -439,6 +438,10 @@ You will get even better failure messages if you use matchers in the checked fun
 the function:
 
       "addition and multiplication are related" ! { (a: Int) => a + a must_== 2 * a }
+
+Note that sometimes type inference may not work so you will need to use the `check` method:
+
+      "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }
 
 #### Setting the ScalaCheck properties
 
@@ -459,7 +462,7 @@ The parameters you can modify are:
 
 At the moment only the [Mockito](http://mockito.org) library is supported.
 
-Mockito allows to specify stubbed values and to verify that some calls are expected on some objects. In order to use those
+Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those
 functionalities, you need to extend the `org.specs2.mock.Mockito` trait:
 
       import org.specs2.mock._
@@ -515,12 +518,12 @@ In some rare cases, it is necessary to have the return value depend on the param
 
 The function passed to answers will be called with each parameter passed to the stubbed method:
 
-     m.get(0)           // returns The parameter is 0
-     m.get(1)           // the second call returns a different value: The parameter is 1
+     m.get(0)           // returns "The parameter is 0"
+     m.get(1)           // the second call returns a different value: "The parameter is 1"
 
 ###### Parameters for the answers function
 
-Because of the use of reflection the function passed to answers will receive only instances of the java.lang.Object type.
+Because of the use of reflection the function passed to answers will receive only instances of the `java.lang.Object` type.
 
 More precisely, it will:
 
@@ -531,7 +534,7 @@ More precisely, it will:
   * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
     `mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString }`
 
-In any other cases, if f is a function of 1 parameter, the array of the method parameters will be passed and if the
+In any other cases, if `f` is a function of 1 parameter, the array of the method parameters will be passed and if the
 function has 2 parameters, the second one will be the mock.
 
 ##### Verification
@@ -636,11 +639,13 @@ can use the `!!` operator to disambiguate (and `||` in the header for good visua
 
 ### Forms
 
-Forms are a way to represent domain objects or service, and declare expected values in a tabular format. Forms can be designed
-as reusable pieces of specification where complex forms can be built out of simple ones.
+Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed
+to be used with the HtmlRunner to get human-readable documentation.
+
+Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.
 
 """ ^
-  "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms)                                                                 ^
+  "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms)                                                          ^
 """
 
 ### Reusing matchers outside of specs2
@@ -651,8 +656,8 @@ framework. You can reuse the following traits:
  * `org.specs2.matcher.MustMatchers` (or `org.specs2.matcher.ShouldMatchers`) to write anything like `1 must be_==(1)` and
    get a `Result` back
 
- * You can also use the side-effecting version of that trait called `org.specs2.matcher.MustThrownMatchers` (or `ShouldThrownMatchers)
-   which throws a `FailureException` as soon as an expectation is failing. Those traits can also be used in a regular
+ * You can also use the side-effecting version of that trait called `org.specs2.matcher.MustThrownMatchers` (or `ShouldThrownMatchers`).
+   It throws a `FailureException` as soon as an expectation is failing. Those traits can also be used in a regular
    Specification if you have several expectations per example and if you don't want to chain them with `and`.
 
  * Finally, in a JUnit-like library you can use the `org.specs2.matcher.JUnitMustMatchers` trait which throws
@@ -701,6 +706,7 @@ framework. You can reuse the following traits:
     def is = "Scalacheck".title ^
     "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a } ^
     "addition and multiplication are related" ! { (a: Int) => a + a must_== 2 * a }        ^
+    "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }  ^
                                                                                            end
   }
 

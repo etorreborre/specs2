@@ -66,6 +66,7 @@ class MutableSpec extends SpecificationWithJUnit {
   object context extends Before {
     def before = () // do something to setup the context
   }
+  // we need to extend Success to act as an Example body
   trait system extends Success {
     val string = "Hey you"
   }
