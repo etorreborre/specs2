@@ -50,6 +50,10 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     "the first example will execute"                                                              ! c().e7^
     "but it will be reported as an error"                                                         ! c().e8^
                                                                                                   p^
+  "Any result can be wrapped in an After context"                                                 ^
+    "explicitly inside the body of the context"                                                   ! c().e8_1^
+    "with an implicit"                                                                            ! c().e8_2^
+                                                                                                  p^
   "The Around trait can be used to"                                                               ^
     "execute the example inside a user provided function"                                         ! c().e9^
                                                                                                   p^
@@ -95,6 +99,8 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     def e6 = executing(ex1_2After).prints("e1", "after", "e2", "after")
     def e7 = executing(ex1_afterFail).prints("e1")
     def e8 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
+    def e8_1 = executing(ex1ExplicitAfter).prints("e1", "after")
+    def e8_2 = executing(ex1ImplicitAfter).prints("e1", "after")
     def e9 = executing(ex1Around).prints("around", "e1")
     def e10 = executing(ex1BeforeAfter).prints("before", "e1", "after")
     def e11 = executing(ex1BeforeAfterAround).prints("before", "around", "e1", "after")
@@ -127,7 +133,7 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     }
   }
 }
-trait ContextData extends StandardResults with FragmentsBuilder with ContextsForFragments {
+trait ContextData extends StandardResults with FragmentsBuilder with ContextsForFragments with Contexts {
 
   def ok(name: String) = { println(name); success }
   def ok1 = ok("e1")
@@ -154,6 +160,14 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1After = "ex1" ! after(ok1) 
   def ex1_afterFail = "ex1" ! afterWithError(ok1) 
   def ex1_2After = ex1After ^ "ex2" ! after(ok2)
+
+  trait afterContext extends Success with After {
+    def after = println("after")
+  }
+  def ex1ExplicitAfter = "ex1" ! new afterContext {
+    this { ok1 }
+  }
+  def ex1ImplicitAfter = "ex1" ! ok1.after(println("after"))
 
   def ex1Around = "ex1" ! around(ok1) 
   def ex1BeforeAfter = "ex1" ! beforeAfter(ok1) 

@@ -22,6 +22,7 @@ trait Specification extends SpecificationStructure with SpecificationFeatures
  *  * AutoExamples: to allow the declaration use todo, pending, success in example bodies
  *  * TimeConversions: to create time expressions like 1.second
  *  * PendingUntilFixed: to mark an example pending until it succeeds
+ *  * Contexts: context methods for results
  *  * Debug: to allow the insertion of .pp to print any expression to the Console and pass
  *           it to the rest of the program
  */
@@ -36,4 +37,5 @@ trait SpecificationFeatures extends FragmentsBuilder
    with AutoExamples
    with TimeConversions
    with PendingUntilFixed
+   with Contexts
    with Debug
