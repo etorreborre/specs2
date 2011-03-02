@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8'>
+  <!-- PLEASE DEAR READER PARDON MY LACK OF HTML/CSS SKILLS :-) Any contribution will be glady accepted! -->
   <title>etorreborre/specs2 @ GitHub</title>
       <style type="text/css" media="all"> 
         @import url('./css/maven-base.css');
@@ -36,19 +37,42 @@
       <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" />   
     <style type="text/css">
     #container {
-      margin: 0 auto;
+      margin-left: 150px;
       width: 1000px;
+    }
+	#sidebar {
+	  margin-top: 93px;
+      width: 200px;
+      float:right;
     }
 	.console { font-family:Courier; color: #CCCCCC; background: #000000; border: 1px #CCCCCC; padding: 10px; }
     .description { font-size: 1.1em; margin-bottom: 30px; margin-top: 0px; font-style: italic;}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
     .download { float: right; }
 	s2 { font-style: italic; }
+	.sidelink { margin-left: 8px; }
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
   </style>
   </head>
 
 <body>
+  <div id="sidebar">
+   <h3 style="margin-bottom: 0;">Try it!</h3>
+   <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2-test">Sample project</a> (<a href="http://github.com/etorreborre/specs2/tarball/master">tar</a>, <a href="http://github.com/etorreborre/specs2/zipball/master">zip</a>)<br/> 
+   </div>
+   <a class="sidelink" href="#Dependencies">Dependencies</a><br/> 
+   <a class="sidelink" href="#Downloads">Downloads</a><br/> 
+   <h3 style="margin-bottom: 0;">Learn it!</h3>
+   <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2/issues">Quick Start</a><br/> 
+   </div>
+   <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">User Guide</a><br/> 
+   <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">Scaladoc</a><br/> 
+   <h3 style="margin-bottom: 0;">Get involved!</h3>
+   <div class="sidelink" style="margin-top: 10px;"><a href="http://groups.google.com/group/specs2-users">User group</a><br/> 
+   </div>
+   <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">Issues</a><br/> 
+   <a class="sidelink" href="http://etorreborre.blogspot.com">Blog</a><br/> 
+  </div>
   <div id="container">
 
     <a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./images/specs2.png" alt="specs2" /></a>
@@ -56,7 +80,7 @@
     <div class="description">
       Software Specifications for Scala
     </div>
-    <h3>This is unreleased software, this site is still under construction!</h3>
+    <h3>Presentation - This is unreleased software, this site is still under construction!</h3>
 
     <s2>specs2</s2> is a library for writing executable software specifications.
 	<p/>
@@ -119,7 +143,7 @@
     <div class="level2"><img src="images/collapsed.gif">Returning "functional" results or throwing exceptions</img></div>
     <div class="level2"><img src="images/collapsed.gif">Reusable outside of specs2 (in <a href="http://junit.org">JUnit</a> tests for example)</img></div>
   
-    <h3>Dependencies</h3>
+    <a name="Dependencies"/><h3>Dependencies</h3>
     The <s2>specs2</s2> jar is available with both sbt and maven
 
 	<div class="tabber">
@@ -151,7 +175,8 @@
  &lt;/repository></code>
       </div>
 	</div>  
-    <h3>Downloads</h3>
+	
+    <a name="Downloads"/><h3>Downloads</h3>
     You can download the project here
 	<table width="800">
 	  <tr><th width="80">Version</th><th width="280">Files</th></tr>
