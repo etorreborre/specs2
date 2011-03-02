@@ -38,6 +38,6 @@ case class Tab(title: String, form: Form, result: Option[Result] = None) extends
 
   def text: String = title + "\n" + new FormCell(form).text
 
-  def xml(implicit args: Arguments) = <div class="tabbertab" title={title}>{new FormCell(form.executeForm).xml}</div>
+  def xml(implicit args: Arguments) = <div class="tabbertab" title={title}>{Form.toXml(form.executeForm)}</div>
 
 }

@@ -119,7 +119,7 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
       if (executedResult.isSuccess)
         "success"
       else
-        new FormCell(executed).xml(Arguments())
+        Form.toXml(executed)(Arguments())
     }
   }
 
