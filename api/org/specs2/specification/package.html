@@ -1,0 +1,646 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.specification</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="value" onload="windowTitle();">
+
+      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <h1>specification</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">specification</span>
+        
+        
+        
+      </span>
+      </h4>
+      <div class="fullcomment" id="comment"></div>
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.specification.Action">
+      <a id="Action:Action"></a>
+      <h4 class="signature"><a href="Action.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Action</span>
+        
+        <span class="params">(<span name="action">action: LazyParameter[Result]</span>)</span>
+        <span class="result"> extends Fragment with Executable with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">An Action is similar to a Step but can be executed concurrently with other examples.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.After">
+      <a id="After:After"></a>
+      <h4 class="signature"><a href="After.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">After</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The After trait can be inherited by classes representing a context
+where an action must be executing after the main executable action
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Around">
+      <a id="Around:Around"></a>
+      <h4 class="signature"><a href="Around.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Around</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Around trait can be inherited by classes which will
+execute some code inside the around method provided by the context.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.AutoExamples">
+      <a id="AutoExamples:AutoExamples"></a>
+      <h4 class="signature"><a href="AutoExamples.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AutoExamples</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Create example descriptions by reading the corresponding line in the source file.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.BaseSpecification">
+      <a id="BaseSpecification:BaseSpecification"></a>
+      <h4 class="signature"><a href="BaseSpecification.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BaseSpecification</span>
+        
+        
+        <span class="result"> extends SpecificationStructure with FragmentsBuilder with SpecificationInclusion</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A Base specification contains the minimum elements for a Specification</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Before">
+      <a id="Before:Before"></a>
+      <h4 class="signature"><a href="Before.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Before</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Before trait can be inherited by classes representing a context
+where an action must be executing before the main executable action
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.BeforeAfter">
+      <a id="BeforeAfter:BeforeAfter"></a>
+      <h4 class="signature"><a href="BeforeAfter.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeAfter</span>
+        
+        
+        <span class="result"> extends Before with After</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The BeforeAfter trait allows to declare before and after actions
+to execute before and after an Example
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.BeforeAfterAround">
+      <a id="BeforeAfterAround:BeforeAfterAround"></a>
+      <h4 class="signature"><a href="BeforeAfterAround.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeAfterAround</span>
+        
+        
+        <span class="result"> extends Before with After with Around</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The BeforeAfter trait allows to declare before, around and after actions
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Contexts">
+      <a id="Contexts:Contexts"></a>
+      <h4 class="signature"><a href="Contexts.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Contexts</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait is only used when we wish to write after actions in unit specifications like this</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Example">
+      <a id="Example:Example"></a>
+      <h4 class="signature"><a href="Example.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Example</span>
+        
+        <span class="params">(<span name="desc">desc: MarkupString</span>, <span name="body">body: () ⇒ Result</span>)</span>
+        <span class="result"> extends Fragment with Executable with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A Example is:</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedBacktab">
+      <a id="ExecutedBacktab:ExecutedBacktab"></a>
+      <h4 class="signature"><a href="ExecutedBacktab.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedBacktab</span>
+        
+        <span class="params">(<span name="n">n: Int</span>)</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedBr">
+      <a id="ExecutedBr:ExecutedBr"></a>
+      <h4 class="signature"><a href="ExecutedBr.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedBr</span>
+        
+        <span class="params">()</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedEnd">
+      <a id="ExecutedEnd:ExecutedEnd"></a>
+      <h4 class="signature"><a href="ExecutedEnd.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedEnd</span>
+        
+        <span class="params">()</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.ExecutedFragment">
+      <a id="ExecutedFragment:ExecutedFragment"></a>
+      <h4 class="signature"><a href="ExecutedFragment.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ExecutedFragment</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Executed Fragments represent pieces of a Specification
+which have already been executed to provide a Result
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedNoText">
+      <a id="ExecutedNoText:ExecutedNoText"></a>
+      <h4 class="signature"><a href="ExecutedNoText.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedNoText</span>
+        
+        <span class="params">(<span name="timer">timer: SimpleTimer</span>)</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This executed Fragment is used when no text must be displayed (for the successful
+execution of an Action for example)
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedResult">
+      <a id="ExecutedResult:ExecutedResult"></a>
+      <h4 class="signature"><a href="ExecutedResult.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedResult</span>
+        
+        <span class="params">(<span name="s">s: MarkupString</span>, <span name="result">result: Result</span>, <span name="timer">timer: SimpleTimer</span>)</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedSee">
+      <a id="ExecutedSee:ExecutedSee"></a>
+      <h4 class="signature"><a href="ExecutedSee.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedSee</span>
+        
+        <span class="params">(<span name="link">link: HtmlLink</span>)</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedSpecEnd">
+      <a id="ExecutedSpecEnd:ExecutedSpecEnd"></a>
+      <h4 class="signature"><a href="ExecutedSpecEnd.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedSpecEnd</span>
+        
+        <span class="params">(<span name="name">name: SpecName</span>)</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedSpecStart">
+      <a id="ExecutedSpecStart:ExecutedSpecStart"></a>
+      <h4 class="signature"><a href="ExecutedSpecStart.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedSpecStart</span>
+        
+        <span class="params">(<span name="name">name: SpecName</span>, <span name="arguments">arguments: Arguments</span>)</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedTab">
+      <a id="ExecutedTab:ExecutedTab"></a>
+      <h4 class="signature"><a href="ExecutedTab.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedTab</span>
+        
+        <span class="params">(<span name="n">n: Int</span>)</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedText">
+      <a id="ExecutedText:ExecutedText"></a>
+      <h4 class="signature"><a href="ExecutedText.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">ExecutedText</span>
+        
+        <span class="params">(<span name="text">text: String</span>)</span>
+        <span class="result"> extends ExecutedFragment with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.FormMarkup">
+      <a id="FormMarkup:FormMarkup"></a>
+      <h4 class="signature"><a href="FormMarkup.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">FormMarkup</span>
+        
+        
+        <span class="result"> extends MarkupString</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The FormMarkup embeds the description of a form as text or as Xml
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.FormattingFragments">
+      <a id="FormattingFragments:FormattingFragments"></a>
+      <h4 class="signature"><a href="FormattingFragments.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">FormattingFragments</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Set of fragments which can be used for formatting
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Forms">
+      <a id="Forms:Forms"></a>
+      <h4 class="signature"><a href="Forms.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Forms</span>
+        
+        
+        <span class="result"> extends FormsBuilder with DecoratedProperties</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Allow a Form to be inserted among Fragments as a Text Fragment
+Allow a Form to be used as an example body and return a Result automatically
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Fragment">
+      <a id="Fragment:Fragment"></a>
+      <h4 class="signature"><a href="Fragment.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Fragment</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A Fragment is a piece of a specification.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Fragments">
+      <a id="Fragments:Fragments"></a>
+      <h4 class="signature"><a href="Fragments.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Fragments</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A Fragments object is a list of fragments with a SpecStart and a SpecEnd
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.HtmlLink">
+      <a id="HtmlLink:HtmlLink"></a>
+      <h4 class="signature"><a href="HtmlLink.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">HtmlLink</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The HtmlLink class represents a link in a specification with an identifier (either a spec name, or a string) and
+link elements.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.See">
+      <a id="See:See"></a>
+      <h4 class="signature"><a href="See.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">See</span>
+        
+        <span class="params">(<span name="link">link: HtmlLink</span>)</span>
+        <span class="result"> extends Fragment with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A link to another specification
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecEnd">
+      <a id="SpecEnd:SpecEnd"></a>
+      <h4 class="signature"><a href="SpecEnd.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">SpecEnd</span>
+        
+        <span class="params">(<span name="name">name: SpecName</span>)</span>
+        <span class="result"> extends Fragment with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">End of a specification.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecHtmlLink">
+      <a id="SpecHtmlLink:SpecHtmlLink"></a>
+      <h4 class="signature"><a href="SpecHtmlLink.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">SpecHtmlLink</span>
+        
+        <span class="params">(<span name="name">name: SpecName</span>, <span name="beforeText">beforeText: String</span>, <span name="linkText">linkText: String</span>, <span name="afterText">afterText: String</span>, <span name="tip">tip: String</span>, <span name="result">result: Result</span>)</span>
+        <span class="result"> extends HtmlLink with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecStart">
+      <a id="SpecStart:SpecStart"></a>
+      <h4 class="signature"><a href="SpecStart.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">SpecStart</span>
+        
+        <span class="params">(<span name="name">name: SpecName</span>, <span name="arguments">arguments: Arguments</span>)</span>
+        <span class="result"> extends Fragment with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Start of a specification.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.SpecificationInclusion">
+      <a id="SpecificationInclusion:SpecificationInclusion"></a>
+      <h4 class="signature"><a href="SpecificationInclusion.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">SpecificationInclusion</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">additional methods to include other specifications or Fragments
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.SpecificationStructure">
+      <a id="SpecificationStructure:SpecificationStructure"></a>
+      <h4 class="signature"><a href="SpecificationStructure.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">SpecificationStructure</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The structure of a Specification is simply defined as a sequence of fragments
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Step">
+      <a id="Step:Step"></a>
+      <h4 class="signature"><a href="Step.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Step</span>
+        
+        <span class="params">(<span name="step">step: LazyParameter[Result]</span>)</span>
+        <span class="result"> extends Fragment with Executable with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">An Step creates a fragment that will either return an
+Error Result if there is an exception or a Success.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Text">
+      <a id="Text:Text"></a>
+      <h4 class="signature"><a href="Text.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Text</span>
+        
+        <span class="params">(<span name="t">t: String</span>)</span>
+        <span class="result"> extends Fragment with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Free text, describing the system to specify
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.UrlHtmlLink">
+      <a id="UrlHtmlLink:UrlHtmlLink"></a>
+      <h4 class="signature"><a href="UrlHtmlLink.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">UrlHtmlLink</span>
+        
+        <span class="params">(<span name="url">url: String</span>, <span name="beforeText">beforeText: String</span>, <span name="linkText">linkText: String</span>, <span name="afterText">afterText: String</span>, <span name="tip">tip: String</span>)</span>
+        <span class="result"> extends HtmlLink with Product</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.specification.Action">
+      <a id="Action:Action"></a>
+      <h4 class="signature"><a href="Action$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Action</span>
+        
+        
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Contexts">
+      <a id="Contexts:Contexts"></a>
+      <h4 class="signature"><a href="Contexts$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Contexts</span>
+        
+        
+        <span class="result"> extends Contexts</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Example">
+      <a id="Example:Example"></a>
+      <h4 class="signature"><a href="Example$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Example</span>
+        
+        
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.FormMarkup">
+      <a id="FormMarkup:FormMarkup"></a>
+      <h4 class="signature"><a href="FormMarkup$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">FormMarkup</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Forms">
+      <a id="Forms:Forms"></a>
+      <h4 class="signature"><a href="Forms$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Forms</span>
+        
+        
+        <span class="result"> extends Forms</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Fragments">
+      <a id="Fragments:Fragments"></a>
+      <h4 class="signature"><a href="Fragments$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Fragments</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Utility methods for fragments
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.HtmlLink">
+      <a id="HtmlLink:HtmlLink"></a>
+      <h4 class="signature"><a href="HtmlLink$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">HtmlLink</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecEnd">
+      <a id="SpecEnd:SpecEnd"></a>
+      <h4 class="signature"><a href="SpecEnd$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">SpecEnd</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecStart">
+      <a id="SpecStart:SpecStart"></a>
+      <h4 class="signature"><a href="SpecStart$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">SpecStart</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Step">
+      <a id="Step:Step"></a>
+      <h4 class="signature"><a href="Step$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Step</span>
+        
+        
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>

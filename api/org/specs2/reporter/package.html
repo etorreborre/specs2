@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.reporter</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="value" onload="windowTitle();">
+
+      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <h1>reporter</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">reporter</span>
+        
+        
+        
+      </span>
+      </h4>
+      <div class="fullcomment" id="comment"></div>
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" data-isabs="true" name="org.specs2.reporter.Block">
+      <a id="Block:Block[T]"></a>
+      <h4 class="signature"><a href="Block.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Block</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">this represent a fragment of a specification that needs to be indented as a block</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockIndent">
+      <a id="BlockIndent:BlockIndent[T]"></a>
+      <h4 class="signature"><a href="BlockIndent.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">BlockIndent</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: T</span>, <span name="n">n: Int</span>)</span>
+        <span class="result"> extends Block[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockNeutral">
+      <a id="BlockNeutral:BlockNeutral[T]"></a>
+      <h4 class="signature"><a href="BlockNeutral.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">BlockNeutral</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: T</span>)</span>
+        <span class="result"> extends Block[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockReset">
+      <a id="BlockReset:BlockReset[T]"></a>
+      <h4 class="signature"><a href="BlockReset.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">BlockReset</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: T</span>)</span>
+        <span class="result"> extends Block[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockTerminal">
+      <a id="BlockTerminal:BlockTerminal[T]"></a>
+      <h4 class="signature"><a href="BlockTerminal.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">BlockTerminal</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: T</span>)</span>
+        <span class="result"> extends Block[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockUnindent">
+      <a id="BlockUnindent:BlockUnindent[T]"></a>
+      <h4 class="signature"><a href="BlockUnindent.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">BlockUnindent</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: T</span>, <span name="n">n: Int</span>)</span>
+        <span class="result"> extends Block[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.ConsoleReporter">
+      <a id="ConsoleReporter:ConsoleReporter"></a>
+      <h4 class="signature"><a href="ConsoleReporter.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ConsoleReporter</span>
+        
+        
+        <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with TextExporting with ConsoleOutput</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The console reporter executes a Specification and exports the results to the Console
+Output:</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.DefaultSelection">
+      <a id="DefaultSelection:DefaultSelection"></a>
+      <h4 class="signature"><a href="DefaultSelection.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">DefaultSelection</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The DefaultSelection trait filters the fragments to execute by filtering Examples according to their names
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.DefaultSequence">
+      <a id="DefaultSequence:DefaultSequence"></a>
+      <h4 class="signature"><a href="DefaultSequence.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">DefaultSequence</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The DefaultSequence trait sorts the Fragments by making sure Steps will be executed before Examples
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.EndOfArguments">
+      <a id="EndOfArguments:EndOfArguments[T]"></a>
+      <h4 class="signature"><a href="EndOfArguments.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">EndOfArguments</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="value">value: T</span>, <span name="name">name: SpecName</span>)</span>
+        <span class="result"> extends ApplicableArguments[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.FragmentSeq">
+      <a id="FragmentSeq:FragmentSeq"></a>
+      <h4 class="signature"><a href="FragmentSeq.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">FragmentSeq</span>
+        
+        <span class="params">(<span name="fragments">fragments: Seq[Fragment]</span>)</span>
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.HandlerEvents">
+      <a id="HandlerEvents:HandlerEvents"></a>
+      <h4 class="signature"><a href="HandlerEvents.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">HandlerEvents</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Specific events which can be notified to sbt
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.Html">
+      <a id="Html:Html"></a>
+      <h4 class="signature"><a href="Html.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Html</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait represents any kind of Html fragment to print</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlBr">
+      <a id="HtmlBr:HtmlBr"></a>
+      <h4 class="signature"><a href="HtmlBr.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">HtmlBr</span>
+        
+        <span class="params">()</span>
+        <span class="result"> extends Html with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.HtmlExporting">
+      <a id="HtmlExporting:HtmlExporting"></a>
+      <h4 class="signature"><a href="HtmlExporting.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">HtmlExporting</span>
+        
+        
+        <span class="result"> extends Exporting with HtmlPrinter</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Trait for exporting the specification as Html files
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlLine">
+      <a id="HtmlLine:HtmlLine"></a>
+      <h4 class="signature"><a href="HtmlLine.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">HtmlLine</span>
+        
+        <span class="params">(<span name="text">text: Html</span>, <span name="stats">stats: Stats</span>, <span name="level">level: Int</span>, <span name="args">args: Arguments</span>)</span>
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">An HtmlLine encapsulates:</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlLines">
+      <a id="HtmlLines:HtmlLines"></a>
+      <h4 class="signature"><a href="HtmlLines.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">HtmlLines</span>
+        
+        <span class="params">(<span name="lines">lines: List[HtmlLine]</span>, <span name="link">link: HtmlLink</span>, <span name="parent">parent: Option[HtmlLines]</span>)</span>
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The HtmlLines groups a list of HtmlLine to print</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlOther">
+      <a id="HtmlOther:HtmlOther"></a>
+      <h4 class="signature"><a href="HtmlOther.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">HtmlOther</span>
+        
+        <span class="params">(<span name="fragment">fragment: ExecutedFragment</span>)</span>
+        <span class="result"> extends Html with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.HtmlPrinter">
+      <a id="HtmlPrinter:HtmlPrinter"></a>
+      <h4 class="signature"><a href="HtmlPrinter.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">HtmlPrinter</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Html printer is used to create an Html report of an executed specification.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlResult">
+      <a id="HtmlResult:HtmlResult"></a>
+      <h4 class="signature"><a href="HtmlResult.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">HtmlResult</span>
+        
+        <span class="params">(<span name="r">r: ExecutedResult</span>)</span>
+        <span class="result"> extends Html with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlSee">
+      <a id="HtmlSee:HtmlSee"></a>
+      <h4 class="signature"><a href="HtmlSee.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">HtmlSee</span>
+        
+        <span class="params">(<span name="see">see: ExecutedSee</span>)</span>
+        <span class="result"> extends Html with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlSpecEnd">
+      <a id="HtmlSpecEnd:HtmlSpecEnd"></a>
+      <h4 class="signature"><a href="HtmlSpecEnd.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">HtmlSpecEnd</span>
+        
+        <span class="params">(<span name="end">end: ExecutedSpecEnd</span>)</span>
+        <span class="result"> extends Html with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlSpecStart">
+      <a id="HtmlSpecStart:HtmlSpecStart"></a>
+      <h4 class="signature"><a href="HtmlSpecStart.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">HtmlSpecStart</span>
+        
+        <span class="params">(<span name="start">start: ExecutedSpecStart</span>)</span>
+        <span class="result"> extends Html with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlText">
+      <a id="HtmlText:HtmlText"></a>
+      <h4 class="signature"><a href="HtmlText.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">HtmlText</span>
+        
+        <span class="params">(<span name="t">t: ExecutedText</span>)</span>
+        <span class="result"> extends Html with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.JUnitDescriptions">
+      <a id="JUnitDescriptions:JUnitDescriptions"></a>
+      <h4 class="signature"><a href="JUnitDescriptions.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">JUnitDescriptions</span>
+        
+        
+        <span class="result"> extends DefaultSelection</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The JUnit descriptions class transforms a list of fragments
+to:</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Levels">
+      <a id="Levels:Levels[T]"></a>
+      <h4 class="signature"><a href="Levels.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Levels</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="blocks">blocks: List[(Block[T], Int)]</span>)</span>
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class computes the 'level' of a given fragment.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.NoStartOfArguments">
+      <a id="NoStartOfArguments:NoStartOfArguments[T]"></a>
+      <h4 class="signature"><a href="NoStartOfArguments.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">NoStartOfArguments</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="value">value: T</span>)</span>
+        <span class="result"> extends ApplicableArguments[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.ResultOutput">
+      <a id="ResultOutput:ResultOutput"></a>
+      <h4 class="signature"><a href="ResultOutput.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ResultOutput</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This traits provides specialised print methods for message representing
+different types of results.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.Selection">
+      <a id="Selection:Selection"></a>
+      <h4 class="signature"><a href="Selection.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Selection</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Selection trait implements the logic for filtering the fragments to execute
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.Sequence">
+      <a id="Sequence:Sequence"></a>
+      <h4 class="signature"><a href="Sequence.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Sequence</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Sequence trait implements the logic for the fragments to execute according to their dependencies
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.StartOfArguments">
+      <a id="StartOfArguments:StartOfArguments[T]"></a>
+      <h4 class="signature"><a href="StartOfArguments.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">StartOfArguments</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="value">value: T</span>, <span name="name">name: SpecName</span>, <span name="args">args: Arguments</span>)</span>
+        <span class="result"> extends ApplicableArguments[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Stats">
+      <a id="Stats:Stats"></a>
+      <h4 class="signature"><a href="Stats.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Stats</span>
+        
+        <span class="params">(<span name="fragments">fragments: Int</span>, <span name="successes">successes: Int</span>, <span name="expectations">expectations: Int</span>, <span name="failures">failures: Int</span>, <span name="errors">errors: Int</span>, <span name="pending">pending: Int</span>, <span name="skipped">skipped: Int</span>, <span name="timer">timer: SimpleTimer</span>, <span name="start">start: Option[ExecutedSpecStart]</span>, <span name="end">end: Option[ExecutedSpecEnd]</span>)</span>
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Stats class store results for the number of:
+* successes
+* expectations
+* failures
+* errors
+* pending
+* skipped</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TestInterfaceReporter">
+      <a id="TestInterfaceReporter:TestInterfaceReporter"></a>
+      <h4 class="signature"><a href="TestInterfaceReporter.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TestInterfaceReporter</span>
+        
+        
+        <span class="result"> extends ConsoleReporter with HandlerEvents</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Reporter for the test interface defined for sbt</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TestInterfaceResultOutput">
+      <a id="TestInterfaceResultOutput:TestInterfaceResultOutput"></a>
+      <h4 class="signature"><a href="TestInterfaceResultOutput.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TestInterfaceResultOutput</span>
+        
+        
+        <span class="result"> extends TextResultOutput with TestLoggers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.TestLoggers">
+      <a id="TestLoggers:TestLoggers"></a>
+      <h4 class="signature"><a href="TestLoggers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">TestLoggers</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.TextPrinter">
+      <a id="TextPrinter:TextPrinter"></a>
+      <h4 class="signature"><a href="TextPrinter.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">TextPrinter</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait reduces a list of ExecutedFragments to a list of PrintLines.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextResultOutput">
+      <a id="TextResultOutput:TextResultOutput"></a>
+      <h4 class="signature"><a href="TextResultOutput.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TextResultOutput</span>
+        
+        
+        <span class="result"> extends ResultOutput with ConsoleOutput</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Implementation of the ResultOutput trait as Text
+</p>
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.reporter.ApplicableArguments">
+      <a id="ApplicableArguments:ApplicableArguments"></a>
+      <h4 class="signature"><a href="ApplicableArguments$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">ApplicableArguments</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Block">
+      <a id="Block:Block"></a>
+      <h4 class="signature"><a href="Block$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Block</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.FragmentSeq">
+      <a id="FragmentSeq:FragmentSeq"></a>
+      <h4 class="signature"><a href="FragmentSeq$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">FragmentSeq</span>
+        
+        
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.JUnitDescriptions">
+      <a id="JUnitDescriptions:JUnitDescriptions"></a>
+      <h4 class="signature"><a href="JUnitDescriptions$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">JUnitDescriptions</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Levels">
+      <a id="Levels:Levels"></a>
+      <h4 class="signature"><a href="Levels$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Levels</span>
+        
+        
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Stats">
+      <a id="Stats:Stats"></a>
+      <h4 class="signature"><a href="Stats$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Stats</span>
+        
+        
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>

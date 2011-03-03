@@ -1,0 +1,319 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="value" onload="windowTitle();">
+
+      <p id="owner"><a href="../package.html" class="extype" name="org">org</a></p>
+
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <h1>specs2</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">specs2</span>
+        
+        
+        
+      </span>
+      </h4>
+      <div class="fullcomment" id="comment"></div>
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" data-isabs="true" name="org.specs2.ScalaCheck">
+      <a id="ScalaCheck:ScalaCheck"></a>
+      <h4 class="signature"><a href="ScalaCheck.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ScalaCheck</span>
+        
+        
+        <span class="result"> extends ScalaCheckMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The ScalaCheck trait can be used to access ScalaCheck matchers
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.Specification">
+      <a id="Specification:Specification"></a>
+      <h4 class="signature"><a href="Specification.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Specification</span>
+        
+        
+        <span class="result"> extends SpecificationStructure with SpecificationFeatures</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Specification trait holds all the Specification fragments + provides matching and other features
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.SpecificationFeatures">
+      <a id="SpecificationFeatures:SpecificationFeatures"></a>
+      <h4 class="signature"><a href="SpecificationFeatures.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">SpecificationFeatures</span>
+        
+        
+        <span class="result"> extends FragmentsBuilder with SpecificationInclusion with ArgumentsArgs with MustMatchers with ShouldMatchers with FormattingFragments with StandardResults with StandardMatchResults with AutoExamples with TimeConversions with PendingUntilFixed with Contexts with Debug</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The SpecificationFeatures trait provides functionalities to build the specification fragments plus additional ones:
+ * ArgumentArgs: arg method to create Arguments
+ * MustMatchers: methods for creating expectations with the <code>must</code> verb like <code>a must_== b</code> * ShouldMatchers: methods for creating expectations with the <code>should</code> verb like <code>a should_== b</code> * FormattingFragments: to use p, br, end to format the specification text
+ * StandardResults: to use todo, pending, success in example bodies
+ * AutoExamples: to allow the declaration use todo, pending, success in example bodies
+ * TimeConversions: to create time expressions like 1.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.SpecificationWithJUnit">
+      <a id="SpecificationWithJUnit:SpecificationWithJUnit"></a>
+      <h4 class="signature"><a href="SpecificationWithJUnit.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">SpecificationWithJUnit</span>
+        
+        
+        <span class="result"> extends Specification</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class must be inherited to allow a Specification to be executed as a JUnit test
+</p>
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.control">
+      <a id="control:control"></a>
+      <h4 class="signature"><a href="control/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">control</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.data">
+      <a id="data:data"></a>
+      <h4 class="signature"><a href="data/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">data</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.execute">
+      <a id="execute:execute"></a>
+      <h4 class="signature"><a href="execute/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">execute</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.files">
+      <a id="files:files"></a>
+      <h4 class="signature"><a href="files$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">files</span>
+        
+        
+        <span class="result"> extends FilesRunner</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This top-level object can be used to execute Specifications found in the source directory
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.form">
+      <a id="form:form"></a>
+      <h4 class="signature"><a href="form/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">form</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io">
+      <a id="io:io"></a>
+      <h4 class="signature"><a href="io/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">io</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.main">
+      <a id="main:main"></a>
+      <h4 class="signature"><a href="main/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">main</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher">
+      <a id="matcher:matcher"></a>
+      <h4 class="signature"><a href="matcher/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">matcher</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.mock">
+      <a id="mock:mock"></a>
+      <h4 class="signature"><a href="mock/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">mock</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.mutable">
+      <a id="mutable:mutable"></a>
+      <h4 class="signature"><a href="mutable/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">mutable</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter">
+      <a id="reporter:reporter"></a>
+      <h4 class="signature"><a href="reporter/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">reporter</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner">
+      <a id="runner:runner"></a>
+      <h4 class="signature"><a href="runner/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">runner</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification">
+      <a id="specification:specification"></a>
+      <h4 class="signature"><a href="specification/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">specification</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.text">
+      <a id="text:text"></a>
+      <h4 class="signature"><a href="text/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">text</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.time">
+      <a id="time:time"></a>
+      <h4 class="signature"><a href="time/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">time</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.tools">
+      <a id="tools:tools"></a>
+      <h4 class="signature"><a href="tools/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">tools</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>

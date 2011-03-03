@@ -1,0 +1,1399 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.reporter.TestInterfaceReporter</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="type" onload="windowTitle();">
+
+      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.reporter">reporter</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/class_big.png" />
+        <h1>TestInterfaceReporter</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TestInterfaceReporter</span>
+        
+        
+        <span class="result"> extends <a href="ConsoleReporter.html" class="extype" name="org.specs2.reporter.ConsoleReporter">ConsoleReporter</a> with <a href="HandlerEvents.html" class="extype" name="org.specs2.reporter.HandlerEvents">HandlerEvents</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment" id="comment"><div class="comment cmt"><p>Reporter for the test interface defined for sbt</p><p>It prints out the result to the output defined by the sbt loggers
+and publishes events to sbt event handlers
+</p></div><div class="block">
+            linear super types: <a href="HandlerEvents.html" class="extype" name="org.specs2.reporter.HandlerEvents">HandlerEvents</a>, <a href="ConsoleReporter.html" class="extype" name="org.specs2.reporter.ConsoleReporter">ConsoleReporter</a>, <span class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</span>, <span class="extype" name="org.specs2.io.Output">Output</span>, <span class="extype" name="org.specs2.reporter.TextExporting">TextExporting</span>, <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a>, <span class="extype" name="org.specs2.reporter.DefaultExecutionStrategy">DefaultExecutionStrategy</span>, <span class="extype" name="org.specs2.specification.FragmentExecution">FragmentExecution</span>, <a href="DefaultSequence.html" class="extype" name="org.specs2.reporter.DefaultSequence">DefaultSequence</a>, <a href="DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a>, <span class="extype" name="org.specs2.reporter.Reporter">Reporter</span>, <span class="extype" name="org.specs2.reporter.Exporting">Exporting</span>, <span class="extype" name="org.specs2.reporter.ExecutionStrategy">ExecutionStrategy</span>, <a href="Sequence.html" class="extype" name="org.specs2.reporter.Sequence">Sequence</a>, <a href="Selection.html" class="extype" name="org.specs2.reporter.Selection">Selection</a>, AnyRef, <span class="extype" name="scala.Any">Any</span>
+          </div>
+            
+            
+            
+          </div>
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          <div id="order">
+                <span class="filtertype">Ordering</span>
+                <ol><li class="alpha in">Alphabetic</li><li class="inherit out">By inheritance</li></ol>
+              </div>
+          <div id="ancestors">
+                <span class="filtertype">Inherited</span>
+                <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
+                <ol id="linearization"><li class="in" name="org.specs2.reporter.TestInterfaceReporter">TestInterfaceReporter</li><li class="in" name="org.specs2.reporter.HandlerEvents">HandlerEvents</li><li class="in" name="org.specs2.reporter.ConsoleReporter">ConsoleReporter</li><li class="in" name="org.specs2.io.ConsoleOutput">ConsoleOutput</li><li class="in" name="org.specs2.io.Output">Output</li><li class="in" name="org.specs2.reporter.TextExporting">TextExporting</li><li class="in" name="org.specs2.reporter.TextPrinter">TextPrinter</li><li class="in" name="org.specs2.reporter.DefaultExecutionStrategy">DefaultExecutionStrategy</li><li class="in" name="org.specs2.specification.FragmentExecution">FragmentExecution</li><li class="in" name="org.specs2.reporter.DefaultSequence">DefaultSequence</li><li class="in" name="org.specs2.reporter.DefaultSelection">DefaultSelection</li><li class="in" name="org.specs2.reporter.Reporter">Reporter</li><li class="in" name="org.specs2.reporter.Exporting">Exporting</li><li class="in" name="org.specs2.reporter.ExecutionStrategy">ExecutionStrategy</li><li class="in" name="org.specs2.reporter.Sequence">Sequence</li><li class="in" name="org.specs2.reporter.Selection">Selection</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+              </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        <div class="members" id="constructors">
+              <h3>Instance constructors</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TestInterfaceReporter#this">
+      <a id="this:TestInterfaceReporter"></a>
+      <h4 class="signature">
+      <span class="kind">new</span>
+      <span class="symbol">
+        <span class="name">TestInterfaceReporter</span>
+        
+        <span class="params">(<span name="handler">handler: <span class="extype" name="org.scalatools.testing.EventHandler">EventHandler</span></span>, <span name="loggers">loggers: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="org.scalatools.testing.Logger">Logger</span>]</span>)</span>
+        
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextExporting#ExportType">
+      <a id="ExportType:ExportType"></a>
+      <h4 class="signature">
+      <span class="kind">type</span>
+      <span class="symbol">
+        <span class="name">ExportType</span>
+        
+        
+        <span class="result"> = <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: TextExporting → Exporting
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HandlerEvents.NamedEvent">
+      <a id="NamedEvent:NamedEvent"></a>
+      <h4 class="signature"><a href="HandlerEvents$NamedEvent.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NamedEvent</span>
+        
+        
+        <span class="result"> extends Event</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.TextPrinter.Print">
+      <a id="Print:Print"></a>
+      <h4 class="signature"><a href="TextPrinter$Print.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Print</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: sealed 
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter.PrintBr">
+      <a id="PrintBr:PrintBr"></a>
+      <h4 class="signature"><a href="TextPrinter$PrintBr.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">PrintBr</span>
+        
+        <span class="params">()</span>
+        <span class="result"> extends Print with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter.PrintLine">
+      <a id="PrintLine:PrintLine"></a>
+      <h4 class="signature"><a href="TextPrinter$PrintLine.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">PrintLine</span>
+        
+        <span class="params">(<span name="text">text: Print</span>, <span name="stats">stats: Stats</span>, <span name="level">level: Int</span>, <span name="args">args: Arguments</span>)</span>
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter.PrintLines">
+      <a id="PrintLines:PrintLines"></a>
+      <h4 class="signature"><a href="TextPrinter$PrintLines.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">PrintLines</span>
+        
+        <span class="params">(<span name="lines">lines: List[PrintLine]</span>)</span>
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter.PrintOther">
+      <a id="PrintOther:PrintOther"></a>
+      <h4 class="signature"><a href="TextPrinter$PrintOther.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">PrintOther</span>
+        
+        <span class="params">(<span name="fragment">fragment: ExecutedFragment</span>)</span>
+        <span class="result"> extends Print with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter.PrintResult">
+      <a id="PrintResult:PrintResult"></a>
+      <h4 class="signature"><a href="TextPrinter$PrintResult.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">PrintResult</span>
+        
+        <span class="params">(<span name="r">r: ExecutedResult</span>)</span>
+        <span class="result"> extends Print with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter.PrintSpecEnd">
+      <a id="PrintSpecEnd:PrintSpecEnd"></a>
+      <h4 class="signature"><a href="TextPrinter$PrintSpecEnd.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">PrintSpecEnd</span>
+        
+        <span class="params">(<span name="end">end: ExecutedSpecEnd</span>)</span>
+        <span class="result"> extends Print with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter.PrintSpecStart">
+      <a id="PrintSpecStart:PrintSpecStart"></a>
+      <h4 class="signature"><a href="TextPrinter$PrintSpecStart.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">PrintSpecStart</span>
+        
+        <span class="params">(<span name="start">start: ExecutedSpecStart</span>)</span>
+        <span class="result"> extends Print with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter.PrintText">
+      <a id="PrintText:PrintText"></a>
+      <h4 class="signature"><a href="TextPrinter$PrintText.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">PrintText</span>
+        
+        <span class="params">(<span name="t">t: ExecutedText</span>)</span>
+        <span class="result"> extends Print with Product</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="scala.AnyRef#!=">
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#!=">
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o != arg0</code> is the same as <code>!(o == (arg0))</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o != arg0</code> is the same as <code>!(o == (arg0))</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for dis-equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the receiver object is equivalent to the argument; <code>true</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef###">
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">##</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef → Any
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$asInstanceOf">
+      <a id="$asInstanceOf[T0]():T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">$asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: T0</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$isInstanceOf">
+      <a id="$isInstanceOf[T0]():Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">$isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#==">
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o == arg0</code> is the same as <code>if (o eq null) arg0 eq null else o.equals(arg0)</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o == arg0</code> is the same as <code>if (o eq null) arg0 eq null else o.equals(arg0)</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#==">
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o == arg0</code> is the same as <code>o.equals(arg0)</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o == arg0</code> is the same as <code>o.equals(arg0)</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter.PrintReducer">
+      <a id="PrintReducer:PrintReducer"></a>
+      <h4 class="signature"><a href="TextPrinter$PrintReducer$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">PrintReducer</span>
+        
+        
+        <span class="result"> extends Reducer[ExecutedFragment, List[Print]]</span>
+      </span>
+      </a></h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: implicit 
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#asInstanceOf">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: T0</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to cast the receiver object to be of type <code>T0</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to cast the receiver object to be of type <code>T0</code>.</p><p>Note that the success of a cast at runtime is modulo Scala's erasure semantics.  Therefore the expression<code>1.asInstanceOf[String]</code> will throw a <code>ClassCastException</code> at runtime, while the expression<code>List(1).asInstanceOf[List[String]]</code> will not.  In the latter example, because the type argument is erased as
+part of compilation it is not possible to check whether the contents of the list are of the requested typed.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the receiver object.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">clone</span>
+        
+        <span class="params">()</span>
+        <span class="result">: AnyRef</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method creates and returns a copy of the receiver object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method creates and returns a copy of the receiver object.</p><p>The default implementation of the <code>clone</code> method is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a copy of the receiver object.</p></dd></dl><div class="block">
+          attributes: protected 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">eq</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to test whether the argument (<code>arg0</code>) is a reference to the
+receiver object (<code>this</code>).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to test whether the argument (<code>arg0</code>) is a reference to the
+receiver object (<code>this</code>).</p><p>The <code>eq</code> method implements an [http://en.wikipedia.org/wiki/Equivalence_relation equivalence relation] on
+non-null instances of <code>AnyRef</code>:
+ * It is reflexive: for any non-null instance <code>x</code> of type <code>AnyRef</code>, <code>x.eq(x)</code> returns <code>true</code>.
+ * It is symmetric: for any non-null instances <code>x</code> and <code>y</code> of type <code>AnyRef</code>, <code>x.eq(y)</code> returns <code>true</code> if and
+   only if <code>y.eq(x)</code> returns <code>true</code>.
+ * It is transitive: for any non-null instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.eq(y)</code> returns <code>true</code>   and <code>y.eq(z)</code> returns <code>true</code>, then <code>x.eq(z)</code> returns <code>true</code>.</p><p>Additionally, the <code>eq</code> method has three other properties.
+ * It is consistent: for any non-null instances <code>x</code> and <code>y</code> of type <code>AnyRef</code>, multiple invocations of
+   <code>x.eq(y)</code> consistently returns <code>true</code> or consistently returns <code>false</code>.
+ * For any non-null instance <code>x</code> of type <code>AnyRef</code>, <code>x.eq(null)</code> and <code>null.eq(x)</code> returns <code>false</code>.
+ * <code>null.eq(null)</code> returns <code>true</code>.</p><p>When overriding the <code>equals</code> or <code>hashCode</code> methods, it is important to ensure that their behavior is
+consistent with reference equality.  Therefore, if two objects are references to each other (<code>o1 eq o2</code>), they
+should be equal to each other (<code>o1 == o2</code>) and they should hash to the same value (<code>o1.hashCode == o2.hashCode</code>).
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the argument is a reference to the receiver object; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#equals">
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">equals</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to compare the receiver object (<code>this</code>) with the argument object (<code>arg0</code>) for equivalence.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to compare the receiver object (<code>this</code>) with the argument object (<code>arg0</code>) for equivalence.</p><p>The default implementations of this method is an [http://en.wikipedia.org/wiki/Equivalence_relation equivalence
+relation]:
+ * It is reflexive: for any instance <code>x</code> of type <code>Any</code>, <code>x.equals(x)</code> should return <code>true</code>.
+ * It is symmetric: for any instances <code>x</code> and <code>y</code> of type <code>Any</code>, <code>x.equals(y)</code> should return <code>true</code> if and
+   only if <code>y.equals(x)</code> returns <code>true</code>.
+ * It is transitive: for any instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.equals(y)</code> returns <code>true</code> and
+   <code>y.equals(z)</code> returns <code>true</code>, then <code>x.equals(z)</code> should return <code>true</code>.</p><p>If you override this method, you should verify that your implementation remains an equivalence relation.
+Additionally, when overriding this method it is often necessary to override <code>hashCode</code> to ensure that objects
+that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>) hash to the same 
+scala.Int
+(<code>o1.hashCode.equals(o2.hashCode)</code>).
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          definition classes: AnyRef → Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HandlerEvents#error">
+      <a id="error(String,Throwable):NamedEvent"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">error</span>
+        
+        <span class="params">(<span name="name">name: String</span>, <span name="e">e: Throwable</span>)</span>
+        <span class="result">: <a href="HandlerEvents$NamedEvent.html" class="extype" name="org.specs2.reporter.HandlerEvents.NamedEvent">NamedEvent</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="HandlerEvents.html" class="extype" name="org.specs2.reporter.HandlerEvents">HandlerEvents</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.DefaultExecutionStrategy#execute">
+      <a id="execute(Arguments):(Seq[FragmentSeq]) ⇒ Seq[ExecutedFragment]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">execute</span>
+        
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: (Seq[<a href="FragmentSeq.html" class="extype" name="org.specs2.reporter.FragmentSeq">FragmentSeq</a>]) ⇒ Seq[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: DefaultExecutionStrategy → ExecutionStrategy
+        </div></div>
+          
+    </li><li visbl="prt" data-isabs="false" name="org.specs2.specification.FragmentExecution#execute">
+      <a id="execute(Fragment)(Arguments):Product with ExecutedFragment"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">execute</span>
+        
+        <span class="params">(<span name="f">f: <a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Product">Product</span> with <a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">execute a Fragment.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>execute a Fragment.</p><p>A Form is executed separately by executing each row and cell, setting the results on each cell
+</p></div><div class="block">
+          attributes: protected 
+        </div><div class="block">
+          definition classes: FragmentExecution
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.FragmentExecution#executeBodies">
+      <a id="executeBodies(Fragments)(Arguments):Seq[Result]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">executeBodies</span>
+        
+        <span class="params">(<span name="exs">exs: <a href="../specification/Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: Seq[<a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">this method is used in tests</p>
+            <div class="fullcomment"><div class="comment cmt"><p>this method is used in tests</p></div><div class="block">
+          definition classes: FragmentExecution
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.FragmentExecution#executeBody">
+      <a id="executeBody(⇒ Result)(Arguments):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">executeBody</span>
+        
+        <span class="params">(<span name="body">body: ⇒ <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method could be overriden to provide alternate behavior when executing an
+Example
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method could be overriden to provide alternate behavior when executing an
+Example
+</p></div><div class="block">
+          definition classes: FragmentExecution
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.FragmentExecution#executeFragment">
+      <a id="executeFragment(Arguments):Function[Fragment, ExecutedFragment]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">executeFragment</span>
+        
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: Function[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">execute a Fragment.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>execute a Fragment.
+</p></div><div class="block">
+          definition classes: FragmentExecution
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TestInterfaceReporter#export">
+      <a id="export(SpecificationStructure)(Arguments):(Seq[ExecutedFragment]) ⇒ Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">export</span>
+        
+        <span class="params">(<span name="s">s: <a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: (Seq[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting ExecutedFragments</p></dd></dl><div class="block">
+          definition classes: <a href="" class="extype" name="org.specs2.reporter.TestInterfaceReporter">TestInterfaceReporter</a> → TextExporting → Exporting
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HandlerEvents#failure">
+      <a id="failure(String,Throwable):NamedEvent"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">failure</span>
+        
+        <span class="params">(<span name="name">name: String</span>, <span name="e">e: Throwable</span>)</span>
+        <span class="result">: <a href="HandlerEvents$NamedEvent.html" class="extype" name="org.specs2.reporter.HandlerEvents.NamedEvent">NamedEvent</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="HandlerEvents.html" class="extype" name="org.specs2.reporter.HandlerEvents">HandlerEvents</a>
+        </div></div>
+          
+    </li><li visbl="prt" data-isabs="false" name="org.specs2.reporter.DefaultSelection#filter">
+      <a id="filter:(Fragment, Arguments) ⇒ Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">filter</span>
+        
+        
+        <span class="result">: (<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <span class="extype" name="org.specs2.main.Arguments">Arguments</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">the filter method filters examples based on their description,
+keeping only the ones matching the ex attribute of the arguments object
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>the filter method filters examples based on their description,
+keeping only the ones matching the ex attribute of the arguments object
+</p></div><div class="block">
+          attributes: protected 
+        </div><div class="block">
+          definition classes: <a href="DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a>
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#finalize">
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">finalize</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is called by the garbage collector on the receiver object when garbage collection determines that
+there are no more references to the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is called by the garbage collector on the receiver object when garbage collection determines that
+there are no more references to the object.</p><p>The details of when and if the <code>finalize</code> method are invoked, as well as the interaction between <code>finalize</code>and non-local returns and exceptions, are all platform dependent.</p></div><div class="block">
+          attributes: protected 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter#flatten">
+      <a id="flatten((((List[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])):List[PrintLine]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">flatten</span>
+        
+        <span class="params">(<span name="results">results: (((List[<a href="TextPrinter$Print.html" class="extype" name="org.specs2.reporter.TextPrinter.Print">Print</a>], <span class="extype" name="org.specs2.reporter.Statistics.SpecsStatistics">SpecsStatistics</span>), <a href="Levels.html" class="extype" name="org.specs2.reporter.Levels">Levels</a>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]), <span class="extype" name="org.specs2.reporter.SpecsArguments">SpecsArguments</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>])</span>)</span>
+        <span class="result">: List[<a href="TextPrinter$PrintLine.html" class="extype" name="org.specs2.reporter.TextPrinter.PrintLine">PrintLine</a>]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.ConsoleOutput#flush">
+      <a id="flush():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">flush</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">flush the content if necessary
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>flush the content if necessary
+</p></div><div class="block">
+          definition classes: ConsoleOutput → Output
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#getClass">
+      <a id="getClass():java.lang.Class[_]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">getClass</span>
+        
+        <span class="params">()</span>
+        <span class="result">: java.lang.Class[_]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Returns a representation that corresponds to the dynamic class of the receiver object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a representation that corresponds to the dynamic class of the receiver object.</p><p>The nature of the representation is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a representation that corresponds to the dynamic class of the receiver object.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TestInterfaceReporter#handler">
+      <a id="handler:EventHandler"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">handler</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.scalatools.testing.EventHandler">EventHandler</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">hashCode</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Returns a hash code value for the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a hash code value for the object.</p><p>The default hashing algorithm is platform dependent.</p><p>Note that it is allowed for two objects to have identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>) yet
+not be equal (<code>o1.equals(o2)</code> returns <code>false</code>).  A degenerate implementation could always return <code>0</code>.
+However, it is required that if two objects are equal (<code>o1.equals(o2)</code> returns <code>true</code>) that they have
+identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>).  Therefore, when overriding this method, be sure
+to verify that the behavior is consistent with the <code>equals</code> method.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the hash code value for the object.</p></dd></dl><div class="block">
+          definition classes: AnyRef → Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#isInstanceOf">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to test whether the dynamic type of the receiver object is <code>T0</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to test whether the dynamic type of the receiver object is <code>T0</code>.</p><p>Note that the test result of the test is modulo Scala's erasure semantics.  Therefore the expression<code>1.isInstanceOf[String]</code> will return <code>false</code>, while the expression <code>List(1).isInstanceOf[List[String]]</code> will
+return <code>true</code>.  In the latter example, because the type argument is erased as part of compilation it is not
+possible to check whether the contents of the list are of the requested typed.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is an instance of erasure of type <code>T0</code>; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="prt" data-isabs="false" name="org.specs2.reporter.DefaultSequence#isolateSteps">
+      <a id="isolateSteps(Seq[Fragment])(Arguments):Seq[FragmentSeq]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isolateSteps</span>
+        
+        <span class="params">(<span name="fragments">fragments: Seq[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: Seq[<a href="FragmentSeq.html" class="extype" name="org.specs2.reporter.FragmentSeq">FragmentSeq</a>]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: protected 
+        </div><div class="block">
+          definition classes: <a href="DefaultSequence.html" class="extype" name="org.specs2.reporter.DefaultSequence">DefaultSequence</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TestInterfaceReporter#loggers">
+      <a id="loggers:Array[Logger]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">loggers</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="org.scalatools.testing.Logger">Logger</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#ne">
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">ne</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o.ne(arg0)</code> is the same as <code>!(o.eq(arg0))</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o.ne(arg0)</code> is the same as <code>!(o.eq(arg0))</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference dis-equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the argument is not a reference to the receiver object; <code>true</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notify">
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">notify</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Wakes up a single thread that is waiting on the receiver object's monitor.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Wakes up a single thread that is waiting on the receiver object's monitor.</p></div><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notifyAll">
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">notifyAll</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Wakes up all threads that are waiting on the receiver object's monitor.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Wakes up all threads that are waiting on the receiver object's monitor.</p></div><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter#output">
+      <a id="output:ResultOutput"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">output</span>
+        
+        
+        <span class="result">: <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TestInterfaceReporter#print">
+      <a id="print(SpecificationStructure,Seq[ExecutedFragment])(Arguments):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">print</span>
+        
+        <span class="params">(<span name="s">s: <a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></span>, <span name="fs">fs: Seq[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="" class="extype" name="org.specs2.reporter.TestInterfaceReporter">TestInterfaceReporter</a> → <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.Output#print">
+      <a id="print(Any):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">print</span>
+        
+        <span class="params">(<span name="m">m: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">print an object with no newline
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>print an object with no newline
+</p></div><div class="block">
+          definition classes: Output
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextPrinter#printLines">
+      <a id="printLines(Seq[ExecutedFragment]):PrintLines"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">printLines</span>
+        
+        <span class="params">(<span name="fs">fs: Seq[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]</span>)</span>
+        <span class="result">: <a href="TextPrinter$PrintLines.html" class="extype" name="org.specs2.reporter.TextPrinter.PrintLines">PrintLines</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.Output#printStackTrace">
+      <a id="printStackTrace(Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">printStackTrace</span>
+        
+        <span class="params">(<span name="t">t: Throwable</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">print stacktraces
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>print stacktraces
+</p></div><div class="block">
+          definition classes: Output
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.ConsoleOutput#printf">
+      <a id="printf(String,Any*):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">printf</span>
+        
+        <span class="params">(<span name="s">s: String</span>, <span name="args">args: <span class="extype" name="scala.Any">Any</span>*</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">print several objects according to a format string (see Console.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>print several objects according to a format string (see Console.printf)
+</p></div><div class="block">
+          definition classes: ConsoleOutput → Output
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.Output#println">
+      <a id="println(Any):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">println</span>
+        
+        <span class="params">(<span name="m">m: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">print an object with a newline
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>print an object with a newline
+</p></div><div class="block">
+          definition classes: Output
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Reporter#report">
+      <a id="report(SpecificationStructure)(Arguments):TestInterfaceReporter.this.type"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">report</span>
+        
+        <span class="params">(<span name="spec">spec: <a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: TestInterfaceReporter.this.type</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">report Fragments by:
+  * extracting arguments from the Fragments
+  * selecting them
+  * sequencing fragments in groups
+  * executing fragments
+  * exporting the results to the output format
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>report Fragments by:
+  * extracting arguments from the Fragments
+  * selecting them
+  * sequencing fragments in groups
+  * executing fragments
+  * exporting the results to the output format
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the reporter
+</p></dd></dl><div class="block">
+          definition classes: Reporter
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.DefaultSelection#select">
+      <a id="select(Seq[Fragment])(Arguments):Seq[Fragment]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">select</span>
+        
+        <span class="params">(<span name="fragments">fragments: Seq[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span> =<span class="defval" name="Arguments()"> ...</span></span>)</span>
+        <span class="result">: Seq[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">select function returning a filtered seq of Fragments</p>
+            <div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered seq of Fragments</p></div><div class="block">
+          definition classes: <a href="DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a>
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.DefaultSelection#select">
+      <a id="select(Arguments):(Fragments) ⇒ Seq[Fragment]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">select</span>
+        
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: (<a href="../specification/Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a>) ⇒ Seq[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">select function returning a filtered seq of Fragments</p>
+            <div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered seq of Fragments</p></div><div class="block">
+          definition classes: <a href="DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a>
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.DefaultSequence#sequence">
+      <a id="sequence(Seq[Fragment])(Arguments):Seq[FragmentSeq]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">sequence</span>
+        
+        <span class="params">(<span name="fragments">fragments: Seq[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span> =<span class="defval" name="Arguments()"> ...</span></span>)</span>
+        <span class="result">: Seq[<a href="FragmentSeq.html" class="extype" name="org.specs2.reporter.FragmentSeq">FragmentSeq</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">the sequence method returns sequences of fragments which can be executed concurrently.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>the sequence method returns sequences of fragments which can be executed concurrently.
+Among the constraints to respect, any Step Fragment must be executed before any following Example Fragment,
+so that &quot;first&quot; and &quot;last&quot; actions are executed properly in a Specification</p><p>If the arguments specify that the specification is sequential, then each fragment will be executed individually
+</p></div><div class="block">
+          definition classes: <a href="DefaultSequence.html" class="extype" name="org.specs2.reporter.DefaultSequence">DefaultSequence</a>
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.DefaultSequence#sequence">
+      <a id="sequence(Arguments):(Seq[Fragment]) ⇒ Seq[FragmentSeq]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">sequence</span>
+        
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span class="extype" name="org.specs2.main.Arguments">Arguments</span></span>)</span>
+        <span class="result">: (Seq[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]) ⇒ Seq[<a href="FragmentSeq.html" class="extype" name="org.specs2.reporter.FragmentSeq">FragmentSeq</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">sequence function returning an ordered seq of seq of Fragments</p>
+            <div class="fullcomment"><div class="comment cmt"><p>sequence function returning an ordered seq of seq of Fragments</p></div><div class="block">
+          definition classes: <a href="DefaultSequence.html" class="extype" name="org.specs2.reporter.DefaultSequence">DefaultSequence</a>
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HandlerEvents#skipped">
+      <a id="skipped(String):NamedEvent {...}"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">skipped</span>
+        
+        <span class="params">(<span name="name">name: String</span>)</span>
+        <span class="result">: <a href="HandlerEvents$NamedEvent.html" class="extype" name="org.specs2.reporter.HandlerEvents.NamedEvent">NamedEvent</a> {...}</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="HandlerEvents.html" class="extype" name="org.specs2.reporter.HandlerEvents">HandlerEvents</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HandlerEvents#succeeded">
+      <a id="succeeded(String):NamedEvent"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">succeeded</span>
+        
+        <span class="params">(<span name="name">name: String</span>)</span>
+        <span class="result">: <a href="HandlerEvents$NamedEvent.html" class="extype" name="org.specs2.reporter.HandlerEvents.NamedEvent">NamedEvent</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="HandlerEvents.html" class="extype" name="org.specs2.reporter.HandlerEvents">HandlerEvents</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#synchronized">
+      <a id="synchronized[T0](T0):T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">synchronized</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">(<span name="arg0">arg0: T0</span>)</span>
+        <span class="result">: T0</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#toString">
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">toString</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Returns a string representation of the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of the object.</p><p>The default representation is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a string representation of the object.</p></dd></dl><div class="block">
+          definition classes: AnyRef → Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li></ol>
+            </div>
+
+        <div class="parent" name="org.specs2.reporter.HandlerEvents">
+              <h3>Inherited from <a href="HandlerEvents.html" class="extype" name="org.specs2.reporter.HandlerEvents">HandlerEvents</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.ConsoleReporter">
+              <h3>Inherited from <a href="ConsoleReporter.html" class="extype" name="org.specs2.reporter.ConsoleReporter">ConsoleReporter</a></h3>
+            </div><div class="parent" name="org.specs2.io.ConsoleOutput">
+              <h3>Inherited from <span class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</span></h3>
+            </div><div class="parent" name="org.specs2.io.Output">
+              <h3>Inherited from <span class="extype" name="org.specs2.io.Output">Output</span></h3>
+            </div><div class="parent" name="org.specs2.reporter.TextExporting">
+              <h3>Inherited from <span class="extype" name="org.specs2.reporter.TextExporting">TextExporting</span></h3>
+            </div><div class="parent" name="org.specs2.reporter.TextPrinter">
+              <h3>Inherited from <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.DefaultExecutionStrategy">
+              <h3>Inherited from <span class="extype" name="org.specs2.reporter.DefaultExecutionStrategy">DefaultExecutionStrategy</span></h3>
+            </div><div class="parent" name="org.specs2.specification.FragmentExecution">
+              <h3>Inherited from <span class="extype" name="org.specs2.specification.FragmentExecution">FragmentExecution</span></h3>
+            </div><div class="parent" name="org.specs2.reporter.DefaultSequence">
+              <h3>Inherited from <a href="DefaultSequence.html" class="extype" name="org.specs2.reporter.DefaultSequence">DefaultSequence</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.DefaultSelection">
+              <h3>Inherited from <a href="DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.Reporter">
+              <h3>Inherited from <span class="extype" name="org.specs2.reporter.Reporter">Reporter</span></h3>
+            </div><div class="parent" name="org.specs2.reporter.Exporting">
+              <h3>Inherited from <span class="extype" name="org.specs2.reporter.Exporting">Exporting</span></h3>
+            </div><div class="parent" name="org.specs2.reporter.ExecutionStrategy">
+              <h3>Inherited from <span class="extype" name="org.specs2.reporter.ExecutionStrategy">ExecutionStrategy</span></h3>
+            </div><div class="parent" name="org.specs2.reporter.Sequence">
+              <h3>Inherited from <a href="Sequence.html" class="extype" name="org.specs2.reporter.Sequence">Sequence</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.Selection">
+              <h3>Inherited from <a href="Selection.html" class="extype" name="org.specs2.reporter.Selection">Selection</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from AnyRef</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>

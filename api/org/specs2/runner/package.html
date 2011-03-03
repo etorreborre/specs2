@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.runner</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="value" onload="windowTitle();">
+
+      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <h1>runner</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">runner</span>
+        
+        
+        
+      </span>
+      </h4>
+      <div class="fullcomment" id="comment"></div>
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.runner.ClassRunner">
+      <a id="ClassRunner:ClassRunner"></a>
+      <h4 class="signature"><a href="ClassRunner.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ClassRunner</span>
+        
+        
+        <span class="result"> extends Classes with ConsoleOutput</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class can be used to executed a Specification in the Console
+by specifying its name as the first argument on the command line
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.runner.FilesRunner">
+      <a id="FilesRunner:FilesRunner"></a>
+      <h4 class="signature"><a href="FilesRunner.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">FilesRunner</span>
+        
+        
+        <span class="result"> extends SpecificationsFinder</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait finds specifications in the source directory, instantiate them as one big
+specification and report them using the ConsoleReporter or the HtmlReporter depending on the presence of the html flag
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.runner.FilesRunnerFingerprint">
+      <a id="FilesRunnerFingerprint:FilesRunnerFingerprint"></a>
+      <h4 class="signature"><a href="FilesRunnerFingerprint.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">FilesRunnerFingerprint</span>
+        
+        
+        <span class="result"> extends TestFingerprint</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.HtmlRunner">
+      <a id="HtmlRunner:HtmlRunner"></a>
+      <h4 class="signature"><a href="HtmlRunner.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">HtmlRunner</span>
+        
+        
+        <span class="result"> extends ClassRunner</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This runner uses an HtmlReporter, creating html pages, for running the specification
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.JUnitRunner">
+      <a id="JUnitRunner:JUnitRunner"></a>
+      <h4 class="signature"><a href="JUnitRunner.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">JUnitRunner</span>
+        
+        
+        <span class="result"> extends Runner</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
+to execute a specification as a JUnit suite.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.SpecFailureAssertionFailedError">
+      <a id="SpecFailureAssertionFailedError:SpecFailureAssertionFailedError"></a>
+      <h4 class="signature"><a href="SpecFailureAssertionFailedError.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">SpecFailureAssertionFailedError</span>
+        
+        
+        <span class="result"> extends AssertionFailedError</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class refines the <code>AssertionFailedError</code> from junit
+and provides the stackTrace of an exception which occurred during the specification execution
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.runner.Specs2Fingerprint">
+      <a id="Specs2Fingerprint:Specs2Fingerprint"></a>
+      <h4 class="signature"><a href="Specs2Fingerprint.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Specs2Fingerprint</span>
+        
+        
+        <span class="result"> extends TestFingerprint</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.SpecsFramework">
+      <a id="SpecsFramework:SpecsFramework"></a>
+      <h4 class="signature"><a href="SpecsFramework.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">SpecsFramework</span>
+        
+        
+        <span class="result"> extends Framework</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Implementation of the Framework interface for the sbt tool.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.TestInterfaceRunner">
+      <a id="TestInterfaceRunner:TestInterfaceRunner"></a>
+      <h4 class="signature"><a href="TestInterfaceRunner.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TestInterfaceRunner</span>
+        
+        
+        <span class="result"> extends Runner with HandlerEvents with TestLoggers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Runner for TestInterface.</p>
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.runner.Fingerprints">
+      <a id="Fingerprints:Fingerprints"></a>
+      <h4 class="signature"><a href="Fingerprints$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Fingerprints</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.JUnitRunner">
+      <a id="JUnitRunner:JUnitRunner"></a>
+      <h4 class="signature"><a href="JUnitRunner$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">JUnitRunner</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Factory methods to help with testing
+</p>
+    </li></ol>
+            </div>
+
+        
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>

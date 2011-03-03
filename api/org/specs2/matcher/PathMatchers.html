@@ -1,0 +1,1866 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.matcher.PathMatchers</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="type" onload="windowTitle();">
+
+      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.matcher">matcher</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/trait_big.png" />
+        <h1>PathMatchers</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">PathMatchers</span>
+        
+        
+        <span class="result"> extends <span class="extype" name="org.specs2.matcher.PathBaseMatchers">PathBaseMatchers</span> with <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment" id="comment"><div class="comment cmt"><p>The PathMatchers trait provides matchers which are applicable to strings representing paths
+</p></div><div class="block">
+            go to: <a href="PathMatchers$.html">companion</a>
+          </div><div class="block">
+            linear super types: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>, <span class="extype" name="org.specs2.matcher.PathBaseMatchers">PathBaseMatchers</span>, <span class="extype" name="org.specs2.io.FileSystem">FileSystem</span>, <span class="extype" name="org.specs2.io.FileWriter">FileWriter</span>, <span class="extype" name="org.specs2.io.FileReader">FileReader</span>, AnyRef, <span class="extype" name="scala.Any">Any</span>
+          </div><div class="block">
+            known subclasses: <a href="FileMatchers.html" class="extype" name="org.specs2.matcher.FileMatchers">FileMatchers</a>, <a href="Matchers.html" class="extype" name="org.specs2.matcher.Matchers">Matchers</a>, <a href="ShouldThrownMatchers.html" class="extype" name="org.specs2.matcher.ShouldThrownMatchers">ShouldThrownMatchers</a>, <a href="ShouldMatchers.html" class="extype" name="org.specs2.matcher.ShouldMatchers">ShouldMatchers</a>, <a href="PathMatchers$.html" class="extype" name="org.specs2.matcher.PathMatchers">PathMatchers</a>, <a href="MustThrownMatchers.html" class="extype" name="org.specs2.matcher.MustThrownMatchers">MustThrownMatchers</a>, <a href="MustMatchers.html" class="extype" name="org.specs2.matcher.MustMatchers">MustMatchers</a>, <a href="Matchers$.html" class="extype" name="org.specs2.matcher.Matchers">Matchers</a>, <a href="JUnitShouldMatchers.html" class="extype" name="org.specs2.matcher.JUnitShouldMatchers">JUnitShouldMatchers</a>, <a href="JUnitShouldMatchers$.html" class="extype" name="org.specs2.matcher.JUnitShouldMatchers">JUnitShouldMatchers</a>, <a href="JUnitMustMatchers.html" class="extype" name="org.specs2.matcher.JUnitMustMatchers">JUnitMustMatchers</a>, <a href="JUnitMustMatchers$.html" class="extype" name="org.specs2.matcher.JUnitMustMatchers">JUnitMustMatchers</a>, <a href="FileMatchers$.html" class="extype" name="org.specs2.matcher.FileMatchers">FileMatchers</a>, <a href="../mutable/SpecificationFeatures.html" class="extype" name="org.specs2.mutable.SpecificationFeatures">SpecificationFeatures</a>, <a href="../mutable/Specification.html" class="extype" name="org.specs2.mutable.Specification">Specification</a>, <a href="../mutable/SpecificationWithJUnit.html" class="extype" name="org.specs2.mutable.SpecificationWithJUnit">SpecificationWithJUnit</a>, <a href="../SpecificationFeatures.html" class="extype" name="org.specs2.SpecificationFeatures">SpecificationFeatures</a>, <a href="../Specification.html" class="extype" name="org.specs2.Specification">Specification</a>, <a href="../SpecificationWithJUnit.html" class="extype" name="org.specs2.SpecificationWithJUnit">SpecificationWithJUnit</a>
+          </div>
+            
+            
+            
+          </div>
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          <div id="order">
+                <span class="filtertype">Ordering</span>
+                <ol><li class="alpha in">Alphabetic</li><li class="inherit out">By inheritance</li></ol>
+              </div>
+          <div id="ancestors">
+                <span class="filtertype">Inherited</span>
+                <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
+                <ol id="linearization"><li class="in" name="org.specs2.matcher.PathMatchers">PathMatchers</li><li class="in" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</li><li class="in" name="org.specs2.matcher.PathBaseMatchers">PathBaseMatchers</li><li class="in" name="org.specs2.io.FileSystem">FileSystem</li><li class="in" name="org.specs2.io.FileWriter">FileWriter</li><li class="in" name="org.specs2.io.FileReader">FileReader</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+              </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers.PathResultMatcher">
+      <a id="PathResultMatcher:PathResultMatcher"></a>
+      <h4 class="signature"><a href="PathBeHaveMatchers$PathResultMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">PathResultMatcher</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="scala.AnyRef#!=">
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#!=">
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o != arg0</code> is the same as <code>!(o == (arg0))</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o != arg0</code> is the same as <code>!(o == (arg0))</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for dis-equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the receiver object is equivalent to the argument; <code>true</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef###">
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">##</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef → Any
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$asInstanceOf">
+      <a id="$asInstanceOf[T0]():T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">$asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: T0</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$isInstanceOf">
+      <a id="$isInstanceOf[T0]():Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">$isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#==">
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o == arg0</code> is the same as <code>if (o eq null) arg0 eq null else o.equals(arg0)</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o == arg0</code> is the same as <code>if (o eq null) arg0 eq null else o.equals(arg0)</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#==">
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o == arg0</code> is the same as <code>o.equals(arg0)</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o == arg0</code> is the same as <code>o.equals(arg0)</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#aDirectoryPath">
+      <a id="aDirectoryPath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">aDirectoryPath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#aFilePath">
+      <a id="aFilePath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">aFilePath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#aHiddenPath">
+      <a id="aHiddenPath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">aHiddenPath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#aReadablePath">
+      <a id="aReadablePath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">aReadablePath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#aWritablePath">
+      <a id="aWritablePath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">aWritablePath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#anAbsolutePath">
+      <a id="anAbsolutePath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">anAbsolutePath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#anExistingPath">
+      <a id="anExistingPath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">anExistingPath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#asAbsolutePath">
+      <a id="asAbsolutePath(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">asAbsolutePath</span>
+        
+        <span class="params">(<span name="name">name: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#asCanonicalPath">
+      <a id="asCanonicalPath(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">asCanonicalPath</span>
+        
+        <span class="params">(<span name="name">name: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#asInstanceOf">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: T0</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to cast the receiver object to be of type <code>T0</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to cast the receiver object to be of type <code>T0</code>.</p><p>Note that the success of a cast at runtime is modulo Scala's erasure semantics.  Therefore the expression<code>1.asInstanceOf[String]</code> will throw a <code>ClassCastException</code> at runtime, while the expression<code>List(1).asInstanceOf[List[String]]</code> will not.  In the latter example, because the type argument is erased as
+part of compilation it is not possible to check whether the contents of the list are of the requested typed.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the receiver object.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#beADirectoryPath">
+      <a id="beADirectoryPath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">beADirectoryPath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).isDirectory</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#beAFilePath">
+      <a id="beAFilePath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">beAFilePath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).isFile</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#beAHiddenPath">
+      <a id="beAHiddenPath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">beAHiddenPath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).isHidden</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#beAReadablePath">
+      <a id="beAReadablePath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">beAReadablePath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).canRead</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#beAWritablePath">
+      <a id="beAWritablePath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">beAWritablePath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).canWrite</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#beAnAbsolutePath">
+      <a id="beAnAbsolutePath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">beAnAbsolutePath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).isAbsolute</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#beAnExistingPath">
+      <a id="beAnExistingPath:PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">beAnExistingPath</span>
+        
+        
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).exists</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#beEqualToIgnoringSep">
+      <a id="beEqualToIgnoringSep(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">beEqualToIgnoringSep</span>
+        
+        <span class="params">(<span name="other">other: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if 2 paths are the same regardless of their separators</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if 2 paths are the same regardless of their separators</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#canRead">
+      <a id="canRead(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">canRead</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the file can be read</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#canWrite">
+      <a id="canWrite(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">canWrite</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the file can be written</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">clone</span>
+        
+        <span class="params">()</span>
+        <span class="result">: AnyRef</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method creates and returns a copy of the receiver object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method creates and returns a copy of the receiver object.</p><p>The default implementation of the <code>clone</code> method is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a copy of the receiver object.</p></dd></dl><div class="block">
+          attributes: protected 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#copy">
+      <a id="copy(InputStream,OutputStream):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">copy</span>
+        
+        <span class="params">(<span name="input">input: <span class="extype" name="java.io.InputStream">InputStream</span></span>, <span name="output">output: <span class="extype" name="java.io.OutputStream">OutputStream</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Copy an input stream to an output stream.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Copy an input stream to an output stream.</p></div><dl class="paramcmts block"><dt class="param">input</dt><dd class="cmt"><p>input stream</p></dd><dt class="param">output</dt><dd class="cmt"><p>output stream
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#copyDir">
+      <a id="copyDir(String,String):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">copyDir</span>
+        
+        <span class="params">(<span name="src">src: String</span>, <span name="dest">dest: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">copy the content of a directory to another.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>copy the content of a directory to another.</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>destination directory path
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#copyDir">
+      <a id="copyDir(URL,String):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">copyDir</span>
+        
+        <span class="params">(<span name="url">url: <span class="extype" name="java.net.URL">URL</span></span>, <span name="dest">dest: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">copy the content of a directory to another.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>copy the content of a directory to another.</p></div><dl class="paramcmts block"><dt class="param">url</dt><dd class="cmt"><p>url of the directory to copy</p></dd><dt class="param">dest</dt><dd class="cmt"><p>destination directory path
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#copyFile">
+      <a id="copyFile(String,String):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">copyFile</span>
+        
+        <span class="params">(<span name="path">path: String</span>, <span name="dest">dest: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Copy the content of a directory to another.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Copy the content of a directory to another.</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>path of the file to copy</p></dd><dt class="param">dest</dt><dd class="cmt"><p>destination directory path
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#copySpecResourcesDir">
+      <a id="copySpecResourcesDir(String,String):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">copySpecResourcesDir</span>
+        
+        <span class="params">(<span name="src">src: String</span>, <span name="outputDir">outputDir: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Copy specs resources found either in the specs jar or in the classpath directories to an output directory.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Copy specs resources found either in the specs jar or in the classpath directories to an output directory.
+Current limitations!! This only works if the jar holding the resources contains the word &quot;specs&quot;.</p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>name of the resource directory to copy</p></dd><dt class="param">outputDir</dt><dd class="cmt"><p>output directory where to copy the files to
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#createDir">
+      <a id="createDir(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">createDir</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">creates a directory for a given path
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>creates a directory for a given path
+</p></div><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileWriter#createFile">
+      <a id="createFile(String):AnyVal"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">createFile</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">creates a file for a given path.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>creates a file for a given path. Create the parent directory if necessary.
+</p></div><div class="block">
+          definition classes: FileWriter
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">eq</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to test whether the argument (<code>arg0</code>) is a reference to the
+receiver object (<code>this</code>).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to test whether the argument (<code>arg0</code>) is a reference to the
+receiver object (<code>this</code>).</p><p>The <code>eq</code> method implements an [http://en.wikipedia.org/wiki/Equivalence_relation equivalence relation] on
+non-null instances of <code>AnyRef</code>:
+ * It is reflexive: for any non-null instance <code>x</code> of type <code>AnyRef</code>, <code>x.eq(x)</code> returns <code>true</code>.
+ * It is symmetric: for any non-null instances <code>x</code> and <code>y</code> of type <code>AnyRef</code>, <code>x.eq(y)</code> returns <code>true</code> if and
+   only if <code>y.eq(x)</code> returns <code>true</code>.
+ * It is transitive: for any non-null instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.eq(y)</code> returns <code>true</code>   and <code>y.eq(z)</code> returns <code>true</code>, then <code>x.eq(z)</code> returns <code>true</code>.</p><p>Additionally, the <code>eq</code> method has three other properties.
+ * It is consistent: for any non-null instances <code>x</code> and <code>y</code> of type <code>AnyRef</code>, multiple invocations of
+   <code>x.eq(y)</code> consistently returns <code>true</code> or consistently returns <code>false</code>.
+ * For any non-null instance <code>x</code> of type <code>AnyRef</code>, <code>x.eq(null)</code> and <code>null.eq(x)</code> returns <code>false</code>.
+ * <code>null.eq(null)</code> returns <code>true</code>.</p><p>When overriding the <code>equals</code> or <code>hashCode</code> methods, it is important to ensure that their behavior is
+consistent with reference equality.  Therefore, if two objects are references to each other (<code>o1 eq o2</code>), they
+should be equal to each other (<code>o1 == o2</code>) and they should hash to the same value (<code>o1.hashCode == o2.hashCode</code>).
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the argument is a reference to the receiver object; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#equalToIgnoringSep">
+      <a id="equalToIgnoringSep(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">equalToIgnoringSep</span>
+        
+        <span class="params">(<span name="other">other: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#equals">
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">equals</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to compare the receiver object (<code>this</code>) with the argument object (<code>arg0</code>) for equivalence.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to compare the receiver object (<code>this</code>) with the argument object (<code>arg0</code>) for equivalence.</p><p>The default implementations of this method is an [http://en.wikipedia.org/wiki/Equivalence_relation equivalence
+relation]:
+ * It is reflexive: for any instance <code>x</code> of type <code>Any</code>, <code>x.equals(x)</code> should return <code>true</code>.
+ * It is symmetric: for any instances <code>x</code> and <code>y</code> of type <code>Any</code>, <code>x.equals(y)</code> should return <code>true</code> if and
+   only if <code>y.equals(x)</code> returns <code>true</code>.
+ * It is transitive: for any instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.equals(y)</code> returns <code>true</code> and
+   <code>y.equals(z)</code> returns <code>true</code>, then <code>x.equals(z)</code> should return <code>true</code>.</p><p>If you override this method, you should verify that your implementation remains an equivalence relation.
+Additionally, when overriding this method it is often necessary to override <code>hashCode</code> to ensure that objects
+that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>) hash to the same 
+scala.Int
+(<code>o1.hashCode.equals(o2.hashCode)</code>).
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          definition classes: AnyRef → Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#exists">
+      <a id="exists(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">exists</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the file exists</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#filePaths">
+      <a id="filePaths(String):List[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">filePaths</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: List[String]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>glob expression, for example: <code>./dir/**/.xml</code></p></dd><dt>returns</dt><dd class="cmt"><p>the list of paths represented by the &quot;glob&quot; definition &lt;code&gt;path&lt;/path&gt;
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#finalize">
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">finalize</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is called by the garbage collector on the receiver object when garbage collection determines that
+there are no more references to the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is called by the garbage collector on the receiver object when garbage collection determines that
+there are no more references to the object.</p><p>The details of when and if the <code>finalize</code> method are invoked, as well as the interaction between <code>finalize</code>and non-local returns and exceptions, are all platform dependent.</p></div><div class="block">
+          attributes: protected 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#getAbsolutePath">
+      <a id="getAbsolutePath(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">getAbsolutePath</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the file absolute path</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#getCanonicalPath">
+      <a id="getCanonicalPath(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">getCanonicalPath</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the file canonical path</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#getClass">
+      <a id="getClass():java.lang.Class[_]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">getClass</span>
+        
+        <span class="params">()</span>
+        <span class="result">: java.lang.Class[_]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Returns a representation that corresponds to the dynamic class of the receiver object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a representation that corresponds to the dynamic class of the receiver object.</p><p>The nature of the representation is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a representation that corresponds to the dynamic class of the receiver object.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#getName">
+      <a id="getName(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">getName</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the file name</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#getParent">
+      <a id="getParent(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">getParent</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the file parent path</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#getResourcesNamed">
+      <a id="getResourcesNamed(String):List[URL]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">getResourcesNamed</span>
+        
+        <span class="params">(<span name="name">name: String</span>)</span>
+        <span class="result">: List[<span class="extype" name="java.net.URL">URL</span>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Return urls of the resources containing the name &quot;name&quot; from this ClassLoader and the System classLoader.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Return urls of the resources containing the name &quot;name&quot; from this ClassLoader and the System classLoader.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>name of the resource to find</p></dd><dt>returns</dt><dd class="cmt"><p>a list of URL
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileWriter#getWriter">
+      <a id="getWriter(String):Writer"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">getWriter</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="java.io.Writer">Writer</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">The getWriter function can be overriden to provide a mock writer writing to the console for example</p>
+            <div class="fullcomment"><div class="comment cmt"><p>The getWriter function can be overriden to provide a mock writer writing to the console for example</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Writer object opened on the file designated by <code>path</code></p></dd></dl><div class="block">
+          definition classes: FileWriter
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#globToPattern">
+      <a id="globToPattern(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">globToPattern</span>
+        
+        <span class="params">(<span name="glob">glob: String</span>)</span>
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the regular expression equivalent to a glob pattern (see the specs for Fragments)
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">hashCode</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Returns a hash code value for the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a hash code value for the object.</p><p>The default hashing algorithm is platform dependent.</p><p>Note that it is allowed for two objects to have identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>) yet
+not be equal (<code>o1.equals(o2)</code> returns <code>false</code>).  A degenerate implementation could always return <code>0</code>.
+However, it is required that if two objects are equal (<code>o1.equals(o2)</code> returns <code>true</code>) that they have
+identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>).  Therefore, when overriding this method, be sure
+to verify that the behavior is consistent with the <code>equals</code> method.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the hash code value for the object.</p></dd></dl><div class="block">
+          definition classes: AnyRef → Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#haveAsAbsolutePath">
+      <a id="haveAsAbsolutePath(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">haveAsAbsolutePath</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).getAbsolutePath == absolutePath</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#haveAsCanonicalPath">
+      <a id="haveAsCanonicalPath(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">haveAsCanonicalPath</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).getCanonicalPath == canonicalPath</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#haveParentPath">
+      <a id="haveParentPath(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">haveParentPath</span>
+        
+        <span class="params">(<span name="parent">parent: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).getParent == parent</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#havePathName">
+      <a id="havePathName(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">havePathName</span>
+        
+        <span class="params">(<span name="name">name: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).getName == name</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileReader#inputStream">
+      <a id="inputStream(String):InputStream"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">inputStream</span>
+        
+        <span class="params">(<span name="filePath">filePath: String</span>)</span>
+        <span class="result">: <span class="extype" name="java.io.InputStream">InputStream</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a FileInputStream for a given file path
+</p></dd></dl><div class="block">
+          definition classes: FileReader
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#isAbsolute">
+      <a id="isAbsolute(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isAbsolute</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the file is absolute</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#isDir">
+      <a id="isDir(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isDir</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the File represented by this path is a directory
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#isDirectory">
+      <a id="isDirectory(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isDirectory</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the file is a directory</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#isFile">
+      <a id="isFile(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isFile</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the file is a file</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#isHidden">
+      <a id="isHidden(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isHidden</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the file is hidden</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#isInstanceOf">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to test whether the dynamic type of the receiver object is <code>T0</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to test whether the dynamic type of the receiver object is <code>T0</code>.</p><p>Note that the test result of the test is modulo Scala's erasure semantics.  Therefore the expression<code>1.isInstanceOf[String]</code> will return <code>false</code>, while the expression <code>List(1).isInstanceOf[List[String]]</code> will
+return <code>true</code>.  In the latter example, because the type argument is erased as part of compilation it is not
+possible to check whether the contents of the list are of the requested typed.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is an instance of erasure of type <code>T0</code>; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#listFiles">
+      <a id="listFiles(String):List[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">listFiles</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: List[String]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the files of that directory</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBaseMatchers#listPaths">
+      <a id="listPaths(String*):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">listPaths</span>
+        
+        <span class="params">(<span name="list">list: String*</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matches if new File(path).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).list == list(files)</p></div><div class="block">
+          definition classes: PathBaseMatchers
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileWriter#mkdirs">
+      <a id="mkdirs(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">mkdirs</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">creates a new directory</p>
+            <div class="fullcomment"><div class="comment cmt"><p>creates a new directory</p></div><div class="block">
+          definition classes: FileWriter
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#ne">
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">ne</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o.ne(arg0)</code> is the same as <code>!(o.eq(arg0))</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o.ne(arg0)</code> is the same as <code>!(o.eq(arg0))</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference dis-equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the argument is not a reference to the receiver object; <code>true</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notify">
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">notify</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Wakes up a single thread that is waiting on the receiver object's monitor.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Wakes up a single thread that is waiting on the receiver object's monitor.</p></div><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notifyAll">
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">notifyAll</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Wakes up all threads that are waiting on the receiver object's monitor.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Wakes up all threads that are waiting on the receiver object's monitor.</p></div><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#parentPath">
+      <a id="parentPath(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">parentPath</span>
+        
+        <span class="params">(<span name="parent">parent: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#pathName">
+      <a id="pathName(String):PathMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">pathName</span>
+        
+        <span class="params">(<span name="name">name: String</span>)</span>
+        <span class="result">: <span class="extype" name="org.specs2.matcher.PathMatcher">PathMatcher</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileReader#readFile">
+      <a id="readFile(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">readFile</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">reads the content of a file</p>
+            <div class="fullcomment"><div class="comment cmt"><p>reads the content of a file</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the path of the file to read</p></dd><dt>returns</dt><dd class="cmt"><p>the content of the file at path
+</p></dd></dl><div class="block">
+          definition classes: FileReader
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileReader#readLines">
+      <a id="readLines(String):IndexedSeq[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">readLines</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[String]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: FileReader
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#removeDir">
+      <a id="removeDir(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">removeDir</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span>
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">deletes the directory and all directory content at the specified path and return the parent path of that directory
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>deletes the directory and all directory content at the specified path and return the parent path of that directory
+</p></div><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#synchronized">
+      <a id="synchronized[T0](T0):T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">synchronized</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">(<span name="arg0">arg0: T0</span>)</span>
+        <span class="result">: T0</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathBeHaveMatchers#toPathResultMatcher">
+      <a id="toPathResultMatcher(MatchResult[String]):PathResultMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">toPathResultMatcher</span>
+        
+        <span class="params">(<span name="result">result: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[String]</span>)</span>
+        <span class="result">: <a href="PathBeHaveMatchers$PathResultMatcher.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers.PathResultMatcher">PathResultMatcher</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">matcher aliases and implicits to use with be / have + matcher
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>matcher aliases and implicits to use with be / have + matcher
+</p></div><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a>
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#toString">
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">toString</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Returns a string representation of the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of the object.</p><p>The default representation is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a string representation of the object.</p></dd></dl><div class="block">
+          definition classes: AnyRef → Any
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#unjar">
+      <a id="unjar(String,String,String):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">unjar</span>
+        
+        <span class="params">(<span name="path">path: String</span>, <span name="dirPath">dirPath: String</span>, <span name="regexFilter">regexFilter: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Unjar the jar (or zip file) specified by &quot;path&quot; to the &quot;dest&quot; directory.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Unjar the jar (or zip file) specified by &quot;path&quot; to the &quot;dest&quot; directory.
+Filters files which shouldn't be extracted with a regular expression.</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>path of the jar file</p></dd><dt class="param">regexFilter</dt><dd class="cmt"><p>regular expression filtering files which shouldn't be extracted
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileSystem#unjar">
+      <a id="unjar(String,String):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">unjar</span>
+        
+        <span class="params">(<span name="path">path: String</span>, <span name="dest">dest: String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Unjar the jar (or zip file) specified by &quot;path&quot; to the &quot;dest&quot; directory.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Unjar the jar (or zip file) specified by &quot;path&quot; to the &quot;dest&quot; directory.</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>path of the jar file</p></dd><dt class="param">dest</dt><dd class="cmt"><p>destination directory path
+</p></dd></dl><div class="block">
+          definition classes: FileSystem
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileWriter#write">
+      <a id="write(String)((Writer) ⇒ Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">write</span>
+        
+        <span class="params">(<span name="path">path: String</span>)</span><span class="params">(<span name="function">function: (<span class="extype" name="java.io.Writer">Writer</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">writes some content to a file and take care of closing the file.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>writes some content to a file and take care of closing the file.</p><p>Usage: &lt;code&gt;
+write(&quot;./dir/hello.txt&quot;) { out =&gt;
+  out.write(&quot;content&quot;)
+}
+&lt;/code&gt;</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>path of the file to write
+</p></dd></dl><div class="block">
+          definition classes: FileWriter
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.io.FileWriter#writeFile">
+      <a id="writeFile(String,⇒ String):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">writeFile</span>
+        
+        <span class="params">(<span name="path">path: String</span>, <span name="content">content: ⇒ String</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">writes some content to a file.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>writes some content to a file.</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>path of the file to read</p></dd><dt class="param">content</dt><dd class="cmt"><p>content of the file to write
+</p></dd></dl><div class="block">
+          definition classes: FileWriter
+        </div>
+            
+            
+            
+          </div>
+          
+    </li></ol>
+            </div>
+
+        <div class="parent" name="org.specs2.matcher.PathBeHaveMatchers">
+              <h3>Inherited from <a href="PathBeHaveMatchers.html" class="extype" name="org.specs2.matcher.PathBeHaveMatchers">PathBeHaveMatchers</a></h3>
+            </div><div class="parent" name="org.specs2.matcher.PathBaseMatchers">
+              <h3>Inherited from <span class="extype" name="org.specs2.matcher.PathBaseMatchers">PathBaseMatchers</span></h3>
+            </div><div class="parent" name="org.specs2.io.FileSystem">
+              <h3>Inherited from <span class="extype" name="org.specs2.io.FileSystem">FileSystem</span></h3>
+            </div><div class="parent" name="org.specs2.io.FileWriter">
+              <h3>Inherited from <span class="extype" name="org.specs2.io.FileWriter">FileWriter</span></h3>
+            </div><div class="parent" name="org.specs2.io.FileReader">
+              <h3>Inherited from <span class="extype" name="org.specs2.io.FileReader">FileReader</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from AnyRef</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>

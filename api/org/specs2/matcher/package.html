@@ -1,0 +1,1528 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.matcher</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="value" onload="windowTitle();">
+
+      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <h1>matcher</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">matcher</span>
+        
+        
+        
+      </span>
+      </h4>
+      <div class="fullcomment" id="comment"></div>
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" data-isabs="true" name="org.specs2.matcher.AbstractContainMatchResult">
+      <a id="AbstractContainMatchResult:AbstractContainMatchResult[T]"></a>
+      <h4 class="signature"><a href="AbstractContainMatchResult.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AbstractContainMatchResult</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends MatchResult[Iterable[T]]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.AdaptableMatcher">
+      <a id="AdaptableMatcher:AdaptableMatcher[T]"></a>
+      <h4 class="signature"><a href="AdaptableMatcher.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AdaptableMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[T]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Inherit this trait to provide a Matcher where both the actual and the expected values can be adapted with a function.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.AndMatch">
+      <a id="AndMatch:AndMatch[T]"></a>
+      <h4 class="signature"><a href="AndMatch.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">AndMatch</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="m1">m1: MatchResult[T]</span>, <span name="m2">m2: MatchResult[T]</span>)</span>
+        <span class="result"> extends MatchResult[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.AndNotMatch">
+      <a id="AndNotMatch:AndNotMatch[T]"></a>
+      <h4 class="signature"><a href="AndNotMatch.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">AndNotMatch</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="m1">m1: MatchResult[T]</span>, <span name="m2">m2: MatchResult[T]</span>)</span>
+        <span class="result"> extends MatchResult[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.AnyBeHaveMatchers">
+      <a id="AnyBeHaveMatchers:AnyBeHaveMatchers"></a>
+      <h4 class="signature"><a href="AnyBeHaveMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AnyBeHaveMatchers</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait allows to write expressions like</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.AnyMatchers">
+      <a id="AnyMatchers:AnyMatchers"></a>
+      <h4 class="signature"><a href="AnyMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AnyMatchers</span>
+        
+        
+        <span class="result"> extends AnyBaseMatchers with AnyBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides matchers which are applicable to any type of value
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.BeCloseTo">
+      <a id="BeCloseTo:BeCloseTo[T]"></a>
+      <h4 class="signature"><a href="BeCloseTo.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BeCloseTo</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.BeEqualTo">
+      <a id="BeEqualTo:BeEqualTo[T]"></a>
+      <h4 class="signature"><a href="BeEqualTo.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BeEqualTo</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AdaptableMatcher[T]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Equality Matcher
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.BeLessThan">
+      <a id="BeLessThan:BeLessThan[T]"></a>
+      <h4 class="signature"><a href="BeLessThan.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BeLessThan</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.BeLessThanOrEqualTo">
+      <a id="BeLessThanOrEqualTo:BeLessThanOrEqualTo[T]"></a>
+      <h4 class="signature"><a href="BeLessThanOrEqualTo.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BeLessThanOrEqualTo</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="prt" data-isabs="false" name="org.specs2.matcher.BeMatching">
+      <a id="BeMatching:BeMatching"></a>
+      <h4 class="signature"><a href="BeMatching.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BeMatching</span>
+        
+        
+        <span class="result"> extends Matcher[String]</span>
+      </span>
+      </a></h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: protected[<a href="../package.html" class="extype" name="org.specs2">specs2</a>] 
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.BeNull">
+      <a id="BeNull:BeNull[T]"></a>
+      <h4 class="signature"><a href="BeNull.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BeNull</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.BeTheSameAs">
+      <a id="BeTheSameAs:BeTheSameAs[T]"></a>
+      <h4 class="signature"><a href="BeTheSameAs.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BeTheSameAs</span>
+        <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
+        
+        <span class="result"> extends Matcher[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.BeTrueMatcher">
+      <a id="BeTrueMatcher:BeTrueMatcher"></a>
+      <h4 class="signature"><a href="BeTrueMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BeTrueMatcher</span>
+        
+        
+        <span class="result"> extends Matcher[Boolean]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matcher for a boolean value which must be true
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainAnyOfMatcher">
+      <a id="ContainAnyOfMatcher:ContainAnyOfMatcher[T]"></a>
+      <h4 class="signature"><a href="ContainAnyOfMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainAnyOfMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[Iterable[T]]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainExactlyOnceMatcher">
+      <a id="ContainExactlyOnceMatcher:ContainExactlyOnceMatcher[T]"></a>
+      <h4 class="signature"><a href="ContainExactlyOnceMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainExactlyOnceMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[Iterable[T]]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainInOrderMatchResult">
+      <a id="ContainInOrderMatchResult:ContainInOrderMatchResult[T]"></a>
+      <h4 class="signature"><a href="ContainInOrderMatchResult.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainInOrderMatchResult</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AbstractContainMatchResult[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainInOrderMatcher">
+      <a id="ContainInOrderMatcher:ContainInOrderMatcher[T]"></a>
+      <h4 class="signature"><a href="ContainInOrderMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainInOrderMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[Iterable[T]]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainLikeMatcher">
+      <a id="ContainLikeMatcher:ContainLikeMatcher[T]"></a>
+      <h4 class="signature"><a href="ContainLikeMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainLikeMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[Iterable[T]]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainLikeOnlyOnceMatcher">
+      <a id="ContainLikeOnlyOnceMatcher:ContainLikeOnlyOnceMatcher[T]"></a>
+      <h4 class="signature"><a href="ContainLikeOnlyOnceMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainLikeOnlyOnceMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[Iterable[T]]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainMatchResult">
+      <a id="ContainMatchResult:ContainMatchResult[T]"></a>
+      <h4 class="signature"><a href="ContainMatchResult.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainMatchResult</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AbstractContainMatchResult[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainMatcher">
+      <a id="ContainMatcher:ContainMatcher[T]"></a>
+      <h4 class="signature"><a href="ContainMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[Iterable[T]]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainOnlyInOrderMatchResult">
+      <a id="ContainOnlyInOrderMatchResult:ContainOnlyInOrderMatchResult[T]"></a>
+      <h4 class="signature"><a href="ContainOnlyInOrderMatchResult.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainOnlyInOrderMatchResult</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AbstractContainMatchResult[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainOnlyMatchResult">
+      <a id="ContainOnlyMatchResult:ContainOnlyMatchResult[T]"></a>
+      <h4 class="signature"><a href="ContainOnlyMatchResult.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainOnlyMatchResult</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AbstractContainMatchResult[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainOnlyMatcher">
+      <a id="ContainOnlyMatcher:ContainOnlyMatcher[T]"></a>
+      <h4 class="signature"><a href="ContainOnlyMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ContainOnlyMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[Iterable[T]]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.DataTables">
+      <a id="DataTables:DataTables"></a>
+      <h4 class="signature"><a href="DataTables.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">DataTables</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides implicit definitions and types to create DataTables.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.EitherMatchers">
+      <a id="EitherMatchers:EitherMatchers"></a>
+      <h4 class="signature"><a href="EitherMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">EitherMatchers</span>
+        
+        
+        <span class="result"> extends EitherBaseMatchers with EitherBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matchers for the Either datatype
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.EqualIgnoringSpaceMatcher">
+      <a id="EqualIgnoringSpaceMatcher:EqualIgnoringSpaceMatcher"></a>
+      <h4 class="signature"><a href="EqualIgnoringSpaceMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">EqualIgnoringSpaceMatcher</span>
+        
+        
+        <span class="result"> extends Matcher[Seq[Node]]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matcher for equalIgnoreSpace comparison, ignoring the nodes order
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.EqualIgnoringSpaceMatcherOrdered">
+      <a id="EqualIgnoringSpaceMatcherOrdered:EqualIgnoringSpaceMatcherOrdered"></a>
+      <h4 class="signature"><a href="EqualIgnoringSpaceMatcherOrdered.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">EqualIgnoringSpaceMatcherOrdered</span>
+        
+        
+        <span class="result"> extends Matcher[Seq[Node]]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matcher for equalIgnoreSpace comparison, considering the node order
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.EventuallyMatchers">
+      <a id="EventuallyMatchers:EventuallyMatchers"></a>
+      <h4 class="signature"><a href="EventuallyMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">EventuallyMatchers</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait adds the possibility to retry a given matcher until it succeeds.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ExceptionBaseMatchers">
+      <a id="ExceptionBaseMatchers:ExceptionBaseMatchers"></a>
+      <h4 class="signature"><a href="ExceptionBaseMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ExceptionBaseMatchers</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ExceptionBeHaveMatchers">
+      <a id="ExceptionBeHaveMatchers:ExceptionBeHaveMatchers"></a>
+      <h4 class="signature"><a href="ExceptionBeHaveMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ExceptionBeHaveMatchers</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ExceptionMatchers">
+      <a id="ExceptionMatchers:ExceptionMatchers"></a>
+      <h4 class="signature"><a href="ExceptionMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ExceptionMatchers</span>
+        
+        
+        <span class="result"> extends ExceptionBaseMatchers with ExceptionBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">These matchers can be used to check if exceptions are thrown or not
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.Expectable">
+      <a id="Expectable:Expectable[T]"></a>
+      <h4 class="signature"><a href="Expectable.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Expectable</span>
+        <span class="tparams">[<span name="T">+T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Expectable class models anything which can be checked by applying a Matcher</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.Expectations">
+      <a id="Expectations:Expectations"></a>
+      <h4 class="signature"><a href="Expectations.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Expectations</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides implicit definitions to transform any value into an Expectable
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.FailureException">
+      <a id="FailureException:FailureException"></a>
+      <h4 class="signature"><a href="FailureException.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">FailureException</span>
+        
+        <span class="params">(<span name="f">f: Failure</span>)</span>
+        <span class="result"> extends Exception with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.FileMatchers">
+      <a id="FileMatchers:FileMatchers"></a>
+      <h4 class="signature"><a href="FileMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">FileMatchers</span>
+        
+        
+        <span class="result"> extends FileBaseMatchers with FileBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The FileMatchers trait provides matchers which are applicable to files
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.HaveTheSameElementsAs">
+      <a id="HaveTheSameElementsAs:HaveTheSameElementsAs[T]"></a>
+      <h4 class="signature"><a href="HaveTheSameElementsAs.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">HaveTheSameElementsAs</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[Iterable[T]]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.InterpretedScript">
+      <a id="InterpretedScript:InterpretedScript"></a>
+      <h4 class="signature"><a href="InterpretedScript.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">InterpretedScript</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.IterableMatchers">
+      <a id="IterableMatchers:IterableMatchers"></a>
+      <h4 class="signature"><a href="IterableMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">IterableMatchers</span>
+        
+        
+        <span class="result"> extends IterableBaseMatchers with IterableBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matchers for iterables
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.JUnitExpectations">
+      <a id="JUnitExpectations:JUnitExpectations"></a>
+      <h4 class="signature"><a href="JUnitExpectations.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">JUnitExpectations</span>
+        
+        
+        <span class="result"> extends ThrownExpectations</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait throws AssertionFailed errors when a match fails.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.JUnitMustExpectations">
+      <a id="JUnitMustExpectations:JUnitMustExpectations"></a>
+      <h4 class="signature"><a href="JUnitMustExpectations.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">JUnitMustExpectations</span>
+        
+        
+        <span class="result"> extends MustThrownExpectations with JUnitExpectations</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait can be imported to use MustMatchers in JUnit
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.JUnitMustMatchers">
+      <a id="JUnitMustMatchers:JUnitMustMatchers"></a>
+      <h4 class="signature"><a href="JUnitMustMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">JUnitMustMatchers</span>
+        
+        
+        <span class="result"> extends Matchers with JUnitMustExpectations</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">These traits and objects can be used in JUnit
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.JUnitShouldExpectations">
+      <a id="JUnitShouldExpectations:JUnitShouldExpectations"></a>
+      <h4 class="signature"><a href="JUnitShouldExpectations.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">JUnitShouldExpectations</span>
+        
+        
+        <span class="result"> extends ShouldThrownExpectations with JUnitExpectations</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait can be imported to use ShouldMatchers in JUnit
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.JUnitShouldMatchers">
+      <a id="JUnitShouldMatchers:JUnitShouldMatchers"></a>
+      <h4 class="signature"><a href="JUnitShouldMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">JUnitShouldMatchers</span>
+        
+        
+        <span class="result"> extends Matchers with JUnitShouldExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.JsonDeepPairMatcher">
+      <a id="JsonDeepPairMatcher:JsonDeepPairMatcher"></a>
+      <h4 class="signature"><a href="JsonDeepPairMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">JsonDeepPairMatcher</span>
+        
+        
+        <span class="result"> extends Matcher[String]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.JsonDeepValueMatcher">
+      <a id="JsonDeepValueMatcher:JsonDeepValueMatcher"></a>
+      <h4 class="signature"><a href="JsonDeepValueMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">JsonDeepValueMatcher</span>
+        
+        
+        <span class="result"> extends Matcher[String]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.JsonMatchers">
+      <a id="JsonMatchers:JsonMatchers"></a>
+      <h4 class="signature"><a href="JsonMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">JsonMatchers</span>
+        
+        
+        <span class="result"> extends JsonBaseMatchers with JsonBaseBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matchers for Json expressions (entered as strings)
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.JsonPairMatcher">
+      <a id="JsonPairMatcher:JsonPairMatcher"></a>
+      <h4 class="signature"><a href="JsonPairMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">JsonPairMatcher</span>
+        
+        
+        <span class="result"> extends Matcher[String]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.JsonValueMatcher">
+      <a id="JsonValueMatcher:JsonValueMatcher"></a>
+      <h4 class="signature"><a href="JsonValueMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">JsonValueMatcher</span>
+        
+        
+        <span class="result"> extends Matcher[String]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.MapMatchers">
+      <a id="MapMatchers:MapMatchers"></a>
+      <h4 class="signature"><a href="MapMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">MapMatchers</span>
+        
+        
+        <span class="result"> extends MapBaseMatchers with MapBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matchers for Maps
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchFailure">
+      <a id="MatchFailure:MatchFailure[T]"></a>
+      <h4 class="signature"><a href="MatchFailure.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">MatchFailure</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="okMessage">okMessage: String</span>, <span name="koMessage">koMessage: String</span>, <span name="expectable">expectable: Expectable[T]</span>, <span name="details">details: Details</span>)</span>
+        <span class="result"> extends MatchResult[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="prt" data-isabs="true" name="org.specs2.matcher.MatchResult">
+      <a id="MatchResult:MatchResult[T]"></a>
+      <h4 class="signature"><a href="MatchResult.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">MatchResult</span>
+        <span class="tparams">[<span name="T">+T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Result of a Match.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchSkip">
+      <a id="MatchSkip:MatchSkip[T]"></a>
+      <h4 class="signature"><a href="MatchSkip.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">MatchSkip</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="message">message: String</span>, <span name="expectable">expectable: Expectable[T]</span>)</span>
+        <span class="result"> extends MatchResult[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchSuccess">
+      <a id="MatchSuccess:MatchSuccess[T]"></a>
+      <h4 class="signature"><a href="MatchSuccess.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">MatchSuccess</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="okMessage">okMessage: String</span>, <span name="koMessage">koMessage: String</span>, <span name="expectable">expectable: Expectable[T]</span>)</span>
+        <span class="result"> extends MatchResult[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.Matcher">
+      <a id="Matcher:Matcher[T]"></a>
+      <h4 class="signature"><a href="Matcher.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Matcher</span>
+        <span class="tparams">[<span name="T">-T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The <code>Matcher</code> trait is the base trait for any Matcher.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.Matchers">
+      <a id="Matchers:Matchers"></a>
+      <h4 class="signature"><a href="Matchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Matchers</span>
+        
+        
+        <span class="result"> extends AnyMatchers with IterableMatchers with MapMatchers with StringMatchers with XmlMatchers with JsonMatchers with BeHaveMatchers with ExceptionMatchers with NumericMatchers with OptionMatchers with EitherMatchers with EventuallyMatchers with FileMatchers with ResultMatchers with MatchersImplicits</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Trait aggregating all of specs2 matchers
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.MatchersImplicits">
+      <a id="MatchersImplicits:MatchersImplicits"></a>
+      <h4 class="signature"><a href="MatchersImplicits.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">MatchersImplicits</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides implicit definitions from MatchResults and Booleans to Results.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MustExpectable">
+      <a id="MustExpectable:MustExpectable[T]"></a>
+      <h4 class="signature"><a href="MustExpectable.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">MustExpectable</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Expectable[T]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This kind of expectable can be followed by the verb must to apply a matcher:</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.MustExpectations">
+      <a id="MustExpectations:MustExpectations"></a>
+      <h4 class="signature"><a href="MustExpectations.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">MustExpectations</span>
+        
+        
+        <span class="result"> extends Expectations</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides implicit definitions to transform any value into a MustExpectable
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.MustMatchers">
+      <a id="MustMatchers:MustMatchers"></a>
+      <h4 class="signature"><a href="MustMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">MustMatchers</span>
+        
+        
+        <span class="result"> extends Matchers with MustExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.MustThrownExpectations">
+      <a id="MustThrownExpectations:MustThrownExpectations"></a>
+      <h4 class="signature"><a href="MustThrownExpectations.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">MustThrownExpectations</span>
+        
+        
+        <span class="result"> extends ThrownExpectations with MustExpectations</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides implicit definitions to transform any value into a MustExpectable, throwing exceptions when
+a match fails
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.MustThrownMatchers">
+      <a id="MustThrownMatchers:MustThrownMatchers"></a>
+      <h4 class="signature"><a href="MustThrownMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">MustThrownMatchers</span>
+        
+        
+        <span class="result"> extends Matchers with MustThrownExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.NeutralMatch">
+      <a id="NeutralMatch:NeutralMatch[T]"></a>
+      <h4 class="signature"><a href="NeutralMatch.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">NeutralMatch</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="m">m: MatchResult[T]</span>)</span>
+        <span class="result"> extends MatchResult[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.NeutralMatcher">
+      <a id="NeutralMatcher:NeutralMatcher[T]"></a>
+      <h4 class="signature"><a href="NeutralMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NeutralMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[T]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This special matcher always return a NeutralMatch MatchResult (an implicit Success)
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.NotMatch">
+      <a id="NotMatch:NotMatch[T]"></a>
+      <h4 class="signature"><a href="NotMatch.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">NotMatch</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="m">m: MatchResult[T]</span>)</span>
+        <span class="result"> extends MatchResult[T] with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.NotMatcher">
+      <a id="NotMatcher:NotMatcher[T]"></a>
+      <h4 class="signature"><a href="NotMatcher.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NotMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Matcher[T]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This special matcher always return a NotMatch MatchResult.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.NumericMatchers">
+      <a id="NumericMatchers:NumericMatchers"></a>
+      <h4 class="signature"><a href="NumericMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">NumericMatchers</span>
+        
+        
+        <span class="result"> extends NumericBaseMatchers with NumericBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matchers for Numerical values
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.OptionMatchers">
+      <a id="OptionMatchers:OptionMatchers"></a>
+      <h4 class="signature"><a href="OptionMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">OptionMatchers</span>
+        
+        
+        <span class="result"> extends OptionBaseMatchers with OptionBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matchers for Options
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.OrMatch">
+      <a id="OrMatch:OrMatch[T]"></a>
+      <h4 class="signature"><a href="OrMatch.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">OrMatch</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends MatchResult[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.OrNotMatch">
+      <a id="OrNotMatch:OrNotMatch[T]"></a>
+      <h4 class="signature"><a href="OrNotMatch.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">OrNotMatch</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends MatchResult[T]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.Parameters">
+      <a id="Parameters:Parameters"></a>
+      <h4 class="signature"><a href="Parameters.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Parameters</span>
+        
+        <span class="params">(<span name="params">params: Map[Symbol, Int]</span>)</span>
+        <span class="result"> extends Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class is the base class for the display and set case classes.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.PathBeHaveMatchers">
+      <a id="PathBeHaveMatchers:PathBeHaveMatchers"></a>
+      <h4 class="signature"><a href="PathBeHaveMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">PathBeHaveMatchers</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathFunction">
+      <a id="PathFunction:PathFunction"></a>
+      <h4 class="signature"><a href="PathFunction.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">PathFunction</span>
+        
+        
+        <span class="result"> extends (Seq[Node]) ⇒ Seq[Node] with XPathFunctions</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The PathFunction object encapsulate a search for a node and/or attributes or attributeValues with an XPath function
+If <code>node</code> has some children, then they are searched using equality
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.PathMatchers">
+      <a id="PathMatchers:PathMatchers"></a>
+      <h4 class="signature"><a href="PathMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">PathMatchers</span>
+        
+        
+        <span class="result"> extends PathBaseMatchers with PathBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The PathMatchers trait provides matchers which are applicable to strings representing paths
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.PropertyImplicits">
+      <a id="PropertyImplicits:PropertyImplicits"></a>
+      <h4 class="signature"><a href="PropertyImplicits.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">PropertyImplicits</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait adds some syntactic sugar to transform function
+to properties by appending forAll
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ResultMatchers">
+      <a id="ResultMatchers:ResultMatchers"></a>
+      <h4 class="signature"><a href="ResultMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ResultMatchers</span>
+        
+        
+        <span class="result"> extends ResultBaseMatchers with ResultBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matchers for Results
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ScalaCheckFunctions">
+      <a id="ScalaCheckFunctions:ScalaCheckFunctions"></a>
+      <h4 class="signature"><a href="ScalaCheckFunctions.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ScalaCheckFunctions</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait is used to facilitate testing by mocking ScalaCheck functionalities
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ScalaCheckMatchers">
+      <a id="ScalaCheckMatchers:ScalaCheckMatchers"></a>
+      <h4 class="signature"><a href="ScalaCheckMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ScalaCheckMatchers</span>
+        
+        
+        <span class="result"> extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters with PropertyImplicits</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The ScalaCheckMatchers trait provides matchers which allow to
+assess properties multiple times with generated data.</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ScalaCheckParameters">
+      <a id="ScalaCheckParameters:ScalaCheckParameters"></a>
+      <h4 class="signature"><a href="ScalaCheckParameters.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ScalaCheckParameters</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides generation parameters to use with the <code>ScalaCheckMatchers</code></p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ScalaInterpreterMatchers">
+      <a id="ScalaInterpreterMatchers:ScalaInterpreterMatchers"></a>
+      <h4 class="signature"><a href="ScalaInterpreterMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ScalaInterpreterMatchers</span>
+        
+        
+        <span class="result"> extends ScalaInterpreter</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ScalazMatchers">
+      <a id="ScalazMatchers:ScalazMatchers"></a>
+      <h4 class="signature"><a href="ScalazMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ScalazMatchers</span>
+        
+        
+        <span class="result"> extends ScalaCheckMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides matchers for some Scalaz (http://code.</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ShouldExpectable">
+      <a id="ShouldExpectable:ShouldExpectable[T]"></a>
+      <h4 class="signature"><a href="ShouldExpectable.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ShouldExpectable</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends Expectable[T]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This kind of expectable can be followed by the verb should to apply a matcher:</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ShouldExpectations">
+      <a id="ShouldExpectations:ShouldExpectations"></a>
+      <h4 class="signature"><a href="ShouldExpectations.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ShouldExpectations</span>
+        
+        
+        <span class="result"> extends Expectations</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides implicit definitions to transform any value into a ShouldExpectable
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ShouldMatchers">
+      <a id="ShouldMatchers:ShouldMatchers"></a>
+      <h4 class="signature"><a href="ShouldMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ShouldMatchers</span>
+        
+        
+        <span class="result"> extends Matchers with ShouldExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ShouldThrownExpectations">
+      <a id="ShouldThrownExpectations:ShouldThrownExpectations"></a>
+      <h4 class="signature"><a href="ShouldThrownExpectations.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ShouldThrownExpectations</span>
+        
+        
+        <span class="result"> extends ThrownExpectations with ShouldExpectations</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides implicit definitions to transform any value into a ShouldExpectable, throwing exceptions when
+a match fails
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ShouldThrownMatchers">
+      <a id="ShouldThrownMatchers:ShouldThrownMatchers"></a>
+      <h4 class="signature"><a href="ShouldThrownMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ShouldThrownMatchers</span>
+        
+        
+        <span class="result"> extends Matchers with ShouldThrownExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.StandardMatchResults">
+      <a id="StandardMatchResults:StandardMatchResults"></a>
+      <h4 class="signature"><a href="StandardMatchResults.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">StandardMatchResults</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait can be used in conjonction with Pattern matchers:</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.StringMatchers">
+      <a id="StringMatchers:StringMatchers"></a>
+      <h4 class="signature"><a href="StringMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">StringMatchers</span>
+        
+        
+        <span class="result"> extends StringBaseMatchers with StringBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The <code>StringMatchers</code> trait provides matchers which are applicable to String objects
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.ThrownExpectations">
+      <a id="ThrownExpectations:ThrownExpectations"></a>
+      <h4 class="signature"><a href="ThrownExpectations.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ThrownExpectations</span>
+        
+        
+        <span class="result"> extends Expectations</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Thrown expectations will throw a FailureException if a match fails
+</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.XPathFunctions">
+      <a id="XPathFunctions:XPathFunctions"></a>
+      <h4 class="signature"><a href="XPathFunctions.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">XPathFunctions</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.XmlMatcher">
+      <a id="XmlMatcher:XmlMatcher"></a>
+      <h4 class="signature"><a href="XmlMatcher.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">XmlMatcher</span>
+        
+        <span class="params">(<span name="functions">functions: List[PathFunction]</span>)</span>
+        <span class="result"> extends Matcher[Seq[Node]] with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The XmlMatcher class matches an xml Node, or a list of Nodes against a list of search functions, which can either search for:</p>
+    </li><li visbl="pub" data-isabs="true" name="org.specs2.matcher.XmlMatchers">
+      <a id="XmlMatchers:XmlMatchers"></a>
+      <h4 class="signature"><a href="XmlMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">XmlMatchers</span>
+        
+        
+        <span class="result"> extends XmlBaseMatchers with XmlBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The XmlMatchers trait provides matchers which are applicable to xml nodes
+</p>
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.specs2.matcher.AnyMatchers">
+      <a id="AnyMatchers:AnyMatchers"></a>
+      <h4 class="signature"><a href="AnyMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">AnyMatchers</span>
+        
+        
+        <span class="result"> extends AnyMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.EitherMatchers">
+      <a id="EitherMatchers:EitherMatchers"></a>
+      <h4 class="signature"><a href="EitherMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">EitherMatchers</span>
+        
+        
+        <span class="result"> extends EitherMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.EventuallyMatchers">
+      <a id="EventuallyMatchers:EventuallyMatchers"></a>
+      <h4 class="signature"><a href="EventuallyMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">EventuallyMatchers</span>
+        
+        
+        <span class="result"> extends EventuallyMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.Expectable">
+      <a id="Expectable:Expectable"></a>
+      <h4 class="signature"><a href="Expectable$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Expectable</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Factory methods for creating Expectables
+</p>
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.FileMatchers">
+      <a id="FileMatchers:FileMatchers"></a>
+      <h4 class="signature"><a href="FileMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">FileMatchers</span>
+        
+        
+        <span class="result"> extends FileMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.IterableMatchers">
+      <a id="IterableMatchers:IterableMatchers"></a>
+      <h4 class="signature"><a href="IterableMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">IterableMatchers</span>
+        
+        
+        <span class="result"> extends IterableMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.JUnitMustExpectations">
+      <a id="JUnitMustExpectations:JUnitMustExpectations"></a>
+      <h4 class="signature"><a href="JUnitMustExpectations$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">JUnitMustExpectations</span>
+        
+        
+        <span class="result"> extends JUnitMustExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.JUnitMustMatchers">
+      <a id="JUnitMustMatchers:JUnitMustMatchers"></a>
+      <h4 class="signature"><a href="JUnitMustMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">JUnitMustMatchers</span>
+        
+        
+        <span class="result"> extends JUnitMustMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.JUnitShouldExpectations">
+      <a id="JUnitShouldExpectations:JUnitShouldExpectations"></a>
+      <h4 class="signature"><a href="JUnitShouldExpectations$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">JUnitShouldExpectations</span>
+        
+        
+        <span class="result"> extends JUnitShouldExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.JUnitShouldMatchers">
+      <a id="JUnitShouldMatchers:JUnitShouldMatchers"></a>
+      <h4 class="signature"><a href="JUnitShouldMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">JUnitShouldMatchers</span>
+        
+        
+        <span class="result"> extends JUnitShouldMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MapMatchers">
+      <a id="MapMatchers:MapMatchers"></a>
+      <h4 class="signature"><a href="MapMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">MapMatchers</span>
+        
+        
+        <span class="result"> extends MapMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.Matcher">
+      <a id="Matcher:Matcher"></a>
+      <h4 class="signature"><a href="Matcher$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Matcher</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.Matchers">
+      <a id="Matchers:Matchers"></a>
+      <h4 class="signature"><a href="Matchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Matchers</span>
+        
+        
+        <span class="result"> extends Matchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MustExpectable">
+      <a id="MustExpectable:MustExpectable"></a>
+      <h4 class="signature"><a href="MustExpectable$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">MustExpectable</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MustExpectations">
+      <a id="MustExpectations:MustExpectations"></a>
+      <h4 class="signature"><a href="MustExpectations$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">MustExpectations</span>
+        
+        
+        <span class="result"> extends MustExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MustThrownExpectations">
+      <a id="MustThrownExpectations:MustThrownExpectations"></a>
+      <h4 class="signature"><a href="MustThrownExpectations$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">MustThrownExpectations</span>
+        
+        
+        <span class="result"> extends MustThrownExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.NumericMatchers">
+      <a id="NumericMatchers:NumericMatchers"></a>
+      <h4 class="signature"><a href="NumericMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">NumericMatchers</span>
+        
+        
+        <span class="result"> extends NumericMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.OptionMatchers">
+      <a id="OptionMatchers:OptionMatchers"></a>
+      <h4 class="signature"><a href="OptionMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">OptionMatchers</span>
+        
+        
+        <span class="result"> extends OptionMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.PathMatchers">
+      <a id="PathMatchers:PathMatchers"></a>
+      <h4 class="signature"><a href="PathMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">PathMatchers</span>
+        
+        
+        <span class="result"> extends PathMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ResultMatchers">
+      <a id="ResultMatchers:ResultMatchers"></a>
+      <h4 class="signature"><a href="ResultMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">ResultMatchers</span>
+        
+        
+        <span class="result"> extends ResultMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ScalaCheckMatchers">
+      <a id="ScalaCheckMatchers:ScalaCheckMatchers"></a>
+      <h4 class="signature"><a href="ScalaCheckMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">ScalaCheckMatchers</span>
+        
+        
+        <span class="result"> extends ScalaCheckMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ShouldExpectable">
+      <a id="ShouldExpectable:ShouldExpectable"></a>
+      <h4 class="signature"><a href="ShouldExpectable$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">ShouldExpectable</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ShouldExpectations">
+      <a id="ShouldExpectations:ShouldExpectations"></a>
+      <h4 class="signature"><a href="ShouldExpectations$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">ShouldExpectations</span>
+        
+        
+        <span class="result"> extends ShouldExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ShouldThrownExpectations">
+      <a id="ShouldThrownExpectations:ShouldThrownExpectations"></a>
+      <h4 class="signature"><a href="ShouldThrownExpectations$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">ShouldThrownExpectations</span>
+        
+        
+        <span class="result"> extends ShouldThrownExpectations</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.StringMatchers">
+      <a id="StringMatchers:StringMatchers"></a>
+      <h4 class="signature"><a href="StringMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">StringMatchers</span>
+        
+        
+        <span class="result"> extends StringMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>
