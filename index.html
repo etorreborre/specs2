@@ -39,10 +39,13 @@
     #container {
       margin-left: 150px;
       width: 75%;
+	  float: left;
+    }
+	#top {
+      margin-left: 150px;
+      width: 75%;
     }
 	#sidebar {
-	  margin-top: 99px;
-      width: 35%px;
       float:right;
     }
 	.console { font-family:Courier; color: #CCCCCC; background: #000000; border: 1px #CCCCCC; padding: 10px; }
@@ -56,8 +59,12 @@
   </head>
 
 <body>
+    <div id="top">
+      <a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./guide/images/specs2.png" alt="specs2" /></a>
+      <div class="description">Software Specifications for Scala</div>
+    </div>
   <div id="sidebar">
-   <h3 style="margin-bottom: 0;">Try it!</h3>
+   <h3 style="margin-top: 0; margin-bottom: 0;">Try it!</h3>
    <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2-test">Sample project</a> (<a href="http://github.com/etorreborre/specs2-test/tarball/master">tar</a>, <a href="http://github.com/etorreborre/specs2-test/zipball/master">zip</a>)<br/> 
    </div>
    <a class="sidelink" href="#Dependencies">Dependencies</a><br/> 
@@ -74,14 +81,8 @@
    <a class="sidelink" href="http://etorreborre.blogspot.com">Blog</a><br/> 
    <a class="sidelink" href="http://www.twitter.com/specs2org"><img style="margin-top: 10px;" src="http://twitter-badges.s3.amazonaws.com/twitter-a.png" alt="Follow specs2 on Twitter"/></a>
   </div>
-  <div id="container">
-
-    <a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./guide/images/specs2.png" alt="specs2" /></a>
-
-    <div class="description">
-      Software Specifications for Scala
-    </div>
-    <h3>Presentation - This is unreleased software, this site is still under construction!</h3>
+	<div id="container">
+    <h3 style="margin-top:0;">Presentation - This is unreleased software, this site is still under construction!</h3>
 
     <s2>specs2</s2> is a library for writing executable software specifications.
 	<p/>
