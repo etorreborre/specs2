@@ -20,10 +20,10 @@
       function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
       function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
       function toggleImage(image) {
-        if (image.src.endsWith('images/expanded.gif')) 
-          image.src = 'images/collapsed.gif';
+        if (image.src.endsWith('./guide/images/expanded.gif')) 
+          image.src = './guide/images/collapsed.gif';
         else 
-          image.src = 'images/expanded.gif';
+          image.src = './guide/images/expanded.gif';
       };
       function showHide(id) {
         element = document.getElementById(id);
@@ -129,19 +129,19 @@
   <h3>Features</h3>
 
   The features of <s2>specs2</s2> are:<p/>
-  <div class="level1"><img src="images/collapsed.gif">Forms for writing <a href="http://fitnesse.org">Fitnesse</a>-like specifications (with Markdown markup)</img></div>
-  <div class="level1"><img src="images/collapsed.gif">Html reporting to create documentation for acceptance tests, to create a User Guide,...</img></div>
-  <div class="level1"><img src="images/collapsed.gif">Integration with <a href="http://code.google.com/p/simple-build-tool/">sbt</a> and JUnit tools (maven, IDEs,...)</img></div>
-  <div class="level1"><img src="images/collapsed.gif">Concurrent execution of examples by default</img></div>
-  <div class="level1"><img src="images/collapsed.gif">ScalaCheck properties</img></div>
-  <div class="level1"><img src="images/collapsed.gif">Mocks with Mockito</img></div>
-  <div class="level1"><img src="images/collapsed.gif">Data tables</img></div>
-  <div class="level1"><img src="images/collapsed.gif">AutoExamples, where the source code is extracted to describe the example</img></div>
-  <div class="level1"><img src="images/collapsed.gif">A rich library of matchers</img></div>
-    <div class="level2"><img src="images/collapsed.gif">Easy to create and compose</img></div>
-    <div class="level2"><img src="images/collapsed.gif">Usable with <code>must</code> and <code>should</code></img></div>
-    <div class="level2"><img src="images/collapsed.gif">Returning "functional" results or throwing exceptions</img></div>
-    <div class="level2"><img src="images/collapsed.gif">Reusable outside of specs2 (in <a href="http://junit.org">JUnit</a> tests for example)</img></div>
+  <div class="level1"><img src="./guide/images/collapsed.gif">Forms for writing <a href="http://fitnesse.org">Fitnesse</a>-like specifications (with Markdown markup)</img></div>
+  <div class="level1"><img src="./guide/images/collapsed.gif">Html reporting to create documentation for acceptance tests, to create a User Guide,...</img></div>
+  <div class="level1"><img src="./guide/images/collapsed.gif">Integration with <a href="http://code.google.com/p/simple-build-tool/">sbt</a> and JUnit tools (maven, IDEs,...)</img></div>
+  <div class="level1"><img src="./guide/images/collapsed.gif">Concurrent execution of examples by default</img></div>
+  <div class="level1"><img src="./guide/images/collapsed.gif">ScalaCheck properties</img></div>
+  <div class="level1"><img src="./guide/images/collapsed.gif">Mocks with Mockito</img></div>
+  <div class="level1"><img src="./guide/images/collapsed.gif">Data tables</img></div>
+  <div class="level1"><img src="./guide/images/collapsed.gif">AutoExamples, where the source code is extracted to describe the example</img></div>
+  <div class="level1"><img src="./guide/images/collapsed.gif">A rich library of matchers</img></div>
+    <div class="level2"><img src="./guide/images/collapsed.gif">Easy to create and compose</img></div>
+    <div class="level2"><img src="./guide/images/collapsed.gif">Usable with <code>must</code> and <code>should</code></img></div>
+    <div class="level2"><img src="./guide/images/collapsed.gif">Returning "functional" results or throwing exceptions</img></div>
+    <div class="level2"><img src="./guide/images/collapsed.gif">Reusable outside of specs2 (in <a href="http://junit.org">JUnit</a> tests for example)</img></div>
   
     <h3><a name="Dependencies"></a>Dependencies</h3>
     The <s2>specs2</s2> jar is available with both sbt and maven
