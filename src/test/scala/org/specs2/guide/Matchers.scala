@@ -416,6 +416,7 @@ This trait is not included in the default specification so you'll have to add it
 the Scala interpreter and execute a script:
 
         class ScalaInterpreterMatchersSpec extends SpecificationWithJUnit with ScalaInterpreterMatchers {
+          def interpret(s: String): String = // you have to provide your own Scala interpreter here
 
           "A script" can {
             "be interpreted" in {
