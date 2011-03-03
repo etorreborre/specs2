@@ -5,16 +5,16 @@
           <title>org.specs2.matcher.ContainMatchResult</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
       <script type="text/javascript" src="../../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type" onload="windowTitle();">
+        <body onload="windowTitle();" class="type">
 
-      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.matcher">matcher</a></p>
+      <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.matcher" class="extype" href="package.html">matcher</a></p>
 
       <div id="definition">
         <img src="../../../lib/class_big.png" />
@@ -27,14 +27,17 @@
         <span class="name">ContainMatchResult</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a>[T]</span>
+        <span class="result"> extends <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a>[T]</span>
       </span>
       </h4>
-      <div class="fullcomment" id="comment"><div class="block">
-            linear super types: <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a>[T], <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]], AnyRef, <span class="extype" name="scala.Any">Any</span>
+      
+          
+          <div class="fullcomment" id="comment"><div class="block">
+            linear super types: <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a>[T], <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]], AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div><div class="block">
-            self type: <a href="" class="extype" name="org.specs2.matcher.ContainMatchResult">ContainMatchResult</a>[T]
+            self type: <a name="org.specs2.matcher.ContainMatchResult" class="extype" href="">ContainMatchResult</a>[T]
           </div></div>
+        
 
       <div id="template">
 
@@ -47,7 +50,7 @@
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="org.specs2.matcher.ContainMatchResult">ContainMatchResult</li><li class="in" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</li><li class="in" name="org.specs2.matcher.MatchResult">MatchResult</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li name="org.specs2.matcher.ContainMatchResult" class="in">ContainMatchResult</li><li name="org.specs2.matcher.AbstractContainMatchResult" class="in">AbstractContainMatchResult</li><li name="org.specs2.matcher.MatchResult" class="in">MatchResult</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -61,14 +64,22 @@
 
         <div class="members" id="constructors">
               <h3>Instance constructors</h3>
-              <ol><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainMatchResult#this">
+              <ol><li visbl="pub" name="org.specs2.matcher.ContainMatchResult#this" data-isabs="false">
       <a id="this:ContainMatchResult[T]"></a>
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol">
         <span class="name">ContainMatchResult</span>
         
-        <span class="params">(<span name="s">s: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>, <span name="containMatcher">containMatcher: <a href="ContainMatcher.html" class="extype" name="org.specs2.matcher.ContainMatcher">ContainMatcher</a>[T]</span>)</span>
+        <span class="params">(<span name="s">
+                  s
+                  : <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]
+                  
+                </span>, <span name="containMatcher">
+                  containMatcher
+                  : <a name="org.specs2.matcher.ContainMatcher" class="extype" href="ContainMatcher.html">ContainMatcher</a>[T]
+                  
+                </span>)</span>
         
       </span>
       </h4>
@@ -80,15 +91,19 @@
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" data-isabs="false" name="scala.AnyRef#!=">
-      <a id="!=(AnyRef):Boolean"></a>
+              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
+      <a id="!=(A,n,y,R,e,f):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">!=</span>
         
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : AnyRef
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
@@ -99,15 +114,19 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.Any#!=">
-      <a id="!=(Any):Boolean"></a>
+    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
+      <a id="!=(A,n,y):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">!=</span>
         
-        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Any" class="extype">Any</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
@@ -121,17 +140,18 @@
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef###">
-      <a id="##():Int"></a>
+    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
+      <a id="##:Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">##</span>
         
         <span class="params">()</span>
-        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
       
@@ -142,8 +162,8 @@
           definition classes: AnyRef → Any
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$asInstanceOf">
-      <a id="$asInstanceOf[T0]():T0"></a>
+    </li><li visbl="pub" name="scala.AnyRef#$asInstanceOf" data-isabs="false">
+      <a id="$asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -161,15 +181,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$isInstanceOf">
-      <a id="$isInstanceOf[T0]():Boolean"></a>
+    </li><li visbl="pub" name="scala.AnyRef#$isInstanceOf" data-isabs="false">
+      <a id="$isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">$isInstanceOf</span>
         <span class="tparams">[<span name="T0">T0</span>]</span>
         <span class="params">()</span>
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
@@ -180,15 +200,19 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#==">
-      <a id="==(AnyRef):Boolean"></a>
+    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
+      <a id="==(A,n,y,R,e,f):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">==</span>
         
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : AnyRef
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
@@ -202,17 +226,22 @@
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.Any#==">
-      <a id="==(Any):Boolean"></a>
+    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
+      <a id="==(A,n,y):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">==</span>
         
-        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Any" class="extype">Any</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
@@ -226,73 +255,89 @@
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchResult#and">
-      <a id="and(Matcher[Iterable[T]]):MatchResult[Iterable[T]]"></a>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchResult#and" data-isabs="false">
+      <a id="and(M,a,t,c,h,e,r,[,I,t,e,r,a,b,l,e,[,T,],]):MatchResult[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">and</span>
         
-        <span class="params">(<span name="m">m: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[Iterable[T]]</span>)</span>
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>
+        <span class="params">(<span name="m">
+                  m
+                  : <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">apply the matcher and return the logical and of two results</p>
             <div class="fullcomment"><div class="comment cmt"><p>apply the matcher and return the logical and of two results</p></div><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchResult#and">
-      <a id="and[S&gt;:T](⇒ MatchResult[S]):MatchResult[S]"></a>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchResult#and" data-isabs="false">
+      <a id="and[S&gt;:Iterable[T]](⇒, ,M,a,t,c,h,R,e,s,u,l,t,[,S,]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">and</span>
-        <span class="tparams">[<span name="S">S &gt;: T</span>]</span>
-        <span class="params">(<span name="m">m: ⇒ <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[S]</span>)</span>
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[S]</span>
+        <span class="tparams">[<span name="S">S &gt;: Iterable[T]</span>]</span>
+        <span class="params">(<span name="m">
+                  m
+                  : ⇒ <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt"></p>
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the logical and of two results</p></dd></dl><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.AbstractContainMatchResult#apply">
-      <a id="apply(Matcher[Iterable[T]]):MatchResult[Iterable[T]]"></a>
+    </li><li visbl="pub" name="org.specs2.matcher.AbstractContainMatchResult#apply" data-isabs="false">
+      <a id="apply(M,a,t,c,h,e,r,[,I,t,e,r,a,b,l,e,[,T,],]):MatchResult[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">apply</span>
         
-        <span class="params">(<span name="matcher">matcher: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[Iterable[T]]</span>)</span>
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>
+        <span class="params">(<span name="matcher">
+                  matcher
+                  : <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">apply a Matcher to the expectable contained in that MatchResult</p>
             <div class="fullcomment"><div class="comment cmt"><p>apply a Matcher to the expectable contained in that MatchResult</p><p>Depending on the exact type of the MatchResult, that logic may vary
 </p></div><div class="block">
-          definition classes: <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a> → <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a> → <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.Any#asInstanceOf">
+    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -305,7 +350,9 @@
       </h4>
       
             <p class="shortcomment cmt">This method is used to cast the receiver object to be of type <code>T0</code>.</p>
-            <div class="fullcomment"><div class="comment cmt"><p>This method is used to cast the receiver object to be of type <code>T0</code>.</p><p>Note that the success of a cast at runtime is modulo Scala's erasure semantics.  Therefore the expression<code>1.asInstanceOf[String]</code> will throw a <code>ClassCastException</code> at runtime, while the expression<code>List(1).asInstanceOf[List[String]]</code> will not.  In the latter example, because the type argument is erased as
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to cast the receiver object to be of type <code>T0</code>.</p><p>Note that the success of a cast at runtime is modulo Scala's erasure semantics.  Therefore the expression
+<code>1.asInstanceOf[String]</code> will throw a <code>ClassCastException</code> at runtime, while the expression
+<code>List(1).asInstanceOf[List[String]]</code> will not.  In the latter example, because the type argument is erased as
 part of compilation it is not possible to check whether the contents of the list are of the requested typed.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the receiver object.</p></dd></dl><div class="block">
           attributes: final 
@@ -315,48 +362,58 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchResult#be">
-      <a id="be[S&lt;:AnyRef&gt;:T](S):MatchResult[Iterable[T]]"></a>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchResult#be" data-isabs="false">
+      <a id="be[S&lt;:AnyRef&gt;:Iterable[T]](S):MatchResult[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">be</span>
-        <span class="tparams">[<span name="S">S &gt;: T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="s">s: S</span>)</span>
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>
+        <span class="tparams">[<span name="S">S &gt;: Iterable[T] &lt;: AnyRef</span>]</span>
+        <span class="params">(<span name="s">
+                  s
+                  : S
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchResult#be">
-      <a id="be(Matcher[Iterable[T]]):MatchResult[Iterable[T]]"></a>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchResult#be" data-isabs="false">
+      <a id="be(M,a,t,c,h,e,r,[,I,t,e,r,a,b,l,e,[,T,],]):MatchResult[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">be</span>
         
-        <span class="params">(<span name="m">m: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[Iterable[T]]</span>)</span>
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>
+        <span class="params">(<span name="m">
+                  m
+                  : <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">apply the matcher</p>
             <div class="fullcomment"><div class="comment cmt"><p>apply the matcher</p></div><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
-      <a id="clone():AnyRef"></a>
+    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
+      <a id="clone:AnyRef"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -370,24 +427,33 @@ part of compilation it is not possible to check whether the contents of the list
             <p class="shortcomment cmt">This method creates and returns a copy of the receiver object.</p>
             <div class="fullcomment"><div class="comment cmt"><p>This method creates and returns a copy of the receiver object.</p><p>The default implementation of the <code>clone</code> method is platform dependent.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a copy of the receiver object.</p></dd></dl><div class="block">
-          attributes: protected 
+          attributes: protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] 
         </div><div class="block">
           definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
-      <a id="eq(AnyRef):Boolean"></a>
+    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
+      <a id="eq(A,n,y,R,e,f):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">eq</span>
         
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : AnyRef
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
@@ -399,7 +465,8 @@ non-null instances of <code>AnyRef</code>:
  * It is reflexive: for any non-null instance <code>x</code> of type <code>AnyRef</code>, <code>x.eq(x)</code> returns <code>true</code>.
  * It is symmetric: for any non-null instances <code>x</code> and <code>y</code> of type <code>AnyRef</code>, <code>x.eq(y)</code> returns <code>true</code> if and
    only if <code>y.eq(x)</code> returns <code>true</code>.
- * It is transitive: for any non-null instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.eq(y)</code> returns <code>true</code>   and <code>y.eq(z)</code> returns <code>true</code>, then <code>x.eq(z)</code> returns <code>true</code>.</p><p>Additionally, the <code>eq</code> method has three other properties.
+ * It is transitive: for any non-null instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.eq(y)</code> returns <code>true</code>
+   and <code>y.eq(z)</code> returns <code>true</code>, then <code>x.eq(z)</code> returns <code>true</code>.</p><p>Additionally, the <code>eq</code> method has three other properties.
  * It is consistent: for any non-null instances <code>x</code> and <code>y</code> of type <code>AnyRef</code>, multiple invocations of
    <code>x.eq(y)</code> consistently returns <code>true</code> or consistently returns <code>false</code>.
  * For any non-null instance <code>x</code> of type <code>AnyRef</code>, <code>x.eq(null)</code> and <code>null.eq(x)</code> returns <code>false</code>.
@@ -414,17 +481,22 @@ should be equal to each other (<code>o1 == o2</code>) and they should hash to th
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#equals">
-      <a id="equals(Any):Boolean"></a>
+    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
+      <a id="equals(A,n,y):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">equals</span>
         
-        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Any" class="extype">Any</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
@@ -437,8 +509,7 @@ relation]:
  * It is transitive: for any instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.equals(y)</code> returns <code>true</code> and
    <code>y.equals(z)</code> returns <code>true</code>, then <code>x.equals(z)</code> should return <code>true</code>.</p><p>If you override this method, you should verify that your implementation remains an equivalence relation.
 Additionally, when overriding this method it is often necessary to override <code>hashCode</code> to ensure that objects
-that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>) hash to the same 
-scala.Int
+that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>) hash to the same scala.Int
 (<code>o1.hashCode.equals(o2.hashCode)</code>).
 </p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
           definition classes: AnyRef → Any
@@ -446,32 +517,34 @@ scala.Int
             
             
             
+            
           </div>
           
-    </li><li visbl="prt" data-isabs="false" name="org.specs2.matcher.MatchResult#evaluate">
-      <a id="evaluate[S&gt;:T]:MatchResult[S]"></a>
+    </li><li visbl="prt" name="org.specs2.matcher.MatchResult#evaluate" data-isabs="false">
+      <a id="evaluate[S&gt;:Iterable[T]]:MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">evaluate</span>
-        <span class="tparams">[<span name="S">S &gt;: T</span>]</span>
+        <span class="tparams">[<span name="S">S &gt;: Iterable[T]</span>]</span>
         
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[S]</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">the value being matched</p>
             <div class="fullcomment"><div class="comment cmt"><p>the value being matched</p></div><div class="block">
-          attributes: protected[<a href="../package.html" class="extype" name="org.specs2">specs2</a>] 
+          attributes: protected[<a name="org.specs2" class="extype" href="../package.html">specs2</a>] 
         </div><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.AbstractContainMatchResult#expectable">
+    </li><li visbl="pub" name="org.specs2.matcher.AbstractContainMatchResult#expectable" data-isabs="false">
       <a id="expectable:Expectable[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
@@ -479,46 +552,53 @@ scala.Int
         <span class="name">expectable</span>
         
         
-        <span class="result">: <a href="Expectable.html" class="extype" name="org.specs2.matcher.Expectable">Expectable</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">the value being matched</p>
             <div class="fullcomment"><div class="comment cmt"><p>the value being matched</p></div><div class="block">
-          definition classes: <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a> → <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a> → <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#finalize">
-      <a id="finalize():Unit"></a>
+    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
+      <a id="finalize:Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">finalize</span>
         
         <span class="params">()</span>
-        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">This method is called by the garbage collector on the receiver object when garbage collection determines that
 there are no more references to the object.</p>
             <div class="fullcomment"><div class="comment cmt"><p>This method is called by the garbage collector on the receiver object when garbage collection determines that
-there are no more references to the object.</p><p>The details of when and if the <code>finalize</code> method are invoked, as well as the interaction between <code>finalize</code>and non-local returns and exceptions, are all platform dependent.</p></div><div class="block">
-          attributes: protected 
+there are no more references to the object.</p><p>The details of when and if the <code>finalize</code> method are invoked, as well as the interaction between <code>finalize</code>
+and non-local returns and exceptions, are all platform dependent.</p></div><div class="block">
+          attributes: protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] 
         </div><div class="block">
           definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#getClass">
-      <a id="getClass():java.lang.Class[_]"></a>
+    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
+      <a id="getClass:java.lang.Class[_]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -539,17 +619,18 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
-      <a id="hashCode():Int"></a>
+    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
+      <a id="hashCode:Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">hashCode</span>
         
         <span class="params">()</span>
-        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
       
@@ -565,30 +646,36 @@ to verify that the behavior is consistent with the <code>equals</code> method.
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchResult#have">
-      <a id="have(Matcher[Iterable[T]]):MatchResult[Iterable[T]]"></a>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchResult#have" data-isabs="false">
+      <a id="have(M,a,t,c,h,e,r,[,I,t,e,r,a,b,l,e,[,T,],]):MatchResult[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">have</span>
         
-        <span class="params">(<span name="m">m: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[Iterable[T]]</span>)</span>
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>
+        <span class="params">(<span name="m">
+                  m
+                  : <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">apply the matcher</p>
             <div class="fullcomment"><div class="comment cmt"><p>apply the matcher</p></div><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainMatchResult#inOrder">
+    </li><li visbl="pub" name="org.specs2.matcher.ContainMatchResult#inOrder" data-isabs="false">
       <a id="inOrder:ContainInOrderMatchResult[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -596,11 +683,11 @@ to verify that the behavior is consistent with the <code>equals</code> method.
         <span class="name">inOrder</span>
         
         
-        <span class="result">: <a href="ContainInOrderMatchResult.html" class="extype" name="org.specs2.matcher.ContainInOrderMatchResult">ContainInOrderMatchResult</a>[T]</span>
+        <span class="result">: <a name="org.specs2.matcher.ContainInOrderMatchResult" class="extype" href="ContainInOrderMatchResult.html">ContainInOrderMatchResult</a>[T]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" data-isabs="false" name="scala.Any#isInstanceOf">
+    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -608,12 +695,13 @@ to verify that the behavior is consistent with the <code>equals</code> method.
         <span class="name">isInstanceOf</span>
         <span class="tparams">[<span name="T0">T0</span>]</span>
         
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">This method is used to test whether the dynamic type of the receiver object is <code>T0</code>.</p>
-            <div class="fullcomment"><div class="comment cmt"><p>This method is used to test whether the dynamic type of the receiver object is <code>T0</code>.</p><p>Note that the test result of the test is modulo Scala's erasure semantics.  Therefore the expression<code>1.isInstanceOf[String]</code> will return <code>false</code>, while the expression <code>List(1).isInstanceOf[List[String]]</code> will
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to test whether the dynamic type of the receiver object is <code>T0</code>.</p><p>Note that the test result of the test is modulo Scala's erasure semantics.  Therefore the expression
+<code>1.isInstanceOf[String]</code> will return <code>false</code>, while the expression <code>List(1).isInstanceOf[List[String]]</code> will
 return <code>true</code>.  In the latter example, because the type argument is erased as part of compilation it is not
 possible to check whether the contents of the list are of the requested typed.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is an instance of erasure of type <code>T0</code>; <code>false</code> otherwise.</p></dd></dl><div class="block">
@@ -624,9 +712,10 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchResult#isSuccess">
+    </li><li visbl="pub" name="org.specs2.matcher.MatchResult#isSuccess" data-isabs="false">
       <a id="isSuccess:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -634,16 +723,16 @@ possible to check whether the contents of the list are of the requested typed.
         <span class="name">isSuccess</span>
         
         
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.AbstractContainMatchResult#matchResult">
+    </li><li visbl="pub" name="org.specs2.matcher.AbstractContainMatchResult#matchResult" data-isabs="false">
       <a id="matchResult:MatchResult[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">lazy val</span>
@@ -651,16 +740,16 @@ possible to check whether the contents of the list are of the requested typed.
         <span class="name">matchResult</span>
         
         
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a>
+          definition classes: <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a>
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainMatchResult#matcher">
+    </li><li visbl="pub" name="org.specs2.matcher.ContainMatchResult#matcher" data-isabs="false">
       <a id="matcher:ContainMatcher[T]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
@@ -668,16 +757,16 @@ possible to check whether the contents of the list are of the requested typed.
         <span class="name">matcher</span>
         
         
-        <span class="result">: <a href="ContainMatcher.html" class="extype" name="org.specs2.matcher.ContainMatcher">ContainMatcher</a>[T]</span>
+        <span class="result">: <a name="org.specs2.matcher.ContainMatcher" class="extype" href="ContainMatcher.html">ContainMatcher</a>[T]</span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: <a href="" class="extype" name="org.specs2.matcher.ContainMatchResult">ContainMatchResult</a> → <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a>
+          definition classes: <a name="org.specs2.matcher.ContainMatchResult" class="extype" href="">ContainMatchResult</a> → <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a>
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchResult#message">
+    </li><li visbl="pub" name="org.specs2.matcher.MatchResult#message" data-isabs="false">
       <a id="message:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -691,18 +780,22 @@ possible to check whether the contents of the list are of the requested typed.
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#ne">
-      <a id="ne(AnyRef):Boolean"></a>
+    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
+      <a id="ne(A,n,y,R,e,f):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">ne</span>
         
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
-        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : AnyRef
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
@@ -716,9 +809,10 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.AbstractContainMatchResult#not">
+    </li><li visbl="pub" name="org.specs2.matcher.AbstractContainMatchResult#not" data-isabs="false">
       <a id="not:MatchResult[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -726,28 +820,29 @@ possible to check whether the contents of the list are of the requested typed.
         <span class="name">not</span>
         
         
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt"></p>
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the negation of this result</p></dd></dl><div class="block">
-          definition classes: <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a> → <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a> → <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notify">
-      <a id="notify():Unit"></a>
+    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
+      <a id="notify:Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">notify</span>
         
         <span class="params">()</span>
-        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       
@@ -760,17 +855,18 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notifyAll">
-      <a id="notifyAll():Unit"></a>
+    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
+      <a id="notifyAll:Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">notifyAll</span>
         
         <span class="params">()</span>
-        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       
@@ -783,9 +879,10 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainMatchResult#only">
+    </li><li visbl="pub" name="org.specs2.matcher.ContainMatchResult#only" data-isabs="false">
       <a id="only:ContainOnlyMatchResult[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -793,53 +890,63 @@ possible to check whether the contents of the list are of the requested typed.
         <span class="name">only</span>
         
         
-        <span class="result">: <a href="ContainOnlyMatchResult.html" class="extype" name="org.specs2.matcher.ContainOnlyMatchResult">ContainOnlyMatchResult</a>[T]</span>
+        <span class="result">: <a name="org.specs2.matcher.ContainOnlyMatchResult" class="extype" href="ContainOnlyMatchResult.html">ContainOnlyMatchResult</a>[T]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchResult#or">
-      <a id="or(Matcher[Iterable[T]]):MatchResult[Iterable[T]]"></a>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchResult#or" data-isabs="false">
+      <a id="or(M,a,t,c,h,e,r,[,I,t,e,r,a,b,l,e,[,T,],]):MatchResult[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">or</span>
         
-        <span class="params">(<span name="m">m: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[Iterable[T]]</span>)</span>
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>
+        <span class="params">(<span name="m">
+                  m
+                  : <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">apply the matcher and return the logical or of two results</p>
             <div class="fullcomment"><div class="comment cmt"><p>apply the matcher and return the logical or of two results</p></div><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.MatchResult#or">
-      <a id="or[S&gt;:T](⇒ MatchResult[S]):MatchResult[S]"></a>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchResult#or" data-isabs="false">
+      <a id="or[S&gt;:Iterable[T]](⇒, ,M,a,t,c,h,R,e,s,u,l,t,[,S,]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">or</span>
-        <span class="tparams">[<span name="S">S &gt;: T</span>]</span>
-        <span class="params">(<span name="m">m: ⇒ <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[S]</span>)</span>
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[S]</span>
+        <span class="tparams">[<span name="S">S &gt;: Iterable[T]</span>]</span>
+        <span class="params">(<span name="m">
+                  m
+                  : ⇒ <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt"></p>
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the logical or of two results</p></dd></dl><div class="block">
-          definition classes: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div>
+            
             
             
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.ContainMatchResult#s">
+    </li><li visbl="pub" name="org.specs2.matcher.ContainMatchResult#s" data-isabs="false">
       <a id="s:MatchResult[Iterable[T]]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
@@ -847,23 +954,27 @@ possible to check whether the contents of the list are of the requested typed.
         <span class="name">s</span>
         
         
-        <span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: <a href="" class="extype" name="org.specs2.matcher.ContainMatchResult">ContainMatchResult</a> → <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a>
+          definition classes: <a name="org.specs2.matcher.ContainMatchResult" class="extype" href="">ContainMatchResult</a> → <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a>
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#synchronized">
-      <a id="synchronized[T0](T0):T0"></a>
+    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
+      <a id="synchronized[T0](⇒, ,T,0):T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">synchronized</span>
         <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="params">(<span name="arg0">arg0: T0</span>)</span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : ⇒ T0
+                  
+                </span>)</span>
         <span class="result">: T0</span>
       </span>
       </h4>
@@ -875,7 +986,7 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher.AbstractContainMatchResult#toResult">
+    </li><li visbl="pub" name="org.specs2.matcher.AbstractContainMatchResult#toResult" data-isabs="false">
       <a id="toResult:Result"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -883,24 +994,24 @@ possible to check whether the contents of the list are of the requested typed.
         <span class="name">toResult</span>
         
         
-        <span class="result">: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>
+        <span class="result">: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a> → <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>
+          definition classes: <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a> → <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#toString">
-      <a id="toString():String"></a>
+    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
+      <a id="toString:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">toString</span>
         
         <span class="params">()</span>
-        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
       
@@ -912,17 +1023,18 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
+            
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
-      <a id="wait():Unit"></a>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait:Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">wait</span>
         
         <span class="params">()</span>
-        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       
@@ -931,17 +1043,29 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
-      <a id="wait(Long,Int):Unit"></a>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait(L,o,n,g)(I,n,t):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">wait</span>
         
-        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span>
-        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Long" class="extype">Long</span>
+                  
+                </span>, <span name="arg1">
+                  arg1
+                  : <span name="scala.Int" class="extype">Int</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       
@@ -950,17 +1074,25 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
-      <a id="wait(Long):Unit"></a>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait(L,o,n,g):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">wait</span>
         
-        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span>
-        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Long" class="extype">Long</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       
@@ -969,19 +1101,23 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
         </div></div>
           
     </li></ol>
             </div>
 
-        <div class="parent" name="org.specs2.matcher.AbstractContainMatchResult">
-              <h3>Inherited from <a href="AbstractContainMatchResult.html" class="extype" name="org.specs2.matcher.AbstractContainMatchResult">AbstractContainMatchResult</a>[T]</h3>
-            </div><div class="parent" name="org.specs2.matcher.MatchResult">
-              <h3>Inherited from <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[Iterable[T]]</h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div name="org.specs2.matcher.AbstractContainMatchResult" class="parent">
+              <h3>Inherited from <a name="org.specs2.matcher.AbstractContainMatchResult" class="extype" href="AbstractContainMatchResult.html">AbstractContainMatchResult</a>[T]</h3>
+            </div><div name="org.specs2.matcher.MatchResult" class="parent">
+              <h3>Inherited from <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Iterable[T]]</h3>
+            </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
-            </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div><div name="scala.Any" class="parent">
+              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
             </div>
 
       </div>

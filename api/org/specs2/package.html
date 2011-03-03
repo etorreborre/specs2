@@ -5,16 +5,16 @@
           <title>org.specs2</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../lib/template.css" />
       <script type="text/javascript" src="../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value" onload="windowTitle();">
+        <body onload="windowTitle();" class="value">
 
-      <p id="owner"><a href="../package.html" class="extype" name="org">org</a></p>
+      <p id="owner"><a name="org" class="extype" href="../package.html">org</a></p>
 
       <div id="definition">
         <img src="../../lib/package_big.png" />
@@ -30,7 +30,10 @@
         
       </span>
       </h4>
-      <div class="fullcomment" id="comment"></div>
+      
+          
+          <div class="fullcomment" id="comment"></div>
+        
 
       <div id="template">
 
@@ -52,7 +55,7 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" data-isabs="true" name="org.specs2.ScalaCheck">
+              <ol><li visbl="pub" name="org.specs2.ScalaCheck" data-isabs="true">
       <a id="ScalaCheck:ScalaCheck"></a>
       <h4 class="signature"><a href="ScalaCheck.html">
       <span class="kind">trait</span>
@@ -65,7 +68,7 @@
       </a></h4>
       <p class="comment cmt">The ScalaCheck trait can be used to access ScalaCheck matchers
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.Specification">
+    </li><li visbl="pub" name="org.specs2.Specification" data-isabs="true">
       <a id="Specification:Specification"></a>
       <h4 class="signature"><a href="Specification.html">
       <span class="kind">trait</span>
@@ -78,7 +81,7 @@
       </a></h4>
       <p class="comment cmt">The Specification trait holds all the Specification fragments + provides matching and other features
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.SpecificationFeatures">
+    </li><li visbl="pub" name="org.specs2.SpecificationFeatures" data-isabs="true">
       <a id="SpecificationFeatures:SpecificationFeatures"></a>
       <h4 class="signature"><a href="SpecificationFeatures.html">
       <span class="kind">trait</span>
@@ -91,11 +94,13 @@
       </a></h4>
       <p class="comment cmt">The SpecificationFeatures trait provides functionalities to build the specification fragments plus additional ones:
  * ArgumentArgs: arg method to create Arguments
- * MustMatchers: methods for creating expectations with the <code>must</code> verb like <code>a must_== b</code> * ShouldMatchers: methods for creating expectations with the <code>should</code> verb like <code>a should_== b</code> * FormattingFragments: to use p, br, end to format the specification text
+ * MustMatchers: methods for creating expectations with the <code>must</code> verb like <code>a must_== b</code>
+ * ShouldMatchers: methods for creating expectations with the <code>should</code> verb like <code>a should_== b</code>
+ * FormattingFragments: to use p, br, end to format the specification text
  * StandardResults: to use todo, pending, success in example bodies
  * AutoExamples: to allow the declaration use todo, pending, success in example bodies
  * TimeConversions: to create time expressions like 1.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.SpecificationWithJUnit">
+    </li><li visbl="pub" name="org.specs2.SpecificationWithJUnit" data-isabs="true">
       <a id="SpecificationWithJUnit:SpecificationWithJUnit"></a>
       <h4 class="signature"><a href="SpecificationWithJUnit.html">
       <span class="kind">class</span>
@@ -113,7 +118,7 @@
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" data-isabs="false" name="org.specs2.control">
+              <ol><li visbl="pub" name="org.specs2.control" data-isabs="false">
       <a id="control:control"></a>
       <h4 class="signature"><a href="control/package.html">
       <span class="kind">package</span>
@@ -125,7 +130,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.data">
+    </li><li visbl="pub" name="org.specs2.data" data-isabs="false">
       <a id="data:data"></a>
       <h4 class="signature"><a href="data/package.html">
       <span class="kind">package</span>
@@ -137,7 +142,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.execute">
+    </li><li visbl="pub" name="org.specs2.execute" data-isabs="false">
       <a id="execute:execute"></a>
       <h4 class="signature"><a href="execute/package.html">
       <span class="kind">package</span>
@@ -149,7 +154,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.files">
+    </li><li visbl="pub" name="org.specs2.files" data-isabs="false">
       <a id="files:files"></a>
       <h4 class="signature"><a href="files$.html">
       <span class="kind">object</span>
@@ -162,7 +167,7 @@
       </a></h4>
       <p class="comment cmt">This top-level object can be used to execute Specifications found in the source directory
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.form">
+    </li><li visbl="pub" name="org.specs2.form" data-isabs="false">
       <a id="form:form"></a>
       <h4 class="signature"><a href="form/package.html">
       <span class="kind">package</span>
@@ -174,7 +179,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.io">
+    </li><li visbl="pub" name="org.specs2.io" data-isabs="false">
       <a id="io:io"></a>
       <h4 class="signature"><a href="io/package.html">
       <span class="kind">package</span>
@@ -186,7 +191,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.main">
+    </li><li visbl="pub" name="org.specs2.main" data-isabs="false">
       <a id="main:main"></a>
       <h4 class="signature"><a href="main/package.html">
       <span class="kind">package</span>
@@ -198,7 +203,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.matcher">
+    </li><li visbl="pub" name="org.specs2.matcher" data-isabs="false">
       <a id="matcher:matcher"></a>
       <h4 class="signature"><a href="matcher/package.html">
       <span class="kind">package</span>
@@ -210,7 +215,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.mock">
+    </li><li visbl="pub" name="org.specs2.mock" data-isabs="false">
       <a id="mock:mock"></a>
       <h4 class="signature"><a href="mock/package.html">
       <span class="kind">package</span>
@@ -222,7 +227,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.mutable">
+    </li><li visbl="pub" name="org.specs2.mutable" data-isabs="false">
       <a id="mutable:mutable"></a>
       <h4 class="signature"><a href="mutable/package.html">
       <span class="kind">package</span>
@@ -234,7 +239,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter">
+    </li><li visbl="pub" name="org.specs2.reporter" data-isabs="false">
       <a id="reporter:reporter"></a>
       <h4 class="signature"><a href="reporter/package.html">
       <span class="kind">package</span>
@@ -246,7 +251,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner">
+    </li><li visbl="pub" name="org.specs2.runner" data-isabs="false">
       <a id="runner:runner"></a>
       <h4 class="signature"><a href="runner/package.html">
       <span class="kind">package</span>
@@ -258,7 +263,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification">
+    </li><li visbl="pub" name="org.specs2.specification" data-isabs="false">
       <a id="specification:specification"></a>
       <h4 class="signature"><a href="specification/package.html">
       <span class="kind">package</span>
@@ -270,7 +275,7 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.text">
+    </li><li visbl="pub" name="org.specs2.text" data-isabs="false">
       <a id="text:text"></a>
       <h4 class="signature"><a href="text/package.html">
       <span class="kind">package</span>
@@ -282,24 +287,12 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.time">
+    </li><li visbl="pub" name="org.specs2.time" data-isabs="false">
       <a id="time:time"></a>
       <h4 class="signature"><a href="time/package.html">
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">time</span>
-        
-        
-        
-      </span>
-      </a></h4>
-      
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.tools">
-      <a id="tools:tools"></a>
-      <h4 class="signature"><a href="tools/package.html">
-      <span class="kind">package</span>
-      <span class="symbol">
-        <span class="name">tools</span>
         
         
         

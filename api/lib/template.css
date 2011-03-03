@@ -2,7 +2,7 @@
 
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, code,
+a, abbr, acronym, address, code, pre,
 del, dfn, em, img, q, dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend, input,
 table, caption, tbody, tfoot, thead, tr, th, td {
@@ -38,12 +38,12 @@ body {
   font-size: 10pt;
 }
 
-a {
+a[href] {
   text-decoration: underline;
   color: #69481D; /* brown */
 }
 
-a:hover {
+a[href]:hover {
   text-decoration: none;
 }
 
@@ -104,6 +104,7 @@ a:hover {
 }
 
 #comment {
+  display:none;
   padding-right: 8px;
   padding-left: 8px;
 }
@@ -325,6 +326,14 @@ div.members > ol > li {
   font-style: bold;
 }
 
+.cmt em, .cmt i {
+  font-style: italic;
+}
+
+.cmt strong, .cmt b {
+  font-weight: bold;
+}
+
 /* Comments structured layout */
 
 p.comment {
@@ -332,10 +341,11 @@ p.comment {
   margin-left: 8.7em;
 }
 
-p.shortcomment {
+.shortcomment {
   display: block;
-  margin-left: 8.7em;
   cursor: pointer;
+  margin: 4px 0px;
+  padding: 0 8px;
 }
 
 div.fullcomment {
@@ -345,6 +355,11 @@ div.fullcomment {
 #template div.fullcomment {
   display:none;
   margin: 6px 0 6px 8.7em;
+}
+
+#template .shortcomment {
+  margin: 0 0 0 8.7em;
+  padding: 0;
 }
 
 div.fullcomment .block {

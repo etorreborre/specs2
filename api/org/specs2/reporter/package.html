@@ -5,16 +5,16 @@
           <title>org.specs2.reporter</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
       <script type="text/javascript" src="../../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value" onload="windowTitle();">
+        <body onload="windowTitle();" class="value">
 
-      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+      <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
 
       <div id="definition">
         <img src="../../../lib/package_big.png" />
@@ -30,7 +30,10 @@
         
       </span>
       </h4>
-      <div class="fullcomment" id="comment"></div>
+      
+          
+          <div class="fullcomment" id="comment"></div>
+        
 
       <div id="template">
 
@@ -52,7 +55,7 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" data-isabs="true" name="org.specs2.reporter.Block">
+              <ol><li visbl="pub" name="org.specs2.reporter.Block" data-isabs="true">
       <a id="Block:Block[T]"></a>
       <h4 class="signature"><a href="Block.html">
       <span class="kind">trait</span>
@@ -64,67 +67,95 @@
       </span>
       </a></h4>
       <p class="comment cmt">this represent a fragment of a specification that needs to be indented as a block</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockIndent">
+    </li><li visbl="pub" name="org.specs2.reporter.BlockIndent" data-isabs="false">
       <a id="BlockIndent:BlockIndent[T]"></a>
       <h4 class="signature"><a href="BlockIndent.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">BlockIndent</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="t">t: T</span>, <span name="n">n: Int</span>)</span>
-        <span class="result"> extends Block[T] with Product</span>
+        <span class="params">(<span name="t">
+                  t
+                  : T
+                  
+                </span>, <span name="n">
+                  n
+                  : Int
+                  
+                </span>)</span>
+        <span class="result"> extends Block[T] with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockNeutral">
+    </li><li visbl="pub" name="org.specs2.reporter.BlockNeutral" data-isabs="false">
       <a id="BlockNeutral:BlockNeutral[T]"></a>
       <h4 class="signature"><a href="BlockNeutral.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">BlockNeutral</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="t">t: T</span>)</span>
-        <span class="result"> extends Block[T] with Product</span>
+        <span class="params">(<span name="t">
+                  t
+                  : T
+                  
+                </span>)</span>
+        <span class="result"> extends Block[T] with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockReset">
+    </li><li visbl="pub" name="org.specs2.reporter.BlockReset" data-isabs="false">
       <a id="BlockReset:BlockReset[T]"></a>
       <h4 class="signature"><a href="BlockReset.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">BlockReset</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="t">t: T</span>)</span>
-        <span class="result"> extends Block[T] with Product</span>
+        <span class="params">(<span name="t">
+                  t
+                  : T
+                  
+                </span>)</span>
+        <span class="result"> extends Block[T] with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockTerminal">
+    </li><li visbl="pub" name="org.specs2.reporter.BlockTerminal" data-isabs="false">
       <a id="BlockTerminal:BlockTerminal[T]"></a>
       <h4 class="signature"><a href="BlockTerminal.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">BlockTerminal</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="t">t: T</span>)</span>
-        <span class="result"> extends Block[T] with Product</span>
+        <span class="params">(<span name="t">
+                  t
+                  : T
+                  
+                </span>)</span>
+        <span class="result"> extends Block[T] with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.BlockUnindent">
+    </li><li visbl="pub" name="org.specs2.reporter.BlockUnindent" data-isabs="false">
       <a id="BlockUnindent:BlockUnindent[T]"></a>
       <h4 class="signature"><a href="BlockUnindent.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">BlockUnindent</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="t">t: T</span>, <span name="n">n: Int</span>)</span>
-        <span class="result"> extends Block[T] with Product</span>
+        <span class="params">(<span name="t">
+                  t
+                  : T
+                  
+                </span>, <span name="n">
+                  n
+                  : Int
+                  
+                </span>)</span>
+        <span class="result"> extends Block[T] with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.ConsoleReporter">
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
       <a id="ConsoleReporter:ConsoleReporter"></a>
       <h4 class="signature"><a href="ConsoleReporter.html">
       <span class="kind">trait</span>
@@ -137,7 +168,7 @@
       </a></h4>
       <p class="comment cmt">The console reporter executes a Specification and exports the results to the Console
 Output:</p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.DefaultSelection">
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection" data-isabs="true">
       <a id="DefaultSelection:DefaultSelection"></a>
       <h4 class="signature"><a href="DefaultSelection.html">
       <span class="kind">trait</span>
@@ -150,7 +181,7 @@ Output:</p>
       </a></h4>
       <p class="comment cmt">The DefaultSelection trait filters the fragments to execute by filtering Examples according to their names
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.DefaultSequence">
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultSequence" data-isabs="true">
       <a id="DefaultSequence:DefaultSequence"></a>
       <h4 class="signature"><a href="DefaultSequence.html">
       <span class="kind">trait</span>
@@ -163,31 +194,43 @@ Output:</p>
       </a></h4>
       <p class="comment cmt">The DefaultSequence trait sorts the Fragments by making sure Steps will be executed before Examples
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.EndOfArguments">
+    </li><li visbl="pub" name="org.specs2.reporter.EndOfArguments" data-isabs="false">
       <a id="EndOfArguments:EndOfArguments[T]"></a>
       <h4 class="signature"><a href="EndOfArguments.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">EndOfArguments</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="value">value: T</span>, <span name="name">name: SpecName</span>)</span>
-        <span class="result"> extends ApplicableArguments[T] with Product</span>
+        <span class="params">(<span name="value">
+                  value
+                  : T
+                  
+                </span>, <span name="name">
+                  name
+                  : SpecName
+                  
+                </span>)</span>
+        <span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.FragmentSeq">
+    </li><li visbl="pub" name="org.specs2.reporter.FragmentSeq" data-isabs="false">
       <a id="FragmentSeq:FragmentSeq"></a>
       <h4 class="signature"><a href="FragmentSeq.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">FragmentSeq</span>
         
-        <span class="params">(<span name="fragments">fragments: Seq[Fragment]</span>)</span>
-        <span class="result"> extends Product</span>
+        <span class="params">(<span name="fragments">
+                  fragments
+                  : Seq[Fragment]
+                  
+                </span>)</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.HandlerEvents">
+    </li><li visbl="pub" name="org.specs2.reporter.HandlerEvents" data-isabs="true">
       <a id="HandlerEvents:HandlerEvents"></a>
       <h4 class="signature"><a href="HandlerEvents.html">
       <span class="kind">trait</span>
@@ -200,7 +243,7 @@ Output:</p>
       </a></h4>
       <p class="comment cmt">Specific events which can be notified to sbt
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.Html">
+    </li><li visbl="pub" name="org.specs2.reporter.Html" data-isabs="true">
       <a id="Html:Html"></a>
       <h4 class="signature"><a href="Html.html">
       <span class="kind">trait</span>
@@ -212,7 +255,7 @@ Output:</p>
       </span>
       </a></h4>
       <p class="comment cmt">This trait represents any kind of Html fragment to print</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlBr">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlBr" data-isabs="false">
       <a id="HtmlBr:HtmlBr"></a>
       <h4 class="signature"><a href="HtmlBr.html">
       <span class="kind">case class</span>
@@ -220,11 +263,11 @@ Output:</p>
         <span class="name">HtmlBr</span>
         
         <span class="params">()</span>
-        <span class="result"> extends Html with Product</span>
+        <span class="result"> extends Html with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.HtmlExporting">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlExporting" data-isabs="true">
       <a id="HtmlExporting:HtmlExporting"></a>
       <h4 class="signature"><a href="HtmlExporting.html">
       <span class="kind">trait</span>
@@ -237,43 +280,75 @@ Output:</p>
       </a></h4>
       <p class="comment cmt">Trait for exporting the specification as Html files
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlLine">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlLine" data-isabs="false">
       <a id="HtmlLine:HtmlLine"></a>
       <h4 class="signature"><a href="HtmlLine.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">HtmlLine</span>
         
-        <span class="params">(<span name="text">text: Html</span>, <span name="stats">stats: Stats</span>, <span name="level">level: Int</span>, <span name="args">args: Arguments</span>)</span>
-        <span class="result"> extends Product</span>
+        <span class="params">(<span name="text">
+                  text
+                  : Html
+                  
+                </span>, <span name="stats">
+                  stats
+                  : Stats
+                  
+                </span>, <span name="level">
+                  level
+                  : Int
+                  
+                </span>, <span name="args">
+                  args
+                  : Arguments
+                  
+                </span>)</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">An HtmlLine encapsulates:</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlLines">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlLines" data-isabs="false">
       <a id="HtmlLines:HtmlLines"></a>
       <h4 class="signature"><a href="HtmlLines.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">HtmlLines</span>
         
-        <span class="params">(<span name="lines">lines: List[HtmlLine]</span>, <span name="link">link: HtmlLink</span>, <span name="parent">parent: Option[HtmlLines]</span>)</span>
-        <span class="result"> extends Product</span>
+        <span class="params">(<span name="lines">
+                  lines
+                  : List[HtmlLine]
+                  
+                </span>, <span name="link">
+                  link
+                  : HtmlLink
+                  
+                </span>, <span name="parent">
+                  parent
+                  : Option[HtmlLines]
+                  
+                </span>)</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">The HtmlLines groups a list of HtmlLine to print</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlOther">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlOther" data-isabs="false">
       <a id="HtmlOther:HtmlOther"></a>
       <h4 class="signature"><a href="HtmlOther.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">HtmlOther</span>
         
-        <span class="params">(<span name="fragment">fragment: ExecutedFragment</span>)</span>
-        <span class="result"> extends Html with Product</span>
+        <span class="params">(<span name="fragment">
+                  fragment
+                  : ExecutedFragment
+                  
+                </span>)</span>
+        <span class="result"> extends Html with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.HtmlPrinter">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter" data-isabs="true">
       <a id="HtmlPrinter:HtmlPrinter"></a>
       <h4 class="signature"><a href="HtmlPrinter.html">
       <span class="kind">trait</span>
@@ -285,67 +360,87 @@ Output:</p>
       </span>
       </a></h4>
       <p class="comment cmt">The Html printer is used to create an Html report of an executed specification.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlResult">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlResult" data-isabs="false">
       <a id="HtmlResult:HtmlResult"></a>
       <h4 class="signature"><a href="HtmlResult.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">HtmlResult</span>
         
-        <span class="params">(<span name="r">r: ExecutedResult</span>)</span>
-        <span class="result"> extends Html with Product</span>
+        <span class="params">(<span name="r">
+                  r
+                  : ExecutedResult
+                  
+                </span>)</span>
+        <span class="result"> extends Html with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlSee">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlSee" data-isabs="false">
       <a id="HtmlSee:HtmlSee"></a>
       <h4 class="signature"><a href="HtmlSee.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">HtmlSee</span>
         
-        <span class="params">(<span name="see">see: ExecutedSee</span>)</span>
-        <span class="result"> extends Html with Product</span>
+        <span class="params">(<span name="see">
+                  see
+                  : ExecutedSee
+                  
+                </span>)</span>
+        <span class="result"> extends Html with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlSpecEnd">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlSpecEnd" data-isabs="false">
       <a id="HtmlSpecEnd:HtmlSpecEnd"></a>
       <h4 class="signature"><a href="HtmlSpecEnd.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">HtmlSpecEnd</span>
         
-        <span class="params">(<span name="end">end: ExecutedSpecEnd</span>)</span>
-        <span class="result"> extends Html with Product</span>
+        <span class="params">(<span name="end">
+                  end
+                  : ExecutedSpecEnd
+                  
+                </span>)</span>
+        <span class="result"> extends Html with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlSpecStart">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlSpecStart" data-isabs="false">
       <a id="HtmlSpecStart:HtmlSpecStart"></a>
       <h4 class="signature"><a href="HtmlSpecStart.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">HtmlSpecStart</span>
         
-        <span class="params">(<span name="start">start: ExecutedSpecStart</span>)</span>
-        <span class="result"> extends Html with Product</span>
+        <span class="params">(<span name="start">
+                  start
+                  : ExecutedSpecStart
+                  
+                </span>)</span>
+        <span class="result"> extends Html with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.HtmlText">
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlText" data-isabs="false">
       <a id="HtmlText:HtmlText"></a>
       <h4 class="signature"><a href="HtmlText.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">HtmlText</span>
         
-        <span class="params">(<span name="t">t: ExecutedText</span>)</span>
-        <span class="result"> extends Html with Product</span>
+        <span class="params">(<span name="t">
+                  t
+                  : ExecutedText
+                  
+                </span>)</span>
+        <span class="result"> extends Html with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.JUnitDescriptions">
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitDescriptions" data-isabs="false">
       <a id="JUnitDescriptions:JUnitDescriptions"></a>
       <h4 class="signature"><a href="JUnitDescriptions.html">
       <span class="kind">class</span>
@@ -358,31 +453,39 @@ Output:</p>
       </a></h4>
       <p class="comment cmt">The JUnit descriptions class transforms a list of fragments
 to:</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Levels">
+    </li><li visbl="pub" name="org.specs2.reporter.Levels" data-isabs="false">
       <a id="Levels:Levels[T]"></a>
       <h4 class="signature"><a href="Levels.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">Levels</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="blocks">blocks: List[(Block[T], Int)]</span>)</span>
-        <span class="result"> extends Product</span>
+        <span class="params">(<span name="blocks">
+                  blocks
+                  : List[(Block[T], Int)]
+                  
+                </span>)</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">This class computes the 'level' of a given fragment.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.NoStartOfArguments">
+    </li><li visbl="pub" name="org.specs2.reporter.NoStartOfArguments" data-isabs="false">
       <a id="NoStartOfArguments:NoStartOfArguments[T]"></a>
       <h4 class="signature"><a href="NoStartOfArguments.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">NoStartOfArguments</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="value">value: T</span>)</span>
-        <span class="result"> extends ApplicableArguments[T] with Product</span>
+        <span class="params">(<span name="value">
+                  value
+                  : T
+                  
+                </span>)</span>
+        <span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.ResultOutput">
+    </li><li visbl="pub" name="org.specs2.reporter.ResultOutput" data-isabs="true">
       <a id="ResultOutput:ResultOutput"></a>
       <h4 class="signature"><a href="ResultOutput.html">
       <span class="kind">trait</span>
@@ -395,7 +498,7 @@ to:</p>
       </a></h4>
       <p class="comment cmt">This traits provides specialised print methods for message representing
 different types of results.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.Selection">
+    </li><li visbl="pub" name="org.specs2.reporter.Selection" data-isabs="true">
       <a id="Selection:Selection"></a>
       <h4 class="signature"><a href="Selection.html">
       <span class="kind">trait</span>
@@ -408,7 +511,7 @@ different types of results.</p>
       </a></h4>
       <p class="comment cmt">The Selection trait implements the logic for filtering the fragments to execute
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.Sequence">
+    </li><li visbl="pub" name="org.specs2.reporter.Sequence" data-isabs="true">
       <a id="Sequence:Sequence"></a>
       <h4 class="signature"><a href="Sequence.html">
       <span class="kind">trait</span>
@@ -421,27 +524,79 @@ different types of results.</p>
       </a></h4>
       <p class="comment cmt">The Sequence trait implements the logic for the fragments to execute according to their dependencies
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.StartOfArguments">
+    </li><li visbl="pub" name="org.specs2.reporter.StartOfArguments" data-isabs="false">
       <a id="StartOfArguments:StartOfArguments[T]"></a>
       <h4 class="signature"><a href="StartOfArguments.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">StartOfArguments</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="value">value: T</span>, <span name="name">name: SpecName</span>, <span name="args">args: Arguments</span>)</span>
-        <span class="result"> extends ApplicableArguments[T] with Product</span>
+        <span class="params">(<span name="value">
+                  value
+                  : T
+                  
+                </span>, <span name="name">
+                  name
+                  : SpecName
+                  
+                </span>, <span name="args">
+                  args
+                  : Arguments
+                  
+                </span>)</span>
+        <span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Stats">
+    </li><li visbl="pub" name="org.specs2.reporter.Stats" data-isabs="false">
       <a id="Stats:Stats"></a>
       <h4 class="signature"><a href="Stats.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">Stats</span>
         
-        <span class="params">(<span name="fragments">fragments: Int</span>, <span name="successes">successes: Int</span>, <span name="expectations">expectations: Int</span>, <span name="failures">failures: Int</span>, <span name="errors">errors: Int</span>, <span name="pending">pending: Int</span>, <span name="skipped">skipped: Int</span>, <span name="timer">timer: SimpleTimer</span>, <span name="start">start: Option[ExecutedSpecStart]</span>, <span name="end">end: Option[ExecutedSpecEnd]</span>)</span>
-        <span class="result"> extends Product</span>
+        <span class="params">(<span name="fragments">
+                  fragments
+                  : Int
+                  
+                </span>, <span name="successes">
+                  successes
+                  : Int
+                  
+                </span>, <span name="expectations">
+                  expectations
+                  : Int
+                  
+                </span>, <span name="failures">
+                  failures
+                  : Int
+                  
+                </span>, <span name="errors">
+                  errors
+                  : Int
+                  
+                </span>, <span name="pending">
+                  pending
+                  : Int
+                  
+                </span>, <span name="skipped">
+                  skipped
+                  : Int
+                  
+                </span>, <span name="timer">
+                  timer
+                  : SimpleTimer
+                  
+                </span>, <span name="start">
+                  start
+                  : Option[ExecutedSpecStart]
+                  
+                </span>, <span name="end">
+                  end
+                  : Option[ExecutedSpecEnd]
+                  
+                </span>)</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">The Stats class store results for the number of:
@@ -451,7 +606,7 @@ different types of results.</p>
 * errors
 * pending
 * skipped</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TestInterfaceReporter">
+    </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceReporter" data-isabs="false">
       <a id="TestInterfaceReporter:TestInterfaceReporter"></a>
       <h4 class="signature"><a href="TestInterfaceReporter.html">
       <span class="kind">class</span>
@@ -463,7 +618,7 @@ different types of results.</p>
       </span>
       </a></h4>
       <p class="comment cmt">Reporter for the test interface defined for sbt</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TestInterfaceResultOutput">
+    </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceResultOutput" data-isabs="false">
       <a id="TestInterfaceResultOutput:TestInterfaceResultOutput"></a>
       <h4 class="signature"><a href="TestInterfaceResultOutput.html">
       <span class="kind">class</span>
@@ -475,7 +630,7 @@ different types of results.</p>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.TestLoggers">
+    </li><li visbl="pub" name="org.specs2.reporter.TestLoggers" data-isabs="true">
       <a id="TestLoggers:TestLoggers"></a>
       <h4 class="signature"><a href="TestLoggers.html">
       <span class="kind">trait</span>
@@ -487,7 +642,7 @@ different types of results.</p>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.reporter.TextPrinter">
+    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter" data-isabs="true">
       <a id="TextPrinter:TextPrinter"></a>
       <h4 class="signature"><a href="TextPrinter.html">
       <span class="kind">trait</span>
@@ -499,7 +654,7 @@ different types of results.</p>
       </span>
       </a></h4>
       <p class="comment cmt">This trait reduces a list of ExecutedFragments to a list of PrintLines.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.TextResultOutput">
+    </li><li visbl="pub" name="org.specs2.reporter.TextResultOutput" data-isabs="false">
       <a id="TextResultOutput:TextResultOutput"></a>
       <h4 class="signature"><a href="TextResultOutput.html">
       <span class="kind">class</span>
@@ -517,7 +672,7 @@ different types of results.</p>
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" data-isabs="false" name="org.specs2.reporter.ApplicableArguments">
+              <ol><li visbl="pub" name="org.specs2.reporter.ApplicableArguments" data-isabs="false">
       <a id="ApplicableArguments:ApplicableArguments"></a>
       <h4 class="signature"><a href="ApplicableArguments$.html">
       <span class="kind">object</span>
@@ -529,7 +684,7 @@ different types of results.</p>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Block">
+    </li><li visbl="pub" name="org.specs2.reporter.Block" data-isabs="false">
       <a id="Block:Block"></a>
       <h4 class="signature"><a href="Block$.html">
       <span class="kind">object</span>
@@ -541,7 +696,7 @@ different types of results.</p>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.FragmentSeq">
+    </li><li visbl="pub" name="org.specs2.reporter.FragmentSeq" data-isabs="false">
       <a id="FragmentSeq:FragmentSeq"></a>
       <h4 class="signature"><a href="FragmentSeq$.html">
       <span class="kind">object</span>
@@ -549,11 +704,11 @@ different types of results.</p>
         <span class="name">FragmentSeq</span>
         
         
-        <span class="result"> extends Product</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.JUnitDescriptions">
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitDescriptions" data-isabs="false">
       <a id="JUnitDescriptions:JUnitDescriptions"></a>
       <h4 class="signature"><a href="JUnitDescriptions$.html">
       <span class="kind">object</span>
@@ -565,7 +720,7 @@ different types of results.</p>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Levels">
+    </li><li visbl="pub" name="org.specs2.reporter.Levels" data-isabs="false">
       <a id="Levels:Levels"></a>
       <h4 class="signature"><a href="Levels$.html">
       <span class="kind">object</span>
@@ -573,11 +728,11 @@ different types of results.</p>
         <span class="name">Levels</span>
         
         
-        <span class="result"> extends Product</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.reporter.Stats">
+    </li><li visbl="pub" name="org.specs2.reporter.Stats" data-isabs="false">
       <a id="Stats:Stats"></a>
       <h4 class="signature"><a href="Stats$.html">
       <span class="kind">object</span>
@@ -585,7 +740,7 @@ different types of results.</p>
         <span class="name">Stats</span>
         
         
-        <span class="result"> extends Product</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       

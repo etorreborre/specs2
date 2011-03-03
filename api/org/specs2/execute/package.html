@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.execute</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="windowTitle();" class="value">
+
+      <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <h1>execute</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">execute</span>
+        
+        
+        
+      </span>
+      </h4>
+      
+          
+          <div class="fullcomment" id="comment"></div>
+        
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.specs2.execute.Details" data-isabs="true">
+      <a id="Details:Details"></a>
+      <h4 class="signature"><a href="Details.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Details</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Trait to model detailled information for failures so that smart differences can be computed
+</p>
+    </li><li visbl="pub" name="org.specs2.execute.Error" data-isabs="false">
+      <a id="Error:Error"></a>
+      <h4 class="signature"><a href="Error.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Error</span>
+        
+        <span class="params">(<span name="m">
+                  m
+                  : String
+                  
+                </span>, <span name="e">
+                  e
+                  : Exception
+                  
+                </span>)</span>
+        <span class="result"> extends Result with ResultStackTrace with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class represents an exception occurring during an execution.</p>
+    </li><li visbl="pub" name="org.specs2.execute.Executable" data-isabs="true">
+      <a id="Executable:Executable"></a>
+      <h4 class="signature"><a href="Executable.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Executable</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Trait for anything that can be executed to return a Result
+</p>
+    </li><li visbl="pub" name="org.specs2.execute.Failure" data-isabs="false">
+      <a id="Failure:Failure"></a>
+      <h4 class="signature"><a href="Failure.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Failure</span>
+        
+        <span class="params">(<span name="m">
+                  m
+                  : String
+                  
+                </span>, <span name="e">
+                  e
+                  : String
+                  
+                </span>, <span name="stackTrace">
+                  stackTrace
+                  : List[StackTraceElement]
+                  
+                </span>, <span name="details">
+                  details
+                  : Details
+                  
+                </span>)</span>
+        <span class="result"> extends Result with ResultStackTrace with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class represents the failure of an execution.</p>
+    </li><li visbl="pub" name="org.specs2.execute.FailureDetails" data-isabs="false">
+      <a id="FailureDetails:FailureDetails"></a>
+      <h4 class="signature"><a href="FailureDetails.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">FailureDetails</span>
+        
+        <span class="params">(<span name="expected">
+                  expected
+                  : String
+                  
+                </span>, <span name="actual">
+                  actual
+                  : String
+                  
+                </span>)</span>
+        <span class="result"> extends Details with Product with Serializable</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.execute.NoDetails" data-isabs="false">
+      <a id="NoDetails:NoDetails"></a>
+      <h4 class="signature"><a href="NoDetails.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">NoDetails</span>
+        
+        <span class="params">()</span>
+        <span class="result"> extends Details with Product with Serializable</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.execute.Pending" data-isabs="false">
+      <a id="Pending:Pending"></a>
+      <h4 class="signature"><a href="Pending.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Pending</span>
+        
+        <span class="params">(<span name="m">
+                  m
+                  : String
+                  
+                </span>)</span>
+        <span class="result"> extends Result with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Pending result</p>
+    </li><li visbl="pub" name="org.specs2.execute.PendingUntilFixed" data-isabs="true">
+      <a id="PendingUntilFixed:PendingUntilFixed"></a>
+      <h4 class="signature"><a href="PendingUntilFixed.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">PendingUntilFixed</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This function allows to mark the body of an example as pending until it is fixed.</p>
+    </li><li visbl="pub" name="org.specs2.execute.Result" data-isabs="true">
+      <a id="Result:Result"></a>
+      <h4 class="signature"><a href="Result.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Result</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The result of an execution, either:</p>
+    </li><li visbl="pub" name="org.specs2.execute.Skipped" data-isabs="false">
+      <a id="Skipped:Skipped"></a>
+      <h4 class="signature"><a href="Skipped.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Skipped</span>
+        
+        <span class="params">(<span name="m">
+                  m
+                  : String
+                  
+                </span>, <span name="e">
+                  e
+                  : String
+                  
+                </span>)</span>
+        <span class="result"> extends Result with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Skipped result</p>
+    </li><li visbl="pub" name="org.specs2.execute.StandardResults" data-isabs="true">
+      <a id="StandardResults:StandardResults"></a>
+      <h4 class="signature"><a href="StandardResults.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">StandardResults</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides standard results that can be used in
+Fragments bodies
+</p>
+    </li><li visbl="pub" name="org.specs2.execute.Success" data-isabs="false">
+      <a id="Success:Success"></a>
+      <h4 class="signature"><a href="Success.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Success</span>
+        
+        <span class="params">(<span name="m">
+                  m
+                  : String
+                  
+                </span>)</span>
+        <span class="result"> extends Result with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class represents the success of an execution
+</p>
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.execute.Error" data-isabs="false">
+      <a id="Error:Error"></a>
+      <h4 class="signature"><a href="Error$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Error</span>
+        
+        
+        <span class="result"> extends Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This object allows to create an Error from an exception
+</p>
+    </li><li visbl="pub" name="org.specs2.execute.PendingUntilFixed" data-isabs="false">
+      <a id="PendingUntilFixed:PendingUntilFixed"></a>
+      <h4 class="signature"><a href="PendingUntilFixed$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">PendingUntilFixed</span>
+        
+        
+        <span class="result"> extends PendingUntilFixed</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.execute.Result" data-isabs="false">
+      <a id="Result:Result"></a>
+      <h4 class="signature"><a href="Result$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Result</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.execute.StandardResults" data-isabs="false">
+      <a id="StandardResults:StandardResults"></a>
+      <h4 class="signature"><a href="StandardResults$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">StandardResults</span>
+        
+        
+        <span class="result"> extends StandardResults</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.execute.Success" data-isabs="false">
+      <a id="Success:Success"></a>
+      <h4 class="signature"><a href="Success$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Success</span>
+        
+        
+        <span class="result"> extends Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Companion object to the Success class providing
+a method to set the expectations number
+</p>
+    </li></ol>
+            </div>
+
+        
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>

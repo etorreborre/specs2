@@ -5,16 +5,16 @@
           <title>org.specs2.specification</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
       <script type="text/javascript" src="../../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value" onload="windowTitle();">
+        <body onload="windowTitle();" class="value">
 
-      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+      <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
 
       <div id="definition">
         <img src="../../../lib/package_big.png" />
@@ -30,7 +30,10 @@
         
       </span>
       </h4>
-      <div class="fullcomment" id="comment"></div>
+      
+          
+          <div class="fullcomment" id="comment"></div>
+        
 
       <div id="template">
 
@@ -52,19 +55,23 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" data-isabs="false" name="org.specs2.specification.Action">
+              <ol><li visbl="pub" name="org.specs2.specification.Action" data-isabs="false">
       <a id="Action:Action"></a>
       <h4 class="signature"><a href="Action.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">Action</span>
         
-        <span class="params">(<span name="action">action: LazyParameter[Result]</span>)</span>
-        <span class="result"> extends Fragment with Executable with Product</span>
+        <span class="params">(<span name="action">
+                  action
+                  : LazyParameter[Result]
+                  
+                </span>)</span>
+        <span class="result"> extends Fragment with Executable with Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">An Action is similar to a Step but can be executed concurrently with other examples.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.After">
+    </li><li visbl="pub" name="org.specs2.specification.After" data-isabs="true">
       <a id="After:After"></a>
       <h4 class="signature"><a href="After.html">
       <span class="kind">trait</span>
@@ -78,7 +85,7 @@
       <p class="comment cmt">The After trait can be inherited by classes representing a context
 where an action must be executing after the main executable action
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Around">
+    </li><li visbl="pub" name="org.specs2.specification.Around" data-isabs="true">
       <a id="Around:Around"></a>
       <h4 class="signature"><a href="Around.html">
       <span class="kind">trait</span>
@@ -91,7 +98,7 @@ where an action must be executing after the main executable action
       </a></h4>
       <p class="comment cmt">The Around trait can be inherited by classes which will
 execute some code inside the around method provided by the context.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.AutoExamples">
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamples" data-isabs="true">
       <a id="AutoExamples:AutoExamples"></a>
       <h4 class="signature"><a href="AutoExamples.html">
       <span class="kind">trait</span>
@@ -103,7 +110,7 @@ execute some code inside the around method provided by the context.</p>
       </span>
       </a></h4>
       <p class="comment cmt">Create example descriptions by reading the corresponding line in the source file.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.BaseSpecification">
+    </li><li visbl="pub" name="org.specs2.specification.BaseSpecification" data-isabs="true">
       <a id="BaseSpecification:BaseSpecification"></a>
       <h4 class="signature"><a href="BaseSpecification.html">
       <span class="kind">trait</span>
@@ -115,7 +122,7 @@ execute some code inside the around method provided by the context.</p>
       </span>
       </a></h4>
       <p class="comment cmt">A Base specification contains the minimum elements for a Specification</p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Before">
+    </li><li visbl="pub" name="org.specs2.specification.Before" data-isabs="true">
       <a id="Before:Before"></a>
       <h4 class="signature"><a href="Before.html">
       <span class="kind">trait</span>
@@ -129,7 +136,7 @@ execute some code inside the around method provided by the context.</p>
       <p class="comment cmt">The Before trait can be inherited by classes representing a context
 where an action must be executing before the main executable action
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.BeforeAfter">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfter" data-isabs="true">
       <a id="BeforeAfter:BeforeAfter"></a>
       <h4 class="signature"><a href="BeforeAfter.html">
       <span class="kind">trait</span>
@@ -143,7 +150,7 @@ where an action must be executing before the main executable action
       <p class="comment cmt">The BeforeAfter trait allows to declare before and after actions
 to execute before and after an Example
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.BeforeAfterAround">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterAround" data-isabs="true">
       <a id="BeforeAfterAround:BeforeAfterAround"></a>
       <h4 class="signature"><a href="BeforeAfterAround.html">
       <span class="kind">trait</span>
@@ -156,7 +163,7 @@ to execute before and after an Example
       </a></h4>
       <p class="comment cmt">The BeforeAfter trait allows to declare before, around and after actions
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Contexts">
+    </li><li visbl="pub" name="org.specs2.specification.Contexts" data-isabs="true">
       <a id="Contexts:Contexts"></a>
       <h4 class="signature"><a href="Contexts.html">
       <span class="kind">trait</span>
@@ -168,31 +175,43 @@ to execute before and after an Example
       </span>
       </a></h4>
       <p class="comment cmt">This trait is only used when we wish to write after actions in unit specifications like this</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Example">
+    </li><li visbl="pub" name="org.specs2.specification.Example" data-isabs="false">
       <a id="Example:Example"></a>
       <h4 class="signature"><a href="Example.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">Example</span>
         
-        <span class="params">(<span name="desc">desc: MarkupString</span>, <span name="body">body: () ⇒ Result</span>)</span>
-        <span class="result"> extends Fragment with Executable with Product</span>
+        <span class="params">(<span name="desc">
+                  desc
+                  : MarkupString
+                  
+                </span>, <span name="body">
+                  body
+                  : () ⇒ Result
+                  
+                </span>)</span>
+        <span class="result"> extends Fragment with Executable with Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">A Example is:</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedBacktab">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedBacktab" data-isabs="false">
       <a id="ExecutedBacktab:ExecutedBacktab"></a>
       <h4 class="signature"><a href="ExecutedBacktab.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">ExecutedBacktab</span>
         
-        <span class="params">(<span name="n">n: Int</span>)</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="params">(<span name="n">
+                  n
+                  : Int
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedBr">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedBr" data-isabs="false">
       <a id="ExecutedBr:ExecutedBr"></a>
       <h4 class="signature"><a href="ExecutedBr.html">
       <span class="kind">case class</span>
@@ -200,11 +219,11 @@ to execute before and after an Example
         <span class="name">ExecutedBr</span>
         
         <span class="params">()</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedEnd">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedEnd" data-isabs="false">
       <a id="ExecutedEnd:ExecutedEnd"></a>
       <h4 class="signature"><a href="ExecutedEnd.html">
       <span class="kind">case class</span>
@@ -212,11 +231,11 @@ to execute before and after an Example
         <span class="name">ExecutedEnd</span>
         
         <span class="params">()</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.ExecutedFragment">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedFragment" data-isabs="true">
       <a id="ExecutedFragment:ExecutedFragment"></a>
       <h4 class="signature"><a href="ExecutedFragment.html">
       <span class="kind">trait</span>
@@ -230,93 +249,133 @@ to execute before and after an Example
       <p class="comment cmt">The Executed Fragments represent pieces of a Specification
 which have already been executed to provide a Result
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedNoText">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedNoText" data-isabs="false">
       <a id="ExecutedNoText:ExecutedNoText"></a>
       <h4 class="signature"><a href="ExecutedNoText.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">ExecutedNoText</span>
         
-        <span class="params">(<span name="timer">timer: SimpleTimer</span>)</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="params">(<span name="timer">
+                  timer
+                  : SimpleTimer
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">This executed Fragment is used when no text must be displayed (for the successful
 execution of an Action for example)
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedResult">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedResult" data-isabs="false">
       <a id="ExecutedResult:ExecutedResult"></a>
       <h4 class="signature"><a href="ExecutedResult.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">ExecutedResult</span>
         
-        <span class="params">(<span name="s">s: MarkupString</span>, <span name="result">result: Result</span>, <span name="timer">timer: SimpleTimer</span>)</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="params">(<span name="s">
+                  s
+                  : MarkupString
+                  
+                </span>, <span name="result">
+                  result
+                  : Result
+                  
+                </span>, <span name="timer">
+                  timer
+                  : SimpleTimer
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedSee">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSee" data-isabs="false">
       <a id="ExecutedSee:ExecutedSee"></a>
       <h4 class="signature"><a href="ExecutedSee.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">ExecutedSee</span>
         
-        <span class="params">(<span name="link">link: HtmlLink</span>)</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="params">(<span name="link">
+                  link
+                  : HtmlLink
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedSpecEnd">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecEnd" data-isabs="false">
       <a id="ExecutedSpecEnd:ExecutedSpecEnd"></a>
       <h4 class="signature"><a href="ExecutedSpecEnd.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">ExecutedSpecEnd</span>
         
-        <span class="params">(<span name="name">name: SpecName</span>)</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="params">(<span name="name">
+                  name
+                  : SpecName
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedSpecStart">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart" data-isabs="false">
       <a id="ExecutedSpecStart:ExecutedSpecStart"></a>
       <h4 class="signature"><a href="ExecutedSpecStart.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">ExecutedSpecStart</span>
         
-        <span class="params">(<span name="name">name: SpecName</span>, <span name="arguments">arguments: Arguments</span>)</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="params">(<span name="name">
+                  name
+                  : SpecName
+                  
+                </span>, <span name="arguments">
+                  arguments
+                  : Arguments
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedTab">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedTab" data-isabs="false">
       <a id="ExecutedTab:ExecutedTab"></a>
       <h4 class="signature"><a href="ExecutedTab.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">ExecutedTab</span>
         
-        <span class="params">(<span name="n">n: Int</span>)</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="params">(<span name="n">
+                  n
+                  : Int
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.ExecutedText">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedText" data-isabs="false">
       <a id="ExecutedText:ExecutedText"></a>
       <h4 class="signature"><a href="ExecutedText.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">ExecutedText</span>
         
-        <span class="params">(<span name="text">text: String</span>)</span>
-        <span class="result"> extends ExecutedFragment with Product</span>
+        <span class="params">(<span name="text">
+                  text
+                  : String
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.FormMarkup">
+    </li><li visbl="pub" name="org.specs2.specification.FormMarkup" data-isabs="false">
       <a id="FormMarkup:FormMarkup"></a>
       <h4 class="signature"><a href="FormMarkup.html">
       <span class="kind">class</span>
@@ -329,7 +388,7 @@ execution of an Action for example)
       </a></h4>
       <p class="comment cmt">The FormMarkup embeds the description of a form as text or as Xml
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.FormattingFragments">
+    </li><li visbl="pub" name="org.specs2.specification.FormattingFragments" data-isabs="true">
       <a id="FormattingFragments:FormattingFragments"></a>
       <h4 class="signature"><a href="FormattingFragments.html">
       <span class="kind">trait</span>
@@ -342,7 +401,7 @@ execution of an Action for example)
       </a></h4>
       <p class="comment cmt">Set of fragments which can be used for formatting
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Forms">
+    </li><li visbl="pub" name="org.specs2.specification.Forms" data-isabs="true">
       <a id="Forms:Forms"></a>
       <h4 class="signature"><a href="Forms.html">
       <span class="kind">trait</span>
@@ -356,7 +415,7 @@ execution of an Action for example)
       <p class="comment cmt">Allow a Form to be inserted among Fragments as a Text Fragment
 Allow a Form to be used as an example body and return a Result automatically
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.Fragment">
+    </li><li visbl="pub" name="org.specs2.specification.Fragment" data-isabs="true">
       <a id="Fragment:Fragment"></a>
       <h4 class="signature"><a href="Fragment.html">
       <span class="kind">trait</span>
@@ -368,7 +427,7 @@ Allow a Form to be used as an example body and return a Result automatically
       </span>
       </a></h4>
       <p class="comment cmt">A Fragment is a piece of a specification.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Fragments">
+    </li><li visbl="pub" name="org.specs2.specification.Fragments" data-isabs="false">
       <a id="Fragments:Fragments"></a>
       <h4 class="signature"><a href="Fragments.html">
       <span class="kind">class</span>
@@ -381,7 +440,7 @@ Allow a Form to be used as an example body and return a Result automatically
       </a></h4>
       <p class="comment cmt">A Fragments object is a list of fragments with a SpecStart and a SpecEnd
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.HtmlLink">
+    </li><li visbl="pub" name="org.specs2.specification.HtmlLink" data-isabs="true">
       <a id="HtmlLink:HtmlLink"></a>
       <h4 class="signature"><a href="HtmlLink.html">
       <span class="kind">class</span>
@@ -394,56 +453,96 @@ Allow a Form to be used as an example body and return a Result automatically
       </a></h4>
       <p class="comment cmt">The HtmlLink class represents a link in a specification with an identifier (either a spec name, or a string) and
 link elements.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.See">
+    </li><li visbl="pub" name="org.specs2.specification.See" data-isabs="false">
       <a id="See:See"></a>
       <h4 class="signature"><a href="See.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">See</span>
         
-        <span class="params">(<span name="link">link: HtmlLink</span>)</span>
-        <span class="result"> extends Fragment with Product</span>
+        <span class="params">(<span name="link">
+                  link
+                  : HtmlLink
+                  
+                </span>)</span>
+        <span class="result"> extends Fragment with Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">A link to another specification
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecEnd">
+    </li><li visbl="pub" name="org.specs2.specification.SpecEnd" data-isabs="false">
       <a id="SpecEnd:SpecEnd"></a>
       <h4 class="signature"><a href="SpecEnd.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">SpecEnd</span>
         
-        <span class="params">(<span name="name">name: SpecName</span>)</span>
-        <span class="result"> extends Fragment with Product</span>
+        <span class="params">(<span name="name">
+                  name
+                  : SpecName
+                  
+                </span>)</span>
+        <span class="result"> extends Fragment with Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">End of a specification.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecHtmlLink">
+    </li><li visbl="pub" name="org.specs2.specification.SpecHtmlLink" data-isabs="false">
       <a id="SpecHtmlLink:SpecHtmlLink"></a>
       <h4 class="signature"><a href="SpecHtmlLink.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">SpecHtmlLink</span>
         
-        <span class="params">(<span name="name">name: SpecName</span>, <span name="beforeText">beforeText: String</span>, <span name="linkText">linkText: String</span>, <span name="afterText">afterText: String</span>, <span name="tip">tip: String</span>, <span name="result">result: Result</span>)</span>
-        <span class="result"> extends HtmlLink with Product</span>
+        <span class="params">(<span name="name">
+                  name
+                  : SpecName
+                  
+                </span>, <span name="beforeText">
+                  beforeText
+                  : String
+                  
+                </span>, <span name="linkText">
+                  linkText
+                  : String
+                  
+                </span>, <span name="afterText">
+                  afterText
+                  : String
+                  
+                </span>, <span name="tip">
+                  tip
+                  : String
+                  
+                </span>, <span name="result">
+                  result
+                  : Result
+                  
+                </span>)</span>
+        <span class="result"> extends HtmlLink with Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecStart">
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart" data-isabs="false">
       <a id="SpecStart:SpecStart"></a>
       <h4 class="signature"><a href="SpecStart.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">SpecStart</span>
         
-        <span class="params">(<span name="name">name: SpecName</span>, <span name="arguments">arguments: Arguments</span>)</span>
-        <span class="result"> extends Fragment with Product</span>
+        <span class="params">(<span name="name">
+                  name
+                  : SpecName
+                  
+                </span>, <span name="arguments">
+                  arguments
+                  : Arguments
+                  
+                </span>)</span>
+        <span class="result"> extends Fragment with Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">Start of a specification.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.SpecificationInclusion">
+    </li><li visbl="pub" name="org.specs2.specification.SpecificationInclusion" data-isabs="true">
       <a id="SpecificationInclusion:SpecificationInclusion"></a>
       <h4 class="signature"><a href="SpecificationInclusion.html">
       <span class="kind">trait</span>
@@ -456,7 +555,7 @@ link elements.</p>
       </a></h4>
       <p class="comment cmt">additional methods to include other specifications or Fragments
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.specification.SpecificationStructure">
+    </li><li visbl="pub" name="org.specs2.specification.SpecificationStructure" data-isabs="true">
       <a id="SpecificationStructure:SpecificationStructure"></a>
       <h4 class="signature"><a href="SpecificationStructure.html">
       <span class="kind">trait</span>
@@ -469,41 +568,69 @@ link elements.</p>
       </a></h4>
       <p class="comment cmt">The structure of a Specification is simply defined as a sequence of fragments
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Step">
+    </li><li visbl="pub" name="org.specs2.specification.Step" data-isabs="false">
       <a id="Step:Step"></a>
       <h4 class="signature"><a href="Step.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">Step</span>
         
-        <span class="params">(<span name="step">step: LazyParameter[Result]</span>)</span>
-        <span class="result"> extends Fragment with Executable with Product</span>
+        <span class="params">(<span name="step">
+                  step
+                  : LazyParameter[Result]
+                  
+                </span>)</span>
+        <span class="result"> extends Fragment with Executable with Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">An Step creates a fragment that will either return an
 Error Result if there is an exception or a Success.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Text">
+    </li><li visbl="pub" name="org.specs2.specification.Text" data-isabs="false">
       <a id="Text:Text"></a>
       <h4 class="signature"><a href="Text.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">Text</span>
         
-        <span class="params">(<span name="t">t: String</span>)</span>
-        <span class="result"> extends Fragment with Product</span>
+        <span class="params">(<span name="t">
+                  t
+                  : String
+                  
+                </span>)</span>
+        <span class="result"> extends Fragment with Product with Serializable</span>
       </span>
       </a></h4>
       <p class="comment cmt">Free text, describing the system to specify
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.UrlHtmlLink">
+    </li><li visbl="pub" name="org.specs2.specification.UrlHtmlLink" data-isabs="false">
       <a id="UrlHtmlLink:UrlHtmlLink"></a>
       <h4 class="signature"><a href="UrlHtmlLink.html">
       <span class="kind">case class</span>
       <span class="symbol">
         <span class="name">UrlHtmlLink</span>
         
-        <span class="params">(<span name="url">url: String</span>, <span name="beforeText">beforeText: String</span>, <span name="linkText">linkText: String</span>, <span name="afterText">afterText: String</span>, <span name="tip">tip: String</span>)</span>
-        <span class="result"> extends HtmlLink with Product</span>
+        <span class="params">(<span name="url">
+                  url
+                  : String
+                  
+                </span>, <span name="beforeText">
+                  beforeText
+                  : String
+                  
+                </span>, <span name="linkText">
+                  linkText
+                  : String
+                  
+                </span>, <span name="afterText">
+                  afterText
+                  : String
+                  
+                </span>, <span name="tip">
+                  tip
+                  : String
+                  
+                </span>)</span>
+        <span class="result"> extends HtmlLink with Product with Serializable</span>
       </span>
       </a></h4>
       
@@ -512,7 +639,7 @@ Error Result if there is an exception or a Success.</p>
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" data-isabs="false" name="org.specs2.specification.Action">
+              <ol><li visbl="pub" name="org.specs2.specification.Action" data-isabs="false">
       <a id="Action:Action"></a>
       <h4 class="signature"><a href="Action$.html">
       <span class="kind">object</span>
@@ -520,11 +647,11 @@ Error Result if there is an exception or a Success.</p>
         <span class="name">Action</span>
         
         
-        <span class="result"> extends Product</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Contexts">
+    </li><li visbl="pub" name="org.specs2.specification.Contexts" data-isabs="false">
       <a id="Contexts:Contexts"></a>
       <h4 class="signature"><a href="Contexts$.html">
       <span class="kind">object</span>
@@ -536,7 +663,7 @@ Error Result if there is an exception or a Success.</p>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Example">
+    </li><li visbl="pub" name="org.specs2.specification.Example" data-isabs="false">
       <a id="Example:Example"></a>
       <h4 class="signature"><a href="Example$.html">
       <span class="kind">object</span>
@@ -544,11 +671,11 @@ Error Result if there is an exception or a Success.</p>
         <span class="name">Example</span>
         
         
-        <span class="result"> extends Product</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.FormMarkup">
+    </li><li visbl="pub" name="org.specs2.specification.FormMarkup" data-isabs="false">
       <a id="FormMarkup:FormMarkup"></a>
       <h4 class="signature"><a href="FormMarkup$.html">
       <span class="kind">object</span>
@@ -560,7 +687,7 @@ Error Result if there is an exception or a Success.</p>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Forms">
+    </li><li visbl="pub" name="org.specs2.specification.Forms" data-isabs="false">
       <a id="Forms:Forms"></a>
       <h4 class="signature"><a href="Forms$.html">
       <span class="kind">object</span>
@@ -572,7 +699,7 @@ Error Result if there is an exception or a Success.</p>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Fragments">
+    </li><li visbl="pub" name="org.specs2.specification.Fragments" data-isabs="false">
       <a id="Fragments:Fragments"></a>
       <h4 class="signature"><a href="Fragments$.html">
       <span class="kind">object</span>
@@ -585,7 +712,7 @@ Error Result if there is an exception or a Success.</p>
       </a></h4>
       <p class="comment cmt">Utility methods for fragments
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.HtmlLink">
+    </li><li visbl="pub" name="org.specs2.specification.HtmlLink" data-isabs="false">
       <a id="HtmlLink:HtmlLink"></a>
       <h4 class="signature"><a href="HtmlLink$.html">
       <span class="kind">object</span>
@@ -597,7 +724,7 @@ Error Result if there is an exception or a Success.</p>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecEnd">
+    </li><li visbl="pub" name="org.specs2.specification.SpecEnd" data-isabs="false">
       <a id="SpecEnd:SpecEnd"></a>
       <h4 class="signature"><a href="SpecEnd$.html">
       <span class="kind">object</span>
@@ -605,11 +732,11 @@ Error Result if there is an exception or a Success.</p>
         <span class="name">SpecEnd</span>
         
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.SpecStart">
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart" data-isabs="false">
       <a id="SpecStart:SpecStart"></a>
       <h4 class="signature"><a href="SpecStart$.html">
       <span class="kind">object</span>
@@ -617,11 +744,11 @@ Error Result if there is an exception or a Success.</p>
         <span class="name">SpecStart</span>
         
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends Serializable</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.specification.Step">
+    </li><li visbl="pub" name="org.specs2.specification.Step" data-isabs="false">
       <a id="Step:Step"></a>
       <h4 class="signature"><a href="Step$.html">
       <span class="kind">object</span>
@@ -629,7 +756,7 @@ Error Result if there is an exception or a Success.</p>
         <span class="name">Step</span>
         
         
-        <span class="result"> extends Product</span>
+        <span class="result"> extends Product with Serializable</span>
       </span>
       </a></h4>
       

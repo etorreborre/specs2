@@ -5,16 +5,16 @@
           <title>org.specs2.runner</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
       <script type="text/javascript" src="../../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value" onload="windowTitle();">
+        <body onload="windowTitle();" class="value">
 
-      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+      <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
 
       <div id="definition">
         <img src="../../../lib/package_big.png" />
@@ -30,7 +30,10 @@
         
       </span>
       </h4>
-      <div class="fullcomment" id="comment"></div>
+      
+          
+          <div class="fullcomment" id="comment"></div>
+        
 
       <div id="template">
 
@@ -52,7 +55,7 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" data-isabs="false" name="org.specs2.runner.ClassRunner">
+              <ol><li visbl="pub" name="org.specs2.runner.ClassRunner" data-isabs="false">
       <a id="ClassRunner:ClassRunner"></a>
       <h4 class="signature"><a href="ClassRunner.html">
       <span class="kind">class</span>
@@ -66,7 +69,7 @@
       <p class="comment cmt">This class can be used to executed a Specification in the Console
 by specifying its name as the first argument on the command line
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.runner.FilesRunner">
+    </li><li visbl="pub" name="org.specs2.runner.FilesRunner" data-isabs="true">
       <a id="FilesRunner:FilesRunner"></a>
       <h4 class="signature"><a href="FilesRunner.html">
       <span class="kind">trait</span>
@@ -80,7 +83,7 @@ by specifying its name as the first argument on the command line
       <p class="comment cmt">This trait finds specifications in the source directory, instantiate them as one big
 specification and report them using the ConsoleReporter or the HtmlReporter depending on the presence of the html flag
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.runner.FilesRunnerFingerprint">
+    </li><li visbl="pub" name="org.specs2.runner.FilesRunnerFingerprint" data-isabs="true">
       <a id="FilesRunnerFingerprint:FilesRunnerFingerprint"></a>
       <h4 class="signature"><a href="FilesRunnerFingerprint.html">
       <span class="kind">trait</span>
@@ -92,7 +95,7 @@ specification and report them using the ConsoleReporter or the HtmlReporter depe
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.HtmlRunner">
+    </li><li visbl="pub" name="org.specs2.runner.HtmlRunner" data-isabs="false">
       <a id="HtmlRunner:HtmlRunner"></a>
       <h4 class="signature"><a href="HtmlRunner.html">
       <span class="kind">class</span>
@@ -105,7 +108,7 @@ specification and report them using the ConsoleReporter or the HtmlReporter depe
       </a></h4>
       <p class="comment cmt">This runner uses an HtmlReporter, creating html pages, for running the specification
 </p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.JUnitRunner">
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner" data-isabs="false">
       <a id="JUnitRunner:JUnitRunner"></a>
       <h4 class="signature"><a href="JUnitRunner.html">
       <span class="kind">class</span>
@@ -118,7 +121,7 @@ specification and report them using the ConsoleReporter or the HtmlReporter depe
       </a></h4>
       <p class="comment cmt">The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
 to execute a specification as a JUnit suite.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.SpecFailureAssertionFailedError">
+    </li><li visbl="pub" name="org.specs2.runner.SpecFailureAssertionFailedError" data-isabs="false">
       <a id="SpecFailureAssertionFailedError:SpecFailureAssertionFailedError"></a>
       <h4 class="signature"><a href="SpecFailureAssertionFailedError.html">
       <span class="kind">class</span>
@@ -132,7 +135,7 @@ to execute a specification as a JUnit suite.</p>
       <p class="comment cmt">This class refines the <code>AssertionFailedError</code> from junit
 and provides the stackTrace of an exception which occurred during the specification execution
 </p>
-    </li><li visbl="pub" data-isabs="true" name="org.specs2.runner.Specs2Fingerprint">
+    </li><li visbl="pub" name="org.specs2.runner.Specs2Fingerprint" data-isabs="true">
       <a id="Specs2Fingerprint:Specs2Fingerprint"></a>
       <h4 class="signature"><a href="Specs2Fingerprint.html">
       <span class="kind">trait</span>
@@ -144,7 +147,7 @@ and provides the stackTrace of an exception which occurred during the specificat
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.SpecsFramework">
+    </li><li visbl="pub" name="org.specs2.runner.SpecsFramework" data-isabs="false">
       <a id="SpecsFramework:SpecsFramework"></a>
       <h4 class="signature"><a href="SpecsFramework.html">
       <span class="kind">class</span>
@@ -156,7 +159,7 @@ and provides the stackTrace of an exception which occurred during the specificat
       </span>
       </a></h4>
       <p class="comment cmt">Implementation of the Framework interface for the sbt tool.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.TestInterfaceRunner">
+    </li><li visbl="pub" name="org.specs2.runner.TestInterfaceRunner" data-isabs="false">
       <a id="TestInterfaceRunner:TestInterfaceRunner"></a>
       <h4 class="signature"><a href="TestInterfaceRunner.html">
       <span class="kind">class</span>
@@ -173,7 +176,7 @@ and provides the stackTrace of an exception which occurred during the specificat
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" data-isabs="false" name="org.specs2.runner.Fingerprints">
+              <ol><li visbl="pub" name="org.specs2.runner.Fingerprints" data-isabs="false">
       <a id="Fingerprints:Fingerprints"></a>
       <h4 class="signature"><a href="Fingerprints$.html">
       <span class="kind">object</span>
@@ -185,7 +188,7 @@ and provides the stackTrace of an exception which occurred during the specificat
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.specs2.runner.JUnitRunner">
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner" data-isabs="false">
       <a id="JUnitRunner:JUnitRunner"></a>
       <h4 class="signature"><a href="JUnitRunner$.html">
       <span class="kind">object</span>

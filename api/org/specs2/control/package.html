@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.control</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="windowTitle();" class="value">
+
+      <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <h1>control</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">control</span>
+        
+        
+        
+      </span>
+      </h4>
+      
+          
+          <div class="fullcomment" id="comment"></div>
+        
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.specs2.control.LazyParameter" data-isabs="false">
+      <a id="LazyParameter:LazyParameter[T]"></a>
+      <h4 class="signature"><a href="LazyParameter.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">LazyParameter</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">class holding a value to be evaluated lazily</p>
+    </li><li visbl="pub" name="org.specs2.control.LazyParameters" data-isabs="true">
+      <a id="LazyParameters:LazyParameters"></a>
+      <h4 class="signature"><a href="LazyParameters.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">LazyParameters</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait can be used to allow some function to be called with varargs, with values being
+evaluated lazily:&lt;code&gt;</p>
+    </li><li visbl="pub" name="org.specs2.control.Property" data-isabs="false">
+      <a id="Property:Property[T]"></a>
+      <h4 class="signature"><a href="Property.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Property</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="value">
+                  value
+                  : () ⇒ Option[T]
+                  
+                </span>, <span name="evaluated">
+                  evaluated
+                  : Boolean
+                  
+                </span>, <span name="evaluatedValue">
+                  evaluatedValue
+                  : Option[T]
+                  
+                </span>)</span>
+        <span class="result"> extends Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class represents values which are evaluated lazily and which may even be missing.</p>
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.control.LazyParameters" data-isabs="false">
+      <a id="LazyParameters:LazyParameters"></a>
+      <h4 class="signature"><a href="LazyParameters$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">LazyParameters</span>
+        
+        
+        <span class="result"> extends LazyParameters</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.control.Property" data-isabs="false">
+      <a id="Property:Property"></a>
+      <h4 class="signature"><a href="Property$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Property</span>
+        
+        
+        <span class="result"> extends Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Companion object to create properties with possibly no initial value
+</p>
+    </li></ol>
+            </div>
+
+        
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>

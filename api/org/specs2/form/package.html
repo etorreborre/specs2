@@ -1,0 +1,637 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.form</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="windowTitle();" class="value">
+
+      <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <h1>form</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">form</span>
+        
+        
+        
+      </span>
+      </h4>
+      
+          
+          <div class="fullcomment" id="comment"></div>
+        
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.specs2.form.Cell" data-isabs="true">
+      <a id="Cell:Cell"></a>
+      <h4 class="signature"><a href="Cell.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Cell</span>
+        
+        
+        <span class="result"> extends Text with Xml with Executable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.</p>
+    </li><li visbl="pub" name="org.specs2.form.Constraint" data-isabs="true">
+      <a id="Constraint:Constraint[T]"></a>
+      <h4 class="signature"><a href="Constraint.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Constraint</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Base class for constraints executed on an optional expected value.</p>
+    </li><li visbl="pub" name="org.specs2.form.DecoratedLabel" data-isabs="true">
+      <a id="DecoratedLabel:DecoratedLabel[T]"></a>
+      <h4 class="signature"><a href="DecoratedLabel.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">DecoratedLabel</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A DecoratedLabel holds a decorator and delegates decoration and styling operations to that Decorator
+</p>
+    </li><li visbl="pub" name="org.specs2.form.DecoratedProperty" data-isabs="true">
+      <a id="DecoratedProperty:DecoratedProperty[T]"></a>
+      <h4 class="signature"><a href="DecoratedProperty.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">DecoratedProperty</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends DecoratedLabel[T]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A DecoratedLabel holds a decorator and delegates decoration and styling operations for values and labels to that Decorator
+</p>
+    </li><li visbl="pub" name="org.specs2.form.Decorator" data-isabs="false">
+      <a id="Decorator:Decorator"></a>
+      <h4 class="signature"><a href="Decorator.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Decorator</span>
+        
+        <span class="params">(<span name="label">
+                  label
+                  : (Any) ⇒ Any
+                  
+                </span>, <span name="value">
+                  value
+                  : (Any) ⇒ Any
+                  
+                </span>, <span name="labelStyles">
+                  labelStyles
+                  : List[String]
+                  
+                </span>, <span name="valueStyles">
+                  valueStyles
+                  : List[String]
+                  
+                </span>)</span>
+        <span class="result"> extends Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class contains functions to decorate and style a label and a value:</p>
+    </li><li visbl="pub" name="org.specs2.form.Effect" data-isabs="false">
+      <a id="Effect:Effect[T]"></a>
+      <h4 class="signature"><a href="Effect.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Effect</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="label">
+                  label
+                  : String
+                  
+                </span>, <span name="value">
+                  value
+                  : Property[T]
+                  
+                </span>, <span name="decorator">
+                  decorator
+                  : Decorator
+                  
+                </span>)</span>
+        <span class="result"> extends Executable with StandardResults with DecoratedProperty[Effect[T]] with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">An Effect is a property which is used to display names corresponding to side-effects.</p>
+    </li><li visbl="pub" name="org.specs2.form.EffectCell" data-isabs="false">
+      <a id="EffectCell:EffectCell"></a>
+      <h4 class="signature"><a href="EffectCell.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">EffectCell</span>
+        
+        <span class="params">(<span name="e">
+                  e
+                  : org.specs2.form.Effect[_]
+                  
+                </span>, <span name="result">
+                  result
+                  : Option[Result]
+                  
+                </span>)</span>
+        <span class="result"> extends Cell with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Cell embedding a Eff
+</p>
+    </li><li visbl="pub" name="org.specs2.form.Field" data-isabs="false">
+      <a id="Field:Field[T]"></a>
+      <h4 class="signature"><a href="Field.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Field</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="label">
+                  label
+                  : String
+                  
+                </span>, <span name="value">
+                  value
+                  : Property[T]
+                  
+                </span>, <span name="decorator">
+                  decorator
+                  : Decorator
+                  
+                </span>)</span>
+        <span class="result"> extends Executable with StandardResults with DecoratedProperty[Field[T]] with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A Field is a property which is used only to display input values or output values.</p>
+    </li><li visbl="pub" name="org.specs2.form.FieldCell" data-isabs="false">
+      <a id="FieldCell:FieldCell"></a>
+      <h4 class="signature"><a href="FieldCell.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">FieldCell</span>
+        
+        <span class="params">(<span name="f">
+                  f
+                  : org.specs2.form.Field[_]
+                  
+                </span>, <span name="result">
+                  result
+                  : Option[Result]
+                  
+                </span>)</span>
+        <span class="result"> extends Cell with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Cell embedding a Field
+</p>
+    </li><li visbl="pub" name="org.specs2.form.Form" data-isabs="false">
+      <a id="Form:Form"></a>
+      <h4 class="signature"><a href="Form.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Form</span>
+        
+        
+        <span class="result"> extends Executable with Text</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).</p>
+    </li><li visbl="pub" name="org.specs2.form.FormCell" data-isabs="false">
+      <a id="FormCell:FormCell"></a>
+      <h4 class="signature"><a href="FormCell.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">FormCell</span>
+        
+        
+        <span class="result"> extends Cell</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Cell embedding a Form
+</p>
+    </li><li visbl="pub" name="org.specs2.form.FormDiffs" data-isabs="true">
+      <a id="FormDiffs:FormDiffs"></a>
+      <h4 class="signature"><a href="FormDiffs.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">FormDiffs</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides methods to perform differences on sequences of Forms.</p>
+    </li><li visbl="pub" name="org.specs2.form.FunctionConstraint" data-isabs="false">
+      <a id="FunctionConstraint:FunctionConstraint[T, S]"></a>
+      <h4 class="signature"><a href="FunctionConstraint.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">FunctionConstraint</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span>
+        <span class="params">(<span name="actual">
+                  actual
+                  : T
+                  
+                </span>, <span name="executor">
+                  executor
+                  : (T, T) ⇒ Result
+                  
+                </span>)</span>
+        <span class="result"> extends Constraint[T] with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This general constraint uses a function taking an actual value and an expected value to do the match.</p>
+    </li><li visbl="pub" name="org.specs2.form.HasLabel" data-isabs="true">
+      <a id="HasLabel:HasLabel"></a>
+      <h4 class="signature"><a href="HasLabel.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">HasLabel</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">generic trait for anything having a label, to unify Props and Forms
+</p>
+    </li><li visbl="pub" name="org.specs2.form.InlinedForm" data-isabs="false">
+      <a id="InlinedForm:InlinedForm"></a>
+      <h4 class="signature"><a href="InlinedForm.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">InlinedForm</span>
+        
+        
+        <span class="result"> extends Form</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This Form overrides the toXml and text methods so that it appears seamlessly included in another Form.</p>
+    </li><li visbl="pub" name="org.specs2.form.LazyCell" data-isabs="false">
+      <a id="LazyCell:LazyCell"></a>
+      <h4 class="signature"><a href="LazyCell.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">LazyCell</span>
+        
+        
+        <span class="result"> extends Cell</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Proxy to a cell that's not evaluated right away when added to a row</p>
+    </li><li visbl="pub" name="org.specs2.form.Prop" data-isabs="false">
+      <a id="Prop:Prop[T, S]"></a>
+      <h4 class="signature"><a href="Prop.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Prop</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span>
+        <span class="params">(<span name="label">
+                  label
+                  : String
+                  
+                </span>, <span name="actual">
+                  actual
+                  : Property[T]
+                  
+                </span>, <span name="expected">
+                  expected
+                  : Property[S]
+                  
+                </span>, <span name="constraint">
+                  constraint
+                  : (T, S) ⇒ Result
+                  
+                </span>, <span name="decorator">
+                  decorator
+                  : Decorator
+                  
+                </span>)</span>
+        <span class="result"> extends Executable with DecoratedProperty[Prop[T, S]] with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Prop class is a named property which holds:
+  * an expected value
+  * an actual value
+  * a constraint to check if the actual value conforms to the expected one</p>
+    </li><li visbl="pub" name="org.specs2.form.PropCell" data-isabs="false">
+      <a id="PropCell:PropCell"></a>
+      <h4 class="signature"><a href="PropCell.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">PropCell</span>
+        
+        <span class="params">(<span name="p">
+                  p
+                  : org.specs2.form.Prop[_, _]
+                  
+                </span>, <span name="result">
+                  result
+                  : Option[Result]
+                  
+                </span>)</span>
+        <span class="result"> extends Cell with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Cell embedding a Prop
+</p>
+    </li><li visbl="pub" name="org.specs2.form.Row" data-isabs="false">
+      <a id="Row:Row"></a>
+      <h4 class="signature"><a href="Row.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Row</span>
+        
+        <span class="params">(<span name="cellList">
+                  cellList
+                  : NonEmptyList[Cell]
+                  
+                </span>)</span>
+        <span class="result"> extends Executable with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A Row is a non-empty list of Cells</p>
+    </li><li visbl="pub" name="org.specs2.form.Tab" data-isabs="false">
+      <a id="Tab:Tab"></a>
+      <h4 class="signature"><a href="Tab.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Tab</span>
+        
+        <span class="params">(<span name="title">
+                  title
+                  : String
+                  
+                </span>, <span name="form">
+                  form
+                  : Form
+                  
+                </span>, <span name="result">
+                  result
+                  : Option[Result]
+                  
+                </span>)</span>
+        <span class="result"> extends Cell with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Class representing an individual tab
+</p>
+    </li><li visbl="pub" name="org.specs2.form.Tabs" data-isabs="false">
+      <a id="Tabs:Tabs"></a>
+      <h4 class="signature"><a href="Tabs.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">Tabs</span>
+        
+        <span class="params">(<span name="tabs">
+                  tabs
+                  : List[Tab]
+                  
+                </span>, <span name="result">
+                  result
+                  : Option[Result]
+                  
+                </span>)</span>
+        <span class="result"> extends Cell with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This class allows the creation of tabs to embed several forms at once on a limited html space</p>
+    </li><li visbl="pub" name="org.specs2.form.Text" data-isabs="true">
+      <a id="Text:Text"></a>
+      <h4 class="signature"><a href="Text.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Text</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Base type for anything returning some text
+</p>
+    </li><li visbl="pub" name="org.specs2.form.TextCell" data-isabs="false">
+      <a id="TextCell:TextCell"></a>
+      <h4 class="signature"><a href="TextCell.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">TextCell</span>
+        
+        <span class="params">(<span name="s">
+                  s
+                  : String
+                  
+                </span>, <span name="result">
+                  result
+                  : Result
+                  
+                </span>)</span>
+        <span class="result"> extends Cell with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Simple Cell embedding an arbitrary String
+</p>
+    </li><li visbl="pub" name="org.specs2.form.Xml" data-isabs="true">
+      <a id="Xml:Xml"></a>
+      <h4 class="signature"><a href="Xml.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Xml</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Base type for anything returning some xml
+</p>
+    </li><li visbl="pub" name="org.specs2.form.XmlCell" data-isabs="false">
+      <a id="XmlCell:XmlCell"></a>
+      <h4 class="signature"><a href="XmlCell.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">XmlCell</span>
+        
+        
+        <span class="result"> extends Cell</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This cell can contain any xml</p>
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.form.Effect" data-isabs="false">
+      <a id="Effect:Effect"></a>
+      <h4 class="signature"><a href="Effect$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Effect</span>
+        
+        
+        <span class="result"> extends Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Factory methods for creating Effects.</p>
+    </li><li visbl="pub" name="org.specs2.form.Field" data-isabs="false">
+      <a id="Field:Field"></a>
+      <h4 class="signature"><a href="Field$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Field</span>
+        
+        
+        <span class="result"> extends Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Factory methods for creating Fields.</p>
+    </li><li visbl="pub" name="org.specs2.form.Form" data-isabs="false">
+      <a id="Form:Form"></a>
+      <h4 class="signature"><a href="Form$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Form</span>
+        
+        
+        <span class="result"> extends Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt"> Companion object of a Form to create:
+  * an empty Form
+  * a Form with no rows but a title
+  * a Form with no title but one row</p>
+    </li><li visbl="pub" name="org.specs2.form.FormCell" data-isabs="false">
+      <a id="FormCell:FormCell"></a>
+      <h4 class="signature"><a href="FormCell$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">FormCell</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.form.FormDiffs" data-isabs="false">
+      <a id="FormDiffs:FormDiffs"></a>
+      <h4 class="signature"><a href="FormDiffs$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">FormDiffs</span>
+        
+        
+        <span class="result"> extends FormDiffs</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.form.LazyCell" data-isabs="false">
+      <a id="LazyCell:LazyCell"></a>
+      <h4 class="signature"><a href="LazyCell$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">LazyCell</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.form.Prop" data-isabs="false">
+      <a id="Prop:Prop"></a>
+      <h4 class="signature"><a href="Prop$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Prop</span>
+        
+        
+        <span class="result"> extends Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Companion object with factory methods
+</p>
+    </li><li visbl="pub" name="org.specs2.form.Row" data-isabs="false">
+      <a id="Row:Row"></a>
+      <h4 class="signature"><a href="Row$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Row</span>
+        
+        
+        <span class="result"> extends Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Companion object of a Row to create a Row with at least one cell
+</p>
+    </li><li visbl="pub" name="org.specs2.form.Xml" data-isabs="false">
+      <a id="Xml:Xml"></a>
+      <h4 class="signature"><a href="Xml$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Xml</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">utility functions for creating xml for Cells
+</p>
+    </li><li visbl="pub" name="org.specs2.form.XmlCell" data-isabs="false">
+      <a id="XmlCell:XmlCell"></a>
+      <h4 class="signature"><a href="XmlCell$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">XmlCell</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>
