@@ -13,30 +13,30 @@ trait NumericBaseMatchers {
   /** matches if x <= n */   
   def beLessThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThanOrEqualTo(n)
   def lessThanOrEqualTo[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
-  /** @alias for beLessThanOrEqualTo */   
+  /** @alias for beLessThanOrEqualTo */
   def be_<=[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
-  /** @alias for beLessThanOrEqualTo */   
+  /** @alias for beLessThanOrEqualTo */
   def <=[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
   /** matches if x < n */   
   def beLessThan[S <% Ordered[S]](n: S) = new BeLessThan(n)
   def lessThan[S <% Ordered[S]](n: S) = beLessThan(n)
-  /** @alias for beLessThan */   
+  /** @alias for beLessThan */
   def be_<[S <% Ordered[S]](n: S) = beLessThan(n)
-  /** @alias for beLessThan */   
+  /** @alias for beLessThan */
   def <[S <% Ordered[S]](n: S) = beLessThan(n)
   /** matches if x >= n */   
   def beGreaterThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThan(n).not
   def greaterThanOrEqualTo[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
-  /** @alias for beGreaterThanOrEqualTo */   
+  /** @alias for beGreaterThanOrEqualTo */
   def be_>=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
-  /** @alias for beGreaterThanOrEqualTo */   
+  /** @alias for beGreaterThanOrEqualTo */
   def >=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
   /** matches if x > n */   
   def beGreaterThan[S <% Ordered[S]](n: S) = new BeLessThanOrEqualTo(n).not
   def greaterThan[S <% Ordered[S]](n: S) = beGreaterThan(n)
-  /** @alias for beGreaterThan */   
+  /** @alias for beGreaterThan */
   def be_>[S <% Ordered[S]](n: S) = beGreaterThan(n)
-  /** @alias for beGreaterThan */   
+  /** @alias for beGreaterThan */
   def >[S <% Ordered[S]](n: S) = beGreaterThan(n)
   
   /** implicit definition to create delta for the beCloseTo matcher */
@@ -47,9 +47,9 @@ trait NumericBaseMatchers {
   /** matches if x = n +/- delta */   
   def beCloseTo[S : Numeric](delta: Delta[S]): Matcher[S] = beCloseTo(delta.n, delta.delta)
   def closeTo[S : Numeric](delta: Delta[S]): Matcher[S] = beCloseTo(delta)
-  /** @alias for beCloseTo */   
+  /** @alias for beCloseTo */
   def ~[S : Numeric](n: S)(delta: S): Matcher[S] = beCloseTo(n, delta)
-  /** @alias for beCloseTo */   
+  /** @alias for beCloseTo */
   def ~[S : Numeric](delta: Delta[S]): Matcher[S] = beCloseTo(delta)
 
 }

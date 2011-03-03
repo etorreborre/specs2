@@ -33,7 +33,7 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   def apply(v: =>T) = new Field(label, value(v), decorator)
   /** @return the field value */
   def apply(): T = value.get
-  /** alias for apply() */
+  /** @alias for apply() */
   def get: T = apply()
   /** @return "label: value" */
   override def toString = if (label.nonEmpty) label + ": " + this.get else this.get.toString
