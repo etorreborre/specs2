@@ -29,6 +29,8 @@ class ExceptionMatchersSpec extends SpecificationWithJUnit { def is =
     "negating a throw matcher must return the proper success message"	                                      !e12^
 																										                                                        end
 
+  import sys.error
+  
   def e1 = ("hello" must throwAn[Error]).message must_== "Expected: java.lang.Error. Got nothing"
 
   def e2 = (theBlock(error("boom")) must throwA[RuntimeException]).message must_==

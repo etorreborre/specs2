@@ -57,7 +57,7 @@ class IterableMatchersSpec extends SpecificationWithJUnit { def is =
   "Java collections can also be used with Iterable matchers"                              ^bt^
   "But generally require explicit conversion"                                             ^
     { asList("Hello", "World") must haveSize(2) }                                         ^
-    { asList("Hello", "World").toList must containMatch("ll") }                           ^
+    { asScalaIterable(asList("Hello", "World")) must containMatch("ll") }                 ^
                                                                                           end
 
   case class subclass() {

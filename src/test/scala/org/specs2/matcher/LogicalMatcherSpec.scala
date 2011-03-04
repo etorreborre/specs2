@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 import execute._
 import specification._
+import sys._
 
 class LogicalMatcherSpec extends SpecificationWithJUnit { def is =
 
