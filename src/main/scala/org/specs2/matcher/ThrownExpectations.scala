@@ -5,6 +5,18 @@ import execute.Failure
 
 /**
  * Thrown expectations will throw a FailureException if a match fails
+ *
+ * This trait can be extended to be used in another framework like ScalaTest:
+ *
+ *   trait ScalaTestExpectations extends ThrownExpectations {
+ *     override protected def checkFailure[T](m: =>MatchResult[T]) = {
+ *       m match {
+ *         case f @ MatchFailure(ok, ko, _, _) => throw new TestFailedException(f.message, f.exception, 0)
+ *         case _ => ()
+ *       }
+ *       m
+ *     }
+ *   }
  */
 trait ThrownExpectations extends Expectations {
   override protected def createExpectable[T](t: =>T) = new Expectable(() => t) {
