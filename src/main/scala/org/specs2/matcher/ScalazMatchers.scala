@@ -7,7 +7,7 @@ import scalaz._, Scalaz._
 /**
  * This trait provides matchers for some Scalaz (http://code.google.com/p/scalaz) datatypes.
  */
-trait ScalazMatchers extends ScalaCheckMatchers { outer: AnyMatchers =>
+trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMatchers =>
 
   implicit def toSemigroupProperty[T](s: Semigroup[T]): SemigroupProperty[T] = new SemigroupProperty(s)
   class SemigroupProperty[T](sg: Semigroup[T]) {
@@ -17,7 +17,7 @@ trait ScalazMatchers extends ScalaCheckMatchers { outer: AnyMatchers =>
 
   def isAssociative[T](implicit sg: Semigroup[T], a: Arbitrary[T], s: Shrink[T], p: Parameters) = {
     check3 { (b1: T, b2: T, b3: T) =>
-    be_==(b1 |+| (b2 |+| b3)).apply(Expectable((b1 |+| b2) |+| b3)) }(a, s, a, s, a, s, p)
+    be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3)) }(a, s, a, s, a, s, p)
   }
 
   implicit def toMonoidProperty[T](m: Monoid[T]): MonoidProperty[T] = new MonoidProperty(m)
@@ -29,8 +29,8 @@ trait ScalazMatchers extends ScalaCheckMatchers { outer: AnyMatchers =>
 
   def hasNeutralElement[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T], p: Parameters) = {
     check { (t: T) => 
-      be_==(t |+| m.zero).apply(Expectable(t)) and 
-      be_==(m.zero |+| t).apply(Expectable(t)) 
+      be_==(t |+| m.zero).apply(createExpectable(t)) and
+      be_==(m.zero |+| t).apply(createExpectable(t))
     }(a, s, p)
   }
 

@@ -18,7 +18,7 @@ import MatchResultMessages._
  * * create matchers from functions
  * * create matchers for seqs and sets from single matchers
  */
-trait MatchersImplicits {
+trait MatchersImplicits extends Expectations {
   /** 
    * implicit definition to transform a Seq of MatchResults to a Result
    */ 
@@ -33,7 +33,7 @@ trait MatchersImplicits {
    * This avoids writing b must beTrue 
    */ 
   implicit def toResult(b: Boolean): Result = {
-    new BeTrueMatcher().apply(Expectable(b)).toResult
+    new BeTrueMatcher().apply(createExpectable(b)).toResult
   }
 
   /**
@@ -79,7 +79,7 @@ trait MatchersImplicits {
   class SeqMatcher[S, T](s: Seq[S], f: S => Matcher[T]) extends Matcher[Seq[T]] {
     def apply[U <: Seq[T]](t: Expectable[U]) = {
       val bothSequences = t.value.toList zip s.toList
-      val results = bothSequences.map { case (t1, s1) => f(s1).apply(Expectable(t1)) }
+      val results = bothSequences.map { case (t1, s1) => f(s1).apply(createExpectable(t1)) }
       if (s.size != t.value.size)
         result(false,
                "the seqs contain the same number of elements",
@@ -104,7 +104,7 @@ trait MatchersImplicits {
                 setToTest)
       else {
         val results = setToTest.value.map { (element: T) =>
-          s.find { (otherElement:S) => f(otherElement).apply(Expectable(element)).isSuccess } match {
+          s.find { (otherElement:S) => f(otherElement).apply(createExpectable(element)).isSuccess } match {
             case None => result(false, "all matches", "no match for element " + q(element), setToTest)
             case Some(x) => result(true, q(element) + " matches with " + x, "no match for element " + q(element), setToTest)
           }
@@ -144,7 +144,7 @@ trait MatchersImplicits {
   class MatchResultFunctionVerification[U, T](t: U => MatchResult[T]) {
     def forall[S <: Seq[U]](seq: S) = {
       if (seq.isEmpty)
-        Matcher.result(true, "ok", "ko", Expectable(seq))
+        Matcher.result(true, "ok", "ko", createExpectable(seq))
       else {
         val r = seq.drop(1).foldLeft(t.apply(seq.head)) { (res, cur) =>
           if (res.isSuccess) t.apply(cur)
@@ -153,13 +153,13 @@ trait MatchersImplicits {
         Matcher.result(r.isSuccess,
                "All elements of "+q(seq.mkString(", "))+" are matching ok",
                "In the sequence "+q(seq.mkString(", "))+", the "+(seq.indexOf(r.expectable.value)+1).th+" element is failing: "+r.message,
-               Expectable(seq))
+               createExpectable(seq))
       }
     }
 
     def foreach[S <: Seq[U]](seq: S) = {
       if (seq.isEmpty)
-        Matcher.result(true, "ok", "ko", Expectable(seq))
+        Matcher.result(true, "ok", "ko", createExpectable(seq))
       else {
         val r = seq.drop(1).foldLeft(t.apply(seq.head).toResult) { (res, cur) =>
           res |+| t.apply(cur).toResult
@@ -167,14 +167,14 @@ trait MatchersImplicits {
         Matcher.result(r.isSuccess,
                        "All elements of "+q(seq.mkString(", "))+" are matching ok",
                        r.message,
-                       Expectable(seq))
+                       createExpectable(seq))
 
       }
     }
 
     def atLeastOnce[S <: Seq[U]](seq: S) = {
       if (seq.isEmpty)
-        Matcher.result(false, "ok", "ko", Expectable(seq))
+        Matcher.result(false, "ok", "ko", createExpectable(seq))
       else {
         val r = seq.drop(1).foldLeft(t.apply(seq.head)) { (res, cur) =>
           if (res.isSuccess) res
@@ -183,7 +183,7 @@ trait MatchersImplicits {
         Matcher.result(r.isSuccess,
           "In the sequence "+q(seq.mkString(", "))+", the "+(seq.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
           "No element of "+q(seq.mkString(", "))+" is matching ok",
-          Expectable(seq))
+          createExpectable(seq))
       }
     }
   }

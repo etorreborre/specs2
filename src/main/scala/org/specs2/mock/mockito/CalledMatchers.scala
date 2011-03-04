@@ -38,15 +38,19 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
   private class CallsMatcher extends Matcher[Any] {
     def apply[S <: Any](calls: Expectable[S]) = checkCalls[S](calls)
   }
-  private def checkCalls[T](expectable: Expectable[T]): MatchResult[T] = {
-    catchAll { expectable.value } { identity } match {
-      case Right(v) => new MatchSuccess("The mock was called as expected", "The mock was not called as expected", Expectable(v))
-      case Left(e) => 
-        new MatchFailure("The mock was called as expected", 
-                         "The mock was not called as expected: " + e.getMessage, 
-                         Expectable(expectable.value, e.getMessage))
+
+  private def checkCalls[T] = new Matcher[T] {
+    def apply[S <: T](s: Expectable[S]) = {
+      catchAll { s.value } { identity } match {
+        case Right(v) => new MatchSuccess("The mock was called as expected", "The mock was not called as expected", Expectable(v))
+        case Left(e) =>
+          new MatchFailure("The mock was called as expected",
+                           "The mock was not called as expected: " + e.getMessage,
+                           createExpectable(s.value, e.getMessage))
+      }
     }
   }
+
   /** create an object supporting 'was' and 'were' methods */
   def there = new Calls
   /** 
@@ -54,7 +58,7 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
    */
   class Calls {
     def were[T](calls: =>T): MatchResult[T] = was(calls)
-    def was[T](calls: =>T): MatchResult[T] = checkCalls(Expectable(calls))
+    def was[T](calls: =>T): MatchResult[T] = createExpectable(calls).applyMatcher(checkCalls);
   }
   /**
    * alias for 'there was'
@@ -128,7 +132,7 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
         calls
         otherCalls 
       }
-      Expectable(f()).applyMatcher(new CallsMatcher)
+      createExpectable(f()).applyMatcher(new CallsMatcher)
     }
   }
 }
