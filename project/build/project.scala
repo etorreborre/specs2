@@ -1,7 +1,7 @@
 import sbt._
 import reaktor.scct.ScctProject
 
-class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject {
+class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject with posterous.Publish {
   val mavenLocal = "Local Maven Repository" at "file://D:/mvn-repository"
 
   override def outputDirectoryName = "target"
