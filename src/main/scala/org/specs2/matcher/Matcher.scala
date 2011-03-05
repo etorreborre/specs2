@@ -18,7 +18,7 @@ import time.Duration
  *
  * The result of a match is a MatchResult object (@see MatchResult).
  * 
- * Matchers can be composed
+ * Matchers can be composed.
  * 
  * Implementation notes:
  *   * the parameter to the apply method must be a by-name parameter.

@@ -12,7 +12,7 @@ import collection.Iterablex._
 private[specs2]
 trait NodeFunctions extends control.Debug {
   /**
-   * @returns true if the Node represents some empty text (containing spaces or newlines)
+   * @return true if the Node represents some empty text (containing spaces or newlines)
    */
   def isSpaceNode(n1: Node): Boolean = n1 match {
     case g: Group => false
@@ -25,14 +25,14 @@ trait NodeFunctions extends control.Debug {
   def ==/(node: NodeSeq, n: NodeSeq): Boolean = isEqualIgnoringSpace(node, n)
 
   /**
-   * @returns true if two Nodes are equal without considering spaces but with ordered children
+   * @return true if two Nodes are equal without considering spaces but with ordered children
    */
   def isEqualIgnoringSpaceOrdered(node: NodeSeq, n: NodeSeq): Boolean = {
     def sameOrder(nodes1: NodeSeq, nodes2: NodeSeq) = nodes1.isSimilar(nodes2, isEqualIgnoringSpace _)
     isEqualIgnoringSpace(node, n, sameOrder(_, _))
   }
   /**
-   * @returns true if two Nodes are equal without considering spaces
+   * @return true if two Nodes are equal without considering spaces
    */
   def isEqualIgnoringSpace(node: NodeSeq, n: NodeSeq): Boolean = {
     def sameAs(nodes1: NodeSeq, nodes2: NodeSeq) = nodes1.toList.sameElementsAs(nodes2.toSeq, isEqualIgnoringSpace _)
@@ -40,7 +40,7 @@ trait NodeFunctions extends control.Debug {
   }
   
   /**
-   * @returns true if two Nodes are equal without considering spaces, taking a function
+   * @return true if two Nodes are equal without considering spaces, taking a function
    *               to apply recursively to compare children nodes
    */
   def isEqualIgnoringSpace(node: NodeSeq, n: NodeSeq, iterableComparison: Function2[NodeSeq, NodeSeq, Boolean]): Boolean = {
