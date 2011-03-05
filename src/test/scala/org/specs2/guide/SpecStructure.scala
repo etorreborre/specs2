@@ -739,14 +739,15 @@ To make things more concrete here is a full example:
        * where the fragments are built using a mutable variable
        */
       class MutableSpec extends SpecificationWithJUnit {
+
         // A title can be added at the beginning of the specification
         "MutableSpec".title
-
         // arguments are simply declared at the beginning of the specification if needed
         args(xonly=true)
+
         // a step to execute before the specification must be declared first
         step {
-          // setup database here
+          // setup your data or initialize your database here
           success
         }
 
@@ -761,13 +762,15 @@ To make things more concrete here is a full example:
            * a failing example will stop right away, without having to "chain" expectations
            */
           "with 'world'" in {
-            // uncommenting this line will stop the execution right away with a Failure
+            // Expectations are throwing exception by default so uncommenting this line will
+            // stop the execution right away with a Failure
             // "Hello world" must startWith("Hi")
+
             "Hello world" must endWith("world")
           }
         }
         /**
-         * There's no "context management", so you need case classes to manage setup and variables
+         * "Context management" is handled through the use of traits or case classes
          */
         "'Hey you'" should {
           // this one uses a "before" method
@@ -796,6 +799,7 @@ To make things more concrete here is a full example:
         object context extends Before {
           def before = () // do something to setup the context
         }
+        // we need to extend Success to be used as an Example body
         trait system extends Success {
           val string = "Hey you"
         }
