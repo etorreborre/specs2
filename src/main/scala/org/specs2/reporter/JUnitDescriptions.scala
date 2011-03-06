@@ -21,6 +21,7 @@ import specification._
  * Description objects. 
  * 
  */
+private[specs2]
 class JUnitDescriptions(specificationClass: Class[_]) extends DefaultSelection {
 	import JUnitDescriptions._
 	def foldAll(fs: Seq[Fragment]) = {
@@ -30,6 +31,7 @@ class JUnitDescriptions(specificationClass: Class[_]) extends DefaultSelection {
 	}
 
 }
+private[specs2]
 object JUnitDescriptions {
   /**
    * This function is used to map each node in a Tree[Fragment] to a pair of 

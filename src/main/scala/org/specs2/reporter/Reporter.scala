@@ -26,8 +26,7 @@ import specification._
  *   * a file (html, xml, junit-report)
  *
  */
-private[specs2]
-trait Reporter extends 
+trait Reporter extends
        Selection
   with Sequence
   with ExecutionStrategy 

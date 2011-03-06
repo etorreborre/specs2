@@ -6,8 +6,7 @@ import io.ConsoleOutput
 /**
  * Reports a Specification as an Html page
  */
-private[specs2]
-trait HtmlReporter extends Reporter 
+trait HtmlReporter extends Reporter
     with DefaultSelection
     with DefaultSequence
     with DefaultExecutionStrategy

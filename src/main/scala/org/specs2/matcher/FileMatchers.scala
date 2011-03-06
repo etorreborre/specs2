@@ -52,6 +52,7 @@ trait PathBaseMatchers extends FileSystem { outer =>
   private def isEqualIgnoringSep(path: String, other: String) = path != null && other != null&& getCanonicalPath(path).replaceAll("\\\\", "/") == getCanonicalPath(other).replaceAll("\\\\", "/") 
 }
 
+private[specs2]
 trait PathBeHaveMatchers { outer: PathBaseMatchers =>
   /** 
    * matcher aliases and implicits to use with be / have + matcher

@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * This factory creates named threads which can be prefixed by "specs2" to get a better understanding of thread dumps
+ *
+ * Contributed by @jedws
  */
 private[specs2]
 case class NamedThreadFactory(namePrefix: String,
