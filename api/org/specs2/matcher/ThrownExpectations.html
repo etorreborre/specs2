@@ -31,9 +31,25 @@
       </span>
       </h4>
       
-          <div class="shortcomment cmt"><p>Thrown expectations will throw a FailureException if a match fails
+          <div class="shortcomment cmt"><p>Thrown expectations will throw a FailureException if a match fails</p><p>This trait can be extended to be used in another framework like ScalaTest:</p><p>  trait ScalaTestExpectations extends ThrownExpectations {
+    override protected def checkFailure[T](m: =&gt;MatchResult[T]) = {
+      m match {
+        case f @ MatchFailure(ok, ko, _, _) =&gt; throw new TestFailedException(f.message, f.exception, 0)
+        case _ =&gt; ()
+      }
+      m
+    }
+  }
 </p></div>
-          <div class="fullcomment" id="comment"><div class="comment cmt"><p>Thrown expectations will throw a FailureException if a match fails
+          <div class="fullcomment" id="comment"><div class="comment cmt"><p>Thrown expectations will throw a FailureException if a match fails</p><p>This trait can be extended to be used in another framework like ScalaTest:</p><p>  trait ScalaTestExpectations extends ThrownExpectations {
+    override protected def checkFailure[T](m: =&gt;MatchResult[T]) = {
+      m match {
+        case f @ MatchFailure(ok, ko, _, _) =&gt; throw new TestFailedException(f.message, f.exception, 0)
+        case _ =&gt; ()
+      }
+      m
+    }
+  }
 </p></div><div class="block">
             linear super types: <a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a>, AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div><div class="block">

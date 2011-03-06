@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.runner.FilesRunner</title>
+          <title>org.specs2.runner.SpecificationsFinder</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -18,37 +18,33 @@
 
       <div id="definition">
         <img src="../../../lib/trait_big.png" />
-        <h1>FilesRunner</h1>
+        <h1>SpecificationsFinder</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">FilesRunner</span>
+        <span class="name">SpecificationsFinder</span>
         
         
-        <span class="result"> extends <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="SpecificationsFinder.html">SpecificationsFinder</a></span>
+        <span class="result"> extends <span name="org.specs2.io.FileSystem" class="extype">FileSystem</span> with <span name="org.specs2.reflect.Classes" class="extype">Classes</span> with <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span></span>
       </span>
       </h4>
       
-          <div class="shortcomment cmt"><p>This trait finds specifications in the source directory, instantiate them as one big
-specification and report them using the ConsoleReporter or the HtmlReporter depending on the presence of the html flag
+          <div class="shortcomment cmt"><p>This trait loads specifications found on a given source directory based
+on a regular expression representing the Specification name, usually .*Spec
 </p></div>
-          <div class="fullcomment" id="comment"><div class="comment cmt"><p>This trait finds specifications in the source directory, instantiate them as one big
-specification and report them using the ConsoleReporter or the HtmlReporter depending on the presence of the html flag
+          <div class="fullcomment" id="comment"><div class="comment cmt"><p>This trait loads specifications found on a given source directory based
+on a regular expression representing the Specification name, usually .*Spec
 </p></div><div class="block">
-            linear super types: <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="SpecificationsFinder.html">SpecificationsFinder</a>, <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <span name="org.specs2.reflect.Classes" class="extype">Classes</span>, <span name="org.specs2.io.Output" class="extype">Output</span>, <span name="org.specs2.io.FileSystem" class="extype">FileSystem</span>, <span name="org.specs2.io.FileWriter" class="extype">FileWriter</span>, <span name="org.specs2.io.FileReader" class="extype">FileReader</span>, AnyRef, <span name="scala.Any" class="extype">Any</span>
+            linear super types: <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <span name="org.specs2.reflect.Classes" class="extype">Classes</span>, <span name="org.specs2.io.Output" class="extype">Output</span>, <span name="org.specs2.io.FileSystem" class="extype">FileSystem</span>, <span name="org.specs2.io.FileWriter" class="extype">FileWriter</span>, <span name="org.specs2.io.FileReader" class="extype">FileReader</span>, AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div><div class="block">
-            known subclasses: <a name="org.specs2.files" class="extype" href="../files$.html">files</a>
+            known subclasses: <a name="org.specs2.runner.FilesRunner" class="extype" href="FilesRunner.html">FilesRunner</a>, <a name="org.specs2.files" class="extype" href="../files$.html">files</a>
           </div>
             
             
             
-            <div class="block"><ol>see also:
-                  <li class="cmt"><p>org.specs2.main.Arguments for the regular expression defining the specification names
-to extract and other options
-</p></li>, <li class="cmt"><p>org.specs2.io.FromSource for the definition of the source directory</p></li>
-                </ol></div>
+            
           </div>
         
 
@@ -63,7 +59,7 @@ to extract and other options
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li name="org.specs2.runner.FilesRunner" class="in">FilesRunner</li><li name="org.specs2.runner.SpecificationsFinder" class="in">SpecificationsFinder</li><li name="org.specs2.io.ConsoleOutput" class="in">ConsoleOutput</li><li name="org.specs2.reflect.Classes" class="in">Classes</li><li name="org.specs2.io.Output" class="in">Output</li><li name="org.specs2.io.FileSystem" class="in">FileSystem</li><li name="org.specs2.io.FileWriter" class="in">FileWriter</li><li name="org.specs2.io.FileReader" class="in">FileReader</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
+                <ol id="linearization"><li name="org.specs2.runner.SpecificationsFinder" class="in">SpecificationsFinder</li><li name="org.specs2.io.ConsoleOutput" class="in">ConsoleOutput</li><li name="org.specs2.reflect.Classes" class="in">Classes</li><li name="org.specs2.io.Output" class="in">Output</li><li name="org.specs2.io.FileSystem" class="in">FileSystem</li><li name="org.specs2.io.FileWriter" class="in">FileWriter</li><li name="org.specs2.io.FileReader" class="in">FileReader</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -248,36 +244,6 @@ to extract and other options
             
           </div>
           
-    </li><li visbl="prt" name="org.specs2.runner.FilesRunner#afterExecution" data-isabs="false">
-      <a id="afterExecution(S,e,q,[,S,p,e,c,i,f,i,c,a,t,i,o,n,S,t,r,u,c,t,u,r,e,])(A,r,g,u,m,e,n,t,s):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">afterExecution</span>
-        
-        <span class="params">(<span name="specs">
-                  specs
-                  : Seq[<a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>]
-                  
-                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">
-                  args
-                  : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">print a message after the execution based on the number of specifications</p>
-            <div class="fullcomment"><div class="comment cmt"><p>print a message after the execution based on the number of specifications</p></div><div class="block">
-          attributes: protected 
-        </div>
-            
-            
-            
-            
-          </div>
-          
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -299,32 +265,6 @@ part of compilation it is not possible to check whether the contents of the list
           attributes: final 
         </div><div class="block">
           definition classes: Any
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="prt" name="org.specs2.runner.FilesRunner#beforeExecution" data-isabs="false">
-      <a id="beforeExecution(A,r,g,u,m,e,n,t,s):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">beforeExecution</span>
-        
-        <span class="params">(<span class="implicit">implicit </span><span name="args">
-                  args
-                  : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">print a message before the execution</p>
-            <div class="fullcomment"><div class="comment cmt"><p>print a message before the execution</p></div><div class="block">
-          attributes: protected 
         </div>
             
             
@@ -422,9 +362,7 @@ The specification pattern is: &quot;\\s*object\\s*(&quot; + pattern + &quot;)\\s
 The specification pattern is: &quot;\\s*object\\s*(&quot; + pattern + &quot;)\\s*extends\\s*.*Spec.*\\s*\\{&quot;
 This may be later extended to support other arbitrary patterns
 </p></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>content of the file</p></dd><dt class="param">pattern</dt><dd class="cmt"><p>a regular expression which is supposed to match an object name extending a Specification
-</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="SpecificationsFinder.html">SpecificationsFinder</a>
-        </div>
+</p></dd></dl>
             
             
             
@@ -650,32 +588,6 @@ Current limitations!! This only works if the jar holding the resources contains 
             
           </div>
           
-    </li><li visbl="prt" name="org.specs2.runner.FilesRunner#createArguments" data-isabs="false">
-      <a id="createArguments(A,r,r,a,y,[,S,t,r,i,n,g,]):Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">createArguments</span>
-        
-        <span class="params">(<span name="arguments">
-                  arguments
-                  : <span name="scala.Array" class="extype">Array</span>[String]
-                  
-                </span>)</span>
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt"></p>
-            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the Arguments object depending on the command-line options</p></dd></dl><div class="block">
-          attributes: protected 
-        </div>
-            
-            
-            
-            
-          </div>
-          
     </li><li visbl="pub" name="org.specs2.io.FileSystem#createDir" data-isabs="false">
       <a id="createDir(S,t,r,i,n,g):Boolean"></a>
       <h4 class="signature">
@@ -866,9 +778,7 @@ so that the exception message and stacktrace are printed when the object can't b
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <code>Specification</code> object from a className if that class is a <code>Specification</code> class.<br>
 Tries to load the class name and cast it to a specification
         None in case of an exception.
-</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="SpecificationsFinder.html">SpecificationsFinder</a>
-        </div>
+</p></dd></dl>
             
             
             
@@ -895,9 +805,7 @@ Tries to load the class name and cast it to a specification
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <code>Specification</code> object from a className if that class is a <code>Specification</code> class.<br>
 Tries to load the class name and cast it to a specification
         None in case of an exception.
-</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="SpecificationsFinder.html">SpecificationsFinder</a>
-        </div>
+</p></dd></dl>
             
             
             
@@ -976,40 +884,6 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
 (<code>o1.hashCode.equals(o2.hashCode)</code>).
 </p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
           definition classes: AnyRef → Any
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="prt" name="org.specs2.runner.FilesRunner#execute" data-isabs="false">
-      <a id="execute(S,p,e,c,i,f,i,c,a,t,i,o,n,S,t,r,u,c,t,u,r,e)(R,e,p,o,r,t,e,r)(A,r,g,u,m,e,n,t,s):Reporter"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">execute</span>
-        
-        <span class="params">(<span name="s">
-                  s
-                  : <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>
-                  
-                </span>, <span name="r">
-                  r
-                  : <a name="org.specs2.reporter.Reporter" class="extype" href="../reporter/Reporter.html">Reporter</a>
-                  
-                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">
-                  args
-                  : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
-                  
-                </span>)</span>
-        <span class="result">: <a name="org.specs2.reporter.Reporter" class="extype" href="../reporter/Reporter.html">Reporter</a></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">report a specification</p>
-            <div class="fullcomment"><div class="comment cmt"><p>report a specification</p></div><div class="block">
-          attributes: protected 
         </div>
             
             
@@ -1574,22 +1448,6 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.runner.FilesRunner#main" data-isabs="false">
-      <a id="main(A,r,r,a,y,[,S,t,r,i,n,g,]):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">main</span>
-        
-        <span class="params">(<span name="arguments">
-                  arguments
-                  : <span name="scala.Array" class="extype">Array</span>[String]
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="org.specs2.io.FileWriter#mkdirs" data-isabs="false">
       <a id="mkdirs(S,t,r,i,n,g):Boolean"></a>
       <h4 class="signature">
@@ -1710,9 +1568,7 @@ possible to check whether the contents of the list are of the requested typed.
       </h4>
       
             <p class="shortcomment cmt"></p>
-            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the package declaration at the beginning of a file</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="SpecificationsFinder.html">SpecificationsFinder</a>
-        </div>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the package declaration at the beginning of a file</p></dd></dl>
             
             
             
@@ -1910,58 +1766,6 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
-    </li><li visbl="prt" name="org.specs2.runner.FilesRunner#reporter" data-isabs="false">
-      <a id="reporter(A,r,g,u,m,e,n,t,s):Option[Reporter with DefaultExecutionStrategy with ConsoleOutput with DefaultSelection with DefaultSequence {...}]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">reporter</span>
-        
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">
-                  arguments
-                  : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.reporter.Reporter" class="extype" href="../reporter/Reporter.html">Reporter</a> with <span name="org.specs2.reporter.DefaultExecutionStrategy" class="extype">DefaultExecutionStrategy</span> with <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span> with <a name="org.specs2.reporter.DefaultSelection" class="extype" href="../reporter/DefaultSelection.html">DefaultSelection</a> with <a name="org.specs2.reporter.DefaultSequence" class="extype" href="../reporter/DefaultSequence.html">DefaultSequence</a> {...}]</span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt"></p>
-            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a reporter depending on the provided arguments</p></dd></dl><div class="block">
-          attributes: protected 
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="prt" name="org.specs2.runner.FilesRunner#specificationClassNames" data-isabs="false">
-      <a id="specificationClassNames(A,r,g,u,m,e,n,t,s):List[String]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">specificationClassNames</span>
-        
-        <span class="params">(<span class="implicit">implicit </span><span name="args">
-                  args
-                  : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
-                  
-                </span>)</span>
-        <span class="result">: List[String]</span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt"></p>
-            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the specifications class names to execute</p></dd></dl><div class="block">
-          attributes: protected 
-        </div>
-            
-            
-            
-            
-          </div>
-          
     </li><li visbl="pub" name="org.specs2.runner.SpecificationsFinder#specificationNames" data-isabs="false">
       <a id="specificationNames(S,t,r,i,n,g)(S,t,r,i,n,g):List[String]"></a>
       <h4 class="signature">
@@ -1984,35 +1788,7 @@ possible to check whether the contents of the list are of the requested typed.
       
             <p class="shortcomment cmt"></p>
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>a path to a directory containing scala files (it can be a glob: i.e. &quot;dir/**/spec.scala&quot;)</p></dd><dt class="param">pattern</dt><dd class="cmt"><p>a regular expression which is supposed to match an object name extending a Specification</p></dd><dt>returns</dt><dd class="cmt"><p>specification names by scanning files and trying to find specifications declarations
-</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="SpecificationsFinder.html">SpecificationsFinder</a>
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="prt" name="org.specs2.runner.FilesRunner#specifications" data-isabs="false">
-      <a id="specifications(A,r,g,u,m,e,n,t,s):Seq[SpecificationStructure]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">specifications</span>
-        
-        <span class="params">(<span class="implicit">implicit </span><span name="args">
-                  args
-                  : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
-                  
-                </span>)</span>
-        <span class="result">: Seq[<a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>]</span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt"></p>
-            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the specifications to execute</p></dd></dl><div class="block">
-          attributes: protected 
-        </div>
+</p></dd></dl>
             
             
             
@@ -2353,9 +2129,7 @@ write(&quot;./dir/hello.txt&quot;) { out =&gt;
     </li></ol>
             </div>
 
-        <div name="org.specs2.runner.SpecificationsFinder" class="parent">
-              <h3>Inherited from <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="SpecificationsFinder.html">SpecificationsFinder</a></h3>
-            </div><div name="org.specs2.io.ConsoleOutput" class="parent">
+        <div name="org.specs2.io.ConsoleOutput" class="parent">
               <h3>Inherited from <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span></h3>
             </div><div name="org.specs2.reflect.Classes" class="parent">
               <h3>Inherited from <span name="org.specs2.reflect.Classes" class="extype">Classes</span></h3>
