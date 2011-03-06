@@ -8,24 +8,22 @@ import specification._
 import Statistics._
 
 class StatisticsSpec extends SpecificationWithJUnit { def is =
-                                                                                          """
-  Statistics can be accumulated on each executed specification
-  in order to be displayed at the end of a run
-                                                                                          """^
-                                                                                          p^
-  "In a specification, the statistics must count"                                         ^
-    "the number of fragments"                                                             ! e1^
-    "the number of expectations"                                                          ! e2^
-    "the number of successes"                                                             ! e3^
-    "the number of failures"                                                              ! e4^
-    "the number of errors"                                                                ! e5^
-    "the number of pending"                                                               ! e6^
-    "the number of skipped"                                                               ! e7^
-                                                                                          p^
-  "If there are included specifications"                                                  ^
-    "the total of an inner spec must be ok"                                               ! e8^
-    "the total of the outer spec must be ok"                                              ! e9^
-                                                                                          end
+                                                                                                                        """
+Statistics can be accumulated on each executed specification in order to be displayed at the end of a run
+                                                                                                                        """^p^
+  "In a specification, the statistics must count"                                                                       ^
+    "the number of fragments"                                                                                           ! e1^
+    "the number of expectations"                                                                                        ! e2^
+    "the number of successes"                                                                                           ! e3^
+    "the number of failures"                                                                                            ! e4^
+    "the number of errors"                                                                                              ! e5^
+    "the number of pending"                                                                                             ! e6^
+    "the number of skipped"                                                                                             ! e7^
+                                                                                                                        p^
+  "If there are included specifications"                                                                                ^
+    "the total of an inner spec must be ok"                                                                             ! e8^
+    "the total of the outer spec must be ok"                                                                            ! e9^
+                                                                                                                        end
                                                                                           
   val spec1 = new Specification { def is =
     "spec1.title"           ^

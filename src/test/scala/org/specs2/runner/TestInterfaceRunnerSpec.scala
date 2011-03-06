@@ -7,22 +7,22 @@ import mock.Mockito
 import reporter._
 
 class TestInterfaceRunnerSpec extends SpecificationWithJUnit { def is =
-                                                                                                    """
+                                                                                                                        """
   A TestInterfaceRunner is responsible for instantiating Specification classes found by
   sbt and executing them using a TestInterfaceReporter
 
-                                                                                                    """                                                                                          ^
-  "if the specification class is missing"                                                            ^
-    "there must be an error logged"                                                                  ! missing().e1^
-    "a stacktrace must be logged"                                                                    ! missing().e2^
-                                                                                                     p^
-  "if the specification instance cannot be created"                                                  ^
-    "a stacktrace for the exception must be logged"                                                  ! instance().e1^
-    "the cause stacktrace must also be logged if there is one"                                       ! instance().e2^
-    "the cause stacktrace must be nicely separated from the top exception"                           ! instance().e3^
-                                                                                                     end^
-  "if the specification instance can be created it must be passed to TestInterfaceReporter"         ! reporting().e1^
-                                                                                                    end
+                                                                                                                        """                                                                                          ^
+  "if the specification class is missing"                                                                               ^
+    "there must be an error logged"                                                                                     ! missing().e1^
+    "a stacktrace must be logged"                                                                                       ! missing().e2^
+                                                                                                                        p^
+  "if the specification instance cannot be created"                                                                     ^
+    "a stacktrace for the exception must be logged"                                                                     ! instance().e1^
+    "the cause stacktrace must also be logged if there is one"                                                          ! instance().e2^
+    "the cause stacktrace must be nicely separated from the top exception"                                              ! instance().e3^
+                                                                                                                        end^
+  "if the specification instance can be created it must be passed to TestInterfaceReporter"                             ! reporting().e1^
+                                                                                                                        end
 
   case class missing() {
     object run extends MockLogger {

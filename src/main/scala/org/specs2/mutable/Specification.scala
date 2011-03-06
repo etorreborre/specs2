@@ -14,7 +14,7 @@ trait Specification extends SpecificationStructure with SpecificationFeatures {
 trait SpecificationFeatures extends FragmentsBuilder
    with SpecificationInclusion
    with ArgumentsArgs
-   with MustThrownExpectations
+   with MustThrownMatchers
    with ShouldThrownMatchers
    with FormattingFragments
    with StandardResults

@@ -3,7 +3,7 @@ package specification
 import reporter._
 
 class BaseSpecificationSpecSuite extends Specification {  def is = 
-                                                                                          """
+                                                                                                                        """
  A Specification is just some pieces of text interleaved with executable pieces of code.
  This is an example of such a specification:
  
@@ -28,10 +28,10 @@ There are 3 steps in executing a specification:
   1. building a list of Fragments, with text, formatting directives and executable code (Examples)
   2. executing the Fragments to collect results
   3. printing the results to the Console
-                                                                                          """^
-                                                                                          p^
-   include(new FragmentsBuilderSpec)                                                      ^
-   include(new FragmentsExecutionSpec)                                                    ^
-   include(new TextPrinterSpec)                                                           ^
-                                                                                          end
+                                                                                                                        """^
+                                                                                                                        p^
+   include(new FragmentsBuilderSpec)                                                                                    ^
+   include(new FragmentsExecutionSpec)                                                                                  ^
+   include(new TextPrinterSpec)                                                                                         ^
+                                                                                                                        end
 }

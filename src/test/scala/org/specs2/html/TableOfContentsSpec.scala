@@ -4,27 +4,28 @@ import TableOfContents._
 import matcher.DataTables
 
 class TableOfContentsSpec extends SpecificationWithJUnit with DataTables { def is =
-  "Creating a table of content for a body with"                                      ^
-    `no toc elements creates nothing`                                                ^
-    `no headers except the title creates nothing`                                    ^
-                                                                                     p^
-    "one h2 header"                                                                  ^
-      `creates one anchor`                                                           ^
-      `creates a link to the anchor in a <li/> element`                              ^
-                                                                                     p^
-    "2 h4 headers"                                                                   ^
-      `create 2 anchors`                                                             ^
-      `create a link to the anchors in 2 <li/> elements`                             ^
-                                                                                     p^
-    "2 h3 headers with one h4 header each"                                           ^
-      `create links to the anchors with a nested <ul> element`                       ^
-                                                                                     endp^
-  "support functions"                                                                ^
-    { isHeader(<h1/>) must beTrue }                                                  ^
-    { isHeader(<h2/>) must beTrue }                                                  ^
-    `headersToTree builds a Tree of headers`                                         ^
-    `headersToTree builds a Tree of headers - 2`                                     ^
-                                                                                     end
+
+  "Creating a table of content for a body with"                                                                         ^
+    `no toc elements creates nothing`                                                                                   ^
+    `no headers except the title creates nothing`                                                                       ^
+                                                                                                                        p^
+    "one h2 header"                                                                                                     ^
+      `creates one anchor`                                                                                              ^
+      `creates a link to the anchor in a <li/> element`                                                                 ^
+                                                                                                                        p^
+    "2 h4 headers"                                                                                                      ^
+      `create 2 anchors`                                                                                                ^
+      `create a link to the anchors in 2 <li/> elements`                                                                ^
+                                                                                                                        p^
+    "2 h3 headers with one h4 header each"                                                                              ^
+      `create links to the anchors with a nested <ul> element`                                                          ^
+                                                                                                                        endp^
+  "support functions"                                                                                                   ^
+    { isHeader(<h1/>) must beTrue }                                                                                     ^
+    { isHeader(<h2/>) must beTrue }                                                                                     ^
+    `headersToTree builds a Tree of headers`                                                                            ^
+    `headersToTree builds a Tree of headers - 2`                                                                        ^
+                                                                                                                        end
 
   val aBodyWithHeadersButNoToc           = <body><h1>title</h1>text with <h2>a header</h2></body>
   val aBodyWithNoHeaders                 = <body><h1>title</h1>text with <toc/><i>other nodes</i></body>

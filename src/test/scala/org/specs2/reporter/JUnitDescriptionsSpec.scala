@@ -8,34 +8,34 @@ import ShowDescription._
 import scala.collection.JavaConversions._
 
 class JUnitDescriptionsSpec extends SpecificationWithJUnit with FragmentsSamples {  def is =
-                                                                                                   """
+                                                                                                                        """
   A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is
   a root Description object (the top 'suite') and children objects representing either
   nested suites or Tests.
-                                                                                                   """^
-                                                                                                   p^
-  "An example is folded into a root description for the spec class and a description of "          +
-  "the example"                                                                                    ! e1^
-                                                                                                   p^
-  "Two examples are folded as 2 children descriptions"                                             ! e2^
-                                                                                                   p^
-  "A text and two subordinates examples are folded as a node and 2 children descriptions"          ! e3^
-                                                                                                   p^
-  "2 texts and two subordinates examples each are folded as 2 nodes and with their own "           +
-  "children descriptions"                                                                          ! e4^
-                                                                                                   p^
-  "2 groups of examples separated by a paragraph are folded as 2 nodes and with their "            ^bt^
-  "own children descriptions"                                                                      ! e5^
-                                                                                                   p^
-  "2 grouped examples and a separate one are folded as 2 suites and one test case"                 ! e6^
-                                                                                                   p^
-  "An example followed by a text grouping 2 examples are folded as 1 suite, with one test"         +
-  "and 1 suite with 2 test cases"                                                                  ! e7^
-                                                                                                   p^
-  "If 2 fragments have the same name, they must have a different description"                      ! e8^
-                                                                                                   p^
-  "A single text with no child examples must be removed"                                           ! e9^
-                                                                                                   end
+                                                                                                                        """^
+                                                                                                                        p^
+  "An example is folded into a root description for the spec class and a description of "                               +
+  "the example"                                                                                                         ! e1^
+                                                                                                                        p^
+  "Two examples are folded as 2 children descriptions"                                                                  ! e2^
+                                                                                                                        p^
+  "A text and two subordinates examples are folded as a node and 2 children descriptions"                               ! e3^
+                                                                                                                        p^
+  "2 texts and two subordinates examples each are folded as 2 nodes and with their own "                                +
+  "children descriptions"                                                                                               ! e4^
+                                                                                                                        p^
+  "2 groups of examples separated by a paragraph are folded as 2 nodes and with their "                                 ^bt^
+  "own children descriptions"                                                                                           ! e5^
+                                                                                                                        p^
+  "2 grouped examples and a separate one are folded as 2 suites and one test case"                                      ! e6^
+                                                                                                                        p^
+  "An example followed by a text grouping 2 examples are folded as 1 suite, with one test"                              +
+  "and 1 suite with 2 test cases"                                                                                       ! e7^
+                                                                                                                        p^
+  "If 2 fragments have the same name, they must have a different description"                                           ! e8^
+                                                                                                                        p^
+  "A single text with no child examples must be removed"                                                                ! e9^
+                                                                                                                        end
 
   def e1 = descriptionIs(ex1)(
   		   "JUnitDescriptionsSpec",

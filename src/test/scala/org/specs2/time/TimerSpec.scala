@@ -3,17 +3,17 @@ package time
 
 class TimerSpec extends SpecificationWithJUnit { def is =
 
-  "A timer should"                                                                        ^
-    "display 0 seconds if not stopped after being started"                                ! e1^
-    "not display 0 seconds if there are millis"                                           ! e1_1^
-                                                                                          p^
-  "When started and stopped, it can"                                                      ^
-    "display the elapsed time in hour-minute-second"                                      ! e2^ 
-    "display the elapsed time in hms and millis"                                          ! e3^
-                                                                                          p^ 
-  "A Timer can also have nested starts and stops"                                         ^
-    "it will then return cumulated times"                                                 ! e4^
-                                                                                          end 
+  "A timer should"                                                                                                      ^
+    "display 0 seconds if not stopped after being started"                                                              ! e1^
+    "not display 0 seconds if there are millis"                                                                         ! e1_1^
+                                                                                                                        p^
+  "When started and stopped, it can"                                                                                    ^
+    "display the elapsed time in hour-minute-second"                                                                    ! e2^
+    "display the elapsed time in hms and millis"                                                                        ! e3^
+                                                                                                                        p^
+  "A Timer can also have nested starts and stops"                                                                       ^
+    "it will then return cumulated times"                                                                               ! e4^
+                                                                                                                        end
     
   def e1 = TestTimer().start.hms must_== "0 second"
   def e1_1 = TestTimer().set(currentTime = 0L).start.

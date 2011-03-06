@@ -5,37 +5,36 @@ import specification._
 import io._
 import org.scalacheck._
 
-class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with ArbitraryFragments { def is = only("with a Reporter")^
-                                                                                             """
-  Before executing and reporting a specification, the fragments must be selected and
-  sorted:
+class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with ArbitraryFragments { def is =
+                                                                                                                        """
+Before executing and reporting a specification, the fragments must be selected and
+sorted:
 
-  * they must be selected to keep only the relevant ones
-  * they must be sorted to respect their execution dependencies
-    * steps must be executed before examples as specified
-    * tagged examples with dependencies must respect their specified ordering
+ * they must be selected to keep only the relevant ones
+ * they must be sorted to respect their execution dependencies
+   ** steps must be executed before examples as specified
+   ** tagged examples with dependencies must respect their specified ordering
 
-                                                                                             """^
-                                                                                             p^
-  "First of all examples are filtered"                                                       ^
-    "when the user specifies a regular expression: ex = ex1.*"                               ! filter().e1^
-    "(if no filter is specified, nothing must be filtered out)"                              ! filter().e2^
-                                                                                             p^
-                                                                                             """
+                                                                                                                        """^p^
+  "First of all examples are filtered"                                                                                  ^
+    "when the user specifies a regular expression: ex = ex1.*"                                                          ! filter().e1^
+    "(if no filter is specified, nothing must be filtered out)"                                                         ! filter().e2^
+                                                                                                                        p^
+                                                                                                                        """
   Then the Selection trait groups fragments to execute in lists of Fragments which can
-  be executed concurrently.                                                                  """^
-                                                                                             p^
-  "If a specification contains steps they must be grouped before the examples"               ^
-    "2 consecutive steps must be in the same list"                                           ! steps().e1^
-    "2 consecutive examples must be in the same list"                                        ! steps().e2^
-    "an example followed by a step must not be in the same list"                             ! steps().e3^
-    "a step followed by an example must not be in the same list"                             ! steps().e4^
-    "so that steps and examples are always separate"                                         ! steps().e5^
-                                                                                             p^
-  "If a specification contains the 'sequential' argument"                                    ^
-    "all examples must be executed in a sequence"                                            ! seq().e1^
-    "with a Reporter"                                                                        ! seq().e2^
-                                                                                             end
+  be executed concurrently.                                                                                             """^
+                                                                                                                        p^
+  "If a specification contains steps they must be grouped before the examples"                                          ^
+    "2 consecutive steps must be in the same list"                                                                      ! steps().e1^
+    "2 consecutive examples must be in the same list"                                                                   ! steps().e2^
+    "an example followed by a step must not be in the same list"                                                        ! steps().e3^
+    "a step followed by an example must not be in the same list"                                                        ! steps().e4^
+    "so that steps and examples are always separate"                                                                    ! steps().e5^
+                                                                                                                        p^
+  "If a specification contains the 'sequential' argument"                                                               ^
+    "all examples must be executed in a sequence"                                                                       ! seq().e1^
+    "with a Reporter"                                                                                                   ! seq().e2^
+                                                                                                                        end
   
   case class filter() extends WithSelection {
     def e1 = select(args(ex = "ex1") ^ ex1 ^ ex2).toString must not contain("ex2")

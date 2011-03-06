@@ -6,10 +6,10 @@ import execute._
 
 class FileWriterSpec extends SpecificationWithJUnit {  def is =
 
-  "A FileWriter should"                                              ^
-    "write inside a file"                                            ! c().e1^
-    "close the file if an exception occurs"                          ! c().e2^
-    "rethrow the exception if an exception occurs"                   ! c().e3
+  "A FileWriter should"                                                                                                 ^
+    "write inside a file"                                                                                               ! c().e1^
+    "close the file if an exception occurs"                                                                             ! c().e2^
+    "rethrow the exception if an exception occurs"                                                                      ! c().e3
 
   case class c() extends After {
     val out = new MockWriter {}

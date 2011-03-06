@@ -3,7 +3,7 @@ package specification
 import text._
 
 class FragmentsBuilderSpec extends SpecificationWithJUnit {  def is =
-                                                                                          """
+                                                                                                                        """
   In a Specification, the `contents` variable stores an instance of the Fragments class,
   which is merely a list of fragments. Those fragments are:
 
@@ -19,37 +19,37 @@ class FragmentsBuilderSpec extends SpecificationWithJUnit {  def is =
 
    * `Step` fragments which are not reported but execute an action
 
-   * `See` fragments to create a link to another specification                                    """^p^
-                                                                                                  """
+   * `See` fragments to create a link to another specification                                                          """^p^
+                                                                                                                        """
 SpecStart/SpecEnd
-=================                                                                                 """^
-                                                                                                  br^
-  "In a specification SpecStart and end fragments are automatically added"                        ^
-    "SpecStart is always the first fragment and SpecEnd the last"                                 ! startEnd().e1^
-    "the SpecStart object contains the specification arguments"                                   ! startEnd().e2^
-    "SpecStart and SpecEnd have the same name"                                                    ! startEnd().e3^
-    "The SpecStart element can be created by adding a title to the specification"                 ! startEnd().e4^
-    "When a title is created there is only one SpecStart in the specification"                    ! startEnd().e5^
-    "A title can be added before arguments are declared"                                          ! startEnd().e6^
-    "A title can be added after arguments are declared"                                           ! startEnd().e7^
-                                                                                                  endp^
-                                                                                                  """
+=================                                                                                                       """^
+                                                                                                                        br^
+  "In a specification SpecStart and end fragments are automatically added"                                              ^
+    "SpecStart is always the first fragment and SpecEnd the last"                                                       ! startEnd().e1^
+    "the SpecStart object contains the specification arguments"                                                         ! startEnd().e2^
+    "SpecStart and SpecEnd have the same name"                                                                          ! startEnd().e3^
+    "The SpecStart element can be created by adding a title to the specification"                                       ! startEnd().e4^
+    "When a title is created there is only one SpecStart in the specification"                                          ! startEnd().e5^
+    "A title can be added before arguments are declared"                                                                ! startEnd().e6^
+    "A title can be added after arguments are declared"                                                                 ! startEnd().e7^
+                                                                                                                        endp^
+                                                                                                                        """
 How to create an Example
-========================                                                                          """^
-                                                                                                  br^
-  "An example is simply created with `string ! e1` where e1 returns a `Result`"                   ! ex().e1^
-  "An example can also use its own description to compute the Result to return"                   ! ex().e2^
-  "An example can have its description marked as `code` for nice html rendering"                  ! ex().e3^
-  "An example has a `matches` method to match its description against a regexp"                   ^
-    "it returns true if there is a match"                                                         ! ex().matches1^
-    "it works even if there are newlines in the description"                                      ! ex().matches2^endp^
-                                                                                                  """
+========================                                                                                                """^
+                                                                                                                        br^
+  "An example is simply created with `string ! e1` where e1 returns a `Result`"                                         ! ex().e1^
+  "An example can also use its own description to compute the Result to return"                                         ! ex().e2^
+  "An example can have its description marked as `code` for nice html rendering"                                        ! ex().e3^
+  "An example has a `matches` method to match its description against a regexp"                                         ^
+    "it returns true if there is a match"                                                                               ! ex().matches1^
+    "it works even if there are newlines in the description"                                                            ! ex().matches2^endp^
+                                                                                                                        """
 Other elements
-==============                                                                                    """^
-                                                                                                  br^
-  "Text is created by appending other fragments before or after"                                  ! other().e1^
-  "But it can also be defined by itself"                                                          ! other().e2^
-                                                                                                  end
+==============                                                                                                          """^
+                                                                                                                        br^
+  "Text is created by appending other fragments before or after"                                                        ! other().e1^
+  "But it can also be defined by itself"                                                                                ! other().e2^
+                                                                                                                        end
 
   case class startEnd() {
     lazy val content = new Specification { def is = "title".title ^ xonly ^ "text" }.content
