@@ -24,7 +24,7 @@ trait ThrownExpectations extends Expectations {
   }
   override protected def createExpectable[T](t: =>T, alias: String) = new Expectable(() => t) {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
-    override val desc = Some((_:String) => alias)
+    override val desc = Some(Expectable.aliasDisplay(alias))
   }
   override protected def createExpectable[T](t: =>T, alias: String => String) = new Expectable(() => t) {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
