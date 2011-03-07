@@ -1,5 +1,3 @@
-_This project has been made public to facilitate its review before official release, but it's not released yet! _
-
 Installation instructions
 =========================
 
