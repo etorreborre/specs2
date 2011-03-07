@@ -5,9 +5,8 @@ import specification._
 
 class ThrowablexSpec extends SpecificationWithJUnit with Throwablex { def is =
                                                                                                                         """
-  The Throwablex trait provides extensions to regular throwables:
+The Throwablex trait provides extensions to regular throwables:
                                                                                                                         """^
-                                                                                                                        p^
   "It provides methods to access nested exceptions"						                                                          ^
     "chainedExceptions returns a list of nested exceptions" 			                                                      ! chained.e1^
     "getFullStackTrace returns a list of all nested stackTraceElements"                                                 ! chained.e2^

@@ -2,8 +2,7 @@ package org.specs2
 package execute
 
 /**
- * This trait provides standard results that can be used in
- * Fragments bodies
+ * This trait provides standard results which can be used in Fragments bodies
  */
 trait StandardResults {
   def done = Success("DONE")

@@ -10,7 +10,6 @@ import reflect.Classes
  * This trait loads specifications found on a given source directory based
  * on a regular expression representing the Specification name, usually .*Spec
  */
-private[specs2]
 trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
 
    /**

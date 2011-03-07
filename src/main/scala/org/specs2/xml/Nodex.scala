@@ -25,7 +25,7 @@ trait Nodex {
    */
   class ExtendedNode(n: Node) {
     /**
-     * @returns true if the Node represents some empty text (containing spaces or newlines)
+     * @return true if the Node represents some empty text (containing spaces or newlines)
      */
     def isSpaceNode: Boolean = NodeFunctions.isSpaceNode(n)
     def matchNode(other: Node, attributes: List[String] = Nil, attributeValues: Map[String, String] = Map(), exactMatch: Boolean = false) =

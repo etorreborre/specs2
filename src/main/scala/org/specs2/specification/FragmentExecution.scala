@@ -18,7 +18,6 @@ import scala.Either
  * It provides a function which executes fragments
  * and returns executed fragments
  */
-private[specs2]
 trait FragmentExecution {
   
   /** 

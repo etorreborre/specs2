@@ -403,25 +403,23 @@ to the `BaseSpecification` and add the non-conflicting traits.
         "the total amount must be displayed"     ! tickets().total^
         "if he buys tickets"                     ^
           "his favorite payment type is shown"   ! buy().favorite
-
-    trait Login {
-      var loggedIn = false
-      def login = loggedIn = true
-      def logout = loggedIn = false
-    }
-    case class history() extends Login {
-      login
-      def isShown = loggedIn must beTrue
-    }
-    case class tickets() extends Login {
-      login
-      def list = success
-      def total = success
-    }
-    case class buy() extends Login {
-      val tickets = new tickets()
-      def favorite = success
-    }
-
+  }
+  trait Login {
+    var loggedIn = false
+    def login = loggedIn = true
+    def logout = loggedIn = false
+  }
+  case class history() extends Login {
+    login
+    def isShown = loggedIn must beTrue
+  }
+  case class tickets() extends Login {
+    login
+    def list = success
+    def total = success
+  }
+  case class buy() extends Login {
+    val tickets = new tickets()
+    def favorite = success
   }
 }

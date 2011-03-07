@@ -6,10 +6,10 @@ import execute._
 
 class FileWriterSpec extends SpecificationWithJUnit {  def is =
 
-  "A FileWriter should"                                              ^
-    "write inside a file"                                            ! c().e1^
-    "close the file if an exception occurs"                          ! c().e2^
-    "rethrow the exception if an exception occurs"                   ! c().e3
+  "A FileWriter should"                                                                                                 ^
+    "write inside a file"                                                                                               ! c().e1^
+    "close the file if an exception occurs"                                                                             ! c().e2^
+    "rethrow the exception if an exception occurs"                                                                      ! c().e3
 
   case class c() extends After {
     val out = new MockWriter {}
@@ -20,12 +20,12 @@ class FileWriterSpec extends SpecificationWithJUnit {  def is =
       out.messages must_== List("hello world")
     }
     def e2 = this {
-      try { fw.write("filePath")(_ => error("bad")) }
+      try { fw.write("filePath")(_ => sys.error("bad")) }
       catch { case e => () }
       out.closed must_== true
     }
     def e3 = this {
-      try { fw.write("filePath")(_ => error("bad")); Failure("an exception must be thrown") }
+      try { fw.write("filePath")(_ => sys.error("bad")); Failure("an exception must be thrown") }
       catch { case e => { e.getMessage must_== "bad" }.toResult }
     }
     def after = { new File("filePath").delete} 

@@ -3,14 +3,13 @@ package text
 import Trim._
 
 class TrimSpec extends SpecificationWithJUnit { def is = 
-                                                                                          """
+                                                                                                                        """
 ### Trait for trimming strings
  
   The *Trim* trait can be used to trim all sorts of strings.
-                                                                                                                        """^
-                                                                                                                        p^
+                                                                                                                        """^p^
   "Trim lines and replace characters"                                                                                   ^
-  { " hello\rworld\n  ".trimNewLines === "hello\rworld" }                                                                 ^
+  { " hello\rworld\n  ".trimNewLines === "hello\rworld" }                                                               ^
   { " hello (world)  ".trimReplace("(" -> "[", ")" -> "]") === "hello [world]" }                                        ^
   { " hello world  ".trimReplaceAll("h" -> "H", "w" -> "W") === "Hello World" }                                         ^
                                                                                                                         p^

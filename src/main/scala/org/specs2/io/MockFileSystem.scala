@@ -93,7 +93,7 @@ trait MockFileSystem extends FileSystem {
   /** create a new directory */
   override def createDir(path: String) = mkdirs(path)
 
-  /** @returns a mock FileWriter for a specific path */
+  /** @return a mock FileWriter for a specific path */
   override def getWriter(path: String) = MockFileWriter(path)
 
   case class MockFileWriter(path: String) extends MockWriter {

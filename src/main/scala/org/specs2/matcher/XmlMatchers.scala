@@ -13,6 +13,7 @@ import StringToElem._
  * The XmlMatchers trait provides matchers which are applicable to xml nodes
  */
 trait XmlMatchers extends XmlBaseMatchers with XmlBeHaveMatchers
+object XmlMatchers extends XmlMatchers
 
 private[specs2]
 trait XmlBaseMatchers { outer =>

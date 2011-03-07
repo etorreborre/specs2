@@ -43,23 +43,25 @@ The Exceptions trait provide functional ways to catch exceptions and deal with t
     "Left(f(e)) if the expression threw anything, even an error"                                    ! catchAll2^
                                                                                                     end
     
+  def boom = { sys.error("boom"); "a" }
+
   def tryo1 = tryo("a") must_== Some("a")
-  def tryo2 = tryo({error("boom");"a"}) must_== None
+  def tryo2 = tryo(boom) must_== None
 
   def tryOr1 = tryOr("a")((e:Exception) => e.getMessage) must_== "a"
-  def tryOr2 = tryOr({error("boom");"a"})((e:Exception) => "bang") must_== "bang"
+  def tryOr2 = tryOr(boom)((e:Exception) => "bang") must_== "bang"
 
   def tryOrElse1 = tryOrElse("a")("b") must_== "a"
-  def tryOrElse2 = tryOrElse({error("boom");"a"})("bang") must_== "bang"
+  def tryOrElse2 = tryOrElse(boom)("bang") must_== "bang"
 
   def tryMap1 = tryMap("a")(true)(false) must_== true
-  def tryMap2 = tryMap({error("boom");"a"})(true)(false) must_== false
+  def tryMap2 = tryMap(boom)(true)(false) must_== false
 
   def tryOk1 = tryOk("a") must_== true
-  def tryOk2 = tryOk({error("boom");"a"}) must_== false
+  def tryOk2 = tryOk(boom) must_== false
 
   def trye1 = trye("a")((e:Exception) => e.getMessage) must_== Right("a")
-  def trye2 = trye({error("boom");"a"})((e:Exception) => e.getMessage) must_== Left("boom")
+  def trye2 = trye(boom)((e:Exception) => e.getMessage) must_== Left("boom")
 
   def catchAll1 = catchAll("a")((e:Throwable) => e.getMessage) must_== Right("a")
   def catchAll2 = catchAll({throw new Error("boom");"a"})((e:Throwable) => e.getMessage) must_== Left("boom")

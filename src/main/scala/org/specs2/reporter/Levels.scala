@@ -26,6 +26,7 @@ import StandardFragments._
  * * when there is a backtab we unindent everything following the tab (1 level is the default)
  * 
  */
+private[specs2]
 case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   /** @return the first block */
   private def headOption = blocks.map(_._1).headOption
@@ -129,6 +130,7 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
     })
   }
 }
+private[specs2]
 case object Levels {
   /** @return a new Levels object for one Block */
   def apply[T](b: Block[T]) = new Levels(List((b, 0)))
@@ -183,14 +185,16 @@ case object Levels {
   }
 }
 /** this represent a fragment of a specification that needs to be indented as a block */
+private[specs2]
 sealed trait Block[T] {
   val t: T
 }
+private[specs2]
 object Block {
   def unapply[T](b: Block[T]) = Some(b.t)
 }
-case class BlockTerminal[T](t: T = null) extends Block[T]
-case class BlockIndent[T](t: T = null, n: Int = 1)  extends Block[T]
-case class BlockUnindent[T](t: T = null, n: Int = 1) extends Block[T]
-case class BlockReset[T](t: T = null)    extends Block[T]
-case class BlockNeutral[T](t: T = null)  extends Block[T]
+private[specs2] case class BlockTerminal[T](t: T = null) extends Block[T]
+private[specs2] case class BlockIndent[T](t: T = null, n: Int = 1)  extends Block[T]
+private[specs2] case class BlockUnindent[T](t: T = null, n: Int = 1) extends Block[T]
+private[specs2] case class BlockReset[T](t: T = null)    extends Block[T]
+private[specs2] case class BlockNeutral[T](t: T = null)  extends Block[T]

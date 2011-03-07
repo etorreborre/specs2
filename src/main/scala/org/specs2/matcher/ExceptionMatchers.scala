@@ -8,6 +8,7 @@ import control.Exceptions._
  */
 trait ExceptionMatchers extends ExceptionBaseMatchers with ExceptionBeHaveMatchers
 
+private[specs2]
 trait ExceptionBaseMatchers extends Expectations {
   /**
    * @return a matcher checking the type of an Exception
@@ -146,6 +147,7 @@ trait ExceptionBaseMatchers extends Expectations {
   }
 }
 
+private[specs2]
 trait ExceptionBeHaveMatchers { outer: ExceptionBaseMatchers =>
   implicit def toExceptionMatcher[T](result: MatchResult[T]) = new ExceptionMatcherResult(result)
   class ExceptionMatcherResult[T](result: MatchResult[T]) {

@@ -19,7 +19,6 @@ import main.SystemProperties
  * by setting the "specs2.srcTestDir" System property
  *
  */
-private[specs2]
 trait FromSource {
   
   private[specs2] lazy val srcDir: String = SystemProperties.getOrElse("srcTestDir", "src/test/scala").dirPath
@@ -39,5 +38,4 @@ trait FromSource {
     } (e => "No source file found at "+srcDir+location.path)
   }
 }
-private[specs2]
 object FromSource extends FromSource

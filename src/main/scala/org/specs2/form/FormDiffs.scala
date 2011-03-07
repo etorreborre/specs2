@@ -6,6 +6,7 @@ package form
  *
  * @see org.specs2.guide.Forms for specification and usages
  */
+private[specs2]
 trait FormDiffs {
 
   def subset(form1: Seq[Form], form2: Seq[Form]): Seq[Form] = {

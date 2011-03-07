@@ -25,7 +25,9 @@ import scalaz.Monoid
  * 
  */
 sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1) {
-  /** @return the textual status of the result */
+  /**
+   * @return the textual status of the result
+   */
   def status(implicit args: Arguments = Arguments()) =
     if (args.plan) 
       color("*", blue, args.color)

@@ -21,7 +21,7 @@ A Field is a labelled property with can be embedded in a Form.
 
   val name = Field("name", "eric")
   val age = Field("age", 18)
-  val ageError = Field("age", {error("error"); 18})
+  val ageError = Field("age", {sys.error("error"); 18})
 
   case object creation {
     def e1 = Field(18).label must_== ""

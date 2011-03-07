@@ -56,11 +56,9 @@ object Expectable {
   def apply[T](t: =>T) = new Expectable(() => t)
   /** @return an Expectable with t as a value, and a constant string for its description */
   def apply[T](t: =>T, d1: String) = new Expectable(() => t) {
-    override val desc: Option[String => String] = {
-      val display = (s: String) => d1 + (if (!s.isEmpty && !Seq("true", "false").contains(s)) " " + q(s) else "")
-      Some(display)
-    }
+    override val desc: Option[String => String] = Some(aliasDisplay(d1))
   }
+  private[specs2] def aliasDisplay(d1: String) = (s: String) => d1 + (if (!s.isEmpty && !Seq("true", "false").contains(s)) " " + q(s) else "")
   /** @return an Expectable with t as a value, and a description function */
   def apply[T](t: =>T, d1: Option[String => String]) = new Expectable(() => t) {
     override val desc: Option[String => String] = d1

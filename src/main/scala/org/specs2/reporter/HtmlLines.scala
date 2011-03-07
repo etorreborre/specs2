@@ -15,6 +15,7 @@ import specification._
  * It can be written ('flushed') to an HtmlResultOuput by printing them one by one to this output
  *
  */
+private[specs2]
 case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink, parent: Option[HtmlLines] = None) {
   def print(implicit out: HtmlResultOutput, args: Arguments) =
     printXml.flush
@@ -46,6 +47,7 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink, parent: Optio
  * * the current level
  * * the current arguments
  */
+private[specs2]
 case class HtmlLine(text: Html = HtmlBr(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
   def print(implicit out: HtmlResultOutput): HtmlResultOutput = text.print(stats, level, args)
 }
@@ -57,21 +59,26 @@ case class HtmlLine(text: Html = HtmlBr(), stats: Stats = Stats(), level: Int = 
  * containing the html code to print
  *
  */
+private[specs2]
 sealed trait Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput): HtmlResultOutput
 }
+private[specs2]
 case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printSpecStart(start.name)(args) else out
 }
+private[specs2]
 case class HtmlText(t: ExecutedText) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printText(t.text, level, !args.xonly)(args) else out
-}        
+}
+private[specs2]
 case class HtmlBr() extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printPar("", !args.xonly)(args) else out
 }
+private[specs2]
 case class HtmlResult(r: ExecutedResult) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if (!args.xonly || !r.result.isSuccess) {
@@ -109,6 +116,7 @@ case class HtmlResult(r: ExecutedResult) extends Html {
         printCollapsibleExceptionMessage(f, level + 1)
   }
 }
+private[specs2]
 case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if ((!args.xonly || stats.hasFailuresOrErrors) && stats.hasExpectations && stats.isEnd(end))
@@ -138,11 +146,13 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
     }
   }
 }
+private[specs2]
 case class HtmlSee(see: ExecutedSee) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if (!args.xonly) out.printLink(see.link, level)(args) else out
   }
 }
+private[specs2]
 case class HtmlOther(fragment: ExecutedFragment)   extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = out
 }

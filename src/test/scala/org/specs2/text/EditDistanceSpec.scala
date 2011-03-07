@@ -3,39 +3,39 @@ package text
 import matcher._
 
 class EditDistanceSpec extends SpecificationWithJUnit with EditDistance with DataTables { def is =
-  "The edit distance should"                                                            ^
-    "return 0 if there's no insertions"                                                 ! e1^
-    "work on insertions"                                                                ! e2^
-    "work on suppressions"                                                              ! e3^
-    "work on substitutions"                                                             ! e4^
-                                                                                        p^
-  "The show distance should"                                                            ^
-    "work on insertions"                                                                ! s1^
-    "work on suppressions"                                                              ! s2^
-    "work on suppressions - 2"                                                          ! s3^
-    "work on substitutions"                                                             ! s4^
-    "not show any difference for the same string"                                       ! s5^
-    "show the differences with another separator"                                       ! s6^
-    "show the differences with another separator like <<>>"                             ! s7^
-    "show the differences with another separator like <<+"                              ! s8^
-    "work on 0-sized strings"                                                           ! s9^
-    "work on 1-sized strings"                                                           ! s10^
-                                                                                        p^
-  "The diff shortener should"                                                           ^
-    "not shorten a regular string"                                                      ! d1^
-    "shorten a diff before if too many letters"                                         ! d2^
-    "shorten a diff even at the end"                                                    ! d3^
-    "shorten a diff even at the beginning"                                              ! d4^
-    "shorten right and left"                                                            ! d5^
-    "shorten in the center"                                                             ! d6^
-    "shorten in the center with an empty diff"                                          ! d7^
-    "shorten in the center with an empty diff"                                          ! d8^
-    "shorten left, center and right"                                                    ! d9^
-                                                                                        p^
-  "The edit distance algorithm should"                                                  ^
-    "not use too much memory on a big string comparison when working with file lines"   ! a1^
-    "dont use too much memory on a big string comparison on any type of string"         ! a2^
-                                                                                        end
+  "The edit distance should"                                                                                            ^
+    "return 0 if there's no insertions"                                                                                 ! e1^
+    "work on insertions"                                                                                                ! e2^
+    "work on suppressions"                                                                                              ! e3^
+    "work on substitutions"                                                                                             ! e4^
+                                                                                                                        p^
+  "The show distance should"                                                                                            ^
+    "work on insertions"                                                                                                ! s1^
+    "work on suppressions"                                                                                              ! s2^
+    "work on suppressions - 2"                                                                                          ! s3^
+    "work on substitutions"                                                                                             ! s4^
+    "not show any difference for the same string"                                                                       ! s5^
+    "show the differences with another separator"                                                                       ! s6^
+    "show the differences with another separator like <<>>"                                                             ! s7^
+    "show the differences with another separator like <<+"                                                              ! s8^
+    "work on 0-sized strings"                                                                                           ! s9^
+    "work on 1-sized strings"                                                                                           ! s10^
+                                                                                                                        p^
+  "The diff shortener should"                                                                                           ^
+    "not shorten a regular string"                                                                                      ! d1^
+    "shorten a diff before if too many letters"                                                                         ! d2^
+    "shorten a diff even at the end"                                                                                    ! d3^
+    "shorten a diff even at the beginning"                                                                              ! d4^
+    "shorten right and left"                                                                                            ! d5^
+    "shorten in the center"                                                                                             ! d6^
+    "shorten in the center with an empty diff"                                                                          ! d7^
+    "shorten in the center with an empty diff"                                                                          ! d8^
+    "shorten left, center and right"                                                                                    ! d9^
+                                                                                                                        p^
+  "The edit distance algorithm should"                                                                                  ^
+    "not use too much memory on a big string comparison when working with file lines"                                   ! a1^
+    "dont use too much memory on a big string comparison on any type of string"                                         ! a2^
+                                                                                                                        end
   def e1 = editDistance("kitte", "kitte") must_== 0
   def e2 = editDistance("kitte", "kittei") must_== 1
   def e3 = editDistance("kitten", "kit") must_== 3
