@@ -61,7 +61,7 @@ trait ArgumentsArgs extends ArgProperties {
   /**
    * shortcut to avoid automatic indentation
    */
-  def noindent = args(noindent = true)
+  def noindent: Arguments = args(noindent = true)
   /**
    * shortcut to not executing the text and avoid automatic indentation
    */
