@@ -13,7 +13,7 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
 	                                            s.contains("UserGuide") || 
 	                                            s.matches("org.specs2.guide.*") 
 
-  val scalacheck 	= "org.scala-tools.testing" %% "scalacheck" % "1.8" 
+  val scalacheck 	= "org.scala-tools.testing" %% "scalacheck" % "1.9-SNAPSHOT" 
   val testinterface = "org.scala-tools.testing" % "test-interface" % "0.5" 
   val scalazcore 	= "com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"
   val hamcrest      = "org.hamcrest" % "hamcrest-all" % "1.1"
