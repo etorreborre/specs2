@@ -69,11 +69,17 @@ API for the complete list:
 The most common type of matcher is `beEqualTo` to test for equality. There are different ways to use this matcher:
 
        1 must beEqualTo(1)
+       1 must be_==(1)            // with a shorter matcher
        1 must_== 1                // my favorite!
        1 should_== 1              // for should lovers
        1 === 1                    // the ultimate shortcut
        1 must be equalTo(1)       // with a literate style
+
        1 must not be equalTo(2)   // with a negation
+       1 must_!= 2                // with a negation
+       1 must be_!=(2)            // with a negation
+       1 !== 2                    // with a negation
+
 
 You can see on the examples above several things which are applicable to all matchers:
 

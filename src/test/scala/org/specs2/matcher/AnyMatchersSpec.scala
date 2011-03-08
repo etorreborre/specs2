@@ -4,6 +4,16 @@ import java.io._
 
 class AnyMatchersSpec extends SpecificationWithJUnit { def is =
 
+  "be_== checks the equality of 2 objects"                                                                              ^
+  { "a" must_== "a" }                                                                                                   ^
+  { "a" must_!= "b" }                                                                                                   ^
+  { "a" should_== "a" }                                                                                                 ^
+  { "a" should_!= "b" }                                                                                                 ^
+  { "a" must be_==("a") }                                                                                               ^
+  { "a" must be_!=("b") }                                                                                               ^
+  { "a" === "a" }                                                                                                       ^
+  { "a" !== "b" }                                                                                                       ^
+                                                                                                                        p^
   "beTheSameAs checks if a value is eq to another one"                                                                  ^
   { aValue must beTheSameAs(aValue) }                                                                                   ^
   { "a" must not beTheSameAs("b") }                                                                                     ^
