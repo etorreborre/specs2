@@ -16,8 +16,8 @@ trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMa
   }
 
   def isAssociative[T](implicit sg: Semigroup[T], a: Arbitrary[T], s: Shrink[T], p: Parameters) = {
-    check3 { (b1: T, b2: T, b3: T) =>
-    be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3)) }(a, s, a, s, a, s, p)
+    check { (b1: T, b2: T, b3: T) =>
+      be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3)) }(a, s, a, s, a, s, p)
   }
 
   implicit def toMonoidProperty[T](m: Monoid[T]): MonoidProperty[T] = new MonoidProperty(m)

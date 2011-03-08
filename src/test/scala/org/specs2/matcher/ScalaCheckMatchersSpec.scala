@@ -24,6 +24,10 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
       "another way is to transform it as a property with .forAll"                                                       ! matcher3^
                                                                                                                         p^
   "A partial function can also be used in the body of the Example"                                                      ! partial1^
+  "A function with 2 parameters, returning a MatchResult be used in the body of the Example"                            ! partial2^
+  "A function with 3 parameters, returning a MatchResult be used in the body of the Example"                            ! partial3^
+  "A function with 4 parameters, returning a MatchResult be used in the body of the Example"                            ! partial4^
+  "A function with 5 parameters, returning a MatchResult be used in the body of the Example"                            ! partial5^
                                                                                                                         p^
   "A ScalaCheck property will create a result"                                                                          ^
     "with a number of expectations that is equal to the minTestsOk"                                                     ! result1^
@@ -46,6 +50,27 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
   def prop4 = ("example" ! exceptionProp).execute.toString must startWith("Error(A counter-example is")
 
   def partial1 = ("example" ! partialFunction.forAll).execute must_== success100tries
+  def partial2 = {
+    ("example" ! check { (s1: Boolean, s2: Boolean) =>
+      s1 && s2 must_== s2 && s1
+    }).execute must_== success100tries
+  }
+  def partial3 = {
+    ("example" ! check { (s1: String, s2: String, s3: Int) =>
+      1 must_== 1
+    }).execute must_== success100tries
+  }
+  def partial4 = {
+    ("example" ! check { (s1: String, s2: String, s3: Int, s4: Boolean) =>
+      1 must_== 1
+    }).execute must_== success100tries
+  }
+  def partial5 = {
+    ("example" ! check { (s1: String, s2: String, s3: Int, s4: Boolean, s5: Double) =>
+      1 must_== 1
+    }).execute must_== success100tries
+  }
+
   def matcher1 = ("example" ! alwaysTrueWithMatcher).execute must_== success100tries
   def matcher2 = ("example" ! check(stringToBooleanMatcher)).execute must_== success100tries
   def matcher3 = ("example" ! stringToBooleanMatcher.forAll).execute must_== success100tries
