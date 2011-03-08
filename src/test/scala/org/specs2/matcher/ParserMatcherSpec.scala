@@ -12,12 +12,11 @@ class ParserMatcherSpec extends SpecificationWithJUnit with ParserMatchers {
   The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   """^
   "succeedOn tests if the parser succeeds on the given input"^
-  { number must succeedOn("12") }
-  // { number must succeedOn("12").withResult(equalTo("12")) }
+  { number must succeedOn("12").withResult(equalTo(12)) }
 
   val parsers = ParsersUnderTest
 }
 
 object ParsersUnderTest extends RegexParsers {
-  val number: Parser[String] = """\d+""".r
+  val number: Parser[Int] = """\d+""".r ^^ {_.toInt}
 }
