@@ -34,6 +34,8 @@ trait Expectations {
   class CanBeEqual[T](t: =>T) {
     /** equality matcher on Expectables */
     def ===[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeEqualTo(other))
+    /** ! equality matcher on Expectables */
+    def !==[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeEqualTo(other).not)
   }
 
   /** @return an Expectable */
