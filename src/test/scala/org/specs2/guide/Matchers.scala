@@ -446,9 +446,9 @@ the function:
 
       "addition and multiplication are related" ! { (a: Int) => a + a must_== 2 * a }
 
-Note that sometimes type inference may not work so you will need to use the `check` method:
+Note that sometimes type inference may not work (if there are several parameters) so you will need to use the `check` method:
 
-      "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }
+      "addition and multiplication are related" ! check { (a: Int, b: Int) => a + b must_== b + a }
 
 #### Setting the ScalaCheck properties
 

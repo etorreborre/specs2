@@ -40,18 +40,37 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
   def check[T](result: T => MatchResult[_])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
     checkProp(result.forAll(a, s))(p)
   }
-  implicit def check2[T1, T2, S](result: Function2[T1, T2, MatchResult[S]])
+  implicit def check[T1, T2](result: (T1, T2) => MatchResult[_])
     (implicit 
         a1: Arbitrary[T1], s1: Shrink[T1], 
         a2: Arbitrary[T2], s2: Shrink[T2], 
         p: Parameters): execute.Result = {
      checkProp(asProperty(result))(p)
   }
-  implicit def check3[T1, T2, T3, S](result: Function3[T1, T2, T3, MatchResult[S]])
+  implicit def check[T1, T2, T3](result: (T1, T2, T3) => MatchResult[_])
     (implicit
         a1: Arbitrary[T1], s1: Shrink[T1],
         a2: Arbitrary[T2], s2: Shrink[T2],
         a3: Arbitrary[T3], s3: Shrink[T3],
+        p: Parameters): execute.Result = {
+     checkProp(asProperty(result))(p)
+  }
+  implicit def check[T1, T2, T3, T4](result: (T1, T2, T3, T4) => MatchResult[_])
+    (implicit
+        a1: Arbitrary[T1], s1: Shrink[T1],
+        a2: Arbitrary[T2], s2: Shrink[T2],
+        a3: Arbitrary[T3], s3: Shrink[T3],
+        a4: Arbitrary[T4], s4: Shrink[T4],
+        p: Parameters): execute.Result = {
+     checkProp(asProperty(result))(p)
+  }
+  implicit def check[T1, T2, T3, T4, T5](result: (T1, T2, T3, T4, T5) => MatchResult[_])
+    (implicit
+        a1: Arbitrary[T1], s1: Shrink[T1],
+        a2: Arbitrary[T2], s2: Shrink[T2],
+        a3: Arbitrary[T3], s3: Shrink[T3],
+        a4: Arbitrary[T4], s4: Shrink[T4],
+        a5: Arbitrary[T5], s5: Shrink[T5],
         p: Parameters): execute.Result = {
      checkProp(asProperty(result))(p)
   }
@@ -195,6 +214,35 @@ trait PropertyImplicits {
         case MatchFailure(ok, ko , _, _) => false :| ko
         case _ => true :| ""
       }   
+    }
+  }
+  protected def asProperty[T1, T2, T3, T4](f: (T1, T2, T3, T4) => MatchResult[_])
+  (implicit
+      a1: Arbitrary[T1], s1: Shrink[T1],
+      a2: Arbitrary[T2], s2: Shrink[T2],
+      a3: Arbitrary[T3], s3: Shrink[T3],
+      a4: Arbitrary[T4], s4: Shrink[T4]
+  ): Prop = {
+    Prop.forAll { (t1: T1, t2: T2, t3: T3, t4: T4) =>
+      f(t1, t2, t3, t4) match {
+        case MatchFailure(ok, ko , _, _) => false :| ko
+        case _ => true :| ""
+      }
+    }
+  }
+  protected def asProperty[T1, T2, T3, T4, T5](f: (T1, T2, T3, T4, T5) => MatchResult[_])
+  (implicit
+      a1: Arbitrary[T1], s1: Shrink[T1],
+      a2: Arbitrary[T2], s2: Shrink[T2],
+      a3: Arbitrary[T3], s3: Shrink[T3],
+      a4: Arbitrary[T4], s4: Shrink[T4],
+      a5: Arbitrary[T5], s5: Shrink[T5]
+  ): Prop = {
+    Prop.forAll { (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) =>
+      f(t1, t2, t3, t4, t5) match {
+        case MatchFailure(ok, ko , _, _) => false :| ko
+        case _ => true :| ""
+      }
     }
   }
 
