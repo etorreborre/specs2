@@ -23,10 +23,10 @@ class JsonSpec extends SpecificationWithJUnit with ScalaCheck {
     Json.find("key", new JSONObject(Map("key"->json))) must beSome(json)
   }
   "The findDeep method returns Some(value) if a key is present somewhere in a document and points to a JSON object" ! check { (json: JSONType) =>
-    if (json.toString.contains("a : "))
-      Json.findDeep("a", json) must beSome
+    if (json.toString.contains("a\" : "))
+      Json.findDeep("a", json) aka json.toString must beSome
     else
-      Json.findDeep("a", json) must beNone
+      Json.findDeep("a", json) aka json.toString must beNone
   }
 
   def isTerminal(a: Any) = a match {
