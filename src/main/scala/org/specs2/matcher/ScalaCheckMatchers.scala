@@ -40,14 +40,21 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
   def check[T](result: T => MatchResult[_])(implicit a: Arbitrary[T], s: Shrink[T], p: Parameters): execute.Result = {
     checkProp(result.forAll(a, s))(p)
   }
-  implicit def check[T1, T2](result: (T1, T2) => MatchResult[_])
+  implicit def check2[T1, T2](result: (T1, T2) => MatchResult[_])
+    (implicit
+        a1: Arbitrary[T1], s1: Shrink[T1],
+        a2: Arbitrary[T2], s2: Shrink[T2],
+        p: Parameters): execute.Result = {
+     checkProp(asProperty(result))(p)
+  }
+  def check[T1, T2](result: (T1, T2) => MatchResult[_])
     (implicit 
         a1: Arbitrary[T1], s1: Shrink[T1], 
         a2: Arbitrary[T2], s2: Shrink[T2], 
         p: Parameters): execute.Result = {
      checkProp(asProperty(result))(p)
   }
-  implicit def check[T1, T2, T3](result: (T1, T2, T3) => MatchResult[_])
+  implicit def check3[T1, T2, T3](result: (T1, T2, T3) => MatchResult[_])
     (implicit
         a1: Arbitrary[T1], s1: Shrink[T1],
         a2: Arbitrary[T2], s2: Shrink[T2],
@@ -55,7 +62,15 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
         p: Parameters): execute.Result = {
      checkProp(asProperty(result))(p)
   }
-  implicit def check[T1, T2, T3, T4](result: (T1, T2, T3, T4) => MatchResult[_])
+  def check[T1, T2, T3](result: (T1, T2, T3) => MatchResult[_])
+    (implicit
+        a1: Arbitrary[T1], s1: Shrink[T1],
+        a2: Arbitrary[T2], s2: Shrink[T2],
+        a3: Arbitrary[T3], s3: Shrink[T3],
+        p: Parameters): execute.Result = {
+     checkProp(asProperty(result))(p)
+  }
+  implicit def check4[T1, T2, T3, T4](result: (T1, T2, T3, T4) => MatchResult[_])
     (implicit
         a1: Arbitrary[T1], s1: Shrink[T1],
         a2: Arbitrary[T2], s2: Shrink[T2],
@@ -64,7 +79,26 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
         p: Parameters): execute.Result = {
      checkProp(asProperty(result))(p)
   }
-  implicit def check[T1, T2, T3, T4, T5](result: (T1, T2, T3, T4, T5) => MatchResult[_])
+  def check[T1, T2, T3, T4](result: (T1, T2, T3, T4) => MatchResult[_])
+    (implicit
+        a1: Arbitrary[T1], s1: Shrink[T1],
+        a2: Arbitrary[T2], s2: Shrink[T2],
+        a3: Arbitrary[T3], s3: Shrink[T3],
+        a4: Arbitrary[T4], s4: Shrink[T4],
+        p: Parameters): execute.Result = {
+     checkProp(asProperty(result))(p)
+  }
+  implicit def check5[T1, T2, T3, T4, T5](result: (T1, T2, T3, T4, T5) => MatchResult[_])
+    (implicit
+        a1: Arbitrary[T1], s1: Shrink[T1],
+        a2: Arbitrary[T2], s2: Shrink[T2],
+        a3: Arbitrary[T3], s3: Shrink[T3],
+        a4: Arbitrary[T4], s4: Shrink[T4],
+        a5: Arbitrary[T5], s5: Shrink[T5],
+        p: Parameters): execute.Result = {
+     checkProp(asProperty(result))(p)
+  }
+  def check[T1, T2, T3, T4, T5](result: (T1, T2, T3, T4, T5) => MatchResult[_])
     (implicit
         a1: Arbitrary[T1], s1: Shrink[T1],
         a2: Arbitrary[T2], s2: Shrink[T2],
