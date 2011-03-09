@@ -180,8 +180,12 @@ And if you want absolute power over matching, you can define your own matcher:
 In the code above you have to:
 
  * define the `apply` method (and its somewhat complex signature)
+
  * use the protected `result` method to return: a Boolean condition, a message when the match is ok, a message when the
-   match is not ok, the "expectable" value
+   match is not ok, the "expectable" value. Note that if you change the expectable value you need to use the `map` method
+   on the `s` expectable (`s.map(other)`). This way you preserve the ability of the Expectable to throw an Exception if
+   a subsequent match fails
+
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
    the optional description you setup using the `aka` method
 

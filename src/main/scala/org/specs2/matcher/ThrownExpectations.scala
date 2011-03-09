@@ -19,17 +19,12 @@ import execute.Failure
  *   }
  */
 trait ThrownExpectations extends Expectations {
-  override protected def createExpectable[T](t: =>T) = new Expectable(() => t) {
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
-  }
-  override protected def createExpectable[T](t: =>T, alias: String) = new Expectable(() => t) {
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
-    override val desc = Some(Expectable.aliasDisplay(alias))
-  }
-  override protected def createExpectable[T](t: =>T, alias: String => String) = new Expectable(() => t) {
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
-    override val desc = Some(alias)
-  }
+  override def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] =
+    new Expectable(() => t) {
+      override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
+      override val desc = alias
+      override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
+    }
   protected def checkFailure[T](m: =>MatchResult[T]) = {
     m match {
       case f @ MatchFailure(ok, ko, _, _) => throw new FailureException(f.toResult)
