@@ -159,6 +159,16 @@ There are many ways to create matchers for your specific usage. The simplest way
         1 must be_==(2).orSkip
         1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
 
+There may sometimes be typing issues with `be_==` and `orSkip`:
+
+        // will not compile!
+        (Some(1): Option[Int]) must be_==(Some(1)).orSkip
+
+The alternative is to either add a type annotation or to use the `be_===` matcher:
+
+       (Some(1): Option[Int]) must be_==(Some(1): Option[Int]).orSkip
+       (Some(1): Option[Int]) must be_===(Some(1)).orSkip
+
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
        val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")

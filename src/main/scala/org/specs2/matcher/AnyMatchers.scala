@@ -29,6 +29,10 @@ trait AnyBaseMatchers {
   /** matches if a != b */
   def be_!=[T](t: =>T) = be_==(t).not
   /** matches if a == b */
+  def be_===(t: =>Any) = be_==(t)
+  /** matches if a != b */
+  def be_!==(t: =>Any) = be_!=(t)
+  /** matches if a == b */
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not

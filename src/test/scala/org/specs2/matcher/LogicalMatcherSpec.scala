@@ -21,7 +21,7 @@ class LogicalMatcherSpec extends SpecificationWithJUnit { def is =
     "if it is ok, it returns a MatchSuccess result"                                                                     ! skip1^
     "if it is ko, it returns a MatchSkip result"                                                                        ! skip2^
     "a skipped message can also be added in front of the failure message"                                               ! skip3^
-    "with be_== and subtyping we need a type annotation"                                                                ! skip4^
+    "with be_== and subtyping we need a type annotation or a be_=== matcher"                                            ! skip4^
                                                                                                                         end
 
   def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
@@ -38,5 +38,5 @@ class LogicalMatcherSpec extends SpecificationWithJUnit { def is =
   def skip3 = (1 must be_==(2).orSkip("precondition failed")).toResult must_==
               Skipped("precondition failed: '1' is not equal to '2'")
 
-  def skip4 = (Some(1): Option[Int]) must be_==(Some(1):Any).orSkip
+  def skip4 = (Some(1): Option[Int]) must be_===(Some(1)).orSkip
 }
