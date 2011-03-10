@@ -181,6 +181,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
   }
   /** execute a ScalaCheck property */
   implicit def checkProp(prop: Prop)(implicit p: Parameters): execute.Result = checkProperty(prop)(p)
+  def check(prop: Prop)(implicit p: Parameters): execute.Result = checkProp(prop)(p)
   /**
    * checks if the property is true for each generated value, and with the specified
    * generation parameters <code>p</code>. <code>p</code> is transformed into a scalacheck parameters

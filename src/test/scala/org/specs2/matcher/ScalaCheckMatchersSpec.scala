@@ -2,7 +2,6 @@ package org.specs2
 package matcher
 import execute._
 import org.scalacheck._
-import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen
 import org.scalacheck.Gen._
 import org.scalacheck.Prop._
@@ -16,6 +15,8 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
     "if it is a function which is always true, it will yield a Success"                                                 ! prop2^
     "if it is a function which is always false, it will yield a Failure"                                                ! prop3^
     "if it is a property throwing an exception, it will yield an Error"                                                 ! prop4^
+    "a Property can be used with checkProp"                                                                             ! prop5^
+    "a Property can be used with check"                                                                                 ! prop6^
                                                                                                                         p^
   "A specs2 matcher can be returned by a function to be checked with ScalaCheck"                                        ^
     "if it is a MatchSuccess the execution will yield a Success"                                                        ! matcher1^
@@ -28,6 +29,8 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
   "A function with 3 parameters, returning a MatchResult be used in the body of the Example"                            ! partial3^
   "A function with 4 parameters, returning a MatchResult be used in the body of the Example"                            ! partial4^
   "A function with 5 parameters, returning a MatchResult be used in the body of the Example"                            ! partial5^
+                                                                                                                        p^
+  "Arbitrary instances can be specified for a given property"                                                           ! check(arb1)^
                                                                                                                         p^
   "A ScalaCheck property will create a result"                                                                          ^
     "with a number of expectations that is equal to the minTestsOk"                                                     ! result1^
@@ -43,11 +46,12 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
   
   val success100tries = Success("The property passed without any counter-example after 100 tries")
 
-  def prop1 = ("example" ! proved).execute must_== 
-	            Success("The property passed without any counter-example after 1 try")
+  def prop1 = ("example" ! proved).execute must_== Success("The property passed without any counter-example after 1 try")
   def prop2 = ("example" ! trueStringFunction.forAll).execute must_== success100tries
   def prop3 = ("example" ! identityFunction.forAll).execute.message must startWith("A counter-example is 'false'")
   def prop4 = ("example" ! exceptionProp).execute.toString must startWith("Error(A counter-example is")
+  def prop5 = ("example" ! checkProp(proved)).execute must beSuccessful
+  def prop6 = ("example" ! check(proved)).execute must beSuccessful
 
   def partial1 = ("example" ! partialFunction.forAll).execute must_== success100tries
   def partial2 = {
@@ -69,6 +73,10 @@ class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with
     ("example" ! check { (s1: String, s2: String, s3: Int, s4: Boolean, s5: Double) =>
       1 must_== 1
     }).execute must_== success100tries
+  }
+  def arb1: Prop = {
+    implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+    (s: String) => s must contain("a") or contain("b")
   }
 
   def matcher1 = ("example" ! alwaysTrueWithMatcher).execute must_== success100tries
