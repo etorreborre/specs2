@@ -1,7 +1,6 @@
 package org.specs2
 package guide
 
-
 class Matchers extends Specification { def is = literate ^ "Matchers guide".title ^
 """ <toc/>
 
@@ -63,6 +62,7 @@ API for the complete list:
  * Scalaz matchers
  * Result matchers
  * Interpreter matchers
+ * Parsers matchers
 
 #### Matchers for Any
 
@@ -445,6 +445,48 @@ the Scala interpreter and execute a script:
           }
         }
 
+#### Parser matchers
+
+Scala provides a parsing library using [parser combinators](http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html).
+
+You can specify your own parsers by:
+
+ * extending the `ParserMatchers` trait
+ * defining the `val parsers` variable with your parsers definition
+ * use the `beASuccess`, `beAFailure`, `successOn`, `failOn`, `errorOn` matchers to specify the results of parsing input
+   strings
+
+For example, specifying a Parser for numbers could look like this:   
+
+        import util.parsing.combinator.RegexParsers
+        import NumberParsers.{number, error}
+
+        class ParserSpec extends SpecificationWithJUnit with matcher.ParserMatchers {  def is =
+          "Parsers for numbers"                                                                   ^
+                                                                                                  p^
+          "beASuccess and succeedOn check if the parse succeeds"                                  ^
+          { number("1") must beASuccess }                                                         ^
+          { number must succeedOn("12") }                                                         ^
+          { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
+                                                                                                  p^
+          "beAFailure and failOn check if the parse fails"                                        ^
+          { number must failOn("abc") }                                                           ^
+          { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
+          { number("i") must beAFailure }                                                         ^
+                                                                                                  p^
+          "beAnError and errorOn check if the parser errors out completely"                       ^
+          { error must errorOn("") }                                                              ^
+          { error("") must beAnError }                                                            ^
+                                                                                                  end
+
+          val parsers = NumberParsers
+        }
+        object NumberParsers extends RegexParsers {
+          /** parse a number with any number of digits */
+          val number: Parser[Int] = "\\d+".r ^^ {_.toInt}
+          /** this parser returns an error */
+          val error: Parser[String] = err("Error")
+        }
 
 ### ScalaCheck properties
 
@@ -695,6 +737,7 @@ framework. You can reuse the following traits:
   include(xonly, new DataTableSpecification)                                                                            ^
   include(xonly, mockitoExamples)                                                                                       ^
   include(xonly, jsonExamples)                                                                                          ^
+  include(xonly, new ParserSpec)                                                                                        ^
   end
 
  lazy val examples = new Specification { def is = "Examples".title ^
@@ -820,4 +863,34 @@ class JsonExamples extends SpecificationWithJUnit {
 
     def is =
     "1" ! { person must /("person") */("person") /("age" -> 33.0) }
+}
+
+import util.parsing.combinator.RegexParsers
+import NumberParsers.{number, error}
+
+class ParserSpec extends SpecificationWithJUnit with matcher.ParserMatchers {  def is =
+  "Parsers for numbers"                                                                   ^
+                                                                                          p^
+  "beASuccess and succeedOn check if the parse succeeds"                                  ^
+  { number("1") must beASuccess }                                                         ^
+  { number must succeedOn("12") }                                                         ^
+  { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
+                                                                                          p^
+  "beAFailure and failOn check if the parse fails"                                        ^
+  { number must failOn("abc") }                                                           ^
+  { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
+  { number("i") must beAFailure }                                                         ^
+                                                                                          p^
+  "beAnError and errorOn check if the parser errors out completely"                       ^
+  { error must errorOn("") }                                                              ^
+  { error("") must beAnError }                                                            ^
+                                                                                          end
+
+  val parsers = NumberParsers
+}
+object NumberParsers extends RegexParsers {
+  /** parse a number with any number of digits */
+  val number: Parser[Int] = "\\d+".r ^^ {_.toInt}
+  /** this parser returns an error */
+  val error: Parser[String] = err("Error")
 }
