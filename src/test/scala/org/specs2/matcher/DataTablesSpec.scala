@@ -10,6 +10,7 @@ class DataTablesSpec extends SpecificationWithJUnit with DataTables { def is =
   "If there are failures on rows they must be reported"                                                                 ! e3^
   "If there is an exception on any row, it will stop the example"                                                       ! e4^
   "If the first value is a string, !! can be used as a cell separator"                                                  ! e5^
+  "!! can be used as a cell separator with any type"                                                                    ! e5_1^
   "A table can be built with just one column"                                                                           ! e6^
   "A table must work with values of different subtypes of the first row"                                                ! e7^
                                                                                                                         end
@@ -37,6 +38,11 @@ class DataTablesSpec extends SpecificationWithJUnit with DataTables { def is =
   def e5 =
     "a"     |  "b"      | "c"             |
     "Hello" !! "world"  !  "Hello world"  |> { (a, b, c) =>  a +" "+b must_== c }
+
+  def e5_1 =
+    "a"           ||  "b"      | "c"            |
+    ("Hello":Any) !! "world"   !  "Hello world" |
+    1             !! "world"   !  "1 world"     |> { (a, b, c) =>  a +" "+b must_== c }
 
   def e6 =
 	  "a"   |
