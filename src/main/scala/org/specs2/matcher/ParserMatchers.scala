@@ -10,7 +10,7 @@ import scalaz.Scalaz._
  *
  * When this trait is inherited the parsers variable needs to be defined.
  *
- * by @alexeyr
+ * by @alexey_r
  */
 trait ParserMatchers extends ParserBaseMatchers with ParserBeHaveMatchers
 
