@@ -34,7 +34,7 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
   def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = m.apply(this)
 
   /** evaluate the value once and return the same expectable */
-  private[specs2] def evaluate = Expectable(t(), desc)
+  protected[specs2] def evaluate = Expectable(t(), desc)
 
   /** @return the description of the matched value, quoted. */
   protected def d[T](value: =>T) = desc  match {

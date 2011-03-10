@@ -3,7 +3,6 @@ package matcher
 import mutable._
 
 class EventuallyMatchersSpec extends SpecificationWithJUnit {
-  sequential
                                                                                                                         """
 `eventually` can be used to retry any matcher until a maximum number of times is reached
 or until it succeeds.
@@ -20,7 +19,7 @@ or until it succeeds.
     option must be_===(Some(3)).eventually
   }
   "If all retries fail, the matcher will eventually fail" in {
-    val iterator = List(1, 2, 3).iterator
-    (iterator.next must be_==(-1).eventually).isSuccess must beFalse
+    val iterator = Stream.from(1).iterator
+    (iterator.next must be_==(-1).eventually) must throwA[FailureException]
   }
 }

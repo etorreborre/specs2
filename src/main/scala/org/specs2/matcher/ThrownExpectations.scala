@@ -24,8 +24,9 @@ trait ThrownExpectations extends Expectations {
       override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
       override val desc = alias
       override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
+      override def evaluate = createExpectable(value, desc)
     }
-  protected def checkFailure[T](m: =>MatchResult[T]) = {
+  protected def checkFailure[T](m: MatchResult[T]) = {
     m match {
       case f @ MatchFailure(ok, ko, _, _) => throw new FailureException(f.toResult)
       case _ => ()
