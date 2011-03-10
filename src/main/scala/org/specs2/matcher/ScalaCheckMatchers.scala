@@ -303,7 +303,11 @@ trait PropertyImplicits {
     def forAll(implicit a: Arbitrary[T], s: Shrink[T]): Prop = asProperty(f)
   }
   /** transform a function returning a MatchResult to a property */
-  protected def asProperty[T](f: T => MatchResult[_])
+  def asProperty[T](f: T => MatchResult[_])
+  (implicit a: Arbitrary[T], s: Shrink[T]
+  ): Prop = asProperty1(f)
+
+  implicit def asProperty1[T](f: T => MatchResult[_])
   (implicit a: Arbitrary[T], s: Shrink[T]
   ): Prop = {
 	  Prop.forAll { (t: T) =>
@@ -313,7 +317,13 @@ trait PropertyImplicits {
 	    } 	
 	  }
   }
-  protected def asProperty[T1, T2](f: (T1, T2) => MatchResult[_])
+  def asProperty[T1, T2](f: (T1, T2) => MatchResult[_])
+  (implicit
+      a1: Arbitrary[T1], s1: Shrink[T1],
+      a2: Arbitrary[T2], s2: Shrink[T2]
+  ): Prop = asProperty2(f)
+
+  implicit def asProperty2[T1, T2](f: (T1, T2) => MatchResult[_])
   (implicit 
       a1: Arbitrary[T1], s1: Shrink[T1],
       a2: Arbitrary[T2], s2: Shrink[T2]
@@ -325,7 +335,15 @@ trait PropertyImplicits {
       }   
     }
   }
-  protected def asProperty[T1, T2, T3](f: (T1, T2, T3) => MatchResult[_])
+
+  def asProperty[T1, T2, T3](f: (T1, T2, T3) => MatchResult[_])
+  (implicit
+      a1: Arbitrary[T1], s1: Shrink[T1],
+      a2: Arbitrary[T2], s2: Shrink[T2],
+      a3: Arbitrary[T3], s3: Shrink[T3]
+  ): Prop = asProperty3(f)
+
+  implicit def asProperty3[T1, T2, T3](f: (T1, T2, T3) => MatchResult[_])
   (implicit 
       a1: Arbitrary[T1], s1: Shrink[T1],
       a2: Arbitrary[T2], s2: Shrink[T2],
@@ -338,7 +356,15 @@ trait PropertyImplicits {
       }   
     }
   }
-  protected def asProperty[T1, T2, T3, T4](f: (T1, T2, T3, T4) => MatchResult[_])
+  def asProperty[T1, T2, T3, T4](f: (T1, T2, T3, T4) => MatchResult[_])
+  (implicit
+      a1: Arbitrary[T1], s1: Shrink[T1],
+      a2: Arbitrary[T2], s2: Shrink[T2],
+      a3: Arbitrary[T3], s3: Shrink[T3],
+      a4: Arbitrary[T4], s4: Shrink[T4]
+  ): Prop = asProperty4(f)
+
+  implicit def asProperty4[T1, T2, T3, T4](f: (T1, T2, T3, T4) => MatchResult[_])
   (implicit
       a1: Arbitrary[T1], s1: Shrink[T1],
       a2: Arbitrary[T2], s2: Shrink[T2],
@@ -352,7 +378,16 @@ trait PropertyImplicits {
       }
     }
   }
-  protected def asProperty[T1, T2, T3, T4, T5](f: (T1, T2, T3, T4, T5) => MatchResult[_])
+  def asProperty[T1, T2, T3, T4, T5](f: (T1, T2, T3, T4, T5) => MatchResult[_])
+  (implicit
+      a1: Arbitrary[T1], s1: Shrink[T1],
+      a2: Arbitrary[T2], s2: Shrink[T2],
+      a3: Arbitrary[T3], s3: Shrink[T3],
+      a4: Arbitrary[T4], s4: Shrink[T4],
+      a5: Arbitrary[T5], s5: Shrink[T5]
+  ): Prop = asProperty5(f)
+
+  implicit def asProperty5[T1, T2, T3, T4, T5](f: (T1, T2, T3, T4, T5) => MatchResult[_])
   (implicit
       a1: Arbitrary[T1], s1: Shrink[T1],
       a2: Arbitrary[T2], s2: Shrink[T2],
