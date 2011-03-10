@@ -92,8 +92,8 @@ trait MapBeHaveMatchers { outer: MapBaseMatchers =>
   }
   implicit def toPartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) = new PartialFunctionResultMatcher(result)
   class PartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) {
-  def definedAt(values: K*) = beDefinedAt(values:_*)
-  def definedBy(values: (K, V)*) = beDefinedBy(values:_*)
+    def definedAt(values: K*) = result(beDefinedAt(values:_*))
+    def definedBy(values: (K, V)*) = result(beDefinedBy(values:_*))
   }
   def key[K](k: K) = haveKey(k)   
   def value[V](v: V) = haveValue(v) 
