@@ -467,10 +467,12 @@ For example, specifying a Parser for numbers could look like this:
           "beASuccess and succeedOn check if the parse succeeds"                                  ^
           { number("1") must beASuccess }                                                         ^
           { number must succeedOn("12") }                                                         ^
+          { number must succeedOn("12").withResult(12) }                                          ^
           { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
                                                                                                   p^
           "beAFailure and failOn check if the parse fails"                                        ^
           { number must failOn("abc") }                                                           ^
+          { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
           { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
           { number("i") must beAFailure }                                                         ^
                                                                                                   p^
@@ -874,10 +876,12 @@ class ParserSpec extends SpecificationWithJUnit with matcher.ParserMatchers {  d
   "beASuccess and succeedOn check if the parse succeeds"                                  ^
   { number("1") must beASuccess }                                                         ^
   { number must succeedOn("12") }                                                         ^
+  { number must succeedOn("12").withResult(12) }                                          ^
   { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
                                                                                           p^
   "beAFailure and failOn check if the parse fails"                                        ^
   { number must failOn("abc") }                                                           ^
+  { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
   { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
   { number("i") must beAFailure }                                                         ^
                                                                                           p^

@@ -49,7 +49,11 @@ trait ParserBaseMatchers {
       s.description+" isn't a Success",
       s)
 
-    def withResult(resultMatcher: Matcher[T]) = new Matcher[TMatchee] {
+    /** check if the parsed value is as expected */
+    def withResult(result: ExpectedParsedResult[T]): Matcher[TMatchee] = withResult(new BeEqualTo(result.t))
+    
+    /** check if the parsed value is as expected, using a matcher */
+    def withResult(resultMatcher: Matcher[T]): Matcher[TMatchee] = new Matcher[TMatchee] {
       def apply[S <: TMatchee](s: Expectable[S]) = {
         val pResult = parseResult(s.value)
         lazy val resultMatcherResult: MatchResult[ParseResult[T]] = pResult match {
@@ -73,7 +77,11 @@ trait ParserBaseMatchers {
       s.description+" isn't a "+clazz.getSimpleName,
       s)
 
-    def withMsg(msgMatcher: Matcher[String]) = new Matcher[TMatchee] {
+    /** check if the failure message is as expected */
+    def withMsg(msg: ExpectedParsedResult[String]): Matcher[TMatchee] = withMsg(new BeMatching(".*"+msg.t+".*"))
+
+    /** check if the failure message is as expected, using a matcher */
+    def withMsg(msgMatcher: Matcher[String]): Matcher[TMatchee] = new Matcher[TMatchee] {
       def apply[S <: TMatchee](s: Expectable[S]) = {
         val pResult = parseResult(s.value)
         lazy val msgMatcherResult = pResult match {
@@ -110,4 +118,9 @@ trait ParserBeHaveMatchers { outer: ParserBaseMatchers =>
     def errorOn(input: Input) = result(outer.errorOn(input))
   }
 
+}
+/** This class is only used as a transient holder for the expected parsed value, to overcome overloaded method issues */
+class ExpectedParsedResult[T](val t: T)
+object ExpectedParsedResult {
+  implicit def toExpectedParsedResult[T](t: T): ExpectedParsedResult[T] = new ExpectedParsedResult(t)
 }

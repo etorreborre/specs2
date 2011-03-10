@@ -12,12 +12,14 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   { number("1") must beASuccess }                                                                                       ^
   { number("1") must be aSuccess }                                                                                      ^
   { number("i") must not be aSuccess }                                                                                  ^
+  { number must succeedOn("12").withResult(12) }                                                                        ^
   { number must succeedOn("12").withResult(equalTo(12)) }                                                               ^
   { number must not succeedOn("abc") }                                                                                  ^
   { number must not(succeedOn("abc").withResult(equalTo(13))) }                                                         ^
                                                                                                                         p^
   "failOn tests if the parser fails on the given input"                                                                 ^
   { number must failOn("abc").withMsg(matching(".*")) }                                                                 ^
+  { number must failOn("abc").withMsg("expected") }                                                                     ^
   { number must not failOn("12") }                                                                                      ^
   { number("i") must beAFailure }                                                                                       ^
   { number("1") must not be aFailure }                                                                                  ^
