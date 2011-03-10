@@ -206,7 +206,7 @@ trait DataTables {
     }
   }
   
-  abstract class DataRow[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] extends Product {
+  abstract class DataRow[+T1, +T2, +T3, +T4, +T5, +T6, +T7, +T8, +T9, +T10] extends Product {
     def show = productIterator.mkString("|", "|", "|")
   }
   
@@ -216,31 +216,31 @@ trait DataTables {
   case class DataRow1[T1](t1: T1) extends DataRow[T1, Any, Any, Any, Any, Any, Any, Any, Any, Any] {
     def ![S2](t2: S2) = DataRow2(t1, t2)
   }
-  case class DataRow2[T1, T2](t1: T1, t2: T2) extends DataRow[T1, T2, Any, Any, Any, Any, Any, Any, Any, Any] {
+  case class DataRow2[+T1, +T2](t1: T1, t2: T2) extends DataRow[T1, T2, Any, Any, Any, Any, Any, Any, Any, Any] {
     def ![S3](t3: S3) = DataRow3(t1, t2, t3)
   }
-  case class DataRow3[T1, T2, T3](t1: T1, t2: T2, t3: T3) extends DataRow[T1, T2, T3, Any, Any, Any, Any, Any, Any, Any] {
+  case class DataRow3[+T1, +T2, +T3](t1: T1, t2: T2, t3: T3) extends DataRow[T1, T2, T3, Any, Any, Any, Any, Any, Any, Any] {
     def ![S4](t4: S4) = DataRow4(t1, t2, t3, t4)
   }
-  case class DataRow4[T1, T2, T3, T4](t1: T1, t2: T2, t3: T3, t4: T4) extends DataRow[T1, T2, T3, T4, Any, Any, Any, Any, Any, Any] {
+  case class DataRow4[+T1, +T2, +T3, +T4](t1: T1, t2: T2, t3: T3, t4: T4) extends DataRow[T1, T2, T3, T4, Any, Any, Any, Any, Any, Any] {
     def ![S5](t5: S5) = DataRow5(t1, t2, t3, t4, t5)
   }
-  case class DataRow5[T1, T2, T3, T4, T5](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) extends DataRow[T1, T2, T3, T4, T5, Any, Any, Any, Any, Any] {
+  case class DataRow5[+T1, +T2, +T3, +T4, +T5](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) extends DataRow[T1, T2, T3, T4, T5, Any, Any, Any, Any, Any] {
     def ![S6](t6: S6) = DataRow6(t1, t2, t3, t4, t5, t6)
   }
-  case class DataRow6[T1, T2, T3, T4, T5, T6](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) extends DataRow[T1, T2, T3, T4, T5, T6, Any, Any, Any, Any] {
+  case class DataRow6[+T1, +T2, +T3, +T4, +T5, +T6](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) extends DataRow[T1, T2, T3, T4, T5, T6, Any, Any, Any, Any] {
     def ![S7](t7: S7) = DataRow7(t1, t2, t3, t4, t5, t6, t7)
   }
-  case class DataRow7[T1, T2, T3, T4, T5, T6, T7](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) extends DataRow[T1, T2, T3, T4, T5, T6, T7, Any, Any, Any] {
+  case class DataRow7[+T1, +T2, +T3, +T4, +T5, +T6, +T7](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) extends DataRow[T1, T2, T3, T4, T5, T6, T7, Any, Any, Any] {
     def ![S8](t8: S8) = DataRow8(t1, t2, t3, t4, t5, t6, t7, t8)
   }
-  case class DataRow8[T1, T2, T3, T4, T5, T6, T7, T8](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) extends DataRow[T1, T2, T3, T4, T5, T6, T7, T8, Any, Any] {
+  case class DataRow8[+T1, +T2, +T3, +T4, +T5, +T6, +T7, +T8](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) extends DataRow[T1, T2, T3, T4, T5, T6, T7, T8, Any, Any] {
     def ![S9](t9: S9) = DataRow9(t1, t2, t3, t4, t5, t6, t7, t8, t9)
   }
-  case class DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9) extends DataRow[T1, T2, T3, T4, T5, T6, T7, T8, T9, Any] {
+  case class DataRow9[+T1, +T2, +T3, +T4, +T5, +T6, +T7, +T8, +T9](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9) extends DataRow[T1, T2, T3, T4, T5, T6, T7, T8, T9, Any] {
     def ![S10](t10: S10) = DataRow10(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10)
   }
-  case class DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10) extends DataRow[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] {
+  case class DataRow10[+T1, +T2, +T3, +T4, +T5, +T6, +T7, +T8, +T9, +T10](t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10) extends DataRow[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] {
   
   }
 }
@@ -300,11 +300,13 @@ private object DataTablesGenerator {
   }
   def parametersList(i: Int) = (1 to i).map(j => "t"+j+": T"+j).mkString("(",", ", ")")
   def parameters(i: Int) = (1 to i).map("t"+_).mkString("(",", ", ")")
-  def types(i: Int) = (1 to i).map("T"+_).mkString("[",", ", "]")
-  def typesList(i: Int): String =  (1 to i).map("T"+_).mkString(", ")
+  def variantTypes(i: Int) = typesAsList(i).map("+"+_).mkString("[",", ", "]")
+  def types(i: Int) = typesAsList(i).mkString("[",", ", "]")
+  def typesAsList(i: Int): String =  (1 to i).map("T"+_)
+  def typesList(i: Int): String = typesAsList(i).mkString(", ")
   def typesList(i: Int, n: Int): String =  (List(typesList(i)) ::: (i+1 to n).map(t => "Any").toList).mkString(", ")
-  def typesTuple(i: Int) =  (1 to i).map("T"+_).mkString("(",", ", ")")
-  def dataRow(i: Int) = "DataRow"+i+types(i)
+  def typesTuple(i: Int) =  typesAsList(i).mkString("(",", ", ")")
+  def dataRow(i: Int) = "DataRow"+i+variantTypes(i)
   def table(i: Int) = "Table"+i
 }
 */
