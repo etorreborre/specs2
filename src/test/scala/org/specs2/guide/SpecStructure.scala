@@ -153,9 +153,11 @@ So the correct way of writing the example is:
 
 The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice
 by some. However you might see it as an annoying restriction. You can avoid it by extending the `org.specs2.matcher.MustThrownMatchers`
-trait. With that trait, any failing expectation will throw an exception and the rest of the example will not be executed.
+trait. With that trait, any failing expectation will throw a `FailureException` and the rest of the example will not be executed.
 
-Note that this is also the default behavior for the `mutable.Specification` trait used for _unit_ specifications.
+There is also an additional method `failure(message)` to throw a `FailureException` at will.
+
+[Note that the `ThrownMatchers` traits are mixed in the `mutable.Specification` trait used for _unit_ specifications].
 
 ##### Set an example Pending until fixed
 
@@ -714,6 +716,17 @@ The other option is to use the After implicit which is available on any `Result`
           data must beReady        
         }.after(cleanData)
 
+##### Generic specification with setup and teardown steps
+
+If each of your specifications involves setting a specific context before and after all the examples, you can define your
+own Specification trait doing this:
+
+        trait DatabaseSpec extends Specification {
+          override def is = Step(startDb) ^ super.is ^ Step(cleanDb)
+        }
+
+The `DatabaseSpec` above will insert, in each inherited specification, a `Step` executed before all the fragments, and one
+executed after all of them.
 
 #### Other unit specification methods
 
