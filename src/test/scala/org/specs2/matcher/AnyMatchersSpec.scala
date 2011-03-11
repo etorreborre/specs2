@@ -10,9 +10,15 @@ class AnyMatchersSpec extends SpecificationWithJUnit { def is =
   { "a" should_== "a" }                                                                                                 ^
   { "a" should_!= "b" }                                                                                                 ^
   { "a" must be_==("a") }                                                                                               ^
+  { "a" must not be_==("b") }                                                                                           ^
   { "a" must be_!=("b") }                                                                                               ^
+  { "a" must not be_!=("a") }                                                                                           ^
   { "a" === "a" }                                                                                                       ^
   { "a" !== "b" }                                                                                                       ^
+  { "a" must be_===("a") }                                                                                              ^
+  { "a" must not be_===("b") }                                                                                          ^
+  { "a" must be_!==("b") }                                                                                              ^
+  { "a" must not be_!==("a") }                                                                                          ^
                                                                                                                         p^
   "beTheSameAs checks if a value is eq to another one"                                                                  ^
   { aValue must beTheSameAs(aValue) }                                                                                   ^

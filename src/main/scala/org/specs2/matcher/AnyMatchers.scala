@@ -166,6 +166,9 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   implicit def anyBeHaveMatcher[T](result: MatchResult[T]) = new AnyBeHaveMatchers(result)
   class AnyBeHaveMatchers[T](result: MatchResult[T]) {
     def be_==(t: T) = result(outer.be_==(t))
+    def be_!=(t: T) = result(outer.be_!=(t))
+    def be_===(t: T) = result(outer.be_===(t))
+    def be_!==(t: T) = result(outer.be_!==(t))
     def equalTo(t: T) = result(outer.be_==(t))
     def asNullAs[T](a: =>T) = result(outer.beAsNullAs(a))
     def oneOf(t: T*) = result(beOneOf(t:_*))
