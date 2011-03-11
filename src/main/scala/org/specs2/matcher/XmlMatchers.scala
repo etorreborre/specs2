@@ -59,7 +59,13 @@ trait XmlBaseMatchers { outer =>
   /** match if <code>node</code> is equal to the tested node without testing empty text */   
   def beEqualToIgnoringSpace(node: Seq[Node]) = new EqualIgnoringSpaceMatcher(node)
   /** @alias for beEqualToIgnoringSpace */
+  def be_==/(node: Seq[Node]): EqualIgnoringSpaceMatcher = beEqualToIgnoringSpace(node)
+  /** @alias for beEqualToIgnoringSpace */
   def ==/(node: Seq[Node]): EqualIgnoringSpaceMatcher = beEqualToIgnoringSpace(node)
+  /** @alias for beEqualToIgnoringSpace */
+  def ==/(node: Elem): EqualIgnoringSpaceMatcher = beEqualToIgnoringSpace(node)
+  /** @alias for beEqualToIgnoringSpace */
+  def be_==/(node: Elem): EqualIgnoringSpaceMatcher = beEqualToIgnoringSpace(node)
   /** @alias for beEqualToIgnoringSpace */
   def equalToIgnoringSpace(node: Seq[Node]) = beEqualToIgnoringSpace(node)
   /** @alias for beEqualToIgnoringSpace */
