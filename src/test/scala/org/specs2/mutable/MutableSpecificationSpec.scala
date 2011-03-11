@@ -2,6 +2,7 @@ package org.specs2
 package mutable
 import io._
 import specification.{ SpecStart, FragmentExecution }
+import matcher.FailureException
 
 class MutableSpecificationSpec extends org.specs2.SpecificationWithJUnit { def is =
                                                                                                                         """
@@ -20,6 +21,7 @@ The following examples specify the functionalities for such a mutable specificat
                                                                                                                         p^
   "Execution"                                                                                                           ^
     "the first failing expectation stops an Example execution"                                                          ! execution().e1^
+    "the failure method throws a FailureException"                                                                      ! execution().e2^
                                                                                                                         end
 
 
@@ -38,6 +40,7 @@ The following examples specify the functionalities for such a mutable specificat
       fragments.map(executeFragment(args())(_))
       output.messages must not contain("statement executed after failing expectation")
     }
+    def e2 = new Specification { failure("failed") } must throwA[FailureException]
   }
 
   trait HasAMutableSpec {

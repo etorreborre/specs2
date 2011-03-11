@@ -33,5 +33,7 @@ trait ThrownExpectations extends Expectations {
     }
     m
   }
+  protected def failure(m: String): Nothing = failure(Failure(m))
+  protected def failure(f: Failure): Nothing = throw new FailureException(f)
 }
 case class FailureException(f: Failure) extends Exception
