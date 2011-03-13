@@ -36,6 +36,8 @@ trait ThrownExpectations extends Expectations {
   }
   protected def failure(m: String): Nothing = failure(Failure(m))
   protected def failure(f: Failure): Nothing = throw new FailureException(f)
+  protected def skipped(m: String): Nothing = skipped(Skipped(m))
+  protected def skipped(s: Skipped): Nothing = throw new SkipException(s)
 }
 case class FailureException(f: Failure) extends Exception
 case class SkipException(f: Skipped) extends Exception

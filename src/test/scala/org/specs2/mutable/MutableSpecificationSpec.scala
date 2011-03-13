@@ -43,7 +43,7 @@ The following examples specify the functionalities for such a mutable specificat
     }
     def e2 = {
       fragments.map(executeFragment(args())(_))
-      output.messages must not contain("statement executed after failing expectation")
+      output.messages must not contain("statement executed after skipped expectation")
     }
     def e3 = new Specification { failure("failed") } must throwA[FailureException]
   }
