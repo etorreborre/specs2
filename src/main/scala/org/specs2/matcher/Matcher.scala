@@ -129,6 +129,12 @@ trait Matcher[-T] { outer =>
       }
     }
   }
+  /** only apply this matcher if the condition is true */
+  def when(b: Boolean, m: String= ""): Matcher[T] = new Matcher[T] {
+    def apply[U <: T](a: Expectable[U]) = if (b) outer(a) else MatchSuccess(m, "ko", a)
+  }
+  /** only apply this matcher if the condition is false */
+  def unless(b: Boolean, m: String= ""): Matcher[T] = when(!b, m)
   /**
    *  The <code>lazily</code> operator returns a Matcher which will match a function returning the expected value
    */   

@@ -154,6 +154,15 @@ There are many ways to create matchers for your specific usage. The simplest way
         iterator.next must be_==(3).eventually
          // Use eventually(retries, n.millis) to use another number of tries and waiting time
 
+ * using `when` or `unless` to apply a matcher only if a condition is satisfied:
+
+        1 must be_==(2).when(false)                        // will return a success
+        1 must be_==(2).unless(true)                       // same thing
+
+        1 must be_==(2).when(false, "don't check this")    // will return a success
+        1 must be_==(2).unless(true, "don't check this")   // same thing
+
+
  * using `orSkip` to return a `Skipped` result instead of a Failure if the condition is not met
 
         1 must be_==(2).orSkip

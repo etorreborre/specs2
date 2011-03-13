@@ -22,6 +22,12 @@ class LogicalMatcherSpec extends SpecificationWithJUnit { def is =
     "if it is ko, it returns a MatchSkip result"                                                                        ! skip2^
     "a skipped message can also be added in front of the failure message"                                               ! skip3^
     "with be_== and subtyping we need a type annotation or a be_=== matcher"                                            ! skip4^
+                                                                                                                        p^
+  "a matcher can applied only if a boolean condition is true"                                                           ^
+    "if the condition is true, it is applied"                                                                           ! when1^
+    "if the condition is false, it is not and a success is returned"                                                    ! when2^
+    "if the condition is false, a message can be added to the success result"                                           ! when3^
+    "'unless' can also be used to avoid negating the condition"                                                         ! when4^
                                                                                                                         end
 
   def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
@@ -39,4 +45,9 @@ class LogicalMatcherSpec extends SpecificationWithJUnit { def is =
               Skipped("precondition failed: '1' is not equal to '2'")
 
   def skip4 = (Some(1): Option[Int]) must be_===(Some(1)).orSkip
+
+  def when1 = (1 must be_==(1).when(true)).toResult must beSuccessful
+  def when2 = (1 must be_==(2).when(false)).toResult must beSuccessful
+  def when3 = (1 must be_==(2).when(false, "no worries")).message must_== "no worries"
+  def when4 = (1 must be_==(2).unless(true)).toResult must beSuccessful
 }
