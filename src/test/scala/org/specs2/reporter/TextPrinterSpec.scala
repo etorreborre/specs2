@@ -177,7 +177,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     def e3 = print(t1 ^ "ex1"!Success("ok", 2)) must containMatch("2 expectations") 
     def e4 = print(t1 ^ fail3) must containMatch("1 failure") 
     def e5 = print(t1 ^ error4) must containMatch("1 error") 
-    def e6 = print(t1 ^ ex1) must containMatch("0 ms")
+    def e6 = print(t1 ^ ex1) must containMatch("\\d+ ms")
   }
 
   def print(fragments: Fragments): Seq[String] = printWithColors(fragments).map(removeColors(_))
