@@ -1,7 +1,7 @@
 import sbt._
 import reaktor.scct.ScctProject
 
-class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject with posterous.Publish with ProguardProject {
+class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject with posterous.Publish with ProguardProject with assembly.AssemblyBuilder {
   
   /** Paths */
   override def outputDirectoryName = "target"
