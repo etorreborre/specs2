@@ -181,9 +181,11 @@ The alternative is to either add a type annotation or to use the `be_===` matche
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
        val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")
-       val m1: Matcher[String]  = ((_: String).startsWith("hello"), "starts with hello", "doesn't start with hello")
-       val m2: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ "doesn't start with hello")
-       val m3: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ "starts with hello", (s:String) => s+ "doesn't start with hello")
+       val m1: Matcher[String] = ((_: String).startsWith("hello"), "starts with hello", "doesn't start with hello")
+       val m2: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ " doesn't start with hello")
+       val m3: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ " starts with hello", (s:String) => s+ " doesn't start with hello")
+       val m4: Matcher[String] = (s: String) => (s.startsWith("hello"), s+" doesn't start with hello")
+       val m5: Matcher[String] = (s: String) => (s.startsWith("hello"), s+ "starts with hello", s+ " doesn't start with hello")
 
 And if you want absolute power over matching, you can define your own matcher:
 

@@ -9,6 +9,8 @@ class MatcherSpec extends SpecificationWithJUnit { def is =
   "a matcher can be adapted with a function for both expected and actual values"                                        ! e2^
   "a matcher can be defined by a function with 1 message"                                                               ! e3^
   "a matcher can be defined by a function with 2 messages"                                                              ! e3_1^
+  "a matcher can be defined by a function returning a triplet"                                                          ! e3_2^
+  "a matcher can be defined by a function returning a pair"                                                             ! e3_3^
   "a matcher can be defined by a function with a function for the ko message"                                           ! e4^
   "a matcher can be defined by a function with 2 functions for the messages"                                            ! e5^
                                                                                                                         end
@@ -26,6 +28,14 @@ class MatcherSpec extends SpecificationWithJUnit { def is =
   }
   def e3_1 = {
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, "is even", "is odd")
+    (3 must beEven) returns "'3' is odd"
+  }
+  def e3_2 = {
+    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "is even", "'"+i+"' is odd")
+    (3 must beEven) returns "'3' is odd"
+  }
+  def e3_3 = {
+    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "'"+i+"' is odd")
     (3 must beEven) returns "'3' is odd"
   }
   def e4 = {

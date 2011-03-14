@@ -139,6 +139,26 @@ trait MatchersImplicits extends Expectations {
       result(functionResult,  f._2(s.value), f._3(s.value), expectable)
     }
   }
+  /**
+   * This method transform a function returning a pair (Boolean, String for ko message) to a Matcher
+   */
+  implicit def pairFunctionToMatcher[T](f: T =>(Boolean, String)): Matcher[T] = new Matcher[T] {
+    def apply[S <: T](s: Expectable[S]) = {
+      val expectable = s
+      val functionResult = f(expectable.value)
+      result(functionResult._1, "not ("+functionResult._2+")", functionResult._2, expectable)
+    }
+  }
+  /**
+   * This method transform a function returning a triplet (Boolean, String for ok message, String for ko message) to a Matcher
+   */
+  implicit def tripletFunctionToMatcher[T](f: T =>(Boolean, String, String)): Matcher[T] = new Matcher[T] {
+    def apply[S <: T](s: Expectable[S]) = {
+      val expectable = s
+      val functionResult = f(expectable.value)
+      result(functionResult._1, functionResult._2,  functionResult._3, expectable)
+    }
+  }
 
   implicit def verifyFunction[U, T](t: U => MatchResult[T]) = new MatchResultFunctionVerification(t)
   class MatchResultFunctionVerification[U, T](t: U => MatchResult[T]) {
