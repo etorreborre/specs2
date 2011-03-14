@@ -38,9 +38,17 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     "the first example will not execute"                                                                                ! before().e5^
     "and it will be reported as skipped with the reason"                                                                ! before().e6^
                                                                                                                         p^
+  "If the before method throws a SkippedException"                                                                      ^
+    "the first example will not execute"                                                                                ! before().e5_1^
+    "and it will be reported as skipped with the reason"                                                                ! before().e6_1^
+                                                                                                                        p^
   "If the before method returns a MatchFailure"                                                                         ^
     "the first example will not execute"                                                                                ! before().e7^
     "and it will be reported as failed with the reason"                                                                 ! before().e8^
+                                                                                                                        p^
+  "If the before method returns a MatchFailure"                                                                         ^
+    "the first example will not execute"                                                                                ! before().e7_1^
+    "and it will be reported as failed with the reason"                                                                 ! before().e8_1^
                                                                                                                         p^
   "The After trait can be used to execute methods after Fragments"                                                      ^
     "the after method is executed after a first example"                                                                ! c().e5^
@@ -91,8 +99,12 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     def e4 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
     def e5 = executing(ex1_beforeSkipped).prints()
     def e6 = executeBodies(ex1_beforeSkipped).map(_.message) must_== List("skipped")
+    def e5_1 = executing(ex1_beforeSkippedThrown).prints()
+    def e6_1 = executeBodies(ex1_beforeSkippedThrown).map(_.message) must_== List("skipped")
     def e7 = executing(ex1_beforeMatchFailed).prints()
     def e8 = executeBodies(ex1_beforeMatchFailed).map(_.message) must_== List("'1' is not equal to '2'")
+    def e7_1 = executing(ex1_beforeMatchFailedThrown).prints()
+    def e8_1 = executeBodies(ex1_beforeMatchFailedThrown).map(_.message) must_== List("'1' is not equal to '2'")
   }
   case class c() extends FragmentsExecution {
     def e5 = executing(ex1After).prints("e1", "after")
@@ -123,7 +135,8 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     def e10 = executing(ex1BeforeAfterAroundThenBefore2After2Around2).
                    prints("before", "before2", "around", "around2", "e1", "after", "after2")
   }
-    
+
+
   class FragmentsExecution extends MockOutput with ContextData {
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
     case class Executed(r: Seq[Result]) {
@@ -155,6 +168,8 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1_beforeFail = "ex1" ! beforeWithError(ok1) 
   def ex1_beforeSkipped = "ex1" ! beforeWithSkipped(ok1)
   def ex1_beforeMatchFailed = "ex1" ! beforeWithMatchFailed(ok1)
+  def ex1_beforeSkippedThrown = "ex1" ! beforeWithSkippedThrown(ok1)
+  def ex1_beforeMatchFailedThrown = "ex1" ! beforeWithMatchFailedThrown(ok1)
   def ex1_2Before = ex1Before ^ "ex2" ! before(ok2)
 
   def ex1After = "ex1" ! after(ok1) 
@@ -190,7 +205,13 @@ trait ContextsForFragments extends MockOutput {
   object beforeWithSkipped extends Before with MockOutput {
 	  def before = Skipped("skipped")
   }
+  object beforeWithSkippedThrown extends Before with MockOutput with MustThrownMatchers {
+	  def before = skipped("skipped")
+  }
   object beforeWithMatchFailed extends Before with MockOutput with MustMatchers {
+	  def before = 1 must_== 2
+  }
+  object beforeWithMatchFailedThrown extends Before with MockOutput with MustThrownMatchers {
 	  def before = 1 must_== 2
   }
   object after extends After {
