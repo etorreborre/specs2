@@ -48,7 +48,9 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   
   override def packageSrcJar = defaultJarPath("-sources.jar")
   val sourceArtifact = Artifact.sources(artifactID)
-  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc)
+  override def assemblyJarName = name + "-all-" + this.version + ".jar"
+  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc, proguard)
+  
   
   /** Publishing */
   override def managedStyle = ManagedStyle.Maven
