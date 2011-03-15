@@ -31,7 +31,7 @@ trait Plural {
      * @return a Option with a non-pluralized string describing this quantity if it is
      * greater than 0
      */
-	  def optInvariantQty(s: String): Option[String] = if (i > 0) Some(s) else None
+	  def optInvariantQty(s: String): Option[String] = if (i > 0) Some(i.toString+" "+s) else None
   }
   /** @return an Ordinal which can have a rank in a sequence */
   implicit def ordinal(i: Int) = Ordinal(i)
