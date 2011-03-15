@@ -193,7 +193,7 @@ trait TextPrinter {
               Some(failures qty "failure"), 
               Some(errors qty "error"),
               pending optQty "pending", 
-              skipped optQty "skipped").flatten.mkString(", "), blue, args.color))
+              skipped optInvariantQty "skipped").flatten.mkString(", "), blue, args.color))
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {
