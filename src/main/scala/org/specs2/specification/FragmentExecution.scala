@@ -26,6 +26,7 @@ trait FragmentExecution {
    */
   def executeBody(body: =>Result)(implicit arguments: Arguments): Result = {
     if (arguments.plan) Success("plan")
+    else if (arguments.skipAll) Skipped()
     else try {
       body
     } catch {

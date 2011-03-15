@@ -115,7 +115,8 @@ trait TextPrinter {
         case Pending(_)    => if (!args.xonly) out.printPending(description + " " + result.message)
         case Skipped(_, _) => if (!args.xonly) {
           out.printSkipped(description)
-          out.printSkipped(result.message)
+          if (!result.message.isEmpty)
+            out.printSkipped(result.message)
         }
       }
     }

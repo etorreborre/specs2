@@ -35,6 +35,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     "if plan = true, nothing is executed"                                                                               ! planargs().e1^
     "if sequential = false examples are executed concurrently"                                                          ! seq().e1^
     "if sequential = true examples are executed sequentially"                                                           ! seq().e2^
+    "if skipAll = true, everything is skipped"                                                                          ! skipAllargs().e1^
                                                                                                                         p^
     "if color = true, the text output is colorized"                                                                     ^
       "text is white"                                                                                                   ! color().e1^
@@ -144,6 +145,14 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
   case class planargs() {
     val plan: Arguments = args(plan = true)
     def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("* e1") and not containMatch("\\+ e1") 
+  }
+  case class skipAllargs() {
+    val sk: Arguments = args(skipAll = true)
+    def e1 = {
+      val spec = print(sk ^ t1 ^ ex1 ^ fail3)
+      (spec must containMatch("o e1")) and
+      (spec must contain("o fail3"))
+    }
   }
   case class seq() {
     val sequential: Arguments = args(sequential = true)
