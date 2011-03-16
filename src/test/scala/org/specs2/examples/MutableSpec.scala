@@ -1,8 +1,8 @@
 package org.specs2
 package examples
-import mutable._
 import specification._
 import execute.Success
+import mutable._
 
 /**
  * This specification shows how to use the mutable.Specification trait to create a unit Specification
@@ -69,8 +69,8 @@ class MutableSpec extends SpecificationWithJUnit {
   object context extends Before {
     def before = () // do something to setup the context
   }
-  // we need to extend Success to be used as an Example body
-  trait system extends Success {
+  // we need to extend Scope to be used as an Example body
+  trait system extends Scope {
     val string = "Hey you"
   }
   case class system2() {

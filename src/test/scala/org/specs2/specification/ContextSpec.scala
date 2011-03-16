@@ -176,7 +176,7 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1_afterFail = "ex1" ! afterWithError(ok1) 
   def ex1_2After = ex1After ^ "ex2" ! after(ok2)
 
-  trait afterContext extends Success with After {
+  trait afterContext extends Scope with After {
     def after = println("after")
   }
   def ex1ExplicitAfter = "ex1" ! new afterContext {

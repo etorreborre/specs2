@@ -680,8 +680,9 @@ called `Action`:
 If you want to inline the example code with the text you'll need another way to manage contexts. If you just need to setup
 data the simplest thing to do is to create a trait holding this data for you:
 
-        // this needs to be a Success to be the body of an Example
-        trait context extends Success {
+        // this needs to be a Scope to be the body of an Example because there is an implicit conversion from Scope
+        // to Success
+        trait context extends Scope {
           val data: Data = createData
         }
 
@@ -696,7 +697,7 @@ time, you can easily add any type of "before" functionality that you need.
 
 If you need some "after" functionality, the syntax gets a bit heavier. You have 2 choices, the first one is to extend After:
 
-        trait context extends Success with After {
+        trait context extends Scope with After {
           val data: Data = createData
           def after = cleanData
         }
@@ -708,7 +709,7 @@ If you need some "after" functionality, the syntax gets a bit heavier. You have 
 
 The other option is to use the After implicit which is available on any `Result`:
 
-        trait context extends Success {
+        trait context extends Scope {
           val data: Data = createData
         }
 
@@ -812,8 +813,8 @@ To make things more concrete here is a full example:
         object context extends Before {
           def before = () // do something to setup the context
         }
-        // we need to extend Success to be used as an Example body
-        trait system extends Success {
+        // we need to extend Scope to be used as an Example body
+        trait system extends Scope {
           val string = "Hey you"
         }
         case class system2() {
