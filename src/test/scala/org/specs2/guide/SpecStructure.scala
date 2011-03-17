@@ -681,12 +681,12 @@ If you want to inline the example code with the text you'll need another way to 
 data the simplest thing to do is to create a trait holding this data for you:
 
         // this needs to be a Scope to be the body of an Example because there is an implicit conversion from Scope
-        // to Success
+        // to Success and Success is an accepted `Result` for an Example
         trait context extends Scope {
           val data: Data = createData
         }
 
-and instantiate that trait for each example:
+Then you instantiate that trait for each example:
 
         "this example uses some data" in new context {
            data must beReady
