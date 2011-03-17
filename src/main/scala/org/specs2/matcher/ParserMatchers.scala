@@ -32,6 +32,18 @@ trait ParserBaseMatchers {
   def failOn[T](input: Input) = ParseNoSuccessMatcher[T, Parser[T], PFailure](_(input))
   /** match if parsing the input raises an error */
   def errorOn[T](input: Input) = ParseNoSuccessMatcher[T, Parser[T], PError](_(input))
+  /** match if the parse successful => matcher ok */
+  def haveSuccessResult[T](m: Matcher[T]): Matcher[ParseResult[T]] =
+    ParseSuccessMatcher[T, ParseResult[T]](identity _).andThenWithResult(m)
+  /** match if the parse successful => string match ok */
+  def haveSuccessResult[T](result: String): Matcher[ParseResult[T]] =
+    haveSuccessResult(new BeMatching(".*"+result+".*") ^^ ((_:Any).toString))
+  /** match if the parse fails => matcher ok */
+  def haveFailureMsg[T](m: Matcher[String]): Matcher[ParseResult[T]] =
+    ParseNoSuccessMatcher[T, ParseResult[T], PFailure](identity _).andThenWithMsg(m)
+  /** match if the parse fails => string match ok */
+  def haveFailureMsg[T](result: String): Matcher[ParseResult[T]] =
+    haveFailureMsg(new BeMatching(".*"+result+".*"))
 
 
   private[specs2] trait ParseResultMatcher[T, TMatchee] extends Matcher[TMatchee] {
@@ -49,6 +61,8 @@ trait ParserBaseMatchers {
       s.description+" isn't a Success",
       s)
 
+    /** check if the parsed value is as expected as a regexp*/
+    def withResult(result: String): Matcher[TMatchee] = withResult(new BeMatching(".*"+result+".*") ^^ ((_:Any).toString))
     /** check if the parsed value is as expected */
     def withResult(result: ExpectedParsedResult[T]): Matcher[TMatchee] = withResult(new BeEqualTo(result.t))
     
@@ -62,6 +76,17 @@ trait ParserBaseMatchers {
         }
 
         (apply0(Expectable(pResult)) and resultMatcherResult).map(_ => s.value)
+      }
+    }
+    protected[specs2]
+    def andThenWithResult(resultMatcher: Matcher[T]): Matcher[TMatchee] = new Matcher[TMatchee] {
+      def apply[S <: TMatchee](s: Expectable[S]) = {
+        val pResult = parseResult(s.value)
+        lazy val resultMatcherResult: MatchResult[ParseResult[T]] = pResult match {
+          case PSuccess(result, _) => resultMatcher(Expectable(result)).map(_ => pResult)
+          case _ => MatchSuccess("Parse succeeded", "Parse didn't succeed", s.map(pResult))
+        }
+        resultMatcherResult.map(_ => s.value)
       }
     }
 
@@ -92,6 +117,18 @@ trait ParserBaseMatchers {
         (apply0(Expectable(pResult)) and msgMatcherResult).map(_ => s.value)
       }
     }
+    /** check if the failure message is as expected, only when the parse is failing */
+    private[specs2]
+    def andThenWithMsg(msgMatcher: Matcher[String]): Matcher[TMatchee] = new Matcher[TMatchee] {
+      def apply[S <: TMatchee](s: Expectable[S]) = {
+        val pResult = parseResult(s.value)
+        lazy val msgMatcherResult = pResult match {
+          case pNoSuccess: NoSuccess => msgMatcher(Expectable(pNoSuccess.msg))
+          case _ => MatchSuccess("Parse has not succeeded", "Parse didn't not succeed correctly", s.map(pResult))
+        }
+        msgMatcherResult.map(_ => s.value)
+      }
+    }
   }
   implicit def useStringsAsInput(s: String): Reader[Char] = new CharSequenceReader(s)
 }
@@ -102,9 +139,13 @@ trait ParserBeHaveMatchers { outer: ParserBaseMatchers =>
   
   implicit def toParsedResultMatcher[T](result: MatchResult[ParseResult[T]]) = new ParsedResultMatcher(result)
   class ParsedResultMatcher[T](result: MatchResult[ParseResult[T]]) {
-    def aSuccess                = result(beASuccess)
-    def aFailure                = result(beAFailure)
-    def aParseError             = result(beAnError)
+    def aSuccess                           = result(beASuccess)
+    def aFailure                           = result(beAFailure)
+    def aParseError                        = result(beAnError)
+    def haveSuccessResult(s: String)       = result(outer.haveSuccessResult(s))
+    def haveSuccessResult(m: Matcher[T])   = result(outer.haveSuccessResult(m))
+    def haveFailureMsg(s: String)          = result(outer.haveFailureMsg(s))
+    def haveFailureMsg(m: Matcher[String]) = result(outer.haveFailureMsg(m))
   }
 
   def aSuccess    = beASuccess
@@ -120,7 +161,9 @@ trait ParserBeHaveMatchers { outer: ParserBaseMatchers =>
 
 }
 /** This class is only used as a transient holder for the expected parsed value, to overcome overloaded method issues */
-class ExpectedParsedResult[T](val t: T)
+case class ExpectedParsedResult[T](t: T) {
+  override def toString = t.toString
+}
 object ExpectedParsedResult {
   implicit def toExpectedParsedResult[T](t: T): ExpectedParsedResult[T] = new ExpectedParsedResult(t)
 }

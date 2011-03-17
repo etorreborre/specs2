@@ -162,6 +162,12 @@ There are many ways to create matchers for your specific usage. The simplest way
         1 must be_==(2).when(false, "don't check this")    // will return a success
         1 must be_==(2).unless(true, "don't check this")   // same thing
 
+ * using `iff` to say that a matcher must succeed if and only if a condition is satisfied:
+
+        1 must be_==(1).iff(true)                        // will return a success
+        1 must be_==(2).iff(true)                        // will return a failure
+        1 must be_==(2).iff(false)                       // will return a success
+        1 must be_==(1).iff(false)                       // will return a failure
 
  * using `orSkip` to return a `Skipped` result instead of a Failure if the condition is not met
 
@@ -466,6 +472,10 @@ You can specify your own parsers by:
  * defining the `val parsers` variable with your parsers definition
  * use the `beASuccess`, `beAFailure`, `successOn`, `failOn`, `errorOn` matchers to specify the results of parsing input
    strings
+ * use `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
+   a String or a matcher so that
+ ** `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
+ ** `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
 
 For example, specifying a Parser for numbers could look like this:   
 
@@ -480,12 +490,14 @@ For example, specifying a Parser for numbers could look like this:
           { number must succeedOn("12") }                                                         ^
           { number must succeedOn("12").withResult(12) }                                          ^
           { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
+          { number("1") must haveSuccessResult("1") }                                             ^
                                                                                                   p^
           "beAFailure and failOn check if the parse fails"                                        ^
           { number must failOn("abc") }                                                           ^
           { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
           { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
           { number("i") must beAFailure }                                                         ^
+          { number("i") must haveFailureMsg("i' found") }                                         ^
                                                                                                   p^
           "beAnError and errorOn check if the parser errors out completely"                       ^
           { error must errorOn("") }                                                              ^
@@ -522,7 +534,7 @@ Note that sometimes type inference may not work (if there are several parameters
 #### Arbitrary instances
 
 By default `Arbitrary` instances are taken from the surrounding example scope. However you'll certainly need to generate
-your own data from time to time. Here's how to specify your Arbitrary instances in examples:
+your own data from time to time. Here's how to specify your Arbitrary instances in an example:
 
         "a simple property" ! check(arb1)
 
@@ -910,12 +922,14 @@ class ParserSpec extends SpecificationWithJUnit with matcher.ParserMatchers {  d
   { number must succeedOn("12") }                                                         ^
   { number must succeedOn("12").withResult(12) }                                          ^
   { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
+  { number("1") must haveSuccessResult("1") }                                             ^
                                                                                           p^
   "beAFailure and failOn check if the parse fails"                                        ^
   { number must failOn("abc") }                                                           ^
   { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
   { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
   { number("i") must beAFailure }                                                         ^
+  { number("i") must haveFailureMsg("i' found") }                                         ^
                                                                                           p^
   "beAnError and errorOn check if the parser errors out completely"                       ^
   { error must errorOn("") }                                                              ^
