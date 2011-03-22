@@ -135,7 +135,7 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
             Some(failures qty "failure"), 
             Some(errors qty "error"),
             pending optQty "pending", 
-            skipped optQty "skipped").flatten.mkString(", ")
+            skipped optInvariantQty "skipped").flatten.mkString(", ")
             
     out.printBr().printElem {
       <table class="dataTable">

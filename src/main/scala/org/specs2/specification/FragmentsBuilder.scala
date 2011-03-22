@@ -130,6 +130,8 @@ trait FragmentsBuilder {
     def ~(p: (SpecificationStructure, String, String)) =
       See(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2, p._3)) ^ p._1.content.fragments
   }
+  /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */
+  implicit def inScope(s: Scope): Success = Success()
 }
 
 /**

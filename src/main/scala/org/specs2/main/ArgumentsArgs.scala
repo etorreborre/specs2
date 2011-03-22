@@ -12,6 +12,7 @@ trait ArgumentsArgs extends ArgProperties {
     ex:            ArgProperty[String]      = ArgProperty[String](),
     xonly:         ArgProperty[Boolean]     = ArgProperty[Boolean](),
     plan:          ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    skipAll:       ArgProperty[Boolean]     = ArgProperty[Boolean](),
     failtrace:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
     color:         ArgProperty[Boolean]     = ArgProperty[Boolean](),
     noindent:      ArgProperty[Boolean]     = ArgProperty[Boolean](),
@@ -30,6 +31,7 @@ trait ArgumentsArgs extends ArgProperties {
      ex.toOption.map(".*"+_+".*"),
      xonly.toOption,
      plan.toOption,
+     skipAll.toOption,
      failtrace.toOption,
      color.toOption,
      noindent.toOption,
@@ -59,9 +61,13 @@ trait ArgumentsArgs extends ArgProperties {
    */
   def plan: Arguments = args(plan = true)
   /**
+   * shortcut to skip all examples
+   */
+  def skipAll: Arguments = args(skipAll = true)
+  /**
    * shortcut to avoid automatic indentation
    */
-  def noindent = args(noindent = true)
+  def noindent: Arguments = args(noindent = true)
   /**
    * shortcut to not executing the text and avoid automatic indentation
    */

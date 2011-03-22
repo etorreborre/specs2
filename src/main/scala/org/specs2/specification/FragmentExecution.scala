@@ -7,7 +7,7 @@ import main.Arguments
 import time.SimpleTimer
 import execute._
 import StandardFragments._
-import matcher.FailureException
+import matcher.{FailureException, SkipException}
 import junit.framework.AssertionFailedError
 import form.Form
 import scala.Either
@@ -26,10 +26,12 @@ trait FragmentExecution {
    */
   def executeBody(body: =>Result)(implicit arguments: Arguments): Result = {
     if (arguments.plan) Success("plan")
+    else if (arguments.skipAll) Skipped()
     else try {
       body
     } catch {
       case FailureException(f) => f
+      case SkipException(f)    => f
       case e: Exception        => Error(e)
       case other               => throw other
     }

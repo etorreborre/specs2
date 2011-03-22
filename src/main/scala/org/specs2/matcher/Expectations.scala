@@ -39,9 +39,13 @@ trait Expectations {
   }
 
   /** @return an Expectable */
-  protected def createExpectable[T](t: =>T) = Expectable(t)
+  def createExpectable[T](t: =>T): Expectable[T] = createExpectable(t, None)
   /** @return an Expectable with a description */
-  protected def createExpectable[T](t: =>T, alias: String) = Expectable(t, Some(Expectable.aliasDisplay(alias)))
+  def createExpectable[T](t: =>T, alias: String): Expectable[T] =
+    createExpectable(t, Some(Expectable.aliasDisplay(alias)))
   /** @return an Expectable with a description function */
-  protected def createExpectable[T](t: =>T, alias: String => String) = Expectable(t, Some(alias))
+  def createExpectable[T](t: =>T, alias: String => String): Expectable[T] = createExpectable(t, Some(alias))
+  /** @return an Expectable with a description function */
+  def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] = Expectable(t, alias)
+  
 }

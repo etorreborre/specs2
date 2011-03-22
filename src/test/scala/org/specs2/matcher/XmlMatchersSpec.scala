@@ -13,6 +13,9 @@ class XmlMatchersSpec extends SpecificationWithJUnit { def is =
                                                                                                                         p^
     "match if the nodes are not in the same order"                                                                      ^
     { <a><b/><c/></a> must ==/(<a> <c/><b/></a>) }                                                                      ^
+    { (<a><b/><c/></a>:NodeSeq) must ==/(<a> <c/><b/></a>) }                                                            ^
+    { <a><b/><c/></a> must be_==/(<a> <c/><b/></a>) }                                                                   ^
+    { <a><b/><c/></a> must be ==/(<a> <c/><b/></a>) }                                                                   ^
     "provide a way to specify that the comparison should be ordered"                                                    ^
     { <a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered }                                                             ^
                                                                                                                         p^

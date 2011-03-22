@@ -12,6 +12,7 @@ case class Arguments (
   _ex:            Option[String]  = None,
   _xonly:         Option[Boolean] = None,
   _plan:          Option[Boolean] = None,
+  _skipAll:       Option[Boolean] = None,
   _failtrace:     Option[Boolean] = None,
   _color:         Option[Boolean] = None,
   _noindent:      Option[Boolean] = None,
@@ -30,6 +31,7 @@ case class Arguments (
   def ex: String                = _ex.getOrElse(".*")
   def xonly: Boolean            = _xonly.getOrElse(false)
   def plan: Boolean             = _plan.getOrElse(false)
+  def skipAll: Boolean          = _skipAll.getOrElse(false)
   def failtrace: Boolean        = _failtrace.getOrElse(false)
   def color: Boolean            = _color.getOrElse(true)
   def noindent: Boolean         = _noindent.getOrElse(false)
@@ -58,6 +60,7 @@ case class Arguments (
       other._ex              .orElse(_ex),
       other._xonly           .orElse(_xonly),
       other._plan            .orElse(_plan),
+      other._skipAll         .orElse(_skipAll),
       other._failtrace       .orElse(_failtrace),
       other._color           .orElse(_color),
       other._noindent        .orElse(_noindent),
@@ -80,6 +83,7 @@ case class Arguments (
     "ex"             -> _ex           ,
     "xonly"          -> _xonly        ,
     "plan"           -> _plan         ,
+    "skipAll"        -> _skipAll      ,
     "failtrace"      -> _failtrace    ,
     "color"          -> _color        ,
     "noindent"       -> _noindent     ,
@@ -112,6 +116,7 @@ object Arguments {
        _ex            = value("ex", ".*"+(_:String)+".*"),
        _xonly         = bool("xonly"),
        _plan          = bool("plan"),
+       _skipAll       = bool("skipAll"),
        _failtrace     = bool("failtrace"),
        _color         = bool("color", "nocolor"),
        _noindent      = bool("noindent"),

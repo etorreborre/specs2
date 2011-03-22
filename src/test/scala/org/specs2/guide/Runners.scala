@@ -44,7 +44,8 @@ The available arguments are the following:
  --------------- | ------------- | -------------------------------------------------------------------------------------------
  `ex`            | .*            | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
  `xonly`         | false         | only reports failures and errors
- `plan`          | true          | only report the text of the specification without executing anything
+ `plan`          | false         | only report the text of the specification without executing anything
+ `skipAll`       | false         | skip all the examples
  `failtrace`     | false         | report the stacktrace for failures
  `color`         | true          | use colors in the output (`nocolor` can also be used on the command line)
  `noindent`      | false         | don't indent automatically text and examples
@@ -62,6 +63,7 @@ All those arguments are usually set in a specification with `args(name=value)` b
  Name                                                      | Equivalent                                                           | Description                                                                                      |
  ---------------                                           | -----------------------                                              | -----------                                                                                      |
  `plan`                                                    | `args(plan=true)`                                                    |                                                                                                  |
+ `skipAll`                                                 | `args(skipAll=true)`                                                 |                                                                                                  |
  `noindent`                                                | `args(noindent=true)`                                                |                                                                                                  |
  `xonly`                                                   | `args(xonly=true)`                                                   |                                                                                                  |
  `only(examples: String)`                                  | `args(ex=examples)`                                                  |                                                                                                  |

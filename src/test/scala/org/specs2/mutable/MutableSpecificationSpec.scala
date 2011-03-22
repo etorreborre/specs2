@@ -2,6 +2,7 @@ package org.specs2
 package mutable
 import io._
 import specification.{ SpecStart, FragmentExecution }
+import matcher.FailureException
 
 class MutableSpecificationSpec extends org.specs2.SpecificationWithJUnit { def is =
                                                                                                                         """
@@ -20,6 +21,8 @@ The following examples specify the functionalities for such a mutable specificat
                                                                                                                         p^
   "Execution"                                                                                                           ^
     "the first failing expectation stops an Example execution"                                                          ! execution().e1^
+    "the first skipped expectation skips the Example execution"                                                         ! execution().e2^
+    "the failure method throws a FailureException"                                                                      ! execution().e3^
                                                                                                                         end
 
 
@@ -38,6 +41,11 @@ The following examples specify the functionalities for such a mutable specificat
       fragments.map(executeFragment(args())(_))
       output.messages must not contain("statement executed after failing expectation")
     }
+    def e2 = {
+      fragments.map(executeFragment(args())(_))
+      output.messages must not contain("statement executed after skipped expectation")
+    }
+    def e3 = new Specification { failure("failed") } must throwA[FailureException]
   }
 
   trait HasAMutableSpec {
@@ -50,7 +58,12 @@ The following examples specify the functionalities for such a mutable specificat
         "have failing example" in {
           1 must_== 2
           output.println("statement executed after failing expectation")
-          1 must_== 1
+          success
+        }
+        "have a skipped example" in {
+          1 must be_==(2).orSkip
+          output.println("statement executed after skipped expectation")
+          success
         }
         "have an example using a should expectation" in {
           1 should be_==(1)

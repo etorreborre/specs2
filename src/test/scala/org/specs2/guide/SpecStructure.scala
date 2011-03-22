@@ -153,9 +153,11 @@ So the correct way of writing the example is:
 
 The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice
 by some. However you might see it as an annoying restriction. You can avoid it by extending the `org.specs2.matcher.MustThrownMatchers`
-trait. With that trait, any failing expectation will throw an exception and the rest of the example will not be executed.
+trait. With that trait, any failing expectation will throw a `FailureException` and the rest of the example will not be executed.
 
-Note that this is also the default behavior for the `mutable.Specification` trait used for _unit_ specifications.
+There is also an additional method `failure(message)` to throw a `FailureException` at will.
+
+[Note that the `ThrownMatchers` traits are mixed in the `mutable.Specification` trait used for _unit_ specifications].
 
 ##### Set an example Pending until fixed
 
@@ -678,12 +680,13 @@ called `Action`:
 If you want to inline the example code with the text you'll need another way to manage contexts. If you just need to setup
 data the simplest thing to do is to create a trait holding this data for you:
 
-        // this needs to be a Success to be the body of an Example
-        trait context extends Success {
+        // this needs to be a Scope to be the body of an Example because there is an implicit conversion from Scope
+        // to Success and Success is an accepted `Result` for an Example
+        trait context extends Scope {
           val data: Data = createData
         }
 
-and instantiate that trait for each example:
+Then you instantiate that trait for each example:
 
         "this example uses some data" in new context {
            data must beReady
@@ -694,7 +697,7 @@ time, you can easily add any type of "before" functionality that you need.
 
 If you need some "after" functionality, the syntax gets a bit heavier. You have 2 choices, the first one is to extend After:
 
-        trait context extends Success with After {
+        trait context extends Scope with After {
           val data: Data = createData
           def after = cleanData
         }
@@ -706,7 +709,7 @@ If you need some "after" functionality, the syntax gets a bit heavier. You have 
 
 The other option is to use the After implicit which is available on any `Result`:
 
-        trait context extends Success {
+        trait context extends Scope {
           val data: Data = createData
         }
 
@@ -714,6 +717,17 @@ The other option is to use the After implicit which is available on any `Result`
           data must beReady        
         }.after(cleanData)
 
+##### Generic specification with setup and teardown steps
+
+If each of your specifications involves setting a specific context before and after all the examples, you can define your
+own Specification trait doing this:
+
+        trait DatabaseSpec extends Specification {
+          override def is = Step(startDb) ^ super.is ^ Step(cleanDb)
+        }
+
+The `DatabaseSpec` above will insert, in each inherited specification, a `Step` executed before all the fragments, and one
+executed after all of them.
 
 #### Other unit specification methods
 
@@ -799,8 +813,8 @@ To make things more concrete here is a full example:
         object context extends Before {
           def before = () // do something to setup the context
         }
-        // we need to extend Success to be used as an Example body
-        trait system extends Success {
+        // we need to extend Scope to be used as an Example body
+        trait system extends Scope {
           val string = "Hey you"
         }
         case class system2() {

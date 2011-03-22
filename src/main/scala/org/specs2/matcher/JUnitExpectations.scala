@@ -11,7 +11,7 @@ import execute._
  * It is involved when reusing Matchers with JUnit
  */
 trait JUnitExpectations extends ThrownExpectations {
-  override protected def checkFailure[T](m: =>MatchResult[T]) = {
+  override protected def checkFailure[T](m: MatchResult[T]) = {
     m match {
       case f @ MatchFailure(ok, ko, _, NoDetails()) => throw new AssertionFailedError(ko) {
         override def getStackTrace = f.exception.getStackTrace

@@ -74,7 +74,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     runner
   }
   private def runSpecification(specification: SpecificationStructure, handler: EventHandler, args: Array[String]): Unit = {
-    reporter(handler).report(specification)(Arguments(args:_*))
+    reporter(handler).report(specification)(Arguments(args:_*).overrideWith(specification.content.arguments))
   }
 
   protected def reporter(handler: EventHandler) = new TestInterfaceReporter(handler, loggers)

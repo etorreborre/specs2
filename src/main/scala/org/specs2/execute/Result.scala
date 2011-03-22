@@ -97,10 +97,10 @@ object Result {
       case (Pending(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
       case (Success(msg1),               Pending(msg2))              => Success(msg1+"; "+msg2)
 
-      case (Success(msg1),               Failure(msg2, e2, st1, d2)) => m2
+      case (Success(msg1),               Failure(msg2, e2, st1, d2)) => m2.updateMessage(msg1+"; but "+msg2)
       case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2, e1+"; "+e2, st1, NoDetails())
 
-      case (Success(msg1),               Error(msg2, st1))           => m2
+      case (Success(msg1),               Error(msg2, st1))           => m2.updateMessage(msg1+"; but "+msg2)
       case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+"; "+msg2, st1)
       case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+"; "+msg2, st1)
 

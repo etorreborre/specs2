@@ -35,6 +35,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     "if plan = true, nothing is executed"                                                                               ! planargs().e1^
     "if sequential = false examples are executed concurrently"                                                          ! seq().e1^
     "if sequential = true examples are executed sequentially"                                                           ! seq().e2^
+    "if skipAll = true, everything is skipped"                                                                          ! skipAllargs().e1^
                                                                                                                         p^
     "if color = true, the text output is colorized"                                                                     ^
       "text is white"                                                                                                   ! color().e1^
@@ -145,6 +146,14 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     val plan: Arguments = args(plan = true)
     def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("* e1") and not containMatch("\\+ e1") 
   }
+  case class skipAllargs() {
+    val sk: Arguments = args(skipAll = true)
+    def e1 = {
+      val spec = print(sk ^ t1 ^ ex1 ^ fail3)
+      (spec must containMatch("o e1")) and
+      (spec must contain("o fail3"))
+    }
+  }
   case class seq() {
     val sequential: Arguments = args(sequential = true)
     val messages = new MockOutput {}
@@ -177,7 +186,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     def e3 = print(t1 ^ "ex1"!Success("ok", 2)) must containMatch("2 expectations") 
     def e4 = print(t1 ^ fail3) must containMatch("1 failure") 
     def e5 = print(t1 ^ error4) must containMatch("1 error") 
-    def e6 = print(t1 ^ ex1) must containMatch("0 ms")
+    def e6 = print(t1 ^ ex1) must containMatch("\\d+ ms")
   }
 
   def print(fragments: Fragments): Seq[String] = printWithColors(fragments).map(removeColors(_))

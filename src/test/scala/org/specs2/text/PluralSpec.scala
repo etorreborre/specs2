@@ -27,7 +27,7 @@ class PluralSpec extends SpecificationWithJUnit with Plural with DataTables {
     }
   }
 
-  "A integer can be optionally described by a pluralized string: 3 qty 'apple' == Some(3 apples)" in {
+  "A integer can be optionally described by a pluralized string: 3 optQty 'apple' == Some(3 apples)" in {
 
     "quantity"   | "description"   | "result"                               |>
      0           ! "apple"         ! (None:Option[String])                  | 
@@ -39,6 +39,17 @@ class PluralSpec extends SpecificationWithJUnit with Plural with DataTables {
     }
   }
 
+  "A integer can be optionally described by a invariant string: 3 OptInvariantQty 'skipped' == Some(3 skipped)" in {
+
+    "quantity"   | "description"   | "result"                               |>
+     0           ! "skipped"       ! (None:Option[String])                  |
+     1           ! "skipped"       ! (Some("1 skipped"):Option[String])       |
+     2           ! "skipped"       ! (Some("2 skipped"):Option[String])      |
+     3           ! "skipped"       ! (Some("3 skipped"):Option[String])      |
+     { (q, desc, result) =>
+      q optInvariantQty desc must_== result
+    }
+  }
   "A integer can be an ordinal: 3 th == '3rd'" in {
     "quantity" | "ordinal"  |>
       0        ! "0th"       |

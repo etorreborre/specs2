@@ -115,7 +115,8 @@ trait TextPrinter {
         case Pending(_)    => if (!args.xonly) out.printPending(description + " " + result.message)
         case Skipped(_, _) => if (!args.xonly) {
           out.printSkipped(description)
-          out.printSkipped(result.message)
+          if (!result.message.isEmpty)
+            out.printSkipped(result.message)
         }
       }
     }
@@ -193,7 +194,7 @@ trait TextPrinter {
               Some(failures qty "failure"), 
               Some(errors qty "error"),
               pending optQty "pending", 
-              skipped optQty "skipped").flatten.mkString(", "), blue, args.color))
+              skipped optInvariantQty "skipped").flatten.mkString(", "), blue, args.color))
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {

@@ -1,7 +1,6 @@
 package org.specs2
 package guide
 
-
 class Matchers extends Specification { def is = literate ^ "Matchers guide".title ^
 """ <toc/>
 
@@ -63,6 +62,7 @@ API for the complete list:
  * Scalaz matchers
  * Result matchers
  * Interpreter matchers
+ * Parsers matchers
 
 #### Matchers for Any
 
@@ -154,17 +154,44 @@ There are many ways to create matchers for your specific usage. The simplest way
         iterator.next must be_==(3).eventually
          // Use eventually(retries, n.millis) to use another number of tries and waiting time
 
+ * using `when` or `unless` to apply a matcher only if a condition is satisfied:
+
+        1 must be_==(2).when(false)                        // will return a success
+        1 must be_==(2).unless(true)                       // same thing
+
+        1 must be_==(2).when(false, "don't check this")    // will return a success
+        1 must be_==(2).unless(true, "don't check this")   // same thing
+
+ * using `iff` to say that a matcher must succeed if and only if a condition is satisfied:
+
+        1 must be_==(1).iff(true)                        // will return a success
+        1 must be_==(2).iff(true)                        // will return a failure
+        1 must be_==(2).iff(false)                       // will return a success
+        1 must be_==(1).iff(false)                       // will return a failure
+
  * using `orSkip` to return a `Skipped` result instead of a Failure if the condition is not met
 
         1 must be_==(2).orSkip
         1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
 
+There may sometimes be typing issues with `be_==` and `orSkip`:
+
+        // will not compile!
+        (Some(1): Option[Int]) must be_==(Some(1)).orSkip
+
+The alternative is to either add a type annotation or to use the `be_===` matcher:
+
+       (Some(1): Option[Int]) must be_==(Some(1): Option[Int]).orSkip
+       (Some(1): Option[Int]) must be_===(Some(1)).orSkip
+
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
        val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")
-       val m1: Matcher[String]  = ((_: String).startsWith("hello"), "starts with hello", "doesn't start with hello")
-       val m2: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ "doesn't start with hello")
-       val m3: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ "starts with hello", (s:String) => s+ "doesn't start with hello")
+       val m1: Matcher[String] = ((_: String).startsWith("hello"), "starts with hello", "doesn't start with hello")
+       val m2: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ " doesn't start with hello")
+       val m3: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ " starts with hello", (s:String) => s+ " doesn't start with hello")
+       val m4: Matcher[String] = (s: String) => (s.startsWith("hello"), s+" doesn't start with hello")
+       val m5: Matcher[String] = (s: String) => (s.startsWith("hello"), s+ "starts with hello", s+ " doesn't start with hello")
 
 And if you want absolute power over matching, you can define your own matcher:
 
@@ -180,8 +207,12 @@ And if you want absolute power over matching, you can define your own matcher:
 In the code above you have to:
 
  * define the `apply` method (and its somewhat complex signature)
+
  * use the protected `result` method to return: a Boolean condition, a message when the match is ok, a message when the
-   match is not ok, the "expectable" value
+   match is not ok, the "expectable" value. Note that if you change the expectable value you need to use the `map` method
+   on the `s` expectable (`s.map(other)`). This way you preserve the ability of the Expectable to throw an Exception if
+   a subsequent match fails
+
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
    the optional description you setup using the `aka` method
 
@@ -431,6 +462,56 @@ the Scala interpreter and execute a script:
           }
         }
 
+#### Parser matchers
+
+Scala provides a parsing library using [parser combinators](http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html).
+
+You can specify your own parsers by:
+
+ * extending the `ParserMatchers` trait
+ * defining the `val parsers` variable with your parsers definition
+ * use the `beASuccess`, `beAFailure`, `successOn`, `failOn`, `errorOn` matchers to specify the results of parsing input
+   strings
+ * use `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
+   a String or a matcher so that
+ ** `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
+ ** `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
+
+For example, specifying a Parser for numbers could look like this:   
+
+        import util.parsing.combinator.RegexParsers
+        import NumberParsers.{number, error}
+
+        class ParserSpec extends SpecificationWithJUnit with matcher.ParserMatchers {  def is =
+          "Parsers for numbers"                                                                   ^
+                                                                                                  p^
+          "beASuccess and succeedOn check if the parse succeeds"                                  ^
+          { number("1") must beASuccess }                                                         ^
+          { number must succeedOn("12") }                                                         ^
+          { number must succeedOn("12").withResult(12) }                                          ^
+          { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
+          { number("1") must haveSuccessResult("1") }                                             ^
+                                                                                                  p^
+          "beAFailure and failOn check if the parse fails"                                        ^
+          { number must failOn("abc") }                                                           ^
+          { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
+          { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
+          { number("i") must beAFailure }                                                         ^
+          { number("i") must haveFailureMsg("i' found") }                                         ^
+                                                                                                  p^
+          "beAnError and errorOn check if the parser errors out completely"                       ^
+          { error must errorOn("") }                                                              ^
+          { error("") must beAnError }                                                            ^
+                                                                                                  end
+
+          val parsers = NumberParsers
+        }
+        object NumberParsers extends RegexParsers {
+          /** parse a number with any number of digits */
+          val number: Parser[Int] = "\\d+".r ^^ {_.toInt}
+          /** this parser returns an error */
+          val error: Parser[String] = err("Error")
+        }
 
 ### ScalaCheck properties
 
@@ -449,6 +530,27 @@ the function:
 Note that sometimes type inference may not work (if there are several parameters) so you will need to use the `check` method:
 
       "addition and multiplication are related" ! check { (a: Int, b: Int) => a + b must_== b + a }
+
+#### Arbitrary instances
+
+By default `Arbitrary` instances are taken from the surrounding example scope. However you'll certainly need to generate
+your own data from time to time. Here's how to specify your Arbitrary instances in an example:
+
+        "a simple property" ! check(arb1)
+
+         // there's an implicit conversion to transform a function to a Prop
+         // but it has to happen *inside* our Arbitrary scope
+         def arb1: Prop = {
+           implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+           (s: String) => s must contain("a") or contain("b")
+         }
+         // otherwise you can explicitly write      
+         def arb1 = {
+           implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+           asProperty((s: String) => s must contain("a") or contain("b"))
+         }
+
+
 
 #### Setting the ScalaCheck properties
 
@@ -681,6 +783,7 @@ framework. You can reuse the following traits:
   include(xonly, new DataTableSpecification)                                                                            ^
   include(xonly, mockitoExamples)                                                                                       ^
   include(xonly, jsonExamples)                                                                                          ^
+  include(xonly, new ParserSpec)                                                                                        ^
   end
 
  lazy val examples = new Specification { def is = "Examples".title ^
@@ -806,4 +909,38 @@ class JsonExamples extends SpecificationWithJUnit {
 
     def is =
     "1" ! { person must /("person") */("person") /("age" -> 33.0) }
+}
+
+import util.parsing.combinator.RegexParsers
+import NumberParsers.{number, error}
+
+class ParserSpec extends SpecificationWithJUnit with matcher.ParserMatchers {  def is =
+  "Parsers for numbers"                                                                   ^
+                                                                                          p^
+  "beASuccess and succeedOn check if the parse succeeds"                                  ^
+  { number("1") must beASuccess }                                                         ^
+  { number must succeedOn("12") }                                                         ^
+  { number must succeedOn("12").withResult(12) }                                          ^
+  { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
+  { number("1") must haveSuccessResult("1") }                                             ^
+                                                                                          p^
+  "beAFailure and failOn check if the parse fails"                                        ^
+  { number must failOn("abc") }                                                           ^
+  { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
+  { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
+  { number("i") must beAFailure }                                                         ^
+  { number("i") must haveFailureMsg("i' found") }                                         ^
+                                                                                          p^
+  "beAnError and errorOn check if the parser errors out completely"                       ^
+  { error must errorOn("") }                                                              ^
+  { error("") must beAnError }                                                            ^
+                                                                                          end
+
+  val parsers = NumberParsers
+}
+object NumberParsers extends RegexParsers {
+  /** parse a number with any number of digits */
+  val number: Parser[Int] = "\\d+".r ^^ {_.toInt}
+  /** this parser returns an error */
+  val error: Parser[String] = err("Error")
 }

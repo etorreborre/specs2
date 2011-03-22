@@ -45,29 +45,29 @@ class JUnitRunner(klass: Class[_]) extends Runner {
    *   junit failure or ignored event on the RunNotifier
    */
   def run(notifier: RunNotifier) {
-	  executions.collect {
+    executions.collect {
       case (desc, f @ SpecStart(_, _)) => (desc, executor.executeFragment(Arguments())(f))
-	    case (desc, f @ Example(_, _))   => (desc, executor.executeFragment(Arguments())(f))
+      case (desc, f @ Example(_, _))   => (desc, executor.executeFragment(Arguments())(f))
       case (desc, f @ Text(_))         => (desc, executor.executeFragment(Arguments())(f))
       case (desc, f @ Step(_))         => (desc, executor.executeFragment(Arguments())(f))
       case (desc, f @ Action(_))       => (desc, executor.executeFragment(Arguments())(f))
       case (desc, f @ SpecEnd(_))      => (desc, executor.executeFragment(Arguments())(f))
-	  }.
-	    foreach {
-	   	  case (desc, ExecutedResult(_, result, timer)) => {
-	        notifier.fireTestStarted(desc)
-	        result match {
+    }.
+      foreach {
+        case (desc, ExecutedResult(_, result, timer)) => {
+          notifier.fireTestStarted(desc)
+          result match {
             case f @ Failure(m, e, st, d)    => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
             case e @ Error(m, st)            => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
             case Pending(_) | Skipped(_, _)  => notifier.fireTestIgnored(desc)
             case _ => ()
           }
-	        notifier.fireTestFinished(desc)
-	      }
+          notifier.fireTestFinished(desc)
+        }
         case (desc, ExecutedSpecStart(_, _))  => notifier.fireTestRunStarted(desc)
         case (desc, ExecutedSpecEnd(_))       => notifier.fireTestRunFinished(new org.junit.runner.Result)
-	   	  case (desc, _)                        => notifier.fireTestStarted(desc); notifier.fireTestFinished(desc)
-	    }
+        case (desc, _)                        => notifier.fireTestStarted(desc); notifier.fireTestFinished(desc)
+      }
   }
   /** @return a Throwable expected by JUnit Failure object */
   private def junitFailure(f: Failure): Throwable = f match {

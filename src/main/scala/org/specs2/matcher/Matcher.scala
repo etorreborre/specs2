@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import scalaz.Scalaz._
+import control.Exceptions._
 import execute._
 import Expectable._
 import text.Quote._
@@ -116,11 +117,27 @@ trait Matcher[-T] { outer =>
    */
   def orSkip(m: String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
-      outer(a) match {
+      val result = tryOr(outer(a)) { (e: Exception) => e match {
+          case FailureException(r) => MatchFailure(r.message, r.message, a)
+          case SkipException(r)    => MatchSkip(r.message, a)
+          case _                   => throw e
+        }
+      }
+      result match {
     	  case MatchFailure(_, ko, _, d) => MatchSkip(m prefix(": ", ko), a)
     	  case other => other
       }
     }
+  }
+  /** only apply this matcher if the condition is true */
+  def when(b: Boolean, m: String= ""): Matcher[T] = new Matcher[T] {
+    def apply[U <: T](a: Expectable[U]) = if (b) outer(a) else MatchSuccess(m, "ko", a)
+  }
+  /** only apply this matcher if the condition is false */
+  def unless(b: Boolean, m: String= ""): Matcher[T] = when(!b, m)
+  /** when the condition is true the matcher is applied, when it's false, the matcher must fail */
+  def iff(b: Boolean, m: String= ""): Matcher[T] = new Matcher[T] {
+    def apply[U <: T](a: Expectable[U]) = if (b) outer(a) else outer(a).not
   }
   /**
    *  The <code>lazily</code> operator returns a Matcher which will match a function returning the expected value
