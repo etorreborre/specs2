@@ -132,7 +132,7 @@ class JUnitDescriptionsSpec extends SpecificationWithJUnit with FragmentsSamples
   
   def toDescription(fragments: Fragment*): Description = {
     import Levels._
-    val descriptionTree = foldAll(fragments).toTree(JUnitDescriptions.mapper)
+    val descriptionTree = foldAll(fragments).toTree(JUnitDescriptions.mapper("JUnitDescriptionSpec"))
     JUnitDescriptions.asOneDescription(descriptionTree)
   }
     

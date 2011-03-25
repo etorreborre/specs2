@@ -7,6 +7,7 @@ import Scalaz._
 import data.Trees._
 import main.Arguments
 import specification._
+import control.Stacktraces
 
 /**
  * The JUnit descriptions class transforms a list of fragments
@@ -26,13 +27,13 @@ class JUnitDescriptions(specificationClass: Class[_]) extends DefaultSelection {
   import JUnitDescriptions._
   def foldAll(fs: Seq[Fragment]) = {
     import Levels._
-    val descriptionTree = Levels.foldAll(select(fs)).toTree(mapper)
+    val descriptionTree = Levels.foldAll(select(fs)).toTree(mapper(specificationClass.getName))
     DescriptionAndExamples(asOneDescription(descriptionTree), descriptionTree.flatten)
   }
 
 }
 private[specs2]
-object JUnitDescriptions {
+object JUnitDescriptions extends ExecutionOrigin {
   /**
    * This function is used to map each node in a Tree[Fragment] to a pair of 
    * (Description, Fragment)
@@ -41,16 +42,15 @@ object JUnitDescriptions {
    * It is used to create a unique description of the example to executed which is required
    * by JUnit
    */
-  val mapper: (Fragment, Int) => Option[(Description, Fragment)] = (f: Fragment, nodeLabel: Int) => f match {
-    case (SpecStart(t, _))            => Some(createSuiteDescription(testName(t.name)) -> f)
-    case (SpecEnd(t))                 => Some(createSuiteDescription(testName(t.name)) -> f)
-    case (Text(t))                    => Some(createSuiteDescription(testName(t)) -> f)
-    case (Example(description, body)) => Some(createDescription(testName(description.toString), nodeLabel) -> f)
-    case (Step(action))               => Some(createDescription("step", nodeLabel) -> f)
-    case (Action(action))             => Some(createDescription("action", nodeLabel) -> f)
+  def mapper(className: String): (Fragment, Int) => Option[(Description, Fragment)] = (f: Fragment, nodeLabel: Int) => f match {
+    case (SpecStart(t, _))            => Some(createDescription(testName(t.name), klassName=className) -> f)
+    case (Text(t))                    => Some(createDescription(testName(t), klassName=className) -> f)
+    case (Example(description, body)) => Some(createDescription(testName(description.toString), nodeLabel.toString, className) -> f)
+    case (Step(action))               => Some(createDescription("step", nodeLabel.toString, className) -> f)
+    case (Action(action))             => Some(createDescription("action", nodeLabel.toString, className) -> f)
     case other                        => None
   }
-  /** 
+  /**
    * Utility class grouping the total description + fragments to execute for each Description 
    */
   case class DescriptionAndExamples(val description: Description, executions: Stream[(Description, Fragment)])
@@ -63,42 +63,10 @@ object JUnitDescriptions {
   }
   /** 
    * unfolding function attaching children descriptions to a parent one 
-   * Note that:
-   * * the Fragment in d: (Description, Fragment) is not used
-   * * parent-child relations of the original tree are reworked to be JUnit-friendly and
-   *   avoid to have an example being the ancestor of other examples like this:
-   * 
-   * text1
-   * |
-   * + ex1
-   *   |
-   *   ` text2
-   *     |
-   *     ` ex2
-   *   
-   * In that case the Description objects are arranged like this:
-   * text1
-   * |
-   * + ex1
-   * |
-   * ` text2
-   *   |
-   *   ` ex2
-   *    
    */
-  private val addChildren = (d: (Description, Fragment), children: Stream[Description]) => {
-    def isAnExample(child: Description) = child.getDisplayName.matches(".*\\(\\d*\\)$")
-    def isText(child: Description) = !isAnExample(child)
-
-    children.foreach { c =>
-      if (!c.getChildren().isEmpty || !isText(c))
-        d._1.addChild(c)
-      if (!c.getChildren().isEmpty && isAnExample(c)) {
-        c.getChildren().foreach(d._1.addChild(_))
-        c.getChildren().clear()
-      }
-    }
-    d._1
+  private val addChildren = (desc: (Description, Fragment), children: Stream[Description]) => {
+    children.foreach { child => desc._1.addChild(child) }
+    desc._1
   }
   import text.Trim._
   /** @return a test name with no newlines */
@@ -109,14 +77,15 @@ object JUnitDescriptions {
     if (trimmed.isEmpty) " "
     else trimmed
   }
-  /** @return a test description */
-  private def createDescription(s: String, e: Any) = {
-    Description.createSuiteDescription(sanitize(s)+"("+e.toString+")")
-  }
-  /** @return a suite description */
-  private def createSuiteDescription(s: String) = {
-    Description.createSuiteDescription(sanitize(s))
+  /** @return a sanitized description */
+  def createDescription(s: String, label: String= "", klassName: String="") = {
+    val code =
+      if ((isExecutedFromAnIDE || isExecutedFromSBT) && !label.isEmpty)
+        "("+label+")"
+      else if (isExecutedFromGradle && !klassName.isEmpty)
+        "("+klassName+")"
+      else ""
+    Description.createSuiteDescription(sanitize(s)+code)
   }
   
-} 
-
+}

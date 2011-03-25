@@ -24,7 +24,7 @@ import control.Throwablex
  * of Description objects and a Map relating each Description to a Fragment to execute. 
  *
  */
-class JUnitRunner(klass: Class[_]) extends Runner {
+class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
 
   private val executor = new FragmentExecution {}
   
@@ -66,7 +66,10 @@ class JUnitRunner(klass: Class[_]) extends Runner {
         }
         case (desc, ExecutedSpecStart(_, _))  => notifier.fireTestRunStarted(desc)
         case (desc, ExecutedSpecEnd(_))       => notifier.fireTestRunFinished(new org.junit.runner.Result)
-        case (desc, _)                        => notifier.fireTestStarted(desc); notifier.fireTestFinished(desc)
+        case (desc, _)                        => if (!isExecutedFromGradle) {
+                                                   notifier.fireTestStarted(desc)
+                                                   notifier.fireTestFinished(desc)
+                                                 }
       }
   }
   /** @return a Throwable expected by JUnit Failure object */
