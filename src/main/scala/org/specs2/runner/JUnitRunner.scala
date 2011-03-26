@@ -14,7 +14,7 @@ import reporter._
 import JUnitDescriptions._
 import specification._
 import text.AnsiColors
-import control.Throwablex
+import control.{ExecutionOrigin, Throwablex}
 
 /**
  * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation

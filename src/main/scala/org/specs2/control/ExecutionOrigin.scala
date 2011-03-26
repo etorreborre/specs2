@@ -9,7 +9,7 @@ trait ExecutionOrigin extends Stacktraces {
   /** return true if the current test is executed with Maven */
   lazy val isExecutedFromMaven = isExecutedFrom("org.apache.maven.surefire.Surefire.run")
   /** return true if the current test is executed with sbt */
-  lazy val isExecutedFromSBT = isExecutedFrom("org.specs2.runner.TestInterfaceRunner")
+  lazy val isExecutedFromSBT = isExecutedFrom("reporter.TestInterfaceReporter")
   /** return true if the current test is executed with Gradle */
   lazy val isExecutedFromGradle = isExecutedFrom("org.gradle.api")
   /** return true if the current test is executed with eclipse */

@@ -7,7 +7,7 @@ import Scalaz._
 import data.Trees._
 import main.Arguments
 import specification._
-import control.Stacktraces
+import control.{ExecutionOrigin, Stacktraces}
 
 /**
  * The JUnit descriptions class transforms a list of fragments
