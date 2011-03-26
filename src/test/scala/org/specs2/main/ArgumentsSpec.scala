@@ -30,6 +30,11 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
     "if there's no corresponding value in b, the value in a stays"                                                      ! e8^
     "there is a corresponding value in b, the value in a is overriden when there is one"                                ! e9^
     "there is a corresponding value in b, the value in b is kept"                                                       ! e10^
+                                                                                                                        p^
+  "Arguments can also be passed from system properties"                                                                 ^
+    "a boolean value just have to exist as -Dname"                                                                      ! e11^
+    "a string value will be -Dname=value"                                                                               ! e12^
+    "properties can also be passed as -Dspecs2.name to avoid conflicts with other properties"                           ! e12^
                                                                                                                         end
 
 
@@ -48,4 +53,16 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
   def e9 = args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
   def e10 = (args(xonly = true) <| args(plan = true)).plan must_== true
 
+  def e11 = {
+    System.setProperty("plan", "")
+    Arguments().plan must_== true
+  }
+  def e12 = {
+    System.setProperty("specname", "spec")
+    Arguments().specName must_== "spec"
+  }
+  def e13 = {
+    System.setProperty("specs2.specname", "spec")
+    Arguments().specName must_== "spec"
+  }
 }

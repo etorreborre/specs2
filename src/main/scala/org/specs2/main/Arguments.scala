@@ -134,13 +134,19 @@ object Arguments {
   }
   
   private def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String]): Option[Boolean] = {
-    args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue)
+    args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue).orElse(boolSystemProperty(name, mappedValue))
+  }
+  private def boolSystemProperty(name: String, mappedValue: Boolean = true): Option[Boolean] = {
+    SystemProperties.getProperty(name).map(a => mappedValue)
   }
   private def bool(name: String, negatedName: String)(implicit args: Seq[String]): Option[Boolean] = {
     bool(negatedName, false) orElse bool(name)
   }
   private def value(name: String, f: String => String)(implicit args: Seq[String]): Option[String] = {
-    args.zip(args.drop(1)).find(_._1.toLowerCase.contains(name.toLowerCase)).map(s => f(s._2))
+    args.zip(args.drop(1)).find(_._1.toLowerCase.contains(name.toLowerCase)).map(s => f(s._2)).orElse(valueSystemProperty(name, f))
+  }
+  private def valueSystemProperty(name: String, f: String => String): Option[String] = {
+    SystemProperties.getProperty(name).map(o => f(o.toString))
   }
   private def value(name: String)(implicit args: Seq[String]): Option[String] = value(name, identity _)
   private def int(name: String)(implicit args: Seq[String]): Option[Int] = {

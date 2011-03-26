@@ -81,6 +81,15 @@ For the diffs arguments the values you can specify are:
   * `shortenSize` controls the number of characters to display around each difference (default is 5)
   * `full` displays the full original expected and actual strings
 
+##### From system properties
+
+You can pass any argument to ***specs2*** from system properties:
+
+ * for a boolean argument, you need to pass `-Dspecs2.name` or `-Dname`
+ * for a string argument, you need to pass `-Dspecs2.name=value` or `-Dname=value`
+
+The recommended format is `-Dname=value` but `-Dspecs2.name=value` is also available to avoid conflicts with other libraries.
+
 ### Console output
 
 Executing a specification `com.company.SpecName` in the console is very easy:
