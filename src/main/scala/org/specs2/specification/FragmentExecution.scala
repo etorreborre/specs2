@@ -42,7 +42,7 @@ trait FragmentExecution {
    */
   def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = {
     val timer = new SimpleTimer().start
-    (f: Fragment) => tryOr(execute(f))((e: Exception) => ExecutedResult(NoMarkup("Fragment evaluation error"), Error(e), timer.stop))
+    (f: Fragment) => tryAllOr(execute(f))((e: Throwable) => ExecutedResult(NoMarkup("Fragment evaluation error"), Error(e), timer.stop))
   }
 
   /**

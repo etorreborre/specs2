@@ -21,6 +21,7 @@ The following examples specify the functionalities for such a mutable specificat
                                                                                                                         p^
   "Execution"                                                                                                           ^
     "the first failing expectation stops an Example execution"                                                          ! execution().e1^
+    "the first error stops an Example execution"                                                                        ! execution().e1_1^
     "the first skipped expectation skips the Example execution"                                                         ! execution().e2^
     "the failure method throws a FailureException"                                                                      ! execution().e3^
                                                                                                                         end
@@ -41,6 +42,10 @@ The following examples specify the functionalities for such a mutable specificat
       fragments.map(executeFragment(args())(_))
       output.messages must not contain("statement executed after failing expectation")
     }
+    def e1_1 = {
+      fragments.map(executeFragment(args())(_))
+      output.messages must not contain("statement executed after error expectation")
+    }
     def e2 = {
       fragments.map(executeFragment(args())(_))
       output.messages must not contain("statement executed after skipped expectation")
@@ -58,6 +63,11 @@ The following examples specify the functionalities for such a mutable specificat
         "have failing example" in {
           1 must_== 2
           output.println("statement executed after failing expectation")
+          success
+        }
+        "have an error example" in {
+          {throw new Error("error"); 1} must_== 1
+          output.println("statement executed after error expectation")
           success
         }
         "have a skipped example" in {

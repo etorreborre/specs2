@@ -203,7 +203,9 @@ case class Error(m: String, e: Exception)
  */
 case object Error {
   def apply(e: Exception) = new Error(e.getMessage.notNull, e)
-  def apply(m: String) = new Error(m, new Exception(m))  
+  def apply(t: Throwable) = new Error(t.getMessage.notNull, new ThrowableException(t))
+  case class ThrowableException(t: Throwable) extends Exception(t)
+  def apply(m: String) = new Error(m, new Exception(m))
 }
 /** 
  * Pending result
