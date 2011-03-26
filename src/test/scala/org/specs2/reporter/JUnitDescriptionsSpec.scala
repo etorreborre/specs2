@@ -33,8 +33,6 @@ class JUnitDescriptionsSpec extends SpecificationWithJUnit with FragmentsSamples
   "and 1 suite with 2 test cases"                                                                                       ! e7^
                                                                                                                         p^
   "If 2 fragments have the same name, they must have a different description"                                           ! e8^
-                                                                                                                        p^
-  "A single text with no child examples must be removed"                                                                ! e9^
                                                                                                                         end
 
   def e1 = descriptionIs(ex1)(
@@ -116,13 +114,6 @@ class JUnitDescriptionsSpec extends SpecificationWithJUnit with FragmentsSamples
          "+- ex1(1)",
          "|",
          "`- ex1(2)\n")
-
-  def e9 = descriptionIs("t1" ^ p ^ "t2" ^ ex1)(
-         "JUnitDescriptionsSpec",
-         "|",
-         "`- t2",
-         "   |",
-         "   `- ex1(3)\n")
 
   def descriptionIs(f: Fragments)(tree: String*) = 
 	  showDescriptionTree("JUnitDescriptionsSpec".title ^ f) must_== tree.toList.mkString("\n")
