@@ -47,7 +47,7 @@ trait Exceptions {
    * If the expression throws a Throwable a function f is used to return a value
    * of the expected type.
    */
-  def tryAllOr[T](a: =>T)(f: Throwable =>T): T = {
+  def catchAllOr[T](a: =>T)(f: Throwable =>T): T = {
 	  try { a }
 	  catch { case e: Throwable => f(e) }
   }
