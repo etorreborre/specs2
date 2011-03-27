@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
+import ResultExecution._
 
 /**
  * This trait provides implicit definitions and types to create DataTables.
@@ -102,14 +103,13 @@ trait DataTables {
     def |[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](row: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) = new Table10(titles, List(row))
     def |>[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](row: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) = new Table10(titles, List(row), execute = true)
   }
-  
   case class Table1[T1](override val titles: List[String], rows: List[DataRow1[T1]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
     def |(row: DataRow1[T1]) = Table1(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow1[T1]) => (d.show, f(d.t1)) })
+        collect(rows map { (d: DataRow1[T1]) => (d.show, implicitly[R => Result].apply(f(d.t1)).execute) })
       else Success("ok")
     }
   }
@@ -119,7 +119,7 @@ trait DataTables {
     def |>[R <% Result](f: (T1, T2) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow2[T1, T2]) => (d.show, f(d.t1,d.t2)) })
+        collect(rows map { (d: DataRow2[T1, T2]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2)).execute) })
       else Success("ok")
     }
   }
@@ -129,7 +129,7 @@ trait DataTables {
     def |>[R <% Result](f: (T1, T2, T3) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow3[T1, T2, T3]) => (d.show, f(d.t1,d.t2,d.t3)) })
+        collect(rows map { (d: DataRow3[T1, T2, T3]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3)).execute) })
       else Success("ok")
     }
   }
@@ -139,7 +139,7 @@ trait DataTables {
     def |>[R <% Result](f: (T1, T2, T3, T4) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow4[T1, T2, T3, T4]) => (d.show, f(d.t1,d.t2,d.t3,d.t4)) })
+        collect(rows map { (d: DataRow4[T1, T2, T3, T4]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4)).execute) })
       else Success("ok")
     }
   }
@@ -149,7 +149,7 @@ trait DataTables {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow5[T1, T2, T3, T4, T5]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5)) })
+        collect(rows map { (d: DataRow5[T1, T2, T3, T4, T5]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5)).execute) })
       else Success("ok")
     }
   }
@@ -159,7 +159,7 @@ trait DataTables {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow6[T1, T2, T3, T4, T5, T6]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6)) })
+        collect(rows map { (d: DataRow6[T1, T2, T3, T4, T5, T6]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6)).execute) })
       else Success("ok")
     }
   }
@@ -169,7 +169,7 @@ trait DataTables {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow7[T1, T2, T3, T4, T5, T6, T7]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7)) })
+        collect(rows map { (d: DataRow7[T1, T2, T3, T4, T5, T6, T7]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7)).execute) })
       else Success("ok")
     }
   }
@@ -179,7 +179,7 @@ trait DataTables {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8)) })
+        collect(rows map { (d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8)).execute) })
       else Success("ok")
     }
   }
@@ -189,7 +189,7 @@ trait DataTables {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9)) })
+        collect(rows map { (d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9)).execute) })
       else Success("ok")
     }
   }
@@ -199,7 +199,7 @@ trait DataTables {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R, exec: Boolean): Result = {
       if (exec)
-        collect(rows map { (d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) => (d.show, f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10)) })
+        collect(rows map { (d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10)).execute) })
       else Success("ok")
     }
   }
@@ -283,7 +283,7 @@ private object DataTablesGenerator {
            "  def |>[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, true)",
            "  def executeRow[R <% Result](f: "+typesTuple(i)+" => R, exec: Boolean): Result = {", 
            "    if (exec)",
-           "      collect(rows map { (d: "+dataRow(i)+") => (d.show, f("+(1 to i).map("d.t"+_).mkString(",")+")) })",
+           "      collect(rows map { (d: "+dataRow(i)+") => (d.show, implicitly[R => Result].apply(f("+(1 to i).map("d.t"+_).mkString(",")+")).execute) })",
            "    else Success(\"ok\")",
            "  }",
            "}").mkString("\n")    
