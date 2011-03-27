@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 import mutable._
+import execute._
 
 class EventuallyMatchersSpec extends SpecificationWithJUnit {
                                                                                                                         """

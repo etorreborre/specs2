@@ -42,6 +42,16 @@ trait Exceptions {
 	  trye(a)(f).fold(identity, identity)
   }
   /**
+   * try to evaluate an expression, returning a value T
+   *
+   * If the expression throws a Throwable a function f is used to return a value
+   * of the expected type.
+   */
+  def catchAllOr[T](a: =>T)(f: Throwable =>T): T = {
+	  try { a }
+	  catch { case e: Throwable => f(e) }
+  }
+  /**
    * try to evaluate an expression and return it if nothing fails.
    * return ko otherwise
    */

@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 
 import specification._
+import main._
 import io._
 import org.scalacheck._
 
@@ -16,8 +17,10 @@ Before executing and reporting a specification, the fragments must be selected a
 
                                                                                                                         """^p^
   "First of all examples are filtered"                                                                                  ^
-    "when the user specifies a regular expression: ex = ex1.*"                                                          ! filter().e1^
-    "(if no filter is specified, nothing must be filtered out)"                                                         ! filter().e2^
+    "when the user specifies a regular expression: ex = ex1.*"                                                          ^
+      "in the spec"                                                                                                     ! filter().e1^
+      "on the command line"                                                                                             ! filter().e2^
+    "(if no filter is specified, nothing must be filtered out)"                                                         ! filter().e3^
                                                                                                                         p^
                                                                                                                         """
   Then the Selection trait groups fragments to execute in lists of Fragments which can
@@ -37,7 +40,8 @@ Before executing and reporting a specification, the fragments must be selected a
   
   case class filter() extends WithSelection {
     def e1 = select(args(ex = "ex1") ^ ex1 ^ ex2).toString must not contain("ex2")
-    def e2 = select(ex1 ^ ex2).toString must contain("ex1")
+    def e2 = select(ex1 ^ ex2)(Arguments("ex", "ex1")).toString must not contain("ex2")
+    def e3 = select(ex1 ^ ex2).toString must contain("ex1")
   }
 
   case class steps() extends ScalaCheck with WithSelection {
@@ -94,9 +98,9 @@ Before executing and reporting a specification, the fragments must be selected a
     def selectSequence(fs: Fragments): Seq[FragmentSeq] = {
       selection.sequence(selection.select(fs.arguments)(fs))(fs.arguments).toList
     }
-    def select(f: Fragments) = {
+    def select(f: Fragments)(implicit args: Arguments = Arguments()) = {
       val fs = new Specification { def is = f }.content
-      selection.select(f.arguments)(fs).toList.map(_.toString)
+      selection.select(args)(fs).toList.map(_.toString)
     }
     def step(message: String) = Step({selection.println(message); reporter.println(message)})
     def example(message: String) = message ! { selection.println(message); reporter.println(message); success }

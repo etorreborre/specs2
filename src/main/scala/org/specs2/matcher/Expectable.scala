@@ -37,9 +37,18 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
   protected[specs2] def evaluate = Expectable(t(), desc)
 
   /** @return the description of the matched value, quoted. */
-  protected def d[T](value: =>T) = desc  match {
-    case None => if (value.isBoolean) "the value" else q(value)
-    case Some(de) => de(value.toString)
+  protected def d[T](value: =>T) = {
+    val valueAsString = value match {
+      case it: Iterable[_] => it.mkString(", ")
+      case _               => if (value != null) value.toString else "null"
+    }
+    desc match {
+      case None => value match {
+        case b: Boolean   => "the value"
+        case _            => q(valueAsString)
+      }
+      case Some(de) => de(valueAsString)
+    }
   }
   /** @return the description of the matched value, unquoted. */
   protected def dUnquoted[T](value: T) = desc match {

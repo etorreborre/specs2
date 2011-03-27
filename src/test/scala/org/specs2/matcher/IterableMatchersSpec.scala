@@ -8,7 +8,7 @@ class IterableMatchersSpec extends SpecificationWithJUnit { def is =
   "we can check if one or several elements are present in an iterable"                                                  ^
     { List(1, 2) must contain(1) }                                                                                      ^
     { List(1, 2, 3) must contain(3, 2) }                                                                                ^
-    { (List(1, 2) must contain(0)) returns "'List(1, 2)' doesn't contain '0'" }                                         ^
+    { (List(1, 2) must contain(0)) returns "'1, 2' doesn't contain '0'" }                                               ^
     "with a subclass"                                                                                                   ! subclass().e1^
                                                                                                                         p^
   "we can check if at least one or several elements are present in an iterable"                                         ^
@@ -69,16 +69,16 @@ class IterableMatchersSpec extends SpecificationWithJUnit { def is =
   }
   case class order() {
     def fail1 = (List(1, 2, 3, 4) must contain(2, 5).inOrder) returns 
-                "'List(1, 2, 3, 4)' doesn't contain in order '2, 5'"
+                "'1, 2, 3, 4' doesn't contain in order '2, 5'"
     def fail2 = (List(1, 2, 3, 4) must contain(4, 2).inOrder) returns  
-                 "'List(1, 2, 3, 4)' doesn't contain in order '4, 2'"
+                 "'1, 2, 3, 4' doesn't contain in order '4, 2'"
   }
 
   case class patternMatch() {
     def fail1 = (List("Hey", "World") must containMatch("llo").onlyOnce) returns
-                 "'List(Hey, World)' doesn't contain match '.*llo.*'"
+                 "'Hey, World' doesn't contain match '.*llo.*'"
     def fail2 = (List("Hello", "Bella") must containMatch("ll").onlyOnce) returns
-                 "'List(Hello, Bella)' contains match '.*ll.*' 2 times"
+                 "'Hello, Bella' contains match '.*ll.*' 2 times"
   }
   
   case class sameElems() {
@@ -88,6 +88,6 @@ class IterableMatchersSpec extends SpecificationWithJUnit { def is =
 
   case class sameSeq() {
     def e1 = (List("Hello", "World") must contain("Hello2", "World2").inOrder.only) returns
-             "'List(Hello, World)' doesn't contain in order 'Hello2, World2'"
+             "'Hello, World' doesn't contain in order 'Hello2, World2'"
   } 
 }                                                                                          

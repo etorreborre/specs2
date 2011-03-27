@@ -11,6 +11,8 @@ trait ArgumentsArgs extends ArgProperties {
   def args(
     ex:            ArgProperty[String]      = ArgProperty[String](),
     xonly:         ArgProperty[Boolean]     = ArgProperty[Boolean](),
+    include:       ArgProperty[String]      = ArgProperty[String](),
+    exclude:       ArgProperty[String]      = ArgProperty[String](),
     plan:          ArgProperty[Boolean]     = ArgProperty[Boolean](),
     skipAll:       ArgProperty[Boolean]     = ArgProperty[Boolean](),
     failtrace:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
@@ -30,6 +32,8 @@ trait ArgumentsArgs extends ArgProperties {
   ) = new Arguments(
      ex.toOption.map(".*"+_+".*"),
      xonly.toOption,
+     include.toOption,
+     exclude.toOption,
      plan.toOption,
      skipAll.toOption,
      failtrace.toOption,
@@ -80,6 +84,14 @@ trait ArgumentsArgs extends ArgProperties {
    * shortcut to execute and print only some examples
    */
   def only(examples: String): Arguments = args(ex = examples)
+  /**
+   * shortcut to include only some tagged fragments
+   */
+  def include(tags: String): Arguments = args(include = tags)
+  /**
+   * shortcut to exclude some tagged fragments
+   */
+  def exclude(tags: String): Arguments = args(exclude = tags)
   /**
    * shortcut to display the differences with some specific parameters
    */

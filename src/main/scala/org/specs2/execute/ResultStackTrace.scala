@@ -19,7 +19,7 @@ trait ResultStackTrace extends HasStackTrace {
    *         Does not filter anything if the system property -Dfullstacktrace is set 
    */
   private[specs2] def sanitized = {
-	  if (SystemProperties.isDefined("fullstacktrace"))
+	  if (SystemProperties.getProperty("fullstacktrace").isDefined)
 	    stackTrace
 	  else {
 	    // filter only if the specs comes from specs2
