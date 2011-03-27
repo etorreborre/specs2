@@ -45,17 +45,17 @@ The available arguments are the following:
  `ex`            | .*            | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
  `xonly`         | false         | only reports failures and errors
  `plan`          | false         | only report the text of the specification without executing anything
- `skipAll`       | false         | skip all the examples
+ `skipall`       | false         | skip all the examples
  `failtrace`     | false         | report the stacktrace for failures
  `color`         | true          | use colors in the output (`nocolor` can also be used on the command line)
  `noindent`      | false         | don't indent automatically text and examples
  `showtimes`     | false         | show individual execution times
  `sequential`    | false         | don't execute examples concurrently
- `threadsNb`     | 0             | number of threads to use for concurrent execution
+ `threadsnb`     | 0             | number of threads to use for concurrent execution
  `markdown`      | true          | interpret text as Markdown in the html reporter
- `debugMarkdown` | false         | print more information when Markdown formatting fails
+ `debugmarkdown` | false         | print more information when Markdown formatting fails
  `html`          | false         | only to be passed on the command line to get console + html reporting at once
- `fromSource`    | true          | true takes an AutoExample description from the file, false from the expectation ok message
+ `fromsource`    | true          | true takes an AutoExample description from the file, false from the expectation ok message
 
 
 All those arguments are usually set in a specification with `args(name=value)` but there are some available shortcuts:

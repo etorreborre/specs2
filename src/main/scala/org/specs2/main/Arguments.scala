@@ -135,7 +135,7 @@ object Arguments {
        _offset        = int("offset"),
        _specName      = value("specname"),
        _sequential    = bool("sequential"),
-       _threadsNb     = int("threadsNb"),
+       _threadsNb     = int("threadsnb"),
        _markdown      = bool("markdown", "nomarkdown"),
        _debugMarkdown = bool("debugmarkdown"),
        _fromSource    = bool("fromsource"),
