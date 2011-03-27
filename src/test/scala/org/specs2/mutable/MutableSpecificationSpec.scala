@@ -2,7 +2,7 @@ package org.specs2
 package mutable
 import io._
 import specification.{ SpecStart, FragmentExecution }
-import matcher.FailureException
+import execute.FailureException
 
 class MutableSpecificationSpec extends org.specs2.SpecificationWithJUnit { def is =
                                                                                                                         """

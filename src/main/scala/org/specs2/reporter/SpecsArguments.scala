@@ -45,9 +45,9 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
    */
   def filterTags(implicit commandLineArgs: Arguments=Arguments()) = (fragmentsAndArguments: Seq[(T, Arguments)]) => {
     fragmentsAndArguments.zip(fragments.drop(1)).filterNot {
-        case ((f, args), t @ TaggedAs(_)) if !t.keep(arguments) => true
-        case ((f, args), TaggedAs(_))                           => true
-        case _                                                  => false
+        case ((f, args), t @ TaggedAs(_)) if !t.keep(args.overrideWith(commandLineArgs)) => true
+        case ((f, args), TaggedAs(_))                      => true
+        case _                                             => false
     }.collect { case (a, b) => a }
   }
   /**
