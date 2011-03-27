@@ -11,6 +11,8 @@ private[specs2]
 case class Arguments (
   _ex:            Option[String]  = None,
   _xonly:         Option[Boolean] = None,
+  _include:       Option[String]  = None,
+  _exclude:       Option[String]  = None,
   _plan:          Option[Boolean] = None,
   _skipAll:       Option[Boolean] = None,
   _failtrace:     Option[Boolean] = None,
@@ -30,6 +32,8 @@ case class Arguments (
  ) {
   def ex: String                = _ex.getOrElse(".*")
   def xonly: Boolean            = _xonly.getOrElse(false)
+  def include: String           = _include.getOrElse("")
+  def exclude: String           = _include.getOrElse("")
   def plan: Boolean             = _plan.getOrElse(false)
   def skipAll: Boolean          = _skipAll.getOrElse(false)
   def failtrace: Boolean        = _failtrace.getOrElse(false)
@@ -59,6 +63,8 @@ case class Arguments (
     new Arguments(
       other._ex              .orElse(_ex),
       other._xonly           .orElse(_xonly),
+      other._include         .orElse(_include),
+      other._exclude         .orElse(_exclude),
       other._plan            .orElse(_plan),
       other._skipAll         .orElse(_skipAll),
       other._failtrace       .orElse(_failtrace),
@@ -82,6 +88,8 @@ case class Arguments (
     List(
     "ex"             -> _ex           ,
     "xonly"          -> _xonly        ,
+    "include"        -> _include      ,
+    "exclude"        -> _exclude      ,
     "plan"           -> _plan         ,
     "skipAll"        -> _skipAll      ,
     "failtrace"      -> _failtrace    ,
@@ -115,6 +123,8 @@ object Arguments {
     new Arguments (
        _ex            = value("ex", ".*"+(_:String)+".*"),
        _xonly         = bool("xonly"),
+       _include       = value("include"),
+       _exclude       = value("exclude"),
        _plan          = bool("plan"),
        _skipAll       = bool("skipAll"),
        _failtrace     = bool("failtrace"),

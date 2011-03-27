@@ -14,6 +14,8 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
   override def args(
     ex:            ArgProperty[String]  = ArgProperty[String](),
     xonly:         ArgProperty[Boolean] = ArgProperty[Boolean](),
+    include:       ArgProperty[String]  = ArgProperty[String](),
+    exclude:       ArgProperty[String]  = ArgProperty[String](),
     plan:          ArgProperty[Boolean] = ArgProperty[Boolean](),
     skipAll:       ArgProperty[Boolean] = ArgProperty[Boolean](),
     failtrace:     ArgProperty[Boolean] = ArgProperty[Boolean](),
@@ -34,6 +36,8 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     addArguments(super.args(
       ex,
       xonly,
+      include,
+      exclude,
       plan,
       skipAll,
       failtrace,

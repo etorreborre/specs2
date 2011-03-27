@@ -138,3 +138,30 @@ object StandardFragments {
   case class Backtab(n: Int = 1) extends Fragment
 }
 
+/**
+ * Those fragments are used to tag other fragments in a specification\
+ */
+object TagsFragments {
+  trait TaggingFragment extends Fragment {
+    val names: Seq[String]
+    def keep(args: Arguments): Boolean = isIncluded(args) && !isExcluded(args)
+    def isIncluded(args: Arguments) = args.include.isEmpty || !args.include.split(",").intersect(names).isEmpty
+    def isExcluded(args: Arguments) = !args.exclude.isEmpty && !args.exclude.split(",").intersect(names).isEmpty
+  }
+  /** tags the next fragment */
+  case class Tag(names: String*) extends TaggingFragment {
+    override def toString = names.mkString("Tag(", ",", ")")
+  }
+  /** tags the previous fragment */
+  case class TaggedAs(names: String*) extends TaggingFragment {
+    override def toString = names.mkString("TaggedAs(", ",", ")")
+  }
+  /** the previous fragment starts a section */
+  case class AsSection(names: String*) extends TaggingFragment {
+    override def toString = names.mkString("AsSection(", ",", ")")
+  }
+  /** the next fragment starts a section */
+  case class Section(names: String*) extends TaggingFragment {
+    override def toString = names.mkString("Section(", ",", ")")
+  }
+}

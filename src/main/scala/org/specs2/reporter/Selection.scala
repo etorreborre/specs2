@@ -23,16 +23,17 @@ trait DefaultSelection {
   def select(implicit arguments: Arguments): Fragments => Seq[Fragment] = (fragments: Fragments) => select(fragments.fragments)(arguments)
   /** select function returning a filtered seq of Fragments */
   def select(fragments: Seq[Fragment])(implicit arguments: Arguments = Arguments()): Seq[Fragment] = {
-    SpecsArguments.filter(fragments)(filter(arguments))
+    SpecsArguments.filter(fragments)(filterFragment)(arguments)
   }
   /** 
    * the filter method filters examples based on their description,
    * keeping only the ones matching the ex attribute of the arguments object
    */
-  protected def filter(implicit arguments: Arguments = Arguments()) = (f: Fragment, args: Arguments) => {
+  protected def filterFragment = (f: Fragment, args: Arguments) => {
     f match {
-      case e @ Example(_, _) => e.matches(arguments.overrideWith(args).ex)
+      case e @ Example(_, _) => e.matches(args.ex)
       case _ => true
     }
   }
 }
+object DefaultSelection extends DefaultSelection
