@@ -33,7 +33,7 @@ case class Arguments (
   def ex: String                = _ex.getOrElse(".*")
   def xonly: Boolean            = _xonly.getOrElse(false)
   def include: String           = _include.getOrElse("")
-  def exclude: String           = _include.getOrElse("")
+  def exclude: String           = _exclude.getOrElse("")
   def plan: Boolean             = _plan.getOrElse(false)
   def skipAll: Boolean          = _skipAll.getOrElse(false)
   def failtrace: Boolean        = _failtrace.getOrElse(false)

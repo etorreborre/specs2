@@ -144,7 +144,8 @@ object StandardFragments {
 object TagsFragments {
   trait TaggingFragment extends Fragment {
     val names: Seq[String]
-    def keep(args: Arguments): Boolean = isIncluded(args) && !isExcluded(args)
+    def keep(args: Arguments): Boolean =
+      isIncluded(args) && !isExcluded(args)
     def isIncluded(args: Arguments) = args.include.isEmpty || !args.include.split(",").intersect(names).isEmpty
     def isExcluded(args: Arguments) = !args.exclude.isEmpty && !args.exclude.split(",").intersect(names).isEmpty
   }

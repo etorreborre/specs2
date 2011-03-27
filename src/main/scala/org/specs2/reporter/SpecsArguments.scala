@@ -43,11 +43,13 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
   /**
    * @return filter fragments according to tags
    */
-  def filterTags(implicit commandLineArgs: Arguments=Arguments()) = (fragmentsAndArguments: Seq[(T, Arguments)]) =>
-    fragmentsAndArguments.zip(fragments.drop(1)) collect {
-      case ((f, args), t @ TaggedAs(_)) if t.keep(args.overrideWith(commandLineArgs)) => (f, args)
-      case ((f1, args), f2)             if !f1.isInstanceOf[TaggingFragment]          => (f1, args)
-    }
+  def filterTags(implicit commandLineArgs: Arguments=Arguments()) = (fragmentsAndArguments: Seq[(T, Arguments)]) => {
+    fragmentsAndArguments.zip(fragments.drop(1)).filterNot {
+        case ((f, args), t @ TaggedAs(_)) if !t.keep(arguments) => true
+        case ((f, args), TaggedAs(_))                           => true
+        case _                                                  => false
+    }.collect { case (a, b) => a }
+  }
   /**
    * @return filter fragments according to sections
    */

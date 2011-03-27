@@ -22,8 +22,9 @@ during the specification execution. There are 2 types of tags:
                                                                                                                         end
 
   import DefaultSelection._
+  import Tags._
+
   def e1 = {
-    import Tags._
     val fragments =
       "text" ^
         "e1" ! success ^ tag("t1")^
