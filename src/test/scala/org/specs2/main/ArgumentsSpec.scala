@@ -57,7 +57,9 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
 
   object props extends After {
     def after = {
-      System.getProperties.clear()
+      System.clearProperty("specs2.specname")
+      System.clearProperty("specname")
+      System.clearProperty("plan")
     }
   }
   def e11 = props {

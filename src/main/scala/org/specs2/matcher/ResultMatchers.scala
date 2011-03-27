@@ -22,17 +22,33 @@ trait ResultBaseMatchers {
     }
   }
 
-  def beFailing[T <: Result]: Matcher[T] = beFailing(".*")
-  def beFailing[T <: Result](message: String) = new Matcher[T] {
+  def beFailing[T <: Result]: Matcher[T] = beFailing(None)
+  def beFailing[T <: Result](message: String): Matcher[T] = beFailing(Some(message))
+  def beFailing[T <: Result](message: Option[String]): Matcher[T] = new Matcher[T] {
     def apply[S <: T](value: Expectable[S]) = {
       result(value.value.isFailure,
              value.description + " is a failure",
              value.description + " is not a failure",
              value) and
-      result(value.value.message matches message,
-             value.value.message + " matches " + message,
-             value.value.message + " doesn't match " + message,
-             value)
+      message.map(m=> result(value.value.message matches m,
+                         value.value.message + " matches " + m,
+                         value.value.message + " doesn't match " + m,
+                         value)).getOrElse(result(true, "ok", "ko", value))
+    }
+  }
+
+  def beError[T <: Result]: Matcher[T] = beError(None)
+  def beError[T <: Result](message: String): Matcher[T] = beError(Some(message))
+  def beError[T <: Result](message: Option[String]): Matcher[T] = new Matcher[T] {
+    def apply[S <: T](value: Expectable[S]) = {
+      result(value.value.isError,
+             value.description + " is an error",
+             value.description + " is not an error",
+             value) and
+      message.map(m=> result(value.value.message matches m,
+                         value.value.message + " matches " + m,
+                         value.value.message + " doesn't match " + m,
+                         value)).getOrElse(result(true, "ok", "ko", value))
     }
   }
 }
