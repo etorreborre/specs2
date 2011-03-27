@@ -111,15 +111,16 @@ case class Arguments (
 
   private def showArg(a: (String, Option[_])) = a._2.map(a._1 +" = "+_)
 } 
+import main.{SystemProperties => sysProperties}
 
 private[specs2]  
 object Arguments {
   
   /** @return new arguments from command-line arguments */
   def apply(implicit arguments: String*): Arguments = {
-    extract(arguments)
+    extract(arguments, sysProperties)
   }
-  private def extract(implicit arguments: Seq[String]): Arguments = {
+  private[specs2] def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Arguments = {
     new Arguments (
        _ex            = value("ex", ".*"+(_:String)+".*"),
        _xonly         = bool("xonly"),
@@ -143,24 +144,24 @@ object Arguments {
     )
   }
   
-  private def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String]): Option[Boolean] = {
+  private def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
     args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue).orElse(boolSystemProperty(name, mappedValue))
   }
-  private def boolSystemProperty(name: String, mappedValue: Boolean = true): Option[Boolean] = {
-    SystemProperties.getProperty(name).map(a => mappedValue)
+  private def boolSystemProperty(name: String, mappedValue: Boolean = true)(implicit sp: SystemProperties): Option[Boolean] = {
+    sp.getProperty(name).map(a => mappedValue)
   }
-  private def bool(name: String, negatedName: String)(implicit args: Seq[String]): Option[Boolean] = {
+  private def bool(name: String, negatedName: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
     bool(negatedName, false) orElse bool(name)
   }
-  private def value(name: String, f: String => String)(implicit args: Seq[String]): Option[String] = {
+  private def value(name: String, f: String => String)(implicit args: Seq[String], sp: SystemProperties): Option[String] = {
     args.zip(args.drop(1)).find(_._1.toLowerCase.contains(name.toLowerCase)).map(s => f(s._2)).orElse(valueSystemProperty(name, f))
   }
-  private def valueSystemProperty(name: String, f: String => String): Option[String] = {
-    SystemProperties.getProperty(name).map(o => f(o.toString))
+  private def valueSystemProperty(name: String, f: String => String)(implicit sp: SystemProperties): Option[String] = {
+    sp.getProperty(name).map(o => f(o.toString))
   }
-  private def value(name: String)(implicit args: Seq[String]): Option[String] = value(name, identity _)
-  private def int(name: String)(implicit args: Seq[String]): Option[Int] = {
-    tryo(value(name)(args).map(_.toInt).get)
+  private def value(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[String] = value(name, identity _)
+  private def int(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Int] = {
+    tryo(value(name)(args, sp).map(_.toInt).get)
   }
 
   implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments] {

@@ -63,15 +63,15 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
     }
   }
   def e11 = props {
-    System.setProperty("plan", "")
-    Arguments("").plan must_== true
+    val sp = new SystemProperties { override def getProperty(name: String) = Some("true") }
+    Arguments.extract(Seq(""), sp).plan must_== true
   }
   def e12 = props {
-    System.setProperty("specname", "spec")
-    Arguments("").specName must_== "spec"
+    val sp = new SystemProperties { override def getProperty(name: String) = Some("spec") }
+    Arguments.extract(Seq(""), sp).specName must_== "spec"
   }
   def e13 = props {
-    System.setProperty("specs2.specname", "spec")
-    Arguments("").specName must_== "spec"
+    val sp = new SystemProperties { override def getProperty(name: String) = Some("spec") }
+    Arguments.extract(Seq(""), sp).specName must_== "spec"
   }
 }
