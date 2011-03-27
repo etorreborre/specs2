@@ -56,18 +56,20 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
   def e10 = (args(xonly = true) <| args(plan = true)).plan must_== true
 
   object props extends After {
-    def after = System.getProperties.clear()
+    def after = {
+      System.getProperties.clear()
+    }
   }
   def e11 = props {
     System.setProperty("plan", "")
-    Arguments().plan must_== true
+    Arguments("").plan must_== true
   }
   def e12 = props {
     System.setProperty("specname", "spec")
-    Arguments().specName must_== "spec"
+    Arguments("").specName must_== "spec"
   }
   def e13 = props {
     System.setProperty("specs2.specname", "spec")
-    Arguments().specName must_== "spec"
+    Arguments("").specName must_== "spec"
   }
 }
