@@ -95,7 +95,10 @@ trait Iterablex {
           }
        }.mkString(", ") + "]"
     }
-
+    /** map the first element with a function */
+    def mapFirst(f: T => T): Seq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
+    /** map the last element with a function */
+    def mapLast(f: T => T): Seq[T] = (xs.dropRight(1) ++ xs.takeRight(1).map(f)).toSeq
   }
 }
 private[specs2]

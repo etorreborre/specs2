@@ -44,6 +44,12 @@ class IterablexSpec extends SpecificationWithJUnit with IterableData {
   "toDeepString uses recursively the toString method to display iterables in brackets" in
   { List(List(1, 2), 3, List(4, 5)).toDeepString must_== "[[1, 2], 3, [4, 5]]" }
 
+  "mapFirst maps the first element with a function if it exists" in
+  { Seq(1, 2).mapFirst(_ + 1) must_== Seq(2, 2) }
+
+  "mapLast maps the last element with a function if it exists" in
+  { Seq(1, 2).mapLast(_ + 1) must_== Seq(1, 3) }
+
 }
 import org.scalacheck.{ Arbitrary, Gen }
 import org.scalacheck.Gen._

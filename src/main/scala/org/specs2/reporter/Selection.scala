@@ -3,6 +3,7 @@ package reporter
 
 import scalaz._
 import Scalaz._
+import collection.Iterablex._
 import main.Arguments
 import control.LazyParameters._
 import specification._
@@ -37,7 +38,7 @@ trait DefaultSelection {
   }
 
   /**
-   * @return filter fragments according to tags
+   * @return filter fragments according to tags by collecting tags as applicable to each fragment and applying them
    */
   def filterTags(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
     val fragments = fragmentsAndArguments.map(_._1)
@@ -45,12 +46,16 @@ trait DefaultSelection {
       case ((f, a), t) if !isTag(f) && t.keep(a.overrideWith(commandLineArgs)) => (f, a)
     }
   }
-  /** alias type */
-  private type TaggedFragment = (Fragment, Tag)
 
+  /**
+   * From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:
+   *
+   *  * a `TaggedAs` fragment is applicable to the the previous fragment
+   *  * a `Tag` fragment is applicable to the the next fragment
+   *  * a `AsSection` fragment is applicable to the the previous fragment to the next `AsSection` fragment with the same name
+   *  * a `Section` fragment is applicable to the the next fragment to the next `Section` fragment with the same name
+   */
   def tags(fragments: Seq[Fragment]): Seq[TaggingFragment] = {
-    def addTagToLast(res: Seq[TaggingFragment], t: TaggingFragment): Seq[TaggingFragment] =
-      res.dropRight(1) ++ res.lastOption.map(_ |+| t).toList
 
     def removeTags(taggingToApply: Seq[TaggingFragment], tf: TaggingFragment) = taggingToApply.map { t =>
         t match {
@@ -70,11 +75,11 @@ trait DefaultSelection {
         /** end of section */
         case t1 @ Section(n)                                    => (tagged :+ Tag(n), removeTags(taggingToApply, t1))
         /** tag the previous fragment */
-        case t1 @ TaggedAs(n)                                   => (addTagToLast(tagged, Tag(n)) :+ t1, taggingToApply)
+        case t1 @ TaggedAs(n)                                   => (tagged.mapLast(_ |+| Tag(n)) :+ t1, taggingToApply)
         /** beginning of section from the previous fragment */
-        case t1 @ AsSection(n) if !(taggingToApply contains t1) => (addTagToLast(tagged, Tag(n)) :+ t1, taggingToApply :+ t1)
+        case t1 @ AsSection(n) if !(taggingToApply contains t1) => (tagged.mapLast(_ |+| Tag(n)) :+ t1, taggingToApply :+ t1)
         /** end of section */
-        case t1 @ AsSection(n)                                  => (addTagToLast(tagged, Tag(n)) :+ t1, removeTags(taggingToApply, t1))
+        case t1 @ AsSection(n)                                  => (tagged.mapLast(_ |+| Tag(n)) :+ t1, removeTags(taggingToApply, t1))
         /** beginning of section from the previous fragment */
         case f                                                  => (tagged :+ taggingToApply.∑, taggingToApply.filter(_.isSection))
       }
