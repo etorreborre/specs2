@@ -27,22 +27,13 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
    *  * one working on the whole fragment list
    *  * one working on each individual fragment
    */
-  def filter(fs: Seq[(T, Arguments)] => Seq[(T, Arguments)], f: (T, Arguments) => Boolean)(implicit commandLineArgs: Arguments=Arguments()): Seq[T] =
-    fragmentAndApplicableArguments |> fs |> filterFragment(f)
-
-  /**
-   * @return filter fragments according to fragments
-   */
-  def filterFragment(f: (T, Arguments) => Boolean)(implicit commandLineArgs: Arguments=Arguments()) = (fragmentsAndArguments: Seq[(T, Arguments)]) =>
-    fragmentsAndArguments.collect {
-      case (value, args) if f(value, commandLineArgs.overrideWith(args)) => value
-    }
+  def filter(fs: Seq[(T, Arguments)] => Seq[T]): Seq[T] = fragmentAndApplicableArguments |> fs
 
   /**
    * @return a list of pair (fragment, argument) where argument is the applicable arguments for the current fragment)
    */
   def fragmentAndApplicableArguments: Seq[(T, Arguments)] =
-    argumentsFragments.zip(toList).collect { case (ApplicableArguments(value), args) => (value, args) }
+    argumentsFragments.zip(toList).view.collect { case (ApplicableArguments(value), args) => (value, args) }
   /**
    * @return a list of fragments without their corresponding arguments
    */
@@ -59,8 +50,8 @@ case object SpecsArguments {
    *  * one working on the whole fragment list
    *  * one working on each individual fragment
    */
-  def filter[T](ts: Seq[T])(fs: Seq[(T, Arguments)] => Seq[(T, Arguments)], f: (T, Arguments) => Boolean)(commandLineArgs: Arguments)(implicit r: Reducer[T, SpecsArguments[T]]): Seq[T] =
-    foldAll(ts).filter(fs, f)(commandLineArgs).view
+  def filter[T](ts: Seq[T])(fs: Seq[(T, Arguments)] => Seq[T])(implicit r: Reducer[T, SpecsArguments[T]]): Seq[T] =
+    foldAll(ts).filter(fs)
 
   implicit def SpecsArgumentsMonoid[T] = new Monoid[SpecsArguments[T]] {
     def append(a1: SpecsArguments[T], a2: =>SpecsArguments[T]) = a1 append a2

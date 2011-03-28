@@ -4,7 +4,7 @@ package specification
 import reporter.DefaultSelection
 import matcher.ThrownExpectations
 
-class TagsSpec extends SpecificationWithJUnit with ThrownExpectations { def is =
+class TagsSpec extends SpecificationWithJUnit with ThrownExpectations with Tags { def is = 
                                                                                                                         """
 A specification can be tagged with some meaningful names like "integration" or "accounts". Creating tags amounts to
 adding new fragments in the specification. Then those fragments are used to determine which other fragments must be executed
@@ -32,7 +32,7 @@ during the specification execution. There are 2 types of tags:
       "and the fragments before the section are kept"                                                                   ! section2^
       "if the section is closed with another AsSection fragment containing the tag t1"                                  ^
         "the tagged fragments between the section tags are excluded"                                                    ! section3^
-        "and the fragments outside the section are kept"                                                                ! section4^
+        "and the fragments outside the section are kept"                                                                ! section4^ tag("try") ^ bt(2)^
     "then, when using include='t1'"                                                                                     ^
       "the tagged fragments just before and after the section tag are included in the selection"                        ! section5^
       "and the fragments before the section are excluded"                                                               ! section6^

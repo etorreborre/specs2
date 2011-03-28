@@ -1,11 +1,14 @@
 package org.specs2
 package reporter
 
+import scalaz._
+import Scalaz._
 import main.Arguments
 import control.LazyParameters._
 import specification._
 import Fragments._
 import SpecsArguments._
+import Foldable._
 import TagsFragments._
 /**
  * The Selection trait implements the logic for filtering the fragments to execute
@@ -22,31 +25,70 @@ trait DefaultSelection {
   /** select function returning a filtered seq of Fragments */
   def select(implicit arguments: Arguments): Fragments => Seq[Fragment] = (fragments: Fragments) => select(fragments.fragments)(arguments)
   /** select function returning a filtered seq of Fragments */
-  def select(fragments: Seq[Fragment])(implicit arguments: Arguments = Arguments()): Seq[Fragment] = {
-    SpecsArguments.foldAll(fragments).filter(filterTags, filterFragment)(arguments)
+  def select(fragments: Seq[Fragment])(implicit commandLineArgs: Arguments = Arguments()): Seq[Fragment] = {
+    SpecsArguments.foldAll(fragments).filter(filter(commandLineArgs))
+  }
+
+  /**
+   * @return filter fragments depending on the command line arguments and the current arguments in the specification
+   */
+  def filter(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
+    fragmentsAndArguments |> filterTags |> filterExamples
   }
 
   /**
    * @return filter fragments according to tags
    */
-  def filterTags(implicit commandLineArgs: Arguments=Arguments()) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
-    val fragments = fragmentsAndArguments.map(_._2)
-    fragmentsAndArguments.zip(fragments.drop(1) :+ fragments.take(1)).filterNot {
-      case ((f, args), t @ TaggedAs(_)) if !t.keep(args.overrideWith(commandLineArgs)) => true
-      case ((f, args), TaggedAs(_))                      => true
-      case _                                             => false
-    }.collect { case (a, b) => a }
+  def filterTags(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
+    val fragments = fragmentsAndArguments.map(_._1)
+    fragmentsAndArguments.zip(tags(fragments)) collect {
+      case ((f, a), t) if !isTag(f) && t.keep(a.overrideWith(commandLineArgs)) => (f, a)
+    }
   }
+  /** alias type */
+  private type TaggedFragment = (Fragment, Tag)
 
+  def tags(fragments: Seq[Fragment]): Seq[TaggingFragment] = {
+    def addTagToLast(res: Seq[TaggingFragment], t: TaggingFragment): Seq[TaggingFragment] =
+      res.dropRight(1) ++ res.lastOption.map(_ |+| t).toList
+
+    def removeTags(taggingToApply: Seq[TaggingFragment], tf: TaggingFragment) = taggingToApply.map { t =>
+        t match {
+          case s @ Section(_)   => Section((s.names diff tf.names):_*)
+          case s @ AsSection(_) => AsSection((s.names diff tf.names):_*)
+          case other            => t
+        }
+      }
+
+    fragments.foldLeft((Nil, Nil): (Seq[TaggingFragment], Seq[TaggingFragment])) { (res, cur) =>
+      val (tagged, taggingToApply) = res
+      cur match {
+        /** tag the next fragment */
+        case t1 @ Tag(_)                                        => (tagged :+ t1, taggingToApply :+ t1)
+        /** beginning of section */
+        case t1 @ Section(n) if !(taggingToApply contains t1)   => (tagged :+ Tag(n), taggingToApply :+ t1)
+        /** end of section */
+        case t1 @ Section(n)                                    => (tagged :+ Tag(n), removeTags(taggingToApply, t1))
+        /** tag the previous fragment */
+        case t1 @ TaggedAs(n)                                   => (addTagToLast(tagged, Tag(n)) :+ t1, taggingToApply)
+        /** beginning of section from the previous fragment */
+        case t1 @ AsSection(n) if !(taggingToApply contains t1) => (addTagToLast(tagged, Tag(n)) :+ t1, taggingToApply :+ t1)
+        /** end of section */
+        case t1 @ AsSection(n)                                  => (addTagToLast(tagged, Tag(n)) :+ t1, removeTags(taggingToApply, t1))
+        /** beginning of section from the previous fragment */
+        case f                                                  => (tagged :+ taggingToApply.∑, taggingToApply.filter(_.isSection))
+      }
+    }
+  }._1
   /** 
    * the filter method filters examples based on their description,
    * keeping only the ones matching the ex attribute of the arguments object
    */
-  protected def filterFragment = (f: Fragment, args: Arguments) => {
-    f match {
-      case e @ Example(_, _) => e.matches(args.ex)
-      case _ => true
-    }
+  protected def filterExamples(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
+    fragmentsAndArguments filter {
+      case (e @ Example(_, _), args) => e.matches(args.overrideWith(commandLineArgs).ex)
+      case (f, args)                 => true
+    } collect { case (f, a) => f }
   }
 }
 object DefaultSelection extends DefaultSelection

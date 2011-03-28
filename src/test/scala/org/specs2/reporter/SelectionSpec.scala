@@ -20,7 +20,7 @@ Before executing and reporting a specification, the fragments must be selected a
     "when the user specifies a regular expression: ex = ex1.*"                                                          ^
       "in the spec"                                                                                                     ! filter().e1^
       "on the command line"                                                                                             ! filter().e2^
-    "(if no filter is specified, nothing must be filtered out)"                                                         ! filter().e3^
+    "if no filter is specified, nothing must be filtered out"                                                           ! filter().e3^
                                                                                                                         p^
                                                                                                                         """
   Then the Selection trait groups fragments to execute in lists of Fragments which can

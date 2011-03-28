@@ -8,6 +8,7 @@ import main.Arguments
 import execute._
 import text._
 import text.Trim._
+import scalaz.Monoid
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
@@ -143,26 +144,76 @@ object StandardFragments {
  */
 object TagsFragments {
   trait TaggingFragment extends Fragment {
+    /** tagging names */
     val names: Seq[String]
-    def keep(args: Arguments): Boolean =
-      isIncluded(args) && !isExcluded(args)
-    def isIncluded(args: Arguments) = args.include.isEmpty || !args.include.split(",").intersect(names).isEmpty
-    def isExcluded(args: Arguments) = !args.exclude.isEmpty && !args.exclude.split(",").intersect(names).isEmpty
+    /** @return true if the fragment tagged with this must be kept */
+    def keep(args: Arguments): Boolean = isIncluded(args) && !isExcluded(args)
+    def isIncluded(args: Arguments) = args.include.trim.isEmpty || !args.include.splitTrim(",").intersect(names).isEmpty
+    def isExcluded(args: Arguments) = !args.exclude.trim.isEmpty && !args.exclude.splitTrim(",").intersect(names).isEmpty
+    /** @return true if this tagging fragment is a section */
+    def isSection: Boolean
   }
   /** tags the next fragment */
   case class Tag(names: String*) extends TaggingFragment {
+    def isSection = false
     override def toString = names.mkString("Tag(", ",", ")")
+    override def equals(o: Any) = {
+      o match {
+        case t @ Tag(n)      => names == t.names
+        case t @ TaggedAs(n) => names == t.names
+        case _ => false
+      }
+    }
   }
   /** tags the previous fragment */
   case class TaggedAs(names: String*) extends TaggingFragment {
+    def isSection = false
     override def toString = names.mkString("TaggedAs(", ",", ")")
+    override def equals(o: Any) = {
+      o match {
+        case t @ Tag(n)      => names == t.names
+        case t @ TaggedAs(n) => names == t.names
+        case _ => false
+      }
+    }
   }
   /** the previous fragment starts a section */
   case class AsSection(names: String*) extends TaggingFragment {
+    def isSection = true
     override def toString = names.mkString("AsSection(", ",", ")")
+    override def equals(o: Any) = {
+      o match {
+        case s @ AsSection(_) => names == s.names
+        case s @ Section(_)   => names == s.names
+        case _ => false
+      }
+    }
   }
   /** the next fragment starts a section */
   case class Section(names: String*) extends TaggingFragment {
+    def isSection = true
     override def toString = names.mkString("Section(", ",", ")")
+    override def equals(o: Any) = {
+      o match {
+        case s @ AsSection(_) => names == s.names
+        case s @ Section(_)   => names == s.names
+        case _ => false
+      }
+    }
+  }
+
+  /**
+   * define a very coarse Monoid for TaggingFragments where appending 2 TaggingFragments returns a Tag object
+   * with both list of tags
+   */
+  implicit def TaggingFragmentsAreMonoid = new Monoid[TaggingFragment] {
+    val zero = Tag()
+    def append(t1: TaggingFragment, t2: =>TaggingFragment) = Tag((t1.names ++ t2.names):_*)
+  }
+
+  /** @return true if the object is a TaggingFragment */
+  def isTag(f: Fragment) = f match {
+    case t: TaggingFragment => true
+    case other              => false
   }
 }

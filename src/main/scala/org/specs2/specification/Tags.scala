@@ -7,8 +7,8 @@ import TagsFragments._
  */
 trait Tags {
   /** create a TaggedAs fragment */
-  def tag(names: String*) = TaggedAs(names:_*)
+  def tag(names: String*): TaggingFragment = TaggedAs(names:_*)
   /** create a AsSection fragment */
-  def section(names: String*) = AsSection(names:_*)
+  def section(names: String*): TaggingFragment = AsSection(names:_*)
 }
 object Tags extends Tags

@@ -19,6 +19,7 @@ In this chapter you will learn how to:
  * include or link specifications
  * give a title to your specification
  * define contexts and actions to execute before/after examples
+ * tag examples or sections of the Specification
 
 ### Declare examples
 
@@ -822,6 +823,38 @@ To make things more concrete here is a full example:
           def e1 = string must have size(7)
         }
       }
+
+### Tags
+
+Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution.
+Let's have a look at one example:
+
+        /**
+         * use the org.specs2.specification.Tags trait to define tags and sections
+         */
+        class TaggedSpecification extends Specification with Tags { def is =
+          "this is some introductory text"                          ^
+          "and the first group of examples"                         ^
+            "example 1"                                             ! success ^ tag("feature 1", "unit")^
+            "example 2"                                             ! success ^ tag("integration")^
+                                                                    ^ p^
+          "and the second group of examples"                        ^          section("checkin")^
+            "example 3"                                             ! success^
+            "example 4"                                             ! success^ section("checkin")
+        }
+
+In that specification we're defining several tags and sections:
+
+ * `feature 1` is a tag that's applied to `example1` (the _preceding_ Fragment)
+ * `feature 2` is a tag that's applied to `example2` (the _preceding_ Fragment)
+ * `checkin` marks a section which goes from the Text `and the second group of examples` to `example 4`
+
+Armed with this, it is now easy to include or exclude portions of the specification at execution time:
+
+ * `args(include="feature 1")` will only include `example 1`
+ * `args(exclude="integration")` will include everything except `example 2`
+ * `args(include="checkin, unit")` will include `example 1` and the second group of examples (`example 3` and `example 4`)
+
 
  - - -
                                                                                                                         """^
