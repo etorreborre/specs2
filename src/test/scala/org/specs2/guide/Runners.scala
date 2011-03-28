@@ -44,6 +44,8 @@ The available arguments are the following:
  --------------- | ------------- | -------------------------------------------------------------------------------------------
  `ex`            | .*            | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
  `xonly`         | false         | only reports failures and errors
+ `include`       | ""            | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ `exclude`       | ""            | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
  `plan`          | false         | only report the text of the specification without executing anything
  `skipall`       | false         | skip all the examples
  `failtrace`     | false         | report the stacktrace for failures
@@ -66,6 +68,8 @@ All those arguments are usually set in a specification with `args(name=value)` b
  `skipAll`                                                 | `args(skipAll=true)`                                                 |                                                                                                  |
  `noindent`                                                | `args(noindent=true)`                                                |                                                                                                  |
  `xonly`                                                   | `args(xonly=true)`                                                   |                                                                                                  |
+ `include(tags: String)`                                   | `args(include=tags)`                                                 |                                                                                                  |
+ `exclude(tags: String)`                                   | `args(exclude=tags)`                                                 |                                                                                                  |
  `only(examples: String)`                                  | `args(ex=examples)`                                                  |                                                                                                  |
  `sequential`                                              | `args(sequential=true)`                                              |                                                                                                  |
  `literate`                                                | `args(noindent=true, sequential=true)`                               | for specifications where text must not be indented and examples be executed in order              |

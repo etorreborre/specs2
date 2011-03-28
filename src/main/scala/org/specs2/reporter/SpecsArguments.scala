@@ -5,7 +5,6 @@ import scalaz._
 import Scalaz._
 import main.Arguments
 import specification._
-import TagsFragments._
 /**
  * The SpecsArguments trait allows to fold a list of Fragments into the list of applicable arguments for each fragment
  */
@@ -23,54 +22,36 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
     import Arguments._
     overrideContext(argumentsFragments.map(toBlock _)).toList
   }
+  /**
+   * filter the fragments with 2 functions:
+   *  * one working on the whole fragment list
+   *  * one working on each individual fragment
+   */
+  def filter(fs: Seq[(T, Arguments)] => Seq[T]): Seq[T] = fragmentAndApplicableArguments |> fs
 
   /**
    * @return a list of pair (fragment, argument) where argument is the applicable arguments for the current fragment)
    */
   def fragmentAndApplicableArguments: Seq[(T, Arguments)] =
-    argumentsFragments.zip(toList).collect { case (ApplicableArguments(value), args) => (value, args) }
+    argumentsFragments.zip(toList).view.collect { case (ApplicableArguments(value), args) => (value, args) }
   /**
    * @return a list of fragments without their corresponding arguments
    */
   def fragments: Seq[T] =
     argumentsFragments.collect { case (ApplicableArguments(value)) => value }
-  /**
-   * @return filter the values according to the current arguments
-   */
-  def filter(f: (T, Arguments) => Boolean)(implicit commandLineArgs: Arguments=Arguments()): Seq[T] =
-    fragmentAndApplicableArguments |> filterTags |> filterSections |> filterFragments(f)
-
-  /**
-   * @return filter fragments according to tags
-   */
-  def filterTags(implicit commandLineArgs: Arguments=Arguments()) = (fragmentsAndArguments: Seq[(T, Arguments)]) => {
-    fragmentsAndArguments.zip(fragments.drop(1) :+ fragments.take(1)).filterNot {
-        case ((f, args), t @ TaggedAs(_)) if !t.keep(args.overrideWith(commandLineArgs)) => true
-        case ((f, args), TaggedAs(_))                      => true
-        case _                                             => false
-    }.collect { case (a, b) => a }
-  }
-  /**
-   * @return filter fragments according to sections
-   */
-  def filterSections(implicit commandLineArgs: Arguments=Arguments()) = (fragmentsAndArguments: Seq[(T, Arguments)]) =>
-    fragmentsAndArguments
-
-  /**
-   * @return filter fragments according to fragments
-   */
-  def filterFragments(f: (T, Arguments) => Boolean)(implicit commandLineArgs: Arguments=Arguments()) = (fragmentsAndArguments: Seq[(T, Arguments)]) =>
-     fragmentsAndArguments.collect {
-      case (value, args) if f(value, commandLineArgs.overrideWith(args)) => value
-    }
 }
 
 private[specs2]
 case object SpecsArguments {
   def apply[T](s: ApplicableArguments[T]) = new SpecsArguments(List(s))
 
-  def filter[T](ts: Seq[T])(f: (T, Arguments) => Boolean)(commandLineArgs: Arguments)(implicit r: Reducer[T, SpecsArguments[T]]): Seq[T] =
-    foldAll(ts).filter(f)(commandLineArgs).view
+  /**
+   * filter the fragments with 2 functions:
+   *  * one working on the whole fragment list
+   *  * one working on each individual fragment
+   */
+  def filter[T](ts: Seq[T])(fs: Seq[(T, Arguments)] => Seq[T])(implicit r: Reducer[T, SpecsArguments[T]]): Seq[T] =
+    foldAll(ts).filter(fs)
 
   implicit def SpecsArgumentsMonoid[T] = new Monoid[SpecsArguments[T]] {
     def append(a1: SpecsArguments[T], a2: =>SpecsArguments[T]) = a1 append a2

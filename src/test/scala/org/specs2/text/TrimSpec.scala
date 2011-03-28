@@ -26,6 +26,11 @@ class TrimSpec extends SpecificationWithJUnit { def is =
   "Remove empty lines"                                                                                                  ^
   { "hello\n    \nworld".removeEmptyLines === "hello\nworld" }                                                          ^
                                                                                                                         p^
+  "Split and trim"                                                                                                      ^
+  { "a,b,c".splitTrim(",").toSeq === Seq("a", "b", "c") }                                                               ^
+  { "a, b , c".splitTrim(",").toSeq === Seq("a", "b", "c") }                                                            ^
+  { "a,  ,c".splitTrim(",").toSeq === Seq("a", "c") }                                                                   ^
+                                                                                                                        p^
   "Last block returns the last block when lines are separated by empty lines"                                           ! e2^
                                                                                                                         end
 

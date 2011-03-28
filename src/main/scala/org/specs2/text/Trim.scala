@@ -90,6 +90,9 @@ trait Trim extends control.Debug {
     def remove(toRemove: String*) = toRemove.foldLeft(s) { (res, cur) => res.replace(cur, "") }
     def removeAll(remove: String) = s.replaceAll(toReplace(remove), "")
 
+    /** split and trim each, removing empty strings */
+    def splitTrim(separator: String) = s.split(separator).collect { case t if !t.trim.isEmpty => t.trim }
+
     private def toReplace(c: String) = c.map { letter => if ("()[]{}+-\\^$|?.*".contains(letter)) ("\\" + letter) else letter }.mkString("")
   }
 }

@@ -17,6 +17,8 @@ class TagsFragmentsSpec extends SpecificationWithJUnit with DataTables {
     "t2"         !! "t"       ! false  |
     "t,t2"       !! ""        ! true   |
     ""           !! "t,t2"    ! false  |
+    ""           !! "t, t2"   ! false  | // adding some whitespace noise
+    ""           !! " t, ,t2" ! false  | // adding some whitespace noise
     "t,t2"       !! "t3"      ! true   |
     "t2"         !! "t,t3"    ! false  | { (inc, exc, keep) =>
       tag.keep(args(include=inc, exclude=exc)) must be_==(keep)
