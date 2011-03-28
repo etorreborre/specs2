@@ -11,9 +11,9 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   val mavenLocal = "Local Maven Repository" at "file://D:/mvn-repository"
   val snapshotsRepo = "snapshots-repo" at "http://scala-tools.org/repo-snapshots"
 
-  val scalacheck    = "org.scala-tools.testing" %% "scalacheck" % "1.8" 
+  val scalacheck    = "org.scala-tools.testing" % "scalacheck_2.9.0-SNAPSHOT" % "1.9-SNAPSHOT" 
   val testinterface = "org.scala-tools.testing" % "test-interface" % "0.5" 
-  val scalazcore    = "com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"
+  val scalazcore    = "org.scalaz" %% "scalaz-core" % "6.0-SNAPSHOT"
   val hamcrest      = "org.hamcrest" % "hamcrest-all" % "1.1"
   val mockito 	    = "org.mockito" % "mockito-all" % "1.8.5" 
   val junit         = "junit" % "junit" % "4.7"
