@@ -17,6 +17,13 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
   /** local mutable contents of the specification */
   protected[specs2] var specFragments: Fragments = new Fragments()
 
+  /** @return a Fragments object from a single piece of text */
+  override implicit def textFragment(s: String): FragmentsFragment = {
+    val t = textStart(s)
+    addFragments(t)
+    t
+  }
+
   override implicit def title(s: String): MutableSpecTitle = new MutableSpecTitle(s)
   class MutableSpecTitle(s: String) extends SpecTitle(s) {
     override def title = addFragments(super.title)
@@ -79,18 +86,18 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
     addFragments(p)
   }
   protected def addFragments(fs: Fragments): Fragments = {
-    specFragments = specFragments ^ fs
+    specFragments = new FragmentsFragment(specFragments) ^ fs
     fs
   }
   protected def addArguments(a: Arguments): Arguments = {
-    specFragments = specFragments ^ a
+    specFragments = new FragmentsFragment(specFragments) ^ a
     a
   }
   protected def addExample[T <% Result](s: String, r: =>T): Example = addExample(Example(s, r))
 
   protected def addExample[T <% Result](ex: =>Example): Example = {
     val example = ex
-    specFragments = specFragments ^ example
+    specFragments = new FragmentsFragment(specFragments) ^ example
     example
   }
 

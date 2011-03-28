@@ -11,10 +11,6 @@ class FeaturesSpec extends Specification { def is = literate ^
     * with a mutable spec
 
  Add a guide section on tags for the mutable specs
- Comment and refactor the Selection trait (introduce mapFirst/mapLast for instance and see where it could be used)
-
-
-
                                                                                                                         """^
  "1.2 features                                                                                                          "^
    "Package dependencies specification                                                                                  "! todo^

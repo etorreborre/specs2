@@ -18,6 +18,7 @@ The following examples specify the functionalities for such a mutable specificat
     "arguments can be created with the `args` keyword"                                                                  ! fragments().e4^
     "examples can be nested"                                                                                            ! fragments().e5^
     "should expectations can be used"                                                                                   ! fragments().e6^
+    "a text fragment can start a block with ^"                                                                          ! fragments().e7^
                                                                                                                         p^
   "Execution"                                                                                                           ^
     "the first failing expectation stops an Example execution"                                                          ! execution().e1^
@@ -35,6 +36,7 @@ The following examples specify the functionalities for such a mutable specificat
     def e4 = fragments.toList must beLike { case SpecStart(_, a) :: other => a.xonly must beTrue }
     def e5 = contentList must contain("Text(examples can)", "Text(be nested)", "Example(at level 1)", "Example(at level 2)").inOrder
     def e6 = contentString must contain("should expectation")
+    def e7 = contentString must contain("should also")
   }
 
   case class execution() extends FragmentExecution with HasAMutableSpec {
@@ -85,6 +87,9 @@ The following examples specify the functionalities for such a mutable specificat
           "at level 2" in { success }
         }
       }
+
+      "it should also"^
+        "have another example" ! success
     }
     def fragments = spec.content.fragments
     def contentList = fragments.map(_.toString)

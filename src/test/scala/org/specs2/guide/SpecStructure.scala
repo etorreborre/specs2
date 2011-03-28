@@ -84,7 +84,9 @@ In that specification the following methods are used:
  * `in` to create an Example containing a `Result`
  * `should` to create a group of Examples, with a the preceding Text fragment appended with `should`
 
-It is completely equivalent to writing:
+It is completely equivalent to writing this in an `org.specs2.Specification`:
+
+      def is =
 
       "The 'Hello world' string should" ^
         "contain 11 characters" ! {
