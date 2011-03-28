@@ -5,6 +5,7 @@ import main.Arguments
 import io._
 import mock.Mockito
 import reporter._
+import specification.SpecificationStructure
 
 class TestInterfaceRunnerSpec extends SpecificationWithJUnit { def is =
                                                                                                                         """
@@ -46,16 +47,17 @@ class TestInterfaceRunnerSpec extends SpecificationWithJUnit { def is =
 	           contain("error:   caused by java.lang.Exception: fail")
   }
 
-  case class reporting() extends Mockito with matcher.MustExpectations {
-    object run extends MockLogger {
-      val outer = this
-	    val reporter = mock[TestInterfaceReporter]
-	    val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger)) {
-	      override def reporter(handler: EventHandler) = outer.reporter
-	    }
-	    runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], Array(""))
-    }
-	  def e1 = there was one(run.reporter).report(any[specification.SpecificationStructure])(any[Arguments])
+}
+case class reporting() extends Mockito with matcher.MustExpectations with MockLogger {
+  val outer = this
+  val reporter = mock[Reporter]
+  val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger)) {
+    override def reporter(handler: EventHandler): Reporter = outer.reporter
+  }
+  def reportSpec = runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], Array(""))
+  def e1 = {
+    reportSpec
+    there was one(reporter).report(any[specification.SpecificationStructure])(any[Arguments])
   }
 }
 
@@ -63,10 +65,10 @@ trait MockLogger extends matcher.MustExpectations with Mockito {
   val logger = new Logger with MockOutput {
 	  override def ansiCodesSupported = false
 	  override def error(message: String) = println("error: " + message)
-	  override def info(message: String) = println("info: " + message)
-	  override def warn(message: String) = println("warn: " + message)
+	  override def info(message: String)  = println("info: " + message)
+	  override def warn(message: String)  = println("warn: " + message)
 	  override def debug(message: String) = println("debug: " + message)
-	  override def trace(t: Throwable) = println("trace: " + t)
+	  override def trace(t: Throwable)    = println("trace: " + t)
   }
 
 }
