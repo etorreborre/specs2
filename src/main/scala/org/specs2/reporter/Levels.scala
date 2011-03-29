@@ -38,6 +38,8 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   private def lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
   /** @return the last level block in a Levels object */
   private def lastAsLevel = Levels(blocks.lastOption.toList)
+  /** @return true if there are no blocks */
+  def isEmpty = blocks.isEmpty
   /** @return alias for the last level */
   def level = levels.lastOption.getOrElse(0)
   /** @return all the levels, post-processing them so that there is no negative value */
