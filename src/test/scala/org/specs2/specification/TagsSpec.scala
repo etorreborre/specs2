@@ -25,6 +25,7 @@ during the specification execution. There are 2 types of tags:
     "then, when using include='t1'"                                                                                     ^
       "the tagged fragment is included in the selection"                                                                ! tag3^
       "and other fragments are excluded"                                                                                ! tag4^
+      "a fragment with several names is also included"                                                                  ! tag5^
                                                                                                                         endp^
   "A AsSection(t1) fragment can be created using the section method in an Acceptance specification"                     ^
     "then, when using exclude='t1'"                                                                                     ^
@@ -32,7 +33,7 @@ during the specification execution. There are 2 types of tags:
       "and the fragments before the section are kept"                                                                   ! section2^
       "if the section is closed with another AsSection fragment containing the tag t1"                                  ^
         "the tagged fragments between the section tags are excluded"                                                    ! section3^
-        "and the fragments outside the section are kept"                                                                ! section4^ tag("try") ^ bt(2)^
+        "and the fragments outside the section are kept"                                                                ! section4^ bt(2)^
     "then, when using include='t1'"                                                                                     ^
       "the tagged fragments just before and after the section tag are included in the selection"                        ! section5^
       "and the fragments before the section are excluded"                                                               ! section6^
@@ -47,6 +48,11 @@ during the specification execution. There are 2 types of tags:
   val tagged =
     "text" ^
       "e1" ! success ^ tag("t1")^
+      "e2" ! success ^ end
+
+  val tagged2 =
+    "text" ^
+      "e1" ! success ^ tag("t1", "t2")^
       "e2" ! success ^ end
 
   val sectioned =
@@ -64,6 +70,7 @@ during the specification execution. There are 2 types of tags:
   def tag2 = excludeTag(tagged) must containMatch("e2")
   def tag3 = includeTag(tagged) must not containMatch("e2")
   def tag4 = includeTag(tagged) must containMatch("e1")
+  def tag5 = includeTag(tagged2) must containMatch("e1")
 
   def section1 = excludeTag(sectioned) must containMatch("e1")
   def section2 = excludeTag(sectioned) must not containMatch("e2")

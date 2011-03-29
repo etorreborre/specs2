@@ -159,8 +159,8 @@ object TagsFragments {
     override def toString = names.mkString("Tag(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case t @ Tag(n)      => names == t.names
-        case t @ TaggedAs(n) => names == t.names
+        case t @ Tag(_*)      => names == t.names
+        case t @ TaggedAs(_*) => names == t.names
         case _ => false
       }
     }
@@ -171,8 +171,8 @@ object TagsFragments {
     override def toString = names.mkString("TaggedAs(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case t @ Tag(n)      => names == t.names
-        case t @ TaggedAs(n) => names == t.names
+        case t @ Tag(_*)      => names == t.names
+        case t @ TaggedAs(_*) => names == t.names
         case _ => false
       }
     }
@@ -183,8 +183,8 @@ object TagsFragments {
     override def toString = names.mkString("AsSection(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case s @ AsSection(_) => names == s.names
-        case s @ Section(_)   => names == s.names
+        case s @ AsSection(_*) => names == s.names
+        case s @ Section(_*)   => names == s.names
         case _ => false
       }
     }
@@ -195,8 +195,8 @@ object TagsFragments {
     override def toString = names.mkString("Section(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case s @ AsSection(_) => names == s.names
-        case s @ Section(_)   => names == s.names
+        case s @ AsSection(_*) => names == s.names
+        case s @ Section(_*)   => names == s.names
         case _ => false
       }
     }
