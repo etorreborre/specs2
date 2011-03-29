@@ -857,6 +857,38 @@ Armed with this, it is now easy to include or exclude portions of the specificat
  * `args(exclude="integration")` will include everything except `example 2`
  * `args(include="checkin, unit")` will include `example 1` and the second group of examples (`example 3` and `example 4`)
 
+#### In a unit specification
+
+A _unit_ specification will accept the same `tag` and `section` methods but the behavior will be slightly different:
+
+        import org.specs2.mutable._
+
+        /**
+         * use the org.specs2.mutable.Tags trait to define tags and sections
+         */
+        class TaggedSpecification extends Specification with Tags {
+          "this is some introductory text" >> {
+            "and the first group of examples" >> {
+              tag("feature 1", "unit")
+              "example 1" in success
+              tag("integration")
+              "example 2" in success
+            }
+          }
+          section("checkin")
+          "and the second group of examples" >> {
+            "example 3" in success
+            "example 4" in success
+          }
+          section("checkin")
+        }
+
+For that specification above:
+
+ * the tagged fragments are the ones just _after_ the tag method call: `example 1` is tagged with `feature1 and unit`
+ * the tagged fragments are the ones _strictly between_ the `section` method call:
+     `and the second group of examples`, `example 3` and `example 4` belong to the section `checkin` (as if they were individually
+     tagged with `checkin`)
 
  - - -
                                                                                                                         """^

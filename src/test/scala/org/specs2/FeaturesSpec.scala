@@ -7,14 +7,11 @@ class FeaturesSpec extends Specification { def is = literate ^
  This is a features / TODO list for specs2. It is an informal list of offers no guarantee
  of implementation!
 
- Add more examples for the SelectionSpec:
-    * with a mutable spec
-
- Add a guide section on tags for the mutable specs
                                                                                                                         """^
  "1.2 features                                                                                                          "^
    "Package dependencies specification                                                                                  "! todo^
    "Reporters                                                                                                           "^
+     "pdf                                                                                                               "! todo^
      "Teamcity                                                                                                          "! todo^
      "junit-xml                                                                                                         "! todo^
    "Lift                                                                                                                "^
