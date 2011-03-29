@@ -44,6 +44,8 @@ trait DefaultSelection {
     val fragments = fragmentsAndArguments.map(_._1)
     fragmentsAndArguments.zip(tags(fragments)) collect {
       case ((f, a), t) if !isTag(f) && t.keep(a.overrideWith(commandLineArgs)) => (f, a)
+      case ((f @ SpecStart(_, _), a), t)                                       => (f, a)
+      case ((f @ SpecEnd(_), a), t)                                            => (f, a)
     }
   }
 

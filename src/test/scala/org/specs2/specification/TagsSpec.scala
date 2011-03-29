@@ -26,6 +26,8 @@ during the specification execution. There are 2 types of tags:
       "the tagged fragment is included in the selection"                                                                ! tag3^
       "and other fragments are excluded"                                                                                ! tag4^
       "a fragment with several names is also included"                                                                  ! tag5^
+      "a SpecStart is not excluded"                                                                                     ! tag6^
+      "a SpecEnd is not excluded"                                                                                       ! tag7^
                                                                                                                         endp^
   "A AsSection(t1) fragment can be created using the section method in an Acceptance specification"                     ^
     "then, when using exclude='t1'"                                                                                     ^
@@ -46,6 +48,7 @@ during the specification execution. There are 2 types of tags:
   import Tags._
 
   val tagged =
+    xonly  ^
     "text" ^
       "e1" ! success ^ tag("t1")^
       "e2" ! success ^ end
@@ -71,6 +74,8 @@ during the specification execution. There are 2 types of tags:
   def tag3 = includeTag(tagged) must not containMatch("e2")
   def tag4 = includeTag(tagged) must containMatch("e1")
   def tag5 = includeTag(tagged2) must containMatch("e1")
+  def tag6 = includeTag(tagged) must containMatch("SpecStart")
+  def tag7 = includeTag(tagged) must containMatch("SpecEnd")
 
   def section1 = excludeTag(sectioned) must containMatch("e1")
   def section2 = excludeTag(sectioned) must not containMatch("e2")
