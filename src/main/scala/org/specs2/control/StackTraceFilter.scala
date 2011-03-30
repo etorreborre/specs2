@@ -48,5 +48,12 @@ object IncludeExcludeStackTraceFilter {
  */
 object DefaultStackTraceFilter extends
   IncludeExcludeStackTraceFilter(Seq(),
-    Seq("org.specs2", "scalaz.concurrent", "java.util.concurrent", "sbt\\.", "com.intellij", "org.junit", "scala\\."))
+    Seq("org.specs2", "scalaz.concurrent", "java.util.concurrent", "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt", "scala\\."))
 
+/**
+ * This filter doesn't do anything
+ */
+object NoStackTraceFilter extends StackTraceFilter {
+  /** @return the filtered stacktrace */
+  def apply(e: Seq[StackTraceElement]) = e
+}

@@ -12,7 +12,7 @@ class IncludeExcludeStackTraceFilterSpec extends SpecificationWithJUnit { def is
     "by declaring 'include' patterns"                                                                                   ^
       "leaving the elements matching the patterns"                                                                      ! e3^
       "filtering out the elements not matching the patterns"                                                            ! e4^
-                                                                                                                        p^
+                                                                                                                        endp^
   "A IncludedExcludedStackTraceFilter can be created from a string"                                                     ^
     "the default pattern is i1,i2/e1,e2 where i are include tags and e are exclude tags"                                ! e5^
                                                                                                                          end

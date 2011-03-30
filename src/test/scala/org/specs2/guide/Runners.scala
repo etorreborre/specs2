@@ -38,26 +38,28 @@ inside the specification:
         "brilliant expectation"                                         ! success
       }
 
-The available arguments are the following:
+##### In a Specification
 
-  Name           | Default value | Description
- --------------- | ------------- | -------------------------------------------------------------------------------------------
- `ex`            | .*            | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
- `xonly`         | false         | only reports failures and errors
- `include`       | ""            | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- `exclude`       | ""            | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- `plan`          | false         | only report the text of the specification without executing anything
- `skipall`       | false         | skip all the examples
- `failtrace`     | false         | report the stacktrace for failures
- `color`         | true          | use colors in the output (`nocolor` can also be used on the command line)
- `noindent`      | false         | don't indent automatically text and examples
- `showtimes`     | false         | show individual execution times
- `sequential`    | false         | don't execute examples concurrently
- `threadsnb`     | 0             | number of threads to use for concurrent execution
- `markdown`      | true          | interpret text as Markdown in the html reporter
- `debugmarkdown` | false         | print more information when Markdown formatting fails
- `html`          | false         | only to be passed on the command line to get console + html reporting at once
- `fromsource`    | true          | true takes an AutoExample description from the file, false from the expectation ok message
+From inside a specification, the available arguments are the following:
+
+  Name           | Default value           | Description
+ --------------- | ----------------------- | -------------------------------------------------------------------------------------------
+ `ex`            | .*                      | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
+ `xonly`         | false                   | only reports failures and errors
+ `include`       | ""                      | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ `exclude`       | ""                      | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ `plan`          | false                   | only report the text of the specification without executing anything
+ `skipAll`       | false                   | skip all the examples
+ `failtrace`     | false                   | report the stacktrace for failures
+ `color`         | true                    | use colors in the output (`nocolor` can also be used on the command line)
+ `noindent`      | false                   | don't indent automatically text and examples
+ `showtimes`     | false                   | show individual execution times
+ `sequential`    | false                   | don't execute examples concurrently
+ `threadsNb`     | 0                       | number of threads to use for concurrent execution
+ `markdown`      | true                    | interpret text as Markdown in the html reporter
+ `debugMarkdown` | false                   | print more information when Markdown formatting fails
+ `fromSource`    | true                    | true takes an AutoExample description from the file, false from the expectation ok message
+ `traceFilter`   | DefaultStackTraceFilter | define a StackTraceFilter instance for filtering the reported stacktrace elements
 
 
 All those arguments are usually set in a specification with `args(name=value)` but there are some available shortcuts:
@@ -72,10 +74,13 @@ All those arguments are usually set in a specification with `args(name=value)` b
  `exclude(tags: String)`                                   | `args(exclude=tags)`                                                 |                                                                                                  |
  `only(examples: String)`                                  | `args(ex=examples)`                                                  |                                                                                                  |
  `sequential`                                              | `args(sequential=true)`                                              |                                                                                                  |
- `literate`                                                | `args(noindent=true, sequential=true)`                               | for specifications where text must not be indented and examples be executed in order              |
+ `literate`                                                | `args(noindent=true, sequential=true)`                               | for specifications where text must not be indented and examples be executed in order             |
  `freetext`                                                | `args(plan=true, noindent=true)`                                     | for specifications with no examples at all and free display of text                              |
  `descFromExpectations`                                    | `args(fromSource=false)`                                             | create the example description for the ok message of the expectation instead of the source file  |
+ `fulltrace`                                               | `args(traceFilter=NoStackTraceFilter)`                               | the stacktraces are not filtered                                                                 |
  `diffs(show, separators, triggerSize, shortenSize, full)` | `args(diffs=Diffs(show, separators, triggerSize, shortenSize, full)` | to display the differences when doing equality comparison                                        |
+
+###### Diffs
 
 For the diffs arguments the values you can specify are:
 
@@ -84,6 +89,52 @@ For the diffs arguments the values you can specify are:
   * `triggerSize` controls the size above which the differences must be shown (default is 20)
   * `shortenSize` controls the number of characters to display around each difference (default is 5)
   * `full` displays the full original expected and actual strings
+
+###### StackTraceFilter
+
+The `traceFilter` argument takes an instance of the `org.specs2.control.StackTraceFilter` trait to define how stacktraces
+should be filtered in a report. By default the `DefaultStackTraceFilter` filter will exclude lines matching the following packages:
+
+ * `org.specs2`
+ * `scalaz.concurrent`, `java.util.concurrent`
+ * `scala\\.`
+ * `sbt\\.`, `com.intellij`, `org.eclipse.jdt`, `org.junit`
+
+If this is not what you want you can either:
+
+ * use the `includeTrace(patterns: String*)` to create a new `StackTraceFilter` which will include only the traces matching
+   those patterns
+ * use the `excludeTrace(patterns: String*)` to create a new `StackTraceFilter` which will exclude only the traces matching
+   those patterns
+ * use the `org.specs2.control.IncludeExcludeStackTraceFilter` class to define both include and exclude patterns
+ * define your own logic by extending the `org.specs2.control.StackTraceFilter`
+
+##### On the command line
+
+On the command line you can pass the following arguments:
+
+  Name           | Value format            | Comments
+ --------------- | ----------------------- | -------------------------------------------
+ `ex`            | regexp                  |
+ `xonly`         | boolean                 |
+ `include`       | csv                     |
+ `exclude`       | csv                     |
+ `plan`          | boolean                 |
+ `skipall`       | boolean                 |
+ `failtrace`     | boolean                 |
+ `color`         | boolean                 |
+ `noindent`      | boolean                 |
+ `showtimes`     | boolean                 |
+ `sequential`    | boolean                 |
+ `threadsnb`     | int                     |
+ `markdown`      | boolean                 |
+ `debugmarkdown` | boolean                 |
+ `html`          | boolean                 | to get console + html reporting at once
+ `fromsource`    | boolean                 |
+ `tracefilter`   | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns
+
+_[`regexp` is a Java regular expression, csv a list of comma-separated values]_
+
 
 ##### From system properties
 
