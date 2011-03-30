@@ -77,7 +77,7 @@ All those arguments are usually set in a specification with `args(name=value)` b
  `literate`                                                | `args(noindent=true, sequential=true)`                               | for specifications where text must not be indented and examples be executed in order             |
  `freetext`                                                | `args(plan=true, noindent=true)`                                     | for specifications with no examples at all and free display of text                              |
  `descFromExpectations`                                    | `args(fromSource=false)`                                             | create the example description for the ok message of the expectation instead of the source file  |
- `fulltrace`                                               | `args(traceFilter=NoStackTraceFilter)`                               | the stacktraces are not filtered                                                                 |
+ `fullStackTrace`                                          | `args(traceFilter=NoStackTraceFilter)`                               | the stacktraces are not filtered                                                                 |
  `diffs(show, separators, triggerSize, shortenSize, full)` | `args(diffs=Diffs(show, separators, triggerSize, shortenSize, full)` | to display the differences when doing equality comparison                                        |
 
 ##### Diffs
@@ -96,8 +96,8 @@ The `traceFilter` argument takes an instance of the `org.specs2.control.StackTra
 should be filtered in a report. By default the `DefaultStackTraceFilter` filter will exclude lines matching the following packages:
 
  * `org.specs2`
- * `scalaz.concurrent`, `java.util.concurrent`
- * `scala\\.`
+ * `scalaz\\.`
+ * `scala\\.`, `java\\.`
  * `sbt\\.`, `com.intellij`, `org.eclipse.jdt`, `org.junit`
 
 If this is not what you want you can either:
@@ -115,25 +115,26 @@ If this is not what you want you can either:
 
 On the command line you can pass the following arguments:
 
-  Name           | Value format            | Comments
- --------------- | ----------------------- | -------------------------------------------
- `ex`            | regexp                  |
- `xonly`         | boolean                 |
- `include`       | csv                     |
- `exclude`       | csv                     |
- `plan`          | boolean                 |
- `skipall`       | boolean                 |
- `failtrace`     | boolean                 |
- `color`         | boolean                 |
- `noindent`      | boolean                 |
- `showtimes`     | boolean                 |
- `sequential`    | boolean                 |
- `threadsnb`     | int                     |
- `markdown`      | boolean                 |
- `debugmarkdown` | boolean                 |
- `html`          | boolean                 | to get console + html reporting at once
- `fromsource`    | boolean                 |
- `tracefilter`   | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns
+  Name            | Value format            | Comments
+ ---------------- | ----------------------- | -------------------------------------------
+ `ex`             | regexp                  |
+ `xonly`          | boolean                 |
+ `include`        | csv                     |
+ `exclude`        | csv                     |
+ `plan`           | boolean                 |
+ `skipall`        | boolean                 |
+ `failtrace`      | boolean                 |
+ `color`          | boolean                 |
+ `noindent`       | boolean                 |
+ `showtimes`      | boolean                 |
+ `sequential`     | boolean                 |
+ `threadsnb`      | int                     |
+ `markdown`       | boolean                 |
+ `debugmarkdown`  | boolean                 |
+ `html`           | boolean                 | to get console + html reporting at once
+ `fromsource`     | boolean                 |
+ `fullstacktrace` | boolean                 |
+ `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values]_
 

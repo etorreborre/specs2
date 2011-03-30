@@ -145,7 +145,8 @@ object Arguments {
        _markdown      = bool("markdown", "nomarkdown"),
        _debugMarkdown = bool("debugmarkdown"),
        _fromSource    = bool("fromsource"),
-       _traceFilter   = value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_)),
+       _traceFilter   = bool("fullstacktrace").map(t=>NoStackTraceFilter).
+                        orElse(value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_))),
        _commandLine   = arguments
     )
   }

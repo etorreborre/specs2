@@ -105,7 +105,7 @@ trait TextPrinter {
         }
         case e: Error => {
           printError(desc, e, timer)
-          e.stackTrace.foreach(t => out.printError(t.toString))
+          args.traceFilter(e.stackTrace).foreach(t => out.printError(t.toString))
           e.exception.chainedExceptions.foreach { (t: Throwable) =>
             out.printError(t.getMessage.notNull)
             args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
@@ -125,7 +125,7 @@ trait TextPrinter {
       out.printFailure(description)
       out.printFailure(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
       if (args.failtrace)
-        f.stackTrace.foreach(t => out.printFailure(t.toString))
+        args.traceFilter(f.stackTrace).foreach(t => out.printFailure(t.toString))
     }
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {

@@ -53,7 +53,9 @@ object IncludeExcludeStackTraceFilter {
  */
 object DefaultStackTraceFilter extends
   IncludeExcludeStackTraceFilter(Seq(),
-    Seq("org.specs2", "scalaz.concurrent", "java.util.concurrent", "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt", "scala\\."))
+    Seq("org.specs2", "scalaz\\.",
+        "java\\.", "scala\\.",
+        "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt"))
 
 /**
  * This filter doesn't do anything
