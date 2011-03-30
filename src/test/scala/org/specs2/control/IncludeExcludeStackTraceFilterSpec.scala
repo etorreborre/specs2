@@ -15,7 +15,11 @@ class IncludeExcludeStackTraceFilterSpec extends SpecificationWithJUnit { def is
                                                                                                                         endp^
   "A IncludedExcludedStackTraceFilter can be created from a string"                                                     ^
     "the default pattern is i1,i2/e1,e2 where i are include tags and e are exclude tags"                                ! e5^
-                                                                                                                         end
+                                                                                                                        p^
+  "From an existing IncludedExcludedStackTraceFilter"                                                                   ^
+    "we can add more include patterns"                                                                                  ! e6^
+    "we can add more exclude patterns"                                                                                  ! e7^
+                                                                                                                        end
 
   def stacktrace(st: String*) =  st.map(stackTraceElement(_))
 
@@ -26,5 +30,8 @@ class IncludeExcludeStackTraceFilterSpec extends SpecificationWithJUnit { def is
   def e4 = includeTrace("t1", "t2").apply(stacktrace("t1", "t3", "a", "com.t1.other")).map(_.toString) must not containMatch("t3")
 
   def e5 = IncludeExcludeStackTraceFilter.fromString("i1,i2/e1,e2") must_== IncludeExcludeStackTraceFilter(Seq("i1", "i2"), Seq("e1", "e2"))
+
+  def e6 = DefaultStackTraceFilter.includeAlso("t1", "t2").apply(stacktrace("org.specs2", "t1")).map(_.toString) must not containMatch("specs2")
+  def e7 = DefaultStackTraceFilter.excludeAlso("t1").apply(stacktrace("org.specs2", "t1")).map(_.toString) must not containMatch("t1")
 
 }
