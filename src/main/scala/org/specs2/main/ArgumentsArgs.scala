@@ -110,7 +110,7 @@ trait ArgumentsArgs extends ArgProperties {
   /**
    * shortcut to add include trace patterns
    */
-  def includeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.includeAlso(patterns)
+  def includeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.includeAlso(patterns:_*)
   /**
    * shortcut to create a stackTrace filter to exclude only some elements
    */
@@ -118,7 +118,7 @@ trait ArgumentsArgs extends ArgProperties {
   /**
    * shortcut to add exclude trace patterns
    */
-  def excludeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.excludeAlso(patterns)
+  def excludeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.excludeAlso(patterns:_*)
   /**
    * shortcut to create a stackTrace filter filtering nothing
    */
