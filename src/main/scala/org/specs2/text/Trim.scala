@@ -91,7 +91,7 @@ trait Trim extends control.Debug {
     def removeAll(remove: String) = s.replaceAll(toReplace(remove), "")
 
     /** split and trim each, removing empty strings */
-    def splitTrim(separator: String) = s.split(separator).collect { case t if !t.trim.isEmpty => t.trim }
+    def splitTrim(separator: String): Seq[String] = (s.split(separator).collect { case t if !t.trim.isEmpty => t.trim }).toSeq
 
     private def toReplace(c: String) = c.map { letter => if ("()[]{}+-\\^$|?.*".contains(letter)) ("\\" + letter) else letter }.mkString("")
   }

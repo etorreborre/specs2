@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-import control.Property
+import control.{IncludeExcludeStackTraceFilter, StackTraceFilter, Property}
 
 /**
  * This trait provides shortcuts to create Arguments instances
@@ -9,26 +9,27 @@ import control.Property
 trait ArgumentsArgs extends ArgProperties {
   /** shorthand method to create an Arguments object */
   def args(
-    ex:            ArgProperty[String]      = ArgProperty[String](),
-    xonly:         ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    include:       ArgProperty[String]      = ArgProperty[String](),
-    exclude:       ArgProperty[String]      = ArgProperty[String](),
-    plan:          ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    skipAll:       ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    failtrace:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    color:         ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    noindent:      ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    showlevel:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    showtimes:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    offset:        ArgProperty[Int]         = ArgProperty[Int](),
-    specName:      ArgProperty[String]      = ArgProperty[String](),
-    sequential:    ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    threadsNb:     ArgProperty[Int]         = ArgProperty[Int](),
-    markdown:      ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    debugMarkdown: ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    diffs:         ArgProperty[Diffs]       = ArgProperty[Diffs](),
-    fromSource:    ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    commandLine:   Seq[String]              = Nil
+    ex:            ArgProperty[String]            = ArgProperty[String](),
+    xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    include:       ArgProperty[String]            = ArgProperty[String](),
+    exclude:       ArgProperty[String]            = ArgProperty[String](),
+    plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    showlevel:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    showtimes:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    offset:        ArgProperty[Int]               = ArgProperty[Int](),
+    specName:      ArgProperty[String]            = ArgProperty[String](),
+    sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
+    markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    debugMarkdown: ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
+    fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
+    commandLine:   Seq[String]                    = Nil
   ) = new Arguments(
      ex.toOption.map(".*"+_+".*"),
      xonly.toOption,
@@ -49,6 +50,7 @@ trait ArgumentsArgs extends ArgProperties {
      debugMarkdown.toOption,
      diffs.toOption,
      fromSource.toOption,
+     traceFilter.toOption,
      commandLine
   )
   /**
@@ -101,6 +103,18 @@ trait ArgumentsArgs extends ArgProperties {
    * shortcut to display the example descriptions from the expectations ok messages
    */
   def descFromExpectations = args(fromSource = false)
+  /**
+   * shortcut to create a stackTrace filter to include only some elements
+   */
+  def includeTrace(patterns: String*) = new IncludeExcludeStackTraceFilter(patterns.toSeq, Seq[String]())
+  /**
+   * shortcut to create a stackTrace filter to exclude only some elements
+   */
+  def excludeTrace(patterns: String*) = new IncludeExcludeStackTraceFilter(Seq[String](), patterns.toSeq)
+  /**
+   * shortcut to create a stackTrace filter filtering nothing
+   */
+  def fulltrace = new IncludeExcludeStackTraceFilter(Seq[String](), Seq[String]())
 }
 object ArgumentsArgs extends ArgumentsArgs
 
