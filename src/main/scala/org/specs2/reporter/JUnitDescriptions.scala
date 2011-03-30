@@ -66,14 +66,14 @@ object JUnitDescriptions extends ExecutionOrigin {
    *         from a Tree[Description]
    */
   def asOneDescription(descriptionTree: Tree[(Description, Fragment)]): Description = {
-    descriptionTree.bottomUp(addChildren).rootLabel
+    descriptionTree.bottomUp(addChildren).rootLabel._1
   }
   /** 
    * unfolding function attaching children descriptions to a parent one 
    */
-  private val addChildren = (desc: (Description, Fragment), children: Stream[Description]) => {
-    children.foreach { child => desc._1.addChild(child) }
-    desc._1
+  private val addChildren = (desc: (Description, Fragment), children: Stream[(Description, Fragment)]) => {
+    children.foreach { child => desc._1.addChild(child._1) }
+    desc
   }
   import text.Trim._
   /** @return a test name with no newlines */

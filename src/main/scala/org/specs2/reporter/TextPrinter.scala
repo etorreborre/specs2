@@ -108,7 +108,7 @@ trait TextPrinter {
           e.stackTrace.foreach(t => out.printError(t.toString))
           e.exception.chainedExceptions.foreach { (t: Throwable) =>
             out.printError(t.getMessage.notNull)
-            t.getStackTrace.foreach(st => out.printError(st.toString))
+            args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
           }
         }
         case Success(_)    => if (!args.xonly) out.printSuccess(description)
