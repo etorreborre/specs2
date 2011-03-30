@@ -192,7 +192,7 @@ Then, depending on the naming of your specification, you have to specify which c
 
       override def includeTest(s: String) = { s.endsWith("Spec") || s.contains("UserGuide") }
 
-##### arguments
+##### Test-only arguments
 
 When you execute one test only, you can pass the arguments on the command line:
 

@@ -84,7 +84,7 @@ trait TableOfContents {
   private[specs2] def headerNumber(e: Node) = {
     e.label match {
       case HeaderTag(i) => Integer.valueOf(i).intValue
-      case _         => -1
+      case _            => -1
     }
   }
 
