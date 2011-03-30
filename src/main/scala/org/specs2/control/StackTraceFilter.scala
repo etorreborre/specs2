@@ -23,6 +23,11 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
     val include = outer.include
     val exclude = outer.exclude
   }
+  /** add include patterns */
+  def includeAlso(patterns: String*) = copy(include = this.include ++ patterns)
+  /** add exclude patterns */
+  def excludeAlso(patterns: String*) = copy(exclude = this.exclude ++ patterns)
+
   /** filter an Exception stacktrace */
   def apply(st: Seq[StackTraceElement]) = st.filter(filter.keep)
 }

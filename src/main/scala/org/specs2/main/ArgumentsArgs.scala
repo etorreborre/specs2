@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-import control.{IncludeExcludeStackTraceFilter, StackTraceFilter, Property}
+import control.{DefaultStackTraceFilter, IncludeExcludeStackTraceFilter, StackTraceFilter, Property}
 
 /**
  * This trait provides shortcuts to create Arguments instances
@@ -108,9 +108,17 @@ trait ArgumentsArgs extends ArgProperties {
    */
   def includeTrace(patterns: String*) = new IncludeExcludeStackTraceFilter(patterns.toSeq, Seq[String]())
   /**
+   * shortcut to add include trace patterns
+   */
+  def includeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.includeAlso(patterns)
+  /**
    * shortcut to create a stackTrace filter to exclude only some elements
    */
   def excludeTrace(patterns: String*) = new IncludeExcludeStackTraceFilter(Seq[String](), patterns.toSeq)
+  /**
+   * shortcut to add exclude trace patterns
+   */
+  def excludeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.excludeAlso(patterns)
   /**
    * shortcut to create a stackTrace filter filtering nothing
    */

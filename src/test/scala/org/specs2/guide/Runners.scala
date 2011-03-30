@@ -27,7 +27,7 @@ repository, so you'll need to add the specs temporary Maven repository to your s
 
   `val specsRepo = "specs-repo" at "http://specs.googlecode.com/svn/maven2"`
 
-#### Arguments
+### Arguments
 
 You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared
 inside the specification:
@@ -38,7 +38,7 @@ inside the specification:
         "brilliant expectation"                                         ! success
       }
 
-##### In a Specification
+#### In a Specification
 
 From inside a specification, the available arguments are the following:
 
@@ -59,7 +59,7 @@ From inside a specification, the available arguments are the following:
  `markdown`      | true                    | interpret text as Markdown in the html reporter
  `debugMarkdown` | false                   | print more information when Markdown formatting fails
  `fromSource`    | true                    | true takes an AutoExample description from the file, false from the expectation ok message
- `traceFilter`   | DefaultStackTraceFilter | define a StackTraceFilter instance for filtering the reported stacktrace elements
+ `traceFilter`   | DefaultStackTraceFilter | use a StackTraceFilter instance for filtering the reported stacktrace elements
 
 
 All those arguments are usually set in a specification with `args(name=value)` but there are some available shortcuts:
@@ -80,7 +80,7 @@ All those arguments are usually set in a specification with `args(name=value)` b
  `fulltrace`                                               | `args(traceFilter=NoStackTraceFilter)`                               | the stacktraces are not filtered                                                                 |
  `diffs(show, separators, triggerSize, shortenSize, full)` | `args(diffs=Diffs(show, separators, triggerSize, shortenSize, full)` | to display the differences when doing equality comparison                                        |
 
-###### Diffs
+##### Diffs
 
 For the diffs arguments the values you can specify are:
 
@@ -90,7 +90,7 @@ For the diffs arguments the values you can specify are:
   * `shortenSize` controls the number of characters to display around each difference (default is 5)
   * `full` displays the full original expected and actual strings
 
-###### StackTraceFilter
+##### StackTraceFilter
 
 The `traceFilter` argument takes an instance of the `org.specs2.control.StackTraceFilter` trait to define how stacktraces
 should be filtered in a report. By default the `DefaultStackTraceFilter` filter will exclude lines matching the following packages:
@@ -102,14 +102,16 @@ should be filtered in a report. By default the `DefaultStackTraceFilter` filter 
 
 If this is not what you want you can either:
 
- * use the `includeTrace(patterns: String*)` to create a new `StackTraceFilter` which will include only the traces matching
+ * use `includeTrace(patterns: String*)` to create a new `StackTraceFilter` which will include only the traces matching
    those patterns
- * use the `excludeTrace(patterns: String*)` to create a new `StackTraceFilter` which will exclude only the traces matching
+ * use `excludeTrace(patterns: String*)` to create a new `StackTraceFilter` which will exclude only the traces matching
    those patterns
+ * use `includeAlsoTrace(patterns: String*)` to add new include patterns to the `DefaultStackTraceFilter`
+ * use `excludeAlsoTrace(patterns: String*)` to add new exclude patterns to the `DefaultStackTraceFilter`
  * use the `org.specs2.control.IncludeExcludeStackTraceFilter` class to define both include and exclude patterns
  * define your own logic by extending the `org.specs2.control.StackTraceFilter`
 
-##### On the command line
+#### On the command line
 
 On the command line you can pass the following arguments:
 
@@ -136,7 +138,7 @@ On the command line you can pass the following arguments:
 _[`regexp` is a Java regular expression, csv a list of comma-separated values]_
 
 
-##### From system properties
+#### From system properties
 
 You can pass any argument to ***specs2*** from system properties:
 
