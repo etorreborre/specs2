@@ -80,7 +80,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
    */
   def link(f: Fragments) = addFragments(f)
 
-  protected def addFragments[T](s: String, fs: =>T, word: String): Unit = {
+  protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(s + " " + word)
     fs
     addFragments(p)

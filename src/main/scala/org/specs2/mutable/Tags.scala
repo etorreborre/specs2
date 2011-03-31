@@ -2,7 +2,7 @@ package org.specs2
 package mutable
 
 import specification.TagsFragments._
-import specification.Fragment
+import specification.{Fragments, Fragment}
 
 /**
  * The tags trait allows the creation of Tags fragments in a mutable specification where the tags are defined for the
@@ -28,14 +28,25 @@ trait Tags extends org.specs2.specification.Tags { outer: FragmentsBuilder =>
   implicit def fragmentTaggedAs[T <: Fragment](f: T) = new FragmentTaggedAs(f)
   class FragmentTaggedAs[T <: Fragment](f: T) {
     def tag(names: String*): T = {
-      val t = TaggedAs(names:_*)
-      addFragments(t)
+      addFragments(TaggedAs(names:_*))
       f
     }
     def section(names: String*): T = {
-      val t = AsSection(names:_*)
-      addFragments(t)
+      addFragments(AsSection(names:_*))
       f
+    }
+  }
+  /**
+   * This implicit allows to add tags and sections _after_ the examples
+   */
+  implicit def fragmentsTaggedAs(fs: =>Fragments) = new FragmentsTaggedAs(fs)
+  class FragmentsTaggedAs(fs: =>Fragments) {
+    def section(names: String*): Fragments = {
+      def section = outer.fragments(Section(names:_*))
+      addFragments(section)
+      val fragments = fs
+      addFragments(section)
+      fragments
     }
   }
 }

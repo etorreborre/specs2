@@ -23,13 +23,14 @@ trait FragmentsBuilder {
    */
 
   /** @return a Fragments object from a single Fragment */
-  implicit def fragments(f: Fragment): Fragments = Fragments.createList(f)
-  implicit def fragmentFragments(f: Fragment): FragmentsFragment = new FragmentsFragment(fragments(f))
-  implicit def fragmentsFragments(fs: Fragments): FragmentsFragment = new FragmentsFragment(fs)
+  implicit def fragments(f: =>Fragment): Fragments = Fragments.createList(f)
+  implicit def fragmentFragments(f: =>Fragment): FragmentsFragment = new FragmentsFragment(fragments(f))
+  implicit def fragmentsFragments(fs: =>Fragments): FragmentsFragment = new FragmentsFragment(fs)
   /**
    * Fragments can be chained with the ^ method
    */
-  class FragmentsFragment(val fs: Fragments) {
+  class FragmentsFragment(fs: =>Fragments) {
+    private[specs2] def fragments = fs
     def ^(t: String) = fs add Text(t)
     def ^(f: Fragment) = f match {
       case s @ SpecStart(n, a) => fs specTitleIs s
@@ -42,7 +43,7 @@ trait FragmentsBuilder {
         case _       => fs add other.middle
       }
     }
-    def ^(other: FragmentsFragment) = fs add other.fs
+    def ^(other: FragmentsFragment) = fs add other.fragments
     def ^(a: Arguments) = fs add a
   }
 

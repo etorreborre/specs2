@@ -47,6 +47,7 @@ during the specification execution. There are 2 types of tags for marking a sing
   "Tags can also be used in a mutable specification"                                                                    ^
     "a tag call on the line before an example will mark it"                                                             ! mutabletags().e1^
     "a tag call on the same line as an example will mark it"                                                            ! mutabletags().e2^
+    "a section call on the same line as a should block will mark all the examples"                                      ! mutabletags().e3^
                                                                                                                         end
 
   import DefaultSelection._
@@ -121,9 +122,14 @@ during the specification execution. There are 2 types of tags for marking a sing
         "e2" in success tag("t2")
         "e3" in success
       }
+      "other text" should {
+        "e4" in success
+        "e5" in success
+      } section("t3")
 
     }
     def e1 = includeMustSelect(tagged.content, "t1", "e1", "e2")
     def e2 = includeMustSelect(tagged.content, "t2", "e2", "e1")
+    def e3 = includeMustSelect(tagged.content, "t3", "e4", "e3")
   }
 }
