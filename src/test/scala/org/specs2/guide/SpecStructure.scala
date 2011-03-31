@@ -884,11 +884,13 @@ A _unit_ specification will accept the same `tag` and `section` methods but the 
 
 For that specification above:
 
- * the tagged fragments are the ones just _after_ the tag method call: `example 1` is tagged with `feature1 and unit`
- * if the `tag` call is placed on the same line as an example, it is tagging that example: `example 2` is tagged with `integration`
- * the tagged fragments are the ones _strictly between_ the `section` method calls:
-     `and the second group of examples`, `example 3` and `example 4` belong to the section `checkin` (as if they were individually
+ * when the `tag` call is inserted on a new line, the tagged fragments are the ones just _after_ the tag method call:
+ ** `example 1` is tagged with `feature1 and unit`,
+ ** `and the second group of examples`, `example 3` and `example 4` belong to the section `checkin` (as if they were individually
      tagged with `checkin`)
+
+ * when the `tag` or the `section` call are appended to an example, they apply to that example: `example 2` is tagged with
+  `integration`
 
  - - -
                                                                                                                         """^

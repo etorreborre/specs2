@@ -2,9 +2,10 @@ package org.specs2
 package reporter
 
 import _root_.org.junit.runner._
+import org.specs2.data.Trees._
 import scalaz._
-import Scalaz._
-import data.Trees._
+import scalaz.Scalaz._
+import scalaz.Traverse._
 import main.Arguments
 import specification._
 import control.{ExecutionOrigin, Stacktraces}
@@ -25,22 +26,31 @@ import control.{ExecutionOrigin, Stacktraces}
 private[specs2]
 class JUnitDescriptions(specificationClass: Class[_]) extends DefaultSelection {
   import JUnitDescriptions._
+  type DescribedFragment = (Description, Fragment)
   def foldAll(fs: Seq[Fragment]) = {
     import Levels._
     val leveledFragments = Levels.foldAll(select(fs))
-    if (leveledFragments.isEmpty) {
-      val root = createDescription(specificationClass.getName, klassName=specificationClass.getName)
-      DescriptionAndExamples(root, Seq((root, Text(specificationClass.getName))).toStream)
-    }
+    lazy val root = createDescription(specificationClass.getName, klassName=specificationClass.getName)
+    implicit val initial: DescribedFragment = (root, Text(specificationClass.getName))
+
+    if (leveledFragments.isEmpty) DescriptionAndExamples(root, Seq(initial).toStream)
     else {
       val descriptionTree = leveledFragments.toTree(mapper(specificationClass.getName))
-      DescriptionAndExamples(asOneDescription(descriptionTree), descriptionTree.flatten)
+      val removeDanglingText = (t: Tree[DescribedFragment]) => {
+        t.rootLabel  match {
+          case (desc, Text(_)) if t.subForest.isEmpty  => (None:Option[DescribedFragment])
+          case other                                   => Some(t.rootLabel)
+        }
+      }
+      val prunedDescriptionTree = descriptionTree.prune(removeDanglingText)
+      DescriptionAndExamples(asOneDescription(prunedDescriptionTree), prunedDescriptionTree.flatten)
     }
   }
 
 }
 private[specs2]
 object JUnitDescriptions extends ExecutionOrigin {
+  type DescribedFragment = (Description, Fragment)
   /**
    * This function is used to map each node in a Tree[Fragment] to a pair of 
    * (Description, Fragment)
@@ -49,7 +59,7 @@ object JUnitDescriptions extends ExecutionOrigin {
    * It is used to create a unique description of the example to executed which is required
    * by JUnit
    */
-  def mapper(className: String): (Fragment, Int) => Option[(Description, Fragment)] = (f: Fragment, nodeLabel: Int) => f match {
+  def mapper(className: String): (Fragment, Int) => Option[DescribedFragment] = (f: Fragment, nodeLabel: Int) => f match {
     case (SpecStart(t, _))            => Some(createDescription(testName(t.name), klassName=className) -> f)
     case (Text(t))                    => Some(createDescription(testName(t), klassName=className) -> f)
     case (Example(description, body)) => Some(createDescription(testName(description.toString), nodeLabel.toString, className) -> f)
@@ -60,18 +70,18 @@ object JUnitDescriptions extends ExecutionOrigin {
   /**
    * Utility class grouping the total description + fragments to execute for each Description 
    */
-  case class DescriptionAndExamples(val description: Description, executions: Stream[(Description, Fragment)])
+  case class DescriptionAndExamples(val description: Description, executions: Stream[DescribedFragment])
   /**
    * @return a Description with parent-child relationships to other Description objects
    *         from a Tree[Description]
    */
-  def asOneDescription(descriptionTree: Tree[(Description, Fragment)]): Description = {
+  def asOneDescription(descriptionTree: Tree[DescribedFragment]): Description = {
     descriptionTree.bottomUp(addChildren).rootLabel._1
   }
   /** 
    * unfolding function attaching children descriptions to a parent one 
    */
-  private val addChildren = (desc: (Description, Fragment), children: Stream[(Description, Fragment)]) => {
+  private val addChildren = (desc: (Description, Fragment), children: Stream[DescribedFragment]) => {
     children.foreach { child => desc._1.addChild(child._1) }
     desc
   }
