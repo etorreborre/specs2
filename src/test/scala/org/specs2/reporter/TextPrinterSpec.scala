@@ -8,7 +8,7 @@ import main.Arguments
 import execute._
 import specification._
 
-class TextPrinterSpec extends SpecificationWithJUnit { def is = 
+class TextPrinterSpec extends SpecificationWithJUnit { def is =
                                                                                                                         """
   The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
   and outputs them using a `TextResultOutput`.
@@ -32,7 +32,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
       "statistics are shown"                                                                                            ! xonlyargs().e7^
                                                                                                                         p^
     "if failtrace = true, failures stacktraces are shown"                                                               ! failtrace().e1^
-    "if fulltrace = true, all error stacktraces are shown"                                                              ! traces().e1^
+    "if fullStacktrace = true, all error stacktraces are shown"                                                         ! traces().e1^
     "if plan = true, nothing is executed"                                                                               ! planargs().e1^
     "if sequential = false examples are executed concurrently"                                                          ! seq().e1^
     "if sequential = true examples are executed sequentially"                                                           ! seq().e2^
@@ -141,10 +141,10 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
   }
   case class failtrace() {
     val failtrace: Arguments = args(failtrace = true)
-    def e1 = print(failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
+    def e1 = print(fullStackTrace <| failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
   }
   case class traces() {
-    def e1 = print(fullStackTrace ^ t1 ^ ex1 ^ {throw new Exception("ouch"); ""}) must containMatch("org.specs2")
+    def e1 = print(fullStackTrace ^ t1 ^ ex1 ^ "e" ! {throw new Exception("ouch"); ok}) must containMatch("org.specs2")
   }
   case class planargs() {
     val plan: Arguments = args(plan = true)
