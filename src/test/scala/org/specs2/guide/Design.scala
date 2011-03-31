@@ -21,16 +21,16 @@ This page explains the overall design of _specs2_:
 The structure of a specification is very simple, it is just a list of `Fragments` provided by the `is` method of the
 `SpecificationStructure` trait:
 
-      +---------------+         1..n   +-----------+
-      | Specification | -------------> | Fragment  |
-      +---------------+                +-----------+
-                                             ^
-                                             |
-             +----------+-----------+-----------+-------------+-------------+----------+                                          
-             |          |           |           |             |             |          |
-         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +------+
-         | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | See  |
-         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +------+
+      +---------------+                     1..n  +-----------+
+      | Specification | ------------------------> | Fragment  |
+      +---------------+                           +-----------+
+                                                        ^
+                                                        |
+             +----------+-----------+-----------+-------------+-------------+----------+--------------+
+             |          |           |           |             |             |          |              |
+         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +------+  +-----------------+
+         | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | See  |  | TaggingFragment |
+         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +------+  +-----------------+
 
 
 Here's a short description of all the Fragments:
@@ -41,6 +41,7 @@ Here's a short description of all the Fragments:
  * SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications. The SpecStart
    element holds the Arguments used to tune the execution/reporting
  * See: a link to another specification
+ * TaggingFragments: those fragments are used to define which fragments should be included or excluded from the execution
 
 ### Specification creation
 
@@ -80,7 +81,8 @@ The execution is triggered by the various reporters and goes through 3 steps:
         spec.content |> select |> sequence |> execute
 
  1. Selection: the Fragments are filtered according to the Arguments object. In that phase all examples but a few can
-    be filtered if the `only("this example")` option is used for instance.
+    be filtered if the `only("this example")` option is used for instance. Another way to select fragments is to insert
+    `TaggingFragment`s inside the specification.
 
  2. Sequencing: the Fragments are sorted in groups so that all the elements of a group can be executed concurrently. This
     usually why Steps are used. If my fragments are: `fragments1 ^ step ^ fragments2` then all fragments1 will be executed,
