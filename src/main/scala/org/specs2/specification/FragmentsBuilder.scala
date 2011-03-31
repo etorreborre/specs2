@@ -133,7 +133,7 @@ trait FragmentsBuilder {
   /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */
   implicit def inScope(s: Scope): Success = Success()
 }
-
+object FragmentsBuilder extends FragmentsBuilder
 /**
  * Implementation of the Show trait to display Fragments
  */

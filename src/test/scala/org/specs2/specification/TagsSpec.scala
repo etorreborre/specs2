@@ -8,10 +8,11 @@ class TagsSpec extends SpecificationWithJUnit with ThrownExpectations with Tags 
                                                                                                                         """
 A specification can be tagged with some meaningful names like "integration" or "accounts". Creating tags amounts to
 adding new fragments in the specification. Then those fragments are used to determine which other fragments must be executed
-during the specification execution. There are 2 types of tags:
+during the specification execution. There are 2 types of tags for marking a single fragment or a full range of fragments:
 
  * `TaggedAs(name1, name2,...)` marks the previous fragment as tagged with the given names
  * `Tag(name1, name2,...)` marks the next fragment as tagged with the given names
+
  * `AsSection(name1, name2,...)` marks the previous fragment and the next as tagged with the given names,
     until the next `Section(name1, name2)` tag
  * `Section(name1, name2,...)` marks the next fragments as tagged with the given names, until the next `Section(name1, name2)` tag
@@ -42,6 +43,10 @@ during the specification execution. There are 2 types of tags:
       "if the section is closed with another AsSection fragment containing the tag t1"                                  ^
         "the tagged fragments between the section tags are included"                                                    ! section7^
         "and the fragments outside the section are excluded"                                                            ! section8^
+                                                                                                                        endp^
+  "Tags can also be used in a mutable specification"                                                                    ^
+    "a tag call on the line before an example will mark it"                                                             ! mutabletags().e1^
+    "a tag call on the same line as an example will mark it"                                                            ! mutabletags().e2^
                                                                                                                         end
 
   import DefaultSelection._
@@ -55,7 +60,7 @@ during the specification execution. There are 2 types of tags:
 
   val tagged2 =
     "text" ^
-      "e1" ! success ^ tag("t1", "t2")^
+      "e1" ! success ^ tag("t1", "t2") ^
       "e2" ! success ^ end
 
   val sectioned =
@@ -66,24 +71,59 @@ during the specification execution. There are 2 types of tags:
       "e4" ! success ^ section("t1")^
       "e5" ! success ^ end
 
-  def includeTag(fs: Fragments) = select(args(include="t1"))(fs).map(_.toString)
-  def excludeTag(fs: Fragments) = select(args(exclude="t1"))(fs).map(_.toString)
+  def includeTag(fs: Fragments) = includeTags(fs, "t1")
+  def excludeTag(fs: Fragments) = excludeTags(fs, "t1")
+  def includeTags(fs: Fragments, tags: String*) = select(args(include=tags.mkString(",")))(fs).map(_.toString)
+  def excludeTags(fs: Fragments, tags: String*) = select(args(exclude=tags.mkString(",")))(fs).map(_.toString)
 
-  def tag1 = excludeTag(tagged) must not containMatch("e1")
-  def tag2 = excludeTag(tagged) must containMatch("e2")
-  def tag3 = includeTag(tagged) must not containMatch("e2")
-  def tag4 = includeTag(tagged) must containMatch("e1")
-  def tag5 = includeTag(tagged2) must containMatch("e1")
-  def tag6 = includeTag(tagged) must containMatch("SpecStart")
-  def tag7 = includeTag(tagged) must containMatch("SpecEnd")
+  def includeMatch(fs: Fragments, tag: String, names: String*) = {
+    (includeTags(fs, tag) must containMatch(_:String)).forall(names)
+  }
+  def excludeMatch(fs: Fragments, tag: String, names: String*) = {
+    (excludeTags(fs, tag) must containMatch(_:String)).forall(names)
+  }
+  def includeDoesntMatch(fs: Fragments, tag: String, names: String*) = {
+    (includeTags(fs, tag) must not containMatch(_:String)).forall(names)
+  }
+  def excludeDoesntMatch(fs: Fragments, tag: String, names: String*) = {
+    (excludeTags(fs, tag) must not containMatch(_:String)).forall(names)
+  }
+  def includeMustSelect(fs: Fragments, tag: String, included: String, excluded: String) = {
+    includeMatch(fs, tag, included) and includeDoesntMatch(fs, tag, excluded)
+  }
+  def excludeMustSelect(fs: Fragments, tag: String, included: String, excluded: String) = {
+    excludeMatch(fs, tag, included) and excludeDoesntMatch(fs, tag, excluded)
+  }
 
-  def section1 = excludeTag(sectioned) must containMatch("e1")
-  def section2 = excludeTag(sectioned) must not containMatch("e2")
-  def section3 = excludeTag(sectioned) must not containMatch("e3")
-  def section4 = excludeTag(sectioned) must containMatch("e5")
+  def tag1 = excludeDoesntMatch(tagged, "t1", "e1")
+  def tag2 = excludeMatch(tagged, "t1", "e2")
+  def tag3 = includeDoesntMatch(tagged , "t1", "e2")
+  def tag4 = includeMatch(tagged , "t1", "e1")
+  def tag5 = includeMatch(tagged2, "t1", "e1")
+  def tag6 = includeMatch(tagged , "t1", "SpecStart")
+  def tag7 = includeMatch(tagged , "t1", "SpecStart")
 
-  def section5 = includeTag(sectioned) must not containMatch("e1")
-  def section6 = includeTag(sectioned) must containMatch("e2")
-  def section7 = includeTag(sectioned) must containMatch("e3")
-  def section8 = includeTag(sectioned) must not containMatch("e5")
+  def section1 = excludeMatch(sectioned, "t1", "e1")
+  def section2 = excludeDoesntMatch(sectioned, "t1", "e2")
+  def section3 = excludeDoesntMatch(sectioned, "t1", "e3")
+  def section4 = excludeMatch(sectioned, "t1", "e5")
+
+  def section5 = includeDoesntMatch(sectioned, "t1", "e1")
+  def section6 = includeMatch(sectioned, "t1", "e2")
+  def section7 = includeMatch(sectioned, "t1", "e3")
+  def section8 = includeDoesntMatch(sectioned, "t1", "e5")
+
+  case class mutabletags() {
+    val tagged = new org.specs2.mutable.Specification with org.specs2.mutable.Tags {
+      "text" should {
+        tag("t1")
+        "e1" in success
+        "e2" in success tag("t2")
+        "e3" in success
+      }
+
+    }
+    def e1 = includeMustSelect(tagged.content, "t1", "e1", "e2")
+    def e2 = includeMustSelect(tagged.content, "t2", "e2", "e1")
+  }
 }

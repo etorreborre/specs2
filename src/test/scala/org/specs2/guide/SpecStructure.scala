@@ -855,7 +855,7 @@ Armed with this, it is now easy to include or exclude portions of the specificat
 
  * `args(include="feature 1")` will only include `example 1`
  * `args(exclude="integration")` will include everything except `example 2`
- * `args(include="checkin, unit")` will include `example 1` and the second group of examples (`example 3` and `example 4`)
+ * `args(include="checkin,unit")` will include `example 1` and the second group of examples (`example 3` and `example 4`)
 
 #### In a unit specification
 
@@ -871,22 +871,22 @@ A _unit_ specification will accept the same `tag` and `section` methods but the 
             "and the first group of examples" >> {
               tag("feature 1", "unit")
               "example 1" in success
-              tag("integration")
-              "example 2" in success
+              "example 2" in success tag("integration")
+
             }
           }
           section("checkin")
           "and the second group of examples" >> {
             "example 3" in success
             "example 4" in success
-          }
-          section("checkin")
+          } section("checkin")
         }
 
 For that specification above:
 
  * the tagged fragments are the ones just _after_ the tag method call: `example 1` is tagged with `feature1 and unit`
- * the tagged fragments are the ones _strictly between_ the `section` method call:
+ * if the `tag` call is placed on the same line as an example, it is tagging that example: `example 2` is tagged with `integration`
+ * the tagged fragments are the ones _strictly between_ the `section` method calls:
      `and the second group of examples`, `example 3` and `example 4` belong to the section `checkin` (as if they were individually
      tagged with `checkin`)
 
