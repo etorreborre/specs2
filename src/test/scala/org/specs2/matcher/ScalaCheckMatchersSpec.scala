@@ -8,7 +8,7 @@ import org.scalacheck.Prop._
 import io._
 import specification._
 
-class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with ScalaCheckProperties { def is =
+class ScalaCheckMatchersSpec extends SpecificationWithJUnit with ScalaCheck with ScalaCheckProperties with ResultMatchers { def is =
 
   "A ScalaCheck property can be used in the body of an Example"                                                         ^
     "if it is proved the execution will yield a Success"                                                                ! prop1^
