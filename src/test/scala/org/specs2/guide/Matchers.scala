@@ -445,7 +445,12 @@ Note that you need to extend the `ScalaCheck` trait if you want to use these mat
 
 That's only if you want to match the result of other matchers!
 
-        ("Hello" must beMatching("h.*")) must beSuccessful
+        // you need to extend the ResultMatchers trait
+        class MatchersSpec extends Specification with ResultMatchers { def is =
+          "beMatching is using a regexp" ! {
+            ("Hello" must beMatching("h.*")) must beSuccessful
+          }
+        }
 
 #### Scala Interpreter matchers
 
