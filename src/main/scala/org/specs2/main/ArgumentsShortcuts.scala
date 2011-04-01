@@ -51,8 +51,8 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
   /**
    * shortcut to display the differences with some specific parameters
    */
-  def diffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, shortenSize: Int = 5, full: Boolean = false): Arguments =
-    args(diffs = Diffs(show, separators, triggerSize, shortenSize, full))
+  def diffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, diffRatio: Int = 30, shortenSize: Int = 5, full: Boolean = false): Arguments =
+    args(diffs = SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full))
   /**
    * shortcut to display the example descriptions from the expectations ok messages
    */

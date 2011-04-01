@@ -54,6 +54,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
       "the shorten size can be modified with diffs(shortenSize=10)"                                                     ! diffs().e4^
       "the full strings can be shown on 2 lines with line numbers with diffs(full=true)"                                ! diffs().e5^
       "they can be disabled with diffs(show = false)"                                                                   ! diffs().e6^
+      "unless there are too many of them diffs(diffRatio=30)"                                                           ! diffs().e7^
                                                                                                                         endp^
                                                                                                                         """
   Examples presentation
@@ -138,6 +139,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     def e4 = print(diffs(shortenSize=3) ^ bigFail) must containMatch("\\.jkl\\[mn\\]opq\\.")
     def e5 = print(diffs(full=true) ^ bigFail) must containMatch("jklmnopq")
     def e6 = print(diffs(show=false) ^ bigFail) must not containMatch("kl[mn]op")
+    def e7 = print(diffs(show=true) ^ "" ! {bigString1 must_== bigString2.reverse} ) must not containMatch("\\[")
   }
   case class failtrace() {
     val failtrace: Arguments = args(failtrace = true)

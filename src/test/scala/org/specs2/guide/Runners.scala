@@ -64,21 +64,21 @@ From inside a specification, the available arguments are the following:
 
 All those arguments are usually set in a specification with `args(name=value)` but there are some available shortcuts:
 
- Name                                                      | Equivalent                                                           | Description                                                                                      |
- ---------------                                           | -----------------------                                              | -----------                                                                                      |
- `plan`                                                    | `args(plan=true)`                                                    |                                                                                                  |
- `skipAll`                                                 | `args(skipAll=true)`                                                 |                                                                                                  |
- `noindent`                                                | `args(noindent=true)`                                                |                                                                                                  |
- `xonly`                                                   | `args(xonly=true)`                                                   |                                                                                                  |
- `include(tags: String)`                                   | `args(include=tags)`                                                 |                                                                                                  |
- `exclude(tags: String)`                                   | `args(exclude=tags)`                                                 |                                                                                                  |
- `only(examples: String)`                                  | `args(ex=examples)`                                                  |                                                                                                  |
- `sequential`                                              | `args(sequential=true)`                                              |                                                                                                  |
- `literate`                                                | `args(noindent=true, sequential=true)`                               | for specifications where text must not be indented and examples be executed in order             |
- `freetext`                                                | `args(plan=true, noindent=true)`                                     | for specifications with no examples at all and free display of text                              |
- `descFromExpectations`                                    | `args(fromSource=false)`                                             | create the example description for the ok message of the expectation instead of the source file  |
- `fullStackTrace`                                          | `args(traceFilter=NoStackTraceFilter)`                               | the stacktraces are not filtered                                                                 |
- `diffs(show, separators, triggerSize, shortenSize, full)` | `args(diffs=Diffs(show, separators, triggerSize, shortenSize, full)` | to display the differences when doing equality comparison                                        |
+ Name                                                                  | Equivalent                                                                            | Description                                                                                      |
+ ---------------                                                       | -----------------------                                                               | -----------                                                                                      |
+ `plan`                                                                | `args(plan=true)`                                                                     |                                                                                                  |
+ `skipAll`                                                             | `args(skipAll=true)`                                                                  |                                                                                                  |
+ `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
+ `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
+ `include(tags: String)`                                               | `args(include=tags)`                                                                  |                                                                                                  |
+ `exclude(tags: String)`                                               | `args(exclude=tags)`                                                                  |                                                                                                  |
+ `only(examples: String)`                                              | `args(ex=examples)`                                                                   |                                                                                                  |
+ `sequential`                                                          | `args(sequential=true)`                                                               |                                                                                                  |
+ `literate`                                                            | `args(noindent=true, sequential=true)`                                                | for specifications where text must not be indented and examples be executed in order             |
+ `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
+ `descFromExpectations`                                                | `args(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
+ `fullStackTrace`                                                      | `args(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
+ `diffs(show, separators, triggerSize, shortenSize, diffRation, full)` | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRation, full)` | to display the differences when doing equality comparison                                        |
 
 ##### Diffs
 
@@ -88,7 +88,25 @@ For the diffs arguments the values you can specify are:
   * `separators` allows to change the separators used to show the differences (default is "[]")
   * `triggerSize` controls the size above which the differences must be shown (default is 20)
   * `shortenSize` controls the number of characters to display around each difference (default is 5)
+  * `diffRatio` percentage of differences above which the differences must not be shown (default is 30)
   * `full` displays the full original expected and actual strings
+
+You can also specify your own enhanced algorithm for displaying difference by providing an instance of the `org.specs2.main.Diffs`
+trait:
+
+        trait Diffs {
+          /** @return true if the differences must be shown */
+          def show: Boolean
+          /** @return true if the differences must be shown for 2 different strings */
+          def show(expected: String, actual: String): Boolean
+          /** @return the diffs */
+          def showDiffs(expected: String, actual: String): (String, String)
+          /** @return true if the full strings must also be shown */
+          def showFull: Boolean
+          /** @return the separators to use*/
+          def separators: String
+        }
+
 
 ##### StackTraceFilter
 

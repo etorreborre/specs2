@@ -10,8 +10,6 @@ import text._
 import Plural._
 import AnsiColors._
 import NotNullStrings._
-import EditDistance._
-import DiffShortener._
 import execute._
 import main.Arguments
 import specification._
@@ -130,10 +128,10 @@ trait TextPrinter {
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {
         case FailureDetails(expected, actual) if (args.diffs.show(expected, actual)) => {
-          val (expectedDiff, actualDiff) = showDistance(expected, actual, args.diffs.separators, args.diffs.shortenSize)
+          val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
           out.printFailure("Expected: " + expectedDiff)
           out.printFailure("Actual:   " + actualDiff)
-          if (args.diffs.full) {
+          if (args.diffs.showFull) {
             out.printFailure("Expected (full): " + expected)
             out.printFailure("Actual (full):   " + actual)
           }
