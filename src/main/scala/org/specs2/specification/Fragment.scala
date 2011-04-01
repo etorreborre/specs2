@@ -32,7 +32,8 @@ sealed trait Fragment {
 case class SpecStart(name: SpecName, arguments: Arguments = Arguments()) extends Fragment {
   override def matches(s: String) = name matches s
   override def toString = "SpecStart("+name.name+")"
-  def withArgs(args: Arguments) = SpecStart(name, args)
+  /** the new arguments take precedence over the old ones */
+  def withArgs(args: Arguments) = SpecStart(name, arguments.overrideWith(args))
 
   /**
    * The name of the specification can be overriden with a user defined title
