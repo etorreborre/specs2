@@ -570,16 +570,26 @@ opening a database connection or deleting a file. ***specs2*** offers a support 
  * `Before`
  * `After`
  * `Around`
+ * `Outside`
  * and all combinations of the above traits
 
-Let's see how to use them.
+Those traits work by providing an `apply` method which can be applied to the body of an example. That `apply` method will
+execute your context code before, around, or after the example code:
+
+    // thanks to Scala special treatment of the apply method this call is equivalent to
+    // context.apply(/* example body */)
+    context {
+      // example body
+    }
+
+Now let's see in detail how to define contexts.
 
 ##### Defining `Before` actions
 
-Let's say that you want to create a specific file before executing each example of your specification. You define a class
-inheriting from the `Before` trait and containing your examples:
+Let's say that you want to create a specific file before executing each example of your specification. You define an object
+inheriting from the `Before` trait:
 
-    case class withFile extends Before {
+    object withFile extends Before {
       def before = createFile("test")
     }
 
@@ -620,25 +630,47 @@ is the result of the `before` action:
 
 Actions to execute after examples are not declared very differently from `Before` ones. Just extend the `After` trait:
 
-    case class withCleanup extends After {
+    object withCleanup extends After {
       def after = deleteFile("test")
     }
+
+    "this is a first example where a test file is deleted after use" ! withCleanup(e1)
+    "and another one"                                                ! withCleanup(e2)
 
 ##### Defining `Around` actions
 
 Another use case for "contextual" actions are actions which must executed in a given context like an Http session. In order
 to define this type of action you must extend the `Around` trait and specify an `around` function:
 
-    case class http extends Around {
+    object http extends Around {
       def around[T <% Result](t: =>T) = openHttpSession("test") {
         t  // execute t inside a http session
       }
     }
 
+    "this is a first example where the code executes inside a http session" ! http(e1)
+    "and another one"                                                       ! http(e2)
+
+##### Defining `Outside` actions
+
+`Outside` is almost like `Around` except that you pass to the `apply` method a function to execute instead of a simple value.
+Let's see that with an example:
+
+    object http extends Outside[HttpReq] {
+      // prepare a valid HttpRequest
+      def outside: HttpReq = createRequest
+    }
+
+    "this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
+    "and another one"                                                     ! http((request: HttpReq) => success)
+
+
 ##### Composing contexts
 
 Note that you can also compose contexts in order to reuse them to build more complex scenarios:
 
+    // Contexts can be composed only if they are of the same type:
+    // Before with Before, After with After,...
     case class withFile extends Before {
       def before = createFile("test")
     }
@@ -648,6 +680,7 @@ Note that you can also compose contexts in order to reuse them to build more com
     val init = withFile() compose withDatabase()
 
     "Do something on the full system"                   ! init(success)
+
 
 ##### Steps and Actions
 
