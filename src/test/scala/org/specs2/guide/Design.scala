@@ -117,7 +117,7 @@ low layer can depend on a package on a higher layer:
 
       + runner
       + reporter
-      + specification
+      + mutable    specification
       + mock form
       + matcher
       + execute

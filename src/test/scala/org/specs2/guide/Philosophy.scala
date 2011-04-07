@@ -351,7 +351,7 @@ design makes sure that a layered architecture is maintained, from low-level pack
 
   +    runner
   +    reporter
-  +    specification
+  +    mutable    specification
   +    mock form
   +    matcher
   +    execute

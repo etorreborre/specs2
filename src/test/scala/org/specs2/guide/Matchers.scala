@@ -479,8 +479,8 @@ You can specify your own parsers by:
    strings
  * use `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
    a String or a matcher so that
- ** `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
- ** `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
+   . `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
+   . `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
 
 For example, specifying a Parser for numbers could look like this:   
 

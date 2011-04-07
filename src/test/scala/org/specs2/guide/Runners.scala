@@ -20,12 +20,7 @@ There are 4 ways to execute ***specs2*** specifications:
 
  ***specs2*** is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the [sbt dsl](http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies):
 
- <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"`</td><td class="info">mandatory</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.8"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.parboiled" % "parboiled4j" % "0.9.9.0"`</td><td class="info">only if using the html runner</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "0.8.5.4"`</td><td class="info">only if using the html runner</td></tr></table>
-
-The last 2 jars are the Pegdown and Parboiled libraries for Markdown parsing. They cannot yet be found in an official maven
-repository, so you'll need to add the specs temporary Maven repository to your sbt project:
-
-  `val specsRepo = "specs-repo" at "http://specs.googlecode.com/svn/maven2"`
+ <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"`</td><td class="info">mandatory</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.8"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "0.9.1"`</td><td class="info">only if using the html runner</td></tr></table>
 
 ### Arguments
 
@@ -78,7 +73,7 @@ All those arguments are usually set in a specification with `args(name=value)` b
  `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
  `descFromExpectations`                                                | `args(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
  `fullStackTrace`                                                      | `args(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
- `diffs(show, separators, triggerSize, shortenSize, diffRation, full)` | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRation, full)` | to display the differences when doing equality comparison                                        |
+ `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)` | to display the differences when doing equality comparison                                        |
 
 ##### Diffs
 
@@ -103,7 +98,7 @@ trait:
           def showDiffs(expected: String, actual: String): (String, String)
           /** @return true if the full strings must also be shown */
           def showFull: Boolean
-          /** @return the separators to use*/
+          /** @return the separators to use */
           def separators: String
         }
 
@@ -118,7 +113,7 @@ should be filtered in a report. By default the `DefaultStackTraceFilter` filter 
  * `scala\\.`, `java\\.`
  * `sbt\\.`, `com.intellij`, `org.eclipse.jdt`, `org.junit`
 
-If this is not what you want you can either:
+If this is not what you want, you can either:
 
  * use `includeTrace(patterns: String*)` to create a new `StackTraceFilter` which will include only the traces matching
    those patterns
@@ -133,26 +128,26 @@ If this is not what you want you can either:
 
 On the command line you can pass the following arguments:
 
-  Name            | Value format            | Comments
- ---------------- | ----------------------- | -------------------------------------------
- `ex`             | regexp                  |
- `xonly`          | boolean                 |
- `include`        | csv                     |
- `exclude`        | csv                     |
- `plan`           | boolean                 |
- `skipall`        | boolean                 |
- `failtrace`      | boolean                 |
- `color`          | boolean                 |
- `noindent`       | boolean                 |
- `showtimes`      | boolean                 |
- `sequential`     | boolean                 |
- `threadsnb`      | int                     |
- `markdown`       | boolean                 |
- `debugmarkdown`  | boolean                 |
- `html`           | boolean                 | to get console + html reporting at once
- `fromsource`     | boolean                 |
- `fullstacktrace` | boolean                 |
- `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns
+  Name            | Value format            | Comments                                                                 |
+ ---------------- | ----------------------- | ------------------------------------------------------------------------ |
+ `ex`             | regexp                  |                                                                          |
+ `xonly`          | boolean                 |                                                                          |
+ `include`        | csv                     |                                                                          |
+ `exclude`        | csv                     |                                                                          |
+ `plan`           | boolean                 |                                                                          |
+ `skipall`        | boolean                 |                                                                          |
+ `failtrace`      | boolean                 |                                                                          |
+ `color`          | boolean                 |                                                                          |
+ `noindent`       | boolean                 |                                                                          |
+ `showtimes`      | boolean                 |                                                                          |
+ `sequential`     | boolean                 |                                                                          |
+ `threadsnb`      | int                     |                                                                          |
+ `markdown`       | boolean                 |                                                                          |
+ `debugmarkdown`  | boolean                 |                                                                          |
+ `html`           | boolean                 | to get console + html reporting at once                                  |
+ `fromsource`     | boolean                 |                                                                          |
+ `fullstacktrace` | boolean                 |                                                                          |
+ `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns  |
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values]_
 
