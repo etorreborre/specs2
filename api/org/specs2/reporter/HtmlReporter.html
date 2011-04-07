@@ -631,15 +631,46 @@ Example
             
           </div>
           
-    </li><li visbl="prt" name="org.specs2.reporter.DefaultSelection#filter" data-isabs="false">
-      <a id="filter:(Fragment, Arguments) ⇒ Boolean"></a>
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection#filter" data-isabs="false">
+      <a id="filter(A,r,g,u,m,e,n,t,s):(Seq[(Fragment, Arguments)]) ⇒ Seq[Fragment]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">filter</span>
         
+        <span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">
+                  commandLineArgs
+                  : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
+                  
+                </span>)</span>
+        <span class="result">: (Seq[(<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>, <span name="org.specs2.main.Arguments" class="extype">Arguments</span>)]) ⇒ <span name="scala.collection.Seq" class="extype">Seq</span>[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>filter fragments depending on the command line arguments and the current arguments in the specification
+</p></dd></dl><div class="block">
+          definition classes: <a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a>
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="prt" name="org.specs2.reporter.DefaultSelection#filterExamples" data-isabs="false">
+      <a id="filterExamples(A,r,g,u,m,e,n,t,s):(Seq[(Fragment, Arguments)]) ⇒ Seq[Fragment]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">filterExamples</span>
         
-        <span class="result">: (<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>, <span name="org.specs2.main.Arguments" class="extype">Arguments</span>) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>
+        <span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">
+                  commandLineArgs
+                  : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
+                  
+                </span>)</span>
+        <span class="result">: (Seq[(<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>, <span name="org.specs2.main.Arguments" class="extype">Arguments</span>)]) ⇒ <span name="scala.collection.Seq" class="extype">Seq</span>[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>
       </span>
       </h4>
       
@@ -651,6 +682,33 @@ keeping only the ones matching the ex attribute of the arguments object
 </p></div><div class="block">
           attributes: protected 
         </div><div class="block">
+          definition classes: <a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a>
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection#filterTags" data-isabs="false">
+      <a id="filterTags(A,r,g,u,m,e,n,t,s):(Seq[(Fragment, Arguments)]) ⇒ Seq[(Fragment, Arguments)]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">filterTags</span>
+        
+        <span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">
+                  commandLineArgs
+                  : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
+                  
+                </span>)</span>
+        <span class="result">: (Seq[(<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>, <span name="org.specs2.main.Arguments" class="extype">Arguments</span>)]) ⇒ <span name="scala.collection.Seq" class="extype">Seq</span>[(<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>, <span name="org.specs2.main.Arguments" class="extype">Arguments</span>)]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>filter fragments according to tags by collecting tags as applicable to each fragment and applying them
+</p></dd></dl><div class="block">
           definition classes: <a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a>
         </div>
             
@@ -1203,8 +1261,8 @@ into a single block that will be reported on a different html page</p><p>This wo
                   fragments
                   : Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]
                   
-                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">
-                  arguments
+                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">
+                  commandLineArgs
                   : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
                    = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span>
                 </span>)</span>
@@ -1329,6 +1387,36 @@ so that &quot;first&quot; and &quot;last&quot; actions are executed properly in 
         </div><div class="block">
           definition classes: AnyRef
         </div></div>
+          
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection#tags" data-isabs="false">
+      <a id="tags(S,e,q,[,F,r,a,g,m,e,n,t,]):Seq[TaggingFragment]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">tags</span>
+        
+        <span class="params">(<span name="fragments">
+                  fragments
+                  : Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]
+                  
+                </span>)</span>
+        <span class="result">: Seq[<a name="org.specs2.specification.TagsFragments.TaggingFragment" class="extype" href="../specification/TagsFragments$$TaggingFragment.html">TaggingFragment</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p>
+            <div class="fullcomment"><div class="comment cmt"><p>From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p><p> * a <code>TaggedAs</code> fragment is applicable to the the previous fragment
+ * a <code>Tag</code> fragment is applicable to the the next fragment
+ * a <code>AsSection</code> fragment is applicable to the the previous fragment to the next <code>AsSection</code> fragment with the same name
+ * a <code>Section</code> fragment is applicable to the the next fragment to the next <code>Section</code> fragment with the same name
+</p></div><div class="block">
+          definition classes: <a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a>
+        </div>
+            
+            
+            
+            
+          </div>
           
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString:String"></a>

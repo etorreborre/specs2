@@ -270,7 +270,7 @@ current content
         </div></div>
           
     </li><li visbl="pub" name="org.specs2.mutable.ArgumentsArgs#args" data-isabs="false">
-      <a id="args(A,r,g,P,r,o,p,e,r,t,y,[,S,t,r,i,n,g,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,I,n,t,])(A,r,g,P,r,o,p,e,r,t,y,[,S,t,r,i,n,g,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,I,n,t,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,D,i,f,f,s,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(S,e,q,[,S,t,r,i,n,g,]):Arguments"></a>
+      <a id="args(A,r,g,P,r,o,p,e,r,t,y,[,S,t,r,i,n,g,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,S,t,r,i,n,g,])(A,r,g,P,r,o,p,e,r,t,y,[,S,t,r,i,n,g,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,I,n,t,])(A,r,g,P,r,o,p,e,r,t,y,[,S,t,r,i,n,g,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,I,n,t,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,D,i,f,f,s,])(A,r,g,P,r,o,p,e,r,t,y,[,B,o,o,l,e,a,n,])(A,r,g,P,r,o,p,e,r,t,y,[,S,t,a,c,k,T,r,a,c,e,F,i,l,t,e,r,])(S,e,q,[,S,t,r,i,n,g,]):Arguments"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -284,8 +284,20 @@ current content
                   xonly
                   : <span name="org.specs2.main.ArgProperty" class="extype">ArgProperty</span>[<span name="scala.Boolean" class="extype">Boolean</span>]
                    = <span class="symbol"><span class="name"><a href="../main/package.html">ArgProperty[Boolean]()</a></span></span>
+                </span>, <span name="include">
+                  include
+                  : <span name="org.specs2.main.ArgProperty" class="extype">ArgProperty</span>[String]
+                   = <span class="symbol"><span class="name"><a href="../main/package.html">ArgProperty[String]()</a></span></span>
+                </span>, <span name="exclude">
+                  exclude
+                  : <span name="org.specs2.main.ArgProperty" class="extype">ArgProperty</span>[String]
+                   = <span class="symbol"><span class="name"><a href="../main/package.html">ArgProperty[String]()</a></span></span>
                 </span>, <span name="plan">
                   plan
+                  : <span name="org.specs2.main.ArgProperty" class="extype">ArgProperty</span>[<span name="scala.Boolean" class="extype">Boolean</span>]
+                   = <span class="symbol"><span class="name"><a href="../main/package.html">ArgProperty[Boolean]()</a></span></span>
+                </span>, <span name="skipAll">
+                  skipAll
                   : <span name="org.specs2.main.ArgProperty" class="extype">ArgProperty</span>[<span name="scala.Boolean" class="extype">Boolean</span>]
                    = <span class="symbol"><span class="name"><a href="../main/package.html">ArgProperty[Boolean]()</a></span></span>
                 </span>, <span name="failtrace">
@@ -340,6 +352,10 @@ current content
                   fromSource
                   : <span name="org.specs2.main.ArgProperty" class="extype">ArgProperty</span>[<span name="scala.Boolean" class="extype">Boolean</span>]
                    = <span class="symbol"><span class="name"><a href="../main/package.html">ArgProperty[Boolean]()</a></span></span>
+                </span>, <span name="traceFilter">
+                  traceFilter
+                  : <span name="org.specs2.main.ArgProperty" class="extype">ArgProperty</span>[<a name="org.specs2.control.StackTraceFilter" class="extype" href="../control/StackTraceFilter.html">StackTraceFilter</a>]
+                   = <span class="symbol"><span class="name"><a href="../main/package.html">ArgProperty[StackTraceFilter]()</a></span></span>
                 </span>, <span name="commandLine">
                   commandLine
                   : Seq[String]
@@ -409,74 +425,6 @@ part of compilation it is not possible to check whether the contents of the list
           annotations: 
                 <span class="name">@throws</span><span class="args">()</span>
               
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#descFromExpectations" data-isabs="false">
-      <a id="descFromExpectations:Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">descFromExpectations</span>
-        
-        
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">shortcut to display the example descriptions from the expectations ok messages
-</p>
-            <div class="fullcomment"><div class="comment cmt"><p>shortcut to display the example descriptions from the expectations ok messages
-</p></div><div class="block">
-          definition classes: <a name="org.specs2.main.ArgumentsArgs" class="extype" href="../main/ArgumentsArgs.html">ArgumentsArgs</a>
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#diffs" data-isabs="false">
-      <a id="diffs(B,o,o,l,e,a,n)(S,t,r,i,n,g)(I,n,t)(I,n,t)(B,o,o,l,e,a,n):Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">diffs</span>
-        
-        <span class="params">(<span name="show">
-                  show
-                  : <span name="scala.Boolean" class="extype">Boolean</span>
-                   = <span class="symbol">true</span>
-                </span>, <span name="separators">
-                  separators
-                  : String
-                   = <span class="symbol">&quot;[]&quot;</span>
-                </span>, <span name="triggerSize">
-                  triggerSize
-                  : <span name="scala.Int" class="extype">Int</span>
-                   = <span class="symbol">20</span>
-                </span>, <span name="shortenSize">
-                  shortenSize
-                  : <span name="scala.Int" class="extype">Int</span>
-                   = <span class="symbol">5</span>
-                </span>, <span name="full">
-                  full
-                  : <span name="scala.Boolean" class="extype">Boolean</span>
-                   = <span class="symbol">false</span>
-                </span>)</span>
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">shortcut to display the differences with some specific parameters
-</p>
-            <div class="fullcomment"><div class="comment cmt"><p>shortcut to display the differences with some specific parameters
-</p></div><div class="block">
-          definition classes: <a name="org.specs2.main.ArgumentsArgs" class="extype" href="../main/ArgumentsArgs.html">ArgumentsArgs</a>
         </div>
             
             
@@ -594,30 +542,6 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#freetext" data-isabs="false">
-      <a id="freetext:Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">freetext</span>
-        
-        
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">shortcut to not executing the text and avoid automatic indentation
-</p>
-            <div class="fullcomment"><div class="comment cmt"><p>shortcut to not executing the text and avoid automatic indentation
-</p></div><div class="block">
-          definition classes: <a name="org.specs2.main.ArgumentsArgs" class="extype" href="../main/ArgumentsArgs.html">ArgumentsArgs</a>
-        </div>
-            
-            
-            
-            
-          </div>
-          
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass:java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -698,30 +622,6 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#literate" data-isabs="false">
-      <a id="literate:Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">literate</span>
-        
-        
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt"></p>
-            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>arguments for a literate specification: no auto indent and a sequential
-        execution
-</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.main.ArgumentsArgs" class="extype" href="../main/ArgumentsArgs.html">ArgumentsArgs</a>
-        </div>
-            
-            
-            
-            
-          </div>
-          
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(A,n,y,R,e,f):Boolean"></a>
       <h4 class="signature">
@@ -744,30 +644,6 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#noindent" data-isabs="false">
-      <a id="noindent:Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">noindent</span>
-        
-        
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">shortcut to avoid automatic indentation
-</p>
-            <div class="fullcomment"><div class="comment cmt"><p>shortcut to avoid automatic indentation
-</p></div><div class="block">
-          definition classes: <a name="org.specs2.main.ArgumentsArgs" class="extype" href="../main/ArgumentsArgs.html">ArgumentsArgs</a>
         </div>
             
             
@@ -816,81 +692,6 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#only" data-isabs="false">
-      <a id="only(S,t,r,i,n,g):Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">only</span>
-        
-        <span class="params">(<span name="examples">
-                  examples
-                  : String
-                  
-                </span>)</span>
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">shortcut to execute and print only some examples
-</p>
-            <div class="fullcomment"><div class="comment cmt"><p>shortcut to execute and print only some examples
-</p></div><div class="block">
-          definition classes: <a name="org.specs2.main.ArgumentsArgs" class="extype" href="../main/ArgumentsArgs.html">ArgumentsArgs</a>
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#plan" data-isabs="false">
-      <a id="plan:Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">plan</span>
-        
-        
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">shortcut to show only the text without any execution
-</p>
-            <div class="fullcomment"><div class="comment cmt"><p>shortcut to show only the text without any execution
-</p></div><div class="block">
-          definition classes: <a name="org.specs2.main.ArgumentsArgs" class="extype" href="../main/ArgumentsArgs.html">ArgumentsArgs</a>
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#sequential" data-isabs="false">
-      <a id="sequential:Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">sequential</span>
-        
-        
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt"></p>
-            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>arguments for a specification where examples must be executed sequentially
-</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.main.ArgumentsArgs" class="extype" href="../main/ArgumentsArgs.html">ArgumentsArgs</a>
         </div>
             
             
@@ -1024,30 +825,6 @@ possible to check whether the contents of the list are of the requested typed.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </div></div>
-          
-    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#xonly" data-isabs="false">
-      <a id="xonly:Arguments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">xonly</span>
-        
-        
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">shortcut to print only failures and errors
-</p>
-            <div class="fullcomment"><div class="comment cmt"><p>shortcut to print only failures and errors
-</p></div><div class="block">
-          definition classes: <a name="org.specs2.main.ArgumentsArgs" class="extype" href="../main/ArgumentsArgs.html">ArgumentsArgs</a>
-        </div>
-            
-            
-            
-            
-          </div>
           
     </li></ol>
             </div>

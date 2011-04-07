@@ -404,7 +404,7 @@ is created.</p></div><div class="block">
         </div></div>
           
     </li><li visbl="prt" name="org.specs2.mutable.FragmentsBuilder#addFragments" data-isabs="false">
-      <a id="addFragments[T](S,t,r,i,n,g)(⇒, ,T)(S,t,r,i,n,g):Unit"></a>
+      <a id="addFragments[T](S,t,r,i,n,g)(⇒, ,T)(S,t,r,i,n,g):Fragments"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -423,7 +423,7 @@ is created.</p></div><div class="block">
                   : String
                   
                 </span>)</span>
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="../specification/Fragments.html">Fragments</a></span>
       </span>
       </h4>
       
@@ -679,7 +679,7 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
           </div>
           
     </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragmentFragments" data-isabs="false">
-      <a id="fragmentFragments(F,r,a,g,m,e,n,t):FragmentsFragment"></a>
+      <a id="fragmentFragments(⇒, ,F,r,a,g,m,e,n,t):FragmentsFragment"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
@@ -687,7 +687,7 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
         
         <span class="params">(<span name="f">
                   f
-                  : <a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>
+                  : ⇒ <a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>
                   
                 </span>)</span>
         <span class="result">: <span name="org.specs2.specification.FragmentsBuilder.FragmentsFragment" class="extype">FragmentsFragment</span></span>
@@ -702,7 +702,7 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
         </div></div>
           
     </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragments" data-isabs="false">
-      <a id="fragments(F,r,a,g,m,e,n,t):Fragments"></a>
+      <a id="fragments(⇒, ,F,r,a,g,m,e,n,t):Fragments"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
@@ -710,7 +710,7 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
         
         <span class="params">(<span name="f">
                   f
-                  : <a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>
+                  : ⇒ <a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>
                   
                 </span>)</span>
         <span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="../specification/Fragments.html">Fragments</a></span>
@@ -730,7 +730,7 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
           </div>
           
     </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragmentsFragments" data-isabs="false">
-      <a id="fragmentsFragments(F,r,a,g,m,e,n,t,s):FragmentsFragment"></a>
+      <a id="fragmentsFragments(⇒, ,F,r,a,g,m,e,n,t,s):FragmentsFragment"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
@@ -738,7 +738,7 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
         
         <span class="params">(<span name="fs">
                   fs
-                  : <a name="org.specs2.specification.Fragments" class="extype" href="../specification/Fragments.html">Fragments</a>
+                  : ⇒ <a name="org.specs2.specification.Fragments" class="extype" href="../specification/Fragments.html">Fragments</a>
                   
                 </span>)</span>
         <span class="result">: <span name="org.specs2.specification.FragmentsBuilder.FragmentsFragment" class="extype">FragmentsFragment</span></span>
@@ -825,6 +825,34 @@ to verify that the behavior is consistent with the <code>equals</code> method.
             <div class="fullcomment"><div class="comment cmt"><p>add a new example using 'in' or '&gt;&gt;' or '!'
 </p></div><div class="block">
           attributes: implicit 
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#inScope" data-isabs="false">
+      <a id="inScope(S,c,o,p,e):Success"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">inScope</span>
+        
+        <span class="params">(<span name="s">
+                  s
+                  : <a name="org.specs2.specification.Scope" class="extype" href="../specification/Scope.html">Scope</a>
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.execute.Success" class="extype" href="../execute/Success.html">Success</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">transform a scope to a success to be able to create traits containing any variables and usable in any Examples</p>
+            <div class="fullcomment"><div class="comment cmt"><p>transform a scope to a success to be able to create traits containing any variables and usable in any Examples</p></div><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: FragmentsBuilder
         </div>
             
             
@@ -1090,7 +1118,7 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#textFragment" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.mutable.FragmentsBuilder#textFragment" data-isabs="false">
       <a id="textFragment(S,t,r,i,n,g):FragmentsFragment"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
@@ -1107,10 +1135,10 @@ possible to check whether the contents of the list are of the requested typed.
       </h4>
       
             <p class="shortcomment cmt"></p>
-            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>create a Text Fragment from a string and allow it to be chained to other fragments</p></dd></dl><div class="block">
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object from a single piece of text</p></dd></dl><div class="block">
           attributes: implicit 
         </div><div class="block">
-          definition classes: FragmentsBuilder
+          definition classes: <a name="org.specs2.mutable.FragmentsBuilder" class="extype" href="">FragmentsBuilder</a> → FragmentsBuilder
         </div>
             
             

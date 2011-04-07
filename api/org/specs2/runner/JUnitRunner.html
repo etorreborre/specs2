@@ -27,7 +27,7 @@
         <span class="name">JUnitRunner</span>
         
         
-        <span class="result"> extends <span name="org.junit.runner.Runner" class="extype">Runner</span></span>
+        <span class="result"> extends <span name="org.junit.runner.Runner" class="extype">Runner</span> with <span name="org.specs2.control.ExecutionOrigin" class="extype">ExecutionOrigin</span></span>
       </span>
       </h4>
       
@@ -39,7 +39,7 @@ to execute a specification as a JUnit suite.</p><p>The implementation is using a
 of Description objects and a Map relating each Description to a Fragment to execute.</p></div><div class="block">
             go to: <a href="JUnitRunner$.html">companion</a>
           </div><div class="block">
-            linear super types: <span name="org.junit.runner.Runner" class="extype">Runner</span>, <span name="org.junit.runner.Describable" class="extype">Describable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span>
+            linear super types: <span name="org.specs2.control.ExecutionOrigin" class="extype">ExecutionOrigin</span>, <span name="org.specs2.control.Stacktraces" class="extype">Stacktraces</span>, <span name="org.junit.runner.Runner" class="extype">Runner</span>, <span name="org.junit.runner.Describable" class="extype">Describable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div>
             
             
@@ -59,7 +59,7 @@ of Description objects and a Map relating each Description to a Fragment to exec
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li name="org.specs2.runner.JUnitRunner" class="in">JUnitRunner</li><li name="org.junit.runner.Runner" class="in">Runner</li><li name="org.junit.runner.Describable" class="in">Describable</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
+                <ol id="linearization"><li name="org.specs2.runner.JUnitRunner" class="in">JUnitRunner</li><li name="org.specs2.control.ExecutionOrigin" class="in">ExecutionOrigin</li><li name="org.specs2.control.Stacktraces" class="in">Stacktraces</li><li name="org.junit.runner.Runner" class="in">Runner</li><li name="org.junit.runner.Describable" class="in">Describable</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -521,6 +521,167 @@ to verify that the behavior is consistent with the <code>equals</code> method.
             
           </div>
           
+    </li><li visbl="pub" name="org.specs2.control.Stacktraces#isExecutedFrom" data-isabs="false">
+      <a id="isExecutedFrom(S,t,r,i,n,g):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isExecutedFrom</span>
+        
+        <span class="params">(<span name="name">
+                  name
+                  : String
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to determine for example if the JUnit runner is executed from Maven or within Eclipse.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to determine for example if the JUnit runner is executed from Maven or within Eclipse.
+In the first the test case names don't need to have the hashcode example.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the this current piece of code contains name in its stacktrace.
+</p></dd></dl><div class="block">
+          definition classes: Stacktraces
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromAnIDE" data-isabs="false">
+      <a id="isExecutedFromAnIDE:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">lazy val</span>
+      <span class="symbol">
+        <span class="name">isExecutedFromAnIDE</span>
+        
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">return true if the current test is executed from an IDE</p>
+            <div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed from an IDE</p></div><div class="block">
+          definition classes: ExecutionOrigin
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromEclipse" data-isabs="false">
+      <a id="isExecutedFromEclipse:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">lazy val</span>
+      <span class="symbol">
+        <span class="name">isExecutedFromEclipse</span>
+        
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">return true if the current test is executed with eclipse</p>
+            <div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with eclipse</p></div><div class="block">
+          definition classes: ExecutionOrigin
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromGradle" data-isabs="false">
+      <a id="isExecutedFromGradle:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">lazy val</span>
+      <span class="symbol">
+        <span class="name">isExecutedFromGradle</span>
+        
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">return true if the current test is executed with Gradle</p>
+            <div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with Gradle</p></div><div class="block">
+          definition classes: ExecutionOrigin
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromIntellij" data-isabs="false">
+      <a id="isExecutedFromIntellij:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">lazy val</span>
+      <span class="symbol">
+        <span class="name">isExecutedFromIntellij</span>
+        
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">return true if the current test is executed with Intellij</p>
+            <div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with Intellij</p></div><div class="block">
+          definition classes: ExecutionOrigin
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromMaven" data-isabs="false">
+      <a id="isExecutedFromMaven:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">lazy val</span>
+      <span class="symbol">
+        <span class="name">isExecutedFromMaven</span>
+        
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">return true if the current test is executed with Maven</p>
+            <div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with Maven</p></div><div class="block">
+          definition classes: ExecutionOrigin
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromSBT" data-isabs="false">
+      <a id="isExecutedFromSBT:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">lazy val</span>
+      <span class="symbol">
+        <span class="name">isExecutedFromSBT</span>
+        
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">return true if the current test is executed with sbt</p>
+            <div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with sbt</p></div><div class="block">
+          definition classes: ExecutionOrigin
+        </div>
+            
+            
+            
+            
+          </div>
+          
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -829,7 +990,11 @@ possible to check whether the contents of the list are of the requested typed.
     </li></ol>
             </div>
 
-        <div name="org.junit.runner.Runner" class="parent">
+        <div name="org.specs2.control.ExecutionOrigin" class="parent">
+              <h3>Inherited from <span name="org.specs2.control.ExecutionOrigin" class="extype">ExecutionOrigin</span></h3>
+            </div><div name="org.specs2.control.Stacktraces" class="parent">
+              <h3>Inherited from <span name="org.specs2.control.Stacktraces" class="extype">Stacktraces</span></h3>
+            </div><div name="org.junit.runner.Runner" class="parent">
               <h3>Inherited from <span name="org.junit.runner.Runner" class="extype">Runner</span></h3>
             </div><div name="org.junit.runner.Describable" class="parent">
               <h3>Inherited from <span name="org.junit.runner.Describable" class="extype">Describable</span></h3>

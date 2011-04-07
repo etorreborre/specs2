@@ -31,11 +31,10 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" /> 
-    </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a></div><title>Philosophy</title><a name="Philosophy"></a><h2>Philosophy</h2><div class="level0"><p><ul><li><a href="#The+origins">The origins</a></li><li><a href="#The+score">The score</a></li><ul><li><a href="#Conciseness">Conciseness</a></li><li><a href="#Readability">Readability</a></li><li><a href="#Extensibility">Extensibility</a></li><li><a href="#Configuration">Configuration</a></li><li><a href="#Clear+implementation">Clear implementation</a></li><li><a href="#User+support">User support</a></li></ul><li><a href="#A+new+compromise">A new compromise</a></li><ul><li><a href="#Functional+%2F+immutable">Functional / immutable</a></li><ul><li><a href="#Chaining+everything">Chaining everything</a></li><li><a href="#Arguments+have+to+be+supplied">Arguments have to be supplied</a></li><li><a href="#Concurrency+is+a+breeze">Concurrency is a breeze</a></li></ul><li><a href="#A+simple+structure">A simple structure</a></li><ul><li><a href="#Contexts">Contexts</a></li><li><a href="#Indentation">Indentation</a></li><li><a href="#Operators">Operators</a></li><li><a href="#Forms">Forms</a></li></ul><li><a href="#But+if+you+STILL+want+mutable+specifications">But if you STILL want mutable specifications</a></li><li><a href="#Dependencies+control">Dependencies control</a></li><li><a href="#Implicit+definitions+control">Implicit definitions control</a></li></ul></ul></p><a name="The+origins"></a><h3>The origins</h3>
-<p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p>
-<p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />
+    </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a></div><title>Philosophy</title><a name="Philosophy"></a><h2>Philosophy</h2><div class="level0"><p><ul><li><a href="#The+origins">The origins</a></li><li><a href="#The+score">The score</a></li><ul><li><a href="#Conciseness">Conciseness</a></li><li><a href="#Readability">Readability</a></li><li><a href="#Extensibility">Extensibility</a></li><li><a href="#Configuration">Configuration</a></li><li><a href="#Clear+implementation">Clear implementation</a></li><li><a href="#User+support">User support</a></li></ul><li><a href="#A+new+compromise">A new compromise</a></li><ul><li><a href="#Functional+%2F+immutable">Functional / immutable</a></li><ul><li><a href="#Chaining+everything">Chaining everything</a></li><li><a href="#Arguments+have+to+be+supplied">Arguments have to be supplied</a></li><li><a href="#Concurrency+is+a+breeze">Concurrency is a breeze</a></li></ul><li><a href="#A+simple+structure">A simple structure</a></li><ul><li><a href="#Contexts">Contexts</a></li><li><a href="#Indentation">Indentation</a></li><li><a href="#Operators">Operators</a></li><li><a href="#Forms">Forms</a></li></ul><li><a href="#But+if+you+STILL+want+mutable+specifications">But if you STILL want mutable specifications</a></li><li><a href="#Dependencies+control">Dependencies control</a></li><li><a href="#Implicit+definitions+control">Implicit definitions control</a></li></ul></ul></p><a name="The+origins"></a><h3>The origins</h3><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />
 Among the very first objectives of specs were:</p>
 <ul>
+  
   <li>
     <p><strong>conciseness</strong>: it should be possible to express a software specification with the least amount of ceremony</p>
   </li>
@@ -50,100 +49,75 @@ Among the very first objectives of specs were:</p>
   </li>
   <li>
     <p><strong>clear implementation</strong>: since this is an open-source project with no business constraint, there's no excuse for not<br />
- having a crystal clear implementation, right?</p>
+     having a crystal clear implementation, right?</p>
   </li>
   <li>
     <p><strong>great user support</strong>: it's not because something is free that it should be buggy! Moreover this is also a good test<br />
- on the design. A good design should be easy to fix and evolve</p>
+     on the design. A good design should be easy to fix and evolve</p>
   </li>
-</ul>
-</div><div class="level0"><a name="The+score"></a><h3>The score</h3>
-<p>After a few years of use, let's have a look at what worked and what didn't.</p><a name="Conciseness"></a><h6>Conciseness</h6>
-<p>This objective was achieved thanks to the incredible power of implicits in Scala which provide lots of way to create<br />
+</ul></div><div class="level0"><a name="The+score"></a><h3>The score</h3><p>After a few years of use, let's have a look at what worked and what didn't.</p><a name="Conciseness"></a><h6>Conciseness</h6><p>This objective was achieved thanks to the incredible power of implicits in Scala which provide lots of way to create<br />
 an elegant syntax for specifying software. However, the implementation of that syntactic support has several drawbacks:</p>
 <ul>
+  
   <li>
     <p><strong><em>specs</em></strong> provides implicits by inheriting methods from the <code class="prettyprint">Specification</code> class. While this is very convenient<br />
- this is also considerably polluting the namespace of the user code <em>inside</em> the specification. This pollution leads<br />
- to possible bugs (an implicit conversion being applied when you don't expect it) and possible namespace conflicts</p>
+     this is also considerably polluting the namespace of the user code <em>inside</em> the specification. This pollution leads<br />
+     to possible bugs (an implicit conversion being applied when you don't expect it) and possible namespace conflicts</p>
   </li>
   <li>
     <p>some &quot;reserved&quot; words like <code class="prettyprint">should</code>, <code class="prettyprint">can</code>, <code class="prettyprint">in</code> come from previous BDD libraries like rspec. But they are not always<br />
- convenient and sometimes one wants to write <code class="prettyprint">&quot;my example should provide&quot;</code> just to avoid having every example under<br />
-&quot;<code class="prettyprint">&quot;my example&quot; should</code>&quot; start with <code class="prettyprint">&quot;provide...&quot;</code>.<br />
- There is a way to do this in <strong><em>specs</em></strong> but this requires the creation of an ad-hoc method</p>
+     convenient and sometimes one wants to write <code class="prettyprint">&quot;my example should provide&quot;</code> just to avoid having every example under<br />
+    &quot;<code class="prettyprint">&quot;my example&quot; should</code>&quot; start with <code class="prettyprint">&quot;provide...&quot;</code>.<br />
+     There is a way to do this in <strong><em>specs</em></strong> but this requires the creation of an ad-hoc method</p>
   </li>
   <li>
     <p>some people like to structure their specifications with other keywords like Given-When-Then which require<br />
- additional methods in the library for no more added value than just displaying those words</p>
+     additional methods in the library for no more added value than just displaying those words</p>
   </li>
-</ul><a name="Readability"></a><h6>Readability</h6>
-<p>The readability of a specification written with <strong><em>specs</em></strong> largely depends on the writer of the specification. Since a<br />
+</ul><a name="Readability"></a><h6>Readability</h6><p>The readability of a specification written with <strong><em>specs</em></strong> largely depends on the writer of the specification. Since a<br />
 specification is created by interleaving text and code, if the amount of code is too large then the textual content of<br />
-the specification is largely lost and the developer cannot read it with just one glance.</p>
-<p>Something was prototyped in <strong><em>specs</em></strong> to alleviate this issue: <a href="http://code.google.com/p/specs/wiki/LiterateSpecifications#A_short_example">LiterateSpecifications</a>.<br />
+the specification is largely lost and the developer cannot read it with just one glance.</p><p>Something was prototyped in <strong><em>specs</em></strong> to alleviate this issue: <a href="http://code.google.com/p/specs/wiki/LiterateSpecifications#A_short_example">LiterateSpecifications</a>.<br />
 The idea was to use Scala support for XML literal to allow the writer to write pure text and insert, at the right places,<br />
 some executable examples. It turns out that the implementation of this approach is fairly different from what was done for<br />
-&quot;regular&quot; examples and cluttered the overall design.</p><a name="Extensibility"></a><h6>Extensibility</h6>
-<p>Since its first release, <strong><em>specs</em></strong> has been extended in different ways. Many users have created their own matchers (<a href="http://code.google.com/p/specs/wiki/MatchersGuide#Eventually_matchers">some<br />
-of them</a> have been integrated to the main library).</p>
-<p>On the other hand, the additional runners which were developed for TeamCity or sbt were written by me, as well as other<br />
-more fundamental enhancements, like <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Specification_context">SpecificationContexts</a>.</p>
-<p>The conclusion we can draw on this subject is that it's difficult to design something that's truly extensible without any<br />
-idea of the future requirements!</p><a name="Configuration"></a><h6>Configuration</h6>
-<p>The &quot;sensible&quot; defaults have been debated and some &quot;opinionated&quot; decisions have been taken, like the decision to mark any<br />
+&quot;regular&quot; examples and cluttered the overall design.</p><a name="Extensibility"></a><h6>Extensibility</h6><p>Since its first release, <strong><em>specs</em></strong> has been extended in different ways. Many users have created their own matchers (<a href="http://code.google.com/p/specs/wiki/MatchersGuide#Eventually_matchers">some<br />
+of them</a> have been integrated to the main library).</p><p>On the other hand, the additional runners which were developed for TeamCity or sbt were written by me, as well as other<br />
+more fundamental enhancements, like <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Specification_context">SpecificationContexts</a>.</p><p>The conclusion we can draw on this subject is that it's difficult to design something that's truly extensible without any<br />
+idea of the future requirements!</p><a name="Configuration"></a><h6>Configuration</h6><p>The &quot;sensible&quot; defaults have been debated and some &quot;opinionated&quot; decisions have been taken, like the decision to mark any<br />
 example without expectation as &quot;Pending&quot; for example. Unfortunately the configuration mechanism offered in exchange<br />
 (to change the defaults) was not really appealing (a mix of properties-file-reflection-system-properties) and there is<br />
-few evidence that anyone actually used it.</p><a name="Clear+implementation"></a><h6>Clear implementation</h6>
-<p>This objective was certainly <em>not</em> achieved. There are several reasons for this. The design of the examples execution is<br />
-certainly the main one.</p>
-<p>In <strong><em>specs</em></strong> the examples are executed &quot;on-demand&quot; when a runner &quot;asks&quot; the specification for its successes and failures.<br />
+few evidence that anyone actually used it.</p><a name="Clear+implementation"></a><h6>Clear implementation</h6><p>This objective was certainly <em>not</em> achieved. There are several reasons for this. The design of the examples execution is<br />
+certainly the main one.</p><p>In <strong><em>specs</em></strong> the examples are executed &quot;on-demand&quot; when a runner &quot;asks&quot; the specification for its successes and failures.<br />
 The specification then asks each example for its status and an example knows that by executing himself. The trouble is,<br />
 the example doesn't really have enough information to know it's full execution context: is there some code to execute beforehand<br />
 for data setup? Or after all other examples, because it's the last example of the specification and a database disconnection<br />
-is required then?</p>
-<p>This design is aggravated by a &quot;magic&quot; feature provided by <strong><em>specs</em></strong>: <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Execution_model">the automatic reset of local variables</a>.<br />
+is required then?</p><p>This design is aggravated by a &quot;magic&quot; feature provided by <strong><em>specs</em></strong>: <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Execution_model">the automatic reset of local variables</a>.<br />
 This feature is <em>very</em> convenient for the user but the implementation is a nightmare! In order to make as if each example<br />
 was executed in isolation, as if other examples did not modify surrounding variables, a new specification is created and<br />
 just one example is executed inside that specification. This works, but at the expense of carefully copying a lot of state<br />
-from the cloned specification to the original one. More than <em>20</em> issues were created because of that only feature!</p><a name="User+support"></a><h6>User support</h6>
-<p>The user support has always been responsive, in terms of bug fixes and enhancements. However the object-oriented nature<br />
+from the cloned specification to the original one. More than <em>20</em> issues were created because of that only feature!</p><a name="User+support"></a><h6>User support</h6><p>The user support has always been responsive, in terms of bug fixes and enhancements. However the object-oriented nature<br />
 of <strong><em>specs</em></strong> with lots of variables and side-effects around made some bugs difficult to diagnose and made some enhancements<br />
 downright impossible. The best example of an &quot;impossible&quot; feature to implement is the concurrent execution of examples.<br />
-With shared variables all around the place, there's little chance to ever get it right.</p><a name="A+new+compromise"></a><h3>A new compromise</h3>
-<p>The redesign of <em><strong>specs2</strong></em> was precisely started to fight the complexities and issues of <strong><em>specs</em></strong>. In order to do<br />
+With shared variables all around the place, there's little chance to ever get it right.</p><a name="A+new+compromise"></a><h3>A new compromise</h3><p>The redesign of <em><strong>specs2</strong></em> was precisely started to fight the complexities and issues of <strong><em>specs</em></strong>. In order to do<br />
 that while remaining true to the original vision for <strong><em>specs</em></strong>, a new design compromise was necessary with new design<br />
 principles:</p>
 <ol>
-  <li>Do not use mutable variables!
-</li>
-  <li>Use a simple structure
-</li>
-  <li>Control the dependencies (no cycles)
-</li>
-  <li>Control the implicits scopes
-</li>
-</ol>
-<p>As we will see in the paragraphs below, this is a compromise in the sense that there is a bit more burden on the developer<br />
-who has to write more code to get his specification into shape.</p><a name="Functional+%2F+immutable"></a><h5>Functional / immutable</h5><a name="Chaining+everything"></a><h6>Chaining everything</h6>
-<p>Mutable variables were the subject of enough grief, I decided it was high time to do without them. This decision has a<br />
+  <li>Do not use mutable variables!</li><li>Use a simple structure</li><li>Control the dependencies (no cycles)</li><li>Control the implicits scopes</li>
+</ol><p>As we will see in the paragraphs below, this is a compromise in the sense that there is a bit more burden on the developer<br />
+who has to write more code to get his specification into shape.</p><a name="Functional+%2F+immutable"></a><h5>Functional / immutable</h5><a name="Chaining+everything"></a><h6>Chaining everything</h6><p>Mutable variables were the subject of enough grief, I decided it was high time to do without them. This decision has a<br />
 big impact on the way a user writes a specification. A specification can not anymore be a set of unrelated &quot;blocks&quot; where<br />
 each block is added to the parent specification through a side effect:</p>
 <pre><code class="prettyprint">  &quot;my example is ok&quot; in { 1 must_== 1 }        // those examples are added to the specification by mutating a
   &quot;my other example is ok&quot; in { 2 must_== 2 }  // variable
-</code></pre>
-<p>Now the &quot;blocks&quot; have to form a sequence:</p>
+</code></pre><p>Now the &quot;blocks&quot; have to form a sequence:</p>
 <pre><code class="prettyprint">  &quot;my example is ok&quot;       ! e1^               // notice the ^ operator here
   &quot;my other example is ok&quot; ! e2
 
   def e1 = { 1 must_== 1 }
   def e2 = { 2 must_== 2 }
-</code></pre>
-<p>This is clearly a drawback of not having side-effects. The presence of <code class="prettyprint">^</code> everywhere produces unwanted syntactic noise<br />
+</code></pre><p>This is clearly a drawback of not having side-effects. The presence of <code class="prettyprint">^</code> everywhere produces unwanted syntactic noise<br />
 in the specification. One way of minimizing that noise is to make good use of an editor with column editing and align<br />
 those symbols on the print margin of the screen. The specification can then be read as having 2 columns, one with the text,<br />
-one with the implementation and the formatting directives.</p>
-<p>The same principle applies to the Examples bodies and has a major consequence: you have to explicitly chain expectations!</p>
+one with the implementation and the formatting directives.</p><p>The same principle applies to the Examples bodies and has a major consequence: you have to explicitly chain expectations!</p>
 <pre><code class="prettyprint">  &quot;my example on strings&quot; ! e1                // will never fail!
   def e1 = {
     &quot;hello&quot; must have size(10000)             // because this expectation will not be returned,...
@@ -154,43 +128,29 @@ one with the implementation and the formatting directives.</p>
   &quot;my example on strings&quot; ! e1               // will fail
   def e1 = &quot;hello&quot; must have size(10000) and
                         startWith(&quot;hell&quot;)
-</code></pre>
-<p>This can be seen as a limitation as well but also as an opportunity for writing better specifications. It's been indeed<br />
+</code></pre><p>This can be seen as a limitation as well but also as an opportunity for writing better specifications. It's been indeed<br />
 advocated in several places that there should be only one expectation per example, now the design of <strong><em>specs2</em></strong> actually<br />
-encourages it!</p>
-<p>One other positive consequence of that design decision is that debugging the library should be almost brainless.<br />
+encourages it!</p><p>One other positive consequence of that design decision is that debugging the library should be almost brainless.<br />
 Functional Programming is like having a pipe-line. If you don't like the output, you just cut the pipeline in smaller<br />
-pieces, examine the ins and outs of each and decide where things went wrong.</p>
-<p>That being said, based on early feedback, a <em>mutable</em> version of the Specification trait was later introduced in order to<br />
+pieces, examine the ins and outs of each and decide where things went wrong.</p><p>That being said, based on early feedback, a <em>mutable</em> version of the Specification trait was later introduced in order to<br />
 provide a nicer DSL for <em>unit</em> specifications, where the code is interleaved with the descriptions (see <a href="org.specs2.guide.Philosophy.html#But+if+you+STILL+want+mutable+specifications">below</a>). The mutability<br />
-is limited to <strong>1</strong> variable and to the construction phase of the specification.</p><a name="Arguments+have+to+be+supplied"></a><h6>Arguments have to be supplied</h6>
-<p>The &quot;local configuration&quot; of a Specification in <strong><em>specs</em></strong> is realized with side-effects too. If you want to declare that<br />
-the examples in a specification will share variables you can add <code class="prettyprint">shareVariables()</code> at the top of the specification.</p>
-<p>This is not possible anymore in specs2, so you have to explicitly pass arguments at the top of your specification and<br />
+is limited to <strong>1</strong> variable and to the construction phase of the specification.</p><a name="Arguments+have+to+be+supplied"></a><h6>Arguments have to be supplied</h6><p>The &quot;local configuration&quot; of a Specification in <strong><em>specs</em></strong> is realized with side-effects too. If you want to declare that<br />
+the examples in a specification will share variables you can add <code class="prettyprint">shareVariables()</code> at the top of the specification.</p><p>This is not possible anymore in specs2, so you have to explicitly pass arguments at the top of your specification and<br />
 chain them with the rest:</p>
 <pre><code class="prettyprint">  new Specification { def is =  args(color=false)   ^ // will not output colors
     &quot;the rest of the specs&quot;                         ^ end
   }
-</code></pre><a name="Concurrency+is+a+breeze"></a><h6>Concurrency is a breeze</h6>
-<p>This is one of the expected advantages of using functional programming techniques and thanks to Scalaz awesomeness the<br />
+</code></pre><a name="Concurrency+is+a+breeze"></a><h6>Concurrency is a breeze</h6><p>This is one of the expected advantages of using functional programming techniques and thanks to Scalaz awesomeness the<br />
 concurrent execution of examples is just one line of code!</p>
 <pre><code class="prettyprint">  fs.fragments.map(f =&gt; promise(executeFragment(arguments &lt;| fs.arguments)(f))).sequence.get
-</code></pre><a name="A+simple+structure"></a><h5>A simple structure</h5>
-<p>This principle comes from the desire to unite the traditional <strong><em>specs</em></strong> approach of using blocks with <code class="prettyprint">should</code> and <code class="prettyprint">in</code><br />
-keywords with a more <em>literate</em> approach of having just free text.</p>
-<p>In other words, there is no fundamental difference between an &quot;Acceptance Testing&quot; specification and a &quot;Unit Test&quot; specification.<br />
-This is just a matter of the scale at which you're looking at things.</p>
-<p>Moreover I found that having restrictions on the words I was supposed to use for my specification text didn't help me write<br />
-the most appropriate descriptions of the system behavior or features.</p>
-<p>The application of this principle is that a specification is composed of &quot;Fragments&quot; which can be some &quot;Text&quot; or some<br />
+</code></pre><a name="A+simple+structure"></a><h5>A simple structure</h5><p>This principle comes from the desire to unite the traditional <strong><em>specs</em></strong> approach of using blocks with <code class="prettyprint">should</code> and <code class="prettyprint">in</code><br />
+keywords with a more <em>literate</em> approach of having just free text.</p><p>In other words, there is no fundamental difference between an &quot;Acceptance Testing&quot; specification and a &quot;Unit Test&quot; specification.<br />
+This is just a matter of the scale at which you're looking at things.</p><p>Moreover I found that having restrictions on the words I was supposed to use for my specification text didn't help me write<br />
+the most appropriate descriptions of the system behavior or features.</p><p>The application of this principle is that a specification is composed of &quot;Fragments&quot; which can be some &quot;Text&quot; or some<br />
 &quot;Example&quot; <em>simply appended together</em>. You can use whatever words you want to describe the examples <code class="prettyprint">should</code>, <code class="prettyprint">can</code>, <code class="prettyprint">must</code>,<br />
-whatever.</p>
-<p>But wait! Nested structures serve 2 important purposes in <strong><em>specs</em></strong>! They are used to control the scopes of variables<br />
-that are applicable to examples and to compute the indentation when displaying the results.</p>
-<p>How can this be done in <strong><em>specs2</em></strong>?</p><a name="Contexts"></a><h6>Contexts</h6>
-<p>Setting up a proper context for an example, with &quot;fresh&quot; variables, which can be possibly inherited from a &quot;parent&quot; context,<br />
-does not require any support from the library (difficult to get bugs with that, right :-) ?).</p>
-<p>We simply use case class instances for each Example. Here is a demonstration:</p>
+whatever.</p><p>But wait! Nested structures serve 2 important purposes in <strong><em>specs</em></strong>! They are used to control the scopes of variables<br />
+that are applicable to examples and to compute the indentation when displaying the results.</p><p>How can this be done in <strong><em>specs2</em></strong>?</p><a name="Contexts"></a><h6>Contexts</h6><p>Setting up a proper context for an example, with &quot;fresh&quot; variables, which can be possibly inherited from a &quot;parent&quot; context,<br />
+does not require any support from the library (difficult to get bugs with that, right :-) ?).</p><p>We simply use case class instances for each Example. Here is a demonstration:</p>
 <pre><code class="prettyprint">  &quot;When the user logs in&quot;                      ^
     &quot;his past history must be shown&quot;           ! history().isShown^
     &quot;if he selects tickets&quot;                    ^
@@ -217,15 +177,11 @@ does not require any support from the library (difficult to get bugs with that, 
     val tickets = new tickets()
     def favorite = pending
   }
-</code></pre>
-<p>In the specification above, each example is using its own instance of a case class, having its own local variables which<br />
+</code></pre><p>In the specification above, each example is using its own instance of a case class, having its own local variables which<br />
 will never be overwritten by another example. Parent context is inherited by means of delegation. For example, in the<br />
-&quot;buy&quot; context, there is an available <code class="prettyprint">tickets</code> instance placing the system in the desired context.</p>
-<p>There is a clear win here because the library doesn't have to propose new concepts, a new API to offer context management<br />
-functionalites to: create contexts, share them, reuse them,...</p>
-<p>Moreover in the &quot;simple structure&quot; above, there is no need for adding curly braces <code class="prettyprint">{...}</code> to separate the specification<br />
-elements. This makes the specification text remarkably close to what's going to be displayed when reported.</p><a name="Indentation"></a><h6>Indentation</h6>
-<p>In specs2, indentation is a feature but it doesn't have to be. For example you could just write the specification above as:</p>
+&quot;buy&quot; context, there is an available <code class="prettyprint">tickets</code> instance placing the system in the desired context.</p><p>There is a clear win here because the library doesn't have to propose new concepts, a new API to offer context management<br />
+functionalites to: create contexts, share them, reuse them,...</p><p>Moreover in the &quot;simple structure&quot; above, there is no need for adding curly braces <code class="prettyprint">{...}</code> to separate the specification<br />
+elements. This makes the specification text remarkably close to what's going to be displayed when reported.</p><a name="Indentation"></a><h6>Indentation</h6><p>In specs2, indentation is a feature but it doesn't have to be. For example you could just write the specification above as:</p>
 <pre><code class="prettyprint">  &quot;When the user logs in&quot;                      ^
   &quot;  his past history must be shown&quot;           ! history().isShown^
   &quot;  if he selects tickets&quot;                    ^
@@ -233,65 +189,48 @@ elements. This makes the specification text remarkably close to what's going to 
   &quot;    the total amount must be displayed&quot;     ! tickets().total^
   &quot;    if he buys tickets&quot;                     ^
   &quot;      his favorite payment type is shown&quot;   ! buy().favorite
-</code></pre>
-<p>Or you can leave <strong><em>specs2</em></strong> compute something reasonable for the indentation along the following rules:</p>
+</code></pre><p>Or you can leave <strong><em>specs2</em></strong> compute something reasonable for the indentation along the following rules:</p>
 <ul>
-  <li>when an example follows a text, it is indented
-</li>
-  <li>2 successive examples will be at the same indentation level
-</li>
-  <li>when a text follows an example, this means that you want to describe a &quot;subcontext&quot;, so the next examples will be<br />
-indented with one more level
-</li>
-</ul>
-<p>This strategy is most likely to bring appropriate results but there are additional formatting elements which can be<br />
-inserted in order to adjust the indentation or just skip lines: <code class="prettyprint">p, br, t, bt, end, endbr, endp</code>.</p><a name="Operators"></a><h6>Operators</h6>
-<p>There are 2 major operators used by <strong><em>specs2</em></strong> when building a Specification: <code class="prettyprint">^</code> and <code class="prettyprint">!</code>.</p>
-<p><code class="prettyprint">^</code> is used to &quot;link&quot; specification fragments together and <code class="prettyprint">!</code> is used to declare the body of an example. The choice of<br />
+  <li>when an example follows a text, it is indented</li><li>2 successive examples will be at the same indentation level</li><li>when a text follows an example, this means that you want to describe a &quot;subcontext&quot;, so the next examples will be<br />
+  indented with one more level</li>
+</ul><p>This strategy is most likely to bring appropriate results but there are additional formatting elements which can be<br />
+inserted in order to adjust the indentation or just skip lines: <code class="prettyprint">p, br, t, bt, end, endbr, endp</code>.</p><a name="Operators"></a><h6>Operators</h6><p>There are 2 major operators used by <strong><em>specs2</em></strong> when building a Specification: <code class="prettyprint">^</code> and <code class="prettyprint">!</code>.</p><p><code class="prettyprint">^</code> is used to &quot;link&quot; specification fragments together and <code class="prettyprint">!</code> is used to declare the body of an example. The choice of<br />
 those 2 symbols is mostly the result of the precedence rules in Scala. <code class="prettyprint">+</code> binds more strongly than <code class="prettyprint">!</code>, and <code class="prettyprint">!</code> more strongly<br />
 than <code class="prettyprint">^</code>. This means that you don't need to add brackets to:</p>
 <ul>
-  <li>add strings with <code class="prettyprint">+</code>: <code class="prettyprint">&quot;this is&quot;+&quot;my string&quot; ^ &quot;ok?&quot;</code>
-</li>
-  <li>declare an example: <code class="prettyprint">&quot;this is some text&quot; ^ &quot;and this is an example description&quot; ! success</code>
-</li>
-</ul><a name="Forms"></a><h6>Forms</h6>
-<p>Having no explicit structure but just a &quot;flow&quot; of Fragments allows to insert other types of Fragments in a <strong><em>specs2</em></strong> specification.</p>
-<p>The &quot;description - expectation&quot; format for specifying software is sometimes too verbose and tables are a much more effective<br />
+  <li>add strings with <code class="prettyprint">+</code>: <code class="prettyprint">&quot;this is&quot;+&quot;my string&quot; ^ &quot;ok?&quot;</code></li><li>declare an example: <code class="prettyprint">&quot;this is some text&quot; ^ &quot;and this is an example description&quot; ! success</code></li>
+</ul><a name="Forms"></a><h6>Forms</h6><p>Having no explicit structure but just a &quot;flow&quot; of Fragments allows to insert other types of Fragments in a <strong><em>specs2</em></strong> specification.</p><p>The &quot;description - expectation&quot; format for specifying software is sometimes too verbose and tables are a much more effective<br />
 way of packing up descriptions and expectations. This idea is not new and a tool like <a href="http://fitnesse.org">Fitnesse</a> has been offering this way<br />
-of writing specifications for years now.</p>
-<p><strong><em>specs2</em></strong> takes this idea further with 3 features:</p>
+of writing specifications for years now.</p><p><strong><em>specs2</em></strong> takes this idea further with 3 features:</p>
 <ul>
+  
   <li>
     <p>the tables (called &quot;Forms&quot;) are statically compiled so adding a new column in a decision table will not fail at runtime<br />
- (and IDEs provide refactoring tools for better productivity)</p>
+     (and IDEs provide refactoring tools for better productivity)</p>
   </li>
   <li>
     <p>the Forms are not limited to simple n x m grids and can be nested inside each other. This helps a lot in specifying<br />
- domain objects where you have aggregates and lists of items</p>
+     domain objects where you have aggregates and lists of items</p>
   </li>
   <li>
     <p>the Forms presentation and implementation can be encapsulated in the same class to be reused as a coherent block in<br />
- other specifications</p>
+     other specifications</p>
   </li>
-</ul>
-<p>The main drawback (for now) of this approach is that it is not possible to see, in real-time, a modification done on a Form<br />
-as can be seen in a browser with Fitnesse. There needs to be a compilation step, which in Scala, is not instantaneous.</p><a name="But+if+you+STILL+want+mutable+specifications"></a><h5>But if you STILL want mutable specifications</h5>
-<p>There are at least 2 very good reason for that.</p>
+</ul><p>The main drawback (for now) of this approach is that it is not possible to see, in real-time, a modification done on a Form<br />
+as can be seen in a browser with Fitnesse. There needs to be a compilation step, which in Scala, is not instantaneous.</p><a name="But+if+you+STILL+want+mutable+specifications"></a><h5>But if you STILL want mutable specifications</h5><p>There are at least 2 very good reason for that.</p>
 <ol>
+  
   <li>
     <p>you want a smooth migration path from <em><strong>specs</strong></em> to <strong><em>specs2</em></strong> because rewriting specifications from scratch,<br />
-with a new syntax, does not bring a lot of value to your project</p>
+    with a new syntax, does not bring a lot of value to your project</p>
   </li>
   <li>
     <p>chaining fragments hides the implementation of the examples and you have to navigate too much between the text and<br />
-the example code to understand what's going on. This is especially true when writing <em>unit</em> specifications where it's<br />
-convenient to interleave short descriptions with blocks of code</p>
+    the example code to understand what's going on. This is especially true when writing <em>unit</em> specifications where it's<br />
+    convenient to interleave short descriptions with blocks of code</p>
   </li>
-</ol>
-<p>Well, Scala is not a black-or-white language and mutation is definitely part of the toolbox. In the case of a specification<br />
-DSL, we know the advantages: less syntax, and the drawbacks: uncontrolled side-effects.</p>
-<p>Thus, in <strong><em>specs2</em></strong> it is possible to create specifications which look almost like the ones which can be created with<br />
+</ol><p>Well, Scala is not a black-or-white language and mutation is definitely part of the toolbox. In the case of a specification<br />
+DSL, we know the advantages: less syntax, and the drawbacks: uncontrolled side-effects.</p><p>Thus, in <strong><em>specs2</em></strong> it is possible to create specifications which look almost like the ones which can be created with<br />
 <strong><em>specs</em></strong>, with a bit less functionalities:</p>
 <pre><code class="prettyprint">    import org.specs2.mutable._   // similar to the mutable package for Scala collections
 
@@ -305,58 +244,24 @@ DSL, we know the advantages: less syntax, and the drawbacks: uncontrolled side-e
         }
       }
     }
-</code></pre>
-<p>The important things to know are:</p>
+</code></pre><p>The important things to know are:</p>
 <ul>
-  <li>side-effects are only used to build the specification fragments, by mutating a variable
-</li>
-  <li>they are also used to short-circuit the execution of an example as soon as there is a failure (by throwing an exception)
-</li>
-  <li>if you build fragments in the body of examples or execute the same specification concurrently, the sky should fall down
-</li>
-  <li>&quot;context&quot; management is to be done with case classes or traits (see <code class="prettyprint">org.specs2.examples.MutableSpec</code>)
-</li>
-</ul><a name="Dependencies+control"></a><h5>Dependencies control</h5>
-<p>One classical impediment to software evolution is circular dependencies between packages in a project. The new <strong><em>specs2</em></strong><br />
+  <li>side-effects are only used to build the specification fragments, by mutating a variable</li><li>they are also used to short-circuit the execution of an example as soon as there is a failure (by throwing an exception)</li><li>if you build fragments in the body of examples or execute the same specification concurrently, the sky should fall down</li><li>&quot;context&quot; management is to be done with case classes or traits (see <code class="prettyprint">org.specs2.examples.MutableSpec</code>)</li>
+</ul><a name="Dependencies+control"></a><h5>Dependencies control</h5><p>One classical impediment to software evolution is circular dependencies between packages in a project. The new <strong><em>specs2</em></strong><br />
 design makes sure that a layered architecture is maintained, from low-level packages to high-level ones:</p>
 <ul>
-  <li>runner
-</li>
-  <li>reporter
-</li>
-  <li>specification
-</li>
-  <li>mock form
-</li>
-  <li>matcher
-</li>
-  <li>execute
-</li>
-  <li>reflect xml html time json
-</li>
-  <li>collection control io text main data
-</li>
-</ul>
-<p>In this scheme, a specification is no longer executable on its own, contrary to the <strong><em>specs</em></strong> design. It always need a<br />
-runner.</p>
-<p>Unfortunately this dependency specification is not yet enforced automatically in <strong><em>specs2</em></strong> test suite, but this kind of<br />
-feature could be implemented in the future.</p><a name="Implicit+definitions+control"></a><h5>Implicit definitions control</h5>
-<p>There is a real tension to be solved here. On one hand, I want to encourage conciseness so that one should not have to<br />
+  <li>runner</li><li>reporter</li><li>specification</li><li>mock form</li><li>matcher</li><li>execute</li><li>reflect xml html time json</li><li>collection control io text main data</li>
+</ul><p>In this scheme, a specification is no longer executable on its own, contrary to the <strong><em>specs</em></strong> design. It always need a<br />
+runner.</p><p>Unfortunately this dependency specification is not yet enforced automatically in <strong><em>specs2</em></strong> test suite, but this kind of<br />
+feature could be implemented in the future.</p><a name="Implicit+definitions+control"></a><h5>Implicit definitions control</h5><p>There is a real tension to be solved here. On one hand, I want to encourage conciseness so that one should not have to<br />
 stack too many traits on top of the Specification declaration to get the desired features. On the other hand, the more<br />
-traits you add, the more implicits you bring in.</p>
-<p>So the compromise is the following:</p>
+traits you add, the more implicits you bring in.</p><p>So the compromise is the following:</p>
 <ul>
-  <li>The <code class="prettyprint">BaseSpecification</code> trait only allows to build Text fragments and Examples, without even any Matchers
-</li>
-  <li>On top of it, the <code class="prettyprint">Specification</code> trait stacks lots of convenient functionalities to<br />
- . use a concise notation for arguments<br />
- . use matchers (with both <code class="prettyprint">must</code> and <code class="prettyprint">should</code>)<br />
- . use predefined fragments and results (like <code class="prettyprint">p</code>, <code class="prettyprint">br</code>, <code class="prettyprint">success</code>, <code class="prettyprint">pending</code>,...)<br />
- . and more
-</li>
-</ul>
-<p>This way, if there is any conflict with the <code class="prettyprint">Specification</code> trait inherited definitions it should be possible to downgrade<br />
+  <li>The <code class="prettyprint">BaseSpecification</code> trait only allows to build Text fragments and Examples, without even any Matchers</li><li>On top of it, the <code class="prettyprint">Specification</code> trait stacks lots of convenient functionalities to<br />
+   . use a concise notation for arguments<br />
+   . use matchers (with both <code class="prettyprint">must</code> and <code class="prettyprint">should</code>)<br />
+   . use predefined fragments and results (like <code class="prettyprint">p</code>, <code class="prettyprint">br</code>, <code class="prettyprint">success</code>, <code class="prettyprint">pending</code>,...)<br />
+   . and more</li>
+</ul><p>This way, if there is any conflict with the <code class="prettyprint">Specification</code> trait inherited definitions it should be possible to downgrade<br />
 to the <code class="prettyprint">BaseSpecification</code> and add the non-conflicting traits.</p>
-<hr />
-<p><br /></p>
-</div></body></html>
+<hr /><p><br /></p></div></body></html>

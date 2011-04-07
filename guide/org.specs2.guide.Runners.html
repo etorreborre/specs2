@@ -31,17 +31,17 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" /> 
-    </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a></div><title>Runners guide</title><a name="Runners+guide"></a><h2>Runners guide</h2><div class="level0"><a name="Presentation"></a><h3>Presentation</h3><p><ul><li><a href="#Presentation">Presentation</a></li><li><a href="#Dependencies">Dependencies</a></li><ul><li><a href="#Arguments">Arguments</a></li></ul><li><a href="#Console+output">Console output</a></li><ul><li><a href="#Colors">Colors</a></li></ul><li><a href="#Html+output">Html output</a></li><li><a href="#Files+Runner">Files Runner</a></li><li><a href="#Simple+build+tool">Simple build tool</a></li><ul><li><a href="#arguments">arguments</a></li><li><a href="#Files+runner">Files runner</a></li><li><a href="#Colors">Colors</a></li></ul><li><a href="#JUnit">JUnit</a></li></ul></p><p>There are 4 ways to execute <strong><em>specs2</em></strong> specifications:</p>
+    </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a></div><title>Runners guide</title><a name="Runners+guide"></a><h2>Runners guide</h2><div class="level0"><a name="Presentation"></a><h3>Presentation</h3><p><ul><li><a href="#Presentation">Presentation</a></li><li><a href="#Dependencies">Dependencies</a></li><li><a href="#Arguments">Arguments</a></li><ul><li><a href="#In+a+Specification">In a Specification</a></li><ul><li><a href="#Diffs">Diffs</a></li><li><a href="#StackTraceFilter">StackTraceFilter</a></li></ul><li><a href="#On+the+command+line">On the command line</a></li><li><a href="#From+system+properties">From system properties</a></li></ul><li><a href="#Console+output">Console output</a></li><ul><li><a href="#Colors">Colors</a></li></ul><li><a href="#Html+output">Html output</a></li><li><a href="#Files+Runner">Files Runner</a></li><li><a href="#Simple+build+tool">Simple build tool</a></li><ul><li><a href="#Test-only+arguments">Test-only arguments</a></li><li><a href="#Files+runner">Files runner</a></li><li><a href="#Colors">Colors</a></li></ul><li><a href="#JUnit">JUnit</a></li></ul></p><p>There are 4 ways to execute <strong><em>specs2</em></strong> specifications:</p>
 <ul>
   <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li><li>on the command line, with an html output, and the <code class="prettyprint">specs2.html</code> runner</li><li>on the command line, with a console or an html output, and the <code class="prettyprint">specs2.files</code> runner</li><li>using <a href="http://code.google.com/p/simple-build-tool">sbt</a></li><li>using <a href="http://www.junit.org">JUnit</a></li>
-</ul><a name="Dependencies"></a><h3>Dependencies</h3><p><strong><em>specs2</em></strong> is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the <a href="http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies">sbt dsl</a>:</p><p><table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info"><code class="prettyprint">&quot;com.googlecode.scalaz&quot; %% &quot;scalaz-core&quot; % &quot;5.1-SNAPSHOT&quot;</code></td><td class="info">mandatory</td></tr><tr><td class="info"> <code class="prettyprint">&quot;org.scala-tools.testing&quot; %% &quot;scalacheck&quot; % &quot;1.8&quot;</code></td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.mockito&quot; % &quot;mockito-all&quot; % &quot;1.8.5&quot;</code></td><td class="info">only if using Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.hamcrest&quot; % &quot;hamcrest-all&quot; % &quot;1.1&quot;</code></td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;junit&quot; % &quot;junit&quot; % &quot;4.7&quot;</code></td><td class="info">only if using JUnit</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-tools.testing&quot; % &quot;test-interface&quot; % &quot;0.5&quot;</code></td><td class="info">provided by sbt when using it</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.pegdown&quot; % &quot;pegdown&quot; % &quot;0.9.0&quot;</code></td><td class="info">only if using the html runner</td></tr></table></p><a name="Arguments"></a><h4>Arguments</h4><p>You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared<br />
+</ul><a name="Dependencies"></a><h3>Dependencies</h3><p><strong><em>specs2</em></strong> is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the <a href="http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies">sbt dsl</a>:</p><p><table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info"><code class="prettyprint">&quot;com.googlecode.scalaz&quot; %% &quot;scalaz-core&quot; % &quot;5.1-SNAPSHOT&quot;</code></td><td class="info">mandatory</td></tr><tr><td class="info"> <code class="prettyprint">&quot;org.scala-tools.testing&quot; %% &quot;scalacheck&quot; % &quot;1.8&quot;</code></td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.mockito&quot; % &quot;mockito-all&quot; % &quot;1.8.5&quot;</code></td><td class="info">only if using Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.hamcrest&quot; % &quot;hamcrest-all&quot; % &quot;1.1&quot;</code></td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;junit&quot; % &quot;junit&quot; % &quot;4.7&quot;</code></td><td class="info">only if using JUnit</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-tools.testing&quot; % &quot;test-interface&quot; % &quot;0.5&quot;</code></td><td class="info">provided by sbt when using it</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.pegdown&quot; % &quot;pegdown&quot; % &quot;0.9.1&quot;</code></td><td class="info">only if using the html runner</td></tr></table></p><a name="Arguments"></a><h3>Arguments</h3><p>You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared<br />
 inside the specification:</p>
 <pre><code class="prettyprint">  class MySpec extends Specification { def is = args(noindent=true) ^
     &quot;Clever spec title&quot;                                             ^
     &quot;this will not be indented&quot;                                     ^
     &quot;brilliant expectation&quot;                                         ! success
   }
-</code></pre><p>The available arguments are the following:</p>
+</code></pre><a name="In+a+Specification"></a><h4>In a Specification</h4><p>From inside a specification, the available arguments are the following:</p>
 <table>
   
   <thead>
@@ -69,9 +69,27 @@ inside the specification:</p>
     </tr>
     <tr>
       
+      <td><code class="prettyprint">include</code> </td>
+      <td>&quot;&quot; </td>
+      <td>execute only the fragments tagged with any of the comma-separated list of tags: &quot;t1,t2,...&quot;</td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">exclude</code> </td>
+      <td>&quot;&quot; </td>
+      <td>do not execute the fragments tagged with any of the comma-separated list of tags: &quot;t1,t2,...&quot;</td>
+    </tr>
+    <tr>
+      
       <td><code class="prettyprint">plan</code> </td>
-      <td>true </td>
+      <td>false </td>
       <td>only report the text of the specification without executing anything</td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">skipAll</code> </td>
+      <td>false </td>
+      <td>skip all the examples</td>
     </tr>
     <tr>
       
@@ -123,15 +141,15 @@ inside the specification:</p>
     </tr>
     <tr>
       
-      <td><code class="prettyprint">html</code> </td>
-      <td>false </td>
-      <td>only to be passed on the command line to get console + html reporting at once</td>
-    </tr>
-    <tr>
-      
       <td><code class="prettyprint">fromSource</code> </td>
       <td>true </td>
       <td>true takes an AutoExample description from the file, false from the expectation ok message</td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">traceFilter</code> </td>
+      <td>DefaultStackTraceFilter </td>
+      <td>use a StackTraceFilter instance for filtering the reported stacktrace elements</td>
     </tr>
   </tbody>
 </table><p>All those arguments are usually set in a specification with <code class="prettyprint">args(name=value)</code> but there are some available shortcuts:</p>
@@ -156,6 +174,12 @@ inside the specification:</p>
     </tr>
     <tr>
       
+      <td><code class="prettyprint">skipAll</code> </td>
+      <td><code class="prettyprint">args(skipAll=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
       <td><code class="prettyprint">noindent</code> </td>
       <td><code class="prettyprint">args(noindent=true)</code> </td>
       <td> </td>
@@ -164,6 +188,18 @@ inside the specification:</p>
       
       <td><code class="prettyprint">xonly</code> </td>
       <td><code class="prettyprint">args(xonly=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">include(tags: String)</code> </td>
+      <td><code class="prettyprint">args(include=tags)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">exclude(tags: String)</code> </td>
+      <td><code class="prettyprint">args(exclude=tags)</code> </td>
       <td> </td>
     </tr>
     <tr>
@@ -198,15 +234,170 @@ inside the specification:</p>
     </tr>
     <tr>
       
-      <td><code class="prettyprint">diffs(show, separators, triggerSize, shortenSize, full)</code> </td>
-      <td><code class="prettyprint">args(diffs=Diffs(show, separators, triggerSize, shortenSize, full)</code> </td>
+      <td><code class="prettyprint">fullStackTrace</code> </td>
+      <td><code class="prettyprint">args(traceFilter=NoStackTraceFilter)</code> </td>
+      <td>the stacktraces are not filtered </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">diffs(show, separators, triggerSize, shortenSize, diffRatio, full)</code> </td>
+      <td><code class="prettyprint">args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)</code> </td>
       <td>to display the differences when doing equality comparison </td>
     </tr>
   </tbody>
-</table><p>For the diffs arguments the values you can specify are:</p>
+</table><a name="Diffs"></a><h5>Diffs</h5><p>For the diffs arguments the values you can specify are:</p>
 <ul>
-  <li><code class="prettyprint">show</code> will not show anything (default is true)</li><li><code class="prettyprint">separators</code> allows to change the separators used to show the differences (default is &quot;[]&quot;)</li><li><code class="prettyprint">triggerSize</code> controls the size above which the differences must be shown (default is 20)</li><li><code class="prettyprint">shortenSize</code> controls the number of characters to display around each difference (default is 5)</li><li><code class="prettyprint">full</code> displays the full original expected and actual strings</li>
-</ul><a name="Console+output"></a><h3>Console output</h3><p>Executing a specification <code class="prettyprint">com.company.SpecName</code> in the console is very easy:</p><p><code class="prettyprint">scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]</code></p><a name="Colors"></a><h5>Colors</h5><p>By default, the reporting will output colors. If you're running on windows you might either:</p>
+  <li><code class="prettyprint">show</code> will not show anything (default is true)</li><li><code class="prettyprint">separators</code> allows to change the separators used to show the differences (default is &quot;[]&quot;)</li><li><code class="prettyprint">triggerSize</code> controls the size above which the differences must be shown (default is 20)</li><li><code class="prettyprint">shortenSize</code> controls the number of characters to display around each difference (default is 5)</li><li><code class="prettyprint">diffRatio</code> percentage of differences above which the differences must not be shown (default is 30)</li><li><code class="prettyprint">full</code> displays the full original expected and actual strings</li>
+</ul><p>You can also specify your own enhanced algorithm for displaying difference by providing an instance of the <code class="prettyprint">org.specs2.main.Diffs</code><br />
+trait:</p>
+<pre><code class="prettyprint">    trait Diffs {
+      /** @return true if the differences must be shown */
+      def show: Boolean
+      /** @return true if the differences must be shown for 2 different strings */
+      def show(expected: String, actual: String): Boolean
+      /** @return the diffs */
+      def showDiffs(expected: String, actual: String): (String, String)
+      /** @return true if the full strings must also be shown */
+      def showFull: Boolean
+      /** @return the separators to use */
+      def separators: String
+    }
+</code></pre><a name="StackTraceFilter"></a><h5>StackTraceFilter</h5><p>The <code class="prettyprint">traceFilter</code> argument takes an instance of the <code class="prettyprint">org.specs2.control.StackTraceFilter</code> trait to define how stacktraces<br />
+should be filtered in a report. By default the <code class="prettyprint">DefaultStackTraceFilter</code> filter will exclude lines matching the following packages:</p>
+<ul>
+  <li><code class="prettyprint">org.specs2</code></li><li><code class="prettyprint">scalaz\\.</code></li><li><code class="prettyprint">scala\\.</code>, <code class="prettyprint">java\\.</code></li><li><code class="prettyprint">sbt\\.</code>, <code class="prettyprint">com.intellij</code>, <code class="prettyprint">org.eclipse.jdt</code>, <code class="prettyprint">org.junit</code></li>
+</ul><p>If this is not what you want, you can either:</p>
+<ul>
+  <li>use <code class="prettyprint">includeTrace(patterns: String*)</code> to create a new <code class="prettyprint">StackTraceFilter</code> which will include only the traces matching<br />
+   those patterns</li><li>use <code class="prettyprint">excludeTrace(patterns: String*)</code> to create a new <code class="prettyprint">StackTraceFilter</code> which will exclude only the traces matching<br />
+   those patterns</li><li>use <code class="prettyprint">includeAlsoTrace(patterns: String*)</code> to add new include patterns to the <code class="prettyprint">DefaultStackTraceFilter</code></li><li>use <code class="prettyprint">excludeAlsoTrace(patterns: String*)</code> to add new exclude patterns to the <code class="prettyprint">DefaultStackTraceFilter</code></li><li>use the <code class="prettyprint">org.specs2.control.IncludeExcludeStackTraceFilter</code> class to define both include and exclude patterns</li><li>define your own logic by extending the <code class="prettyprint">org.specs2.control.StackTraceFilter</code></li>
+</ul><a name="On+the+command+line"></a><h4>On the command line</h4><p>On the command line you can pass the following arguments:</p>
+<table>
+  
+  <thead>
+    
+    <tr>
+      
+      <th>Name </th>
+      <th>Value format </th>
+      <th>Comments </th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      
+      <td><code class="prettyprint">ex</code> </td>
+      <td>regexp </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">xonly</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">include</code> </td>
+      <td>csv </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">exclude</code> </td>
+      <td>csv </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">plan</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">skipall</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">failtrace</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">color</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">noindent</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">showtimes</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">sequential</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">threadsnb</code> </td>
+      <td>int </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">markdown</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">debugmarkdown</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">html</code> </td>
+      <td>boolean </td>
+      <td>to get console + html reporting at once </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">fromsource</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">fullstacktrace</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      
+      <td><code class="prettyprint">tracefilter</code> </td>
+      <td>regexp-csv/regexp-csv </td>
+      <td>comma-separated include patterns separated by <code class="prettyprint">/</code> with exclude patterns </td>
+    </tr>
+  </tbody>
+</table><p><em>[<code class="prettyprint">regexp</code> is a Java regular expression, csv a list of comma-separated values]</em></p><a name="From+system+properties"></a><h4>From system properties</h4><p>You can pass any argument to <strong><em>specs2</em></strong> from system properties:</p>
+<ul>
+  <li>for a boolean argument, you need to pass <code class="prettyprint">-Dspecs2.name</code> or <code class="prettyprint">-Dname</code></li><li>for a string argument, you need to pass <code class="prettyprint">-Dspecs2.name=value</code> or <code class="prettyprint">-Dname=value</code></li>
+</ul><p>The recommended format is <code class="prettyprint">-Dname=value</code> but <code class="prettyprint">-Dspecs2.name=value</code> is also available to avoid conflicts with other libraries.</p><a name="Console+output"></a><h3>Console output</h3><p>Executing a specification <code class="prettyprint">com.company.SpecName</code> in the console is very easy:</p><p><code class="prettyprint">scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]</code></p><a name="Colors"></a><h5>Colors</h5><p>By default, the reporting will output colors. If you're running on windows you might either:</p>
 <ul>
   <li>use the <a href="http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows">following tip</a> to install colors in the DOS console</li><li>or pass <code class="prettyprint">nocolor</code> as a command line argument</li>
 </ul><a name="Html+output"></a><h3>Html output</h3><p>If you want html pages to be produced for your specification you'll need to execute:</p><p><code class="prettyprint">scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]</code></p><p>By default the files will be created in the <code class="prettyprint">target/specs-report</code> directory but you can change that by setting the<br />
@@ -220,7 +411,7 @@ to your environment if necessary.</p><a name="Simple+build+tool"></a><h3>Simple 
   override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
 </code></pre><p>Then, depending on the naming of your specification, you have to specify which classes you want to include for reporting:</p>
 <pre><code class="prettyprint">  override def includeTest(s: String) = { s.endsWith(&quot;Spec&quot;) || s.contains(&quot;UserGuide&quot;) }
-</code></pre><a name="arguments"></a><h5>arguments</h5><p>When you execute one test only, you can pass the arguments on the command line:</p>
+</code></pre><a name="Test-only+arguments"></a><h5>Test-only arguments</h5><p>When you execute one test only, you can pass the arguments on the command line:</p>
 <pre><code class="prettyprint">  &gt; test-only org.specs2.UserGuide -- xonly
 </code></pre><p>The <code class="prettyprint">html</code> argument is also available with sbt to allow the creation of the html report from the command line.</p>
 <pre><code class="prettyprint">  &gt; test-only org.specs2.UserGuide -- html

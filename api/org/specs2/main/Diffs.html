@@ -17,47 +17,27 @@
       <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.main" class="extype" href="package.html">main</a></p>
 
       <div id="definition">
-        <img src="../../../lib/class_big.png" />
+        <img src="../../../lib/trait_big.png" />
         <h1>Diffs</h1>
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">case class</span>
+      <span class="kind">trait</span>
       <span class="symbol">
         <span class="name">Diffs</span>
         
-        <span class="params">(<span name="show">
-                  show
-                  : <span name="scala.Boolean" class="extype">Boolean</span>
-                  
-                </span>, <span name="separators">
-                  separators
-                  : String
-                  
-                </span>, <span name="triggerSize">
-                  triggerSize
-                  : <span name="scala.Int" class="extype">Int</span>
-                  
-                </span>, <span name="shortenSize">
-                  shortenSize
-                  : <span name="scala.Int" class="extype">Int</span>
-                  
-                </span>, <span name="full">
-                  full
-                  : <span name="scala.Boolean" class="extype">Boolean</span>
-                  
-                </span>)</span>
-        <span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-          <div class="shortcomment cmt"><p>The Diffs class holds all the required parameters to show differences between 2 strings
+          <div class="shortcomment cmt"><p>this trait is used to define and compute the differences between strings (used by the reporters)
 </p></div>
-          <div class="fullcomment" id="comment"><div class="comment cmt"><p>The Diffs class holds all the required parameters to show differences between 2 strings
+          <div class="fullcomment" id="comment"><div class="comment cmt"><p>this trait is used to define and compute the differences between strings (used by the reporters)
 </p></div><div class="block">
-            go to: <a href="Diffs$.html">companion</a>
+            linear super types: AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div><div class="block">
-            linear super types: <span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span>
+            known subclasses: <a name="org.specs2.main.SmartDiffs" class="extype" href="SmartDiffs.html">SmartDiffs</a>
           </div>
             
             
@@ -77,7 +57,7 @@
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li name="org.specs2.main.Diffs" class="in">Diffs</li><li name="scala.Serializable" class="in">Serializable</li><li name="java.io.Serializable" class="in">Serializable</li><li name="scala.Product" class="in">Product</li><li name="scala.Equals" class="in">Equals</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
+                <ol id="linearization"><li name="org.specs2.main.Diffs" class="in">Diffs</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -89,42 +69,7 @@
             </div>
         </div>
 
-        <div class="members" id="constructors">
-              <h3>Instance constructors</h3>
-              <ol><li visbl="pub" name="org.specs2.main.Diffs#this" data-isabs="false">
-      <a id="this:Diffs"></a>
-      <h4 class="signature">
-      <span class="kind">new</span>
-      <span class="symbol">
-        <span class="name">Diffs</span>
         
-        <span class="params">(<span name="show">
-                  show
-                  : <span name="scala.Boolean" class="extype">Boolean</span>
-                  
-                </span>, <span name="separators">
-                  separators
-                  : String
-                  
-                </span>, <span name="triggerSize">
-                  triggerSize
-                  : <span name="scala.Int" class="extype">Int</span>
-                  
-                </span>, <span name="shortenSize">
-                  shortenSize
-                  : <span name="scala.Int" class="extype">Int</span>
-                  
-                </span>, <span name="full">
-                  full
-                  : <span name="scala.Boolean" class="extype">Boolean</span>
-                  
-                </span>)</span>
-        
-      </span>
-      </h4>
-      
-    </li></ol>
-            </div>
 
         
 
@@ -325,27 +270,6 @@ part of compilation it is not possible to check whether the contents of the list
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.main.Diffs#canEqual" data-isabs="false">
-      <a id="canEqual(A,n,y):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">canEqual</span>
-        
-        <span class="params">(<span name="arg0">
-                  arg0
-                  : <span name="scala.Any" class="extype">Any</span>
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: <a name="org.specs2.main.Diffs" class="extype" href="">Diffs</a> → Equals
-        </div></div>
-          
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone:AnyRef"></a>
       <h4 class="signature">
@@ -418,7 +342,7 @@ should be equal to each other (<code>o1 == o2</code>) and they should hash to th
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.main.Diffs#equals" data-isabs="false">
+    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
       <a id="equals(A,n,y):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -446,7 +370,7 @@ Additionally, when overriding this method it is often necessary to override <cod
 that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>) hash to the same scala.Int
 (<code>o1.hashCode.equals(o2.hashCode)</code>).
 </p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.main.Diffs" class="extype" href="">Diffs</a> → Equals → AnyRef → Any
+          definition classes: AnyRef → Any
         </div>
             
             
@@ -485,18 +409,6 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.main.Diffs#full" data-isabs="false">
-      <a id="full:Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol">
-        <span class="name">full</span>
-        
-        
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass:java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -522,7 +434,7 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.main.Diffs#hashCode" data-isabs="false">
+    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode:Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -541,7 +453,7 @@ However, it is required that if two objects are equal (<code>o1.equals(o2)</code
 identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>).  Therefore, when overriding this method, be sure
 to verify that the behavior is consistent with the <code>equals</code> method.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the hash code value for the object.</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.main.Diffs" class="extype" href="">Diffs</a> → AnyRef → Any
+          definition classes: AnyRef → Any
         </div>
             
             
@@ -654,105 +566,10 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.main.Diffs#productArity" data-isabs="false">
-      <a id="productArity:Int"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">productArity</span>
-        
-        
-        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: <a name="org.specs2.main.Diffs" class="extype" href="">Diffs</a> → Product
-        </div></div>
-          
-    </li><li visbl="pub" name="org.specs2.main.Diffs#productElement" data-isabs="false">
-      <a id="productElement(I,n,t):Any"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">productElement</span>
-        
-        <span class="params">(<span name="arg0">
-                  arg0
-                  : <span name="scala.Int" class="extype">Int</span>
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.Any" class="extype">Any</span></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: <a name="org.specs2.main.Diffs" class="extype" href="">Diffs</a> → Product
-        </div></div>
-          
-    </li><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
-      <a id="productElements:Iterator[Any]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name deprecated">productElements</span>
-        
-        
-        <span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: Product
-        </div><div class="block">
-          annotations: 
-                <span class="name">@deprecated</span><span class="args">()</span>
-              
-        </div><div class="block"><ol>deprecated:
-          <li class="cmt"><p>use productIterator instead</p></li>
-        </ol></div></div>
-          
-    </li><li visbl="pub" name="scala.Product#productIterator" data-isabs="false">
-      <a id="productIterator:Iterator[Any]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">productIterator</span>
-        
-        
-        <span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: Product
-        </div></div>
-          
-    </li><li visbl="pub" name="org.specs2.main.Diffs#productPrefix" data-isabs="false">
-      <a id="productPrefix:String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">productPrefix</span>
-        
-        
-        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: <a name="org.specs2.main.Diffs" class="extype" href="">Diffs</a> → Product
-        </div></div>
-          
-    </li><li visbl="pub" name="org.specs2.main.Diffs#separators" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.main.Diffs#separators" data-isabs="true">
       <a id="separators:String"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol">
         <span class="name">separators</span>
         
@@ -761,19 +578,17 @@ possible to check whether the contents of the list are of the requested typed.
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.main.Diffs#shortenSize" data-isabs="false">
-      <a id="shortenSize:Int"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol">
-        <span class="name">shortenSize</span>
-        
-        
-        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.specs2.main.Diffs#show" data-isabs="false">
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the separators to use</p></dd></dl><div class="block">
+          attributes: abstract 
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.main.Diffs#show" data-isabs="true">
       <a id="show(S,t,r,i,n,g)(S,t,r,i,n,g):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -793,10 +608,20 @@ possible to check whether the contents of the list are of the requested typed.
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.main.Diffs#show" data-isabs="false">
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the differences must be shown for 2 different strings</p></dd></dl><div class="block">
+          attributes: abstract 
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.main.Diffs#show" data-isabs="true">
       <a id="show:Boolean"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol">
         <span class="name">show</span>
         
@@ -805,6 +630,68 @@ possible to check whether the contents of the list are of the requested typed.
       </span>
       </h4>
       
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the differences must be shown</p></dd></dl><div class="block">
+          attributes: abstract 
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.main.Diffs#showDiffs" data-isabs="true">
+      <a id="showDiffs(S,t,r,i,n,g)(S,t,r,i,n,g):(String, String)"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">showDiffs</span>
+        
+        <span class="params">(<span name="expected">
+                  expected
+                  : String
+                  
+                </span>, <span name="actual">
+                  actual
+                  : String
+                  
+                </span>)</span>
+        <span class="result">: (String, String)</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the diffs</p></dd></dl><div class="block">
+          attributes: abstract 
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.main.Diffs#showFull" data-isabs="true">
+      <a id="showFull:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">showFull</span>
+        
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the full strings must also be shown</p></dd></dl><div class="block">
+          attributes: abstract 
+        </div>
+            
+            
+            
+            
+          </div>
+          
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒, ,T,0):T0"></a>
       <h4 class="signature">
@@ -828,7 +715,7 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.specs2.main.Diffs#toString" data-isabs="false">
+    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -836,14 +723,14 @@ possible to check whether the contents of the list are of the requested typed.
         <span class="name">toString</span>
         
         <span class="params">()</span>
-        <span class="result">: String</span>
+        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">Returns a string representation of the object.</p>
             <div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of the object.</p><p>The default representation is platform dependent.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a string representation of the object.</p></dd></dl><div class="block">
-          definition classes: <a name="org.specs2.main.Diffs" class="extype" href="">Diffs</a> → AnyRef → Any
+          definition classes: AnyRef → Any
         </div>
             
             
@@ -851,18 +738,6 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.main.Diffs#triggerSize" data-isabs="false">
-      <a id="triggerSize:Int"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol">
-        <span class="name">triggerSize</span>
-        
-        
-        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait:Unit"></a>
       <h4 class="signature">
@@ -947,15 +822,7 @@ possible to check whether the contents of the list are of the requested typed.
     </li></ol>
             </div>
 
-        <div name="scala.Serializable" class="parent">
-              <h3>Inherited from <span name="scala.Serializable" class="extype">Serializable</span></h3>
-            </div><div name="java.io.Serializable" class="parent">
-              <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
-            </div><div name="scala.Product" class="parent">
-              <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
-            </div><div name="scala.Equals" class="parent">
-              <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
-            </div><div name="scala.AnyRef" class="parent">
+        <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

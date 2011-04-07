@@ -68,12 +68,38 @@
       </a></h4>
       <p class="comment cmt">This trait provides shortcuts to create Arguments instances
 </p>
-    </li><li visbl="pub" name="org.specs2.main.Diffs" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts" data-isabs="true">
+      <a id="ArgumentsShortcuts:ArgumentsShortcuts"></a>
+      <h4 class="signature"><a href="ArgumentsShortcuts.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ArgumentsShortcuts</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides shortcuts for frequently used arguments
+</p>
+    </li><li visbl="pub" name="org.specs2.main.Diffs" data-isabs="true">
       <a id="Diffs:Diffs"></a>
       <h4 class="signature"><a href="Diffs.html">
-      <span class="kind">case class</span>
+      <span class="kind">trait</span>
       <span class="symbol">
         <span class="name">Diffs</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">this trait is used to define and compute the differences between strings (used by the reporters)
+</p>
+    </li><li visbl="pub" name="org.specs2.main.SmartDiffs" data-isabs="false">
+      <a id="SmartDiffs:SmartDiffs"></a>
+      <h4 class="signature"><a href="SmartDiffs.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">SmartDiffs</span>
         
         <span class="params">(<span name="show">
                   show
@@ -91,15 +117,20 @@
                   shortenSize
                   : Int
                   
-                </span>, <span name="full">
-                  full
+                </span>, <span name="diffRatio">
+                  diffRatio
+                  : Int
+                  
+                </span>, <span name="showFull">
+                  showFull
                   : Boolean
                   
                 </span>)</span>
-        <span class="result"> extends Product with Serializable</span>
+        <span class="result"> extends Diffs with Product with Serializable</span>
       </span>
       </a></h4>
-      <p class="comment cmt">The Diffs class holds all the required parameters to show differences between 2 strings
+      <p class="comment cmt">The SmartDiffs class holds all the required parameters to show differences between 2 strings using the edit distance
+algorithm
 </p>
     </li></ol>
             </div>

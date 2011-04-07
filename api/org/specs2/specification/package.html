@@ -98,6 +98,19 @@ where an action must be executing after the main executable action
       </a></h4>
       <p class="comment cmt">The Around trait can be inherited by classes which will
 execute some code inside the around method provided by the context.</p>
+    </li><li visbl="pub" name="org.specs2.specification.AroundOutside" data-isabs="true">
+      <a id="AroundOutside:AroundOutside[T]"></a>
+      <h4 class="signature"><a href="AroundOutside.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AroundOutside</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The AroundOutside trait can be inherited by classes which will execute some code inside a given context, with a
+function using that context and actions before and after if necessary.</p>
     </li><li visbl="pub" name="org.specs2.specification.BaseSpecification" data-isabs="true">
       <a id="BaseSpecification:BaseSpecification"></a>
       <h4 class="signature"><a href="BaseSpecification.html">
@@ -453,6 +466,33 @@ Allow a Form to be used as an example body and return a Result automatically
       </a></h4>
       <p class="comment cmt">The HtmlLink class represents a link in a specification with an identifier (either a spec name, or a string) and
 link elements.</p>
+    </li><li visbl="pub" name="org.specs2.specification.Outside" data-isabs="true">
+      <a id="Outside:Outside[T]"></a>
+      <h4 class="signature"><a href="Outside.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Outside</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The Outside trait can be inherited by classes which will
+execute some code inside the outside method provided by the context.</p>
+    </li><li visbl="pub" name="org.specs2.specification.Scope" data-isabs="true">
+      <a id="Scope:Scope"></a>
+      <h4 class="signature"><a href="Scope.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Scope</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Marker trait that is used to create a new scope with variables and implicitly converted to a Success in a mutable
+Specification
+</p>
     </li><li visbl="pub" name="org.specs2.specification.See" data-isabs="false">
       <a id="See:See"></a>
       <h4 class="signature"><a href="See.html">
@@ -585,6 +625,19 @@ link elements.</p>
       </a></h4>
       <p class="comment cmt">An Step creates a fragment that will either return an
 Error Result if there is an exception or a Success.</p>
+    </li><li visbl="pub" name="org.specs2.specification.Tags" data-isabs="true">
+      <a id="Tags:Tags"></a>
+      <h4 class="signature"><a href="Tags.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Tags</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">The tags trait allows the creation of Tags fragments in a Specification
+</p>
     </li><li visbl="pub" name="org.specs2.specification.Text" data-isabs="false">
       <a id="Text:Text"></a>
       <h4 class="signature"><a href="Text.html">
@@ -712,6 +765,18 @@ Error Result if there is an exception or a Success.</p>
       </a></h4>
       <p class="comment cmt">Utility methods for fragments
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder" data-isabs="false">
+      <a id="FragmentsBuilder:FragmentsBuilder"></a>
+      <h4 class="signature"><a href="FragmentsBuilder$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">FragmentsBuilder</span>
+        
+        
+        <span class="result"> extends FragmentsBuilder</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.HtmlLink" data-isabs="false">
       <a id="HtmlLink:HtmlLink"></a>
       <h4 class="signature"><a href="HtmlLink$.html">
@@ -760,6 +825,31 @@ Error Result if there is an exception or a Success.</p>
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.specs2.specification.Tags" data-isabs="false">
+      <a id="Tags:Tags"></a>
+      <h4 class="signature"><a href="Tags$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">Tags</span>
+        
+        
+        <span class="result"> extends Tags</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.TagsFragments" data-isabs="false">
+      <a id="TagsFragments:TagsFragments"></a>
+      <h4 class="signature"><a href="TagsFragments$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">TagsFragments</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Those fragments are used to tag other fragments in a specification\
+</p>
     </li></ol>
             </div>
 

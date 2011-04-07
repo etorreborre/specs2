@@ -55,7 +55,28 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.control.LazyParameter" data-isabs="false">
+              <ol><li visbl="pub" name="org.specs2.control.IncludeExcludeStackTraceFilter" data-isabs="false">
+      <a id="IncludeExcludeStackTraceFilter:IncludeExcludeStackTraceFilter"></a>
+      <h4 class="signature"><a href="IncludeExcludeStackTraceFilter.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">IncludeExcludeStackTraceFilter</span>
+        
+        <span class="params">(<span name="include">
+                  include
+                  : Seq[String]
+                  
+                </span>, <span name="exclude">
+                  exclude
+                  : Seq[String]
+                  
+                </span>)</span>
+        <span class="result"> extends StackTraceFilter with Product with Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Implementation of the StackTraceFilter trait with a list of include/exclude patterns
+</p>
+    </li><li visbl="pub" name="org.specs2.control.LazyParameter" data-isabs="false">
       <a id="LazyParameter:LazyParameter[T]"></a>
       <h4 class="signature"><a href="LazyParameter.html">
       <span class="kind">class</span>
@@ -104,12 +125,51 @@ evaluated lazily:&lt;code&gt;</p>
       </span>
       </a></h4>
       <p class="comment cmt">This class represents values which are evaluated lazily and which may even be missing.</p>
+    </li><li visbl="pub" name="org.specs2.control.StackTraceFilter" data-isabs="true">
+      <a id="StackTraceFilter:StackTraceFilter"></a>
+      <h4 class="signature"><a href="StackTraceFilter.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">StackTraceFilter</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait Filters an Exception stacktrace
+</p>
     </li></ol>
             </div>
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="org.specs2.control.LazyParameters" data-isabs="false">
+              <ol><li visbl="pub" name="org.specs2.control.DefaultStackTraceFilter" data-isabs="false">
+      <a id="DefaultStackTraceFilter:DefaultStackTraceFilter"></a>
+      <h4 class="signature"><a href="DefaultStackTraceFilter$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">DefaultStackTraceFilter</span>
+        
+        
+        <span class="result"> extends IncludeExcludeStackTraceFilter</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">default filter for specs2 runs
+</p>
+    </li><li visbl="pub" name="org.specs2.control.IncludeExcludeStackTraceFilter" data-isabs="false">
+      <a id="IncludeExcludeStackTraceFilter:IncludeExcludeStackTraceFilter"></a>
+      <h4 class="signature"><a href="IncludeExcludeStackTraceFilter$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">IncludeExcludeStackTraceFilter</span>
+        
+        
+        <span class="result"> extends Serializable</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Factory object to build a stack trace filter
+</p>
+    </li><li visbl="pub" name="org.specs2.control.LazyParameters" data-isabs="false">
       <a id="LazyParameters:LazyParameters"></a>
       <h4 class="signature"><a href="LazyParameters$.html">
       <span class="kind">object</span>
@@ -121,6 +181,19 @@ evaluated lazily:&lt;code&gt;</p>
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.specs2.control.NoStackTraceFilter" data-isabs="false">
+      <a id="NoStackTraceFilter:NoStackTraceFilter"></a>
+      <h4 class="signature"><a href="NoStackTraceFilter$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">NoStackTraceFilter</span>
+        
+        
+        <span class="result"> extends StackTraceFilter</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This filter doesn't do anything
+</p>
     </li><li visbl="pub" name="org.specs2.control.Property" data-isabs="false">
       <a id="Property:Property"></a>
       <h4 class="signature"><a href="Property$.html">
