@@ -46,6 +46,14 @@ trait Contexts {
     }.apply(t)
   }
 
+  /**
+   * This method executes some code and returns either:
+   *  * an error if there was an exception
+   *  * a failure if a failure was thrown
+   *  * a skipped if a skipped was thrown
+   *  * a non-successful result if that's what the code is returning
+   *  * the application of a function to that code otherwise to output a result
+   */
   def execute[T, R <% Result](code: =>T)(f: T => R): Result = {
     val executed = trye(code)(identity)
     executed match {

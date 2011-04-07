@@ -26,7 +26,7 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
      * After
      * Around
      * Outside
-     * BeforeAfter or BeforeAfterAround for combined functionality
+     * BeforeAfter or BeforeAfterAround or AroundOutside for combined functionality
                                                                                                                         """                                                                                 ^
   "The Before trait can be used to execute methods before Fragments"                                                    ^
     "the before method is executed before a first example"                                                              ! before().e1^
@@ -69,7 +69,10 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
                                                                                                                         p^
   "The Outside trait can be used to"                                                                                    ^
     "execute the example inside a user provided function"                                                               ! c().e9_1^
-    "get a proper error if the the context preparation fails"                                                           ! c().e9_2^
+    "get a proper error if the context preparation fails"                                                               ! c().e9_2^
+                                                                                                                        p^
+  "The AroundOutside trait can be used to"                                                                              ^
+    "execute the example inside a user provided function, with some code around"                                        ! c().e9_3^
                                                                                                                         p^
   "The BeforeAfter trait can be used to"                                                                                ^
     "execute a method before and after each example"                                                                    ! c().e10^
@@ -122,6 +125,7 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     def e9 = executing(ex1Around).prints("around", "e1")
     def e9_1 = executing(ex1Outside).prints("outside", "e1")
     def e9_2 = executeBodies(ex1OutsideFail).map(_.message) must_== List("error")
+    def e9_3 = executing(ex1AroundOutside).prints("around", "outside", "e1")
     def e10 = executing(ex1BeforeAfter).prints("before", "e1", "after")
     def e11 = executing(ex1BeforeAfterAround).prints("before", "around", "e1", "after")
     def e12 = executing(firstThenEx1).prints("first", "e1")
@@ -195,6 +199,7 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1Around = "ex1" ! around(ok1) 
   def ex1Outside = "ex1" ! outside((s:String) => ok1)
   def ex1OutsideFail = "ex1" ! outsideWithError((s:String) => ok1)
+  def ex1AroundOutside = "ex1" ! aroundOutside((s:String) => ok1)
   def ex1BeforeAfter = "ex1" ! beforeAfter(ok1)
   def ex1BeforeAfterAround = "ex1" ! beforeAfterAround(ok1)
   
@@ -244,6 +249,10 @@ trait ContextsForFragments extends MockOutput {
   }
   object outsideWithError extends Outside[String] with MockOutput {
 	  def outside = { Predef.error("error"); "ok" }
+  }
+  object aroundOutside extends AroundOutside[String] {
+	  def outside = { println("outside"); "string" }
+    def around[T <% Result](a: =>T) = { println("around"); a }
   }
   object beforeAfter extends BeforeAfter {
 	  def before = println("before")

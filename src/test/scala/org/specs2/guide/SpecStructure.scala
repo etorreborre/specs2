@@ -162,7 +162,7 @@ There is also an additional method `failure(message)` to throw a `FailureExcepti
 
 [Note that the `ThrownMatchers` traits are mixed in the `mutable.Specification` trait used for _unit_ specifications].
 
-##### Set an example Pending until fixed
+##### Set an example as "Pending until fixed"
 
 Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.
 Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed`
@@ -576,11 +576,11 @@ opening a database connection or deleting a file. ***specs2*** offers a support 
 Those traits work by providing an `apply` method which can be applied to the body of an example. That `apply` method will
 execute your context code before, around, or after the example code:
 
-    // thanks to Scala special treatment of the apply method this call is equivalent to
-    // context.apply(/* example body */)
-    context {
-      // example body
-    }
+      // thanks to Scala special treatment of the apply method this call is equivalent to
+      // context.apply(example body)
+      context {
+        // example body
+      }
 
 Now let's see in detail how to define contexts.
 
@@ -589,30 +589,30 @@ Now let's see in detail how to define contexts.
 Let's say that you want to create a specific file before executing each example of your specification. You define an object
 inheriting from the `Before` trait:
 
-    object withFile extends Before {
-      def before = createFile("test")
-    }
+      object withFile extends Before {
+        def before = createFile("test")
+      }
 
 The `Before` trait requires you to define a `before` method defining an action to do before every call to the `apply`
 method. Then, there are many ways to use this context class. Here's one of them:
 
-    "this is a first example where I need a file"          ! withFile(e1)
-    "and another one"                                      ! withFile(e2)
+      "this is a first example where I need a file"          ! withFile(e1)
+      "and another one"                                      ! withFile(e2)
 
-    def e1 = readFile("test") must_== "success"
-    def e2 = readFile("missing") must_== "failed"
+      def e1 = readFile("test") must_== "success"
+      def e2 = readFile("missing") must_== "failed"
 
 Or if you need "local variables" as well in your examples:
 
-    "this is a first example where I need a file"          ! withFile(c().e1)
-    "and another one"                                      ! withFile(c().e2)
+      "this is a first example where I need a file"          ! withFile(c().e1)
+      "and another one"                                      ! withFile(c().e2)
 
-    case class c() {
-      val (okFile, koFile) = ("test", "missing")
+      case class c() {
+        val (okFile, koFile) = ("test", "missing")
 
-      def e1 = readFile(okFile) must_== "success"
-      def e2 = readFile(koFile) must_== "failed"
-    }
+        def e1 = readFile(okFile) must_== "success"
+        def e2 = readFile(koFile) must_== "failed"
+      }
 
 `Before` actions can also fail for several reasons. When that happens examples are not executed and the Example result becomes
 is the result of the `before` action:
@@ -630,40 +630,63 @@ is the result of the `before` action:
 
 Actions to execute after examples are not declared very differently from `Before` ones. Just extend the `After` trait:
 
-    object withCleanup extends After {
-      def after = deleteFile("test")
-    }
+      object withCleanup extends After {
+        def after = deleteFile("test")
+      }
 
-    "this is a first example where a test file is deleted after use" ! withCleanup(e1)
-    "and another one"                                                ! withCleanup(e2)
+      "this is a first example where a test file is deleted after use" ! withCleanup(e1)
+      "and another one"                                                ! withCleanup(e2)
 
 ##### Defining `Around` actions
 
 Another use case for "contextual" actions are actions which must executed in a given context like an Http session. In order
 to define this type of action you must extend the `Around` trait and specify an `around` function:
 
-    object http extends Around {
-      def around[T <% Result](t: =>T) = openHttpSession("test") {
-        t  // execute t inside a http session
+      object http extends Around {
+        def around[T <% Result](t: =>T) = openHttpSession("test") {
+          t  // execute t inside a http session
+        }
       }
-    }
 
-    "this is a first example where the code executes inside a http session" ! http(e1)
-    "and another one"                                                       ! http(e2)
+      "this is a first example where the code executes inside a http session" ! http(e1)
+      "and another one"                                                       ! http(e2)
 
 ##### Defining `Outside` actions
 
 `Outside` is almost like `Around` except that you pass to the `apply` method a function to execute instead of a simple value.
 Let's see that with an example:
 
-    object http extends Outside[HttpReq] {
-      // prepare a valid HttpRequest
-      def outside: HttpReq = createRequest
-    }
+      object http extends Outside[HttpReq] {
+        // prepare a valid HttpRequest
+        def outside: HttpReq = createRequest
+      }
 
-    "this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
-    "and another one"                                                     ! http((request: HttpReq) => success)
+      // use the http request in each example
+      "this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
+      "and another one"                                                     ! http((request: HttpReq) => success)
 
+##### Defining `AroundOutside` actions
+
+As the name indicates `AroundOutside` is just a combination of both `Around` and `Outside` traits to allow you to:
+
+ * execute some code "around" the example
+ * create a context object and pass it to the example
+
+Like this:
+
+      object http extends AroundOutside[HttpReq] {
+        // create a context
+        def around[T <% Result](t: =>T) = {
+          createNewDatabase
+          // execute the code inside a databaseSession
+          inDatabaseSession { t }
+        }
+        // prepare a valid HttpRequest
+        def outside: HttpReq = createRequest
+      }
+
+      "this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
+      "and another one"                                                     ! http((request: HttpReq) => success)
 
 ##### Composing contexts
 
@@ -933,7 +956,7 @@ For that specification above:
    "checkin" section
 
  * when the `section` call is appended to a block of Fragments on the same line, all the fragments of that block are part of
-   the section: `example 5` and `example 5` are tagged with `slow`
+   the section: `example 5` and `example 6` are tagged with `slow`
 
 
  - - -
