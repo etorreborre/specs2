@@ -9,6 +9,7 @@ import execute._
 import text._
 import text.Trim._
 import scalaz.Monoid
+import data.IncludedExcluded
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
@@ -31,7 +32,8 @@ sealed trait Fragment {
 case class SpecStart(name: SpecName, arguments: Arguments = Arguments()) extends Fragment {
   override def matches(s: String) = name matches s
   override def toString = "SpecStart("+name.name+")"
-  def withArgs(args: Arguments) = SpecStart(name, args)
+  /** the new arguments take precedence over the old ones */
+  def withArgs(args: Arguments) = SpecStart(name, arguments.overrideWith(args))
 
   /**
    * The name of the specification can be overriden with a user defined title
@@ -144,12 +146,16 @@ object StandardFragments {
  */
 object TagsFragments {
   trait TaggingFragment extends Fragment {
+    private def filter(args: Arguments) = new IncludedExcluded[Seq[String]] {
+      val matchFunction = (n: Seq[String], tags: Seq[String]) => (n intersect tags).nonEmpty
+      val include = args.include.splitTrim(",")
+      val exclude = args.exclude.splitTrim(",")
+    }
+    
     /** tagging names */
     val names: Seq[String]
     /** @return true if the fragment tagged with this must be kept */
-    def keep(args: Arguments): Boolean = isIncluded(args) && !isExcluded(args)
-    def isIncluded(args: Arguments) = args.include.trim.isEmpty || !args.include.splitTrim(",").intersect(names).isEmpty
-    def isExcluded(args: Arguments) = !args.exclude.trim.isEmpty && !args.exclude.splitTrim(",").intersect(names).isEmpty
+    def keep(args: Arguments): Boolean = filter(args).keep(names)
     /** @return true if this tagging fragment is a section */
     def isSection: Boolean
   }
@@ -159,8 +165,8 @@ object TagsFragments {
     override def toString = names.mkString("Tag(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case t @ Tag(n)      => names == t.names
-        case t @ TaggedAs(n) => names == t.names
+        case t @ Tag(_*)      => names == t.names
+        case t @ TaggedAs(_*) => names == t.names
         case _ => false
       }
     }
@@ -171,8 +177,8 @@ object TagsFragments {
     override def toString = names.mkString("TaggedAs(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case t @ Tag(n)      => names == t.names
-        case t @ TaggedAs(n) => names == t.names
+        case t @ Tag(_*)      => names == t.names
+        case t @ TaggedAs(_*) => names == t.names
         case _ => false
       }
     }
@@ -183,8 +189,8 @@ object TagsFragments {
     override def toString = names.mkString("AsSection(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case s @ AsSection(_) => names == s.names
-        case s @ Section(_)   => names == s.names
+        case s @ AsSection(_*) => names == s.names
+        case s @ Section(_*)   => names == s.names
         case _ => false
       }
     }
@@ -195,8 +201,8 @@ object TagsFragments {
     override def toString = names.mkString("Section(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case s @ AsSection(_) => names == s.names
-        case s @ Section(_)   => names == s.names
+        case s @ AsSection(_*) => names == s.names
+        case s @ Section(_*)   => names == s.names
         case _ => false
       }
     }

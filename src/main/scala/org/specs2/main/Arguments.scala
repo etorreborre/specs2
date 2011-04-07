@@ -2,54 +2,58 @@ package org.specs2
 package main
 
 import scalaz.Monoid
-import control.Exceptions._
+import control._
+import Exceptions._
+import text.{DiffShortener, EditDistance}
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
  */
 private[specs2]  
 case class Arguments (
-  _ex:            Option[String]  = None,
-  _xonly:         Option[Boolean] = None,
-  _include:       Option[String]  = None,
-  _exclude:       Option[String]  = None,
-  _plan:          Option[Boolean] = None,
-  _skipAll:       Option[Boolean] = None,
-  _failtrace:     Option[Boolean] = None,
-  _color:         Option[Boolean] = None,
-  _noindent:      Option[Boolean] = None,
-  _showlevel:     Option[Boolean] = None,
-  _showtimes:     Option[Boolean] = None,
-  _offset:        Option[Int]     = None,
-  _specName:      Option[String]  = None,
-  _sequential:    Option[Boolean] = None,
-  _threadsNb:     Option[Int]     = None,
-  _markdown:      Option[Boolean] = None,
-  _debugMarkdown: Option[Boolean] = None,
-  _diffs:         Option[Diffs]   = None,
-  _fromSource:    Option[Boolean] = None,
-  _commandLine:   Seq[String]     = Nil
+  _ex:            Option[String]           = None,
+  _xonly:         Option[Boolean]          = None,
+  _include:       Option[String]           = None,
+  _exclude:       Option[String]           = None,
+  _plan:          Option[Boolean]          = None,
+  _skipAll:       Option[Boolean]          = None,
+  _failtrace:     Option[Boolean]          = None,
+  _color:         Option[Boolean]          = None,
+  _noindent:      Option[Boolean]          = None,
+  _showlevel:     Option[Boolean]          = None,
+  _showtimes:     Option[Boolean]          = None,
+  _offset:        Option[Int]              = None,
+  _specName:      Option[String]           = None,
+  _sequential:    Option[Boolean]          = None,
+  _threadsNb:     Option[Int]              = None,
+  _markdown:      Option[Boolean]          = None,
+  _debugMarkdown: Option[Boolean]          = None,
+  _diffs:         Option[Diffs]            = None,
+  _fromSource:    Option[Boolean]          = None,
+  _traceFilter:   Option[StackTraceFilter] = None,
+  _commandLine:   Seq[String]              = Nil
  ) {
-  def ex: String                = _ex.getOrElse(".*")
-  def xonly: Boolean            = _xonly.getOrElse(false)
-  def include: String           = _include.getOrElse("")
-  def exclude: String           = _exclude.getOrElse("")
-  def plan: Boolean             = _plan.getOrElse(false)
-  def skipAll: Boolean          = _skipAll.getOrElse(false)
-  def failtrace: Boolean        = _failtrace.getOrElse(false)
-  def color: Boolean            = _color.getOrElse(true)
-  def noindent: Boolean         = _noindent.getOrElse(false)
-  def showlevel: Boolean        = _showlevel.getOrElse(false)
-  def showtimes: Boolean        = _showtimes.getOrElse(false)
-  def offset: Int               = _offset.getOrElse(0)
-  def specName: String          = _specName.getOrElse(".*Spec")
-  def sequential: Boolean       = _sequential.getOrElse(false)
-  def threadsNb: Int            = _threadsNb.getOrElse(4)
-  def markdown: Boolean         = _markdown.getOrElse(true)
-  def debugMarkdown: Boolean    = _debugMarkdown.getOrElse(false)
-  def diffs: Diffs              = _diffs.getOrElse(Diffs())
-  def fromSource: Boolean       = _fromSource.getOrElse(true)
-  def commandLine: Seq[String]  = _commandLine
+  def ex: String                    = _ex.getOrElse(".*")
+  def xonly: Boolean                = _xonly.getOrElse(false)
+  def include: String               = _include.getOrElse("")
+  def exclude: String               = _exclude.getOrElse("")
+  def plan: Boolean                 = _plan.getOrElse(false)
+  def skipAll: Boolean              = _skipAll.getOrElse(false)
+  def failtrace: Boolean            = _failtrace.getOrElse(false)
+  def color: Boolean                = _color.getOrElse(true)
+  def noindent: Boolean             = _noindent.getOrElse(false)
+  def showlevel: Boolean            = _showlevel.getOrElse(false)
+  def showtimes: Boolean            = _showtimes.getOrElse(false)
+  def offset: Int                   = _offset.getOrElse(0)
+  def specName: String              = _specName.getOrElse(".*Spec")
+  def sequential: Boolean           = _sequential.getOrElse(false)
+  def threadsNb: Int                = _threadsNb.getOrElse(4)
+  def markdown: Boolean             = _markdown.getOrElse(true)
+  def debugMarkdown: Boolean        = _debugMarkdown.getOrElse(false)
+  def diffs: Diffs                  = _diffs.getOrElse(SmartDiffs())
+  def fromSource: Boolean           = _fromSource.getOrElse(true)
+  def traceFilter: StackTraceFilter = _traceFilter.getOrElse(DefaultStackTraceFilter)
+  def commandLine: Seq[String]      = _commandLine
 
   /** @return true if the command line contains a given string */
   def contains(a: String) = commandLine contains a
@@ -80,6 +84,7 @@ case class Arguments (
       other._debugMarkdown   .orElse(_debugMarkdown),
       other._diffs           .orElse(_diffs),
       other._fromSource      .orElse(_fromSource),
+      other._traceFilter     .orElse(_traceFilter),
       if (other._commandLine.isEmpty) _commandLine else other._commandLine
     )
   }
@@ -105,6 +110,7 @@ case class Arguments (
     "debugMarkdown"  -> _debugMarkdown,
     "diffs"          -> _diffs,
     "fromSource"     -> _fromSource,
+    "traceFilter"    -> _traceFilter,
     "commandLine"    -> (if (_commandLine.isEmpty) None else Some(_commandLine.mkString(", ")))
     ).flatMap(showArg).mkString(", ") + ") "
   }
@@ -140,6 +146,8 @@ object Arguments {
        _markdown      = bool("markdown", "nomarkdown"),
        _debugMarkdown = bool("debugmarkdown"),
        _fromSource    = bool("fromsource"),
+       _traceFilter   = bool("fullstacktrace").map(t=>NoStackTraceFilter).
+                        orElse(value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_))),
        _commandLine   = arguments
     )
   }
@@ -153,13 +161,13 @@ object Arguments {
   private def bool(name: String, negatedName: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
     bool(negatedName, false) orElse bool(name)
   }
-  private def value(name: String, f: String => String)(implicit args: Seq[String], sp: SystemProperties): Option[String] = {
+  private def value[T](name: String, f: String => T)(implicit args: Seq[String], sp: SystemProperties): Option[T] = {
     args.zip(args.drop(1)).find(_._1.toLowerCase.contains(name.toLowerCase)).map(s => f(s._2)).orElse(valueSystemProperty(name, f))
   }
-  private def valueSystemProperty(name: String, f: String => String)(implicit sp: SystemProperties): Option[String] = {
+  private def valueSystemProperty[T](name: String, f: String => T)(implicit sp: SystemProperties): Option[T] = {
     sp.getProperty(name).map(o => f(o.toString))
   }
-  private def value(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[String] = value(name, identity _)
+  private def value[T](name: String)(implicit args: Seq[String], sp: SystemProperties): Option[String] = value(name, identity _)
   private def int(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Int] = {
     tryo(value(name)(args, sp).map(_.toInt).get)
   }
@@ -171,9 +179,34 @@ object Arguments {
 }
 
 /**
- * The Diffs class holds all the required parameters to show differences between 2 strings
+ * this trait is used to define and compute the differences between strings (used by the reporters)
  */
-case class Diffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, shortenSize: Int = 5, full: Boolean = false) {
+trait Diffs {
+  /** @return true if the differences must be shown */
+  def show: Boolean
+  /** @return true if the differences must be shown for 2 different strings */
+  def show(expected: String, actual: String): Boolean
+  /** @return the diffs */
+  def showDiffs(expected: String, actual: String): (String, String)
+  /** @return true if the full strings must also be shown */
+  def showFull: Boolean
+  /** @return the separators to use*/
+  def separators: String
+}
+
+/**
+ * The SmartDiffs class holds all the required parameters to show differences between 2 strings using the edit distance
+ * algorithm
+ */
+case class SmartDiffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, shortenSize: Int = 5, diffRatio: Int = 30, showFull: Boolean = false) extends Diffs {
+  import EditDistance._
+
   def show(expected: String, actual: String): Boolean = show && Seq(expected, actual).exists(_.size >= triggerSize)
+  def showDiffs(expected: String, actual: String) = {
+    if (editDistance(expected, actual).doubleValue / (expected.size + actual.size) < diffRatio.doubleValue / 100)
+      showDistance(expected, actual, separators, shortenSize)
+    else
+      (expected, actual)
+  }
 }
 

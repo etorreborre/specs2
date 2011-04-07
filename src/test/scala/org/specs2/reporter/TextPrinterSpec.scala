@@ -8,7 +8,7 @@ import main.Arguments
 import execute._
 import specification._
 
-class TextPrinterSpec extends SpecificationWithJUnit { def is = 
+class TextPrinterSpec extends SpecificationWithJUnit { def is =
                                                                                                                         """
   The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
   and outputs them using a `TextResultOutput`.
@@ -32,6 +32,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
       "statistics are shown"                                                                                            ! xonlyargs().e7^
                                                                                                                         p^
     "if failtrace = true, failures stacktraces are shown"                                                               ! failtrace().e1^
+    "if fullStacktrace = true, all error stacktraces are shown"                                                         ! traces().e1^
     "if plan = true, nothing is executed"                                                                               ! planargs().e1^
     "if sequential = false examples are executed concurrently"                                                          ! seq().e1^
     "if sequential = true examples are executed sequentially"                                                           ! seq().e2^
@@ -53,6 +54,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
       "the shorten size can be modified with diffs(shortenSize=10)"                                                     ! diffs().e4^
       "the full strings can be shown on 2 lines with line numbers with diffs(full=true)"                                ! diffs().e5^
       "they can be disabled with diffs(show = false)"                                                                   ! diffs().e6^
+      "unless there are too many of them diffs(diffRatio=30)"                                                           ! diffs().e7^
                                                                                                                         endp^
                                                                                                                         """
   Examples presentation
@@ -137,10 +139,14 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     def e4 = print(diffs(shortenSize=3) ^ bigFail) must containMatch("\\.jkl\\[mn\\]opq\\.")
     def e5 = print(diffs(full=true) ^ bigFail) must containMatch("jklmnopq")
     def e6 = print(diffs(show=false) ^ bigFail) must not containMatch("kl[mn]op")
+    def e7 = print(diffs(show=true) ^ "" ! {bigString1 must_== bigString2.reverse} ) must not containMatch("\\[")
   }
   case class failtrace() {
     val failtrace: Arguments = args(failtrace = true)
-    def e1 = print(failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
+    def e1 = print(fullStackTrace <| failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
+  }
+  case class traces() {
+    def e1 = print(fullStackTrace ^ t1 ^ ex1 ^ "e" ! {throw new Exception("ouch"); ok}) must containMatch("org.specs2")
   }
   case class planargs() {
     val plan: Arguments = args(plan = true)

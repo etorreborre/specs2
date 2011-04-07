@@ -31,15 +31,13 @@ trait Throwablex {
      * Select all traces of this exception matching a given pattern
      */
     def filter(pattern: String) = {
-      t.setStackTrace(t.getStackTrace.toList.filter(_.toString matches (".*"+pattern+".*")).toArray)
-      t
+      setStackTrace(t.getStackTrace.toList.filter(_.toString matches (".*"+pattern+".*")))
     }
-    /** 
+    /**
      * Select all traces of this exception not matching a given pattern
      */
     def filterNot(pattern: String) = {
-      t.setStackTrace(t.getStackTrace.toList.filterNot(_.toString matches (".*"+pattern+".*")).toArray)
-      t
+      setStackTrace(t.getStackTrace.toList.filterNot(_.toString matches (".*"+pattern+".*")))
     }
     /** @return the list of chained exceptions */
     def chainedExceptions: List[Throwable] = {
@@ -61,18 +59,24 @@ trait Throwablex {
     /** print all the stacktrace for t, including the traces from its causes */
     def printFullStackTrace = t.getFullStackTrace.foreach(println(_))
 
+    /** set a new stacktrace */
+    private def setStackTrace(st: Seq[StackTraceElement]) = {
+      t.setStackTrace(st.toArray)
+      t
+    }
+
   }
   /** utility method to create a default stacktrace element */
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 
 	   new StackTraceElement(m, className, fileName, lineNumber)
   /** @return an exception with the given message and stacktrace */
-  def exception(m: String, st: List[StackTraceElement]): Exception = {
+  def exception(m: String, st: Seq[StackTraceElement]): Exception = {
 	  val exception = new Exception(m)
 	  exception.setStackTrace(st.toArray)
 	  exception
   }
   /** @return an exception with the given stacktrace */
-  def exception(st: List[StackTraceElement]): Exception = exception("", st)
+  def exception(st: Seq[StackTraceElement]): Exception = exception("", st)
   /** location information from a stackTrace element */
   class Location(t: StackTraceElement) {
     /** path corresponding to the class name. This is an approximation corresponding to the

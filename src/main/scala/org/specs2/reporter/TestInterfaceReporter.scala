@@ -3,7 +3,6 @@ package reporter
 
 import _root_.org.scalatools.testing.{ EventHandler, Logger, Event, Result }
 import control.Throwablex._
-import control.Throwablex._
 import main.Arguments
 import main.ArgumentsArgs._
 import io._
@@ -29,8 +28,8 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
     fragments foreach {
       case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer) => result match {
         case Success(text)               => handler.handle(succeeded(text))
-        case r @ Failure(text, e, st, d) => handler.handle(failure(text, r.exception))
-        case r @ Error(text, e)          => handler.handle(error(text, r.exception))
+        case r @ Failure(text, e, st, d) => handler.handle(failure(text, args.traceFilter(r.exception)))
+        case r @ Error(text, e)          => handler.handle(error(text, args.traceFilter(r.exception)))
         case Skipped(text, _)            => handler.handle(skipped(text))
         case Pending(text)               => handler.handle(skipped(text))
       }
@@ -40,12 +39,10 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
   }
 }
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
-  override def printFailure(message: String)(implicit args: Arguments) = 
-    logFailure(color(message, yellow))
-  override def printError(message: String)(implicit args: Arguments) = 
-    logError(color(message, red))
+  override def printFailure(message: String)(implicit args: Arguments) = logFailure(color(message, yellow))
+  override def printError(message: String)(implicit args: Arguments)   = logError(color(message, red))
   override def printSuccess(message: String)(implicit args: Arguments) = logInfo(message)
-  override def printLine(message: String)(implicit args: Arguments) = logInfo(message)
+  override def printLine(message: String)(implicit args: Arguments)    = logInfo(message)
   override def status(result: execute.Result)(implicit arguments: Arguments): String =
     result.status(arguments.overrideWith(args(color = true)))  + " "
 }

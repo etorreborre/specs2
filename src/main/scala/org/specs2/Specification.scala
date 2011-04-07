@@ -1,8 +1,8 @@
 package org.specs2
 
 import control._
+import main.{ArgumentsShortcuts, ArgumentsArgs}
 import time._
-import main.ArgumentsArgs
 import execute._
 import matcher._
 import specification._
@@ -29,6 +29,7 @@ trait Specification extends SpecificationStructure with SpecificationFeatures
 trait SpecificationFeatures extends FragmentsBuilder
    with SpecificationInclusion
    with ArgumentsArgs
+   with ArgumentsShortcuts
    with MustMatchers
    with ShouldMatchers
    with FormattingFragments

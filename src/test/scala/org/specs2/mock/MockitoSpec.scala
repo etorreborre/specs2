@@ -1,6 +1,7 @@
 package org.specs2
 package mock
 import specification._
+import execute.Result
 import control.Exceptions._
 import org.hamcrest.core.{ IsNull }
 import org.mockito.Matchers.{ anyInt }
@@ -114,12 +115,12 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
 	  val list1 = mock[java.util.List[String]]
 	  val list2 = mock[java.util.List[String]]
 	
-    def asExpected = {
+    def asExpected: Result = {
 	    list1.get(0)
 	    list2.get(0)
 	    implicit val order = inOrder(list1, list2)
-      (there was one(list1)(order).get(0) then
-                 one(list2)(order).get(0)).message must_== "The mock was called as expected"
+      (there was one(list1).get(0) then
+                 one(list2).get(0)).message must_== "The mock was called as expected"
     }
 	
     def failed = {

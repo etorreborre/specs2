@@ -45,20 +45,21 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
    *   junit failure or ignored event on the RunNotifier
    */
   def run(notifier: RunNotifier) {
+    implicit val args = executions.collect {  case (_, SpecStart(_, a)) => a }.headOption.getOrElse(Arguments())
     executions.collect {
-      case (desc, f @ SpecStart(_, _)) => (desc, executor.executeFragment(Arguments())(f))
-      case (desc, f @ Example(_, _))   => (desc, executor.executeFragment(Arguments())(f))
-      case (desc, f @ Text(_))         => (desc, executor.executeFragment(Arguments())(f))
-      case (desc, f @ Step(_))         => (desc, executor.executeFragment(Arguments())(f))
-      case (desc, f @ Action(_))       => (desc, executor.executeFragment(Arguments())(f))
-      case (desc, f @ SpecEnd(_))      => (desc, executor.executeFragment(Arguments())(f))
+      case (desc, f @ SpecStart(_, _)) => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Example(_, _))   => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Text(_))         => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Step(_))         => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Action(_))       => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ SpecEnd(_))      => (desc, executor.executeFragment(args)(f))
     }.
       foreach {
         case (desc, ExecutedResult(_, result, timer)) => {
           notifier.fireTestStarted(desc)
           result match {
             case f @ Failure(m, e, st, d)    => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-            case e @ Error(m, st)            => notifier.fireTestFailure(new notification.Failure(desc, e.exception))
+            case e @ Error(m, st)            => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
             case Pending(_) | Skipped(_, _)  => notifier.fireTestIgnored(desc)
             case _ => ()
           }
@@ -66,19 +67,16 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
         }
         case (desc, ExecutedSpecStart(_, _))  => notifier.fireTestRunStarted(desc)
         case (desc, ExecutedSpecEnd(_))       => notifier.fireTestRunFinished(new org.junit.runner.Result)
-        case (desc, _)                        => if (!isExecutedFromGradle) {
-                                                   notifier.fireTestStarted(desc)
-                                                   notifier.fireTestFinished(desc)
-                                                 }
+        case (desc, _)                        => // don't do anything otherwise too many tests will be counted
       }
   }
   /** @return a Throwable expected by JUnit Failure object */
-  private def junitFailure(f: Failure): Throwable = f match {
-    case Failure(m, e, st, NoDetails())                      =>
-      new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), st))
-    case Failure(m, e, st, FailureDetails(expected, actual)) =>
-      new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {
-        private val e = f.exception
+  private def junitFailure(f: Failure)(implicit args: Arguments): Throwable = f match {
+    case Failure(m, e, st, NoDetails()) =>
+      new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
+
+    case Failure(m, e, st, FailureDetails(expected, actual)) => new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {
+        private val e = args.traceFilter(f.exception)
         override def getStackTrace = e.getStackTrace
         override def getCause = e.getCause
         override def printStackTrace = e.printStackTrace

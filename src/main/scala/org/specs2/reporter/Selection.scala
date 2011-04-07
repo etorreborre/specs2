@@ -44,6 +44,8 @@ trait DefaultSelection {
     val fragments = fragmentsAndArguments.map(_._1)
     fragmentsAndArguments.zip(tags(fragments)) collect {
       case ((f, a), t) if !isTag(f) && t.keep(a.overrideWith(commandLineArgs)) => (f, a)
+      case ((f @ SpecStart(_, _), a), t)                                       => (f, a)
+      case ((f @ SpecEnd(_), a), t)                                            => (f, a)
     }
   }
 
@@ -69,17 +71,17 @@ trait DefaultSelection {
       val (tagged, taggingToApply) = res
       cur match {
         /** tag the next fragment */
-        case t1 @ Tag(_)                                        => (tagged :+ t1, taggingToApply :+ t1)
+        case t1 @ Tag(_*)                                        => (tagged :+ t1, taggingToApply :+ t1)
         /** beginning of section */
-        case t1 @ Section(n) if !(taggingToApply contains t1)   => (tagged :+ Tag(n), taggingToApply :+ t1)
+        case t1 @ Section(_*) if !(taggingToApply contains t1)   => (tagged :+ Tag(t1.names:_*), taggingToApply :+ t1)
         /** end of section */
-        case t1 @ Section(n)                                    => (tagged :+ Tag(n), removeTags(taggingToApply, t1))
+        case t1 @ Section(_*)                                    => (tagged :+ Tag(t1.names:_*), removeTags(taggingToApply, t1))
         /** tag the previous fragment */
-        case t1 @ TaggedAs(n)                                   => (tagged.mapLast(_ |+| Tag(n)) :+ t1, taggingToApply)
+        case t1 @ TaggedAs(_*)                                   => (tagged.mapLast(_ |+| Tag(t1.names:_*)) :+ t1, taggingToApply)
         /** beginning of section from the previous fragment */
-        case t1 @ AsSection(n) if !(taggingToApply contains t1) => (tagged.mapLast(_ |+| Tag(n)) :+ t1, taggingToApply :+ t1)
+        case t1 @ AsSection(_*) if !(taggingToApply contains t1) => (tagged.mapLast(_ |+| Tag(t1.names:_*)) :+ t1, taggingToApply :+ t1)
         /** end of section */
-        case t1 @ AsSection(n)                                  => (tagged.mapLast(_ |+| Tag(n)) :+ t1, removeTags(taggingToApply, t1))
+        case t1 @ AsSection(_*)                                  => (tagged.mapLast(_ |+| Tag(t1.names:_*)) :+ t1, removeTags(taggingToApply, t1))
         /** beginning of section from the previous fragment */
         case f                                                  => (tagged :+ taggingToApply.sumr, taggingToApply.filter(_.isSection))
       }

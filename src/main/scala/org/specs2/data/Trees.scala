@@ -12,9 +12,19 @@ trait Trees { outer =>
   /**
    * Implicit definition to add a bottomUp method on Trees
    */
-  implicit def bottomUpTree[A](t: Tree[A]) = new BottomUpTree(t)
-  case class BottomUpTree[A](t: Tree[A]) {
+  implicit def extendedTree[A](t: Tree[A]) = Treex(t)
+  case class Treex[A](t: Tree[A]) {
     def bottomUp[B](f: ((A, Stream[B]) => B)) = outer.bottomUp(t, f)
+    def prune[B](f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
+    def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
+  }
+
+  /**
+   * This implicit can be used to remove None nodes in a Tree
+   */
+  implicit def cleanedTree[A](t: Tree[Option[A]]) = CleanedTree(t)
+  case class CleanedTree[A](t: Tree[Option[A]]) {
+    def clean(implicit initial: A): Tree[A] = outer.clean(t)(initial)
   }
   /**
    * map a Tree from leaves to root by replacing each node with the result of a function taking
@@ -27,6 +37,23 @@ trait Trees { outer =>
     val tbs = t.subForest.map(t => bottomUp(t, f))
     node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
   }
+  /**
+   * remove None nodes from a tree
+   */
+  def clean[A](t: Tree[Option[A]])(implicit initial: A): Tree[A] = prune(t, (a: Option[A]) => a).getOrElse(leaf(initial))
+  /**
+   * remove nodes from a tree if they are None according to a function f
+   */
+  def prune[A, B](t: Tree[A], f: A => Option[B]): Option[Tree[B]] = {
+    val tbs = t.subForest.flatMap(t => prune(t, f))
+    f(t.rootLabel).map { root =>
+      node(root, tbs)
+    }
+  }
+  /**
+   * remove nodes from a tree if they are None according to a function f
+   */
+  def prune[A](t: Tree[A], f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = t.cobind(f).clean
 
   /**
    * Implicit method to add a parentLoc method to TreeLoc[T]

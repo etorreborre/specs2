@@ -5,12 +5,13 @@ import mutable.SpecificationWithJUnit
 import TagsFragments._
 
 class TagsFragmentsSpec extends SpecificationWithJUnit with DataTables {
-  val tag = TaggedAs("t")
+  val tag = TaggedAs("t","t4")
 
   "A tagging fragment containing the tag 't' will keep fragments depending on the include/exclude arguments" >> {
     "include"    || "exclude" | "keep" |>
     ""           !! ""        ! true   |
     "t"          !! ""        ! true   |
+    "t4"         !! ""        ! true   |
     ""           !! "t"       ! false  |
     "t2"         !! ""        ! false  |
     "t"          !! "t2"      ! true   |

@@ -3,7 +3,7 @@ package specification
 import TagsFragments._
 
 /**
- * The tags trait allows the creation of Tags fragments in a specification
+ * The tags trait allows the creation of Tags fragments in a Specification
  */
 trait Tags {
   /** create a TaggedAs fragment */

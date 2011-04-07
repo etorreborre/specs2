@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class ExceptionMatchersSpec extends SpecificationWithJUnit { def is =
+class ExceptionMatchersSpec extends SpecificationWithJUnit with ResultMatchers { def is =
 
   "Exception matchers allow to check that exceptions are thrown"                          				                      ^
     "by specifying the expected type of exception: 'value must throwAn[Error]'"							                            ^

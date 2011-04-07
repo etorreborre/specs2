@@ -76,7 +76,7 @@ trait Exceptions {
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
-  def trye[T, S](a: =>T)(implicit f: Exception =>S): Either[S, T] = {
+  def trye[T, S](a: =>T)(implicit f: Exception => S): Either[S, T] = {
 	  try { Right(a) }
 	  catch { case e: Exception => Left(f(e)) }
   }
@@ -86,7 +86,7 @@ trait Exceptions {
    * If the expression throws any Throwable a function f is used to return the left value
    * of the Either returned value.
    */
-  def catchAll[T, S](a: =>T)(f: Throwable =>S): Either[S, T] = {
+  def catchAll[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
 	  try { Right(a) }
 	  catch { case e: Throwable => Left(f(e)) }
   }

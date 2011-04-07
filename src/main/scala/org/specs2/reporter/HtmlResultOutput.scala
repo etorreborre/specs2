@@ -107,14 +107,14 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
     if (doIt) {
       d match {
         case FailureDetails(expected, actual) if args.diffs.show(expected, actual) => {
-          val (expectedDiff, actualDiff) = showDistance(expected, actual, args.diffs.separators, args.diffs.shortenSize)
+          val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
           val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
           val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
           printElem(<t>
 <div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(d)}/>details</div>
   <div id={id(d)} style="display:none">
     <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
-    { if (args.diffs.full) <pre class="details">{expectedFull+"\n"+actualFull}</pre> else NodeSeq.Empty }
+    { if (args.diffs.showFull) <pre class="details">{expectedFull+"\n"+actualFull}</pre> else NodeSeq.Empty }
   </div></t>)
         }
         case _ => this

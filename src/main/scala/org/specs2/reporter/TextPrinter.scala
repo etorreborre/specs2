@@ -10,8 +10,6 @@ import text._
 import Plural._
 import AnsiColors._
 import NotNullStrings._
-import EditDistance._
-import DiffShortener._
 import execute._
 import main.Arguments
 import specification._
@@ -105,10 +103,10 @@ trait TextPrinter {
         }
         case e: Error => {
           printError(desc, e, timer)
-          e.stackTrace.foreach(t => out.printError(t.toString))
+          args.traceFilter(e.stackTrace).foreach(t => out.printError(t.toString))
           e.exception.chainedExceptions.foreach { (t: Throwable) =>
             out.printError(t.getMessage.notNull)
-            t.getStackTrace.foreach(st => out.printError(st.toString))
+            args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
           }
         }
         case Success(_)    => if (!args.xonly) out.printSuccess(description)
@@ -125,15 +123,15 @@ trait TextPrinter {
       out.printFailure(description)
       out.printFailure(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
       if (args.failtrace)
-        f.stackTrace.foreach(t => out.printFailure(t.toString))
+        args.traceFilter(f.stackTrace).foreach(t => out.printFailure(t.toString))
     }
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {
         case FailureDetails(expected, actual) if (args.diffs.show(expected, actual)) => {
-          val (expectedDiff, actualDiff) = showDistance(expected, actual, args.diffs.separators, args.diffs.shortenSize)
+          val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
           out.printFailure("Expected: " + expectedDiff)
           out.printFailure("Actual:   " + actualDiff)
-          if (args.diffs.full) {
+          if (args.diffs.showFull) {
             out.printFailure("Expected (full): " + expected)
             out.printFailure("Actual (full):   " + actual)
           }

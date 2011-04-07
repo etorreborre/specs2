@@ -445,7 +445,12 @@ Note that you need to extend the `ScalaCheck` trait if you want to use these mat
 
 That's only if you want to match the result of other matchers!
 
-        ("Hello" must beMatching("h.*")) must beSuccessful
+        // you need to extend the ResultMatchers trait
+        class MatchersSpec extends Specification with ResultMatchers { def is =
+          "beMatching is using a regexp" ! {
+            ("Hello" must beMatching("h.*")) must beSuccessful
+          }
+        }
 
 #### Scala Interpreter matchers
 
@@ -474,8 +479,8 @@ You can specify your own parsers by:
    strings
  * use `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
    a String or a matcher so that
- ** `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
- ** `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
+   . `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
+   . `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
 
 For example, specifying a Parser for numbers could look like this:   
 
@@ -697,10 +702,9 @@ The order of method calls can be checked by creating calls and chaining them wit
 
       there was one(m1).get(0) then one(m1).get(1)
 
-      // when several mocks are involved, the expected order must be given
-      // whereas it is not necessary if the methods of one mock only are to
-      // be checked in order
-      there was one(m2).get(0) then one(m1).get(2) orderedBy (m1, m2)
+      // when several mocks are involved, the expected order must be specified as an implicit value
+	    implicit val order = inOrder(m1, m2)
+      there was one(m1).get(0) then one(m2).get(0)
 
 ###### Spies
 

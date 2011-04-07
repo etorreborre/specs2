@@ -9,15 +9,15 @@ import execute.Result
  */
 trait ResultOutput {
   def printSpecStart(message: String)(implicit args: Arguments)
-  def printSuccess(message: String)(implicit args: Arguments)
-  def printFailure(message: String)(implicit args: Arguments)
-  def printError(message: String)(implicit args: Arguments)
-  def printSkipped(message: String)(implicit args: Arguments)
-  def printPending(message: String)(implicit args: Arguments)
+  def printSuccess(message: String)  (implicit args: Arguments)
+  def printFailure(message: String)  (implicit args: Arguments)
+  def printError(message: String)    (implicit args: Arguments)
+  def printSkipped(message: String)  (implicit args: Arguments)
+  def printPending(message: String)  (implicit args: Arguments)
   /** print some text, splitting it on several lines */
-  def printMessage(message: String)(implicit args: Arguments)
-  def printLines(message: String)(implicit args: Arguments)
+  def printMessage(message: String)  (implicit args: Arguments)
+  def printLines(message: String)    (implicit args: Arguments)
   /** print one line */
-  def printLine(message: String)(implicit args: Arguments)
-  def status(result: Result)(implicit args: Arguments): String
+  def printLine(message: String)    (implicit args: Arguments)
+  def status(result: Result)        (implicit args: Arguments): String
 }

@@ -1,7 +1,12 @@
 package org.specs2
 package specification
 
-import execute.Result
+import control.Exceptions._
+import execute.FailureException._
+import execute.SkipException._
+import execute.Error._
+import matcher.MatchResult
+import execute.{FailureException, SkipException, Error, Result}
 
 /**
  * This trait is only used when we wish to write after actions in unit specifications like this
@@ -39,6 +44,26 @@ trait Contexts {
     def after(action: => Unit) = new After {
       def after = action
     }.apply(t)
+  }
+
+  /**
+   * This method executes some code and returns either:
+   *  * an error if there was an exception
+   *  * a failure if a failure was thrown
+   *  * a skipped if a skipped was thrown
+   *  * a non-successful result if that's what the code is returning
+   *  * the application of a function to that code otherwise to output a result
+   */
+  def execute[T, R <% Result](code: =>T)(f: T => R): Result = {
+    val executed = trye(code)(identity)
+    executed match {
+      case Left(FailureException(f)) => f
+      case Left(SkipException(f))    => f
+      case Left(e)                   => Error(e)
+      case Right(m: MatchResult[_]) if !m.isSuccess => m.toResult
+      case Right(r: Result)         if !r.isSuccess => r
+      case Right(other)                          => f(other)
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-import control.Property
+import control._
 
 /**
  * This trait provides shortcuts to create Arguments instances
@@ -9,26 +9,27 @@ import control.Property
 trait ArgumentsArgs extends ArgProperties {
   /** shorthand method to create an Arguments object */
   def args(
-    ex:            ArgProperty[String]      = ArgProperty[String](),
-    xonly:         ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    include:       ArgProperty[String]      = ArgProperty[String](),
-    exclude:       ArgProperty[String]      = ArgProperty[String](),
-    plan:          ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    skipAll:       ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    failtrace:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    color:         ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    noindent:      ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    showlevel:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    showtimes:     ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    offset:        ArgProperty[Int]         = ArgProperty[Int](),
-    specName:      ArgProperty[String]      = ArgProperty[String](),
-    sequential:    ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    threadsNb:     ArgProperty[Int]         = ArgProperty[Int](),
-    markdown:      ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    debugMarkdown: ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    diffs:         ArgProperty[Diffs]       = ArgProperty[Diffs](),
-    fromSource:    ArgProperty[Boolean]     = ArgProperty[Boolean](),
-    commandLine:   Seq[String]              = Nil
+    ex:            ArgProperty[String]            = ArgProperty[String](),
+    xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    include:       ArgProperty[String]            = ArgProperty[String](),
+    exclude:       ArgProperty[String]            = ArgProperty[String](),
+    plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    showlevel:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    showtimes:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    offset:        ArgProperty[Int]               = ArgProperty[Int](),
+    specName:      ArgProperty[String]            = ArgProperty[String](),
+    sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
+    markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    debugMarkdown: ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
+    fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
+    commandLine:   Seq[String]                    = Nil
   ) = new Arguments(
      ex.toOption.map(".*"+_+".*"),
      xonly.toOption,
@@ -49,58 +50,9 @@ trait ArgumentsArgs extends ArgProperties {
      debugMarkdown.toOption,
      diffs.toOption,
      fromSource.toOption,
+     traceFilter.toOption,
      commandLine
   )
-  /**
-   * @return arguments for a literate specification: no auto indent and a sequential
-   *         execution
-   */
-  def literate: Arguments = args(noindent = true, sequential = true)
-  /**
-   * @return arguments for a specification where examples must be executed sequentially
-   */
-  def sequential: Arguments = args(sequential = true)
-  /**
-   * shortcut to show only the text without any execution
-   */
-  def plan: Arguments = args(plan = true)
-  /**
-   * shortcut to skip all examples
-   */
-  def skipAll: Arguments = args(skipAll = true)
-  /**
-   * shortcut to avoid automatic indentation
-   */
-  def noindent: Arguments = args(noindent = true)
-  /**
-   * shortcut to not executing the text and avoid automatic indentation
-   */
-  def freetext: Arguments = plan <| noindent
-  /**
-   * shortcut to print only failures and errors
-   */
-  def xonly: Arguments = args(xonly = true)
-  /**
-   * shortcut to execute and print only some examples
-   */
-  def only(examples: String): Arguments = args(ex = examples)
-  /**
-   * shortcut to include only some tagged fragments
-   */
-  def include(tags: String): Arguments = args(include = tags)
-  /**
-   * shortcut to exclude some tagged fragments
-   */
-  def exclude(tags: String): Arguments = args(exclude = tags)
-  /**
-   * shortcut to display the differences with some specific parameters
-   */
-  def diffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, shortenSize: Int = 5, full: Boolean = false): Arguments =
-    args(diffs = Diffs(show, separators, triggerSize, shortenSize, full))
-  /**
-   * shortcut to display the example descriptions from the expectations ok messages
-   */
-  def descFromExpectations = args(fromSource = false)
 }
 object ArgumentsArgs extends ArgumentsArgs
 
