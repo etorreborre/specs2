@@ -1,7 +1,7 @@
 package org.specs2
-package examples
+package specification
 
-class GivenWhenThenSpec extends SpecificationWithJUnit { def is =
+class RegexpStepsSpec extends SpecificationWithJUnit { def is =
 
   "A given-when-then example for a calculator"                 ^
     "Given the following number: 1"                            ^ number1 ^
@@ -18,7 +18,7 @@ class GivenWhenThenSpec extends SpecificationWithJUnit { def is =
     "Then I should get: 20"                                    ^ result ^
     "And it should be >: 10"                                   ^ greaterThan ^
                                                                end
-
+  
   object number1 extends Given[Int]("Given the following number: (.*)") {
     def extract(text: String): Int = extractString(text).toInt
   }

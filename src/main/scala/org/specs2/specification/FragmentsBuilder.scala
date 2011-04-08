@@ -16,7 +16,7 @@ import FormattingFragments._
  * 
  */
 private[specs2]
-trait FragmentsBuilder {
+trait FragmentsBuilder extends RegexpSteps {
 
   /**
    * Methods for chaining fragments
@@ -45,6 +45,16 @@ trait FragmentsBuilder {
     }
     def ^(other: FragmentsFragment) = fs add other.fragments
     def ^(a: Arguments) = fs add a
+
+    /** start a given-when-then block */
+    def ^[T](step: Given[T]): PreStep[T] = {
+      val text = fs.fragments.collect { case t: Text => t }.lastOption match {
+        case Some(Text(t)) => t
+        case other         => "A Text must precede a Given object!"
+      }
+      lazy val extracted = step.extractContext(text)
+      new PreStep(() => extracted, fragmentsFragments(fs ^ Arguments("noindent")) ^ Step.fromEither(extracted))
+    }
   }
 
   /**
