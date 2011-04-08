@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 import text.Quote._
+import execute.{Result, Failure}
 
 /**
  * Matchers for Options
@@ -65,4 +66,19 @@ class SomeMatcher[T] extends Matcher[Option[T]] {
            value)
   }
   def which(f: T => Boolean) = this ^^ { (t: Option[T]) => t filter f }
+  def like(f: PartialFunction[T, MatchResult[_]]) = this and partialMatcher(f)
+
+  private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Option[T]] {
+    def apply[S <: Option[T]](value: Expectable[S]) = {
+      val res: Result = value.value match {
+        case Some(t) if f.isDefinedAt(t)  => f(t).toResult
+        case Some(t) if !f.isDefinedAt(t) => Failure("function undefined")
+        case None                         => Failure("no match")
+      }
+      result(res.isSuccess,
+             value.description+" is Some[T] and "+res.message,
+             value.description+" is Some[T] but "+res.message,
+             value)
+    }
+  }
 }
