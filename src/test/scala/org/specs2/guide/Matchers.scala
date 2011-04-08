@@ -221,6 +221,8 @@ In the code above you have to:
 There are several matchers to check Option and Either instances:
 
  * `beSome` checks if an element is Some(_)
+ * `beSome.which(function)` checks if an element is Some(_) and satisfies a function returning a boolean
+ * `beSome.like(partial function)` checks if an element is Some(_) and satisfies a partial function returning a `MatchResult`
  * `beNone` checks if an element is None
  * `beAsNoneAs` checks if 2 values are equal to None at the same time
  * `beRight` checks if an element is Right(_)

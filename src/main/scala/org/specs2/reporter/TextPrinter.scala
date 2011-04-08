@@ -143,7 +143,7 @@ trait TextPrinter {
     def printError(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
       val description = statusAndDescription(desc, f, timer)
       out.printError(description)
-      out.printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
+      out.printError(desc.takeWhile(_ == ' ') + "  " + f.exception.getClass.getSimpleName + ": " + f.message + " ("+f.location+")")
     }
     /**
      * add the status to the description

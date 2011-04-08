@@ -27,7 +27,7 @@ private[specs2]
 class JUnitDescriptions(specificationClass: Class[_]) extends DefaultSelection {
   import JUnitDescriptions._
   type DescribedFragment = (Description, Fragment)
-  def foldAll(fs: Seq[Fragment]) = {
+  def foldAll(fs: Seq[Fragment])(implicit args: Arguments) = {
     import Levels._
     val leveledFragments = Levels.foldAll(select(fs))
     lazy val root = createDescription(specificationClass.getName, klassName=specificationClass.getName)
@@ -75,15 +75,25 @@ object JUnitDescriptions extends ExecutionOrigin {
    * @return a Description with parent-child relationships to other Description objects
    *         from a Tree[Description]
    */
-  def asOneDescription(descriptionTree: Tree[DescribedFragment]): Description = {
-    descriptionTree.bottomUp(addChildren).rootLabel._1
+  def asOneDescription(descriptionTree: Tree[DescribedFragment])(implicit args: Arguments = Arguments()): Description = {
+    if (args.noindent)
+      descriptionTree.flatten.drop(1).foldLeft(descriptionTree.rootLabel)(flattenChildren)._1
+    else
+      descriptionTree.bottomUp(addChildren).rootLabel._1
   }
   /** 
-   * unfolding function attaching children descriptions to a parent one 
+   * unfolding function attaching children descriptions their parent
    */
   private val addChildren = (desc: (Description, Fragment), children: Stream[DescribedFragment]) => {
     children.foreach { child => desc._1.addChild(child._1) }
     desc
+  }
+  /**
+   * unfolding function attaching children descriptions the root
+   */
+  private def flattenChildren = (result: DescribedFragment, current: DescribedFragment) => {
+    result._1.addChild(current._1)
+    result
   }
   import text.Trim._
   /** @return a test name with no newlines */

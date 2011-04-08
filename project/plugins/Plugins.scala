@@ -9,5 +9,5 @@ class Plugins(info : ProjectInfo) extends PluginDefinition(info) {
    val proguard   = "org.scala-tools.sbt" % "sbt-proguard-plugin" % "0.0.5"
    val assembly   = "com.codahale" % "assembly-sbt" % "0.1.1"
    val scctPlugin = "reaktor" % "sbt-scct-for-2.8" % "0.1-SNAPSHOT"
-   val posterous  = "net.databinder" % "posterous-sbt" % "0.1.6"
+   val posterous  = "net.databinder" % "posterous-sbt" % "0.1.7"
 }

@@ -233,35 +233,47 @@ In that case the argument passed to the `!` method is a function taking a String
 
 ##### Given / When / Then
 
-In the same fashion, the Given/When/Then style of writing specifications is supported, albeit using a mutable object to
-collect the successive states of the system:
+In the same fashion, the Given/When/Then style of writing specifications is supported by interspersing Text fragments,
+with Given/When/Then objects which extract meaningful values from the text:
 
-      // the execution needs to be sequential
-      sequential                                                                                       ^
-      "Given that the customer buys 3 books at 10 dollars each"                                        ! c1.buyBook^
-      "Given that the customer buys 1 book at 20 dollars"                                              ! c1.buyBook^
-      "When he checks out"                                                                             ! c1.checkout^
-      "Then the total price must be 50 dollars"                                                        ! c1.total^
-                                                                                                       end
+        "A given-when-then example for the addition"                 ^
+          "Given the following number: 1"                            ^ number1 ^
+          "And a second number: 2"                                   ^ number2 ^
+          "Then I should get: 3"                                     ^ result ^
+                                                                     end
 
-      case object c1 {
-        val BuyBooks = ".* buys (\\d+) book.? at (\\d+) .*".r     // a regular expression for extracting the quantity and price
-        val TotalBooks = ".* must be (\\d+) .*".r                 // a regular expression for extracting the total price
-        val books: scala.collection.mutable.Map[Int, Int] = new scala.collection.mutable.HashMap[Int, Int]()
-
-        def buyBook = (s: String) => {
-          val BuyBooks(qty, price) = s
-          books += qty.toInt -> price.toInt
-          success
+        object number1 extends Given[Int]("Given the following number: (.*)") {
+          def extract(text: String): Int = extract1(text).toInt
         }
-        def checkout = books.pp must not be empty
-        def total = (s: String) => {
-          val TotalBooks(total) = s
-          books.foldLeft(0)((res, cur) => res + cur._1 * cur._2) must_== total.toInt
+        case class Addition(n1: Int, n2: Int) {
+          def add: Int = n1 + n2
         }
-      }
+        object number2 extends When[Int, Addition]("And a second number: (.*)") {
+          def extract(number1: Int, text: String) = Addition(number1, extract1(text).toInt)
+        }
+        object result extends Then[Operation]("Then I should get: (.*)") {
+          def extract(addition: Addition, text: String) = addition.add  must_== extract1(text).toInt
+        }
 
-### Shared examples
+This is indeed the simplest form of Given/When/Then specification but it shows the following:
+
+  * a `Given[T]` extractor defines an `extract(String)` method and must return an object of type `T`. It is used to start
+    a sequence of setup actions on the system
+  * a `When[T, S]` extractor defines an `extract(T, String)` method and must return an object of type `S`. It takes the
+    previous system state (of type `T`) and returns a new state (of type `S`)
+  * a `Then[S]` extractor defines an `extract(S, String)` method and must return an object of type `Result`.
+    It takes the final state of the system (of type `S`) and creates an expectation (of type `Result`)
+
+The compiler is courteous enough to check that:
+
+   * only a `Given` extractor can start a sequence
+   * only one or more `When` extractors can follow a `Given` extractor
+   * only one or more `Then` extractors can follow a `When` extractor
+
+Note that if you want to create another sequence of Given/When/Then fragments in your specification, you'll have to terminate
+the current one with the `end` fragment.
+
+ ### Shared examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
 different parts of your specification. The best example of this situation is a specification for a Stack of limited size:

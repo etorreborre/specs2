@@ -10,6 +10,7 @@ class OptionMatchersSpec extends SpecificationWithJUnit { def is =
   { Some(1) must beSome }                                                                                               ^
   { Some(1) must beSome(1) }                                                                                            ^
   { Some(1) must beSome.which(_ > 0) }                                                                                  ^
+  { Some(1) must beSome.like { case a if a > 0 => ok } }                                                                ^
   { Some(1) must not be some(2) }                                                                                       ^
   { None must not be some }                                                                                             ^
   { None must not be some(2) }                                                                                          ^

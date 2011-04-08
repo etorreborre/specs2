@@ -106,7 +106,8 @@ case class Step (step: LazyParameter[Result] = lazyfy(Success())) extends Fragme
   override def toString = "Step"
 }
 case object Step {
-  def apply(r: =>Any) = new Step(lazyfy(trye(r)(Error(_)).left.getOrElse(Success())))
+  def fromEither[T](r: =>Either[Result, T]) = new Step(lazyfy(r.left.getOrElse(Success())))
+  def apply(r: =>Any) = fromEither(trye(r)(Error(_)))
 }
 /**
  * An Action is similar to a Step but can be executed concurrently with other examples.
