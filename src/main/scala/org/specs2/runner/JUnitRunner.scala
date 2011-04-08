@@ -31,13 +31,15 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
   /** specification to execute */
   protected lazy val specification = tryToCreateObject[SpecificationStructure](klass.getName, true, true).get
   protected lazy val content = specification.content
+  /** arguments for the specification */
+  implicit lazy val args: Arguments = content.arguments
   /** fold object used to create descriptions */
   private val descriptions = new JUnitDescriptions(klass)
   /** extract the root Description object and the examples to execute */
   private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll(content.fragments)
   /** @return a Description for the TestSuite */
   def getDescription = desc
-  
+
   /** 
    * run the suite by executing each fragment related to a description:
    * * execute all fragments (including Steps which are reported as steps)
@@ -45,7 +47,6 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
    *   junit failure or ignored event on the RunNotifier
    */
   def run(notifier: RunNotifier) {
-    implicit val args = executions.collect {  case (_, SpecStart(_, a)) => a }.headOption.getOrElse(Arguments())
     executions.collect {
       case (desc, f @ SpecStart(_, _)) => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Example(_, _))   => (desc, executor.executeFragment(args)(f))
