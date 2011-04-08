@@ -16,7 +16,7 @@ import FormattingFragments._
  * 
  */
 private[specs2]
-trait FragmentsBuilder extends RegexpSteps {
+trait FragmentsBuilder extends RegexSteps {
 
   /**
    * Methods for chaining fragments

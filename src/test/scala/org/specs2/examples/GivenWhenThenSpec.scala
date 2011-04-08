@@ -20,21 +20,21 @@ class GivenWhenThenSpec extends SpecificationWithJUnit { def is =
                                                                end
 
   object number1 extends Given[Int]("Given the following number: (.*)") {
-    def extract(text: String): Int = extractString(text).toInt
+    def extract(text: String): Int = extract1(text).toInt
   }
   object number2 extends When[Int, (Int, Int)]("And a second number: (.*)") {
-    def extract(number1: Int, text: String) = (number1, extractString(text).toInt)
+    def extract(number1: Int, text: String) = (number1, extract1(text).toInt)
   }
   case class Operation(n1: Int, n2: Int, operator: String) {
     def calculate: Int = if (operator == "+") n1 + n2 else n1 * n2
   }
   object operator extends When[(Int, Int), Operation]("When I use this operator: (.*)") {
-    def extract(numbers: (Int, Int), text: String) = Operation(numbers._1, numbers._2, extractString(text))
+    def extract(numbers: (Int, Int), text: String) = Operation(numbers._1, numbers._2, extract1(text))
   }
   object result extends Then[Operation]("Then I should get: (.*)") {
-    def extract(operation: Operation, text: String) = operation.calculate  must_== extractString(text).toInt
+    def extract(operation: Operation, text: String) = operation.calculate  must_== extract1(text).toInt
   }
   object greaterThan extends Then[Operation]("And it should be >: (.*)") {
-    def extract(operation: Operation, text: String) = operation.calculate  must be_>=(extractString(text).toInt)
+    def extract(operation: Operation, text: String) = operation.calculate  must be_>=(extract1(text).toInt)
   }
 }

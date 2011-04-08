@@ -243,16 +243,16 @@ with Given/When/Then objects which extract meaningful values from the text:
                                                                      end
 
         object number1 extends Given[Int]("Given the following number: (.*)") {
-          def extract(text: String): Int = extractString(text).toInt
+          def extract(text: String): Int = extract1(text).toInt
         }
         case class Addition(n1: Int, n2: Int) {
           def add: Int = n1 + n2
         }
         object number2 extends When[Int, Addition]("And a second number: (.*)") {
-          def extract(number1: Int, text: String) = Addition(number1, extractString(text).toInt)
+          def extract(number1: Int, text: String) = Addition(number1, extract1(text).toInt)
         }
         object result extends Then[Operation]("Then I should get: (.*)") {
-          def extract(addition: Addition, text: String) = addition.add  must_== extractString(text).toInt
+          def extract(addition: Addition, text: String) = addition.add  must_== extract1(text).toInt
         }
 
 This is indeed the simplest form of Given/When/Then specification but it shows the following:
