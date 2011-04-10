@@ -21,7 +21,7 @@ class Fragments (val specStart: Option[SpecStart] = None, val middle: Seq[Fragme
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
   def overrideArgs(args: Arguments) = new Fragments(Some(start.overrideArgs(args)), middle, specEnd)
-
+  def map(function: Fragment => Fragment) = new Fragments(specStart, middle.map(function), specEnd)
   import StandardFragments._
   override def toString = fragments.mkString("\n")
 

@@ -234,26 +234,38 @@ In that case the argument passed to the `!` method is a function taking a String
 ##### Given / When / Then
 
 In the same fashion, the Given/When/Then style of writing specifications is supported by interspersing Text fragments,
-with Given/When/Then objects which extract meaningful values from the text:
+with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example spefication for a simple
+calculator:
 
         "A given-when-then example for the addition"                 ^
-          "Given the following number: 1"                            ^ number1 ^
-          "And a second number: 2"                                   ^ number2 ^
-          "Then I should get: 3"                                     ^ result ^
+          "Given the following number: ${1}"                         ^ number1 ^
+          "And a second number: ${2}"                                ^ number2 ^
+          "Then I should get: ${3}"                                  ^ result ^
                                                                      end
 
-        object number1 extends Given[Int]("Given the following number: (.*)") {
+        object number1 extends Given[Int] {
           def extract(text: String): Int = extract1(text).toInt
         }
         case class Addition(n1: Int, n2: Int) {
           def add: Int = n1 + n2
         }
-        object number2 extends When[Int, Addition]("And a second number: (.*)") {
+        object number2 extends When[Int, Addition] {
           def extract(number1: Int, text: String) = Addition(number1, extract1(text).toInt)
         }
-        object result extends Then[Operation]("Then I should get: (.*)") {
+        object result extends Then[Operation] {
           def extract(addition: Addition, text: String) = addition.add  must_== extract1(text).toInt
         }
+
+By default, if you  define the Given/When/Then steps without specifying any regular expression, then the steps assume that
+the Text fragment has some values delimited by `${}` that you wish to extract. Given this definition
+
+        object number1 extends Given[Int] {
+          def extract(text: String): Int = extract1(text).toInt
+        }
+
+Then, when provided with the text `"Given the following number: ${1}` the step can use the extract1 inherited method to
+extract the substring `1` that is delimited with `${}`. If there are more values to extract you can just use the other
+`extractn` methods where n is the number of values to extract (up to 10).
 
 This is indeed the simplest form of Given/When/Then specification but it shows the following:
 

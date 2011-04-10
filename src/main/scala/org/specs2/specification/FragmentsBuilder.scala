@@ -48,12 +48,10 @@ trait FragmentsBuilder extends RegexSteps {
 
     /** start a given-when-then block */
     def ^[T](step: Given[T]): PreStep[T] = {
-      val text = fs.fragments.collect { case t: Text => t }.lastOption match {
-        case Some(Text(t)) => t
-        case other         => "A Text must precede a Given object!"
-      }
+      val text = fs.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
       lazy val extracted = step.extractContext(text)
-      new PreStep(() => extracted, fragmentsFragments(fs ^ Arguments("noindent")) ^ Step.fromEither(extracted))
+      def strip(fragments: Fragments) = fragments.map(step.strip)
+      new PreStep(() => extracted, fragmentsFragments(strip(fs) ^ Arguments("noindent")) ^ Step.fromEither(extracted))
     }
   }
 

@@ -17,27 +17,37 @@ trait RegexSteps {
   implicit def RegexFragmentToFragments(r: RegexFragment): Fragments = r.fs
 
   /** Regulaat any point in time a regex sequence can be transformed as a sequence of Fragments */
-  abstract class RegexStep[P, T](regex: String = "") {
+  abstract class RegexStep[P, T](regex: String = "", defaultRegex: String = """\$\{([^}]+)\}""") {
     def extractAll(text: String) = {
       if (regex.isEmpty) {
-        """\$\{([^}]+)\}""".r.findAllIn(text).matchData.collect {
+        defaultRegex.r.findAllIn(text).matchData.collect {
           case Regex.Groups(g) => g
         }.toList
       }
       else regex.r.unapplySeq(text).get
     }
-    def strip(text: String) = {
+    def strip(text: String): String = {
       if (regex.isEmpty)
-        """\$\{([^}]+)\}""".r.replaceAllIn(text, (m:Regex.Match) match { case Regex.Groups(v) => v })
+        defaultRegex.r.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v })
       else
         text
     }
+    def strip(f: Fragment): Fragment =
+      f match {
+        case Text(t) => Text(strip(t))
+        case other   => other
+      }
+
     def extract1(t: String) = (extractAll(t): @unchecked) match { case s1::_ => s1 }
     def extract2(t: String) = (extractAll(t): @unchecked) match { case s1::s2::_ => (s1,s2) }
     def extract3(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }
     def extract4(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }
     def extract5(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }
     def extract6(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }
+    def extract7(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }
+    def extract8(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }
+    def extract9(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }
+    def extract10(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) }
   }
 
   private def tryOrError[T](t: =>T): Either[Result, T] = try(Right(t)) catch { case (e:Exception) => Left(Error(e)) }
@@ -82,11 +92,11 @@ trait RegexSteps {
     type RegexType = PreStepText[T]
     def ^[R](step: When[T, R]) = {
       lazy val extracted = step.extractContext(context(), text)
-      new PreStep(() => extracted, fs.add(Text(strip(text))).add(Step.fromEither(extracted)))
+      new PreStep(() => extracted, fs.add(Text(step.strip(text))).add(Step.fromEither(extracted)))
     }
     def ^(step: Then[T]) = {
      lazy val extracted = step.extractContext(context(), text)
-     new PostStep(() => toContext(extracted), fs.add(Example(strip(text), toResult(extracted))))
+     new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
     }
     def add(f: Fragment): RegexType = new PreStepText(text, context, fs.add(f))
   }
@@ -101,7 +111,7 @@ trait RegexSteps {
     type RegexType = PostStepText[T]
     def ^(step: Then[T]) = {
       lazy val extracted = step.extractContext(context(), text)
-      new PostStep(() => extracted, fs.add(Example(strip(text), toResult(extracted))))
+      new PostStep(() => extracted, fs.add(Example(step.strip(text), toResult(extracted))))
     }
     def add(f: Fragment): RegexType = new PostStepText(text, context, fs.add(f))
   }
