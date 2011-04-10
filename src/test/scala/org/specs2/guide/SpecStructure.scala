@@ -299,7 +299,7 @@ duplicated in 2 places, adding more maintenance burden.
 
 Given the rule saying that only a `Then` block can follow another `Then` block you might think that it is not possible to
 start another G/W/T sequence in the same specification! Fortunately it is possible by just terminating the first sequence
-with the `end` fragment:
+with an `end` fragment:
 
         "A given-when-then example for the addition"                 ^
           "Given the following number: ${1}"                         ^ number1 ^

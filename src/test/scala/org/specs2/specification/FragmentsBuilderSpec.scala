@@ -1,8 +1,10 @@
 package org.specs2
 package specification
 import text._
+import execute.Skipped
+import matcher._
 
-class FragmentsBuilderSpec extends SpecificationWithJUnit {  def is =
+class FragmentsBuilderSpec extends SpecificationWithJUnit with ResultMatchers {  def is =
                                                                                                                         """
   In a Specification, the `contents` variable stores an instance of the Fragments class,
   which is merely a list of fragments. Those fragments are:
@@ -50,8 +52,12 @@ How to create an Example
 Other elements
 ==============                                                                                                          """^
                                                                                                                         br^
-  "Text is created by appending other fragments before or after"                                                        ! other().e1^
-  "But it can also be defined by itself"                                                                                ! other().e2^
+  "A Fragments object by appending fragment objects"                                                                    ! other().e1^
+  "Or simply by casting a String to a Fragments object"                                                                 ! other().e2^
+                                                                                                                        br^
+  "A Step can be created from an Either[Result, T]"                                                                     ^
+    "from a Left(Skipped())"                                                                                            ! other().e3^
+    "from a Right(value)"                                                                                               ! other().e4^
                                                                                                                         end
 
   case class startEnd() {
@@ -90,5 +96,7 @@ Other elements
   case class other() {
     def e1 = ("t" ^ "t2").middle must have size(2)
     def e2 = ("t":Fragments).middle must have size(1)
+    def e3 = Step.fromEither(Left(Skipped())).execute must beSkipped
+    def e4 = Step.fromEither(Right("value")).execute must beSuccessful
   }
 }

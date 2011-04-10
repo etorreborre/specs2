@@ -3,74 +3,47 @@ package specification
 
 import execute._
 import specification.StandardFragments.{Br, End}
-import util.matching.Regex
-import util.matching.Regex.Match
 
 /**
- * This trait provides building block to create steps and examples from regular expression.
+ * This trait provides building blocks to create steps and examples from regular expression.
  *
  * It is used to implement a Given-When-Then way of describing systems.
+ *
+ * Fragments are created by adding a `Given` step to a `Text`:
+ *
+ *  "name: ${Eric}" ^ givenName
+ *
+ * This creates a PreStep object containing the current context (representing all the extracted values) and a list of
+ * Fragments containing:
+ *
+ *  * the Text fragment: Text("name: ${Eric}")
+ *  * a Step containing the extraction code to get the value delimited by `${}`
+ *
+ * Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
+ * stores the additional Text fragment so that values can be extracted from it when a `When` step is added:
+ *
+ *  // this creates a PreStepText object
+ *  "name: ${Eric}" ^ givenName ^
+ *  "age: ${38}"
+ *
+ *  // this creates a PreStep object
+ *  "name: ${Eric}" ^ givenName ^
+ *  "age: ${38}"    ^ thenAge ^
+ *
+ * Eventually, when a `Then` step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
+ * the current context and the results returned by the `Then` objects to create Examples.
+ *
+ * The last PostStep object contains the list of all fragments created by the Given/When/Then sequence:
+ *
+ *  * Text fragments
+ *  * Steps
+ *  * Examples
+ *
  */
 trait RegexSteps {
 
   /** at any point in time a regex sequence can be transformed as a sequence of Fragments */
   implicit def RegexFragmentToFragments(r: RegexFragment): Fragments = r.fs
-
-  /** Regulaat any point in time a regex sequence can be transformed as a sequence of Fragments */
-  abstract class RegexStep[P, T](regex: String = "", defaultRegex: String = """\$\{([^}]+)\}""") {
-    def extractAll(text: String) = {
-      if (regex.isEmpty) {
-        defaultRegex.r.findAllIn(text).matchData.collect {
-          case Regex.Groups(g) => g
-        }.toList
-      }
-      else regex.r.unapplySeq(text).get
-    }
-    def strip(text: String): String = {
-      if (regex.isEmpty)
-        defaultRegex.r.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v })
-      else
-        text
-    }
-    def strip(f: Fragment): Fragment =
-      f match {
-        case Text(t) => Text(strip(t))
-        case other   => other
-      }
-
-    def extract1(t: String) = (extractAll(t): @unchecked) match { case s1::_ => s1 }
-    def extract2(t: String) = (extractAll(t): @unchecked) match { case s1::s2::_ => (s1,s2) }
-    def extract3(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }
-    def extract4(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }
-    def extract5(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }
-    def extract6(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }
-    def extract7(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }
-    def extract8(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }
-    def extract9(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }
-    def extract10(t: String) = (extractAll(t): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) }
-  }
-
-  private def tryOrError[T](t: =>T): Either[Result, T] = try(Right(t)) catch { case (e:Exception) => Left(Error(e)) }
-
-  abstract class Given[T](regex: String = "") extends RegexStep[Unit, T](regex) {
-    def extractContext(text: String): Either[Result, T] = tryOrError(extract(text))
-    def extract(text: String): T
-  }
-  abstract class When[P, T](regex: String = "") extends RegexStep[P, T](regex) {
-    def extractContext(p: Either[Result, P], text: String): Either[Result, T] = p match {
-      case Left(l)  => Left(Skipped(l.message))
-      case Right(r) => tryOrError(extract(r, text))
-    }
-    def extract(p: P, text: String): T
-  }
-
-  abstract class Then[T](regex: String = "") extends RegexStep[Either[Result, T], (T, Result)](regex) {
-    def extractContext(t: Either[Result, T], text: String): Either[Result, (T, Result)] = t match {
-      case Left(l)  => Left(Skipped(l.message))
-      case Right(r) => tryOrError((r, extract(r, text)))
-    }
-    def extract(t: T, text: String): Result
-  }
 
   trait RegexFragment {
     type RegexType <: RegexFragment
