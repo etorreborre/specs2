@@ -234,7 +234,7 @@ In that case the argument passed to the `!` method is a function taking a String
 ##### Given / When / Then
 
 In the same fashion, the Given/When/Then style of writing specifications is supported by interspersing Text fragments,
-with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example spefication for a simple
+with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example specification for a simple
 calculator:
 
         "A given-when-then example for the addition"                 ^
@@ -252,38 +252,65 @@ calculator:
         object number2 extends When[Int, Addition] {
           def extract(number1: Int, text: String) = Addition(number1, extract1(text).toInt)
         }
-        object result extends Then[Operation] {
-          def extract(addition: Addition, text: String) = addition.add  must_== extract1(text).toInt
+        object result extends Then[Addition] {
+          def extract(addition: Addition, text: String): Result = addition.add must_== extract1(text).toInt
         }
 
-By default, if you  define the Given/When/Then steps without specifying any regular expression, then the steps assume that
-the Text fragment has some values delimited by `${}` that you wish to extract. Given this definition
+Here's some explanation of the object definitions that support the G/W/T style:
 
-        object number1 extends Given[Int] {
+ * `number1` is a `Given` step. It is parametrized with the type `Int` meaning that its `extract` method is supposed to extract
+   an Int from the preceding text. It does so by using the `extract1` inherited method, which parses the text for `${}` expressions
+   and return a tuple (with 1 element here) containing all the values enclosed in `${}`.
+
+ * `number2` is a `When` step. It is paramerized with an `Int`, the result from the previous extraction, and an `Addition`
+   which is the result of extracting the second number and putting the 2 together. In that case the method which must be
+   defined is `extract(Int, String): Addition`.
+
+ * finally the `result` object defines the outcome of the Addition. Its `extract` method takes an `Addition` and the current
+   text to return a `Result`
+
+###### Multiple steps
+
+A G/W/T sequence can contain more than just 3 steps. However the compiler will check that:
+
+   * only a `Given[T]` extractor can start a sequence
+   * only a `When[T, S]` extractor can follow a `Given[T]` extractor
+   * only a `When[S, U]` extractor or a `Then[S]` can follow a `When[T, S]` extractor
+   * only a `Then[S]` can follow a `Then[S]` extractor
+
+###### Extract methods
+
+The `Given`, `When`, `Then` classes provide several convenience methods to extract strings from the preceding text: the
+`extractn` methods will extracts the values delimited by `${}` for up to 10 values.
+
+###### User regexps
+
+In the original way of declaring Given/When/Then steps, the text is left completely void of markers to extract meaningful
+values. On the other hand the user specifies a regular expression where groups are used to show where those values are:
+
+        object number1 extends Given[Int]("Given the following number: (.*)") {
           def extract(text: String): Int = extract1(text).toInt
         }
 
-Then, when provided with the text `"Given the following number: ${1}` the step can use the extract1 inherited method to
-extract the substring `1` that is delimited with `${}`. If there are more values to extract you can just use the other
-`extractn` methods where n is the number of values to extract (up to 10).
+The advantage of using this way is that the text is left in it's pristine form, the drawback is that most of the text is
+duplicated in 2 places, adding more maintenance burden.
 
-This is indeed the simplest form of Given/When/Then specification but it shows the following:
+###### Several G/W/T blocks
 
-  * a `Given[T]` extractor defines an `extract(String)` method and must return an object of type `T`. It is used to start
-    a sequence of setup actions on the system
-  * a `When[T, S]` extractor defines an `extract(T, String)` method and must return an object of type `S`. It takes the
-    previous system state (of type `T`) and returns a new state (of type `S`)
-  * a `Then[S]` extractor defines an `extract(S, String)` method and must return an object of type `Result`.
-    It takes the final state of the system (of type `S`) and creates an expectation (of type `Result`)
+Given the rule saying that only a `Then` block can follow another `Then` block you might think that it is not possible to
+start another G/W/T sequence in the same specification! Fortunately it is possible by just terminating the first sequence
+with the `end` fragment:
 
-The compiler is courteous enough to check that:
-
-   * only a `Given` extractor can start a sequence
-   * only one or more `When` extractors can follow a `Given` extractor
-   * only one or more `Then` extractors can follow a `When` extractor
-
-Note that if you want to create another sequence of Given/When/Then fragments in your specification, you'll have to terminate
-the current one with the `end` fragment.
+        "A given-when-then example for the addition"                 ^
+          "Given the following number: ${1}"                         ^ number1 ^
+          "And a second number: ${2}"                                ^ number2 ^
+          "Then I should get: ${3}"                                  ^ addition ^
+                                                                     end^
+        "A given-when-then example for the multiplication"           ^
+          "Given the following number: ${1}"                         ^ number1 ^
+          "And a second number: ${2}"                                ^ number2 ^
+          "Then I should get: ${2}"                                  ^ multiplication ^
+                                                                     end
 
  ### Shared examples
 
