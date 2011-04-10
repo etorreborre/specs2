@@ -3,7 +3,8 @@ package examples
 
 import specification._
 
-class GivenWhenThenSpec extends SpecificationWithJUnit { def is = fullStackTrace ^
+class GivenWhenThenSpec extends SpecificationWithJUnit { def is =
+
   "A given-when-then example for a calculator"                 ^
     "Given the following number: ${1}"                         ^ number1 ^
     "And a second number: ${2}"                                ^ number2 ^
