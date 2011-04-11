@@ -48,11 +48,19 @@ object Fragments {
     }
   }
 
+  /** @return true if the Fragment is a Text */
+  def isText: Function[Fragment, Boolean] = { case Text(_) => true; case _ => false }
+  /** @return the text if the Fragment is a Text */
+  def isSomeText: PartialFunction[Fragment, Text] = { case t @ Text(_) => t }
   /** @return true if the Fragment is an Example */
   def isExample: Function[Fragment, Boolean] = { case Example(_, _) => true; case _ => false }
+  /** @return the example if the Fragment is an Example */
+  def isAnExample: PartialFunction[Fragment, Example] = { case e @ Example(_,_) => e }
   /** @return true if the Fragment is a step */
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
-  
+  /** @return the step if the Fragment is a Step*/
+  def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_) => s }
+
   /** @return a Fragments object with the appropriate name set on the SpecStart fragment */
   def withSpecStartEnd(fragments: Fragments, name: SpecName): Fragments = {
     val specStart = fragments.start.withName(name)
