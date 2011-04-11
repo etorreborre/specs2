@@ -16,8 +16,8 @@ abstract class Given[T](regex: String = "") extends specification.Given[Gen[T]](
  * Create a context from a previous context by adding more generated data
  */
 abstract class When[P, T](regex: String = "") extends specification.When[Gen[P], Gen[T]](regex) {
-  def extract(p: P, text: String): Gen[T]
   def extract(pg: Gen[P], text: String): Gen[T] = for (p <- pg; t <- extract(p, text)) yield t
+  def extract(p: P, text: String): Gen[T]
 }
 /**
  * Check the state of the system by taking an arbitrary value and using ScalaCheck properties to generate a Result
