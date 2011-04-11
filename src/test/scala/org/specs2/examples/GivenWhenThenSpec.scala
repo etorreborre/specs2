@@ -3,7 +3,7 @@ package examples
 
 import specification._
 
-class GivenWhenThenSpec extends SpecificationWithJUnit { def is =
+class GivenWhenThenSpec extends SpecificationWithJUnit { def is = 
 
   "A given-when-then example for a calculator"                 ^
     "Given the following number: ${1}"                         ^ number1 ^
@@ -27,9 +27,6 @@ class GivenWhenThenSpec extends SpecificationWithJUnit { def is =
   object number2 extends When[Int, (Int, Int)] {
     def extract(number1: Int, text: String) = (number1, extract1(text).toInt)
   }
-  case class Operation(n1: Int, n2: Int, operator: String) {
-    def calculate: Int = if (operator == "+") n1 + n2 else n1 * n2
-  }
   object operator extends When[(Int, Int), Operation] {
     def extract(numbers: (Int, Int), text: String) = Operation(numbers._1, numbers._2, extract1(text))
   }
@@ -38,5 +35,8 @@ class GivenWhenThenSpec extends SpecificationWithJUnit { def is =
   }
   object greaterThan extends Then[Operation] {
     def extract(operation: Operation, text: String) = operation.calculate  must be_>=(extract1(text).toInt)
+  }
+  case class Operation(n1: Int, n2: Int, operator: String) {
+    def calculate: Int = if (operator == "+") n1 + n2 else n1 * n2
   }
 }

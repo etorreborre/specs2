@@ -312,7 +312,58 @@ with an `end` fragment:
           "Then I should get: ${2}"                                  ^ multiplication ^
                                                                      end
 
- ### Shared examples
+###### ScalaCheck values
+
+Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario
+with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.
+
+This can be avoided and even enhanced by using ScalaCheck to generate more values for the same scenario. For the calculator
+above you could write:
+
+        import org.scalacheck.Gen._
+        import specification.gen._
+
+        class GivenWhenThenScalacheckSpec extends SpecificationWithJUnit with ScalaCheck { def is =
+
+          "A given-when-then example for a calculator"                                   ^
+            "Given a first number n1"                                                    ^ number1 ^
+            "And a second number n2"                                                     ^ number2 ^
+            "When I add them"                                                            ^ add ^
+            "Then I should get n1 + n2"                                                  ^ result ^
+                                                                                         end^
+
+          object number1 extends Given[Int] {
+            def extract(text: String) = choose(-10, 10)
+          }
+          object number2 extends When[Int, (Int, Int)] {
+            def extract(number1: Int, text: String) = for { n2 <- choose(-10, 10) } yield (number1, n2)
+          }
+          object add extends When[(Int, Int), Addition] {
+            def extract(numbers: (Int, Int), text: String) = Addition(numbers._1, numbers._2)
+          }
+          object mult extends When[(Int, Int), Multiplication] {
+            def extract(numbers: (Int, Int), text: String) = Multiplication(numbers._1, numbers._2)
+          }
+          object result extends Then[Addition] {
+            def extract(text: String)(implicit op: Arbitrary[Addition]) = {
+              check { (op: Addition) => op.calculate must_== op.n1 + op.n2 }
+            }
+          }
+          case class Addition(n1: Int, n2: Int) extends Operation { def calculate: Int = n1 + n2 }
+        }
+
+The main differences with a "normal" G/W/T sequence are:
+
+ * the import of step classes from `org.specs2.specification.gen` instead of `org.specs2.specification`
+ * the return values from the `extract` methods of the `Given` and `When` steps which must return ScalaCheck generators
+   (cf `number1` and `number2`. For the `add` step there is an implicit conversion transforming any value of type `T` to a
+   `Gen[T]`
+ * the use of the ScalaCheck trait to access the `check` function transforming a function to a `org.scalacheck.Prop` and then
+   to a `Result`
+ * the `extract` method of the `Then` step takes an implicit `Arbitrary[T]` parameter which is used by the `check` method
+   to create a ScalaCheck property
+
+### Shared examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
 different parts of your specification. The best example of this situation is a specification for a Stack of limited size:
