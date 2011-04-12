@@ -10,7 +10,7 @@ import text._
 import text.Trim._
 import scalaz.Monoid
 import data.IncludedExcluded
-
+import io.Location
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
  * an Example
@@ -18,6 +18,7 @@ import data.IncludedExcluded
 sealed trait Fragment {
   val linkedTo: Option[SpecificationStructure] = None
   def matches(s: String) = true
+  def location: Location = new Location
 }
 
 /**

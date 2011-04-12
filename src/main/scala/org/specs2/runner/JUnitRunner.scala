@@ -56,7 +56,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
       case (desc, f @ SpecEnd(_))      => (desc, executor.executeFragment(args)(f))
     }.
       foreach {
-        case (desc, ExecutedResult(_, result, timer)) => {
+        case (desc, ExecutedResult(_, result, timer, _)) => {
           notifier.fireTestStarted(desc)
           result match {
             case f @ Failure(m, e, st, d)    => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
@@ -66,9 +66,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
           }
           notifier.fireTestFinished(desc)
         }
-        case (desc, ExecutedSpecStart(_, _))  => notifier.fireTestRunStarted(desc)
-        case (desc, ExecutedSpecEnd(_))       => notifier.fireTestRunFinished(new org.junit.runner.Result)
-        case (desc, _)                        => // don't do anything otherwise too many tests will be counted
+        case (desc, ExecutedSpecStart(_, _, _))  => notifier.fireTestRunStarted(desc)
+        case (desc, ExecutedSpecEnd(_, _))       => notifier.fireTestRunFinished(new org.junit.runner.Result)
+        case (desc, _)                           => // don't do anything otherwise too many tests will be counted
       }
   }
   /** @return a Throwable expected by JUnit Failure object */

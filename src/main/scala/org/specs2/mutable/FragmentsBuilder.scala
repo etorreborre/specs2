@@ -51,12 +51,11 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
     }
   }
 
-  override implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s, mutableExampleFactory)
-  
-  private val mutableExampleFactory = new ExampleFactory {
-    def newExample[T <% Result](s: String, function: String => T): Example = addExample(s, function(s))
-	  def newExample[T](s: String, t: =>MatchResult[T]): Example             = addExample(s, t.toResult)
-	  def newExample[T <% Result](s: String, t: =>T): Example                = addExample(s, t)
+  private[specs2]
+  override def exampleFactory: ExampleFactory = new MutableExampleFactory
+
+  private[specs2] class MutableExampleFactory extends DefaultExampleFactory {
+    override def newExample[T <% Result](s: String, t: =>T): Example = addExample(super.newExample(s, t))
   }
 
   /**

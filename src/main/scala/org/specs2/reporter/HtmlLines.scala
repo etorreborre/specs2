@@ -83,8 +83,8 @@ case class HtmlResult(r: ExecutedResult) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if (!args.xonly || !r.result.isSuccess) {
       r match {
-        case ExecutedResult(FormMarkup(form), _, _) => printFormResult(form)(args, out)
-        case _                                      => printResult(r.text(args), level, r.result)(args, out)
+        case ExecutedResult(FormMarkup(form), _, _, _) => printFormResult(form)(args, out)
+        case _                                         => printResult(r.text(args), level, r.result)(args, out)
       }
 
     }
