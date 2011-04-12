@@ -88,7 +88,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
 	  def ![T <% Result](t: =>T): Example = exampleFactory.newExample(s, t)
   }
 
-  private[specs2] def exampleFactory: ExampleFactory = new DefaultExampleFactory
+  private[specs2] implicit def exampleFactory: ExampleFactory = new DefaultExampleFactory
 
   /**
    * Arguments creation

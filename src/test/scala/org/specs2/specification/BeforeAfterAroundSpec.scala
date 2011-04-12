@@ -10,6 +10,7 @@ class BeforeAfterAroundSpec extends SpecificationWithJUnit { def is =
  "a spec can define a Before context that is used for each example"                                                     ^
    "in a mutable spec"                                                                                                  ! before ^
    "also in an acceptance spec"                                                                                         ! before2 ^
+   "defined on several fragments"                                                                                       ! before3 ^
                                                                                                                         p^
  "a spec can define an After context that is used for each example"                                                     ! after ^
  "a spec can define an Around context that is used for each example"                                                    ! around ^
@@ -32,6 +33,16 @@ class BeforeAfterAroundSpec extends SpecificationWithJUnit { def is =
       def before = println("before")
       def is = "ex1" ! success
     }, "before")
+
+  def before3 = executeContains(
+    new Specification with MockOutput {
+      object withBefore extends Before with Apply { def before = println("before") }
+      def is = withBefore(spec)
+      def spec =
+        "this should"     ^
+          "ex1" ! success ^
+          "ex2" ! success
+    }, "before", "before")
 
   def after = executeContains(
     new mutable.Specification with AfterExample with MockOutput {

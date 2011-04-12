@@ -14,7 +14,9 @@ trait ExampleFactory {
   /** @return an Example, using a match */
 	def newExample[T](s: String, t: =>MatchResult[T]): Example = newExample(s, t.toResult)
   /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
-	def newExample[T <% Result](s: String, t: =>T): Example
+	def newExample[T <% Result](s: String, t: =>T): Example = newExample(Example(s, t))
+  /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
+	def newExample(e: Example): Example
 }
 
 /**
@@ -22,7 +24,7 @@ trait ExampleFactory {
  */
 private[specs2]
 class DefaultExampleFactory extends ExampleFactory {
-  def newExample[T <% Result](s: String, t: =>T): Example = Example(s, t)
+  def newExample(e: Example): Example = e
 }
 
 /**
@@ -30,6 +32,7 @@ class DefaultExampleFactory extends ExampleFactory {
  * @see mutable.BeforeExample
  */
 private[specs2]
-class DecoratedExampleFactory(factory: =>ExampleFactory, function: {def apply[T <% Result](a: =>T): Result}) extends ExampleFactory {
-  def newExample[T <% Result](s: String, t: =>T) = factory.newExample(s, function(t))
+class DecoratedExampleFactory(factory: =>ExampleFactory, function: Context) extends ExampleFactory {
+  override def newExample[T <% Result](s: String, t: =>T) = factory.newExample(s, function(t))
+  def newExample(e: Example) = e
 }

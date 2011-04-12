@@ -809,29 +809,60 @@ Note that you can also compose contexts in order to reuse them to build more com
 ##### Using a context for each Example
 
 The context creation which has been described up to now is very flexible and allows to switch contexts and compose between
-different examples. Yet, there are specifications where the context need to be set similarly for each example. In that
-case repeating the context name for each example body adds a lot of redundancy. You can avoid that by using one of the following
-traits:
+different examples. Yet, there are specifications where the context need to be set similarly for each Example. An easy way
+around that is to use the `Apply` trait:
 
- * `BeforeExample`, `BeforeContextExample`
- * `AfterExample`, `AfterContextExample`
- * `AroundExample`, `AroundContextExample`
- * `BeforeAfterAroundExample`, `BeforeAfterAroundContextExample`
+      class SpecificationWithBefore extends Specification {
+        // the Apply trait adds an apply method to apply the context to each Example
+        object withBefore extends Before with Apply {
+          def before = cleanupDatabase
+        }
+        def is = withBefore(spec)
 
-The `BeforeExample` and `XxxxExample` traits are the simplest ones. For example, `BeforeExample` requires you to define a
-`before` method exactly like the one you define in the `Before` trait:
+        def spec =
+        "this should"     ^
+          "ex1" ! success ^
+          "ex2" ! succes
+      }
+
+This way of doing is especially useful if you define an abstract Specification meant to be reused across the project, with
+the same setup/teardown procedure at the beginning/end of the specification with a `before` method executed before each example:
+
+      class ProjectSpecification extends Specification {
+        // always clean up the database before an example
+        object cleanUpDb extends Before with Apply {
+          def before = cleanupDatabase
+        }
+        def is = Step(initialCleanup) ^ cleanUpDb(spec) ^ Step(finalCleanup)
+        def spec: Fragments
+      }
+
+
+##### Using a context for each Example in a mutable specification
+
+Alas the `Apply` trait is not usable with a mutable specification because of the way that examples are added to the specification
+as soon as created. In order to avoid repetition in that case there are additional traits with you can use:
+
+ * `BeforeExample`
+ * `AfterExample`
+ * `AroundExample`
+ * `BeforeAfterAroundExample`
+
+The `BeforeExample` trait requires you to define a `before` method exactly like the one you define in the `Before` trait:
 
         class Specification extends BeforeExample {
           def before = cleanDatabase
-          def is =
-          "This is a specification where the database is cleaned up before each example"     ^
-            "first example"                                                                  ! e1^
-            "second example"                                                                 ! e2^
-                                                                                             end
+
+          "This is a specification where the database is cleaned up before each example" >> {
+            "first example" in { success }
+            "second example" in { success }
+          }
         }
 
-On the other hand the `BeforeContextExample` trait (and the other `XxxxContextExample` traits) allows to define a bit more
-elaborate context by requiring a `val beforeContext: Before` member.
+As you can guess, the `AfterExample`, `AroundExample`,... traits work similarly by requiring the corresponding `after`, `around`
+,... methods to be defined.
+
+Note that if you like this way of declaring the setup methods you can also use it in a non-mutable Specification.
 
 ##### Steps and Actions
 

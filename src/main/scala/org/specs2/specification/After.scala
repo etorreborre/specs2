@@ -10,7 +10,7 @@ import execute._
  * 
  * @see Example to understand why the type T must <% Result
  */
-trait After { outer =>
+trait After extends Context { outer =>
   /** override this method to provide the after behavior */
   def after: Any
   /** 

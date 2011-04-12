@@ -49,13 +49,15 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
       addFragments(p)
       ex
     }
+    def in(fs: =>Fragments): Fragments = fs
+    def >>(fs: =>Fragments): Fragments = fs
   }
 
   private[specs2]
-  override def exampleFactory: ExampleFactory = new MutableExampleFactory
+  override implicit def exampleFactory: ExampleFactory = new MutableExampleFactory
 
   private[specs2] class MutableExampleFactory extends DefaultExampleFactory {
-    override def newExample[T <% Result](s: String, t: =>T): Example = addExample(super.newExample(s, t))
+    override def newExample(e: Example): Example = addExample(e)
   }
 
   /**

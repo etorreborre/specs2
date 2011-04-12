@@ -77,7 +77,7 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
   def execute = body()
   override def matches(s: String) = desc.toString.removeAll("\n").matches(s)
   override def toString = "Example("+desc+")"
-
+  def map(f: Result => Result) = Example(desc, () =>f(body()))
   override def equals(a: Any) = {
     a match {
       case e: Example => desc == e.desc
