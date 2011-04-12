@@ -806,6 +806,32 @@ Note that you can also compose contexts in order to reuse them to build more com
 
     "Do something on the full system"                   ! init(success)
 
+##### Using a context for each Example
+
+The context creation which has been described up to now is very flexible and allows to switch contexts and compose between
+different examples. Yet, there are specifications where the context need to be set similarly for each example. In that
+case repeating the context name for each example body adds a lot of redundancy. You can avoid that by using one of the following
+traits:
+
+ * `BeforeExample`, `BeforeContextExample`
+ * `AfterExample`, `AfterContextExample`
+ * `AroundExample`, `AroundContextExample`
+ * `BeforeAfterAroundExample`, `BeforeAfterAroundContextExample`
+
+The `BeforeExample` and `XxxxExample` traits are the simplest ones. For example, `BeforeExample` requires you to define a
+`before` method exactly like the one you define in the `Before` trait:
+
+        class Specification extends BeforeExample {
+          def before = cleanDatabase
+          def is =
+          "This is a specification where the database is cleaned up before each example"     ^
+            "first example"                                                                  ! e1^
+            "second example"                                                                 ! e2^
+                                                                                             end
+        }
+
+On the other hand the `BeforeContextExample` trait (and the other `XxxxContextExample` traits) allows to define a bit more
+elaborate context by requiring a `val beforeContext: Before` member.
 
 ##### Steps and Actions
 

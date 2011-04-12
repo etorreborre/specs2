@@ -55,13 +55,13 @@ trait RegexSteps {
     def ^(fs2: Fragments) = fs.add(fs2)
   }
 
-  case class PreStep[T](context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
+  private[specs2] case class PreStep[T](context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
     type RegexType = PreStep[T]
     def ^(toExtract: String) = new PreStepText(toExtract, context, fs)
     def add(f: Fragment): RegexType = new PreStep(context, fs.add(f))
   }
 
-  case class PreStepText[T](text: String, context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
+  private[specs2] case class PreStepText[T](text: String, context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
     type RegexType = PreStepText[T]
     def ^[R](step: When[T, R]) = {
       lazy val extracted = step.extractContext(context(), text)
@@ -74,13 +74,13 @@ trait RegexSteps {
     def add(f: Fragment): RegexType = new PreStepText(text, context, fs.add(f))
   }
 
-  case class PostStep[T](context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
+  private[specs2] case class PostStep[T](context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
     type RegexType = PostStep[T]
     def ^(toExtract: String) = new PostStepText(toExtract, context, fs)
     def add(f: Fragment): RegexType = new PostStep(context, fs.add(f))
   }
 
-  case class PostStepText[T](text: String, context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
+  private[specs2] case class PostStepText[T](text: String, context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
     type RegexType = PostStepText[T]
     def ^(step: Then[T]) = {
       lazy val extracted = step.extractContext(context(), text)

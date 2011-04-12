@@ -226,7 +226,9 @@ There are several matchers to check Option and Either instances:
  * `beNone` checks if an element is None
  * `beAsNoneAs` checks if 2 values are equal to None at the same time
  * `beRight` checks if an element is Right(_)
+ * `beRight.like(partial function)` checks if an element is Right(_) and satisfies a partial function returning a `MatchResult`
  * `beLeft` checks if an element is Left(_)
+ * `beLeft.like(partial function)` checks if an element is Left(_) and satisfies a partial function returning a `MatchResult`
 
 #### String matchers
 
