@@ -16,7 +16,7 @@ trait Throwablex {
    * See the ExtendedExceptions object description
    */
   class ExtendedThrowable[T <: Throwable](t: T) {
-    private val topTrace = new Location(if (t.getStackTrace().isEmpty) stackTraceElement("specs2") else t.getStackTrace()(0)) 
+    private val topTrace = new TraceLocation(if (t.getStackTrace().isEmpty) stackTraceElement("specs2") else t.getStackTrace()(0))
     /** @return the file name and the line number where the Throwable was created */
     def location = topTrace.location
     /** @return the class name and the line number where the Throwable was created */
@@ -78,7 +78,7 @@ trait Throwablex {
   /** @return an exception with the given stacktrace */
   def exception(st: Seq[StackTraceElement]): Exception = exception("", st)
   /** location information from a stackTrace element */
-  class Location(t: StackTraceElement) {
+  class TraceLocation(t: StackTraceElement) {
     /** path corresponding to the class name. This is an approximation corresponding to the
      *  simple case of a top-level class in a file having the same name */
     lazy val path = className.replace(".", "/")+".scala"

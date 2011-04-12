@@ -31,11 +31,17 @@ trait FromSource {
   def getCode(depth: Int = 4): String = {
     val stackTrace = new Exception().getStackTrace()
     val trace = stackTrace.apply(depth)
-    val location = new Location(trace)
+    val location = new TraceLocation(trace)
     tryOr {
       val content = readLines(srcDir+location.path)
       content(location.lineNumber - 1)
     } (e => "No source file found at "+srcDir+location.path)
+  }
+
+  def location = {
+    val stackTrace = new Exception().getStackTrace().toList
+    val trace = stackTrace.filterNot(_.toString.contains("org.specs2")).headOption
+    new TraceLocation(trace.getOrElse(stackTrace(0)))
   }
 }
 object FromSource extends FromSource
