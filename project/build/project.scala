@@ -36,20 +36,19 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   
 
   /** Packaging */
-	/** Proguard */
+  /** Proguard */
   override def proguardOptions = List("-dontshrink -dontobfuscate -dontpreverify")
-	override def proguardInJars = { 
-		println((super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz")))
-		(super.proguardInJars +++ scalaLibraryPath)  filter (_.name.contains("scalaz"))
+  override def proguardInJars = { 
+	(super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz"))
   }
 	
-	/** Sources */
+  /** Sources */
   override def packageSrcJar = defaultJarPath("-sources.jar")
   override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc, proguard)
   override def artifacts = super.artifacts ++ Seq(Artifact("specs2_"+buildScalaVersion, "jar", ".min.jar"))
   
   /** Publishing */
-	override def ivyXML =
+  override def ivyXML =
     <dependencies>
       <exclude module={"scalaz-core_"+buildScalaVersion}/>
     </dependencies>
