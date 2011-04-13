@@ -54,7 +54,7 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
       <exclude module={"scalaz-core_"+buildScalaVersion}/>
     </dependencies>
 	
-	override def pomPostProcess(pom: Node): Node = super.pomPostProcess(pom)
+//	override def pomPostProcess(pom: Node): Node = super.pomPostProcess(pom)
 			
   override def managedStyle = ManagedStyle.Maven
   override def defaultPublishRepository = {
