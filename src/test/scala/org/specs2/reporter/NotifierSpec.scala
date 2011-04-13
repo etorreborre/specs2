@@ -46,7 +46,7 @@ A Notifier can be used to get stream of events for the execution of a Specificat
   def ex5    = there was atLeastOne(notified).exampleError(anyString, any[Throwable], anyLong)
   def ex6    = there was atLeastOne(notified).exampleSkipped(anyString, anyLong)
   def ex7    = there was atLeastOne(notified).examplePending(anyString, anyLong)
-  def step1  = there was atLeastOne(notified).exampleFailure(matching("step failure"), any[Throwable], anyLong)
+  def step1  = there was atLeastOne(notified).exampleFailure(matching("clean failed"), any[Throwable], anyLong)
   def end1   = there was one(notified).specEnd(anyString, anyString)
 
   def notified: Notifier = {

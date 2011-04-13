@@ -48,8 +48,8 @@ trait NotifierExporting extends Exporting {
         notifier.exampleStarted(s.toString, l.toString)
         r match {
           case Success(_)              => notifier.exampleSuccess(r.message, t.stop.elapsed)
-          case fail @ Failure(_,_,_,_) => notifier.exampleFailure(r.message, fail.exception, t.stop.elapsed)
-          case err  @ Error(_,_)       => notifier.exampleError(r.message, err.exception, t.stop.elapsed)
+          case fail @ Failure(_,_,_,_) => notifier.exampleFailure(fail.message, fail.exception, t.stop.elapsed)
+          case err  @ Error(_,_)       => notifier.exampleError(err.message, err.exception, t.stop.elapsed)
           case Skipped(_,_)            => notifier.exampleSkipped(r.message, t.stop.elapsed)
           case Pending(_)              => notifier.examplePending(r.message, t.stop.elapsed)
         }
