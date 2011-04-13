@@ -45,6 +45,7 @@ From inside a specification, the available arguments are the following:
  `exclude`       | ""                      | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
  `plan`          | false                   | only report the text of the specification without executing anything
  `skipAll`       | false                   | skip all the examples
+ `stopOnFail`    | false                   | skip all examples after the first failure or error
  `failtrace`     | false                   | report the stacktrace for failures
  `color`         | true                    | use colors in the output (`nocolor` can also be used on the command line)
  `noindent`      | false                   | don't indent automatically text and examples
@@ -63,6 +64,7 @@ All those arguments are usually set in a specification with `args(name=value)` b
  ---------------                                                       | -----------------------                                                               | -----------                                                                                      |
  `plan`                                                                | `args(plan=true)`                                                                     |                                                                                                  |
  `skipAll`                                                             | `args(skipAll=true)`                                                                  |                                                                                                  |
+ `stopOnFail`                                                          | `args(stopOnFail=true)`                                                               |                                                                                                  |
  `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
  `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
  `include(tags: String)`                                               | `args(include=tags)`                                                                  |                                                                                                  |
@@ -73,7 +75,7 @@ All those arguments are usually set in a specification with `args(name=value)` b
  `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
  `descFromExpectations`                                                | `args(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
  `fullStackTrace`                                                      | `args(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
- `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)` | to display the differences when doing equality comparison                                        |
+ `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | to display the differences when doing equality comparison                                        |
 
 ##### Diffs
 
