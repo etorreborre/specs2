@@ -881,7 +881,7 @@ framework. You can reuse the following traits:
          success
        }
        def e3 = {
-         m.get(anyInt()) returns "element"
+         m.get(anyInt) returns "element"
          m.get(999) must_== "element"
          m.get(be_==(123)) returns "one"
          success

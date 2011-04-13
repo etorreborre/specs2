@@ -11,6 +11,8 @@ import text.Trim._
 import scalaz.Monoid
 import data.IncludedExcluded
 import io.Location
+import scala.Either
+
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
  * an Example
@@ -107,9 +109,19 @@ case class Step (step: LazyParameter[Result] = lazyfy(Success())) extends Fragme
   override def toString = "Step"
 }
 case object Step {
-  /** create a Step object from either a result, or a value to evaluate */
-  def fromEither[T](r: =>Either[Result, T]) = new Step(lazyfy(r.left.getOrElse(Success())))
-  def apply(r: =>Any) = fromEither(trye(r)(Error(_)))
+  /** create a Step object from either a previous result, or a value to evaluate */
+  def fromEither[T](r: =>Either[Result, T]) = new Step(either(r))
+
+  private[specs2]
+  def either[T](r: =>Either[Result, T]): LazyParameter[Result] = lazyfy {
+    r match {
+      case Left(l)               => l
+      case Right(result: Result) => result
+      case Right(other)          => Success()
+    }
+  }
+  /** create a Step object from any value */
+  def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))
 }
 /**
  * An Action is similar to a Step but can be executed concurrently with other examples.
@@ -121,7 +133,10 @@ case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fr
   override def toString = "Action"
 }
 case object Action {
-  def apply(r: =>Any) = new Action(lazyfy(trye(r)(Error(_)).left.getOrElse(Success())))
+  /** create an Action object from any value */
+  def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))
+  /** create an Action object from either a previous result, or a value to evaluate */
+  def fromEither[T](r: =>Either[Result, T]) = new Action(Step.either(r))
 }
 
 /**

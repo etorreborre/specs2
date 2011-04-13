@@ -27,8 +27,9 @@ A Notifier can be used to get stream of events for the execution of a Specificat
         "when Skipped"                                                                                                  ! ex6^
         "when Pending"                                                                                                  ! ex7^
                                                                                                                         endp^
-  "A step is notified only if it fails"                                                                                 ! step1^
-    "with its location"                                                                                                 ! step2^
+  "A step can be notified"                                                                                              ^
+    "if it fails"                                                                                                       ! step1^
+                                                                                                                        endp^
   "The SpecEnd is notified"                                                                                             ! end1^
                                                                                                                         end
 
@@ -40,13 +41,12 @@ A Notifier can be used to get stream of events for the execution of a Specificat
   def level2 = there was one(notified).contextEnd(anyString, anyString)
   def ex1    = there was atLeastOne(notified).exampleStarted(equalTo("ex1"), anyString)
   def ex2    = there was atLeastOne(notified).exampleStarted(anyString, matching(".*.scala.*"))
-  def ex3    = there was one(notified).exampleSuccess(anyString, any[Long])
-  def ex4    = there was one(notified).exampleFailure(anyString, any[Throwable], any[Long])
-  def ex5    = there was one(notified).exampleError(anyString, any[Throwable], any[Long])
-  def ex6    = there was one(notified).exampleSkipped(anyString, any[Long])
-  def ex7    = there was one(notified).examplePending(anyString, any[Long])
-  def step1  = pending
-  def step2  = pending
+  def ex3    = there was atLeastOne(notified).exampleSuccess(anyString, anyLong)
+  def ex4    = there was atLeastOne(notified).exampleFailure(anyString, any[Throwable], anyLong)
+  def ex5    = there was atLeastOne(notified).exampleError(anyString, any[Throwable], anyLong)
+  def ex6    = there was atLeastOne(notified).exampleSkipped(anyString, anyLong)
+  def ex7    = there was atLeastOne(notified).examplePending(anyString, anyLong)
+  def step1  = there was atLeastOne(notified).exampleFailure(matching("step failure"), any[Throwable], anyLong)
   def end1   = there was one(notified).specEnd(anyString, anyString)
 
   def notified: Notifier = {
@@ -62,7 +62,9 @@ A Notifier can be used to get stream of events for the execution of a Specificat
         "ex3" ! Error("skipped", new Exception("error"))  ^
         "ex4" ! Skipped("skipped")                        ^
         "ex5" ! Pending("pending")                        ^
-        Step("clean")                                     ^ end
+        Step(Failure("clean failed"))                     ^
+        Step("clean ok")                                  ^
+                                                          end
   }
   def reporter = new NotifierReporter {
     val notifier = mock[Notifier]

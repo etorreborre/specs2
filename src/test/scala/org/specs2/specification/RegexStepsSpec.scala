@@ -24,7 +24,7 @@ class RegexStepsSpec extends SpecificationWithJUnit with ResultMatchers { def is
 
   def when = number2.extractContext(Right(1), "And a second number: ${2}") must beRight((1, 2))
 
-  def then = equalToLast.extractContext(Right(1), "Then it is ${3}") must beRight.like { case (s, r) => r must beSuccessful }
+  def then = equalToLast.extractContext(Right(1), "Then it is ${1}") must beRight.like { case (s, r) => r must beSuccessful }
 
   object number1 extends Given[Int] {
     def extract(text: String): Int = extract1(text).toInt
