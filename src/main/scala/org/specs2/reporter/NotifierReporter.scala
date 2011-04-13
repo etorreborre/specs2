@@ -78,3 +78,17 @@ trait Notifier {
   def exampleSkipped(message: String, duration: Long)
   def examplePending(message: String, duration: Long)
 }
+
+object ConsoleNotifier extends Notifier {
+  def specStart(title: String, location: String)                    = Console.println("specStart "     +title+" "+location)
+  def specEnd(title: String, location: String)                      = Console.println("specEnd "       +title+" "+location)
+  def contextStart(text: String, location: String)                  = Console.println("contextStart "  +text+" "+location)
+  def contextEnd(text: String, location: String)                    = Console.println("contextEnd "    +text+" "+location)
+  def text(text: String, location: String)                          = Console.println("text "          +text+" "+location)
+  def exampleStarted(text: String, location: String)                = Console.println("exampleStarted "+text+" "+location)
+  def exampleSuccess(text: String, duration: Long)                  = Console.println("exampleSuccess "+text+" "+duration)
+  def exampleFailure(message: String, f: Throwable, duration: Long) = Console.println("exampleFailure "+message+" "+f+" "+duration)
+  def exampleError(message: String, f: Throwable, duration: Long)   = Console.println("exampleError "  +message+" "+f+" "+duration)
+  def exampleSkipped(message: String, duration: Long)               = Console.println("exampleSkipped "+message+" "+duration)
+  def examplePending(message: String, duration: Long)               = Console.println("examplePending "+message+" "+duration)
+}
