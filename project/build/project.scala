@@ -1,7 +1,7 @@
 import sbt._
 import reaktor.scct.ScctProject
 
-class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject with posterous.Publish with ProguardProject with assembly.AssemblyBuilder {
+class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject with posterous.Publish with ProguardProject {
   
   /** Paths */
   override def outputDirectoryName = "target"
@@ -17,7 +17,7 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   val hamcrest      = "org.hamcrest" % "hamcrest-all" % "1.1"
   val mockito 	    = "org.mockito" % "mockito-all" % "1.8.5" 
   val junit         = "junit" % "junit" % "4.7"
-  val pegdown       =  "org.pegdown" % "pegdown" % "0.9.1"
+  val pegdown       = "org.pegdown" % "pegdown" % "0.9.1"
   
   /** Compiling */
   override def compileOptions = Unchecked :: super.compileOptions.toList
@@ -36,23 +36,26 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   
 
   /** Packaging */
-  override def proguardOptions = List(
-    "-dontoptimize",
-    "-dontobfuscate",
-    proguardKeepLimitedSerializability,
-    proguardKeepAllScala,
-    "-keep interface scala.ScalaObject"
-  )
-  
-  override def proguardInJars = Path.fromFile(scalaLibraryJar) +++ super.proguardInJars
-  
+	/** Proguard */
+  override def proguardOptions = List("-dontshrink -dontobfuscate -dontpreverify")
+	override def proguardInJars = { 
+		println((super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz")))
+		(super.proguardInJars +++ scalaLibraryPath)  filter (_.name.contains("scalaz"))
+  }
+	
+	/** Sources */
   override def packageSrcJar = defaultJarPath("-sources.jar")
-  val sourceArtifact = Artifact.sources(artifactID)
-  override def assemblyJarName = name + "-all-" + this.version + ".jar"
-  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc)
-  
+  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc, proguard)
+  override def artifacts = super.artifacts ++ Seq(Artifact("specs2_"+buildScalaVersion, "jar", ".min.jar"))
   
   /** Publishing */
+	override def ivyXML =
+    <dependencies>
+      <exclude module={"scalaz-core_"+buildScalaVersion}/>
+    </dependencies>
+	
+	override def pomPostProcess(pom: Node): Node = super.pomPostProcess(pom)
+			
   override def managedStyle = ManagedStyle.Maven
   override def defaultPublishRepository = {
     val nexusDirect = "http://nexus-direct.scala-tools.org/content/repositories/"
