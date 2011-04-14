@@ -47,11 +47,11 @@ trait NotifierExporting extends Exporting {
       case f @ ExecutedResult(s, r, t, l)  => {
         notifier.exampleStarted(s.toString, l.toString)
         r match {
-          case Success(_)              => notifier.exampleSuccess(r.message, t.stop.elapsed)
-          case fail @ Failure(_,_,_,_) => notifier.exampleFailure(fail.message, fail.exception, t.stop.elapsed)
-          case err  @ Error(_,_)       => notifier.exampleError(err.message, err.exception, t.stop.elapsed)
-          case Skipped(_,_)            => notifier.exampleSkipped(r.message, t.stop.elapsed)
-          case Pending(_)              => notifier.examplePending(r.message, t.stop.elapsed)
+          case Success(_)              => notifier.exampleSuccess(r.message, t.elapsed)
+          case fail @ Failure(_,_,_,_) => notifier.exampleFailure(fail.message, fail.exception, t.elapsed)
+          case err  @ Error(_,_)       => notifier.exampleError(err.message, err.exception, t.elapsed)
+          case Skipped(_,_)            => notifier.exampleSkipped(r.message, t.elapsed)
+          case Pending(_)              => notifier.examplePending(r.message, t.elapsed)
         }
       }
       case other                           => tree.subForest.foreach(export)
