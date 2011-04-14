@@ -36,7 +36,7 @@ class BeforeAfterAroundSpec extends SpecificationWithJUnit { def is =
 
   def before3 = executeContains(
     new Specification with MockOutput {
-      object withBefore extends Before with Apply { def before = println("before") }
+      object withBefore extends BeforeEach { def before = println("before") }
       def is = withBefore(spec)
       def spec =
         "this should"     ^

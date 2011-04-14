@@ -810,11 +810,12 @@ Note that you can also compose contexts in order to reuse them to build more com
 
 The context creation which has been described up to now is very flexible and allows to switch contexts and compose between
 different examples. Yet, there are specifications where the context need to be set similarly for each Example. An easy way
-around that is to use the `Apply` trait:
+around that is to use the `BeforeEach` trait. This is just a Before context, with an additional `apply` method to apply this
+context to each example:
 
       class SpecificationWithBefore extends Specification {
-        // the Apply trait adds an apply method to apply the context to each Example
-        object withBefore extends Before with Apply {
+
+        object withBefore extends BeforeEach {
           def before = cleanupDatabase
         }
         def is = withBefore(spec)
@@ -830,18 +831,24 @@ the same setup/teardown procedure at the beginning/end of the specification with
 
       class ProjectSpecification extends Specification {
         // always clean up the database before an example
-        object cleanUpDb extends Before with Apply {
+        object cleanUpDb extends BeforeEach {
           def before = cleanupDatabase
         }
         def is = Step(initialCleanup) ^ cleanUpDb(spec) ^ Step(finalCleanup)
         def spec: Fragments
       }
 
+Of course there are similar traits for after and around setups:
+
+ * `AfterEach`
+ * `BeforeAfterEach`
+ * `AroundEach`
+ * `BeforeAfterAroundEach`
 
 ##### Using a context for each Example in a mutable specification
 
-Alas the `Apply` trait is not usable with a mutable specification because of the way that examples are added to the specification
-as soon as created. In order to avoid repetition in that case there are additional traits with you can use:
+Alas the `BeforeEach` trait is not usable with a mutable specification because of the way that examples are added to the
+specification as soon as created. In order to avoid repetition in that case there are additional traits with you can use:
 
  * `BeforeExample`
  * `AfterExample`
