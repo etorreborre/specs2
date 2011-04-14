@@ -5,7 +5,7 @@ import specification._
 import main.Arguments
 import execute._
 
-class NotifierSpec extends SpecificationWithJUnit with Mockito { def is =
+class NotifierSpec extends SpecificationWithJUnit with Mockito { def is = only("location")^
                                                                                                                         """
 A Notifier can be used to get stream of events for the execution of a Specification
                                                                                                                         """^
@@ -40,7 +40,7 @@ A Notifier can be used to get stream of events for the execution of a Specificat
   def level1 = there was one(notified).contextStart(anyString, anyString)
   def level2 = there was one(notified).contextEnd(anyString, anyString)
   def ex1    = there was atLeastOne(notified).exampleStarted(equalTo("ex1"), anyString)
-  def ex2    = there was atLeastOne(notified).exampleStarted(anyString, matching(".*.scala.*"))
+  def ex2    = there was atLeastOne(notified).exampleStarted(anyString, matching(".*NotifierSpecification.scala.*"))
   def ex3    = there was atLeastOne(notified).exampleSuccess(anyString, anyLong)
   def ex4    = there was atLeastOne(notified).exampleFailure(anyString, any[Throwable], anyLong)
   def ex5    = there was atLeastOne(notified).exampleError(anyString, any[Throwable], anyLong)
@@ -54,18 +54,7 @@ A Notifier can be used to get stream of events for the execution of a Specificat
     r.report(spec)(Arguments())
     r.notifier
   }
-  def spec = new Specification { def is =
-      "intro"                                             ^p^
-      "first group"                                       ^
-        "ex1" ! success                                   ^
-        "ex2" ! Failure("fail")                           ^
-        "ex3" ! Error("skipped", new Exception("error"))  ^
-        "ex4" ! Skipped("skipped")                        ^
-        "ex5" ! Pending("pending")                        ^
-        Step(Failure("clean failed"))                     ^
-        Step("clean ok")                                  ^
-                                                          end
-  }
+  def spec = new user.reporter.NotifierSpecification
   def reporter = new NotifierReporter {
     val notifier = mock[Notifier]
   }

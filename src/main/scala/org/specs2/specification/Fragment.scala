@@ -20,7 +20,7 @@ import scala.Either
 sealed trait Fragment {
   val linkedTo: Option[SpecificationStructure] = None
   def matches(s: String) = true
-  def location: Location = new Location
+  val location: Location = new Location
 }
 
 /**

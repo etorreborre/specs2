@@ -11,6 +11,6 @@ import Throwablex._
 private[specs2]
 trait ResultStackTrace extends HasStackTrace {
   /** @return the location (file and line number) of the topmost stackTraceElement */
-  def location = Throwablex.exception(stackTrace).location
+  def location = Throwablex.exception(stackTrace).filterNot("org.specs2").location
   def exception: Throwable
 }
