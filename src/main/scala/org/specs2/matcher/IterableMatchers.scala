@@ -88,6 +88,7 @@ trait IterableBeHaveMatchers extends LazyParameters { outer: IterableMatchers =>
     def contain(t: LazyParameter[T], ts: LazyParameter[T]*) = new ContainMatchResult(s, outer.contain((t +: ts):_*))
     def containMatch(t: =>String) = s(outer.containMatch(t))
     def containPattern(t: =>String) = s(outer.containPattern(t))
+    def have(f: T => Boolean) = s(outer.have(f))
   }
   implicit def sized[T : Sized](s: MatchResult[T]) = new HasSize(s)
   class HasSize[T : Sized](s: MatchResult[T]) {

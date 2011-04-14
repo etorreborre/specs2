@@ -47,6 +47,7 @@ class IterableMatchersSpec extends SpecificationWithJUnit { def is =
                                                                                                                         p^
   "we can check if an iterable contains an element with a given property"                                               ^
     { List("Hello", "World") must have(_.size >= 5) }                                                                   ^
+    { List("Hello", "World") must not have((_:String).size < 3) }                                                       ^
                                                                                                                         p^
   "we can check if an iterable has the same elements as another one"                                                    ^
     { List("Hello", "World") must haveTheSameElementsAs(List("Hello", "World")) }                                       ^
