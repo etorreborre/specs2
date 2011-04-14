@@ -291,6 +291,10 @@ readability.
 
 Iterables can be checked with several matchers:
 
+  * to check if the iterable is empty
+    `Nil must be empty`
+    `List(1, 2, 3) must not be empty`
+
   * to check if some elements are contained in the iterable
     `List(1, 2, 3) must contain(3, 2)`
 
