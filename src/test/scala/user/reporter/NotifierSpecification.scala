@@ -8,8 +8,10 @@ class NotifierSpecification extends Specification { def is =
       "intro"                                             ^p^
       "first group"                                       ^
         "ex1" ! success                                   ^
-        "ex2" ! Failure("fail")                           ^
-        "ex3" ! Error("skipped", new Exception("error"))  ^
+        "ex2" !
+          Failure("fail")                           ^
+        "ex3" !
+          Error("skipped", new Exception("error"))  ^
         "ex4" ! Skipped("skipped")                        ^
         "ex5" ! Pending("pending")                        ^
         Step(Failure("clean failed"))                     ^
