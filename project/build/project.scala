@@ -13,7 +13,7 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
 
   val scalacheck    = "org.scala-tools.testing" %% "scalacheck" % "1.8" 
   val testinterface = "org.scala-tools.testing" % "test-interface" % "0.5" 
-  val scalazcore    = "com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"
+  val scalazcore    = "com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT" % "optional"
   val hamcrest      = "org.hamcrest" % "hamcrest-all" % "1.1"
   val mockito 	    = "org.mockito" % "mockito-all" % "1.8.5" 
   val junit         = "junit" % "junit" % "4.7"
@@ -36,24 +36,20 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   
 
   /** Packaging */
+//	override def artifactBaseName = super.artifactBaseName + "-noscalaz"
   /** Proguard */
+	override def minJarName = super.artifactBaseName + ".jar"
   override def proguardOptions = List("-dontshrink -dontobfuscate -dontpreverify")
   override def proguardInJars = { 
-	(super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz"))
+    (super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz"))
   }
 	
   /** Sources */
+  override def jarPath = defaultJarPath("-noscalaz.jar")
   override def packageSrcJar = defaultJarPath("-sources.jar")
   override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc, proguard)
-  override def artifacts = super.artifacts ++ Seq(Artifact("specs2_"+buildScalaVersion, "jar", ".min.jar"))
   
   /** Publishing */
-  override def ivyXML =
-    <dependencies>
-      <exclude module={"scalaz-core_"+buildScalaVersion}/>
-    </dependencies>
-	
-//	override def pomPostProcess(pom: Node): Node = super.pomPostProcess(pom)
 			
   override def managedStyle = ManagedStyle.Maven
   override def defaultPublishRepository = {
