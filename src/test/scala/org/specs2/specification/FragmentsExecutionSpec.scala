@@ -9,9 +9,14 @@ class FragmentsExecutionSpec extends SpecificationWithJUnit {
   "An example when executed returns a result" in {
     (1 must_== 1).toResult must_== Success("'1' is equal to '1'")
   }
+  "A failed expectation must point to its precise location" in {
+    val result: Failure = new user.specification.UserExecutionSpecification().is.fragments.
+      collect { case Example(_, body) if (body().isFailure) => body().asInstanceOf[Failure] }.apply(0)
+    result.location must beMatching("UserExecutionSpecification.scala.*")
+  }
   "An example can be marked as pending until fixed" in e1
     "with a specific message" in e2
-  "It must be failed when the example succeeds" in e3
+    "it must change to failed when the example succeeds" in e3
     "with a specific message" in e4
 
 
