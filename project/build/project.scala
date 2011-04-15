@@ -36,21 +36,22 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   
 
   /** Packaging */
-//	override def artifactBaseName = super.artifactBaseName + "-noscalaz"
-  /** Proguard */
+	// the published jar will contain scalaz classes so the "standard" one needs to be renamed
+  override def jarPath = defaultJarPath("-noscalaz.jar")
+    /** Proguard */
+	// the proguard jar name will have the "standard" jar name
 	override def minJarName = super.artifactBaseName + ".jar"
   override def proguardOptions = List("-dontshrink -dontobfuscate -dontpreverify")
-  override def proguardInJars = { 
-    (super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz"))
-  }
+
+	// add only the dependencies having scalaz in their name, to retain only the scalaz jar
+  override def proguardInJars = (super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz"))
 	
-  /** Sources */
-  override def jarPath = defaultJarPath("-noscalaz.jar")
+    /** Sources */
   override def packageSrcJar = defaultJarPath("-sources.jar")
+	// before publishing, package the sources and create the specs2 jar including the scalaz classes
   override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc, proguard)
   
   /** Publishing */
-			
   override def managedStyle = ManagedStyle.Maven
   override def defaultPublishRepository = {
     val nexusDirect = "http://nexus-direct.scala-tools.org/content/repositories/"
