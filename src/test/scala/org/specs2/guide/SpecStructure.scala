@@ -2,6 +2,7 @@ package org.specs2
 package guide
 import examples._
 import specification._
+import execute.Result
 
 class SpecStructure extends Specification { def is =
   "Specification structure".title                                                                                       ^
@@ -362,6 +363,25 @@ The main differences with a "normal" G/W/T sequence are:
    to a `Result`
  * the `extract` method of the `Then` step takes an implicit `Arbitrary[T]` parameter which is used by the `check` method
    to create a ScalaCheck property
+
+###### Single step
+
+A `GivenThen` step can be used to extract values from a single piece of text and return a `Result`:
+
+    "given the name: ${eric}, then the age is ${18}" ! new GivenThen {
+      def extract(text: String) = {
+        val (name, age) = extract2(text)
+        age.toInt must_== 18
+      }
+    }
+
+You can also use the `so` object doing the same thing and taking a `PartialFunction`:
+
+    import org.specs2.specification.so
+
+    "given the name: ${eric}, then the age is ${18}" ! so { case (name: String, age: String) =>
+      age.toInt must_== 18
+    }
 
 ### Shared examples
 
@@ -1139,6 +1159,15 @@ For that specification above:
   val exampleTextExtraction = new Specification { def is =
     "Text extraction".title     ^
     "Bob should pay 12"         ! e1
+    "given the name: ${eric}, then the age is ${18}" ! so { case (name: String, age: String) =>
+      age.toInt must_== 18
+    }
+    "given the name: ${eric}, then the age is ${18}" ! new GivenThen {
+      def extract(text: String) = {
+        val (name, age) = extract2(text)
+        age.toInt must_== 18
+      }
+    }
 
     val toPay = Map("Bob"->"12", "Bill"->"10")           // a "database" of expected values
     val ShouldPay = "(.*) should pay (\\d+)".r           // a regular expression for extracting the name and price
@@ -1147,6 +1176,8 @@ For that specification above:
       val ShouldPay(name, price) = s                     // extracting the values
       toPay(name) must_== price                          // using them for the expectation
     }
+
+
   }
 
   val exampleTextIndentation = new Specification { def is =

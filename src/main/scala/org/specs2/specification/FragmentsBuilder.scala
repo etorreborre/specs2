@@ -6,6 +6,7 @@ import execute._
 import main._
 import matcher._
 import FormattingFragments._
+import scala.PartialFunction
 
 /**
  * This trait provides function to create specification Fragments:
@@ -86,6 +87,8 @@ trait FragmentsBuilder extends RegexSteps { outer =>
 	  def ![T](t: =>MatchResult[T]): Example = exampleFactory.newExample(s, t)
     /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
 	  def ![T <% Result](t: =>T): Example = exampleFactory.newExample(s, t)
+    /** @return an Example which a function using values extracted from the text */
+	  def !(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
   }
 
   private[specs2] implicit def exampleFactory: ExampleFactory = new DefaultExampleFactory
