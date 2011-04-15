@@ -41,12 +41,12 @@ A Notifier can be used to get stream of events for the execution of a Specificat
   def level2 = there was one(notified).contextEnd(anyString, anyString)
   def ex1    = there was atLeastOne(notified).exampleStarted(equalTo("ex1"), anyString)
   def ex2    = there was atLeastOne(notified).exampleStarted(anyString, matching(".*NotifierSpecification.scala:11.*"))
-  def ex3    = there was atLeastOne(notified).exampleSuccess(anyString, anyLong)
-  def ex4    = there was atLeastOne(notified).exampleFailure(anyString, matching(".*NotifierSpecification.scala:12.*"), any[Throwable], anyLong)
-  def ex5    = there was atLeastOne(notified).exampleError(anyString, matching(".*NotifierSpecification.scala:14.*"), any[Throwable], anyLong)
-  def ex6    = there was atLeastOne(notified).exampleSkipped(anyString, anyLong)
-  def ex7    = there was atLeastOne(notified).examplePending(anyString, anyLong)
-  def step1  = there was atLeastOne(notified).exampleFailure(matching("clean failed"), anyString, any[Throwable], anyLong)
+  def ex3    = there was atLeastOne(notified).exampleSuccess(equalTo("ex1"), anyLong)
+  def ex4    = there was atLeastOne(notified).exampleFailure(anyString, anyString, matching(".*NotifierSpecification.scala:12.*"), any[Throwable], anyLong)
+  def ex5    = there was atLeastOne(notified).exampleError(anyString, anyString, matching(".*NotifierSpecification.scala:14.*"), any[Throwable], anyLong)
+  def ex6    = there was atLeastOne(notified).exampleSkipped(anyString, anyString, anyLong)
+  def ex7    = there was atLeastOne(notified).examplePending(anyString, anyString, anyLong)
+  def step1  = there was atLeastOne(notified).exampleFailure(anyString, matching("clean failed"), anyString, any[Throwable], anyLong)
   def end1   = there was one(notified).specEnd(anyString, anyString)
 
   def notified: Notifier = {

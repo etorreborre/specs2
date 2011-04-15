@@ -20,7 +20,7 @@ There are 4 ways to execute ***specs2*** specifications:
 
  ***specs2*** is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the [sbt dsl](http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies):
 
- <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"`</td><td class="info">mandatory</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.8"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "0.9.1"`</td><td class="info">only if using the html runner</td></tr></table>
+ <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"`</td><td class="info">optional, the scalaz class are provided in the specs2 jar</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.8"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "0.9.1"`</td><td class="info">only if using the html runner</td></tr></table>
 
 ### Arguments
 
@@ -254,6 +254,21 @@ You can use the second one if your IDE doesn't work with the first one:
 
 [*some [tricks](http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse) described on the specs website can still be useful there*]
 
+### Notifier runner
+
+A `NotifierRunner` accepts a `Notifier` to execute a specification and report execution events. The `Notifier` trait notifies
+of the following:
+
+ * specification start: the beginning of a specification, with its name
+ * specification end: the end of a specification, with its name
+ * context start: the beginning of a sub-level when the specification is seen as a tree or Fragments
+ * context end: the end of a sub-level when the specification is seen as a tree or Fragments
+ * text: any Text fragment that needs to be displayed
+ * example start
+ * example result: success / failure / error / skipped / pending
+
+All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration
+when relevant (i.e. for examples only).
 
    - - -
 
