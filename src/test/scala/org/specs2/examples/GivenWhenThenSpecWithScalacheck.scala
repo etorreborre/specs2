@@ -6,7 +6,10 @@ import Gen._
 import Prop._
 import specification.gen._
 
-class GivenWhenThenScalacheckSpec extends SpecificationWithJUnit with ScalaCheck { def is =
+/**
+ * This specification is an acceptance specification written
+ */
+class GivenWhenThenSpecWithScalacheck extends Specification with ScalaCheck { def is =
 
   "A given-when-then example for a calculator"                                   ^
     "Given a first number n1"                                                    ^ number1 ^

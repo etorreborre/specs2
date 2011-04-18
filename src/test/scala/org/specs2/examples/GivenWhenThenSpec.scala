@@ -3,7 +3,12 @@ package examples
 
 import specification._
 
-class GivenWhenThenSpec extends SpecificationWithJUnit { def is = 
+/**
+ * This specification shows how to use the Given/When/Then style for acceptance specifications.
+ *
+ * Meaningful values are extracted from the example descriptions and used to define expectations.
+ */
+class GivenWhenThenSpec extends Specification { def is =
 
   "A given-when-then example for a calculator"                 ^
     "Given the following number: ${1}"                         ^ number1 ^

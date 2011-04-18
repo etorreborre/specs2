@@ -1,7 +1,7 @@
 package org.specs2
 package examples
 
-class HelloWorldSpec extends SpecificationWithJUnit { def is =
+class HelloWorldSpec extends Specification { def is =
 
   "This is a specification to check the 'Hello world' string"                 ^
                                                                               p^

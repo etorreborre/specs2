@@ -8,7 +8,7 @@ import mutable._
  * This specification shows how to use the mutable.Specification trait to create a unit Specification
  * where the fragments are built using a mutable variable
  */
-class MutableSpec extends SpecificationWithJUnit {
+class UnitSpec extends Specification {
 
   // A title can be added at the beginning of the specification
   "MutableSpec".title
