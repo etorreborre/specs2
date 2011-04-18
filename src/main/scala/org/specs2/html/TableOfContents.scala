@@ -6,7 +6,7 @@ import transform.{RewriteRule, RuleTransformer}
 import scalaz.{ TreeLoc, Scalaz, Show }
 import Scalaz._
 import data.Trees._
-
+import xml.Nodex._
 /**
  * This trait checks for the presence of a <toc/> tag at the beginning of a xml document and replaces it
  * by a list of links to the headers of the document
@@ -23,7 +23,7 @@ trait TableOfContents {
   /** create a sanitized anchor name */
   def anchorName(name: String) = "#"+sanitize(name)
 
-  /** @return all the headers of a documennt */
+  /** @return all the headers of a document */
   def headers(body: NodeSeq): NodeSeq = {
     body.toList match {
       case e :: rest if isHeader(e) => e ++ headers(rest)
@@ -69,8 +69,8 @@ trait TableOfContents {
   private def toc(body: NodeSeq) = {
     headersToTree(body).toTree.
     bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-      { if (h.name.isEmpty) NodeSeq.Empty else <li><a href={anchorName(h.name)}>{h.name}</a></li> } ++
-      ( if (s.isEmpty) NodeSeq.Empty else <ul>{s.toSeq}</ul>)
+      { <li><a href={anchorName(h.name)}>{h.name}</a>{ <ul>{s.toSeq}</ul> unless s.isEmpty }</li> unless h.name.isEmpty } ++
+      { <ul>{s.toSeq}</ul> unless (!h.name.isEmpty) }
     }.rootLabel
   }
 
