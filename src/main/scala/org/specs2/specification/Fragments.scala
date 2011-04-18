@@ -6,6 +6,8 @@ import control.LazyParameters._
 import control.LazyParameter
 import main.Arguments
 import StandardFragments._
+import scalaz.Monoid
+
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
@@ -73,5 +75,12 @@ object Fragments {
    */
   def withSpecStartEnd(fragments: Fragments, s: SpecificationStructure): Fragments = withSpecStartEnd(fragments, SpecName(s))
 
+  /**
+   * Fragments can be added as a monoid
+   */
+  implicit def fragmentsIsMonoid = new Monoid[Fragments] {
+    val zero = new Fragments()
+    def append(s1: Fragments, s2: => Fragments) = s1 add s2
+  }
 }
 

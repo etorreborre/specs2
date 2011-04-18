@@ -102,7 +102,7 @@ It is completely equivalent to writing this in an `org.specs2.Specification`:
 
 You can look at the bottom of this page for the other methods which are used to build unit specifications.
 
-##### Results
+#### Results
 
 An Example is created by following a piece of text with `!` and providing anything convertible to an `org.specs2.execute.Result`:
 
@@ -163,7 +163,7 @@ There is also an additional method `failure(message)` to throw a `FailureExcepti
 
 [Note that the `ThrownMatchers` traits are mixed in the `mutable.Specification` trait used for _unit_ specifications].
 
-##### Set an example as "Pending until fixed"
+#### Set an example as "Pending until fixed"
 
 Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.
 Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed`
@@ -182,7 +182,7 @@ to the Example body:
 The example above will be reported as `Pending` until it succeeds. Then it is marked as a failure so that you can remember
 to remove the `pendingUntilFixed` marker.
 
-##### Auto-Examples
+#### Auto-Examples
 
 If your specification is about showing the use of a DSL or of an API and all expectations fit on one line, you can elid
 a description for the Example. This functionality is used in ***specs2*** to specify matchers:
@@ -215,7 +215,7 @@ A few things to remember about this feature:
          descFromExpectations ^
          { List(1, 2) must contain(1) }
 
-##### Using the text of the Example
+#### Using the text of the Example
 
 It is possible to use the text of an example to extract meaningful values, use them in the example body and avoid
 repeating oneself:
@@ -232,7 +232,7 @@ repeating oneself:
 
 In that case the argument passed to the `!` method is a function taking a String and returning a Result.
 
-##### Given / When / Then
+#### Given / When / Then
 
 In the same fashion, the Given/When/Then style of writing specifications is supported by interspersing Text fragments,
 with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example specification for a simple
@@ -270,7 +270,7 @@ Here's some explanation of the object definitions that support the G/W/T style:
  * finally the `result` object defines the outcome of the Addition. Its `extract` method takes an `Addition` and the current
    text to return a `Result`
 
-###### Multiple steps
+##### Multiple steps
 
 A G/W/T sequence can contain more than just 3 steps. However the compiler will check that:
 
@@ -279,12 +279,12 @@ A G/W/T sequence can contain more than just 3 steps. However the compiler will c
    * only a `When[S, U]` extractor or a `Then[S]` can follow a `When[T, S]` extractor
    * only a `Then[S]` can follow a `Then[S]` extractor
 
-###### Extract methods
+##### Extract methods
 
 The `Given`, `When`, `Then` classes provide several convenience methods to extract strings from the preceding text: the
 `extractn` methods will extracts the values delimited by `${}` for up to 10 values.
 
-###### User regexps
+##### User regexps
 
 In the original way of declaring Given/When/Then steps, the text is left completely void of markers to extract meaningful
 values. On the other hand the user specifies a regular expression where groups are used to show where those values are:
@@ -296,7 +296,7 @@ values. On the other hand the user specifies a regular expression where groups a
 The advantage of using this way is that the text is left in it's pristine form, the drawback is that most of the text is
 duplicated in 2 places, adding more maintenance burden.
 
-###### Several G/W/T blocks
+##### Several G/W/T blocks
 
 Given the rule saying that only a `Then` block can follow another `Then` block you might think that it is not possible to
 start another G/W/T sequence in the same specification! Fortunately it is possible by just terminating the first sequence
@@ -313,7 +313,7 @@ with an `end` fragment:
           "Then I should get: ${2}"                                  ^ multiplication ^
                                                                      end
 
-###### ScalaCheck values
+##### ScalaCheck values
 
 Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario
 with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.
@@ -364,7 +364,7 @@ The main differences with a "normal" G/W/T sequence are:
  * the `extract` method of the `Then` step takes an implicit `Arbitrary[T]` parameter which is used by the `check` method
    to create a ScalaCheck property
 
-###### Single step
+##### Single step
 
 A `GivenThen` step can be used to extract values from a single piece of text and return a `Result`:
 
@@ -621,11 +621,17 @@ You can turn off that automatic layout by adding the `noindent` argument at the 
 
 ###### Include specifications
 
-There is a simple mechanism for including "children" specification in a given specification. You use the `include` method,
-as if you were adding a new fragment:
+There is a simple mechanism for including "children" specification in a given specification. You can simply add the child
+specification as if it was a simple fragment:
 
     "This is an included specification"     ^
-      include(childSpec)
+      childSpec
+
+Otherwise, if you want to include several specifications at once you can use the `include` method:
+
+    "This is the included specifications"         ^
+      include(childSpec1, childSpec2, childSpec3)
+
 
 The effect of doing so is that all the fragments of the children specification will be inlined in the parent one. This
 is exactly what is done in this page of the user guide, but with a twist

@@ -1,8 +1,9 @@
 package org.specs2
 package specification
-
+import scalaz._
+import Scalaz._
 import main.Arguments
-
+import Fragments._
 /**
  * A Base specification contains the minimum elements for a Specification
  * 
@@ -18,8 +19,9 @@ trait BaseSpecification extends SpecificationStructure with FragmentsBuilder wit
  */
 trait SpecificationInclusion { this: FragmentsBuilder =>
   def include(f: Fragments): FragmentsFragment = fragmentsFragments(f)
-  def include(s: SpecificationStructure): FragmentsFragment = include(s.content)
-  def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(s.content.overrideArgs(args))
+  implicit def include(s: SpecificationStructure): FragmentsFragment = include(s.content)
+  def include(s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include((Seq(s)++ss).map(_.content).∑)
+  def include(args: Arguments, s: SpecificationStructure*): FragmentsFragment = include(s.map(_.content).∑.overrideArgs(args))
 }
 /**
  * The structure of a Specification is simply defined as a sequence of fragments

@@ -55,6 +55,8 @@ trait FragmentsBuilder extends RegexSteps { outer =>
       new PreStep(() => extracted, fragmentsFragments(strip(fs) ^ Arguments("noindent")) ^ Step.fromEither(extracted))
     }
   }
+  /** reverse conversion from a Fragment containing a Fragments object to the Fragments object*/
+  implicit def fragmentsFragmentToFragments(fs: FragmentsFragment): Fragments = fs.fragments
 
   /**
    * Methods for creating fragments
