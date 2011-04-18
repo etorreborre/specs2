@@ -31,7 +31,7 @@ trait Before extends Context { outer =>
    * * with a non-Success match result
    */
   def apply[T <% Result](a: =>T): Result = {
-    Contexts.execute(before)((any: Any) => a)
+    ResultExecution.execute(before)((any: Any) => a)
   }
   
   /** compose the actions of 2 Before traits */
