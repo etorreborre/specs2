@@ -3,6 +3,7 @@ package specification
 
 import execute._
 import specification.StandardFragments.{Br, End}
+import main.Arguments
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -52,6 +53,7 @@ trait RegexSteps {
     def ^(f: Text): RegexType = add(f)
     def ^(f: Br): RegexType = add(f)
     def ^(f: End) = fs.add(f)
+    def ^(a: Arguments) = fs.add(a)
     def ^(fs2: Fragments) = fs.add(fs2)
   }
 

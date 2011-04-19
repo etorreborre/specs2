@@ -25,7 +25,7 @@ class GivenWhenThenSpecWithScalacheck extends Specification with ScalaCheck { de
     "When I multiply them"                                                       ^ mult ^
     "Then I should get n1 * n2"                                                  ^ multResult ^
     "And it should be positive if the numbers have the same sign"                ^ positiveMult ^
-                                                                                 end
+                                                                                 end ^ noindent
 
   object number1 extends Given[Int] {
     def extract(text: String) = choose(-10, 10)

@@ -24,7 +24,7 @@ class GivenWhenThenSpec extends Specification { def is =
     "When I use this operator: ${*}"                           ^ operator ^
     "Then I should get: ${20}"                                 ^ result ^
     "And it should be >: ${10}"                                ^ greaterThan ^
-                                                               end
+                                                               end ^ noindent
 
   object number1 extends Given[Int] {
     def extract(text: String): Int = extract1(text).toInt
