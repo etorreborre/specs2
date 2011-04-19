@@ -39,3 +39,12 @@ case class ExecutedSee(link: HtmlLink, location: Location) extends ExecutedFragm
  * execution of an Action for example)
  */
 case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Location) extends ExecutedFragment
+
+private[specs2]
+trait ExecutedFragmentsShow {
+  implicit object showExecutedFragments extends scalaz.Show[ExecutedFragment] {
+	  def show(f: ExecutedFragment) = f.toString.toList
+  }
+}
+private[specs2]
+object ExecutedFragmentsShow extends ExecutedFragmentsShow

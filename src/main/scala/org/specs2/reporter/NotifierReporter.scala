@@ -5,7 +5,9 @@ import execute._
 import specification._
 import Levels._
 import specification.SpecificationStructure
-import scalaz.Tree
+import scalaz.{Tree, Scalaz}
+import Scalaz._
+import data.Trees._
 import main.Arguments
 
 /**
@@ -22,36 +24,39 @@ trait NotifierExporting extends Exporting {
   val notifier: Notifier
   /** @return a function exporting ExecutedFragments */
   def export(s: SpecificationStructure)(implicit args: Arguments): Seq[ExecutedFragment] => ExportType = (fs: Seq[ExecutedFragment]) => {
-    export(Levels.foldAll(fs).toTree(mapper))
+    val tree = Levels.foldAll(fs).toTree(mapper)
+    if (args.noindent) export(tree.flattenSubForests)
+    else               export(tree)
     ()
   }
   private val mapper = (f: ExecutedFragment, i: Int) => f match {
     case e: ExecutedStandardFragment => None
     case other                       => Some(other)
   }
-  private def export(tree: Tree[ExecutedFragment]) {
+  private def export(tree: Tree[ExecutedFragment])(implicit args: Arguments) {
     tree.rootLabel match {
-      case f @ ExecutedSpecStart(n, _, _)                       => {
+      case f @ ExecutedSpecStart(n, _, _)                                   => {
         notifier.specStart(n.name, f.location.toString)
         tree.subForest.foreach(export)
       }
-      case f @ ExecutedSpecEnd(n, _)                            => {
+      case f @ ExecutedSpecEnd(n, _)                                        => {
         notifier.specEnd(n.name, f.location.toString)
       }
-      case f @ ExecutedText(t, _)  if (tree.subForest.isEmpty)  => notifier.text(t, f.location.toString)
-      case f @ ExecutedText(t, _)                               => {
+      case f @ ExecutedText(t, _)  if tree.subForest.isEmpty && !args.xonly => notifier.text(t, f.location.toString)
+      case f @ ExecutedText(t, _)                                           => {
         notifier.contextStart(t, f.location.toString)
         tree.subForest.foreach(export)
         notifier.contextEnd(t, f.location.toString)
       }
-      case f @ ExecutedResult(s, r, t, l)  => {
+      case f @ ExecutedResult(s, r, t, l)                                  => {
         notifier.exampleStarted(s.toString, l.toString)
         r match {
-          case Success(_)              => notifier.exampleSuccess(s.toString, t.elapsed)
-          case fail @ Failure(_,_,_,_) => notifier.exampleFailure(s.toString, fail.message, fail.location, fail.exception, t.elapsed)
-          case err  @ Error(_,_)       => notifier.exampleError(s.toString,   err.message, err.location, err.exception, t.elapsed)
-          case Skipped(_,_)            => notifier.exampleSkipped(s.toString, r.message, t.elapsed)
-          case Pending(_)              => notifier.examplePending(s.toString, r.message, t.elapsed)
+          case Success(_)              if !args.xonly => notifier.exampleSuccess(s.toString, t.elapsed)
+          case fail @ Failure(_,_,_,_)                => notifier.exampleFailure(s.toString, fail.message, fail.location, args.traceFilter(fail.exception), t.elapsed)
+          case err  @ Error(_,_)                      => notifier.exampleError(s.toString,   err.message, err.location, args.traceFilter(err.exception), t.elapsed)
+          case Skipped(_,_)            if !args.xonly => notifier.exampleSkipped(s.toString, r.message, t.elapsed)
+          case Pending(_)              if !args.xonly => notifier.examplePending(s.toString, r.message, t.elapsed)
+          case other                                  => ()
         }
       }
       case other                           => tree.subForest.foreach(export)

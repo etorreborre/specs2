@@ -17,6 +17,8 @@ trait Trees { outer =>
     def bottomUp[B](f: ((A, Stream[B]) => B)) = outer.bottomUp(t, f)
     def prune[B](f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
     def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
+    def flattenSubForests = outer.flattenSubForests(t)
+
   }
 
   /**
@@ -55,6 +57,7 @@ trait Trees { outer =>
    */
   def prune[A](t: Tree[A], f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = t.cobind(f).clean
 
+  def flattenSubForests[A](tree: Tree[A]): Tree[A] = node(tree.rootLabel, tree.flatten.drop(1).map(leaf(_)))
   /**
    * Implicit method to add a parentLoc method to TreeLoc[T]
    */
