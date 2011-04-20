@@ -50,8 +50,10 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
 
   def runSpecification(classname: String, handler: EventHandler, args: Array[String]): Any = {
     toRun[SpecificationStructure](classname, handler).right.toOption map { s =>
-      if (args.contains("html")) specs2.html.main(Array(classname) ++ args)
-      else                       runSpecification(s, handler, args)
+      if (args.contains("html"))
+        specs2.html.main(Array(classname) ++ args)
+      if (args.contains("console") || !args.contains("html"))
+        runSpecification(s, handler, args)
     }
   }
   

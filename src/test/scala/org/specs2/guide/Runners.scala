@@ -146,7 +146,6 @@ On the command line you can pass the following arguments:
  `threadsnb`      | int                     |                                                                          |
  `markdown`       | boolean                 |                                                                          |
  `debugmarkdown`  | boolean                 |                                                                          |
- `html`           | boolean                 | to get console + html reporting at once                                  |
  `fromsource`     | boolean                 |                                                                          |
  `fullstacktrace` | boolean                 |                                                                          |
  `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns  |
@@ -214,13 +213,25 @@ When you execute one test only, you can pass the arguments on the command line:
 
       > test-only org.specs2.UserGuide -- xonly
 
-The `html` argument is also available with sbt to allow the creation of the html report from the command line.
+##### Output formats
+
+The `html` argument is available with sbt to allow the creation of the html report from the command line.
 
       > test-only org.specs2.UserGuide -- html
 
+      // or in your project file
+      override def testOptions = super.testOptions ++ Seq(TestArgument("html"))
+
+If you want to get a console output as well, don't forget to add the `console` argument:
+
+      > test-only org.specs2.UserGuide -- html console
+
+      // or in your project file
+      override def testOptions = super.testOptions ++ Seq(TestArgument("html"), TestArgument("console"))
+
 ##### Files runner
 
-Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console` or `html` on the command line:
+Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console` or `html` (or both) on the command line:
 
       > test-only allSpecs -- console
 
