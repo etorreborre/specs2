@@ -6,12 +6,18 @@ import execute._
 import matcher._
 
 /**
+ * generic trait for Before, After, Around
+ */
+trait Context {
+  def apply[T <% Result](a: =>T): Result
+}
+/**
  * The Before trait can be inherited by classes representing a context
  * where an action must be executing before the main executable action
  * 
  * @see Example to understand why the type T must <% Result
  */
-trait Before { outer =>
+trait Before extends Context { outer =>
   /** override this method to provide the before behavior */
   def before: Any
   /** 
@@ -25,7 +31,7 @@ trait Before { outer =>
    * * with a non-Success match result
    */
   def apply[T <% Result](a: =>T): Result = {
-    Contexts.execute(before)((any: Any) => a)
+    ResultExecution.execute(before)((any: Any) => a)
   }
   
   /** compose the actions of 2 Before traits */

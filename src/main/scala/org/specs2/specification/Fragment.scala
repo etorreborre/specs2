@@ -10,6 +10,8 @@ import text._
 import text.Trim._
 import scalaz.Monoid
 import data.IncludedExcluded
+import io.Location
+import scala.Either
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
@@ -18,6 +20,7 @@ import data.IncludedExcluded
 sealed trait Fragment {
   val linkedTo: Option[SpecificationStructure] = None
   def matches(s: String) = true
+  val location: Location = new Location
 }
 
 /**
@@ -76,7 +79,7 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
   def execute = body()
   override def matches(s: String) = desc.toString.removeAll("\n").matches(s)
   override def toString = "Example("+desc+")"
-
+  def map(f: Result => Result) = Example(desc, () =>f(body()))
   override def equals(a: Any) = {
     a match {
       case e: Example => desc == e.desc
@@ -106,8 +109,19 @@ case class Step (step: LazyParameter[Result] = lazyfy(Success())) extends Fragme
   override def toString = "Step"
 }
 case object Step {
-  def fromEither[T](r: =>Either[Result, T]) = new Step(lazyfy(r.left.getOrElse(Success())))
-  def apply(r: =>Any) = fromEither(trye(r)(Error(_)))
+  /** create a Step object from either a previous result, or a value to evaluate */
+  def fromEither[T](r: =>Either[Result, T]) = new Step(either(r))
+
+  private[specs2]
+  def either[T](r: =>Either[Result, T]): LazyParameter[Result] = lazyfy {
+    r match {
+      case Left(l)               => l
+      case Right(result: Result) => result
+      case Right(other)          => Success()
+    }
+  }
+  /** create a Step object from any value */
+  def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))
 }
 /**
  * An Action is similar to a Step but can be executed concurrently with other examples.
@@ -119,7 +133,10 @@ case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fr
   override def toString = "Action"
 }
 case object Action {
-  def apply(r: =>Any) = new Action(lazyfy(trye(r)(Error(_)).left.getOrElse(Success())))
+  /** create an Action object from any value */
+  def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))
+  /** create an Action object from either a previous result, or a value to evaluate */
+  def fromEither[T](r: =>Either[Result, T]) = new Action(Step.either(r))
 }
 
 /**

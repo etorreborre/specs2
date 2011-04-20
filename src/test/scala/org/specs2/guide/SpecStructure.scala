@@ -2,6 +2,7 @@ package org.specs2
 package guide
 import examples._
 import specification._
+import execute.Result
 
 class SpecStructure extends Specification { def is =
   "Specification structure".title                                                                                       ^
@@ -101,7 +102,7 @@ It is completely equivalent to writing this in an `org.specs2.Specification`:
 
 You can look at the bottom of this page for the other methods which are used to build unit specifications.
 
-##### Results
+#### Results
 
 An Example is created by following a piece of text with `!` and providing anything convertible to an `org.specs2.execute.Result`:
 
@@ -162,7 +163,7 @@ There is also an additional method `failure(message)` to throw a `FailureExcepti
 
 [Note that the `ThrownMatchers` traits are mixed in the `mutable.Specification` trait used for _unit_ specifications].
 
-##### Set an example as "Pending until fixed"
+#### Set an example as "Pending until fixed"
 
 Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.
 Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed`
@@ -181,7 +182,7 @@ to the Example body:
 The example above will be reported as `Pending` until it succeeds. Then it is marked as a failure so that you can remember
 to remove the `pendingUntilFixed` marker.
 
-##### Auto-Examples
+#### Auto-Examples
 
 If your specification is about showing the use of a DSL or of an API and all expectations fit on one line, you can elid
 a description for the Example. This functionality is used in ***specs2*** to specify matchers:
@@ -214,7 +215,7 @@ A few things to remember about this feature:
          descFromExpectations ^
          { List(1, 2) must contain(1) }
 
-##### Using the text of the Example
+#### Using the text of the Example
 
 It is possible to use the text of an example to extract meaningful values, use them in the example body and avoid
 repeating oneself:
@@ -231,49 +232,158 @@ repeating oneself:
 
 In that case the argument passed to the `!` method is a function taking a String and returning a Result.
 
-##### Given / When / Then
+#### Given / When / Then
 
 In the same fashion, the Given/When/Then style of writing specifications is supported by interspersing Text fragments,
-with Given/When/Then objects which extract meaningful values from the text:
+with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example specification for a simple
+calculator:
 
         "A given-when-then example for the addition"                 ^
-          "Given the following number: 1"                            ^ number1 ^
-          "And a second number: 2"                                   ^ number2 ^
-          "Then I should get: 3"                                     ^ result ^
+          "Given the following number: ${1}"                         ^ number1 ^
+          "And a second number: ${2}"                                ^ number2 ^
+          "Then I should get: ${3}"                                  ^ result ^
                                                                      end
 
-        object number1 extends Given[Int]("Given the following number: (.*)") {
+        object number1 extends Given[Int] {
           def extract(text: String): Int = extract1(text).toInt
         }
         case class Addition(n1: Int, n2: Int) {
           def add: Int = n1 + n2
         }
-        object number2 extends When[Int, Addition]("And a second number: (.*)") {
+        object number2 extends When[Int, Addition] {
           def extract(number1: Int, text: String) = Addition(number1, extract1(text).toInt)
         }
-        object result extends Then[Operation]("Then I should get: (.*)") {
-          def extract(addition: Addition, text: String) = addition.add  must_== extract1(text).toInt
+        object result extends Then[Addition] {
+          def extract(addition: Addition, text: String): Result = addition.add must_== extract1(text).toInt
         }
 
-This is indeed the simplest form of Given/When/Then specification but it shows the following:
+Here's some explanation of the object definitions that support the G/W/T style:
 
-  * a `Given[T]` extractor defines an `extract(String)` method and must return an object of type `T`. It is used to start
-    a sequence of setup actions on the system
-  * a `When[T, S]` extractor defines an `extract(T, String)` method and must return an object of type `S`. It takes the
-    previous system state (of type `T`) and returns a new state (of type `S`)
-  * a `Then[S]` extractor defines an `extract(S, String)` method and must return an object of type `Result`.
-    It takes the final state of the system (of type `S`) and creates an expectation (of type `Result`)
+ * `number1` is a `Given` step. It is parametrized with the type `Int` meaning that its `extract` method is supposed to extract
+   an Int from the preceding text. It does so by using the `extract1` inherited method, which parses the text for `${}` expressions
+   and return a tuple (with 1 element here) containing all the values enclosed in `${}`.
 
-The compiler is courteous enough to check that:
+ * `number2` is a `When` step. It is paramerized with an `Int`, the result from the previous extraction, and an `Addition`
+   which is the result of extracting the second number and putting the 2 together. In that case the method which must be
+   defined is `extract(Int, String): Addition`.
 
-   * only a `Given` extractor can start a sequence
-   * only one or more `When` extractors can follow a `Given` extractor
-   * only one or more `Then` extractors can follow a `When` extractor
+ * finally the `result` object defines the outcome of the Addition. Its `extract` method takes an `Addition` and the current
+   text to return a `Result`
 
-Note that if you want to create another sequence of Given/When/Then fragments in your specification, you'll have to terminate
-the current one with the `end` fragment.
+##### Multiple steps
 
- ### Shared examples
+A G/W/T sequence can contain more than just 3 steps. However the compiler will check that:
+
+   * only a `Given[T]` extractor can start a sequence
+   * only a `When[T, S]` extractor can follow a `Given[T]` extractor
+   * only a `When[S, U]` extractor or a `Then[S]` can follow a `When[T, S]` extractor
+   * only a `Then[S]` can follow a `Then[S]` extractor
+
+##### Extract methods
+
+The `Given`, `When`, `Then` classes provide several convenience methods to extract strings from the preceding text: the
+`extractn` methods will extracts the values delimited by `${}` for up to 10 values.
+
+##### User regexps
+
+In the original way of declaring Given/When/Then steps, the text is left completely void of markers to extract meaningful
+values. On the other hand the user specifies a regular expression where groups are used to show where those values are:
+
+        object number1 extends Given[Int]("Given the following number: (.*)") {
+          def extract(text: String): Int = extract1(text).toInt
+        }
+
+The advantage of using this way is that the text is left in it's pristine form, the drawback is that most of the text is
+duplicated in 2 places, adding more maintenance burden.
+
+##### Several G/W/T blocks
+
+Given the rule saying that only a `Then` block can follow another `Then` block you might think that it is not possible to
+start another G/W/T sequence in the same specification! Fortunately it is possible by just terminating the first sequence
+with an `end` fragment:
+
+        "A given-when-then example for the addition"                 ^
+          "Given the following number: ${1}"                         ^ number1 ^
+          "And a second number: ${2}"                                ^ number2 ^
+          "Then I should get: ${3}"                                  ^ addition ^
+                                                                     end^
+        "A given-when-then example for the multiplication"           ^
+          "Given the following number: ${1}"                         ^ number1 ^
+          "And a second number: ${2}"                                ^ number2 ^
+          "Then I should get: ${2}"                                  ^ multiplication ^
+                                                                     end
+
+##### ScalaCheck values
+
+Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario
+with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.
+
+This can be avoided and even enhanced by using ScalaCheck to generate more values for the same scenario. For the calculator
+above you could write:
+
+        import org.scalacheck.Gen._
+        import specification.gen._
+
+        class GivenWhenThenScalacheckSpec extends SpecificationWithJUnit with ScalaCheck { def is =
+
+          "A given-when-then example for a calculator"                                   ^
+            "Given a first number n1"                                                    ^ number1 ^
+            "And a second number n2"                                                     ^ number2 ^
+            "When I add them"                                                            ^ add ^
+            "Then I should get n1 + n2"                                                  ^ result ^
+                                                                                         end^
+
+          object number1 extends Given[Int] {
+            def extract(text: String) = choose(-10, 10)
+          }
+          object number2 extends When[Int, (Int, Int)] {
+            def extract(number1: Int, text: String) = for { n2 <- choose(-10, 10) } yield (number1, n2)
+          }
+          object add extends When[(Int, Int), Addition] {
+            def extract(numbers: (Int, Int), text: String) = Addition(numbers._1, numbers._2)
+          }
+          object mult extends When[(Int, Int), Multiplication] {
+            def extract(numbers: (Int, Int), text: String) = Multiplication(numbers._1, numbers._2)
+          }
+          object result extends Then[Addition] {
+            def extract(text: String)(implicit op: Arbitrary[Addition]) = {
+              check { (op: Addition) => op.calculate must_== op.n1 + op.n2 }
+            }
+          }
+          case class Addition(n1: Int, n2: Int) extends Operation { def calculate: Int = n1 + n2 }
+        }
+
+The main differences with a "normal" G/W/T sequence are:
+
+ * the import of step classes from `org.specs2.specification.gen` instead of `org.specs2.specification`
+ * the return values from the `extract` methods of the `Given` and `When` steps which must return ScalaCheck generators
+   (cf `number1` and `number2`. For the `add` step there is an implicit conversion transforming any value of type `T` to a
+   `Gen[T]`
+ * the use of the ScalaCheck trait to access the `check` function transforming a function to a `org.scalacheck.Prop` and then
+   to a `Result`
+ * the `extract` method of the `Then` step takes an implicit `Arbitrary[T]` parameter which is used by the `check` method
+   to create a ScalaCheck property
+
+##### Single step
+
+A `GivenThen` step can be used to extract values from a single piece of text and return a `Result`:
+
+    "given the name: ${eric}, then the age is ${18}" ! new GivenThen {
+      def extract(text: String) = {
+        val (name, age) = extract2(text)
+        age.toInt must_== 18
+      }
+    }
+
+You can also use the `so` object doing the same thing and taking a `PartialFunction`:
+
+    import org.specs2.specification.so
+
+    "given the name: ${eric}, then the age is ${18}" ! so { case (name: String, age: String) =>
+      age.toInt must_== 18
+    }
+
+### Shared examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
 different parts of your specification. The best example of this situation is a specification for a Stack of limited size:
@@ -511,11 +621,17 @@ You can turn off that automatic layout by adding the `noindent` argument at the 
 
 ###### Include specifications
 
-There is a simple mechanism for including "children" specification in a given specification. You use the `include` method,
-as if you were adding a new fragment:
+There is a simple mechanism for including "children" specification in a given specification. You can simply add the child
+specification as if it was a simple fragment:
 
     "This is an included specification"     ^
-      include(childSpec)
+      childSpec
+
+Otherwise, if you want to include several specifications at once you can use the `include` method:
+
+    "This is the included specifications"         ^
+      include(childSpec1, childSpec2, childSpec3)
+
 
 The effect of doing so is that all the fragments of the children specification will be inlined in the parent one. This
 is exactly what is done in this page of the user guide, but with a twist
@@ -716,6 +832,70 @@ Note that you can also compose contexts in order to reuse them to build more com
 
     "Do something on the full system"                   ! init(success)
 
+##### Using a context for each Example
+
+The context creation which has been described up to now is very flexible and allows to switch contexts and compose between
+different examples. Yet, there are specifications where the context need to be set similarly for each Example. An easy way
+around that is to use the `BeforeEach` trait. This is just a Before context, with an additional `apply` method to apply this
+context to each example:
+
+      class SpecificationWithBefore extends Specification {
+
+        object withBefore extends BeforeEach {
+          def before = cleanupDatabase
+        }
+        def is = withBefore(spec)
+
+        def spec =
+        "this should"     ^
+          "ex1" ! success ^
+          "ex2" ! succes
+      }
+
+This way of doing is especially useful if you define an abstract Specification meant to be reused across the project, with
+the same setup/teardown procedure at the beginning/end of the specification with a `before` method executed before each example:
+
+      class ProjectSpecification extends Specification {
+        // always clean up the database before an example
+        object cleanUpDb extends BeforeEach {
+          def before = cleanupDatabase
+        }
+        def is = Step(initialCleanup) ^ cleanUpDb(spec) ^ Step(finalCleanup)
+        def spec: Fragments
+      }
+
+Of course there are similar traits for after and around setups:
+
+ * `AfterEach`
+ * `BeforeAfterEach`
+ * `AroundEach`
+ * `BeforeAfterAroundEach`
+
+##### Using a context for each Example in a mutable specification
+
+Alas the `BeforeEach` trait is not usable with a mutable specification because of the way that examples are added to the
+specification as soon as created. In order to avoid repetition in that case there are additional traits with you can use:
+
+ * `BeforeExample`
+ * `AfterExample`
+ * `AroundExample`
+ * `BeforeAfterAroundExample`
+
+The `BeforeExample` trait requires you to define a `before` method exactly like the one you define in the `Before` trait:
+
+        class Specification extends BeforeExample {
+          def before = cleanDatabase
+
+          "This is a specification where the database is cleaned up before each example" >> {
+            "first example" in { success }
+            "second example" in { success }
+          }
+        }
+
+As you can guess, the `AfterExample`, `AroundExample`,... traits work similarly by requiring the corresponding `after`, `around`
+,... methods to be defined.
+
+Note that if you like this way of declaring the setup methods you can also use it in a non-mutable Specification.
 
 ##### Steps and Actions
 
@@ -985,6 +1165,15 @@ For that specification above:
   val exampleTextExtraction = new Specification { def is =
     "Text extraction".title     ^
     "Bob should pay 12"         ! e1
+    "given the name: ${eric}, then the age is ${18}" ! so { case (name: String, age: String) =>
+      age.toInt must_== 18
+    }
+    "given the name: ${eric}, then the age is ${18}" ! new GivenThen {
+      def extract(text: String) = {
+        val (name, age) = extract2(text)
+        age.toInt must_== 18
+      }
+    }
 
     val toPay = Map("Bob"->"12", "Bill"->"10")           // a "database" of expected values
     val ShouldPay = "(.*) should pay (\\d+)".r           // a regular expression for extracting the name and price
@@ -993,6 +1182,8 @@ For that specification above:
       val ShouldPay(name, price) = s                     // extracting the values
       toPay(name) must_== price                          // using them for the expectation
     }
+
+
   }
 
   val exampleTextIndentation = new Specification { def is =

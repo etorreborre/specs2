@@ -20,7 +20,7 @@ There are 4 ways to execute ***specs2*** specifications:
 
  ***specs2*** is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the [sbt dsl](http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies):
 
- <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"`</td><td class="info">mandatory</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.8"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "0.9.1"`</td><td class="info">only if using the html runner</td></tr></table>
+ <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"com.googlecode.scalaz" %% "scalaz-core" % "5.1-SNAPSHOT"`</td><td class="info">optional, the scalaz class are provided in the specs2 jar</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.8"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "0.9.1"`</td><td class="info">only if using the html runner</td></tr></table>
 
 ### Arguments
 
@@ -45,6 +45,7 @@ From inside a specification, the available arguments are the following:
  `exclude`       | ""                      | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
  `plan`          | false                   | only report the text of the specification without executing anything
  `skipAll`       | false                   | skip all the examples
+ `stopOnFail`    | false                   | skip all examples after the first failure or error
  `failtrace`     | false                   | report the stacktrace for failures
  `color`         | true                    | use colors in the output (`nocolor` can also be used on the command line)
  `noindent`      | false                   | don't indent automatically text and examples
@@ -63,6 +64,7 @@ All those arguments are usually set in a specification with `args(name=value)` b
  ---------------                                                       | -----------------------                                                               | -----------                                                                                      |
  `plan`                                                                | `args(plan=true)`                                                                     |                                                                                                  |
  `skipAll`                                                             | `args(skipAll=true)`                                                                  |                                                                                                  |
+ `stopOnFail`                                                          | `args(stopOnFail=true)`                                                               |                                                                                                  |
  `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
  `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
  `include(tags: String)`                                               | `args(include=tags)`                                                                  |                                                                                                  |
@@ -73,7 +75,7 @@ All those arguments are usually set in a specification with `args(name=value)` b
  `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
  `descFromExpectations`                                                | `args(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
  `fullStackTrace`                                                      | `args(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
- `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)` | to display the differences when doing equality comparison                                        |
+ `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | to display the differences when doing equality comparison                                        |
 
 ##### Diffs
 
@@ -144,7 +146,6 @@ On the command line you can pass the following arguments:
  `threadsnb`      | int                     |                                                                          |
  `markdown`       | boolean                 |                                                                          |
  `debugmarkdown`  | boolean                 |                                                                          |
- `html`           | boolean                 | to get console + html reporting at once                                  |
  `fromsource`     | boolean                 |                                                                          |
  `fullstacktrace` | boolean                 |                                                                          |
  `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns  |
@@ -212,13 +213,25 @@ When you execute one test only, you can pass the arguments on the command line:
 
       > test-only org.specs2.UserGuide -- xonly
 
-The `html` argument is also available with sbt to allow the creation of the html report from the command line.
+##### Output formats
+
+The `html` argument is available with sbt to allow the creation of the html report from the command line.
 
       > test-only org.specs2.UserGuide -- html
 
+      // or in your project file
+      override def testOptions = super.testOptions ++ Seq(TestArgument("html"))
+
+If you want to get a console output as well, don't forget to add the `console` argument:
+
+      > test-only org.specs2.UserGuide -- html console
+
+      // or in your project file
+      override def testOptions = super.testOptions ++ Seq(TestArgument("html"), TestArgument("console"))
+
 ##### Files runner
 
-Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console` or `html` on the command line:
+Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console` or `html` (or both) on the command line:
 
       > test-only allSpecs -- console
 
@@ -252,6 +265,21 @@ You can use the second one if your IDE doesn't work with the first one:
 
 [*some [tricks](http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse) described on the specs website can still be useful there*]
 
+### Notifier runner
+
+A `NotifierRunner` accepts a `Notifier` to execute a specification and report execution events. The `Notifier` trait notifies
+of the following:
+
+ * specification start: the beginning of a specification, with its name
+ * specification end: the end of a specification, with its name
+ * context start: the beginning of a sub-level when the specification is seen as a tree or Fragments
+ * context end: the end of a sub-level when the specification is seen as a tree or Fragments
+ * text: any Text fragment that needs to be displayed
+ * example start
+ * example result: success / failure / error / skipped / pending
+
+All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration
+when relevant (i.e. for examples only).
 
    - - -
 

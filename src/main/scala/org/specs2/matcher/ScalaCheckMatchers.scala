@@ -218,15 +218,11 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       printf("\r%s %s%s\n", if (results.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
     }
     results match {
-      case Result(Proved(as), succeeded, discarded, _, _) => 
-        execute.Success(noCounterExample(succeeded), succeeded)
-      case Result(Passed, succeeded, discarded, _, _) => 
-        execute.Success(noCounterExample(succeeded), succeeded)
-      case r @ Result(GenException(e), n, _, _, _) => 
-        execute.Failure(prettyTestRes(r)(defaultPrettyParams))
-      case r @ Result(Exhausted, n, _, _, _) => 
-        execute.Failure(prettyTestRes(r)(defaultPrettyParams))
-      case Result(Failed(args, labels), n, _, _, _) =>
+      case Result(Proved(as), succeeded, discarded, _, _) => execute.Success(noCounterExample(succeeded), succeeded)
+      case Result(Passed, succeeded, discarded, _, _)     => execute.Success(noCounterExample(succeeded), succeeded)
+      case r @ Result(GenException(e), n, _, _, _)        => execute.Failure(prettyTestRes(r)(defaultPrettyParams), "", e.getStackTrace().toList)
+      case r @ Result(Exhausted, n, _, _, _)              => execute.Failure(prettyTestRes(r)(defaultPrettyParams))
+      case Result(Failed(args, labels), n, _, _, _)       =>
         execute.Failure("A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels))
       case Result(PropException(args, ex, labels), n, _, _, _) =>
         ex match {

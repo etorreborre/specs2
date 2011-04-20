@@ -40,8 +40,11 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
   implicit def inExample(s: String): InExample = new InExample(s)
   /** transient class to hold an example description before creating a full Example */
   class InExample(s: String) {
-    def in[T <% Result](r: =>T): Example = addExample(s, r)
+    def in[T <% Result](r: =>T): Example = exampleFactory.newExample(s, r)
     def >>[T <% Result](r: =>T): Example = in(r)
+    def in(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
+    def >>(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
+
     def >>(e: =>Example)       : Example = in(e)
     def in(e: =>Example)       : Example = {
       addFragments(s)
@@ -49,14 +52,15 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
       addFragments(p)
       ex
     }
+    def in(fs: =>Fragments): Fragments = fs
+    def >>(fs: =>Fragments): Fragments = fs
   }
 
-  override implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s, mutableExampleFactory)
-  
-  private val mutableExampleFactory = new ExampleFactory {
-    def newExample[T <% Result](s: String, function: String => T): Example = addExample(s, function(s))
-	  def newExample[T](s: String, t: =>MatchResult[T]): Example             = addExample(s, t.toResult)
-	  def newExample[T <% Result](s: String, t: =>T): Example                = addExample(s, t)
+  private[specs2]
+  override implicit def exampleFactory: ExampleFactory = new MutableExampleFactory
+
+  private[specs2] class MutableExampleFactory extends DefaultExampleFactory {
+    override def newExample(e: Example): Example = addExample(e)
   }
 
   /**
@@ -93,7 +97,6 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
     specFragments = new FragmentsFragment(specFragments) ^ a
     a
   }
-  protected def addExample[T <% Result](s: String, r: =>T): Example = addExample(Example(s, r))
 
   protected def addExample[T <% Result](ex: =>Example): Example = {
     val example = ex

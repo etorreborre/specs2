@@ -6,6 +6,8 @@ import control.LazyParameters._
 import control.LazyParameter
 import main.Arguments
 import StandardFragments._
+import scalaz.Monoid
+
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
@@ -21,7 +23,7 @@ class Fragments (val specStart: Option[SpecStart] = None, val middle: Seq[Fragme
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
   def overrideArgs(args: Arguments) = new Fragments(Some(start.overrideArgs(args)), middle, specEnd)
-
+  def map(function: Fragment => Fragment) = new Fragments(specStart, middle.map(function), specEnd)
   import StandardFragments._
   override def toString = fragments.mkString("\n")
 
@@ -48,11 +50,19 @@ object Fragments {
     }
   }
 
+  /** @return true if the Fragment is a Text */
+  def isText: Function[Fragment, Boolean] = { case Text(_) => true; case _ => false }
+  /** @return the text if the Fragment is a Text */
+  def isSomeText: PartialFunction[Fragment, Text] = { case t @ Text(_) => t }
   /** @return true if the Fragment is an Example */
   def isExample: Function[Fragment, Boolean] = { case Example(_, _) => true; case _ => false }
+  /** @return the example if the Fragment is an Example */
+  def isAnExample: PartialFunction[Fragment, Example] = { case e @ Example(_,_) => e }
   /** @return true if the Fragment is a step */
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
-  
+  /** @return the step if the Fragment is a Step*/
+  def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_) => s }
+
   /** @return a Fragments object with the appropriate name set on the SpecStart fragment */
   def withSpecStartEnd(fragments: Fragments, name: SpecName): Fragments = {
     val specStart = fragments.start.withName(name)
@@ -65,5 +75,12 @@ object Fragments {
    */
   def withSpecStartEnd(fragments: Fragments, s: SpecificationStructure): Fragments = withSpecStartEnd(fragments, SpecName(s))
 
+  /**
+   * Fragments can be added as a monoid
+   */
+  implicit def fragmentsIsMonoid = new Monoid[Fragments] {
+    val zero = new Fragments()
+    def append(s1: Fragments, s2: => Fragments) = s1 add s2
+  }
 }
 

@@ -1,8 +1,10 @@
 package org.specs2
 package specification
 import text._
+import execute.Skipped
+import matcher._
 
-class FragmentsBuilderSpec extends SpecificationWithJUnit {  def is =
+class FragmentsBuilderSpec extends SpecificationWithJUnit with ResultMatchers {  def is =
                                                                                                                         """
   In a Specification, the `contents` variable stores an instance of the Fragments class,
   which is merely a list of fragments. Those fragments are:
@@ -43,6 +45,9 @@ How to create an Example
   "An example is simply created with `string ! e1` where e1 returns a `Result`"                                         ! ex().e1^
   "An example can also use its own description to compute the Result to return"                                         ! ex().e2^
   "An example can have its description marked as `code` for nice html rendering"                                        ! ex().e3^
+  "An example can use a partial function to extract values from its text"                                               ! ex().e4^
+    "the description must be stripped out of value markers"                                                             ! ex().e5^
+                                                                                                                        p^
   "An example has a `matches` method to match its description against a regexp"                                         ^
     "it returns true if there is a match"                                                                               ! ex().matches1^
     "it works even if there are newlines in the description"                                                            ! ex().matches2^endp^
@@ -50,8 +55,12 @@ How to create an Example
 Other elements
 ==============                                                                                                          """^
                                                                                                                         br^
-  "Text is created by appending other fragments before or after"                                                        ! other().e1^
-  "But it can also be defined by itself"                                                                                ! other().e2^
+  "A Fragments object by appending fragment objects"                                                                    ! other().e1^
+  "Or simply by casting a String to a Fragments object"                                                                 ! other().e2^
+                                                                                                                        br^
+  "A Step can be created from an Either[Result, T]"                                                                     ^
+    "from a Left(Skipped())"                                                                                            ! other().e3^
+    "from a Right(value)"                                                                                               ! other().e4^
                                                                                                                         end
 
   case class startEnd() {
@@ -84,11 +93,19 @@ Other elements
 
     def e3 = Example(CodeMarkup("a == b"), success).desc.toHtml must startWith("<code")
 
+    val soExample = "given the name: ${eric}, then the age is ${18}" ! so {
+      case (name: String, age: String) => age.toInt must_== 18
+    }
+    def e4 = soExample.body() must beSuccessful
+    def e5 = soExample.desc.toString must_== "given the name: eric, then the age is 18"
+
     def matches1 = ("Eric" ! success).matches("E.*")
     def matches2 = ("Eric\nT." ! success).matches("E.*T.*")
   }
   case class other() {
     def e1 = ("t" ^ "t2").middle must have size(2)
     def e2 = ("t":Fragments).middle must have size(1)
+    def e3 = Step.fromEither(Left(Skipped())).execute must beSkipped
+    def e4 = Step.fromEither(Right("value")).execute must beSuccessful
   }
 }

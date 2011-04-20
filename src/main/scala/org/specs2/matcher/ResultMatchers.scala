@@ -51,6 +51,21 @@ trait ResultBaseMatchers {
                          value)).getOrElse(result(true, "ok", "ko", value))
     }
   }
+
+  def beSkipped[T <: Result]: Matcher[T] = beSkipped(None)
+  def beSkipped[T <: Result](message: String): Matcher[T] = beSkipped(Some(message))
+  def beSkipped[T <: Result](message: Option[String]): Matcher[T] = new Matcher[T] {
+    def apply[S <: T](value: Expectable[S]) = {
+      result(value.value.isSkipped,
+             value.description + " is skipped",
+             value.description + " is not skipped",
+             value) and
+      message.map(m=> result(value.value.message matches m,
+                         value.value.message + " matches " + m,
+                         value.value.message + " doesn't match " + m,
+                         value)).getOrElse(result(true, "ok", "ko", value))
+    }
+  }
 }
 private[specs2]
 trait ResultBeHaveMatchers { outer: ResultBaseMatchers =>

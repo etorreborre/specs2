@@ -17,6 +17,7 @@ case class Arguments (
   _exclude:       Option[String]           = None,
   _plan:          Option[Boolean]          = None,
   _skipAll:       Option[Boolean]          = None,
+  _stopOnFail:    Option[Boolean]          = None,
   _failtrace:     Option[Boolean]          = None,
   _color:         Option[Boolean]          = None,
   _noindent:      Option[Boolean]          = None,
@@ -39,6 +40,7 @@ case class Arguments (
   def exclude: String               = _exclude.getOrElse("")
   def plan: Boolean                 = _plan.getOrElse(false)
   def skipAll: Boolean              = _skipAll.getOrElse(false)
+  def stopOnFail: Boolean           = _stopOnFail.getOrElse(false)
   def failtrace: Boolean            = _failtrace.getOrElse(false)
   def color: Boolean                = _color.getOrElse(true)
   def noindent: Boolean             = _noindent.getOrElse(false)
@@ -71,6 +73,7 @@ case class Arguments (
       other._exclude         .orElse(_exclude),
       other._plan            .orElse(_plan),
       other._skipAll         .orElse(_skipAll),
+      other._stopOnFail      .orElse(_stopOnFail),
       other._failtrace       .orElse(_failtrace),
       other._color           .orElse(_color),
       other._noindent        .orElse(_noindent),
@@ -97,6 +100,7 @@ case class Arguments (
     "exclude"        -> _exclude      ,
     "plan"           -> _plan         ,
     "skipAll"        -> _skipAll      ,
+    "stopOnFail"     -> _stopOnFail   ,
     "failtrace"      -> _failtrace    ,
     "color"          -> _color        ,
     "noindent"       -> _noindent     ,
@@ -134,6 +138,7 @@ object Arguments {
        _exclude       = value("exclude"),
        _plan          = bool("plan"),
        _skipAll       = bool("skipall"),
+       _stopOnFail    = bool("stoponfail"),
        _failtrace     = bool("failtrace"),
        _color         = bool("color", "nocolor"),
        _noindent      = bool("noindent"),

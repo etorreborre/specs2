@@ -4,7 +4,7 @@ package matcher
 import scala.util.parsing.json._
 import text.Quote._
 import text.Trim._
-import IterableMatchers._
+import TraversableMatchers._
 import json.Json._
 
 /**

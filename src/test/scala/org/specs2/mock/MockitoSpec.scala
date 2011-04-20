@@ -107,7 +107,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
   case class callbacks() {
 	  val list = mock[java.util.List[String]]
     def c1 = {
-	    list.get(anyInt()) answers { i => "The parameter is " + i.toString }
+	    list.get(anyInt) answers { i => "The parameter is " + i.toString }
 	    list.get(2) must_== "The parameter is 2"
 	  }
   }

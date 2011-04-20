@@ -19,18 +19,17 @@ import reporter._
  */
 trait FilesRunner extends SpecificationsFinder {
 
-  def main(arguments: Array[String]): Unit = {
+  def main(arguments: Array[String]) {
     implicit val args = createArguments(arguments)
     beforeExecution
 
-    reporter match {
-      case Some(r) => {
-        val specs = specifications
+    val specs = specifications
+    reporters foreach  { r =>
         specs.foreach(execute(_, r))
         afterExecution(specs)
-      }
-      case None => println("No file to run because the arguments don't contain 'console' or 'html'\n")
     }
+    if (reporters.isEmpty)
+      println("No file to run because the arguments don't contain 'console' or 'html'\n")
   }
 
   /** print a message before the execution */
@@ -49,12 +48,9 @@ trait FilesRunner extends SpecificationsFinder {
   protected def createArguments(arguments: Array[String]) = Arguments(arguments:_*) <| ArgumentsArgs.args(offset=2)
 
   /** @return a reporter depending on the provided arguments */
-  protected def reporter(implicit arguments: Arguments) =
-      if (arguments.contains("html"))
-        Some(new HtmlReporter {})
-      else if (arguments.contains("console"))
-        Some(new ConsoleReporter {})
-      else None
+  protected def reporters(implicit arguments: Arguments): List[Reporter] =
+      List((arguments.contains("html"), new HtmlReporter {}),
+           (arguments.contains("console"), new ConsoleReporter {})).collect { case (true, r) => r }
 
   /** @return the specifications to execute */
   protected def specifications(implicit args: Arguments): Seq[SpecificationStructure] =

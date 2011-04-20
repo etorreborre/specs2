@@ -39,7 +39,7 @@ trait Nodex {
 
   implicit def unless(ns: =>NodeSeq): UnlessEmpty = new UnlessEmpty(ns)
   class UnlessEmpty(ns: =>NodeSeq) {
-    def unless(b: Boolean) = if (!b) ns else NodeSeq.Empty
+    def unless(b: Boolean) = if (b) NodeSeq.Empty else ns
   }
 }
 private[specs2]

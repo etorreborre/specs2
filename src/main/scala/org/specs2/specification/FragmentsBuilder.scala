@@ -6,6 +6,7 @@ import execute._
 import main._
 import matcher._
 import FormattingFragments._
+import scala.PartialFunction
 
 /**
  * This trait provides function to create specification Fragments:
@@ -16,7 +17,7 @@ import FormattingFragments._
  * 
  */
 private[specs2]
-trait FragmentsBuilder extends RegexSteps {
+trait FragmentsBuilder extends RegexSteps { outer =>
 
   /**
    * Methods for chaining fragments
@@ -48,14 +49,14 @@ trait FragmentsBuilder extends RegexSteps {
 
     /** start a given-when-then block */
     def ^[T](step: Given[T]): PreStep[T] = {
-      val text = fs.fragments.collect { case t: Text => t }.lastOption match {
-        case Some(Text(t)) => t
-        case other         => "A Text must precede a Given object!"
-      }
+      val text = fs.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
       lazy val extracted = step.extractContext(text)
-      new PreStep(() => extracted, fragmentsFragments(fs ^ Arguments("noindent")) ^ Step.fromEither(extracted))
+      def strip(fragments: Fragments) = fragments.map(step.strip)
+      new PreStep(() => extracted, fragmentsFragments(strip(fs) ^ Arguments("noindent")) ^ Step.fromEither(extracted))
     }
   }
+  /** reverse conversion from a Fragment containing a Fragments object to the Fragments object*/
+  implicit def fragmentsFragmentToFragments(fs: FragmentsFragment): Fragments = fs.fragments
 
   /**
    * Methods for creating fragments
@@ -79,34 +80,21 @@ trait FragmentsBuilder extends RegexSteps {
    * Example creation
    * @return an Example description from a string, to create a full Example once the body is defined
    */
-  implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s, defaultExampleFactory)
+  implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s)
   /** transient class to hold an example description before creating a full Example */
-  class ExampleDesc(s: String, factory: ExampleFactory) {
+  class ExampleDesc(s: String) {
     /** @return an Example, using a function taking the example description as an input */
-    def ![T <% Result](function: String => T): Example = factory.newExample(s, function)
+    def ![T <% Result](function: String => T): Example = exampleFactory.newExample(s, function)
     /** @return an Example, using a match */
-	  def ![T](t: =>MatchResult[T]): Example = factory.newExample(s, t)
+	  def ![T](t: =>MatchResult[T]): Example = exampleFactory.newExample(s, t)
     /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
-	  def ![T <% Result](t: =>T): Example = factory.newExample(s, t)
+	  def ![T <% Result](t: =>T): Example = exampleFactory.newExample(s, t)
+    /** @return an Example which a function using values extracted from the text */
+	  def !(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
   }
 
-  private val defaultExampleFactory = new ExampleFactory {
-    def newExample[T <% Result](s: String, function: String => T): Example = Example(s, function(s))
-	  def newExample[T](s: String, t: =>MatchResult[T]): Example             = Example(s, t.toResult)
-	  def newExample[T <% Result](s: String, t: =>T): Example                = Example(s, t)
-  }
+  private[specs2] implicit def exampleFactory: ExampleFactory = new DefaultExampleFactory
 
-  /**
-   * this trait defines methods for creating Examples
-   */
-  protected trait ExampleFactory {
-    /** @return an Example, using a function taking the example description as an input */
-    def newExample[T <% Result](s: String, function: String => T): Example
-    /** @return an Example, using a match */
-	  def newExample[T](s: String, t: =>MatchResult[T]): Example
-    /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
-	  def newExample[T <% Result](s: String, t: =>T): Example
-  }
   /**
    * Arguments creation
    * @return a Fragments object which can be chained with other fragments

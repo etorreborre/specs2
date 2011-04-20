@@ -2,9 +2,11 @@ package org.specs2
 package examples
 
 /**
- * This specification shows how to use different data with different example so that both of them can be reused
+ * This specification shows how both examples and data can be combined for maximum reusability.
+ *
+ * For example `isNonEmpty` is a list of examples which can be reused with both a `normal` or a `full` stack.
  */
-class StackSpec extends SpecificationWithJUnit { def is = 
+class StackSpec extends Specification { def is =
   
   "Specification for a Stack with a limited capacity".title                                       ^
                                                                                                   p^

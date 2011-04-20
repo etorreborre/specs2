@@ -57,8 +57,9 @@ trait HtmlPrinter {
   def reportPath(url: String) = outputDir + url
 
   /** copy css and images file to the output directory */
-  def copyResources() =
+  def copyResources() = {
     Seq("css", "images").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
+  }
     
   /**
    * @return an HtmlResultOutput object containing all the html corresponding to the
@@ -110,13 +111,13 @@ trait HtmlPrinter {
     implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment) = fragment match { 
-      case start @ ExecutedSpecStart(_, _)     => HtmlSpecStart(start)
-      case result @ ExecutedResult(_, _, _)    => HtmlResult(result)
-      case text @ ExecutedText(s)              => HtmlText(text)
-      case par @ ExecutedBr()                  => HtmlBr()
-      case end @ ExecutedSpecEnd(_)            => HtmlSpecEnd(end)
-      case see @ ExecutedSee(_)                => HtmlSee(see)
-      case fragment                            => HtmlOther(fragment)
+      case start @ ExecutedSpecStart(_, _, _)     => HtmlSpecStart(start)
+      case result @ ExecutedResult(_, _, _, _)    => HtmlResult(result)
+      case text @ ExecutedText(s, _)              => HtmlText(text)
+      case par @ ExecutedBr(_)                    => HtmlBr()
+      case end @ ExecutedSpecEnd(_, _)            => HtmlSpecEnd(end)
+      case see @ ExecutedSee(_, _)                => HtmlSee(see)
+      case fragment                               => HtmlOther(fragment)
     }
   }
 

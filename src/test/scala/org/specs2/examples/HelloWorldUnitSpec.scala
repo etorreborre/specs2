@@ -14,4 +14,5 @@ class HelloWorldUnitSpec extends mutable.Specification {
       "Hello world" must endWith("world")
     }
   }
+  
 }

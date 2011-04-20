@@ -5,7 +5,7 @@ package matcher
  * Trait aggregating all of specs2 matchers 
  */
 trait Matchers extends AnyMatchers 
-                  with IterableMatchers 
+                  with TraversableMatchers
                   with MapMatchers
                   with StringMatchers
                   with XmlMatchers

@@ -36,6 +36,7 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
     "if plan = true, nothing is executed"                                                                               ! planargs().e1^
     "if sequential = false examples are executed concurrently"                                                          ! seq().e1^
     "if sequential = true examples are executed sequentially"                                                           ! seq().e2^
+    "if stopOnFail = true everything is skipped after the first failure"                                                ! stopOnFailargs().e1^
     "if skipAll = true, everything is skipped"                                                                          ! skipAllargs().e1^
                                                                                                                         p^
     "if color = true, the text output is colorized"                                                                     ^
@@ -174,6 +175,14 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
       messages.messages must contain("e1", "e2").inOrder
     }
   }
+  case class stopOnFailargs() {
+    def e1 = {
+      print(sequential ^ stopOnFail ^
+            "ok" ! success ^
+            "ko" ! Failure("fail") ^
+            "ok2" ! success) must contain("o ok2")
+    }
+  }
   case class status() {
     def e1 = print(t1 ^ ex1) must containMatch("^\\s*t1") 
     def e2 = print(t1 ^ ex1) must contain("+ e1") 
@@ -209,7 +218,8 @@ class TextPrinterSpec extends SpecificationWithJUnit { def is =
 
   val preReporter = new DefaultSelection with DefaultSequence with DefaultExecutionStrategy {
     def exec(spec: SpecificationStructure): Seq[ExecutedFragment] = {
-      spec.content |> select |> sequence |> execute
+      val args = spec.content.arguments
+      spec.content |> select(args) |> sequence(args) |> execute(args)
     }
   }
 

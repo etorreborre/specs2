@@ -3,7 +3,7 @@ package html
 import TableOfContents._
 import matcher.DataTables
 
-class TableOfContentsSpec extends SpecificationWithJUnit with DataTables { def is =
+class TableOfContentsSpec extends Specification with DataTables { def is =
 
   "Creating a table of content for a body with"                                                                         ^
     `no toc elements creates nothing`                                                                                   ^
@@ -56,10 +56,12 @@ class TableOfContentsSpec extends SpecificationWithJUnit with DataTables { def i
   def `create links to the anchors with a nested <ul> element` =
     addToc(<body><toc/>{aBodyWithTwoH3HeadersAndOneH4Each}</body>) must \\ {
       <ul>
-        <li><a href="#a+h3+header">a h3 header</a></li>
+        <li><a href="#a+h3+header">a h3 header</a>
           <ul><li><a href="#first+h4">first h4</a></li></ul>
-        <li><a href="#another+h3+header">another h3 header</a></li>
-         <ul><li><a href="#second+h4">second h4</a></li></ul>
+        </li>
+        <li><a href="#another+h3+header">another h3 header</a>
+          <ul><li><a href="#second+h4">second h4</a></li></ul>
+        </li>
       </ul>
     }
 

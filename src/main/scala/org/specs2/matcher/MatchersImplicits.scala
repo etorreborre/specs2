@@ -162,7 +162,7 @@ trait MatchersImplicits extends Expectations {
 
   implicit def verifyFunction[U, T](t: U => MatchResult[T]) = new MatchResultFunctionVerification(t)
   class MatchResultFunctionVerification[U, T](t: U => MatchResult[T]) {
-    def forall[S <: Seq[U]](seq: S) = {
+    def forall[S <: Traversable[U]](seq: S) = {
       if (seq.isEmpty)
         Matcher.result(true, "ok", "ko", createExpectable(seq))
       else {
@@ -172,12 +172,12 @@ trait MatchersImplicits extends Expectations {
         }
         Matcher.result(r.isSuccess,
                "All elements of "+q(seq.mkString(", "))+" are matching ok",
-               "In the sequence "+q(seq.mkString(", "))+", the "+(seq.indexOf(r.expectable.value)+1).th+" element is failing: "+r.message,
+               "In the sequence "+q(seq.mkString(", "))+", the "+(seq.toSeq.indexOf(r.expectable.value)+1).th+" element is failing: "+r.message,
                createExpectable(seq))
       }
     }
 
-    def foreach[S <: Seq[U]](seq: S) = {
+    def foreach[S <: Traversable[U]](seq: S) = {
       if (seq.isEmpty)
         Matcher.result(true, "ok", "ko", createExpectable(seq))
       else {
@@ -192,7 +192,7 @@ trait MatchersImplicits extends Expectations {
       }
     }
 
-    def atLeastOnce[S <: Seq[U]](seq: S) = {
+    def atLeastOnce[S <: Traversable[U]](seq: S) = {
       if (seq.isEmpty)
         Matcher.result(false, "ok", "ko", createExpectable(seq))
       else {
@@ -201,7 +201,7 @@ trait MatchersImplicits extends Expectations {
           else t.apply(cur)
         }
         Matcher.result(r.isSuccess,
-          "In the sequence "+q(seq.mkString(", "))+", the "+(seq.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
+          "In the sequence "+q(seq.mkString(", "))+", the "+(seq.toSeq.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
           "No element of "+q(seq.mkString(", "))+" is matching ok",
           createExpectable(seq))
       }

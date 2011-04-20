@@ -1,7 +1,7 @@
 import sbt._
 import reaktor.scct.ScctProject
 
-class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject with posterous.Publish with ProguardProject with assembly.AssemblyBuilder {
+class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject with posterous.Publish with ProguardProject {
   
   /** Paths */
   override def outputDirectoryName = "target"
@@ -13,11 +13,11 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
 
   val scalacheck    = "org.scala-tools.testing" % "scalacheck_2.9.0-SNAPSHOT" % "1.9-SNAPSHOT" 
   val testinterface = "org.scala-tools.testing" % "test-interface" % "0.5" 
-  val scalazcore    = "org.scalaz" %% "scalaz-core" % "6.0-SNAPSHOT"
+  val scalazcore    = "org.scalaz" %% "scalaz-core" % "6.0-SNAPSHOT" % "optional"
   val hamcrest      = "org.hamcrest" % "hamcrest-all" % "1.1"
   val mockito 	    = "org.mockito" % "mockito-all" % "1.8.5" 
   val junit         = "junit" % "junit" % "4.7"
-  val pegdown       =  "org.pegdown" % "pegdown" % "0.9.1"
+  val pegdown       = "org.pegdown" % "pegdown" % "0.9.1"
   
   /** Compiling */
   override def compileOptions = Unchecked :: super.compileOptions.toList
@@ -36,21 +36,20 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   
 
   /** Packaging */
-  override def proguardOptions = List(
-    "-dontoptimize",
-    "-dontobfuscate",
-    proguardKeepLimitedSerializability,
-    proguardKeepAllScala,
-    "-keep interface scala.ScalaObject"
-  )
-  
-  override def proguardInJars = Path.fromFile(scalaLibraryJar) +++ super.proguardInJars
-  
+	// the published jar will contain scalaz classes so the "standard" one needs to be renamed
+  override def jarPath = defaultJarPath("-noscalaz.jar")
+    /** Proguard */
+	// the proguard jar name will have the "standard" jar name
+	override def minJarName = super.artifactBaseName + ".jar"
+  override def proguardOptions = List("-dontshrink -dontobfuscate -dontpreverify")
+
+	// add only the dependencies having scalaz in their name, to retain only the scalaz jar
+  override def proguardInJars = (super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz"))
+	
+    /** Sources */
   override def packageSrcJar = defaultJarPath("-sources.jar")
-  val sourceArtifact = Artifact.sources(artifactID)
-  override def assemblyJarName = name + "-all-" + this.version + ".jar"
-  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc)
-  
+	// before publishing, package the sources and create the specs2 jar including the scalaz classes
+  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc, proguard)
   
   /** Publishing */
   override def managedStyle = ManagedStyle.Maven

@@ -226,7 +226,9 @@ There are several matchers to check Option and Either instances:
  * `beNone` checks if an element is None
  * `beAsNoneAs` checks if 2 values are equal to None at the same time
  * `beRight` checks if an element is Right(_)
+ * `beRight.like(partial function)` checks if an element is Right(_) and satisfies a partial function returning a `MatchResult`
  * `beLeft` checks if an element is Left(_)
+ * `beLeft.like(partial function)` checks if an element is Left(_) and satisfies a partial function returning a `MatchResult`
 
 #### String matchers
 
@@ -288,6 +290,10 @@ readability.
 #### Iterable matchers
 
 Iterables can be checked with several matchers:
+
+  * to check if the iterable is empty
+    `Nil must be empty`
+    `List(1, 2, 3) must not be empty`
 
   * to check if some elements are contained in the iterable
     `List(1, 2, 3) must contain(3, 2)`
@@ -879,7 +885,7 @@ framework. You can reuse the following traits:
          success
        }
        def e3 = {
-         m.get(anyInt()) returns "element"
+         m.get(anyInt) returns "element"
          m.get(999) must_== "element"
          m.get(be_==(123)) returns "one"
          success
