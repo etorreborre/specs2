@@ -3,14 +3,15 @@ package matcher
 import execute._
 import specification._
 
-class StringMatchersSpec extends SpecificationWithJUnit {  def is = 
+class StringMatchersSpec extends Specification {  def is =
   
   "A string can be matched against a pattern using"                                                                     ^
     "beMatching"                                                                                                        ^
     { "eric" must beMatching("e.*") }                                                                                   ^
                                                                                                                         p^
-    "or ' be matching'"                                                                                                  ^
+    "or 'be matching'"                                                                                                  ^
     { "eric" aka "ETO" must be matching("e.*") }                                                                        ^
+    { "a" must not be matching("""{"a":"b"}""") }                                                                       ^
                                                                                                                         p^
     "find ... withGroups, to check for groups"                                                                          ^
     { "erirec" must find("(e|i).").withGroups("e", "i", "e") }                                                          ^

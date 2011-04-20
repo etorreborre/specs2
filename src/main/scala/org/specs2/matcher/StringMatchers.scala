@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import java.util.regex._
+import control.Exceptions._
 import text.Quote._
 
 /**
@@ -160,7 +161,7 @@ protected[specs2]
 class BeMatching(t: =>String) extends Matcher[String] {
   def apply[S <: String](b: Expectable[S]) = {
     val a = t
-    result(b.value matches a,
+    result(tryOr(b.value matches a){ (e: Exception) => false },
            b.description + " matches " + q(a),
            b.description + " doesn't match " + q(a), b)
   }
