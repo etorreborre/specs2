@@ -227,7 +227,7 @@ If you want to get a console output as well, don't forget to add the `console` a
       > test-only org.specs2.UserGuide -- html console
 
       // or in your project file
-      override def testOptions = super.testOptions ++ Seq(TestArgument("html"), TestArgument("console"))
+      override def testOptions = super.testOptions ++ Seq(TestArgument("html", "console"))
 
 ##### Files runner
 
