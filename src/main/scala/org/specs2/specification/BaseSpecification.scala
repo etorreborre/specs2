@@ -20,8 +20,8 @@ trait BaseSpecification extends SpecificationStructure with FragmentsBuilder wit
 trait SpecificationInclusion { this: FragmentsBuilder =>
   def include(f: Fragments): FragmentsFragment = fragmentsFragments(f)
   implicit def include(s: SpecificationStructure): FragmentsFragment = include(s.content)
-  def include(s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include((Seq(s)++ss).map(_.content).∑)
-  def include(args: Arguments, s: SpecificationStructure*): FragmentsFragment = include(s.map(_.content).∑.overrideArgs(args))
+  def include(s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include((Seq(s)++ss).map(_.content).sumr)
+  def include(args: Arguments, s: SpecificationStructure*): FragmentsFragment = include(s.map(_.content).sumr.overrideArgs(args))
 }
 /**
  * The structure of a Specification is simply defined as a sequence of fragments
