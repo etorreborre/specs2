@@ -57,8 +57,9 @@ trait HtmlPrinter {
   def reportPath(url: String) = outputDir + url
 
   /** copy css and images file to the output directory */
-  def copyResources() =
+  def copyResources() = {
     Seq("css", "images").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
+  }
     
   /**
    * @return an HtmlResultOutput object containing all the html corresponding to the
