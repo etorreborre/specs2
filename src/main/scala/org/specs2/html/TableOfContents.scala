@@ -66,10 +66,13 @@ trait TableOfContents {
   }
 
   /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
-  private def toc(body: NodeSeq) = {
+  def toc(body: NodeSeq, url: String = "") = headersToc(headers(body), url)
+
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
+  private def headersToc(body: NodeSeq, url: String = "") = {
     headersToTree(body).toTree.
     bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-      { <li><a href={anchorName(h.name)}>{h.name}</a>{ <ul>{s.toSeq}</ul> unless s.isEmpty }</li> unless h.name.isEmpty } ++
+      { <li><a href={url+anchorName(h.name)}>{h.name}</a>{ <ul>{s.toSeq}</ul> unless s.isEmpty }</li> unless h.name.isEmpty } ++
       { <ul>{s.toSeq}</ul> unless (!h.name.isEmpty) }
     }.rootLabel
   }
@@ -100,7 +103,7 @@ trait TableOfContents {
   /** This rule can replace the toc element with a table of contents derived from the body */
   private def tableOfContents(body: Node) = new RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
-      case <toc/> => toc(headers(body).drop(1))
+      case <toc/> => headersToc(headers(body).drop(1))
       case other => other
     }
     def add = new RuleTransformer(this).apply(body)

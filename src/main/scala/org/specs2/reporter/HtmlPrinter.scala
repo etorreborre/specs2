@@ -3,7 +3,9 @@ package reporter
 
 import scala.xml.NodeSeq
 import scalaz.{ Reducer, Scalaz, Generator }, Scalaz._
-import html.TableOfContents._
+import html._
+import xml.Nodex._
+import TableOfContents._
 import Generator._
 import data.Tuples._
 import io._
@@ -35,8 +37,7 @@ trait HtmlPrinter {
    * the output directory is either defined by a specs2 system variable
    * or chosen as a reports directory in the standard maven "target" directory
    */
-  private[specs2] lazy val outputDir: String = 
-    SystemProperties.getOrElse("outDir", "target/specs2-reports/").dirPath
+  private[specs2] lazy val outputDir: String = SystemProperties.getOrElse("outDir", "target/specs2-reports/").dirPath
   
   /**
    * print a sequence of executed fragments for a given specification class into a html 
@@ -46,18 +47,29 @@ trait HtmlPrinter {
   def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     copyResources()
     val parentLink = HtmlLink(SpecName(s), "", SpecName(s).name)
-    reduce(fs, parentLink).foreach { lines =>
+    val htmlFiles = reduce(fs, parentLink)
+    lazy val toc = globalToc(htmlFiles)
+    htmlFiles.foreach { lines =>
       fileWriter.write(reportPath(lines.link.url)) { out =>
-        printHtml(new HtmlResultOutput(out), lines).flush
+        printHtml(new HtmlResultOutput, lines, toc).flush(out)
       }
     }
   }
 
+  /** @return a global toc to be displayed with jstree */
+  private def globalToc(htmlFiles: List[HtmlLines])(implicit args: Arguments) = {
+    <div id="tree">
+      <ul>
+        <li id="topics"><a>Topics</a><ul>{htmlFiles.map(lines => toc(lines.printXml(new HtmlResultOutput).xml, lines.link.url)).reduce}</ul></li>
+      </ul>
+      <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['topics'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
+    </div>
+  }
   /** @return the file path for the html output */
   def reportPath(url: String) = outputDir + url
 
   /** copy css and images file to the output directory */
-  def copyResources() = {
+  def copyResources() {
     Seq("css", "images").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
   }
     
@@ -65,9 +77,9 @@ trait HtmlPrinter {
    * @return an HtmlResultOutput object containing all the html corresponding to the
    *         html lines to print  
    */  
-  def printHtml(output: HtmlResultOutput, lines: HtmlLines)(implicit args: Arguments) = {
+  def printHtml(output: HtmlResultOutput, lines: HtmlLines, globalToc: NodeSeq)(implicit args: Arguments) = {
     output.enclose((t: NodeSeq) => <html>{t}</html>) {
-      output.blank.printHead.enclose((t: NodeSeq) => addToc(<body>{breadcrumbs(lines)}{t}</body>)) {
+      output.blank.printHead.enclose((t: NodeSeq) => addToc(<body>{breadcrumbs(lines)}<div id="container">{t}</div>{globalToc}</body>)) {
         lines.printXml(output.blank)
       }
     }

@@ -320,3 +320,31 @@ table td {
 .formstacktrace {
   display: none;
 }
+#container {
+      
+  width: 83%;
+
+  float:right;
+    
+}
+
+#tree {
+	  
+  position: fixed;
+  margin-top:20px;
+  border: solid #AAAAAA;
+  border-width: 1px 1px 1px 8px;
+  background-color:white;
+
+  width:15%;
+
+  float:left;
+
+  overflow:auto;
+}
+#tree a {
+
+ white-space:normal !important;
+ height: auto;
+	
+}

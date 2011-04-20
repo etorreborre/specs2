@@ -17,17 +17,14 @@ import specification._
  */
 private[specs2]
 case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink, parent: Option[HtmlLines] = None) {
-  def print(implicit out: HtmlResultOutput, args: Arguments) =
-    printXml.flush
-  def printXml(implicit out: HtmlResultOutput) =
-    lines.foldLeft(out) { (res, cur) => cur.print(res) }
+
+  def printXml(implicit out: HtmlResultOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
   def add(line: HtmlLine) = HtmlLines(lines :+ line, link, parent)
   def is(name: SpecName) = link.is(name)
 
-  def breadcrumbs: NodeSeq = {
+  def breadcrumbs: NodeSeq =
     if (parent.isDefined) <div id="breadcrumbs">{breadcrumbsLinks}</div>
     else NodeSeq.Empty
-  }
 
   private def breadcrumbsLinks: NodeSeq = {
     val result = parent map { (p: HtmlLines) =>
