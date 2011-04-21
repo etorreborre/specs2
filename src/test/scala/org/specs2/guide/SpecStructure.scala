@@ -9,8 +9,6 @@ class SpecStructure extends Specification { def is =
                                                                                                                         """
 ### Presentation
 
-<toc/>
-
 In this chapter you will learn how to:
 
  * declare examples

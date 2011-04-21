@@ -2,8 +2,7 @@ package org.specs2
 package guide
 
 class Matchers extends Specification { def is = literate ^ "Matchers guide".title ^
-""" <toc/>
-
+"""
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns
 a `Result`:
 

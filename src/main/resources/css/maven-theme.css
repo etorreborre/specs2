@@ -316,9 +316,6 @@ table td {
 #breadcrumbs {
   position: fixed;
   width: 15.7%;
-  margin-top:0px;
-  float:top;
-    
   border-top: 1px dashed #aaa;
   border-bottom: 1px dashed #aaa;
   background-color: #eee;
@@ -330,7 +327,7 @@ table td {
       
   width: 83%;
 
-  margin-top:3px;
+  margin-top:-18px;
   float:right;
     
 }
@@ -338,7 +335,7 @@ table td {
 #tree {
 	  
   position: fixed;
-  margin-top:22px;
+  margin-top:2px;
   border: solid #AAAAAA;
   border-width: 1px 1px 1px 8px;
   background-color:white;
