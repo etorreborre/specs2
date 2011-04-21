@@ -80,7 +80,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     }
 
     def print(spec: Fragments) = {
-      printer.reduce(spec.fragments.map(executeFragment), HtmlLink(SpecName("spec"))).head.
+      printer.reduce(spec.fragments.map(executeFragment), HtmlLink(SpecName("spec"))).flatten.head.
               printXml(new HtmlResultOutput).xml
     }
     def printSpec(spec: SpecificationStructure) = {

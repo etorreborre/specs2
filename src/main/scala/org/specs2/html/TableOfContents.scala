@@ -66,13 +66,29 @@ trait TableOfContents {
   }
 
   /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
+  def tocElements(body: NodeSeq, url: String = "", subToc: NodeSeq = NodeSeq.Empty) = headersTocElements(headers(body), url, subToc)
+
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to a list of <li/> */
+  private def headersTocElements(body: NodeSeq, url: String = "", subToc: NodeSeq = NodeSeq.Empty) = {
+    headersToTree(body).toTree.
+    bottomUp { (h: Header, s: Stream[NodeSeq]) =>
+      if (h.name.isEmpty)
+        (s.toSeq).reduce
+      else
+        <li id={h.name}><a href={url+anchorName(h.name)}>{h.name}</a>
+          { <ul>{s.toSeq ++ subToc}</ul> }
+        </li>
+    }.rootLabel
+  }
+
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
   def toc(body: NodeSeq, url: String = "") = headersToc(headers(body), url)
 
   /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
   private def headersToc(body: NodeSeq, url: String = "") = {
     headersToTree(body).toTree.
     bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-      { <li><a href={url+anchorName(h.name)}>{h.name}</a>{ <ul>{s.toSeq}</ul> unless s.isEmpty }</li> unless h.name.isEmpty } ++
+      { <li id={h.name}><a href={url+anchorName(h.name)}>{h.name}</a>{ <ul>{s.toSeq}</ul> unless s.isEmpty }</li> unless h.name.isEmpty } ++
       { <ul>{s.toSeq}</ul> unless (!h.name.isEmpty) }
     }.rootLabel
   }

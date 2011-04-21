@@ -76,13 +76,6 @@ p {
   line-height: 1.3em;
   font-size: small;
 }
-#breadcrumbs {
-  border-top: 1px dashed #aaa;
-  border-bottom: 1px dashed #aaa;
-  background-color: #eee;
-  font-size: 12px;
-  font-style: italic;
-}
 #leftColumn {
   margin: 10px 0 0 5px;
   border: 1px solid #999;
@@ -320,10 +313,24 @@ table td {
 .formstacktrace {
   display: none;
 }
+#breadcrumbs {
+  position: fixed;
+  width: 15.7%;
+  margin-top:0px;
+  float:top;
+    
+  border-top: 1px dashed #aaa;
+  border-bottom: 1px dashed #aaa;
+  background-color: #eee;
+  font-size: 12px;
+  font-style: italic;
+}
+
 #container {
       
   width: 83%;
 
+  margin-top:3px;
   float:right;
     
 }
@@ -331,7 +338,7 @@ table td {
 #tree {
 	  
   position: fixed;
-  margin-top:20px;
+  margin-top:22px;
   border: solid #AAAAAA;
   border-width: 1px 1px 1px 8px;
   background-color:white;

@@ -1,6 +1,6 @@
 package org.specs2
 package data
-import scalaz.{ Tree, TreeLoc, Scalaz }
+import scalaz.{NonEmptyList, Tree, TreeLoc, Scalaz}
 import Scalaz._
 
 /**
@@ -58,6 +58,7 @@ trait Trees { outer =>
   def prune[A](t: Tree[A], f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = t.cobind(f).clean
 
   def flattenSubForests[A](tree: Tree[A]): Tree[A] = node(tree.rootLabel, tree.flatten.drop(1).map(leaf(_)))
+
   /**
    * Implicit method to add a parentLoc method to TreeLoc[T]
    */

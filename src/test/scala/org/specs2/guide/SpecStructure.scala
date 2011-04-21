@@ -980,7 +980,7 @@ own Specification trait doing this:
 The `DatabaseSpec` above will insert, in each inherited specification, a `Step` executed before all the fragments, and one
 executed after all of them.
 
-#### Other unit specification methods
+### Other unit specification methods
 
 Other methods can be used to create fragments in a unit specification:
 

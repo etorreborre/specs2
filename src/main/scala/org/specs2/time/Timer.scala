@@ -82,4 +82,9 @@ class SimpleTimer extends HmsTimer[SimpleTimer] {
     }
   def add(t: SimpleTimer) = copy(elapsed + t.elapsed, millis ++ t.millis)
   override def toString = hms
+
+  override def equals(a: Any) = a match {
+    case s: SimpleTimer => true
+    case other          => false
+  }
 }
