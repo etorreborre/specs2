@@ -66,16 +66,22 @@ trait TableOfContents {
   }
 
   /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
-  def tocElements(body: NodeSeq, url: String = "", subToc: NodeSeq = NodeSeq.Empty) = headersTocElements(headers(body), url, subToc)
+  def tocElements(body: NodeSeq, url: String = "", id: Int = 0, subToc: NodeSeq = NodeSeq.Empty) = headersTocElements(headers(body), url, id, subToc)
 
   /** @return the toc of a document by building a Tree of all the headers and mapping it to a list of <li/> */
-  private def headersTocElements(body: NodeSeq, url: String = "", subToc: NodeSeq = NodeSeq.Empty) = {
+  private def headersTocElements(body: NodeSeq, url: String = "", id: Int = 0, subToc: NodeSeq = NodeSeq.Empty) = {
     headersToTree(body).toTree.
     bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-      if (h.name.isEmpty)
-        (s.toSeq).reduce
+      if (h.name.isEmpty) {
+        val headers = s.flatMap(_.toSeq).reduce.toList
+        val headersWithId = headers match {
+          case (e:Elem) :: rest => (e % ("id" -> id)) :: rest
+          case other            => other
+        }
+        headersWithId.reduce
+      }
       else
-        <li id={h.name}><a href={url+anchorName(h.name)}>{h.name}</a>
+        <li><a href={url+anchorName(h.name)}>{h.name}</a>
           { <ul>{s.toSeq ++ subToc}</ul> }
         </li>
     }.rootLabel

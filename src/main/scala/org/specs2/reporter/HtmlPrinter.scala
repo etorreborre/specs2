@@ -53,7 +53,7 @@ trait HtmlPrinter {
     lazy val toc = globalToc(htmlFiles)
     htmlFiles.flatten.foreach { lines =>
       fileWriter.write(reportPath(lines.link.url)) { out =>
-        printHtml(new HtmlResultOutput, lines, globalTocDiv(toc, lines)).flush(out)
+        printHtml(new HtmlResultOutput, lines, globalTocDiv(toc, htmlFiles.rootLabel, lines)).flush(out)
       }
     }
   }
@@ -62,15 +62,15 @@ trait HtmlPrinter {
   private def globalToc(htmlFiles: Tree[HtmlLines])(implicit args: Arguments) = {
     def itemsList(tree: Tree[HtmlLines]): NodeSeq = {
       val root = tree.rootLabel
-      tocElements(root.printXml(new HtmlResultOutput).xml, root.link.url, { tree.subForest.map(itemsList).reduce })
+      tocElements(root.printXml(new HtmlResultOutput).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduce })
     }
     itemsList(htmlFiles)
   }
   /** @return a global toc to be displayed with jstree, focusing on the current section */
-  private def globalTocDiv(toc: NodeSeq, current: HtmlLines)(implicit args: Arguments) =
+  private def globalTocDiv(toc: NodeSeq, root: HtmlLines, current: HtmlLines)(implicit args: Arguments) =
     <div id="tree">
       <ul>{toc}</ul>
-      <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+current.hashCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
+      <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+root.hashCode+"','"+current.hashCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
     </div>
 
   /** @return the file path for the html output */
