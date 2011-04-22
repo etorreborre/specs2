@@ -47,14 +47,14 @@ A Notifier can be used to get stream of events for the execution of a Specificat
   def ex1    = there was atLeastOne(notified).exampleStarted(equalTo("ex1"), anyString)
   def ex2    = there was atLeastOne(notified).exampleStarted(anyString, matching(".*NotifierSpecification.scala:11.*"))
   def ex3    = there was atLeastOne(notified).exampleSuccess(equalTo("ex1"), anyLong)
-  def ex4    = there was atLeastOne(notified).exampleFailure(anyString, anyString, matching(".*NotifierSpecification.scala:12.*"), any[Throwable], anyLong)
+  def ex4    = there was atLeastOne(notified).exampleFailure(anyString, anyString, matching(".*NotifierSpecification.scala:12.*"), any[Throwable], any[Details], anyLong)
   def ex5    = there was atLeastOne(notified).exampleError(anyString, anyString, matching(".*NotifierSpecification.scala:14.*"), any[Throwable], anyLong)
   def ex6    = there was atLeastOne(notified).exampleSkipped(anyString, anyString, anyLong)
   def ex7    = there was atLeastOne(notified).examplePending(anyString, anyString, anyLong)
   def ex8    = there was no(notified(withXOnly)).exampleSuccess(anyString, anyLong)
   def ex9    = there was atLeastOne(notified).
-               exampleFailure(anyString, anyString, anyString, containMatch("specs2") ^^ ((t:Throwable) => t.getStackTrace().map(_.toString)), anyLong)
-  def step1  = there was atLeastOne(notified).exampleFailure(anyString, matching("clean failed"), anyString, any[Throwable], anyLong)
+               exampleFailure(anyString, anyString, anyString, containMatch("specs2") ^^ ((t:Throwable) => t.getStackTrace().map(_.toString)), any[Details], anyLong)
+  def step1  = there was atLeastOne(notified).exampleFailure(anyString, matching("clean failed"), anyString, any[Throwable], any[Details], anyLong)
   def end1   = there was one(notified).specEnd(anyString, anyString)
 
   def notified: Notifier = notified(spec)
