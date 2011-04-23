@@ -7,7 +7,7 @@ import Scalaz._
 import ShowDescription._
 import scala.collection.JavaConversions._
 
-class JUnitDescriptionsSpec extends SpecificationWithJUnit with FragmentsSamples {  def is =
+class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def is =
                                                                                                                         """
   A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is
   a root Description object (the top 'suite') and children objects representing either

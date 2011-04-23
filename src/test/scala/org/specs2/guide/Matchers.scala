@@ -464,7 +464,7 @@ That's only if you want to match the result of other matchers!
 This trait is not included in the default specification so you'll have to add it in the rare case where you want to use
 the Scala interpreter and execute a script:
 
-        class ScalaInterpreterMatchersSpec extends SpecificationWithJUnit with ScalaInterpreterMatchers {
+        class ScalaInterpreterMatchersSpec extends Specification with ScalaInterpreterMatchers {
           def interpret(s: String): String = // you have to provide your own Scala interpreter here
 
           "A script" can {
@@ -494,7 +494,7 @@ For example, specifying a Parser for numbers could look like this:
         import util.parsing.combinator.RegexParsers
         import NumberParsers.{number, error}
 
-        class ParserSpec extends SpecificationWithJUnit with matcher.ParserMatchers {  def is =
+        class ParserSpec extends Specification with matcher.ParserMatchers {  def is =
           "Parsers for numbers"                                                                   ^
                                                                                                   p^
           "beASuccess and succeedOn check if the parse succeeds"                                  ^
@@ -904,7 +904,7 @@ framework. You can reuse the following traits:
 
   lazy val jsonExamples = new JsonExamples
 }
-class JsonExamples extends SpecificationWithJUnit {
+class JsonExamples extends Specification {
     val person = """{
       "person": {
         "name": "Joe",
@@ -925,7 +925,7 @@ class JsonExamples extends SpecificationWithJUnit {
 import util.parsing.combinator.RegexParsers
 import NumberParsers.{number, error}
 
-class ParserSpec extends SpecificationWithJUnit with matcher.ParserMatchers {  def is =
+class ParserSpec extends Specification with matcher.ParserMatchers {  def is =
   "Parsers for numbers"                                                                   ^
                                                                                           p^
   "beASuccess and succeedOn check if the parse succeeds"                                  ^

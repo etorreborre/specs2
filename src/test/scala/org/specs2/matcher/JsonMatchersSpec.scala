@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class JsonMatchersSpec extends SpecificationWithJUnit { def is =
+class JsonMatchersSpec extends Specification { def is =
 
  "The / matcher matches a name and a value if the input is a Map"                                                       ^
  { """{ "name": "Joe" }""" must /("name" -> "Joe") }                                                                    ^

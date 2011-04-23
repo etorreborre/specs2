@@ -3,7 +3,7 @@ package matcher
 import mutable._
 import execute.FailureException
 
-class ExpectableSpec extends SpecificationWithJUnit {
+class ExpectableSpec extends Specification {
 
   "An expectable can have a precise description with aka(description)" in {
     ("a" aka "the string").description must_== "the string 'a'"

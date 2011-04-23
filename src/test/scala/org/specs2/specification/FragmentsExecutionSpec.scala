@@ -4,7 +4,7 @@ import execute._
 import matcher._
 import mutable._
 
-class FragmentsExecutionSpec extends SpecificationWithJUnit {
+class FragmentsExecutionSpec extends Specification {
 
   "An example when executed returns a result" in {
     (1 must_== 1).toResult must_== Success("'1' is equal to '1'")

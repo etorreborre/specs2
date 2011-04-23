@@ -6,7 +6,7 @@ import _root_.org.junit.runner.notification.{ RunNotifier, Failure }
 import _root_.org.junit.runner.Description
 import _root_.org.junit.ComparisonFailure
 
-class JUnitRunnerSpec extends SpecificationWithJUnit with Mockito with FragmentsSamples {  def is =
+class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {  def is =
   
                                                                                                                         """
   The JUnitRunner is meant to be used with the RunWith annotation.

@@ -4,7 +4,7 @@ package matcher
 import util.parsing.combinator.RegexParsers
 import ParsersUnderTest.{ number, error }
 
-class ParserMatcherSpec extends SpecificationWithJUnit with ParserMatchers { def is =
+class ParserMatcherSpec extends Specification with ParserMatchers { def is =
                                                                                                                         """
 The ParserMatchers trait provides matchers for Parser and ParseResult instances.
                                                                                                                         """^p^

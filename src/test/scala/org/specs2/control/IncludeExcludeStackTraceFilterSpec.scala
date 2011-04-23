@@ -2,7 +2,7 @@ package org.specs2
 package control
 import Throwablex._
 
-class IncludeExcludeStackTraceFilterSpec extends SpecificationWithJUnit { def is =
+class IncludeExcludeStackTraceFilterSpec extends Specification { def is =
 
   "A stacktrace can be filtered"                                                                                        ^
     "by declaring 'exclude' patterns"                                                                                   ^

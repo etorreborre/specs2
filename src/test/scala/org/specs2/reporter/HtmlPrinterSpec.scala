@@ -4,7 +4,7 @@ import io._
 import mock._
 import specification._
 
-class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is =       sequential ^
+class HtmlPrinterSpec extends Specification with Mockito { outer => def is =       sequential ^
                                                                                                                         """
 The HtmlPrinter class is responsible for opening an html file and writing the specification text.
                                                                                                                         """^p^
@@ -15,9 +15,6 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
                                                                                                                         p^
   "The page title"                                                                                                      ^
     "must be the title of the specification"                                                                            ! title().e1^
-                                                                                                                        p^
-  "If there are children pages"                                                                                         ^
-    "there must be breadcrumbs on top of the children pages"                                                            ! breadcrumbs().e1^
                                                                                                                         p^
   "Resources"                                                                                                           ^
     "there must be a directory for css files"                                                                           ! resources().css^
@@ -52,12 +49,6 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     
     def css = there was one(fs).copySpecResourcesDir(equalTo("css"), anyString)
     def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)
-  }
-  case class breadcrumbs() extends MockHtmlPrinter {
-    val child = new Specification { def is = "t2" }
-    val spec = new Specification { def is = "t1" ! success ^ "child" ~ ("child", child) }
-
-    def e1 = printSpec(spec) must contain("div id=\"breadcrumbs\"")
   }
   case class fragments() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success ^ "*ex2*" ! success ^

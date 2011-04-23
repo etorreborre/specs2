@@ -3,7 +3,7 @@ package matcher
 import mutable._
 import execute._
 
-class EventuallyMatchersSpec extends SpecificationWithJUnit {
+class EventuallyMatchersSpec extends Specification {
                                                                                                                         """
 `eventually` can be used to retry any matcher until a maximum number of times is reached
 or until it succeeds.

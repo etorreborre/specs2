@@ -1,10 +1,10 @@
 package org.specs2
 package collection
 
-import mutable.SpecificationWithJUnit
+import mutable.Specification
 import Listx._
 
-class ListxSpec extends SpecificationWithJUnit {
+class ListxSpec extends Specification {
 
   "A removeFirst function" should {
     "remove nothing if the list is empty" in {

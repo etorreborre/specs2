@@ -322,7 +322,7 @@ above you could write:
         import org.scalacheck.Gen._
         import specification.gen._
 
-        class GivenWhenThenScalacheckSpec extends SpecificationWithJUnit with ScalaCheck { def is =
+        class GivenWhenThenScalacheckSpec extends Specification with ScalaCheck { def is =
 
           "A given-when-then example for a calculator"                                   ^
             "Given a first number n1"                                                    ^ number1 ^
@@ -386,7 +386,7 @@ You can also use the `so` object doing the same thing and taking a `PartialFunct
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
 different parts of your specification. The best example of this situation is a specification for a Stack of limited size:
 
-        class StackSpec extends SpecificationWithJUnit { def is =
+        class StackSpec extends Specification { def is =
           "Specification for a Stack with a limited capacity".title                 ^
                                                                                     p^
           "An empty stack should"                                                   ^
@@ -1001,7 +1001,7 @@ To make things more concrete here is a full example:
        * This specification shows how to use the mutable.Specification trait to create a unit Specification
        * where the fragments are built using a mutable variable
        */
-      class MutableSpec extends SpecificationWithJUnit {
+      class MutableSpec extends Specification {
 
         // A title can be added at the beginning of the specification
         "MutableSpec".title

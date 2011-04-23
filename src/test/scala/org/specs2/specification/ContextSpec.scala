@@ -6,7 +6,7 @@ import reporter._
 import matcher._
 import matcher.MustExpectable._
 
-class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is =
+class ContextSpec extends Specification with FragmentExecution { def is =
                                                                                                                         """
   It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments
   and clean it up afterwards. This may be for example:

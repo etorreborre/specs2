@@ -3,7 +3,7 @@ package matcher
 import java.util.Arrays._
 import scala.collection.JavaConversions.{ asScalaIterable }
 
-class TraversableMatchersSpec extends SpecificationWithJUnit { def is =
+class TraversableMatchersSpec extends Specification { def is =
 
   "we can check if one or several elements are present in an traversable"                                                  ^
     { List(1, 2) must contain(1) }                                                                                      ^

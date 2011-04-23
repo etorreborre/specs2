@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class OptionMatchersSpec extends SpecificationWithJUnit { def is = 
+class OptionMatchersSpec extends Specification { def is =
                                                                                                                         """
   The OptionMatchers trait provides matchers to check Option instances.
                                                                                                                         """^

@@ -1,11 +1,11 @@
 package org.specs2
 package collection
-import mutable.SpecificationWithJUnit
+import mutable.Specification
 import Listx._
 import org.scalacheck.Prop
 import Iterablex._
 
-class IterablexSpec extends SpecificationWithJUnit with IterableData {
+class IterablexSpec extends Specification with IterableData {
 
   "Specification for Iterables extensions".title
 

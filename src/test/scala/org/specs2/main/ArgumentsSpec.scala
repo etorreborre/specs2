@@ -3,7 +3,7 @@ package main
 
 import specification.After
 
-class ArgumentsSpec extends SpecificationWithJUnit { def is =
+class ArgumentsSpec extends Specification { def is =
                                                                                                                         """
 Arguments can be passed on the command line as an Array of Strings. There are 2 types of arguments:
 

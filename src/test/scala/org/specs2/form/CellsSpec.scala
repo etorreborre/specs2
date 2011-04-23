@@ -2,7 +2,7 @@ package org.specs2
 package form
 import FormsBuilder._
 
-class CellsSpec extends SpecificationWithJUnit { def is = 
+class CellsSpec extends Specification { def is =
                                                                                                                         """
 Cells are responsible for the formatting of Fields, Props and Form added to a Form.
                                                                                                                         """^

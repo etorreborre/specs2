@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class DataTablesSpec extends SpecificationWithJUnit with DataTables with ResultMatchers { def is =
+class DataTablesSpec extends Specification with DataTables with ResultMatchers { def is =
                                                                                                                         """
   DataTables are useful to specify lots of examples varying just by a few values.
                                                                                                                         """^

@@ -2,7 +2,7 @@ package org.specs2
 package text
 import CamelCase._
 
-class CamelCaseSpec extends SpecificationWithJUnit { def is =
+class CamelCaseSpec extends Specification { def is =
 
   "Camel case to words examples"                                                                                        ^
   { "HelloWorld".camelCaseToWords === "hello world" }                                                                   ^

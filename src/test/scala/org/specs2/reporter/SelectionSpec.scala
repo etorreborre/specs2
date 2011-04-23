@@ -6,7 +6,7 @@ import main._
 import io._
 import org.scalacheck._
 
-class SelectionSpec extends SpecificationWithJUnit with ScalaCheck with ArbitraryFragments { def is =
+class SelectionSpec extends Specification with ScalaCheck with ArbitraryFragments { def is =
                                                                                                                         """
 Before executing and reporting a specification, the fragments must be selected and sorted:
 

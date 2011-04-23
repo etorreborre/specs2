@@ -56,11 +56,11 @@ class TableOfContentsSpec extends Specification with DataTables { def is =
   def `create links to the anchors with a nested <ul> element` =
     addToc(<body><toc/>{aBodyWithTwoH3HeadersAndOneH4Each}</body>) must \\ {
       <ul>
-        <li><a href="#a+h3+header">a h3 header</a>
-          <ul><li><a href="#first+h4">first h4</a></li></ul>
+        <li id="a h3 header"><a href="#a+h3+header">a h3 header</a>
+          <ul><li id="first h4"><a href="#first+h4">first h4</a></li></ul>
         </li>
-        <li><a href="#another+h3+header">another h3 header</a>
-          <ul><li><a href="#second+h4">second h4</a></li></ul>
+        <li id="another h3 header"><a href="#another+h3+header">another h3 header</a>
+          <ul><li id="second h4"><a href="#second+h4">second h4</a></li></ul>
         </li>
       </ul>
     }

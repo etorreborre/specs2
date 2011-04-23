@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 
-class ResultMatchersSpec extends SpecificationWithJUnit with ResultMatchers { def is =
+class ResultMatchersSpec extends Specification with ResultMatchers { def is =
                                                                                                                         """
 The ResultMatchers trait provides matchers to check Result instances.
                                                                                                                         """^p^

@@ -7,7 +7,7 @@ import execute._
 import specification._
 import Statistics._
 
-class StatisticsSpec extends SpecificationWithJUnit { def is =
+class StatisticsSpec extends Specification { def is =
                                                                                                                         """
 Statistics can be accumulated on each executed specification in order to be displayed at the end of a run
                                                                                                                         """^p^

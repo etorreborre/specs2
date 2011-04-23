@@ -3,7 +3,7 @@ package form
 import FormsBuilder._
 import specification._
 
-class FormSpec extends SpecificationWithJUnit { def is =
+class FormSpec extends Specification { def is =
                                                                                                                         """
 A Form is a generic table which has an optional title and rows.
 Each row contains cells which can be created from Fields, Props or other Forms.

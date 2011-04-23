@@ -1,7 +1,7 @@
 package org.specs2
 package mock
 
-class HamcrestMatcherAdapterSpec extends SpecificationWithJUnit { def is = 
+class HamcrestMatcherAdapterSpec extends Specification { def is =
 
   "A specs2 matcher can be adapted to be used like a Hamcrest matcher"                                                  ^
   "  when the match is ok" ! {

@@ -2,7 +2,7 @@ package org.specs2
 package specification
 import form._
 
-class FormsFragmentsSpec extends SpecificationWithJUnit with Forms { def is = 
+class FormsFragmentsSpec extends Specification with Forms { def is =
   
   "A form can be added as a Fragment in a specification"                                                                ^
     "creating a new Text Fragment"                                                                                      ! fragments.e1_1^

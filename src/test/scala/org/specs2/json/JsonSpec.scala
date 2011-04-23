@@ -1,13 +1,13 @@
 package org.specs2
 package json
 
-import mutable.SpecificationWithJUnit
+import mutable.Specification
 import matcher._
 import util.parsing.json._
 import org.scalacheck._
 import JsonGen._
 
-class JsonSpec extends SpecificationWithJUnit with ScalaCheck {
+class JsonSpec extends Specification with ScalaCheck {
   implicit val jsonParams = set(maxSize -> 3)
   
   "The pairs of a json document must have values with a terminal type" ! check { (json: JSONType) =>

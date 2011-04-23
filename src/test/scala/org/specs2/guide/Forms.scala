@@ -3,7 +3,7 @@ package guide
 
 import form._
 
-class Forms extends SpecificationWithJUnit with specification.Forms { def is = literate^
+class Forms extends Specification with specification.Forms { def is = literate^
   """
 
 Forms are a way to represent domain objects or services, and declare expected values in a tabular format. Forms can be designed

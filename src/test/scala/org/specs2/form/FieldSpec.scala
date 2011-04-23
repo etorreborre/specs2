@@ -2,7 +2,7 @@ package org.specs2
 package form
 import execute._
 
-class FieldSpec extends SpecificationWithJUnit { def is =
+class FieldSpec extends Specification { def is =
                                                                                                                         """
 A Field is a labelled property with can be embedded in a Form.                                                        
                                                                                                                         """^
