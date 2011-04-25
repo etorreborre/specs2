@@ -39,7 +39,7 @@ In an _acceptance_ specification you build a list of _fragments_ with the `^` op
       def e2 = success
 
 What we have here is a list of 3 fragments, a Text fragment and 2 Example fragments. The examples are declared using the
-format `"description" ! body` their "bodies" are provided by 2 methods returning a `Result`, separated from the specification text.
+format `"description" ! body`. Their "bodies" are provided by 2 methods returning a `Result`, separated from the specification text.
 
 There is no specific recommendation on how you should name those methods but you can either use short names or use the backtick
 notation for better readability:
@@ -280,12 +280,12 @@ A G/W/T sequence can contain more than just 3 steps. However the compiler will c
 ##### Extract methods
 
 The `Given`, `When`, `Then` classes provide several convenience methods to extract strings from the preceding text: the
-`extractn` methods will extracts the values delimited by `${}` for up to 10 values.
+`extract1, extract2,...` methods will extracts the values delimited by `${}` for up to 10 values.
 
 ##### User regexps
 
 In the original way of declaring Given/When/Then steps, the text is left completely void of markers to extract meaningful
-values. On the other hand the user specifies a regular expression where groups are used to show where those values are:
+values. The user then needs to specify a regular expression where groups are used to show where those values are:
 
         object number1 extends Given[Int]("Given the following number: (.*)") {
           def extract(text: String): Int = extract1(text).toInt
@@ -373,7 +373,8 @@ A `GivenThen` step can be used to extract values from a single piece of text and
       }
     }
 
-You can also use the `so` object doing the same thing and taking a `PartialFunction`:
+You can also use the `so` object. This object provides an `apply` method expecting a `PartialFunction` and does the value
+extraction:
 
     import org.specs2.specification.so
 
@@ -982,7 +983,7 @@ executed after all of them.
 
 Other methods can be used to create fragments in a unit specification:
 
- * `can` to create a group of Examples, with a the preceding Text fragment appended with `can`
+ * `can` to create a group of Examples, with the preceding Text fragment appended with `can`
  * <code>>></code> to create an Example or a group of Examples (with no appended text)
  * `"My spec title".title` to give a title to the Specification
  * `args(...)` to create arguments for the specification
