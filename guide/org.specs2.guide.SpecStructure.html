@@ -8,6 +8,10 @@
       <script type="text/javascript" src="./css/prettify.js"></script>
       <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
       <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="css/jquery.js"></script>
+      <script type="text/javascript" src="css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./css/tooltip.js"></script>
       <script language="javascript"> 
       function init() {  prettyPrint(); };   
@@ -31,7 +35,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" /> 
-    </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a></div><title>Specification structure</title><a name="Specification+structure"></a><h2>Specification structure</h2><div class="level0"><a name="Presentation"></a><h3>Presentation</h3><p><ul><li><a href="#Presentation">Presentation</a></li><li><a href="#Declare+examples">Declare examples</a></li><ul><li><a href="#Structure+of+a+Specification">Structure of a Specification</a></li><ul><li><a href="#Acceptance+specification">Acceptance specification</a></li><li><a href="#Unit+specification">Unit specification</a></li><li><a href="#Results">Results</a></li><li><a href="#Standard+results">Standard results</a></li><li><a href="#Matcher+results">Matcher results</a></li><li><a href="#Functional+expectations">Functional expectations</a></li><li><a href="#Thrown+Expectations">Thrown Expectations</a></li><li><a href="#Set+an+example+as+%22Pending+until+fixed%22">Set an example as &quot;Pending until fixed&quot;</a></li><li><a href="#Auto-Examples">Auto-Examples</a></li><li><a href="#Using+the+text+of+the+Example">Using the text of the Example</a></li><li><a href="#Given+%2F+When+%2F+Then">Given / When / Then</a></li></ul></ul><li><a href="#Shared+examples">Shared examples</a></li><li><a href="#Declare+arguments">Declare arguments</a></li><li><a href="#Layout">Layout</a></li><ul><li><a href="#The+rules">The rules</a></li><li><a href="#The+formatting+fragments">The formatting fragments</a></li><ul><li><a href="#Separating+groups+of+examples">Separating groups of examples</a></li><li><a href="#Reset+the+levels">Reset the levels</a></li><li><a href="#Changing+the+indentation+level">Changing the indentation level</a></li><li><a href="#Combinations">Combinations</a></li><li><a href="#Turning-off+the+automatic+layout">Turning-off the automatic layout</a></li></ul></ul><li><a href="#Include+or+link+specifications">Include or link specifications</a></li><ul><li><a href="#Include+specifications">Include specifications</a></li><li><a href="#Link+specifications">Link specifications</a></li></ul><li><a href="#Specification+title">Specification title</a></li><li><a href="#Contexts">Contexts</a></li><ul><li><a href="#Defining+Before+actions">Defining Before actions</a></li><li><a href="#Defining+After+actions">Defining After actions</a></li><li><a href="#Defining+Around+actions">Defining Around actions</a></li><li><a href="#Defining+Outside+actions">Defining Outside actions</a></li><li><a href="#Defining+AroundOutside+actions">Defining AroundOutside actions</a></li><li><a href="#Composing+contexts">Composing contexts</a></li><li><a href="#Steps+and+Actions">Steps and Actions</a></li><li><a href="#In+unit+specifications">In unit specifications</a></li><li><a href="#Generic+specification+with+setup+and+teardown+steps">Generic specification with setup and teardown steps</a></li></ul><li><a href="#Other+unit+specification+methods">Other unit specification methods</a></li><li><a href="#Tags">Tags</a></li><ul><li><a href="#In+a+unit+specification">In a unit specification</a></li></ul></ul></p><p>In this chapter you will learn how to:</p>
+    </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"></a><h2>Specification structure</h2><div class="level0"><a name="Presentation"></a><h3>Presentation</h3><p>In this chapter you will learn how to:</p>
 <ul>
   <li>declare examples</li><li>share examples</li><li>add arguments for execution and reporting</li><li>format the layout of your specification</li><li>include or link specifications</li><li>give a title to your specification</li><li>define contexts and actions to execute before/after examples</li><li>tag examples or sections of the Specification</li>
 </ul><a name="Declare+examples"></a><h3>Declare examples</h3><a name="Structure+of+a+Specification"></a><h4>Structure of a Specification</h4><p>The <a href="org.specs2.guide.QuickStart.html">Quick Start</a> guide describes 2 styles of specifications, the <em>unit</em> style and the <em>acceptance</em> style.<br />
@@ -86,7 +90,7 @@ notation for better readability:</p>
     &quot;end with 'world'&quot; ! {
       &quot;Hello world&quot; must endWith(&quot;world&quot;)
     }
-</code></pre><p>You can look at the bottom of this page for the other methods which are used to build unit specifications.</p><a name="Results"></a><h5>Results</h5><p>An Example is created by following a piece of text with <code class="prettyprint">!</code> and providing anything convertible to an <code class="prettyprint">org.specs2.execute.Result</code>:</p>
+</code></pre><p>You can look at the bottom of this page for the other methods which are used to build unit specifications.</p><a name="Results"></a><h4>Results</h4><p>An Example is created by following a piece of text with <code class="prettyprint">!</code> and providing anything convertible to an <code class="prettyprint">org.specs2.execute.Result</code>:</p>
 <ul>
   <li>a standard result</li><li>a Matcher result</li><li>a boolean value</li>
 </ul><a name="Standard+results"></a><h5>Standard results</h5><p>The simplest <code class="prettyprint">Result</code> values are provided by the <code class="prettyprint">StandardResults</code> trait (mixed-in with <code class="prettyprint">Specification</code>), and match the 5<br />
@@ -113,7 +117,7 @@ of its body. This example will never fail because the first expectation is &quot
                         startWith(&quot;hell&quot;)
 </code></pre><a name="Thrown+Expectations"></a><h5>Thrown Expectations</h5><p>The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice<br />
 by some. However you might see it as an annoying restriction. You can avoid it by extending the <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code><br />
-trait. With that trait, any failing expectation will throw a <code class="prettyprint">FailureException</code> and the rest of the example will not be executed.</p><p>There is also an additional method <code class="prettyprint">failure(message)</code> to throw a <code class="prettyprint">FailureException</code> at will.</p><p>[Note that the <code class="prettyprint">ThrownMatchers</code> traits are mixed in the <code class="prettyprint">mutable.Specification</code> trait used for <em>unit</em> specifications].</p><a name="Set+an+example+as+%22Pending+until+fixed%22"></a><h5>Set an example as &quot;Pending until fixed&quot;</h5><p>Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.<br />
+trait. With that trait, any failing expectation will throw a <code class="prettyprint">FailureException</code> and the rest of the example will not be executed.</p><p>There is also an additional method <code class="prettyprint">failure(message)</code> to throw a <code class="prettyprint">FailureException</code> at will.</p><p>[Note that the <code class="prettyprint">ThrownMatchers</code> traits are mixed in the <code class="prettyprint">mutable.Specification</code> trait used for <em>unit</em> specifications].</p><a name="Set+an+example+as+%22Pending+until+fixed%22"></a><h4>Set an example as &quot;Pending until fixed&quot;</h4><p>Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.<br />
 Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append <code class="prettyprint">pendingUntilFixed</code><br />
 to the Example body:</p>
 <pre><code class="prettyprint">  &quot;this example fails for now&quot; ! {
@@ -125,7 +129,7 @@ to the Example body:</p>
     1 must_== 2
   }.pendingUntilFixed(&quot;ISSUE-123&quot;)
 </code></pre><p>The example above will be reported as <code class="prettyprint">Pending</code> until it succeeds. Then it is marked as a failure so that you can remember<br />
-to remove the <code class="prettyprint">pendingUntilFixed</code> marker.</p><a name="Auto-Examples"></a><h5>Auto-Examples</h5><p>If your specification is about showing the use of a DSL or of an API and all expectations fit on one line, you can elid<br />
+to remove the <code class="prettyprint">pendingUntilFixed</code> marker.</p><a name="Auto-Examples"></a><h4>Auto-Examples</h4><p>If your specification is about showing the use of a DSL or of an API and all expectations fit on one line, you can elid<br />
 a description for the Example. This functionality is used in <strong><em>specs2</em></strong> to specify matchers:</p>
 <pre><code class="prettyprint"> &quot;beNone checks if an element is None&quot;                             ^
  { None must beNone }                                              ^
@@ -156,7 +160,7 @@ a description for the Example. This functionality is used in <strong><em>specs2<
  { List(1, 2) must contain(1) }
 </code></pre>
   </li>
-</ul><a name="Using+the+text+of+the+Example"></a><h5>Using the text of the Example</h5><p>It is possible to use the text of an example to extract meaningful values, use them in the example body and avoid<br />
+</ul><a name="Using+the+text+of+the+Example"></a><h4>Using the text of the Example</h4><p>It is possible to use the text of an example to extract meaningful values, use them in the example body and avoid<br />
 repeating oneself:</p>
 <pre><code class="prettyprint">&quot;Bob should pay 12&quot;   ! e1
 
@@ -167,35 +171,124 @@ def e1 = (s: String) =&gt; {
   val ShouldPay(name, price) = s                     // extracting the values
   toPay(name) must_== price                          // using them for the expectation
 }
-</code></pre><p>In that case the argument passed to the <code class="prettyprint">!</code> method is a function taking a String and returning a Result.</p><a name="Given+%2F+When+%2F+Then"></a><h5>Given / When / Then</h5><p>In the same fashion, the Given/When/Then style of writing specifications is supported, albeit using a mutable object to<br />
-collect the successive states of the system:</p>
-<pre><code class="prettyprint">  // the execution needs to be sequential
-  sequential                                                                                       ^
-  &quot;Given that the customer buys 3 books at 10 dollars each&quot;                                        ! c1.buyBook^
-  &quot;Given that the customer buys 1 book at 20 dollars&quot;                                              ! c1.buyBook^
-  &quot;When he checks out&quot;                                                                             ! c1.checkout^
-  &quot;Then the total price must be 50 dollars&quot;                                                        ! c1.total^
-                                                                                                   end
+</code></pre><p>In that case the argument passed to the <code class="prettyprint">!</code> method is a function taking a String and returning a Result.</p><a name="Given+%2F+When+%2F+Then"></a><h4>Given / When / Then</h4><p>In the same fashion, the Given/When/Then style of writing specifications is supported by interspersing Text fragments,<br />
+with Given/When/Then <code class="prettyprint">RegexSteps</code> which extract meaningful values from the text. Here's an example specification for a simple<br />
+calculator:</p>
+<pre><code class="prettyprint">    &quot;A given-when-then example for the addition&quot;                 ^
+      &quot;Given the following number: ${1}&quot;                         ^ number1 ^
+      &quot;And a second number: ${2}&quot;                                ^ number2 ^
+      &quot;Then I should get: ${3}&quot;                                  ^ result ^
+                                                                 end
 
-  case object c1 {
-    val BuyBooks = &quot;.* buys (\\d+) book.? at (\\d+) .*&quot;.r     // a regular expression for extracting the quantity and price
-    val TotalBooks = &quot;.* must be (\\d+) .*&quot;.r                 // a regular expression for extracting the total price
-    val books: scala.collection.mutable.Map[Int, Int] = new scala.collection.mutable.HashMap[Int, Int]()
+    object number1 extends Given[Int] {
+      def extract(text: String): Int = extract1(text).toInt
+    }
+    case class Addition(n1: Int, n2: Int) {
+      def add: Int = n1 + n2
+    }
+    object number2 extends When[Int, Addition] {
+      def extract(number1: Int, text: String) = Addition(number1, extract1(text).toInt)
+    }
+    object result extends Then[Addition] {
+      def extract(addition: Addition, text: String): Result = addition.add must_== extract1(text).toInt
+    }
+</code></pre><p>Here's some explanation of the object definitions that support the G/W/T style:</p>
+<ul>
+  
+  <li>
+    <p><code class="prettyprint">number1</code> is a <code class="prettyprint">Given</code> step. It is parametrized with the type <code class="prettyprint">Int</code> meaning that its <code class="prettyprint">extract</code> method is supposed to extract<br />
+     an Int from the preceding text. It does so by using the <code class="prettyprint">extract1</code> inherited method, which parses the text for <code class="prettyprint">${}</code> expressions<br />
+     and return a tuple (with 1 element here) containing all the values enclosed in <code class="prettyprint">${}</code>.</p>
+  </li>
+  <li>
+    <p><code class="prettyprint">number2</code> is a <code class="prettyprint">When</code> step. It is paramerized with an <code class="prettyprint">Int</code>, the result from the previous extraction, and an <code class="prettyprint">Addition</code><br />
+     which is the result of extracting the second number and putting the 2 together. In that case the method which must be<br />
+     defined is <code class="prettyprint">extract(Int, String): Addition</code>.</p>
+  </li>
+  <li>
+    <p>finally the <code class="prettyprint">result</code> object defines the outcome of the Addition. Its <code class="prettyprint">extract</code> method takes an <code class="prettyprint">Addition</code> and the current<br />
+     text to return a <code class="prettyprint">Result</code></p>
+  </li>
+</ul><a name="Multiple+steps"></a><h5>Multiple steps</h5><p>A G/W/T sequence can contain more than just 3 steps. However the compiler will check that:</p>
+<ul>
+  <li>only a <code class="prettyprint">Given[T]</code> extractor can start a sequence</li><li>only a <code class="prettyprint">When[T, S]</code> extractor can follow a <code class="prettyprint">Given[T]</code> extractor</li><li>only a <code class="prettyprint">When[S, U]</code> extractor or a <code class="prettyprint">Then[S]</code> can follow a <code class="prettyprint">When[T, S]</code> extractor</li><li>only a <code class="prettyprint">Then[S]</code> can follow a <code class="prettyprint">Then[S]</code> extractor</li>
+</ul><a name="Extract+methods"></a><h5>Extract methods</h5><p>The <code class="prettyprint">Given</code>, <code class="prettyprint">When</code>, <code class="prettyprint">Then</code> classes provide several convenience methods to extract strings from the preceding text: the<br />
+<code class="prettyprint">extractn</code> methods will extracts the values delimited by <code class="prettyprint">${}</code> for up to 10 values.</p><a name="User+regexps"></a><h5>User regexps</h5><p>In the original way of declaring Given/When/Then steps, the text is left completely void of markers to extract meaningful<br />
+values. On the other hand the user specifies a regular expression where groups are used to show where those values are:</p>
+<pre><code class="prettyprint">    object number1 extends Given[Int](&quot;Given the following number: (.*)&quot;) {
+      def extract(text: String): Int = extract1(text).toInt
+    }
+</code></pre><p>The advantage of using this way is that the text is left in it's pristine form, the drawback is that most of the text is<br />
+duplicated in 2 places, adding more maintenance burden.</p><a name="Several+G%2FW%2FT+blocks"></a><h5>Several G/W/T blocks</h5><p>Given the rule saying that only a <code class="prettyprint">Then</code> block can follow another <code class="prettyprint">Then</code> block you might think that it is not possible to<br />
+start another G/W/T sequence in the same specification! Fortunately it is possible by just terminating the first sequence<br />
+with an <code class="prettyprint">end</code> fragment:</p>
+<pre><code class="prettyprint">    &quot;A given-when-then example for the addition&quot;                 ^
+      &quot;Given the following number: ${1}&quot;                         ^ number1 ^
+      &quot;And a second number: ${2}&quot;                                ^ number2 ^
+      &quot;Then I should get: ${3}&quot;                                  ^ addition ^
+                                                                 end^
+    &quot;A given-when-then example for the multiplication&quot;           ^
+      &quot;Given the following number: ${1}&quot;                         ^ number1 ^
+      &quot;And a second number: ${2}&quot;                                ^ number2 ^
+      &quot;Then I should get: ${2}&quot;                                  ^ multiplication ^
+                                                                 end
+</code></pre><a name="ScalaCheck+values"></a><h5>ScalaCheck values</h5><p>Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario<br />
+with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.</p><p>This can be avoided and even enhanced by using ScalaCheck to generate more values for the same scenario. For the calculator<br />
+above you could write:</p>
+<pre><code class="prettyprint">    import org.scalacheck.Gen._
+    import specification.gen._
 
-    def buyBook = (s: String) =&gt; {
-      val BuyBooks(qty, price) = s
-      books += qty.toInt -&gt; price.toInt
-      success
+    class GivenWhenThenScalacheckSpec extends Specification with ScalaCheck { def is =
+
+      &quot;A given-when-then example for a calculator&quot;                                   ^
+        &quot;Given a first number n1&quot;                                                    ^ number1 ^
+        &quot;And a second number n2&quot;                                                     ^ number2 ^
+        &quot;When I add them&quot;                                                            ^ add ^
+        &quot;Then I should get n1 + n2&quot;                                                  ^ result ^
+                                                                                     end^
+
+      object number1 extends Given[Int] {
+        def extract(text: String) = choose(-10, 10)
+      }
+      object number2 extends When[Int, (Int, Int)] {
+        def extract(number1: Int, text: String) = for { n2 &lt;- choose(-10, 10) } yield (number1, n2)
+      }
+      object add extends When[(Int, Int), Addition] {
+        def extract(numbers: (Int, Int), text: String) = Addition(numbers._1, numbers._2)
+      }
+      object mult extends When[(Int, Int), Multiplication] {
+        def extract(numbers: (Int, Int), text: String) = Multiplication(numbers._1, numbers._2)
+      }
+      object result extends Then[Addition] {
+        def extract(text: String)(implicit op: Arbitrary[Addition]) = {
+          check { (op: Addition) =&gt; op.calculate must_== op.n1 + op.n2 }
+        }
+      }
+      case class Addition(n1: Int, n2: Int) extends Operation { def calculate: Int = n1 + n2 }
     }
-    def checkout = books.pp must not be empty
-    def total = (s: String) =&gt; {
-      val TotalBooks(total) = s
-      books.foldLeft(0)((res, cur) =&gt; res + cur._1 * cur._2) must_== total.toInt
-    }
+</code></pre><p>The main differences with a &quot;normal&quot; G/W/T sequence are:</p>
+<ul>
+  <li>the import of step classes from <code class="prettyprint">org.specs2.specification.gen</code> instead of <code class="prettyprint">org.specs2.specification</code></li><li>the return values from the <code class="prettyprint">extract</code> methods of the <code class="prettyprint">Given</code> and <code class="prettyprint">When</code> steps which must return ScalaCheck generators<br />
+   (cf <code class="prettyprint">number1</code> and <code class="prettyprint">number2</code>. For the <code class="prettyprint">add</code> step there is an implicit conversion transforming any value of type <code class="prettyprint">T</code> to a<br />
+   <code class="prettyprint">Gen[T]</code></li><li>the use of the ScalaCheck trait to access the <code class="prettyprint">check</code> function transforming a function to a <code class="prettyprint">org.scalacheck.Prop</code> and then<br />
+   to a <code class="prettyprint">Result</code></li><li>the <code class="prettyprint">extract</code> method of the <code class="prettyprint">Then</code> step takes an implicit <code class="prettyprint">Arbitrary[T]</code> parameter which is used by the <code class="prettyprint">check</code> method<br />
+   to create a ScalaCheck property</li>
+</ul><a name="Single+step"></a><h5>Single step</h5><p>A <code class="prettyprint">GivenThen</code> step can be used to extract values from a single piece of text and return a <code class="prettyprint">Result</code>:</p>
+<pre><code class="prettyprint">&quot;given the name: ${eric}, then the age is ${18}&quot; ! new GivenThen {
+  def extract(text: String) = {
+    val (name, age) = extract2(text)
+    age.toInt must_== 18
   }
+}
+</code></pre><p>You can also use the <code class="prettyprint">so</code> object doing the same thing and taking a <code class="prettyprint">PartialFunction</code>:</p>
+<pre><code class="prettyprint">import org.specs2.specification.so
+
+&quot;given the name: ${eric}, then the age is ${18}&quot; ! so { case (name: String, age: String) =&gt;
+  age.toInt must_== 18
+}
 </code></pre><a name="Shared+examples"></a><h3>Shared examples</h3><p>In a given specification some examples may look similar enough that you would like to &quot;factor&quot; them out and share them between<br />
 different parts of your specification. The best example of this situation is a specification for a Stack of limited size:</p>
-<pre><code class="prettyprint">    class StackSpec extends SpecificationWithJUnit { def is =
+<pre><code class="prettyprint">    class StackSpec extends Specification { def is =
       &quot;Specification for a Stack with a limited capacity&quot;.title                 ^
                                                                                 p^
       &quot;An empty stack should&quot;                                                   ^
@@ -361,10 +454,13 @@ There are different ways of hiding the text
 <pre><code class="prettyprint">  class MySpecWithNoIndent extends Specification {
     def is = noindent ^ ....
   }
-</code></pre><a name="Include+or+link+specifications"></a><h3>Include or link specifications</h3><a name="Include+specifications"></a><h6>Include specifications</h6><p>There is a simple mechanism for including &quot;children&quot; specification in a given specification. You use the <code class="prettyprint">include</code> method,<br />
-as if you were adding a new fragment:</p>
+</code></pre><a name="Include+or+link+specifications"></a><h3>Include or link specifications</h3><a name="Include+specifications"></a><h6>Include specifications</h6><p>There is a simple mechanism for including &quot;children&quot; specification in a given specification. You can simply add the child<br />
+specification as if it was a simple fragment:</p>
 <pre><code class="prettyprint">&quot;This is an included specification&quot;     ^
-  include(childSpec)
+  childSpec
+</code></pre><p>Otherwise, if you want to include several specifications at once you can use the <code class="prettyprint">include</code> method:</p>
+<pre><code class="prettyprint">&quot;This is the included specifications&quot;         ^
+  include(childSpec1, childSpec2, childSpec3)
 </code></pre><p>The effect of doing so is that all the fragments of the children specification will be inlined in the parent one. This<br />
 is exactly what is done in this page of the user guide, but with a twist</p>
 <pre><code class="prettyprint">include(xonly, exampleTextExtraction)        ^
@@ -499,7 +595,50 @@ case class withDatabase extends Before {
 val init = withFile() compose withDatabase()
 
 &quot;Do something on the full system&quot;                   ! init(success)
-</code></pre><a name="Steps+and+Actions"></a><h5>Steps and Actions</h5><p>Some setup actions are very time consuming and should be executed only once for the whole specification. This can be achieved<br />
+</code></pre><a name="Using+a+context+for+each+Example"></a><h5>Using a context for each Example</h5><p>The context creation which has been described up to now is very flexible and allows to switch contexts and compose between<br />
+different examples. Yet, there are specifications where the context need to be set similarly for each Example. An easy way<br />
+around that is to use the <code class="prettyprint">BeforeEach</code> trait. This is just a Before context, with an additional <code class="prettyprint">apply</code> method to apply this<br />
+context to each example:</p>
+<pre><code class="prettyprint">  class SpecificationWithBefore extends Specification {
+
+    object withBefore extends BeforeEach {
+      def before = cleanupDatabase
+    }
+    def is = withBefore(spec)
+
+    def spec =
+    &quot;this should&quot;     ^
+      &quot;ex1&quot; ! success ^
+      &quot;ex2&quot; ! succes
+  }
+</code></pre><p>This way of doing is especially useful if you define an abstract Specification meant to be reused across the project, with<br />
+the same setup/teardown procedure at the beginning/end of the specification with a <code class="prettyprint">before</code> method executed before each example:</p>
+<pre><code class="prettyprint">  class ProjectSpecification extends Specification {
+    // always clean up the database before an example
+    object cleanUpDb extends BeforeEach {
+      def before = cleanupDatabase
+    }
+    def is = Step(initialCleanup) ^ cleanUpDb(spec) ^ Step(finalCleanup)
+    def spec: Fragments
+  }
+</code></pre><p>Of course there are similar traits for after and around setups:</p>
+<ul>
+  <li><code class="prettyprint">AfterEach</code></li><li><code class="prettyprint">BeforeAfterEach</code></li><li><code class="prettyprint">AroundEach</code></li><li><code class="prettyprint">BeforeAfterAroundEach</code></li>
+</ul><a name="Using+a+context+for+each+Example+in+a+mutable+specification"></a><h5>Using a context for each Example in a mutable specification</h5><p>Alas the <code class="prettyprint">BeforeEach</code> trait is not usable with a mutable specification because of the way that examples are added to the<br />
+specification as soon as created. In order to avoid repetition in that case there are additional traits with you can use:</p>
+<ul>
+  <li><code class="prettyprint">BeforeExample</code></li><li><code class="prettyprint">AfterExample</code></li><li><code class="prettyprint">AroundExample</code></li><li><code class="prettyprint">BeforeAfterAroundExample</code></li>
+</ul><p>The <code class="prettyprint">BeforeExample</code> trait requires you to define a <code class="prettyprint">before</code> method exactly like the one you define in the <code class="prettyprint">Before</code> trait:</p>
+<pre><code class="prettyprint">    class Specification extends BeforeExample {
+      def before = cleanDatabase
+
+      &quot;This is a specification where the database is cleaned up before each example&quot; &gt;&gt; {
+        &quot;first example&quot; in { success }
+        &quot;second example&quot; in { success }
+      }
+    }
+</code></pre><p>As you can guess, the <code class="prettyprint">AfterExample</code>, <code class="prettyprint">AroundExample</code>,... traits work similarly by requiring the corresponding <code class="prettyprint">after</code>, <code class="prettyprint">around</code><br />
+,... methods to be defined.</p><p>Note that if you like this way of declaring the setup methods you can also use it in a non-mutable Specification.</p><a name="Steps+and+Actions"></a><h5>Steps and Actions</h5><p>Some setup actions are very time consuming and should be executed only once for the whole specification. This can be achieved<br />
 by inserting some silent <code class="prettyprint">Step</code>s in between fragments:</p>
 <pre><code class="prettyprint">class DatabaseSpec extends Specification { def is =
 
@@ -557,7 +696,7 @@ own Specification trait doing this:</p>
       override def is = Step(startDb) ^ super.is ^ Step(cleanDb)
     }
 </code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, a <code class="prettyprint">Step</code> executed before all the fragments, and one<br />
-executed after all of them.</p><a name="Other+unit+specification+methods"></a><h4>Other unit specification methods</h4><p>Other methods can be used to create fragments in a unit specification:</p>
+executed after all of them.</p><a name="Other+unit+specification+methods"></a><h3>Other unit specification methods</h3><p>Other methods can be used to create fragments in a unit specification:</p>
 <ul>
   <li><code class="prettyprint">can</code> to create a group of Examples, with a the preceding Text fragment appended with <code class="prettyprint">can</code></li><li><code class="prettyprint">&gt;&gt;</code> to create an Example or a group of Examples (with no appended text)</li><li><code class="prettyprint">&quot;My spec title&quot;.title</code> to give a title to the Specification</li><li><code class="prettyprint">args(...)</code> to create arguments for the specification</li><li><code class="prettyprint">step(s)</code> to create a <code class="prettyprint">Step</code></li><li><code class="prettyprint">action(a)</code> to create an <code class="prettyprint">Action</code></li><li><code class="prettyprint">link(&quot;how&quot; ~ (&quot;to do hello world&quot;, new HelloWorldSpec))</code> to create a link to another specification</li><li><code class="prettyprint">include(new HelloWorldSpec)</code> to include another specification</li>
 </ul><p>To make things more concrete here is a full example:</p>
@@ -569,7 +708,7 @@ executed after all of them.</p><a name="Other+unit+specification+methods"></a><h
    * This specification shows how to use the mutable.Specification trait to create a unit Specification
    * where the fragments are built using a mutable variable
    */
-  class MutableSpec extends SpecificationWithJUnit {
+  class MutableSpec extends Specification {
 
     // A title can be added at the beginning of the specification
     &quot;MutableSpec&quot;.title
@@ -709,6 +848,1553 @@ Let's have a look at one example:</p>
 </ul>
 <hr /></div><p></p><br /><table class="dataTable">
         <tr><th colSpan="2">Total for specification Specification structure</th></tr>
-        <tr><td>Finished in</td><td class="info">26 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">24 ms</td></tr>
         <tr><td>Results</td><td class="success">17 examples, 0 failure, 0 error</td></tr>
-      </table></body></html>
+      </table></div><div id="tree">
+      <ul><li id="-1342120101"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-1098319080"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+          <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.QuickStart.html#Execution">Execution</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
+          <ul></ul>
+        </li></ul>
+        </li><li id="33712769"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Structure+of+a+Specification">Structure of a Specification</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Acceptance+specification">Acceptance specification</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Unit+specification">Unit specification</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Results">Results</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Standard+results">Standard results</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Matcher+results">Matcher results</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Functional+expectations">Functional expectations</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Thrown+Expectations">Thrown Expectations</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Set+an+example+as+%22Pending+until+fixed%22">Set an example as &quot;Pending until fixed&quot;</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Auto-Examples">Auto-Examples</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+the+text+of+the+Example">Using the text of the Example</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Given+%2F+When+%2F+Then">Given / When / Then</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Multiple+steps">Multiple steps</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Extract+methods">Extract methods</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#User+regexps">User regexps</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Several+G%2FW%2FT+blocks">Several G/W/T blocks</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#ScalaCheck+values">ScalaCheck values</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Single+step">Single step</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Shared+examples">Shared examples</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+arguments">Declare arguments</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Layout">Layout</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#The+rules">The rules</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#The+formatting+fragments">The formatting fragments</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Separating+groups+of+examples">Separating groups of examples</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Reset+the+levels">Reset the levels</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Changing+the+indentation+level">Changing the indentation level</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Include+or+link+specifications">Include or link specifications</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Include+specifications">Include specifications</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Link+specifications">Link specifications</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Specification+title">Specification title</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Defining+Before+actions">Defining Before actions</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+After+actions">Defining After actions</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+Around+actions">Defining Around actions</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+Outside+actions">Defining Outside actions</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+AroundOutside+actions">Defining AroundOutside actions</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Composing+contexts">Composing contexts</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+a+context+for+each+Example">Using a context for each Example</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+a+context+for+each+Example+in+a+mutable+specification">Using a context for each Example in a mutable specification</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Steps+and+Actions">Steps and Actions</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#In+unit+specifications">In unit specifications</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Generic+specification+with+setup+and+teardown+steps">Generic specification with setup and teardown steps</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Other+unit+specification+methods">Other unit specification methods</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Tags">Tags</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#In+a+unit+specification">In a unit specification</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li id="1482034458"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
+          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li id="-2057816845"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
+          <ul><li><a href="org.specs2.guide.Runners.html#In+a+Specification">In a Specification</a>
+          <ul><li><a href="org.specs2.guide.Runners.html#Diffs">Diffs</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#StackTraceFilter">StackTraceFilter</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#On+the+command+line">On the command line</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#From+system+properties">From system properties</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
+          <ul><li><a href="org.specs2.guide.Runners.html#Colors">Colors</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Html+output">Html output</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Simple+build+tool">Simple build tool</a>
+          <ul><li><a href="org.specs2.guide.Runners.html#Test-only+arguments">Test-only arguments</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Output+formats">Output formats</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Files+runner">Files runner</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Colors">Colors</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#JUnit">JUnit</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
+          <ul></ul>
+        </li></ul>
+        </li><li id="994357730"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
+          <ul><li><a href="org.specs2.guide.Philosophy.html#Conciseness">Conciseness</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Readability">Readability</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Extensibility">Extensibility</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Configuration">Configuration</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Clear+implementation">Clear implementation</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#User+support">User support</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#A+new+compromise">A new compromise</a>
+          <ul><li><a href="org.specs2.guide.Philosophy.html#Functional+%2F+immutable">Functional / immutable</a>
+          <ul><li><a href="org.specs2.guide.Philosophy.html#Chaining+everything">Chaining everything</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Arguments+have+to+be+supplied">Arguments have to be supplied</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Concurrency+is+a+breeze">Concurrency is a breeze</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#A+simple+structure">A simple structure</a>
+          <ul><li><a href="org.specs2.guide.Philosophy.html#Contexts">Contexts</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Indentation">Indentation</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Operators">Operators</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Forms">Forms</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#But+if+you+STILL+want+mutable+specifications">But if you STILL want mutable specifications</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Dependencies+control">Dependencies control</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Philosophy.html#Implicit+definitions+control">Implicit definitions control</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li id="707763356"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Design.html#Specification+creation">Specification creation</a>
+          <ul><li><a href="org.specs2.guide.Design.html#Creating+Fragments">Creating Fragments</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Design.html#Mutable+Specification">Mutable Specification</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Design.html#Specification+execution">Specification execution</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Design.html#Specification+reporting">Specification reporting</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Design.html#Packages+dependencies">Packages dependencies</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li></ul>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['-1342120101','33712769'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></body></html>
