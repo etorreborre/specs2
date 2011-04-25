@@ -543,8 +543,7 @@ This may be later extended to support other arbitrary patterns
       </h4>
       
             <p class="shortcomment cmt">Copy specs resources found either in the specs jar or in the classpath directories to an output directory.</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Copy specs resources found either in the specs jar or in the classpath directories to an output directory.
-Current limitations!! This only works if the jar holding the resources contains the word &quot;specs&quot;.</p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>name of the resource directory to copy</p></dd><dt class="param">outputDir</dt><dd class="cmt"><p>output directory where to copy the files to
+            <div class="fullcomment"><div class="comment cmt"><p>Copy specs resources found either in the specs jar or in the classpath directories to an output directory.</p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>name of the resource directory to copy</p></dd><dt class="param">outputDir</dt><dd class="cmt"><p>output directory where to copy the files to
 </p></dd></dl><div class="block">
           definition classes: FileSystem
         </div>
@@ -565,8 +564,8 @@ Current limitations!! This only works if the jar holding the resources contains 
                   className
                   : String
                    = <span class="symbol">&quot;&quot;</span>
-                </span>, <span name="loader">
-                  loader
+                </span>, <span name="classLoader">
+                  classLoader
                   : <span name="java.lang.ClassLoader" class="extype">ClassLoader</span>
                    = <span name='<span class="name"><a href="../../../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span>
                 </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">
@@ -1120,33 +1119,6 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
       
             <p class="shortcomment cmt"></p>
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the file parent path</p></dd></dl><div class="block">
-          definition classes: FileSystem
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="pub" name="org.specs2.io.FileSystem#getResourcesNamed" data-isabs="false">
-      <a id="getResourcesNamed(S,t,r,i,n,g):List[URL]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">getResourcesNamed</span>
-        
-        <span class="params">(<span name="name">
-                  name
-                  : String
-                  
-                </span>)</span>
-        <span class="result">: List[<span name="java.net.URL" class="extype">URL</span>]</span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">Return urls of the resources containing the name &quot;name&quot; from this ClassLoader and the System classLoader.</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Return urls of the resources containing the name &quot;name&quot; from this ClassLoader and the System classLoader.</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>name of the resource to find</p></dd><dt>returns</dt><dd class="cmt"><p>a list of URL
-</p></dd></dl><div class="block">
           definition classes: FileSystem
         </div>
             
@@ -1842,37 +1814,7 @@ possible to check whether the contents of the list are of the requested typed.
           </div>
           
     </li><li visbl="pub" name="org.specs2.reflect.Classes#tryToCreateObject" data-isabs="false">
-      <a id="tryToCreateObject[T&lt;:AnyRef](S,t,r,i,n,g)(C,l,a,s,s,M,a,n,i,f,e,s,t,[,T,]):Option[T]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">tryToCreateObject</span>
-        <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">
-                  className
-                  : String
-                  
-                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">
-                  m
-                  : <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">try to create object but print no messages</p>
-            <div class="fullcomment"><div class="comment cmt"><p>try to create object but print no messages</p></div><div class="block">
-          definition classes: Classes
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="pub" name="org.specs2.reflect.Classes#tryToCreateObject" data-isabs="false">
-      <a id="tryToCreateObject[T&lt;:AnyRef](S,t,r,i,n,g)(B,o,o,l,e,a,n)(B,o,o,l,e,a,n)(C,l,a,s,s,M,a,n,i,f,e,s,t,[,T,]):Option[T]"></a>
+      <a id="tryToCreateObject[T&lt;:AnyRef](S,t,r,i,n,g)(B,o,o,l,e,a,n)(B,o,o,l,e,a,n)(C,l,a,s,s,L,o,a,d,e,r)(C,l,a,s,s,M,a,n,i,f,e,s,t,[,T,]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -1885,11 +1827,15 @@ possible to check whether the contents of the list are of the requested typed.
                 </span>, <span name="printMessage">
                   printMessage
                   : <span name="scala.Boolean" class="extype">Boolean</span>
-                  
+                   = <span class="symbol">true</span>
                 </span>, <span name="printStackTrace">
                   printStackTrace
                   : <span name="scala.Boolean" class="extype">Boolean</span>
-                  
+                   = <span class="symbol">true</span>
+                </span>, <span name="loader">
+                  loader
+                  : <span name="java.lang.ClassLoader" class="extype">ClassLoader</span>
+                   = <span name='<span class="name"><a href="../../../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span>
                 </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">
                   m
                   : <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]

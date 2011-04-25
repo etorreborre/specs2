@@ -63,7 +63,7 @@
         <span class="name">AbstractContainMatchResult</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends MatchResult[Iterable[T]]</span>
+        <span class="result"> extends MatchResult[Traversable[T]]</span>
       </span>
       </a></h4>
       
@@ -255,7 +255,7 @@
         <span class="name">ContainAnyOfMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends Matcher[Iterable[T]]</span>
+        <span class="result"> extends Matcher[Traversable[T]]</span>
       </span>
       </a></h4>
       
@@ -267,7 +267,7 @@
         <span class="name">ContainExactlyOnceMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends Matcher[Iterable[T]]</span>
+        <span class="result"> extends Matcher[Traversable[T]]</span>
       </span>
       </a></h4>
       
@@ -291,7 +291,7 @@
         <span class="name">ContainInOrderMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends Matcher[Iterable[T]]</span>
+        <span class="result"> extends Matcher[Traversable[T]]</span>
       </span>
       </a></h4>
       
@@ -303,7 +303,7 @@
         <span class="name">ContainLikeMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends Matcher[Iterable[T]]</span>
+        <span class="result"> extends Matcher[Traversable[T]]</span>
       </span>
       </a></h4>
       
@@ -315,7 +315,7 @@
         <span class="name">ContainLikeOnlyOnceMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends Matcher[Iterable[T]]</span>
+        <span class="result"> extends Matcher[Traversable[T]]</span>
       </span>
       </a></h4>
       
@@ -339,7 +339,7 @@
         <span class="name">ContainMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends Matcher[Iterable[T]]</span>
+        <span class="result"> extends Matcher[Traversable[T]]</span>
       </span>
       </a></h4>
       
@@ -375,7 +375,7 @@
         <span class="name">ContainOnlyMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends Matcher[Iterable[T]]</span>
+        <span class="result"> extends Matcher[Traversable[T]]</span>
       </span>
       </a></h4>
       
@@ -517,23 +517,10 @@
         <span class="name">HaveTheSameElementsAs</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends Matcher[Iterable[T]]</span>
+        <span class="result"> extends Matcher[Traversable[T]]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.specs2.matcher.IterableMatchers" data-isabs="true">
-      <a id="IterableMatchers:IterableMatchers"></a>
-      <h4 class="signature"><a href="IterableMatchers.html">
-      <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">IterableMatchers</span>
-        
-        
-        <span class="result"> extends IterableBaseMatchers with IterableBeHaveMatchers</span>
-      </span>
-      </a></h4>
-      <p class="comment cmt">Matchers for iterables
-</p>
     </li><li visbl="pub" name="org.specs2.matcher.JUnitExpectations" data-isabs="true">
       <a id="JUnitExpectations:JUnitExpectations"></a>
       <h4 class="signature"><a href="JUnitExpectations.html">
@@ -727,7 +714,7 @@
         <span class="name">Matchers</span>
         
         
-        <span class="result"> extends AnyMatchers with IterableMatchers with MapMatchers with StringMatchers with XmlMatchers with JsonMatchers with BeHaveMatchers with ExceptionMatchers with NumericMatchers with OptionMatchers with EitherMatchers with EventuallyMatchers with FileMatchers with MatchersImplicits</span>
+        <span class="result"> extends AnyMatchers with TraversableMatchers with MapMatchers with StringMatchers with XmlMatchers with JsonMatchers with BeHaveMatchers with ExceptionMatchers with NumericMatchers with OptionMatchers with EitherMatchers with EventuallyMatchers with FileMatchers with MatchersImplicits</span>
       </span>
       </a></h4>
       <p class="comment cmt">Trait aggregating all of specs2 matchers
@@ -1159,6 +1146,19 @@ a match fails
       </span>
       </a></h4>
       <p class="comment cmt">Thrown expectations will throw a FailureException if a match fails</p>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableMatchers" data-isabs="true">
+      <a id="TraversableMatchers:TraversableMatchers"></a>
+      <h4 class="signature"><a href="TraversableMatchers.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">TraversableMatchers</span>
+        
+        
+        <span class="result"> extends TraversableBaseMatchers with TraversableBeHaveMatchers</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Matchers for traversables
+</p>
     </li><li visbl="pub" name="org.specs2.matcher.XPathFunctions" data-isabs="true">
       <a id="XPathFunctions:XPathFunctions"></a>
       <h4 class="signature"><a href="XPathFunctions.html">
@@ -1275,18 +1275,6 @@ a match fails
         
         
         <span class="result"> extends FileMatchers</span>
-      </span>
-      </a></h4>
-      
-    </li><li visbl="pub" name="org.specs2.matcher.IterableMatchers" data-isabs="false">
-      <a id="IterableMatchers:IterableMatchers"></a>
-      <h4 class="signature"><a href="IterableMatchers$.html">
-      <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">IterableMatchers</span>
-        
-        
-        <span class="result"> extends IterableMatchers</span>
       </span>
       </a></h4>
       
@@ -1515,6 +1503,18 @@ a match fails
         
         
         <span class="result"> extends StringMatchers</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableMatchers" data-isabs="false">
+      <a id="TraversableMatchers:TraversableMatchers"></a>
+      <h4 class="signature"><a href="TraversableMatchers$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">TraversableMatchers</span>
+        
+        
+        <span class="result"> extends TraversableMatchers</span>
       </span>
       </a></h4>
       

@@ -27,13 +27,13 @@
         <span class="name">ContainLikeOnlyOnceMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</span>
+        <span class="result"> extends <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
       </span>
       </h4>
       
           
           <div class="fullcomment" id="comment"><div class="block">
-            linear super types: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]], AnyRef, <span name="scala.Any" class="extype">Any</span>
+            linear super types: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]], AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div></div>
         
 
@@ -257,7 +257,7 @@
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#^^" data-isabs="false">
-      <a id="^^[S]((,S,), ,⇒, ,I,t,e,r,a,b,l,e,[,T,]):Matcher[S]"></a>
+      <a id="^^[S]((,S,), ,⇒, ,T,r,a,v,e,r,s,a,b,l,e,[,T,]):Matcher[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -265,7 +265,7 @@
         <span class="tparams">[<span name="S">S</span>]</span>
         <span class="params">(<span name="f">
                   f
-                  : (S) ⇒ Iterable[T]
+                  : (S) ⇒ Traversable[T]
                   
                 </span>)</span>
         <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]</span>
@@ -285,12 +285,12 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)</code> can be applied to 
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#and" data-isabs="false">
-      <a id="and[S&lt;:Iterable[T]](⇒, ,M,a,t,c,h,e,r,[,S,]):Matcher[S]"></a>
+      <a id="and[S&lt;:Traversable[T]](⇒, ,M,a,t,c,h,e,r,[,S,]):Matcher[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">and</span>
-        <span class="tparams">[<span name="S">S &lt;: Iterable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
         <span class="params">(<span name="m">
                   m
                   : ⇒ <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]
@@ -314,14 +314,14 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)</code> can be applied to 
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.ContainLikeOnlyOnceMatcher#apply" data-isabs="false">
-      <a id="apply[S&lt;:Iterable[T]](E,x,p,e,c,t,a,b,l,e,[,S,]):MatchResult[S]"></a>
+      <a id="apply[S&lt;:Traversable[T]](E,x,p,e,c,t,a,b,l,e,[,S,]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">apply</span>
-        <span class="tparams">[<span name="S">S &lt;: Iterable[T]</span>]</span>
-        <span class="params">(<span name="iterable">
-                  iterable
+        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
+        <span class="params">(<span name="traversable">
+                  traversable
                   : <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]
                   
                 </span>)</span>
@@ -369,14 +369,14 @@ part of compilation it is not possible to check whether the contents of the list
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#atLeastOnce" data-isabs="false">
-      <a id="atLeastOnce:Matcher[Seq[Iterable[T]]]"></a>
+      <a id="atLeastOnce:Matcher[Traversable[Traversable[T]]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">atLeastOnce</span>
         
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Seq[Iterable[T]]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[Traversable[T]]]</span>
       </span>
       </h4>
       
@@ -500,7 +500,7 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#eventually" data-isabs="false">
-      <a id="eventually(I,n,t)(D,u,r,a,t,i,o,n):Matcher[Iterable[T]]"></a>
+      <a id="eventually(I,n,t)(D,u,r,a,t,i,o,n):Matcher[Traversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -515,7 +515,7 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
                   : <span name="org.specs2.time.Duration" class="extype">Duration</span>
                   
                 </span>)</span>
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
       </span>
       </h4>
       
@@ -532,14 +532,14 @@ and a sleep time
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#eventually" data-isabs="false">
-      <a id="eventually:Matcher[Iterable[T]]"></a>
+      <a id="eventually:Matcher[Traversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">eventually</span>
         
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
       </span>
       </h4>
       
@@ -587,14 +587,14 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#forall" data-isabs="false">
-      <a id="forall:Matcher[Seq[Iterable[T]]]"></a>
+      <a id="forall:Matcher[Traversable[Traversable[T]]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">forall</span>
         
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Seq[Iterable[T]]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[Traversable[T]]]</span>
       </span>
       </h4>
       
@@ -611,14 +611,14 @@ failure
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#foreach" data-isabs="false">
-      <a id="foreach:Matcher[Seq[Iterable[T]]]"></a>
+      <a id="foreach:Matcher[Traversable[Traversable[T]]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">foreach</span>
         
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Seq[Iterable[T]]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[Traversable[T]]]</span>
       </span>
       </h4>
       
@@ -686,7 +686,7 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#iff" data-isabs="false">
-      <a id="iff(B,o,o,l,e,a,n)(S,t,r,i,n,g):Matcher[Iterable[T]]"></a>
+      <a id="iff(B,o,o,l,e,a,n)(S,t,r,i,n,g):Matcher[Traversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -701,7 +701,7 @@ to verify that the behavior is consistent with the <code>equals</code> method.
                   : String
                    = <span class="symbol">&quot;&quot;</span>
                 </span>)</span>
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
       </span>
       </h4>
       
@@ -744,14 +744,14 @@ possible to check whether the contents of the list are of the requested typed.
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#lazily" data-isabs="false">
-      <a id="lazily:Matcher[() ⇒ Iterable[T]]"></a>
+      <a id="lazily:Matcher[() ⇒ Traversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">lazily</span>
         
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[() ⇒ Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[() ⇒ Traversable[T]]</span>
       </span>
       </h4>
       
@@ -797,14 +797,14 @@ possible to check whether the contents of the list are of the requested typed.
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#not" data-isabs="false">
-      <a id="not:Matcher[Iterable[T]]"></a>
+      <a id="not:Matcher[Traversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">not</span>
         
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
       </span>
       </h4>
       
@@ -870,12 +870,12 @@ possible to check whether the contents of the list are of the requested typed.
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#or" data-isabs="false">
-      <a id="or[S&lt;:Iterable[T]](⇒, ,M,a,t,c,h,e,r,[,S,]):Matcher[S]"></a>
+      <a id="or[S&lt;:Traversable[T]](⇒, ,M,a,t,c,h,e,r,[,S,]):Matcher[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">or</span>
-        <span class="tparams">[<span name="S">S &lt;: Iterable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
         <span class="params">(<span name="m">
                   m
                   : ⇒ <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]
@@ -899,7 +899,7 @@ possible to check whether the contents of the list are of the requested typed.
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#orSkip" data-isabs="false">
-      <a id="orSkip(S,t,r,i,n,g):Matcher[Iterable[T]]"></a>
+      <a id="orSkip(S,t,r,i,n,g):Matcher[Traversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -910,7 +910,7 @@ possible to check whether the contents of the list are of the requested typed.
                   : String
                   
                 </span>)</span>
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
       </span>
       </h4>
       
@@ -927,14 +927,14 @@ If the skip message is empty, only the failure message is printed
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#orSkip" data-isabs="false">
-      <a id="orSkip:Matcher[Iterable[T]]"></a>
+      <a id="orSkip:Matcher[Traversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">orSkip</span>
         
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
       </span>
       </h4>
       
@@ -950,12 +950,12 @@ If the skip message is empty, only the failure message is printed
           </div>
           
     </li><li visbl="prt" name="org.specs2.matcher.Matcher#result" data-isabs="false">
-      <a id="result[S&lt;:Iterable[T]](M,a,t,c,h,R,e,s,u,l,t,M,e,s,s,a,g,e)(E,x,p,e,c,t,a,b,l,e,[,S,]):MatchResult[S]"></a>
+      <a id="result[S&lt;:Traversable[T]](M,a,t,c,h,R,e,s,u,l,t,M,e,s,s,a,g,e)(E,x,p,e,c,t,a,b,l,e,[,S,]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">result</span>
-        <span class="tparams">[<span name="S">S &lt;: Iterable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
         <span class="params">(<span name="other">
                   other
                   : <span name="org.specs2.matcher.MatchResultMessages.MatchResultMessage" class="extype">MatchResultMessage</span>
@@ -983,12 +983,12 @@ If the skip message is empty, only the failure message is printed
           </div>
           
     </li><li visbl="prt" name="org.specs2.matcher.Matcher#result" data-isabs="false">
-      <a id="result[S&lt;:Iterable[T]](o,r,g,.,s,p,e,c,s,2,.,m,a,t,c,h,e,r,.,M,a,t,c,h,R,e,s,u,l,t,[,_,])(E,x,p,e,c,t,a,b,l,e,[,S,]):MatchResult[S]"></a>
+      <a id="result[S&lt;:Traversable[T]](o,r,g,.,s,p,e,c,s,2,.,m,a,t,c,h,e,r,.,M,a,t,c,h,R,e,s,u,l,t,[,_,])(E,x,p,e,c,t,a,b,l,e,[,S,]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">result</span>
-        <span class="tparams">[<span name="S">S &lt;: Iterable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
         <span class="params">(<span name="other">
                   other
                   : org.specs2.matcher.MatchResult[_]
@@ -1016,12 +1016,12 @@ If the skip message is empty, only the failure message is printed
           </div>
           
     </li><li visbl="prt" name="org.specs2.matcher.Matcher#result" data-isabs="false">
-      <a id="result[S&lt;:Iterable[T]](⇒, ,B,o,o,l,e,a,n)(⇒, ,S,t,r,i,n,g)(⇒, ,S,t,r,i,n,g)(E,x,p,e,c,t,a,b,l,e,[,S,])(S,t,r,i,n,g)(S,t,r,i,n,g):MatchResult[S]"></a>
+      <a id="result[S&lt;:Traversable[T]](⇒, ,B,o,o,l,e,a,n)(⇒, ,S,t,r,i,n,g)(⇒, ,S,t,r,i,n,g)(E,x,p,e,c,t,a,b,l,e,[,S,])(S,t,r,i,n,g)(S,t,r,i,n,g):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">result</span>
-        <span class="tparams">[<span name="S">S &lt;: Iterable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
         <span class="params">(<span name="test">
                   test
                   : ⇒ <span name="scala.Boolean" class="extype">Boolean</span>
@@ -1066,12 +1066,12 @@ If the skip message is empty, only the failure message is printed
           </div>
           
     </li><li visbl="prt" name="org.specs2.matcher.Matcher#result" data-isabs="false">
-      <a id="result[S&lt;:Iterable[T]](⇒, ,B,o,o,l,e,a,n)(⇒, ,S,t,r,i,n,g)(⇒, ,S,t,r,i,n,g)(E,x,p,e,c,t,a,b,l,e,[,S,]):MatchResult[S]"></a>
+      <a id="result[S&lt;:Traversable[T]](⇒, ,B,o,o,l,e,a,n)(⇒, ,S,t,r,i,n,g)(⇒, ,S,t,r,i,n,g)(E,x,p,e,c,t,a,b,l,e,[,S,]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">result</span>
-        <span class="tparams">[<span name="S">S &lt;: Iterable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
         <span class="params">(<span name="test">
                   test
                   : ⇒ <span name="scala.Boolean" class="extype">Boolean</span>
@@ -1153,7 +1153,7 @@ If the skip message is empty, only the failure message is printed
           </div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#unless" data-isabs="false">
-      <a id="unless(B,o,o,l,e,a,n)(S,t,r,i,n,g):Matcher[Iterable[T]]"></a>
+      <a id="unless(B,o,o,l,e,a,n)(S,t,r,i,n,g):Matcher[Traversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -1168,7 +1168,7 @@ If the skip message is empty, only the failure message is printed
                   : String
                    = <span class="symbol">&quot;&quot;</span>
                 </span>)</span>
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
       </span>
       </h4>
       
@@ -1264,7 +1264,7 @@ If the skip message is empty, only the failure message is printed
         </div></div>
           
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#when" data-isabs="false">
-      <a id="when(B,o,o,l,e,a,n)(S,t,r,i,n,g):Matcher[Iterable[T]]"></a>
+      <a id="when(B,o,o,l,e,a,n)(S,t,r,i,n,g):Matcher[Traversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -1279,7 +1279,7 @@ If the skip message is empty, only the failure message is printed
                   : String
                    = <span class="symbol">&quot;&quot;</span>
                 </span>)</span>
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
       </span>
       </h4>
       
@@ -1297,7 +1297,7 @@ If the skip message is empty, only the failure message is printed
             </div>
 
         <div name="org.specs2.matcher.Matcher" class="parent">
-              <h3>Inherited from <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[T]]</h3>
+              <h3>Inherited from <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

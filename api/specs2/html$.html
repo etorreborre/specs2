@@ -308,8 +308,8 @@ part of compilation it is not possible to check whether the contents of the list
                   className
                   : String
                    = <span class="symbol">&quot;&quot;</span>
-                </span>, <span name="loader">
-                  loader
+                </span>, <span name="classLoader">
+                  classLoader
                   : <span name="java.lang.ClassLoader" class="extype">ClassLoader</span>
                    = <span name='<span class="name"><a href="../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span>
                 </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">
@@ -437,6 +437,33 @@ so that the exception message and stacktrace are printed when the object can't b
             
             
           </div>
+          
+    </li><li visbl="prt" name="org.specs2.runner.ClassRunner#createSpecification" data-isabs="false">
+      <a id="createSpecification(S,t,r,i,n,g)(C,l,a,s,s,L,o,a,d,e,r):SpecificationStructure"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">createSpecification</span>
+        
+        <span class="params">(<span name="className">
+                  className
+                  : String
+                  
+                </span>, <span name="classLoader">
+                  classLoader
+                  : <span name="java.lang.ClassLoader" class="extype">ClassLoader</span>
+                   = <span name='<span class="name"><a href="../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span>
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../org/specs2/specification/SpecificationStructure.html">SpecificationStructure</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: protected 
+        </div><div class="block">
+          definition classes: <a name="org.specs2.runner.ClassRunner" class="extype" href="../org/specs2/runner/ClassRunner.html">ClassRunner</a>
+        </div></div>
           
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(A,n,y,R,e,f):Boolean"></a>
@@ -981,37 +1008,7 @@ possible to check whether the contents of the list are of the requested typed.
           </div>
           
     </li><li visbl="pub" name="org.specs2.reflect.Classes#tryToCreateObject" data-isabs="false">
-      <a id="tryToCreateObject[T&lt;:AnyRef](S,t,r,i,n,g)(C,l,a,s,s,M,a,n,i,f,e,s,t,[,T,]):Option[T]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">tryToCreateObject</span>
-        <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">
-                  className
-                  : String
-                  
-                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">
-                  m
-                  : <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
-      </span>
-      </h4>
-      
-            <p class="shortcomment cmt">try to create object but print no messages</p>
-            <div class="fullcomment"><div class="comment cmt"><p>try to create object but print no messages</p></div><div class="block">
-          definition classes: Classes
-        </div>
-            
-            
-            
-            
-          </div>
-          
-    </li><li visbl="pub" name="org.specs2.reflect.Classes#tryToCreateObject" data-isabs="false">
-      <a id="tryToCreateObject[T&lt;:AnyRef](S,t,r,i,n,g)(B,o,o,l,e,a,n)(B,o,o,l,e,a,n)(C,l,a,s,s,M,a,n,i,f,e,s,t,[,T,]):Option[T]"></a>
+      <a id="tryToCreateObject[T&lt;:AnyRef](S,t,r,i,n,g)(B,o,o,l,e,a,n)(B,o,o,l,e,a,n)(C,l,a,s,s,L,o,a,d,e,r)(C,l,a,s,s,M,a,n,i,f,e,s,t,[,T,]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -1024,11 +1021,15 @@ possible to check whether the contents of the list are of the requested typed.
                 </span>, <span name="printMessage">
                   printMessage
                   : <span name="scala.Boolean" class="extype">Boolean</span>
-                  
+                   = <span class="symbol">true</span>
                 </span>, <span name="printStackTrace">
                   printStackTrace
                   : <span name="scala.Boolean" class="extype">Boolean</span>
-                  
+                   = <span class="symbol">true</span>
+                </span>, <span name="loader">
+                  loader
+                  : <span name="java.lang.ClassLoader" class="extype">ClassLoader</span>
+                   = <span name='<span class="name"><a href="../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span>
                 </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">
                   m
                   : <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]

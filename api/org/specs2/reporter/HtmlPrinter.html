@@ -291,22 +291,6 @@ part of compilation it is not possible to check whether the contents of the list
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#breadcrumbs" data-isabs="false">
-      <a id="breadcrumbs(H,t,m,l,L,i,n,e,s):NodeSeq"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">breadcrumbs</span>
-        
-        <span class="params">(<span name="lines">
-                  lines
-                  : <span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone:AnyRef"></a>
       <h4 class="signature">
@@ -662,7 +646,7 @@ the name of the html file is the full class name
           </div>
           
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#printHtml" data-isabs="false">
-      <a id="printHtml(H,t,m,l,R,e,s,u,l,t,O,u,t,p,u,t)(H,t,m,l,L,i,n,e,s)(A,r,g,u,m,e,n,t,s):HtmlResultOutput"></a>
+      <a id="printHtml(H,t,m,l,R,e,s,u,l,t,O,u,t,p,u,t)(H,t,m,l,L,i,n,e,s)(N,o,d,e,S,e,q)(A,r,g,u,m,e,n,t,s):HtmlResultOutput"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -675,6 +659,10 @@ the name of the html file is the full class name
                 </span>, <span name="lines">
                   lines
                   : <span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>
+                  
+                </span>, <span name="globalToc">
+                  globalToc
+                  : <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span>
                   
                 </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">
                   args
@@ -696,7 +684,7 @@ the name of the html file is the full class name
           </div>
           
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#reduce" data-isabs="false">
-      <a id="reduce(S,e,q,[,E,x,e,c,u,t,e,d,F,r,a,g,m,e,n,t,])(H,t,m,l,L,i,n,k):List[HtmlLines]"></a>
+      <a id="reduce(S,e,q,[,E,x,e,c,u,t,e,d,F,r,a,g,m,e,n,t,])(H,t,m,l,L,i,n,k):Tree[HtmlLines]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -711,7 +699,7 @@ the name of the html file is the full class name
                   : <a name="org.specs2.specification.HtmlLink" class="extype" href="../specification/HtmlLink.html">HtmlLink</a>
                   
                 </span>)</span>
-        <span class="result">: <span name="scala.collection.immutable.List" class="extype">List</span>[<span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>]</span>
+        <span class="result">: <span name="scalaz.Tree" class="extype">Tree</span>[<span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>]</span>
       </span>
       </h4>
       

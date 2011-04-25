@@ -79,12 +79,62 @@
         <span class="name">After</span>
         
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends Context</span>
       </span>
       </a></h4>
       <p class="comment cmt">The After trait can be inherited by classes representing a context
 where an action must be executing after the main executable action
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.AfterContextExample" data-isabs="true">
+      <a id="AfterContextExample:AfterContextExample"></a>
+      <h4 class="signature"><a href="AfterContextExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AfterContextExample</span>
+        
+        
+        <span class="result"> extends FragmentsBuilder</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given After context
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.AfterEach" data-isabs="true">
+      <a id="AfterEach:AfterEach"></a>
+      <h4 class="signature"><a href="AfterEach.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AfterEach</span>
+        
+        
+        <span class="result"> extends After with Apply</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">apply an After context to each Example</p>
+    </li><li visbl="pub" name="org.specs2.specification.AfterExample" data-isabs="true">
+      <a id="AfterExample:AfterExample"></a>
+      <h4 class="signature"><a href="AfterExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AfterExample</span>
+        
+        
+        <span class="result"> extends AfterContextExample</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given after method
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.Apply" data-isabs="true">
+      <a id="Apply:Apply"></a>
+      <h4 class="signature"><a href="Apply.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Apply</span>
+        
+        
+        <span class="result"> extends Context</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Apply a Context to a sequence of fragments containing examples.</p>
     </li><li visbl="pub" name="org.specs2.specification.Around" data-isabs="true">
       <a id="Around:Around"></a>
       <h4 class="signature"><a href="Around.html">
@@ -93,11 +143,49 @@ where an action must be executing after the main executable action
         <span class="name">Around</span>
         
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends Context</span>
       </span>
       </a></h4>
       <p class="comment cmt">The Around trait can be inherited by classes which will
 execute some code inside the around method provided by the context.</p>
+    </li><li visbl="pub" name="org.specs2.specification.AroundContextExample" data-isabs="true">
+      <a id="AroundContextExample:AroundContextExample"></a>
+      <h4 class="signature"><a href="AroundContextExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AroundContextExample</span>
+        
+        
+        <span class="result"> extends FragmentsBuilder</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given Around context
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.AroundEach" data-isabs="true">
+      <a id="AroundEach:AroundEach"></a>
+      <h4 class="signature"><a href="AroundEach.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AroundEach</span>
+        
+        
+        <span class="result"> extends Around with Apply</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">apply an Around context to each Example</p>
+    </li><li visbl="pub" name="org.specs2.specification.AroundExample" data-isabs="true">
+      <a id="AroundExample:AroundExample"></a>
+      <h4 class="signature"><a href="AroundExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AroundExample</span>
+        
+        
+        <span class="result"> extends AroundContextExample</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given around method
+</p>
     </li><li visbl="pub" name="org.specs2.specification.AroundOutside" data-isabs="true">
       <a id="AroundOutside:AroundOutside[T]"></a>
       <h4 class="signature"><a href="AroundOutside.html">
@@ -131,7 +219,7 @@ function using that context and actions before and after if necessary.</p>
         <span class="name">Before</span>
         
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends Context</span>
       </span>
       </a></h4>
       <p class="comment cmt">The Before trait can be inherited by classes representing a context
@@ -163,6 +251,133 @@ to execute before and after an Example
       </span>
       </a></h4>
       <p class="comment cmt">The BeforeAfter trait allows to declare before, around and after actions
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterAroundContextExample" data-isabs="true">
+      <a id="BeforeAfterAroundContextExample:BeforeAfterAroundContextExample"></a>
+      <h4 class="signature"><a href="BeforeAfterAroundContextExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeAfterAroundContextExample</span>
+        
+        
+        <span class="result"> extends FragmentsBuilder</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given BeforeAfterAround context
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterAroundEach" data-isabs="true">
+      <a id="BeforeAfterAroundEach:BeforeAfterAroundEach"></a>
+      <h4 class="signature"><a href="BeforeAfterAroundEach.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeAfterAroundEach</span>
+        
+        
+        <span class="result"> extends BeforeAfterAround with Apply</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">apply a BeforeAfterAround context to each Example</p>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterAroundExample" data-isabs="true">
+      <a id="BeforeAfterAroundExample:BeforeAfterAroundExample"></a>
+      <h4 class="signature"><a href="BeforeAfterAroundExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeAfterAroundExample</span>
+        
+        
+        <span class="result"> extends BeforeAfterAroundContextExample</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given before/after method
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterContextExample" data-isabs="true">
+      <a id="BeforeAfterContextExample:BeforeAfterContextExample"></a>
+      <h4 class="signature"><a href="BeforeAfterContextExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeAfterContextExample</span>
+        
+        
+        <span class="result"> extends FragmentsBuilder</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given BeforeAfter context
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterEach" data-isabs="true">
+      <a id="BeforeAfterEach:BeforeAfterEach"></a>
+      <h4 class="signature"><a href="BeforeAfterEach.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeAfterEach</span>
+        
+        
+        <span class="result"> extends BeforeAfter with Apply</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">apply a BeforeAfter context to each Example</p>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterExample" data-isabs="true">
+      <a id="BeforeAfterExample:BeforeAfterExample"></a>
+      <h4 class="signature"><a href="BeforeAfterExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeAfterExample</span>
+        
+        
+        <span class="result"> extends BeforeAfterContextExample</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given before/after method
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeContextExample" data-isabs="true">
+      <a id="BeforeContextExample:BeforeContextExample"></a>
+      <h4 class="signature"><a href="BeforeContextExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeContextExample</span>
+        
+        
+        <span class="result"> extends FragmentsBuilder</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given Before context
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeEach" data-isabs="true">
+      <a id="BeforeEach:BeforeEach"></a>
+      <h4 class="signature"><a href="BeforeEach.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeEach</span>
+        
+        
+        <span class="result"> extends Before with Apply</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">apply a Before context to each Example</p>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeExample" data-isabs="true">
+      <a id="BeforeExample:BeforeExample"></a>
+      <h4 class="signature"><a href="BeforeExample.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BeforeExample</span>
+        
+        
+        <span class="result"> extends BeforeContextExample</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">For each created example use a given after method
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.Context" data-isabs="true">
+      <a id="Context:Context"></a>
+      <h4 class="signature"><a href="Context.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Context</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">generic trait for Before, After, Around
 </p>
     </li><li visbl="pub" name="org.specs2.specification.Contexts" data-isabs="true">
       <a id="Contexts:Contexts"></a>
@@ -207,8 +422,12 @@ to execute before and after an Example
                   n
                   : Int
                   
+                </span>, <span name="location">
+                  location
+                  : Location
+                  
                 </span>)</span>
-        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
+        <span class="result"> extends ExecutedFragment with ExecutedStandardFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
@@ -219,8 +438,12 @@ to execute before and after an Example
       <span class="symbol">
         <span class="name">ExecutedBr</span>
         
-        <span class="params">()</span>
-        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
+        <span class="params">(<span name="location">
+                  location
+                  : Location
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with ExecutedStandardFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
@@ -231,8 +454,12 @@ to execute before and after an Example
       <span class="symbol">
         <span class="name">ExecutedEnd</span>
         
-        <span class="params">()</span>
-        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
+        <span class="params">(<span name="location">
+                  location
+                  : Location
+                  
+                </span>)</span>
+        <span class="result"> extends ExecutedFragment with ExecutedStandardFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
@@ -261,6 +488,10 @@ which have already been executed to provide a Result
                   timer
                   : SimpleTimer
                   
+                </span>, <span name="location">
+                  location
+                  : Location
+                  
                 </span>)</span>
         <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
@@ -287,6 +518,10 @@ execution of an Action for example)
                   timer
                   : SimpleTimer
                   
+                </span>, <span name="location">
+                  location
+                  : Location
+                  
                 </span>)</span>
         <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
@@ -303,6 +538,10 @@ execution of an Action for example)
                   link
                   : HtmlLink
                   
+                </span>, <span name="location">
+                  location
+                  : Location
+                  
                 </span>)</span>
         <span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
@@ -318,6 +557,10 @@ execution of an Action for example)
         <span class="params">(<span name="name">
                   name
                   : SpecName
+                  
+                </span>, <span name="location">
+                  location
+                  : Location
                   
                 </span>)</span>
         <span class="result"> extends ExecutedFragment with Product with Serializable</span>
@@ -339,8 +582,24 @@ execution of an Action for example)
                   arguments
                   : Arguments
                   
+                </span>, <span name="location">
+                  location
+                  : Location
+                  
                 </span>)</span>
         <span class="result"> extends ExecutedFragment with Product with Serializable</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedStandardFragment" data-isabs="true">
+      <a id="ExecutedStandardFragment:ExecutedStandardFragment"></a>
+      <h4 class="signature"><a href="ExecutedStandardFragment.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ExecutedStandardFragment</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
@@ -355,8 +614,12 @@ execution of an Action for example)
                   n
                   : Int
                   
+                </span>, <span name="location">
+                  location
+                  : Location
+                  
                 </span>)</span>
-        <span class="result"> extends ExecutedFragment with Product with Serializable</span>
+        <span class="result"> extends ExecutedFragment with ExecutedStandardFragment with Product with Serializable</span>
       </span>
       </a></h4>
       
@@ -370,6 +633,10 @@ execution of an Action for example)
         <span class="params">(<span name="text">
                   text
                   : String
+                  
+                </span>, <span name="location">
+                  location
+                  : Location
                   
                 </span>)</span>
         <span class="result"> extends ExecutedFragment with Product with Serializable</span>
@@ -453,6 +720,47 @@ Allow a Form to be used as an example body and return a Result automatically
       </a></h4>
       <p class="comment cmt">A Fragments object is a list of fragments with a SpecStart and a SpecEnd
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.Given" data-isabs="true">
+      <a id="Given:Given[T]"></a>
+      <h4 class="signature"><a href="Given.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Given</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends RegexStep[Unit, T]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This step can start a sequence of Given / When / Then.</p>
+    </li><li visbl="pub" name="org.specs2.specification.GivenThen" data-isabs="true">
+      <a id="GivenThen:GivenThen"></a>
+      <h4 class="signature"><a href="GivenThen.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">GivenThen</span>
+        
+        
+        <span class="result"> extends RegexStep[String, Result]</span>
+      </span>
+      </a></h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: abstract 
+        </div></div>
+          
+    </li><li visbl="pub" name="org.specs2.specification.GivenThenFunction" data-isabs="false">
+      <a id="GivenThenFunction:GivenThenFunction[R]"></a>
+      <h4 class="signature"><a href="GivenThenFunction.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">GivenThenFunction</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends GivenThen</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.HtmlLink" data-isabs="true">
       <a id="HtmlLink:HtmlLink"></a>
       <h4 class="signature"><a href="HtmlLink.html">
@@ -479,6 +787,31 @@ link elements.</p>
       </a></h4>
       <p class="comment cmt">The Outside trait can be inherited by classes which will
 execute some code inside the outside method provided by the context.</p>
+    </li><li visbl="pub" name="org.specs2.specification.RegexStep" data-isabs="true">
+      <a id="RegexStep:RegexStep[P, T]"></a>
+      <h4 class="signature"><a href="RegexStep.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">RegexStep</span>
+        <span class="tparams">[<span name="P">P</span>, <span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">A Regular expression step which takes a text and extracts meaningful values according to
+a regular expression:</p>
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps" data-isabs="true">
+      <a id="RegexSteps:RegexSteps"></a>
+      <h4 class="signature"><a href="RegexSteps.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">RegexSteps</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait provides building blocks to create steps and examples from regular expression.</p>
     </li><li visbl="pub" name="org.specs2.specification.Scope" data-isabs="true">
       <a id="Scope:Scope"></a>
       <h4 class="signature"><a href="Scope.html">
@@ -655,6 +988,18 @@ Error Result if there is an exception or a Success.</p>
       </a></h4>
       <p class="comment cmt">Free text, describing the system to specify
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.Then" data-isabs="true">
+      <a id="Then:Then[T]"></a>
+      <h4 class="signature"><a href="Then.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Then</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends RegexStep[Either[Result, T], (T, Result)]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This step define checks in a sequence of Given / When / Then.</p>
     </li><li visbl="pub" name="org.specs2.specification.UrlHtmlLink" data-isabs="false">
       <a id="UrlHtmlLink:UrlHtmlLink"></a>
       <h4 class="signature"><a href="UrlHtmlLink.html">
@@ -687,6 +1032,18 @@ Error Result if there is an exception or a Success.</p>
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.specs2.specification.When" data-isabs="true">
+      <a id="When:When[P, T]"></a>
+      <h4 class="signature"><a href="When.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">When</span>
+        <span class="tparams">[<span name="P">P</span>, <span name="T">T</span>]</span>
+        
+        <span class="result"> extends RegexStep[P, T]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This step define conditions in a sequence of Given / When / Then.</p>
     </li></ol>
             </div>
 
@@ -789,6 +1146,18 @@ Error Result if there is an exception or a Success.</p>
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.specs2.specification.RegexStep" data-isabs="false">
+      <a id="RegexStep:RegexStep"></a>
+      <h4 class="signature"><a href="RegexStep$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">RegexStep</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.SpecEnd" data-isabs="false">
       <a id="SpecEnd:SpecEnd"></a>
       <h4 class="signature"><a href="SpecEnd$.html">
@@ -850,6 +1219,30 @@ Error Result if there is an exception or a Success.</p>
       </a></h4>
       <p class="comment cmt">Those fragments are used to tag other fragments in a specification\
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.gen" data-isabs="false">
+      <a id="gen:gen"></a>
+      <h4 class="signature"><a href="gen/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">gen</span>
+        
+        
+        
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.so" data-isabs="false">
+      <a id="so:so"></a>
+      <h4 class="signature"><a href="so$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">so</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
     </li></ol>
             </div>
 

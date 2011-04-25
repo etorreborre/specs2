@@ -305,27 +305,6 @@ part of compilation it is not possible to check whether the contents of the list
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#breadcrumbs" data-isabs="false">
-      <a id="breadcrumbs(H,t,m,l,L,i,n,e,s):NodeSeq"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">breadcrumbs</span>
-        
-        <span class="params">(<span name="lines">
-                  lines
-                  : <span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>
-                  
-                </span>)</span>
-        <span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: <a name="org.specs2.reporter.HtmlPrinter" class="extype" href="HtmlPrinter.html">HtmlPrinter</a>
-        </div></div>
-          
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone:AnyRef"></a>
       <h4 class="signature">
@@ -457,7 +436,7 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
           </div>
           
     </li><li visbl="pub" name="org.specs2.reporter.DefaultExecutionStrategy#execute" data-isabs="false">
-      <a id="execute(A,r,g,u,m,e,n,t,s):(Seq[FragmentSeq]) ⇒ Seq[ExecutedFragment]"></a>
+      <a id="execute(A,r,g,u,m,e,n,t,s):(Seq[FragmentSeq]) ⇒ List[ExecutedFragment]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -468,14 +447,20 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
                   : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
                   
                 </span>)</span>
-        <span class="result">: (Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]) ⇒ Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>
+        <span class="result">: (Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]) ⇒ List[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>
       </span>
       </h4>
       
-            
-            <div class="fullcomment"><div class="block">
+            <p class="shortcomment cmt">execute sequences of Fragments.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>execute sequences of Fragments.</p><p>If the stopOnFail argument is true, we check that the execution is ok before executing the next sequence.
+</p></div><div class="block">
           definition classes: DefaultExecutionStrategy → ExecutionStrategy
-        </div></div>
+        </div>
+            
+            
+            
+            
+          </div>
           
     </li><li visbl="prt" name="org.specs2.specification.FragmentExecution#execute" data-isabs="false">
       <a id="execute(F,r,a,g,m,e,n,t)(A,r,g,u,m,e,n,t,s):Product with Serializable with ExecutedFragment"></a>
@@ -524,7 +509,7 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
                 </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">
                   arguments
                   : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
-                  
+                   = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span>
                 </span>)</span>
         <span class="result">: Seq[<a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>]</span>
       </span>
@@ -1025,7 +1010,7 @@ the name of the html file is the full class name
           </div>
           
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#printHtml" data-isabs="false">
-      <a id="printHtml(H,t,m,l,R,e,s,u,l,t,O,u,t,p,u,t)(H,t,m,l,L,i,n,e,s)(A,r,g,u,m,e,n,t,s):HtmlResultOutput"></a>
+      <a id="printHtml(H,t,m,l,R,e,s,u,l,t,O,u,t,p,u,t)(H,t,m,l,L,i,n,e,s)(N,o,d,e,S,e,q)(A,r,g,u,m,e,n,t,s):HtmlResultOutput"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -1038,6 +1023,10 @@ the name of the html file is the full class name
                 </span>, <span name="lines">
                   lines
                   : <span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>
+                  
+                </span>, <span name="globalToc">
+                  globalToc
+                  : <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span>
                   
                 </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">
                   args
@@ -1148,7 +1137,7 @@ the name of the html file is the full class name
           </div>
           
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#reduce" data-isabs="false">
-      <a id="reduce(S,e,q,[,E,x,e,c,u,t,e,d,F,r,a,g,m,e,n,t,])(H,t,m,l,L,i,n,k):List[HtmlLines]"></a>
+      <a id="reduce(S,e,q,[,E,x,e,c,u,t,e,d,F,r,a,g,m,e,n,t,])(H,t,m,l,L,i,n,k):Tree[HtmlLines]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -1163,7 +1152,7 @@ the name of the html file is the full class name
                   : <a name="org.specs2.specification.HtmlLink" class="extype" href="../specification/HtmlLink.html">HtmlLink</a>
                   
                 </span>)</span>
-        <span class="result">: <span name="scala.collection.immutable.List" class="extype">List</span>[<span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>]</span>
+        <span class="result">: <span name="scalaz.Tree" class="extype">Tree</span>[<span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>]</span>
       </span>
       </h4>
       

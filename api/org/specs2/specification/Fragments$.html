@@ -459,6 +459,30 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
             
           </div>
           
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#fragmentsIsMonoid" data-isabs="false">
+      <a id="fragmentsIsMonoid:Monoid[Fragments]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">fragmentsIsMonoid</span>
+        
+        
+        <span class="result">: <span name="scalaz.Monoid" class="extype">Monoid</span>[<a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Fragments can be added as a monoid
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Fragments can be added as a monoid
+</p></div><div class="block">
+          attributes: implicit 
+        </div>
+            
+            
+            
+            
+          </div>
+          
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass:java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -505,6 +529,46 @@ to verify that the behavior is consistent with the <code>equals</code> method.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the hash code value for the object.</p></dd></dl><div class="block">
           definition classes: AnyRef → Any
         </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#isAStep" data-isabs="false">
+      <a id="isAStep:PartialFunction[Fragment, Step]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isAStep</span>
+        
+        
+        <span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.Step" class="extype" href="Step.html">Step</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the step if the Fragment is a Step</p></dd></dl>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#isAnExample" data-isabs="false">
+      <a id="isAnExample:PartialFunction[Fragment, Example]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isAnExample</span>
+        
+        
+        <span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.Example" class="extype" href="Example.html">Example</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the example if the Fragment is an Example</p></dd></dl>
             
             
             
@@ -559,6 +623,26 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#isSomeText" data-isabs="false">
+      <a id="isSomeText:PartialFunction[Fragment, Text]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isSomeText</span>
+        
+        
+        <span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.Text" class="extype" href="Text.html">Text</a>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the text if the Fragment is a Text</p></dd></dl>
+            
+            
+            
+            
+          </div>
+          
     </li><li visbl="pub" name="org.specs2.specification.Fragments#isStep" data-isabs="false">
       <a id="isStep:Function[Fragment, Boolean]"></a>
       <h4 class="signature">
@@ -573,6 +657,26 @@ possible to check whether the contents of the list are of the requested typed.
       
             <p class="shortcomment cmt"></p>
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the Fragment is a step</p></dd></dl>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#isText" data-isabs="false">
+      <a id="isText:Function[Fragment, Boolean]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isText</span>
+        
+        
+        <span class="result">: Function[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <span name="scala.Boolean" class="extype">Boolean</span>]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"></p>
+            <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the Fragment is a Text</p></dd></dl>
             
             
             

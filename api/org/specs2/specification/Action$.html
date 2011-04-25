@@ -236,21 +236,29 @@
           </div>
           
     </li><li visbl="pub" name="org.specs2.specification.Action#apply" data-isabs="false">
-      <a id="apply(⇒, ,A,n,y):Action"></a>
+      <a id="apply[T](⇒, ,T):Action"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">apply</span>
-        
+        <span class="tparams">[<span name="T">T</span>]</span>
         <span class="params">(<span name="r">
                   r
-                  : ⇒ <span name="scala.Any" class="extype">Any</span>
+                  : ⇒ T
                   
                 </span>)</span>
         <span class="result">: <a name="org.specs2.specification.Action" class="extype" href="Action.html">Action</a></span>
       </span>
       </h4>
       
+            <p class="shortcomment cmt">create an Action object from any value</p>
+            <div class="fullcomment"><div class="comment cmt"><p>create an Action object from any value</p></div>
+            
+            
+            
+            
+          </div>
+          
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -433,6 +441,30 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
                 <span class="name">@throws</span><span class="args">()</span>
               
         </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.specification.Action#fromEither" data-isabs="false">
+      <a id="fromEither[T](⇒, ,E,i,t,h,e,r,[,R,e,s,u,l,t,,, ,T,]):Action"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">fromEither</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="r">
+                  r
+                  : ⇒ <span name="scala.Either" class="extype">Either</span>[<a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>, T]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.specification.Action" class="extype" href="Action.html">Action</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">create an Action object from either a previous result, or a value to evaluate</p>
+            <div class="fullcomment"><div class="comment cmt"><p>create an Action object from either a previous result, or a value to evaluate</p></div>
             
             
             

@@ -35,7 +35,7 @@
 is created.</p></div>
           <div class="fullcomment" id="comment"><div class="comment cmt"><p>Adding new implicits to support specs-like naming: &quot;the system&quot; should &quot;do this&quot; in { ... }</p><p>This trait belongs to the mutable package because it works by mutating a local variable each time a new Fragment
 is created.</p></div><div class="block">
-            linear super types: <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span>, AnyRef, <span name="scala.Any" class="extype">Any</span>
+            linear super types: <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span>, <a name="org.specs2.specification.RegexSteps" class="extype" href="../specification/RegexSteps.html">RegexSteps</a>, AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div><div class="block">
             known subclasses: <a name="org.specs2.mutable.SpecificationFeatures" class="extype" href="SpecificationFeatures.html">SpecificationFeatures</a>, <a name="org.specs2.mutable.Specification" class="extype" href="Specification.html">Specification</a>, <a name="org.specs2.mutable.SpecificationWithJUnit" class="extype" href="SpecificationWithJUnit.html">SpecificationWithJUnit</a>
           </div>
@@ -57,7 +57,7 @@ is created.</p></div><div class="block">
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li name="org.specs2.mutable.FragmentsBuilder" class="in">FragmentsBuilder</li><li name="org.specs2.specification.FragmentsBuilder" class="in">FragmentsBuilder</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
+                <ol id="linearization"><li name="org.specs2.mutable.FragmentsBuilder" class="in">FragmentsBuilder</li><li name="org.specs2.specification.FragmentsBuilder" class="in">FragmentsBuilder</li><li name="org.specs2.specification.RegexSteps" class="in">RegexSteps</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -106,6 +106,18 @@ is created.</p></div><div class="block">
         
         
         <span class="result"> extends SpecTitle</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps.RegexFragment" data-isabs="true">
+      <a id="RegexFragment:RegexFragment"></a>
+      <h4 class="signature"><a href="../specification/RegexSteps$RegexFragment.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">RegexFragment</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
@@ -281,6 +293,34 @@ is created.</p></div><div class="block">
             
           </div>
           
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#RegexFragmentToFragments" data-isabs="false">
+      <a id="RegexFragmentToFragments(R,e,g,e,x,F,r,a,g,m,e,n,t):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">RegexFragmentToFragments</span>
+        
+        <span class="params">(<span name="r">
+                  r
+                  : <a name="org.specs2.specification.RegexSteps.RegexFragment" class="extype" href="../specification/RegexSteps$RegexFragment.html">RegexFragment</a>
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="../specification/Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">at any point in time a regex sequence can be transformed as a sequence of Fragments</p>
+            <div class="fullcomment"><div class="comment cmt"><p>at any point in time a regex sequence can be transformed as a sequence of Fragments</p></div><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: <a name="org.specs2.specification.RegexSteps" class="extype" href="../specification/RegexSteps.html">RegexSteps</a>
+        </div>
+            
+            
+            
+            
+          </div>
+          
     </li><li visbl="pub" name="org.specs2.mutable.FragmentsBuilder#action" data-isabs="false">
       <a id="action(⇒, ,A,n,y):Action"></a>
       <h4 class="signature">
@@ -338,35 +378,6 @@ is created.</p></div><div class="block">
         <span class="params">(<span name="ex">
                   ex
                   : ⇒ <a name="org.specs2.specification.Example" class="extype" href="../specification/Example.html">Example</a>
-                  
-                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">
-                  arg0
-                  : (T) ⇒ <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>
-                  
-                </span>)</span>
-        <span class="result">: <a name="org.specs2.specification.Example" class="extype" href="../specification/Example.html">Example</a></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          attributes: protected 
-        </div></div>
-          
-    </li><li visbl="prt" name="org.specs2.mutable.FragmentsBuilder#addExample" data-isabs="false">
-      <a id="addExample[T](S,t,r,i,n,g)(⇒, ,T)((,T,), ,⇒, ,R,e,s,u,l,t):Example"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">addExample</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="s">
-                  s
-                  : String
-                  
-                </span>, <span name="r">
-                  r
-                  : ⇒ T
                   
                 </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">
                   arg0
@@ -649,7 +660,7 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
             
           </div>
           
-    </li><li visbl="pub" name="org.specs2.mutable.FragmentsBuilder#forExample" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#forExample" data-isabs="false">
       <a id="forExample(S,t,r,i,n,g):ExampleDesc"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
@@ -670,7 +681,7 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
 </p></dd></dl><div class="block">
           attributes: implicit 
         </div><div class="block">
-          definition classes: <a name="org.specs2.mutable.FragmentsBuilder" class="extype" href="">FragmentsBuilder</a> → FragmentsBuilder
+          definition classes: FragmentsBuilder
         </div>
             
             
@@ -719,6 +730,34 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
       
             <p class="shortcomment cmt"></p>
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object from a single Fragment</p></dd></dl><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: FragmentsBuilder
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragmentsFragmentToFragments" data-isabs="false">
+      <a id="fragmentsFragmentToFragments(F,r,a,g,m,e,n,t,s,F,r,a,g,m,e,n,t):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">fragmentsFragmentToFragments</span>
+        
+        <span class="params">(<span name="fs">
+                  fs
+                  : <span name="org.specs2.specification.FragmentsBuilder.FragmentsFragment" class="extype">FragmentsFragment</span>
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="../specification/Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">reverse conversion from a Fragment containing a Fragments object to the Fragments object</p>
+            <div class="fullcomment"><div class="comment cmt"><p>reverse conversion from a Fragment containing a Fragments object to the Fragments object</p></div><div class="block">
           attributes: implicit 
         </div><div class="block">
           definition classes: FragmentsBuilder
@@ -1314,6 +1353,8 @@ possible to check whether the contents of the list are of the requested typed.
 
         <div name="org.specs2.specification.FragmentsBuilder" class="parent">
               <h3>Inherited from <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span></h3>
+            </div><div name="org.specs2.specification.RegexSteps" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.RegexSteps" class="extype" href="../specification/RegexSteps.html">RegexSteps</a></h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

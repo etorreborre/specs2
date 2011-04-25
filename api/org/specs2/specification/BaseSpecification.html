@@ -37,7 +37,7 @@
           <div class="fullcomment" id="comment"><div class="comment cmt"><p>A Base specification contains the minimum elements for a Specification</p><p>* a Seq of Fragments, available through the SpecificationStructure trait
 * methods for creating Fragments from the FragmentsBuilder trait
 * methods to include other specifications</p></div><div class="block">
-            linear super types: <a name="org.specs2.specification.SpecificationInclusion" class="extype" href="SpecificationInclusion.html">SpecificationInclusion</a>, <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span>, <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a>, AnyRef, <span name="scala.Any" class="extype">Any</span>
+            linear super types: <a name="org.specs2.specification.SpecificationInclusion" class="extype" href="SpecificationInclusion.html">SpecificationInclusion</a>, <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span>, <a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a>, <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a>, AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div>
             
             
@@ -57,7 +57,7 @@
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li name="org.specs2.specification.BaseSpecification" class="in">BaseSpecification</li><li name="org.specs2.specification.SpecificationInclusion" class="in">SpecificationInclusion</li><li name="org.specs2.specification.FragmentsBuilder" class="in">FragmentsBuilder</li><li name="org.specs2.specification.SpecificationStructure" class="in">SpecificationStructure</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
+                <ol id="linearization"><li name="org.specs2.specification.BaseSpecification" class="in">BaseSpecification</li><li name="org.specs2.specification.SpecificationInclusion" class="in">SpecificationInclusion</li><li name="org.specs2.specification.FragmentsBuilder" class="in">FragmentsBuilder</li><li name="org.specs2.specification.RegexSteps" class="in">RegexSteps</li><li name="org.specs2.specification.SpecificationStructure" class="in">SpecificationStructure</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -71,7 +71,22 @@
 
         
 
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.specs2.specification.RegexSteps.RegexFragment" data-isabs="true">
+      <a id="RegexFragment:RegexFragment"></a>
+      <h4 class="signature"><a href="RegexSteps$RegexFragment.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">RegexFragment</span>
         
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
@@ -235,6 +250,34 @@
           attributes: final 
         </div><div class="block">
           definition classes: Any
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#RegexFragmentToFragments" data-isabs="false">
+      <a id="RegexFragmentToFragments(R,e,g,e,x,F,r,a,g,m,e,n,t):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">RegexFragmentToFragments</span>
+        
+        <span class="params">(<span name="r">
+                  r
+                  : <a name="org.specs2.specification.RegexSteps.RegexFragment" class="extype" href="RegexSteps$RegexFragment.html">RegexFragment</a>
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">at any point in time a regex sequence can be transformed as a sequence of Fragments</p>
+            <div class="fullcomment"><div class="comment cmt"><p>at any point in time a regex sequence can be transformed as a sequence of Fragments</p></div><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: <a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a>
         </div>
             
             
@@ -518,6 +561,34 @@ and non-local returns and exceptions, are all platform dependent.</p></div><div 
             
           </div>
           
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragmentsFragmentToFragments" data-isabs="false">
+      <a id="fragmentsFragmentToFragments(F,r,a,g,m,e,n,t,s,F,r,a,g,m,e,n,t):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">fragmentsFragmentToFragments</span>
+        
+        <span class="params">(<span name="fs">
+                  fs
+                  : <span name="org.specs2.specification.FragmentsBuilder.FragmentsFragment" class="extype">FragmentsFragment</span>
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">reverse conversion from a Fragment containing a Fragments object to the Fragments object</p>
+            <div class="fullcomment"><div class="comment cmt"><p>reverse conversion from a Fragment containing a Fragments object to the Fragments object</p></div><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: FragmentsBuilder
+        </div>
+            
+            
+            
+            
+          </div>
+          
     </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragmentsFragments" data-isabs="false">
       <a id="fragmentsFragments(⇒, ,F,r,a,g,m,e,n,t,s):FragmentsFragment"></a>
       <h4 class="signature">
@@ -622,7 +693,7 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           </div>
           
     </li><li visbl="pub" name="org.specs2.specification.SpecificationInclusion#include" data-isabs="false">
-      <a id="include(A,r,g,u,m,e,n,t,s)(S,p,e,c,i,f,i,c,a,t,i,o,n,S,t,r,u,c,t,u,r,e):FragmentsFragment"></a>
+      <a id="include(A,r,g,u,m,e,n,t,s)(S,p,e,c,i,f,i,c,a,t,i,o,n,S,t,r,u,c,t,u,r,e,*):FragmentsFragment"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -634,7 +705,32 @@ to verify that the behavior is consistent with the <code>equals</code> method.
                   
                 </span>, <span name="s">
                   s
+                  : <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a>*
+                  
+                </span>)</span>
+        <span class="result">: <span name="org.specs2.specification.FragmentsBuilder.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a name="org.specs2.specification.SpecificationInclusion" class="extype" href="SpecificationInclusion.html">SpecificationInclusion</a> → <a name="org.specs2.specification.SpecificationInclusion" class="extype" href="SpecificationInclusion.html">SpecificationInclusion</a>
+        </div></div>
+          
+    </li><li visbl="pub" name="org.specs2.specification.SpecificationInclusion#include" data-isabs="false">
+      <a id="include(S,p,e,c,i,f,i,c,a,t,i,o,n,S,t,r,u,c,t,u,r,e)(S,p,e,c,i,f,i,c,a,t,i,o,n,S,t,r,u,c,t,u,r,e,*):FragmentsFragment"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">include</span>
+        
+        <span class="params">(<span name="s">
+                  s
                   : <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a>
+                  
+                </span>, <span name="ss">
+                  ss
+                  : <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a>*
                   
                 </span>)</span>
         <span class="result">: <span name="org.specs2.specification.FragmentsBuilder.FragmentsFragment" class="extype">FragmentsFragment</span></span>
@@ -649,7 +745,7 @@ to verify that the behavior is consistent with the <code>equals</code> method.
     </li><li visbl="pub" name="org.specs2.specification.SpecificationInclusion#include" data-isabs="false">
       <a id="include(S,p,e,c,i,f,i,c,a,t,i,o,n,S,t,r,u,c,t,u,r,e):FragmentsFragment"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">implicit def</span>
       <span class="symbol">
         <span class="name">include</span>
         
@@ -664,6 +760,8 @@ to verify that the behavior is consistent with the <code>equals</code> method.
       
             
             <div class="fullcomment"><div class="block">
+          attributes: implicit 
+        </div><div class="block">
           definition classes: <a name="org.specs2.specification.SpecificationInclusion" class="extype" href="SpecificationInclusion.html">SpecificationInclusion</a> → <a name="org.specs2.specification.SpecificationInclusion" class="extype" href="SpecificationInclusion.html">SpecificationInclusion</a>
         </div></div>
           
@@ -1094,6 +1192,8 @@ possible to check whether the contents of the list are of the requested typed.
               <h3>Inherited from <a name="org.specs2.specification.SpecificationInclusion" class="extype" href="SpecificationInclusion.html">SpecificationInclusion</a></h3>
             </div><div name="org.specs2.specification.FragmentsBuilder" class="parent">
               <h3>Inherited from <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span></h3>
+            </div><div name="org.specs2.specification.RegexSteps" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a></h3>
             </div><div name="org.specs2.specification.SpecificationStructure" class="parent">
               <h3>Inherited from <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></h3>
             </div><div name="scala.AnyRef" class="parent">

@@ -1,0 +1,1089 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.matcher.TraversableMatchers</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="windowTitle();" class="type">
+
+      <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.matcher" class="extype" href="package.html">matcher</a></p>
+
+      <div id="definition">
+        <img src="../../../lib/trait_big.png" />
+        <h1>TraversableMatchers</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">TraversableMatchers</span>
+        
+        
+        <span class="result"> extends <span name="org.specs2.matcher.TraversableBaseMatchers" class="extype">TraversableBaseMatchers</span> with <span name="org.specs2.matcher.TraversableBeHaveMatchers" class="extype">TraversableBeHaveMatchers</span></span>
+      </span>
+      </h4>
+      
+          <div class="shortcomment cmt"><p>Matchers for traversables
+</p></div>
+          <div class="fullcomment" id="comment"><div class="comment cmt"><p>Matchers for traversables
+</p></div><div class="block">
+            go to: <a href="TraversableMatchers$.html">companion</a>
+          </div><div class="block">
+            linear super types: <span name="org.specs2.matcher.TraversableBeHaveMatchers" class="extype">TraversableBeHaveMatchers</span>, <span name="org.specs2.matcher.TraversableBaseMatchers" class="extype">TraversableBaseMatchers</span>, <a name="org.specs2.control.LazyParameters" class="extype" href="../control/LazyParameters.html">LazyParameters</a>, AnyRef, <span name="scala.Any" class="extype">Any</span>
+          </div><div class="block">
+            known subclasses: <a name="org.specs2.matcher.TraversableMatchers" class="extype" href="TraversableMatchers$.html">TraversableMatchers</a>, <a name="org.specs2.matcher.Matchers" class="extype" href="Matchers.html">Matchers</a>, <a name="org.specs2.matcher.ShouldThrownMatchers" class="extype" href="ShouldThrownMatchers.html">ShouldThrownMatchers</a>, <a name="org.specs2.matcher.ShouldMatchers" class="extype" href="ShouldMatchers.html">ShouldMatchers</a>, <a name="org.specs2.matcher.MustThrownMatchers" class="extype" href="MustThrownMatchers.html">MustThrownMatchers</a>, <a name="org.specs2.matcher.MustMatchers" class="extype" href="MustMatchers.html">MustMatchers</a>, <a name="org.specs2.matcher.Matchers" class="extype" href="Matchers$.html">Matchers</a>, <a name="org.specs2.matcher.JUnitShouldMatchers" class="extype" href="JUnitShouldMatchers.html">JUnitShouldMatchers</a>, <a name="org.specs2.matcher.JUnitShouldMatchers" class="extype" href="JUnitShouldMatchers$.html">JUnitShouldMatchers</a>, <a name="org.specs2.matcher.JUnitMustMatchers" class="extype" href="JUnitMustMatchers.html">JUnitMustMatchers</a>, <a name="org.specs2.matcher.JUnitMustMatchers" class="extype" href="JUnitMustMatchers$.html">JUnitMustMatchers</a>, <a name="org.specs2.mutable.SpecificationFeatures" class="extype" href="../mutable/SpecificationFeatures.html">SpecificationFeatures</a>, <a name="org.specs2.mutable.Specification" class="extype" href="../mutable/Specification.html">Specification</a>, <a name="org.specs2.mutable.SpecificationWithJUnit" class="extype" href="../mutable/SpecificationWithJUnit.html">SpecificationWithJUnit</a>, <a name="org.specs2.SpecificationFeatures" class="extype" href="../SpecificationFeatures.html">SpecificationFeatures</a>, <a name="org.specs2.Specification" class="extype" href="../Specification.html">Specification</a>, <a name="org.specs2.SpecificationWithJUnit" class="extype" href="../SpecificationWithJUnit.html">SpecificationWithJUnit</a>
+          </div>
+            
+            
+            
+            
+          </div>
+        
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          <div id="order">
+                <span class="filtertype">Ordering</span>
+                <ol><li class="alpha in">Alphabetic</li><li class="inherit out">By inheritance</li></ol>
+              </div>
+          <div id="ancestors">
+                <span class="filtertype">Inherited</span>
+                <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
+                <ol id="linearization"><li name="org.specs2.matcher.TraversableMatchers" class="in">TraversableMatchers</li><li name="org.specs2.matcher.TraversableBeHaveMatchers" class="in">TraversableBeHaveMatchers</li><li name="org.specs2.matcher.TraversableBaseMatchers" class="in">TraversableBaseMatchers</li><li name="org.specs2.control.LazyParameters" class="in">LazyParameters</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
+              </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
+        </div>
+
+        
+
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
+      <a id="!=(A,n,y,R,e,f):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : AnyRef
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
+      <a id="!=(A,n,y):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Any" class="extype">Any</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o != arg0</code> is the same as <code>!(o == (arg0))</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o != arg0</code> is the same as <code>!(o == (arg0))</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for dis-equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the receiver object is equivalent to the argument; <code>true</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
+      <a id="##:Int"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">##</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef → Any
+        </div></div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#$asInstanceOf" data-isabs="false">
+      <a id="$asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">$asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: T0</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#$isInstanceOf" data-isabs="false">
+      <a id="$isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">$isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
+      <a id="==(A,n,y,R,e,f):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : AnyRef
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o == arg0</code> is the same as <code>if (o eq null) arg0 eq null else o.equals(arg0)</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o == arg0</code> is the same as <code>if (o eq null) arg0 eq null else o.equals(arg0)</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
+      <a id="==(A,n,y):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Any" class="extype">Any</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o == arg0</code> is the same as <code>o.equals(arg0)</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o == arg0</code> is the same as <code>o.equals(arg0)</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: T0</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to cast the receiver object to be of type <code>T0</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to cast the receiver object to be of type <code>T0</code>.</p><p>Note that the success of a cast at runtime is modulo Scala's erasure semantics.  Therefore the expression
+<code>1.asInstanceOf[String]</code> will throw a <code>ClassCastException</code> at runtime, while the expression
+<code>List(1).asInstanceOf[List[String]]</code> will not.  In the latter example, because the type argument is erased as
+part of compilation it is not possible to check whether the contents of the list are of the requested typed.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the receiver object.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
+      <a id="clone:AnyRef"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">clone</span>
+        
+        <span class="params">()</span>
+        <span class="result">: AnyRef</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method creates and returns a copy of the receiver object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method creates and returns a copy of the receiver object.</p><p>The default implementation of the <code>clone</code> method is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a copy of the receiver object.</p></dd></dl><div class="block">
+          attributes: protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#contain" data-isabs="false">
+      <a id="contain[T](L,a,z,y,P,a,r,a,m,e,t,e,r,[,T,],*):ContainMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">contain</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">
+                  t
+                  : <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[T]*
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.ContainMatcher" class="extype" href="ContainMatcher.html">ContainMatcher</a>[T]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">match if traversable contains (t1, t2)</p>
+            <div class="fullcomment"><div class="comment cmt"><p>match if traversable contains (t1, t2)</p></div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#contain" data-isabs="false">
+      <a id="contain[T](⇒, ,T):ContainMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">contain</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">
+                  t
+                  : ⇒ T
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.ContainMatcher" class="extype" href="ContainMatcher.html">ContainMatcher</a>[T]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">match if an traversable contains (t).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>match if an traversable contains (t).
+This definition looks redundant with the one below but it is necessary to
+avoid the implicit argThat method from Mockito to infer an improper matcher</p></div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            <div class="block"><ol>see also:
+                  <li class="cmt"><p>the HtmlPrinterSpec failing with a NPE if that method is missing
+</p></li>
+                </ol></div>
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#containAnyOf" data-isabs="false">
+      <a id="containAnyOf[T](L,a,z,y,P,a,r,a,m,e,t,e,r,[,T,],*):ContainAnyOfMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">containAnyOf</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">
+                  t
+                  : <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[T]*
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.ContainAnyOfMatcher" class="extype" href="ContainAnyOfMatcher.html">ContainAnyOfMatcher</a>[T]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">match if traversable contains one of (t1, t2)</p>
+            <div class="fullcomment"><div class="comment cmt"><p>match if traversable contains one of (t1, t2)</p></div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#containMatch" data-isabs="false">
+      <a id="containMatch[T](⇒, ,S,t,r,i,n,g):ContainLikeMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">containMatch</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">
+                  t
+                  : ⇒ String
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.ContainLikeMatcher" class="extype" href="ContainLikeMatcher.html">ContainLikeMatcher</a>[T]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">match if traversable contains (x matches .</p>
+            <div class="fullcomment"><div class="comment cmt"><p>match if traversable contains (x matches .*+t+.*)</p></div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#containPattern" data-isabs="false">
+      <a id="containPattern[T](⇒, ,S,t,r,i,n,g):ContainLikeMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">containPattern</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">
+                  t
+                  : ⇒ String
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.ContainLikeMatcher" class="extype" href="ContainLikeMatcher.html">ContainLikeMatcher</a>[T]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">match if traversable contains (x matches p)</p>
+            <div class="fullcomment"><div class="comment cmt"><p>match if traversable contains (x matches p)</p></div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
+      <a id="eq(A,n,y,R,e,f):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">eq</span>
+        
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : AnyRef
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to test whether the argument (<code>arg0</code>) is a reference to the
+receiver object (<code>this</code>).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to test whether the argument (<code>arg0</code>) is a reference to the
+receiver object (<code>this</code>).</p><p>The <code>eq</code> method implements an [http://en.wikipedia.org/wiki/Equivalence_relation equivalence relation] on
+non-null instances of <code>AnyRef</code>:
+ * It is reflexive: for any non-null instance <code>x</code> of type <code>AnyRef</code>, <code>x.eq(x)</code> returns <code>true</code>.
+ * It is symmetric: for any non-null instances <code>x</code> and <code>y</code> of type <code>AnyRef</code>, <code>x.eq(y)</code> returns <code>true</code> if and
+   only if <code>y.eq(x)</code> returns <code>true</code>.
+ * It is transitive: for any non-null instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.eq(y)</code> returns <code>true</code>
+   and <code>y.eq(z)</code> returns <code>true</code>, then <code>x.eq(z)</code> returns <code>true</code>.</p><p>Additionally, the <code>eq</code> method has three other properties.
+ * It is consistent: for any non-null instances <code>x</code> and <code>y</code> of type <code>AnyRef</code>, multiple invocations of
+   <code>x.eq(y)</code> consistently returns <code>true</code> or consistently returns <code>false</code>.
+ * For any non-null instance <code>x</code> of type <code>AnyRef</code>, <code>x.eq(null)</code> and <code>null.eq(x)</code> returns <code>false</code>.
+ * <code>null.eq(null)</code> returns <code>true</code>.</p><p>When overriding the <code>equals</code> or <code>hashCode</code> methods, it is important to ensure that their behavior is
+consistent with reference equality.  Therefore, if two objects are references to each other (<code>o1 eq o2</code>), they
+should be equal to each other (<code>o1 == o2</code>) and they should hash to the same value (<code>o1.hashCode == o2.hashCode</code>).
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the argument is a reference to the receiver object; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
+      <a id="equals(A,n,y):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">equals</span>
+        
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Any" class="extype">Any</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to compare the receiver object (<code>this</code>) with the argument object (<code>arg0</code>) for equivalence.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to compare the receiver object (<code>this</code>) with the argument object (<code>arg0</code>) for equivalence.</p><p>The default implementations of this method is an [http://en.wikipedia.org/wiki/Equivalence_relation equivalence
+relation]:
+ * It is reflexive: for any instance <code>x</code> of type <code>Any</code>, <code>x.equals(x)</code> should return <code>true</code>.
+ * It is symmetric: for any instances <code>x</code> and <code>y</code> of type <code>Any</code>, <code>x.equals(y)</code> should return <code>true</code> if and
+   only if <code>y.equals(x)</code> returns <code>true</code>.
+ * It is transitive: for any instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.equals(y)</code> returns <code>true</code> and
+   <code>y.equals(z)</code> returns <code>true</code>, then <code>x.equals(z)</code> should return <code>true</code>.</p><p>If you override this method, you should verify that your implementation remains an equivalence relation.
+Additionally, when overriding this method it is often necessary to override <code>hashCode</code> to ensure that objects
+that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>) hash to the same scala.Int
+(<code>o1.hashCode.equals(o2.hashCode)</code>).
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          definition classes: AnyRef → Any
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
+      <a id="finalize:Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">finalize</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is called by the garbage collector on the receiver object when garbage collection determines that
+there are no more references to the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is called by the garbage collector on the receiver object when garbage collection determines that
+there are no more references to the object.</p><p>The details of when and if the <code>finalize</code> method are invoked, as well as the interaction between <code>finalize</code>
+and non-local returns and exceptions, are all platform dependent.</p></div><div class="block">
+          attributes: protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
+      <a id="getClass:java.lang.Class[_]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">getClass</span>
+        
+        <span class="params">()</span>
+        <span class="result">: java.lang.Class[_]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Returns a representation that corresponds to the dynamic class of the receiver object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a representation that corresponds to the dynamic class of the receiver object.</p><p>The nature of the representation is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a representation that corresponds to the dynamic class of the receiver object.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
+      <a id="hashCode:Int"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">hashCode</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Returns a hash code value for the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a hash code value for the object.</p><p>The default hashing algorithm is platform dependent.</p><p>Note that it is allowed for two objects to have identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>) yet
+not be equal (<code>o1.equals(o2)</code> returns <code>false</code>).  A degenerate implementation could always return <code>0</code>.
+However, it is required that if two objects are equal (<code>o1.equals(o2)</code> returns <code>true</code>) that they have
+identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>).  Therefore, when overriding this method, be sure
+to verify that the behavior is consistent with the <code>equals</code> method.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the hash code value for the object.</p></dd></dl><div class="block">
+          definition classes: AnyRef → Any
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#have" data-isabs="false">
+      <a id="have[T]((,T,), ,⇒, ,B,o,o,l,e,a,n):Matcher[Traversable[T]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">have</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="function">
+                  function
+                  : (T) ⇒ <span name="scala.Boolean" class="extype">Boolean</span>
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Matches if there is one element in the traversable verifying the <code>function</code> parameter: <code>(traversable.exists(function(_))</code>
+</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Matches if there is one element in the traversable verifying the <code>function</code> parameter: <code>(traversable.exists(function(_))</code>
+</p></div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#haveSize" data-isabs="false">
+      <a id="haveSize[T](I,n,t)(S,i,z,e,d,[,T,]):Matcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">haveSize</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="n">
+                  n
+                  : <span name="scala.Int" class="extype">Int</span>
+                  
+                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">
+                  arg0
+                  : <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[T]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">match if there is a way to size T</p>
+            <div class="fullcomment"><div class="comment cmt"><p>match if there is a way to size T</p></div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#haveTheSameElementsAs" data-isabs="false">
+      <a id="haveTheSameElementsAs[T](⇒, ,T,r,a,v,e,r,s,a,b,l,e,[,T,]):HaveTheSameElementsAs[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">haveTheSameElementsAs</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="l">
+                  l
+                  : ⇒ Traversable[T]
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.matcher.HaveTheSameElementsAs" class="extype" href="HaveTheSameElementsAs.html">HaveTheSameElementsAs</a>[T]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Matches if there l contains the same elements as the Traversable <code>traversable</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Matches if there l contains the same elements as the Traversable <code>traversable</code>.<br>
+This verification does not consider the order of the elements but checks the traversables recursively
+</p></div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">This method is used to test whether the dynamic type of the receiver object is <code>T0</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method is used to test whether the dynamic type of the receiver object is <code>T0</code>.</p><p>Note that the test result of the test is modulo Scala's erasure semantics.  Therefore the expression
+<code>1.isInstanceOf[String]</code> will return <code>false</code>, while the expression <code>List(1).isInstanceOf[List[String]]</code> will
+return <code>true</code>.  In the latter example, because the type argument is erased as part of compilation it is not
+possible to check whether the contents of the list are of the requested typed.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is an instance of erasure of type <code>T0</code>; <code>false</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: Any
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#javaCollectionIsSized" data-isabs="false">
+      <a id="javaCollectionIsSized[T&lt;:java.util.Collection[_]]:Sized[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">javaCollectionIsSized</span>
+        <span class="tparams">[<span name="T">T &lt;: java.util.Collection[_]</span>]</span>
+        
+        <span class="result">: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[T]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">any java collection has a size</p>
+            <div class="fullcomment"><div class="comment cmt"><p>any java collection has a size</p></div><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.control.LazyParameters#lazyfy" data-isabs="false">
+      <a id="lazyfy[T](⇒, ,T):LazyParameter[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">lazyfy</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="value">
+                  value
+                  : ⇒ T
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[T]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">transform a value to a zero-arg function returning that value</p>
+            <div class="fullcomment"><div class="comment cmt"><p>transform a value to a zero-arg function returning that value</p></div><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: <a name="org.specs2.control.LazyParameters" class="extype" href="../control/LazyParameters.html">LazyParameters</a>
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
+      <a id="ne(A,n,y,R,e,f):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">ne</span>
+        
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : AnyRef
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt"><code>o.ne(arg0)</code> is the same as <code>!(o.eq(arg0))</code>.</p>
+            <div class="fullcomment"><div class="comment cmt"><p><code>o.ne(arg0)</code> is the same as <code>!(o.eq(arg0))</code>.
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference dis-equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the argument is not a reference to the receiver object; <code>true</code> otherwise.</p></dd></dl><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
+      <a id="notify:Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">notify</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Wakes up a single thread that is waiting on the receiver object's monitor.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Wakes up a single thread that is waiting on the receiver object's monitor.</p></div><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
+      <a id="notifyAll:Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">notifyAll</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Wakes up all threads that are waiting on the receiver object's monitor.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Wakes up all threads that are waiting on the receiver object's monitor.</p></div><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#scalaTraversableIsSized" data-isabs="false">
+      <a id="scalaTraversableIsSized[I&lt;:TraversableOnce[_]]:Sized[I]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">scalaTraversableIsSized</span>
+        <span class="tparams">[<span name="I">I &lt;: TraversableOnce[_]</span>]</span>
+        
+        <span class="result">: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[I]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">any scala collection has a size</p>
+            <div class="fullcomment"><div class="comment cmt"><p>any scala collection has a size</p></div><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBeHaveMatchers#sized" data-isabs="false">
+      <a id="sized[T](M,a,t,c,h,R,e,s,u,l,t,[,T,])(S,i,z,e,d,[,T,]):HasSize[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">sized</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="s">
+                  s
+                  : <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]
+                  
+                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">
+                  arg0
+                  : <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[T]
+                  
+                </span>)</span>
+        <span class="result">: <span name="org.specs2.matcher.TraversableBeHaveMatchers.HasSize" class="extype">HasSize</span>[T]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: TraversableBeHaveMatchers → TraversableBeHaveMatchers
+        </div></div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#stringIsSized" data-isabs="false">
+      <a id="stringIsSized:Sized[String]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">stringIsSized</span>
+        
+        
+        <span class="result">: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[String]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">a regular string has a size, without having to be converted to an Traversable</p>
+            <div class="fullcomment"><div class="comment cmt"><p>a regular string has a size, without having to be converted to an Traversable</p></div><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: TraversableBaseMatchers
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
+      <a id="synchronized[T0](⇒, ,T,0):T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">synchronized</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : ⇒ T0
+                  
+                </span>)</span>
+        <span class="result">: T0</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
+      <a id="toString:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">toString</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Returns a string representation of the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of the object.</p><p>The default representation is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a string representation of the object.</p></dd></dl><div class="block">
+          definition classes: AnyRef → Any
+        </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBeHaveMatchers#traversable" data-isabs="false">
+      <a id="traversable[T](M,a,t,c,h,R,e,s,u,l,t,[,T,r,a,v,e,r,s,a,b,l,e,[,T,],]):TraversableBeHaveMatchers[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">traversable</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="s">
+                  s
+                  : <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Traversable[T]]
+                  
+                </span>)</span>
+        <span class="result">: <span name="org.specs2.matcher.TraversableBeHaveMatchers.TraversableBeHaveMatchers" class="extype">TraversableBeHaveMatchers</span>[T]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: implicit 
+        </div><div class="block">
+          definition classes: TraversableBeHaveMatchers → TraversableBeHaveMatchers
+        </div></div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait:Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </div></div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait(L,o,n,g)(I,n,t):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Long" class="extype">Long</span>
+                  
+                </span>, <span name="arg1">
+                  arg1
+                  : <span name="scala.Int" class="extype">Int</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </div></div>
+          
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait(L,o,n,g):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">
+                  arg0
+                  : <span name="scala.Long" class="extype">Long</span>
+                  
+                </span>)</span>
+        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div><div class="block">
+          annotations: 
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </div></div>
+          
+    </li></ol>
+            </div>
+
+        <div name="org.specs2.matcher.TraversableBeHaveMatchers" class="parent">
+              <h3>Inherited from <span name="org.specs2.matcher.TraversableBeHaveMatchers" class="extype">TraversableBeHaveMatchers</span></h3>
+            </div><div name="org.specs2.matcher.TraversableBaseMatchers" class="parent">
+              <h3>Inherited from <span name="org.specs2.matcher.TraversableBaseMatchers" class="extype">TraversableBaseMatchers</span></h3>
+            </div><div name="org.specs2.control.LazyParameters" class="parent">
+              <h3>Inherited from <a name="org.specs2.control.LazyParameters" class="extype" href="../control/LazyParameters.html">LazyParameters</a></h3>
+            </div><div name="scala.AnyRef" class="parent">
+              <h3>Inherited from AnyRef</h3>
+            </div><div name="scala.Any" class="parent">
+              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
+            </div>
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>

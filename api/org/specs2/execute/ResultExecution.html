@@ -398,6 +398,41 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
           </div>
           
     </li><li visbl="pub" name="org.specs2.execute.ResultExecution#execute" data-isabs="false">
+      <a id="execute[T, R](⇒, ,T)((,T,), ,⇒, ,R)((,R,), ,⇒, ,R,e,s,u,l,t):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">execute</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="R">R</span>]</span>
+        <span class="params">(<span name="code">
+                  code
+                  : ⇒ T
+                  
+                </span>)</span><span class="params">(<span name="convert">
+                  convert
+                  : (T) ⇒ R
+                  
+                </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">
+                  arg0
+                  : (R) ⇒ <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a>
+                  
+                </span>)</span>
+        <span class="result">: <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">execute a piece of code and return a result:</p>
+            <div class="fullcomment"><div class="comment cmt"><p>execute a piece of code and return a result:</p><p> * if the code already returns a result, just keep it
+ * if the code throws an Exception return an Error
+ * if the code returns a value of type T, convert it to a result
+</p></div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.specs2.execute.ResultExecution#execute" data-isabs="false">
       <a id="execute(⇒, ,R,e,s,u,l,t):Result"></a>
       <h4 class="signature">
       <span class="kind">def</span>

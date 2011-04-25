@@ -27,7 +27,7 @@
         <span class="name">After</span>
         
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends <a name="org.specs2.specification.Context" class="extype" href="Context.html">Context</a></span>
       </span>
       </h4>
       
@@ -37,9 +37,9 @@ where an action must be executing after the main executable action
           <div class="fullcomment" id="comment"><div class="comment cmt"><p>The After trait can be inherited by classes representing a context
 where an action must be executing after the main executable action
 </p></div><div class="block">
-            linear super types: AnyRef, <span name="scala.Any" class="extype">Any</span>
+            linear super types: <a name="org.specs2.specification.Context" class="extype" href="Context.html">Context</a>, AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div><div class="block">
-            known subclasses: <a name="org.specs2.specification.BeforeAfterAround" class="extype" href="BeforeAfterAround.html">BeforeAfterAround</a>, <a name="org.specs2.specification.BeforeAfter" class="extype" href="BeforeAfter.html">BeforeAfter</a>
+            known subclasses: <a name="org.specs2.specification.BeforeAfter" class="extype" href="BeforeAfter.html">BeforeAfter</a>, <a name="org.specs2.specification.BeforeAfterEach" class="extype" href="BeforeAfterEach.html">BeforeAfterEach</a>, <a name="org.specs2.specification.BeforeAfterAround" class="extype" href="BeforeAfterAround.html">BeforeAfterAround</a>, <a name="org.specs2.specification.BeforeAfterAroundEach" class="extype" href="BeforeAfterAroundEach.html">BeforeAfterAroundEach</a>, <a name="org.specs2.specification.AfterEach" class="extype" href="AfterEach.html">AfterEach</a>
           </div><div class="block">
             self type: <a name="org.specs2.specification.After" class="extype" href="">After</a>
           </div>
@@ -64,7 +64,7 @@ where an action must be executing after the main executable action
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li name="org.specs2.specification.After" class="in">After</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
+                <ol id="linearization"><li name="org.specs2.specification.After" class="in">After</li><li name="org.specs2.specification.Context" class="in">Context</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -296,7 +296,9 @@ and finally the after action
 </p>
             <div class="fullcomment"><div class="comment cmt"><p>execute an action returning a Result
 and finally the after action
-</p></div>
+</p></div><div class="block">
+          definition classes: <a name="org.specs2.specification.After" class="extype" href="">After</a> → <a name="org.specs2.specification.Context" class="extype" href="Context.html">Context</a>
+        </div>
             
             
             
@@ -805,7 +807,9 @@ possible to check whether the contents of the list are of the requested typed.
     </li></ol>
             </div>
 
-        <div name="scala.AnyRef" class="parent">
+        <div name="org.specs2.specification.Context" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.Context" class="extype" href="Context.html">Context</a></h3>
+            </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

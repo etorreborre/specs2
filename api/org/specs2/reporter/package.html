@@ -197,6 +197,44 @@ Output:</p>
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.specs2.reporter.Notifier" data-isabs="true">
+      <a id="Notifier:Notifier"></a>
+      <h4 class="signature"><a href="Notifier.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">Notifier</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">This trait can be used for any event concerning the execution of examples
+seen as a Tree of Fragments.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.NotifierExporting" data-isabs="true">
+      <a id="NotifierExporting:NotifierExporting"></a>
+      <h4 class="signature"><a href="NotifierExporting.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">NotifierExporting</span>
+        
+        
+        <span class="result"> extends Exporting</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.NotifierReporter" data-isabs="true">
+      <a id="NotifierReporter:NotifierReporter"></a>
+      <h4 class="signature"><a href="NotifierReporter.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">NotifierReporter</span>
+        
+        
+        <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with NotifierExporting</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Report a Specification by notifying execution events to a Notifier
+</p>
     </li><li visbl="pub" name="org.specs2.reporter.Reporter" data-isabs="true">
       <a id="Reporter:Reporter"></a>
       <h4 class="signature"><a href="Reporter.html">
@@ -419,6 +457,18 @@ at the end of the specification
         
         
         <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleNotifier" data-isabs="false">
+      <a id="ConsoleNotifier:ConsoleNotifier"></a>
+      <h4 class="signature"><a href="ConsoleNotifier$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">ConsoleNotifier</span>
+        
+        
+        <span class="result"> extends Notifier</span>
       </span>
       </a></h4>
       

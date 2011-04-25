@@ -671,7 +671,7 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
           </div>
           
     </li><li visbl="pub" name="org.specs2.reporter.DefaultExecutionStrategy#execute" data-isabs="false">
-      <a id="execute(A,r,g,u,m,e,n,t,s):(Seq[FragmentSeq]) ⇒ Seq[ExecutedFragment]"></a>
+      <a id="execute(A,r,g,u,m,e,n,t,s):(Seq[FragmentSeq]) ⇒ List[ExecutedFragment]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -682,14 +682,20 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
                   : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
                   
                 </span>)</span>
-        <span class="result">: (Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]) ⇒ Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>
+        <span class="result">: (Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]) ⇒ List[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>
       </span>
       </h4>
       
-            
-            <div class="fullcomment"><div class="block">
+            <p class="shortcomment cmt">execute sequences of Fragments.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>execute sequences of Fragments.</p><p>If the stopOnFail argument is true, we check that the execution is ok before executing the next sequence.
+</p></div><div class="block">
           definition classes: DefaultExecutionStrategy → ExecutionStrategy
-        </div></div>
+        </div>
+            
+            
+            
+            
+          </div>
           
     </li><li visbl="prt" name="org.specs2.specification.FragmentExecution#execute" data-isabs="false">
       <a id="execute(F,r,a,g,m,e,n,t)(A,r,g,u,m,e,n,t,s):Product with Serializable with ExecutedFragment"></a>
@@ -738,7 +744,7 @@ that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>
                 </span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">
                   arguments
                   : <span name="org.specs2.main.Arguments" class="extype">Arguments</span>
-                  
+                   = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span>
                 </span>)</span>
         <span class="result">: Seq[<a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>]</span>
       </span>

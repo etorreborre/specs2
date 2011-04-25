@@ -26,8 +26,12 @@
       <span class="symbol">
         <span class="name">ExecutedBr</span>
         
-        <span class="params">()</span>
-        <span class="result"> extends <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="location">
+                  location
+                  : <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a>
+                  
+                </span>)</span>
+        <span class="result"> extends <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a> with <a name="org.specs2.specification.ExecutedStandardFragment" class="extype" href="ExecutedStandardFragment.html">ExecutedStandardFragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -35,7 +39,7 @@
           <div class="fullcomment" id="comment"><div class="block">
             go to: <a href="ExecutedBr$.html">companion</a>
           </div><div class="block">
-            linear super types: <span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>, AnyRef, <span name="scala.Any" class="extype">Any</span>
+            linear super types: <span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.specification.ExecutedStandardFragment" class="extype" href="ExecutedStandardFragment.html">ExecutedStandardFragment</a>, <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>, AnyRef, <span name="scala.Any" class="extype">Any</span>
           </div></div>
         
 
@@ -50,7 +54,7 @@
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li name="org.specs2.specification.ExecutedBr" class="in">ExecutedBr</li><li name="scala.Serializable" class="in">Serializable</li><li name="java.io.Serializable" class="in">Serializable</li><li name="scala.Product" class="in">Product</li><li name="scala.Equals" class="in">Equals</li><li name="org.specs2.specification.ExecutedFragment" class="in">ExecutedFragment</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
+                <ol id="linearization"><li name="org.specs2.specification.ExecutedBr" class="in">ExecutedBr</li><li name="scala.Serializable" class="in">Serializable</li><li name="java.io.Serializable" class="in">Serializable</li><li name="scala.Product" class="in">Product</li><li name="scala.Equals" class="in">Equals</li><li name="org.specs2.specification.ExecutedStandardFragment" class="in">ExecutedStandardFragment</li><li name="org.specs2.specification.ExecutedFragment" class="in">ExecutedFragment</li><li name="scala.AnyRef" class="in">AnyRef</li><li name="scala.Any" class="in">Any</li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -71,7 +75,11 @@
       <span class="symbol">
         <span class="name">ExecutedBr</span>
         
-        <span class="params">()</span>
+        <span class="params">(<span name="location">
+                  location
+                  : <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a>
+                  
+                </span>)</span>
         
       </span>
       </h4>
@@ -518,6 +526,23 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedBr#location" data-isabs="false">
+      <a id="location:Location"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">location</span>
+        
+        
+        <span class="result">: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a name="org.specs2.specification.ExecutedBr" class="extype" href="">ExecutedBr</a> → <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>
+        </div></div>
+          
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(A,n,y,R,e,f):Boolean"></a>
       <h4 class="signature">
@@ -828,6 +853,8 @@ possible to check whether the contents of the list are of the requested typed.
               <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
             </div><div name="scala.Equals" class="parent">
               <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
+            </div><div name="org.specs2.specification.ExecutedStandardFragment" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.ExecutedStandardFragment" class="extype" href="ExecutedStandardFragment.html">ExecutedStandardFragment</a></h3>
             </div><div name="org.specs2.specification.ExecutedFragment" class="parent">
               <h3>Inherited from <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></h3>
             </div><div name="scala.AnyRef" class="parent">
