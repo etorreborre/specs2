@@ -3,7 +3,7 @@ package control
 import io._
 import specification._
 
-class PropertySpec extends SpecificationWithJUnit { def is = 
+class PropertySpec extends Specification { def is =
                                                                                                                         """
 A Property is used to store values which can be lazily accessed when required.
 

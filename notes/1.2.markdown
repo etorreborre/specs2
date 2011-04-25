@@ -1,9 +1,11 @@
 This version adds new features on top of 1.1:
 
- * Support for `Given / When / Then` style of specification: fully typechecked and integrated with ScalaCheck for random generation of values
- * Additional`Before/After` traits: to easily define a context for each example in a Specification
+ * Support for `Given/When/Then` style of specification: fully typechecked and integrated with ScalaCheck for random generation of values
+ * Additional `Before/After` traits: to easily define a context for each example in a Specification
  * `stopOnFail`: a new argument to stop the execution of a specification in case of a failure or an error
+ * better `Either` matchers
  * `NotifierRunner` executes a specification and notifies a `Notifier` instance of execution events (this is used by the IntelliJ IDEA plugin)
- * scalaz is now provided with the specs2 class and become an optional dependency
+ * The User Guide has a global table of contents for easier navigation of the documentation
+ * scalaz classes are now provided in the specs2 jar so that Scalaz is not a required dependency anymore
 
 ------

@@ -4,7 +4,7 @@ import execute._
 import matcher._
 import Fragments._
 
-class RegexStepsSpec extends SpecificationWithJUnit with ResultMatchers { def is =
+class RegexStepsSpec extends Specification with ResultMatchers { def is =
 
   "Given/When/Then specifications can be written by adding extractors after Text fragments"                             ^
     "A Given[T] extractor extracts the text from the previous Text fragment"                                            ^

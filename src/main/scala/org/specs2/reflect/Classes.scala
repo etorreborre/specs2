@@ -14,9 +14,9 @@ private[specs2]
 trait Classes extends Output {
 
   /** @return an instance of a given class, returning either the instance, or an exception */
-  def create[T <: AnyRef](className: String = "", loader: ClassLoader = Thread.currentThread.getContextClassLoader)
+  def create[T <: AnyRef](className: String = "", classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
                          (implicit m: ClassManifest[T]): Either[Throwable, T] =
-    trye(createInstanceFor(loadClassOf[T](className, loader)))
+    trye(createInstanceFor(loadClassOf[T](className, loader = classLoader)))
 
   /** @return an instance of a given class */
   def createObject[T <: AnyRef](className: String)(implicit m: ClassManifest[T]): Option[T] =
@@ -54,7 +54,8 @@ trait Classes extends Output {
    * 
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
-  def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
+  def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean= true, printStackTrace: Boolean = true,
+                                     loader: ClassLoader = Thread.currentThread.getContextClassLoader)
                                     (implicit m: ClassManifest[T]): Option[T] = {
     loadClass(className) match {
       case None => None
@@ -81,11 +82,6 @@ trait Classes extends Output {
       }
     }
   }
-  /** try to create object but print no messages */
-  def tryToCreateObject[T <: AnyRef](className: String)
-                                    (implicit m: ClassManifest[T]) : Option[T] = {
-    tryToCreateObject(className, false, false)(m)
-  }
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
    */
@@ -98,20 +94,20 @@ trait Classes extends Output {
   private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassManifest[T]) = {
     val constructor = klass.getDeclaredConstructors()(0)
     constructor.setAccessible(true)
-	try {
+  	try {
       val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
       if (!m.erasure.isInstance(instance)) sys.error(instance + " is not an instance of " + m.erasure.getName)
       instance.asInstanceOf[T]
-	} catch {
-	  case e: java.lang.reflect.InvocationTargetException => throw e.getTargetException
-	}
+  	} catch {
+  	  case e: java.lang.reflect.InvocationTargetException => throw e.getTargetException
+  	}
   }
   /**
    * Load a class, given the class name
    * 
    * If the 'debugLoadClass' property is set, then an error message is printed out to the Console
    */
-  private[reflect] def loadClass[T <: AnyRef](className: String): Option[Class[T]] = {
+  private[reflect] def loadClass[T <: AnyRef](className: String, loader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[Class[T]] = {
     tryo(Some(loadClassOf(className).asInstanceOf[Class[T]])) { (e: Throwable) =>
       if (System.getProperty("debugLoadClass") != null) {
         println("Could not load class " + className)

@@ -4,7 +4,7 @@ package specification
 import io.MockOutput
 import execute.Result
 
-class BeforeAfterAroundSpec extends SpecificationWithJUnit { def is =
+class BeforeAfterAroundSpec extends Specification { def is =
 
  "The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies"            ^
  "a spec can define a Before context that is used for each example"                                                     ^

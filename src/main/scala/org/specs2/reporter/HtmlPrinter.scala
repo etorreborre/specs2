@@ -2,10 +2,14 @@ package org.specs2
 package reporter
 
 import scala.xml.NodeSeq
-import scalaz.{ Reducer, Scalaz, Generator }, Scalaz._
-import html.TableOfContents._
+import scalaz.{Tree, TreeLoc, Reducer, Scalaz, Generator, Show}
+import  Scalaz._
 import Generator._
+import html._
+import data.Trees._
 import data.Tuples._
+import xml.Nodex._
+import TableOfContents._
 import io._
 import io.Paths._
 import main.{ Arguments, SystemProperties }
@@ -35,8 +39,7 @@ trait HtmlPrinter {
    * the output directory is either defined by a specs2 system variable
    * or chosen as a reports directory in the standard maven "target" directory
    */
-  private[specs2] lazy val outputDir: String = 
-    SystemProperties.getOrElse("outDir", "target/specs2-reports/").dirPath
+  private[specs2] lazy val outputDir: String = SystemProperties.getOrElse("outDir", "target/specs2-reports/").dirPath
   
   /**
    * print a sequence of executed fragments for a given specification class into a html 
@@ -46,34 +49,50 @@ trait HtmlPrinter {
   def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     copyResources()
     val parentLink = HtmlLink(SpecName(s), "", SpecName(s).name)
-    reduce(fs, parentLink).foreach { lines =>
+    val htmlFiles = reduce(fs, parentLink)
+    lazy val toc = globalToc(htmlFiles)
+    htmlFiles.flatten.foreach { lines =>
       fileWriter.write(reportPath(lines.link.url)) { out =>
-        printHtml(new HtmlResultOutput(out), lines).flush
+        printHtml(new HtmlResultOutput, lines, globalTocDiv(toc, htmlFiles.rootLabel, lines)).flush(out)
       }
     }
   }
+
+  /** @return a global toc */
+  private def globalToc(htmlFiles: Tree[HtmlLines])(implicit args: Arguments) = {
+    def itemsList(tree: Tree[HtmlLines]): NodeSeq = {
+      val root = tree.rootLabel
+      tocElements(root.printXml(new HtmlResultOutput).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduce })
+    }
+    itemsList(htmlFiles)
+  }
+  /** @return a global toc to be displayed with jstree, focusing on the current section */
+  private def globalTocDiv(toc: NodeSeq, root: HtmlLines, current: HtmlLines)(implicit args: Arguments) =
+    <div id="tree">
+      <ul>{toc}</ul>
+      <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+root.hashCode+"','"+current.hashCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
+    </div>
 
   /** @return the file path for the html output */
   def reportPath(url: String) = outputDir + url
 
   /** copy css and images file to the output directory */
-  def copyResources() = {
-    Seq("css", "images").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
+  def copyResources() {
+    Seq("css", "images", "css/themes/default").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
   }
     
   /**
    * @return an HtmlResultOutput object containing all the html corresponding to the
    *         html lines to print  
    */  
-  def printHtml(output: HtmlResultOutput, lines: HtmlLines)(implicit args: Arguments) = {
+  def printHtml(output: HtmlResultOutput, lines: HtmlLines, globalToc: NodeSeq)(implicit args: Arguments) = {
     output.enclose((t: NodeSeq) => <html>{t}</html>) {
-      output.blank.printHead.enclose((t: NodeSeq) => addToc(<body>{breadcrumbs(lines)}{t}</body>)) {
+      output.blank.printHead.enclose((t: NodeSeq) => addToc(<body><div id="container">{t}</div>{globalToc}</body>)) {
         lines.printXml(output.blank)
       }
     }
   }
 
-  def breadcrumbs(lines: HtmlLines) = lines.breadcrumbs
   /**
    * Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
    * into a single block that will be reported on a different html page
@@ -82,15 +101,16 @@ trait HtmlPrinter {
    *
    * @return the HtmlLines to print
    */
-  def reduce(fs: Seq[ExecutedFragment], parentLink: HtmlLink) = {
-    flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (List(HtmlLines(Nil, parentLink, None))) { (res, cur) =>
+  def reduce(fs: Seq[ExecutedFragment], parentLink: HtmlLink): Tree[HtmlLines] = {
+    lazy val start: HtmlLines = HtmlLines(Nil, parentLink)
+    flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (leaf(start).loc) { (res, cur) =>
+      def updated = res.setLabel(res.getLabel.add(cur))
       cur match {
-        case HtmlLine(HtmlSee(see), _, _, _)          => HtmlLines(link = see.link, parent = Some(res.head)) :: (res.head.add(cur)) :: res.drop(1)
-        case HtmlLine(HtmlSpecEnd(end), _, _, _)
-          if (res.head.is(end.name))                  => res.drop(1) :+ res.head.add(cur)
-        case other                                    => res.head.add(cur) :: res.drop(1)
+        case HtmlLine(HtmlSee(see), _, _, _)                                      => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
+        case HtmlLine(HtmlSpecEnd(end), _, _, _) if (res.getLabel.is(end.name))   => updated.parent.getOrElse(updated)
+        case other                                                                => updated
       }
-    }
+    }.root.tree
   }
 
   /** flatten the results of the reduction to a list of Html lines */

@@ -4,7 +4,7 @@ import java.io.File
 import specification._
 import execute._
 
-class FileWriterSpec extends SpecificationWithJUnit {  def is =
+class FileWriterSpec extends Specification {  def is =
 
   "A FileWriter should"                                                                                                 ^
     "write inside a file"                                                                                               ! c().e1^

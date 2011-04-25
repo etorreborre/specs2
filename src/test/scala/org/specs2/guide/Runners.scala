@@ -6,8 +6,6 @@ class Runners extends Specification { def is = freetext ^
                                                                                                                         """
 ### Presentation
 
-<toc/>
-
 There are 4 ways to execute ***specs2*** specifications:
 
  * on the command line, with a console output, and the `specs2.run` runner
@@ -227,7 +225,7 @@ If you want to get a console output as well, don't forget to add the `console` a
       > test-only org.specs2.UserGuide -- html console
 
       // or in your project file
-      override def testOptions = super.testOptions ++ Seq(TestArgument("html"), TestArgument("console"))
+      override def testOptions = super.testOptions ++ Seq(TestArgument("html", "console"))
 
 ##### Files runner
 
@@ -247,9 +245,9 @@ It is possible to have ***specs2*** specifications executed as JUnit tests. This
 Maven and the JUnit runners of your IDE of choice.
 
 There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The
-simple one is to extend `SpecificationWithJUnit`:
+simple one is to extend `Specification`:
 
-       class MySpecification extends SpecificationWithJUnit {
+       class MySpecification extends Specification {
          def is = // as usual....
        }
 

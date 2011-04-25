@@ -5,7 +5,7 @@ import specification._
 import text._
 import io._
 
-class FileMatchersSpec extends SpecificationWithJUnit with TestFiles with MockFileSystem { def is =
+class FileMatchersSpec extends Specification with TestFiles with MockFileSystem { def is =
                                                                                                                         """
   The FileMatchers trait provides matchers to check files and paths.
 

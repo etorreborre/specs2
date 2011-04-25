@@ -4,7 +4,7 @@ import io._
 import specification.{ SpecStart, FragmentExecution }
 import execute.FailureException
 
-class MutableSpecificationSpec extends org.specs2.SpecificationWithJUnit { def is =
+class MutableSpecificationSpec extends org.specs2.Specification { def is =
                                                                                                                         """
 A Specification can be written in the specs style using should/in blocks. This works by building the fragments
 and mutating a local variable

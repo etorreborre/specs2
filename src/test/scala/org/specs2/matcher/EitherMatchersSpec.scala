@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class EitherMatchersSpec extends SpecificationWithJUnit { def is = 
+class EitherMatchersSpec extends Specification { def is =
                                                                                                                         """
   The EitherMatchers trait provides matchers to check Either instances.
                                                                                                                         """^

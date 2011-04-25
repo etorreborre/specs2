@@ -1,10 +1,10 @@
 package org.specs2
 package reflect
 
-import mutable.SpecificationWithJUnit
+import mutable.Specification
 import ClassName._
 
-class ClassNameSpec extends SpecificationWithJUnit {
+class ClassNameSpec extends Specification {
 
   "The class name of a fully qualified class must return only the last part" in { 
     simpleName(classOf[ClassNameSpec]) must_== "ClassNameSpec"

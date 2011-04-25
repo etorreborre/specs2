@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-class ExceptionsSpec extends SpecificationWithJUnit with Exceptions {  def is =
+class ExceptionsSpec extends Specification with Exceptions {  def is =
                                                                                                                         """
 The Exceptions trait provide functional ways to catch exceptions and deal with them:
 

@@ -204,7 +204,7 @@ case object Form {
   private def cell(c: Cell, colnumber: Int = 0)(implicit args: Arguments) = {
     if (colnumber > 1) {
       c.xml(args).toList match {
-      case start ::> (e: Elem) => start ++ (e % new UnprefixedAttribute("colspan", colnumber.toString, Null))
+      case start ::> (e: Elem) => start ++ (e % ("colspan" -> colnumber.toString))
         case other                         => other
       }
     } else

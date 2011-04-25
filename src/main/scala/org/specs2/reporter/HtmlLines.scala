@@ -8,6 +8,7 @@ import form._
 import main.Arguments
 import execute._
 import specification._
+import scalaz.Scalaz._
 
 /**
  * The HtmlLines groups a list of HtmlLine to print
@@ -16,27 +17,10 @@ import specification._
  *
  */
 private[specs2]
-case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink, parent: Option[HtmlLines] = None) {
-  def print(implicit out: HtmlResultOutput, args: Arguments) =
-    printXml.flush
-  def printXml(implicit out: HtmlResultOutput) =
-    lines.foldLeft(out) { (res, cur) => cur.print(res) }
-  def add(line: HtmlLine) = HtmlLines(lines :+ line, link, parent)
+case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink) {
+  def printXml(implicit out: HtmlResultOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
+  def add(line: HtmlLine) = HtmlLines(lines :+ line, link)
   def is(name: SpecName) = link.is(name)
-
-  def breadcrumbs: NodeSeq = {
-    if (parent.isDefined) <div id="breadcrumbs">{breadcrumbsLinks}</div>
-    else NodeSeq.Empty
-  }
-
-  private def breadcrumbsLinks: NodeSeq = {
-    val result = parent map { (p: HtmlLines) =>
-      val separator = if (!p.breadcrumbsLinks.isEmpty) <t> / </t> else NodeSeq.Empty
-      p.breadcrumbsLinks ++ separator ++ <a href={p.link.url}>{p.link.linkText}</a>
-    }
-    result.getOrElse(NodeSeq.Empty)
-  }
-
 }
 
 /** 

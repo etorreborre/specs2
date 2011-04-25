@@ -29,7 +29,8 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
   private val executor = new FragmentExecution {}
   
   /** specification to execute */
-  protected lazy val specification = tryToCreateObject[SpecificationStructure](klass.getName, true, true).get
+  protected lazy val specification = tryToCreateObject[SpecificationStructure](klass.getName).get
+
   protected lazy val content = specification.content
   /** arguments for the specification */
   implicit lazy val args: Arguments = content.arguments

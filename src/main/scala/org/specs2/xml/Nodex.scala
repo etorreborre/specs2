@@ -41,6 +41,12 @@ trait Nodex {
   class UnlessEmpty(ns: =>NodeSeq) {
     def unless(b: Boolean) = if (b) NodeSeq.Empty else ns
   }
+
+  /**
+   * @return an unprefixed attribute from pair
+   */
+  implicit def pairToUnprefixedAttribute(pair: Tuple2[Any, Any]) = new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
+
 }
 private[specs2]
 object Nodex extends Nodex

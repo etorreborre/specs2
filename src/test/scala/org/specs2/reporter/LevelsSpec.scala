@@ -10,7 +10,7 @@ import Levels._
 import FragmentLevelsReducer._
 import specification.FragmentsShow._
 
-class LevelsSpec extends SpecificationWithJUnit with ScalaCheck with ScalazMatchers with ArbitraryFragments { def is = sequential^
+class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with ArbitraryFragments { def is = sequential^
                                                                                                                         """
   The Levels class is used to compute the 'level' of Fragments in a list of Fragments.
                                                                                                                         """^p^

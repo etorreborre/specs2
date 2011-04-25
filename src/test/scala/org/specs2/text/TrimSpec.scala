@@ -2,7 +2,7 @@ package org.specs2
 package text
 import Trim._
 
-class TrimSpec extends SpecificationWithJUnit { def is = 
+class TrimSpec extends Specification { def is =
                                                                                                                         """
 ### Trait for trimming strings
  

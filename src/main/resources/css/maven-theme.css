@@ -76,13 +76,6 @@ p {
   line-height: 1.3em;
   font-size: small;
 }
-#breadcrumbs {
-  border-top: 1px dashed #aaa;
-  border-bottom: 1px dashed #aaa;
-  background-color: #eee;
-  font-size: 12px;
-  font-style: italic;
-}
 #leftColumn {
   margin: 10px 0 0 5px;
   border: 1px solid #999;
@@ -319,4 +312,43 @@ table td {
 }
 .formstacktrace {
   display: none;
+}
+#breadcrumbs {
+  position: fixed;
+  width: 15.7%;
+  border-top: 1px dashed #aaa;
+  border-bottom: 1px dashed #aaa;
+  background-color: #eee;
+  font-size: 12px;
+  font-style: italic;
+}
+
+#container {
+      
+  width: 83%;
+
+  margin-top:-18px;
+  float:right;
+    
+}
+
+#tree {
+	  
+  position: fixed;
+  margin-top:2px;
+  border: solid #AAAAAA;
+  border-width: 1px 1px 1px 8px;
+  background-color:white;
+
+  width:15%;
+
+  float:left;
+
+  overflow:auto;
+}
+#tree a {
+
+ white-space:normal !important;
+ height: auto;
+	
 }

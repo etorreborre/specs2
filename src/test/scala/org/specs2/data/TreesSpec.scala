@@ -6,15 +6,15 @@ import Scalaz._
 import Trees._
 import text.Trim._
 
-class TreesSpec extends SpecificationWithJUnit { def is =
+class TreesSpec extends Specification { def is =
 
-  "A tree can be pruned by providing a function mapping nodes to Option[Node]"    ^
-    "if a node is mapped to Some(n), it stays in the tree"                        ! e1^
-    "if a node is mapped to None, it is removed from the tree"                    ^
-      "if it's a leaf"                                                            ! e2^
-      "if it's a subtree"                                                         ! e3^
-      "even the root of the tree"                                                 ! e4^
-                                                                                  end
+  "A tree can be pruned by providing a function mapping nodes to Option[Node]"                         ^
+    "if a node is mapped to Some(n), it stays in the tree"                                             ! e1^
+    "if a node is mapped to None, it is removed from the tree"                                         ^
+      "if it's a leaf"                                                                                 ! e2^
+      "if it's a subtree"                                                                              ! e3^
+      "even the root of the tree"                                                                      ! e4^
+                                                                                                       end
 
   /**
    *  0

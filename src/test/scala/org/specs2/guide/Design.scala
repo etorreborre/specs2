@@ -6,8 +6,6 @@ class Design extends Specification { def is = freetext                          
                                                                                                                         """
 ### Presentation
 
-<toc/>
-
 This page explains the overall design of _specs2_:
 
  * the structure of a specification

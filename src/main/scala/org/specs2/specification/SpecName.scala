@@ -39,6 +39,10 @@ case class SpecificationName(s: SpecificationStructure) extends SpecName {
       override def name =  t
     }
   }
+  override def equals(a: Any) = a match {
+    case s: SpecificationName => s.name == this.name
+    case other                => false
+  }
 }
 private[specs2]
 case class SpecificationTitle(t: String) extends SpecName {

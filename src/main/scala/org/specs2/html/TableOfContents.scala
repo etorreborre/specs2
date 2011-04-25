@@ -66,10 +66,35 @@ trait TableOfContents {
   }
 
   /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
-  private def toc(body: NodeSeq) = {
+  def tocElements(body: NodeSeq, url: String = "", id: Int = 0, subToc: NodeSeq = NodeSeq.Empty) = headersTocElements(headers(body), url, id, subToc)
+
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to a list of <li/> */
+  private def headersTocElements(body: NodeSeq, url: String = "", id: Int = 0, subToc: NodeSeq = NodeSeq.Empty) = {
     headersToTree(body).toTree.
     bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-      { <li><a href={anchorName(h.name)}>{h.name}</a>{ <ul>{s.toSeq}</ul> unless s.isEmpty }</li> unless h.name.isEmpty } ++
+      if (h.name.isEmpty) {
+        val headers = s.flatMap(_.toSeq).reduce.toList
+        val headersWithId = headers match {
+          case (e:Elem) :: rest => (e % ("id" -> id)) :: rest
+          case other            => other
+        }
+        headersWithId.reduce
+      }
+      else
+        <li><a href={url+anchorName(h.name)}>{h.name}</a>
+          { <ul>{s.toSeq ++ subToc}</ul> }
+        </li>
+    }.rootLabel
+  }
+
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
+  def toc(body: NodeSeq, url: String = "") = headersToc(headers(body), url)
+
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
+  private def headersToc(body: NodeSeq, url: String = "") = {
+    headersToTree(body).toTree.
+    bottomUp { (h: Header, s: Stream[NodeSeq]) =>
+      { <li id={h.name}><a href={url+anchorName(h.name)}>{h.name}</a>{ <ul>{s.toSeq}</ul> unless s.isEmpty }</li> unless h.name.isEmpty } ++
       { <ul>{s.toSeq}</ul> unless (!h.name.isEmpty) }
     }.rootLabel
   }
@@ -100,7 +125,7 @@ trait TableOfContents {
   /** This rule can replace the toc element with a table of contents derived from the body */
   private def tableOfContents(body: Node) = new RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
-      case <toc/> => toc(headers(body).drop(1))
+      case <toc/> => headersToc(headers(body).drop(1))
       case other => other
     }
     def add = new RuleTransformer(this).apply(body)

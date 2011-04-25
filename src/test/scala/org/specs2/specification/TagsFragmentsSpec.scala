@@ -1,10 +1,10 @@
 package org.specs2
 package specification
 import matcher.DataTables
-import mutable.SpecificationWithJUnit
+import mutable.Specification
 import TagsFragments._
 
-class TagsFragmentsSpec extends SpecificationWithJUnit with DataTables {
+class TagsFragmentsSpec extends Specification with DataTables {
   val tag = TaggedAs("t","t4")
 
   "A tagging fragment containing the tag 't' will keep fragments depending on the include/exclude arguments" >> {

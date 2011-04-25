@@ -4,7 +4,7 @@ import text._
 import execute.Skipped
 import matcher._
 
-class FragmentsBuilderSpec extends SpecificationWithJUnit with ResultMatchers {  def is =
+class FragmentsBuilderSpec extends Specification with ResultMatchers {  def is =
                                                                                                                         """
   In a Specification, the `contents` variable stores an instance of the Fragments class,
   which is merely a list of fragments. Those fragments are:

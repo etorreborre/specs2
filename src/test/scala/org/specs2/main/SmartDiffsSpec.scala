@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-class SmartDiffsSpec extends SpecificationWithJUnit { def is =
+class SmartDiffsSpec extends Specification { def is =
 
   "The differences between two strings must only be shown if there aren't too many of them"                             ^
    { smart.showDiffs(a_to_z, z_to_a)._1 must not contain("[") }                                                         ^

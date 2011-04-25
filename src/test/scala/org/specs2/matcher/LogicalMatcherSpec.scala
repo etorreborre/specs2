@@ -4,7 +4,7 @@ import execute._
 import specification._
 import sys._
 
-class LogicalMatcherSpec extends SpecificationWithJUnit with ResultMatchers { def is =
+class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
 
   "a matcher can be or-ed with another one"                                                                             ^
     "if both matches are ok the result is ok"                                                                           ! or1^

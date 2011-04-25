@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class NumericMatchersSpec extends SpecificationWithJUnit {  def is = 
+class NumericMatchersSpec extends Specification {  def is =
                                                                                                                         """
 The NumericMatchers trait provides matchers to do comparisons with Numeric
 types and more generally with Ordered types.

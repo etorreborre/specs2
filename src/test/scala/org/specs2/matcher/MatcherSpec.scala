@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class MatcherSpec extends SpecificationWithJUnit { def is =
+class MatcherSpec extends Specification { def is =
                                                                                                                         """
   Matchers can be created in different ways
                                                                                                                         """^

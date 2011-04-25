@@ -2,7 +2,7 @@ package org.specs2
 package io
 import mutable._
 
-class FromSourceSpec extends SpecificationWithJUnit with FromSource {
+class FromSourceSpec extends Specification with FromSource {
   
   "an expression can be read from a source file" in {
     (1 must_== 1).desc.toString must contain("(1 must_== 1)")

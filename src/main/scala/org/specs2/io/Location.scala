@@ -9,4 +9,8 @@ class Location {
   def file: String = location.fileName
   def lineNumber: Int = location.lineNumber
   override def toString = location.fullLocation
+  override def equals(a: Any) = a match {
+    case l: Location => l.toString == this.toString
+    case other       => false
+  }
 }

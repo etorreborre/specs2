@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class MapMatchersSpec extends SpecificationWithJUnit { def is = 
+class MapMatchersSpec extends Specification { def is =
                                                                                                                         """
   The MapMatchers trait provides matchers to check Map instances.                                                                                                                                                                                """^
                                                                                                                         p^

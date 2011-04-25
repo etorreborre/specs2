@@ -9,8 +9,7 @@ import execute.Result
 trait BeforeContextExample extends FragmentsBuilder {
   protected def beforeContext: Before
 
-  private def parentExampleFactory = super.exampleFactory
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(parentExampleFactory, beforeContext)
+  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, beforeContext)
 }
 /**
  * For each created example use a given after method
@@ -25,8 +24,7 @@ trait BeforeExample extends BeforeContextExample { outer =>
 trait AfterContextExample extends FragmentsBuilder {
   protected def afterContext: After
 
-  private def parentExampleFactory = super.exampleFactory
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(parentExampleFactory, afterContext)
+  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, afterContext)
 }
 /**
  * For each created example use a given after method
@@ -41,8 +39,7 @@ trait AfterExample extends AfterContextExample { outer =>
 trait AroundContextExample extends FragmentsBuilder {
   protected def aroundContext: Around
 
-  private def parentExampleFactory = super.exampleFactory
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(parentExampleFactory, aroundContext)
+  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, aroundContext)
 }
 /**
  * For each created example use a given around method
@@ -59,8 +56,7 @@ trait AroundExample extends AroundContextExample { outer =>
 trait BeforeAfterContextExample extends FragmentsBuilder {
   protected def beforeAfterContext: BeforeAfter
 
-  private def parentExampleFactory = super.exampleFactory
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(parentExampleFactory, beforeAfterContext)
+  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, beforeAfterContext)
 }
 /**
  * For each created example use a given before/after method
@@ -79,8 +75,7 @@ trait BeforeAfterExample extends BeforeAfterContextExample { outer =>
 trait BeforeAfterAroundContextExample extends FragmentsBuilder {
   protected def beforeAfterAroundContext: BeforeAfterAround
 
-  private def parentExampleFactory = super.exampleFactory
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(parentExampleFactory, beforeAfterAroundContext)
+  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, beforeAfterAroundContext)
 }
 /**
  * For each created example use a given before/after method

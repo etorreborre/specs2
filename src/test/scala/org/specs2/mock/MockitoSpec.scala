@@ -8,7 +8,7 @@ import org.mockito.Matchers.{ anyInt }
 import matcher._
 import junit.framework.AssertionFailedError
 
-class MockitoSpec extends SpecificationWithJUnit with Mockito {  def is = 	
+class MockitoSpec extends Specification with Mockito {  def is =
                                                                                                                         """
 Mockito is a Java library for mocking.
 

@@ -1,9 +1,9 @@
 package org.specs2
 package text
 import matcher.DataTables
-import mutable.SpecificationWithJUnit
+import mutable.Specification
 
-class PluralSpec extends SpecificationWithJUnit with Plural with DataTables {
+class PluralSpec extends Specification with Plural with DataTables {
   
   "A string can be pluralized: 'apple'.plural(n)" in {
 

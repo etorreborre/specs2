@@ -9,8 +9,6 @@ class SpecStructure extends Specification { def is =
                                                                                                                         """
 ### Presentation
 
-<toc/>
-
 In this chapter you will learn how to:
 
  * declare examples
@@ -41,7 +39,7 @@ In an _acceptance_ specification you build a list of _fragments_ with the `^` op
       def e2 = success
 
 What we have here is a list of 3 fragments, a Text fragment and 2 Example fragments. The examples are declared using the
-format `"description" ! body` their "bodies" are provided by 2 methods returning a `Result`, separated from the specification text.
+format `"description" ! body`. Their "bodies" are provided by 2 methods returning a `Result`, separated from the specification text.
 
 There is no specific recommendation on how you should name those methods but you can either use short names or use the backtick
 notation for better readability:
@@ -282,12 +280,12 @@ A G/W/T sequence can contain more than just 3 steps. However the compiler will c
 ##### Extract methods
 
 The `Given`, `When`, `Then` classes provide several convenience methods to extract strings from the preceding text: the
-`extractn` methods will extracts the values delimited by `${}` for up to 10 values.
+`extract1, extract2,...` methods will extracts the values delimited by `${}` for up to 10 values.
 
 ##### User regexps
 
 In the original way of declaring Given/When/Then steps, the text is left completely void of markers to extract meaningful
-values. On the other hand the user specifies a regular expression where groups are used to show where those values are:
+values. The user then needs to specify a regular expression where groups are used to show where those values are:
 
         object number1 extends Given[Int]("Given the following number: (.*)") {
           def extract(text: String): Int = extract1(text).toInt
@@ -324,7 +322,7 @@ above you could write:
         import org.scalacheck.Gen._
         import specification.gen._
 
-        class GivenWhenThenScalacheckSpec extends SpecificationWithJUnit with ScalaCheck { def is =
+        class GivenWhenThenScalacheckSpec extends Specification with ScalaCheck { def is =
 
           "A given-when-then example for a calculator"                                   ^
             "Given a first number n1"                                                    ^ number1 ^
@@ -375,7 +373,8 @@ A `GivenThen` step can be used to extract values from a single piece of text and
       }
     }
 
-You can also use the `so` object doing the same thing and taking a `PartialFunction`:
+You can also use the `so` object. This object provides an `apply` method expecting a `PartialFunction` and does the value
+extraction:
 
     import org.specs2.specification.so
 
@@ -388,7 +387,7 @@ You can also use the `so` object doing the same thing and taking a `PartialFunct
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
 different parts of your specification. The best example of this situation is a specification for a Stack of limited size:
 
-        class StackSpec extends SpecificationWithJUnit { def is =
+        class StackSpec extends Specification { def is =
           "Specification for a Stack with a limited capacity".title                 ^
                                                                                     p^
           "An empty stack should"                                                   ^
@@ -980,11 +979,11 @@ own Specification trait doing this:
 The `DatabaseSpec` above will insert, in each inherited specification, a `Step` executed before all the fragments, and one
 executed after all of them.
 
-#### Other unit specification methods
+### Other unit specification methods
 
 Other methods can be used to create fragments in a unit specification:
 
- * `can` to create a group of Examples, with a the preceding Text fragment appended with `can`
+ * `can` to create a group of Examples, with the preceding Text fragment appended with `can`
  * <code>>></code> to create an Example or a group of Examples (with no appended text)
  * `"My spec title".title` to give a title to the Specification
  * `args(...)` to create arguments for the specification
@@ -1003,7 +1002,7 @@ To make things more concrete here is a full example:
        * This specification shows how to use the mutable.Specification trait to create a unit Specification
        * where the fragments are built using a mutable variable
        */
-      class MutableSpec extends SpecificationWithJUnit {
+      class MutableSpec extends Specification {
 
         // A title can be added at the beginning of the specification
         "MutableSpec".title

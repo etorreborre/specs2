@@ -1,7 +1,7 @@
 package org.specs2
 package time
 
-class TimerSpec extends SpecificationWithJUnit { def is =
+class TimerSpec extends Specification { def is =
 
   "A timer should"                                                                                                      ^
     "display 0 seconds if not stopped after being started"                                                              ! e1^

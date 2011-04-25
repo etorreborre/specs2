@@ -7,7 +7,7 @@ import mock.Mockito
 import reporter._
 import specification.SpecificationStructure
 
-class TestInterfaceRunnerSpec extends SpecificationWithJUnit { def is =
+class TestInterfaceRunnerSpec extends Specification { def is =
                                                                                                                         """
   A TestInterfaceRunner is responsible for instantiating Specification classes found by
   sbt and executing them using a TestInterfaceReporter

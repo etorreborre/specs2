@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 import java.io._
 
-class AnyMatchersSpec extends SpecificationWithJUnit { def is =
+class AnyMatchersSpec extends Specification { def is =
 
   "be_== checks the equality of 2 objects"                                                                              ^
   { "a" must_== "a" }                                                                                                   ^
