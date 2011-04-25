@@ -78,7 +78,7 @@ trait HtmlPrinter {
 
   /** copy css and images file to the output directory */
   def copyResources() {
-    Seq("css", "images").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
+    Seq("css", "images", "css/themes/default").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
   }
     
   /**
