@@ -62,7 +62,7 @@ trait HtmlPrinter {
   private def globalToc(htmlFiles: Tree[HtmlLines])(implicit args: Arguments) = {
     def itemsList(tree: Tree[HtmlLines]): NodeSeq = {
       val root = tree.rootLabel
-      tocElements(root.printXml(new HtmlResultOutput).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduce })
+      tocElements(root.printXml(new HtmlResultOutput).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduceNodes })
     }
     itemsList(htmlFiles)
   }

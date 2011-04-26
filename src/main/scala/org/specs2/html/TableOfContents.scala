@@ -73,12 +73,12 @@ trait TableOfContents {
     headersToTree(body).toTree.
     bottomUp { (h: Header, s: Stream[NodeSeq]) =>
       if (h.name.isEmpty) {
-        val headers = s.flatMap(_.toSeq).reduce.toList
+        val headers = s.flatMap(_.toSeq).reduceNodes.toList
         val headersWithId = headers match {
           case (e:Elem) :: rest => (e % ("id" -> id)) :: rest
           case other            => other
         }
-        headersWithId.reduce
+        headersWithId.reduceNodes
       }
       else
         <li><a href={url+anchorName(h.name)}>{h.name}</a>

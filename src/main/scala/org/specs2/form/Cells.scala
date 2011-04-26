@@ -49,13 +49,13 @@ trait Xml {
 object Xml {
   /** @return the stacktraces of a Cell depending on its type and execution result */
   def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell match {
-    case FormCell(f: Form)                          => f.rows.map(stacktraces(_)).reduce
+    case FormCell(f: Form)                          => f.rows.map(stacktraces(_)).reduceNodes
     case PropCell(_, Some(e @ Error(_, _)))         => stacktraces(e)
     case PropCell(_, Some(f @ Failure(_, _, _, _))) => stacktraces(f)
     case other                                      => NodeSeq.Empty
   }
 
-  private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq = row.cells.map(stacktraces(_)).reduce
+  private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq = row.cells.map(stacktraces(_)).reduceNodes
 
   private def stacktraces(e: Result with ResultStackTrace): NodeSeq =
     <div class="formstacktrace details" id={System.identityHashCode(e).toString}>

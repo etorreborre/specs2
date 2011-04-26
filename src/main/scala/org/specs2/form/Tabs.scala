@@ -21,7 +21,7 @@ case class Tabs(tabs: List[Tab] = Nil, result: Option[Result] = None) extends Ce
 
   def text: String = tabs.map(_.text).mkString("\n")
 
-  def xml(implicit args: Arguments) = <td class="info"><div class="tabber">{tabs.map(_.xml).reduce}</div></td>
+  def xml(implicit args: Arguments) = <td class="info"><div class="tabber">{tabs.map(_.xml).reduceNodes}</div></td>
 
   def executeTabs = tabs.foldLeft(success: Result){ (res, cur) => res and cur.execute }
 }
