@@ -47,6 +47,7 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   override def proguardInJars = (super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz"))
 	
     /** Sources */
+  val sourceArtifact = Artifact.sources(artifactID)
   override def packageSrcJar = defaultJarPath("-sources.jar")
 	// before publishing, package the sources and create the specs2 jar including the scalaz classes
   override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc, proguard)
