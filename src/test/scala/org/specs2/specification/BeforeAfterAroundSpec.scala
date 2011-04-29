@@ -11,6 +11,7 @@ class BeforeAfterAroundSpec extends Specification { def is =
    "in a mutable spec"                                                                                                  ! before ^
    "also in an acceptance spec"                                                                                         ! before2 ^
    "defined on several fragments"                                                                                       ! before3 ^
+   "even for a mutable spec"                                                                                            ! before4 ^
                                                                                                                         p^
  "a spec can define an After context that is used for each example"                                                     ! after ^
  "a spec can define an Around context that is used for each example"                                                    ! around ^
@@ -43,6 +44,13 @@ class BeforeAfterAroundSpec extends Specification { def is =
           "ex1" ! success ^
           "ex2" ! success
     }, "before", "before")
+
+  def before4 = executeContains(
+    new mutable.Specification with MockOutput {
+      object withBefore extends BeforeEach { def before = println("before") }
+      override def is = withBefore(super.is)
+      "ex1" ! { 1 must_== 2 }
+    }, "before")
 
   def after = executeContains(
     new mutable.Specification with AfterExample with MockOutput {
