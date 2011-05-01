@@ -245,9 +245,9 @@ It is possible to have ***specs2*** specifications executed as JUnit tests. This
 Maven and the JUnit runners of your IDE of choice.
 
 There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The
-simple one is to extend `Specification`:
+simple one is to extend `SpecificationWithJUnit`:
 
-       class MySpecification extends Specification {
+       class MySpecification extends SpecificationWithJUnit {
          def is = // as usual....
        }
 
