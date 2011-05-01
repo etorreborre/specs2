@@ -439,8 +439,8 @@ to your environment if necessary.</p><a name="Simple+build+tool"></a><h3>Simple 
 <pre><code class="prettyprint">    -Djline.terminal=jline.UnsupportedTerminal
 </code></pre><a name="JUnit"></a><h3>JUnit</h3><p>It is possible to have <em><strong>specs2</strong></em> specifications executed as JUnit tests. This enables the integration of <strong><em>specs2</em></strong> with<br />
 Maven and the JUnit runners of your IDE of choice.</p><p>There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The<br />
-simple one is to extend <code class="prettyprint">Specification</code>:</p>
-<pre><code class="prettyprint">   class MySpecification extends Specification {
+simple one is to extend <code class="prettyprint">SpecificationWithJUnit</code>:</p>
+<pre><code class="prettyprint">   class MySpecification extends SpecificationWithJUnit {
      def is = // as usual....
    }
 </code></pre><p>You can use the second one if your IDE doesn't work with the first one:</p>
