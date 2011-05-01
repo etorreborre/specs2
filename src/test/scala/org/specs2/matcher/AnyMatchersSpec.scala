@@ -1,8 +1,9 @@
 package org.specs2
 package matcher
 import java.io._
+import execute._
 
-class AnyMatchersSpec extends Specification { def is =
+class AnyMatchersSpec extends Specification with ResultMatchers { def is =
 
   "be_== checks the equality of 2 objects"                                                                              ^
   { "a" must_== "a" }                                                                                                   ^
@@ -19,6 +20,7 @@ class AnyMatchersSpec extends Specification { def is =
   { "a" must not be_===("b") }                                                                                          ^
   { "a" must be_!==("b") }                                                                                              ^
   { "a" must not be_!==("a") }                                                                                          ^
+  { (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(e, a)) => e must_== "2" } }                  ^
                                                                                                                         p^
   "beTheSameAs checks if a value is eq to another one"                                                                  ^
   { aValue must beTheSameAs(aValue) }                                                                                   ^
