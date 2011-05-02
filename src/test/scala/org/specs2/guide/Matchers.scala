@@ -546,13 +546,14 @@ Note that sometimes type inference may not work (if there are several parameters
 #### Arbitrary instances
 
 By default `Arbitrary` instances are taken from the surrounding example scope. However you'll certainly need to generate
-your own data from time to time. Here's how to specify your Arbitrary instances in an example:
+your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope
+of the function you're testing:
 
         "a simple property" ! check(arb1)
 
-         // there's an implicit conversion to transform a function to a Prop
-         // but it has to happen *inside* our Arbitrary scope
          def arb1: Prop = {
+           // there's an implicit conversion to transform a function to a Prop
+           // but it has to happen *inside* your Arbitrary scope
            implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
            (s: String) => s must contain("a") or contain("b")
          }
