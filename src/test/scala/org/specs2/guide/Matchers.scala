@@ -215,6 +215,19 @@ In the code above you have to:
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
    the optional description you setup using the `aka` method
 
+#### Matching with a sequence of values
+
+If you have the same "MatchResult" expression that you'd like to verify for different values you can write one of the following:
+
+        // stop after the first failure
+        ((_:Int) must be_>(2)).forall(Seq(3, 4, 5))
+
+        // try to match all values and collect the results
+        ((_:Int) must be_>(2)).foreach(Seq(3, 4, 5))
+
+        // succeeds after the first success
+        ((_:Int) must be_>(2)).atLeastOnce(Seq(3, 4, 5))
+
 #### Matchers for Option / Either
 
 There are several matchers to check Option and Either instances:
