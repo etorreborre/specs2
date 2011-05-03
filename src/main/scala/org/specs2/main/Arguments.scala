@@ -49,7 +49,7 @@ case class Arguments (
   def offset: Int                   = _offset.getOrElse(0)
   def specName: String              = _specName.getOrElse(".*Spec")
   def sequential: Boolean           = _sequential.getOrElse(false)
-  def threadsNb: Int                = _threadsNb.getOrElse(4)
+  def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
   def markdown: Boolean             = _markdown.getOrElse(true)
   def debugMarkdown: Boolean        = _debugMarkdown.getOrElse(false)
   def diffs: Diffs                  = _diffs.getOrElse(SmartDiffs())
