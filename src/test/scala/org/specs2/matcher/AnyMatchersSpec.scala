@@ -51,6 +51,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is =
                                                                                                                         p^
  "forall allows to transform a single matcher to a matcher checking that all elements of a Seq are matching"            ^
   { Seq(2, 3, 4) must be_>=(2).forall }                                                                                 ^
+  { (Seq(2, 3, 4) must contain(_:Int)).forall(Seq(2, 4)) }                                                              ^
   { (Seq(2, 3, 4) must be_<=(2).forall) returns
     "In the sequence '2, 3, 4', the 2nd element is failing: 3 is greater than 2" }                                      ^
                                                                                                                         p^
