@@ -17,6 +17,8 @@ class TreesSpec extends Specification { def is =
                                                                                                        end
 
   /**
+   *  tree is:
+   *
    *  0
    *  |
    *  +- 2

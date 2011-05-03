@@ -7,7 +7,7 @@ class DependenciesSpec extends Specification { def is = freetext ^
                                                                                           """
   +    runner
   +    reporter 
-  +    specification  
+  +    specification mutable
   +    mock form
   +    matcher  
   +    execute  

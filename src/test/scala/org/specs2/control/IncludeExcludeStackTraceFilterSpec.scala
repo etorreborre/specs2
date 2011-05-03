@@ -17,8 +17,8 @@ class IncludeExcludeStackTraceFilterSpec extends Specification { def is =
     "the default pattern is i1,i2/e1,e2 where i are include tags and e are exclude tags"                                ! e5^
                                                                                                                         p^
   "From an existing IncludedExcludedStackTraceFilter"                                                                   ^
-    "we can add more include patterns"                                                                                  ! e6^
-    "we can add more exclude patterns"                                                                                  ! e7^
+    "we can add more include patterns, using the includeAlso method"                                                    ! e6^
+    "we can add more exclude patterns, using the excludeAlso method"                                                    ! e7^
                                                                                                                         end
 
   def stacktrace(st: String*) =  st.map(stackTraceElement(_))

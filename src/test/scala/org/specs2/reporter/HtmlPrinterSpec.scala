@@ -19,6 +19,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
   "Resources"                                                                                                           ^
     "there must be a directory for css files"                                                                           ! resources().css^
     "there must be a directory for images files"                                                                        ! resources().images^
+    "there must be a directory for the js tree theme files"                                                             ! resources().jstheme^
                                                                                                                         p^
   "Fragments"                                                                                                           ^
     "A text block must"                                                                                                 ^
@@ -49,6 +50,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     
     def css = there was one(fs).copySpecResourcesDir(equalTo("css"), anyString)
     def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)
+    def jstheme = there was one(fs).copySpecResourcesDir(equalTo("css/themes/default"), anyString)
   }
   case class fragments() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success ^ "*ex2*" ! success ^

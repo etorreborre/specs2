@@ -12,8 +12,7 @@ for each example by the sheer virtue of creating a fresh context object
                                                                                                                         """^p^
   "Those 2 first Fragments show that they are not sharing variables"                                                    ^
     "This one modifies a local variable"                                                                                ! c().e1^
-    "This other one 'reuses' the same local variable, but the variable is "                                             +
-    "reinitialized"                                                                                                     ! c().e2^
+    "This other one 'reuses' the same local variable, but the variable is reinitialized"                                ! c().e2^
                                                                                                                         p^
   "The next 2 Fragments show that it is possible to 'nest' context by inheriting them"                                  ^
     "This example uses new local variables + the one from the parent context"                                           ! c1().e3^

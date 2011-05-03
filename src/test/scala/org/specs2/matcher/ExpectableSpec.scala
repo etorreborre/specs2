@@ -11,7 +11,7 @@ class ExpectableSpec extends Specification {
   "If it is a boolean its value is not displayed, only the description" in {
     (true aka "my boolean").description must_== "my boolean"
   }
-  "An expectable described with aka only will take it's own toString value as the description" in {
+  "An expectable described with aka only will take its own toString value as the description" in {
     ("a" aka).description must_== "a 'a'"
   }
   "An expectable described with post will have some description text appended to its toString value" in {

@@ -4,7 +4,7 @@ import CamelCase._
 
 class CamelCaseSpec extends Specification { def is =
 
-  "Camel case to words examples"                                                                                        ^
+  "CamelCased can be converted to space separated words"                                                                ^
   { "HelloWorld".camelCaseToWords === "hello world" }                                                                   ^
   { "hello".camelCaseToWords === "hello" }                                                                              ^
   { "helloWorld".camelCaseToWords === "hello world" }                                                                   ^

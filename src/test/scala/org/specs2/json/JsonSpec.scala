@@ -8,12 +8,11 @@ import org.scalacheck._
 import JsonGen._
 
 class JsonSpec extends Specification with ScalaCheck {
-  implicit val jsonParams = set(maxSize -> 3)
-  
-  "The pairs of a json document must have values with a terminal type" ! check { (json: JSONType) =>
+
+  "The pairs of a json document must only have values with a terminal type" ! check { (json: JSONType) =>
     Json.pairs(json) must haveTerminalValues
   }
-  "The values of a json document must have values with a terminal type" ! check { (json: JSONType) =>
+  "The values of a json document must only have values with a terminal type" ! check { (json: JSONType) =>
     Json.values(json) must beTerminalValues
   }
   "The find method returns None if a key is not present at the first level of a document" ! check { (json: JSONType) =>
@@ -23,11 +22,10 @@ class JsonSpec extends Specification with ScalaCheck {
     Json.find("key", new JSONObject(Map("key"->json))) must beSome(json)
   }
   "The findDeep method returns Some(value) if a key is present somewhere in a document and points to a JSON object" ! check { (json: JSONType) =>
-    if (json.toString.contains("a : "))
-      Json.findDeep("a", json) must beSome
-    else
-      Json.findDeep("a", json) must beNone
+    Json.findDeep("a", json) must beSome.iff(json.toString.contains("a : "))
   }
+
+  implicit val jsonParams: Parameters = set(maxSize -> 3)
 
   def isTerminal(a: Any) = a match {
     case JSONArray(_)  => false

@@ -28,6 +28,6 @@ class FileWriterSpec extends Specification {  def is =
       try { fw.write("filePath")(_ => error("bad")); Failure("an exception must be thrown") }
       catch { case e => { e.getMessage must_== "bad" }.toResult }
     }
-    def after = { new File("filePath").delete} 
+    def after = { new File("filePath").delete }
   }
 }

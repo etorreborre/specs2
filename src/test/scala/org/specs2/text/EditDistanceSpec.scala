@@ -3,6 +3,7 @@ package text
 import matcher._
 
 class EditDistanceSpec extends Specification with EditDistance with DataTables { def is =
+
   "The edit distance should"                                                                                            ^
     "return 0 if there's no insertions"                                                                                 ! e1^
     "work on insertions"                                                                                                ! e2^

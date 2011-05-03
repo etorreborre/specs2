@@ -8,7 +8,7 @@ class FeaturesSpec extends Specification { def is = literate ^
  of implementation!
 
                                                                                                                         """^
- "1.2 features                                                                                                          "^
+ "1.3 features                                                                                                          "^
    "Package dependencies specification                                                                                  "! todo^
    "Reporters                                                                                                           "^
      "pdf                                                                                                               "! todo^
@@ -16,6 +16,12 @@ class FeaturesSpec extends Specification { def is = literate ^
      "junit-xml                                                                                                         "! todo^
    "Lift                                                                                                                "^
      "specify the example webapp                                                                                        "! todo^
+                                                                                                                        p^
+ "1.2 features                                                                                                          "^
+   "Typechecked Given/When/Then                                                                                         "! done^
+      "integrated with ScalaCheck                                                                                       "! done^
+  "stopOnFail argument to stop the execution after the first failure                                                    "! done^
+  "Integration with IntelliJ                                                                                            "! done^
                                                                                                                         p^
  "1.1 features                                                                                                          "^
    "Tags                                                                                                                "! done^

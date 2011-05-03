@@ -5,9 +5,9 @@ import matcher.DataTables
 
 class TableOfContentsSpec extends Specification with DataTables { def is =
 
-  "Creating a table of content for a body with"                                                                         ^
-    `no toc elements creates nothing`                                                                                   ^
-    `no headers except the title creates nothing`                                                                       ^
+  "Creating a table of content for a body creates nothing when there are"                                               ^
+    `no toc elements`                                                                                                  ^
+    `no headers except the title`                                                                                       ^
                                                                                                                         p^
     "one h2 header"                                                                                                     ^
       `creates one anchor`                                                                                              ^
@@ -44,8 +44,8 @@ class TableOfContentsSpec extends Specification with DataTables { def is =
       <h3>a h3 header</h3>     ++
       <h2>a h2 header</h2>
 
-  def `no toc elements creates nothing` = addToc(aBodyWithHeadersButNoToc) must not \\(<li/>)
-  def `no headers except the title creates nothing` = addToc(aBodyWithNoHeaders) must not \\(<li/>)
+  def `no toc elements` = addToc(aBodyWithHeadersButNoToc) must not \\(<li/>)
+  def `no headers except the title` = addToc(aBodyWithNoHeaders) must not \\(<li/>)
 
   def `creates one anchor` = addToc(aBodyWithOneH3Header) must \\("a", "name"->"a+h3+header")
   def `create 2 anchors` = addToc(aBodyWithTwoH3Headers) must \\("a", "name"->"another+h3+header")
