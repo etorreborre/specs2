@@ -19,20 +19,20 @@ object StringMatchers extends StringMatchers
 private[specs2]
 trait StringBaseMatchers { outer =>
   /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
-  implicit def stringMatcher(m: AdaptableMatcher[String]): StringMatcher = new StringMatcher(m)
-  class StringMatcher(m: AdaptableMatcher[String]) {
-    private val ignoringCase = (_:String) + ", ignoring case"
-    private val ignoringSpace = (_:String) + ", ignoring space"
-    def ignoreCase: AdaptableMatcher[String] = m.^^^((s: String) => s.toLowerCase, ignoringCase, ignoringCase)
-    def ignoreSpace: AdaptableMatcher[String] = m.^^^((s: String) => s.trim, ignoringSpace, ignoringSpace)
+  implicit def stringMatcher(m: AdaptableMatcher[Any]): StringMatcher = new StringMatcher(m)
+  class StringMatcher(m: AdaptableMatcher[Any]) {
+    private val ignoringCase = (_:Any) + ", ignoring case"
+    private val ignoringSpace = (_:Any) + ", ignoring space"
+    def ignoreCase: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
+    def ignoreSpace: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.trim, ignoringSpace, ignoringSpace)
   }
   
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
   def ==/(s: String) = be_==/(s)
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
-  def be_==/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace  
+  def be_==/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
-  def be_!=/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace  
+  def be_!=/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
   def !=/(s: String) = be_!=/(s)
   /** matches if (b contains a) */

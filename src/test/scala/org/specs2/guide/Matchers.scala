@@ -70,12 +70,14 @@ The most common type of matcher is `beEqualTo` to test for equality. There are d
        1 must beEqualTo(1)
        1 must be_==(1)            // with a shorter matcher
        1 must_== 1                // my favorite!
+       1 mustEqual 1              // if you dislike underscores
        1 should_== 1              // for should lovers
        1 === 1                    // the ultimate shortcut
        1 must be equalTo(1)       // with a literate style
 
        1 must not be equalTo(2)   // with a negation
        1 must_!= 2                // with a negation
+       1 mustNotEqual 2           // with a negation
        1 must be_!=(2)            // with a negation
        1 !== 2                    // with a negation
 
@@ -172,16 +174,6 @@ There are many ways to create matchers for your specific usage. The simplest way
 
         1 must be_==(2).orSkip
         1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
-
-There may sometimes be typing issues with `be_==` and `orSkip`:
-
-        // will not compile!
-        (Some(1): Option[Int]) must be_==(Some(1)).orSkip
-
-The alternative is to either add a type annotation or to use the `be_===` matcher:
-
-       (Some(1): Option[Int]) must be_==(Some(1): Option[Int]).orSkip
-       (Some(1): Option[Int]) must be_===(Some(1)).orSkip
 
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 

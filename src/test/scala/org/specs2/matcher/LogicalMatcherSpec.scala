@@ -22,7 +22,6 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
     "if it is ok, it returns a MatchSuccess result"                                                                     ! skip1^
     "if it is ko, it returns a MatchSkip result"                                                                        ! skip2^
     "a skipped message can also be added in front of the failure message"                                               ! skip3^
-    "with be_== and subtyping we need a type annotation or a be_=== matcher"                                            ! skip4^
                                                                                                                         p^
   "a matcher can applied only if a boolean condition is true"                                                           ^
     "if the condition is true, it is applied"                                                                           ! when1^
@@ -56,8 +55,6 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
   def skip2 = (1 must be_==(2).orSkip).toResult must_== Skipped("'1' is not equal to '2'")
   def skip3 = (1 must be_==(2).orSkip("precondition failed")).toResult must_==
               Skipped("precondition failed: '1' is not equal to '2'")
-
-  def skip4 = (Some(1): Option[Int]) must be_===(Some(1)).orSkip
 
   def when1 = (1 must be_==(1).when(true)).toResult must beSuccessful
   def when2 = (1 must be_==(2).when(false)).toResult must beSuccessful
