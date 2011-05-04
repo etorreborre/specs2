@@ -37,6 +37,11 @@ trait MatchersImplicits extends Expectations {
   }
 
   /**
+   * implicit definition to accept any MatchResult as a Boolean value.
+   * It is true if the MatchResult is not an Error or a Failure
+   */
+  implicit def fromMatchResult(r: MatchResult[_]): Boolean = r.isSuccess || r.isSkipped || r.isPending
+  /**
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers
    */
@@ -170,10 +175,17 @@ trait MatchersImplicits extends Expectations {
           if (res.isSuccess) t.apply(cur)
           else res
         }
+        lazy val failingElementIndex = if (r.isSuccess) -1 else seq.toSeq.indexOf(r.expectable.value)
+        lazy val failingElementMessage =
+          if (failingElementIndex >= 0)
+            "In the sequence "+q(seq.mkString(", "))+", the "+(failingElementIndex+1).th+" element is failing: "+r.message
+          else
+            r.message
+
         Matcher.result(r.isSuccess,
-               "All elements of "+q(seq.mkString(", "))+" are matching ok",
-               "In the sequence "+q(seq.mkString(", "))+", the "+(seq.toSeq.indexOf(r.expectable.value)+1).th+" element is failing: "+r.message,
-               createExpectable(seq))
+                       "All elements of "+q(seq.mkString(", "))+" are matching ok",
+                       failingElementMessage,
+                       createExpectable(seq))
       }
     }
 

@@ -29,11 +29,12 @@ trait SpecificationInclusion { this: FragmentsBuilder =>
 trait SpecificationStructure { 
   /** declaration of Fragments from the user */
   def is: Fragments
-  
+  /** this method can be overriden to map additional behavior in the user-defined fragments */
+  def map(fs: Fragments): Fragments = fs
   /** 
    * this "cached" version of the Fragments is kept hidden from the user to avoid polluting
    * the Specification namespace.
    * SpecStart and SpecEnd fragments are added if the user haven't inserted any
    */
-  private[specs2] lazy val content: Fragments = Fragments.withSpecStartEnd(is, this)
+  private[specs2] lazy val content: Fragments = Fragments.withSpecStartEnd(map(is), this)
 }

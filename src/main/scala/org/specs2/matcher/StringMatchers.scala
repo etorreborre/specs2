@@ -35,16 +35,25 @@ trait StringBaseMatchers { outer =>
   def be_!=/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace  
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
   def !=/(s: String) = be_!=/(s)
-  /** matches if (b.indexOf(a) >= 0) */   
-  def contain(t: String) = new Matcher[String] { 
+  /** matches if (b contains a) */
+  def contain(t: String) = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
-      result(a != null && b.value != null && b.value.indexOf(a) >= 0, 
-             b.description + " contains " + q(a), 
+      result(a != null && b.value != null && b.value.contains(a),
+             b.description + " contains " + q(a),
              b.description + " doesn't contain " + q(a), b)
     }
   }
-  /** matches if b matches the regular expression a */   
+  /** matches if (b contains a) */
+  def contain(t: Char) = new Matcher[String] {
+    def apply[S <: String](b: Expectable[S]) = {
+      val a = t
+      result(b.value != null && b.value.contains(a),
+             b.description + " contains " + q(a),
+             b.description + " doesn't contain " + q(a), b)
+    }
+  }
+  /** matches if b matches the regular expression a */
   def beMatching(t: =>String) = new BeMatching(t)
   /** @alias for beMatching but matching just a fragment of the string*/
   def =~(t: =>String) = new BeMatching(".*"+t+".*")

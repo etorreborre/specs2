@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 class BeHaveMatchersSpec extends Specification { def is =
+
   "The following ways of using matchers are allowed"                                                                    ^
                                                                                                                         p^
     "using not to negate matchers"                                                                                      ^

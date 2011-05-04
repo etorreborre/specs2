@@ -3,7 +3,7 @@ package xml
 import NodeFunctions._
 import Nodex._
 
-class NodeFunctionsSpec extends Specification { def is = sequential^
+class NodeFunctionsSpec extends Specification { def is =
   "Node functions".title                                                                                                ^
                                                                                                                         p^
   "The matchNode function must return true if"                                                                          ^

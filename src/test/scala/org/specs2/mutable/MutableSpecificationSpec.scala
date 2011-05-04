@@ -28,6 +28,8 @@ The following examples specify the functionalities for such a mutable specificat
                                                                                                                         end
 
 
+
+
   case class fragments() extends HasAMutableSpec {
 
     def e1 = contentString must contain("it should")

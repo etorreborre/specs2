@@ -8,7 +8,7 @@ import execute._
 
 class NotifierSpec extends Specification with Mockito with Tags { def is = 
                                                                                                                         """
-A Notifier can be used to get stream of events for the execution of a Specification
+A Notifier can be used to get a stream of events for the execution of a Specification
                                                                                                                         """^
   "The SpecStart is notified"                                                                                           ! start1^
   "A Text is notified"                                                                                                  ! text1^
@@ -31,8 +31,8 @@ A Notifier can be used to get stream of events for the execution of a Specificat
         "but not if xonly and it's not a Failure or an Error"                                                           ! ex8^
         "and a filtered stacktrace"                                                                                     ! ex9^
                                                                                                                         endp^
-  "A step can be notified"                                                                                              ^
-    "if it fails"                                                                                                       ! step1^
+  "A step is notified"                                                                                                  ^
+    "but only if it fails"                                                                                              ! step1^
                                                                                                                         endp^
   "The SpecEnd is notified"                                                                                             ! end1^
                                                                                                                         end

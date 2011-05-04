@@ -13,7 +13,7 @@ Before executing and reporting a specification, the fragments must be selected a
  * they must be selected to keep only the relevant ones
  * they must be sorted to respect their execution dependencies
    ** steps must be executed before examples as specified
-   ** tagged examples with dependencies must respect their specified ordering
+   ** the 'sequential' argument forces the each fragment to be sequenced
 
                                                                                                                         """^p^
   "First of all examples are filtered"                                                                                  ^

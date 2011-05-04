@@ -87,6 +87,10 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    */
   def isSkipped: Boolean = false
   /**
+   * @return true if the result is a Pending instance
+   */
+  def isPending: Boolean = true
+  /**
    * @return true if the result is a Failure instance
    */
   def isFailure: Boolean = false
@@ -214,7 +218,9 @@ case object Error {
  * Pending result
  * @see Result for description
  */
-case class Pending(m: String = "")  extends Result(m)
+case class Pending(m: String = "")  extends Result(m) {
+  override def isPending: Boolean = true
+}
 /** 
  * Skipped result
  * @see Result for description 

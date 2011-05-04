@@ -40,7 +40,7 @@ class NodexSpec extends Specification { def is =
     { Text("1").isEqualIgnoringSpace(Text(" 1 ")) }                                                                     ^
     { !Text("1").isEqualIgnoringSpace(Text("2")) }                                                                      ^
                                                                                                                         p^
-  "An isEqualIgnoringSpaceOrdered function should return"                                                               ^
+  "An isEqualIgnoringSpaceOrdered function returns true if 2 NodeSeqs are the same regardless of spaces and order"      ^
     { <a><b/><c/></a>.isEqualIgnoringSpaceOrdered(<a><b/><c/></a>) }                                                    ^
     { ! <a><b/><c/></a>.isEqualIgnoringSpaceOrdered(<a><c/><b/></a>) }
 }    
