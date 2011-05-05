@@ -120,7 +120,7 @@ object Prop {
   }
   
   /** default constraint function */
-  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeEqualTo(s).apply(Expectable(t))).toResult
+  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeTypedEqualTo(s).apply(Expectable(t))).toResult
 }
 /**
  * generic trait for anything having a label, to unify Props and Forms

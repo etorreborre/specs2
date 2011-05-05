@@ -29,15 +29,16 @@ trait AnyBaseMatchers {
   /** matches if a != b */
   def be_!=[T](t: =>T) = be_==(t).not
   /** matches if a == b */
-  def be_===(t: =>Any) = be_==(t)
+  def be_===[T](t: =>T) = beTypedEqualTo(t)
   /** matches if a != b */
-  def be_!==(t: =>Any) = be_!=(t)
+  def be_!==[T](t: =>T) = be_===(t).not
   /** matches if a == b */
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
+  /** matches if a == b */
+  def beTypedEqualTo[T](t: =>T) = new BeTypedEqualTo(t)
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not
   
-  /** matches if a.isEmpty */
   /** matches if a.isEmpty */
   def beEmpty[T <% Any { def isEmpty: Boolean }] = new Matcher[T] {
     def apply[S <: T](iterable: Expectable[S]) = {
@@ -125,15 +126,15 @@ class BeTrueMatcher extends Matcher[Boolean] {
   }
 }
 /**
- * Equality Matcher
+ * Typed equality Matcher
  */
-class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
+class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
   import AnyMatchers._
   protected val ok: String => String = identity
   protected val ko: String => String = identity
   
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
-    val newMatcher = new BeEqualTo(f(t)) {
+    val newMatcher = new BeTypedEqualTo(f(t)) {
       override protected val ok: String => String = okFunction compose outer.ok
       override protected val ko: String => String = koFunction compose outer.ko
     } 
@@ -157,6 +158,10 @@ class BeEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
   }
 }
 
+/**
+ * Equality Matcher
+ */
+class BeEqualTo(t: =>Any) extends BeTypedEqualTo(t)
 /**
  * This trait allows to write expressions like
  * 

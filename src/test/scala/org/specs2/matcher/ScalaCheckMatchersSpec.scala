@@ -11,12 +11,33 @@ import specification._
 class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { def is =
 
   "A ScalaCheck property can be used in the body of an Example"                                                         ^
+    "Here are some examples with"                                                                                       ^
+      "a match result"                                                                                                  ^
+        check { (i:Int) => i must be_>(0) or be_<=(0) }                                                                 ^p^
+      "a boolean value"                                                                                                 ^
+        check { (i:Int) => i > 0 || i <=0 }                                                                             ^p^
+      "a Prop"                                                                                                          ^
+        forAll { (i:Int) => i > 0 || i <=0 }                                                                            ^p^
+      "an implication and a match result"                                                                               ^
+        check { (i:Int) => (i > 0) ==> (i must be_>(0)) }                                                               ^p^
+      "an implication and a boolean value"                                                                              ^
+        check { (i:Int) => (i > 0) ==> (i > 0) }                                                                        ^p^
+      "a specific arbitrary instance in the enclosing scope"                                                            ^ {
+        implicit val arbitrary = positiveInts
+        check { (i:Int) => i must be_>(0) }
+      }                                                                                                                 ^p^
+      "a specific arbitrary instance"                                                                                   ^
+        positiveInts { (i:Int) => i must be_>(0) }                                                                      ^p^
+      "several specific arbitrary instances"                                                                            ^
+        (positiveInts, positiveInts) { (i:Int, j: Int) => i+j must be_>(0) }                                            ^p^
+      "specific generation parameters"                                                                                  ^
+      { check { (i:Int) => (i > 0) ==> (i > 0) } set (minTestsOk->50) }                                                 ^p^
+                                                                                                                        p^
     "if it is proved the execution will yield a Success"                                                                ! prop1^
     "if it is a function which is always true, it will yield a Success"                                                 ! prop2^
     "if it is a function which is always false, it will yield a Failure"                                                ! prop3^
     "if it is a property throwing an exception, it will yield an Error"                                                 ! prop4^
-    "a Property can be used with checkProp"                                                                             ! prop5^
-    "a Property can be used with check"                                                                                 ! prop6^
+    "a Property can be used with check"                                                                                 ! prop5^
                                                                                                                         p^
   "A specs2 matcher can be returned by a function to be checked with ScalaCheck"                                        ^
     "if it is a MatchSuccess the execution will yield a Success"                                                        ! matcher1^
@@ -53,8 +74,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   def prop2 = execute(trueStringFunction.forAll) must_== success100tries
   def prop3 = execute(identityFunction.forAll).message must startWith("A counter-example is 'false'")
   def prop4 = execute(exceptionProp).toString must startWith("Error(A counter-example is")
-  def prop5 = execute(checkProp(proved)) must beSuccessful
-  def prop6 = execute(check(proved)) must beSuccessful
+  def prop5 = execute(check(proved)) must beSuccessful
 
   def partial1 = execute(partialFunction.forAll) must_== success100tries
   def partial2 = execute { check { (s1: Boolean, s2: Boolean) => s1 && s2 must_== s2 && s1 } } must_== success100tries
@@ -62,15 +82,17 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   def partial4 = execute { check { (s1: String, s2: String, s3: Int, s4: Boolean) => 1 must_== 1 } } must_== success100tries
   def partial5 = execute { check { (s1: String, s2: String, s3: Int, s4: Boolean, s5: Double) => 1 must_== 1 } } must_== success100tries
 
+  val positiveInts = Arbitrary(Gen.choose(1, 5))
+
   def arb1: Prop = {
     implicit def ab = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
     (s: String) => s must contain("a") or contain("b")
   }
 
-  def matcher1 = execute(alwaysTrueWithMatcher) must_== success100tries
+  def matcher1 = execute(check(alwaysTrueWithMatcher)) must_== success100tries
   def matcher2 = execute(check(stringToBooleanMatcher)) must_== success100tries
-  def matcher3 = execute(stringToBooleanMatcher.forAll) must_== success100tries
-  def result1 =  execute(trueFunction.forAll).expectationsNb must_== 100
+  def matcher3 = execute(check(stringToBooleanMatcher)) must_== success100tries
+  def result1 =  execute(check(trueFunction)).expectationsNb must_== 100
 
   case class config() extends Before with ScalaCheck with MockOutput {
     def before = clear()

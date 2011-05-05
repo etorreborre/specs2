@@ -70,12 +70,14 @@ The most common type of matcher is `beEqualTo` to test for equality. There are d
        1 must beEqualTo(1)
        1 must be_==(1)            // with a shorter matcher
        1 must_== 1                // my favorite!
+       1 mustEqual 1              // if you dislike underscores
        1 should_== 1              // for should lovers
        1 === 1                    // the ultimate shortcut
        1 must be equalTo(1)       // with a literate style
 
        1 must not be equalTo(2)   // with a negation
        1 must_!= 2                // with a negation
+       1 mustNotEqual 2           // with a negation
        1 must be_!=(2)            // with a negation
        1 !== 2                    // with a negation
 
@@ -172,16 +174,6 @@ There are many ways to create matchers for your specific usage. The simplest way
 
         1 must be_==(2).orSkip
         1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
-
-There may sometimes be typing issues with `be_==` and `orSkip`:
-
-        // will not compile!
-        (Some(1): Option[Int]) must be_==(Some(1)).orSkip
-
-The alternative is to either add a type annotation or to use the `be_===` matcher:
-
-       (Some(1): Option[Int]) must be_==(Some(1): Option[Int]).orSkip
-       (Some(1): Option[Int]) must be_===(Some(1)).orSkip
 
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
@@ -542,19 +534,23 @@ For example, specifying a Parser for numbers could look like this:
 
 A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
 
-To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can define a ScalaCheck property
- and add it to the body of your example:
+To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can pass functions to the `check` method
+and use the resulting block as your example body:
 
-      "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }
+      "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }
 
-You will get even better failure messages if you use matchers in the checked function, and in that case you can simply pass
-the function:
+The function that is checked can either return:
 
-      "addition and multiplication are related" ! { (a: Int) => a + a must_== 2 * a }
+      // a Boolean
+      "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }
 
-Note that sometimes type inference may not work (if there are several parameters) so you will need to use the `check` method:
+      // a MatchResult
+      "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }
 
-      "addition and multiplication are related" ! check { (a: Int, b: Int) => a + b must_== b + a }
+      // a Prop
+      "addition and multiplication are related" ! check { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) }
+
+Note that if you pass functions using MatchResults you will get better failure messages so you are encouraged to do so.
 
 #### Arbitrary instances
 
@@ -562,21 +558,24 @@ By default `Arbitrary` instances are taken from the surrounding example scope. H
 your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope
 of the function you're testing:
 
-        "a simple property" ! check(arb1)
+        // this arbitrary will be used for all the examples
+        implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
 
-         def arb1: Prop = {
-           // there's an implicit conversion to transform a function to a Prop
-           // but it has to happen *inside* your Arbitrary scope
-           implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
-           (s: String) => s must contain("a") or contain("b")
-         }
-         // otherwise you can explicitly write      
-         def arb1 = {
-           implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
-           asProperty((s: String) => s must contain("a") or contain("b"))
-         }
+        "a simple property" ! ex1
 
+         def ex1 = check((s: String) => s must contain("a") or contain("b"))
 
+You can also be very specific if you want to use an `Arbitrary` instance only on one example. In that case, just replace the
+`check` method with the name of your `Arbitrary` instance:
+
+        "a simple property"       ! ex1
+        "a more complex property" ! ex2
+
+        implicit def abStrings = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+        def ex1 = abStrings((s: String) => s must contain("a") or contain("b"))
+
+        // use a tuple if there are several parameters to your function
+        def ex2 = (abStrings, abStrings)((s1: String, s2: String) => s must contain("a") or contain("b"))
 
 #### Setting the ScalaCheck properties
 
@@ -584,6 +583,12 @@ ScalaCheck test generation can be tuned with a few properties. If you want to ch
 implicit values:
 
       implicit val params = set(minTestsOk -> 20) // use display instead of set to get additional console printing
+
+It is also possible to specifically set the execution parameters on a given property:
+
+      "this is a specific property" ! check { (a: Int, b: Int) =>
+        (a + b) must_== (b + a)
+      }.set(minTestsOk -> 200, workers -> 3)
 
 The parameters you can modify are:
 
@@ -839,10 +844,14 @@ framework. You can reuse the following traits:
     implicit val params = set(minTestsOk -> 20)
 
     def is = "Scalacheck".title ^
-    "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a } ^
-    "addition and multiplication are related" ! { (a: Int) => a + a must_== 2 * a }        ^
-    "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }  ^
-                                                                                           end
+    "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }              ^
+    "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }                    ^
+    "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }               ^
+    "addition and multiplication are related" ! check { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) } ^
+    "this is a specific property" ! check { (a: Int, b: Int) =>
+      (a + b) must_== (b + a)
+    }.set(minTestsOk -> 200, workers -> 1)                                                              ^
+                                                                                                        end
   }
 
   import org.specs2.matcher._

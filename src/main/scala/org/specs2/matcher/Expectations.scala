@@ -36,6 +36,10 @@ trait Expectations {
     def ===[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeEqualTo(other))
     /** ! equality matcher on Expectables */
     def !==[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeEqualTo(other).not)
+    /** typed equality matcher on Expectables */
+    def ====[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeTypedEqualTo(other))
+    /** ! typed equality matcher on Expectables */
+    def !===[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeTypedEqualTo(other).not)
   }
 
   /** @return an Expectable */

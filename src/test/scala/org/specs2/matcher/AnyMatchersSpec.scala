@@ -44,10 +44,10 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is =
   "if the match succeeds but the condition after match fails, a precise failure message can be returned"                ! e1^
                                                                                                                         p^
   "toSeq allows to transform a single matcher to a matcher checking a Seq"                                              ^
-  { List(1, 2, 3) must ((be_==(_:Int)).toSeq)(Seq(1, 2, 3)) }                                                           ^
+  { List(1, 2, 3) must ((be_===(_:Int)).toSeq)(Seq(1, 2, 3)) }                                                           ^
                                                                                                                         p^
   "toSet allows to transform a single matcher to a matcher checking a Set"                                              ^
-  { Set(1, 2, 3) must ((be_==(_:Int)).toSet)(Set(1, 2, 3)) }                                                            ^
+  { Set(1, 2, 3) must ((be_===(_:Int)).toSet)(Set(1, 2, 3)) }                                                            ^
                                                                                                                         p^
  "forall allows to transform a single matcher to a matcher checking that all elements of a Seq are matching"            ^
   { Seq(2, 3, 4) must be_>=(2).forall }                                                                                 ^

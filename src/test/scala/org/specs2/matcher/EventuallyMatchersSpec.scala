@@ -17,7 +17,7 @@ or until it succeeds.
   }
   "A matcher can work with eventually and be_== but a type annotation is necessary or a be_=== matcher" in {
     val option: Option[Int] = Some(3)
-    option must be_===(Some(3)).eventually
+    option must be_==(Some(3)).eventually
   }
   "If all retries fail, the matcher will eventually fail" in {
     val iterator = Stream.from(1).iterator
