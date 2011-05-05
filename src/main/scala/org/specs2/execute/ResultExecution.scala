@@ -22,6 +22,7 @@ trait ResultExecution { outer =>
       case FailureException(f) => f
       case SkipException(f)    => f
       case e: Exception        => Error(e)
+      case e: AssertionError   => Failure(e.getMessage, "", e.getStackTrace.toList)
       case other               => throw other
     }
 
