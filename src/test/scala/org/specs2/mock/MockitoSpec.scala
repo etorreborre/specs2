@@ -42,6 +42,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
   "The order of calls to a mocked method can be checked"^
     "with 2 calls that were indeed in order"                                                                            ! ordered().asExpected^
     "with 2 calls that were indeed not in order"                                                                        ! ordered().failed^
+    "with 3 calls that were indeed not in order"                                                                        ! ordered().failed2^
                                                                                                                         p^
   "Callbacks can be created to control the returned a value"                                                            ! callbacks().c1^
                                                                                                                         p^
@@ -129,6 +130,18 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
 	    implicit val order = inOrder(list1, list2)
       (there was one(list2)(order).get(0) then
                  one(list1)(order).get(0)).message must startWith("The mock was not called as expected")
+    }
+
+    def failed2: execute.Result = {
+      list1.get(0); list1.size; list1.get(0); list1.size;
+
+	    implicit val order = inOrder(list1)
+      val result = there was one(list1).get(0) then
+                             one(list1).size() then
+                             no(list1) .get(0) then
+                             one(list1).size()
+
+      result.message must startWith("The mock was not called as expected")
     }
   }
   case class captured() {
