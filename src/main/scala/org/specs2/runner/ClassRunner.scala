@@ -51,10 +51,11 @@ class ClassRunner extends Classes with ConsoleOutput {
    *    > implicit val myargs = nocolor
    *    > specs2.run(spec1)
    */
-  def apply(specifications: SpecificationStructure*)(implicit args: Arguments = Arguments()) = {
-    specifications foreach { specification =>
+  def apply(specifications: SpecificationStructure*)(implicit args: Arguments = Arguments()): Either[Reporter, Unit] = {
+    specifications map { specification =>
       trye(reporter.report(specification)(args.overrideWith(specification.content.arguments)))(errorHandler)
     }
+    Right(reporter)
   }
 
   protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): SpecificationStructure = {
