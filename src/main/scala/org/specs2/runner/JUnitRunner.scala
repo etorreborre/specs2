@@ -11,7 +11,7 @@ import io._
 import reflect.Classes._
 import execute._
 import reporter._
-import JUnitDescriptions._
+import JUnitDescriptionMaker._
 import specification._
 import text.AnsiColors
 import control.{ExecutionOrigin, Throwablex}
