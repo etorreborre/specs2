@@ -1198,12 +1198,12 @@ For that specification above:
       "xonly displays nothing but failures"                  ! success^
       "there is also a color option"                         ^              // this text will be indented
         "rgb=value uses that value to color the text"        ! rgb^         // and the following examples as well
-        "nocolor dont color anything"                        ! nocolor^ end^
+        "nocolor dont color anything"                        ! nocolors^ end^
     "There are different ways of hiding the text"            ^              // this text will be properly indented now
         "by tagging the text"                                ! hideTag^
                                                              end
     def rgb = success
-    def nocolor = success
+    def nocolors = success
     def hideTag = success
   }
 
