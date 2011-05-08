@@ -36,7 +36,7 @@ class ClassRunner extends Classes with ConsoleOutput {
   /**
    * This method can be called directly from the console with the specs2.run object:
    *
-   *     > spec2.run(spec1, spec2)
+   *     > specs2.run(spec1, spec2)
    * or  > import specs2._
    *     > run(spec1, spec2)
    *
