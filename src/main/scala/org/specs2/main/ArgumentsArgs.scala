@@ -58,14 +58,11 @@ trait ArgumentsArgs extends ArgProperties {
 }
 object ArgumentsArgs extends ArgumentsArgs
 
-private[specs2]
 trait ArgProperties {
   implicit def anyToArgProperty[T](t: =>T): ArgProperty[T] = ArgProperty(Property(t))
 }
-private[specs2]
 object ArgProperties extends ArgProperties
 
-private[specs2]
 case class ArgProperty[T](p: Property[T] = Property[T]()) {
   def toOption: Option[T] = p.toOption
 }
