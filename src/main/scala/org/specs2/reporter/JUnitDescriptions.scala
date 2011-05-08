@@ -9,6 +9,8 @@ import scalaz.Traverse._
 import main.Arguments
 import specification._
 import control.{ExecutionOrigin, Stacktraces}
+import text.Trim.Trimmed._
+import java.util.regex.Matcher
 
 /**
  * The JUnit descriptions class transforms a list of fragments
@@ -25,17 +27,17 @@ import control.{ExecutionOrigin, Stacktraces}
  */
 private[specs2]
 class JUnitDescriptions(specificationClass: Class[_]) extends DefaultSelection {
-  import JUnitDescriptions._
+  import JUnitDescriptionMaker._
   type DescribedFragment = (Description, Fragment)
   def foldAll(fs: Seq[Fragment])(implicit args: Arguments) = {
     import Levels._
     val leveledFragments = Levels.foldAll(select(fs))
-    lazy val root = createDescription(specificationClass.getName, klassName=specificationClass.getName)
+    lazy val root = createDescription(specificationClass, specificationClass.getName)
     implicit val initial: DescribedFragment = (root, Text(specificationClass.getName))
 
     if (leveledFragments.isEmpty) DescriptionAndExamples(root, Seq(initial).toStream)
     else {
-      val descriptionTree = leveledFragments.toTree(mapper(specificationClass.getName))
+      val descriptionTree = leveledFragments.toTree(mapper(specificationClass))
       val removeDanglingText = (t: Tree[DescribedFragment]) => {
         t.rootLabel  match {
           case (desc, Text(_)) if t.subForest.isEmpty  => (None:Option[DescribedFragment])
@@ -49,7 +51,7 @@ class JUnitDescriptions(specificationClass: Class[_]) extends DefaultSelection {
 
 }
 private[specs2]
-object JUnitDescriptions extends ExecutionOrigin {
+trait JUnitDescriptionMaker extends ExecutionOrigin {
   type DescribedFragment = (Description, Fragment)
   /**
    * This function is used to map each node in a Tree[Fragment] to a pair of 
@@ -59,12 +61,12 @@ object JUnitDescriptions extends ExecutionOrigin {
    * It is used to create a unique description of the example to executed which is required
    * by JUnit
    */
-  def mapper(className: String): (Fragment, Int) => Option[DescribedFragment] = (f: Fragment, nodeLabel: Int) => f match {
-    case (SpecStart(t, _))            => Some(createDescription(testName(t.name), klassName=className) -> f)
-    case (Text(t))                    => Some(createDescription(testName(t), klassName=className) -> f)
-    case (Example(description, body)) => Some(createDescription(testName(description.toString), nodeLabel.toString, className) -> f)
-    case (Step(action))               => Some(createDescription("step", nodeLabel.toString, className) -> f)
-    case (Action(action))             => Some(createDescription("action", nodeLabel.toString, className) -> f)
+  def mapper(klass: Class[_]): (Fragment, Int) => Option[DescribedFragment] = (f: Fragment, nodeLabel: Int) => f match {
+    case (SpecStart(t, _))            => Some(createDescription(klass, suiteName=testName(t.name)) -> f)
+    case (Text(t))                    => Some(createDescription(klass, suiteName=testName(t)) -> f)
+    case (Example(description, body)) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(description.toString)) -> f)
+    case (Step(action))               => Some(createDescription(klass, label=nodeLabel.toString, testName="step") -> f)
+    case (Action(action))             => Some(createDescription(klass, label=nodeLabel.toString, testName="action") -> f)
     case other                        => None
   }
   /**
@@ -95,24 +97,29 @@ object JUnitDescriptions extends ExecutionOrigin {
     result._1.addChild(current._1)
     result
   }
+  /** @return a sanitized description */
+  def createDescription(testClass: Class[_], suiteName: String = "", testName: String = "", label: String = "") = {
+    val origin =
+      if (isExecutedFromAnIDE && !label.isEmpty) label
+      else testClass.getName
+
+    val desc=
+      if (testName.isEmpty) (if (suiteName.isEmpty) testClass.getSimpleName else suiteName)
+      else sanitize(testName)+"("+origin+")"
+    Description.createSuiteDescription(desc)
+  }
+
   import text.Trim._
   /** @return a test name with no newlines */
   private def testName(s: String)= Trimmed(s).trimNewLines
+
+
   /** @return replace () with [] because it cause display issues in JUnit plugins */
   private def sanitize(s: String) = {
     val trimmed = Trimmed(s).trimReplace("(" -> "[",  ")" -> "]")
     if (trimmed.isEmpty) " "
     else trimmed
   }
-  /** @return a sanitized description */
-  def createDescription(s: String, label: String= "", klassName: String="") = {
-    val code =
-      if ((isExecutedFromAnIDE || isExecutedFromSBT) && !label.isEmpty)
-        "("+label+")"
-      else if (isExecutedFromGradle && !klassName.isEmpty)
-        "("+klassName+")"
-      else ""
-    Description.createSuiteDescription(sanitize(s)+code)
-  }
-  
 }
+private[specs2]
+object JUnitDescriptionMaker extends JUnitDescriptionMaker

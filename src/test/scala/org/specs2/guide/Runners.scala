@@ -279,6 +279,28 @@ of the following:
 All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration
 when relevant (i.e. for examples only).
 
+### From the console
+
+The `specs2.run` object has an `apply` method to execute specifications from the Scala console:
+
+      scala> spec2.run(spec1, spec2)
+
+      scala> import specs2._  // same thing, importing the run object
+      scala> run(spec1, spec2)
+
+If you want to pass specific arguments you can import the `specs2.args` object member functions:
+
+      scala> import specs2.args._
+
+      scala> specs2.run(spec1)(nocolor)
+
+Or you can set implicit arguments which will be used for any specification execution:
+
+      scala> import specs2.args._
+      scala> implicit val myargs = nocolor
+
+      scala> specs2.run(spec1)
+
    - - -
 
            	                                                                                                            """ ^

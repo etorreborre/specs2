@@ -33,6 +33,10 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def noindent: Arguments = args(noindent = true)
   /**
+   * shortcut to avoid colored output
+   */
+  def nocolor: Arguments = args(color = false)
+  /**
    * shortcut to not executing the text and avoid automatic indentation
    */
   def freetext: Arguments = plan <| noindent

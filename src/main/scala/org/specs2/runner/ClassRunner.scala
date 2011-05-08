@@ -17,22 +17,45 @@ import reporter._
  */
 class ClassRunner extends Classes with ConsoleOutput {
 	lazy val reporter: Reporter = new ConsoleReporter {}
-	
+
+  protected val errorHandler: PartialFunction[Throwable, Unit] = {  case e =>
+	  println("\nAn error occurred. " +
+            "Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.")
+	  e.printStackTrace
+  }
+
   def main(arguments: Array[String]) = start(arguments:_*)
   
   def start(arguments: String*) = {
     if (arguments.length == 0)
       println("The first argument should at least be the specification class name")
 
-    run(arguments.drop(1), createSpecification(arguments(0))) {  case e =>
-	    println("\nAn error occurred. " +
-              "Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.")
-	    e.printStackTrace 
-	  }
+    apply(createSpecification(arguments(0)))(Arguments(arguments.drop(1):_*))
   }
-  
-  protected[specs2] def run(args: Seq[String], specification: SpecificationStructure)(f: Exception => Unit) = {
-	  trye(reporter.report(specification)(Arguments(args:_*).overrideWith(specification.content.arguments)))(f)
+
+  /**
+   * This method can be called directly from the console with the specs2.run object:
+   *
+   *     > specs2.run(spec1, spec2)
+   * or  > import specs2._
+   *     > run(spec1, spec2)
+   *
+   * If you want to pass specific arguments you can pass:
+   *
+   *    > import specs2.args._
+   *    > specs2.run(spec1)(nocolor)
+   *
+   * Or you can set specific default with an implicit value:
+   *
+   *    > import specs2.args._
+   *    > implicit val myargs = nocolor
+   *    > specs2.run(spec1)
+   */
+  def apply(specifications: SpecificationStructure*)(implicit args: Arguments = Arguments()): Either[Reporter, Unit] = {
+    specifications map { specification =>
+      trye(reporter.report(specification)(args.overrideWith(specification.content.arguments)))(errorHandler)
+    }
+    Right(reporter)
   }
 
   protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): SpecificationStructure = {

@@ -1,14 +1,13 @@
-package org.specs2
-package main
+package specs2
 
-import control._
+import org.specs2.control.StackTraceFilter
+import org.specs2.main.{ArgProperties, ArgProperty, Arguments, Diffs}
 
 /**
- * This trait provides shortcuts to create Arguments instances
+ * import args._ to get access to all the Arguments creation functions
  */
-trait ArgumentsArgs extends ArgProperties {
-  /** shorthand method to create an Arguments object */
-  def args(
+object args extends org.specs2.main.ArgumentsArgs with ArgProperties {
+  def apply (
     ex:            ArgProperty[String]            = ArgProperty[String](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     include:       ArgProperty[String]            = ArgProperty[String](),
@@ -31,38 +30,28 @@ trait ArgumentsArgs extends ArgProperties {
     fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
     commandLine:   Seq[String]                    = Nil
-  ) = new Arguments(
-     ex.toOption.map(".*"+_+".*"),
-     xonly.toOption,
-     include.toOption,
-     exclude.toOption,
-     plan.toOption,
-     skipAll.toOption,
-     stopOnFail.toOption,
-     failtrace.toOption,
-     color.toOption,
-     noindent.toOption,
-     showlevel.toOption,
-     showtimes.toOption,
-     offset.toOption,
-     specName.toOption,
-     sequential.toOption,
-     threadsNb.toOption,
-     markdown.toOption,
-     debugMarkdown.toOption,
-     diffs.toOption,
-     fromSource.toOption,
-     traceFilter.toOption,
-     commandLine
+  ) = args(
+    ex            ,
+    xonly         ,
+    include       ,
+    exclude       ,
+    plan          ,
+    skipAll       ,
+    stopOnFail    ,
+    failtrace     ,
+    color         ,
+    noindent      ,
+    showlevel     ,
+    showtimes     ,
+    offset        ,
+    specName      ,
+    sequential    ,
+    threadsNb     ,
+    markdown      ,
+    debugMarkdown ,
+    diffs         ,
+    fromSource    ,
+    traceFilter   ,
+    commandLine
   )
-}
-object ArgumentsArgs extends ArgumentsArgs
-
-trait ArgProperties {
-  implicit def anyToArgProperty[T](t: =>T): ArgProperty[T] = ArgProperty(Property(t))
-}
-object ArgProperties extends ArgProperties
-
-case class ArgProperty[T](p: Property[T] = Property[T]()) {
-  def toOption: Option[T] = p.toOption
 }
