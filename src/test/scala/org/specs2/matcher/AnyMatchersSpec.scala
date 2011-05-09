@@ -4,9 +4,11 @@ import java.io._
 import execute._
 
 class AnyMatchersSpec extends Specification with ResultMatchers { def is =
-
+  fullStackTrace^
   "be_== checks the equality of 2 objects"                                                                              ^
   { "a" must_== "a" }                                                                                                   ^
+  { "a" must not be_==(null) }                                                                                          ^
+  { (null: String) must not be_==("a") }                                                                                ^
   { "a" must_!= "b" }                                                                                                   ^
   { "a" should_== "a" }                                                                                                 ^
   { "a" should_!= "b" }                                                                                                 ^

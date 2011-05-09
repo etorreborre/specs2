@@ -91,6 +91,16 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    *         S and possibly skipping nodes
    */
   def toTree[S](m: (T, Seq[S], Int) => Option[S]): Tree[S] = toTreeLoc(m).toTree
+  /**
+   * map each node to another type given: the current type, the node number
+   *
+   * @return a Tree[S] based on the level of each block, mapping each node to value of type
+   *         S and possibly skipping nodes
+   */
+  def toTree[S](m: (T, Int) => Option[S]): Tree[S] = {
+    def m1(t: T, s: Seq[S], i: Int) = m(t, i)
+    toTree[S](m1 _)
+  }
 
   /**
    * @return a TreeLoc[T] based on the level of each block
