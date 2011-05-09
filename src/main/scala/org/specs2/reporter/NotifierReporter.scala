@@ -29,7 +29,7 @@ trait NotifierExporting extends Exporting {
     else               export(tree)
     ()
   }
-  private val mapper = (f: ExecutedFragment, i: Int) => f match {
+  private val mapper = (f: ExecutedFragment, parents: Seq[ExecutedFragment], i: Int) => f match {
     case e: ExecutedStandardFragment => None
     case other                       => Some(other)
   }

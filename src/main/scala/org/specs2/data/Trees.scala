@@ -10,7 +10,7 @@ private[specs2]
 trait Trees { outer =>
 
   /**
-   * Implicit definition to add a bottomUp method on Trees
+   * Implicit definition to add more functionalities to the Tree trait
    */
   implicit def extendedTree[A](t: Tree[A]) = Treex(t)
   case class Treex[A](t: Tree[A]) {
@@ -18,7 +18,6 @@ trait Trees { outer =>
     def prune[B](f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
     def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
     def flattenSubForests = outer.flattenSubForests(t)
-
   }
 
   /**
@@ -60,12 +59,18 @@ trait Trees { outer =>
   def flattenSubForests[A](tree: Tree[A]): Tree[A] = node(tree.rootLabel, tree.flatten.drop(1).map(leaf(_)))
 
   /**
-   * Implicit method to add a parentLoc method to TreeLoc[T]
+   * Implicit definition to add more functionalities to the TreeLoc class
    */
   implicit def extendTreeLoc[T](t: TreeLoc[T]) = new TreeLocx(t)
   case class TreeLocx[T](t: TreeLoc[T]) {
     def parentLocs = outer.parentLocs(t)
+    def size = outer.size(t)
   }
+
+  /**
+   * @return the number of nodes in a TreeLoc
+   */
+  def size[A](t: TreeLoc[A]) = t.root.toTree.flatten.size
 
   /**
    * @return the list of all parent locs from a given TreeLoc

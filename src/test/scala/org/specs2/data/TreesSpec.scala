@@ -2,19 +2,23 @@ package org.specs2
 package data
 
 import scalaz._
-import Scalaz._
 import Trees._
+import Scalaz.{node, leaf}
 import text.Trim._
+import matcher.DataTables
 
-class TreesSpec extends Specification { def is =
+class TreesSpec extends Specification with DataTables { def is =
 
-  "A tree can be pruned by providing a function mapping nodes to Option[Node]"                         ^
-    "if a node is mapped to Some(n), it stays in the tree"                                             ! e1^
-    "if a node is mapped to None, it is removed from the tree"                                         ^
-      "if it's a leaf"                                                                                 ! e2^
-      "if it's a subtree"                                                                              ! e3^
-      "even the root of the tree"                                                                      ! e4^
-                                                                                                       end
+  "A tree can be pruned by providing a function mapping nodes to Option[Node]"                                          ^
+    "if a node is mapped to Some(n), it stays in the tree"                                                              ! e1^
+    "if a node is mapped to None, it is removed from the tree"                                                          ^
+      "if it's a leaf"                                                                                                  ! e2^
+      "if it's a subtree"                                                                                               ! e3^
+      "even the root of the tree"                                                                                       ! e4^
+                                                                                                                        endp^
+  "A TreeLoc can"                                                                                                       ^
+    "return its size"                                                                                                   ! e5^
+                                                                                                                        end
 
   /**
    *  tree is:
@@ -53,8 +57,15 @@ class TreesSpec extends Specification { def is =
   "`- 2")
 
   def e3 = pruneAndDraw(tree3, prune) must beTree("0")
-
   def e4 = pruneAndDraw(tree4, prune) must beTree("None")
+
+  def e5 = {
+     "tree"  | "size" |>
+      tree   ! 6      |
+      tree1  ! 3      |
+      tree2  ! 3      |
+      tree3  ! 3      | { (tree, size) => tree.loc.size must_== size }
+  }
 
   def pruneAndDraw(tree: Tree[Int], f: Int => Option[Int]) = tree.prune(f).map(_.drawTree).getOrElse("None\n")
   def beTree(s: String*) = be_==(s.mkString("", "\n", "\n"))

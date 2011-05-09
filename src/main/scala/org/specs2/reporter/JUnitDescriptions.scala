@@ -61,14 +61,15 @@ trait JUnitDescriptionMaker extends ExecutionOrigin {
    * It is used to create a unique description of the example to executed which is required
    * by JUnit
    */
-  def mapper(klass: Class[_]): (Fragment, Int) => Option[DescribedFragment] = (f: Fragment, nodeLabel: Int) => f match {
-    case (SpecStart(t, _))            => Some(createDescription(klass, suiteName=testName(t.name)) -> f)
-    case (Text(t))                    => Some(createDescription(klass, suiteName=testName(t)) -> f)
-    case (Example(description, body)) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(description.toString)) -> f)
-    case (Step(action))               => Some(createDescription(klass, label=nodeLabel.toString, testName="step") -> f)
-    case (Action(action))             => Some(createDescription(klass, label=nodeLabel.toString, testName="action") -> f)
-    case other                        => None
-  }
+  def mapper(klass: Class[_]): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
+    (f: Fragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
+      case (SpecStart(t, _))            => Some(createDescription(klass, suiteName=testName(t.name)) -> f)
+      case (Text(t))                    => Some(createDescription(klass, suiteName=testName(t)) -> f)
+      case (Example(description, body)) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))) -> f)
+      case (Step(action))               => Some(createDescription(klass, label=nodeLabel.toString, testName="step") -> f)
+      case (Action(action))             => Some(createDescription(klass, label=nodeLabel.toString, testName="action") -> f)
+      case other                        => None
+    }
   /**
    * Utility class grouping the total description + fragments to execute for each Description 
    */
@@ -110,8 +111,15 @@ trait JUnitDescriptionMaker extends ExecutionOrigin {
   }
 
   import text.Trim._
+
+  /** @return a seq containing the path of an example without the root name */
+  private def parentPath(parentNodes: Seq[DescribedFragment]) = parentNodes.drop(1).map(_._1.getDisplayName)
+
   /** @return a test name with no newlines */
-  private def testName(s: String)= Trimmed(s).trimNewLines
+  private def testName(s: String, parentNodes: Seq[String] = Seq()): String = {
+    (if (parentNodes.isEmpty || isExecutedFromAnIDE) "" else parentNodes.mkString("", "::", "::")) +
+    Trimmed(s).trimNewLines
+  }
 
 
   /** @return replace () with [] because it cause display issues in JUnit plugins */
