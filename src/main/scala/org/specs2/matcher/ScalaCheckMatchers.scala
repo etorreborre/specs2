@@ -56,11 +56,13 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
     Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => result(t1, t2, t3, t4, t5, t6, t7, t8))
   
   /** execute a PartialFunction as a ScalaCheck property */
-  implicit def check[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop =
+  def check[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = checkPartial(f)
+  implicit def checkPartial[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop =
     PartialFunctionPropertyImplicits.partialFunctionToProp(f).forAll
 
   /** execute a ScalaCheck property */
-  implicit def check(prop: Prop)(implicit p: Parameters): execute.Result = checkProperty(prop)(p)
+  def check(prop: Prop)(implicit p: Parameters): execute.Result = checkProp(prop)(p)
+  implicit def checkProp(prop: Prop)(implicit p: Parameters): execute.Result = checkProperty(prop)(p)
 
   /** set specific execution parameters on a Property */
   implicit def setProperty(p: Prop) = new SetProperty(p)
@@ -68,6 +70,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
     def set(p: (Symbol, Int)*) = check(prop)(outer.set(p:_*))
     def display(p: (Symbol, Int)*) = check(prop)(outer.display(p:_*))
   }
+  
   /**
    * checks if the property is true for each generated value, and with the specified
    * generation parameters <code>p</code>. <code>p</code> is transformed into a scalacheck parameters
