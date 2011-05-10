@@ -40,7 +40,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
     def ^(other: Seq[Fragment]) = fs add other
     def ^(other: Fragments) = {
       other.specStart match {
-        case Some(s) => (fs add other.middle).specTitleIs(s)
+        case Some(s) => (fs add other.middle).specTitleIs(s).overrideArgs(s.arguments)
         case _       => fs add other.middle
       }
     }

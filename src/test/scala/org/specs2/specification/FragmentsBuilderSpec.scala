@@ -37,6 +37,7 @@ SpecStart/SpecEnd
     "Arguments can be added in different place in the spec" ^
       "new Arguments values are added to the existing ones"                                                             ! startEnd().e8^
       "and override them if already declared"                                                                           ! startEnd().e9^
+      "it also works with the map method in BaseSpecification"                                                          ! startEnd().e10^
                                                                                                                         endp^
                                                                                                                         """
 How to create an Example
@@ -71,6 +72,10 @@ Other elements
     lazy val content2 = new Specification { def is = xonly ^ "title".title ^ "text" }.content
     lazy val content3 = new Specification { def is = xonly ^ args(include="t1") ^ "title".title ^ "text" }.content
     lazy val content4 = new Specification { def is = args(include="t1") ^ "title".title ^ args(include="t2") ^ "text" }.content
+    trait CustomSpecification extends Specification {
+      override def map(fs: =>Fragments) = "title".title ^ fs ^ "end of the spec"
+    }
+    lazy val content5 = new CustomSpecification { def is = sequential ^ "text" }.content
 
     def fragments = content.fragments
     def e1 = (fragments.head must haveClass[SpecStart]) and (fragments.last must haveClass[SpecEnd])
@@ -82,6 +87,7 @@ Other elements
     def e7 = (content2.start.name.toString must_== "title") and (content2.start.arguments.xonly must beTrue)
     def e8 = (content3.start.arguments.xonly must beTrue) and (content3.start.arguments.include must_== "t1")
     def e9 = content4.start.arguments.include must_== "t2"
+    def e10 = content5.start.arguments.sequential must beTrue
   }
 
   case class ex() {

@@ -30,7 +30,7 @@ trait SpecificationStructure {
   /** declaration of Fragments from the user */
   def is: Fragments
   /** this method can be overriden to map additional behavior in the user-defined fragments */
-  def map(fs: Fragments): Fragments = fs
+  def map(fs: =>Fragments): Fragments = fs
   /** 
    * this "cached" version of the Fragments is kept hidden from the user to avoid polluting
    * the Specification namespace.
