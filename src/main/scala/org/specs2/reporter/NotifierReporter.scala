@@ -24,6 +24,10 @@ trait NotifierExporting extends Exporting {
   val notifier: Notifier
   /** @return a function exporting ExecutedFragments */
   def export(s: SpecificationStructure)(implicit args: Arguments): Seq[ExecutedFragment] => ExportType = (fs: Seq[ExecutedFragment]) => {
+    notifyExport(fs)
+    if (args.contains("html")) new HtmlExporting {}.export(s)(args)(fs)
+  }
+  private def notifyExport(fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     val tree = Levels.foldAll(fs).toTree(mapper)
     if (args.noindent) export(tree.flattenSubForests)
     else               export(tree)
