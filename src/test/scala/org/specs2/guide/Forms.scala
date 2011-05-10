@@ -93,7 +93,7 @@ Let's look at a few examples:
     tr(field("""prop("label", "expected", "expected")""").code, prop("label", "expected", "expected")).
     tr(field("""prop("label", "expected")("expected")""").code, prop("label", "expected")("expected")).
     tr(field("""prop("label", "actual")("expected")""").code, prop("label", "actual")("expected")).
-    tr(field("""prop("label", { sys.error("but got an error"); "actual" })("expected")""").code, prop("label", { sys.error("but got an error"); "actual" })("expected")).
+    tr(field("""prop("label", { error("but got an error"); "actual" })("expected")""").code, prop("label", { error("but got an error"); "actual" })("expected")).
     tr(field("""prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")""").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
     tr(field("""prop("label", "expected", (s: String) => beEqualTo(s))("expected")""").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).executeForm.toXml.toString^
 """
@@ -609,7 +609,7 @@ specification.
   case class WrongCalculator(form: Form = Form()) {
     def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = WrongCalculator {
       def plus = prop(a + b)(a_plus_b)
-      def minus = if (a_minus_b != 2) prop(a - b)(a_minus_b) else prop({sys.error("very wrong"); 0})(a_minus_b)
+      def minus = if (a_minus_b != 2) prop(a - b)(a_minus_b) else prop({error("very wrong"); 0})(a_minus_b)
       form.tr(a, b, plus, minus)
     }
   }

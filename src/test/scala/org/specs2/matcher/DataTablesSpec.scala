@@ -15,7 +15,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
   "A table must work with values of different subtypes of the first row"                                                ! e7^
                                                                                                                         end
 
-  def boom = sys.error("boom")
+  def boom = error("boom")
   
   def e1 =
 	  "a"   | "b" | "c" |>

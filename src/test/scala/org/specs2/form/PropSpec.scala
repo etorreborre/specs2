@@ -69,7 +69,7 @@ the actual value is equal to the expected value.
     def e3 = expectedOnly.execute must_== Pending("No actual value")
     def e4 = nameProp("eric").execute must_== Success("'eric' is equal to 'eric'")
     def e5 = nameProp("eric2").execute.message must_== "'eric' is not equal to 'eric2'"
-    def e6 = nameProp.apply(sys.error("bad")).execute.message must_== "bad"
+    def e6 = nameProp.apply(error("bad")).execute.message must_== "bad"
     def e7 = constrained("e").execute.isSuccess must beTrue
     def e8 = constrained("a").execute.message must_== "'eric' doesn't contain 'a'"
     def e9 = withMatcher("e").execute.isSuccess must beTrue

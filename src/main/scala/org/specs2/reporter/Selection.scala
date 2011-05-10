@@ -83,7 +83,7 @@ trait DefaultSelection {
         /** end of section */
         case t1 @ AsSection(_*)                                  => (tagged.mapLast(_ |+| Tag(t1.names:_*)) :+ t1, removeTags(taggingToApply, t1))
         /** beginning of section from the previous fragment */
-        case f                                                  => (tagged :+ taggingToApply.sumr, taggingToApply.filter(_.isSection))
+        case f                                                  => (tagged :+ ma(taggingToApply).sum, taggingToApply.filter(_.isSection))
       }
     }
   }._1

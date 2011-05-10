@@ -1,5 +1,6 @@
 package org.specs2
 package control
+import main.System._
 
 class ExceptionsSpec extends Specification with Exceptions {  def is =
                                                                                                                         """
@@ -48,7 +49,7 @@ The Exceptions trait provide functional ways to catch exceptions and deal with t
     "a default value if the expression throws an exception"                                                             ! catchAllOr2^
                                                                                                                         end
     
-  def boom = { sys.error("boom"); "a" }
+  def boom = { error("boom"); "a" }
 
   def tryo1 = tryo("a") must_== Some("a")
   def tryo2 = tryo(boom) must_== None

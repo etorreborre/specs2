@@ -122,7 +122,7 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
   val random = Gen.oneOf(true, false)
   val exceptionValues = Gen(p => throw new java.lang.Exception("e"))
   val propertyWithGenerationException = {
-    implicit def arb: Arbitrary[Int] = Arbitrary { for (n <- Gen.choose(1, 3)) yield { sys.error("boo"); n }}
+    implicit def arb: Arbitrary[Int] = Arbitrary { for (n <- Gen.choose(1, 3)) yield { error("boo"); n }}
     Prop.forAll((i: Int) => i > 0)
   }
   def exceptionProp = forAll((b: Boolean) => {throw new java.lang.Exception("boom"); true})

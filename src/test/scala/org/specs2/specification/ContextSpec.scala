@@ -205,7 +205,7 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   
   def firstThenEx1 = Step(println("first")) ^ ex1
   def silentFirstThenEx1 = Step("first") ^ ex1
-  def failingFirstThenEx1 = Step { sys.error("error"); 1 } ^ ex1
+  def failingFirstThenEx1 = Step { error("error"); 1 } ^ ex1
 }
 trait ContextsForFragments extends MockOutput {
   object before extends Before {
@@ -215,7 +215,7 @@ trait ContextsForFragments extends MockOutput {
     def before = println("before2")
   }
   object beforeWithError extends Before with MockOutput {
-	  def before = sys.error("error")
+	  def before = error("error")
   }
   object beforeWithSkipped extends Before with MockOutput {
 	  def before = Skipped("skipped")
@@ -236,7 +236,7 @@ trait ContextsForFragments extends MockOutput {
     def after = println("after2")
   }
   object afterWithError extends After {
-	  def after = sys.error("error")
+	  def after = error("error")
   }
   object around extends Around {
 	  def around[T <% Result](a: =>T) = { println("around"); a } 
@@ -248,7 +248,7 @@ trait ContextsForFragments extends MockOutput {
 	  def outside = { println("outside"); "string" }
   }
   object outsideWithError extends Outside[String] with MockOutput {
-	  def outside = { sys.error("error"); "ok" }
+	  def outside = { error("error"); "ok" }
   }
   object aroundOutside extends AroundOutside[String] {
 	  def outside = { println("outside"); "string" }
