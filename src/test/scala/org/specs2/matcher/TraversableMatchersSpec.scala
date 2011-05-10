@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 import java.util.Arrays._
-import scala.collection.JavaConversions.{ collectionAsScalaIterable }
+import scala.collection.JavaConversions.{ asScalaIterable }
 
 class TraversableMatchersSpec extends Specification { def is =
 
@@ -62,7 +62,7 @@ class TraversableMatchersSpec extends Specification { def is =
   "Java collections can also be used with Traversable matchers"                                                         ^bt^
   "But generally require explicit conversion"                                                                           ^
     { asList("Hello", "World") must haveSize(2) }                                                                       ^
-    { collectionAsScalaIterable(asList("Hello", "World")) must containMatch("ll") }                                     ^
+    { asScalaIterable(asList("Hello", "World")) must containMatch("ll") }                                               ^
                                                                                                                         end
 
   case class subclass() {
