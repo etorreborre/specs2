@@ -1,6 +1,6 @@
 package org.specs2
 package guide
-
+import sys._
 import form._
 
 class Forms extends Specification with specification.Forms { def is = literate^

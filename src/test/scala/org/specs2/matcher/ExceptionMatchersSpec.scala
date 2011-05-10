@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
-
+import sys._
+ 
 class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
 
   "Exception matchers allow to check that exceptions are thrown"                          				                      ^

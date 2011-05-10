@@ -3,6 +3,7 @@ package io
 import java.io.File
 import specification._
 import execute._
+import sys._
 
 class FileWriterSpec extends Specification {  def is =
 

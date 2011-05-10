@@ -1,6 +1,7 @@
 package org.specs2
 package specification
 import io._
+import sys._
 import execute._
 import reporter._
 import matcher._

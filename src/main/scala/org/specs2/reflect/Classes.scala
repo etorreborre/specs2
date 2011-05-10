@@ -6,7 +6,7 @@ import ClassName._
 import control.Exceptions._
 import control.Throwablex._
 import io._
-
+import sys._
 /**
  * This trait provides utility functions for classes
  */

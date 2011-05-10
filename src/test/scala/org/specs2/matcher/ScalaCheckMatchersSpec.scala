@@ -6,6 +6,7 @@ import org.scalacheck.Gen
 import org.scalacheck.Gen._
 import org.scalacheck.Prop.{ forAll, proved }
 import io._
+import sys.error
 import specification._
 
 class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { def is =

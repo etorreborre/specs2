@@ -1,5 +1,6 @@
 package org.specs2
 package matcher
+import sys._
 
 class DataTablesSpec extends Specification with DataTables with ResultMatchers { def is =
                                                                                                                         """

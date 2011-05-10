@@ -1,6 +1,7 @@
 package org.specs2
 package form
 import execute._
+import sys._
 
 class FieldSpec extends Specification { def is =
                                                                                                                         """

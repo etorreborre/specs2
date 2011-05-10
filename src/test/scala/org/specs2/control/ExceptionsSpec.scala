@@ -1,5 +1,6 @@
 package org.specs2
 package control
+import sys._
 
 class ExceptionsSpec extends Specification with Exceptions {  def is =
                                                                                                                         """
