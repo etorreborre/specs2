@@ -83,16 +83,29 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    * @return a Tree[T] based on the level of each block
    */
   def toTree: Tree[T] = toTreeLoc.toTree
+
   /**
+   * map each node to another type given: the current type, the path from root (without the current node), the node number
+   *
    * @return a Tree[S] based on the level of each block, mapping each node to value of type
    *         S and possibly skipping nodes
    */
-  def toTree[S](m: (T, Int) => Option[S]): Tree[S] = toTreeLoc(m).toTree
+  def toTree[S](m: (T, Seq[S], Int) => Option[S]): Tree[S] = toTreeLoc(m).toTree
+  /**
+   * map each node to another type given: the current type, the node number
+   *
+   * @return a Tree[S] based on the level of each block, mapping each node to value of type
+   *         S and possibly skipping nodes
+   */
+  def toTree[S](m: (T, Int) => Option[S]): Tree[S] = {
+    def m1(t: T, s: Seq[S], i: Int) = m(t, i)
+    toTree[S](m1 _)
+  }
 
   /**
    * @return a TreeLoc[T] based on the level of each block
    */
-  def toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, i: Int) => Some(t))
+  def toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, parentsPath: Seq[T], i: Int) => Some(t))
   /**
    * WARNING this method assumes that the Levels are not empty!!
    * 
@@ -100,13 +113,14 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    *         S and possibly skipping nodes, passing the numeric label of the current node. 
    * @see JUnitDescriptions
    */
-  def toTreeLoc[S](m: (T, Int) => Option[S]): TreeLoc[S] = {
+  def toTreeLoc[S](m: (T, Seq[S], Int) => Option[S]): TreeLoc[S] = {
     val all = allLevels
-    val initial = m(all.head._1.t, 0).get
+    val initial = m(all.head._1.t, Seq(), 0).get
     all.drop(1).foldLeft(leaf(initial).loc) { (treeLoc, cur) =>
       val (block, level) = cur
-      m(block.t, treeLoc.root.toTree.flatten.size) match {
-        case Some(s) => treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc).insertDownLast(leaf(s))
+      val parent = treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc)
+      m(block.t, parent.path.reverse.toSeq, treeLoc.size) match {
+        case Some(s) => parent.insertDownLast(leaf(s))
         case None    => treeLoc
       }
     }

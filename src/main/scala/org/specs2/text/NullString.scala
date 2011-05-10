@@ -6,9 +6,9 @@ package text
  */
 private[specs2]
 trait NotNullStrings {
-  implicit def stringToNotNull(s: String) = new NotNullString(s)
-  class NotNullString(s: String) {
-    def notNull = if (s == null) "null" else s
+  implicit def anyToNotNull(a: Any) = new NotNullAny(a)
+  class NotNullAny(a: Any) {
+    def notNull = if (a == null) "null" else a.toString
   }
 }
 private[specs2]

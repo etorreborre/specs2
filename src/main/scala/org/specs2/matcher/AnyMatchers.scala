@@ -3,6 +3,7 @@ package matcher
 
 import reflect.ClassName._
 import text.Quote._
+import text.NotNullStrings._
 import execute._
 
 /**
@@ -154,7 +155,7 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
 	    }
       case other @ _ => other 
 	  }
-    result(a == b.value, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b, a.toString, b.value.toString)
+    result(a == b.value, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b, a.notNull, b.value.notNull.toString)
   }
 }
 
