@@ -31,7 +31,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
    * Fragments can be chained with the ^ method
    */
   class FragmentsFragment(fs: =>Fragments) {
-    private[specs2] def fragments = fs
+    def fragments = fs
     def ^(t: String) = fs add Text(t)
     def ^(f: Fragment) = f match {
       case s @ SpecStart(n, a) => fs specTitleIs s
@@ -120,6 +120,9 @@ trait FragmentsBuilder extends RegexSteps { outer =>
     def ~(p: (String, SpecificationStructure, String, String)) =
       See(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3, p._4)) ^ p._2.content.fragments
   }
+
+  /** create a link directly on a specification*/
+  def link(s: SpecificationStructure) = See(HtmlLink(s.content.start.name, linkText = s.content.start.name.name)) ^ s.content.fragments
 
   implicit def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = new HtmlLinkFragments2(HtmlLink(SpecName(""), s, "", "", "", Success()))
   class HtmlLinkFragments2(link: HtmlLink) {
