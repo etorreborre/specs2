@@ -6,6 +6,7 @@ import java.util.regex._
 import java.net.URL
 import java.util.zip._
 import scala.collection.JavaConversions._
+import java.lang.String._
 
 /**
  * The FileSystem trait abstracts file system operations to allow easier mocking of file system related functionalities.
@@ -18,20 +19,24 @@ trait FileSystem extends FileReader with FileWriter {
    * @param path glob expression, for example: <code>./dir/**/*.xml</code>
    * @return the list of paths represented by the "glob" definition <code>path</path>  
    */
-  def filePaths(path: String): List[String] = {
+  def filePaths(basePath: String = ".", path: String = "*"): Seq[String] = {
     val pattern = globToPattern(path) + (if (isDir(path)) "/*.*" else "")
-    recurse(new File(".")).collect { 
-      case f if (f.isFile && f.getPath.replace("\\", "/").matches(pattern)) => f.getPath 
-    }.toList
+    recurse(new File(basePath)).collect { case f if fileMatchesPattern(f, pattern) => f.getPath }.toSeq
   }
-  
+
+  private def isVersionFile(f: File) = Seq(".svn", ".cvs").exists(f.getPath.contains(_))
+  private def fileMatchesPattern(f: File, pattern: String) = {
+    val filePath = "./"+f.getPath.replace("\\", "/")
+    f.isFile && (filePath matches pattern)
+  }
+
   /**
    * @param file start file
    * @return a Stream with all the recursively accessible files
    */
   private def recurse(file: File): Stream[File] = {
 	  import Stream._
-	  cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.flatMap(recurse(_)))
+	  cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.filterNot(isVersionFile).flatMap(recurse(_)))
   }
   
   /**
