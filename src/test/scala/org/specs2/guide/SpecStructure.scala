@@ -672,6 +672,9 @@ And if there's no "before text":
      // or
      "text to highlight" ~ (specification, "after text", "tooltip")
 
+Finally if you want to link a specification with its own name as the link text:
+
+     link(specification)
 
 ### Specification title
 
