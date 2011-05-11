@@ -692,6 +692,30 @@ The title can be defined either:
  * at the beginning of the specification
  * just after the arguments of the specification
 
+### Index page
+
+Here's something you can do to automatically create an index page for your specifications:
+
+      import org.specs2._
+      import runner.FilesRunner
+
+      class index extends Specification with FilesRunner { def is =
+
+        examplesLinks("Example specifications")
+
+        def examplesLinks(t: String) = {
+          specifications("**/examples/*.scala").
+            foldLeft(t.title) { (res, cur) => res ^ link(cur) }
+        }
+      }
+
+The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method
+creates specifications using the following parameters:
+
+ * pattern: glob pattern to filter specification files
+ * spec pattern: pattern to use when trying to retrieve the specification names from the source files. Default value = `.*Spec`
+ * base path: the path where to start the search. Default value: the `specs2.srcTestDir` system value = `src/test/scala`
+
 ### Contexts
 
 There are some situations when we want to make sure that some actions are always done before or after each example, like
