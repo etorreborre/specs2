@@ -21,7 +21,7 @@ more precisely:
   { (success1 and skipped1) must_== success1 }                                                                          ^
   { (failure1 and success1) must_== failure1 }                                                                          ^
   { (failure1 and failure2) must_== failure1 }                                                                          ^
-  { (failure1 and error1)   must_== error1 }                                                                            ^
+  { (failure1 and error1)   must_== failure1 }                                                                          ^
                                                                                                                         p^
   "Results can be combined with or"                                                                                     ^
   { (success1 or success2) must_== Success("s1") }                                                                      ^

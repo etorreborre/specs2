@@ -13,7 +13,7 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
 
   val scalacheck    = "org.scala-tools.testing" % "scalacheck_2.9.0.RC3" % "1.9-SNAPSHOT" 
   val testinterface = "org.scala-tools.testing" % "test-interface" % "0.5" 
-  val scalazcore    = "org.scalaz" % "scalaz-core_2.9.0.RC3" % "6.0-SNAPSHOT" % "optional"
+  val scalazcore    = "org.specs2" % "scalaz-core_2.9.0.RC4" % "6.0-SNAPSHOT"
   val hamcrest      = "org.hamcrest" % "hamcrest-all" % "1.1"
   val mockito 	    = "org.mockito" % "mockito-all" % "1.8.5" 
   val junit         = "junit" % "junit" % "4.7"
@@ -31,26 +31,10 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
 	                                            s.contains("UserGuide") || 
 	                                            s.matches("org.specs2.guide.*") 
 
-  /** Documenting  - hack for creating the doc with 2.9.0 because 2.8.1 throws an Exception */
-  override protected def docAction = scaladocTask(mainLabel, mainSources, mainDocPath, docClasspath, documentOptions)
-  
-
-  /** Packaging */
-	// the published jar will contain scalaz classes so the "standard" one needs to be renamed
-  override def jarPath = defaultJarPath("-noscalaz.jar")
-    /** Proguard */
-	// the proguard jar name will have the "standard" jar name
-	override def minJarName = super.artifactBaseName + ".jar"
-  override def proguardOptions = List("-dontshrink -dontobfuscate -dontpreverify")
-
-	// add only the dependencies having scalaz in their name, to retain only the scalaz jar
-  override def proguardInJars = (super.proguardInJars +++ scalaLibraryPath) filter (_.name.contains("scalaz"))
-	
-    /** Sources */
+  /** Sources */
   val sourceArtifact = Artifact.sources(artifactID)
   override def packageSrcJar = defaultJarPath("-sources.jar")
-	// before publishing, package the sources and create the specs2 jar including the scalaz classes
-  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc, proguard)
+  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc)
   
   /** Publishing */
   override def managedStyle = ManagedStyle.Maven

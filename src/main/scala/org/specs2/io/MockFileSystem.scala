@@ -29,7 +29,7 @@ trait MockFileSystem extends FileSystem {
   override def readFile(path: String) = files(path)
 
   /** @return all file paths */
-  override def filePaths(path: String) = files.keySet.toList
+  override def filePaths(basePath: String = ".", path: String = "*") = files.keySet.toList
 
   /** adds a new file to the FileSystem. The file path will be a default one */
   def addFile(content: String): Unit = addFile(defaultFilePath, content)

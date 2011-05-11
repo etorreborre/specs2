@@ -4,7 +4,7 @@ package matcher
 import control.Exceptions._
 import execute._
 import Expectable._
-import scalaz._, Scalaz._
+import org.specs2.internal.scalaz._, Scalaz._
 import Generator._
 import text.Quote._
 import text.Plural._

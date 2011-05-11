@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-import scalaz.Monoid
+import org.specs2.internal.scalaz.Monoid
 import control._
 import Exceptions._
 import text.{DiffShortener, EditDistance}

@@ -3,7 +3,7 @@ package matcher
 
 import util.parsing.combinator.Parsers
 import util.parsing.input.{CharSequenceReader, Reader}
-import scalaz.Scalaz._
+import org.specs2.internal.scalaz.Scalaz._
 
 /**
  * Matchers for parser combinators

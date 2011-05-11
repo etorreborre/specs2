@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import scalaz.{ Functor, Scalaz }, Scalaz._
+import org.specs2.internal.scalaz.{ Functor, Scalaz }, Scalaz._
 import execute._
 import Expectable._
 

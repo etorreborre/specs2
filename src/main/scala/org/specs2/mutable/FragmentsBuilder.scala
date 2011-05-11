@@ -83,6 +83,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
    * add a new link to the Fragments
    */
   def link(f: Fragments) = addFragments(f)
+  override def link(s: SpecificationStructure) = addFragments(super.link(s))
 
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(s + " " + word)

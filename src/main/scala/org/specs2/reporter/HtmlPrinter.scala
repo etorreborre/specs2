@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import scala.xml.NodeSeq
-import scalaz.{Tree, TreeLoc, Reducer, Scalaz, Generator, Show}
+import org.specs2.internal.scalaz.{Tree, TreeLoc, Reducer, Scalaz, Generator, Show}
 import  Scalaz._
 import Generator._
 import html._
@@ -48,7 +48,7 @@ trait HtmlPrinter {
    */
   def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     copyResources()
-    val parentLink = HtmlLink(SpecName(s), "", SpecName(s).name)
+    val parentLink = HtmlLink(s.content.start.name, "", s.content.start.name.name)
     val htmlFiles = reduce(fs, parentLink)
     lazy val toc = globalToc(htmlFiles)
     htmlFiles.flatten.foreach { lines =>

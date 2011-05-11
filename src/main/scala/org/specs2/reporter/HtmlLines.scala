@@ -8,7 +8,7 @@ import form._
 import main.Arguments
 import execute._
 import specification._
-import scalaz.Scalaz._
+import org.specs2.internal.scalaz.Scalaz._
 
 /**
  * The HtmlLines groups a list of HtmlLine to print

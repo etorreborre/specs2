@@ -31,7 +31,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
    * Fragments can be chained with the ^ method
    */
   class FragmentsFragment(fs: =>Fragments) {
-    private[specs2] def fragments = fs
+    def fragments = fs
     def ^(t: String) = fs add Text(t)
     def ^(f: Fragment) = f match {
       case s @ SpecStart(n, a) => fs specTitleIs s
@@ -121,6 +121,9 @@ trait FragmentsBuilder extends RegexSteps { outer =>
       See(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3, p._4)) ^ p._2.content.fragments
   }
 
+  /** create a link directly on a specification*/
+  def link(s: SpecificationStructure) = See(HtmlLink(s.content.start.name, linkText = s.content.start.name.name)) ^ s.content.fragments
+
   implicit def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = new HtmlLinkFragments2(HtmlLink(SpecName(""), s, "", "", "", Success()))
   class HtmlLinkFragments2(link: HtmlLink) {
     def ~(p: (SpecificationStructure, String)) =
@@ -133,12 +136,14 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   implicit def inScope(s: Scope): Success = Success()
 }
 object FragmentsBuilder extends FragmentsBuilder
+
+import org.specs2.internal.scalaz._
 /**
  * Implementation of the Show trait to display Fragments
  */
 private[specs2]
 trait FragmentsShow {
-  implicit object showFragments extends scalaz.Show[Fragment] {
+  implicit object showFragments extends Show[Fragment] {
 	  def show(f: Fragment) = f.toString.toList
   }
 }

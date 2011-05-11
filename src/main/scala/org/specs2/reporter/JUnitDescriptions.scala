@@ -3,9 +3,9 @@ package reporter
 
 import _root_.org.junit.runner._
 import org.specs2.data.Trees._
-import scalaz._
-import scalaz.Scalaz._
-import scalaz.Traverse._
+import org.specs2.internal.scalaz._
+import org.specs2.internal.scalaz.Scalaz._
+import org.specs2.internal.scalaz.Traverse._
 import main.Arguments
 import specification._
 import control.{ExecutionOrigin, Stacktraces}

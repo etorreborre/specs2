@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import scalaz.{Monoid, Reducer}
+import org.specs2.internal.scalaz.{Monoid, Reducer}
 
 /**
  * MatchResultMessages are used to accumulate the results of several matches into a "summary" one

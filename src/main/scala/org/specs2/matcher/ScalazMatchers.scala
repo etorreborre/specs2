@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
-import scalaz._, Scalaz._
+import org.specs2.internal.scalaz._, Scalaz._
 
 /**
  * This trait provides matchers for some Scalaz (http://code.google.com/p/scalaz) datatypes.

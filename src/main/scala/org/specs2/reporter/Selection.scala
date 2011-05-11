@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import scalaz._
+import org.specs2.internal.scalaz._
 import Scalaz._
 import collection.Iterablex._
 import main.Arguments
