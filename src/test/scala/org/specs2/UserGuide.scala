@@ -1,6 +1,5 @@
 package org.specs2
 import guide._
-import specification._
 
 class UserGuide extends Specification { def is = 
   "User Guide".title                                                                             ^
@@ -20,7 +19,7 @@ class UserGuide extends Specification { def is =
   "how to use " ~ ("matchers", new Matchers)                                                     ^
   "how to " ~ ("execute a specification", new Runners)                                           ^
   "the ***specs2*** " ~ ("philosophy", new Philosophy)                                           ^
-  "the ***specs2*** " ~ ("design", new Design)                                                       ^
+  "the ***specs2*** " ~ ("design", new Design)                                                   ^
                                                                                                  end
 
 }
