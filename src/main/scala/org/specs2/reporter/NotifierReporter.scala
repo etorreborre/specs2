@@ -9,6 +9,7 @@ import scalaz.{Tree, Scalaz}
 import Scalaz._
 import data.Trees._
 import main.Arguments
+import io.Location
 
 /**
  * Report a Specification by notifying execution events to a Notifier
@@ -28,10 +29,16 @@ trait NotifierExporting extends Exporting {
     if (args.contains("html")) new HtmlExporting {}.export(s)(args)(fs)
   }
   private def notifyExport(fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
-    val tree = Levels.foldAll(fs).toTree(mapper)
-    if (args.noindent) export(tree.flattenSubForests)
-    else               export(tree)
-    ()
+    def notify(fs: Seq[ExecutedFragment]) = {
+      val tree = Levels.foldAll(fs).toTree(mapper)
+      if (args.noindent) export(tree.flattenSubForests)
+      else               export(tree)
+    }
+
+    if (fs.nonEmpty) notify(fs)
+    else             notify(Seq(ExecutedSpecStart(SpecName("empty specification"), Arguments(), new Location()),
+                                ExecutedSpecEnd(SpecName("empty specification"), new Location())))
+
   }
   private val mapper = (f: ExecutedFragment, i: Int) => f match {
     case e: ExecutedStandardFragment => None
