@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import scalaz.{ Scalaz, Monoid, Reducer }
+import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
 import Scalaz._
 import collection.Iterablex._
 import main.Arguments

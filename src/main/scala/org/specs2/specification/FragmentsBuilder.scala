@@ -136,12 +136,14 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   implicit def inScope(s: Scope): Success = Success()
 }
 object FragmentsBuilder extends FragmentsBuilder
+
+import org.specs2.internal.scalaz._
 /**
  * Implementation of the Show trait to display Fragments
  */
 private[specs2]
 trait FragmentsShow {
-  implicit object showFragments extends scalaz.Show[Fragment] {
+  implicit object showFragments extends Show[Fragment] {
 	  def show(f: Fragment) = f.toString.toList
   }
 }

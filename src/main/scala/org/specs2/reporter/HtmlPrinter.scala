@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import scala.xml.NodeSeq
-import scalaz.{Tree, TreeLoc, Reducer, Scalaz, Generator, Show}
+import org.specs2.internal.scalaz.{Tree, TreeLoc, Reducer, Scalaz, Generator, Show}
 import  Scalaz._
 import Generator._
 import html._

@@ -1,7 +1,7 @@
 package org.specs2
 package data
 
-import scalaz._
+import org.specs2.internal.scalaz._
 import Trees._
 import Scalaz.{node, leaf}
 import text.Trim._

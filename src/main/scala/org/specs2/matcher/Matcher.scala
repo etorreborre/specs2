@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import scalaz.Scalaz._
+import org.specs2.internal.scalaz.Scalaz._
 import control.Exceptions._
 import execute._
 import Expectable._

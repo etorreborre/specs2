@@ -3,7 +3,7 @@ package html
 
 import scala.xml._
 import transform.{RewriteRule, RuleTransformer}
-import scalaz.{ TreeLoc, Scalaz, Show }
+import org.specs2.internal.scalaz.{ TreeLoc, Scalaz, Show }
 import Scalaz._
 import data.Trees._
 import xml.Nodex._

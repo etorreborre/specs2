@@ -5,7 +5,7 @@ import control.Throwablex._
 import text.AnsiColors._
 import text.NotNullStrings._
 import main.Arguments
-import scalaz.Monoid
+import org.specs2.internal.scalaz.Monoid
 
 /**
  * The result of an execution, either:

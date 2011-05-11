@@ -8,7 +8,7 @@ import main.Arguments
 import execute._
 import text._
 import text.Trim._
-import scalaz.Monoid
+import org.specs2.internal.scalaz.Monoid
 import data.IncludedExcluded
 import io.Location
 import scala.Either

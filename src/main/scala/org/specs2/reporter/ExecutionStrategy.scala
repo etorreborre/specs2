@@ -3,7 +3,7 @@ package reporter
 
 import java.util.concurrent.Executors
 import execute.{ Error, Failure }
-import scalaz._
+import org.specs2.internal.scalaz._
 import Scalaz._
 import concurrent._
 import Strategy.Executor

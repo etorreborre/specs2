@@ -6,7 +6,7 @@ import control.LazyParameters._
 import control.LazyParameter
 import main.Arguments
 import StandardFragments._
-import scalaz.Monoid
+import org.specs2.internal.scalaz.Monoid
 
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd

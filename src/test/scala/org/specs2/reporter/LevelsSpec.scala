@@ -3,7 +3,7 @@ package reporter
 
 import org.scalacheck.{ Arbitrary, Shrink, Gen, Prop }
 import matcher.{ ScalazMatchers, Matcher, Expectable, MatchResult, MustExpectable }
-import scalaz._
+import org.specs2.internal.scalaz._
 import Scalaz._
 import specification._
 import Levels._
