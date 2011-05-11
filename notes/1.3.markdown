@@ -1,0 +1,18 @@
+This version adds new features on top of 1.2:
+
+ * more consistent ScalaCheck implicits + syntactic sugar to use custom `Arbitrary` instances
+ * decoupled a `run` method on the specs2.run object for easier execution of specifications in the console (inspired by Bill Venners's work on the ScalaTest shell)
+ * html files can be executed from Intellij by adding the `html` option in the test options
+ * added an example showing how to create a index.html page with links to all the specifications
+ * refactored the use of scalaz. specs2 now has its own version of the scalaz classes packaged as `org.specs2.internal.scalaz` and published as a separate dependency. This allows the scalaz team to use specs2 to specify other scalaz versions.
+ 
+And some fixes:
+
+ * `BeEqualTo` matcher is now a Matcher[Any] to be better aligned with the `==` method. `BeTypedEqualTo` or `be_===` can be used for typed equality
+ * `BeEqualTo` is more resilient to nulls
+ * AssertionErrors are treated as Failures
+ * `InOrder` calls bug in Mockito
+ * The filtering of examples works ok now with `\r` characters
+ * JUnit Description methods return expected values for `getTestClass`, `getDisplayName`,...
+
+------
