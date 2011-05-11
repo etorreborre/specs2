@@ -96,7 +96,8 @@ trait Classes extends Output {
     constructor.setAccessible(true)
   	try {
       val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
-      if (!m.erasure.isInstance(instance)) error(instance + " is not an instance of " + m.erasure.getName)
+      if (!m.erasure.isInstance(instance))
+        error(instance + " is not an instance of " + m.erasure.getName)
       instance.asInstanceOf[T]
   	} catch {
   	  case e: java.lang.reflect.InvocationTargetException => throw e.getTargetException
