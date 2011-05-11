@@ -22,7 +22,12 @@ trait Matchers extends AnyMatchers
 object Matchers extends Matchers
 
 trait MustMatchers extends Matchers with MustExpectations
+object MustMatchers extends MustMatchers
 trait ShouldMatchers extends Matchers with ShouldExpectations
+object ShouldMatchers extends ShouldMatchers
 
 trait MustThrownMatchers extends Matchers with MustThrownExpectations
+object MustThrownMatchers extends MustThrownMatchers
+
 trait ShouldThrownMatchers extends Matchers with ShouldThrownExpectations
+object ShouldThrownMatchers extends ShouldThrownMatchers
