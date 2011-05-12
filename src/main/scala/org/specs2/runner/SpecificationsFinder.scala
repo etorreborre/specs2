@@ -26,11 +26,23 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    * @return specification names by scanning files and trying to find specifications declarations
    */
   def specificationNames(path: String = "*", pattern: String = ".*Spec", basePath: String = FromSource.srcDir, verbose: Boolean = false) : Seq[String] = {
-     filePaths(basePath, path, verbose) filter (_.endsWith(".scala")) flatMap { p =>
-       val fileContent = readFile(p)
-       val packName = packageName(fileContent)
-       classNames(packName, fileContent, pattern, "object", "$") ++ classNames(packName, fileContent, pattern, "class", "")	 
-     } 
+    lazy val specClassPattern = {
+      val p = specPattern("class", pattern)
+      if (verbose) println("\nthe pattern used to match specification classes is: "+p+"\n")
+      Pattern.compile(p)
+    }
+    lazy val specObjectPattern = {
+      val p = specPattern("object", pattern)
+      if (verbose) println("\nthe pattern used to match specification objects is: "+p+"\n")
+      Pattern.compile(p)
+    }
+    filePaths(basePath, path, verbose) filter (_.endsWith(".scala")) flatMap { p =>
+      val fileContent = readFile(p)
+      val packName = packageName(fileContent)
+      val (objectPattern, classPattern) = (specObjectPattern, specClassPattern)
+      if (verbose) println("\nSearching for specifications in file: "+p)
+      classNames(packName, fileContent, objectPattern, "$", verbose) ++ classNames(packName, fileContent, classPattern, "", verbose)
+    }
    }
 
   /**
@@ -42,15 +54,17 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    * @param content content of the file
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    */
-  def classNames(packageName: String, content: String, pattern: String, specType: String, suffix: String): Seq[String] = {
+  def classNames(packageName: String, content: String, pattern: Pattern, suffix: String, verbose: Boolean = false): Seq[String] = {
+
     def result(m: Matcher): Stream[String] = 
       if (m.find) { 
     	  val fullName = List(packageName, m.group(1).trim).mkString(".") + suffix   
     	  Stream.cons(fullName, result(m))
-      }
-      else Stream.empty
-      
-    result(Pattern.compile(specPattern(specType, pattern)).matcher(content)).toList
+      } else Stream.empty
+
+    val found = result(pattern.matcher(content)).toList
+    if (verbose && found.nonEmpty) println("found the following specifications: "+found.mkString(","))
+    found
   }
 
   /**
