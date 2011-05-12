@@ -19,7 +19,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    * @return specifications created from specification names
    */
   def specifications(path: String = "*", pattern: String = ".*Spec", basePath: String = FromSource.srcDir): Seq[SpecificationStructure] =
-    specificationNames(path, pattern).flatMap(n => createSpecification(n))
+    specificationNames(path, pattern, basePath).flatMap(n => createSpecification(n))
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
