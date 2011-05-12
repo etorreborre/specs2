@@ -19,14 +19,20 @@ trait FileSystem extends FileReader with FileWriter {
    * @param path glob expression, for example: <code>./dir/**/*.xml</code>
    * @return the list of paths represented by the "glob" definition <code>path</path>  
    */
-  def filePaths(basePath: String = ".", path: String = "*"): Seq[String] = {
+  def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean = false): Seq[String] = {
+    val found = recurse(new File(basePath))
+    if (verbose) found.foreach { f => println("found file: "+f) }
     val pattern = globToPattern(path) + (if (isDir(path)) "/*.*" else "")
-    recurse(new File(basePath)).collect { case f if fileMatchesPattern(f, pattern) => f.getPath }.toSeq
+    if (verbose) println("\nThe pattern used to match files is: "+pattern)
+    val collected = found.collect { case f if fileMatchesPattern(f, pattern, verbose) => f.getPath }.toSeq
+    collected
   }
 
   private def isVersionFile(f: File) = Seq(".svn", ".cvs").exists(f.getPath.contains(_))
-  private def fileMatchesPattern(f: File, pattern: String) = {
+
+  private def fileMatchesPattern(f: File, pattern: String, verbose: Boolean = false) = {
     val filePath = "./"+f.getPath.replace("\\", "/")
+    if (verbose && f.isFile) println(filePath+" matches pattern: "+(filePath matches pattern))
     f.isFile && (filePath matches pattern)
   }
 

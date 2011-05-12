@@ -24,9 +24,7 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
       case Right(v) => skipped
     }
   }
-  def valueOrResult: Either[Result, T] = {
-    trye(value.get)(Error(_))
-  }
+  lazy val valueOrResult: Either[Result, T] = ResultExecution.executeProperty(value)
   /**
    * set a new value on the field. 
    */
@@ -36,7 +34,14 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   /** @alias for apply() */
   def get: T = apply()
   /** @return "label: value" */
-  override def toString = if (label.nonEmpty) label + ": " + this.get else this.get.toString
+  override def toString = {
+    val valueString = valueOrResult match {
+      case Left(Success(_)) => "_"
+      case Left(result)     => result.toString
+      case Right(v)         => v.toString
+    }
+    (if (label.nonEmpty) label + ": " else "") + valueString
+  }
   /** transforms this typed Field as a Field containing the toString value of the Fields value*/
   def toStringField = new Field(label, Property(value.get.toString), decorator)
   /** set a new Decorator */

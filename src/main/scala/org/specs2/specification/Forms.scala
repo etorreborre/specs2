@@ -26,11 +26,12 @@ object Forms extends Forms
 /**
  * The FormMarkup embeds the description of a form as text or as Xml
  */
-class FormMarkup(val form: Form) extends MarkupString {
+class FormMarkup(val f: () => Form) extends MarkupString {
+  lazy val form = f()
   def toXml = form.toXml
   override def toString = new FormCell(form).text
 }
 object FormMarkup {
   def unapply(f: FormMarkup): Option[Form] = Some(f.form)
-  def apply(f: =>Form) = new FormMarkup(f)
+  def apply(f: =>Form) = new FormMarkup(() => f)
 }

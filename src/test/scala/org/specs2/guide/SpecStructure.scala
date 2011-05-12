@@ -712,9 +712,10 @@ Here's something you can do to automatically create an index page for your speci
 The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method
 creates specifications using the following parameters:
 
- * pattern: glob pattern to filter specification files
- * spec pattern: pattern to use when trying to retrieve the specification names from the source files. Default value = `.*Spec`
- * base path: the path where to start the search. Default value: the `specs2.srcTestDir` system value = `src/test/scala`
+ * `pattern`: glob pattern to filter specification files. Default value is `**/*.scala`
+ * `specPattern`: pattern to use when trying to retrieve the specification names from the source files. Default value = `.*Spec`
+ * `basePath`: the path where to start the search. Default value: the `specs2.srcTestDir` system value = `src/test/scala`
+ * `verbose`: boolean indicating if information about finding files and specifications must be printed. Default value = `false`
 
 ### Contexts
 
