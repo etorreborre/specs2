@@ -12,27 +12,23 @@
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body onload="windowTitle();" class="value">
-
-      <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
-
+        <body class="value">
       <div id="definition">
         <img src="../../../lib/package_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
         <h1>reporter</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">package</span>
-      <span class="symbol">
+      <span class="symbol"> 
         <span class="name">reporter</span>
-        
         
         
       </span>
       </h4>
       
-          
-          <div class="fullcomment" id="comment"></div>
+          <div class="fullcommenttop" id="comment"></div>
         
 
       <div id="template">
@@ -43,11 +39,7 @@
           
           <div id="visbl">
               <span class="filtertype">Visibility</span>
-              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-            </div>
-          <div id="impl">
-              <span class="filtertype">Impl.</span>
-              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
             </div>
         </div>
 
@@ -57,310 +49,223 @@
               <h3>Type Members</h3>
               <ol><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
       <a id="ConsoleReporter:ConsoleReporter"></a>
-      <h4 class="signature"><a href="ConsoleReporter.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ConsoleReporter</span>
-        
+      <span class="symbol"> 
+        <a href="ConsoleReporter.html"><span class="name">ConsoleReporter</span></a>
         
         <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with TextExporting with ConsoleOutput</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">The console reporter executes a Specification and exports the results to the Console
 Output:</p>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection" data-isabs="true">
       <a id="DefaultSelection:DefaultSelection"></a>
-      <h4 class="signature"><a href="DefaultSelection.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">DefaultSelection</span>
-        
+      <span class="symbol"> 
+        <a href="DefaultSelection.html"><span class="name">DefaultSelection</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">The DefaultSelection trait filters the fragments to execute by filtering Examples according to their names
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSequence" data-isabs="true">
       <a id="DefaultSequence:DefaultSequence"></a>
-      <h4 class="signature"><a href="DefaultSequence.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">DefaultSequence</span>
-        
+      <span class="symbol"> 
+        <a href="DefaultSequence.html"><span class="name">DefaultSequence</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">The DefaultSequence trait sorts the Fragments by making sure Steps will be executed before Examples
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.EndOfArguments" data-isabs="false">
       <a id="EndOfArguments:EndOfArguments[T]"></a>
-      <h4 class="signature"><a href="EndOfArguments.html">
+      <h4 class="signature">
       <span class="kind">case class</span>
-      <span class="symbol">
-        <span class="name">EndOfArguments</span>
+      <span class="symbol"> 
+        <a href="EndOfArguments.html"><span class="name">EndOfArguments</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="value">
-                  value
-                  : T
-                  
-                </span>, <span name="name">
-                  name
-                  : SpecName
-                  
-                </span>)</span>
-        <span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
+        <span class="params">(<span name="value">value: T</span>, <span name="name">name: SpecName</span>)</span><span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.FragmentSeq" data-isabs="false">
       <a id="FragmentSeq:FragmentSeq"></a>
-      <h4 class="signature"><a href="FragmentSeq.html">
+      <h4 class="signature">
       <span class="kind">case class</span>
-      <span class="symbol">
-        <span class="name">FragmentSeq</span>
+      <span class="symbol"> 
+        <a href="FragmentSeq.html"><span class="name">FragmentSeq</span></a>
         
-        <span class="params">(<span name="fragments">
-                  fragments
-                  : Seq[Fragment]
-                  
-                </span>)</span>
-        <span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="fragments">fragments: Seq[Fragment]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.HandlerEvents" data-isabs="true">
       <a id="HandlerEvents:HandlerEvents"></a>
-      <h4 class="signature"><a href="HandlerEvents.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">HandlerEvents</span>
-        
+      <span class="symbol"> 
+        <a href="HandlerEvents.html"><span class="name">HandlerEvents</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Specific events which can be notified to sbt
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlExporting" data-isabs="true">
       <a id="HtmlExporting:HtmlExporting"></a>
-      <h4 class="signature"><a href="HtmlExporting.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">HtmlExporting</span>
-        
+      <span class="symbol"> 
+        <a href="HtmlExporting.html"><span class="name">HtmlExporting</span></a>
         
         <span class="result"> extends Exporting with HtmlPrinter</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Trait for exporting the specification as Html files
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter" data-isabs="true">
       <a id="HtmlPrinter:HtmlPrinter"></a>
-      <h4 class="signature"><a href="HtmlPrinter.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">HtmlPrinter</span>
-        
+      <span class="symbol"> 
+        <a href="HtmlPrinter.html"><span class="name">HtmlPrinter</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">The Html printer is used to create an Html report of an executed specification.</p>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlReporter" data-isabs="true">
       <a id="HtmlReporter:HtmlReporter"></a>
-      <h4 class="signature"><a href="HtmlReporter.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">HtmlReporter</span>
-        
+      <span class="symbol"> 
+        <a href="HtmlReporter.html"><span class="name">HtmlReporter</span></a>
         
         <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with HtmlExporting with ConsoleOutput</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Reports a Specification as an Html page
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.NoStartOfArguments" data-isabs="false">
       <a id="NoStartOfArguments:NoStartOfArguments[T]"></a>
-      <h4 class="signature"><a href="NoStartOfArguments.html">
+      <h4 class="signature">
       <span class="kind">case class</span>
-      <span class="symbol">
-        <span class="name">NoStartOfArguments</span>
+      <span class="symbol"> 
+        <a href="NoStartOfArguments.html"><span class="name">NoStartOfArguments</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="value">
-                  value
-                  : T
-                  
-                </span>)</span>
-        <span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
+        <span class="params">(<span name="value">value: T</span>)</span><span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.Notifier" data-isabs="true">
       <a id="Notifier:Notifier"></a>
-      <h4 class="signature"><a href="Notifier.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">Notifier</span>
-        
+      <span class="symbol"> 
+        <a href="Notifier.html"><span class="name">Notifier</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">This trait can be used for any event concerning the execution of examples
 seen as a Tree of Fragments.</p>
     </li><li visbl="pub" name="org.specs2.reporter.NotifierExporting" data-isabs="true">
       <a id="NotifierExporting:NotifierExporting"></a>
-      <h4 class="signature"><a href="NotifierExporting.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">NotifierExporting</span>
-        
+      <span class="symbol"> 
+        <a href="NotifierExporting.html"><span class="name">NotifierExporting</span></a>
         
         <span class="result"> extends Exporting</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.NotifierReporter" data-isabs="true">
       <a id="NotifierReporter:NotifierReporter"></a>
-      <h4 class="signature"><a href="NotifierReporter.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">NotifierReporter</span>
-        
+      <span class="symbol"> 
+        <a href="NotifierReporter.html"><span class="name">NotifierReporter</span></a>
         
         <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with NotifierExporting</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Report a Specification by notifying execution events to a Notifier
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.Reporter" data-isabs="true">
       <a id="Reporter:Reporter"></a>
-      <h4 class="signature"><a href="Reporter.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">Reporter</span>
-        
+      <span class="symbol"> 
+        <a href="Reporter.html"><span class="name">Reporter</span></a>
         
         <span class="result"> extends Selection with Sequence with ExecutionStrategy with Exporting</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">A Reporter will report the execution of a Specification following 3 steps:</p>
     </li><li visbl="pub" name="org.specs2.reporter.ResultOutput" data-isabs="true">
       <a id="ResultOutput:ResultOutput"></a>
-      <h4 class="signature"><a href="ResultOutput.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ResultOutput</span>
-        
+      <span class="symbol"> 
+        <a href="ResultOutput.html"><span class="name">ResultOutput</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">This traits provides specialised print methods for message representing
 different types of results.</p>
     </li><li visbl="pub" name="org.specs2.reporter.Selection" data-isabs="true">
       <a id="Selection:Selection"></a>
-      <h4 class="signature"><a href="Selection.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">Selection</span>
-        
+      <span class="symbol"> 
+        <a href="Selection.html"><span class="name">Selection</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">The Selection trait implements the logic for filtering the fragments to execute
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.Sequence" data-isabs="true">
       <a id="Sequence:Sequence"></a>
-      <h4 class="signature"><a href="Sequence.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">Sequence</span>
-        
+      <span class="symbol"> 
+        <a href="Sequence.html"><span class="name">Sequence</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">The Sequence trait implements the logic for the fragments to execute according to their dependencies
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.StartOfArguments" data-isabs="false">
       <a id="StartOfArguments:StartOfArguments[T]"></a>
-      <h4 class="signature"><a href="StartOfArguments.html">
+      <h4 class="signature">
       <span class="kind">case class</span>
-      <span class="symbol">
-        <span class="name">StartOfArguments</span>
+      <span class="symbol"> 
+        <a href="StartOfArguments.html"><span class="name">StartOfArguments</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="value">
-                  value
-                  : T
-                  
-                </span>, <span name="name">
-                  name
-                  : SpecName
-                  
-                </span>, <span name="args">
-                  args
-                  : Arguments
-                  
-                </span>)</span>
-        <span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
+        <span class="params">(<span name="value">value: T</span>, <span name="name">name: SpecName</span>, <span name="args">args: Arguments</span>)</span><span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.Stats" data-isabs="false">
       <a id="Stats:Stats"></a>
-      <h4 class="signature"><a href="Stats.html">
+      <h4 class="signature">
       <span class="kind">case class</span>
-      <span class="symbol">
-        <span class="name">Stats</span>
+      <span class="symbol"> 
+        <a href="Stats.html"><span class="name">Stats</span></a>
         
-        <span class="params">(<span name="fragments">
-                  fragments
-                  : Int
-                  
-                </span>, <span name="successes">
-                  successes
-                  : Int
-                  
-                </span>, <span name="expectations">
-                  expectations
-                  : Int
-                  
-                </span>, <span name="failures">
-                  failures
-                  : Int
-                  
-                </span>, <span name="errors">
-                  errors
-                  : Int
-                  
-                </span>, <span name="pending">
-                  pending
-                  : Int
-                  
-                </span>, <span name="skipped">
-                  skipped
-                  : Int
-                  
-                </span>, <span name="timer">
-                  timer
-                  : SimpleTimer
-                  
-                </span>, <span name="start">
-                  start
-                  : Option[ExecutedSpecStart]
-                  
-                </span>, <span name="end">
-                  end
-                  : Option[ExecutedSpecEnd]
-                  
-                </span>)</span>
-        <span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="fragments">fragments: Int</span>, <span name="successes">successes: Int</span>, <span name="expectations">expectations: Int</span>, <span name="failures">failures: Int</span>, <span name="errors">errors: Int</span>, <span name="pending">pending: Int</span>, <span name="skipped">skipped: Int</span>, <span name="timer">timer: SimpleTimer</span>, <span name="start">start: Option[ExecutedSpecStart]</span>, <span name="end">end: Option[ExecutedSpecEnd]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">The Stats class store results for the number of:
 * successes
 * expectations
@@ -370,143 +275,134 @@ different types of results.</p>
 * skipped</p>
     </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceReporter" data-isabs="false">
       <a id="TestInterfaceReporter:TestInterfaceReporter"></a>
-      <h4 class="signature"><a href="TestInterfaceReporter.html">
+      <h4 class="signature">
       <span class="kind">class</span>
-      <span class="symbol">
-        <span class="name">TestInterfaceReporter</span>
-        
+      <span class="symbol"> 
+        <a href="TestInterfaceReporter.html"><span class="name">TestInterfaceReporter</span></a>
         
         <span class="result"> extends ConsoleReporter with HandlerEvents</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Reporter for the test interface defined for sbt</p>
     </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceResultOutput" data-isabs="false">
       <a id="TestInterfaceResultOutput:TestInterfaceResultOutput"></a>
-      <h4 class="signature"><a href="TestInterfaceResultOutput.html">
+      <h4 class="signature">
       <span class="kind">class</span>
-      <span class="symbol">
-        <span class="name">TestInterfaceResultOutput</span>
-        
+      <span class="symbol"> 
+        <a href="TestInterfaceResultOutput.html"><span class="name">TestInterfaceResultOutput</span></a>
         
         <span class="result"> extends TextResultOutput with TestLoggers</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.TestLoggers" data-isabs="true">
       <a id="TestLoggers:TestLoggers"></a>
-      <h4 class="signature"><a href="TestLoggers.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">TestLoggers</span>
-        
+      <span class="symbol"> 
+        <a href="TestLoggers.html"><span class="name">TestLoggers</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.TextExporting" data-isabs="true">
       <a id="TextExporting:TextExporting"></a>
-      <h4 class="signature"><a href="TextExporting.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">TextExporting</span>
-        
+      <span class="symbol"> 
+        <a href="TextExporting.html"><span class="name">TextExporting</span></a>
         
         <span class="result"> extends TextPrinter with Exporting</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">This trait prints the executed fragments results and statistics
 at the end of the specification
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.TextPrinter" data-isabs="true">
       <a id="TextPrinter:TextPrinter"></a>
-      <h4 class="signature"><a href="TextPrinter.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">TextPrinter</span>
-        
+      <span class="symbol"> 
+        <a href="TextPrinter.html"><span class="name">TextPrinter</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">This trait reduces a list of ExecutedFragments to a list of PrintLines.</p>
     </li><li visbl="pub" name="org.specs2.reporter.TextResultOutput" data-isabs="false">
       <a id="TextResultOutput:TextResultOutput"></a>
-      <h4 class="signature"><a href="TextResultOutput.html">
+      <h4 class="signature">
       <span class="kind">class</span>
-      <span class="symbol">
-        <span class="name">TextResultOutput</span>
-        
+      <span class="symbol"> 
+        <a href="TextResultOutput.html"><span class="name">TextResultOutput</span></a>
         
         <span class="result"> extends ResultOutput with ConsoleOutput</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Implementation of the ResultOutput trait as Text
 </p>
     </li></ol>
             </div>
+        
+        
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
               <ol><li visbl="pub" name="org.specs2.reporter.ApplicableArguments" data-isabs="false">
       <a id="ApplicableArguments:ApplicableArguments"></a>
-      <h4 class="signature"><a href="ApplicableArguments$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">ApplicableArguments</span>
-        
+      <span class="symbol"> 
+        <a href="ApplicableArguments$.html"><span class="name">ApplicableArguments</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.ConsoleNotifier" data-isabs="false">
       <a id="ConsoleNotifier:ConsoleNotifier"></a>
-      <h4 class="signature"><a href="ConsoleNotifier$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">ConsoleNotifier</span>
-        
+      <span class="symbol"> 
+        <a href="ConsoleNotifier$.html"><span class="name">ConsoleNotifier</span></a>
         
         <span class="result"> extends Notifier</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection" data-isabs="false">
       <a id="DefaultSelection:DefaultSelection"></a>
-      <h4 class="signature"><a href="DefaultSelection$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">DefaultSelection</span>
-        
+      <span class="symbol"> 
+        <a href="DefaultSelection$.html"><span class="name">DefaultSelection</span></a>
         
         <span class="result"> extends DefaultSelection</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.FragmentSeq" data-isabs="false">
       <a id="FragmentSeq:FragmentSeq"></a>
-      <h4 class="signature"><a href="FragmentSeq$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">FragmentSeq</span>
-        
+      <span class="symbol"> 
+        <a href="FragmentSeq$.html"><span class="name">FragmentSeq</span></a>
         
         <span class="result"> extends Product with Serializable</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li><li visbl="pub" name="org.specs2.reporter.Stats" data-isabs="false">
       <a id="Stats:Stats"></a>
-      <h4 class="signature"><a href="Stats$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">Stats</span>
-        
+      <span class="symbol"> 
+        <a href="Stats$.html"><span class="name">Stats</span></a>
         
         <span class="result"> extends Product with Serializable</span>
       </span>
-      </a></h4>
+      </h4>
       
     </li></ol>
             </div>
