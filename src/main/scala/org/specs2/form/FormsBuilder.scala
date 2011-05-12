@@ -15,21 +15,21 @@ private[specs2]
 trait FormsBuilder {
 
   /** anything can be added on a Form row as a Field */
-  implicit def anyAreField[T](t: =>T) = Field(t)
+  implicit def anyIsField[T](t: =>T): Field[T] = Field(t)
   /** anything can be added on a Form row as a TextCell */
-  implicit def anyAreFieldCell[T](t: =>T) = fieldsAreTextCell(Field(t))
+  implicit def anyIsFieldCell[T](t: =>T): FieldCell = fieldIsTextCell(Field(t))
   /** any xml can be injected as a cell */
-  implicit def xmlIsACell[T](xml: =>NodeSeq) = new XmlCell(xml)
+  implicit def xmlIsACell[T](xml: =>NodeSeq): XmlCell = new XmlCell(xml)
   /** a Field can be added on a Form row as a FieldCell */
-  implicit def fieldsAreTextCell[T](t: Field[T]) = new FieldCell(t)
+  implicit def fieldIsTextCell[T](t: Field[T]) = new FieldCell(t)
   /** a Effect can be added on a Form row as a EffectCell */
-  implicit def effectAreTextCell[T](t: Effect[T]) = new EffectCell(t)
+  implicit def effectIsTextCell[T](t: Effect[T]): EffectCell = new EffectCell(t)
   /** a Prop can be added on a Form row as a PropCell */
-  implicit def propsAreCell(t: Prop[_, _]) = new PropCell(t)
+  implicit def propIsCell(t: Prop[_, _]): PropCell = new PropCell(t)
   /** a Form can be added on a Form row as a FormCell */
-  implicit def formsAreCell(t: =>Form): FormCell = new FormCell(t)
+  implicit def formIsCell(t: =>Form): FormCell = new FormCell(t)
   /** a Form can be implicitly executed if necessary */
-  implicit def formsAreExecutable(f: Form): Result = f.execute
+  implicit def formIsExecutable(f: Form): Result = f.execute
   /** a cell can be added lazily to a row. It will only be evaluated when necessary */
   def lazyfy(c: =>Cell) = new LazyCell(c)
 

@@ -41,6 +41,11 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   def tr(c1: Cell, cs: Cell*): Form = {
     newForm(title, this.rows :+ Row.tr(c1, cs:_*), result)
   }
+  /** add a new Row, with some cells */
+  def tr(cs: Seq[Cell]): Form = {
+    if (cs.isEmpty) this
+    else            newForm(title, this.rows :+ Row.tr(cs.head, cs.drop(1):_*), result)
+  }
 
   /** add the rows of a form */
   private def addRows(f: Form): Form = {
@@ -149,7 +154,9 @@ case object Form {
   /** @return an empty form with a title */
   def apply(title: String) = new Form(Some(title))
   /** @return a Form with one row */
-  def tr(c1: Cell, c: Cell*) = new Form().tr(c1, c:_*)
+  def tr(c1: Cell, cs: Cell*) = new Form().tr(c1, cs:_*)
+  /** @return a Form with one row */
+  def tr(cs: Seq[Cell]) = new Form().tr(cs)
   /** @return a Form with one row and cells formatted as header cells */
   def th(h1: Field[_], hs: Field[_]*) = new Form().th(h1, hs:_*)
   /** @return a Form with one row and cells formatted as header cells */
