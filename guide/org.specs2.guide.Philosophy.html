@@ -4,10 +4,10 @@
         @import url('./css/maven-base.css');
         @import url('./css/maven-theme.css');
       </style>
-      <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
+      <link type="text/css" rel="stylesheet" href="./css/prettify.css" />
       <script type="text/javascript" src="./css/prettify.js"></script>
-      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
-      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
+      <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
+      <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
       <script type="text/javascript" src="css/jquery.js"></script>
       <script type="text/javascript" src="css/jquery.cookie.js"></script>
       <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
@@ -34,7 +34,7 @@
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
-      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" /> 
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
     </head><body><div id="container"><title>Philosophy</title><a name="Philosophy"></a><h2>Philosophy</h2><div class="level0"><a name="The+origins"></a><h3>The origins</h3><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />
 Among the very first objectives of specs were:</p>
 <ul>
@@ -269,8 +269,8 @@ traits you add, the more implicits you bring in.</p><p>So the compromise is the 
 </ul><p>This way, if there is any conflict with the <code class="prettyprint">Specification</code> trait inherited definitions it should be possible to downgrade<br />
 to the <code class="prettyprint">BaseSpecification</code> and add the non-conflicting traits.</p>
 <hr /><p><br /></p></div></div><div id="tree">
-      <ul><li id="-1342120101"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="-1098319080"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1993234404"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-526231793"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -280,7 +280,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="33712769"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="1472605657"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -349,6 +349,8 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Specification+title">Specification title</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Index+page">Index page</a>
+          <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Defining+Before+actions">Defining Before actions</a>
           <ul></ul>
@@ -380,9 +382,9 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="1482034458"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="-747120260"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -420,7 +422,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -459,7 +461,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -497,7 +499,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -535,7 +537,45 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -573,7 +613,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -611,7 +651,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -649,7 +689,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -687,7 +727,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -725,7 +765,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -763,7 +803,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -801,7 +841,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -839,7 +879,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -877,7 +917,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -915,7 +955,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -953,7 +993,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -991,7 +1031,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1029,7 +1069,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1066,7 +1106,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1105,7 +1145,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1143,7 +1183,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1180,7 +1220,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1219,7 +1259,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1257,7 +1297,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1296,7 +1336,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1333,7 +1373,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1372,7 +1412,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1410,7 +1450,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1448,7 +1488,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1485,7 +1525,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1522,7 +1562,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1560,7 +1600,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1598,7 +1638,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1636,7 +1676,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1673,7 +1713,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1710,7 +1750,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-2057816845"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="-322057272"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1749,8 +1789,10 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
+          <ul></ul>
         </li></ul>
-        </li><li id="994357730"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="1892965460"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1794,7 +1836,7 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="707763356"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="433226241"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1814,5 +1856,5 @@ to the <code class="prettyprint">BaseSpecification</code> and add the non-confli
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['-1342120101','994357730'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1993234404','1892965460'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

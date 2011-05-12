@@ -4,10 +4,10 @@
         @import url('./css/maven-base.css');
         @import url('./css/maven-theme.css');
       </style>
-      <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
+      <link type="text/css" rel="stylesheet" href="./css/prettify.css" />
       <script type="text/javascript" src="./css/prettify.js"></script>
-      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
-      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
+      <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
+      <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
       <script type="text/javascript" src="css/jquery.js"></script>
       <script type="text/javascript" src="css/jquery.cookie.js"></script>
       <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
@@ -34,7 +34,7 @@
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
-      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" /> 
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
     </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"></a><h2>Specification structure</h2><div class="level0"><a name="Presentation"></a><h3>Presentation</h3><p>In this chapter you will learn how to:</p>
 <ul>
   <li>declare examples</li><li>share examples</li><li>add arguments for execution and reporting</li><li>format the layout of your specification</li><li>include or link specifications</li><li>give a title to your specification</li><li>define contexts and actions to execute before/after examples</li><li>tag examples or sections of the Specification</li>
@@ -47,7 +47,7 @@ Both styles actually build a specification as a list of <em>fragments</em>.</p><
   def e1 = success
   def e2 = success
 </code></pre><p>What we have here is a list of 3 fragments, a Text fragment and 2 Example fragments. The examples are declared using the<br />
-format <code class="prettyprint">&quot;description&quot; ! body</code> their &quot;bodies&quot; are provided by 2 methods returning a <code class="prettyprint">Result</code>, separated from the specification text.</p><p>There is no specific recommendation on how you should name those methods but you can either use short names or use the backtick<br />
+format <code class="prettyprint">&quot;description&quot; ! body</code>. Their &quot;bodies&quot; are provided by 2 methods returning a <code class="prettyprint">Result</code>, separated from the specification text.</p><p>There is no specific recommendation on how you should name those methods but you can either use short names or use the backtick<br />
 notation for better readability:</p>
 <pre><code class="prettyprint">  &quot;this is my specification&quot;                          ^
     &quot;and example 1&quot;                                   ! `first example`^
@@ -213,8 +213,8 @@ calculator:</p>
 <ul>
   <li>only a <code class="prettyprint">Given[T]</code> extractor can start a sequence</li><li>only a <code class="prettyprint">When[T, S]</code> extractor can follow a <code class="prettyprint">Given[T]</code> extractor</li><li>only a <code class="prettyprint">When[S, U]</code> extractor or a <code class="prettyprint">Then[S]</code> can follow a <code class="prettyprint">When[T, S]</code> extractor</li><li>only a <code class="prettyprint">Then[S]</code> can follow a <code class="prettyprint">Then[S]</code> extractor</li>
 </ul><a name="Extract+methods"></a><h5>Extract methods</h5><p>The <code class="prettyprint">Given</code>, <code class="prettyprint">When</code>, <code class="prettyprint">Then</code> classes provide several convenience methods to extract strings from the preceding text: the<br />
-<code class="prettyprint">extractn</code> methods will extracts the values delimited by <code class="prettyprint">${}</code> for up to 10 values.</p><a name="User+regexps"></a><h5>User regexps</h5><p>In the original way of declaring Given/When/Then steps, the text is left completely void of markers to extract meaningful<br />
-values. On the other hand the user specifies a regular expression where groups are used to show where those values are:</p>
+<code class="prettyprint">extract1, extract2,...</code> methods will extracts the values delimited by <code class="prettyprint">${}</code> for up to 10 values.</p><a name="User+regexps"></a><h5>User regexps</h5><p>In the original way of declaring Given/When/Then steps, the text is left completely void of markers to extract meaningful<br />
+values. The user then needs to specify a regular expression where groups are used to show where those values are:</p>
 <pre><code class="prettyprint">    object number1 extends Given[Int](&quot;Given the following number: (.*)&quot;) {
       def extract(text: String): Int = extract1(text).toInt
     }
@@ -280,7 +280,8 @@ above you could write:</p>
     age.toInt must_== 18
   }
 }
-</code></pre><p>You can also use the <code class="prettyprint">so</code> object doing the same thing and taking a <code class="prettyprint">PartialFunction</code>:</p>
+</code></pre><p>You can also use the <code class="prettyprint">so</code> object. This object provides an <code class="prettyprint">apply</code> method expecting a <code class="prettyprint">PartialFunction</code> and does the value<br />
+extraction:</p>
 <pre><code class="prettyprint">import org.specs2.specification.so
 
 &quot;given the name: ${eric}, then the age is ${18}&quot; ! so { case (name: String, age: String) =&gt;
@@ -486,6 +487,8 @@ another html file. The syntax to do this is the following:</p>
  &quot;text to highlight&quot; ~ (specification, &quot;after text&quot;)
  // or
  &quot;text to highlight&quot; ~ (specification, &quot;after text&quot;, &quot;tooltip&quot;)
+</code></pre><p>Finally if you want to link a specification with its own name as the link text:</p>
+<pre><code class="prettyprint"> link(specification)
 </code></pre><a name="Specification+title"></a><h3>Specification title</h3><p>Usually the title of a specification is derived from the specification class name. However if you want to give a more<br />
 readable name to your specification report you can do the following:</p>
 <pre><code class="prettyprint"> class MySpec extends Specification { def is =
@@ -496,6 +499,23 @@ readable name to your specification report you can do the following:</p>
 </code></pre><p>The title can be defined either:</p>
 <ul>
   <li>at the beginning of the specification</li><li>just after the arguments of the specification</li>
+</ul><a name="Index+page"></a><h3>Index page</h3><p>Here's something you can do to automatically create an index page for your specifications:</p>
+<pre><code class="prettyprint">  import org.specs2._
+  import runner.FilesRunner
+
+  class index extends Specification with FilesRunner { def is =
+
+    examplesLinks(&quot;Example specifications&quot;)
+
+    def examplesLinks(t: String) = {
+      specifications(&quot;**/examples/*.scala&quot;).
+        foldLeft(t.title) { (res, cur) =&gt; res ^ link(cur) }
+    }
+  }
+</code></pre><p>The specification above creates an index.html file in the <code class="prettyprint">target/specs2-reports</code> directory. The specifications method<br />
+creates specifications using the following parameters:</p>
+<ul>
+  <li><code class="prettyprint">pattern</code>: glob pattern to filter specification files. Default value is <code class="prettyprint">**/*.scala</code></li><li><code class="prettyprint">specPattern</code>: pattern to use when trying to retrieve the specification names from the source files. Default value = <code class="prettyprint">.*Spec</code></li><li><code class="prettyprint">basePath</code>: the path where to start the search. Default value: the <code class="prettyprint">specs2.srcTestDir</code> system value = <code class="prettyprint">src/test/scala</code></li><li><code class="prettyprint">verbose</code>: boolean indicating if information about finding files and specifications must be printed. Default value = <code class="prettyprint">false</code></li>
 </ul><a name="Contexts"></a><h3>Contexts</h3><p>There are some situations when we want to make sure that some actions are always done before or after each example, like<br />
 opening a database connection or deleting a file. <strong><em>specs2</em></strong> offers a support for those actions with specific traits:</p>
 <ul>
@@ -698,7 +718,7 @@ own Specification trait doing this:</p>
 </code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, a <code class="prettyprint">Step</code> executed before all the fragments, and one<br />
 executed after all of them.</p><a name="Other+unit+specification+methods"></a><h3>Other unit specification methods</h3><p>Other methods can be used to create fragments in a unit specification:</p>
 <ul>
-  <li><code class="prettyprint">can</code> to create a group of Examples, with a the preceding Text fragment appended with <code class="prettyprint">can</code></li><li><code class="prettyprint">&gt;&gt;</code> to create an Example or a group of Examples (with no appended text)</li><li><code class="prettyprint">&quot;My spec title&quot;.title</code> to give a title to the Specification</li><li><code class="prettyprint">args(...)</code> to create arguments for the specification</li><li><code class="prettyprint">step(s)</code> to create a <code class="prettyprint">Step</code></li><li><code class="prettyprint">action(a)</code> to create an <code class="prettyprint">Action</code></li><li><code class="prettyprint">link(&quot;how&quot; ~ (&quot;to do hello world&quot;, new HelloWorldSpec))</code> to create a link to another specification</li><li><code class="prettyprint">include(new HelloWorldSpec)</code> to include another specification</li>
+  <li><code class="prettyprint">can</code> to create a group of Examples, with the preceding Text fragment appended with <code class="prettyprint">can</code></li><li><code class="prettyprint">&gt;&gt;</code> to create an Example or a group of Examples (with no appended text)</li><li><code class="prettyprint">&quot;My spec title&quot;.title</code> to give a title to the Specification</li><li><code class="prettyprint">args(...)</code> to create arguments for the specification</li><li><code class="prettyprint">step(s)</code> to create a <code class="prettyprint">Step</code></li><li><code class="prettyprint">action(a)</code> to create an <code class="prettyprint">Action</code></li><li><code class="prettyprint">link(&quot;how&quot; ~ (&quot;to do hello world&quot;, new HelloWorldSpec))</code> to create a link to another specification</li><li><code class="prettyprint">include(new HelloWorldSpec)</code> to include another specification</li>
 </ul><p>To make things more concrete here is a full example:</p>
 <pre><code class="prettyprint">  import mutable._
   import specification._
@@ -848,11 +868,11 @@ Let's have a look at one example:</p>
 </ul>
 <hr /></div><p></p><br /><table class="dataTable">
         <tr><th colSpan="2">Total for specification Specification structure</th></tr>
-        <tr><td>Finished in</td><td class="info">24 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">28 ms</td></tr>
         <tr><td>Results</td><td class="success">17 examples, 0 failure, 0 error</td></tr>
       </table></div><div id="tree">
-      <ul><li id="-1342120101"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="-1098319080"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1993234404"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-526231793"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -862,7 +882,7 @@ Let's have a look at one example:</p>
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="33712769"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="1472605657"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -931,6 +951,8 @@ Let's have a look at one example:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Specification+title">Specification title</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Index+page">Index page</a>
+          <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Defining+Before+actions">Defining Before actions</a>
           <ul></ul>
@@ -962,9 +984,9 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="1482034458"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="-747120260"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1002,7 +1024,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1041,7 +1063,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1079,7 +1101,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1117,7 +1139,45 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1155,7 +1215,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1193,7 +1253,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1231,7 +1291,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1269,7 +1329,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1307,7 +1367,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1345,7 +1405,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1383,7 +1443,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1421,7 +1481,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1459,7 +1519,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1497,7 +1557,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1535,7 +1595,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1573,7 +1633,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1611,7 +1671,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1648,7 +1708,7 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1687,7 +1747,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1725,7 +1785,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1762,7 +1822,7 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1801,7 +1861,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1839,7 +1899,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1878,7 +1938,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1915,7 +1975,7 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1954,7 +2014,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1992,7 +2052,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2030,7 +2090,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2067,7 +2127,7 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2104,7 +2164,7 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2142,7 +2202,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2180,7 +2240,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2218,7 +2278,7 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2255,7 +2315,7 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2292,7 +2352,7 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-2057816845"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="-322057272"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -2331,8 +2391,10 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
+          <ul></ul>
         </li></ul>
-        </li><li id="994357730"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="1892965460"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -2376,7 +2438,7 @@ Let's have a look at one example:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="707763356"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="433226241"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -2396,5 +2458,5 @@ Let's have a look at one example:</p>
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['-1342120101','33712769'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1993234404','1472605657'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

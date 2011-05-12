@@ -4,10 +4,10 @@
         @import url('./css/maven-base.css');
         @import url('./css/maven-theme.css');
       </style>
-      <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
+      <link type="text/css" rel="stylesheet" href="./css/prettify.css" />
       <script type="text/javascript" src="./css/prettify.js"></script>
-      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
-      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
+      <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
+      <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
       <script type="text/javascript" src="css/jquery.js"></script>
       <script type="text/javascript" src="css/jquery.cookie.js"></script>
       <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
@@ -34,7 +34,7 @@
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
-      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" /> 
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
     </head><body><div id="container"><title>Matchers guide</title><a name="Matchers+guide"></a><h2>Matchers guide</h2><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns<br />
 a <code class="prettyprint">Result</code>:</p>
 <ul>
@@ -59,12 +59,14 @@ API for the complete list:</p>
 <pre><code class="prettyprint">   1 must beEqualTo(1)
    1 must be_==(1)            // with a shorter matcher
    1 must_== 1                // my favorite!
+   1 mustEqual 1              // if you dislike underscores
    1 should_== 1              // for should lovers
    1 === 1                    // the ultimate shortcut
    1 must be equalTo(1)       // with a literate style
 
    1 must not be equalTo(2)   // with a negation
    1 must_!= 2                // with a negation
+   1 mustNotEqual 2           // with a negation
    1 must be_!=(2)            // with a negation
    1 !== 2                    // with a negation
 </code></pre><p>You can see on the examples above several things which are applicable to all matchers:</p>
@@ -140,13 +142,7 @@ iterator.next must be_==(3).eventually
 1 must be_==(2).orSkip(&quot;Precondition failed&quot;)  // prints &quot;Precondition failed: '1' is not equal to '2'&quot;
 </code></pre>
   </li>
-</ul><p>There may sometimes be typing issues with <code class="prettyprint">be_==</code> and <code class="prettyprint">orSkip</code>:</p>
-<pre><code class="prettyprint">    // will not compile!
-    (Some(1): Option[Int]) must be_==(Some(1)).orSkip
-</code></pre><p>The alternative is to either add a type annotation or to use the <code class="prettyprint">be_===</code> matcher:</p>
-<pre><code class="prettyprint">   (Some(1): Option[Int]) must be_==(Some(1): Option[Int]).orSkip
-   (Some(1): Option[Int]) must be_===(Some(1)).orSkip
-</code></pre><p>Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:</p>
+</ul><p>Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:</p>
 <pre><code class="prettyprint">   val m: Matcher[String]  = ((_: String).startsWith(&quot;hello&quot;), &quot;doesn't start with hello&quot;)
    val m1: Matcher[String] = ((_: String).startsWith(&quot;hello&quot;), &quot;starts with hello&quot;, &quot;doesn't start with hello&quot;)
    val m2: Matcher[String] = ((_: String).startsWith(&quot;hello&quot;), (s:String) =&gt; s+ &quot; doesn't start with hello&quot;)
@@ -178,7 +174,16 @@ iterator.next must be_==(3).eventually
     <p>you can use the <code class="prettyprint">description</code> method on the <code class="prettyprint">Expectable</code> class to return the full description of the expectable including<br />
      the optional description you setup using the <code class="prettyprint">aka</code> method</p>
   </li>
-</ul><a name="Matchers+for+Option+%2F+Either"></a><h4>Matchers for Option / Either</h4><p>There are several matchers to check Option and Either instances:</p>
+</ul><a name="Matching+with+a+sequence+of+values"></a><h4>Matching with a sequence of values</h4><p>If you have the same &quot;MatchResult&quot; expression that you'd like to verify for different values you can write one of the following:</p>
+<pre><code class="prettyprint">    // stop after the first failure
+    ((_:Int) must be_&gt;(2)).forall(Seq(3, 4, 5))
+
+    // try to match all values and collect the results
+    ((_:Int) must be_&gt;(2)).foreach(Seq(3, 4, 5))
+
+    // succeeds after the first success
+    ((_:Int) must be_&gt;(2)).atLeastOnce(Seq(3, 4, 5))
+</code></pre><a name="Matchers+for+Option+%2F+Either"></a><h4>Matchers for Option / Either</h4><p>There are several matchers to check Option and Either instances:</p>
 <ul>
   <li><code class="prettyprint">beSome</code> checks if an element is Some(_)</li><li><code class="prettyprint">beSome.which(function)</code> checks if an element is Some(_) and satisfies a function returning a boolean</li><li><code class="prettyprint">beSome.like(partial function)</code> checks if an element is Some(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li><li><code class="prettyprint">beNone</code> checks if an element is None</li><li><code class="prettyprint">beAsNoneAs</code> checks if 2 values are equal to None at the same time</li><li><code class="prettyprint">beRight</code> checks if an element is Right(_)</li><li><code class="prettyprint">beRight.like(partial function)</code> checks if an element is Right(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li><li><code class="prettyprint">beLeft</code> checks if an element is Left(_)</li><li><code class="prettyprint">beLeft.like(partial function)</code> checks if an element is Left(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
 </ul><a name="String+matchers"></a><h4>String matchers</h4><p>Matching on strings is very common. Here are the matchers which can help you:</p>
@@ -425,32 +430,44 @@ the Scala interpreter and execute a script:</p>
       /** this parser returns an error */
       val error: Parser[String] = err(&quot;Error&quot;)
     }
-</code></pre><a name="ScalaCheck+properties"></a><h3>ScalaCheck properties</h3><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can define a ScalaCheck property<br />
- and add it to the body of your example:</p>
-<pre><code class="prettyprint">  &quot;addition and multiplication are related&quot; ! Prop.forAll { (a: Int) =&gt; a + a == 2 * a }
-</code></pre><p>You will get even better failure messages if you use matchers in the checked function, and in that case you can simply pass<br />
-the function:</p>
-<pre><code class="prettyprint">  &quot;addition and multiplication are related&quot; ! { (a: Int) =&gt; a + a must_== 2 * a }
-</code></pre><p>Note that sometimes type inference may not work (if there are several parameters) so you will need to use the <code class="prettyprint">check</code> method:</p>
-<pre><code class="prettyprint">  &quot;addition and multiplication are related&quot; ! check { (a: Int, b: Int) =&gt; a + b must_== b + a }
-</code></pre><a name="Arbitrary+instances"></a><h4>Arbitrary instances</h4><p>By default <code class="prettyprint">Arbitrary</code> instances are taken from the surrounding example scope. However you'll certainly need to generate<br />
-your own data from time to time. Here's how to specify your Arbitrary instances in an example:</p>
-<pre><code class="prettyprint">    &quot;a simple property&quot; ! check(arb1)
+</code></pre><a name="ScalaCheck+properties"></a><h3>ScalaCheck properties</h3><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions to the <code class="prettyprint">check</code> method<br />
+and use the resulting block as your example body:</p>
+<pre><code class="prettyprint">  &quot;addition and multiplication are related&quot; ! check { (a: Int) =&gt; a + a == 2 * a }
+</code></pre><p>The function that is checked can either return:</p>
+<pre><code class="prettyprint">  // a Boolean
+  &quot;addition and multiplication are related&quot; ! check { (a: Int) =&gt; a + a == 2 * a }
 
-     // there's an implicit conversion to transform a function to a Prop
-     // but it has to happen *inside* our Arbitrary scope
-     def arb1: Prop = {
-       implicit def a = Arbitrary { for { a &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;); b &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;) } yield a+b }
-       (s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;)
-     }
-     // otherwise you can explicitly write      
-     def arb1 = {
-       implicit def a = Arbitrary { for { a &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;); b &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;) } yield a+b }
-       asProperty((s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
-     }
+  // a MatchResult
+  &quot;addition and multiplication are related&quot; ! check { (a: Int) =&gt; a + a must_== 2 * a }
+
+  // a Prop
+  &quot;addition and multiplication are related&quot; ! check { (a: Int) =&gt; (a &gt; 0) ==&gt; (a + a must_== 2 * a) }
+</code></pre><p>Note that if you pass functions using MatchResults you will get better failure messages so you are encouraged to do so.</p><a name="Arbitrary+instances"></a><h4>Arbitrary instances</h4><p>By default <code class="prettyprint">Arbitrary</code> instances are taken from the surrounding example scope. However you'll certainly need to generate<br />
+your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope<br />
+of the function you're testing:</p>
+<pre><code class="prettyprint">    // this arbitrary will be used for all the examples
+    implicit def a = Arbitrary { for { a &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;); b &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;) } yield a+b }
+
+    &quot;a simple property&quot; ! ex1
+
+     def ex1 = check((s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
+</code></pre><p>You can also be very specific if you want to use an <code class="prettyprint">Arbitrary</code> instance only on one example. In that case, just replace the<br />
+<code class="prettyprint">check</code> method with the name of your <code class="prettyprint">Arbitrary</code> instance:</p>
+<pre><code class="prettyprint">    &quot;a simple property&quot;       ! ex1
+    &quot;a more complex property&quot; ! ex2
+
+    implicit def abStrings = Arbitrary { for { a &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;); b &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;) } yield a+b }
+    def ex1 = abStrings((s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
+
+    // use a tuple if there are several parameters to your function
+    def ex2 = (abStrings, abStrings)((s1: String, s2: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
 </code></pre><a name="Setting+the+ScalaCheck+properties"></a><h4>Setting the ScalaCheck properties</h4><p>ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use<br />
 implicit values:</p>
 <pre><code class="prettyprint">  implicit val params = set(minTestsOk -&gt; 20) // use display instead of set to get additional console printing
+</code></pre><p>It is also possible to specifically set the execution parameters on a given property:</p>
+<pre><code class="prettyprint">  &quot;this is a specific property&quot; ! check { (a: Int, b: Int) =&gt;
+    (a + b) must_== (b + a)
+  }.set(minTestsOk -&gt; 200, workers -&gt; 3)
 </code></pre><p>The parameters you can modify are:</p>
 <ul>
   <li><code class="prettyprint">minTestsOk</code>: minimum of tests which must be ok before the property is ok (default=100)</li><li><code class="prettyprint">maxDiscarded</code>: if the data generation discards too many values, then the property can't be proven (default=500)</li><li><code class="prettyprint">minSize</code>: minimum size for the &quot;sized&quot; data generators, like list generators (default=0)</li><li><code class="prettyprint">maxSize</code>: maximum size for the &quot;sized&quot; data generators (default=100)</li><li><code class="prettyprint">workers</code>: number of threads checking the property (default=1)</li>
@@ -574,7 +591,7 @@ addition of integers by providing one example on each row of a table:</p>
   }
 </code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you<br />
 can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"></a><h3>Forms</h3><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed<br />
-to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a href="org.specs2.guide.Forms.html" tooltip="">how to use Forms</a></div><div class="level0"><a name="Reusing+matchers+outside+of+specs2"></a><h3>Reusing matchers outside of specs2</h3><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test<br />
+to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div><div class="level0"><a name="Reusing+matchers+outside+of+specs2"></a><h3>Reusing matchers outside of specs2</h3><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test<br />
 framework. You can reuse the following traits:</p>
 <ul>
   
@@ -594,11 +611,11 @@ framework. You can reuse the following traits:</p>
 </ul>
 <hr /></div><p></p><br /><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers guide</th></tr>
-        <tr><td>Finished in</td><td class="info">1 second, 212 ms</td></tr>
-        <tr><td>Results</td><td class="success">42 examples, 99 expectations, 0 failure, 0 error</td></tr>
+        <tr><td>Finished in</td><td class="info">1 second, 948 ms</td></tr>
+        <tr><td>Results</td><td class="success">44 examples, 319 expectations, 0 failure, 0 error</td></tr>
       </table></div><div id="tree">
-      <ul><li id="-1342120101"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="-1098319080"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1993234404"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-526231793"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -608,7 +625,7 @@ framework. You can reuse the following traits:</p>
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="33712769"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="1472605657"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -677,6 +694,8 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Specification+title">Specification title</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Index+page">Index page</a>
+          <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Defining+Before+actions">Defining Before actions</a>
           <ul></ul>
@@ -708,9 +727,9 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="1482034458"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="-747120260"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -748,7 +767,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -787,7 +806,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -825,7 +844,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -863,7 +882,45 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -901,7 +958,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -939,7 +996,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -977,7 +1034,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1015,7 +1072,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1053,7 +1110,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1091,7 +1148,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1129,7 +1186,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1167,7 +1224,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1205,7 +1262,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1243,7 +1300,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1281,7 +1338,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1319,7 +1376,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1357,7 +1414,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1394,7 +1451,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1433,7 +1490,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1471,7 +1528,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1508,7 +1565,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1547,7 +1604,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1585,7 +1642,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1624,7 +1681,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1661,7 +1718,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1700,7 +1757,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1738,7 +1795,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1776,7 +1833,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1813,7 +1870,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1850,7 +1907,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1888,7 +1945,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1926,7 +1983,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1964,7 +2021,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2001,7 +2058,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2080495580"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2038,7 +2095,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-2057816845"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="-322057272"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -2077,8 +2134,10 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
+          <ul></ul>
         </li></ul>
-        </li><li id="994357730"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="1892965460"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -2122,7 +2181,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="707763356"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="433226241"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -2142,5 +2201,5 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['-1342120101','1482034458'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1993234404','-747120260'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
