@@ -18,15 +18,15 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    * @return specifications created from specification names
    */
-  def specifications(path: String = "*", pattern: String = ".*Spec", basePath: String = FromSource.srcDir): Seq[SpecificationStructure] =
-    specificationNames(path, pattern, basePath).flatMap(n => createSpecification(n))
+  def specifications(path: String = "*", pattern: String = ".*Spec", basePath: String = FromSource.srcDir, verbose: Boolean = false): Seq[SpecificationStructure] =
+    specificationNames(path, pattern, basePath, verbose).flatMap(n => createSpecification(n))
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    * @return specification names by scanning files and trying to find specifications declarations
    */
-  def specificationNames(path: String = "*", pattern: String = ".*Spec", basePath: String = FromSource.srcDir) : Seq[String] = {
-     filePaths(basePath, path) filter (_.endsWith(".scala")) flatMap { p =>
+  def specificationNames(path: String = "*", pattern: String = ".*Spec", basePath: String = FromSource.srcDir, verbose: Boolean = false) : Seq[String] = {
+     filePaths(basePath, path, verbose) filter (_.endsWith(".scala")) flatMap { p =>
        val fileContent = readFile(p)
        val packName = packageName(fileContent)
        classNames(packName, fileContent, pattern, "object", "$") ++ classNames(packName, fileContent, pattern, "class", "")	 
