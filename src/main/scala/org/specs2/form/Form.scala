@@ -156,7 +156,7 @@ case object Form {
   /** @return a Form with one row */
   def tr(c1: Cell, cs: Cell*) = new Form().tr(c1, cs:_*)
   /** @return a Form with one row */
-  def tr(cs: Seq[Cell]) = new Form().tr(cs)
+  def tr(cs: Seq[Field[_]]) = new Form().tr(cs.map(FieldCell(_)))
   /** @return a Form with one row and cells formatted as header cells */
   def th(h1: Field[_], hs: Field[_]*) = new Form().th(h1, hs:_*)
   /** @return a Form with one row and cells formatted as header cells */
