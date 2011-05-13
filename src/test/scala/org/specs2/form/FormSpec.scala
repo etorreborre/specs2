@@ -1,18 +1,16 @@
 package org.specs2
 package form
-import FormsBuilder._
 import specification._
+import Forms._
 
 class FormSpec extends Specification { def is =
                                                                                                                         """
-A Form is a generic table which has an optional title and rows.
-Each row contains cells which can be created from Fields, Props or other Forms.
+A Form is a generic table which has an optional title and rows. Each row contains cells which can be created from
+Fields, Props or other Forms.
 
-A Form is usually created in a specification with expected values so that it
-can be displayed with the rest of the text (whereas a DataTable is only displayed
-when there are failures. It is then "implemented" with actual values in an example.
-Upon execution a Form will return a Result value summarizing the execution of each
-Prop it embeds.
+A Form is usually created in a specification with expected values so that it can be displayed with the rest of the text
+(whereas a DataTable is only displayed when there are failures. It is then "implemented" with actual values in an example.
+Upon execution a Form will return a Result value summarizing the execution of each Prop it embeds.
                                                                                                                         """^
                                                                                                                         p^
 "A Form can be created"                                                                                                 ^
@@ -22,6 +20,7 @@ Prop it embeds.
   "with a title and one field on each row"                                                                              ! creation.e4 ^
   "with a property on one row"                                                                                          ! creation.e5 ^
   "with another Form on one row"                                                                                        ! creation.e6 ^
+  "with a seq of fields on one row"                                                                                     ! creation.e7 ^
                                                                                                                         p^
 "A Form can be displayed, showing expected values"                                                                      ^
   "with its title"                                                                                                      ^
@@ -69,6 +68,7 @@ Prop it embeds.
                   tr(field("age", 18)).rows.size must_== 2
     def e5 = Form("title").tr(prop("name", "eric")).rows.size must_== 1
     def e6 = Form("title").tr(form("title")).rows.size must_== 1
+    def e7 = Form.tr(Seq(field(1), field(2))).rows(0).cells.size must_== 2
   }
 
   object display {
