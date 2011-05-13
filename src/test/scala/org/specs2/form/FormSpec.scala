@@ -21,6 +21,7 @@ Upon execution a Form will return a Result value summarizing the execution of ea
   "with a property on one row"                                                                                          ! creation.e5 ^
   "with another Form on one row"                                                                                        ! creation.e6 ^
   "with a seq of fields on one row"                                                                                     ! creation.e7 ^
+  "with a seq of fields on one row - and no title"                                                                      ! creation.e8 ^
                                                                                                                         p^
 "A Form can be displayed, showing expected values"                                                                      ^
   "with its title"                                                                                                      ^
@@ -68,7 +69,8 @@ Upon execution a Form will return a Result value summarizing the execution of ea
                   tr(field("age", 18)).rows.size must_== 2
     def e5 = Form("title").tr(prop("name", "eric")).rows.size must_== 1
     def e6 = Form("title").tr(form("title")).rows.size must_== 1
-    def e7 = Form.tr(Seq(field(1), field(2))).rows(0).cells.size must_== 2
+    def e7 = Form("title").tr(Seq(field(1), field(2)):_*).rows(0).cells.size must_== 2
+    def e8 = Form.tr(Seq(field(1), field(2)):_*).rows(0).cells.size must_== 2
   }
 
   object display {
