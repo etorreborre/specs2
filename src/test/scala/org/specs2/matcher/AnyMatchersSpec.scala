@@ -4,7 +4,7 @@ import java.io._
 import execute._
 
 class AnyMatchersSpec extends Specification with ResultMatchers { def is =
-  fullStackTrace^
+
   "be_== checks the equality of 2 objects"                                                                              ^
   { "a" must_== "a" }                                                                                                   ^
   { "a" must not be_==(null) }                                                                                          ^
@@ -92,10 +92,21 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is =
                                                                                                                         p^
   "beAssignableFrom checks if a class is assignable from another"                                                       ^
   { classOf[OutputStream] must beAssignableFrom[FileOutputStream] }                                                     ^
+                                                                                                                        p^
+  "beAnInstanceOf checks if an object is an instance of a given type"                                                   ^
+    { type1 must beAnInstanceOf[Type1] }                                                                                ^
+    { type1 must not be anInstanceOf[Type2] }                                                                           ^
+    { (type1 must beAnInstanceOf[Type2]).message must_== "'type1' is not an instance of 'org.specs2.matcher.Type2'" }   ^
                                                                                                                         end
                                                                                           
   def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
            "'3' is not equal to '2'"
   val aValue: String = "a value"
 
+  val type1 = new Type1 {
+    override def toString = "type1"
+  }
+
 }
+trait Type1
+trait Type2

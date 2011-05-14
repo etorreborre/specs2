@@ -91,7 +91,7 @@ trait AnyBaseMatchers {
       val c = implicitly[ClassManifest[T]].erasure
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
       result(xClass == c,
-             x.description + " has class" + q(c.getName), 
+             x.description + " has class " + q(c.getName),
              x.description + " doesn't have class " + q(c.getName) + " but " + q(xClass.getName),
              x)
     }
@@ -102,7 +102,7 @@ trait AnyBaseMatchers {
       val c = implicitly[ClassManifest[T]].erasure
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
       result(c.isAssignableFrom(xClass.getSuperclass),
-             x.description + " has super class" + q(c.getName),
+             x.description + " has super class " + q(c.getName),
              x.description + " doesn't have super class " + q(c.getName) + " but " + q(xClass.getSuperclass.getName),
              x)
     }
@@ -114,6 +114,17 @@ trait AnyBaseMatchers {
       result(x.value.isAssignableFrom(c), 
              x.description + " is assignable from " + q(c.getName), 
              x.description + " is not assignable from " + q(c.getName), 
+             x)
+    }
+  }
+
+  def beAnInstanceOf[T: ClassManifest] = new Matcher[Any] {
+    def apply[S <: Any](x: Expectable[S]) = {
+      val c = implicitly[ClassManifest[T]].erasure
+      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      result(c.isAssignableFrom(xClass),
+             x.description + " is an instance of " + q(c.getName),
+             x.description + " is not an instance of " + q(c.getName),
              x)
     }
   }
@@ -179,6 +190,7 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
     def asNullAs[T](a: =>T) = result(outer.beAsNullAs(a))
     def oneOf(t: T*) = result(beOneOf(t:_*))
     def beNull = result(outer.beNull)
+    def anInstanceOf[T](implicit c: ClassManifest[T]) = result(beAnInstanceOf[T])
   }
 
   implicit def toAnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]) = new AnyRefMatcherResult(result)
@@ -218,6 +230,7 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   def klass[T : ClassManifest]: Matcher[Any] = outer.haveClass[T]
   def superClass[T : ClassManifest]: Matcher[Any] = outer.haveSuperclass[T]
   def assignableFrom[T : ClassManifest] = outer.beAssignableFrom[T]
+  def anInstanceOf[T : ClassManifest] = outer.beAnInstanceOf[T]
 }
 class BeTheSameAs[T <: AnyRef](t: =>T) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {

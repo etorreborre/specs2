@@ -102,8 +102,9 @@ An non-exhaustive list of those matchers:
  * `haveClass`: to check the class of an object
  * `haveSuperclass`: to check if the class of an object as another class as one of its ancestors
  * `beAssignableFrom`: to check if a class is assignable from another
+ * `beAnInstanceOf[T]`: to check if an object is an instance of type `T`
 
-#### With a better description
+ #### With a better description
 
 Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information
 is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a
