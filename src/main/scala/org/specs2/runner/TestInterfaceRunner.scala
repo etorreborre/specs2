@@ -52,7 +52,9 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     toRun[SpecificationStructure](classname, handler).right.toOption map { s =>
       if (args.contains("html"))
         specs2.html.main(Array(classname) ++ args)
-      if (args.contains("console") || !args.contains("html"))
+      else if (args.contains("junitxml"))
+        specs2.junitxml.main(Array(classname) ++ args)
+      if (args.contains("console") || !Seq("html", "junitxml").exists(args.contains))
         runSpecification(s, handler, args)
     }
   }

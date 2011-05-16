@@ -182,6 +182,16 @@ If you want html pages to be produced for your specification you'll need to exec
 By default the files will be created in the `target/specs-report` directory but you can change that by setting the
 `-Dspecs2.outDir` system property.
 
+### JUnit XML output
+
+Many Continuous Integration systems rely on JUnit XML reports to display build and test results. It is possible to produce
+those result by using the `specs2.junitxml` object:
+
+`scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]`
+
+By default the files will be created in the `target/test-reports` directory but you can change that by setting the
+`-Dspecs2.junit.outDir` system property.
+
 ### Files Runner
 
 The `specs2.files` object will, by default, select and execute Specifications found in the test source directory:
@@ -219,6 +229,13 @@ The `html` argument is available with sbt to allow the creation of the html repo
 
       // or in your project file
       override def testOptions = super.testOptions ++ Seq(TestArgument("html"))
+
+Similarly, JUnit xml output files can be created by passing the `junitxml` option:
+
+      > test-only org.specs2.examples.HelloWorldUnitSpec -- junitxml
+
+      // or in your project file
+      override def testOptions = super.testOptions ++ Seq(TestArgument("junitxml"))
 
 If you want to get a console output as well, don't forget to add the `console` argument:
 

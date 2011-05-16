@@ -3,11 +3,11 @@ package reporter
 
 import java.io.Writer
 import java.net.InetAddress
-import scala.xml.Xhtml
+import scala.xml.{XML, NodeSeq}
 import org.junit.runner.Description
 import scala.collection.JavaConversions._
 import xml.Nodex._
-import execute.Result
+import execute._
 import io.{FileWriter, FileSystem, Location}
 import main.{Arguments, SystemProperties}
 import specification._
@@ -46,7 +46,7 @@ trait JUnitXmlPrinter extends Statistics {
     lazy val statistics: Stats = foldAll(fs).total
 
     fileWriter.write(filePath(desc)) { out =>
-      executions.foldLeft(TestSuite(s.getClass.getName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.elapsed/1000)) { (suite, de) =>
+      executions.foldLeft(TestSuite(s.getClass.getName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.elapsed)) { (suite, de) =>
         val (d, f) = de
         if (d.isTest) suite.addTest(TestCase(d, f))
         else          suite
@@ -74,12 +74,13 @@ trait JUnitXmlPrinter extends Statistics {
         case r @ ExecutedResult(_,_,_,_) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) -> f)
         case other                       => None
       }
-
   }
+
+  private def formatTime(t: Long) = "%.3f" format (t / 1000.0)
 
   case class TestSuite(className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq()) {
     def addTest(t: TestCase) = copy(tests = tests :+ t)
-    def flush(out: Writer) = out.write(Xhtml.toXhtml(xml))
+    def flush(out: Writer) = XML.write(out, xml, "", false, null)
 
     def xml =
       <testsuite hostname={InetAddress.getLocalHost.getHostName}
@@ -88,8 +89,9 @@ trait JUnitXmlPrinter extends Statistics {
                  errors={errors.toString}
                  failures={failures.toString}
                  skipped={skipped.toString}
-                 time={time.toString}>
+                 time={formatTime(time)}>
         {properties}
+        {tests.map(_.xml).reduceNodes}
         <system-out><![CDATA[]]></system-out>
         <system-err><![CDATA[]]></system-err>
       </testsuite>
@@ -99,6 +101,32 @@ trait JUnitXmlPrinter extends Statistics {
       {System.getProperties.entrySet.toSeq.map(p => <property name={p.getKey.toString} value={p.getValue.toString}/>).reduceNodes}
       </properties>
   }
-  case class TestCase(desc: Description, fragment: ExecutedFragment)
+
+  case class TestCase(desc: Description, fragment: ExecutedFragment) {
+    def xml = 
+      <testcase name={desc.getMethodName} classname={desc.getClassName} time={formatTime(time)}>
+        {testError}{testFailure}{testSkipped}
+      </testcase>
+
+    def time = fragment match {
+      case ExecutedResult(_,_,t,_) => t.elapsed
+      case other                   => 0
+    }
+
+    def testError = fragment match {
+      case ExecutedResult(_,er @ Error(m, e),_,_) => <error message={m}
+                                                            type={e.getClass.getName}>{er.stackTrace.mkString("\n")}</error>
+      case other                                  => NodeSeq.Empty
+    }
+    def testFailure = fragment match {
+      case ExecutedResult(_,f @ Failure(m, e, st, d),_,_) => <failure message={m}
+                                                                      type={f.exception.getClass.getName}>{st.mkString("\n")}</failure>
+      case other                                          => NodeSeq.Empty
+    }
+    def testSkipped = fragment match {
+      case ExecutedResult(_, Skipped(m, e),_,_) => <skipped/>
+      case other                                => NodeSeq.Empty
+    }
+  }
 
 }

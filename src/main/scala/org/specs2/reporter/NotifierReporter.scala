@@ -27,6 +27,7 @@ trait NotifierExporting extends Exporting {
   def export(s: SpecificationStructure)(implicit args: Arguments): Seq[ExecutedFragment] => ExportType = (fs: Seq[ExecutedFragment]) => {
     notifyExport(fs)
     if (args.contains("html")) new HtmlExporting {}.export(s)(args)(fs)
+    if (args.contains("junitxml")) new JUnitXmlExporting {}.export(s)(args)(fs)
   }
   private def notifyExport(fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     def notify(fs: Seq[ExecutedFragment]) = {

@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 
 import java.io.StringReader
+import scala.xml._
 import io._
 import main._
 import specification._
@@ -30,21 +31,19 @@ is formatted for JUnit reporting tools.
                                                                                                                         p^
   "Inside the <testsuite> there is"                                                                                     ^
     "a <properties> tag for all system properties"                                                                      ! suite().e10^
-    "a <testcase> tag with"                                                                                             ! pending^
-      "the class name"                                                                                                  ! pending^
-      "the test name"                                                                                                   ! pending^
-      "the test duration"                                                                                               ! pending^
+    "a <testcase> tag with"                                                                                             ^
+      "the class name"                                                                                                  ! test().e1^
+      "the test name"                                                                                                   ! test().e2^
+      "the test duration"                                                                                               ! test().e3^
                                                                                                                         p^
   "Inside the <testcase> tag there is"                                                                                  ^
-    "the error message"                                                                                                 ! pending^
-    "the error type"                                                                                                    ! pending^
-    "the error trace"                                                                                                   ! pending^
-    "the failure message"                                                                                               ! pending^
-    "the failure type"                                                                                                  ! pending^
-    "the failure trace"                                                                                                 ! pending^
-    "the skipped type"                                                                                                  ! pending^
-    "the skipped message"                                                                                               ! pending^
-    "the skipped trace"                                                                                                 ! pending^
+    "the error message"                                                                                                 ! test().e4^
+    "the error type"                                                                                                    ! test().e5^
+    "the error trace"                                                                                                   ! test().e6^
+    "the failure message"                                                                                               ! test().e7^
+    "the failure type"                                                                                                  ! test().e8^
+    "the failure trace"                                                                                                 ! test().e9^
+    "the skipped tag"                                                                                                   ! test().e10^
                                                                                                                         end
 
   object outputDir {
@@ -70,10 +69,26 @@ is formatted for JUnit reporting tools.
     def e4  = xml must \("testsuite", "errors" -> "1")
     def e5  = xml must \("testsuite", "failures" -> "1")
     def e6  = xml must \("testsuite", "skipped" -> "1")
-    def e7  = xml must \("testsuite", "time" -> "0")
+    def e7  = xml must \("testsuite", "time" -> "0.000")
     def e8  = xml must \\("system-out")
     def e9  = xml must \\("system-err")
     def e10 = xml must (\\("properties") and \\("property"))
+  }
+
+  case class test() extends WithReporter {
+    def e1 = xml("t1" ^ "e1" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlSpecification")
+    def e2 = xml("t1" ^ "e1" ! success) must \\("testcase", "name" -> "t1::e1")
+    def e3 = xml("t1" ^ "e1" ! success) must \\("testcase", "time" -> "0.000")
+
+    def e4 = xml("t1" ^ "e2" ! anError) must \\("error", "message" -> anError.message)
+    def e5 = xml("t1" ^ "e2" ! anError) must \\("error", "type" -> anError.exception.getClass.getName)
+    def e6 = xml("t1" ^ "e2" ! anError).toString must contain("JUnitXmlReporterSpec.scala")
+
+    def e7 = xml("t1" ^ "e3" ! failure) must \\("failure", "message" -> failure.message)
+    def e8 = xml("t1" ^ "e3" ! failure) must \\("failure", "type" -> failure.exception.getClass.getName)
+    def e9 = xml("t1" ^ "e3" ! failure).toString must contain("JUnitXmlReporterSpec.scala")
+
+    def e10 = xml("t1" ^ "e2" ! skipped) must \\("skipped")
   }
 
   trait WithReporter {
@@ -81,8 +96,11 @@ is formatted for JUnit reporting tools.
       override lazy val fileWriter = new MockFileWriter {}
     }
     def report(fs: Fragments) = reporter.report(JUnitXmlSpecification(fs))(Arguments())
-
-    def xml = <out>{scala.xml.XML.load(new StringReader(reporter.fileWriter.getWriter.messages.mkString("\n")))}</out>
+    def xml(fs: Fragments): NodeSeq = {
+      report(fs)
+      xml
+    }
+    def xml: NodeSeq = <out>{scala.xml.XML.load(new StringReader(reporter.fileWriter.getWriter.messages.mkString("\n")))}</out>
   }
 }
 
