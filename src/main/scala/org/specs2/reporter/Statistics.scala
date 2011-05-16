@@ -70,6 +70,7 @@ trait Statistics {
       }
       totalContext(stats.map(toBlock)).toList
     }
+    def total = totals.lastOption.getOrElse(Stats())
   }
   case object SpecsStatistics {
     def apply(current: Stats) = new SpecsStatistics(List(current))

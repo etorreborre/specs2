@@ -11,11 +11,10 @@ import io._
 import reflect.Classes._
 import execute._
 import reporter._
-import JUnitDescriptionMaker._
 import specification._
 import text.AnsiColors
 import control.{ExecutionOrigin, Throwablex}
-
+import DefaultSelection._
 /**
  * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
  * to execute a specification as a JUnit suite.
@@ -35,9 +34,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
   /** arguments for the specification */
   implicit lazy val args: Arguments = content.arguments
   /** fold object used to create descriptions */
-  private val descriptions = new JUnitDescriptions(klass)
+  private val descriptions = new JUnitDescriptionsFragments(klass)
   /** extract the root Description object and the examples to execute */
-  private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll(content.fragments)
+  private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll(select(content.fragments))
   /** @return a Description for the TestSuite */
   def getDescription = desc
 
@@ -110,3 +109,27 @@ class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError
   override def printStackTrace(w: java.io.PrintStream) = e.printStackTrace(w)
   override def printStackTrace(w: java.io.PrintWriter) = e.printStackTrace(w)
 }
+
+/**
+ * Descriptions for a seq of Fragments to execute
+ */
+class JUnitDescriptionsFragments(klass: Class[_]) extends JUnitDescriptions[Fragment](klass) {
+    def initialFragment(s: Class[_]) = Text(s.getName)
+    /**
+     * This function is used to map each node in a Tree[Fragment] to a pair of
+     * (Description, Fragment)
+     *
+     * The Int argument is the numeric label of the current TreeNode being mapped.
+     * It is used to create a unique description of the example to executed which is required
+     * by JUnit
+     */
+    def mapper(klass: Class[_]): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
+      (f: Fragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
+        case (SpecStart(t, _))            => Some(createDescription(klass, suiteName=testName(t.name)) -> f)
+        case (Text(t))                    => Some(createDescription(klass, suiteName=testName(t)) -> f)
+        case (Example(description, body)) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))) -> f)
+        case (Step(action))               => Some(createDescription(klass, label=nodeLabel.toString, testName="step") -> f)
+        case (Action(action))             => Some(createDescription(klass, label=nodeLabel.toString, testName="action") -> f)
+        case other                        => None
+      }
+  }

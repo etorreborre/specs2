@@ -3,6 +3,7 @@ package reporter
 import specification._
 import org.junit.runner._
 import ShowDescription._
+import runner.JUnitDescriptionsFragments
 
 class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def is =
                                                                                                                         """
@@ -143,7 +144,8 @@ class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def i
     val descriptionTree = foldAll(fragments).toTree(descriptionsMaker.mapper(classOf[JUnitDescriptionsSpec]))
     descriptionsMaker.asOneDescription(descriptionTree)
   }
-  val descriptionsMaker = new JUnitDescriptionMaker {
+
+  val descriptionsMaker = new JUnitDescriptionsFragments(getClass) {
     override lazy val isExecutedFromAnIDE = false
   }
 
