@@ -33,6 +33,5 @@ lift/*
 test/specs/fitnesse.*
 test/specs/fitnesse_debug.*
 test/specs/FitNesseRoot/files/testResults/
-junit*
 /log_errors.log
 /log_info.log
