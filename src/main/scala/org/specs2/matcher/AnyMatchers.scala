@@ -190,7 +190,7 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
     def asNullAs[T](a: =>T) = result(outer.beAsNullAs(a))
     def oneOf(t: T*) = result(beOneOf(t:_*))
     def beNull = result(outer.beNull)
-    def anInstanceOf[T](implicit c: ClassManifest[T]) = result(beAnInstanceOf[T])
+    def anInstanceOf[T : ClassManifest] = result(beAnInstanceOf[T])
   }
 
   implicit def toAnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]) = new AnyRefMatcherResult(result)
