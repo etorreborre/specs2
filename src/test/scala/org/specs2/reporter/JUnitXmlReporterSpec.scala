@@ -69,7 +69,7 @@ is formatted for JUnit reporting tools.
     def e4  = xml must \("testsuite", "errors" -> "1")
     def e5  = xml must \("testsuite", "failures" -> "1")
     def e6  = xml must \("testsuite", "skipped" -> "1")
-    def e7  = xml must \("testsuite", "time" -> "0.000")
+    def e7  = xml must \("testsuite", "time")
     def e8  = xml must \\("system-out")
     def e9  = xml must \\("system-err")
     def e10 = xml must (\\("properties") and \\("property"))
@@ -78,7 +78,7 @@ is formatted for JUnit reporting tools.
   case class test() extends WithReporter {
     def e1 = xml("t1" ^ "e1" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlSpecification")
     def e2 = xml("t1" ^ "e1" ! success) must \\("testcase", "name" -> "t1::e1")
-    def e3 = xml("t1" ^ "e1" ! success) must \\("testcase", "time" -> "0.000")
+    def e3 = xml("t1" ^ "e1" ! success) must \\("testcase", "time")
 
     def e4 = xml("t1" ^ "e2" ! anError) must \\("error", "message" -> anError.message)
     def e5 = xml("t1" ^ "e2" ! anError) must \\("error", "type" -> anError.exception.getClass.getName)
