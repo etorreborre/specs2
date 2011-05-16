@@ -39,6 +39,10 @@ class TraversableMatchersSpec extends Specification { def is =
     { List(1, 2) must haveSize(2) }                                                                                     ^
     { List(1, 2) must have size(2) }                                                                                    ^
                                                                                                                         p^
+  "we can check the size of an Array"                                                                                   ^
+    { Array(1, 2) must have size(2) }                                                                                   ^
+    { (Array(1, 2) must have size(1)).message must_== "'1, 2' doesn't have size 1 but size 2" }                         ^
+                                                                                                                        p^
   "we can check if a traversable contains elements following a given pattern"                                           ^
     { List("Hello", "World") must containMatch("ll") }                                                                  ^
     { List("Hello", "World") must containPattern(".*llo") }                                                             ^
