@@ -7,6 +7,12 @@ import control.Throwablex._
 import reporter._
 import specification._
 import Fingerprints._
+import scala.Array._
+import text.MarkupString
+import time.SimpleTimer
+import execute.Failure._
+import execute.Skipped._
+import execute.Pending._
 
 /**
  * Implementation of the Framework interface for the sbt tool.
@@ -50,12 +56,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
 
   def runSpecification(classname: String, handler: EventHandler, args: Array[String]): Any = {
     toRun[SpecificationStructure](classname, handler).right.toOption map { s =>
-      if (args.contains("html"))
-        specs2.html.main(Array(classname) ++ args)
-      else if (args.contains("junitxml"))
-        specs2.junitxml.main(Array(classname) ++ args)
-      if (args.contains("console") || !Seq("html", "junitxml").exists(args.contains))
-        runSpecification(s, handler, args)
+      reporter(handler)(args).report(s)(s.content.arguments.overrideWith(Arguments(args:_*)))
     }
   }
   
@@ -78,10 +79,15 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     runner
   }
 
-  private def runSpecification(specification: SpecificationStructure, handler: EventHandler, args: Array[String]): Unit = {
-    reporter(handler).report(specification)(specification.content.arguments.overrideWith(Arguments(args:_*)))
+  protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {
+    override def export(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+      if (args.contains("html"))
+        (new HtmlExporting {}).export(s)(args)(fragments)
+      if (args.contains("junitxml"))
+        (new JUnitXmlExporting {}).export(s)(args)(fragments)
+      if (args.contains("console") || !Seq("html", "junitxml").exists(args.contains))
+        new TestInterfaceReporter(handler, loggers).export(s)(args)(fragments)
+    }
   }
-
-  protected def reporter(handler: EventHandler): Reporter = new TestInterfaceReporter(handler, loggers)
 
 }

@@ -52,7 +52,7 @@ case class reporting() extends Mockito with matcher.MustExpectations with MockLo
   val outer = this
   val reporter = mock[Reporter]
   val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger)) {
-    override def reporter(handler: EventHandler): Reporter = outer.reporter
+    override def reporter(handler: EventHandler)(args: Array[String]): Reporter = outer.reporter
   }
   def reportSpec = runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], Array(""))
   def e1 = {
