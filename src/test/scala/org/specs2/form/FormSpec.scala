@@ -2,8 +2,9 @@ package org.specs2
 package form
 import specification._
 import Forms._
+import matcher._
 
-class FormSpec extends Specification { def is =
+class FormSpec extends Specification with ResultMatchers { def is =
                                                                                                                         """
 A Form is a generic table which has an optional title and rows. Each row contains cells which can be created from
 Fields, Props or other Forms.
@@ -50,6 +51,9 @@ Upon execution a Form will return a Result value summarizing the execution of ea
   "then its rows are a failure"                                                                                         ! exec.e3^
   "and row cells are a failure"                                                                                         ! exec.e4^
                                                                                                                         p^
+ "A Form can be executed"                                                                                               ^
+   "then all its rows are executed"                                                                                     ! exec.e5^
+                                                                                                                        p^
 "Forms rows and cells have equals/hashcode methods"                                                                     ^
   "row1 == row1"                                                                                                        ! equality.e1^
   "cell1 == cell1"                                                                                                      ! equality.e2^
@@ -69,8 +73,8 @@ Upon execution a Form will return a Result value summarizing the execution of ea
                   tr(field("age", 18)).rows.size must_== 2
     def e5 = Form("title").tr(prop("name", "eric")).rows.size must_== 1
     def e6 = Form("title").tr(form("title")).rows.size must_== 1
-    def e7 = Form("title").tr(Seq(field(1), field(2)):_*).rows(0).cells.size must_== 2
-    def e8 = Form.tr(Seq(field(1), field(2)):_*).rows(0).cells.size must_== 2
+    def e7 = Form("title").tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
+    def e8 = Form.tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
   }
 
   object display {
@@ -91,9 +95,12 @@ Upon execution a Form will return a Result value summarizing the execution of ea
   
   object exec {
     def e1 = Form.tr("a").setSuccess.execute must_== success
-    def e2 = Form.tr("a").setSuccess.rows.forall(_.execute.isSuccess) must_== true
+    def e2 = Form.tr("a").setSuccess.rows.forall(_.execute.isSuccess) must beTrue
     def e3 = Form.tr("a").setFailure.execute.message must_== failure.message
-    def e4 = Form.tr("a").setFailure.rows.forall(_.execute.isSuccess) must_== false
+    def e4 = Form.tr("a").setFailure.rows.forall(_.execute.isSuccess) must beFalse
+    def e5 = Form.tr(prop("a")("b")).
+                  tr(prop("a")("a")).
+                  tr(prop("c")("d")).executeForm.rows.filter(_.execute.isFailure) must have size(2)
   }
   
   object equality {

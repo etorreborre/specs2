@@ -69,6 +69,9 @@ trait FormsBuilder {
   /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
   def prop[T, S](label: String, actual: =>T, c: Matcher[T]) = Prop(label, actual, c)
 
+  /** @return a new Prop with no label, an actual value and a matcher to apply to the actual value */
+  def prop[T, S](actual: =>T, c: Matcher[T]) = Prop("", actual, c)
+
   /** @return a new Tabs object */
   def tabs = new Tabs()
 

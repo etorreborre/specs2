@@ -34,14 +34,14 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   def setFailure = newForm(title, rows.map(_.setFailure), Some(failure))
 
   /** add a new Header, with at least one Field */
-  def th(h1: Field[_], hs: Field[_]*): Form = tr((h1 +: hs).map((f: Field[_]) => FieldCell(f.header)):_*)
+  def th(h1: Field[_], hs: Field[_]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*))
   /** add a new Header, with at least one Field */
   def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_)):_*)
   /** add a new Row, with at least one Cell */
-  def tr(cs: Cell*): Form = {
-    if (cs.isEmpty) this
-    else newForm(title, this.rows :+ Row.tr(cs.head, cs.drop(1):_*), result)
-  }
+  def tr(c1: Cell, cs: Cell*): Form = tr(Row.tr(c1, cs:_*))
+  /** add a new Row */
+  def tr(row: Row): Form = newForm(title, this.rows :+ row, result)
+
   /** add the rows of a form */
   private def addRows(f: Form): Form = {
     val oldRowsAndTitle = f.title.map(th(_)).getOrElse(this).rows
@@ -62,7 +62,7 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
     if (result.isDefined) this
     else {
       val executedRows = executeRows
-      newForm(title, executedRows, Some(executedRows.foldLeft(success: Result) { (res, cur) => res and cur.execute }))
+      newForm(title, executedRows, Some(executedRows.map(_.execute).foldLeft(success: Result) { (res, cur) => res and cur }))
     }
   }
 
@@ -149,7 +149,9 @@ case object Form {
   /** @return an empty form with a title */
   def apply(title: String) = new Form(Some(title))
   /** @return a Form with one row */
-  def tr(cs: Cell*) = new Form().tr(cs:_*)
+  def tr(c1: Cell, cs: Cell*) = new Form().tr(c1, cs:_*)
+  /** @return a Form with one row */
+  def tr(row: Row) = new Form().tr(row)
   /** @return a Form with one row and cells formatted as header cells */
   def th(h1: Field[_], hs: Field[_]*) = new Form().th(h1, hs:_*)
   /** @return a Form with one row and cells formatted as header cells */
@@ -210,7 +212,6 @@ case object Form {
     } else
       c.xml(args).toList
   }
-  /** @return the stacktraces for a Form */
 
 }
 

@@ -5,6 +5,7 @@ import control.{ Property }
 import control.Exceptions._
 import execute._
 import matcher._
+import text.NotNullStrings._
 
 /**
  * The Prop class is a named property which holds:
@@ -68,6 +69,11 @@ case class Prop[T, S](
    */
   def resultIs(r: =>Result): Prop[T, S] = copy(constraint = (t: T, s: S) => r)
   /**
+   * set a specific constraint on the property
+   */
+  def matchWith(c: (T, S) => Result): Prop[T, S] = copy(constraint = c)
+
+  /**
    * Display the property:
    * 
    * label: "this" (actual: "that")
@@ -83,7 +89,7 @@ case class Prop[T, S](
    */
   private def valueToString(executed: Either[Result, _]) = {
     executed match {
-      case Right(r)          => r.toString
+      case Right(r)          => r.notNull
       case Left(Pending(_))  => "_"
       case Left(r)           => r.toString
     }

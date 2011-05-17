@@ -24,7 +24,7 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
    * execute all cells
    * @return a logical `and` on all results
    */
-  def execute = cells.foldLeft(success: Result) { (res, cur) => res and cur.execute }
+  def execute = cellList.list.foldLeft(success: Result) { (res, cur) =>  res and cur.execute }
   /**
    * execute the row
    * @return the Row with executed cells
