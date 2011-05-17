@@ -3,7 +3,7 @@ package text
 import Markdown._
 import execute._
 
-class MarkdownSpec extends Specification with PendingUntilFixed { def is =
+class MarkdownSpec extends Specification { def is =
                                                                                                                         """
   Markdown text can be transformed to an html equivalent.
                                                                                                                         """^
@@ -17,8 +17,8 @@ class MarkdownSpec extends Specification with PendingUntilFixed { def is =
   "Multi-line text must preserve newlines"                                                                              ^
   { toHtmlNoPar("hello\nworld") must contain("hello<br/>world") }                                                       ^
                                                                                                                         p^
-  "Embedded code"                                                                                                       ! e1.pendingUntilFixed^
-  "Code with newlines must be enclosed in one code tag only"                                                            ! e2.pendingUntilFixed^
+  "Embedded code"                                                                                                       ! e1^
+  "Code with newlines must be enclosed in one code tag only"                                                            ! e2^
                                                                                                                         end
 
   val someCode = """
@@ -33,6 +33,6 @@ This is a paragraph presenting some code:
 
 and no more code here"""
 
-  def e1 = toHtmlNoPar(someCode) must contain("<pre>") and contain("<code class='prettyprint'>")
+  def e1 = toHtmlNoPar(someCode) must contain("<code class='prettyprint'>")
   def e2 = toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) must have size(1)
 }

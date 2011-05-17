@@ -25,8 +25,6 @@ trait Markdown {
    */
   def toHtml(text: String) = {
     processor.markdownToHtml(text).
-      replaceAll("<pre><code>" -> "<code>").
-      replaceAll("</code></pre>" -> "</code><br/>").
       replaceAll("<code>" -> "<code class='prettyprint'>")
   }
 
