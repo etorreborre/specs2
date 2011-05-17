@@ -162,7 +162,7 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
     val executed = result.getOrElse(skipped)
     (<td style={p.labelStyles}>{p.decorateLabel(p.label)}</td> unless p.label.isEmpty) ++
     (<td class={executed.statusName}>{p.decorateValue(p.expectedValue.right.toOption.getOrElse(""))}</td> unless !p.expectedValue.right.toOption.isDefined) ++
-    (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td> unless executed.isSuccess)
+    (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td> unless (executed.isSuccess || executed.message.isEmpty))
   }
 }
 /**

@@ -5,6 +5,7 @@ import control.{ Property }
 import control.Exceptions._
 import execute._
 import matcher._
+import MatchersImplicits._
 import text.NotNullStrings._
 
 /**
@@ -121,15 +122,20 @@ object Prop {
   }
   /** create a Prop with a label, an actual value, and a matcher on the actual value */
   def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, String] = Prop(label, act, "success", c)
+  /** create a Prop with an empty label and an actual value. When the property is executed the cell will only change color */
+  def apply[T](act: =>T, f: T => Boolean): Prop[T, T] = {
+    lazy val a = act
+    Prop[T, T]("", a, a, booleanMatcherWithNoMessages(a, f))
+  }
+  private def booleanMatcherWithNoMessages[T](t: T, f: T => Boolean) = new Matcher[T] {
+    def apply[S <: T](exp: Expectable[S]) = result(f(exp.value), "", "", exp)
+  }
   /** create a Prop with a label, an actual value, an expected value, and a constraint on the actual value*/
   def apply[T, S](label: String, act: =>T, exp: =>S, c: Matcher[T]): Prop[T, S] = {
     new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(Expectable(t)).toResult)
   }
   /** create a Prop with an empty label and an actual value */
-  def apply[T](act: =>T): Prop[T, T] = {
-    new Prop[T, T](actual = Property(act))
-  }
-  
+  def apply[T](act: =>T): Prop[T, T] = new Prop[T, T](actual = Property(act))
   /** default constraint function */
   private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeTypedEqualTo(s).apply(Expectable(t))).toResult
 }
