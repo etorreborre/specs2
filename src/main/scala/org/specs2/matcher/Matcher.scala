@@ -182,6 +182,13 @@ trait Matcher[-T] { outer =>
     def apply[S <: Traversable[T]](seq: Expectable[S]) =
       MatchersImplicits.verifyFunction((t: T) => outer.apply(Expectable(t))).atLeastOnce(seq.value)
   }
+
+  /**
+   * @return a Matcher with no messages
+   */
+  def mute = new Matcher[T] {
+    def apply[S <: T](s: Expectable[S]) = outer.apply(s).mute
+  }
 }
 
 object Matcher {

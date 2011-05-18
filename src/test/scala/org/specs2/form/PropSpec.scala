@@ -55,7 +55,7 @@ the actual value is equal to the expected value.
     def e3 = nameProp.actual.get must_== "eric"
     def e4 = constrained.label must_== "name"
     def e5 = withMatcher("e").execute must_== Success("'eric' contains 'e'")
-    def e6 = Prop(1, (_:Int) > 0).execute must_== Success("")
+    def e6 = Prop("", 1, be_>(0).mute).execute must_== Success("")
   }
                                               
   object display {

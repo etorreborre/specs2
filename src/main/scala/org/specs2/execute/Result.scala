@@ -94,6 +94,10 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return true if the result is a Failure instance
    */
   def isFailure: Boolean = false
+  /**
+   * @return the result with no message
+   */
+  def mute: Result
 }
 object Result {
   implicit val ResultMonoid: Monoid[Result] = new Monoid[Result] {
@@ -139,6 +143,8 @@ case class Success(m: String = "")  extends Result(m, m) {
     }
   }
   override def isSuccess = true
+
+  def mute = Success()
 }
 /**
  * Companion object to the Success class providing 
@@ -165,6 +171,9 @@ case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement
       case _ => super.or(r)
     }
   }
+
+  def mute = copy(m = "",  e = "")
+
   override def toString = m
   override def equals(o: Any) = {
     o match {
@@ -195,6 +204,9 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
       case _ => false
     }
   }
+
+  def mute = copy(m = "")
+
   override def hashCode = m.hashCode
   override def isError: Boolean = true
 }
@@ -212,6 +224,9 @@ case object Error {
  * @see Result for description
  */
 case class Pending(m: String = "")  extends Result(m) {
+
+  def mute = Pending()
+
   override def isPending: Boolean = true
 }
 /** 
@@ -219,5 +234,8 @@ case class Pending(m: String = "")  extends Result(m) {
  * @see Result for description 
  */
 case class Skipped(m: String = "", e: String = "")  extends Result(m, e) {
+
+  def mute = Skipped()
+
   override def isSkipped: Boolean = true
 }

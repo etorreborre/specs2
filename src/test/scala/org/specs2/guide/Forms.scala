@@ -77,6 +77,8 @@ executing the property, both values are compared to get a result. You can create
 
          `prop("label", Some(1), beSome)
 
+      If the matcher is `mute`d then no message will be displayed in case of a failure.
+
 If the expected value is not provided when building the property, it can be given with the `apply` method:
 
         // apply "sets" the expected value
@@ -94,8 +96,10 @@ Let's look at a few examples:
     tr(field("""prop("label", "expected")("expected")""").code, prop("label", "expected")("expected")).
     tr(field("""prop("label", "actual")("expected")""").code, prop("label", "actual")("expected")).
     tr(field("""prop("label", { error("but got an error"); "actual" })("expected")""").code, prop("label", { error("but got an error"); "actual" })("expected")).
-    tr(field("""prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")""").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
-    tr(field("""prop("label", "expected", (s: String) => beEqualTo(s))("expected")""").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).executeForm.toXml.toString^
+    tr(field("""prop("label", "actual", (a: String, b: String) => (a === b).toResult)("expected")""").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
+    tr(field("""prop("label", "actual", (s: String) => beEqualTo(s))("expected")""").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).
+    tr(field("""prop("label", "actual", beEqualTo("expected"))""").code, prop("label", "actual", beEqualTo("expected"))).
+    tr(field("""prop("label", "actual", beEqualTo("expected").mute)""").code, prop("label", "actual", beEqualTo("expected").mute)).executeForm.toXml.toString^
 """
 
 ### Styles

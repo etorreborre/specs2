@@ -13,6 +13,7 @@ class MatcherSpec extends Specification { def is =
   "a matcher can be defined by a function returning a pair"                                                             ! e3_3^
   "a matcher can be defined by a function with a function for the ko message"                                           ! e4^
   "a matcher can be defined by a function with 2 functions for the messages"                                            ! e5^
+  "a matcher can be muted and will output no message"                                                                   ! e6^
                                                                                                                         end
 
   def e1 = new Exception("message")  must be_==("message") ^^ ((_:Exception).getMessage)
@@ -46,4 +47,5 @@ class MatcherSpec extends Specification { def is =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
     (3 must beEven) returns "3 is odd"
   }
+  def e6 = (1 must be_==("1").mute) returns ""
 }

@@ -176,6 +176,9 @@ There are many ways to create matchers for your specific usage. The simplest way
         1 must be_==(2).orSkip
         1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
 
+ * using `mute` to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create
+   properties showing no messages when they fail
+
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
        val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")
