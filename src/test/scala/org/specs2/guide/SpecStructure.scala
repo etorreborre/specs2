@@ -200,8 +200,10 @@ A few things to remember about this feature:
  * the source file is expected to be found in the `src/test/scala` directory.
    This can be overriden by specifying the `specs2.srcTestDir` system property
 
- * the extraction of the source code is very rudimentary and will just extract one line of code. It also expects
-   the code to extract to be in a class which has the same name as the file it's in.
+ * the extraction of the source code is rudimentary and will just extract one line of code. It also expects
+   the code to extract to be in the same directory as the package of the specification class it belongs to. If a Specification
+   is declared in `package com.mycompany.accounting` then its source file has to be in the `com/mycompany/accounting` directory
+   for Auto-Examples to be working
 
  * for more robustness, but different results, you can use the `descFromExpectations` arguments (creates an
    `args(fromSource=false)`) to take the "ok message" from the expectation as the example description:

@@ -15,6 +15,7 @@ The Throwablex trait provides extensions to regular throwables:
     "to get the name of the file and the line from an exception"                                                        ! location.e1^
     "to get the class name and line number of an exception"                                                             ! location.e2^
     "to get the class name, file name and line number of an exception"                                                  ! location.e3^
+    "to get the path of an exception"                                                                                   ! location.e4^
                                                                                                                         p^
   "It allows to filter stacktraces"                                                                                     ^
     "to filter all the lines matching a given pattern"                                                                  ! filter.e1^
@@ -34,6 +35,7 @@ The Throwablex trait provides extensions to regular throwables:
     def e1 = e.location must_== "ThrowablexContext.scala:6"
     def e2 = e.classLocation must_== "org.specs2.control.ThrowablexContext:6"
     def e3 = e.fullLocation must_== "org.specs2.control.ThrowablexContext (ThrowablexContext.scala:6)"
+    def e4 = new TraceLocation(trace).path must_== "org/specs2/control/ThrowablexContext.scala"
   }
   object filter extends ThrowablexContext {
     def e1 = e.filter("org.specs2.control").getStackTrace.toList.map(_.toString) must

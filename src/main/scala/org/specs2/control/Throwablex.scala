@@ -81,7 +81,7 @@ trait Throwablex {
   class TraceLocation(t: StackTraceElement) {
     /** path corresponding to the class name. This is an approximation corresponding to the
      *  simple case of a top-level class in a file having the same name */
-    lazy val path = className.replace(".", "/")+".scala"
+    lazy val path = className.split("\\.").dropRight(1).mkString("", "/", "/"+fileName)
     lazy val fileName = t.getFileName
     lazy val className = t.getClassName.split('$')(0)
     lazy val lineNumber = t.getLineNumber
