@@ -124,7 +124,7 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
 
   def printStack(e: ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) enclose((t: NodeSeq) => <div id={System.identityHashCode(e).toString} style="display:none">{t}</div>) {
-      e.stackTrace.foldLeft(blank) { (res, cur) => 
+      args.traceFilter(e.stackTrace).foldLeft(blank) { (res, cur) =>
         res.printText(cur.toString, level)
       }
     } else this

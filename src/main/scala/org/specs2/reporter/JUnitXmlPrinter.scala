@@ -78,7 +78,7 @@ trait JUnitXmlPrinter extends Statistics {
 
   private def formatTime(t: Long) = "%.3f" format (t / 1000.0)
 
-  case class TestSuite(className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq()) {
+  case class TestSuite(className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq())(implicit args: Arguments) {
     def addTest(t: TestCase) = copy(tests = tests :+ t)
     def flush(out: Writer) = XML.write(out, xml, "", false, null)
 
@@ -102,8 +102,8 @@ trait JUnitXmlPrinter extends Statistics {
       </properties>
   }
 
-  case class TestCase(desc: Description, fragment: ExecutedFragment) {
-    def xml = 
+  case class TestCase(desc: Description, fragment: ExecutedFragment)(implicit args: Arguments) {
+    def xml =
       <testcase name={desc.getMethodName} classname={desc.getClassName} time={formatTime(time)}>
         {testError}{testFailure}{testSkipped}
       </testcase>
@@ -115,12 +115,12 @@ trait JUnitXmlPrinter extends Statistics {
 
     def testError = fragment match {
       case ExecutedResult(_,er @ Error(m, e),_,_) => <error message={m}
-                                                            type={e.getClass.getName}>{er.stackTrace.mkString("\n")}</error>
+                                                            type={e.getClass.getName}>{args.traceFilter(er.stackTrace).mkString("\n")}</error>
       case other                                  => NodeSeq.Empty
     }
     def testFailure = fragment match {
       case ExecutedResult(_,f @ Failure(m, e, st, d),_,_) => <failure message={m}
-                                                                      type={f.exception.getClass.getName}>{st.mkString("\n")}</failure>
+                                                                      type={f.exception.getClass.getName}>{args.traceFilter(st).mkString("\n")}</failure>
       case other                                          => NodeSeq.Empty
     }
     def testSkipped = fragment match {

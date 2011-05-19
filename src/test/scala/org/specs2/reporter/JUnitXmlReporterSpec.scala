@@ -95,7 +95,7 @@ is formatted for JUnit reporting tools.
     val reporter = new JUnitXmlReporter {
       override lazy val fileWriter = new MockFileWriter {}
     }
-    def report(fs: Fragments) = reporter.report(JUnitXmlSpecification(fs))(Arguments())
+    def report(fs: Fragments) = reporter.report(JUnitXmlSpecification(fs))(fullStackTrace)
     def xml(fs: Fragments): NodeSeq = {
       report(fs)
       xml
