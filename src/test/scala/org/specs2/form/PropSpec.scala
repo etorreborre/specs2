@@ -17,7 +17,8 @@ the actual value is equal to the expected value.
     "with a label and actual value"                                                                                     ! creation.e3^
     "with a label, the actual value and a binary function returning a result"                                           ! creation.e4^
     "with a label, the actual value and a matcher"                                                                      ! creation.e5^
-    "with the actual value and boolean function"                                                                        ! creation.e6^
+    "with the actual value and a muted matcher"                                                                         ! creation.e6^
+    "with the actual value, the expected value and a muted matcher"                                                     ! creation.e7^
                                                                                                                         p^
   "A Prop can be displayed"                                                                                             ^
     "with only the expected value"                                                                                      ! display.e1^
@@ -56,6 +57,7 @@ the actual value is equal to the expected value.
     def e4 = constrained.label must_== "name"
     def e5 = withMatcher("e").execute must_== Success("'eric' contains 'e'")
     def e6 = Prop("", 1, be_>(0).mute).execute must_== Success("")
+    def e7 = Prop("", 1, 2, be_>(0).mute).execute must_== Success("")
   }
                                               
   object display {

@@ -64,13 +64,16 @@ trait FormsBuilder {
   def prop[T, S](label: String, actual: =>T, c: (T, S) => Result) = Prop(label, actual, c)
 
   /** @return a new Prop with a label, an actual value and a matcher to apply to values */
-  def prop[T, S](label: String, actual: =>T, c: (S) => Matcher[T]) = Prop(label, actual, c)
+  def prop[T, S](label: String, actual: =>T, c: (S) => Matcher[T]) = Prop[T, S](label, actual, c)
 
   /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
-  def prop[T, S](label: String, actual: =>T, c: Matcher[T]) = Prop(label, actual, c)
+  def prop[T](label: String, actual: =>T, c: Matcher[T]) = Prop[T](label, actual, c)
 
   /** @return a new Prop with no label, an actual value and a matcher to apply to the actual value */
-  def prop[T, S](actual: =>T, c: Matcher[T]) = Prop("", actual, c)
+  def prop[T](actual: =>T, c: Matcher[T]) = Prop[T]("", actual, c)
+
+  /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
+  def prop[T, S](label: String, actual: =>T, expected: => S, c: Matcher[T]) = Prop[T, S](label, actual, expected, c)
 
   /** @return a new Tabs object */
   def tabs = new Tabs()

@@ -123,7 +123,7 @@ object Prop {
   /** create a Prop with a label, an actual value, and a matcher on the actual value */
   def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, T] = {
     lazy val a = act
-    Prop(label, act, a, c)
+    Prop[T, T](label, a, a, c)
   }
   /** create a Prop with a label, an actual value, an expected value, and a constraint on the actual value*/
   def apply[T, S](label: String, act: =>T, exp: =>S, c: Matcher[T]): Prop[T, S] = {
