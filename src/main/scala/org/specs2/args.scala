@@ -1,5 +1,6 @@
 package specs2
 
+import org.specs2.text.AnsiColors
 import org.specs2.control.StackTraceFilter
 import org.specs2.main.{ArgProperties, ArgProperty, Arguments, Diffs}
 
@@ -17,8 +18,8 @@ object args extends org.specs2.main.ArgumentsArgs with ArgProperties {
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    colors:        ArgProperty[AnsiColors]        = ArgProperty[AnsiColors](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    showlevel:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showtimes:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     offset:        ArgProperty[Int]               = ArgProperty[Int](),
     specName:      ArgProperty[String]            = ArgProperty[String](),
@@ -40,8 +41,8 @@ object args extends org.specs2.main.ArgumentsArgs with ArgProperties {
     stopOnFail    ,
     failtrace     ,
     color         ,
+    colors        ,
     noindent      ,
-    showlevel     ,
     showtimes     ,
     offset        ,
     specName      ,

@@ -4,7 +4,7 @@ package main
 import org.specs2.internal.scalaz.Monoid
 import control._
 import Exceptions._
-import text.{DiffShortener, EditDistance}
+import text.{AnsiColors, DiffShortener, EditDistance}
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
@@ -20,8 +20,8 @@ case class Arguments (
   _stopOnFail:    Option[Boolean]          = None,
   _failtrace:     Option[Boolean]          = None,
   _color:         Option[Boolean]          = None,
+  _colors:        Option[AnsiColors]       = None,
   _noindent:      Option[Boolean]          = None,
-  _showlevel:     Option[Boolean]          = None,
   _showtimes:     Option[Boolean]          = None,
   _offset:        Option[Int]              = None,
   _specName:      Option[String]           = None,
@@ -43,8 +43,8 @@ case class Arguments (
   def stopOnFail: Boolean           = _stopOnFail.getOrElse(false)
   def failtrace: Boolean            = _failtrace.getOrElse(false)
   def color: Boolean                = _color.getOrElse(true)
+  def colors: AnsiColors            = _colors.getOrElse(AnsiColors)
   def noindent: Boolean             = _noindent.getOrElse(false)
-  def showlevel: Boolean            = _showlevel.getOrElse(false)
   def showtimes: Boolean            = _showtimes.getOrElse(false)
   def offset: Int                   = _offset.getOrElse(0)
   def specName: String              = _specName.getOrElse(".*Spec")
@@ -76,8 +76,8 @@ case class Arguments (
       other._stopOnFail      .orElse(_stopOnFail),
       other._failtrace       .orElse(_failtrace),
       other._color           .orElse(_color),
+      other._colors          .orElse(_colors),
       other._noindent        .orElse(_noindent),
-      other._showlevel       .orElse(_showlevel),
       other._showtimes       .orElse(_showtimes),
       other._offset          .orElse(_offset),
       other._specName        .orElse(_specName),
@@ -103,8 +103,8 @@ case class Arguments (
     "stopOnFail"     -> _stopOnFail   ,
     "failtrace"      -> _failtrace    ,
     "color"          -> _color        ,
+    "colors"         -> _colors  ,
     "noindent"       -> _noindent     ,
-    "showlevel"      -> _showlevel    ,
     "showtimes"      -> _showtimes    ,
     "offset"         -> _offset       ,
     "specName"       -> _specName     ,
@@ -142,7 +142,6 @@ object Arguments {
        _failtrace     = bool("failtrace"),
        _color         = bool("color", "nocolor"),
        _noindent      = bool("noindent"),
-       _showlevel     = bool("showlevel"),
        _showtimes     = bool("showtimes"),
        _offset        = int("offset"),
        _specName      = value("specname"),

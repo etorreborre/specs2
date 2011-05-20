@@ -81,7 +81,7 @@ trait TextPrinter {
       if (args.noindent) s 
       else {
         val indent = "  "*level
-        s.trim.split("\n").map(indent+_).mkString("\n") + (if (args.showlevel) " ("+level+")" else "")
+        s.trim.split("\n").map(indent+_).mkString("\n")
       }
     }
   }
@@ -179,20 +179,21 @@ trait TextPrinter {
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       val n = end.name
       out.printLine(" ")
-      out.printLine(color("Total for specification" + (if (n.name.isEmpty) n.name.trim else " "+n.name.trim), blue, args.color))
+      out.printLine(args.colors.color("Total for specification" + (if (n.name.isEmpty) n.name.trim else " "+n.name.trim), args.colors.blue, args.color))
       printStats(stats)
       out.printLine(" ")
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
+
       val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer, specStart, specEnd) = stats
-      out.printLine(color("Finished in " + timer.time, blue, args.color))
-      out.printLine(color(
+      out.printLine(args.colors.color("Finished in " + timer.time, args.colors.blue, args.color))
+      out.printLine(args.colors.color(
           Seq(Some(examples qty "example"), 
               if (expectations != examples) Some(expectations qty "expectation") else None,
               Some(failures qty "failure"), 
               Some(errors qty "error"),
               pending optQty "pending", 
-              skipped optInvariantQty "skipped").flatten.mkString(", "), blue, args.color))
+              skipped optInvariantQty "skipped").flatten.mkString(", "), args.colors.blue, args.color))
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {

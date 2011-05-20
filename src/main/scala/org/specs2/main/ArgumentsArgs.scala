@@ -2,6 +2,7 @@ package org.specs2
 package main
 
 import control._
+import text.AnsiColors
 
 /**
  * This trait provides shortcuts to create Arguments instances
@@ -18,8 +19,8 @@ trait ArgumentsArgs extends ArgProperties {
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    colors:        ArgProperty[AnsiColors]        = ArgProperty[AnsiColors](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    showlevel:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showtimes:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     offset:        ArgProperty[Int]               = ArgProperty[Int](),
     specName:      ArgProperty[String]            = ArgProperty[String](),
@@ -41,8 +42,8 @@ trait ArgumentsArgs extends ArgProperties {
      stopOnFail.toOption,
      failtrace.toOption,
      color.toOption,
+     colors.toOption,
      noindent.toOption,
-     showlevel.toOption,
      showtimes.toOption,
      offset.toOption,
      specName.toOption,

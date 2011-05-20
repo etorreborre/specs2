@@ -2,6 +2,7 @@ package org.specs2
 package mutable
 
 import main._
+import text._
 import specification.Fragments
 import control.{StackTraceFilter, Property}
 
@@ -21,8 +22,8 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    colors:        ArgProperty[AnsiColors]        = ArgProperty[AnsiColors](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    showlevel:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showtimes:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     offset:        ArgProperty[Int]               = ArgProperty[Int](),
     specName:      ArgProperty[String]            = ArgProperty[String](),
@@ -33,7 +34,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
     fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
-    commandLine:   Seq[String]                   = Nil
+    commandLine:   Seq[String]                    = Nil
   ) = {
     addArguments(super.args(
       ex,
@@ -45,8 +46,8 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       stopOnFail,
       failtrace,
       color,
+      colors,
       noindent,
-      showlevel,
       showtimes,
       offset,
       specName,

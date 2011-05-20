@@ -2,6 +2,7 @@ package org.specs2
 package main
 
 import control.{NoStackTraceFilter, IncludeExcludeStackTraceFilter, DefaultStackTraceFilter}
+import text.AnsiColors
 
 /**
  * This trait provides shortcuts for frequently used arguments
@@ -36,6 +37,10 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    * shortcut to avoid colored output
    */
   def nocolor: Arguments = args(color = false)
+  /**
+   * shortcut to set new AnsiColors
+   */
+  def colors(c: AnsiColors): Arguments = args(colors = c)
   /**
    * shortcut to not executing the text and avoid automatic indentation
    */
