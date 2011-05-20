@@ -125,15 +125,6 @@ trait StringBaseMatchers { outer =>
     } 
   }
   
-  /** matches if the length is n */
-  def haveLength(n: Int) = new Matcher[String](){
-    def apply[S <: String](string: Expectable[S]) = {
-      result(string.value.length == n,
-         		 string.description  + " has length " + n,
-        		 string.description  + " doesn't have length " + n, string)
-    }
-  }
-  
 }
 
 private[specs2]
@@ -143,7 +134,6 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
     def matching(s: String) = result(beMatching(s))
     def contain(s: String) = result(outer.contain(s))
     def containing(s: String) = result(outer.contain(s))
-    def length(n: Int) = result(haveLength(n))
     def startWith(s: String) = result(outer.startWith(s))
     def endWith(s: String) = result(outer.endWith(s))
     def startingWith(s: String) = result(outer.startWith(s))
@@ -161,7 +151,6 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
     def =~(s: String) = outer.=~(s).not
   }
   def matching(t: =>String) = beMatching(t)
-  def length(n: Int) = haveLength(n)
   def containing(s: String) = outer.contain(s)
   def startingWith(s: String) = outer.startWith(s)
   def endingWith(s: String) = outer.endWith(s)

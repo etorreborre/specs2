@@ -38,6 +38,10 @@ class TraversableMatchersSpec extends Specification { def is =
     { Nil must be empty }                                                                                               ^
     { List(1, 2) must haveSize(2) }                                                                                     ^
     { List(1, 2) must have size(2) }                                                                                    ^
+    { List(1, 2) must not have size(1) }                                                                                ^
+    { List(1, 2) must haveLength(2) }                                                                                   ^
+    { List(1, 2) must have length(2) }                                                                                  ^
+    { List(1, 2) must not have length(1) }                                                                              ^
                                                                                                                         p^
   "we can check the size of an Array"                                                                                   ^
     { Array(1, 2) must have size(2) }                                                                                   ^

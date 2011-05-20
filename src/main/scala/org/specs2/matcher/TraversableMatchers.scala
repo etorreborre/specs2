@@ -57,15 +57,13 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
     new ContainLikeMatcher[T](pattern, matchType) 
 
   /** match if there is a way to size T */
-  def haveSize[T : Sized](n: Int) = new Matcher[T] {
-    def apply[S <: T](traversable: Expectable[S]) = {
-      val s = implicitly[Sized[T]]
-      val valueSize = s.size(traversable.value)
-      result(valueSize == n,
-             traversable.description + " have size " + n,
-             traversable.description + " doesn't have size " + n + " but size " + valueSize, traversable)
-    }
-  }
+  def haveSize[T : Sized](n: Int) = new SizedMatcher[T](n, "size")
+  /** alias for haveSize */
+  def size[T : Sized](n: Int) = haveSize[T](n)
+  /** alias for haveSize */
+  def haveLength[T : Sized](n: Int) = new SizedMatcher[T](n, "length")
+  /** alias for haveSize */
+  def length[T : Sized](n: Int) = haveLength[T](n)
 
   /** any scala collection has a size */
   implicit def scalaTraversableIsSized[I <: TraversableOnce[_]]: Sized[I] = new Sized[I] {
@@ -97,6 +95,7 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
   implicit def sized[T : Sized](s: MatchResult[T]) = new HasSize(s)
   class HasSize[T : Sized](s: MatchResult[T]) {
     def size(n: Int) : MatchResult[T] = s(outer.haveSize[T](n))
+    def length(n: Int) : MatchResult[T] = size(n)
   }
 }
 class ContainMatchResult[T](val s: MatchResult[Traversable[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
@@ -219,4 +218,12 @@ class HaveTheSameElementsAs[T] (l: =>Traversable[T]) extends Matcher[Traversable
   }
 }
 
-  
+class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T] {
+  def apply[S <: T](traversable: Expectable[S]) = {
+    val s = implicitly[Sized[T]]
+    val valueSize = s.size(traversable.value)
+    result(valueSize == n,
+           traversable.description + " have "+sizeWord+" "+ n,
+           traversable.description + " doesn't have "+sizeWord+" " + n + " but "+sizeWord+" " + valueSize, traversable)
+  }
+}

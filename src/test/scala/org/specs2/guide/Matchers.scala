@@ -317,6 +317,7 @@ Iterables can be checked with several matchers:
 
   * to check the size of an iterable
     `List(1, 2) must have size(2)`
+    `List(1, 2) must have length(2)` // equivalent to size
 
   * to check if an `Iterable[String]` contains matching strings
     `List("Hello", "World") must containMatch("ll")        // matches with .*ll.*`

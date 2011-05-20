@@ -20,10 +20,12 @@ class StringMatchersSpec extends Specification {  def is =
     "with have length"                                                                                                  ^
     { "Eric" must haveLength(4) }                                                                                       ^
     { "Eric" must have length(4) }                                                                                      ^
+    { "Eric" must not have length(3) }                                                                                   ^
                                                                                                                         p^
     "or with haveSize because a String is also an Iterable[Char]"                                                       ^
     { "Eric" must haveSize(4) }                                                                                         ^
     { "Eric" must have size(4) }                                                                                        ^
+    { "Eric" must not have size(3) }                                                                                    ^
                                                                                                                         p^
     "or with beEmpty because a String is also an Iterable[Char]"                                                        ^
     { "" must beEmpty }                                                                                                 ^
