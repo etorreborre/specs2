@@ -24,6 +24,7 @@ class GivenWhenThenSpec extends Specification { def is =
     "When I use this operator: ${*}"                           ^ operator ^
     "Then I should get: ${20}"                                 ^ result ^
     "And it should be >: ${10}"                                ^ greaterThan ^
+    "But not should be >: ${50}"                               ^ lowerThan ^
                                                                end ^ noindent
 
   object number1 extends Given[Int] {
@@ -40,6 +41,9 @@ class GivenWhenThenSpec extends Specification { def is =
   }
   object greaterThan extends Then[Operation] {
     def extract(operation: Operation, text: String) = operation.calculate  must be_>=(extract1(text).toInt)
+  }
+  object lowerThan extends Then[Operation] {
+    def extract(operation: Operation, text: String) = operation.calculate  must be_<=(extract1(text).toInt)
   }
   case class Operation(n1: Int, n2: Int, operator: String) {
     def calculate: Int = if (operator == "+") n1 + n2 else n1 * n2

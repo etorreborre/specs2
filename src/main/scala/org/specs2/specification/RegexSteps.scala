@@ -86,7 +86,7 @@ trait RegexSteps {
     type RegexType = PostStepText[T]
     def ^(step: Then[T]) = {
       lazy val extracted = step.extractContext(context(), text)
-      new PostStep(() => extracted, fs.add(Example(step.strip(text), toResult(extracted))))
+      new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
     }
     def add(f: Fragment): RegexType = new PostStepText(text, context, fs.add(f))
   }
