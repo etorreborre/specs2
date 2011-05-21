@@ -1,0 +1,17 @@
+This version adds new features on top of 1.3:
+
+ * A JUnit XML reporter to create [junit-xml files](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Output+formats) usable for continuous integration
+ * updated to the latest pegdown release
+ * [Auto-examples](http://etorreborre.github.com/specs2/guide/org.specs2.guide.SpecStructure.html#Auto-Examples) can be used even if the specification class doesn't have the same name as the file containing it
+ * added a `beAnInstanceOf` matcher
+ * added a `haveLength` matcher (alias for `haveSize`)
+ * the colors used for the text output [can be customized](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Colors)
+ * added a `mute` method on matchers to remove messages (used in Forms and Props to just color cells when there is a failure)
+ 
+And some fixes:
+
+ * better display for Array expectables
+ * filtering stacktraces for html output
+ * various fixes for Forms and Properties evaluations
+ 
+ ==========================
