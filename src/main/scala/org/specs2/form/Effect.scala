@@ -1,11 +1,11 @@
 package org.specs2
 package form
 
-import scala.xml._
 import control.Exceptions._
 import control.Property
 import execute._
 import DecoratedProperties._
+
 /**
  * An Effect is a property which is used to display names corresponding to side-effects.
  *
@@ -35,7 +35,7 @@ case class Effect[T](label: String, value: Property[T], decorator: Decorator = D
   def apply(v: =>T) = new Effect(label, value(v), decorator)
   /** @return the effect value */
   def apply(): T = value.get
-  /** alias for apply() */
+  /** @alias for apply() */
   def get: T = apply()
   /** @return "label" */
   override def toString = label

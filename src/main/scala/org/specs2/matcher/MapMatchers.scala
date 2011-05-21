@@ -79,11 +79,11 @@ private[specs2]
 trait MapBeHaveMatchers { outer: MapBaseMatchers =>
   implicit def toMapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) = new MapKeyResultMatcher(result)
   class MapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) {
-    def key(k: K) = result(haveKey(k))   
+    def key(k: K) = result(haveKey(k))
   }
   implicit def toMapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) = new MapValueResultMatcher(result)
   class MapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) {
-    def value(v: V) = result(haveValue(v)) 
+    def value(v: V) = result(haveValue(v))
   }
   implicit def toMapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) = new MapResultMatcher(result)
   class MapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) {
@@ -92,8 +92,8 @@ trait MapBeHaveMatchers { outer: MapBaseMatchers =>
   }
   implicit def toPartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) = new PartialFunctionResultMatcher(result)
   class PartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) {
-  def definedAt(values: K*) = beDefinedAt(values:_*)
-  def definedBy(values: (K, V)*) = beDefinedBy(values:_*)
+    def definedAt(values: K*) = result(beDefinedAt(values:_*))
+    def definedBy(values: (K, V)*) = result(beDefinedBy(values:_*))
   }
   def key[K](k: K) = haveKey(k)   
   def value[V](v: V) = haveValue(v) 

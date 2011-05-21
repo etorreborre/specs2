@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import scalaz.{ Scalaz, Monoid, Reducer }
+import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
 import Scalaz._
 import collection.Iterablex._
 import main.Arguments
@@ -34,7 +34,7 @@ trait Statistics {
   
   object StatisticsReducer extends Reducer[ExecutedFragment, SpecsStatistics] {
     override def unit(f: ExecutedFragment): SpecsStatistics = f match { 
-      case ExecutedResult(_, r, t) => {
+      case ExecutedResult(_, r, t, _) => {
         val current = r match {
           case s @ Success(_)       => Stats(fragments = 1, expectations = s.expectationsNb, successes = 1)
           case Failure(_, _, _, _)  => Stats(fragments = 1, expectations = 1, failures = 1)
@@ -45,10 +45,10 @@ trait Statistics {
         }
         SpecsStatistics(current.copy(timer = t))
       }
-      case start @ ExecutedSpecStart(name, args) => SpecsStatistics(Stats(start = Some(start)))
-      case end @ ExecutedSpecEnd(_)              => SpecsStatistics(Stats(end = Some(end)))
-      case ExecutedNoText(t)                     => SpecsStatistics(Stats(timer = t))
-      case _                                     => SpecsStatistics(Stats())
+      case start @ ExecutedSpecStart(name, args, _) => SpecsStatistics(Stats(start = Some(start)))
+      case end @ ExecutedSpecEnd(_, _)              => SpecsStatistics(Stats(end = Some(end)))
+      case ExecutedNoText(t, _)                     => SpecsStatistics(Stats(timer = t))
+      case _                                        => SpecsStatistics(Stats())
     }
   }
   /**

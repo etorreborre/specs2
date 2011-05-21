@@ -1,37 +1,48 @@
 package org.specs2
 package mutable
 
-import control.Property
 import main._
 import specification.Fragments
+import control.{StackTraceFilter, Property}
 
 /**
- * This trait provides shortcuts to create Arguments instances
+ * This trait provides shortcuts to create Arguments instances and adding them to the SpecificationStructure by mutating its
+ * current content
  */
-trait ArgumentsArgs extends main.ArgumentsArgs { this: BaseSpecification =>
+trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
   /** shorthand method to create an Arguments object */
   override def args(
-    ex:            Property[String]   = Property[String](),
-    xonly:         Property[Boolean]  = Property[Boolean](),
-    plan:          Property[Boolean]  = Property[Boolean](),
-    failtrace:     Property[Boolean]  = Property[Boolean](),
-    color:         Property[Boolean]  = Property[Boolean](),
-    noindent:      Property[Boolean]  = Property[Boolean](),
-    showlevel:     Property[Boolean]  = Property[Boolean](),
-    showtimes:     Property[Boolean]  = Property[Boolean](),
-    offset:        Property[Int]      = Property[Int](),
-    specName:      Property[String]   = Property[String](),
-    sequential:    Property[Boolean]  = Property[Boolean](),
-    threadsNb:     Property[Int]      = Property[Int](),
-    markdown:      Property[Boolean]  = Property[Boolean](),
-    debugMarkdown: Property[Boolean]  = Property[Boolean](),
-    diffs:         Property[Diffs]    = Property[Diffs](),
-    fromSource:    Property[Boolean]  = Property[Boolean]()
+    ex:            ArgProperty[String]            = ArgProperty[String](),
+    xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    include:       ArgProperty[String]            = ArgProperty[String](),
+    exclude:       ArgProperty[String]            = ArgProperty[String](),
+    plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    showlevel:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    showtimes:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    offset:        ArgProperty[Int]               = ArgProperty[Int](),
+    specName:      ArgProperty[String]            = ArgProperty[String](),
+    sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
+    markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    debugMarkdown: ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
+    fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
+    commandLine:   Seq[String]                   = Nil
   ) = {
     addArguments(super.args(
       ex,
       xonly,
+      include,
+      exclude,
       plan,
+      skipAll,
+      stopOnFail,
       failtrace,
       color,
       noindent,
@@ -44,7 +55,9 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: BaseSpecification =>
       markdown,
       debugMarkdown,
       diffs,
-      fromSource))
+      fromSource,
+      traceFilter,
+      commandLine))
   }
 
 }

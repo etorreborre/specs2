@@ -1,0 +1,26 @@
+This version provides lots of fixes and adjustments since 1.0:
+
+ * `skipAll` is a new argument allowing to skip all the examples in a specification
+ * `Before/After` traits work with thrown expectations
+ * More implicits to create matchers from functions
+ * Publishing of the source code
+ * Added `when`, `until`, `iff` methods on `Matcher` to restrict the applicability of a given matcher
+ * New `skipped` and `failure` methods in `mutable.Specification` throwing `Skip` and `Failure` results
+ * Added more `ScalaCheck` implicits to transform functions into `Prop`s
+ * Added an example to show how to use a custom Arbitrary instance
+ * Added an example to show how to define a reusable Specification with `do-before-all` and `do-after-all` steps
+ * Better variance on DataTables
+ * Added a `be_!=` matcher (and `must_!=` method for symmetry)
+ * Added a `be_===` matcher which is only `be_==(_:Any)` to solve some typing issues
+ * New `ParserMatchers` trait (thanks to @alexey_r!)
+ * Upgraded to the latest Pegdown version
+ * Added a new `Scope` trait to make the creation of contexts easier in a `mutable.Specification`
+ * Added an `Outside` trait creating a "context" object to pass to each example
+ * Added a `Tags` trait to tag fragments in a Specification and include/exclude them during the execution 
+ * Added filtering to stacktraces which are shown as compact by default
+ * Smarter and more configurable differences with matchers
+ 
+Many of these fixes and changes were driven by the migration of the [Lift specifications](https://github.com/etorreborre/framework/tree/eto-wip-specs2).
+You can refer to that project to read more examples of ***specs2*** specifications.
+
+------

@@ -1,0 +1,36 @@
+***specs2*** is a library for writing executable software specifications in Scala.
+
+It is a [complete rewrite](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Philosophy.html) of the [specs](http://code.google.com/p/specs) project with the aim of:
+
+ * providing both _acceptance_ specifications (like [Fitnesse](http://fitnesse.org)) and _unit_ specifications (as in [specs](http://code.google.com/p/specs))
+ * being more robust
+ * being faster
+ 
+The features of specs2 are:
+
+ * Forms for writing Fitnesse-like specifications (with Markdown markup)
+ * Html reporting to create documentation for acceptance tests, to create a User Guide,...
+ * Integration with sbt and JUnit tools (maven, IDEs)
+ * Concurrent execution of examples by default
+ * ScalaCheck properties
+ * Mocks with Mockito
+ * Data tables
+ * AutoExamples, where the source code is extracted to describe the example
+ * A rich library of matchers
+   <ul>
+   <li>Easy to create and compose</li>
+   <li>Usable with must and should</li>
+   <li>Returning "functional" results or throwing exceptions</li>
+   <li>Reusable outside of specs2 (in JUnit tests for example)</li>
+   </ul>
+
+***specs2*** has not been fully battled-tested yet so please use the [issues](http://github.com/etorreborre/specs2/issues) page and the [users](http://groups.google.com/group/specs2-users) mailing-list for bugs, feedback, comments, ideas, etc,...
+
+There is also an in-progress project to use ***specs2*** for specifying a [Lift](http://liftweb.net) webapp: 
+
+ * Acceptance specification for the [Signup and login process](http://etorreborre.github.com/pocketchangeapp)
+ * Unit specification for [REST formatters](https://github.com/etorreborre/pocketchangeapp/blob/master/src/test/scala/com/pocketchangeapp/api/RestFormattersSpec.scala)
+
+Have fun with ***specs2***!
+ 
+------ 

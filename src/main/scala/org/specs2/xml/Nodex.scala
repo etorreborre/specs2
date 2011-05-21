@@ -25,7 +25,7 @@ trait Nodex {
    */
   class ExtendedNode(n: Node) {
     /**
-     * @returns true if the Node represents some empty text (containing spaces or newlines)
+     * @return true if the Node represents some empty text (containing spaces or newlines)
      */
     def isSpaceNode: Boolean = NodeFunctions.isSpaceNode(n)
     def matchNode(other: Node, attributes: List[String] = Nil, attributeValues: Map[String, String] = Map(), exactMatch: Boolean = false) =
@@ -34,13 +34,19 @@ trait Nodex {
 
   implicit def reducable(ns: Seq[NodeSeq]) = new Reducable(ns)
   class Reducable(ns: Seq[NodeSeq]) {
-    def reduce = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ cur }
+    def reduceNodes = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ cur }
   }
 
   implicit def unless(ns: =>NodeSeq): UnlessEmpty = new UnlessEmpty(ns)
   class UnlessEmpty(ns: =>NodeSeq) {
-    def unless(b: Boolean) = if (!b) ns else NodeSeq.Empty
+    def unless(b: Boolean) = if (b) NodeSeq.Empty else ns
   }
+
+  /**
+   * @return an unprefixed attribute from pair
+   */
+  implicit def pairToUnprefixedAttribute(pair: Tuple2[Any, Any]) = new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
+
 }
 private[specs2]
 object Nodex extends Nodex

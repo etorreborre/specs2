@@ -9,7 +9,6 @@ import specification._
  * This trait prints the executed fragments results and statistics
  * at the end of the specification
  */
-private[specs2]
 trait TextExporting extends TextPrinter with Exporting { outer =>
 
   type ExportType = Unit

@@ -60,5 +60,4 @@ trait BeforeAfterAround extends Before with After with Around { outer =>
       outer.around(a.around(t))
     }
   }
-
 }

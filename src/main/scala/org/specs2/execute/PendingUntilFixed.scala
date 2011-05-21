@@ -3,12 +3,15 @@ package execute
 
 import control.Exceptions._
 import text.Quote._
+
 /**
  * This function allows to mark the body of an example as pending until it is fixed.
+ *
  * If the result becomes a success then it is reported as a Failure so that the user thinks of
  * removing the marker
  */
 trait PendingUntilFixed {
+
   implicit def toPendingUntilFixed[T <% Result](t: =>T) = new PendingUntilFixed(t)
 
   class PendingUntilFixed[T](t: =>T)(implicit toResult: T => Result) {

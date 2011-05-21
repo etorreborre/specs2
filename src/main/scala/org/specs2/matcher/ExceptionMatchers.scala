@@ -8,7 +8,8 @@ import control.Exceptions._
  */
 trait ExceptionMatchers extends ExceptionBaseMatchers with ExceptionBeHaveMatchers
 
-trait ExceptionBaseMatchers {
+private[specs2]
+trait ExceptionBaseMatchers extends Expectations {
   /**
    * @return a matcher checking the type of an Exception
    */
@@ -17,7 +18,7 @@ trait ExceptionBaseMatchers {
    * @return a matcher checking the type of an Exception and its message (as a regexp)
    */
   def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]): Matcher[Any] = {
-    throwA(m).like { case e => Expectable(e.getMessage).applyMatcher(new BeMatching(".*"+message+".*")) }
+    throwA(m).like { case e => createExpectable(e.getMessage).applyMatcher(new BeMatching(".*"+message+".*")) }
   }
   /**
    * @return a matcher checking the value of an Exception
@@ -146,6 +147,7 @@ trait ExceptionBaseMatchers {
   }
 }
 
+private[specs2]
 trait ExceptionBeHaveMatchers { outer: ExceptionBaseMatchers =>
   implicit def toExceptionMatcher[T](result: MatchResult[T]) = new ExceptionMatcherResult(result)
   class ExceptionMatcherResult[T](result: MatchResult[T]) {

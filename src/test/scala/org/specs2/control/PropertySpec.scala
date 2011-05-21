@@ -3,35 +3,38 @@ package control
 import io._
 import specification._
 
-class PropertySpec extends SpecificationWithJUnit { def is = t^
-                                                                                          """
-  A Property is used to store values which can be executed lazily.
-  It has an Option-like structure, supporting the same kind of operations and 
-  can be empty like an Option
-                                                                                          """^br^
-  "A property"                                                                            ^
-    "can be created from any value"                                                       ! creation1^
-    "can be empty "                                                                       ! creation2^
-    "can be updated with another value"                                                   ! creation3^
-    "can be updated with an option"                                                       ! creation4^
-    "has a toString method returning the option value toString"                           ! creation5^
-                                                                                          p^
-  "A property can be executed"                                                            ^
-    "and return a value"                                                                  ! exec().e1^
-    "it is only executed once"                                                            ! exec().e2^
-                                                                                          p^
-  "A property behaves like an Option"                                                     ^
-    "with map"                                                                            ! option().e1^
-    "with flatMap"                                                                        ! option().e2^
-    "with filter"                                                                         ! option().e3^
-    "with foreach"                                                                        ! option().e4^
-    "with getOrElse"                                                                      ! option().e5^
-    "with isDefined"                                                                      ! option().e6^
-    "with isEmpty"                                                                        ! option().e7^
-    "with orElse"                                                                         ! option().e8^
-    "with toLeft"                                                                         ! option().e9^
-    "with toRight"                                                                        ! option().e10^
-                                                                                          end
+class PropertySpec extends Specification { def is =
+                                                                                                                        """
+A Property is used to store values which can be lazily accessed when required.
+
+It has an Option-like structure, supporting the same kind of operations and can be empty like an Option.
+                                                                                                                        """^
+                                                                                                                        p^
+  "A property"                                                                                                          ^
+    "can be created from any value"                                                                                     ! creation1^
+    "can be empty "                                                                                                     ! creation2^
+    "can be updated with another value"                                                                                 ! creation3^
+    "can be updated with an option"                                                                                     ! creation4^
+    "has a toString method returning the option value toString"                                                         ! creation5^
+                                                                                                                        p^
+  "A property can be executed"                                                                                          ^
+    "and return its contained value"                                                                                    ! exec().e1^
+    "it is only executed once"                                                                                          ! exec().e2^
+                                                                                                                        p^
+  "A property behaves like an Option"                                                                                   ^
+    "with map"                                                                                                          ! option().e1^
+    "with flatMap"                                                                                                      ! option().e2^
+    "with filter"                                                                                                       ! option().e3^
+    "with foreach"                                                                                                      ! option().e4^
+    "with getOrElse"                                                                                                    ! option().e5^
+    "with isDefined"                                                                                                    ! option().e6^
+    "with isEmpty"                                                                                                      ! option().e7^
+    "with orElse"                                                                                                       ! option().e8^
+                                                                                                                        p^
+  "A property can be transformed to an Either instance"                                                                 ^
+    "with toLeft"                                                                                                       ! either().e1^
+    "with toRight"                                                                                                      ! either().e2^
+                                                                                                                        end
 
   def creation1 = Property(1).get must_== 1
   def creation2 = Property().isEmpty must beTrue
@@ -60,7 +63,12 @@ class PropertySpec extends SpecificationWithJUnit { def is = t^
     def e6 = p.isDefined must beTrue
     def e7 = p.isEmpty must beFalse
     def e8 = p.orElse(Property(2)) must_== Property(1)
-    def e9 = p.toLeft(2) must_== Left(1)
-    def e10 = p.toRight(2) must_== Right(1)
+  }
+
+  case class either() extends Before with MockOutput {
+    def before = clear()
+    val p = Property(1)
+    def e1 = p.toLeft(2) must_== Left(1)
+    def e2 = p.toRight(2) must_== Right(1)
   }
 }

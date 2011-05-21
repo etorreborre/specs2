@@ -2,18 +2,19 @@ package org.specs2
 package form
 import FormsBuilder._
 
-class CellsSpec extends SpecificationWithJUnit { def is = 
-                                                                                          
-"Text output for cells"                                                                  ^
-                                                                                          p^
-  "for FieldCell(name, 3)"         ! { fieldCell.text must_== "name: 3" }                 ^   
-  "padText(5) for FieldCell"       ! { fieldCell.padText(Some(5)) must_== "name: 3" }     ^   
-  "padText(10) for FieldCell"      ! { fieldCell.padText(Some(10)) must_== "name: 3   " } ^   
-                                                                                          p^
-  "for PropCell(prop(name, 5)(3))" ! { propCell.text must_== "name: 3" }                  ^   
-  "padText(5) for PropCell"        ! { propCell.padText(Some(5)) must_== "name: 3" }      ^   
-  "padText(10) for PropCell"       ! { propCell.padText(Some(10)) must_== "name: 3   " }  ^  
-                                                                                          end
+class CellsSpec extends Specification { def is =
+                                                                                                                        """
+Cells are responsible for the formatting of Fields, Props and Form added to a Form.
+                                                                                                                        """^
+  "Field cells can format fields as text"                                                                               ^
+    "to display the label and value of the Field"                                                                       !
+      { fieldCell.text must_== "name: 3" }                                                                              ^
+                                                                                                                        p^
+  "Prop cells can format props as text"                                                                                 ^
+    "to display the label and expected value of the Prop"                                                               !
+    { propCell.text must_== "name: 3" }                                                                                 ^
+                                                                                                                        end
+
   val fieldCell = FieldCell(field("name", 3))
   val propCell = PropCell(prop("name", 3)(3))
 

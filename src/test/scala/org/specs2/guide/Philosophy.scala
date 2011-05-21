@@ -4,8 +4,7 @@ package guide
 class Philosophy extends Specification { def is = freetext                                                              ^
   "Philosophy".title ^
                                                                                                                         """
-<toc/>
-                                                                                                                        
+
 ### The origins
 
 ***specs2*** has been created as an evolution of the [***specs***](http://code.google.com/p/specs) project.
@@ -84,11 +83,11 @@ few evidence that anyone actually used it.
 This objective was certainly *not* achieved. There are several reasons for this. The design of the examples execution is
 certainly the main one.
 
-In ***specs*** the examples are executed "on-demand" when a runner "asks" the specification for
-its successes and failures. The specification then asks each example for its status and an example knows that by executing
-himself. The trouble is, the example doesn't really have enough information to know it's full execution context: is there
-some code to execute beforehand for data setup? Or after all other examples, because it's the last example of the specification
-and a database disconnection is required then?
+In ***specs*** the examples are executed "on-demand" when a runner "asks" the specification for its successes and failures.
+The specification then asks each example for its status and an example knows that by executing himself. The trouble is,
+the example doesn't really have enough information to know it's full execution context: is there some code to execute beforehand
+for data setup? Or after all other examples, because it's the last example of the specification and a database disconnection
+is required then?
 
 This design is aggravated by a "magic" feature provided by ***specs***: [the automatic reset of local variables](http://code.google.com/p/specs/wiki/DeclareSpecifications#Execution_model).
 This feature is _very_ convenient for the user but the implementation is a nightmare! In order to make as if each example
@@ -112,7 +111,7 @@ that while remaining true to the original vision for ***specs***, a new design c
 principles:
 
  1. Do not use mutable variables!
- 2. There is no explicit structure
+ 2. Use a simple structure
  3. Control the dependencies (no cycles)
  4. Control the implicits scopes
 
@@ -124,8 +123,8 @@ who has to write more code to get his specification into shape.
 ###### Chaining everything
 
 Mutable variables were the subject of enough grief, I decided it was high time to do without them. This decision has a
-big impact on the way a user writes a specification. A specification can not anymore be a set of unrelated "blocks"
- where each block is added to the parent specification through a side effect:
+big impact on the way a user writes a specification. A specification can not anymore be a set of unrelated "blocks" where
+each block is added to the parent specification through a side effect:
 
       "my example is ok" in { 1 must_== 1 }        // those examples are added to the specification by mutating a
       "my other example is ok" in { 2 must_== 2 }  // variable
@@ -160,14 +159,18 @@ This can be seen as a limitation as well but also as an opportunity for writing 
 advocated in several places that there should be only one expectation per example, now the design of ***specs2*** actually
 encourages it!
 
-In any case the very positive consequence of that design decision is that debugging the library should be almost brainless.
+One other positive consequence of that design decision is that debugging the library should be almost brainless.
 Functional Programming is like having a pipe-line. If you don't like the output, you just cut the pipeline in smaller
 pieces, examine the ins and outs of each and decide where things went wrong.
 
+That being said, based on early feedback, a _mutable_ version of the Specification trait was later introduced in order to
+provide a nicer DSL for _unit_ specifications, where the code is interleaved with the descriptions (see [below](org.specs2.guide.Philosophy.html#But+if+you+STILL+want+mutable+specifications)). The mutability
+is limited to **1** variable and to the construction phase of the specification.
+
 ###### Arguments have to be supplied
 
-The "local configuration" of a Specification in ***specs*** is realized with side-effects too. If you want to declare
-that the examples in a specification will share variables you can add `shareVariables()` at the top of the specification.
+The "local configuration" of a Specification in ***specs*** is realized with side-effects too. If you want to declare that
+the examples in a specification will share variables you can add `shareVariables()` at the top of the specification.
 
 This is not possible anymore in specs2, so you have to explicitly pass arguments at the top of your specification and
 chain them with the rest:
@@ -183,16 +186,16 @@ concurrent execution of examples is just one line of code!
 
       fs.fragments.map(f => promise(executeFragment(arguments <| fs.arguments)(f))).sequence.get
 
-##### No explicit structure
+##### A simple structure
 
 This principle comes from the desire to unite the traditional ***specs*** approach of using blocks with `should` and `in`
 keywords with a more *literate* approach of having just free text.
 
-In other words, there is no fundamental difference between an "Acceptance Testing" specification and a "Unit Test"
-specification. This is just a matter of the scale at which you're looking at things.
+In other words, there is no fundamental difference between an "Acceptance Testing" specification and a "Unit Test" specification.
+This is just a matter of the scale at which you're looking at things.
 
-Moreover I found that having restrictions on the words I was supposed to use for my specification text didn't help me
-write the most appropriate descriptions of the system behavior or features.
+Moreover I found that having restrictions on the words I was supposed to use for my specification text didn't help me write
+the most appropriate descriptions of the system behavior or features.
 
 The application of this principle is that a specification is composed of "Fragments" which can be some "Text" or some
 "Example" *simply appended together*. You can use whatever words you want to describe the examples `should`, `can`, `must`,
@@ -245,8 +248,8 @@ will never be overwritten by another example. Parent context is inherited by mea
 There is a clear win here because the library doesn't have to propose new concepts, a new API to offer context management
 functionalites to: create contexts, share them, reuse them,...
 
-We can also notice the point about having "No structure". There is no need for adding curly braces `{...}` to separate
-the specification elements so the specification text is remarkably close to what's going to be displayed when reported.
+Moreover in the "simple structure" above, there is no need for adding curly braces `{...}` to separate the specification
+elements. This makes the specification text remarkably close to what's going to be displayed when reported.
 
 ###### Indentation
 
@@ -272,22 +275,22 @@ inserted in order to adjust the indentation or just skip lines: `p, br, t, bt, e
 
 ###### Operators
 
-There are 2 major operators used by ***specs2*** when building a Specification: `^` and `!`. `^` is used to "link" specification
-fragments together and `!` is used to declare the body of an example. The choice of those 2 symbols is mostly the result
-of the precedence rules in Scala. `+` binds more strongly than `!`, and `!` more strongly than `^`. This means that you
-don't need to add brackets to:
+There are 2 major operators used by ***specs2*** when building a Specification: `^` and `!`.
+
+`^` is used to "link" specification fragments together and `!` is used to declare the body of an example. The choice of
+those 2 symbols is mostly the result of the precedence rules in Scala. `+` binds more strongly than `!`, and `!` more strongly
+than `^`. This means that you don't need to add brackets to:
 
   * add strings with `+`: `"this is"+"my string" ^ "ok?"`
   * declare an example: `"this is some text" ^ "and this is an example description" ! success`
 
 ###### Forms
 
-Having no explicit structure but just a "flow" of Fragments allows to insert other types of Fragments at will in a ***specs2***
-specification.
+Having no explicit structure but just a "flow" of Fragments allows to insert other types of Fragments in a ***specs2*** specification.
 
-Notably the "description - expectation" format for specifying software is sometimes too verbose and tables are a much more
-effective way of packing up descriptions and expectations. This idea is  not new and a tool like [Fitnesse](http://fitnesse.org) has been offering
-this way of writing specifications for years now.
+The "description - expectation" format for specifying software is sometimes too verbose and tables are a much more effective
+way of packing up descriptions and expectations. This idea is  not new and a tool like [Fitnesse](http://fitnesse.org) has been offering this way
+of writing specifications for years now.
 
 ***specs2*** takes this idea further with 3 features:
 
@@ -300,13 +303,19 @@ this way of writing specifications for years now.
  * the Forms presentation and implementation can be encapsulated in the same class to be reused as a coherent block in
    other specifications
 
-The main drawback (for now) of this approach is that it is not possible to see, in real-time, a modification done on a Form.
-There needs to be a compilation step, which in Scala, is not instantaneous.
+The main drawback (for now) of this approach is that it is not possible to see, in real-time, a modification done on a Form
+as can be seen in a browser with Fitnesse. There needs to be a compilation step, which in Scala, is not instantaneous.
 
-###### But if you STILL want mutable specifications
+##### But if you STILL want mutable specifications
 
-There's at least one very good reason for that. You want a smooth migration path from ***specs*** to ***specs2*** because
-rewriting specifications from scratch, with a new syntax, does not bring a lot of value to your project.
+There are at least 2 very good reason for that.
+
+ 1. you want a smooth migration path from ***specs*** to ***specs2*** because rewriting specifications from scratch,
+    with a new syntax, does not bring a lot of value to your project
+
+ 2. chaining fragments hides the implementation of the examples and you have to navigate too much between the text and
+    the example code to understand what's going on. This is especially true when writing _unit_ specifications where it's
+    convenient to interleave short descriptions with blocks of code
 
 Well, Scala is not a black-or-white language and mutation is definitely part of the toolbox. In the case of a specification
 DSL, we know the advantages: less syntax, and the drawbacks: uncontrolled side-effects.
@@ -332,8 +341,7 @@ The important things to know are:
   * side-effects are only used to build the specification fragments, by mutating a variable
   * they are also used to short-circuit the execution of an example as soon as there is a failure (by throwing an exception)
   * if you build fragments in the body of examples or execute the same specification concurrently, the sky should fall down
-  * "context" management is to be done with case classes (see `org.specs2.examples.MutableSpec`)
-
+  * "context" management is to be done with case classes or traits (see `org.specs2.examples.MutableSpec`)
 
 ##### Dependencies control
 
@@ -342,18 +350,18 @@ design makes sure that a layered architecture is maintained, from low-level pack
 
   +    runner
   +    reporter
-  +    specification
+  +    mutable    specification
   +    mock form
   +    matcher
   +    execute
-  +               reflect  xml html  time
+  +               reflect  xml html  time json
   +    collection control  io  text  main data
 
 In this scheme, a specification is no longer executable on its own, contrary to the ***specs*** design. It always need a
 runner.
 
-Unfortunately this dependency specification is not yet enforced automatically in ***specs2*** test suite, but it is
-certainly on the features list.
+Unfortunately this dependency specification is not yet enforced automatically in ***specs2*** test suite, but this kind of
+feature could be implemented in the future.
 
 ##### Implicit definitions control
 
@@ -363,14 +371,14 @@ traits you add, the more implicits you bring in.
 
 So the compromise is the following:
 
- + The `BaseSpecification` class only allows to build Text fragments and Examples, without even any Matchers
- + On top of it, the `Specification` class stacks lots of convenient functionalities to
+ + The `BaseSpecification` trait only allows to build Text fragments and Examples, without even any Matchers
+ + On top of it, the `Specification` trait stacks lots of convenient functionalities to
      . use a concise notation for arguments
      . use matchers (with both `must` and `should`)
      . use predefined fragments and results (like `p`, `br`, `success`, `pending`,...)
      . and more
 
-This way, if there is any conflict with the `Specification` class inherited definitions it should be possible to downgrade
+This way, if there is any conflict with the `Specification` trait inherited definitions it should be possible to downgrade
 to the `BaseSpecification` and add the non-conflicting traits.
 
  - - -
@@ -382,7 +390,7 @@ to the `BaseSpecification` and add the non-conflicting traits.
 
   val chaining = new Specification { def is =  args(color=false) ^
     "my example on strings" ! e1             // will fail
-    def e1 = "hello" must  have size(10000) and
+    def e1 = "hello" must have size(10000) and
                                startWith("hell")
   }
 
@@ -394,25 +402,23 @@ to the `BaseSpecification` and add the non-conflicting traits.
         "the total amount must be displayed"     ! tickets().total^
         "if he buys tickets"                     ^
           "his favorite payment type is shown"   ! buy().favorite
-
-    trait Login {
-      var loggedIn = false
-      def login = loggedIn = true
-      def logout = loggedIn = false
-    }
-    case class history() extends Login {
-      login
-      def isShown = loggedIn must beTrue
-    }
-    case class tickets() extends Login {
-      login
-      def list = success
-      def total = success
-    }
-    case class buy() extends Login {
-      val tickets = new tickets()
-      def favorite = success
-    }
-
+  }
+  trait Login {
+    var loggedIn = false
+    def login = loggedIn = true
+    def logout = loggedIn = false
+  }
+  case class history() extends Login {
+    login
+    def isShown = loggedIn must beTrue
+  }
+  case class tickets() extends Login {
+    login
+    def list = success
+    def total = success
+  }
+  case class buy() extends Login {
+    val tickets = new tickets()
+    def favorite = success
   }
 }

@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 import text.Quote._
+import execute.{Result, Failure}
 
 /**
  * Matchers for Options
@@ -22,7 +23,7 @@ trait OptionBaseMatchers {
   }
   def some[T](t: =>T) = beSome(t)
   def beSome[T] = new SomeMatcher[T]
-  def some[T] = beSome
+  def some[T] = beSome[T]
   def beNone = new Matcher[Option[Any]] {
     def apply[S <: Option[Any]](value: Expectable[S]) = {
       result(value.value == None,
@@ -47,6 +48,9 @@ private[specs2]
 trait OptionBeHaveMatchers { outer: OptionBaseMatchers =>
   implicit def toOptionResultMatcher[T](result: MatchResult[Option[T]]) = new OptionResultMatcher(result)
   class OptionResultMatcher[T](result: MatchResult[Option[T]]) {
+    def beSome = result(outer.beSome)
+    def beSome(t: =>T) = result(outer.beSome(t))
+    def beNone = result(outer.beNone)
     def some = result(outer.beSome)
     def some(t: =>T) = result(outer.beSome(t))
     def none = result(outer.beNone)
@@ -62,4 +66,19 @@ class SomeMatcher[T] extends Matcher[Option[T]] {
            value)
   }
   def which(f: T => Boolean) = this ^^ { (t: Option[T]) => t filter f }
+  def like(f: PartialFunction[T, MatchResult[_]]) = this and partialMatcher(f)
+
+  private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Option[T]] {
+    def apply[S <: Option[T]](value: Expectable[S]) = {
+      val res: Result = value.value match {
+        case Some(t) if f.isDefinedAt(t)  => f(t).toResult
+        case Some(t) if !f.isDefinedAt(t) => Failure("function undefined")
+        case None                         => Failure("no match")
+      }
+      result(res.isSuccess,
+             value.description+" is Some[T] and "+res.message,
+             value.description+" is Some[T] but "+res.message,
+             value)
+    }
+  }
 }

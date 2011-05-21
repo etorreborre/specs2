@@ -1,6 +1,9 @@
 package org.specs2
 package collection
 
+import matcher.MustExpectable._
+import scala.collection.immutable.List._
+
 /**
  * This trait provides additional methods on Lists and nested Lists
  */
@@ -27,12 +30,8 @@ trait Listx { outer =>
      * @return a list minus the first element satisfying the predicate
      */
     def removeFirst(predicate: T => Boolean): List[T] = {
-      list match {
-        case Nil => Nil
-        case x :: rest if (predicate(x)) => rest
-        case x :: rest if (!predicate(x)) => List(x) ::: rest.removeFirst(predicate)
-        case _ => Nil // should never happen thanks to the predicate condition above
-      }
+      val (withoutElement, startWithElement) = list span (x => !predicate(x))
+      withoutElement ++ startWithElement.drop(1)
     }
     /**
      * @return a randomly mixed list

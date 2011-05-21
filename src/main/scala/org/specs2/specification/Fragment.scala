@@ -8,6 +8,10 @@ import main.Arguments
 import execute._
 import text._
 import text.Trim._
+import org.specs2.internal.scalaz.Monoid
+import data.IncludedExcluded
+import io.Location
+import scala.Either
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
@@ -16,6 +20,7 @@ import text.Trim._
 sealed trait Fragment {
   val linkedTo: Option[SpecificationStructure] = None
   def matches(s: String) = true
+  val location: Location = new Location
 }
 
 /**
@@ -30,7 +35,8 @@ sealed trait Fragment {
 case class SpecStart(name: SpecName, arguments: Arguments = Arguments()) extends Fragment {
   override def matches(s: String) = name matches s
   override def toString = "SpecStart("+name.name+")"
-  def withArgs(args: Arguments) = SpecStart(name, args)
+  /** the new arguments take precedence over the old ones */
+  def withArgs(args: Arguments) = SpecStart(name, arguments.overrideWith(args))
 
   /**
    * The name of the specification can be overriden with a user defined title
@@ -71,9 +77,9 @@ case class Text(t: String) extends Fragment {
  */
 case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable {
   def execute = body()
-  override def matches(s: String) = desc.toString.removeAll("\n").matches(s)
+  override def matches(s: String) = desc.toString.removeAll("\n").removeAll("\r").matches(s)
   override def toString = "Example("+desc+")"
-
+  def map(f: Result => Result) = Example(desc, () =>f(body()))
   override def equals(a: Any) = {
     a match {
       case e: Example => desc == e.desc
@@ -103,7 +109,19 @@ case class Step (step: LazyParameter[Result] = lazyfy(Success())) extends Fragme
   override def toString = "Step"
 }
 case object Step {
-  def apply(r: =>Any) = new Step(lazyfy(trye(r)(Error(_)).left.getOrElse(Success())))
+  /** create a Step object from either a previous result, or a value to evaluate */
+  def fromEither[T](r: =>Either[Result, T]) = new Step(either(r))
+
+  private[specs2]
+  def either[T](r: =>Either[Result, T]): LazyParameter[Result] = lazyfy {
+    r match {
+      case Left(l)               => l
+      case Right(result: Result) => result
+      case Right(other)          => Success()
+    }
+  }
+  /** create a Step object from any value */
+  def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))
 }
 /**
  * An Action is similar to a Step but can be executed concurrently with other examples.
@@ -115,7 +133,10 @@ case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fr
   override def toString = "Action"
 }
 case object Action {
-  def apply(r: =>Any) = new Action(lazyfy(trye(r)(Error(_)).left.getOrElse(Success())))
+  /** create an Action object from any value */
+  def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))
+  /** create an Action object from either a previous result, or a value to evaluate */
+  def fromEither[T](r: =>Either[Result, T]) = new Action(Step.either(r))
 }
 
 /**
@@ -138,3 +159,85 @@ object StandardFragments {
   case class Backtab(n: Int = 1) extends Fragment
 }
 
+/**
+ * Those fragments are used to tag other fragments in a specification\
+ */
+object TagsFragments {
+  trait TaggingFragment extends Fragment {
+    private def filter(args: Arguments) = new IncludedExcluded[Seq[String]] {
+      val matchFunction = (n: Seq[String], tags: Seq[String]) => (n intersect tags).nonEmpty
+      val include = args.include.splitTrim(",")
+      val exclude = args.exclude.splitTrim(",")
+    }
+    
+    /** tagging names */
+    val names: Seq[String]
+    /** @return true if the fragment tagged with this must be kept */
+    def keep(args: Arguments): Boolean = filter(args).keep(names)
+    /** @return true if this tagging fragment is a section */
+    def isSection: Boolean
+  }
+  /** tags the next fragment */
+  case class Tag(names: String*) extends TaggingFragment {
+    def isSection = false
+    override def toString = names.mkString("Tag(", ",", ")")
+    override def equals(o: Any) = {
+      o match {
+        case t @ Tag(_*)      => names == t.names
+        case t @ TaggedAs(_*) => names == t.names
+        case _ => false
+      }
+    }
+  }
+  /** tags the previous fragment */
+  case class TaggedAs(names: String*) extends TaggingFragment {
+    def isSection = false
+    override def toString = names.mkString("TaggedAs(", ",", ")")
+    override def equals(o: Any) = {
+      o match {
+        case t @ Tag(_*)      => names == t.names
+        case t @ TaggedAs(_*) => names == t.names
+        case _ => false
+      }
+    }
+  }
+  /** the previous fragment starts a section */
+  case class AsSection(names: String*) extends TaggingFragment {
+    def isSection = true
+    override def toString = names.mkString("AsSection(", ",", ")")
+    override def equals(o: Any) = {
+      o match {
+        case s @ AsSection(_*) => names == s.names
+        case s @ Section(_*)   => names == s.names
+        case _ => false
+      }
+    }
+  }
+  /** the next fragment starts a section */
+  case class Section(names: String*) extends TaggingFragment {
+    def isSection = true
+    override def toString = names.mkString("Section(", ",", ")")
+    override def equals(o: Any) = {
+      o match {
+        case s @ AsSection(_*) => names == s.names
+        case s @ Section(_*)   => names == s.names
+        case _ => false
+      }
+    }
+  }
+
+  /**
+   * define a very coarse Monoid for TaggingFragments where appending 2 TaggingFragments returns a Tag object
+   * with both list of tags
+   */
+  implicit def TaggingFragmentsAreMonoid = new Monoid[TaggingFragment] {
+    val zero = Tag()
+    def append(t1: TaggingFragment, t2: =>TaggingFragment) = Tag((t1.names ++ t2.names):_*)
+  }
+
+  /** @return true if the object is a TaggingFragment */
+  def isTag(f: Fragment) = f match {
+    case t: TaggingFragment => true
+    case other              => false
+  }
+}

@@ -6,6 +6,7 @@ import java.util.regex._
 import java.net.URL
 import java.util.zip._
 import scala.collection.JavaConversions._
+import java.lang.String._
 
 /**
  * The FileSystem trait abstracts file system operations to allow easier mocking of file system related functionalities.
@@ -18,20 +19,30 @@ trait FileSystem extends FileReader with FileWriter {
    * @param path glob expression, for example: <code>./dir/**/*.xml</code>
    * @return the list of paths represented by the "glob" definition <code>path</path>  
    */
-  def filePaths(path: String): List[String] = {
+  def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean = false): Seq[String] = {
+    val found = recurse(new File(basePath))
+    if (verbose) found.foreach { f => println("found file: "+f) }
     val pattern = globToPattern(path) + (if (isDir(path)) "/*.*" else "")
-    recurse(new File(".")).collect { 
-      case f if (f.isFile && f.getPath.replace("\\", "/").matches(pattern)) => f.getPath 
-    }.toList
+    if (verbose) println("\nThe pattern used to match files is: "+pattern)
+    val collected = found.collect { case f if fileMatchesPattern(f, pattern, verbose) => f.getPath }.toSeq
+    collected
   }
-  
+
+  private def isVersionFile(f: File) = Seq(".svn", ".cvs").exists(f.getPath.contains(_))
+
+  private def fileMatchesPattern(f: File, pattern: String, verbose: Boolean = false) = {
+    val filePath = "./"+f.getPath.replace("\\", "/")
+    if (verbose && f.isFile) println(filePath+" matches pattern: "+(filePath matches pattern))
+    f.isFile && (filePath matches pattern)
+  }
+
   /**
    * @param file start file
    * @return a Stream with all the recursively accessible files
    */
   private def recurse(file: File): Stream[File] = {
 	  import Stream._
-	  cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.flatMap(recurse(_)))
+	  cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.filterNot(isVersionFile).flatMap(recurse(_)))
   }
   
   /**
@@ -121,21 +132,24 @@ trait FileSystem extends FileReader with FileWriter {
    * @param url url of the directory to copy
    * @param dest destination directory path
    */
-  def copyDir(url: URL, dest: String): Unit = copyDir(new File(url.toURI).getPath, dest)
+  def copyDir(url: URL, dest: String) { copyDir(new File(url.toURI).getPath, dest) }
    /** 
    * copy the content of a directory to another.
    * @param path path of the directory to copy
    * @param dest destination directory path
    */
-  def copyDir(src: String, dest: String): Unit = listFiles(src).filterNot(_.contains(".svn")).foreach { name =>
-    copyFile(src + "/" + name, dest) 
+  def copyDir(src: String, dest: String) {
+    listFiles(src).filterNot(_.contains(".svn")).foreach { name =>
+      val path = src + "/" + name
+      if (new File(path).isDirectory) copyDir(path, dest) else copyFile(path, dest)
+    }
   }
   /** 
    * Copy the content of a directory to another.
    * @param path path of the file to copy
    * @param dest destination directory path
    */
-  def copyFile(path: String, dest: String) = {
+  def copyFile(path: String, dest: String) {
     mkdirs(dest)
     val destFilePath = dest + "/" + new File(path).getName
     new File(destFilePath).createNewFile
@@ -151,7 +165,7 @@ trait FileSystem extends FileReader with FileWriter {
    * @param path path of the jar file
    * @param dest destination directory path
    */
-  def unjar(path: String, dest: String): Unit = unjar(path, dest, ".*")
+  def unjar(path: String, dest: String) { unjar(path, dest, ".*") }
   
   /** 
    * Unjar the jar (or zip file) specified by "path" to the "dest" directory.
@@ -160,12 +174,12 @@ trait FileSystem extends FileReader with FileWriter {
    * @param dest destination directory path
    * @param regexFilter regular expression filtering files which shouldn't be extracted
    */
-  def unjar(path: String, dirPath: String, regexFilter: String) = {
+  def unjar(path: String, dirPath: String, regexFilter: String) {
 	 mkdirs(dirPath)
    val fis = new FileInputStream(path)
    val zis = new ZipInputStream(new BufferedInputStream(fis))
    var entry: ZipEntry = null
-   def extractEntry(entry: ZipEntry): Unit = {
+   def extractEntry(entry: ZipEntry) {
      if (entry != null) {
        if (entry.getName.matches(regexFilter)) {
 		     if (entry.isDirectory()){
@@ -192,7 +206,7 @@ trait FileSystem extends FileReader with FileWriter {
    * @param input input stream
    * @param output output stream
    */
-  def copy(input: InputStream, output: OutputStream) = {
+  def copy(input: InputStream, output: OutputStream) {
     val data = new Array[Byte](2048)
     def readData(count: Int): Unit = {
       if (count != -1) {
@@ -206,20 +220,19 @@ trait FileSystem extends FileReader with FileWriter {
 
   /** 
    * Copy specs resources found either in the specs jar or in the classpath directories to an output directory.
-   * Current limitations!! This only works if the jar holding the resources contains the word "specs".
    * @param src name of the resource directory to copy
    * @param outputDir output directory where to copy the files to
    */
-  def copySpecResourcesDir(src: String, outputDir: String) = {
-    val dirUrls = getResourcesNamed(src)
-    Set(dirUrls.toList:_*) foreach { dirUrl => 
-      if (dirUrl.toString.startsWith("jar")) {
-        if (dirUrl.toString.toLowerCase.contains("specs")) 
-          unjar(getPath(dirUrl).takeWhile(_ != '!').mkString, outputDir, ".*" + src + "/.*")
-      } else {
-         copyDir(dirUrl, outputDir + src)
-      }
-    } 
+  def copySpecResourcesDir(src: String, outputDir: String) {
+    val jarUrl = Thread.currentThread.getContextClassLoader.getResource(getClass.getName.replace(".", "/")+".class")
+    val folderUrl = Thread.currentThread.getContextClassLoader.getResource(src)
+    val srcUrl = Option(if(folderUrl == null) jarUrl else folderUrl)
+    for (url <- srcUrl) {
+      if (url.toString.startsWith("jar"))
+        unjar(getPath(url).takeWhile(_ != '!').mkString, outputDir, ".*" + src + "/.*")
+      else
+        copyDir(url, outputDir + src)
+    }
   }
   /**
    * @return a path that should be valid on all plateforms (@see issue 148)
@@ -230,20 +243,6 @@ trait FileSystem extends FileReader with FileWriter {
 	  else
 		  url.getPath.replace("file:", "")
   }
-  /** 
-   * Return urls of the resources containing the name "name" from this ClassLoader and the System classLoader.
-   * @param name name of the resource to find
-   * @return a list of URL
-   */
-  def getResourcesNamed(name: String): List[URL] = {
-    val resource = ClassLoader.getSystemResource(name)
-    val resources = Thread.currentThread.getContextClassLoader.getResources(name)
-    if (resource != null)
-      resource :: resources.toList
-    else
-      resources.toList
-  }
-
 }
 /**
  * The fs object offers a simple interface to the file system (see the description of the FileSystem trait)

@@ -8,6 +8,7 @@ import form._
 import main.Arguments
 import execute._
 import specification._
+import org.specs2.internal.scalaz.Scalaz._
 
 /**
  * The HtmlLines groups a list of HtmlLine to print
@@ -15,27 +16,11 @@ import specification._
  * It can be written ('flushed') to an HtmlResultOuput by printing them one by one to this output
  *
  */
-case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink, parent: Option[HtmlLines] = None) {
-  def print(implicit out: HtmlResultOutput, args: Arguments) =
-    printXml.flush
-  def printXml(implicit out: HtmlResultOutput) =
-    lines.foldLeft(out) { (res, cur) => cur.print(res) }
-  def add(line: HtmlLine) = HtmlLines(lines :+ line, link, parent)
+private[specs2]
+case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink) {
+  def printXml(implicit out: HtmlResultOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
+  def add(line: HtmlLine) = HtmlLines(lines :+ line, link)
   def is(name: SpecName) = link.is(name)
-
-  def breadcrumbs: NodeSeq = {
-    if (parent.isDefined) <div id="breadcrumbs">{breadcrumbsLinks}</div>
-    else NodeSeq.Empty
-  }
-
-  private def breadcrumbsLinks: NodeSeq = {
-    val result = parent map { (p: HtmlLines) =>
-      val separator = if (!p.breadcrumbsLinks.isEmpty) <t> / </t> else NodeSeq.Empty
-      p.breadcrumbsLinks ++ separator ++ <a href={p.link.url}>{p.link.linkText}</a>
-    }
-    result.getOrElse(NodeSeq.Empty)
-  }
-
 }
 
 /** 
@@ -46,6 +31,7 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink, parent: Optio
  * * the current level
  * * the current arguments
  */
+private[specs2]
 case class HtmlLine(text: Html = HtmlBr(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
   def print(implicit out: HtmlResultOutput): HtmlResultOutput = text.print(stats, level, args)
 }
@@ -57,27 +43,32 @@ case class HtmlLine(text: Html = HtmlBr(), stats: Stats = Stats(), level: Int = 
  * containing the html code to print
  *
  */
+private[specs2]
 sealed trait Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput): HtmlResultOutput
 }
+private[specs2]
 case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printSpecStart(start.name)(args) else out
 }
+private[specs2]
 case class HtmlText(t: ExecutedText) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printText(t.text, level, !args.xonly)(args) else out
-}        
+}
+private[specs2]
 case class HtmlBr() extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printPar("", !args.xonly)(args) else out
 }
+private[specs2]
 case class HtmlResult(r: ExecutedResult) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if (!args.xonly || !r.result.isSuccess) {
       r match {
-        case ExecutedResult(FormMarkup(form), _, _) => printFormResult(form)(args, out)
-        case _                                      => printResult(r.text(args), level, r.result)(args, out)
+        case ExecutedResult(FormMarkup(form), _, _, _) => printFormResult(form)(args, out)
+        case _                                         => printResult(r.text(args), level, r.result)(args, out)
       }
 
     }
@@ -109,6 +100,7 @@ case class HtmlResult(r: ExecutedResult) extends Html {
         printCollapsibleExceptionMessage(f, level + 1)
   }
 }
+private[specs2]
 case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if ((!args.xonly || stats.hasFailuresOrErrors) && stats.hasExpectations && stats.isEnd(end))
@@ -127,7 +119,7 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
             Some(failures qty "failure"), 
             Some(errors qty "error"),
             pending optQty "pending", 
-            skipped optQty "skipped").flatten.mkString(", ")
+            skipped optInvariantQty "skipped").flatten.mkString(", ")
             
     out.printBr().printElem {
       <table class="dataTable">
@@ -138,11 +130,13 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
     }
   }
 }
+private[specs2]
 case class HtmlSee(see: ExecutedSee) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if (!args.xonly) out.printLink(see.link, level)(args) else out
   }
 }
+private[specs2]
 case class HtmlOther(fragment: ExecutedFragment)   extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = out
 }

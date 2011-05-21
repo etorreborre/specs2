@@ -2,18 +2,23 @@ package org.specs2
 package specification
 import execute._
 import matcher._
+import mutable._
 
-class FragmentsExecutionSpec extends SpecificationWithJUnit { def is =
+class FragmentsExecutionSpec extends Specification {
 
-  "An example when executed returns a result" ! {
+  "An example when executed returns a result" in {
     (1 must_== 1).toResult must_== Success("'1' is equal to '1'")
-  }^
-  "An example can be marked as pending until fixed" ! e1^
-    "with a specific message" ! e2^
-  p^
-  "It must be failed when the example succeeds" ! e3^
-    "with a specific message" ! e4^
-  end
+  }
+  "A failed expectation must point to its precise location" in {
+    val result: Failure = new user.specification.UserExecutionSpecification().is.fragments.
+      collect { case Example(_, body) if (body().isFailure) => body().asInstanceOf[Failure] }.apply(0)
+    result.location must beMatching("UserExecutionSpecification.scala:6.*")
+  }
+  "An example can be marked as pending until fixed" in e1
+    "with a specific message" in e2
+    "it must change to failed when the example succeeds" in e3
+    "with a specific message" in e4
+
 
   def e1 = {
     val ex = "ex" ! { 1 must_== 2 }.pendingUntilFixed

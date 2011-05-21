@@ -19,7 +19,7 @@ import specification._
  *
  */
 private[specs2]
-class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
+class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   
   /**
    * Usage: out.enclose((t: NodeSeq) => <body>{t}</body>)(<div>inside</div>))
@@ -31,7 +31,7 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
   def enclose(f: NodeSeq => NodeSeq)(rest: =>HtmlResultOutput)(implicit args: Arguments): HtmlResultOutput = {
     printNodeSeq(f(rest.xml))
   } 
-  private[specs2] lazy val blank = new HtmlResultOutput(out)
+  private[specs2] lazy val blank = new HtmlResultOutput
   
   def printBr(doIt: Boolean = true)(implicit args: Arguments) = 
     if (doIt) printElem(<br></br>)
@@ -107,14 +107,14 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
     if (doIt) {
       d match {
         case FailureDetails(expected, actual) if args.diffs.show(expected, actual) => {
-          val (expectedDiff, actualDiff) = showDistance(expected, actual, args.diffs.separators, args.diffs.shortenSize)
+          val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
           val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
           val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
           printElem(<t>
 <div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(d)}/>details</div>
   <div id={id(d)} style="display:none">
     <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
-    { if (args.diffs.full) <pre class="details">{expectedFull+"\n"+actualFull}</pre> else NodeSeq.Empty }
+    { if (args.diffs.showFull) <pre class="details">{expectedFull+"\n"+actualFull}</pre> else NodeSeq.Empty }
   </div></t>)
         }
         case _ => this
@@ -130,16 +130,16 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
     } else this
   }
   def printElem(xml2: Elem, doIt: Boolean = true)(implicit args: Arguments) = {
-    if (doIt) new HtmlResultOutput(out, xml ++ xml2)
+    if (doIt) new HtmlResultOutput(xml ++ xml2)
     else this
   }
   
   def printNodeSeq(xml2: NodeSeq, doIt: Boolean = true)(implicit args: Arguments) = {
-    if (doIt) new HtmlResultOutput(out, xml ++ xml2)
+    if (doIt) new HtmlResultOutput(xml ++ xml2)
     else this
   }
 
-  def printHead = new HtmlResultOutput(out, xml ++ head)
+  def printHead = new HtmlResultOutput(xml ++ head)
   
   def head = 
     <head>
@@ -152,6 +152,10 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
       <script type="text/javascript" src="./css/prettify.js"></script>
       <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
       <link href="./css/tooltip.css" rel="stylesheet" type="text/css" />
+      <script type="text/javascript" src="css/jquery.js"></script>
+      <script type="text/javascript" src="css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./css/tooltip.js"/>
       {javascript}
       <script language="javascript">window.onload={"init;"}</script>
@@ -186,5 +190,5 @@ class HtmlResultOutput(out: Writer, val xml: NodeSeq = NodeSeq.Empty) {
    * writing to the output and doing <br></br> replacement by <br/> to avoid newlines to be inserted after the Xhtml
    * parsing
    */
-  def flush = out.write(Xhtml.toXhtml(xml))
+  def flush(out: Writer) = out.write(Xhtml.toXhtml(xml))
 }

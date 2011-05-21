@@ -1,6 +1,5 @@
 package org.specs2
 package control
-import scala.util.control.Exception._                                                                                          
 
 /**
  * This trait provides methods to catch exceptions and transform them into values which can be passed to
@@ -13,6 +12,7 @@ import scala.util.control.Exception._
  */
 private[specs2]
 trait Exceptions {
+  /** this implicit avoids having to pass a function when no effect is desired on the Exception being thrown */
   implicit def implicitUnit[T](t: T): Unit = ()
   
   /**
@@ -42,6 +42,16 @@ trait Exceptions {
 	  trye(a)(f).fold(identity, identity)
   }
   /**
+   * try to evaluate an expression, returning a value T
+   *
+   * If the expression throws a Throwable a function f is used to return a value
+   * of the expected type.
+   */
+  def catchAllOr[T](a: =>T)(f: Throwable =>T): T = {
+	  try { a }
+	  catch { case e: Throwable => f(e) }
+  }
+  /**
    * try to evaluate an expression and return it if nothing fails.
    * return ko otherwise
    */
@@ -66,7 +76,7 @@ trait Exceptions {
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
-  def trye[T, S](a: =>T)(implicit f: Exception =>S): Either[S, T] = {
+  def trye[T, S](a: =>T)(implicit f: Exception => S): Either[S, T] = {
 	  try { Right(a) }
 	  catch { case e: Exception => Left(f(e)) }
   }
@@ -76,7 +86,7 @@ trait Exceptions {
    * If the expression throws any Throwable a function f is used to return the left value
    * of the Either returned value.
    */
-  def catchAll[T, S](a: =>T)(f: Throwable =>S): Either[S, T] = {
+  def catchAll[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
 	  try { Right(a) }
 	  catch { case e: Throwable => Left(f(e)) }
   }

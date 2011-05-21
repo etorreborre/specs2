@@ -30,6 +30,7 @@ import matcher._
  *  * results 
  * 
  */
+private[specs2]
 trait AutoExamples {
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragments(expression: =>MatchResult[_]): Fragments = {

@@ -1,11 +1,10 @@
 package org.specs2
 package reporter
 
-import scalaz._
+import org.specs2.internal.scalaz._
 import Scalaz._
 import main.Arguments
 import specification._
-
 /**
  * The SpecsArguments trait allows to fold a list of Fragments into the list of applicable arguments for each fragment
  */
@@ -23,18 +22,36 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
     import Arguments._
     overrideContext(argumentsFragments.map(toBlock _)).toList
   }
+  /**
+   * filter the fragments with 2 functions:
+   *  * one working on the whole fragment list
+   *  * one working on each individual fragment
+   */
+  def filter(fs: Seq[(T, Arguments)] => Seq[T]): Seq[T] = fragmentAndApplicableArguments |> fs
 
-  def filter(f: (T, Arguments) => Boolean): Seq[T] = {
-    argumentsFragments.zip(toList).collect { case (ApplicableArguments(value), args) if f(value, args) => value }
-  }
+  /**
+   * @return a list of pair (fragment, argument) where argument is the applicable arguments for the current fragment)
+   */
+  def fragmentAndApplicableArguments: Seq[(T, Arguments)] =
+    argumentsFragments.zip(toList).view.collect { case (ApplicableArguments(value), args) => (value, args) }
+  /**
+   * @return a list of fragments without their corresponding arguments
+   */
+  def fragments: Seq[T] =
+    argumentsFragments.collect { case (ApplicableArguments(value)) => value }
 }
 
 private[specs2]
 case object SpecsArguments {
   def apply[T](s: ApplicableArguments[T]) = new SpecsArguments(List(s))
 
-  def filter[T](ts: Seq[T])(f: (T, Arguments) => Boolean)(implicit r: Reducer[T, SpecsArguments[T]]): Seq[T] =
-    foldAll(ts).filter(f).view
+  /**
+   * filter the fragments with 2 functions:
+   *  * one working on the whole fragment list
+   *  * one working on each individual fragment
+   */
+  def filter[T](ts: Seq[T])(fs: Seq[(T, Arguments)] => Seq[T])(implicit r: Reducer[T, SpecsArguments[T]]): Seq[T] =
+    foldAll(ts).filter(fs)
 
   implicit def SpecsArgumentsMonoid[T] = new Monoid[SpecsArguments[T]] {
     def append(a1: SpecsArguments[T], a2: =>SpecsArguments[T]) = a1 append a2
@@ -52,9 +69,9 @@ case object SpecsArguments {
   }
   implicit object SpecsArgumentsReducer extends Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] {
     implicit override def unit(f: ExecutedFragment) = f match {
-      case ExecutedSpecStart(name, args)    => SpecsArguments(StartOfArguments(f, name, args))
-      case ExecutedSpecEnd(name)            => SpecsArguments(EndOfArguments(f, name))
-      case _                                => SpecsArguments(NoStartOfArguments(f))
+      case ExecutedSpecStart(name, args, _)    => SpecsArguments(StartOfArguments(f, name, args))
+      case ExecutedSpecEnd(name, _)            => SpecsArguments(EndOfArguments(f, name))
+      case _                                   => SpecsArguments(NoStartOfArguments(f))
     }
   }
 

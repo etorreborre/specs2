@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import reflect._
+import reflect.ClassName._
 
 /**
  * Name declaration for a specification
@@ -30,7 +30,7 @@ object SpecName {
 }
 private[specs2]
 case class SpecificationName(s: SpecificationStructure) extends SpecName {
-  def name =  ClassName.className(s)
+  def name =  simpleClassName(s)
   def url = s.getClass.getName + ".html"
 
   def overrideWith(n: SpecName) = n match {
@@ -38,6 +38,10 @@ case class SpecificationName(s: SpecificationStructure) extends SpecName {
     case SpecificationTitle(t) => new SpecificationName(s) {
       override def name =  t
     }
+  }
+  override def equals(a: Any) = a match {
+    case s: SpecificationName => s.name == this.name
+    case other                => false
   }
 }
 private[specs2]

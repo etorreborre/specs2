@@ -10,20 +10,18 @@ private[specs2]
 trait BeHaveMatchers {
   def be = new NeutralMatcher[Any]
   def have = be
-  def not = new NotMatcher[Any] 
+  def not = new NotMatcher[Any]
 }
 /**
  * This special matcher always return a NeutralMatch MatchResult (an implicit Success)
  */
 class NeutralMatcher[T] extends Matcher[T] {
-  def apply[S <: T](s: Expectable[S]): MatchResult[S] =
-    NeutralMatch(MatchSuccess("ok", "ko", s))
+  def apply[S <: T](s: Expectable[S]): MatchResult[S] = NeutralMatch(MatchSuccess("ok", "ko", s))
 }
 
 /**
- * This special matcher always return a NotMatch MatchResult (an implicit Success)
+ * This special matcher always return a NotMatch MatchResult. It will negate the next match applied to it.
  */
 class NotMatcher[T] extends Matcher[T] {
-  def apply[S <: T](s: Expectable[S]): MatchResult[S] =
-    NotMatch(MatchSuccess("ok", "ko", s))
+  def apply[S <: T](s: Expectable[S]): MatchResult[S] = NotMatch(MatchSuccess("ok", "ko", s))
 }

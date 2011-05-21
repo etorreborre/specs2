@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import scalaz._
+import org.specs2.internal.scalaz._
 import Scalaz._
 import scala.math._
 import main.Arguments
@@ -26,6 +26,7 @@ import StandardFragments._
  * * when there is a backtab we unindent everything following the tab (1 level is the default)
  * 
  */
+private[specs2]
 case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   /** @return the first block */
   private def headOption = blocks.map(_._1).headOption
@@ -37,17 +38,19 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   private def lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
   /** @return the last level block in a Levels object */
   private def lastAsLevel = Levels(blocks.lastOption.toList)
+  /** @return true if there are no blocks */
+  def isEmpty = blocks.isEmpty
   /** @return alias for the last level */
   def level = levels.lastOption.getOrElse(0)
   /** @return all the levels, post-processing them so that there is no negative value */
   def allLevels = {
     import NestedBlocks._
     def toNestedBlock(bl: (Block[T], Int)) = bl match {
-      case (b @ Block(SpecStart(_,_)), l)         => BlockStart(Levels(List(bl)))
-      case (b @ Block(ExecutedSpecStart(_,_)), l) => BlockStart(Levels(List(bl)))
-      case (b @ Block(SpecEnd(_)), l)             => BlockEnd(Levels(List(bl)))
-      case (b @ Block(ExecutedSpecEnd(_)), l)     => BlockEnd(Levels(List(bl)))
-      case (b, l)                                 => BlockBit(Levels(List(bl)))
+      case (b @ Block(SpecStart(_,_)), l)            => BlockStart(Levels(List(bl)))
+      case (b @ Block(ExecutedSpecStart(_,_, _)), l) => BlockStart(Levels(List(bl)))
+      case (b @ Block(SpecEnd(_)), l)                => BlockEnd(Levels(List(bl)))
+      case (b @ Block(ExecutedSpecEnd(_, _)), l)     => BlockEnd(Levels(List(bl)))
+      case (b, l)                                    => BlockBit(Levels(List(bl)))
     }
     import Levels._
     val summed = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T])
@@ -80,16 +83,29 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    * @return a Tree[T] based on the level of each block
    */
   def toTree: Tree[T] = toTreeLoc.toTree
+
   /**
+   * map each node to another type given: the current type, the path from root (without the current node), the node number
+   *
    * @return a Tree[S] based on the level of each block, mapping each node to value of type
    *         S and possibly skipping nodes
    */
-  def toTree[S](m: (T, Int) => Option[S]): Tree[S] = toTreeLoc(m).toTree
+  def toTree[S](m: (T, Seq[S], Int) => Option[S]): Tree[S] = toTreeLoc(m).toTree
+  /**
+   * map each node to another type given: the current type, the node number
+   *
+   * @return a Tree[S] based on the level of each block, mapping each node to value of type
+   *         S and possibly skipping nodes
+   */
+  def toTree[S](m: (T, Int) => Option[S]): Tree[S] = {
+    def m1(t: T, s: Seq[S], i: Int) = m(t, i)
+    toTree[S](m1 _)
+  }
 
   /**
    * @return a TreeLoc[T] based on the level of each block
    */
-  def toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, i: Int) => Some(t))
+  def toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, parentsPath: Seq[T], i: Int) => Some(t))
   /**
    * WARNING this method assumes that the Levels are not empty!!
    * 
@@ -97,13 +113,14 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
    *         S and possibly skipping nodes, passing the numeric label of the current node. 
    * @see JUnitDescriptions
    */
-  def toTreeLoc[S](m: (T, Int) => Option[S]): TreeLoc[S] = {
+  def toTreeLoc[S](m: (T, Seq[S], Int) => Option[S]): TreeLoc[S] = {
     val all = allLevels
-    val initial = m(all.head._1.t, 0).get
+    val initial = m(all.head._1.t, Seq(), 0).get
     all.drop(1).foldLeft(leaf(initial).loc) { (treeLoc, cur) =>
       val (block, level) = cur
-      m(block.t, treeLoc.root.toTree.flatten.size) match {
-        case Some(s) => treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc).insertDownLast(leaf(s))
+      val parent = treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc)
+      m(block.t, parent.path.reverse.toSeq, treeLoc.size) match {
+        case Some(s) => parent.insertDownLast(leaf(s))
         case None    => treeLoc
       }
     }
@@ -129,6 +146,7 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
     })
   }
 }
+private[specs2]
 case object Levels {
   /** @return a new Levels object for one Block */
   def apply[T](b: Block[T]) = new Levels(List((b, 0)))
@@ -156,14 +174,14 @@ case object Levels {
   }
   implicit object LevelsReducer extends Reducer[ExecutedFragment, Levels[ExecutedFragment]] {
     implicit def toBlock(f: ExecutedFragment): Block[ExecutedFragment] = f match {
-      case t @ ExecutedResult(_, _, _)    => BlockTerminal(t)
-      case t @ ExecutedText(_)            => BlockIndent(t)   
-      case t @ ExecutedTab(n)             => BlockIndent(t, n)
-      case t @ ExecutedBacktab(n)         => BlockUnindent(t, n) 
-      case t @ ExecutedSpecStart(_, _)    => BlockNeutral(t)
-      case t @ ExecutedSpecEnd(_)         => BlockNeutral(t)
-      case t @ ExecutedEnd()              => BlockReset(t)    
-      case t                              => BlockNeutral(t)  
+      case t @ ExecutedResult(_, _, _, _)    => BlockTerminal(t)
+      case t @ ExecutedText(_, _)            => BlockIndent(t)
+      case t @ ExecutedTab(n, _)             => BlockIndent(t, n)
+      case t @ ExecutedBacktab(n, _)         => BlockUnindent(t, n)
+      case t @ ExecutedSpecStart(_, _, _)    => BlockNeutral(t)
+      case t @ ExecutedSpecEnd(_, _)         => BlockNeutral(t)
+      case t @ ExecutedEnd( _)               => BlockReset(t)
+      case t                                 => BlockNeutral(t)
     } 
     implicit override def unit(f: ExecutedFragment): Levels[ExecutedFragment] = Levels[ExecutedFragment](toBlock(f))
     
@@ -183,14 +201,16 @@ case object Levels {
   }
 }
 /** this represent a fragment of a specification that needs to be indented as a block */
+private[specs2]
 sealed trait Block[T] {
   val t: T
 }
+private[specs2]
 object Block {
   def unapply[T](b: Block[T]) = Some(b.t)
 }
-case class BlockTerminal[T](t: T = null) extends Block[T]
-case class BlockIndent[T](t: T = null, n: Int = 1)  extends Block[T]
-case class BlockUnindent[T](t: T = null, n: Int = 1) extends Block[T]
-case class BlockReset[T](t: T = null)    extends Block[T]
-case class BlockNeutral[T](t: T = null)  extends Block[T]
+private[specs2] case class BlockTerminal[T](t: T = null) extends Block[T]
+private[specs2] case class BlockIndent[T](t: T = null, n: Int = 1)  extends Block[T]
+private[specs2] case class BlockUnindent[T](t: T = null, n: Int = 1) extends Block[T]
+private[specs2] case class BlockReset[T](t: T = null)    extends Block[T]
+private[specs2] case class BlockNeutral[T](t: T = null)  extends Block[T]

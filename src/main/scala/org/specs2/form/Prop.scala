@@ -1,11 +1,9 @@
 package org.specs2
 package form
 
-import scala.xml._
 import control.{ Property }
 import control.Exceptions._
 import execute._
-import StandardResults._
 import matcher._
 
 /**
@@ -46,10 +44,10 @@ case class Prop[T, S](
    * The apply method sets the expected value and returns the Prop
    */
   def apply(e: =>S): Prop[T, S] = new Prop(label, actual, expected(e), constraint)
-  /** @return the actual value as an option */
-  def actualValue = actual.optionalValue
+  /** @return the actual value as either Right(value) or Left(result) */
+  lazy val actualValue = ResultExecution.executeProperty(actual, Pending("No actual value"))
   /** @return the expected value as an option */
-  def expectedValue = expected.optionalValue
+  lazy val expectedValue = ResultExecution.executeProperty(expected, Pending("No expected value"))
   /**
    * shortcut method for this().get returning the contained expected value.
    * @return the expected value if set and throws an exception otherwise
@@ -58,17 +56,11 @@ case class Prop[T, S](
 
   /** execute the constraint set on this property, with the expected value */
   def execute: Result = {
-    val result = try {
-      for {
-        a <- actualValue
-        e <- expectedValue
-      } yield constraint(a, e)
-    } catch {
-      case FailureException(f) => Some(f)
-      case e: Exception        => Some(Error(e))
-      case other               => throw other
-    }
-    result getOrElse (if (expected.isDefined) Pending("No actual value") else Pending("No expected value"))
+    val result = for {
+      a <- actualValue.right.toOption
+      e <- expectedValue.right.toOption
+    } yield ResultExecution.execute(constraint(a, e))
+    result.getOrElse(expectedValue.left.toOption.getOrElse(actualValue.left.toOption.get))
   }
 
   /**
@@ -82,8 +74,20 @@ case class Prop[T, S](
    */
   override def toString = {
     (if (label.isEmpty) "" else (label + ": ")) + 
-    tryOrElse(expected.getOrElse("_"))("_") +
-    (if (expected == actual) "" else (" (actual: " + tryOrElse(actual.getOrElse("_"))("_") + ")"))
+    valueToString(expected, expectedValue) +
+    (if (expectedValue.right.toOption == actualValue.right.toOption) "" else (" (actual: " + valueToString(actual, actualValue) + ")"))
+  }
+
+  /**
+   * @return the string for the expected/actual value depending on its existence and execution result
+   */
+  private def valueToString(value: Property[_], executed: Either[Result, _]) = {
+    val result = value.toOption.map(v => executed).map { v => v match {
+       case Right(r) => r.toString
+       case Left(r)  => r.toString
+     }
+    }
+    result getOrElse ("_")
   }
   /** set a new Decorator */
   def decoratorIs(d: Decorator) = copy(decorator = d)
@@ -122,7 +126,7 @@ object Prop {
   }
   
   /** default constraint function */
-  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeEqualTo(s).apply(Expectable(t))).toResult
+  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeTypedEqualTo(s).apply(Expectable(t))).toResult
 }
 /**
  * generic trait for anything having a label, to unify Props and Forms

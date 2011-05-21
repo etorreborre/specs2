@@ -1,10 +1,8 @@
 package org.specs2
 package guide
 
-
 class Matchers extends Specification { def is = literate ^ "Matchers guide".title ^
-""" <toc/>
-
+"""
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns
 a `Result`:
 
@@ -32,17 +30,17 @@ This can be useful for simple expectations but a failure will give few informati
 
 Some standard results can be used when you need specific result meanings:
 
-  * success: the example is ok
-  * failure: there is a non-met expectation
-  * anError: a non-expected exception occurred
-  * skipped: the example is skipped possibly at runtime because some conditions are not met. A more specific message can
+  * `success`: the example is ok
+  * `failure`: there is a non-met expectation
+  * `anError`: a non-expected exception occurred
+  * `skipped`: the example is skipped possibly at runtime because some conditions are not met. A more specific message can
     be created with `Skipped("my message")`
-  * pending: usually means "not implemented yet", but a specific message can be created with `Pending("my message")`
+  * `pending`: usually means "not implemented yet", but a specific message can be created with `Pending("my message")`
 
 Two additional results are also available to track the progress of features:
 
-  * done: a Success with the message "DONE"
-  * todo: a Pending with the message "TODO"
+  * `done`: a `Success` with the message "DONE"
+  * `todo`: a `Pending` with the message "TODO"
 
 ### Match results
 
@@ -58,19 +56,31 @@ API for the complete list:
  * Iterable matchers
  * Map matchers
  * Xml matchers
+ * Json matchers
  * File matchers
  * Scalaz matchers
+ * Result matchers
+ * Interpreter matchers
+ * Parsers matchers
 
 #### Matchers for Any
 
 The most common type of matcher is `beEqualTo` to test for equality. There are different ways to use this matcher:
 
        1 must beEqualTo(1)
+       1 must be_==(1)            // with a shorter matcher
        1 must_== 1                // my favorite!
+       1 mustEqual 1              // if you dislike underscores
        1 should_== 1              // for should lovers
        1 === 1                    // the ultimate shortcut
        1 must be equalTo(1)       // with a literate style
+
        1 must not be equalTo(2)   // with a negation
+       1 must_!= 2                // with a negation
+       1 mustNotEqual 2           // with a negation
+       1 must be_!=(2)            // with a negation
+       1 !== 2                    // with a negation
+
 
 You can see on the examples above several things which are applicable to all matchers:
 
@@ -78,13 +88,13 @@ You can see on the examples above several things which are applicable to all mat
  * you can use `should` instead of `must` if you prefer
  * there are only 2 shortcuts provided because the equality matcher is so ubiquitous `must_==` and `===`
  * for most of the matchers you can use a form where the ` be` word (or the `have` word) is detached
- * you can as well negate a matcher by adding not before (but also after as a method on the matcher)
+ * you can as well negate a matcher by adding not before it (or after it, as a method call)
 
 An non-exhaustive list of those matchers:
 
- * ` beTheSameAs` for checking if `a eq b`
+ * `beTheSameAs` for checking if `a eq b` (`a must be(b)` also works)
  * `beTrue, beFalse`
- * `beLike { case exp => ok }`: to check if an object is like a given pattern
+ * `beLike { case exp => ok }`: to check if an object is like a given pattern (`ok` is a predefined value, `ko` is the opposite)
  * `beLike { case exp => exp must beXXX }`: to check if an object is like a given pattern, and verifies a condition
  * `beNull`
  * `beAsNullAs`: when 2 objects must be null at the same time if one of them is null
@@ -93,7 +103,7 @@ An non-exhaustive list of those matchers:
  * `haveSuperclass`: to check if the class of an object as another class as one of its ancestors
  * `beAssignableFrom`: to check if a class is assignable from another
 
-##### With a better description
+#### With a better description
 
 Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information
 is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a
@@ -121,7 +131,12 @@ There are many ways to create matchers for your specific usage. The simplest way
 
  * using logical operators
 
-        def m3 = m1 and m2
+        def beBetween(i: Int, j: Int) = be_>=(i) and be_<=(j)
+
+        // create a Seq Matcher from a Matcher
+        def allBeGreaterThan2: Matcher[Seq[Int]]   = be_>=(2).forall     // fail after the first failure
+        def allBeGreaterThan3: Matcher[Seq[Int]]   = be_>=(2).foreach    // like forall but execute all matchers and collect the results
+        def haveOneGreaterThan2: Matcher[Seq[Int]] = be_>=(2).atLeastOnce
 
  * adapting the actual value. This matcher adapts the existing `be_<=` matcher to a matcher applicable to `Any`
 
@@ -138,16 +153,36 @@ There are many ways to create matchers for your specific usage. The simplest way
 
         val iterator = List(1, 2, 3).iterator
         iterator.next must be_==(3).eventually
-         // Use eventually(retries, n.millis) to modify the default settings
+         // Use eventually(retries, n.millis) to use another number of tries and waiting time
+
+ * using `when` or `unless` to apply a matcher only if a condition is satisfied:
+
+        1 must be_==(2).when(false)                        // will return a success
+        1 must be_==(2).unless(true)                       // same thing
+
+        1 must be_==(2).when(false, "don't check this")    // will return a success
+        1 must be_==(2).unless(true, "don't check this")   // same thing
+
+ * using `iff` to say that a matcher must succeed if and only if a condition is satisfied:
+
+        1 must be_==(1).iff(true)                        // will return a success
+        1 must be_==(2).iff(true)                        // will return a failure
+        1 must be_==(2).iff(false)                       // will return a success
+        1 must be_==(1).iff(false)                       // will return a failure
 
  * using `orSkip` to return a `Skipped` result instead of a Failure if the condition is not met
 
         1 must be_==(2).orSkip
         1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
 
-If this is not enough you can transform a function, returning a Boolean and 2 messages, into a Matcher:
+Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
-       val m: Matcher[String] = (s: String) => (s.startsWith("hello"), "ok string", "ko string")
+       val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")
+       val m1: Matcher[String] = ((_: String).startsWith("hello"), "starts with hello", "doesn't start with hello")
+       val m2: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ " doesn't start with hello")
+       val m3: Matcher[String] = ((_: String).startsWith("hello"), (s:String) => s+ " starts with hello", (s:String) => s+ " doesn't start with hello")
+       val m4: Matcher[String] = (s: String) => (s.startsWith("hello"), s+" doesn't start with hello")
+       val m5: Matcher[String] = (s: String) => (s.startsWith("hello"), s+ "starts with hello", s+ " doesn't start with hello")
 
 And if you want absolute power over matching, you can define your own matcher:
 
@@ -163,26 +198,48 @@ And if you want absolute power over matching, you can define your own matcher:
 In the code above you have to:
 
  * define the `apply` method (and its somewhat complex signature)
+
  * use the protected `result` method to return: a Boolean condition, a message when the match is ok, a message when the
-   match is not ok, the "expectable" value
+   match is not ok, the "expectable" value. Note that if you change the expectable value you need to use the `map` method
+   on the `s` expectable (`s.map(other)`). This way you preserve the ability of the Expectable to throw an Exception if
+   a subsequent match fails
+
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
-   the optional description you can setup using the `aka` method
+   the optional description you setup using the `aka` method
+
+#### Matching with a sequence of values
+
+If you have the same "MatchResult" expression that you'd like to verify for different values you can write one of the following:
+
+        // stop after the first failure
+        ((_:Int) must be_>(2)).forall(Seq(3, 4, 5))
+
+        // try to match all values and collect the results
+        ((_:Int) must be_>(2)).foreach(Seq(3, 4, 5))
+
+        // succeeds after the first success
+        ((_:Int) must be_>(2)).atLeastOnce(Seq(3, 4, 5))
 
 #### Matchers for Option / Either
 
 There are several matchers to check Option and Either instances:
 
  * `beSome` checks if an element is Some(_)
+ * `beSome.which(function)` checks if an element is Some(_) and satisfies a function returning a boolean
+ * `beSome.like(partial function)` checks if an element is Some(_) and satisfies a partial function returning a `MatchResult`
  * `beNone` checks if an element is None
  * `beAsNoneAs` checks if 2 values are equal to None at the same time
  * `beRight` checks if an element is Right(_)
+ * `beRight.like(partial function)` checks if an element is Right(_) and satisfies a partial function returning a `MatchResult`
  * `beLeft` checks if an element is Left(_)
+ * `beLeft.like(partial function)` checks if an element is Left(_) and satisfies a partial function returning a `MatchResult`
 
 #### String matchers
 
 Matching on strings is very common. Here are the matchers which can help you:
 
  * `beMatching` (or ` be matching`) checks if a string matches a regular expression
+ * `=~(s)` is a shortcut for `beMatching(".*"+s+".*")`
  * `find(exp).withGroups(a, b, c)` checks if some groups are found in a string
  * `have length` checks the length of a string
  * `have size` checks the size of a string (seen as an `Iterable[Char]`)
@@ -238,17 +295,21 @@ readability.
 
 Iterables can be checked with several matchers:
 
+  * to check if the iterable is empty
+    `Nil must be empty`
+    `List(1, 2, 3) must not be empty`
+
   * to check if some elements are contained in the iterable
-    `List(1, 2, 3) must contain(3, 2)
+    `List(1, 2, 3) must contain(3, 2)`
 
   * to check if some elements are contained in the iterable in the same order
-    `List(1, 2, 3, 4) must contain(2, 4).inOrder
+    `List(1, 2, 3, 4) must contain(2, 4).inOrder`
 
   * to check if only some elements are contained in the iterable
-    `List(4, 2) must contain(2, 4).only
+    `List(4, 2) must contain(2, 4).only`
 
   * to check if only some elements are contained in the iterable and in the same order
-    `List(2, 4) must contain(2, 4).only.inOrder
+    `List(2, 4) must contain(2, 4).only.inOrder`
 
   * to check the size of an iterable
     `List(1, 2) must have size(2)`
@@ -314,6 +375,43 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
   * The equivalent of `\` for a "deep" match is simply `\\`
     `<a><s><c></c></s></a> must \\("c")`
 
+#### Json matchers
+
+[Json](www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be
+used to verify the presence of appropriate values in Strings representing Json documents:
+
+  * `/(value)` checks if a value is present at the root of the document. This can only be the case if that document is
+    an Array
+
+  * `/(key -> value)` checks if a pair is present at the root of the document. This can only be the case if that document is
+    a Map
+
+  * `*/(value)` checks if a value is present anywhere in the document, either as an entry in an Array, or as the value
+    for a key in a Map
+
+  * `*/(key -> value)` checks if a pair is present anywhere in a Map of thedocument
+
+Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document.
+For example, for the following document:
+
+        // taken from an example in the Lift project
+        val person = {
+          "person": {
+            "name": "Joe",
+            "age": 35,
+            "spouse": {
+              "person": {
+                "name": "Marilyn",
+                "age": 33
+              }
+            }
+          }
+        }
+
+You can use these combinations:
+
+       person must /("person") */("person") /("age" -> 33.0) // by default numbers are parsed as Doubles
+
 #### File matchers
 
 The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files:
@@ -355,19 +453,129 @@ It was useful to check some Scalaz properties during the development of ***specs
 
 Note that you need to extend the `ScalaCheck` trait if you want to use these matchers in a specification.
 
+#### Result matchers
+
+That's only if you want to match the result of other matchers!
+
+        // you need to extend the ResultMatchers trait
+        class MatchersSpec extends Specification with ResultMatchers { def is =
+          "beMatching is using a regexp" ! {
+            ("Hello" must beMatching("h.*")) must beSuccessful
+          }
+        }
+
+#### Scala Interpreter matchers
+
+This trait is not included in the default specification so you'll have to add it in the rare case where you want to use
+the Scala interpreter and execute a script:
+
+        class ScalaInterpreterMatchersSpec extends Specification with ScalaInterpreterMatchers {
+          def interpret(s: String): String = // you have to provide your own Scala interpreter here
+
+          "A script" can {
+            "be interpreted" in {
+               "1 + 1" >| "2"
+            }
+          }
+        }
+
+#### Parser matchers
+
+Scala provides a parsing library using [parser combinators](http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html).
+
+You can specify your own parsers by:
+
+ * extending the `ParserMatchers` trait
+ * defining the `val parsers` variable with your parsers definition
+ * use the `beASuccess`, `beAFailure`, `successOn`, `failOn`, `errorOn` matchers to specify the results of parsing input
+   strings
+ * use `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
+   a String or a matcher so that
+   . `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
+   . `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
+
+For example, specifying a Parser for numbers could look like this:   
+
+        import util.parsing.combinator.RegexParsers
+        import NumberParsers.{number, error}
+
+        class ParserSpec extends Specification with matcher.ParserMatchers {  def is =
+          "Parsers for numbers"                                                                   ^
+                                                                                                  p^
+          "beASuccess and succeedOn check if the parse succeeds"                                  ^
+          { number("1") must beASuccess }                                                         ^
+          { number must succeedOn("12") }                                                         ^
+          { number must succeedOn("12").withResult(12) }                                          ^
+          { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
+          { number("1") must haveSuccessResult("1") }                                             ^
+                                                                                                  p^
+          "beAFailure and failOn check if the parse fails"                                        ^
+          { number must failOn("abc") }                                                           ^
+          { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
+          { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
+          { number("i") must beAFailure }                                                         ^
+          { number("i") must haveFailureMsg("i' found") }                                         ^
+                                                                                                  p^
+          "beAnError and errorOn check if the parser errors out completely"                       ^
+          { error must errorOn("") }                                                              ^
+          { error("") must beAnError }                                                            ^
+                                                                                                  end
+
+          val parsers = NumberParsers
+        }
+        object NumberParsers extends RegexParsers {
+          /** parse a number with any number of digits */
+          val number: Parser[Int] = "\\d+".r ^^ {_.toInt}
+          /** this parser returns an error */
+          val error: Parser[String] = err("Error")
+        }
+
 ### ScalaCheck properties
 
 A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
 
-To declare ScalaCheck properties you first need to import the `ScalaCheck` trait. Then you can define a ScalaCheck property
- and add it to the body of an example:
+To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can pass functions to the `check` method
+and use the resulting block as your example body:
 
-      "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }
+      "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }
 
-You will get even better failure messages if you use matchers in the checked function, and in that case you can simply pass
-the function:
+The function that is checked can either return:
 
-      "addition and multiplication are related" ! { (a: Int) => a + a must_== 2 * a }
+      // a Boolean
+      "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }
+
+      // a MatchResult
+      "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }
+
+      // a Prop
+      "addition and multiplication are related" ! check { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) }
+
+Note that if you pass functions using MatchResults you will get better failure messages so you are encouraged to do so.
+
+#### Arbitrary instances
+
+By default `Arbitrary` instances are taken from the surrounding example scope. However you'll certainly need to generate
+your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope
+of the function you're testing:
+
+        // this arbitrary will be used for all the examples
+        implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+
+        "a simple property" ! ex1
+
+         def ex1 = check((s: String) => s must contain("a") or contain("b"))
+
+You can also be very specific if you want to use an `Arbitrary` instance only on one example. In that case, just replace the
+`check` method with the name of your `Arbitrary` instance:
+
+        "a simple property"       ! ex1
+        "a more complex property" ! ex2
+
+        implicit def abStrings = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+        def ex1 = abStrings((s: String) => s must contain("a") or contain("b"))
+
+        // use a tuple if there are several parameters to your function
+        def ex2 = (abStrings, abStrings)((s1: String, s2: String) => s must contain("a") or contain("b"))
 
 #### Setting the ScalaCheck properties
 
@@ -375,6 +583,12 @@ ScalaCheck test generation can be tuned with a few properties. If you want to ch
 implicit values:
 
       implicit val params = set(minTestsOk -> 20) // use display instead of set to get additional console printing
+
+It is also possible to specifically set the execution parameters on a given property:
+
+      "this is a specific property" ! check { (a: Int, b: Int) =>
+        (a + b) must_== (b + a)
+      }.set(minTestsOk -> 200, workers -> 3)
 
 The parameters you can modify are:
 
@@ -388,7 +602,7 @@ The parameters you can modify are:
 
 At the moment only the [Mockito](http://mockito.org) library is supported.
 
-Mockito allows to specify stubbed values and to verify that some calls are expected on some objects. In order to use those
+Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those
 functionalities, you need to extend the `org.specs2.mock.Mockito` trait:
 
       import org.specs2.mock._
@@ -444,12 +658,12 @@ In some rare cases, it is necessary to have the return value depend on the param
 
 The function passed to answers will be called with each parameter passed to the stubbed method:
 
-     m.get(0)           // returns The parameter is 0
-     m.get(1)           // the second call returns a different value: The parameter is 1
+     m.get(0)           // returns "The parameter is 0"
+     m.get(1)           // the second call returns a different value: "The parameter is 1"
 
 ###### Parameters for the answers function
 
-Because of the use of reflection the function passed to answers will receive only instances of the java.lang.Object type.
+Because of the use of reflection the function passed to answers will receive only instances of the `java.lang.Object` type.
 
 More precisely, it will:
 
@@ -460,7 +674,7 @@ More precisely, it will:
   * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
     `mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString }`
 
-In any other cases, if f is a function of 1 parameter, the array of the method parameters will be passed and if the
+In any other cases, if `f` is a function of 1 parameter, the array of the method parameters will be passed and if the
 function has 2 parameters, the second one will be the mock.
 
 ##### Verification
@@ -514,10 +728,9 @@ The order of method calls can be checked by creating calls and chaining them wit
 
       there was one(m1).get(0) then one(m1).get(1)
 
-      // when several mocks are involved, the expected order must be given
-      // whereas it is not necessary if the methods of one mock only are to
-      // be checked in order
-      there was one(m2).get(0) then one(m1).get(2) orderedBy (m1, m2)
+      // when several mocks are involved, the expected order must be specified as an implicit value
+	    implicit val order = inOrder(m1, m2)
+      there was one(m1).get(0) then one(m2).get(0)
 
 ###### Spies
 
@@ -565,11 +778,13 @@ can use the `!!` operator to disambiguate (and `||` in the header for good visua
 
 ### Forms
 
-Forms are a way to represent domain objects or service, and declare expected values in a tabular format. Forms can be designed
-as reusable pieces of specification where complex forms can be built out of simple ones.
+Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed
+to be used with the HtmlRunner to get human-readable documentation.
+
+Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.
 
 """ ^
-  "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms)                                                                 ^
+  "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms)                                                          ^
 """
 
 ### Reusing matchers outside of specs2
@@ -580,8 +795,8 @@ framework. You can reuse the following traits:
  * `org.specs2.matcher.MustMatchers` (or `org.specs2.matcher.ShouldMatchers`) to write anything like `1 must be_==(1)` and
    get a `Result` back
 
- * You can also use the side-effecting version of that trait called `org.specs2.matcher.MustThrownMatchers` (or `ShouldThrownMatchers)
-   which throws a `FailureException` as soon as an expectation is failing. Those traits can also be used in a regular
+ * You can also use the side-effecting version of that trait called `org.specs2.matcher.MustThrownMatchers` (or `ShouldThrownMatchers`).
+   It throws a `FailureException` as soon as an expectation is failing. Those traits can also be used in a regular
    Specification if you have several expectations per example and if you don't want to chain them with `and`.
 
  * Finally, in a JUnit-like library you can use the `org.specs2.matcher.JUnitMustMatchers` trait which throws
@@ -597,9 +812,11 @@ framework. You can reuse the following traits:
   include(xonly, new MockitoSpecification)                                                                              ^
   include(xonly, new DataTableSpecification)                                                                            ^
   include(xonly, mockitoExamples)                                                                                       ^
+  include(xonly, jsonExamples)                                                                                          ^
+  include(xonly, new ParserSpec)                                                                                        ^
   end
 
-  val examples = new Specification { def is = "Examples".title ^
+ lazy val examples = new Specification { def is = "Examples".title ^
     "This is hopefully true"         ! (1 != 2)     ^
     { 1 must beEqualTo(1)      }                    ^
     { 1 must_== 1              }                    ^ // my favorite!
@@ -611,7 +828,7 @@ framework. You can reuse the following traits:
     def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size }
   }
 
-  val akaExpectations = new Specification { def is = "Aka".title ^
+ lazy val akaExpectations = new Specification { def is = "Aka".title ^
     "without description"                                        ! {
       machine.tickets must have size(3)
     }^
@@ -622,14 +839,19 @@ framework. You can reuse the following traits:
     val machine = Machine(List("ticket1", "ticket2", "ticket3"))
   }
 
-  val scalaCheckExamples = new Specification with ScalaCheck {
+ lazy val scalaCheckExamples = new Specification with ScalaCheck {
     import org.scalacheck._
     implicit val params = set(minTestsOk -> 20)
 
     def is = "Scalacheck".title ^
-    "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a } ^
-    "addition and multiplication are related" ! { (a: Int) => a + a must_== 2 * a }        ^
-                                                                                           end
+    "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }              ^
+    "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }                    ^
+    "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }               ^
+    "addition and multiplication are related" ! check { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) } ^
+    "this is a specific property" ! check { (a: Int, b: Int) =>
+      (a + b) must_== (b + a)
+    }.set(minTestsOk -> 200, workers -> 1)                                                              ^
+                                                                                                        end
   }
 
   import org.specs2.matcher._
@@ -665,7 +887,7 @@ framework. You can reuse the following traits:
        def verify2 = there was no(m).get(0)      // verify that the call never happened
      }
    }
-   val mockitoExamples = new Specification { def is =
+  lazy val mockitoExamples = new Specification { def is =
      "returned values"                         ! c().e1 ^
      "consecutive returns"                     ! c().e2 ^
      "matchers"                                ! c().e3 ^
@@ -685,7 +907,7 @@ framework. You can reuse the following traits:
          success
        }
        def e3 = {
-         m.get(anyInt()) returns "element"
+         m.get(anyInt) returns "element"
          m.get(999) must_== "element"
          m.get(be_==(123)) returns "one"
          success
@@ -702,4 +924,57 @@ framework. You can reuse the following traits:
        2    !  2  !  4  |
        1    !  1  !  2  |> { (a, b, c) =>  a + b must_== c }
   }
+
+  lazy val jsonExamples = new JsonExamples
+}
+class JsonExamples extends Specification {
+    val person = """{
+      "person": {
+        "name": "Joe",
+        "age": 35,
+        "spouse": {
+          "person": {
+            "name": "Marilyn",
+            "age": 33
+          }
+        }
+      }
+    }"""
+
+    def is =
+    "1" ! { person must /("person") */("person") /("age" -> 33.0) }
+}
+
+import util.parsing.combinator.RegexParsers
+import NumberParsers.{number, error}
+
+class ParserSpec extends Specification with matcher.ParserMatchers {  def is =
+  "Parsers for numbers"                                                                   ^
+                                                                                          p^
+  "beASuccess and succeedOn check if the parse succeeds"                                  ^
+  { number("1") must beASuccess }                                                         ^
+  { number must succeedOn("12") }                                                         ^
+  { number must succeedOn("12").withResult(12) }                                          ^
+  { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
+  { number("1") must haveSuccessResult("1") }                                             ^
+                                                                                          p^
+  "beAFailure and failOn check if the parse fails"                                        ^
+  { number must failOn("abc") }                                                           ^
+  { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
+  { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
+  { number("i") must beAFailure }                                                         ^
+  { number("i") must haveFailureMsg("i' found") }                                         ^
+                                                                                          p^
+  "beAnError and errorOn check if the parser errors out completely"                       ^
+  { error must errorOn("") }                                                              ^
+  { error("") must beAnError }                                                            ^
+                                                                                          end
+
+  val parsers = NumberParsers
+}
+object NumberParsers extends RegexParsers {
+  /** parse a number with any number of digits */
+  val number: Parser[Int] = "\\d+".r ^^ {_.toInt}
+  /** this parser returns an error */
+  val error: Parser[String] = err("Error")
 }

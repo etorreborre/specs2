@@ -5,6 +5,7 @@ import control.Throwablex._
 import text.AnsiColors._
 import text.NotNullStrings._
 import main.Arguments
+import org.specs2.internal.scalaz.Monoid
 
 /**
  * The result of an execution, either:
@@ -24,7 +25,9 @@ import main.Arguments
  * 
  */
 sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1) {
-  /** @return the textual status of the result */
+  /**
+   * @return the textual status of the result
+   */
   def status(implicit args: Arguments = Arguments()) =
     if (args.plan) 
       color("*", blue, args.color)
@@ -75,16 +78,65 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return true if the result is a Success instance
    */
   def isSuccess: Boolean = false
+  /**
+   * @return true if the result is an Error instance
+   */
+  def isError: Boolean = false
+  /**
+   * @return true if the result is a Skipped instance
+   */
+  def isSkipped: Boolean = false
+  /**
+   * @return true if the result is a Pending instance
+   */
+  def isPending: Boolean = true
+  /**
+   * @return true if the result is a Failure instance
+   */
+  def isFailure: Boolean = false
+}
+object Result {
+  implicit val ResultMonoid: Monoid[Result] = new Monoid[Result] {
+    val zero = Success()
+    def append(m1: Result, m2: =>Result) = (m1, m2) match {
+      case (Success(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
+      case (Success(msg1),               Skipped(msg2, e2))          => Success(msg1+"; "+msg2)
+      case (Skipped(msg1, e2),           Success(msg2))              => Success(msg1+"; "+msg2)
+      case (Pending(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
+      case (Success(msg1),               Pending(msg2))              => Success(msg1+"; "+msg2)
+
+      case (Success(msg1),               Failure(msg2, e2, st1, d2)) => m2.updateMessage(msg1+"; but "+msg2)
+      case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2, e1+"; "+e2, st1, NoDetails())
+
+      case (Success(msg1),               Error(msg2, st1))           => m2.updateMessage(msg1+"; but "+msg2)
+      case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+"; "+msg2, st1)
+      case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+"; "+msg2, st1)
+
+      case (Skipped(msg1, e1),           Skipped(msg2, e2))          => Skipped(msg1+"; "+msg2, e1+"; "+e2)
+      case (Skipped(msg1, e1),           Pending(msg2))              => Pending(msg1+"; "+msg2)
+      case (Pending(msg1),               Skipped(msg2, e2))          => Pending(msg1+"; "+msg2)
+      case (Pending(msg1),               Pending(msg2))              => Pending(msg1+"; "+msg2)
+
+      case (Failure(msg1, e1, st, d),    _)                          => m1
+      case (Error(msg1, st),          _)                             => m1
+      case (_,                           Failure(msg1, e1, st, d))   => m2
+      case (_,                           Error(msg1, st))            => m2
+
+    }
+  }
 }
 /** 
  * This class represents the success of an execution
  */
 case class Success(m: String = "")  extends Result(m, m) {
-  override def and(r: =>Result): Result = r match {
-	  case Success(m)          => if (message == m) this else Success(message+" and "+m)
-    case Error(_, _)         => r
-	  case Failure(_, _, _, _) => r
-    case _                   => super.and(r)
+  override def and(res: =>Result): Result = {
+    val r = res
+    r match {
+      case Success(m)          => if (message == m) this else Success(message+" and "+m)
+      case e @ Error(_, _)     => r
+      case Failure(_, _, _, _) => r
+      case _                   => super.and(r)
+    }
   }
   override def isSuccess = true
 }
@@ -105,14 +157,13 @@ case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement
   extends Result(m, e) with ResultStackTrace {
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
-  override def and(r: =>Result): Result = r match {
-	  case Error(_, _) => r
-	  case _ => super.and(r)
-  }
-  override def or(r: =>Result): Result = r match {
-    case Success(m) => if (message == m) r else Success(message+" and "+m)
-    case Failure(m, e, st, d) => Failure(message+" and "+m, e, stackTrace ::: st, d)
-    case _ => super.or(r)
+  override def or(res: =>Result): Result = {
+    val r = res
+    r match {
+      case Success(m) => if (message == m) r else Success(message+" and "+m)
+      case Failure(m, e, st, d) => Failure(message+" and "+m, e, stackTrace ::: st, d)
+      case _ => super.or(r)
+    }
   }
   override def toString = m
   override def equals(o: Any) = {
@@ -122,6 +173,7 @@ case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement
     }
   }
   override def hashCode = m.hashCode + e.hashCode
+  override def isFailure: Boolean = true
 }
 
 /**
@@ -133,8 +185,7 @@ case class NoDetails() extends Details
 /** 
  * This class represents an exception occurring during an execution.
  */
-case class Error(m: String, e: Exception)
-  extends Result(m) with ResultStackTrace {
+case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrace {
   /** @return an exception created from the message and the stackTraceElements */
   def exception = e
   def stackTrace = e.getFullStackTrace.toList
@@ -145,21 +196,28 @@ case class Error(m: String, e: Exception)
     }
   }
   override def hashCode = m.hashCode
+  override def isError: Boolean = true
 }
 /** 
  * This object allows to create an Error from an exception
  */
 case object Error {
   def apply(e: Exception) = new Error(e.getMessage.notNull, e)
-  def apply(m: String) = new Error(m, new Exception(m))  
+  def apply(t: Throwable) = new Error(t.getMessage.notNull, new ThrowableException(t))
+  case class ThrowableException(t: Throwable) extends Exception(t)
+  def apply(m: String) = new Error(m, new Exception(m))
 }
 /** 
  * Pending result
  * @see Result for description
  */
-case class Pending(m: String = "")  extends Result(m)
+case class Pending(m: String = "")  extends Result(m) {
+  override def isPending: Boolean = true
+}
 /** 
  * Skipped result
  * @see Result for description 
  */
-case class Skipped(m: String = "", e: String = "")  extends Result(m, e)
+case class Skipped(m: String = "", e: String = "")  extends Result(m, e) {
+  override def isSkipped: Boolean = true
+}

@@ -4,37 +4,33 @@ import io._
 import mock._
 import specification._
 
-class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is =       sequential ^
-                                                                                             """
-  The HtmlPrinter class is responsible for opening an html file and writing the
-  specification text.
-                                                                                             """^
-                                                                                             p^
-  "The file path must"                                                                       ^
-    "use target/specs-reports as a default value for the output directory"                   ! filepath().e1^
-    "use the `outDir` system variable if set"                                                ! filepath().e2^
-    "use class name of the specification as file name"                                       ! filepath().e3^
-                                                                                             p^
-  "The page title"                                                                           ^
-    "must be the title of the specification"                                                 ! title().e1^
-                                                                                             p^
-  "If there are children pages"                                                              ^
-    "there must be breadcrumbs on top of the children pages"                                 ! breadcrumbs().e1^
-                                                                                             p^
-  "Resources"                                                                                ^
-    "there must be a directory for css files"                                                ! resources().css^
-    "there must be a directory for images files"                                             ! resources().images^
-                                                                                             p^
-  "Fragments"                                                                                ^
-    "A text block must"                                                                      ^
-      "be printed as a div"                                                                  ! fragments().text1^
-      "be indented to its level with a css property"                                         ! fragments().text2^
-      "be formatted as some Mockito text"                                                    ! fragments().text3^
-	                                                                                           p^
-    "An example must"                                                                        ^
-      "have a success icon if successful"                                                    ! fragments().ex1^
-      "show detailed failures if any"                                                        ! fragments().ex2^
-                                                                                             end
+class HtmlPrinterSpec extends Specification with Mockito { outer => def is =       sequential ^
+                                                                                                                        """
+The HtmlPrinter class is responsible for opening an html file and writing the specification text.
+                                                                                                                        """^p^
+  "The file path must"                                                                                                  ^
+    "use target/specs-reports as a default value for the output directory"                                              ! filepath().e1^
+    "use the `outDir` system variable if set"                                                                           ! filepath().e2^
+    "use class name of the specification as file name"                                                                  ! filepath().e3^
+                                                                                                                        p^
+  "The page title"                                                                                                      ^
+    "must be the title of the specification"                                                                            ! title().e1^
+                                                                                                                        p^
+  "Resources"                                                                                                           ^
+    "there must be a directory for css files"                                                                           ! resources().css^
+    "there must be a directory for images files"                                                                        ! resources().images^
+    "there must be a directory for the js tree theme files"                                                             ! resources().jstheme^
+                                                                                                                        p^
+  "Fragments"                                                                                                           ^
+    "A text block must"                                                                                                 ^
+      "be printed as a div"                                                                                             ! fragments().text1^
+      "be indented to its level with a css property"                                                                    ! fragments().text2^
+      "be formatted as some Mockito text"                                                                               ! fragments().text3^
+	                                                                                                                      p^
+    "An example must"                                                                                                   ^
+      "have a success icon if successful"                                                                               ! fragments().ex1^
+      "show detailed failures if any"                                                                                   ! fragments().ex2^
+                                                                                                                        end
                                                                                           
   implicit val argument = args()
   case class filepath() {
@@ -54,12 +50,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
     
     def css = there was one(fs).copySpecResourcesDir(equalTo("css"), anyString)
     def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)
-  }
-  case class breadcrumbs() extends MockHtmlPrinter {
-    val child = new Specification { def is = "t2" }
-    val spec = new Specification { def is = "t1" ! success ^ "child" ~ ("child", child) }
-
-    def e1 = printSpec(spec) must contain("div id=\"breadcrumbs\"")
+    def jstheme = there was one(fs).copySpecResourcesDir(equalTo("css/themes/default"), anyString)
   }
   case class fragments() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success ^ "*ex2*" ! success ^
@@ -82,8 +73,8 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
     }
 
     def print(spec: Fragments) = {
-      printer.reduce(spec.fragments.map(executeFragment), HtmlLink(SpecName("spec"))).head.
-              printXml(new HtmlResultOutput(out)).xml
+      printer.reduce(spec.fragments.map(executeFragment), HtmlLink(SpecName("spec"))).flatten.head.
+              printXml(new HtmlResultOutput).xml
     }
     def printSpec(spec: SpecificationStructure) = {
       printer.print(spec, spec.content.fragments.map(executeFragment))

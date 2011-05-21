@@ -3,6 +3,9 @@ package form
 
 import scala.xml._
 
+/**
+ * This trait defines functions that are applicable to any DecoratedProperty, i.e. something having a Decorator
+ */
 private[specs2]
 trait DecoratedProperties {
   implicit def toDecorated[T <: DecoratedProperty[T]](d: T) = new Decorated(d)

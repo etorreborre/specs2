@@ -11,9 +11,11 @@ package matcher
  * `a should matcher`
  */
 class ShouldExpectable[T] private[specs2] (tm: () => T) extends Expectable[T](tm){
-  def should(m: =>Matcher[T]) = applyMatcher(m)
-  def shouldNot(m: =>Matcher[T]) = applyMatcher(m.not)
-  def should_==(other: =>T) = applyMatcher(new BeEqualTo(other))
+  def should(m: =>Matcher[T])      = applyMatcher(m)
+  def shouldEqual(other: =>Any)    = applyMatcher(new BeEqualTo(other))
+  def shouldNotEqual(other: =>Any) = applyMatcher(new BeEqualTo(other).not)
+  def should_==(other: =>Any)      = applyMatcher(new BeEqualTo(other))
+  def should_!=(other: =>Any)      = applyMatcher(new BeEqualTo(other).not)
 }
 object ShouldExpectable {
   def apply[T](t: =>T) = new ShouldExpectable(() => t)

@@ -3,10 +3,14 @@ package html
 
 import scala.xml._
 import transform.{RewriteRule, RuleTransformer}
-import scalaz.{ TreeLoc, Scalaz, Show }
+import org.specs2.internal.scalaz.{ TreeLoc, Scalaz, Show }
 import Scalaz._
 import data.Trees._
-
+import xml.Nodex._
+/**
+ * This trait checks for the presence of a <toc/> tag at the beginning of a xml document and replaces it
+ * by a list of links to the headers of the document
+ */
 private[specs2]
 trait TableOfContents {
   /**
@@ -19,8 +23,16 @@ trait TableOfContents {
   /** create a sanitized anchor name */
   def anchorName(name: String) = "#"+sanitize(name)
 
+  /** @return all the headers of a document */
+  def headers(body: NodeSeq): NodeSeq = {
+    body.toList match {
+      case e :: rest if isHeader(e) => e ++ headers(rest)
+      case (e:Elem) :: rest         => headers(e.child) ++ headers(rest)
+      case e :: rest                => headers(rest)
+      case Nil                      => Nil
+    }
+  }
   /** collect all the headers as a Tree */
-  private[specs2]
   def headersToTree(body: NodeSeq, headers: TreeLoc[Header] = leaf(Header(1, "")).loc): TreeLoc[Header] = {
     def goUpUntil(headers: TreeLoc[Header], level: Int): TreeLoc[Header] =
       if (headers.tree.rootLabel.level > level) headers.parent.map(goUpUntil(_, level)).getOrElse(headers)
@@ -48,19 +60,42 @@ trait TableOfContents {
     }
   }
 
-  private[specs2]
   case class Header(level: Int, name: String)
-
   implicit object HeaderShow extends Show[Header] {
     def show(h : Header) = h.name.toList
   }
 
-  /** @return toc of a document */
-  private def toc(body: NodeSeq) = {
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
+  def tocElements(body: NodeSeq, url: String = "", id: Int = 0, subToc: NodeSeq = NodeSeq.Empty) = headersTocElements(headers(body), url, id, subToc)
+
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to a list of <li/> */
+  private def headersTocElements(body: NodeSeq, url: String = "", id: Int = 0, subToc: NodeSeq = NodeSeq.Empty) = {
     headersToTree(body).toTree.
     bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-      { if (h.name.isEmpty) NodeSeq.Empty else <li><a href={anchorName(h.name)}>{h.name}</a></li> } ++
-      ( if (s.isEmpty) NodeSeq.Empty else <ul>{s.toSeq}</ul>)
+      if (h.name.isEmpty) {
+        val headers = s.flatMap(_.toSeq).reduceNodes.toList
+        val headersWithId = headers match {
+          case (e:Elem) :: rest => (e % ("id" -> id)) :: rest
+          case other            => other
+        }
+        headersWithId.reduceNodes
+      }
+      else
+        <li><a href={url+anchorName(h.name)}>{h.name}</a>
+          { <ul>{s.toSeq ++ subToc}</ul> }
+        </li>
+    }.rootLabel
+  }
+
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
+  def toc(body: NodeSeq, url: String = "") = headersToc(headers(body), url)
+
+  /** @return the toc of a document by building a Tree of all the headers and mapping it to an <ul/> list */
+  private def headersToc(body: NodeSeq, url: String = "") = {
+    headersToTree(body).toTree.
+    bottomUp { (h: Header, s: Stream[NodeSeq]) =>
+      { <li id={h.name}><a href={url+anchorName(h.name)}>{h.name}</a>{ <ul>{s.toSeq}</ul> unless s.isEmpty }</li> unless h.name.isEmpty } ++
+      { <ul>{s.toSeq}</ul> unless (!h.name.isEmpty) }
     }.rootLabel
   }
 
@@ -74,7 +109,7 @@ trait TableOfContents {
   private[specs2] def headerNumber(e: Node) = {
     e.label match {
       case HeaderTag(i) => Integer.valueOf(i).intValue
-      case _         => -1
+      case _            => -1
     }
   }
 
@@ -86,20 +121,11 @@ trait TableOfContents {
     }
     def addTo(n: Node) = new RuleTransformer(this).apply(n)
   }
-  private[specs2]
-  def headers(body: NodeSeq): NodeSeq = {
-    body.toList match {
-      case e :: rest if isHeader(e) => e ++ headers(rest)
-      case (e:Elem) :: rest => headers(e.child) ++ headers(rest)
-      case e :: rest => headers(rest)
-      case Nil => Nil
-    }
-  }
 
   /** This rule can replace the toc element with a table of contents derived from the body */
   private def tableOfContents(body: Node) = new RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
-      case <toc/> => toc(headers(body).drop(1))
+      case <toc/> => headersToc(headers(body).drop(1))
       case other => other
     }
     def add = new RuleTransformer(this).apply(body)

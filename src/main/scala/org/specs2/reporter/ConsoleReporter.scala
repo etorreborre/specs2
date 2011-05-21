@@ -1,10 +1,7 @@
 package org.specs2
 package reporter
 
-import scalaz.Scalaz._
 import io._
-import main._
-import specification._
 
 /**
  * The console reporter executes a Specification and exports the results to the Console
@@ -18,6 +15,7 @@ import specification._
  */
 trait ConsoleReporter extends Reporter 
     with DefaultSelection
+    with DefaultSequence
     with DefaultExecutionStrategy
     with TextExporting
     with ConsoleOutput 

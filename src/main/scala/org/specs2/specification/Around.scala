@@ -11,7 +11,7 @@ import execute._
  * 
  * @see Example to understand why the type T must <% Result
  */
-trait Around { outer =>
+trait Around extends Context { outer =>
   def around[T <% Result](t: =>T): Result
   def apply[T <% Result](a: =>T) = around(a)
   

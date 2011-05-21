@@ -3,7 +3,7 @@ package io
 import matcher.DataTables
 import Paths._
 
-class PathsSpec extends SpecificationWithJUnit with DataTables { def is =
+class PathsSpec extends Specification with DataTables { def is =
 
   "The dirPath function must normalize directory paths" ! {
     "path"              || "result"       |>

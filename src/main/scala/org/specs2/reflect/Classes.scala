@@ -2,33 +2,31 @@ package org.specs2
 package reflect
 
 import scala.reflect.ClassManifest
-import scala.reflect.NameTransformer
+import ClassName._
 import control.Exceptions._
 import control.Throwablex._
 import io._
-
+import sys._
 /**
- * This trait provides utility functions for classes.
+ * This trait provides utility functions for classes
  */
 private[specs2]
 trait Classes extends Output {
-  /**
-   * @return an instance of a given class, returning either the instance, or an exception
-   */
-  def create[T <: AnyRef](className: String = "", loader: ClassLoader = Thread.currentThread.getContextClassLoader)
-                         (implicit m: ClassManifest[T]): Either[Throwable, T] = {
-    trye(createInstanceFor(loadClassOf[T](className, loader)))
-  }
-  /**
-   * @return an instance of a given class.
-   */
-  def createObject[T <: AnyRef](className: String)(implicit m: ClassManifest[T]): Option[T] = createObject[T](className, false)(m)
+
+  /** @return an instance of a given class, returning either the instance, or an exception */
+  def create[T <: AnyRef](className: String = "", classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
+                         (implicit m: ClassManifest[T]): Either[Throwable, T] =
+    trye(createInstanceFor(loadClassOf[T](className, loader = classLoader)))
+
+  /** @return an instance of a given class */
+  def createObject[T <: AnyRef](className: String)(implicit m: ClassManifest[T]): Option[T] =
+    createObject[T](className, false)(m)
   
-  /**
-   * @return an instance of a given class and optionally print message if the class can't be loaded.
-   */
+  /** @return an instance of a given class and optionally print message if the class can't be loaded */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean)
-                               (implicit m: ClassManifest[T]): Option[T] = createObject(className, printMessage, false)(m)
+                               (implicit m: ClassManifest[T]): Option[T] =
+    createObject(className, printMessage, false)(m)
+
   /**
    * A system property 'debugCreateObject' can be set to override the printMessage and printStackTrace parameters
    * so that the exception message and stacktrace are printed when the object can't be created
@@ -49,13 +47,15 @@ trait Classes extends Output {
       println(msg)
     }.flatMap(identity)
   }
+
   /**
    * Try to create an instance of a given class by using whatever constructor is available
    * and trying to instantiate the first parameter recursively if there is a parameter for that constructor.
    * 
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
-  def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
+  def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean= true, printStackTrace: Boolean = true,
+                                     loader: ClassLoader = Thread.currentThread.getContextClassLoader)
                                     (implicit m: ClassManifest[T]): Option[T] = {
     loadClass(className) match {
       case None => None
@@ -82,45 +82,6 @@ trait Classes extends Output {
       }
     }
   }
-  /** try to create object but print no messages */
-  def tryToCreateObject[T <: AnyRef](className: String)
-                                    (implicit m: ClassManifest[T]) : Option[T] = {
-    tryToCreateObject(className, false, false)(m)
-  }
-  /**
-   * @return the outer class name for a given class
-   */
-  def getOuterClassName(c: Class[_]): String = {
-    c.getDeclaredConstructors.toList(0).getParameterTypes.toList(0).getName
-  }
-  /**
-   * @return the decoded class name
-   */
-  def className(name: String): String = {
-    val decoded = NameTransformer.decode(name)
-    val remainingDollarNames = decoded.split("\\$")
-    val result = if (remainingDollarNames.size > 1) {
-      if (remainingDollarNames(remainingDollarNames.size - 1).matches("\\d"))
-        remainingDollarNames(remainingDollarNames.size - 2)
-      else
-        remainingDollarNames(remainingDollarNames.size - 1)
-    } else remainingDollarNames(0)
-    result
-  }
-  /**
-   * @return the class name without the package name
-   */
-  def className(klass: Class[_]): String = {
-    val result = className(klass.getSimpleName)
-    if (result.contains("anon") && klass.getSuperclass != null)
-      className(klass.getSuperclass)
-    else
-      result
-  }
-  /**
-   * @return the class name without the package name of any object
-   */
-  def getClassName[T](a: T): String = className(a.asInstanceOf[java.lang.Object].getClass)
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
    */
@@ -133,20 +94,21 @@ trait Classes extends Output {
   private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassManifest[T]) = {
     val constructor = klass.getDeclaredConstructors()(0)
     constructor.setAccessible(true)
-	try {
+  	try {
       val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
-      if (!m.erasure.isInstance(instance)) error(instance + " is not an instance of " + m.erasure.getName)
+      if (!m.erasure.isInstance(instance))
+        error(instance + " is not an instance of " + m.erasure.getName)
       instance.asInstanceOf[T]
-	} catch {
-	  case e: java.lang.reflect.InvocationTargetException => throw e.getTargetException
-	}
+  	} catch {
+  	  case e: java.lang.reflect.InvocationTargetException => throw e.getTargetException
+  	}
   }
   /**
    * Load a class, given the class name
    * 
    * If the 'debugLoadClass' property is set, then an error message is printed out to the Console
    */
-  private[reflect] def loadClass[T <: AnyRef](className: String): Option[Class[T]] = {
+  private[reflect] def loadClass[T <: AnyRef](className: String, loader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[Class[T]] = {
     tryo(Some(loadClassOf(className).asInstanceOf[Class[T]])) { (e: Throwable) =>
       if (System.getProperty("debugLoadClass") != null) {
         println("Could not load class " + className)

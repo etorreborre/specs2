@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable }
+import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable }
 import Generator._
 import control.Throwablex._
 import data.Tuples._
@@ -10,8 +10,6 @@ import text._
 import Plural._
 import AnsiColors._
 import NotNullStrings._
-import EditDistance._
-import DiffShortener._
 import execute._
 import main.Arguments
 import specification._
@@ -63,12 +61,12 @@ trait TextPrinter {
     implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment) = fragment match { 
-      case start @ ExecutedSpecStart(_, _)     => PrintSpecStart(start)
-      case result @ ExecutedResult(_, _, _)    => PrintResult(result)
-      case text @ ExecutedText(s)              => PrintText(text)
-      case par @ ExecutedBr()                  => PrintBr()
-      case end @ ExecutedSpecEnd(_)            => PrintSpecEnd(end)
-      case fragment                            => PrintOther(fragment)
+      case start @ ExecutedSpecStart(_, _, _)     => PrintSpecStart(start)
+      case result @ ExecutedResult(_, _, _, _)    => PrintResult(result)
+      case text @ ExecutedText(s, _)              => PrintText(text)
+      case par @ ExecutedBr(_)                    => PrintBr()
+      case end @ ExecutedSpecEnd(_, _)            => PrintSpecEnd(end)
+      case fragment                               => PrintOther(fragment)
     }
   }
     
@@ -105,17 +103,18 @@ trait TextPrinter {
         }
         case e: Error => {
           printError(desc, e, timer)
-          e.stackTrace.foreach(t => out.printError(t.toString))
+          args.traceFilter(e.stackTrace).foreach(t => out.printError(t.toString))
           e.exception.chainedExceptions.foreach { (t: Throwable) =>
             out.printError(t.getMessage.notNull)
-            t.getStackTrace.foreach(st => out.printError(st.toString))
+            args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
           }
         }
         case Success(_)    => if (!args.xonly) out.printSuccess(description)
         case Pending(_)    => if (!args.xonly) out.printPending(description + " " + result.message)
         case Skipped(_, _) => if (!args.xonly) {
           out.printSkipped(description)
-          out.printSkipped(result.message)
+          if (!result.message.isEmpty)
+            out.printSkipped(result.message)
         }
       }
     }
@@ -124,15 +123,15 @@ trait TextPrinter {
       out.printFailure(description)
       out.printFailure(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
       if (args.failtrace)
-        f.stackTrace.foreach(t => out.printFailure(t.toString))
+        args.traceFilter(f.stackTrace).foreach(t => out.printFailure(t.toString))
     }
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {
         case FailureDetails(expected, actual) if (args.diffs.show(expected, actual)) => {
-          val (expectedDiff, actualDiff) = showDistance(expected, actual, args.diffs.separators, args.diffs.shortenSize)
+          val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
           out.printFailure("Expected: " + expectedDiff)
           out.printFailure("Actual:   " + actualDiff)
-          if (args.diffs.full) {
+          if (args.diffs.showFull) {
             out.printFailure("Expected (full): " + expected)
             out.printFailure("Actual (full):   " + actual)
           }
@@ -144,7 +143,7 @@ trait TextPrinter {
     def printError(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
       val description = statusAndDescription(desc, f, timer)
       out.printError(description)
-      out.printError(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
+      out.printError(desc.takeWhile(_ == ' ') + "  " + f.exception.getClass.getSimpleName + ": " + f.message + " ("+f.location+")")
     }
     /**
      * add the status to the description
@@ -193,7 +192,7 @@ trait TextPrinter {
               Some(failures qty "failure"), 
               Some(errors qty "error"),
               pending optQty "pending", 
-              skipped optQty "skipped").flatten.mkString(", "), blue, args.color))
+              skipped optInvariantQty "skipped").flatten.mkString(", "), blue, args.color))
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {

@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import java.util.regex._
+import control.Exceptions._
 import text.Quote._
 
 /**
@@ -18,33 +19,44 @@ object StringMatchers extends StringMatchers
 private[specs2]
 trait StringBaseMatchers { outer =>
   /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
-  implicit def stringMatcher(m: AdaptableMatcher[String]): StringMatcher = new StringMatcher(m)
-  class StringMatcher(m: AdaptableMatcher[String]) {
-    private val ignoringCase = (_:String) + ", ignoring case"
-    private val ignoringSpace = (_:String) + ", ignoring space"
-    def ignoreCase: AdaptableMatcher[String] = m.^^^((s: String) => s.toLowerCase, ignoringCase, ignoringCase)
-    def ignoreSpace: AdaptableMatcher[String] = m.^^^((s: String) => s.trim, ignoringSpace, ignoringSpace)
+  implicit def stringMatcher(m: AdaptableMatcher[Any]): StringMatcher = new StringMatcher(m)
+  class StringMatcher(m: AdaptableMatcher[Any]) {
+    private val ignoringCase = (_:Any) + ", ignoring case"
+    private val ignoringSpace = (_:Any) + ", ignoring space"
+    def ignoreCase: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
+    def ignoreSpace: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.trim, ignoringSpace, ignoringSpace)
   }
   
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
   def ==/(s: String) = be_==/(s)
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
-  def be_==/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace  
+  def be_==/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
-  def be_!=/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace  
+  def be_!=/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
   def !=/(s: String) = be_!=/(s)
-  /** matches if (b.indexOf(a) >= 0) */   
-  def contain(t: String) = new Matcher[String] { 
+  /** matches if (b contains a) */
+  def contain(t: String) = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
-      result(a != null && b.value != null && b.value.indexOf(a) >= 0, 
-             b.description + " contains " + q(a), 
+      result(a != null && b.value != null && b.value.contains(a),
+             b.description + " contains " + q(a),
              b.description + " doesn't contain " + q(a), b)
     }
   }
-  /** matches if b matches the regular expression a */   
+  /** matches if (b contains a) */
+  def contain(t: Char) = new Matcher[String] {
+    def apply[S <: String](b: Expectable[S]) = {
+      val a = t
+      result(b.value != null && b.value.contains(a),
+             b.description + " contains " + q(a),
+             b.description + " doesn't contain " + q(a), b)
+    }
+  }
+  /** matches if b matches the regular expression a */
   def beMatching(t: =>String) = new BeMatching(t)
+  /** @alias for beMatching but matching just a fragment of the string*/
+  def =~(t: =>String) = new BeMatching(".*"+t+".*")
   /** matches if b.startsWith(a) */
   def startWith(t: =>String) = new Matcher[String] { 
     def apply[S <: String](b: Expectable[S]) = {
@@ -132,17 +144,21 @@ trait StringBeHaveMatchers { outer: StringBaseMatchers =>
     def contain(s: String) = result(outer.contain(s))
     def containing(s: String) = result(outer.contain(s))
     def length(n: Int) = result(haveLength(n))
-    def size(n: Int) = result(IterableMatchers.haveSize(n))
     def startWith(s: String) = result(outer.startWith(s))
     def endWith(s: String) = result(outer.endWith(s))
     def startingWith(s: String) = result(outer.startWith(s))
     def endingWith(s: String) = result(outer.endWith(s))
     def ==/(s: String) = result(outer.be_==/(s))
   }
-  implicit def toNeutralStringMatcher(result: NeutralMatcher[Any]) : NeutralStringMatcher = 
-    new NeutralStringMatcher(result)
+  implicit def toNeutralStringMatcher(result: NeutralMatcher[Any]) : NeutralStringMatcher = new NeutralStringMatcher(result)
   class NeutralStringMatcher(result: NeutralMatcher[Any]) {
     def ==/(s: String) = outer.be_==/(s)
+    def =~(s: String) = outer.=~(s)
+  }
+  implicit def toNotStringMatcher(result: NotMatcher[Any]) : NotStringMatcher = new NotStringMatcher(result)
+  class NotStringMatcher(result: NotMatcher[Any]) {
+    def ==/(s: String) = outer.be_==/(s).not
+    def =~(s: String) = outer.=~(s).not
   }
   def matching(t: =>String) = beMatching(t)
   def length(n: Int) = haveLength(n)
@@ -154,7 +170,7 @@ protected[specs2]
 class BeMatching(t: =>String) extends Matcher[String] {
   def apply[S <: String](b: Expectable[S]) = {
     val a = t
-    result(b.value matches a,
+    result(tryOr(b.value matches a){ (e: Exception) => false },
            b.description + " matches " + q(a),
            b.description + " doesn't match " + q(a), b)
   }

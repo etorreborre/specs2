@@ -1,11 +1,13 @@
 package org.specs2
 package specification
 import io._
+import sys._
 import execute._
 import reporter._
 import matcher._
+import matcher.MustExpectable._
 
-class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is =
+class ContextSpec extends Specification with FragmentExecution { def is =
                                                                                                                         """
   It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments
   and clean it up afterwards. This may be for example:
@@ -24,61 +26,81 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
      * Before
      * After
      * Around
-     * BeforeAfter or BeforeAfterAround for combined functionality
-                                                                                                  """                                                                                 ^
-  "The Before trait can be used to execute methods before Fragments"                              ^
-    "the before method is executed before a first example"                                        ! before().e1^
-    "the before method is executed before the second example"                                     ! before().e2^
-                                                                                                  p^
-  "If the before method throws an exception"                                                      ^
-    "the first example will not execute"                                                          ! before().e3^
-    "and it will be reported as an error"                                                         ! before().e4^
-                                                                                                  p^
-  "If the before method returns Skipped"                                                          ^
-    "the first example will not execute"                                                          ! before().e5^
-    "and it will be reported as skipped with the reason"                                          ! before().e6^
-                                                                                                  p^
-  "If the before method returns a MatchFailure"                                                   ^
-    "the first example will not execute"                                                          ! before().e7^
-    "and it will be reported as failed with the reason"                                           ! before().e8^
-                                                                                                  p^
-  "The After trait can be used to execute methods after Fragments"                                ^
-    "the after method is executed after a first example"                                          ! c().e5^
-    "the after method is executed after the second example"                                       ! c().e6^
-                                                                                                  p^
-  "If the after method throws an exception"                                                       ^
-    "the first example will execute"                                                              ! c().e7^
-    "but it will be reported as an error"                                                         ! c().e8^
-                                                                                                  p^
-  "The Around trait can be used to"                                                               ^
-    "execute the example inside a user provided function"                                         ! c().e9^
-                                                                                                  p^
-  "The BeforeAfter trait can be used to"                                                          ^
-    "execute a method before and after each example"                                              ! c().e10^
-                                                                                                  p^
-  "The BeforeAfterAround trait can be used to"                                                    ^
-    "execute a method before, around and after the first example"                                 ! c().e11^
-                                                                                                  p^
-  "The Before After Around traits can be composed to create more complex setups"                  ^
-    "before compose before2 "                                                                     ! compose().e1^
-    "before then before2 "                                                                        ! compose().e2^
-    "after compose after2 "                                                                       ! compose().e3^
-    "after then after2 "                                                                          ! compose().e4^
-    "beforeAfter compose before2After2 "                                                          ! compose().e5^
-    "beforeAfter then before2After2 "                                                             ! compose().e6^
-    "around compose around2 "                                                                     ! compose().e7^
-    "around then around2 "                                                                        ! compose().e8^
-    "beforeAfterAround compose before2After2Around"                                               ! compose().e9^
-    "beforeAfterAround then before2After2Around2"                                                 ! compose().e10^
-                                                                                                  p^
-  "An Action can be used to create Step fragments containing an action to execute:"               ^
-    "val beforeSpec = new Action"                                                                 ^
-    "def is = beforeSpec(c.println('beforeSpec')) ^ ex1"                                          ^
-                                                                                                  p^
-    "that action will execute and return a result"                                                ! c().e12^
-    "if it executes ok, nothing is printed, it is a silent Success"                               ! c().e13^
-    "otherwise, it is reported as an Error"                                                       ! c().e14^
-                                                                                                  end
+     * Outside
+     * BeforeAfter or BeforeAfterAround or AroundOutside for combined functionality
+                                                                                                                        """                                                                                 ^
+  "The Before trait can be used to execute methods before Fragments"                                                    ^
+    "the before method is executed before a first example"                                                              ! before().e1^
+    "the before method is executed before the second example"                                                           ! before().e2^
+                                                                                                                        p^
+  "If the before method throws an exception"                                                                            ^
+    "the first example will not execute"                                                                                ! before().e3^
+    "and it will be reported as an error"                                                                               ! before().e4^
+                                                                                                                        p^
+  "If the before method returns Skipped"                                                                                ^
+    "the first example will not execute"                                                                                ! before().e5^
+    "and it will be reported as skipped with the reason"                                                                ! before().e6^
+                                                                                                                        p^
+  "If the before method throws a SkippedException"                                                                      ^
+    "the first example will not execute"                                                                                ! before().e5_1^
+    "and it will be reported as skipped with the reason"                                                                ! before().e6_1^
+                                                                                                                        p^
+  "If the before method returns a MatchFailure"                                                                         ^
+    "the first example will not execute"                                                                                ! before().e7^
+    "and it will be reported as failed with the reason"                                                                 ! before().e8^
+                                                                                                                        p^
+  "If the before method returns a MatchFailure"                                                                         ^
+    "the first example will not execute"                                                                                ! before().e7_1^
+    "and it will be reported as failed with the reason"                                                                 ! before().e8_1^
+                                                                                                                        p^
+  "The After trait can be used to execute methods after Fragments"                                                      ^
+    "the after method is executed after a first example"                                                                ! c().e5^
+    "the after method is executed after the second example"                                                             ! c().e6^
+                                                                                                                        p^
+  "If the after method throws an exception"                                                                             ^
+    "the first example will execute"                                                                                    ! c().e7^
+    "but it will be reported as an error"                                                                               ! c().e8^
+                                                                                                                        p^
+  "Any result can be wrapped in an After context"                                                                       ^
+    "explicitly inside the body of the context"                                                                         ! c().e8_1^
+    "with an implicit"                                                                                                  ! c().e8_2^
+                                                                                                                        p^
+  "The Around trait can be used to"                                                                                     ^
+    "execute the example inside a user provided context"                                                                ! c().e9^
+                                                                                                                        p^
+  "The Outside trait can be used to"                                                                                    ^
+    "execute the example inside a user provided function"                                                               ! c().e9_1^
+    "get a proper error if the context preparation fails"                                                               ! c().e9_2^
+                                                                                                                        p^
+  "The AroundOutside trait can be used to"                                                                              ^
+    "execute the example inside a user provided function, with some code around"                                        ! c().e9_3^
+                                                                                                                        p^
+  "The BeforeAfter trait can be used to"                                                                                ^
+    "execute a method before and after each example"                                                                    ! c().e10^
+                                                                                                                        p^
+  "The BeforeAfterAround trait can be used to"                                                                          ^
+    "execute a method before, around and after the first example"                                                       ! c().e11^
+                                                                                                                        p^
+  "The Before After Around traits can be composed to create more complex setups"                                        ^
+    "before compose before2 "                                                                                           ! compose().e1^
+    "before then before2 "                                                                                              ! compose().e2^
+    "after compose after2 "                                                                                             ! compose().e3^
+    "after then after2 "                                                                                                ! compose().e4^
+    "beforeAfter compose before2After2 "                                                                                ! compose().e5^
+    "beforeAfter then before2After2 "                                                                                   ! compose().e6^
+    "around compose around2 "                                                                                           ! compose().e7^
+    "around then around2 "                                                                                              ! compose().e8^
+    "beforeAfterAround compose before2After2Around"                                                                     ! compose().e9^
+    "beforeAfterAround then before2After2Around2"                                                                       ! compose().e10^
+                                                                                                                        p^
+  "An Action can be used to create Step fragments containing an action to execute:"                                     ^
+    "val beforeSpec = new Action"                                                                                       ^
+    "def is = beforeSpec(c.println('beforeSpec')) ^ ex1"                                                                ^
+                                                                                                                        p^
+    "that action will execute and return a result"                                                                      ! c().e12^
+    "if it executes ok, nothing is printed, it is a silent Success"                                                     ! c().e13^
+    "otherwise, it is reported as an Error"                                                                             ! c().e14^
+                                                                                                                        end
   implicit val args = main.Arguments()
   case class before() extends FragmentsExecution {
     def e1 = executing(ex1Before).prints("before", "e1")
@@ -87,15 +109,24 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     def e4 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
     def e5 = executing(ex1_beforeSkipped).prints()
     def e6 = executeBodies(ex1_beforeSkipped).map(_.message) must_== List("skipped")
+    def e5_1 = executing(ex1_beforeSkippedThrown).prints()
+    def e6_1 = executeBodies(ex1_beforeSkippedThrown).map(_.message) must_== List("skipped")
     def e7 = executing(ex1_beforeMatchFailed).prints()
     def e8 = executeBodies(ex1_beforeMatchFailed).map(_.message) must_== List("'1' is not equal to '2'")
+    def e7_1 = executing(ex1_beforeMatchFailedThrown).prints()
+    def e8_1 = executeBodies(ex1_beforeMatchFailedThrown).map(_.message) must_== List("'1' is not equal to '2'")
   }
   case class c() extends FragmentsExecution {
     def e5 = executing(ex1After).prints("e1", "after")
     def e6 = executing(ex1_2After).prints("e1", "after", "e2", "after")
     def e7 = executing(ex1_afterFail).prints("e1")
     def e8 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
+    def e8_1 = executing(ex1ExplicitAfter).prints("e1", "after")
+    def e8_2 = executing(ex1ImplicitAfter).prints("e1", "after")
     def e9 = executing(ex1Around).prints("around", "e1")
+    def e9_1 = executing(ex1Outside).prints("outside", "e1")
+    def e9_2 = executeBodies(ex1OutsideFail).map(_.message) must_== List("error")
+    def e9_3 = executing(ex1AroundOutside).prints("around", "outside", "e1")
     def e10 = executing(ex1BeforeAfter).prints("before", "e1", "after")
     def e11 = executing(ex1BeforeAfterAround).prints("before", "around", "e1", "after")
     def e12 = executing(firstThenEx1).prints("first", "e1")
@@ -117,7 +148,8 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     def e10 = executing(ex1BeforeAfterAroundThenBefore2After2Around2).
                    prints("before", "before2", "around", "around2", "e1", "after", "after2")
   }
-    
+
+
   class FragmentsExecution extends MockOutput with ContextData {
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
     case class Executed(r: Seq[Result]) {
@@ -127,7 +159,7 @@ class ContextSpec extends SpecificationWithJUnit with FragmentExecution { def is
     }
   }
 }
-trait ContextData extends StandardResults with FragmentsBuilder with ContextsForFragments {
+trait ContextData extends StandardResults with FragmentsBuilder with ContextsForFragments with Contexts {
 
   def ok(name: String) = { println(name); success }
   def ok1 = ok("e1")
@@ -149,19 +181,32 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1_beforeFail = "ex1" ! beforeWithError(ok1) 
   def ex1_beforeSkipped = "ex1" ! beforeWithSkipped(ok1)
   def ex1_beforeMatchFailed = "ex1" ! beforeWithMatchFailed(ok1)
+  def ex1_beforeSkippedThrown = "ex1" ! beforeWithSkippedThrown(ok1)
+  def ex1_beforeMatchFailedThrown = "ex1" ! beforeWithMatchFailedThrown(ok1)
   def ex1_2Before = ex1Before ^ "ex2" ! before(ok2)
 
   def ex1After = "ex1" ! after(ok1) 
   def ex1_afterFail = "ex1" ! afterWithError(ok1) 
   def ex1_2After = ex1After ^ "ex2" ! after(ok2)
 
+  trait afterContext extends Scope with After {
+    def after = println("after")
+  }
+  def ex1ExplicitAfter = "ex1" ! new afterContext {
+    this { ok1 }
+  }
+  def ex1ImplicitAfter = "ex1" ! ok1.after(println("after"))
+
   def ex1Around = "ex1" ! around(ok1) 
-  def ex1BeforeAfter = "ex1" ! beforeAfter(ok1) 
+  def ex1Outside = "ex1" ! outside((s:String) => ok1)
+  def ex1OutsideFail = "ex1" ! outsideWithError((s:String) => ok1)
+  def ex1AroundOutside = "ex1" ! aroundOutside((s:String) => ok1)
+  def ex1BeforeAfter = "ex1" ! beforeAfter(ok1)
   def ex1BeforeAfterAround = "ex1" ! beforeAfterAround(ok1)
   
   def firstThenEx1 = Step(println("first")) ^ ex1
   def silentFirstThenEx1 = Step("first") ^ ex1
-  def failingFirstThenEx1 = Step { Predef.error("error"); 1 } ^ ex1
+  def failingFirstThenEx1 = Step { error("error"); 1 } ^ ex1
 }
 trait ContextsForFragments extends MockOutput {
   object before extends Before {
@@ -171,12 +216,18 @@ trait ContextsForFragments extends MockOutput {
     def before = println("before2")
   }
   object beforeWithError extends Before with MockOutput {
-	  def before = Predef.error("error")
+	  def before = error("error")
   }
   object beforeWithSkipped extends Before with MockOutput {
 	  def before = Skipped("skipped")
   }
+  object beforeWithSkippedThrown extends Before with MockOutput with MustThrownMatchers {
+	  def before = skipped("skipped")
+  }
   object beforeWithMatchFailed extends Before with MockOutput with MustMatchers {
+	  def before = 1 must_== 2
+  }
+  object beforeWithMatchFailedThrown extends Before with MockOutput with MustThrownMatchers {
 	  def before = 1 must_== 2
   }
   object after extends After {
@@ -186,13 +237,23 @@ trait ContextsForFragments extends MockOutput {
     def after = println("after2")
   }
   object afterWithError extends After {
-	  def after = Predef.error("error")
+	  def after = error("error")
   }
   object around extends Around {
 	  def around[T <% Result](a: =>T) = { println("around"); a } 
   }
   object around2 extends Around {
     def around[T <% Result](a: =>T) = { println("around2"); a } 
+  }
+  object outside extends Outside[String] {
+	  def outside = { println("outside"); "string" }
+  }
+  object outsideWithError extends Outside[String] with MockOutput {
+	  def outside = { error("error"); "ok" }
+  }
+  object aroundOutside extends AroundOutside[String] {
+	  def outside = { println("outside"); "string" }
+    def around[T <% Result](a: =>T) = { println("around"); a }
   }
   object beforeAfter extends BeforeAfter {
 	  def before = println("before")

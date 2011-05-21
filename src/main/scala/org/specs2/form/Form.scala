@@ -5,6 +5,7 @@ import scala.xml._
 import collection.Listx._
 import ::>._
 import xml.Nodex._
+import text.Trim._
 import execute._
 import main.Arguments
 import StandardResults._
@@ -16,21 +17,21 @@ import matcher.ResultMatchers
  * 
  * A Form can be executed by executing each row and collecting the results.
  */
-case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Row])) extends Executable with Text {
+class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Row]),  val result: Option[Result] = None) extends Executable with Text {
 
-  /** @return the labels of all rows to build a header for the form */
-  def header: List[Cell] = if (rows.isEmpty) Nil else rows(0).header.flatten
-  
   /** @return all rows, including the header */
   lazy val allRows = title.map(t => Row.tr(TextCell(t))).toList ::: rows
 
   /** @return the maximum cell size, column by column */
-  lazy val maxSizes = allRows.map(_.cells).safeTranspose.map(l => l.map(_.text.size).max[Int])
+  lazy val maxSizes = allRows.map(_.cells).safeTranspose.map(l => l.map(_.width).max[Int])
 
+  /** @return a new Form. This method can be overriden to return a more accurate subtype */
+  protected def newForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) =
+    new Form(title, rows, result)
   /** @return a Form where every Row is executed with a Success */
-  def setSuccess = new Form(title, rows.map(_.setSuccess))
+  def setSuccess = newForm(title, rows.map(_.setSuccess), Some(success))
   /** @return a Form where every Row is executed with a Failure */
-  def setFailure = new Form(title, rows.map(_.setFailure))
+  def setFailure = newForm(title, rows.map(_.setFailure), Some(failure))
 
   /** add a new Header, with at least one Field */
   def th(h1: Field[_], hs: Field[_]*): Form = tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*)
@@ -38,30 +39,45 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
   def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_)):_*)
   /** add a new Row, with at least one Cell */
   def tr(c1: Cell, cs: Cell*): Form = {
-    new Form(title, this.rows :+ Row.tr(c1, cs:_*))
+    newForm(title, this.rows :+ Row.tr(c1, cs:_*), result)
   }
+  /** add a new Row, with some cells */
+  def tr(cs: Seq[Cell]): Form = {
+    if (cs.isEmpty) this
+    else            newForm(title, this.rows :+ Row.tr(cs.head, cs.drop(1):_*), result)
+  }
+
   /** add the rows of a form */
-  def tr(f: Form): Form = {
-    val oldRowsAndTitle = f.title.map(t => tr(new TextCell(t))).getOrElse(this).rows
-    new Form(title, oldRowsAndTitle ++ f.rows)
+  private def addRows(f: Form): Form = {
+    val oldRowsAndTitle = f.title.map(th(_)).getOrElse(this).rows
+    newForm(title, oldRowsAndTitle ++ f.rows, result)
   }
-  
-  /** 
+
+  /**
    * execute all rows
    * @return a logical and on all results 
    */
-  def execute = rows.foldLeft(success: Result) { (res, cur) => res and cur.execute }
+  def execute = result getOrElse (executeForm.result getOrElse success)
+  def executeRows = rows.map(_.executeRow)
   /**
    * execute all rows
-   * @return a logical and on all results
+   * @return an executed Form
    */
-  def executeForm = Form(title, rows.map(_.executeRow))
+  def executeForm = {
+    if (result.isDefined) this
+    else {
+      val executedRows = executeRows
+      newForm(title, executedRows, Some(executedRows.foldLeft(success: Result) { (res, cur) => res and cur.execute }))
+    }
+  }
 
   /** @return the printed form with a padding space size to use for each cell */
-  def padText(size: Option[Int]): String = new FormCell(this).padText(size)
+  def text: String = allRows.map(_.text(maxSizes)).mkString("\n")
 
   /** @return an xml description of this form */
   def toXml(implicit args: Arguments = Arguments()) = Form.toXml(this)(args)
+  /** @return an xml description of this form, to be embedded in a Cell */
+  def toCellXml(implicit args: Arguments = Arguments()) = <td class="info">{Form.toXml(this)(args)}</td>
 
   def subset(f1: Traversable[Form], f2: Traversable[Form]): Form = {
     addLines(FormDiffs.subset(f1.toSeq, f2.toSeq))
@@ -108,11 +124,16 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
       if (executedResult.isSuccess)
         "success"
       else
-        new FormCell(executed).xml(Arguments())
+        Form.toXml(executed)(Arguments())
     }
   }
 
-  private def addLines(fs: Seq[Form]) = fs.foldLeft(this) { (res, cur) =>  res.tr(cur) }
+  /**
+   * transform this form to a form that will be added as a <td> element inside another form
+   */
+  def inline: InlinedForm = new InlinedForm(title, rows, result)
+
+  private def addLines(fs: Seq[Form]) = fs.foldLeft(this) { (res, cur) =>  res.addRows(cur) }
 
   override def equals(a: Any) = a match {
     case f: Form => f.title == title && rows == f.rows
@@ -128,13 +149,14 @@ case class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: Li
  *
  */
 case object Form {
-
   /** @return an empty form */
-  def apply() = new Form(None, Nil)
+  def apply() = new Form()
   /** @return an empty form with a title */
-  def apply(title: String) = new Form(Some(title), Nil)
+  def apply(title: String) = new Form(Some(title))
   /** @return a Form with one row */
-  def tr(c1: Cell, c: Cell*) = new Form().tr(c1, c:_*)
+  def tr(c1: Cell, cs: Cell*) = new Form().tr(c1, cs:_*)
+  /** @return a Form with one row */
+  def tr(cs: Seq[Cell]) = new Form().tr(cs)
   /** @return a Form with one row and cells formatted as header cells */
   def th(h1: Field[_], hs: Field[_]*) = new Form().th(h1, hs:_*)
   /** @return a Form with one row and cells formatted as header cells */
@@ -148,23 +170,39 @@ case object Form {
    * @return the xml representation of a Form
    */
   def toXml(form: Form)(implicit args: Arguments) = {
-    val colnumber = new FormCell(form).colnumber
-    val formStacktraces = stacktraces(form)
     <form>
       <table  class="dataTable">
-        {title(form, colnumber)}
-        {rows(form, colnumber)}
+        {titleAndRows(form)}
       </table>
-      {<i>[click on failed cells to see the stacktraces]</i> unless formStacktraces.isEmpty}
-      {formStacktraces}
+      {formStacktraces(form)}
     </form>
   }
-
+  /**
+   * This method creates an xml representation of a Form as an Html table rows,
+   * ready to be embedded in a table
+   *
+   * @return the xml representation of a Form
+   */
+  def titleAndRows(form: Form)(implicit args: Arguments = Arguments()) = {
+    val colnumber = Xml.colnumber(new FormCell(form))
+    title(form, colnumber) ++
+    rows(form, colnumber)
+  }
+  /**
+   * This method creates a div to display the exceptions of a form
+   * ready to be embedded in a table
+   *
+   */
+  def formStacktraces(form: Form)(implicit args: Arguments = Arguments()) = {
+    val traces = Xml.stacktraces(new FormCell(form))
+    (<i>[click on failed cells to see the stacktraces]</i> unless traces.isEmpty) ++
+    traces
+  }
   /**
    * Private methods for building the Form xml
    */
-  private def title(form: Form, colnumber: Int) = form.title.map(t => <tr><th colspan={(colnumber+1).toString}>{t}</th></tr>).toList.reduce
-  private def rows(form: Form, colnumber: Int)(implicit args: Arguments) = form.rows.map(row(_, colnumber)).reduce
+  private def title(form: Form, colnumber: Int) = form.title.map(t => <tr><th colspan={(colnumber+1).toString}>{t}</th></tr>).toList.reduceNodes
+  private def rows(form: Form, colnumber: Int)(implicit args: Arguments) = form.rows.map(row(_, colnumber)).reduceNodes
   private def row(r: Row, colnumber: Int)(implicit args: Arguments) = {
     val spanned = r.cells.dropRight(1).map(cell(_)) ++ cell(r.cells.last, colnumber - r.cells.size + 1)
     <tr>{spanned}</tr>
@@ -173,17 +211,13 @@ case object Form {
   private def cell(c: Cell, colnumber: Int = 0)(implicit args: Arguments) = {
     if (colnumber > 1) {
       c.xml(args).toList match {
-      case start ::> (e: Elem) => start ++ (e % new UnprefixedAttribute("colspan", colnumber.toString, Null))
+      case start ::> (e: Elem) => start ++ (e % ("colspan" -> colnumber.toString))
         case other                         => other
       }
     } else
       c.xml(args).toList
   }
-
   /** @return the stacktraces for a Form */
-  def stacktraces(form: Form)(implicit args: Arguments): NodeSeq = form.rows.map(stacktraces(_)(args)).reduce
-
-  private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq   = row.cells.map(stacktraces(_)(args)).reduce
-  private def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell.stacktraces(args)
 
 }
+

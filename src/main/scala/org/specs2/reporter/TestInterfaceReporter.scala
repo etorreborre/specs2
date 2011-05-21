@@ -3,7 +3,6 @@ package reporter
 
 import _root_.org.scalatools.testing.{ EventHandler, Logger, Event, Result }
 import control.Throwablex._
-import control.Throwablex._
 import main.Arguments
 import main.ArgumentsArgs._
 import io._
@@ -19,35 +18,33 @@ import specification._
  * It prints out the result to the output defined by the sbt loggers
  * and publishes events to sbt event handlers
  */
-class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends 
-       ConsoleReporter 
+class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends ConsoleReporter
   with HandlerEvents {  
 	
   override def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit arguments: Arguments) =
     printLines(fs).print(new TestInterfaceResultOutput(loggers))
 
-  override def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = (f: Fragment) => {
- 	  val executed = new FragmentExecution {}.executeFragment(arguments)(f)
-    executed match {
-      case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer) => result match {
+  override def export(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+    fragments foreach {
+      case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _) => result match {
         case Success(text)               => handler.handle(succeeded(text))
-        case r @ Failure(text, e, st, d) => handler.handle(failure(text, r.exception))
-        case r @ Error(text, e)          => handler.handle(error(text, r.exception))
+        case r @ Failure(text, e, st, d) => handler.handle(failure(text, args.traceFilter(r.exception)))
+        case r @ Error(text, e)          => handler.handle(error(text, args.traceFilter(r.exception)))
         case Skipped(text, _)            => handler.handle(skipped(text))
         case Pending(text)               => handler.handle(skipped(text))
       }
       case _ => ()
     }
-    executed
+    print(s, fragments)
   }
 }
+
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
-  override def printFailure(message: String)(implicit args: Arguments) = 
-    logFailure(color(message, yellow))
-  override def printError(message: String)(implicit args: Arguments) = 
-    logError(color(message, red))
-  override def printSuccess(message: String)(implicit args: Arguments) = logInfo(message)
-  override def printLine(message: String)(implicit args: Arguments) = logInfo(message)
+  override def printSpecStart(message: String)(implicit args: Arguments) = () // do nothing because sbt already displays the specification name
+  override def printFailure(message: String)(implicit args: Arguments)   = logFailure(color(message, yellow))
+  override def printError(message: String)(implicit args: Arguments)     = logError(color(message, red))
+  override def printSuccess(message: String)(implicit args: Arguments)   = logInfo(message)
+  override def printLine(message: String)(implicit args: Arguments)      = logInfo(message)
   override def status(result: execute.Result)(implicit arguments: Arguments): String =
     result.status(arguments.overrideWith(args(color = true)))  + " "
 }
