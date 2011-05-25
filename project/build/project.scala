@@ -21,12 +21,12 @@ class Project(info: ProjectInfo) extends DefaultProject(info) with ScctProject w
   
   /** Compiling */
   override def compileOptions = Unchecked :: super.compileOptions.toList
-  override def javaCompileOptions = JavaCompileOption("-Xmx256m -Xms64m -Xss4m") :: Nil
+  override def javaCompileOptions = JavaCompileOption("-Xmx256m -Xms64m -Xss4m -XX:ReservedCodeCacheSize=96m") :: Nil
 
   /** Testing */
   override def testFrameworks = super.testFrameworks ++ Seq(new TestFramework("org.specs2.runner.SpecsFramework"))
 
-  override def testJavaCompileOptions = JavaCompileOption("-Xmx256m -Xms64m -Xss4m") :: Nil
+  override def testJavaCompileOptions = JavaCompileOption("-Xmx256m -Xms64m -Xss4m -XX:ReservedCodeCacheSize=96m") :: Nil
   override def includeTest(s: String) = Seq("Spec", "Suite", "Unit", "all").exists(s.endsWith(_)) && !s.endsWith("FeaturesSpec") || 
 	                                            s.contains("UserGuide") || 
 	                                            s.matches("org.specs2.guide.*") 
