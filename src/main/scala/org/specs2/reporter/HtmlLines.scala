@@ -21,6 +21,8 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink) {
   def printXml(implicit out: HtmlResultOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
   def add(line: HtmlLine) = HtmlLines(lines :+ line, link)
   def is(name: SpecName) = link.is(name)
+  def nonEmpty = !isEmpty
+  def isEmpty = lines.isEmpty
 }
 
 /** 

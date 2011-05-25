@@ -143,7 +143,6 @@ case object Action {
  * A link to another specification
  */
 case class See(link: HtmlLink) extends Fragment
-
 /**
  * Those standard Fragments are used to format the specification text:
  *  * End() can be used to "reset" the indentation of text

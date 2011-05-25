@@ -660,23 +660,24 @@ In this case the `~` operator is used to create a `HtmlLink` where:
  * "quick start guide" is the text that will be highlighted as a url link
  * `new QuickStart` is the specification to include, the url being derived from the specification class name
 
-Note that if you want to add some text after the url link, you can use the more general form:
+Several variations are possible on this pattern, depending which part of the link you want to be highlighted:
 
      "before text" ~ ("text to highlight", specification, "after text")
-     // or
      "before text" ~ ("text to highlight", specification, "after text", "tooltip")
-
-And if there's no "before text":
-
      "text to highlight" ~ specification
-     // or
      "text to highlight" ~ (specification, "after text")
-     // or
      "text to highlight" ~ (specification, "after text", "tooltip")
-
-Finally if you want to link a specification with its own name as the link text:
-
      link(specification)
+
+It is also desirable sometimes to create a page with links to other specifications where the linked specifications will not
+give raise to the creation of subsequent pages. There will be just html links:
+
+     "before text" ~/ ("text to highlight", specification, "after text")
+     "before text" ~/ ("text to highlight", specification, "after text", "tooltip")
+     "text to highlight" ~/ specification
+     "text to highlight" ~/ (specification, "after text")
+     "text to highlight" ~/ (specification, "after text", "tooltip")
+     see(specification)
 
 ### Specification title
 

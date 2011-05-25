@@ -11,10 +11,10 @@ abstract class HtmlLink(val url: String, val beforeText: String, val linkText: S
   def is(name: SpecName) = false
 }
 case class SpecHtmlLink(val name: SpecName,
-                        override val beforeText: String,
-                        override val linkText: String,
-                        override val afterText: String,
-                        override val tip: String, result: Result) extends
+                        override val beforeText: String = "",
+                        override val linkText: String = "",
+                        override val afterText: String = "",
+                        override val tip: String = "", result: Result = Success()) extends
    HtmlLink(name.url, beforeText, linkText, afterText, tip) {
   override def is(n: SpecName) = name.id == n.id
 }
@@ -30,4 +30,6 @@ case class UrlHtmlLink(override val url: String,
 object HtmlLink {
  def apply(name: SpecName, beforeText: String = "", linkText: String = "", afterText: String = "", tip: String = "", result: Result = Success()): HtmlLink  =
    new SpecHtmlLink(name, beforeText, linkText, afterText, tip, result)
+
+  def apply(s: SpecificationStructure): HtmlLink = SpecHtmlLink(s.content.start.name, linkText = s.content.start.name.name)
 }

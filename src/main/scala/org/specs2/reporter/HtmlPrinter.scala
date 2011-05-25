@@ -51,7 +51,7 @@ trait HtmlPrinter {
     val parentLink = HtmlLink(s.content.start.name, "", s.content.start.name.name)
     val htmlFiles = reduce(fs, parentLink)
     lazy val toc = globalToc(htmlFiles)
-    htmlFiles.flatten.foreach { lines =>
+    htmlFiles.flatten.filter(_.nonEmpty).foreach { lines =>
       fileWriter.write(reportPath(lines.link.url)) { out =>
         printHtml(new HtmlResultOutput, lines, globalTocDiv(toc, htmlFiles.rootLabel, lines)).flush(out)
       }

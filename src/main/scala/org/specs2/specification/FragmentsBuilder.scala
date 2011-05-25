@@ -108,30 +108,34 @@ trait FragmentsBuilder extends RegexSteps { outer =>
    */
   implicit def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = new HtmlLinkFragments(HtmlLink(SpecName(""), s, "", "", "", Success()))
   class HtmlLinkFragments(link: HtmlLink) {
-    def ~(s: SpecificationStructure) =
-      See(HtmlLink(s.content.start.name, "", link.beforeText)) ^ s.content.fragments
-
-    def ~(p: (String, SpecificationStructure)) =
-      See(HtmlLink(p._2.content.start.name, link.beforeText, p._1)) ^ p._2.content.fragments
-
-    def ~(p: (String, SpecificationStructure, String)) =
-      See(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3)) ^ p._2.content.fragments
-
-    def ~(p: (String, SpecificationStructure, String, String)) =
-      See(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3, p._4)) ^ p._2.content.fragments
+    def ~(s: SpecificationStructure) = outer.link(HtmlLink(s.content.start.name, "", link.beforeText), s)
+    def ~(p: (String, SpecificationStructure)) = outer.link(HtmlLink(p._2.content.start.name, link.beforeText, p._1), p._2)
+    def ~(p: (String, SpecificationStructure, String)) = outer.link(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3), p._2)
+    def ~(p: (String, SpecificationStructure, String, String)) = outer.link(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3, p._4), p._2)
+    def ~/(s: SpecificationStructure) = outer.see(HtmlLink(s.content.start.name, "", link.beforeText), s)
+    def ~/(p: (String, SpecificationStructure)) = outer.see(HtmlLink(p._2.content.start.name, link.beforeText, p._1), p._2)
+    def ~/(p: (String, SpecificationStructure, String)) = outer.see(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3), p._2)
+    def ~/(p: (String, SpecificationStructure, String, String)) = outer.see(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3, p._4), p._2)
   }
-
-  /** create a link directly on a specification*/
-  def link(s: SpecificationStructure) = See(HtmlLink(s.content.start.name, linkText = s.content.start.name.name)) ^ s.content.fragments
 
   implicit def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = new HtmlLinkFragments2(HtmlLink(SpecName(""), s, "", "", "", Success()))
   class HtmlLinkFragments2(link: HtmlLink) {
-    def ~(p: (SpecificationStructure, String)) =
-      See(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2)) ^ p._1.content.fragments
-
-    def ~(p: (SpecificationStructure, String, String)) =
-      See(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2, p._3)) ^ p._1.content.fragments
+    def ~(p: (SpecificationStructure, String)) = outer.link(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2), p._1)
+    def ~(p: (SpecificationStructure, String, String)) = outer.link(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2, p._3), p._1)
+    def ~/(p: (SpecificationStructure, String)) = outer.see(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2), p._1)
+    def ~/(p: (SpecificationStructure, String, String)) = outer.see(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2, p._3), p._1)
   }
+
+  /** create a link directly on a specification, with a given link */
+  def link(s: SpecificationStructure): Fragments = link(HtmlLink(s), s)
+  /** create a link directly on a specification, with a given link */
+  def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = See(htmlLink) ^ s.content.fragments
+
+  /** create a html link without including the other specification fragments */
+  def see(s: SpecificationStructure): Fragments = see(HtmlLink(s),  s)
+  /** create a html link without including the other specification fragments, and passing a specificlink */
+  def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = See(htmlLink) ^ s.content.end
+
   /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */
   implicit def inScope(s: Scope): Success = Success()
 }
