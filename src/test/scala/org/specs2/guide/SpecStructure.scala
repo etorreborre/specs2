@@ -275,9 +275,16 @@ Here's some explanation of the object definitions that support the G/W/T style:
 A G/W/T sequence can contain more than just 3 steps. However the compiler will check that:
 
    * only a `Given[T]` extractor can start a sequence
-   * only a `When[T, S]` extractor can follow a `Given[T]` extractor
+   * only a `When[T, S]` or a `Then[T]` extractor can follow a `Given[T]` extractor
    * only a `When[S, U]` extractor or a `Then[S]` can follow a `When[T, S]` extractor
    * only a `Then[S]` can follow a `Then[S]` extractor
+
+To be more concrete, here are a few valid sequences:
+
+   * Given[T] / When[T, S] / Then[S]
+   * Given[T] / When[T, S] / Then[S] / Then[S]
+   * Given[T] / Then[T] / Then[T]
+   * Given[T] / When[T, S] / When[S, U] / Then[U]
 
 ##### Extract methods
 
