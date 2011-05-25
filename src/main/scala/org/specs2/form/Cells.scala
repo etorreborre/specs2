@@ -12,7 +12,7 @@ import StandardResults._
  * A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.
  * A more general XmlCell is also available to be able to input any kind of Xml inside a Form
  * 
- * A Cell can be executed by executing the underlying element but also set to a specific result (success or failure).
+ * A Cell can be executed by executing the underlying element but also by setting the cell to a specific result (success or failure).
  * This feature is used to display rows of values with were expected and found ok in Forms.
  *
  */
@@ -96,13 +96,13 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
   def text = f.toString
 
   def xml(implicit args: Arguments) = {
-    val executed = f.valueOrResult match {
+    val executedValue = f.valueOrResult match {
       case Left(e)  => e
       case Right(e) => e
     }
     val executedResult = execute
     (<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> unless f.label.isEmpty) ++
-     <td class={statusName(executedResult)} style={f.valueStyles}>{f.decorateValue(executed)}</td> ++
+     <td class={statusName(executedResult)} style={f.valueStyles}>{f.decorateValue(executedValue)}</td> ++
     (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless
       !executedResult.isError)
   }
@@ -168,18 +168,20 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
 /**
  * Cell embedding a Form
  */
-class FormCell(_form: =>Form) extends Cell {
+class FormCell(_form: =>Form, result: Option[Result] = None) extends Cell {
   lazy val form = _form
 
   def text: String = form.text
 
   def xml(implicit args: Arguments) = form.toCellXml(args)
 
-  def execute = form.execute
-  def executeCell = new FormCell(form.executeForm)
-
-  def setSuccess = new FormCell(form.setSuccess)
-  def setFailure = new FormCell(form.setFailure)
+  def execute = result.getOrElse(form.execute)
+  def executeCell = {
+    lazy val executed = result.map(r => form).getOrElse(form.executeForm)
+    new FormCell(executed, result.orElse(Some(executed.execute)))
+  }
+  def setSuccess = new FormCell(form.setSuccess, Some(success))
+  def setFailure = new FormCell(form.setFailure, Some(failure))
 
   /**
    * @return the width of a form when inlined.

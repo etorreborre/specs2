@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 import org.specs2.internal.scalaz.{ NonEmptyList, Scalaz }
-import Scalaz.{ nel }
+import Scalaz.nel
 import execute._
 import StandardResults._
 
@@ -27,7 +27,7 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
   def execute = cellList.list.foldLeft(success: Result) { (res, cur) =>  res and cur.execute }
   /**
    * execute the row
-   * @return the Row with executed cells
+   * @return a new Row with executed cells
    */
   def executeRow = Row(cellList.map(_.executeCell))
 
