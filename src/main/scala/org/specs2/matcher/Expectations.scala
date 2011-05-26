@@ -45,8 +45,7 @@ trait Expectations {
   /** @return an Expectable */
   def createExpectable[T](t: =>T): Expectable[T] = createExpectable(t, None)
   /** @return an Expectable with a description */
-  def createExpectable[T](t: =>T, alias: String): Expectable[T] =
-    createExpectable(t, Some(Expectable.aliasDisplay(alias)))
+  def createExpectable[T](t: =>T, alias: String): Expectable[T] = createExpectable(t, Some(Expectable.aliasDisplay(alias)))
   /** @return an Expectable with a description function */
   def createExpectable[T](t: =>T, alias: String => String): Expectable[T] = createExpectable(t, Some(alias))
   /** @return an Expectable with a description function */
