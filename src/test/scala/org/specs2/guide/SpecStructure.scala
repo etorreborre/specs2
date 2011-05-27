@@ -1011,7 +1011,8 @@ If each of your specifications involves setting a specific context before and af
 own Specification trait doing this:
 
         trait DatabaseSpec extends Specification {
-          override def is = Step(startDb) ^ super.is ^ Step(cleanDb)
+          /** the map method allows to "post-process" the fragments after their creation */
+          override def map(fs: =>Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
         }
 
 The `DatabaseSpec` above will insert, in each inherited specification, a `Step` executed before all the fragments, and one
