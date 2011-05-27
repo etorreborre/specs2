@@ -26,7 +26,7 @@ trait ThrownExpectations extends Expectations {
       override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
       override def evaluate = createExpectable(value, desc)
     }
-  protected def checkFailure[T](m: MatchResult[T]) = {
+  override protected def checkFailure[T](m: MatchResult[T]) = {
     m match {
       case f @ MatchFailure(ok, ko, _, _) => throw new FailureException(f.toResult)
       case f @ MatchSkip(m, _)            => throw new SkipException(f.toResult)
@@ -39,3 +39,5 @@ trait ThrownExpectations extends Expectations {
   protected def skipped(m: String): Nothing = skipped(Skipped(m))
   protected def skipped(s: Skipped): Nothing = throw new SkipException(s)
 }
+private [specs2]
+object ThrownExpectations extends ThrownExpectations
