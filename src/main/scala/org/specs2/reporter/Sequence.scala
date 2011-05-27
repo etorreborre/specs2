@@ -40,14 +40,13 @@ trait DefaultSequence {
       res match {
         case Nil => List(FragmentSeq.create(f))
         case last :: rest => f match {
-          case Step(_) if last.fragments.exists(isExample) => FragmentSeq.create(f) :: last :: rest
+          case Step(_) if last.fragments.exists(isExampleOrStep)    => FragmentSeq.create(f) :: last :: rest
           case Example(_, _) if last.fragments.exists(isStep) => FragmentSeq.create(f) :: last :: rest
           case _ => FragmentSeq(last.fragments :+ f) :: rest
         }
       }
     }
   }
-
 }
 case class FragmentSeq(fragments: Seq[Fragment]) {
   def arguments = Fragments.create(fragments:_*).arguments

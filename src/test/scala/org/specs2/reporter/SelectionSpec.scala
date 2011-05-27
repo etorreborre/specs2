@@ -27,7 +27,7 @@ Before executing and reporting a specification, the fragments must be selected a
   be executed concurrently.                                                                                             """^
                                                                                                                         p^
   "If a specification contains steps they must be grouped before the examples"                                          ^
-    "2 consecutive steps must be in the same list"                                                                      ! steps().e1^
+    "2 consecutive steps must not be in the same list"                                                                  ! steps().e1^
     "2 consecutive examples must be in the same list"                                                                   ! steps().e2^
     "an example followed by a step must not be in the same list"                                                        ! steps().e3^
     "a step followed by an example must not be in the same list"                                                        ! steps().e4^
@@ -50,7 +50,7 @@ Before executing and reporting a specification, the fragments must be selected a
     def e1 = check { (fs: Fragments) =>
       val selected = selectSequence(fs ^ step("1"))
       val selected2 = selectSequence(fs ^ step("1") ^ step("2"))
-      selected2 must have size(selected.size)
+      selected2 must not have size(selected.size)
     }           
     def e2 = check { (fs: Fragments) =>
       val selected = selectSequence(fs ^ ex1)
@@ -72,7 +72,8 @@ Before executing and reporting a specification, the fragments must be selected a
       selectSequence(fragments).map((s: FragmentSeq) => s.fragments.toString) must contain(
       "List(SpecStart(), Text(intro), Step)",
       "List(Example(ex1), Example(ex2))",
-      "List(Step, Step)",
+      "List(Step)",
+      "List(Step)",
       "List(Example(ex1), Example(ex2), SpecEnd())").inOrder
     }
   }

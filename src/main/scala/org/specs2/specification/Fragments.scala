@@ -60,6 +60,8 @@ object Fragments {
   def isAnExample: PartialFunction[Fragment, Example] = { case e @ Example(_,_) => e }
   /** @return true if the Fragment is a step */
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
+  /** @return true if the Fragment is an Example or a Step */
+  def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
   /** @return the step if the Fragment is a Step*/
   def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_) => s }
 
