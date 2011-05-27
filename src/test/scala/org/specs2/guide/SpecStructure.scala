@@ -729,83 +729,145 @@ creates specifications using the following parameters:
 
 ### Contexts
 
-There are some situations when we want to make sure that some actions are always done before or after each example, like
-opening a database connection or deleting a file. ***specs2*** offers a support for those actions with specific traits:
+In a specification some examples are very simple and just check that a function is behaving as expected. However other examples
+can be more complex and require a more elaborate set-up of data to:
 
- * `Before`
- * `After`
- * `Around`
- * `Outside`
- * and all combinations of the above traits
+ * to create inter-related domain objects
+ * to put the environment (database, filesystem, external system) in the appropriate state
 
-Those traits work by providing an `apply` method which can be applied to the body of an example. That `apply` method will
-execute your context code before, around, or after the example code:
+And there are usually 3 difficulties in doing that:
 
-      // thanks to Scala special treatment of the apply method this call is equivalent to
-      // context.apply(example body)
-      context {
-        // example body
+ 1. _Variables isolation_: making sure that each example can be executed with its own data without being impacted by
+   the undesired side-effects of other examples
+ 1. _Before/After code_: running code before or after every example without repeating that code in the body of each example
+ 1. _Global setup/teardown code_: setting some state when this could take lots of resources, so you need to do it just once
+   before anything runs
+
+How does a library like [JUnit](http://junit.org/) solves this?
+
+ 1. _Variables isolation_: for each test run a new class instance is created so that there are new "fresh" variables for the current test case
+ 1. _Before/After code_: there are `@Before` and `@After` annotations to declare once the code that must be executed before or after each example
+ 1. _Global setup/teardown code_: there are `@BeforeClass` and `@AfterClass` annotations dedicated to that kind of code
+
+Now let's see how this can be achieved with ***specs2***.
+
+#### Variables isolation
+
+***specs2*** solves this issue simply by relying on Scala features: creating a new Trait or a case class opens a new scope
+with fresh variables!
+
+Let's see an example with a mutable specification:
+
+       class ContextSpec extends mutable.Specification {
+         "this is the first example" in new trees {
+           tree.removeNodes(2, 3) must have size(2)
+         }
+         "this is the first example" in new trees {
+           tree.removeNodes(2, 3, 4) must have size(1)
+         }
+       }
+
+       /** the `trees` context */
+       trait trees extends Scope {
+         val tree = createATreeWith4Nodes
+       }
+
+Each example of that specification gets a new instance of the `trees` trait. So it will have a brand new `tree` variable
+and even if this data is mutated by an example, other examples will be isolated from these changes.
+
+##### `Scope`
+
+You might wonder why the `trees` trait is extending the `org.specs2.specification.Scope` trait? The reason is that the body
+of an Example only accepts objects which are convertible to a `Result`. By extending `Scope` we can take advantage of
+ an implicit conversion provided by the `Specification` trait to convert our context object to a `Result`.
+
+##### With acceptance specifications
+
+The same kind of variable isolation can be achieved in acceptance specifications by using case classes:
+
+       class ContextSpec extends Specification { def is =
+         "this is the first example" ! trees().e1 ^
+         "this is the first example" ! trees().e2
+       }
+
+       case class trees() {
+         val tree = createATreeWith4Nodes
+
+         def e1 = tree.removeNodes(2, 3) must have size(2)
+         def e2 = tree.removeNodes(2, 3, 4) must have size(1)
+       }
+
+In this case we don't need to extend the `Scope` trait because the examples `e1` and `e2` already return `Result`s.
+
+##### Contexts inheritance
+
+One very cool property of using traits to define context variables is that we can use inheritance to describe more and more
+specific contexts:
+
+      trait LoggedIn extends Scope with Before {
+        val user = logInUser
+        // do something with the user
       }
 
-Now let's see in detail how to define contexts.
-
-##### Defining `Before` actions
-
-Let's say that you want to create a specific file before executing each example of your specification. You define an object
-inheriting from the `Before` trait:
-
-      object withFile extends Before {
-        def before = createFile("test")
+      trait HasAPendingOrder extends LoggedIn {
+        val order = createPendingOrder
+        // the user is logged in
+        // now do something with the user and his order
       }
 
-The `Before` trait requires you to define a `before` method defining an action to do before every call to the `apply`
-method. Then, there are many ways to use this context class. Here's one of them:
+#### Before/After code
 
-      "this is a first example where I need a file"          ! withFile(e1)
-      "and another one"                                      ! withFile(e2)
+If you want to run some code before or after each example, the `Before` and `After` traits are there to help you.
 
-      def e1 = readFile("test") must_== "success"
-      def e2 = readFile("missing") must_== "failed"
+When you make your context trait extend the `Before` trait:
 
-Or if you need "local variables" as well in your examples:
+       class ContextSpec extends mutable.Specification {
+         "this is the first example" in new trees {
+           tree.removeNodes(2, 3) must have size(2)
+         }
+         "this is the first example" in new trees {
+           tree.removeNodes(2, 3, 4) must have size(1)
+         }
+       }
 
-      "this is a first example where I need a file"          ! withFile(c().e1)
-      "and another one"                                      ! withFile(c().e2)
+       trait trees extends Scope with Before {
+         val tree = getATreeWith4NodesFromTheDatabase
+         def before = setupDB
+       }
 
-      case class c() {
-        val (okFile, koFile) = ("test", "missing")
+Then the set-up code defined in the `before` method will be executed before each example. The `After` trait works the same
+way by requiring you to define an `after` method.
 
-        def e1 = readFile(okFile) must_== "success"
-        def e2 = readFile(koFile) must_== "failed"
-      }
+Needless to say, adding `Before` code to an acceptance specification is as simple:
 
-`Before` actions can also fail for several reasons. When that happens examples are not executed and the Example result becomes
-is the result of the `before` action:
+       class ContextSpec extends Specification { def is =
+         "this is the first example" ! trees().e1 ^
+         "this is the first example" ! trees().e2
+       }
 
- * if an exception occurs during the `before` action, an `Error` is created
- * if some prerequisites are not met (not the right type of database for example), you can return a `Skipped` result to
-   abort the execution of all the examples:
+       case class trees() extends Before {
+         val tree = getATreeWith4NodesFromTheDatabase
+         def before = setupDB
 
-          def before = {
-            val db = openDatabase
-            db.databaseType must be oneOf("H2", "Oracle").orSkip("not the appropriate database type")
-          }
+         def e1 = tree.removeNodes(2, 3) must have size(2)
+         def e2 = tree.removeNodes(2, 3, 4) must have size(1)
+       }
 
-##### Defining `After` actions
+Now we have both variable isolation and non-duplication of set-up code!
 
-Actions to execute after examples are not declared very differently from `Before` ones. Just extend the `After` trait:
+But there is more to it. The next paragraphs will show how to:
 
-      object withCleanup extends After {
-        def after = deleteFile("test")
-      }
+ 1. execute the body of each example inside a specific context: `Around`
+ 1. set-up a context object (say a http query) and pass it to each example: `Outside`
+ 1. declare a `before` method for all the examples of a Specification without even having to create a context object
+ 1. create a new context object by combining existing ones
 
-      "this is a first example where a test file is deleted after use" ! withCleanup(e1)
-      "and another one"                                                ! withCleanup(e2)
+#### `Around` actions
 
-##### Defining `Around` actions
+Some examples need to be executed in a given context. For example you're testing a web application and your specification
+code needs to have your example executed inside an Http session.
 
-Another use case for "contextual" actions are actions which must executed in a given context like an Http session. In order
-to define this type of action you must extend the `Around` trait and specify an `around` function:
+In that case you can extend the `Around` trait and specify the `around` method:
 
       object http extends Around {
         def around[T <% Result](t: =>T) = openHttpSession("test") {
@@ -816,28 +878,31 @@ to define this type of action you must extend the `Around` trait and specify an 
       "this is a first example where the code executes inside a http session" ! http(e1)
       "and another one"                                                       ! http(e2)
 
-##### Defining `Outside` actions
+Note that the context here is an object instead of a trait or case class instance because in this specification we don't need
+any variable isolation. We also take the advantage that objects extending `Context` traits (like `Before` / `After` / `Around`,...).
+have an `apply` method so we can directly write `http(e1)` meaning `http.apply(e1)`.
 
-`Outside` is almost like `Around` except that you pass to the `apply` method a function to execute instead of a simple value.
-Let's see that with an example:
+#### `Outside` actions
 
-      object http extends Outside[HttpReq] {
+`Outside` is bit like `Around` except that you can get access to the application state that you're setting in your Context
+object. Let's see that with an example (with a mutable Specification for a change):
+
+      object http extends Outside[HttpReq] with Scope {
         // prepare a valid HttpRequest
         def outside: HttpReq = createRequest
       }
 
       // use the http request in each example
-      "this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
-      "and another one"                                                     ! http((request: HttpReq) => success)
+      "this is a first example where the code executes uses a http request" in http { (request: HttpReq) =>
+        success
+      }
+      "and another one" in http { (request: HttpReq) =>
+        success
+      }
 
-##### Defining `AroundOutside` actions
+##### `AroundOutside` actions
 
-As the name indicates `AroundOutside` is just a combination of both `Around` and `Outside` traits to allow you to:
-
- * execute some code "around" the example
- * create a context object and pass it to the example
-
-Like this:
+We can also combine both the `Around` and the `Outside` behaviors with the `AroundOutside` trait:
 
       object http extends AroundOutside[HttpReq] {
         // create a context
@@ -853,72 +918,13 @@ Like this:
       "this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
       "and another one"                                                     ! http((request: HttpReq) => success)
 
-##### Composing contexts
+#### Without creating a context object: `BeforeExample`
 
-Note that you can also compose contexts in order to reuse them to build more complex scenarios:
+When you just need to have set-up code executed before each example and if you don't need to have variable isolation, you
+can simply use the `BeforeExample` trait.
 
-    // Contexts can be composed only if they are of the same type:
-    // Before with Before, After with After,...
-    case class withFile extends Before {
-      def before = createFile("test")
-    }
-    case class withDatabase extends Before {
-      def before = openDatabase("test")
-    }
-    val init = withFile() compose withDatabase()
-
-    "Do something on the full system"                   ! init(success)
-
-##### Using a context for each Example
-
-The context creation which has been described up to now is very flexible and allows to switch contexts and compose between
-different examples. Yet, there are specifications where the context need to be set similarly for each Example. An easy way
-around that is to use the `BeforeEach` trait. This is just a Before context, with an additional `apply` method to apply this
-context to each example:
-
-      class SpecificationWithBefore extends Specification {
-
-        object withBefore extends BeforeEach {
-          def before = cleanupDatabase
-        }
-        def is = withBefore(spec)
-
-        def spec =
-        "this should"     ^
-          "ex1" ! success ^
-          "ex2" ! succes
-      }
-
-This way of doing is especially useful if you define an abstract Specification meant to be reused across the project, with
-the same setup/teardown procedure at the beginning/end of the specification with a `before` method executed before each example:
-
-      class ProjectSpecification extends Specification {
-        // always clean up the database before an example
-        object cleanUpDb extends BeforeEach {
-          def before = cleanupDatabase
-        }
-        def is = Step(initialCleanup) ^ cleanUpDb(spec) ^ Step(finalCleanup)
-        def spec: Fragments
-      }
-
-Of course there are similar traits for after and around setups:
-
- * `AfterEach`
- * `BeforeAfterEach`
- * `AroundEach`
- * `BeforeAfterAroundEach`
-
-##### Using a context for each Example in a mutable specification
-
-Alas the `BeforeEach` trait is not usable with a mutable specification because of the way that examples are added to the
-specification as soon as created. In order to avoid repetition in that case there are additional traits with you can use:
-
- * `BeforeExample`
- * `AfterExample`
- * `AroundExample`
- * `BeforeAfterAroundExample`
-
-The `BeforeExample` trait requires you to define a `before` method exactly like the one you define in the `Before` trait:
+The `BeforeExample` trait allows you to define a `before` method exactly like the one you define in the `Before` trait and
+apply it to all the examples of the specification:
 
         class Specification extends BeforeExample {
           def before = cleanDatabase
@@ -932,11 +938,47 @@ The `BeforeExample` trait requires you to define a `before` method exactly like 
 As you can guess, the `AfterExample`, `AroundExample`,... traits work similarly by requiring the corresponding `after`, `around`
 ,... methods to be defined.
 
-Note that if you like this way of declaring the setup methods you can also use it in a non-mutable Specification.
+#### Composing contexts
 
-##### Steps and Actions
+##### Combinations
 
-Some setup actions are very time consuming and should be executed only once for the whole specification. This can be achieved
+***specs2*** contexts can be combined in several ways. When you want to define both `Before` and `After` behavior, you can
+do it by simply extending those 2 traits:
+
+    case class withFile extends Before with After {
+      def before = createFile("test")
+      def after  = deleteFile("test")
+    }
+
+But, as we've seen with the `AroundOutside` example, ***specs2*** likes to help save keystrokes so you can directly extend
+the `BeforeAfter` trait:
+
+    case class withFile extends BeforeAfter {
+      def before = createFile("test")
+      def after  = deleteFile("test")
+    }
+
+Similarly you can use `BeforeAfterAround` instead of `Before with After with Around`.
+
+##### Composition
+
+Contexts can be also be _composed_ but only if they are of the same type, `Before` with `Before`, `After` with `After`,...
+
+    case class withFile extends Before {
+      def before = createFile("test")
+    }
+    case class withDatabase extends Before {
+      def before = openDatabase("test")
+    }
+    val init = withFile() compose withDatabase()
+
+    "Do something on the full system" ! init(success)
+
+#### Steps and Actions
+
+##### Steps
+
+Some set-up actions are very time-consuming and should be executed only once for the whole specification. This can be achieved
 by inserting some silent `Step`s in between fragments:
 
     class DatabaseSpec extends Specification { def is =
@@ -951,7 +993,9 @@ by inserting some silent `Step`s in between fragments:
 The examples are (by default) executed concurrently between the 2 steps and the "result" of those steps will never be
 reported unless if there is a failure.
 
-`Step` are very useful because they will really be executed sequentially, before anything else, but if you need to execute
+##### Actions
+
+`Step`s are very useful because they will really be executed sequentially, before anything else, but if you need to execute
 some actions which are completely independent of the rest of the specification, there is an equivalent to `Step` adequately
 called `Action`:
 
@@ -963,59 +1007,37 @@ called `Action`:
         "example 2"                                                    ! success ^
                                                                        Step(closeDatabase)^
                                                                        end
-##### In _unit_ specifications
+    }
 
-If you want to inline the example code with the text you'll need another way to manage contexts. If you just need to setup
-data the simplest thing to do is to create a trait holding this data for you:
+Of course, `Step`s and `Action`s are not the privilege of acceptance specifications:
 
-        // this needs to be a Scope to be the body of an Example because there is an implicit conversion from Scope
-        // to Success and Success is an accepted `Result` for an Example
-        trait context extends Scope {
-          val data: Data = createData
-        }
+    class DatabaseSpec extends mutable.Specification {
 
-Then you instantiate that trait for each example:
+      textFragment("This specification opens a database and execute some tests")
+      step(openDatabase)
 
-        "this example uses some data" in new context {
-           data must beReady
-        }
+      "example 1" in success
 
-This way, you get access to the context scope and the data variable, but also, because a new trait is instantiated all the
-time, you can easily add any type of "before" functionality that you need.
+      textFragment("add 1 to the number of specification executions")
+      action(db.executionsNb += 1)
 
-If you need some "after" functionality, the syntax gets a bit heavier. You have 2 choices, the first one is to extend After:
+      "example 2" in success
+      step(closeDatabase)
+    }
 
-        trait context extends Scope with After {
-          val data: Data = createData
-          def after = cleanData
-        }
 
-        "this example uses some data" in new context {
-           // the expectation call has to be in the 'apply' method of 'this' so that the after method will be called
-           this { data must beReady }
-        }
+#### Generic specification with setup and teardown steps
 
-The other option is to use the After implicit which is available on any `Result`:
+There may still be some duplication of code if you have to use the same kind of set-up procedure for several specifications.
 
-        trait context extends Scope {
-          val data: Data = createData
-        }
-
-        "this example uses some data" in new context {
-          data must beReady        
-        }.after(cleanData)
-
-##### Generic specification with setup and teardown steps
-
-If each of your specifications involves setting a specific context before and after all the examples, you can define your
-own Specification trait doing this:
+If that's the case you can define your own Specification trait doing the job:
 
         trait DatabaseSpec extends Specification {
           /** the map method allows to "post-process" the fragments after their creation */
           override def map(fs: =>Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
         }
 
-The `DatabaseSpec` above will insert, in each inherited specification, a `Step` executed before all the fragments, and one
+The `DatabaseSpec` above will insert, in each inherited specification, one `Step` executed before all the fragments, and one
 executed after all of them.
 
 ### Other unit specification methods
@@ -1026,9 +1048,11 @@ Other methods can be used to create fragments in a unit specification:
  * <code>>></code> to create an Example or a group of Examples (with no appended text)
  * `"My spec title".title` to give a title to the Specification
  * `args(...)` to create arguments for the specification
+ * `textFragment(s)` to create a `Text` fragment
  * `step(s)` to create a `Step`
  * `action(a)` to create an `Action`
  * `link("how" ~ ("to do hello world", new HelloWorldSpec))` to create a link to another specification
+ * `see(new HelloWorldSpec)` to add a link to another specification without including its fragments for execution
  * `include(new HelloWorldSpec)` to include another specification
 
 To make things more concrete here is a full example:
@@ -1088,6 +1112,8 @@ To make things more concrete here is a full example:
           "contain 7 characters" in system2().e1
         }
         // you can add links to other specifications with `link`
+        // they will be executed when this one is executed. If you don't want this to happen
+        // you can use `see` instead of `link`
         link("how" ~ ("to do hello world", new HelloWorldSpec))
         // you can include other specifications with `include`
         include(new HelloWorldSpec)
