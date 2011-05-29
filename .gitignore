@@ -1,3 +1,7 @@
+project-old/lib_managed/
+project-old/boot/
+project-old/plugins/lib_managed/
+project-old/plugins/src_managed/
 project/lib_managed/
 project/boot/
 project/plugins/lib_managed/

@@ -46,8 +46,6 @@ initialCommands in console := "import org.specs2._"
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
 publishTo := {
- if (version.toString.endsWith("SNAPSHOT")) 
+//   Some("releases" at "http://nexus-direct.scala-tools.org/content/repositories/releases/")
    Some("snapshots" at "http://nexus-direct.scala-tools.org/content/repositories/snapshots/") 
- else 
-   Some("releases" at "http://nexus-direct.scala-tools.org/content/repositories/releases/")
 }
