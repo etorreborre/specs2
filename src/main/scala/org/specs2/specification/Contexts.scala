@@ -45,6 +45,9 @@ trait Contexts {
       def after = action
     }.apply(t)
   }
+
+  protected[specs2] val defaultContext = new Context { def apply[T <% Result](a: =>T): Result = a }
+
 }
 
 object Contexts extends Contexts

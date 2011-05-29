@@ -5,8 +5,8 @@ import control._
 import time._
 import execute._
 import matcher._
-import specification.{SpecificationStructure, FormattingFragments, AutoExamples}
 import main.ArgumentsShortcuts
+import specification._
 
 trait Specification extends SpecificationStructure with SpecificationFeatures {
   def is = specFragments
@@ -24,4 +24,11 @@ trait SpecificationFeatures extends FragmentsBuilder
    with AutoExamples
    with TimeConversions
    with PendingUntilFixed
-   with Debug
+   with Contexts
+   with Debug {
+  /** transform a context to a result to allow the implicit passing of a context to each example */
+  implicit def contextToResult[T](t: MatchResult[T])(implicit context: Context = defaultContext): Result = context(asResult(t))
+  /** use an available outside context to transform a function returning a MatchResult into a result */
+  implicit def outsideFunctionToResult[T, S](implicit o: Outside[T]) = (f: T => MatchResult[S]) => { o((t1:T) => f(t1).toResult) }
+
+}

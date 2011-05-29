@@ -9,6 +9,7 @@ class SpecStructure extends Specification { def is =
                                                                                                                         """
 ### Presentation
 
+ruc
 In this chapter you will learn how to:
 
  * declare examples
@@ -214,23 +215,6 @@ A few things to remember about this feature:
          // outputs: 'List(1, 2)' contains '1'
          descFromExpectations ^
          { List(1, 2) must contain(1) }
-
-#### Using the text of the Example
-
-It is possible to use the text of an example to extract meaningful values, use them in the example body and avoid
-repeating oneself:
-
-    "Bob should pay 12"   ! e1
-
-    val toPay = Map("Bob"->"12", "Bill"->"10")           // a "database" of expected values
-    val ShouldPay = "(.*) should pay (\\d+)".r           // a regular expression for extracting the name and price
-
-    def e1 = (s: String) => {
-      val ShouldPay(name, price) = s                     // extracting the values
-      toPay(name) must_== price                          // using them for the expectation
-    }
-
-In that case the argument passed to the `!` method is a function taking a String and returning a Result.
 
 #### Given / When / Then
 
@@ -644,7 +628,6 @@ Otherwise, if you want to include several specifications at once you can use the
 The effect of doing so is that all the fragments of the children specification will be inlined in the parent one. This
 is exactly what is done in this page of the user guide, but with a twist
 
-    include(xonly, exampleTextExtraction)        ^
     include(xonly, new GivenWhenThenSpec)        ^
     include(xonly, exampleTextIndentation)       ^
     include(xonly, resetTextIndentation)         ^
@@ -860,6 +843,7 @@ But there is more to it. The next paragraphs will show how to:
  1. execute the body of each example inside a specific context: `Around`
  1. set-up a context object (say a http query) and pass it to each example: `Outside`
  1. declare a `before` method for all the examples of a Specification without even having to create a context object
+ 1. use an implicit context to avoid duplication
  1. create a new context object by combining existing ones
 
 #### `Around` actions
@@ -926,7 +910,7 @@ can simply use the `BeforeExample` trait.
 The `BeforeExample` trait allows you to define a `before` method exactly like the one you define in the `Before` trait and
 apply it to all the examples of the specification:
 
-        class Specification extends BeforeExample {
+        class MySpecification extends mutable.Specification with BeforeExample {
           def before = cleanDatabase
 
           "This is a specification where the database is cleaned up before each example" >> {
@@ -935,8 +919,34 @@ apply it to all the examples of the specification:
           }
         }
 
-As you can guess, the `AfterExample`, `AroundExample`,... traits work similarly by requiring the corresponding `after`, `around`
-,... methods to be defined.
+As you can guess, the `AfterExample`, `AroundExample`,... traits work similarly by requiring the corresponding `after`,
+`around`,... methods to be defined.
+
+#### Implicit context
+
+The `BeforeExample` trait is a nice shortcut to avoid the creation of a context object, but there is another possibility
+to avoid the repetition of the context name for each example. If your specification is:
+
+        class ContextSpec extends mutable.Specification {
+          object myContext = new Before { def before = cleanUp }
+
+          "This is a specification where the database is cleaned up before each example" >> {
+            "first example" in myContext { 1 must_== 1 }
+            "second example" in myContext { 1 must_== 1 }
+          }
+        }
+
+You can simply mark your context object as `implicit` and it will be automatically passed to each example:
+
+        class ContextSpec extends mutable.Specification {
+          implicit object myContext = new Before { def before = cleanUp }
+
+          "This is a specification where the database is cleaned up before each example" >> {
+            "first example"  in { 1 must_== 1 }
+            "second example" in { 1 must_== 1 }
+          }
+        }
+
 
 #### Composing contexts
 
@@ -1218,37 +1228,12 @@ For that specification above:
  - - -
                                                                                                                         """^
                                                                                                                         br^
-  include(xonly, exampleTextExtraction)                                                                                 ^
   include(xonly, new GivenWhenThenSpec)                                                                                 ^
   include(xonly, exampleTextIndentation)                                                                                ^
   include(xonly, resetTextIndentation)                                                                                  ^
   include(xonly, pTextIndentation)                                                                                      ^
   include(xonly, databaseSpec)                                                                                          ^
                                                                                                                         end
-
-  val exampleTextExtraction = new Specification { def is =
-    "Text extraction".title     ^
-    "Bob should pay 12"         ! e1
-    "given the name: ${eric}, then the age is ${18}" ! so { case (name: String, age: String) =>
-      age.toInt must_== 18
-    }
-    "given the name: ${eric}, then the age is ${18}" ! new GivenThen {
-      def extract(text: String) = {
-        val (name, age) = extract2(text)
-        age.toInt must_== 18
-      }
-    }
-
-    val toPay = Map("Bob"->"12", "Bill"->"10")           // a "database" of expected values
-    val ShouldPay = "(.*) should pay (\\d+)".r           // a regular expression for extracting the name and price
-
-    def e1 = (s: String) => {
-      val ShouldPay(name, price) = s                     // extracting the values
-      toPay(name) must_== price                          // using them for the expectation
-    }
-
-
-  }
 
   val exampleTextIndentation = new Specification { def is =
     "Text indentation".title              ^

@@ -100,6 +100,12 @@ class ContextSpec extends Specification with FragmentExecution { def is =
     "that action will execute and return a result"                                                                      ! c().e12^
     "if it executes ok, nothing is printed, it is a silent Success"                                                     ! c().e13^
     "otherwise, it is reported as an Error"                                                                             ! c().e14^
+                                                                                                                        p^
+  "A context can be passed applied to many fragments"                                                                   ^
+    "for an acceptance spec"                                                                                            ! applyEach().e1^
+    "for a mutable spec"                                                                                                ! applyEach().e2^
+    "for an outside context and an acceptance spec"                                                                     ! applyEach().e3^
+    "for an outside context and a mutable spec"                                                                         ! applyEach().e4^
                                                                                                                         end
   implicit val args = main.Arguments()
   case class before() extends FragmentsExecution {
@@ -149,6 +155,36 @@ class ContextSpec extends Specification with FragmentExecution { def is =
                    prints("before", "before2", "around", "around2", "e1", "after", "after2")
   }
 
+  case class applyEach() extends FragmentsExecution {
+    def e1 = {
+      val spec = new Specification {
+        implicit def before1 = before
+        def is = "e1" ! { 1 must_== 1 }
+      }
+      executing(spec.content).prints("before")
+    }
+    def e2 = {
+      val spec = new mutable.Specification {
+        implicit def before1 = before
+        "e1" in { 1 must_== 1 }
+      }
+      executing(spec.content).prints("before")
+    }
+    def e3 = {
+      val spec = new Specification {
+        implicit def outside1 = outside
+        def is = "e1" ! { (s: String) => s must_== s }
+      }
+      executing(spec.content).prints("outside")
+    }
+    def e4 = {
+      val spec = new mutable.Specification {
+        implicit def outside1 = outside
+        "e1" in { (s: String) => s must_== s }
+      }
+      executing(spec.content).prints("outside")
+    }
+  }
 
   class FragmentsExecution extends MockOutput with ContextData {
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
@@ -209,7 +245,10 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def failingFirstThenEx1 = Step { error("error"); 1 } ^ ex1
 }
 trait ContextsForFragments extends MockOutput {
-  object before extends Before {
+  object before extends Before with Apply {
+	  def before = println("before")
+  }
+  object beforeEach extends BeforeEach {
 	  def before = println("before")
   }
   object before2 extends Before {

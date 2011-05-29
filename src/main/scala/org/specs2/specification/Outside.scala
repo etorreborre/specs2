@@ -26,13 +26,11 @@ trait Outside[T] { outer =>
  *
  * @see Example to understand why the type T must <% Result
  */
-trait AroundOutside[T] { outer =>
-  /** create a new context object */
-  def outside: T
+trait AroundOutside[T] extends Outside[T] { outer =>
   /** something can be done before and after the whole execution */
   def around[R <% Result](a: =>R): Result
 
-  def apply[R <% Result](a: T => R) = {
+  override def apply[R <% Result](a: T => R) = {
     around(ResultExecution.execute(outside)(a))
   }
 }

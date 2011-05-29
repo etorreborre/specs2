@@ -75,7 +75,6 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   class SpecTitle(name: String) {
     def title = new Fragments().specTitleIs(SpecStart(SpecName(name)))
   }
-
   /**
    * Example creation
    * @return an Example description from a string, to create a full Example once the body is defined
@@ -83,10 +82,6 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s)
   /** transient class to hold an example description before creating a full Example */
   class ExampleDesc(s: String) {
-    /** @return an Example, using a function taking the example description as an input */
-    def ![T <% Result](function: String => T): Example = exampleFactory.newExample(s, function)
-    /** @return an Example, using a match */
-	  def ![T](t: =>MatchResult[T]): Example = exampleFactory.newExample(s, t)
     /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
 	  def ![T <% Result](t: =>T): Example = exampleFactory.newExample(s, t)
     /** @return an Example which a function using values extracted from the text */
