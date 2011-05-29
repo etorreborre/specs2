@@ -22,7 +22,7 @@ trait LazyParameters {
 object LazyParameters extends LazyParameters
 
 /** class holding a value to be evaluated lazily */
-class LazyParameter[T](private val v: () => T) {
+class LazyParameter[+T](private val v: () => T) {
   private lazy val evaluated = v.apply()
   /**
    * @return the evaluated value. This method is private to specs2 to avoid the implicit to leak to client
