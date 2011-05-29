@@ -44,13 +44,12 @@ How to create an Example
 ========================                                                                                                """^
                                                                                                                         br^
   "An example is simply created with `string ! e1` where e1 returns a `Result`"                                         ! ex().e1^
-  "An example can also use its own description to compute the Result to return"                                         ! ex().e2^
-  "An example can have its description marked as `code` for nice html rendering"                                        ! ex().e3^
-  "An example can use a partial function to extract values from its text"                                               ! ex().e4^
-    "the description must be stripped out of value markers"                                                             ! ex().e5^
+  "An example can have its description marked as `code` for nice html rendering"                                        ! ex().e2^
+  "An example can use a partial function to extract values from its text"                                               ! ex().e3^
+    "the description must be stripped out of value markers"                                                             ! ex().e4^
                                                                                                                         p^
-  "An Error in the Example body will fail the example creation"                                                         ! ex().e6^
-     "except if it is an AssertionError"                                                                                ! ex().e7^
+  "An Error in the Example body will fail the example creation"                                                         ! ex().e5^
+     "except if it is an AssertionError"                                                                                ! ex().e6^
                                                                                                                         p^
   "An example has a `matches` method to match its description against a regexp"                                         ^
     "it returns true if there is a match"                                                                               ! ex().matches1^
@@ -93,24 +92,17 @@ Other elements
   case class ex() {
     def e1 = success
 
-    def e2 = ("name: eric, age: 18" ! function).body().isSuccess
-    def function = (s: String) => {
-      val Exp = "name: (\\w*), age: (\\d*)".r
-      val Exp(name, age) = s
-      (name must_== "eric") and (age must_== "18")
-    }
-
-    def e3 = Example(CodeMarkup("a == b"), success).desc.toHtml must startWith("<code")
+    def e2 = Example(CodeMarkup("a == b"), success).desc.toHtml must startWith("<code")
 
     val soExample = "given the name: ${eric}, then the age is ${18}" ! so {
       case (name: String, age: String) => age.toInt must_== 18
     }
-    def e4 = soExample.body() must beSuccessful
-    def e5 = soExample.desc.toString must_== "given the name: eric, then the age is 18"
+    def e3 = soExample.body() must beSuccessful
+    def e4 = soExample.desc.toString must_== "given the name: eric, then the age is 18"
 
     def execute = FragmentExecution.executeFragment(args())
-    def e6 = execute("example" ! { throw new LinkageError(); success }).toString must contain("Fragment evaluation error")
-    def e7 = execute("example" ! { throw new AssertionError(); success }).toString must not contain("Fragment evaluation error")
+    def e5 = execute("example" ! { throw new LinkageError(); success }).toString must contain("Fragment evaluation error")
+    def e6 = execute("example" ! { throw new AssertionError(); success }).toString must not contain("Fragment evaluation error")
 
     def matches1 = ("Eric" ! success).matches("E.*")
     def matches2 = ("Eric\nT." ! success).matches("E.*T.*")
