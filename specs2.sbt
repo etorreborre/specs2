@@ -37,6 +37,12 @@ pollInterval := 1000
 
 testFrameworks += new TestFramework("org.specs2.runner.SpecsFramework")
 
+testOptions := Seq(Tests.Filter(s =>
+  Seq("Spec", "Suite", "Unit", "all").exists(s.endsWith(_)) &&
+    ! s.endsWith("FeaturesSpec") ||
+    s.contains("UserGuide") || 
+    s.matches("org.specs2.guide.*")))
+
 /** Console */
 initialCommands in console := "import org.specs2._"
 
@@ -45,7 +51,8 @@ initialCommands in console := "import org.specs2._"
 /** Publishing */
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
-publishTo := {
-//   Some("releases" at "http://nexus-direct.scala-tools.org/content/repositories/releases/")
-   Some("snapshots" at "http://nexus-direct.scala-tools.org/content/repositories/snapshots/") 
+publishTo <<= (version) { version: String =>
+  val nexus = "http://nexus-direct.scala-tools.org/content/repositories/"
+  if (version.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus+"snapshots/") 
+  else                                   Some("releases" at nexus+"releases/")
 }
