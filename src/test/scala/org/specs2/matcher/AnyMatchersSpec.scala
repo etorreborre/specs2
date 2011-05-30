@@ -32,6 +32,11 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is =
   { aValue must be(aValue) }                                                                                            ^
   { "a" must not be("b") }                                                                                              ^
                                                                                                                         p^
+  "be_==~ checks the equality of 2 objects, up to an implicit conversion"                                               ^
+  { 1L must be_==~(1) }                                                                                                 ^
+  { 2L must not be_==~(1) }                                                                                             ^
+  { (2L must be_==~(1)).message must_== "'2' is not equal to '1' [original object is: '1']" }                           ^
+                                                                                                                        p^
   "beTrue matches true values"                                                                                          ^
   { true must beTrue }                                                                                                  ^
   { (false must beTrue).message must_==  "the value is false" }                                                         ^
@@ -94,9 +99,9 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is =
   { classOf[OutputStream] must beAssignableFrom[FileOutputStream] }                                                     ^
                                                                                                                         p^
   "beAnInstanceOf checks if an object is an instance of a given type"                                                   ^
-    { type1 must beAnInstanceOf[Type1] }                                                                                ^
-    { type1 must not be anInstanceOf[Type2] }                                                                           ^
-    { (type1 must beAnInstanceOf[Type2]).message must_== "'type1' is not an instance of 'org.specs2.matcher.Type2'" }   ^
+  { type1 must beAnInstanceOf[Type1] }                                                                                  ^
+  { type1 must not be anInstanceOf[Type2] }                                                                             ^
+  { (type1 must beAnInstanceOf[Type2]).message must_== "'type1' is not an instance of 'org.specs2.matcher.Type2'" }     ^
                                                                                                                         end
                                                                                           
   def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 

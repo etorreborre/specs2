@@ -37,6 +37,10 @@ trait AnyBaseMatchers {
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
   /** matches if a == b */
   def beTypedEqualTo[T](t: =>T) = new BeTypedEqualTo(t)
+  /** matches if a == b after an implicit conversion */
+  def be_==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = new BeTypedEqualTo(convert(s)).
+    adapt(identity, (_:String)+" [original object is: "+q(s)+"]", (_:String)+" [original object is: "+q(s)+"]")
+
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not
   
@@ -186,6 +190,7 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
     def be_!=(t: T) = result(outer.be_!=(t))
     def be_===(t: T) = result(outer.be_===(t))
     def be_!==(t: T) = result(outer.be_!==(t))
+    def be_==~[S](s: =>S)(implicit convert: S => T) = result(outer.be_==~(s))
     def equalTo(t: T) = result(outer.be_==(t))
     def asNullAs[T](a: =>T) = result(outer.beAsNullAs(a))
     def oneOf(t: T*) = result(beOneOf(t:_*))
