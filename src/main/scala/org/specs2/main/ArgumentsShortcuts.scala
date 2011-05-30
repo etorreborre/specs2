@@ -3,6 +3,7 @@ package main
 
 import control.{NoStackTraceFilter, IncludeExcludeStackTraceFilter, DefaultStackTraceFilter}
 import text.AnsiColors
+import reporter.Colors
 
 /**
  * This trait provides shortcuts for frequently used arguments
@@ -38,9 +39,9 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def nocolor: Arguments = args(color = false)
   /**
-   * shortcut to set new AnsiColors
+   * shortcut to set new Colors
    */
-  def colors(c: AnsiColors): Arguments = args(colors = c)
+  def colors(c: Colors): Arguments = args(colors = c)
   /**
    * shortcut to not executing the text and avoid automatic indentation
    */

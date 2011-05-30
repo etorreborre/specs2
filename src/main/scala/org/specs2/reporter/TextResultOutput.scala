@@ -19,10 +19,10 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
     printLines(message)
   
   def printFailure(message: String)(implicit args: Arguments) = 
-    printLines(args.colors.color(message, args.colors.yellow, args.color))
+    printLines(args.colors.failure(message, args.color))
   
   def printError(message: String)(implicit args: Arguments) = 
-    printLines(args.colors.color(message, args.colors.red, args.color))
+    printLines(args.colors.error(message, args.color))
   
   def printSkipped(message: String)(implicit args: Arguments) = 
     printLines(message)
@@ -37,7 +37,7 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
    * print some text, splitting it on several lines
    */
   def printMessage(message: String)(implicit args: Arguments) = 
-    printLines(args.colors.color(message, args.colors.white, args.color))
+    printLines(args.colors.text(message, args.color))
   
   def printLines(message: String)(implicit args: Arguments) = {
     val splitted = message.split("\n")

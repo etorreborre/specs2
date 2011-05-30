@@ -46,7 +46,7 @@ From inside a specification, the available arguments are the following:
  `stopOnFail`    | false                                   | skip all examples after the first failure or error
  `failtrace`     | false                                   | report the stacktrace for failures
  `color`         | true                                    | use colors in the output (`nocolor` can also be used on the command line)
- `colors`        | `org.specs2.text.AnsiColors`            | define alternative colors everywhere ansi colors are used (replace yellow with magenta for example)
+ `colors`        | `org.specs2.reporter.SmartColors`       | define alternative colors (replace failureColor from being yellow to magenta for example)
  `noindent`      | false                                   | don't indent automatically text and examples
  `showtimes`     | false                                   | show individual execution times
  `sequential`    | false                                   | don't execute examples concurrently
@@ -139,6 +139,7 @@ On the command line you can pass the following arguments:
  `skipall`        | boolean                 |                                                                          |
  `failtrace`      | boolean                 |                                                                          |
  `color`          | boolean                 |                                                                          |
+ `colors`         | map                     | e.g. text:be, failure:m (see the Colors section)                         |
  `noindent`       | boolean                 |                                                                          |
  `showtimes`      | boolean                 |                                                                          |
  `sequential`     | boolean                 |                                                                          |
@@ -149,7 +150,7 @@ On the command line you can pass the following arguments:
  `fullstacktrace` | boolean                 |                                                                          |
  `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns  |
 
-_[`regexp` is a Java regular expression, csv a list of comma-separated values]_
+_[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 
 
 #### From system properties
@@ -253,10 +254,55 @@ Any `FilesRunner` object can also be invoked by sbt, but you need to specify `co
 
 ##### Colors
 
-You can change the color scheme that's being used on the console by implementing your own `org.specs2.text.AnsiColors`
+*From system properties*
+
+The so-called "SmartColors" argument will check if there are colors defined as specs2 properties. If so, the colors  used
+to output text in the Console will be extracted from those properties:
+
+e.g. `-Dspecs2.color.failure=m` will use magenta for failures.
+
+The property names and default values are:
+
+Property        | Default value |
+--------------- |  ------------ |
+`color.text`    |  white        |
+`color.success` |  green        |
+`color.failure` |  yellow       |
+`color.error`   |  red          |
+`color.pending` |  blue         |
+`color.skipped` |  cyan         |
+
+All the available colors are listed here, with their corresponding abbreviation which you can use to refer to them as well:
+
+ Color   | Abbreviation |
+ ------  | ------------ |
+ white   | w            |
+ green   | g            |
+ yellow  | y            |
+ red     | r            |
+ blue    | be           |
+ cyan    | c            |
+ black   | bk           |
+ magenta | m            |
+
+
+*From command-line arguments*
+
+It is also possible to set colors by passing the `colors` argument. This argument must be a list of `key:value` pairs (comma-separated)
+where keys are taken from the property names above without the `color.` prefix and values from the abbreviated color names.
+
+For example you can pass on the command line:
+
+ colors text:blue,failure:magenta
+
+ to have the text colored in blue and the failures in Magenta.
+
+*Through the API*
+
+Finally you can change the color scheme that's being used on the console by implementing your own `org.specs2.reporter.Colors`
 trait. For example if you want to output magenta everywhere yellow is used you can write:
 
-      object MyColors = new org.specs2.text.AnsiColors { override val yellow = magenta }
+      object MyColors = new org.specs2.reporter.Colors { override val failureColor = magenta }
 
       class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
          // the failure message will be magenta

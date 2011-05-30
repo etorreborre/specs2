@@ -179,21 +179,21 @@ trait TextPrinter {
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       val n = end.name
       out.printLine(" ")
-      out.printLine(args.colors.color("Total for specification" + (if (n.name.isEmpty) n.name.trim else " "+n.name.trim), args.colors.blue, args.color))
+      out.printLine(args.colors.stats("Total for specification" + (if (n.name.isEmpty) n.name.trim else " "+n.name.trim), args.color))
       printStats(stats)
       out.printLine(" ")
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
 
       val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer, specStart, specEnd) = stats
-      out.printLine(args.colors.color("Finished in " + timer.time, args.colors.blue, args.color))
-      out.printLine(args.colors.color(
+      out.printLine(args.colors.stats("Finished in " + timer.time, args.color))
+      out.printLine(args.colors.stats(
           Seq(Some(examples qty "example"), 
               if (expectations != examples) Some(expectations qty "expectation") else None,
               Some(failures qty "failure"), 
               Some(errors qty "error"),
               pending optQty "pending", 
-              skipped optInvariantQty "skipped").flatten.mkString(", "), args.colors.blue, args.color))
+              skipped optInvariantQty "skipped").flatten.mkString(", "), args.color))
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {

@@ -33,11 +33,11 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
       color("*", blue, args.color)
     else {
       this match {
-    	  case Success(_)          => args.colors.color("+", args.colors.green, args.color)
-    	  case Failure(_, _, _, _) => args.colors.color("x", args.colors.yellow, args.color)
-    	  case Error(_, _)         => args.colors.color("!", args.colors.red, args.color)
-    	  case Pending(_)          => args.colors.color("*", args.colors.blue, args.color)
-    	  case Skipped(_, _)       => args.colors.color("o", args.colors.cyan, args.color)
+    	  case Success(_)          => args.colors.success("+", args.color)
+    	  case Failure(_, _, _, _) => args.colors.failure("x", args.color)
+    	  case Error(_, _)         => args.colors.error("!", args.color)
+    	  case Pending(_)          => args.colors.pending("*", args.color)
+    	  case Skipped(_, _)       => args.colors.skipped("o", args.color)
       }
     }
   }

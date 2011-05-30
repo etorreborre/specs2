@@ -34,3 +34,4 @@ trait AnsiColors {
   override def toString = all.mkString("AnsiColors(",",",")")
 }
 object AnsiColors extends AnsiColors
+

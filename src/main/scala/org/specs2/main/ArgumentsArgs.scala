@@ -2,7 +2,7 @@ package org.specs2
 package main
 
 import control._
-import text.AnsiColors
+import reporter.Colors
 
 /**
  * This trait provides shortcuts to create Arguments instances
@@ -19,7 +19,7 @@ trait ArgumentsArgs extends ArgProperties {
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    colors:        ArgProperty[AnsiColors]        = ArgProperty[AnsiColors](),
+    colors:        ArgProperty[Colors]            = ArgProperty[Colors](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showtimes:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     offset:        ArgProperty[Int]               = ArgProperty[Int](),

@@ -47,7 +47,9 @@ class TextPrinterSpec extends Specification { def is =
       "pending status is blue"                                                                                          ! color().e5^
       "skipped status is cyan"                                                                                          ! color().e6^
       "stats are blue"                                                                                                  ! color().e7^
-      "if the colors argument defines new colors, they are used to output text"                                         ! color().e8^
+      "colors can be redefined by passing a Colors object"                                                              ! color().e8^
+      "colors can be redefined by passing system properties"                                                            ! color().e9^
+      "colors can be redefined by passing command-line args"                                                            ! color().e10^
                                                                                                                         p^
     "when doing equals comparisons, differences are shown"                                                              ^
       "the differences show up after the failure message"                                                               ! diffs().e1^
@@ -132,10 +134,14 @@ class TextPrinterSpec extends Specification { def is =
     def e5 = printWithColors(pending6) must containMatch(blue.remove("\033["))
     def e6 = printWithColors(skipped5) must containMatch(cyan.remove("\033["))
     def e7 = printWithColors(t1) must containMatch(blue.remove("\033["))
-    def e8 = {
-      val myColors = new text.AnsiColors { override val yellow = magenta }
-      printWithColors(colors(myColors) ^ fail3) must containMatch("35m")
-    }
+
+    def failureMustBeMagenta(cs: Colors) = printWithColors(colors(cs) ^ fail3) must containMatch("35m")
+
+    def e8  = failureMustBeMagenta(new Colors { override val failureColor = magenta })
+    def e9  = failureMustBeMagenta(SmartColors.fromArgs("failure:m"))
+    def e10 = failureMustBeMagenta(new SmartColors {
+      override lazy val properties = Map("color.failure"->"magenta")
+    })
   }
   case class diffs() {
     def test = bigString1 must_== bigString2

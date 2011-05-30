@@ -92,6 +92,8 @@ You can see on the examples above several things which are applicable to all mat
 
 An non-exhaustive list of those matchers:
 
+ * `be_===` for checking if `a == b` where a and b are expected to have the same type by the compiler
+ * `be_==~` for checking if `(a:A) == (b:A)` when there is an implicit conversion from B (the type of b) to A (the type of a)
  * `beTheSameAs` for checking if `a eq b` (`a must be(b)` also works)
  * `beTrue, beFalse`
  * `beLike { case exp => ok }`: to check if an object is like a given pattern (`ok` is a predefined value, `ko` is the opposite)

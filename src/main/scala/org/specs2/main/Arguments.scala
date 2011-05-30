@@ -5,6 +5,7 @@ import org.specs2.internal.scalaz.Monoid
 import control._
 import Exceptions._
 import text.{AnsiColors, DiffShortener, EditDistance}
+import reporter.{SmartColors, Colors}
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
@@ -20,7 +21,7 @@ case class Arguments (
   _stopOnFail:    Option[Boolean]          = None,
   _failtrace:     Option[Boolean]          = None,
   _color:         Option[Boolean]          = None,
-  _colors:        Option[AnsiColors]       = None,
+  _colors:        Option[Colors]           = None,
   _noindent:      Option[Boolean]          = None,
   _showtimes:     Option[Boolean]          = None,
   _offset:        Option[Int]              = None,
@@ -43,7 +44,7 @@ case class Arguments (
   def stopOnFail: Boolean           = _stopOnFail.getOrElse(false)
   def failtrace: Boolean            = _failtrace.getOrElse(false)
   def color: Boolean                = _color.getOrElse(true)
-  def colors: AnsiColors            = _colors.getOrElse(AnsiColors)
+  def colors: Colors                = _colors.getOrElse(new SmartColors())
   def noindent: Boolean             = _noindent.getOrElse(false)
   def showtimes: Boolean            = _showtimes.getOrElse(false)
   def offset: Int                   = _offset.getOrElse(0)
@@ -141,6 +142,7 @@ object Arguments {
        _stopOnFail    = bool("stoponfail"),
        _failtrace     = bool("failtrace"),
        _color         = bool("color", "nocolor"),
+       _colors        = value("colors").map(SmartColors.fromArgs).orElse(Some(new SmartColors)),
        _noindent      = bool("noindent"),
        _showtimes     = bool("showtimes"),
        _offset        = int("offset"),

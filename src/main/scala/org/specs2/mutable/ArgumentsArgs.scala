@@ -5,6 +5,7 @@ import main._
 import text._
 import specification.Fragments
 import control.{StackTraceFilter, Property}
+import reporter.Colors
 
 /**
  * This trait provides shortcuts to create Arguments instances and adding them to the SpecificationStructure by mutating its
@@ -22,7 +23,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    colors:        ArgProperty[AnsiColors]        = ArgProperty[AnsiColors](),
+    colors:        ArgProperty[Colors]            = ArgProperty[Colors](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showtimes:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
     offset:        ArgProperty[Int]               = ArgProperty[Int](),
