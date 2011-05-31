@@ -235,13 +235,13 @@ trait FileSystem extends FileReader with FileWriter {
     }
   }
   /**
-   * @return a path that should be valid on all plateforms (@see issue 148)
+   * @return a path that should be valid on all plateforms (@see issue 148 of the specs project)
    */
   private def getPath(url: URL) = {
-    if (System.getProperty("file.separator") == "\\") 
-		  url.getPath.replace("\\", "/").replace("file:/", "")
-	  else
-		  url.getPath.replace("file:", "")
+    val path = if (System.getProperty("file.separator") == "\\") url.getPath.replace("\\", "/").replace("file:/", "")
+	             else                                         		 url.getPath.replace("file:", "")
+
+    path.replace("%20", " ")
   }
 }
 /**
