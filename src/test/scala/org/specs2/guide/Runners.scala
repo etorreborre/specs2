@@ -293,7 +293,7 @@ where keys are taken from the property names above without the `color.` prefix a
 
 For example you can pass on the command line:
 
- colors text:blue,failure:magenta
+ `colors text:blue,failure:magenta`
 
  to have the text colored in blue and the failures in Magenta.
 
