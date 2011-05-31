@@ -36,10 +36,17 @@ trait Trim extends control.Debug {
     def removeEnd(end: String) =
       if (s.endsWith(end)) s.dropRight(end.size)  else s
 
-    def removeEnclosing(toRemove: String) = removeStart(toRemove).removeEnd(toRemove)
-	  def removeEnclosing(start: String, end: String) = removeStart(start).removeEnd(end)
+    def removeEnclosing(toRemove: String):String = removeEnclosing(toRemove, toRemove)
 
-	  def removeEnclosingXmlTag(t: String) = removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
+	  def removeEnclosing(start: String, end: String):String =
+      if (isEnclosing(start, end)) removeStart(start).removeEnd(end)
+      else                                 s
+
+	  def removeEnclosingXmlTag(t: String) =
+      if (isEnclosing("<"+t, "</"+t+">")) removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
+      else                                s
+
+    def isEnclosing(start: String, end: String) = s.startsWith(start) && s.endsWith(end)
 
     def trimNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
       res.trimStart(cur).trimEnd(cur)

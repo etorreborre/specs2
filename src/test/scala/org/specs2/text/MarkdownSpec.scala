@@ -16,6 +16,7 @@ class MarkdownSpec extends Specification { def is =
                                                                                                                         p^
   "Multi-line text must preserve newlines"                                                                              ^
   { toHtmlNoPar("hello\nworld") must contain("hello<br/>world") }                                                       ^
+  titleAndLineBreak ^
                                                                                                                         p^
   "Embedded code"                                                                                                       ! e1^
   "Code with newlines must be enclosed in one code tag only"                                                            ! e2^
@@ -35,4 +36,7 @@ and no more code here"""
 
   def e1 = toHtmlNoPar(someCode) must contain("<code class='prettyprint'>")
   def e2 = toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) must have size(1)
+
+
+  def titleAndLineBreak = toXhtml("### Title\nline1\n\nline2").toString must not contain("### Title")
 }
