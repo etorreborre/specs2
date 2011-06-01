@@ -16,7 +16,9 @@ class TrimSpec extends Specification { def is =
   "Trim enclosing symbols"                                                                                              ^
   { " (hello world)  ".trimEnclosing("(", ")") === "hello world" }                                                      ^
   { " ( (hello world) )  ".trimEnclosing("(", ")") === "(hello world)" }                                                ^
-                                                                                                                        p^
+  "but not if they're not enclosing"                                                                                    ^
+    { "hello world)".trimEnclosing("(", ")") === "hello world)" }                                                       ^
+                                                                                                                        endp^
   "Trim enclosing xml tags"                                                                                             ^
   { "<p>hello</p>".trimEnclosingXmlTag("p") === "hello" }                                                               ^
   { "<p a=\"2\">hello</p>".trimEnclosingXmlTag("p") === "hello" }                                                       ^
