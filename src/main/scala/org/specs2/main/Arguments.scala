@@ -168,7 +168,7 @@ object Arguments {
     bool(negatedName, false) orElse bool(name)
   }
   private def value[T](name: String, f: String => T)(implicit args: Seq[String], sp: SystemProperties): Option[T] = {
-    args.zip(args.drop(1)).find(_._1.toLowerCase.contains(name.toLowerCase)).map(s => f(s._2)).orElse(valueSystemProperty(name, f))
+    args.zip(args.drop(1)).find(_._1.toLowerCase.equals(name.toLowerCase)).map(s => f(s._2)).orElse(valueSystemProperty(name, f))
   }
   private def valueSystemProperty[T](name: String, f: String => T)(implicit sp: SystemProperties): Option[T] = {
     sp.getProperty(name).map(o => f(o.toString))

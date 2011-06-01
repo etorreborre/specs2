@@ -13,6 +13,7 @@ class TagsFragmentsSpec extends Specification with DataTables {
     "t"          !! ""        ! true   |
     "t4"         !! ""        ! true   |
     ""           !! "t"       ! false  |
+    ""           !! "t2"      ! true   |
     "t2"         !! ""        ! false  |
     "t"          !! "t2"      ! true   |
     "t2"         !! "t"       ! false  |
@@ -25,4 +26,6 @@ class TagsFragmentsSpec extends Specification with DataTables {
       tag.keep(args(include=inc, exclude=exc)) must be_==(keep)
     }
   }
+
+
 }

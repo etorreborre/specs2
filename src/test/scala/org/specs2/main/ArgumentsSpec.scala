@@ -25,18 +25,19 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
   "The argument names can be capitalized or not"                                                                        ^
     "for a boolean argument like xonly, xOnly is admissible"                                                            ! e5^
     "for a string argument like specName, specname is admissible"                                                       ! e6^
+    "but the name has to match exactly, 'exclude' must not be mistaken for 'ex'"                                        ! e7^
                                                                                                                         p^
-  "Some boolean arguments have negated names, like nocolor, meaning !color"                                             ! e7^
+  "Some boolean arguments have negated names, like nocolor, meaning !color"                                             ! e8^
                                                                                                                         p^
   "An Arguments instance can be overriden by another with the `<|` operator: `a <| b`"                                  ^
-    "if there's no corresponding value in b, the value in a stays"                                                      ! e8^
-    "there is a corresponding value in b, the value in a is overriden when there is one"                                ! e9^
-    "there is a corresponding value in b, the value in b is kept"                                                       ! e10^
+    "if there's no corresponding value in b, the value in a stays"                                                      ! e9^
+    "there is a corresponding value in b, the value in a is overriden when there is one"                                ! e10^
+    "there is a corresponding value in b, the value in b is kept"                                                       ! e11^
                                                                                                                         p^
   "Arguments can also be passed from system properties"                                                                 ^
-    "a boolean value just have to exist as -Dname"                                                                      ! e11^
-    "a string value will be -Dname=value"                                                                               ! e12^
-    "properties can also be passed as -Dspecs2.name to avoid conflicts with other properties"                           ! e12^
+    "a boolean value just have to exist as -Dname"                                                                      ! e12^
+    "a string value will be -Dname=value"                                                                               ! e13^
+    "properties can also be passed as -Dspecs2.name to avoid conflicts with other properties"                           ! e14^
                                                                                                                         end
 
 
@@ -48,12 +49,13 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
 
   def e5 = Arguments("xOnly").xonly must beTrue
   def e6 = Arguments("specname", "spec").specName must_== "spec"
+  def e7 = Arguments("exclude", "spec").ex must_== Arguments().ex
 
-  def e7 = Arguments("nocolor").color must beFalse
+  def e8 = Arguments("nocolor").color must beFalse
 
-  def e8 = (args(xonly = true) <| args(plan = false)).xonly must_== true
-  def e9 = args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
-  def e10 = (args(xonly = true) <| args(plan = true)).plan must_== true
+  def e9 = (args(xonly = true) <| args(plan = false)).xonly must_== true
+  def e10 = args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
+  def e11 = (args(xonly = true) <| args(plan = true)).plan must_== true
 
   object props extends After {
     def after = {
@@ -62,15 +64,15 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
       System.clearProperty("plan")
     }
   }
-  def e11 = props {
+  def e12 = props {
     val sp = new SystemProperties { override def getProperty(name: String) = Some("true") }
     Arguments.extract(Seq(""), sp).plan must_== true
   }
-  def e12 = props {
+  def e13 = props {
     val sp = new SystemProperties { override def getProperty(name: String) = Some("spec") }
     Arguments.extract(Seq(""), sp).specName must_== "spec"
   }
-  def e13 = props {
+  def e14 = props {
     val sp = new SystemProperties { override def getProperty(name: String) = Some("spec") }
     Arguments.extract(Seq(""), sp).specName must_== "spec"
   }
