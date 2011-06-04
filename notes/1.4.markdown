@@ -7,11 +7,19 @@ This version adds new features on top of 1.3:
  * added a `haveLength` matcher (alias for `haveSize`)
  * the colors used for the text output [can be customized](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Colors)
  * added a `mute` method on matchers to remove messages (used in Forms and Props to just color cells when there is a failure)
- 
+ * added a `see` method to create an html link to another specification without executing it
+ * better [Contexts](http://etorreborre.github.com/specs2/guide/org.specs2.guide.SpecStructure.html#Contexts) description in the UserGuide
+ * added the possibility to define an implicit Context to avoid duplication
+ * removed the possibility to use the description of an Example in the body of the example (use the Given-When-Then support instead)
+ * added a `be_==~` matcher to match with an implicit conversion
+ * using sbt 0.10.0
+  
 And some fixes:
 
  * better display for Array expectables
  * filtering stacktraces for html output
  * various fixes for Forms and Properties evaluations
+ * fixed the `ThrownExpectation` issue where mixing it to an Acceptance spec had no effect
+ * fixed a sequencing issue when there are 2 consecutive Steps with no example in between
  
  ==========================
