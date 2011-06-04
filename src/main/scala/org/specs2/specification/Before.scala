@@ -8,7 +8,7 @@ import matcher._
 /**
  * generic trait for Before, After, Around
  */
-trait Context {
+trait Context extends Scope {
   def apply[T <% Result](a: =>T): Result
 }
 /**
