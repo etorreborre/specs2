@@ -1,7 +1,7 @@
 /** Project */
 name := "specs2"
 
-version := "1.4-SNAPSHOT"
+version := "1.4"
 
 organization := "org.specs2"
 
