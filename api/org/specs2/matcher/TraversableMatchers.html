@@ -275,14 +275,25 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       <p class="shortcomment cmt">Matches if there is one element in the traversable verifying the <code>function</code> parameter: <code>(traversable.exists(function(_))</code>
 </p><div class="fullcomment"><div class="comment cmt"><p>Matches if there is one element in the traversable verifying the <code>function</code> parameter: <code>(traversable.exists(function(_))</code>
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#haveLength" data-isabs="false">
+      <a id="haveLength[T](Int)(Sized[T]):SizedMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">haveLength</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.SizedMatcher" class="extype" href="SizedMatcher.html">SizedMatcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for haveSize</p><div class="fullcomment"><div class="comment cmt"><p>alias for haveSize</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#haveSize" data-isabs="false">
-      <a id="haveSize[T](Int)(Sized[T]):Matcher[T]"></a>
+      <a id="haveSize[T](Int)(Sized[T]):SizedMatcher[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">haveSize</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
+        <span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.SizedMatcher" class="extype" href="SizedMatcher.html">SizedMatcher</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">match if there is a way to size T</p><div class="fullcomment"><div class="comment cmt"><p>match if there is a way to size T</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
@@ -332,6 +343,17 @@ This verification does not consider the order of the elements but checks the tra
       </span>
       </h4>
       <p class="shortcomment cmt">transform a value to a zero-arg function returning that value</p><div class="fullcomment"><div class="comment cmt"><p>transform a value to a zero-arg function returning that value</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.control.LazyParameters" class="extype" href="../control/LazyParameters.html">LazyParameters</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#length" data-isabs="false">
+      <a id="length[T](Int)(Sized[T]):SizedMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">length</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.SizedMatcher" class="extype" href="SizedMatcher.html">SizedMatcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for haveSize</p><div class="fullcomment"><div class="comment cmt"><p>alias for haveSize</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -365,6 +387,17 @@ This verification does not consider the order of the elements but checks the tra
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#scalaArrayIsSized" data-isabs="false">
+      <a id="scalaArrayIsSized[T]:Sized[Array[T]]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">scalaArrayIsSized</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="result">: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[<span name="scala.Array" class="extype">Array</span>[T]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">any scala array has a size</p><div class="fullcomment"><div class="comment cmt"><p>any scala array has a size</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#scalaTraversableIsSized" data-isabs="false">
       <a id="scalaTraversableIsSized[I&lt;:TraversableOnce[_]]:Sized[I]"></a>
       <h4 class="signature">
@@ -376,6 +409,17 @@ This verification does not consider the order of the elements but checks the tra
       </span>
       </h4>
       <p class="shortcomment cmt">any scala collection has a size</p><div class="fullcomment"><div class="comment cmt"><p>any scala collection has a size</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#size" data-isabs="false">
+      <a id="size[T](Int)(Sized[T]):SizedMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">size</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.SizedMatcher" class="extype" href="SizedMatcher.html">SizedMatcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for haveSize</p><div class="fullcomment"><div class="comment cmt"><p>alias for haveSize</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBeHaveMatchers#sized" data-isabs="false">
       <a id="sized[T](MatchResult[T])(Sized[T]):HasSize[T]"></a>
       <h4 class="signature">

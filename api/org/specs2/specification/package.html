@@ -72,12 +72,12 @@
 where an action must be executing after the main executable action
 </p>
     </li><li visbl="pub" name="org.specs2.specification.AfterContextExample" data-isabs="true">
-      <a id="AfterContextExample:AfterContextExample"></a>
+      <a id="AfterContextExample:AfterContextExample[C]"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
         <a href="AfterContextExample.html"><span class="name">AfterContextExample</span></a>
-        
+        <span class="tparams">[<span name="C">C &lt;: After</span>]</span>
         <span class="result"> extends FragmentsBuilder</span>
       </span>
       </h4>
@@ -101,7 +101,7 @@ where an action must be executing after the main executable action
       <span class="symbol"> 
         <a href="AfterExample.html"><span class="name">AfterExample</span></a>
         
-        <span class="result"> extends AfterContextExample</span>
+        <span class="result"> extends AfterContextExample[After]</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given after method
@@ -130,12 +130,12 @@ where an action must be executing after the main executable action
       <p class="comment cmt">The Around trait can be inherited by classes which will
 execute some code inside the around method provided by the context.</p>
     </li><li visbl="pub" name="org.specs2.specification.AroundContextExample" data-isabs="true">
-      <a id="AroundContextExample:AroundContextExample"></a>
+      <a id="AroundContextExample:AroundContextExample[C]"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
         <a href="AroundContextExample.html"><span class="name">AroundContextExample</span></a>
-        
+        <span class="tparams">[<span name="C">C &lt;: Around</span>]</span>
         <span class="result"> extends FragmentsBuilder</span>
       </span>
       </h4>
@@ -159,7 +159,7 @@ execute some code inside the around method provided by the context.</p>
       <span class="symbol"> 
         <a href="AroundExample.html"><span class="name">AroundExample</span></a>
         
-        <span class="result"> extends AroundContextExample</span>
+        <span class="result"> extends AroundContextExample[Around]</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given around method
@@ -171,7 +171,7 @@ execute some code inside the around method provided by the context.</p>
       <span class="symbol"> 
         <a href="AroundOutside.html"><span class="name">AroundOutside</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends Outside[T]</span>
       </span>
       </h4>
       <p class="comment cmt">The AroundOutside trait can be inherited by classes which will execute some code inside a given context, with a
@@ -226,12 +226,12 @@ to execute before and after an Example
       <p class="comment cmt">The BeforeAfter trait allows to declare before, around and after actions
 </p>
     </li><li visbl="pub" name="org.specs2.specification.BeforeAfterAroundContextExample" data-isabs="true">
-      <a id="BeforeAfterAroundContextExample:BeforeAfterAroundContextExample"></a>
+      <a id="BeforeAfterAroundContextExample:BeforeAfterAroundContextExample[C]"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
         <a href="BeforeAfterAroundContextExample.html"><span class="name">BeforeAfterAroundContextExample</span></a>
-        
+        <span class="tparams">[<span name="C">C &lt;: BeforeAfterAround</span>]</span>
         <span class="result"> extends FragmentsBuilder</span>
       </span>
       </h4>
@@ -255,18 +255,18 @@ to execute before and after an Example
       <span class="symbol"> 
         <a href="BeforeAfterAroundExample.html"><span class="name">BeforeAfterAroundExample</span></a>
         
-        <span class="result"> extends BeforeAfterAroundContextExample</span>
+        <span class="result"> extends BeforeAfterAroundContextExample[BeforeAfterAround]</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given before/after method
 </p>
     </li><li visbl="pub" name="org.specs2.specification.BeforeAfterContextExample" data-isabs="true">
-      <a id="BeforeAfterContextExample:BeforeAfterContextExample"></a>
+      <a id="BeforeAfterContextExample:BeforeAfterContextExample[C]"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
         <a href="BeforeAfterContextExample.html"><span class="name">BeforeAfterContextExample</span></a>
-        
+        <span class="tparams">[<span name="C">C &lt;: BeforeAfter</span>]</span>
         <span class="result"> extends FragmentsBuilder</span>
       </span>
       </h4>
@@ -290,18 +290,18 @@ to execute before and after an Example
       <span class="symbol"> 
         <a href="BeforeAfterExample.html"><span class="name">BeforeAfterExample</span></a>
         
-        <span class="result"> extends BeforeAfterContextExample</span>
+        <span class="result"> extends BeforeAfterContextExample[BeforeAfter]</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given before/after method
 </p>
     </li><li visbl="pub" name="org.specs2.specification.BeforeContextExample" data-isabs="true">
-      <a id="BeforeContextExample:BeforeContextExample"></a>
+      <a id="BeforeContextExample:BeforeContextExample[C]"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
         <a href="BeforeContextExample.html"><span class="name">BeforeContextExample</span></a>
-        
+        <span class="tparams">[<span name="C">C &lt;: Before</span>]</span>
         <span class="result"> extends FragmentsBuilder</span>
       </span>
       </h4>
@@ -325,7 +325,7 @@ to execute before and after an Example
       <span class="symbol"> 
         <a href="BeforeExample.html"><span class="name">BeforeExample</span></a>
         
-        <span class="result"> extends BeforeContextExample</span>
+        <span class="result"> extends BeforeContextExample[Before]</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given after method
@@ -337,7 +337,7 @@ to execute before and after an Example
       <span class="symbol"> 
         <a href="Context.html"><span class="name">Context</span></a>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends Scope</span>
       </span>
       </h4>
       <p class="comment cmt">generic trait for Before, After, Around

@@ -24,14 +24,14 @@
       <span class="symbol"> 
         <span class="name">BeforeAfterExample</span>
         
-        <span class="result"> extends <a name="org.specs2.specification.BeforeAfterContextExample" class="extype" href="BeforeAfterContextExample.html">BeforeAfterContextExample</a></span>
+        <span class="result"> extends <a name="org.specs2.specification.BeforeAfterContextExample" class="extype" href="BeforeAfterContextExample.html">BeforeAfterContextExample</a>[<a name="org.specs2.specification.BeforeAfter" class="extype" href="BeforeAfter.html">BeforeAfter</a>]</span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>For each created example use a given before/after method
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.specification.BeforeAfterExample" class="extype" href="">BeforeAfterExample</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.specification.BeforeAfterContextExample" class="extype" href="BeforeAfterContextExample.html">BeforeAfterContextExample</a>, <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span>, <a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.specification.BeforeAfterContextExample" class="extype" href="BeforeAfterContextExample.html">BeforeAfterContextExample</a>[<a name="org.specs2.specification.BeforeAfter" class="extype" href="BeforeAfter.html">BeforeAfter</a>], <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span>, <a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -353,6 +353,17 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#link" data-isabs="false">
+      <a id="link(HtmlLink,SpecificationStructure):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">link</span>
+        
+        <span class="params">(<span name="htmlLink">htmlLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a link directly on a specification, with a given link</p><div class="fullcomment"><div class="comment cmt"><p>create a link directly on a specification, with a given link</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#link" data-isabs="false">
       <a id="link(SpecificationStructure):Fragments"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -362,7 +373,7 @@
         <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">create a link directly on a specification</p><div class="fullcomment"><div class="comment cmt"><p>create a link directly on a specification</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
+      <p class="shortcomment cmt">create a link directly on a specification, with a given link</p><div class="fullcomment"><div class="comment cmt"><p>create a link directly on a specification, with a given link</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -396,6 +407,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#see" data-isabs="false">
+      <a id="see(HtmlLink,SpecificationStructure):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">see</span>
+        
+        <span class="params">(<span name="htmlLink">htmlLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a html link without including the other specification fragments, and passing a specificlink</p><div class="fullcomment"><div class="comment cmt"><p>create a html link without including the other specification fragments, and passing a specificlink</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#see" data-isabs="false">
+      <a id="see(SpecificationStructure):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">see</span>
+        
+        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a html link without including the other specification fragments</p><div class="fullcomment"><div class="comment cmt"><p>create a html link without including the other specification fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#stringToHtmlLinkFragments" data-isabs="false">
       <a id="stringToHtmlLinkFragments(String):HtmlLinkFragments"></a>
       <h4 class="signature">
@@ -525,7 +558,7 @@
             </div>
 
         <div name="org.specs2.specification.BeforeAfterContextExample" class="parent">
-              <h3>Inherited from <a name="org.specs2.specification.BeforeAfterContextExample" class="extype" href="BeforeAfterContextExample.html">BeforeAfterContextExample</a></h3>
+              <h3>Inherited from <a name="org.specs2.specification.BeforeAfterContextExample" class="extype" href="BeforeAfterContextExample.html">BeforeAfterContextExample</a>[<a name="org.specs2.specification.BeforeAfter" class="extype" href="BeforeAfter.html">BeforeAfter</a>]</h3>
             </div><div name="org.specs2.specification.FragmentsBuilder" class="parent">
               <h3>Inherited from <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span></h3>
             </div><div name="org.specs2.specification.RegexSteps" class="parent">

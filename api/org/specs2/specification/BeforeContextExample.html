@@ -23,7 +23,7 @@
       <span class="kind">trait</span>
       <span class="symbol"> 
         <span class="name">BeforeContextExample</span>
-        
+        <span class="tparams">[<span name="C">C &lt;: <a name="org.specs2.specification.Before" class="extype" href="Before.html">Before</a></span>]</span>
         <span class="result"> extends <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span></span>
       </span>
       </h4>
@@ -79,13 +79,13 @@
         <div class="values members" id="values">
               <h3>Abstract Value Members</h3>
               <ol><li visbl="prt" name="org.specs2.specification.BeforeContextExample#beforeContext" data-isabs="true">
-      <a id="beforeContext:Before"></a>
+      <a id="beforeContext:C"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">beforeContext</span>
         
-        <span class="result">: <a name="org.specs2.specification.Before" class="extype" href="Before.html">Before</a></span>
+        <span class="result">: C</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected abstract </dd></dl></div>
@@ -334,6 +334,17 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#link" data-isabs="false">
+      <a id="link(HtmlLink,SpecificationStructure):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">link</span>
+        
+        <span class="params">(<span name="htmlLink">htmlLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a link directly on a specification, with a given link</p><div class="fullcomment"><div class="comment cmt"><p>create a link directly on a specification, with a given link</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#link" data-isabs="false">
       <a id="link(SpecificationStructure):Fragments"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -343,7 +354,7 @@
         <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">create a link directly on a specification</p><div class="fullcomment"><div class="comment cmt"><p>create a link directly on a specification</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
+      <p class="shortcomment cmt">create a link directly on a specification, with a given link</p><div class="fullcomment"><div class="comment cmt"><p>create a link directly on a specification, with a given link</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -377,6 +388,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#see" data-isabs="false">
+      <a id="see(HtmlLink,SpecificationStructure):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">see</span>
+        
+        <span class="params">(<span name="htmlLink">htmlLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a html link without including the other specification fragments, and passing a specificlink</p><div class="fullcomment"><div class="comment cmt"><p>create a html link without including the other specification fragments, and passing a specificlink</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#see" data-isabs="false">
+      <a id="see(SpecificationStructure):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">see</span>
+        
+        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a html link without including the other specification fragments</p><div class="fullcomment"><div class="comment cmt"><p>create a html link without including the other specification fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#stringToHtmlLinkFragments" data-isabs="false">
       <a id="stringToHtmlLinkFragments(String):HtmlLinkFragments"></a>
       <h4 class="signature">

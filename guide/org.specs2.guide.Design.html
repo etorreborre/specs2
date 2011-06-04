@@ -37,9 +37,12 @@
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
     </head><body><div id="container"><title>specs2 design</title><a name="specs2+design"></a><h2>specs2 design</h2><div class="level0"><a name="Presentation"></a><h3>Presentation</h3><p>This page explains the overall design of <em>specs2</em>:</p>
 <ul>
-  <li>the structure of a specification</li><li>how the specification is built</li><li>how the specification is executed</li><li>how the reporting works</li><li>the packages dependencies</li>
-</ul><a name="Specification+structure"></a><h3>Specification structure</h3><p>The structure of a specification is very simple, it is just a list of <code class="prettyprint">Fragments</code> provided by the <code class="prettyprint">is</code> method of the<br />
-<code class="prettyprint">SpecificationStructure</code> trait:</p>
+  <li>the structure of a specification</li>
+  <li>how the specification is built</li>
+  <li>how the specification is executed</li>
+  <li>how the reporting works</li>
+  <li>the packages dependencies</li>
+</ul><a name="Specification+structure"></a><h3>Specification structure</h3><p>The structure of a specification is very simple, it is just a list of <code class="prettyprint">Fragments</code> provided by the <code class="prettyprint">is</code> method of the<br /><code class="prettyprint">SpecificationStructure</code> trait:</p>
 <pre><code class="prettyprint">  +---------------+                     1..n  +-----------+
   | Specification | ------------------------&gt; | Fragment  |
   +---------------+                           +-----------+
@@ -52,18 +55,22 @@
      +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +------+  +-----------------+
 </code></pre><p>Here's a short description of all the Fragments:</p>
 <ul>
-  <li>Text: free text describing the specified system</li><li>Example: a description and a piece of executable code returning a Result</li><li>Step / Action: some action on the system which is only reported if there's an exception</li><li>SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications. The SpecStart<br />
-   element holds the Arguments used to tune the execution/reporting</li><li>See: a link to another specification</li><li>TaggingFragments: those fragments are used to define which fragments should be included or excluded from the execution</li>
+  <li>Text: free text describing the specified system</li>
+  <li>Example: a description and a piece of executable code returning a Result</li>
+  <li>Step / Action: some action on the system which is only reported if there's an exception</li>
+  <li>SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications. The SpecStart<br /> element holds the Arguments used to tune the execution/reporting</li>
+  <li>See: a link to another specification</li>
+  <li>TaggingFragments: those fragments are used to define which fragments should be included or excluded from the execution</li>
 </ul><a name="Specification+creation"></a><h3>Specification creation</h3><a name="Creating+Fragments"></a><h4>Creating Fragments</h4><p>There are implicits to create Fragments (found in the <code class="prettyprint">org.specs2.specification.FragmentsBuilder</code> trait):</p>
 <ul>
-  <li><code class="prettyprint">String =&gt; Text</code>, to create a simple Text Fragment</li><li><code class="prettyprint">String ! Result =&gt; Example</code>, to create an Example</li><li>...</li>
+  <li><code class="prettyprint">String =&gt; Text</code>, to create a simple Text Fragment</li>
+  <li><code class="prettyprint">String ! Result =&gt; Example</code>, to create an Example</li>
+  <li>...</li>
 </ul><p>Once build, these Fragments can be &quot;linked&quot; with <code class="prettyprint">^</code>, creating a <code class="prettyprint">Fragments</code> object, containing a <code class="prettyprint">Seq[Fragment]</code>:</p>
 <pre><code class="prettyprint">    val fragments: Fragments =
       &quot;this text&quot; ^
       &quot;is related to this Example&quot; ! success
-</code></pre><p>The <code class="prettyprint">Fragments</code> object is used to hold temporarily a sequence of Fragments as it is built and it makes sure that when<br />
-the building is done, the Fragments passed for execution will start and end with proper SpecStart and SpecEnd fragments.</p><a name="Mutable+Specification"></a><h4>Mutable Specification</h4><p>In a mutable Specification there is no visible &quot;link&quot; between Fragments, they're all created and linked through side-effects<br />
-(thanks to an enhanced version of the <code class="prettyprint">FragmentsBuilder</code> trait in the <code class="prettyprint">org.specs2.mutable</code> package):</p>
+</code></pre><p>The <code class="prettyprint">Fragments</code> object is used to hold temporarily a sequence of Fragments as it is built and it makes sure that when<br />the building is done, the Fragments passed for execution will start and end with proper SpecStart and SpecEnd fragments.</p><a name="Mutable+Specification"></a><h4>Mutable Specification</h4><p>In a mutable Specification there is no visible &quot;link&quot; between Fragments, they're all created and linked through side-effects<br />(thanks to an enhanced version of the <code class="prettyprint">FragmentsBuilder</code> trait in the <code class="prettyprint">org.specs2.mutable</code> package):</p>
 <pre><code class="prettyprint">    // build an Example and add it to the specFragments variable
     &quot;this example must succeed&quot; in { success }
     &quot;same thing here&quot; in { success }
@@ -72,31 +79,21 @@ the building is done, the Fragments passed for execution will start and end with
     spec.content |&gt; select |&gt; sequence |&gt; execute
 </code></pre>
 <ol>
-  
-  <li>
-    <p>Selection: the Fragments are filtered according to the Arguments object. In that phase all examples but a few can<br />
-    be filtered if the <code class="prettyprint">only(&quot;this example&quot;)</code> option is used for instance. Another way to select fragments is to insert<br />
-    <code class="prettyprint">TaggingFragment</code>s inside the specification.</p>
-  </li>
-  <li>
-    <p>Sequencing: the Fragments are sorted in groups so that all the elements of a group can be executed concurrently. This<br />
-    usually why Steps are used. If my fragments are: <code class="prettyprint">fragments1 ^ step ^ fragments2</code> then all fragments1 will be executed,<br />
-    then step, then fragments2.</p>
-  </li>
-  <li>
-    <p>Execution: for each group, the execution of the fragments is concurrent by default and results are collected in<br />
-    a sequence of <code class="prettyprint">ExecutedFragments</code></p>
-  </li>
+  <li><p>Selection: the Fragments are filtered according to the Arguments object. In that phase all examples but a few can<br />be filtered if the <code class="prettyprint">only(&quot;this example&quot;)</code> option is used for instance. Another way to select fragments is to insert<br /><code class="prettyprint">TaggingFragment</code>s inside the specification.</p></li>
+  <li><p>Sequencing: the Fragments are sorted in groups so that all the elements of a group can be executed concurrently. This<br />usually why Steps are used. If my fragments are: <code class="prettyprint">fragments1 ^ step ^ fragments2</code> then all fragments1 will be executed,<br />then step, then fragments2.</p></li>
+  <li><p>Execution: for each group, the execution of the fragments is concurrent by default and results are collected in<br />a sequence of <code class="prettyprint">ExecutedFragments</code></p></li>
 </ol><a name="Specification+reporting"></a><h3>Specification reporting</h3><p>All the reporters start of with a sequence of <code class="prettyprint">ExecutedFragments</code>. A list of <code class="prettyprint">Reducers</code> is used to collect relevant information:</p>
 <ul>
-  <li>The text and results to display</li><li>The &quot;level&quot; of the text i.e. its indentation. The rules for this are given in the <code class="prettyprint">org.specs2.guide.SpecStructure#The Rules</code></li><li>The statistics and execution times</li><li>The applicable arguments (where the arguments of an included specification must override the arguments of its parent)</li>
-</ul><p>One of the main difficulties in this 'reduction' is the fact that included specifications change the context of what needs<br />
-to be accumulated. The <code class="prettyprint">reporter.NestedBlocks</code> trait proveides</p><p>This builds a list of objects containing all the text to display:</p>
+  <li>The text and results to display</li>
+  <li>The &quot;level&quot; of the text i.e. its indentation. The rules for this are given in the <code class="prettyprint">org.specs2.guide.SpecStructure#The Rules</code></li>
+  <li>The statistics and execution times</li>
+  <li>The applicable arguments (where the arguments of an included specification must override the arguments of its parent)</li>
+</ul><p>One of the main difficulties in this 'reduction' is the fact that included specifications change the context of what needs<br />to be accumulated. The <code class="prettyprint">reporter.NestedBlocks</code> trait proveides</p><p>This builds a list of objects containing all the text to display:</p>
 <ul>
-  <li>for a console output, <code class="prettyprint">PrintLines</code>: <code class="prettyprint">PrintSpecStart</code>, <code class="prettyprint">PrintText</code>, <code class="prettyprint">PrintResult</code>,...</li><li>for a Html output, <code class="prettyprint">HtmlLines</code>: <code class="prettyprint">HtmlSpecStart</code>, <code class="prettyprint">HtmlText</code>, <code class="prettyprint">HtmlResult</code>,...</li><li>for a JUnit output, a tree of JUnit <code class="prettyprint">Description</code> objects with the corresponding code to execute (in JUnit the Descriptions<br />
-  are built first, then the examples are executed)</li>
-</ul><a name="Packages+dependencies"></a><h3>Packages dependencies</h3><p>The following dependencies should be always verified, from low-level packages to high-level ones, where no package on a<br />
-low layer can depend on a package on a higher layer:</p>
+  <li>for a console output, <code class="prettyprint">PrintLines</code>: <code class="prettyprint">PrintSpecStart</code>, <code class="prettyprint">PrintText</code>, <code class="prettyprint">PrintResult</code>,...</li>
+  <li>for a Html output, <code class="prettyprint">HtmlLines</code>: <code class="prettyprint">HtmlSpecStart</code>, <code class="prettyprint">HtmlText</code>, <code class="prettyprint">HtmlResult</code>,...</li>
+  <li>for a JUnit output, a tree of JUnit <code class="prettyprint">Description</code> objects with the corresponding code to execute (in JUnit the Descriptions<br />are built first, then the examples are executed)</li>
+</ul><a name="Packages+dependencies"></a><h3>Packages dependencies</h3><p>The following dependencies should be always verified, from low-level packages to high-level ones, where no package on a<br />low layer can depend on a package on a higher layer:</p>
 <pre><code class="prettyprint">  + runner
   + reporter
   + mutable    specification
@@ -106,8 +103,8 @@ low layer can depend on a package on a higher layer:</p>
   +            reflect  xml html  time json
   + collection control  io  text  main data
 </code></pre></div></div><div id="tree">
-      <ul><li id="1993234404"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="-526231793"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1457815269"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="151197571"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -117,7 +114,7 @@ low layer can depend on a package on a higher layer:</p>
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1472605657"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="747455103"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -140,8 +137,6 @@ low layer can depend on a package on a higher layer:</p>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Set+an+example+as+%22Pending+until+fixed%22">Set an example as &quot;Pending until fixed&quot;</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Auto-Examples">Auto-Examples</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+the+text+of+the+Example">Using the text of the Example</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Given+%2F+When+%2F+Then">Given / When / Then</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Multiple+steps">Multiple steps</a>
@@ -189,26 +184,38 @@ low layer can depend on a package on a higher layer:</p>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Index+page">Index page</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Defining+Before+actions">Defining Before actions</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Variables+isolation">Variables isolation</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Scope">Scope</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+After+actions">Defining After actions</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#With+acceptance+specifications">With acceptance specifications</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+Around+actions">Defining Around actions</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts+inheritance">Contexts inheritance</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+Outside+actions">Defining Outside actions</a>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Before%2FAfter+code">Before/After code</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+AroundOutside+actions">Defining AroundOutside actions</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Around+actions">Around actions</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Outside+actions">Outside actions</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#AroundOutside+actions">AroundOutside actions</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Without+creating+a+context+object%3A+BeforeExample">Without creating a context object: BeforeExample</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Implicit+context">Implicit context</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Composing+contexts">Composing contexts</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+a+context+for+each+Example">Using a context for each Example</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Composition">Composition</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+a+context+for+each+Example+in+a+mutable+specification">Using a context for each Example in a mutable specification</a>
-          <ul></ul>
+        </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Steps+and+Actions">Steps and Actions</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Steps">Steps</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#In+unit+specifications">In unit specifications</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Actions">Actions</a>
           <ul></ul>
+        </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Generic+specification+with+setup+and+teardown+steps">Generic specification with setup and teardown steps</a>
           <ul></ul>
         </li></ul>
@@ -219,9 +226,9 @@ low layer can depend on a package on a higher layer:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-747120260"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="1468800887"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -259,7 +266,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -298,45 +305,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
-          <ul></ul>
-        </li></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -374,7 +343,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -412,7 +381,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -450,7 +419,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -488,7 +457,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -526,7 +495,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -564,7 +533,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -602,7 +571,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -640,7 +609,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -678,7 +647,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -716,7 +685,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -754,7 +723,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -792,7 +761,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -830,7 +799,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -868,7 +837,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -906,7 +875,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -943,7 +912,7 @@ low layer can depend on a package on a higher layer:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -982,7 +951,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1020,7 +989,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1057,7 +1026,7 @@ low layer can depend on a package on a higher layer:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1096,7 +1065,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1134,7 +1103,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1173,7 +1142,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1210,7 +1179,7 @@ low layer can depend on a package on a higher layer:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1249,7 +1218,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1287,7 +1256,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1325,7 +1294,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1362,7 +1331,7 @@ low layer can depend on a package on a higher layer:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1399,7 +1368,7 @@ low layer can depend on a package on a higher layer:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1437,7 +1406,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1475,7 +1444,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1513,7 +1482,7 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1550,7 +1519,7 @@ low layer can depend on a package on a higher layer:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1587,7 +1556,7 @@ low layer can depend on a package on a higher layer:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-322057272"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="849349606"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1610,6 +1579,8 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Html+output">Html output</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#JUnit+XML+output">JUnit XML output</a>
+          <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Simple+build+tool">Simple build tool</a>
@@ -1629,7 +1600,7 @@ low layer can depend on a package on a higher layer:</p>
         </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1892965460"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="878195635"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1673,7 +1644,7 @@ low layer can depend on a package on a higher layer:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="433226241"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="1675391399"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1693,5 +1664,5 @@ low layer can depend on a package on a higher layer:</p>
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1993234404','433226241'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1457815269','1675391399'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

@@ -35,26 +35,46 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Matchers guide</title><a name="Matchers+guide"></a><h2>Matchers guide</h2><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns<br />
-a <code class="prettyprint">Result</code>:</p>
+    </head><body><div id="container"><title>Matchers guide</title><a name="Matchers+guide"></a><h2>Matchers guide</h2><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns<br />a <code class="prettyprint">Result</code>:</p>
 <ul>
-  <li>Boolean</li><li>Standard result</li><li>Matcher result</li><li>Scalacheck property</li><li>Mock expectation</li><li>DataTable</li><li>Forms</li>
+  <li>Boolean</li>
+  <li>Standard result</li>
+  <li>Matcher result</li>
+  <li>Scalacheck property</li>
+  <li>Mock expectation</li>
+  <li>DataTable</li>
+  <li>Forms</li>
 </ul><a name="Boolean+results"></a><h3>Boolean results</h3><p>This is the simplest kind of result you can define for an expectation but also the least expressive!</p><p>Here's an example:</p>
 <pre><code class="prettyprint">&quot;This is hopefully true&quot;         ! (1 != 2)
 </code></pre><p>This can be useful for simple expectations but a failure will give few information on what went wrong:</p>
 <pre><code class="prettyprint">&quot;This is hopefully true&quot;         ! (2 != 2) // fails with 'the value is false',...
 </code></pre><a name="Standard+results"></a><h3>Standard results</h3><p>Some standard results can be used when you need specific result meanings:</p>
 <ul>
-  <li><code class="prettyprint">success</code>: the example is ok</li><li><code class="prettyprint">failure</code>: there is a non-met expectation</li><li><code class="prettyprint">anError</code>: a non-expected exception occurred</li><li><code class="prettyprint">skipped</code>: the example is skipped possibly at runtime because some conditions are not met. A more specific message can<br />
-  be created with <code class="prettyprint">Skipped(&quot;my message&quot;)</code></li><li><code class="prettyprint">pending</code>: usually means &quot;not implemented yet&quot;, but a specific message can be created with <code class="prettyprint">Pending(&quot;my message&quot;)</code></li>
+  <li><code class="prettyprint">success</code>: the example is ok</li>
+  <li><code class="prettyprint">failure</code>: there is a non-met expectation</li>
+  <li><code class="prettyprint">anError</code>: a non-expected exception occurred</li>
+  <li><code class="prettyprint">skipped</code>: the example is skipped possibly at runtime because some conditions are not met. A more specific message can<br />be created with <code class="prettyprint">Skipped(&quot;my message&quot;)</code></li>
+  <li><code class="prettyprint">pending</code>: usually means &quot;not implemented yet&quot;, but a specific message can be created with <code class="prettyprint">Pending(&quot;my message&quot;)</code></li>
 </ul><p>Two additional results are also available to track the progress of features:</p>
 <ul>
-  <li><code class="prettyprint">done</code>: a <code class="prettyprint">Success</code> with the message &quot;DONE&quot;</li><li><code class="prettyprint">todo</code>: a <code class="prettyprint">Pending</code> with the message &quot;TODO&quot;</li>
-</ul><a name="Match+results"></a><h3>Match results</h3><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to<br />
-create new ones or be created from scratch by the user. Let's have a look at some of them and refer the reader to the<br />
-API for the complete list:</p>
+  <li><code class="prettyprint">done</code>: a <code class="prettyprint">Success</code> with the message &quot;DONE&quot;</li>
+  <li><code class="prettyprint">todo</code>: a <code class="prettyprint">Pending</code> with the message &quot;TODO&quot;</li>
+</ul><a name="Match+results"></a><h3>Match results</h3><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to<br />create new ones or be created from scratch by the user. Let's have a look at some of them and refer the reader to the<br />API for the complete list:</p>
 <ul>
-  <li>Matchers for Any</li><li>Option / Either matchers</li><li>String matchers</li><li>Numeric matchers</li><li>Exception matchers</li><li>Iterable matchers</li><li>Map matchers</li><li>Xml matchers</li><li>Json matchers</li><li>File matchers</li><li>Scalaz matchers</li><li>Result matchers</li><li>Interpreter matchers</li><li>Parsers matchers</li>
+  <li>Matchers for Any</li>
+  <li>Option / Either matchers</li>
+  <li>String matchers</li>
+  <li>Numeric matchers</li>
+  <li>Exception matchers</li>
+  <li>Iterable matchers</li>
+  <li>Map matchers</li>
+  <li>Xml matchers</li>
+  <li>Json matchers</li>
+  <li>File matchers</li>
+  <li>Scalaz matchers</li>
+  <li>Result matchers</li>
+  <li>Interpreter matchers</li>
+  <li>Parsers matchers</li>
 </ul><a name="Matchers+for+Any"></a><h4>Matchers for Any</h4><p>The most common type of matcher is <code class="prettyprint">beEqualTo</code> to test for equality. There are different ways to use this matcher:</p>
 <pre><code class="prettyprint">   1 must beEqualTo(1)
    1 must be_==(1)            // with a shorter matcher
@@ -71,13 +91,27 @@ API for the complete list:</p>
    1 !== 2                    // with a negation
 </code></pre><p>You can see on the examples above several things which are applicable to all matchers:</p>
 <ul>
-  <li>the general form for using a matcher is <code class="prettyprint">a must matcher</code></li><li>you can use <code class="prettyprint">should</code> instead of <code class="prettyprint">must</code> if you prefer</li><li>there are only 2 shortcuts provided because the equality matcher is so ubiquitous <code class="prettyprint">must_==</code> and <code class="prettyprint">===</code></li><li>for most of the matchers you can use a form where the <code class="prettyprint">be</code> word (or the <code class="prettyprint">have</code> word) is detached</li><li>you can as well negate a matcher by adding not before it (or after it, as a method call)</li>
+  <li>the general form for using a matcher is <code class="prettyprint">a must matcher</code></li>
+  <li>you can use <code class="prettyprint">should</code> instead of <code class="prettyprint">must</code> if you prefer</li>
+  <li>there are only 2 shortcuts provided because the equality matcher is so ubiquitous <code class="prettyprint">must_==</code> and <code class="prettyprint">===</code></li>
+  <li>for most of the matchers you can use a form where the <code class="prettyprint">be</code> word (or the <code class="prettyprint">have</code> word) is detached</li>
+  <li>you can as well negate a matcher by adding not before it (or after it, as a method call)</li>
 </ul><p>An non-exhaustive list of those matchers:</p>
 <ul>
-  <li><code class="prettyprint">beTheSameAs</code> for checking if <code class="prettyprint">a eq b</code> (<code class="prettyprint">a must be(b)</code> also works)</li><li><code class="prettyprint">beTrue, beFalse</code></li><li><code class="prettyprint">beLike { case exp =&gt; ok }</code>: to check if an object is like a given pattern (<code class="prettyprint">ok</code> is a predefined value, <code class="prettyprint">ko</code> is the opposite)</li><li><code class="prettyprint">beLike { case exp =&gt; exp must beXXX }</code>: to check if an object is like a given pattern, and verifies a condition</li><li><code class="prettyprint">beNull</code></li><li><code class="prettyprint">beAsNullAs</code>: when 2 objects must be null at the same time if one of them is null</li><li><code class="prettyprint">beOneOf(a, b, c)</code>: to check if an object is one of a given list</li><li><code class="prettyprint">haveClass</code>: to check the class of an object</li><li><code class="prettyprint">haveSuperclass</code>: to check if the class of an object as another class as one of its ancestors</li><li><code class="prettyprint">beAssignableFrom</code>: to check if a class is assignable from another</li>
-</ul><a name="With+a+better+description"></a><h4>With a better description</h4><p>Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information<br />
-is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a<br />
-&quot;ticket list&quot;:</p>
+  <li><code class="prettyprint">be_===</code> for checking if <code class="prettyprint">a == b</code> where a and b are expected to have the same type by the compiler</li>
+  <li><code class="prettyprint">be_==~</code> for checking if <code class="prettyprint">(a:A) == (b:A)</code> when there is an implicit conversion from B (the type of b) to A (the type of a)</li>
+  <li><code class="prettyprint">beTheSameAs</code> for checking if <code class="prettyprint">a eq b</code> (<code class="prettyprint">a must be(b)</code> also works)</li>
+  <li><code class="prettyprint">beTrue, beFalse</code></li>
+  <li><code class="prettyprint">beLike { case exp =&gt; ok }</code>: to check if an object is like a given pattern (<code class="prettyprint">ok</code> is a predefined value, <code class="prettyprint">ko</code> is the opposite)</li>
+  <li><code class="prettyprint">beLike { case exp =&gt; exp must beXXX }</code>: to check if an object is like a given pattern, and verifies a condition</li>
+  <li><code class="prettyprint">beNull</code></li>
+  <li><code class="prettyprint">beAsNullAs</code>: when 2 objects must be null at the same time if one of them is null</li>
+  <li><code class="prettyprint">beOneOf(a, b, c)</code>: to check if an object is one of a given list</li>
+  <li><code class="prettyprint">haveClass</code>: to check the class of an object</li>
+  <li><code class="prettyprint">haveSuperclass</code>: to check if the class of an object as another class as one of its ancestors</li>
+  <li><code class="prettyprint">beAssignableFrom</code>: to check if a class is assignable from another</li>
+  <li><code class="prettyprint">beAnInstanceOf[T]</code>: to check if an object is an instance of type <code class="prettyprint">T</code></li>
+</ul><p>#### With a better description</p><p>Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information<br />is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a<br />&quot;ticket list&quot;:</p>
 <pre><code class="prettyprint">  // will fail with &quot;List(ticket1, ticket2) doesn't have size 3&quot; for example
   machine.tickets must have size(3) // machine is a user-defined object
 </code></pre><p>If you wish to get a more precise failure message you can set an alias with the <code class="prettyprint">aka</code> method (<em>also known as</em>):</p>
@@ -85,63 +119,49 @@ is sometimes necessary to get a better diagnostic on the value that's being chec
   machine.tickets aka &quot;the created tickets&quot; must haveSize(3)
 </code></pre><p>There is also a shortcut for <code class="prettyprint">value aka value.toString</code> which is simply <code class="prettyprint">value.aka</code>.</p><p>And when you want to other ways to customize the description, you can use:</p>
 <ul>
-  <li><code class="prettyprint">post</code>: <code class="prettyprint">&quot;a&quot; post &quot; is the first letter&quot;</code> prints <code class="prettyprint">a is the first letter</code></li><li><code class="prettyprint">as</code>: <code class="prettyprint">&quot;b&quot; as ((s:String) =&gt; &quot;a&quot;+s+&quot;c&quot;)</code> prints <code class="prettyprint">abc</code></li>
+  <li><code class="prettyprint">post</code>: <code class="prettyprint">&quot;a&quot; post &quot; is the first letter&quot;</code> prints <code class="prettyprint">a is the first letter</code></li>
+  <li><code class="prettyprint">as</code>: <code class="prettyprint">&quot;b&quot; as ((s:String) =&gt; &quot;a&quot;+s+&quot;c&quot;)</code> prints <code class="prettyprint">abc</code></li>
 </ul><a name="Matchers+creation"></a><h4>Matchers creation</h4><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
 <ul>
-  
-  <li>
-    <p>using logical operators</p>
-    <pre><code class="prettyprint">def beBetween(i: Int, j: Int) = be_&gt;=(i) and be_&lt;=(j)
+  <li><p>using logical operators</p>
+  <pre><code class="prettyprint">def beBetween(i: Int, j: Int) = be_&gt;=(i) and be_&lt;=(j)
 
 // create a Seq Matcher from a Matcher
 def allBeGreaterThan2: Matcher[Seq[Int]]   = be_&gt;=(2).forall     // fail after the first failure
 def allBeGreaterThan3: Matcher[Seq[Int]]   = be_&gt;=(2).foreach    // like forall but execute all matchers and collect the results
 def haveOneGreaterThan2: Matcher[Seq[Int]] = be_&gt;=(2).atLeastOnce
-</code></pre>
-  </li>
-  <li>
-    <p>adapting the actual value. This matcher adapts the existing <code class="prettyprint">be_&lt;=</code> matcher to a matcher applicable to <code class="prettyprint">Any</code></p>
-    <pre><code class="prettyprint">def beShort = be_&lt;=(5) ^^ { (t: Any) =&gt; t.toString.size }
-</code></pre>
-  </li>
-  <li>
-    <p>adapting the actual and expected values. This matcher compares 2 <code class="prettyprint">Human</code> objects but set their <code class="prettyprint">wealth</code> field to 0<br />
-     so that the equals method will not fail on that field:</p>
-    <pre><code class="prettyprint">def beMostlyEqualTo = (be_==(_:Human)) ^^^ ((_:Human).copy(wealth = 0))
+</code></pre></li>
+  <li><p>adapting the actual value. This matcher adapts the existing <code class="prettyprint">be_&lt;=</code> matcher to a matcher applicable to <code class="prettyprint">Any</code></p>
+  <pre><code class="prettyprint">def beShort = be_&lt;=(5) ^^ { (t: Any) =&gt; t.toString.size }
+</code></pre></li>
+  <li><p>adapting the actual and expected values. This matcher compares 2 <code class="prettyprint">Human</code> objects but set their <code class="prettyprint">wealth</code> field to 0<br /> so that the equals method will not fail on that field:</p>
+  <pre><code class="prettyprint">def beMostlyEqualTo = (be_==(_:Human)) ^^^ ((_:Human).copy(wealth = 0))
 // then
 Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) toResult // success
-</code></pre>
-  </li>
-  <li>
-    <p>using <code class="prettyprint">eventually</code> to try a match a number of times until it succeeds:</p>
-    <pre><code class="prettyprint">val iterator = List(1, 2, 3).iterator
+</code></pre></li>
+  <li><p>using <code class="prettyprint">eventually</code> to try a match a number of times until it succeeds:</p>
+  <pre><code class="prettyprint">val iterator = List(1, 2, 3).iterator
 iterator.next must be_==(3).eventually
  // Use eventually(retries, n.millis) to use another number of tries and waiting time
-</code></pre>
-  </li>
-  <li>
-    <p>using <code class="prettyprint">when</code> or <code class="prettyprint">unless</code> to apply a matcher only if a condition is satisfied:</p>
-    <pre><code class="prettyprint">1 must be_==(2).when(false)                        // will return a success
+</code></pre></li>
+  <li><p>using <code class="prettyprint">when</code> or <code class="prettyprint">unless</code> to apply a matcher only if a condition is satisfied:</p>
+  <pre><code class="prettyprint">1 must be_==(2).when(false)                        // will return a success
 1 must be_==(2).unless(true)                       // same thing
 
 1 must be_==(2).when(false, &quot;don't check this&quot;)    // will return a success
 1 must be_==(2).unless(true, &quot;don't check this&quot;)   // same thing
-</code></pre>
-  </li>
-  <li>
-    <p>using <code class="prettyprint">iff</code> to say that a matcher must succeed if and only if a condition is satisfied:</p>
-    <pre><code class="prettyprint">1 must be_==(1).iff(true)                        // will return a success
+</code></pre></li>
+  <li><p>using <code class="prettyprint">iff</code> to say that a matcher must succeed if and only if a condition is satisfied:</p>
+  <pre><code class="prettyprint">1 must be_==(1).iff(true)                        // will return a success
 1 must be_==(2).iff(true)                        // will return a failure
 1 must be_==(2).iff(false)                       // will return a success
 1 must be_==(1).iff(false)                       // will return a failure
-</code></pre>
-  </li>
-  <li>
-    <p>using <code class="prettyprint">orSkip</code> to return a <code class="prettyprint">Skipped</code> result instead of a Failure if the condition is not met</p>
-    <pre><code class="prettyprint">1 must be_==(2).orSkip
+</code></pre></li>
+  <li><p>using <code class="prettyprint">orSkip</code> to return a <code class="prettyprint">Skipped</code> result instead of a Failure if the condition is not met</p>
+  <pre><code class="prettyprint">1 must be_==(2).orSkip
 1 must be_==(2).orSkip(&quot;Precondition failed&quot;)  // prints &quot;Precondition failed: '1' is not equal to '2'&quot;
-</code></pre>
-  </li>
+</code></pre></li>
+  <li><p>using <code class="prettyprint">mute</code> to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create<br /> properties showing no messages when they fail</p></li>
 </ul><p>Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:</p>
 <pre><code class="prettyprint">   val m: Matcher[String]  = ((_: String).startsWith(&quot;hello&quot;), &quot;doesn't start with hello&quot;)
    val m1: Matcher[String] = ((_: String).startsWith(&quot;hello&quot;), &quot;starts with hello&quot;, &quot;doesn't start with hello&quot;)
@@ -160,20 +180,9 @@ iterator.next must be_==(3).eventually
   }
 </code></pre><p>In the code above you have to:</p>
 <ul>
-  
-  <li>
-    <p>define the <code class="prettyprint">apply</code> method (and its somewhat complex signature)</p>
-  </li>
-  <li>
-    <p>use the protected <code class="prettyprint">result</code> method to return: a Boolean condition, a message when the match is ok, a message when the<br />
-     match is not ok, the &quot;expectable&quot; value. Note that if you change the expectable value you need to use the <code class="prettyprint">map</code> method<br />
-     on the <code class="prettyprint">s</code> expectable (<code class="prettyprint">s.map(other)</code>). This way you preserve the ability of the Expectable to throw an Exception if<br />
-     a subsequent match fails</p>
-  </li>
-  <li>
-    <p>you can use the <code class="prettyprint">description</code> method on the <code class="prettyprint">Expectable</code> class to return the full description of the expectable including<br />
-     the optional description you setup using the <code class="prettyprint">aka</code> method</p>
-  </li>
+  <li><p>define the <code class="prettyprint">apply</code> method (and its somewhat complex signature)</p></li>
+  <li><p>use the protected <code class="prettyprint">result</code> method to return: a Boolean condition, a message when the match is ok, a message when the<br /> match is not ok, the &quot;expectable&quot; value. Note that if you change the expectable value you need to use the <code class="prettyprint">map</code> method<br /> on the <code class="prettyprint">s</code> expectable (<code class="prettyprint">s.map(other)</code>). This way you preserve the ability of the Expectable to throw an Exception if<br /> a subsequent match fails</p></li>
+  <li><p>you can use the <code class="prettyprint">description</code> method on the <code class="prettyprint">Expectable</code> class to return the full description of the expectable including<br /> the optional description you setup using the <code class="prettyprint">aka</code> method</p></li>
 </ul><a name="Matching+with+a+sequence+of+values"></a><h4>Matching with a sequence of values</h4><p>If you have the same &quot;MatchResult&quot; expression that you'd like to verify for different values you can write one of the following:</p>
 <pre><code class="prettyprint">    // stop after the first failure
     ((_:Int) must be_&gt;(2)).forall(Seq(3, 4, 5))
@@ -185,170 +194,80 @@ iterator.next must be_==(3).eventually
     ((_:Int) must be_&gt;(2)).atLeastOnce(Seq(3, 4, 5))
 </code></pre><a name="Matchers+for+Option+%2F+Either"></a><h4>Matchers for Option / Either</h4><p>There are several matchers to check Option and Either instances:</p>
 <ul>
-  <li><code class="prettyprint">beSome</code> checks if an element is Some(_)</li><li><code class="prettyprint">beSome.which(function)</code> checks if an element is Some(_) and satisfies a function returning a boolean</li><li><code class="prettyprint">beSome.like(partial function)</code> checks if an element is Some(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li><li><code class="prettyprint">beNone</code> checks if an element is None</li><li><code class="prettyprint">beAsNoneAs</code> checks if 2 values are equal to None at the same time</li><li><code class="prettyprint">beRight</code> checks if an element is Right(_)</li><li><code class="prettyprint">beRight.like(partial function)</code> checks if an element is Right(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li><li><code class="prettyprint">beLeft</code> checks if an element is Left(_)</li><li><code class="prettyprint">beLeft.like(partial function)</code> checks if an element is Left(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beSome</code> checks if an element is Some(_)</li>
+  <li><code class="prettyprint">beSome.which(function)</code> checks if an element is Some(_) and satisfies a function returning a boolean</li>
+  <li><code class="prettyprint">beSome.like(partial function)</code> checks if an element is Some(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beNone</code> checks if an element is None</li>
+  <li><code class="prettyprint">beAsNoneAs</code> checks if 2 values are equal to None at the same time</li>
+  <li><code class="prettyprint">beRight</code> checks if an element is Right(_)</li>
+  <li><code class="prettyprint">beRight.like(partial function)</code> checks if an element is Right(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beLeft</code> checks if an element is Left(_)</li>
+  <li><code class="prettyprint">beLeft.like(partial function)</code> checks if an element is Left(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
 </ul><a name="String+matchers"></a><h4>String matchers</h4><p>Matching on strings is very common. Here are the matchers which can help you:</p>
 <ul>
-  <li><code class="prettyprint">beMatching</code> (or <code class="prettyprint">be matching</code>) checks if a string matches a regular expression</li><li><code class="prettyprint">=~(s)</code> is a shortcut for <code class="prettyprint">beMatching(&quot;.*&quot;+s+&quot;.*&quot;)</code></li><li><code class="prettyprint">find(exp).withGroups(a, b, c)</code> checks if some groups are found in a string</li><li><code class="prettyprint">have length</code> checks the length of a string</li><li><code class="prettyprint">have size</code> checks the size of a string (seen as an <code class="prettyprint">Iterable[Char]</code>)</li><li><code class="prettyprint">be empty</code> checks if a string is empty</li><li><code class="prettyprint">beEqualTo(b).ignoreCase</code> checks if 2 strings are equal regardless of casing</li><li><code class="prettyprint">beEqualTo(b).ignoreSpace</code> checks if 2 strings are equal when trimmed</li><li><code class="prettyprint">beEqualTo(b).ignoreSpace.ignoreCase</code> you can compose them</li><li><code class="prettyprint">contain(b)</code> checks if a string contains another one</li><li><code class="prettyprint">startWith(b)</code> checks if a string starts with another one</li><li><code class="prettyprint">endWith(b)</code> checks if a string ends with another one</li>
+  <li><code class="prettyprint">beMatching</code> (or <code class="prettyprint">be matching</code>) checks if a string matches a regular expression</li>
+  <li><code class="prettyprint">=~(s)</code> is a shortcut for <code class="prettyprint">beMatching(&quot;.*&quot;+s+&quot;.*&quot;)</code></li>
+  <li><code class="prettyprint">find(exp).withGroups(a, b, c)</code> checks if some groups are found in a string</li>
+  <li><code class="prettyprint">have length</code> checks the length of a string</li>
+  <li><code class="prettyprint">have size</code> checks the size of a string (seen as an <code class="prettyprint">Iterable[Char]</code>)</li>
+  <li><code class="prettyprint">be empty</code> checks if a string is empty</li>
+  <li><code class="prettyprint">beEqualTo(b).ignoreCase</code> checks if 2 strings are equal regardless of casing</li>
+  <li><code class="prettyprint">beEqualTo(b).ignoreSpace</code> checks if 2 strings are equal when trimmed</li>
+  <li><code class="prettyprint">beEqualTo(b).ignoreSpace.ignoreCase</code> you can compose them</li>
+  <li><code class="prettyprint">contain(b)</code> checks if a string contains another one</li>
+  <li><code class="prettyprint">startWith(b)</code> checks if a string starts with another one</li>
+  <li><code class="prettyprint">endWith(b)</code> checks if a string ends with another one</li>
 </ul><a name="Numeric+matchers"></a><h4>Numeric matchers</h4><p>Less often you need to do comparisons on Numerical values:</p>
 <ul>
-  
-  <li>
-    <p><code class="prettyprint">beLessThanOrEqualTo</code> compares any Ordered type with <code class="prettyprint">&lt;=</code><br />
-    <code class="prettyprint">1 must be_&lt;=(2)</code><br />
-    <code class="prettyprint">1 must beLessThanOrEqualTo(2)</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">beLessThan</code> compares any Ordered type with <code class="prettyprint">&lt;</code><br />
-    <code class="prettyprint">1 must be_&lt;(2)</code><br />
-    <code class="prettyprint">1 must beLessThan(2)</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">beGreaterThanOrEqualTo</code> compares any Ordered type with <code class="prettyprint">&gt;=</code><br />
-    <code class="prettyprint">2 must be_&gt;=(1)</code><br />
-    <code class="prettyprint">2 must beGreaterThanOrEqualTo(1)</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">beGreaterThan</code> compares any Ordered type with <code class="prettyprint">&gt;</code><br />
-    <code class="prettyprint">2 must be_&lt;(1)</code><br />
-    <code class="prettyprint">2 must beGreaterThan(1)</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">beCloseTo</code> checks if 2 Numerics are close to each other<br />
-    <code class="prettyprint">1.0 must beCloseTo(1, 0.5)</code><br />
-    <code class="prettyprint">4 must be ~(5 +/- 2)</code></p>
-  </li>
+  <li><p><code class="prettyprint">beLessThanOrEqualTo</code> compares any Ordered type with <code class="prettyprint">&lt;=</code><br /><code class="prettyprint">1 must be_&lt;=(2)</code><br /><code class="prettyprint">1 must beLessThanOrEqualTo(2)</code></p></li>
+  <li><p><code class="prettyprint">beLessThan</code> compares any Ordered type with <code class="prettyprint">&lt;</code><br /><code class="prettyprint">1 must be_&lt;(2)</code><br /><code class="prettyprint">1 must beLessThan(2)</code></p></li>
+  <li><p><code class="prettyprint">beGreaterThanOrEqualTo</code> compares any Ordered type with <code class="prettyprint">&gt;=</code><br /><code class="prettyprint">2 must be_&gt;=(1)</code><br /><code class="prettyprint">2 must beGreaterThanOrEqualTo(1)</code></p></li>
+  <li><p><code class="prettyprint">beGreaterThan</code> compares any Ordered type with <code class="prettyprint">&gt;</code><br /><code class="prettyprint">2 must be_&lt;(1)</code><br /><code class="prettyprint">2 must beGreaterThan(1)</code></p></li>
+  <li><p><code class="prettyprint">beCloseTo</code> checks if 2 Numerics are close to each other<br /><code class="prettyprint">1.0 must beCloseTo(1, 0.5)</code><br /><code class="prettyprint">4 must be ~(5 +/- 2)</code></p></li>
 </ul><a name="Exception+matchers"></a><h4>Exception matchers</h4><p><strong><em>specs2</em></strong> offers very compact ways of checking that some exceptions are thrown:</p>
 <ul>
-  <li><code class="prettyprint">throwA[ExceptionType]</code> checks if a block of code throws an exception of the given type</li><li><code class="prettyprint">throwA[ExceptionType](message = &quot;boom&quot;)</code> additionally checks if the exception message is as expected</li><li><code class="prettyprint">throwA(exception)</code> or <code class="prettyprint">throwAn(exception)</code> checks if a block of code throws an exception of the same type, with the<br />
-  same message</li><li><code class="prettyprint">throwA[ExceptionType].like { case e =&gt; e must matchSomething }</code> or<br />
-   <code class="prettyprint">throwA(exception).like { case e =&gt; e must matchSomething }</code> allow to verify that the thrown exception satisfies a property</li><li><code class="prettyprint">throwA[ExceptionType](me.like { case e =&gt; e must matchSomething }</code> or<br />
-   <code class="prettyprint">throwA(exception).like { case e =&gt; e must matchSomething }</code> allow to verify that the thrown exception satisfies a property</li>
-</ul><p>For all the above matchers you can use <code class="prettyprint">throwAn</code> instead of <code class="prettyprint">throwA</code> if the exception name starts with a vowel for better<br />
-readability.</p><a name="Iterable+matchers"></a><h4>Iterable matchers</h4><p>Iterables can be checked with several matchers:</p>
+  <li><code class="prettyprint">throwA[ExceptionType]</code> checks if a block of code throws an exception of the given type</li>
+  <li><code class="prettyprint">throwA[ExceptionType](message = &quot;boom&quot;)</code> additionally checks if the exception message is as expected</li>
+  <li><code class="prettyprint">throwA(exception)</code> or <code class="prettyprint">throwAn(exception)</code> checks if a block of code throws an exception of the same type, with the<br />same message</li>
+  <li><code class="prettyprint">throwA[ExceptionType].like { case e =&gt; e must matchSomething }</code> or<br /> <code class="prettyprint">throwA(exception).like { case e =&gt; e must matchSomething }</code> allow to verify that the thrown exception satisfies a property</li>
+  <li><code class="prettyprint">throwA[ExceptionType](me.like { case e =&gt; e must matchSomething }</code> or<br /> <code class="prettyprint">throwA(exception).like { case e =&gt; e must matchSomething }</code> allow to verify that the thrown exception satisfies a property</li>
+</ul><p>For all the above matchers you can use <code class="prettyprint">throwAn</code> instead of <code class="prettyprint">throwA</code> if the exception name starts with a vowel for better<br />readability.</p><a name="Iterable+matchers"></a><h4>Iterable matchers</h4><p>Iterables can be checked with several matchers:</p>
 <ul>
-  
-  <li>
-    <p>to check if the iterable is empty<br />
-    <code class="prettyprint">Nil must be empty</code><br />
-    <code class="prettyprint">List(1, 2, 3) must not be empty</code></p>
-  </li>
-  <li>
-    <p>to check if some elements are contained in the iterable<br />
-    <code class="prettyprint">List(1, 2, 3) must contain(3, 2)</code></p>
-  </li>
-  <li>
-    <p>to check if some elements are contained in the iterable in the same order<br />
-    <code class="prettyprint">List(1, 2, 3, 4) must contain(2, 4).inOrder</code></p>
-  </li>
-  <li>
-    <p>to check if only some elements are contained in the iterable<br />
-    <code class="prettyprint">List(4, 2) must contain(2, 4).only</code></p>
-  </li>
-  <li>
-    <p>to check if only some elements are contained in the iterable and in the same order<br />
-    <code class="prettyprint">List(2, 4) must contain(2, 4).only.inOrder</code></p>
-  </li>
-  <li>
-    <p>to check the size of an iterable<br />
-    <code class="prettyprint">List(1, 2) must have size(2)</code></p>
-  </li>
-  <li>
-    <p>to check if an <code class="prettyprint">Iterable[String]</code> contains matching strings<br />
-    <code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must containMatch(&quot;ll&quot;)        // matches with .*ll.*</code><br />
-    <code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must containPattern(&quot;.*llo&quot;)   // matches with .*llo</code></p>
-  </li>
-  <li>
-    <p>to check if an <code class="prettyprint">Iterable[String]</code> contains matching strings, but only once<br />
-    <code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must containMatch(&quot;ll&quot;).onlyOnce</code></p>
-  </li>
-  <li>
-    <p>to check if one of the elements has a given property<br />
-    <code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must have(_.size &gt;= 5)</code></p>
-  </li>
-  <li>
-    <p>to check if an iterable has the same elements as another one, regardless of the order<br />
-    <code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must haveTheSameElementsAs(List(&quot;World&quot;, &quot;Hello&quot;))</code></p>
-  </li>
+  <li><p>to check if the iterable is empty<br /><code class="prettyprint">Nil must be empty</code><br /><code class="prettyprint">List(1, 2, 3) must not be empty</code></p></li>
+  <li><p>to check if some elements are contained in the iterable<br /><code class="prettyprint">List(1, 2, 3) must contain(3, 2)</code></p></li>
+  <li><p>to check if some elements are contained in the iterable in the same order<br /><code class="prettyprint">List(1, 2, 3, 4) must contain(2, 4).inOrder</code></p></li>
+  <li><p>to check if only some elements are contained in the iterable<br /><code class="prettyprint">List(4, 2) must contain(2, 4).only</code></p></li>
+  <li><p>to check if only some elements are contained in the iterable and in the same order<br /><code class="prettyprint">List(2, 4) must contain(2, 4).only.inOrder</code></p></li>
+  <li><p>to check the size of an iterable<br /><code class="prettyprint">List(1, 2) must have size(2)</code><br /><code class="prettyprint">List(1, 2) must have length(2)</code> // equivalent to size</p></li>
+  <li><p>to check if an <code class="prettyprint">Iterable[String]</code> contains matching strings<br /><code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must containMatch(&quot;ll&quot;)        // matches with .*ll.*</code><br /><code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must containPattern(&quot;.*llo&quot;)   // matches with .*llo</code></p></li>
+  <li><p>to check if an <code class="prettyprint">Iterable[String]</code> contains matching strings, but only once<br /><code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must containMatch(&quot;ll&quot;).onlyOnce</code></p></li>
+  <li><p>to check if one of the elements has a given property<br /><code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must have(_.size &gt;= 5)</code></p></li>
+  <li><p>to check if an iterable has the same elements as another one, regardless of the order<br /><code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must haveTheSameElementsAs(List(&quot;World&quot;, &quot;Hello&quot;))</code></p></li>
 </ul><a name="Map+matchers"></a><h4>Map matchers</h4><p>Maps have their own matchers as well, to check keys and values:</p>
 <ul>
-  
-  <li>
-    <p><code class="prettyprint">haveKey</code> checks if a Map has a given key<br />
-    <code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must haveKey(1)</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">haveValue</code> checks if a Map has a given value<br />
-     <code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must haveValue(&quot;1&quot;)</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">havePair</code> checks if a Map has a given pair of values<br />
-    <code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must havePair(1 -&gt; &quot;1&quot;)</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">havePairs</code> checks if a Map has some pairs of values<br />
-    <code class="prettyprint">Map(1-&gt;&quot;1&quot;, 2-&gt;&quot;2&quot;, 3-&gt;&quot;3&quot;) must havePairs(1-&gt;&quot;1&quot;, 2-&gt;&quot;2&quot;)</code></p>
-  </li>
+  <li><p><code class="prettyprint">haveKey</code> checks if a Map has a given key<br /><code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must haveKey(1)</code></p></li>
+  <li><p><code class="prettyprint">haveValue</code> checks if a Map has a given value<br /> <code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must haveValue(&quot;1&quot;)</code></p></li>
+  <li><p><code class="prettyprint">havePair</code> checks if a Map has a given pair of values<br /><code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must havePair(1 -&gt; &quot;1&quot;)</code></p></li>
+  <li><p><code class="prettyprint">havePairs</code> checks if a Map has some pairs of values<br /><code class="prettyprint">Map(1-&gt;&quot;1&quot;, 2-&gt;&quot;2&quot;, 3-&gt;&quot;3&quot;) must havePairs(1-&gt;&quot;1&quot;, 2-&gt;&quot;2&quot;)</code></p></li>
 </ul><p>But Maps are also Partial Functions, so:</p>
 <ul>
-  
-  <li>
-    <p><code class="prettyprint">beDefinedAt</code> checks if a PartialFunction is defined for a given value<br />
-    <code class="prettyprint">partial must beDefinedAt(1)</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">beDefinedBy</code> checks if a PartialFunction is defined for a given value<br />
-    and returns another one<br />
-    <code class="prettyprint">partial</code> must beDefinedBy(1 -&gt; true) </p>
-  </li>
+  <li><p><code class="prettyprint">beDefinedAt</code> checks if a PartialFunction is defined for a given value<br /><code class="prettyprint">partial must beDefinedAt(1)</code></p></li>
+  <li><p><code class="prettyprint">beDefinedBy</code> checks if a PartialFunction is defined for a given value<br />and returns another one<br /><code class="prettyprint">partial</code> must beDefinedBy(1 -&gt; true) </p></li>
 </ul><a name="Xml+matchers"></a><h4>Xml matchers</h4><p>It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it!</p>
 <ul>
-  
-  <li>
-    <p><code class="prettyprint">beEqualToIgnoringSpace</code> compares 2 Nodes, without considering spaces<br />
-    <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code><br />
-    <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">beEqualToIgnoringSpace</code> can also do an ordered comparison<br />
-    <code class="prettyprint">&lt;a&gt;&lt;c/&gt; &lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;c/&gt;&lt;b/&gt;&lt;/a&gt;).ordered</code></p>
-  </li>
-  <li>
-    <p><code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another<br />
-    <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must \(&quot;b&quot;)</code></p>
-  </li>
-  <li>
-    <p>You can also check attribute names<br />
-    <code class="prettyprint">&lt;a&gt;&lt;b name=&quot;value&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;name&quot;)</code></p>
-  </li>
-  <li>
-    <p>And attribute names and values as well<br />
-    <code class="prettyprint">&lt;a&gt;&lt;b n=&quot;v&quot; n2=&quot;v2&quot; n3=&quot;v3&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v2&quot;)</code></p>
-  </li>
-  <li>
-    <p>The equivalent of <code class="prettyprint">\</code> for a &quot;deep&quot; match is simply <code class="prettyprint">\\</code><br />
-    <code class="prettyprint">&lt;a&gt;&lt;s&gt;&lt;c&gt;&lt;/c&gt;&lt;/s&gt;&lt;/a&gt; must \\(&quot;c&quot;)</code></p>
-  </li>
-</ul><a name="Json+matchers"></a><h4>Json matchers</h4><p><a href="www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be<br />
-used to verify the presence of appropriate values in Strings representing Json documents:</p>
+  <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> compares 2 Nodes, without considering spaces<br /><code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code><br /><code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code></p></li>
+  <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> can also do an ordered comparison<br /><code class="prettyprint">&lt;a&gt;&lt;c/&gt; &lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;c/&gt;&lt;b/&gt;&lt;/a&gt;).ordered</code></p></li>
+  <li><p><code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another<br /><code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must \(&quot;b&quot;)</code></p></li>
+  <li><p>You can also check attribute names<br /><code class="prettyprint">&lt;a&gt;&lt;b name=&quot;value&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;name&quot;)</code></p></li>
+  <li><p>And attribute names and values as well<br /><code class="prettyprint">&lt;a&gt;&lt;b n=&quot;v&quot; n2=&quot;v2&quot; n3=&quot;v3&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v2&quot;)</code></p></li>
+  <li><p>The equivalent of <code class="prettyprint">\</code> for a &quot;deep&quot; match is simply <code class="prettyprint">\\</code><br /><code class="prettyprint">&lt;a&gt;&lt;s&gt;&lt;c&gt;&lt;/c&gt;&lt;/s&gt;&lt;/a&gt; must \\(&quot;c&quot;)</code></p></li>
+</ul><a name="Json+matchers"></a><h4>Json matchers</h4><p><a href="www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be<br />used to verify the presence of appropriate values in Strings representing Json documents:</p>
 <ul>
-  
-  <li>
-    <p><code class="prettyprint">/(value)</code> checks if a value is present at the root of the document. This can only be the case if that document is<br />
-    an Array</p>
-  </li>
-  <li>
-    <p><code class="prettyprint">/(key -&gt; value)</code> checks if a pair is present at the root of the document. This can only be the case if that document is<br />
-    a Map</p>
-  </li>
-  <li>
-    <p><code class="prettyprint">*/(value)</code> checks if a value is present anywhere in the document, either as an entry in an Array, or as the value<br />
-    for a key in a Map</p>
-  </li>
-  <li>
-    <p><code class="prettyprint">*/(key -&gt; value)</code> checks if a pair is present anywhere in a Map of thedocument</p>
-  </li>
-</ul><p>Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document.<br />
-For example, for the following document:</p>
+  <li><p><code class="prettyprint">/(value)</code> checks if a value is present at the root of the document. This can only be the case if that document is<br />an Array</p></li>
+  <li><p><code class="prettyprint">/(key -&gt; value)</code> checks if a pair is present at the root of the document. This can only be the case if that document is<br />a Map</p></li>
+  <li><p><code class="prettyprint">*/(value)</code> checks if a value is present anywhere in the document, either as an entry in an Array, or as the value<br />for a key in a Map</p></li>
+  <li><p><code class="prettyprint">*/(key -&gt; value)</code> checks if a pair is present anywhere in a Map of thedocument</p></li>
+</ul><p>Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document.<br />For example, for the following document:</p>
 <pre><code class="prettyprint">    // taken from an example in the Lift project
     val person = {
       &quot;person&quot;: {
@@ -366,11 +285,36 @@ For example, for the following document:</p>
 <pre><code class="prettyprint">   person must /(&quot;person&quot;) */(&quot;person&quot;) /(&quot;age&quot; -&gt; 33.0) // by default numbers are parsed as Doubles
 </code></pre><a name="File+matchers"></a><h4>File matchers</h4><p>The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files:</p>
 <ul>
-  <li><code class="prettyprint">beEqualToIgnoringSep</code> checks if 2 paths are the same regardless of their separators<br />
-  <code class="prettyprint">&quot;c:\\temp\\hello&quot; must beEqualToIgnoringSep(&quot;c:/temp/hello&quot;)</code></li><li><code class="prettyprint">beAnExistingPath</code> checks if a path exists</li><li><code class="prettyprint">beAReadablePath</code> checks if a path is readable</li><li><code class="prettyprint">beAWritablePath</code> checks if a path is writable</li><li><code class="prettyprint">beAnAbsolutePath</code> checks if a path is absolute</li><li><code class="prettyprint">beAHiddenPath</code> checks if a path is hidden</li><li><code class="prettyprint">beAFilePath</code> checks if a path is a file</li><li><code class="prettyprint">beADirectoryPath</code> checks if a path is a directory</li><li><code class="prettyprint">havePathName</code> checks if a path has a given name</li><li><code class="prettyprint">haveAsAbsolutePath</code> checks if a path has a given absolute path</li><li><code class="prettyprint">haveAsCanonicalPath</code> checks if a path has a given canonical path</li><li><code class="prettyprint">haveParentPath</code> checks if a path has a given parent path</li><li><code class="prettyprint">listPaths</code> checks if a path has a given list of children</li><li><code class="prettyprint">exist</code> checks if a file exists</li><li><code class="prettyprint">beReadable</code> checks if a file is readable</li><li><code class="prettyprint">beWritable</code> checks if a file is writable</li><li><code class="prettyprint">beAbsolute</code> checks if a file is absolute</li><li><code class="prettyprint">beHidden</code> checks if a file is hidden</li><li><code class="prettyprint">beAFile</code> checks if a file is a file</li><li><code class="prettyprint">beADirectory</code> checks if a file is a directory</li><li><code class="prettyprint">haveName</code> checks if a file has a given name</li><li><code class="prettyprint">haveAbsolutePath</code> checks if a file has a given absolute path</li><li><code class="prettyprint">haveCanonicalPath</code> checks if afile has a given canonical path</li><li><code class="prettyprint">haveParent</code> checks if a file has a given parent path</li><li><code class="prettyprint">haveList</code> checks if a file has a given list of children</li>
+  <li><code class="prettyprint">beEqualToIgnoringSep</code> checks if 2 paths are the same regardless of their separators<br /><code class="prettyprint">&quot;c:\\temp\\hello&quot; must beEqualToIgnoringSep(&quot;c:/temp/hello&quot;)</code></li>
+  <li><code class="prettyprint">beAnExistingPath</code> checks if a path exists</li>
+  <li><code class="prettyprint">beAReadablePath</code> checks if a path is readable</li>
+  <li><code class="prettyprint">beAWritablePath</code> checks if a path is writable</li>
+  <li><code class="prettyprint">beAnAbsolutePath</code> checks if a path is absolute</li>
+  <li><code class="prettyprint">beAHiddenPath</code> checks if a path is hidden</li>
+  <li><code class="prettyprint">beAFilePath</code> checks if a path is a file</li>
+  <li><code class="prettyprint">beADirectoryPath</code> checks if a path is a directory</li>
+  <li><code class="prettyprint">havePathName</code> checks if a path has a given name</li>
+  <li><code class="prettyprint">haveAsAbsolutePath</code> checks if a path has a given absolute path</li>
+  <li><code class="prettyprint">haveAsCanonicalPath</code> checks if a path has a given canonical path</li>
+  <li><code class="prettyprint">haveParentPath</code> checks if a path has a given parent path</li>
+  <li><code class="prettyprint">listPaths</code> checks if a path has a given list of children</li>
+  <li><code class="prettyprint">exist</code> checks if a file exists</li>
+  <li><code class="prettyprint">beReadable</code> checks if a file is readable</li>
+  <li><code class="prettyprint">beWritable</code> checks if a file is writable</li>
+  <li><code class="prettyprint">beAbsolute</code> checks if a file is absolute</li>
+  <li><code class="prettyprint">beHidden</code> checks if a file is hidden</li>
+  <li><code class="prettyprint">beAFile</code> checks if a file is a file</li>
+  <li><code class="prettyprint">beADirectory</code> checks if a file is a directory</li>
+  <li><code class="prettyprint">haveName</code> checks if a file has a given name</li>
+  <li><code class="prettyprint">haveAbsolutePath</code> checks if a file has a given absolute path</li>
+  <li><code class="prettyprint">haveCanonicalPath</code> checks if afile has a given canonical path</li>
+  <li><code class="prettyprint">haveParent</code> checks if a file has a given parent path</li>
+  <li><code class="prettyprint">haveList</code> checks if a file has a given list of children</li>
 </ul><a name="Scalaz+matchers"></a><h4>Scalaz matchers</h4><p>It was useful to check some Scalaz properties during the development of <strong><em>specs2</em></strong> so they are available as matchers:</p>
 <ul>
-  <li><code class="prettyprint">semigroup.isAssociative</code> checks if a <code class="prettyprint">Semigroup</code> respect the associativity law</li><li><code class="prettyprint">monoid.hasNeutralElement</code> checks if a <code class="prettyprint">Monoid</code> zero value is really a neutral element</li><li><code class="prettyprint">monoid.isMonoid</code> checks if a <code class="prettyprint">Monoid</code> has a neutral element and respects the associativity rule</li>
+  <li><code class="prettyprint">semigroup.isAssociative</code> checks if a <code class="prettyprint">Semigroup</code> respect the associativity law</li>
+  <li><code class="prettyprint">monoid.hasNeutralElement</code> checks if a <code class="prettyprint">Monoid</code> zero value is really a neutral element</li>
+  <li><code class="prettyprint">monoid.isMonoid</code> checks if a <code class="prettyprint">Monoid</code> has a neutral element and respects the associativity rule</li>
 </ul><p>Note that you need to extend the <code class="prettyprint">ScalaCheck</code> trait if you want to use these matchers in a specification.</p><a name="Result+matchers"></a><h4>Result matchers</h4><p>That's only if you want to match the result of other matchers!</p>
 <pre><code class="prettyprint">    // you need to extend the ResultMatchers trait
     class MatchersSpec extends Specification with ResultMatchers { def is =
@@ -378,8 +322,7 @@ For example, for the following document:</p>
         (&quot;Hello&quot; must beMatching(&quot;h.*&quot;)) must beSuccessful
       }
     }
-</code></pre><a name="Scala+Interpreter+matchers"></a><h4>Scala Interpreter matchers</h4><p>This trait is not included in the default specification so you'll have to add it in the rare case where you want to use<br />
-the Scala interpreter and execute a script:</p>
+</code></pre><a name="Scala+Interpreter+matchers"></a><h4>Scala Interpreter matchers</h4><p>This trait is not included in the default specification so you'll have to add it in the rare case where you want to use<br />the Scala interpreter and execute a script:</p>
 <pre><code class="prettyprint">    class ScalaInterpreterMatchersSpec extends Specification with ScalaInterpreterMatchers {
       def interpret(s: String): String = // you have to provide your own Scala interpreter here
 
@@ -391,11 +334,10 @@ the Scala interpreter and execute a script:</p>
     }
 </code></pre><a name="Parser+matchers"></a><h4>Parser matchers</h4><p>Scala provides a parsing library using <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">parser combinators</a>.</p><p>You can specify your own parsers by:</p>
 <ul>
-  <li>extending the <code class="prettyprint">ParserMatchers</code> trait</li><li>defining the <code class="prettyprint">val parsers</code> variable with your parsers definition</li><li>use the <code class="prettyprint">beASuccess</code>, <code class="prettyprint">beAFailure</code>, <code class="prettyprint">successOn</code>, <code class="prettyprint">failOn</code>, <code class="prettyprint">errorOn</code> matchers to specify the results of parsing input<br />
-   strings</li><li>use <code class="prettyprint">haveSuccessResult</code> and <code class="prettyprint">haveFailureMsg</code> to specify what happens <em>only</em> on success or failure. Those matchers accept<br />
-   a String or a matcher so that<br />
-   . <code class="prettyprint">haveSuccessResult(&quot;r&quot;) &lt;==&gt; haveSuccessResult(beMatching(&quot;.*r.*&quot;) ^^ ((_:Any).toString)</code><br />
-   . <code class="prettyprint">haveFailingMsg(&quot;m&quot;) &lt;==&gt; haveFailingMsg(beMatching(&quot;.*r.*&quot;))</code></li>
+  <li>extending the <code class="prettyprint">ParserMatchers</code> trait</li>
+  <li>defining the <code class="prettyprint">val parsers</code> variable with your parsers definition</li>
+  <li>use the <code class="prettyprint">beASuccess</code>, <code class="prettyprint">beAFailure</code>, <code class="prettyprint">successOn</code>, <code class="prettyprint">failOn</code>, <code class="prettyprint">errorOn</code> matchers to specify the results of parsing input<br /> strings</li>
+  <li>use <code class="prettyprint">haveSuccessResult</code> and <code class="prettyprint">haveFailureMsg</code> to specify what happens <em>only</em> on success or failure. Those matchers accept<br /> a String or a matcher so that<br /> . <code class="prettyprint">haveSuccessResult(&quot;r&quot;) &lt;==&gt; haveSuccessResult(beMatching(&quot;.*r.*&quot;) ^^ ((_:Any).toString)</code><br /> . <code class="prettyprint">haveFailingMsg(&quot;m&quot;) &lt;==&gt; haveFailingMsg(beMatching(&quot;.*r.*&quot;))</code></li>
 </ul><p>For example, specifying a Parser for numbers could look like this: </p>
 <pre><code class="prettyprint">    import util.parsing.combinator.RegexParsers
     import NumberParsers.{number, error}
@@ -430,8 +372,7 @@ the Scala interpreter and execute a script:</p>
       /** this parser returns an error */
       val error: Parser[String] = err(&quot;Error&quot;)
     }
-</code></pre><a name="ScalaCheck+properties"></a><h3>ScalaCheck properties</h3><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions to the <code class="prettyprint">check</code> method<br />
-and use the resulting block as your example body:</p>
+</code></pre><a name="ScalaCheck+properties"></a><h3>ScalaCheck properties</h3><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions to the <code class="prettyprint">check</code> method<br />and use the resulting block as your example body:</p>
 <pre><code class="prettyprint">  &quot;addition and multiplication are related&quot; ! check { (a: Int) =&gt; a + a == 2 * a }
 </code></pre><p>The function that is checked can either return:</p>
 <pre><code class="prettyprint">  // a Boolean
@@ -442,17 +383,14 @@ and use the resulting block as your example body:</p>
 
   // a Prop
   &quot;addition and multiplication are related&quot; ! check { (a: Int) =&gt; (a &gt; 0) ==&gt; (a + a must_== 2 * a) }
-</code></pre><p>Note that if you pass functions using MatchResults you will get better failure messages so you are encouraged to do so.</p><a name="Arbitrary+instances"></a><h4>Arbitrary instances</h4><p>By default <code class="prettyprint">Arbitrary</code> instances are taken from the surrounding example scope. However you'll certainly need to generate<br />
-your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope<br />
-of the function you're testing:</p>
+</code></pre><p>Note that if you pass functions using MatchResults you will get better failure messages so you are encouraged to do so.</p><a name="Arbitrary+instances"></a><h4>Arbitrary instances</h4><p>By default <code class="prettyprint">Arbitrary</code> instances are taken from the surrounding example scope. However you'll certainly need to generate<br />your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope<br />of the function you're testing:</p>
 <pre><code class="prettyprint">    // this arbitrary will be used for all the examples
     implicit def a = Arbitrary { for { a &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;); b &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;) } yield a+b }
 
     &quot;a simple property&quot; ! ex1
 
      def ex1 = check((s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
-</code></pre><p>You can also be very specific if you want to use an <code class="prettyprint">Arbitrary</code> instance only on one example. In that case, just replace the<br />
-<code class="prettyprint">check</code> method with the name of your <code class="prettyprint">Arbitrary</code> instance:</p>
+</code></pre><p>You can also be very specific if you want to use an <code class="prettyprint">Arbitrary</code> instance only on one example. In that case, just replace the<br /><code class="prettyprint">check</code> method with the name of your <code class="prettyprint">Arbitrary</code> instance:</p>
 <pre><code class="prettyprint">    &quot;a simple property&quot;       ! ex1
     &quot;a more complex property&quot; ! ex2
 
@@ -461,8 +399,7 @@ of the function you're testing:</p>
 
     // use a tuple if there are several parameters to your function
     def ex2 = (abStrings, abStrings)((s1: String, s2: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
-</code></pre><a name="Setting+the+ScalaCheck+properties"></a><h4>Setting the ScalaCheck properties</h4><p>ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use<br />
-implicit values:</p>
+</code></pre><a name="Setting+the+ScalaCheck+properties"></a><h4>Setting the ScalaCheck properties</h4><p>ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use<br />implicit values:</p>
 <pre><code class="prettyprint">  implicit val params = set(minTestsOk -&gt; 20) // use display instead of set to get additional console printing
 </code></pre><p>It is also possible to specifically set the execution parameters on a given property:</p>
 <pre><code class="prettyprint">  &quot;this is a specific property&quot; ! check { (a: Int, b: Int) =&gt;
@@ -470,9 +407,12 @@ implicit values:</p>
   }.set(minTestsOk -&gt; 200, workers -&gt; 3)
 </code></pre><p>The parameters you can modify are:</p>
 <ul>
-  <li><code class="prettyprint">minTestsOk</code>: minimum of tests which must be ok before the property is ok (default=100)</li><li><code class="prettyprint">maxDiscarded</code>: if the data generation discards too many values, then the property can't be proven (default=500)</li><li><code class="prettyprint">minSize</code>: minimum size for the &quot;sized&quot; data generators, like list generators (default=0)</li><li><code class="prettyprint">maxSize</code>: maximum size for the &quot;sized&quot; data generators (default=100)</li><li><code class="prettyprint">workers</code>: number of threads checking the property (default=1)</li>
-</ul><a name="Mock+expectations"></a><h3>Mock expectations</h3><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those<br />
-functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait:</p>
+  <li><code class="prettyprint">minTestsOk</code>: minimum of tests which must be ok before the property is ok (default=100)</li>
+  <li><code class="prettyprint">maxDiscarded</code>: if the data generation discards too many values, then the property can't be proven (default=500)</li>
+  <li><code class="prettyprint">minSize</code>: minimum size for the &quot;sized&quot; data generators, like list generators (default=0)</li>
+  <li><code class="prettyprint">maxSize</code>: maximum size for the &quot;sized&quot; data generators (default=100)</li>
+  <li><code class="prettyprint">workers</code>: number of threads checking the property (default=1)</li>
+</ul><a name="Mock+expectations"></a><h3>Mock expectations</h3><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those<br />functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait:</p>
 <pre><code class="prettyprint">  import org.specs2.mock._
   class MockitoSpec extends Specification { def is =
 
@@ -513,13 +453,10 @@ functionalities, you need to extend the <code class="prettyprint">org.specs2.moc
  m.get(1)           // the second call returns a different value: &quot;The parameter is 1&quot;
 </code></pre><a name="Parameters+for+the+answers+function"></a><h6>Parameters for the answers function</h6><p>Because of the use of reflection the function passed to answers will receive only instances of the <code class="prettyprint">java.lang.Object</code> type.</p><p>More precisely, it will:</p>
 <ul>
-  <li>pass the mock object if both the method has no parameters and the function has one parameter:<br />
-   <code class="prettyprint">mock.size answers { mock =&gt; mock.hashCode }</code></li><li>pass the parameter if both the method and the function have one parameter:<br />
-   <code class="prettyprint">mock.get(0) answers ( i =&gt; i.toString )</code></li><li>pass the parameter and the mock object if the method has 1 parameter and the function has 2:<br />
-  <code class="prettyprint">mock.get(0) answers { (i, mock) =&gt; i.toString + &quot; for mock &quot; + mock.toString }</code></li>
-</ul><p>In any other cases, if <code class="prettyprint">f</code> is a function of 1 parameter, the array of the method parameters will be passed and if the<br />
-function has 2 parameters, the second one will be the mock.</p><a name="Verification"></a><h5>Verification</h5><p>By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you<br />
-want to specify that some methods are indeed called:</p>
+  <li>pass the mock object if both the method has no parameters and the function has one parameter:<br /> <code class="prettyprint">mock.size answers { mock =&gt; mock.hashCode }</code></li>
+  <li>pass the parameter if both the method and the function have one parameter:<br /> <code class="prettyprint">mock.get(0) answers ( i =&gt; i.toString )</code></li>
+  <li>pass the parameter and the mock object if the method has 1 parameter and the function has 2:<br /><code class="prettyprint">mock.get(0) answers { (i, mock) =&gt; i.toString + &quot; for mock &quot; + mock.toString }</code></li>
+</ul><p>In any other cases, if <code class="prettyprint">f</code> is a function of 1 parameter, the array of the method parameters will be passed and if the<br />function has 2 parameters, the second one will be the mock.</p><a name="Verification"></a><h5>Verification</h5><p>By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you<br />want to specify that some methods are indeed called:</p>
 <pre><code class="prettyprint">   m.get(0)
    m.get(0) was called
    m.get(1) wasnt called
@@ -577,8 +514,7 @@ want to specify that some methods are indeed called:</p>
  spiedList.get(0) returns &quot;one&quot;
 </code></pre><p>As advised in the Mockito documentation, doReturn must be used in that case:</p>
 <pre><code class="prettyprint"> doReturn(&quot;one&quot;).when(spiedList).get(0)
-</code></pre><a name="DataTables"></a><h3>DataTables</h3><p>DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the<br />
-addition of integers by providing one example on each row of a table:</p>
+</code></pre><a name="DataTables"></a><h3>DataTables</h3><p>DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the<br />addition of integers by providing one example on each row of a table:</p>
 <pre><code class="prettyprint">  class DataTableSpec extends Specification with DataTables { def is =
     &quot;adding integers should just work in scala&quot;  ! e1
 
@@ -589,33 +525,19 @@ addition of integers by providing one example on each row of a table:</p>
        (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
     }
   }
-</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you<br />
-can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"></a><h3>Forms</h3><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed<br />
-to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div><div class="level0"><a name="Reusing+matchers+outside+of+specs2"></a><h3>Reusing matchers outside of specs2</h3><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test<br />
-framework. You can reuse the following traits:</p>
+</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you<br />can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"></a><h3>Forms</h3><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed<br />to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div><div class="level0"><a name="Reusing+matchers+outside+of+specs2"></a><h3>Reusing matchers outside of specs2</h3><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test<br />framework. You can reuse the following traits:</p>
 <ul>
-  
-  <li>
-    <p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br />
-     get a <code class="prettyprint">Result</code> back</p>
-  </li>
-  <li>
-    <p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br />
-     It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br />
-     Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p>
-  </li>
-  <li>
-    <p>Finally, in a JUnit-like library you can use the <code class="prettyprint">org.specs2.matcher.JUnitMustMatchers</code> trait which throws<br />
-     <code class="prettyprint">AssertionFailureError</code>s</p>
-  </li>
+  <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
+  <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
+  <li><p>Finally, in a JUnit-like library you can use the <code class="prettyprint">org.specs2.matcher.JUnitMustMatchers</code> trait which throws<br /> <code class="prettyprint">AssertionFailureError</code>s</p></li>
 </ul>
 <hr /></div><p></p><br /><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers guide</th></tr>
-        <tr><td>Finished in</td><td class="info">1 second, 948 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">16 seconds, 617 ms</td></tr>
         <tr><td>Results</td><td class="success">44 examples, 319 expectations, 0 failure, 0 error</td></tr>
       </table></div><div id="tree">
-      <ul><li id="1993234404"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="-526231793"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1457815269"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="151197571"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -625,7 +547,7 @@ framework. You can reuse the following traits:</p>
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1472605657"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="747455103"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -648,8 +570,6 @@ framework. You can reuse the following traits:</p>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Set+an+example+as+%22Pending+until+fixed%22">Set an example as &quot;Pending until fixed&quot;</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Auto-Examples">Auto-Examples</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+the+text+of+the+Example">Using the text of the Example</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Given+%2F+When+%2F+Then">Given / When / Then</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Multiple+steps">Multiple steps</a>
@@ -697,26 +617,38 @@ framework. You can reuse the following traits:</p>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Index+page">Index page</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Defining+Before+actions">Defining Before actions</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Variables+isolation">Variables isolation</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Scope">Scope</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+After+actions">Defining After actions</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#With+acceptance+specifications">With acceptance specifications</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+Around+actions">Defining Around actions</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts+inheritance">Contexts inheritance</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+Outside+actions">Defining Outside actions</a>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Before%2FAfter+code">Before/After code</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Defining+AroundOutside+actions">Defining AroundOutside actions</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Around+actions">Around actions</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Outside+actions">Outside actions</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#AroundOutside+actions">AroundOutside actions</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Without+creating+a+context+object%3A+BeforeExample">Without creating a context object: BeforeExample</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Implicit+context">Implicit context</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Composing+contexts">Composing contexts</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+a+context+for+each+Example">Using a context for each Example</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Composition">Composition</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+a+context+for+each+Example+in+a+mutable+specification">Using a context for each Example in a mutable specification</a>
-          <ul></ul>
+        </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Steps+and+Actions">Steps and Actions</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#Steps">Steps</a>
           <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#In+unit+specifications">In unit specifications</a>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Actions">Actions</a>
           <ul></ul>
+        </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Generic+specification+with+setup+and+teardown+steps">Generic specification with setup and teardown steps</a>
           <ul></ul>
         </li></ul>
@@ -727,9 +659,9 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-747120260"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="1468800887"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -767,7 +699,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -806,45 +738,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
-          <ul></ul>
-        </li></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -882,7 +776,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -920,7 +814,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -958,7 +852,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -996,7 +890,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1034,7 +928,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1072,7 +966,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1110,7 +1004,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1148,7 +1042,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1186,7 +1080,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1224,7 +1118,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1262,7 +1156,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1300,7 +1194,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1338,7 +1232,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1376,7 +1270,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1414,7 +1308,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1451,7 +1345,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1490,7 +1384,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1528,7 +1422,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1565,7 +1459,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1604,7 +1498,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1642,7 +1536,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1681,7 +1575,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1718,7 +1612,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1757,7 +1651,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1795,7 +1689,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1833,7 +1727,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1870,7 +1764,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1907,7 +1801,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1945,7 +1839,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1983,7 +1877,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2021,7 +1915,7 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2058,7 +1952,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-114681290"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2095,7 +1989,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-322057272"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="849349606"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -2118,6 +2012,8 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Html+output">Html output</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#JUnit+XML+output">JUnit XML output</a>
+          <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Simple+build+tool">Simple build tool</a>
@@ -2137,7 +2033,7 @@ framework. You can reuse the following traits:</p>
         </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1892965460"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="878195635"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -2181,7 +2077,7 @@ framework. You can reuse the following traits:</p>
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="433226241"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="1675391399"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -2201,5 +2097,5 @@ framework. You can reuse the following traits:</p>
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1993234404','-747120260'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1457815269','1468800887'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

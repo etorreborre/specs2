@@ -47,7 +47,55 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
+              <ol><li visbl="pub" name="org.specs2.reporter.Colors" data-isabs="false">
+      <a id="Colors:Colors"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="Colors.html"><span class="name">Colors</span></a>
+        
+        <span class="result"> extends AnsiColors with ConsoleColors</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class defines the colors to use to print out text on the Console
+with defaults as AnsiColors for a dark background console
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.ColorsFromSystemProperties" data-isabs="false">
+      <a id="ColorsFromSystemProperties:ColorsFromSystemProperties"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="ColorsFromSystemProperties.html"><span class="name">ColorsFromSystemProperties</span></a>
+        
+        <span class="result"> extends Colors with ColorsMap</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.ColorsMap" data-isabs="true">
+      <a id="ColorsMap:ColorsMap"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ColorsMap.html"><span class="name">ColorsMap</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Definition of abbreviated color names
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleColors" data-isabs="true">
+      <a id="ConsoleColors:ConsoleColors"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ConsoleColors.html"><span class="name">ConsoleColors</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait defines the colors which must be used to output text on the console
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
       <a id="ConsoleReporter:ConsoleReporter"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
@@ -82,6 +130,18 @@ Output:</p>
       </span>
       </h4>
       <p class="comment cmt">The DefaultSequence trait sorts the Fragments by making sure Steps will be executed before Examples
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.DescriptionAndExamples" data-isabs="false">
+      <a id="DescriptionAndExamples:DescriptionAndExamples[T]"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="DescriptionAndExamples.html"><span class="name">DescriptionAndExamples</span></a>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="description">description: Description</span>, <span name="executions">executions: Stream[T]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Utility class grouping the total description + fragments to execute for each Description
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.EndOfArguments" data-isabs="false">
       <a id="EndOfArguments:EndOfArguments[T]"></a>
@@ -152,6 +212,40 @@ Output:</p>
       </h4>
       <p class="comment cmt">Reports a Specification as an Html page
 </p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlExporting" data-isabs="true">
+      <a id="JUnitXmlExporting:JUnitXmlExporting"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="JUnitXmlExporting.html"><span class="name">JUnitXmlExporting</span></a>
+        
+        <span class="result"> extends Exporting with JUnitXmlPrinter</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Trait for exporting the specification as JUnit xml files
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter" data-isabs="true">
+      <a id="JUnitXmlPrinter:JUnitXmlPrinter"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="JUnitXmlPrinter.html"><span class="name">JUnitXmlPrinter</span></a>
+        
+        <span class="result"> extends Statistics</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The JUnitXml printer is used to create a JUnit xml report of an executed specification.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlReporter" data-isabs="true">
+      <a id="JUnitXmlReporter:JUnitXmlReporter"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="JUnitXmlReporter.html"><span class="name">JUnitXmlReporter</span></a>
+        
+        <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with JUnitXmlExporting with ConsoleOutput</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait execute specifications and exports them as JUnit xml files in the target/test-reports directory (by default).</p>
     </li><li visbl="pub" name="org.specs2.reporter.NoStartOfArguments" data-isabs="false">
       <a id="NoStartOfArguments:NoStartOfArguments[T]"></a>
       <h4 class="signature">
@@ -244,6 +338,18 @@ different types of results.</p>
       </span>
       </h4>
       <p class="comment cmt">The Sequence trait implements the logic for the fragments to execute according to their dependencies
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.SmartColors" data-isabs="false">
+      <a id="SmartColors:SmartColors"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="SmartColors.html"><span class="name">SmartColors</span></a>
+        
+        <span class="result"> extends Colors with ColorsMap with SystemProperties</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class checks if colors must be taken from system properties
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.StartOfArguments" data-isabs="false">
       <a id="StartOfArguments:StartOfArguments[T]"></a>

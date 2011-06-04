@@ -171,6 +171,17 @@ List(1, 2) must be like { case List(a, b) =&gt; ko(&quot;unexpected&quot;) }
       <p class="shortcomment cmt">A value can be tested against another with the === operator.</p><div class="fullcomment"><div class="comment cmt"><p>A value can be tested against another with the === operator.
 It is equivalent to writting a must_== b
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.matcher.Expectations#checkFailure" data-isabs="false">
+      <a id="checkFailure[T](MatchResult[T]):MatchResult[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">checkFailure</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="m">m: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this method can be overriden to throw exceptions when checking the result</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overriden to throw exceptions when checking the result</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -323,7 +334,7 @@ It is equivalent to writting a must_== b
     </li><li visbl="pub" name="org.specs2.matcher.StandardMatchResults#ko" data-isabs="false">
       <a id="ko:MatchFailure[None.type]"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">lazy val</span>
       <span class="symbol"> 
         <span class="name">ko</span>
         
@@ -378,7 +389,7 @@ It is equivalent to writting a must_== b
     </li><li visbl="pub" name="org.specs2.matcher.StandardMatchResults#ok" data-isabs="false">
       <a id="ok:MatchSuccess[None.type]"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">lazy val</span>
       <span class="symbol"> 
         <span class="name">ok</span>
         
