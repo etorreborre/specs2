@@ -216,9 +216,15 @@ A few things to remember about this feature:
          descFromExpectations ^
          { List(1, 2) must contain(1) }
 
+#### Using the Example description
+
+The Example descirption can be used to create an expectation in the Example body:
+
+      "This is a long, long, long description" ! ((s: String) => s.size must be_>(10))
+
 #### Given / When / Then
 
-In the same fashion, the Given/When/Then style of writing specifications is supported by interspersing Text fragments,
+More sophisticated is the Given/When/Then style of writing specifications is supported by interspersing Text fragments,
 with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example specification for a simple
 calculator:
 
@@ -787,7 +793,7 @@ In this case we don't need to extend the `Scope` trait because the examples `e1`
 One very cool property of using traits to define context variables is that we can use inheritance to describe more and more
 specific contexts:
 
-      trait LoggedIn extends Scope with Before {
+      trait LoggedIn extends Scope {
         val user = logInUser
         // do something with the user
       }
@@ -800,7 +806,7 @@ specific contexts:
 
 #### Before/After code
 
-If you want to run some code before or after each example, the `Before` and `After` traits are there to help you.
+If you want to run some code before or after each example, the `Before` and `After` traits are there to help you (they both extend the `Scope` trait).
 
 When you make your context trait extend the `Before` trait:
 
@@ -813,7 +819,7 @@ When you make your context trait extend the `Before` trait:
          }
        }
 
-       trait trees extends Scope with Before {
+       trait trees extends Before {
          val tree = getATreeWith4NodesFromTheDatabase
          def before = setupDB
        }

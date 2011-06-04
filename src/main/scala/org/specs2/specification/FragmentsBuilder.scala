@@ -84,6 +84,8 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   class ExampleDesc(s: String) {
     /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
 	  def ![T <% Result](t: =>T): Example = exampleFactory.newExample(s, t)
+    /** @return an Example, using the example description */
+	  def ![T <% Result](f: String => T): Example = exampleFactory.newExample(s, f(s))
     /** @return an Example which a function using values extracted from the text */
 	  def !(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
   }

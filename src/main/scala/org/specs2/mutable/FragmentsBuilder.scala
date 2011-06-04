@@ -41,7 +41,9 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
   /** transient class to hold an example description before creating a full Example */
   class InExample(s: String) {
     def in[T <% Result](r: =>T): Example = exampleFactory.newExample(s, r)
+    def in[T <% Result](f: String => T): Example = exampleFactory.newExample(s, f(s))
     def >>[T <% Result](r: =>T): Example = in(r)
+    def >>[T <% Result](f: String => T): Example = in(f)
     def in(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
     def >>(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
 

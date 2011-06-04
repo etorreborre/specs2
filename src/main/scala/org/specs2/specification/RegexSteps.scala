@@ -4,6 +4,7 @@ package specification
 import execute._
 import specification.StandardFragments.{Br, End}
 import main.Arguments
+import matcher.MatchResult
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -42,7 +43,6 @@ import main.Arguments
  *
  */
 trait RegexSteps {
-
   /** at any point in time a regex sequence can be transformed as a sequence of Fragments */
   implicit def RegexFragmentToFragments(r: RegexFragment): Fragments = r.fs
 
