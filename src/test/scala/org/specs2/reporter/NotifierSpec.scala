@@ -30,6 +30,7 @@ A Notifier can be used to get a stream of events for the execution of a Specific
         "when Pending"                                                                                                  ! ex7^
         "but not if xonly and it's not a Failure or an Error"                                                           ! ex8^
         "and a filtered stacktrace"                                                                                     ! ex9^
+        "when a DataTable"                                                                                              ! ex10^
                                                                                                                         endp^
   "A step is notified"                                                                                                  ^
     "but only if it fails"                                                                                              ! step1^
@@ -47,13 +48,16 @@ A Notifier can be used to get a stream of events for the execution of a Specific
   def ex1    = there was atLeastOne(notified).exampleStarted(equalTo("ex1"), anyString)
   def ex2    = there was atLeastOne(notified).exampleStarted(anyString, matching(".*NotifierSpecification.scala:11.*"))
   def ex3    = there was atLeastOne(notified).exampleSuccess(equalTo("ex1"), anyLong)
-  def ex4    = there was atLeastOne(notified).exampleFailure(anyString, anyString, matching(".*NotifierSpecification.scala:12.*"), any[Throwable], any[Details], anyLong)
-  def ex5    = there was atLeastOne(notified).exampleError(anyString, anyString, matching(".*NotifierSpecification.scala:14.*"), any[Throwable], anyLong)
+  def ex4    = there was atLeastOne(notified).exampleFailure(anyString, anyString, matching(".*NotifierSpecification.scala:13.*"), any[Throwable], any[Details], anyLong)
+  def ex5    = there was atLeastOne(notified).exampleError(anyString, anyString, matching(".*NotifierSpecification.scala:15.*"), any[Throwable], anyLong)
   def ex6    = there was atLeastOne(notified).exampleSkipped(anyString, anyString, anyLong)
   def ex7    = there was atLeastOne(notified).examplePending(anyString, anyString, anyLong)
   def ex8    = there was no(notified(withXOnly)).exampleSuccess(anyString, anyLong)
   def ex9    = there was atLeastOne(notified).
                exampleFailure(anyString, anyString, anyString, containMatch("specs2") ^^ ((t:Throwable) => t.getStackTrace().map(_.toString)), any[Details], anyLong)
+  def ex10   = there was atLeastOne(notified).exampleSuccess(anyString, anyLong)
+
+
   def step1  = there was atLeastOne(notified).exampleFailure(anyString, matching("clean failed"), anyString, any[Throwable], any[Details], anyLong)
   def end1   = there was one(notified).specEnd(anyString, anyString)
 

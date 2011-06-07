@@ -59,10 +59,12 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
         case (desc, ExecutedResult(_, result, timer, _)) => {
           notifier.fireTestStarted(desc)
           result match {
-            case f @ Failure(m, e, st, d)            => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-            case e @ Error(m, st)                    => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
-            case Pending(_) | Skipped(_, _)          => notifier.fireTestIgnored(desc)
-            case Success(_) | DecoratedResult(_, _)  => ()
+            case f @ Failure(m, e, st, d)                     => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
+            case e @ Error(m, st)                             => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
+            case DecoratedResult(_, f @ Failure(m, e, st, d)) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
+            case DecoratedResult(_, e @ Error(m, st))         => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
+            case Pending(_) | Skipped(_, _)                   => notifier.fireTestIgnored(desc)
+            case Success(_) | DecoratedResult(_, _)           => ()
           }
           notifier.fireTestFinished(desc)
         }

@@ -29,6 +29,7 @@ trait NotifierExporting extends Exporting {
     if (args.contains("html")) new HtmlExporting {}.export(s)(args)(fs)
     if (args.contains("junitxml")) new JUnitXmlExporting {}.export(s)(args)(fs)
   }
+
   private def notifyExport(fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     def notify(fs: Seq[ExecutedFragment]) = {
       val tree = Levels.foldAll(fs).toTree(mapper)
@@ -41,10 +42,12 @@ trait NotifierExporting extends Exporting {
                                 ExecutedSpecEnd(SpecName("empty specification"), new Location())))
 
   }
+
   private val mapper = (f: ExecutedFragment, i: Int) => f match {
     case e: ExecutedStandardFragment => None
     case other                       => Some(other)
   }
+
   private def export(tree: Tree[ExecutedFragment])(implicit args: Arguments) {
     tree.rootLabel match {
       case f @ ExecutedSpecStart(n, _, _)                                   => {
@@ -69,7 +72,7 @@ trait NotifierExporting extends Exporting {
             case err  @ Error(_,_)                       => notifier.exampleError(s.toString,   err.message, err.location, args.traceFilter(err.exception), t.elapsed)
             case Skipped(_,_)            if !args.xonly  => notifier.exampleSkipped(s.toString, r.message, t.elapsed)
             case Pending(_)              if !args.xonly  => notifier.examplePending(s.toString, r.message, t.elapsed)
-            case DecoratedResult(t, r)                   => notifyResult(r)
+            case DecoratedResult(t, res)                 => notifyResult(res)
             case Success(_) | Skipped(_, _) | Pending(_) => ()
           }
         }

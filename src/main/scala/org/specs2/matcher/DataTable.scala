@@ -62,7 +62,7 @@ trait DataTables {
 	   	  case Success(_) => showTitles
 	   	  case other      => "  " + showTitles  
 	    }
-	    DecoratedResult(DataTable(titles, results), result.updateMessage {
+      DecoratedResult(DataTable(titles, results), result.updateMessage {
 	      header+"\n"+
         results.map((cur: (String, R)) => resultLine(cur._1, cur._2)).mkString("\n")
 	    })

@@ -53,9 +53,8 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
    * @return true if the executed fragment is not a Failure or an Error
    */
   private def isOk(e: ExecutedFragment) = e match {
-    case ExecutedResult(_,Error(_,_),_,_)       => false
-    case ExecutedResult(_,Failure(_,_,_,_),_,_) => false
-    case other                                  => true
+    case ExecutedResult(_,r,_,_) if r.isFailure || r.isError => false
+    case other                                                => true
   }
 
   private def executeSequence(fs: FragmentSeq)(implicit args: Arguments): Seq[ExecutedFragment] = {
