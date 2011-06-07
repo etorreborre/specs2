@@ -172,15 +172,15 @@ class ContextSpec extends Specification with FragmentExecution { def is =
     }
     def e3 = {
       val spec = new Specification {
-        implicit def outside1 = outside
-        def is = "e1" ! { (s: String) => s must_== s }
+        implicit def outside1 = outsideInt
+        def is = "e1" ! { (s: Int) => s must_== s }
       }
       executing(spec.content).prints("outside")
     }
     def e4 = {
       val spec = new mutable.Specification {
-        implicit def outside1 = outside
-        "e1" in { (s: String) => s must_== s }
+        implicit def outside1 = outsideInt
+        "e1" in { (s: Int) => s must_== s }
       }
       executing(spec.content).prints("outside")
     }
@@ -225,7 +225,7 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1_afterFail = "ex1" ! afterWithError(ok1) 
   def ex1_2After = ex1After ^ "ex2" ! after(ok2)
 
-  trait afterContext extends Scope with After {
+  trait afterContext extends After {
     def after = println("after")
   }
   def ex1ExplicitAfter = "ex1" ! new afterContext {
@@ -286,6 +286,9 @@ trait ContextsForFragments extends MockOutput {
   }
   object outside extends Outside[String] {
 	  def outside = { println("outside"); "string" }
+  }
+  object outsideInt extends Outside[Int] {
+	  def outside = { println("outside"); 1 }
   }
   object outsideWithError extends Outside[String] with MockOutput {
 	  def outside = { error("error"); "ok" }
