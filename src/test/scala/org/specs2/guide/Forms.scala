@@ -294,6 +294,11 @@ as its content. Then every subsequent `tab` calls on the `Tabs` object will crea
                   tr(prop("number", 2)(2))))^
 """
 
+Tabs can also be created from a seq of values. Let's pretend we have a list of `Address` objects with a name and a Form
+displaying the `Address` values. You can write:
+
+      Form("Addresses").tabs(adresses) { address: Address => tab(address.name, address.form) }
+
 ### Aggregating forms
 Now that we've defined a form for a simple entity, let's see how we can reuse it with a larger entity:
 
