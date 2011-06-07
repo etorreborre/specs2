@@ -3,6 +3,7 @@ package reporter
 import io._
 import mock._
 import specification._
+import matcher.DataTables
 
 class HtmlPrinterSpec extends Specification with Mockito { outer => def is =       sequential ^
                                                                                                                         """
@@ -30,6 +31,9 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     "An example must"                                                                                                   ^
       "have a success icon if successful"                                                                               ! fragments().ex1^
       "show detailed failures if any"                                                                                   ! fragments().ex2^
+                                                                                                                        p^
+    "A data table must"                                                                                                 ^
+      "be exported as a proper html table"                                                                              ! tables().ex1^
                                                                                                                         end
                                                                                           
   implicit val argument = args()
@@ -63,6 +67,12 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     def ex2 = print(spec).toString must contain("details")
   }
   
+  case class tables() extends MockHtmlPrinter with DataTables {
+    val dataTable = "a" | "b" |> 1 ! 2 | { (a, b) => success }
+    val spec: Fragments = "table" ! dataTable
+    def ex1 = print(spec) must \\("table")
+  }
+
   trait MockHtmlPrinter extends FragmentExecution { outer =>
     val fs = mock[FileSystem]
     val fileWriter = new MockFileWriter {}

@@ -3,8 +3,9 @@ package form
 import specification._
 import Forms._
 import matcher._
+import execute.DecoratedResult
 
-class FormSpec extends Specification with ResultMatchers { def is =
+class FormSpec extends Specification with ResultMatchers { def is = 
                                                                                                                         """
 A Form is a generic table which has an optional title and rows. Each row contains cells which can be created from
 Fields, Props or other Forms.
@@ -23,7 +24,11 @@ Upon execution a Form will return a Result value summarizing the execution of ea
   "with another Form on one row"                                                                                        ! creation.e6 ^
   "with a seq of fields on one row"                                                                                     ! creation.e7 ^
   "with a seq of fields on one row - and no title"                                                                      ! creation.e8 ^
-                                                                                                                        p^
+  "from a DataTable"                                                                                                    ^
+    "the Form header is the DataTable header"                                                                           ! datatable.e1 ^
+    "with an additional column for failure messages"                                                                    ! datatable.e2 ^
+    "the form rows are the DataTable rows"                                                                              ! datatable.e3 ^
+                                                                                                                        endp^
 "A Form can be displayed, showing expected values"                                                                      ^
   "with its title"                                                                                                      ^
     "if present: | title |"                                                                                             ! display.e1 ^
@@ -102,7 +107,21 @@ Upon execution a Form will return a Result value summarizing the execution of ea
                   tr(prop("a")("a")).
                   tr(prop("c")("d")).executeForm.rows.filter(_.execute.isFailure) must have size(2)
   }
-  
+
+  object datatable extends DataTables {
+    val okDataTable =
+      "a" | "b" |>
+       1  ! 1   | { (a, b) => a must_== b }
+
+    val koDataTable =
+      "a" | "b" |>
+       1  ! 2   | { (a, b) => a must_== b }
+
+    def e1 = Form(okDataTable.decorator).text must startWith("| a | b |")
+    def e2 = Form(koDataTable.decorator).text must contain("| a | b | message")
+    def e3 = Form(okDataTable.decorator).text must contain("| 1 | 1 |")
+  }
+
   object equality {
     def e1 = Row.tr(TextCell("a")) must_== Row.tr(TextCell("a"))   
     def e2 = TextCell("a") must_== TextCell("a")   
@@ -127,26 +146,26 @@ Upon execution a Form will return a Result value summarizing the execution of ea
   }
 
                                                                                                                           end
-  val street = field("street", "Rose Crescent")
-  val number = field("number", 2)
-  val town = field("town", "Mosman")
+  lazy val street = field("street", "Rose Crescent")
+  lazy val number = field("number", 2)
+  lazy val town = field("town", "Mosman")
 
-  val address = Form("Address").
-                     tr(street).
-                     tr(number)
+  lazy val address = Form("Address").
+                       tr(street).
+                       tr(number)
 
-  val address1 =  quote(address.text)
+  lazy val address1 =  quote(address.text)
 
-  val address2 = quote(Form("Address").
-                       tr(street, number).
-                       tr(town).text)
+  lazy val address2 = quote(Form("Address").
+                              tr(street, number).
+                              tr(town).text)
 
-  val address3 = quote(Form.
-                       tr(street, number).
-                       tr(town, street, number).
-                       tr(town).text)
+  lazy val address3 = quote(Form.
+                              tr(street, number).
+                              tr(town, street, number).
+                              tr(town).text)
 
-  val address4 = quote(Form.
+  lazy val address4 = quote(Form.
                        tr(town).
                        tr(address.inline).text)
 

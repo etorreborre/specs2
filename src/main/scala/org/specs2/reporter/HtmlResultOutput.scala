@@ -9,6 +9,7 @@ import EditDistance._
 import NotNullStrings._
 import text.Trim._
 import execute._
+import matcher.DataTable
 import specification._
 
 /**
@@ -84,7 +85,7 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
 
   def printPending(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
     printWithIcon(message, "info", level, doIt)
-    
+
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
       val message = "  "+e.message+" ("+e.location+")"

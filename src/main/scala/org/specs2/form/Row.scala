@@ -46,7 +46,10 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
     }
     pad(cells, maxSizes, Nil).mkString("| ", " | ", " |")
   }
-  
+
+  /** append a new Cell */
+  def add(cell: Cell) = copy(cellList = cellList :::> List(cell))
+
   override def equals(a: Any) = a match {
     case Row(c) => cells == c.list
     case other => false
@@ -61,4 +64,8 @@ case object Row {
    * create a row from cells
    */
   def tr(c1: Cell, cs: Cell*) = Row(nel(c1, cs:_*))
+  /**
+   * create a row from fields
+   */
+  def tr(f1: Field[_], fs: Field[_]*) = Row(nel(new FieldCell(f1), fs.map(new FieldCell(_)):_*))
 }

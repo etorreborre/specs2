@@ -62,14 +62,18 @@ trait NotifierExporting extends Exporting {
       }
       case f @ ExecutedResult(s, r, t, l)                                  => {
         notifier.exampleStarted(s.toString, l.toString)
-        r match {
-          case Success(_)              if !args.xonly => notifier.exampleSuccess(s.toString, t.elapsed)
-          case fail @ Failure(_,_,_,_)                => notifier.exampleFailure(s.toString, fail.message, fail.location, args.traceFilter(fail.exception), fail.details, t.elapsed)
-          case err  @ Error(_,_)                      => notifier.exampleError(s.toString,   err.message, err.location, args.traceFilter(err.exception), t.elapsed)
-          case Skipped(_,_)            if !args.xonly => notifier.exampleSkipped(s.toString, r.message, t.elapsed)
-          case Pending(_)              if !args.xonly => notifier.examplePending(s.toString, r.message, t.elapsed)
-          case other                                  => ()
+        def notifyResult(result: Result) {
+          result match {
+            case Success(_)              if !args.xonly  => notifier.exampleSuccess(s.toString, t.elapsed)
+            case fail @ Failure(_,_,_,_)                 => notifier.exampleFailure(s.toString, fail.message, fail.location, args.traceFilter(fail.exception), fail.details, t.elapsed)
+            case err  @ Error(_,_)                       => notifier.exampleError(s.toString,   err.message, err.location, args.traceFilter(err.exception), t.elapsed)
+            case Skipped(_,_)            if !args.xonly  => notifier.exampleSkipped(s.toString, r.message, t.elapsed)
+            case Pending(_)              if !args.xonly  => notifier.examplePending(s.toString, r.message, t.elapsed)
+            case DecoratedResult(t, r)                   => notifyResult(r)
+            case Success(_) | Skipped(_, _) | Pending(_) => ()
+          }
         }
+        notifyResult(r)
       }
       case other                           => tree.subForest.foreach(export)
     }

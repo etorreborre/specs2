@@ -96,27 +96,31 @@ trait TextPrinter {
       
     def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
       val description = statusAndDescription(desc, result, timer)(args, out)
-      result match {
-        case f @ Failure(m, e, st, d) => {
-          printFailure(desc, f, timer)
-          printFailureDetails(d)
-        }
-        case e: Error => {
-          printError(desc, e, timer)
-          args.traceFilter(e.stackTrace).foreach(t => out.printError(t.toString))
-          e.exception.chainedExceptions.foreach { (t: Throwable) =>
-            out.printError(t.getMessage.notNull)
-            args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
+      def print(res: Result) {
+        res match {
+          case f @ Failure(m, e, st, d) => {
+            printFailure(desc, f, timer)
+            printFailureDetails(d)
           }
-        }
-        case Success(_)    => if (!args.xonly) out.printSuccess(description)
-        case Pending(_)    => if (!args.xonly) out.printPending(description + " " + result.message)
-        case Skipped(_, _) => if (!args.xonly) {
-          out.printSkipped(description)
-          if (!result.message.isEmpty)
-            out.printSkipped(result.message)
+          case e: Error => {
+            printError(desc, e, timer)
+            args.traceFilter(e.stackTrace).foreach(t => out.printError(t.toString))
+            e.exception.chainedExceptions.foreach { (t: Throwable) =>
+              out.printError(t.getMessage.notNull)
+              args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
+            }
+          }
+          case Success(_)    => if (!args.xonly) out.printSuccess(description)
+          case Pending(_)    => if (!args.xonly) out.printPending(description + " " + result.message)
+          case Skipped(_, _) => if (!args.xonly) {
+            out.printSkipped(description)
+            if (!result.message.isEmpty)
+              out.printSkipped(result.message)
+          }
+          case DecoratedResult(_, r) => print(r)
         }
       }
+      print(result)
     }
     def printFailure(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
       val description = statusAndDescription(desc, f, timer)

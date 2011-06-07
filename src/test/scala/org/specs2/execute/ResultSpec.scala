@@ -22,7 +22,15 @@ more precisely:
   { (failure1 and success1) must_== failure1 }                                                                          ^
   { (failure1 and failure2) must_== failure1 }                                                                          ^
   { (failure1 and error1)   must_== failure1 }                                                                          ^
-                                                                                                                        p^
+    "the expectationsNb must be ok"                                                                                     ^
+    { (success1 and success2).expectationsNb must_== 2 }                                                                ^
+    { (success1 and failure1).expectationsNb must_== 2 }                                                                ^
+    { (success1 and error1)  .expectationsNb must_== 2 }                                                                ^
+    { (success1 and skipped1).expectationsNb must_== 2 }                                                                ^
+    { (failure1 and success1).expectationsNb must_== 2 }                                                                ^
+    { (failure1 and failure2).expectationsNb must_== 2 }                                                                ^
+    { (failure1 and error1)  .expectationsNb must_== 2 }                                                                ^
+                                                                                                                        endp^
   "Results can be combined with or"                                                                                     ^
   { (success1 or success2) must_== Success("s1") }                                                                      ^
   { (success1 or failure1) must_== success1 }                                                                           ^
@@ -31,6 +39,14 @@ more precisely:
   { (success1 or failure1) must_== Success("s1") }                                                                      ^
   { (failure1 or failure2) must_== Failure("f1 and f2") }                                                               ^
   { (failure1 or error1)   must_== failure1 }                                                                           ^
+  "the expectationsNb must be ok"                                                                                       ^
+   { (success1 or success2).expectationsNb must_== 2 }                                                                  ^
+   { (success1 or failure1).expectationsNb must_== 2 }                                                                  ^
+   { (success1 or skipped1).expectationsNb must_== 2 }                                                                  ^
+   { (failure1 or success1).expectationsNb must_== 2 }                                                                  ^
+   { (success1 or failure1).expectationsNb must_== 2 }                                                                  ^
+   { (failure1 or failure2).expectationsNb must_== 2 }                                                                  ^
+   { (failure1 or error1)  .expectationsNb must_== 2 }                                                                  ^
                                                                                                                         end
   val success1 = Success("s1")                                                                                          
   val success2 = Success("s2")                                                                                          

@@ -49,10 +49,11 @@ trait Xml {
 object Xml {
   /** @return the stacktraces of a Cell depending on its type and execution result */
   def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell match {
-    case FormCell(f: Form)                          => f.rows.map(stacktraces(_)).reduceNodes
-    case PropCell(_, Some(e @ Error(_, _)))         => stacktraces(e)
-    case PropCell(_, Some(f @ Failure(_, _, _, _))) => stacktraces(f)
-    case other                                      => NodeSeq.Empty
+    case FormCell(f: Form)                           => f.rows.map(stacktraces(_)).reduceNodes
+    case PropCell(_, Some(e @ Error(_, _)))          => stacktraces(e)
+    case PropCell(_, Some(f @ Failure(_, _, _, _)))  => stacktraces(f)
+    case FieldCell(_, Some(e @ Error(_, _)))         => stacktraces(e)
+    case other                                       => NodeSeq.Empty
   }
 
   private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq = row.cells.map(stacktraces(_)).reduceNodes
@@ -113,8 +114,9 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
   }
 
   def execute = result.getOrElse(f.execute)
-  def setSuccess = FieldCell(f, Some(success))
-  def setFailure = FieldCell(f, Some(failure))
+  def setSuccess = setResult(success)
+  def setFailure = setResult(failure)
+  def setResult(r: Result) = FieldCell(f, Some(r))
   def executeCell = FieldCell(f, result.orElse(Some(f.execute)))
 
 }

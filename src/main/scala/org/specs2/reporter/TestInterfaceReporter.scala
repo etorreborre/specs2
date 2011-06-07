@@ -9,7 +9,7 @@ import io._
 import text._
 import time._
 import AnsiColors._
-import execute.{ Success, Failure, Error, Skipped, Pending }
+import execute.{ Success, Failure, Error, Skipped, Pending, DecoratedResult }
 import specification._
 
 /**
@@ -26,12 +26,18 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 
   override def export(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
     fragments foreach {
-      case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _) => result match {
-        case Success(text)               => handler.handle(succeeded(text))
-        case r @ Failure(text, e, st, d) => handler.handle(failure(text, args.traceFilter(r.exception)))
-        case r @ Error(text, e)          => handler.handle(error(text, args.traceFilter(r.exception)))
-        case Skipped(text, _)            => handler.handle(skipped(text))
-        case Pending(text)               => handler.handle(skipped(text))
+      case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _) => {
+        def handleResult(r: org.specs2.execute.Result) {
+          result match {
+            case Success(text)               => handler.handle(succeeded(text))
+            case r @ Failure(text, e, st, d) => handler.handle(failure(text, args.traceFilter(r.exception)))
+            case r @ Error(text, e)          => handler.handle(error(text, args.traceFilter(r.exception)))
+            case Skipped(text, _)            => handler.handle(skipped(text))
+            case Pending(text)               => handler.handle(skipped(text))
+            case DecoratedResult(t, r)       => handleResult(r)
+          }
+        }
+        handleResult(result)
       }
       case _ => ()
     }

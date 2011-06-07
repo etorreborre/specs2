@@ -953,6 +953,19 @@ You can simply mark your context object as `implicit` and it will be automatical
           }
         }
 
+There is just one gotcha that you need to be aware of. If your implicit context is an `Outside[String]` context this will
+not work:
+
+        class ContextSpec extends mutable.Specification {
+          implicit object myContext = new Outside[String] { def outside = "hello" }
+
+          "This is a specification uses a new String in each example" >> {
+            "first example"  in { (s: String) => s must_== s }
+            "second example" in { (s: String) => s must_== s }
+          }
+        }
+
+Indeed in both examples above the `s` string that will be passed is the Example description as specified [here](http://etorreborre.github.com/specs2/guide/org.specs2.guide.SpecStructure.html#Using+the+Example+description).
 
 #### Composing contexts
 

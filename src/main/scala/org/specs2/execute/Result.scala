@@ -28,52 +28,59 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   /**
    * @return the textual status of the result
    */
-  def status(implicit args: Arguments = Arguments()) = {
+  def status(implicit args: Arguments = Arguments()): String = {
    if (args.plan)
       color("*", blue, args.color)
     else {
       this match {
-    	  case Success(_)          => args.colors.success("+", args.color)
-    	  case Failure(_, _, _, _) => args.colors.failure("x", args.color)
-    	  case Error(_, _)         => args.colors.error("!", args.color)
-    	  case Pending(_)          => args.colors.pending("*", args.color)
-    	  case Skipped(_, _)       => args.colors.skipped("o", args.color)
+    	  case Success(_)            => args.colors.success("+", args.color)
+    	  case Failure(_, _, _, _)   => args.colors.failure("x", args.color)
+    	  case Error(_, _)           => args.colors.error("!", args.color)
+    	  case Pending(_)            => args.colors.pending("*", args.color)
+    	  case Skipped(_, _)         => args.colors.skipped("o", args.color)
+        case DecoratedResult(_, r) => r.status(args)
       }
     }
   }
   
   /** @return the textual status of the result */
-  def statusName(implicit args: Arguments = Arguments()) =
+  def statusName(implicit args: Arguments = Arguments()): String =
     if (args.plan)
       "info"
     else {
       this match {
-    	  case Success(_)          => "success"
-    	  case Failure(_, _, _, _) => "failure"
-    	  case Error(_, _)         => "error"
-    	  case Pending(_)          => "pending"
-    	  case Skipped(_, _)       => "skipped"
+        case Success(_)            => "success"
+        case Failure(_, _, _, _)   => "failure"
+        case Error(_, _)           => "error"
+        case Pending(_)            => "pending"
+        case Skipped(_, _)         => "skipped"
+        case DecoratedResult(_, r) => r.statusName(args)
       }
     }
 
   /** update the message of a result, keeping the subclass type */
-  def updateMessage(msg: String) =
+  def updateMessage(msg: String): Result =
 	  this match {
-	    case Success(m)           => Success(msg)
-	    case Failure(m, e, st, d) => Failure(msg, e, st, d)
-	    case Error(m, st)         => Error(msg, st)
-	    case Skipped(m, e)        => Skipped(msg, e)
-	    case Pending(m)           => Pending(msg)
+	    case Success(m)            => Success(msg)
+	    case Failure(m, e, st, d)  => Failure(msg, e, st, d)
+	    case Error(m, st)          => Error(msg, st)
+	    case Skipped(m, e)         => Skipped(msg, e)
+	    case Pending(m)            => Pending(msg)
+      case DecoratedResult(t, r) => DecoratedResult(t, r.updateMessage(msg))
 	  }
 
   /**
+   * increment the number of expectations
+   */
+  def addExpectationsNb(n: Int): Result
+  /**
    * @return the logical and combination of 2 results
    */
-  def and(r: =>Result): Result = this
+  def and(r: =>Result): Result = this.addExpectationsNb(r.expectationsNb)
   /**
    * @return the logical or combination of 2 results
    */
-  def or(r2: =>Result) = this 
+  def or(r: =>Result) = this.addExpectationsNb(r.expectationsNb)
    
   /**
    * @return true if the result is a Success instance
@@ -122,6 +129,9 @@ object Result {
       case (Pending(msg1),               Skipped(msg2, e2))          => Pending(msg1+"; "+msg2)
       case (Pending(msg1),               Pending(msg2))              => Pending(msg1+"; "+msg2)
 
+      case (DecoratedResult(t, r),       other)                      => DecoratedResult(t, append(r, other))
+      case (other,                       DecoratedResult(t, r))      => DecoratedResult(t, append(other, r))
+
       case (Failure(msg1, e1, st, d),    _)                          => m1
       case (Error(msg1, st),          _)                             => m1
       case (_,                           Failure(msg1, e1, st, d))   => m2
@@ -137,13 +147,16 @@ case class Success(m: String = "")  extends Result(m, m) {
   override def and(res: =>Result): Result = {
     val r = res
     r match {
-      case Success(m)          => if (message == m) this else Success(message+" and "+m)
-      case e @ Error(_, _)     => r
-      case Failure(_, _, _, _) => r
+      case Success(m)          => if (message == m || message.isEmpty) Success(m, expectationsNb + r.expectationsNb)
+                                  else                                 Success(message+" and "+m, expectationsNb + r.expectationsNb)
+      case e @ Error(_, _)     => r.addExpectationsNb(expectationsNb)
+      case Failure(_, _, _, _) => r.addExpectationsNb(expectationsNb)
       case _                   => super.and(r)
     }
   }
   override def isSuccess = true
+
+  def addExpectationsNb(n: Int): Result = Success(m, expectationsNb + n)
 
   def mute = Success()
 }
@@ -161,18 +174,21 @@ object Success {
  * It has a message and a stacktrace
  */
 case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList, details: Details = NoDetails())
-  extends Result(m, e) with ResultStackTrace {
+  extends Result(m, e) with ResultStackTrace { outer =>
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
   override def or(res: =>Result): Result = {
     val r = res
     r match {
-      case Success(m) => if (message == m) r else Success(message+" and "+m)
-      case Failure(m, e, st, d) => Failure(message+" and "+m, e, stackTrace ::: st, d)
-      case _ => super.or(r)
+      case s @ Success(m)       => if (message == m) r.addExpectationsNb(expectationsNb) else Success(message+" and "+m, expectationsNb + s.expectationsNb)
+      case Failure(m, e, st, d) => Failure(message+" and "+m, e, stackTrace ::: st, d).addExpectationsNb(expectationsNb)
+      case _                    => super.or(r)
     }
   }
 
+  def addExpectationsNb(n: Int): Result = new Failure(m, e, stackTrace, details) {
+    override val expectationsNb = outer.expectationsNb + n
+  }
   def mute = copy(m = "",  e = "")
 
   override def toString = m
@@ -195,7 +211,7 @@ case class NoDetails() extends Details
 /** 
  * This class represents an exception occurring during an execution.
  */
-case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrace {
+case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrace { outer =>
   /** @return an exception created from the message and the stackTraceElements */
   def exception = e
   def stackTrace = e.getFullStackTrace.toList
@@ -206,6 +222,9 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
     }
   }
 
+  def addExpectationsNb(n: Int): Result = new Error(m, e) {
+    override val expectationsNb = outer.expectationsNb + n
+  }
   def mute = copy(m = "")
 
   override def hashCode = m.hashCode
@@ -224,9 +243,12 @@ case object Error {
  * Pending result
  * @see Result for description
  */
-case class Pending(m: String = "")  extends Result(m) {
+case class Pending(m: String = "")  extends Result(m) { outer =>
 
   def mute = Pending()
+  def addExpectationsNb(n: Int): Result = new Pending(m) {
+    override val expectationsNb = outer.expectationsNb + n
+  }
 
   override def isPending: Boolean = true
 }
@@ -234,9 +256,32 @@ case class Pending(m: String = "")  extends Result(m) {
  * Skipped result
  * @see Result for description 
  */
-case class Skipped(m: String = "", e: String = "")  extends Result(m, e) {
+case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer =>
 
   def mute = Skipped()
+  def addExpectationsNb(n: Int): Result = new Skipped(m) {
+    override val expectationsNb = outer.expectationsNb + n
+  }
 
   override def isSkipped: Boolean = true
+}
+
+/**
+ * This result allows to embed additional data with a given result for further display
+ *
+ * Is is used to provide a way to display properly the data tables in the HtmlExporter
+ */
+case class DecoratedResult[T](decorator: T, result: Result) extends Result(result.message, result.expected) { outer =>
+  def mute = DecoratedResult(decorator, result.mute)
+  def addExpectationsNb(n: Int): Result = new DecoratedResult(decorator, result) {
+    override val expectationsNb = outer.expectationsNb + n
+  }
+    
+  override def and(r: =>Result): Result = DecoratedResult(decorator, result and r)
+  override def or(r2: =>Result): Result = DecoratedResult(decorator, result or r2)
+  override def isSuccess: Boolean       = result.isSuccess
+  override def isError: Boolean         = result.isError
+  override def isSkipped: Boolean       = result.isSkipped
+  override def isPending: Boolean       = result.isPending
+  override def isFailure: Boolean       = result.isFailure
 }

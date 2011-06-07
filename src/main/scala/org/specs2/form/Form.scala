@@ -9,7 +9,8 @@ import text.Trim._
 import execute._
 import main.Arguments
 import StandardResults._
-import matcher.ResultMatchers
+import matcher.{DataTable, ResultMatchers}
+import DecoratedProperties._
 
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
@@ -145,17 +146,32 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
  */
 case object Form {
   /** @return an empty form */
-  def apply() = new Form()
+  def apply(): Form = new Form()
   /** @return an empty form with a title */
-  def apply(title: String) = new Form(Some(title))
+  def apply(title: String): Form = new Form(Some(title))
+  /** create a Form from a DataTable */
+  def apply(table: DataTable): Form = {
+    def firstField[A](as: Seq[A]) = Field(as.headOption.getOrElse(""))
+    def otherFields[A](as: Seq[A]) = as.drop(1).map(Field(_))
+
+    val headerRest = otherFields(table.titles) ++ (if (table.isSuccess) Seq[Field[_]]() else Seq(Field("message")))
+    table.rows.foldLeft(th(firstField(table.titles), headerRest:_*)) { (res, cur) =>
+      val values = Row.tr(firstField(cur.cells), otherFields(cur.cells):_*)
+      res.tr {
+        if (cur.result.isSuccess)      values
+        else if (cur.result.isFailure) values.add(FieldCell(Field(cur.result.message)).setResult(cur.result))
+        else                           values.add(FieldCell(Field("error").bold).setResult(cur.result))
+      }
+    }
+  }
   /** @return a Form with one row */
-  def tr(c1: Cell, cs: Cell*) = new Form().tr(c1, cs:_*)
+  def tr(c1: Cell, cs: Cell*): Form = new Form().tr(c1, cs:_*)
   /** @return a Form with one row */
-  def tr(row: Row) = new Form().tr(row)
+  def tr(row: Row): Form = new Form().tr(row)
   /** @return a Form with one row and cells formatted as header cells */
-  def th(h1: Field[_], hs: Field[_]*) = new Form().th(h1, hs:_*)
+  def th(h1: Field[_], hs: Field[_]*): Form = new Form().th(h1, hs:_*)
   /** @return a Form with one row and cells formatted as header cells */
-  def th(h1: String, hs: String*) = new Form().th(h1, hs:_*)
+  def th(h1: String, hs: String*): Form = new Form().th(h1, hs:_*)
 
   /**
    * This method creates an xml representation of a Form as an Html table
