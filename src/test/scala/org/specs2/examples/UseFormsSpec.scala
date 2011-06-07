@@ -2,6 +2,7 @@ package org.specs2
 package examples
 import specification._
 import form._
+import form.FormsBuilder._
 
 class UseFormsSpec extends Specification with Forms { def is =
                                                                                                                         """
@@ -38,14 +39,12 @@ This will create a html file in the target/specs2-reports directory
   case class Person(firstName: String, lastName: String) {
     def initials = firstName.take(1).capitalize+"."+lastName.take(1).capitalize+"."      
   }              
+}
 
-
-  case class Address(street: String, number: Int) {
-    def form = fill(street, number)
-    def fill(s: String, n: Int) =
-      Form("Address").
-          tr(prop("street", s)(street)).
-          tr(prop("number", n)(number))
-  }
-
+case class Address(street: String, number: Int) {
+  def form = fill(street, number)
+  def fill(s: String, n: Int) =
+    Form("Address").
+        tr(prop("street", s)(street)).
+        tr(prop("number", n)(number))
 }

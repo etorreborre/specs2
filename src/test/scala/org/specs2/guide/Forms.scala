@@ -2,6 +2,7 @@ package org.specs2
 package guide
 import sys._
 import form._
+import examples.Address
 
 class Forms extends Specification with specification.Forms { def is = literate^
   """
@@ -190,6 +191,17 @@ And then you can use it like this:
                retrieve(123)                                /** actual address id */           ^
                                                                                                end
          }
+
+##### Adding several rows at once
+
+A very practical way to add rows programmatically is to start from a seq of values and have a function creating a Row object
+for each value:
+
+        Form("a new Form").trs(addresses) { a: Address => Row.tr(field(a.number), field(a.street)) }
+
+"""^
+  Form("a new Form").trs(addresses) { a: Address => Row.tr(field(a.number), field(a.street)) }^
+"""
 
 #### Nesting a Form into another Form
 
@@ -625,6 +637,8 @@ specification.
   object WrongCalculator {
     def th(title1: String, titles: String*) = WrongCalculator(Form.th(title1, titles:_*))
   }
+
+  lazy val addresses = Seq(Address("Rose Crescent", 3), Address("Oxfort St", 4))
 
   val address = Form("Address").
                   tr(field("street", "Rose Crescent")).

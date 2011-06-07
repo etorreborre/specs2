@@ -44,6 +44,8 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   def tr(row: Row): Form = newForm(title, this.rows :+ row, result)
   /** create new tabs in the Form */
   def tabs[T](values: Seq[T])(f: T => Tabs) = tr(values.foldLeft(Tabs()) { (res, cur) => res.tabs(f(cur)) })
+  /** create new rows in the Form */
+  def trs[T](values: Seq[T])(f: T => Row) = values.foldLeft(this) { (res, cur) => res.tr(f(cur)) }
 
   /** add the rows of a form */
   private def addRows(f: Form): Form = {
@@ -176,6 +178,8 @@ case object Form {
   def th(h1: String, hs: String*): Form = new Form().th(h1, hs:_*)
   /** create new tabs in the Form */
   def tabs[T](values: Seq[T])(f: T => Tabs) = new Form().tabs(values)(f)
+  /** create new rows in the Form */
+  def trs[T](values: Seq[T])(f: T => Row) = new Form().trs(values)(f)
 
   /**
    * This method creates an xml representation of a Form as an Html table

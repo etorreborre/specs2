@@ -25,6 +25,7 @@ Upon execution a Form will return a Result value summarizing the execution of ea
   "with a seq of fields on one row"                                                                                     ! creation.e7 ^
   "with a seq of fields on one row - and no title"                                                                      ! creation.e8 ^
   "with tabs"                                                                                                           ! creation.e9 ^
+  "with a seq of Rows"                                                                                                  ! creation.e10^
   "from a DataTable"                                                                                                    ^
     "the Form header is the DataTable header"                                                                           ! datatable.e1 ^
     "with an additional column for failure messages"                                                                    ! datatable.e2 ^
@@ -82,6 +83,7 @@ Upon execution a Form will return a Result value summarizing the execution of ea
     def e7 = Form("title").tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
     def e8 = Form.tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
     def e9 = Form.tabs(Seq("name")) { (s: String) => tab(s, Form("title")) }.rows.size must_== 1
+    def e10 = Form.trs(Seq("a", "b")) { (s: String) => Row.tr(field(s)) }.rows.size must_== 2
   }
 
   object display {

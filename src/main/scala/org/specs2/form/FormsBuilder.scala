@@ -80,7 +80,7 @@ trait FormsBuilder {
 
   /** @return a new Tabs object with a first tab */
   def tab(label: String, form: Form) = tabs.tab(label, form)
-  
+
 }
 private[specs2]
 object FormsBuilder extends FormsBuilder
