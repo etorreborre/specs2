@@ -35,26 +35,26 @@ inside the specification:
 
 From inside a specification, the available arguments are the following:
 
-  Name           | Default value                           | Description
- --------------- | --------------------------------------- | -------------------------------------------------------------------------------------------
- `ex`            | .*                                      | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
- `xonly`         | false                                   | only reports failures and errors
- `include`       | ""                                      | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- `exclude`       | ""                                      | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- `plan`          | false                                   | only report the text of the specification without executing anything
- `skipAll`       | false                                   | skip all the examples
- `stopOnFail`    | false                                   | skip all examples after the first failure or error
- `failtrace`     | false                                   | report the stacktrace for failures
- `color`         | true                                    | use colors in the output (`nocolor` can also be used on the command line)
- `colors`        | `org.specs2.reporter.SmartColors`       | define alternative colors (replace failureColor from being yellow to magenta for example)
- `noindent`      | false                                   | don't indent automatically text and examples
- `showtimes`     | false                                   | show individual execution times
- `sequential`    | false                                   | don't execute examples concurrently
- `threadsNb`     | `Runtime.getRuntime.availableProcessors | number of threads to use for concurrent execution
- `markdown`      | true                                    | interpret text as Markdown in the html reporter
- `debugMarkdown` | false                                   | print more information when Markdown formatting fails
- `fromSource`    | true                                    | true takes an AutoExample description from the file, false from the expectation ok message
- `traceFilter`   | `DefaultStackTraceFilter`               | use a StackTraceFilter instance for filtering the reported stacktrace elements
+  Name           | Default value                            | Description
+ --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+ `ex`            | .*                                       | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
+ `xonly`         | false                                    | only reports failures and errors
+ `include`       | ""                                       | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ `exclude`       | ""                                       | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ `plan`          | false                                    | only report the text of the specification without executing anything
+ `skipAll`       | false                                    | skip all the examples
+ `stopOnFail`    | false                                    | skip all examples after the first failure or error
+ `failtrace`     | false                                    | report the stacktrace for failures
+ `color`         | true                                     | use colors in the output (`nocolor` can also be used on the command line)
+ `colors`        | `org.specs2.reporter.SmartColors`        | define alternative colors (replace failureColor from being yellow to magenta for example)
+ `noindent`      | false                                    | don't indent automatically text and examples
+ `showtimes`     | false                                    | show individual execution times
+ `sequential`    | false                                    | don't execute examples concurrently
+ `threadsNb`     | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
+ `markdown`      | true                                     | interpret text as Markdown in the html reporter
+ `debugMarkdown` | false                                    | print more information when Markdown formatting fails
+ `fromSource`    | true                                     | true takes an AutoExample description from the file, false from the expectation ok message
+ `traceFilter`   | `DefaultStackTraceFilter`                | use a StackTraceFilter instance for filtering the reported stacktrace elements
 
 
 All those arguments are usually set in a specification with `args(name=value)` but there are some available shortcuts:
