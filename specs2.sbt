@@ -29,13 +29,13 @@ libraryDependencies ++= Seq(
 /** Compilation */
 javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss4m")
 
+javaOptions += "-Xmx2G"
+
 scalacOptions += "-deprecation"
 
-maxErrors := 20
+maxErrors := 20 
 
 pollInterval := 1000
-
-testFrameworks += new TestFramework("org.specs2.runner.SpecsFramework")
 
 testOptions := Seq(Tests.Filter(s =>
   Seq("Spec", "Suite", "Unit", "all").exists(s.endsWith(_)) &&
