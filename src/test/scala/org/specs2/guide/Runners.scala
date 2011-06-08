@@ -6,13 +6,16 @@ class Runners extends Specification { def is = freetext ^
                                                                                                                         """
 ### Presentation
 
-There are 4 ways to execute ***specs2*** specifications:
+There are many ways to execute ***specs2*** specifications:
 
  * on the command line, with a console output, and the `specs2.run` runner
  * on the command line, with an html output, and the `specs2.html` runner
  * on the command line, with a console or an html output, and the `specs2.files` runner
  * using [sbt](http://code.google.com/p/simple-build-tool)
  * using [JUnit](http://www.junit.org)
+ * using [Intellij IDEA](http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA)
+ * using your own reporting tool implementing the `Notifier` interface
+
 
 ### Dependencies
 
@@ -336,6 +339,20 @@ You can use the second one if your IDE doesn't work with the first one:
       }
 
 [*some [tricks](http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse) described on the specs website can still be useful there*]
+
+### IntelliJ
+
+IntelliJ offers a nice integration with ***specs2***. You can:
+
+ * Execute a specification by selecting its name and pressing CTRL+SHIFT+F10
+ * Execute a single example by selecting its description and pressing CTRL+SHIFT+F10
+
+ ![specs2 in Intellij](images/intellij.png)
+
+But also:
+
+ * Provide command-line arguments in the "Test options"
+ * "Jump to Test" and "Jump to Source"
 
 ### Notifier runner
 
