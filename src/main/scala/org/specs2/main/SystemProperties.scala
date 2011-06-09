@@ -9,7 +9,7 @@ private[specs2]
 trait SystemProperties {
   val specs2Prefix = "specs2."
 
-  lazy val properties: Map[String, String] = Map(System.getProperties.toSeq.map(s => s._1.notNull -> s._1.notNull):_*)
+  lazy val properties: Map[String, String] = Map(System.getProperties.toSeq.map(s => s._1.notNull -> s._2.notNull):_*)
     
   /** @return the value of the system property p */  
   def getProperty(p: String): Option[String] =        properties.get(specs2Prefix + p).
