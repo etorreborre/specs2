@@ -41,7 +41,7 @@ trait HmsTimer[T <: HmsTimer[T]] {
     val totalMillis = elapsed
     val hours = totalMillis / 1000 / 3600
     val totalMillis1 = totalMillis - hours * 3600 * 1000
-    val minutes = totalMillis / 1000 / 60
+    val minutes = totalMillis1 / 1000 / 60
     val totalMillis2 = totalMillis1 - minutes * 60 * 1000
     val seconds = totalMillis2 / 1000
     val millis = totalMillis2 - seconds * 1000

@@ -10,9 +10,10 @@ class TimerSpec extends Specification { def is =
   "When started and stopped, it can"                                                                                    ^
     "display the elapsed time in hour-minute-second"                                                                    ! e2^
     "display the elapsed time in hms and millis"                                                                        ! e3^
+    "display the correct time when it is more than 1 hour"                                                              ! e4^
                                                                                                                         p^
   "A Timer can also have nested starts and stops"                                                                       ^
-    "it will then return cumulated times"                                                                               ! e4^
+    "it will then return cumulated times"                                                                               ! e5^
                                                                                                                         end
     
   def e1 = TestTimer().start.hms must_== "0 second"
@@ -28,7 +29,11 @@ class TimerSpec extends Specification { def is =
                        set(currentTime = 2500L).stop.
            time must beMatching("1 second, 500 ms")
                                                                                          
-  def e4 = TestTimer().set(currentTime = 1000L).start.
+  def e4 = TestTimer().set(currentTime = 0L).start.
+                       set(currentTime = 3800010L).stop.
+           time must beMatching("1 hour 3 minutes 20 seconds, 10 ms")
+
+  def e5 = TestTimer().set(currentTime = 1000L).start.
                        set(currentTime = 2000L).start.
                        set(currentTime = 3000L).stop.
                        set(currentTime = 4000L).stop.
