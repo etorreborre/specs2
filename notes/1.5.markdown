@@ -1,0 +1,13 @@
+This version adds new features on top of 1.4:
+
+ * datatables are now formatted as html tables when using the HtmlRunner (issue 22)
+  
+And some fixes:
+
+ * fixed issue 20: reflection error when using maven/surefire
+ * added back the possibility to use the example description in the example body
+ * fixed issue 23 (specification of system properties)
+ * fixed a missing quote in the documentation messing up the layout
+ * fixed a time formatting issue when > 1 hour in the statistics
+ 
+ ==========================
