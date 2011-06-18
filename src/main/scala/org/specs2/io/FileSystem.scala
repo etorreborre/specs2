@@ -219,21 +219,21 @@ trait FileSystem extends FileReader with FileWriter {
   }
 
   /** 
-   * Copy specs resources found either in the specs jar or in the classpath directories to an output directory.
+   * Copy specs resources found either in the specs jar or in the classpath directories to an output directory
+   * 
    * @param src name of the resource directory to copy
    * @param outputDir output directory where to copy the files to
    */
   def copySpecResourcesDir(src: String, outputDir: String) {
     val jarUrl = Thread.currentThread.getContextClassLoader.getResource(getClass.getName.replace(".", "/")+".class")
+    for (url <- Option(jarUrl) if url.toString.startsWith("jar"))
+      unjar(getPath(url).takeWhile(_ != '!').mkString, outputDir, ".*" + src + "/.*")
+
     val folderUrl = Thread.currentThread.getContextClassLoader.getResource(src)
-    val srcUrl = Option(if(folderUrl == null) jarUrl else folderUrl)
-    for (url <- srcUrl) {
-      if (url.toString.startsWith("jar"))
-        unjar(getPath(url).takeWhile(_ != '!').mkString, outputDir, ".*" + src + "/.*")
-      else
-        copyDir(url, outputDir + src)
-    }
+    for (url <- Option(folderUrl) if !folderUrl.toString.startsWith("jar"))
+      copyDir(url, outputDir + src)
   }
+
   /**
    * @return a path that should be valid on all plateforms (@see issue 148 of the specs project)
    */
