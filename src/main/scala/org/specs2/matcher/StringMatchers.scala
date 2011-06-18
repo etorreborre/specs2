@@ -55,7 +55,7 @@ trait StringBaseMatchers { outer =>
   }
   /** matches if b matches the regular expression a */
   def beMatching(t: =>String) = new BeMatching(t)
-  /** @alias for beMatching but matching just a fragment of the string*/
+  /** alias for beMatching but matching just a fragment of the string*/
   def =~(t: =>String) = new BeMatching(".*"+t+".*")
   /** matches if b.startsWith(a) */
   def startWith(t: =>String) = new Matcher[String] { 

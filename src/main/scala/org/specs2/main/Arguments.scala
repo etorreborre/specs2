@@ -60,7 +60,7 @@ case class Arguments (
 
   /** @return true if the command line contains a given string */
   def contains(a: String) = commandLine contains a
-  /** @alias for overrideWith */
+  /** alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
   
   /**

@@ -25,15 +25,15 @@ trait ExceptionBaseMatchers extends Expectations {
    */
   def throwA[E <: Throwable](e: E): ExceptionMatcher[E] = new ExceptionMatcher(e)
   /**
-   * @alias for throwA
+   * alias for throwA
    */
   def throwAn[E <: Throwable](implicit m: ClassManifest[E]) = throwA[E](m)
   /**
-   * @alias for throwA
+   * alias for throwA
    */
   def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]): Matcher[Any] = throwA(message)(m)
   /**
-   * @alias for throwA
+   * alias for throwA
    */
   def throwAn[E <: Throwable](e: E) = throwA(e)
   /**

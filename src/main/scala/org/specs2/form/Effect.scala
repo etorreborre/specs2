@@ -35,7 +35,7 @@ case class Effect[T](label: String, value: Property[T], decorator: Decorator = D
   def apply(v: =>T) = new Effect(label, value(v), decorator)
   /** @return the effect value */
   def apply(): T = value.get
-  /** @alias for apply() */
+  /** alias for apply() */
   def get: T = apply()
   /** @return "label" */
   override def toString = label

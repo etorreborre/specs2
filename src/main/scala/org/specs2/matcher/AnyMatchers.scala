@@ -22,7 +22,7 @@ trait AnyBaseMatchers {
 
   /** matches if a eq b */
   def beTheSameAs[T <: AnyRef](t: =>T) = new BeTheSameAs(t)
-  /** @alias for beTheSameAs */
+  /** alias for beTheSameAs */
   def be[T <: AnyRef](t: =>T) = beTheSameAs(t)
 
   /** matches if a == b */
