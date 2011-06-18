@@ -13,24 +13,24 @@ import matcher.MatchResult
  *
  * Fragments are created by adding a `Given` step to a `Text`:
  *
- *  "name: ${Eric}" ^ givenName
+ *  `"name: ${Eric}" ^ givenName`
  *
  * This creates a PreStep object containing the current context (representing all the extracted values) and a list of
  * Fragments containing:
  *
- *  * the Text fragment: Text("name: ${Eric}")
+ *  * the Text fragment: `Text("name: ${Eric}")`
  *  * a Step containing the extraction code to get the value delimited by `${}`
  *
  * Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
  * stores the additional Text fragment so that values can be extracted from it when a `When` step is added:
  *
  *  // this creates a PreStepText object
- *  "name: ${Eric}" ^ givenName ^
- *  "age: ${38}"
+ *  `"name: ${Eric}" ^ givenName ^`
+ *  `"age: ${38}"`
  *
  *  // this creates a PreStep object
- *  "name: ${Eric}" ^ givenName ^
- *  "age: ${38}"    ^ thenAge ^
+ *  `"name: ${Eric}" ^ givenName ^`
+ *  `"age: ${38}"    ^ thenAge ^`
  *
  * Eventually, when a `Then` step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
  * the current context and the results returned by the `Then` objects to create Examples.
