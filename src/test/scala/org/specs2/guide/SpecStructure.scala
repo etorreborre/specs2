@@ -381,6 +381,16 @@ extraction:
       age.toInt must_== 18
     }
 
+##### Conversions
+
+Given / When / Then steps are invariant in their type parameters. This might be detrimental to reuse. For example, if you've defined a `Then[X]` step to check something about a value of type `X`, it would make sense to reuse the same step with a value of type `Y` when `Y <: X`. In order to do this you can use some implicit conversions which will translate steps between types when it makes sense:
+
+      val thenX = new Then[X] {
+        def extract(x: X, s: String) = success // check something about x
+      }
+      // thenX can be reused as a Then[Y] step because Y <: X
+      val thenY: Then[Y] = thenX
+
 ### Shared examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between

@@ -57,6 +57,22 @@ trait RegexSteps {
     def ^(fs2: Fragments) = fs.add(fs2)
   }
 
+  /**
+   * implicit conversion to transform a Given[Y] to Given[X] when Y <: X
+   */
+  implicit def downcastGiven[X, Y <: X](gv: Given[Y]) = new Given[X](gv.regex) { def extract(s: String) = gv.extract(s) }
+
+  /**
+   * implicit conversion to transform a When[P, Q] to When[R, S] when R <: P and S >: Q
+   */
+  implicit def updowncastWhen[P, Q, R <: P, S >: Q](wh: When[P, Q]) =
+    new When[R, S](wh.regex) { def extract(t: R, s: String): S = wh.extract(t, s) }
+
+  /**
+   * implicit conversion to transform a Then[Y] to Then[X] when Y <: X
+   */
+  implicit def upcastThen[X, Y <: X](th: Then[X]) = new Then[Y] { def extract(t: Y, s: String) = th.extract(t, s) }
+
   private[specs2] case class PreStep[T](context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
     type RegexType = PreStep[T]
     def ^(toExtract: String) = new PreStepText(toExtract, context, fs)

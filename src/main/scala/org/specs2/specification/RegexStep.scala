@@ -60,7 +60,7 @@ object RegexStep {
  *
  * It must define the extract function creating a value of type T from the extracted values
  */
-abstract class Given[T](regex: String = "") extends RegexStep[Unit, T](regex) {
+abstract class Given[T](val regex: String = "") extends RegexStep[Unit, T](regex) {
   /** if the extraction goes wrong, then an Error is propagated */
   private[specs2] def extractContext(text: String): Either[Result, T] = trye(extract(text))((e:Exception) => Error(e))
 
@@ -73,7 +73,7 @@ abstract class Given[T](regex: String = "") extends RegexStep[Unit, T](regex) {
  * It must define the extract function taking the previous state of extracted values, P, and creating a new state
  * of type T from the extracted values
  */
-abstract class When[P, T](regex: String = "") extends RegexStep[P, T](regex) {
+abstract class When[P, T](val regex: String = "") extends RegexStep[P, T](regex) {
   /**
    * if the previous extraction went wrong, then a Skipped result is propagated.
    * Otherwise if the current extraction goes wrong, then an Error is propagated

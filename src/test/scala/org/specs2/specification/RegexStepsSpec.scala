@@ -16,6 +16,10 @@ class RegexStepsSpec extends Specification with ResultMatchers { def is =
                                                                                                                         p^
     "A Then[T] extractor extracts the text from the previous Text fragment, and combines it with the current State"     ^
       "returning a Result"                                                                                              ! then^
+                                                                                                                        p^
+    "A Given[Y] extractor can be used as a Given[X] step if Y <: X, with an implicit conversion"                        ! convert1^
+    "A Then[X] extractor can be used as a Then[Y] step if Y <: X, with an implicit conversion"                          ! convert2^
+    "A When[P, Q] extractor can be used as a When[R, S] step if P <: R and Q >: S, with an implicit conversion"         ! convert3^
                                                                                                                         end
 
 
@@ -25,6 +29,28 @@ class RegexStepsSpec extends Specification with ResultMatchers { def is =
   def when = number2.extractContext(Right(1), "And a second number: ${2}") must beRight((1, 2))
 
   def then = equalToLast.extractContext(Right(1), "Then it is ${1}") must beRight.like { case (s, r) => r must beSuccessful }
+
+  trait X; trait Y extends X { override def toString = "Y"}
+  trait P; trait R extends P
+  trait S; trait Q extends S { override def toString = "Q"}
+
+  def convert1 = {
+    val givenY = new Given[Y] { def extract(s: String) = new Y {} }
+    val givenX: Given[X] = givenY
+    givenX.extract("").toString must_== "Y"
+  }
+
+  def convert2 = {
+    val thenX = new Then[X] { def extract(x: X, s: String) = success }
+    val thenY: Then[Y] = thenX
+    thenY.extract(new Y {}, "") must beSuccessful
+  }
+
+  def convert3 = {
+    val whenPQ = new When[P, Q] { def extract(p: P, s: String) = new Q {} }
+    val whenRS: When[R, S] = whenPQ
+    whenRS.extract(new R {}, "").toString must_== "Q"
+  }
 
   object number1 extends Given[Int] {
     def extract(text: String): Int = extract1(text).toInt
