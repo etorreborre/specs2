@@ -47,9 +47,10 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
   override def printSpecStart(message: String)(implicit args: Arguments) = () // do nothing because sbt already displays the specification name
-  override def printFailure(message: String)(implicit args: Arguments)   = logFailure(args.colors.failure(message))
-  override def printError(message: String)(implicit args: Arguments)     = logError(args.colors.error(message))
+  override def printFailure(message: String)(implicit args: Arguments)   = logFailure(message)
+  override def printError(message: String)(implicit args: Arguments)     = logError(message)
   override def printSuccess(message: String)(implicit args: Arguments)   = logInfo(message)
+  override def printStats(message: String)(implicit args: Arguments)     = logInfo(message)
   override def printLine(message: String)(implicit args: Arguments)      = logInfo(message)
   override def status(result: execute.Result)(implicit arguments: Arguments): String =
     result.status(arguments.overrideWith(args(color = true)))  + " "

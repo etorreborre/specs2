@@ -137,7 +137,7 @@ class TextPrinterSpec extends Specification { def is =
 
     def failureMustBeMagenta(cs: Colors) = printWithColors(colors(cs) ^ fail3) must containMatch("35m")
 
-    def e8  = failureMustBeMagenta(new Colors { override val failureColor = magenta })
+    def e8  = failureMustBeMagenta(new ConsoleColors { override val failureColor = magenta })
     def e9  = failureMustBeMagenta(SmartColors.fromArgs("failure:m"))
     def e10 = failureMustBeMagenta(new SmartColors {
       override lazy val properties = Map("color.failure"->"magenta")

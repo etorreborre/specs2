@@ -13,10 +13,10 @@ import execute.Result
 class TextResultOutput extends ResultOutput with ConsoleOutput {
 
   def printSpecStart(message: String)(implicit args: Arguments) =
-    printLines(message)
+    printLines(args.colors.text(message))
   
   def printSuccess(message: String)(implicit args: Arguments) = 
-    printLines(message)
+    printLines(args.colors.success(message))
   
   def printFailure(message: String)(implicit args: Arguments) = 
     printLines(args.colors.failure(message, args.color))
@@ -25,11 +25,14 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
     printLines(args.colors.error(message, args.color))
   
   def printSkipped(message: String)(implicit args: Arguments) = 
-    printLines(message)
+    printLines(args.colors.skipped(message))
   
   def printPending(message: String)(implicit args: Arguments) = 
-    printLines(message)
-  
+    printLines(args.colors.pending(message))
+
+  def printStats(message: String)(implicit args: Arguments) =
+    printLines(args.colors.stats(message))
+
   def status(result: Result)(implicit args: Arguments): String = 
     result.status(args) + " "
   

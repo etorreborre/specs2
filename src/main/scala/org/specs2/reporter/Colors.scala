@@ -3,11 +3,33 @@ package reporter
 
 import text.AnsiColors
 import text.AnsiColors._
+
 /**
- * This class defines the colors to use to print out text on the Console
- * with defaults as AnsiColors for a dark background console
+ * This trait defines the colors which must be used to output text on the console
  */
-class Colors extends AnsiColors with ConsoleColors {
+trait Colors {
+  def textColor   : String
+  def successColor: String
+  def failureColor: String
+  def errorColor  : String
+  def pendingColor: String
+  def skippedColor: String
+  def statsColor  : String
+
+  def text   (s: String, doIt: Boolean = true): String
+  def success(s: String, doIt: Boolean = true): String
+  def failure(s: String, doIt: Boolean = true): String
+  def error  (s: String, doIt: Boolean = true): String
+  def pending(s: String, doIt: Boolean = true): String
+  def skipped(s: String, doIt: Boolean = true): String
+  def stats  (s: String, doIt: Boolean = true): String
+}
+
+/**
+* This class defines the colors to use to print out text on the Console
+* with defaults as AnsiColors for a dark background console
+*/
+class ConsoleColors extends AnsiColors with Colors {
 
   def textColor    = white
   def successColor = green
@@ -33,35 +55,28 @@ class Colors extends AnsiColors with ConsoleColors {
                               ("skipped",skippedColor),
                               ("stats",  statsColor)
                               ).map(p => p._1+": "+p._2)mkString("Colors(", ",", "}")
-
 }
 
 /**
- * This trait defines the colors which must be used to output text on the console
+ * This color scheme can be used with a white background
  */
-trait ConsoleColors {
-  def textColor   : String
-  def successColor: String
-  def failureColor: String
-  def errorColor  : String
-  def pendingColor: String
-  def skippedColor: String
-  def statsColor  : String
+class InvertedColors extends ConsoleColors {
 
-  def text   (s: String, doIt: Boolean = true): String
-  def success(s: String, doIt: Boolean = true): String
-  def failure(s: String, doIt: Boolean = true): String
-  def error  (s: String, doIt: Boolean = true): String
-  def pending(s: String, doIt: Boolean = true): String
-  def skipped(s: String, doIt: Boolean = true): String
-  def stats  (s: String, doIt: Boolean = true): String
+  override def textColor    = black
+  override def successColor = green
+  override def failureColor = magenta
+  override def errorColor   = red
+  override def pendingColor = blue
+  override def skippedColor = cyan
+  override def statsColor   = blue
+
 }
 
 import main.SystemProperties
 
-class ColorsFromSystemProperties() extends Colors with ColorsMap {
+class ColorsFromSystemProperties() extends ConsoleColors with ColorsMap {
   lazy val properties: SystemProperties = SystemProperties
-  lazy val defaultColors = new Colors
+  lazy val defaultColors = properties.getIfElse("color.whitebg", new InvertedColors: ConsoleColors)(new ConsoleColors)
 
   override lazy val textColor    = getColor(properties.getOrElse("color.text",    "notfound")).getOrElse(defaultColors.textColor   )
   override lazy val successColor = getColor(properties.getOrElse("color.success", "notfound")).getOrElse(defaultColors.successColor)
@@ -75,8 +90,8 @@ class ColorsFromSystemProperties() extends Colors with ColorsMap {
 /**
  * This class checks if colors must be taken from system properties
  */
-class SmartColors(argsColors: Map[String, String] = Map()) extends Colors with ColorsMap with SystemProperties { outer =>
-  lazy val defaultColors = new Colors
+class SmartColors(argsColors: Map[String, String] = Map()) extends ConsoleColors with ColorsMap with SystemProperties { outer =>
+  lazy val defaultColors = new ConsoleColors
   lazy val systemColors = new ColorsFromSystemProperties {
     override lazy val properties = outer
   }

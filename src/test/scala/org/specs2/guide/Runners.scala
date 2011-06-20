@@ -171,13 +171,6 @@ Executing a specification `com.company.SpecName` in the console is very easy:
 
 `scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]`
 
-##### Colors
-
-By default, the reporting will output colors. If you're running on windows you might either:
-
- * use the [following tip](http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) to install colors in the DOS console
- * or pass `nocolor` as a command line argument
-
 ### Html output
 
 If you want html pages to be produced for your specification you'll need to execute:
@@ -257,6 +250,13 @@ Any `FilesRunner` object can also be invoked by sbt, but you need to specify `co
 
 ##### Colors
 
+By default, the reporting will output colors. If you're running on windows you might either:
+
+ * use the [following tip](http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) to install colors in the DOS console
+ * or pass `nocolor` as a command line argument
+
+Then, there are different ways to set-up the colors you want to use for the output
+
 *From system properties*
 
 The so-called "SmartColors" argument will check if there are colors defined as specs2 properties. If so, the colors  used
@@ -274,6 +274,19 @@ Property        | Default value |
 `color.error`   |  red          |
 `color.pending` |  blue         |
 `color.skipped` |  cyan         |
+`color.stats`   |  blue         |
+
+The default values above are provided for a black background. If you have a white background you can use the `specs2.whitebg` property and then the default values will be:
+
+Property        | Default value |
+--------------- |  ------------ |
+`color.text`    |  black        |
+`color.success` |  green        |
+`color.failure` |  magenta      |
+`color.error`   |  red          |
+`color.pending` |  blue         |
+`color.skipped` |  cyan         |
+`color.stats`   |  blue         |
 
 All the available colors are listed here, with their corresponding abbreviation which you can use to refer to them as well:
 
@@ -302,10 +315,10 @@ For example you can pass on the command line:
 
 *Through the API*
 
-Finally you can change the color scheme that's being used on the console by implementing your own `org.specs2.reporter.Colors`
-trait. For example if you want to output magenta everywhere yellow is used you can write:
+Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.reporter.Colors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.reporter.Colors)
+trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
 
-      object MyColors = new org.specs2.reporter.Colors { override val failureColor = magenta }
+      object MyColors = new org.specs2.reporter.ConsoleColors { override val failureColor = magenta }
 
       class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
          // the failure message will be magenta
