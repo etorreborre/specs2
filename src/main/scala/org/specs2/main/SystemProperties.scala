@@ -20,6 +20,12 @@ trait SystemProperties {
   /** @return the value of the system property p or a default value */
   def getOrElse(p: String, defaultValue: String): String = getProperty(p).getOrElse(defaultValue)
 
+  /** @return the value Some(T) if the property is defined */
+  def getIf[T](p: String, value: =>T): Option[T] = getProperty(p).map(v => value)
+
+  /** @return the value Some(T) if the property is defined */
+  def getIfElse[T](p: String, v1: =>T)(v2: =>T): T = getIf(p, v1).getOrElse(v2)
+
   /** @return true if a property is defined */
   def isDefined(p: String) = getProperty(p).isDefined
   /** @return true if there is a property matching the regular expression */
