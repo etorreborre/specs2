@@ -313,6 +313,8 @@ For example you can pass on the command line:
 
  to have the text colored in blue and the failures in Magenta.
 
+If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.reporter.Colors)
+
 *Through the API*
 
 Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.reporter.Colors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.reporter.Colors)

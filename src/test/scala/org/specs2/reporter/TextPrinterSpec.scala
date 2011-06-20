@@ -50,7 +50,9 @@ class TextPrinterSpec extends Specification { def is =
       "colors can be redefined by passing a Colors object"                                                              ! color().e8^
       "colors can be redefined by passing system properties"                                                            ! color().e9^
       "colors can be redefined by passing command-line args"                                                            ! color().e10^
-                                                                                                                        p^
+      "the background color can be specified as being white"                                                            ^
+        "then the color scheme is inverted"                                                                             ! color().e11^
+                                                                                                                        p^bt^
     "when doing equals comparisons, differences are shown"                                                              ^
       "the differences show up after the failure message"                                                               ! diffs().e1^
       "the separators can be modified with diffs(separators='<>')"                                                      ! diffs().e2^
@@ -142,6 +144,7 @@ class TextPrinterSpec extends Specification { def is =
     def e10 = failureMustBeMagenta(new SmartColors {
       override lazy val properties = Map("color.failure"->"magenta")
     })
+    def e11  = SmartColors.fromArgs("whitebg,success:b").textColor must_== black
   }
   case class diffs() {
     def test = bigString1 must_== bigString2

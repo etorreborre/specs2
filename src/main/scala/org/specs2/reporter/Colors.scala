@@ -120,7 +120,10 @@ object SmartColors extends ColorsMap {
       else
         None
     }
-    new SmartColors(Map(map:_*))
+    if (args.contains("whitebg"))
+      new SmartColors(Map(map:_*)) { override lazy val defaultColors = new InvertedColors }
+    else
+      new SmartColors(Map(map:_*))
   }
 }
 
