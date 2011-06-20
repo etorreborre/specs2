@@ -1,6 +1,8 @@
 This version adds new features on top of 1.4:
 
  * datatables are now formatted as html tables when using the HtmlRunner (issue 22)
+ * added some implicit conversions to allow a better reuse of Given/When/Then steps with variant types
+ * added a `specs2.whitebg` property to specify a white background and get a better color scheme in the console
   
 And some fixes:
 
@@ -9,5 +11,6 @@ And some fixes:
  * fixed issue 23 (specification of system properties)
  * fixed a missing quote in the documentation messing up the layout
  * fixed a time formatting issue when > 1 hour in the statistics
+ * changed the API so that `org.specs2.reporter.Colors` and `org.specs2.reporter.ConsoleColors` switch names for better abstraction
  
  ==========================
