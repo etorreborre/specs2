@@ -1,6 +1,6 @@
-package org.specs2
 package examples
 
+import org.specs2._
 /**
  * This specification shows how both examples and data can be combined for maximum reusability.
  *

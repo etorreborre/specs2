@@ -1,3 +1,5 @@
+package examples
+
 import org.specs2._
 import runner.FilesRunner
 

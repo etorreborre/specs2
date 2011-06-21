@@ -1,6 +1,8 @@
 package org.specs2
 package guide
 
+import _root_.examples._
+
 class QuickStart extends Specification { def is = literate                                                              ^
 "Quick Start".title ^
 """
@@ -92,7 +94,7 @@ You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide")
  * use sbt/maven/junit to execute a specification
  * export your specification as an html document (like this one!)
                                                                                                                         """^
-  include(xonly, new examples.HelloWorldSpec)                                                                           ^
-  include(xonly, new examples.HelloWorldUnitSpec)                                                                       ^
+  include(xonly, new HelloWorldSpec)                                                                           ^
+  include(xonly, new HelloWorldUnitSpec)                                                                       ^
                                                                                                                         end
 }

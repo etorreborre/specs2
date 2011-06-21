@@ -1,6 +1,6 @@
-package org.specs2
 package examples
 
+import org.specs2._
 import specification._
 
 /**

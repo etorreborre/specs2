@@ -2,7 +2,7 @@ package org.specs2
 package guide
 import sys._
 import form._
-import examples.Address
+import _root_.examples.Address
 
 class Forms extends Specification with specification.Forms { def is = literate^
   """

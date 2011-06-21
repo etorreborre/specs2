@@ -1,5 +1,6 @@
-package org.specs2
 package examples
+
+import org.specs2._
 
 /**
  * This specification shows that it is possible to use method names in quotes to describe examples in a specification

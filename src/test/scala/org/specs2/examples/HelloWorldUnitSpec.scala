@@ -1,5 +1,6 @@
-package org.specs2
 package examples
+
+import org.specs2._
 
 class HelloWorldUnitSpec extends mutable.Specification {
 

@@ -1,14 +1,14 @@
-package org.specs2
 package examples
+
+import org.specs2._
 import specification._
 import execute.Success
-import mutable._
 
 /**
  * This specification shows how to use the mutable.Specification trait to create a unit Specification
  * where the fragments are built using a mutable variable
  */
-class UnitSpec extends Specification {
+class UnitSpec extends mutable.Specification {
 
   // A title can be added at the beginning of the specification
   "MutableSpec".title

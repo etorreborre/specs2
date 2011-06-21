@@ -1,6 +1,7 @@
 package org.specs2
 package guide
-import examples._
+
+import _root_.examples._
 import specification._
 import execute.Result
 
