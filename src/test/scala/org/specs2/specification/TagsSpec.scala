@@ -1,10 +1,11 @@
 package org.specs2
 package specification
 
+import main._
 import reporter.DefaultSelection
 import matcher.ThrownExpectations
 
-class TagsSpec extends Specification with ThrownExpectations with Tags { def is =
+class TagsSpec extends Specification with ThrownExpectations with Tags { def is = 
                                                                                                                         """
 A specification can be tagged with some meaningful names like "integration" or "accounts". Creating tags amounts to
 adding new fragments in the specification. Then those fragments are used to determine which other fragments must be executed
@@ -48,6 +49,9 @@ during the specification execution. There are 2 types of tags for marking a sing
     "a tag call on the line before an example will mark it"                                                             ! mutabletags().e1^
     "a tag call on the same line as an example will mark it"                                                            ! mutabletags().e2^
     "a section call on the same line as a should block will mark all the examples"                                      ! mutabletags().e3^
+                                                                                                                        p^
+  "Tags can be specified from arguments"                                                                                ^
+    "from system properties"                                                                                            ! fromargs().e1^
                                                                                                                         end
 
   import DefaultSelection._
@@ -131,5 +135,13 @@ during the specification execution. There are 2 types of tags for marking a sing
     def e1 = includeMustSelect(tagged.content, "t1", "e1", "e2")
     def e2 = includeMustSelect(tagged.content, "t2", "e2", "e1")
     def e3 = includeMustSelect(tagged.content, "t3", "e4", "e3")
+  }
+
+  case class fromargs() {
+    def e1 = {
+      val properties = MapSystemProperties("specs2.include" -> "t1", "specs2.exclude" -> "")
+      val arguments = Arguments.extract(Seq(), properties)
+      select(arguments)(tagged).map(_.toString) must containMatch("e1")
+    }
   }
 }

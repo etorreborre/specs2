@@ -37,3 +37,11 @@ trait SystemProperties {
 
 private[specs2]
 object SystemProperties extends SystemProperties
+
+/**
+ * This class is used in specifications to mock the system properties
+ */
+private[specs2]
+case class MapSystemProperties(map: (String, String)*) extends SystemProperties {
+  override lazy val properties = Map(map:_*)
+}
