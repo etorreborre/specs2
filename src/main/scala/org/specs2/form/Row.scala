@@ -64,8 +64,4 @@ case object Row {
    * create a row from cells
    */
   def tr(c1: Cell, cs: Cell*) = Row(nel(c1, cs:_*))
-  /**
-   * create a row from fields
-   */
-  def tr(f1: Field[_], fs: Field[_]*) = Row(nel(new FieldCell(f1), fs.map(new FieldCell(_)):_*))
 }

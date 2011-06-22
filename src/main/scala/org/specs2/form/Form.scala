@@ -160,7 +160,7 @@ case object Form {
 
     val headerRest = otherFields(table.titles) ++ (if (table.isSuccess) Seq[Field[_]]() else Seq(Field("message")))
     table.rows.foldLeft(th(firstField(table.titles), headerRest:_*)) { (res, cur) =>
-      val values = Row.tr(firstField(cur.cells), otherFields(cur.cells):_*)
+      val values = Row.tr(FieldCell(firstField(cur.cells)), otherFields(cur.cells).map(FieldCell(_)):_*)
       res.tr {
         if (cur.result.isSuccess)      values
         else if (cur.result.isFailure) values.add(FieldCell(Field(cur.result.message)).setResult(cur.result))
