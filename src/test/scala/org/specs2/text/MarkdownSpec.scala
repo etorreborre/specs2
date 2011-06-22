@@ -20,6 +20,9 @@ class MarkdownSpec extends Specification { def is =
                                                                                                                         p^
   "Embedded code"                                                                                                       ! e1^
   "Code with newlines must be enclosed in one code tag only"                                                            ! e2^
+                                                                                                                        p^
+  "the encoding must be ok with utf-8 characters"                                                                       ^
+  { toXhtml("⊛").toString must contain("⊛") }                                                                          ^
                                                                                                                         end
 
   val someCode = """
