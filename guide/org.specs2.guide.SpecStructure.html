@@ -526,7 +526,7 @@ include(xonly, resetTextIndentation)         ^
      def e2 = tree.removeNodes(2, 3, 4) must have size(1)
    }
 </code></pre><p>In this case we don't need to extend the <code class="prettyprint">Scope</code> trait because the examples <code class="prettyprint">e1</code> and <code class="prettyprint">e2</code> already return <code class="prettyprint">Result</code>s.</p><a name="Contexts+inheritance"></a><h5>Contexts inheritance</h5><p>One very cool property of using traits to define context variables is that we can use inheritance to describe more and more<br />specific contexts:</p>
-<pre><code class="prettyprint">  trait LoggedIn extends Scope with Before {
+<pre><code class="prettyprint">  trait LoggedIn extends Scope {
     val user = logInUser
     // do something with the user
   }
@@ -546,8 +546,8 @@ include(xonly, resetTextIndentation)         ^
      }
    }
 
-   trait trees extends Scope with Before {
-     val tree = getATreeWith4NodesFromTheDatabase
+   trait trees extends Before {
+     lazy val tree = getATreeWith4NodesFromTheDatabase
      def before = setupDB
    }
 </code></pre><p>Then the set-up code defined in the <code class="prettyprint">before</code> method will be executed before each example. The <code class="prettyprint">After</code> trait works the same<br />way by requiring you to define an <code class="prettyprint">after</code> method.</p><p>Needless to say, adding <code class="prettyprint">Before</code> code to an acceptance specification is as simple:</p>
@@ -557,7 +557,7 @@ include(xonly, resetTextIndentation)         ^
    }
 
    case class trees() extends Before {
-     val tree = getATreeWith4NodesFromTheDatabase
+     lazy val tree = getATreeWith4NodesFromTheDatabase
      def before = setupDB
 
      def e1 = tree.removeNodes(2, 3) must have size(2)
