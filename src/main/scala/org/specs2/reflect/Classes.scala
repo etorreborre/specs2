@@ -111,7 +111,7 @@ trait Classes extends Output {
   private[reflect] def loadClass[T <: AnyRef](className: String, loader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[Class[T]] = {
     tryo(Some(loadClassOf(className).asInstanceOf[Class[T]])) { (e: Throwable) =>
       if (System.getProperty("debugLoadClass") != null) {
-        println("Could not load class " + className)
+        println("Could not load class " + className + ": " + e.getMessage)
         e.getStackTrace() foreach (s => println(s.toString))
       }
     }.flatMap(identity)
