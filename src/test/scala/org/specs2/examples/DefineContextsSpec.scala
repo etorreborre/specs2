@@ -24,8 +24,8 @@ class DefineContextsSpec extends Specification {
       val aNewSystem = "a fresh value"
       def before = println("clean up before each example")
 
-      def e1 = aNewSystem must_== "a fresh value"
-      def e2 = aNewSystem must_== "a fresh value"
+      def e1 = this { aNewSystem must_== "a fresh value" }
+      def e2 = this { aNewSystem must_== "a fresh value" }
     }
   }
 
@@ -42,8 +42,8 @@ class DefineContextsSpec extends Specification {
       }
     }
 
-    /** here we need a trait extending `Scope` */
-    trait clean extends Before {
+    /** here we need a trait extending mutable.Before because the example body will be executed as a "delayed init"  section*/
+    trait clean extends mutable.Before {
       lazy val aNewSystem = "a fresh value"
       def before = println("clean up before each example")
     }

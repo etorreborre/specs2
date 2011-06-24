@@ -10,13 +10,7 @@ import execute._
  * 
  * @see Example to understand why the type T must <% Result
  */
-trait After extends Context with DelayedInit { outer =>
-  /**
-   * this method allows the after code to be executed after any other code from the body of the Context
-   */
-  override def delayedInit(x: => Unit): Unit = {
-    try { x } finally { after }
-  }
+trait After extends Context { outer =>
 
   /** override this method to provide the after behavior */
   def after: Any

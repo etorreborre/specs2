@@ -17,14 +17,8 @@ trait Context extends Scope {
  * 
  * @see Example to understand why the type T must <% Result
  */
-trait Before extends Context with DelayedInit { outer =>
+trait Before extends Context { outer =>
 
-  /**
-   * this method allows the before code to be executed before any other code from the body of the Context
-   */
-  override def delayedInit(x: => Unit): Unit = {
-    before; x
-  }
   /** override this method to provide the before behavior */
   def before: Any
   /** 

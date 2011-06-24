@@ -816,9 +816,7 @@ specific contexts:
 
 #### Before/After code
 
-If you want to run some code before or after each example, the `Before` and `After` traits are there to help you (they both extend the `Scope` trait).
-
-When you make your context trait extend the `Before` trait:
+If you want to run some code before or after each example, the `Before` and `After` traits are there to help you (they both extend the `Scope` trait). In the following examples we'll only show the use of `After` because `Before` most of the time unnecessary:
 
        class ContextSpec extends mutable.Specification {
          "this is the first example" in new trees {
@@ -829,27 +827,49 @@ When you make your context trait extend the `Before` trait:
          }
        }
 
-       trait trees extends Before {
+       trait trees {
+         setupDB
          lazy val tree = getATreeWith4NodesFromTheDatabase
-         def before = setupDB
        }
 
-Then the set-up code defined in the `before` method will be executed before each example. The `After` trait works the same
-way by requiring you to define an `after` method.
+Indeed when you have setup code you can do anything you want in the body of your context trait and this will be executed before the example body. However this wouldn't work with teardown code, so let's see how to use the `After` trait.
 
-Needless to say, adding `Before` code to an acceptance specification is as simple:
+##### In a mutable specification
+
+You make your context trait extend the `mutable.After` trait:
+
+       class ContextSpec extends mutable.Specification {
+         "this is the first example" in new trees {
+           tree.removeNodes(2, 3) must have size(2)
+         }
+         "this is the first example" in new trees {
+           tree.removeNodes(2, 3, 4) must have size(1)
+         }
+       }
+
+       trait trees extends mutable.After {
+         lazy val tree = getATreeWith4NodesFromTheDatabase
+         def after = cleanupDB
+       }
+
+In this case, the clean-up code defined in the `after` method will be executed after each example. This is possible because the `mutable.After` trait extends the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
+
+##### In an acceptance specification
+
+In that case you would extend the `specification.After` trait and use the `apply` method:
 
        class ContextSpec extends Specification { def is =
          "this is the first example" ! trees().e1 ^
          "this is the first example" ! trees().e2
        }
 
-       case class trees() extends Before {
+       case class trees() extends specification.After {
          lazy val tree = getATreeWith4NodesFromTheDatabase
-         def before = setupDB
+         def after = cleanupDB
 
-         def e1 = tree.removeNodes(2, 3) must have size(2)
-         def e2 = tree.removeNodes(2, 3, 4) must have size(1)
+         // this is equivalent to: def e1 = this.apply { ... }
+         def e1 = this { tree.removeNodes(2, 3) must have size(2) }
+         def e2 = this { tree.removeNodes(2, 3, 4) must have size(1) }
        }
 
 Now we have both variable isolation and non-duplication of set-up code!
