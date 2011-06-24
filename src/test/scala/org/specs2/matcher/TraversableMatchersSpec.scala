@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 import java.util.Arrays._
 import scala.collection.JavaConversions.{ collectionAsScalaIterable }
+import scala.collection.parallel.ParSeq
 
 class TraversableMatchersSpec extends Specification { def is =
 
@@ -72,6 +73,9 @@ class TraversableMatchersSpec extends Specification { def is =
   "But generally require explicit conversion"                                                                           ^
     { asList("Hello", "World") must haveSize(2) }                                                                       ^
     { collectionAsScalaIterable(asList("Hello", "World")) must containMatch("ll") }                                     ^
+                                                                                                                        p^
+  "Parallel collections work with any matcher"                                                                          ^
+    { ParSeq(1, 2, 3) must contain(1, 2, 3) }                                                                           ^
                                                                                                                         end
 
   case class subclass() {

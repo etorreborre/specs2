@@ -7,9 +7,10 @@ import text.Quote._
 import text.Plural._
 import collection.Iterablex._
 import MatchersImplicits._
+import scala.collection.{GenTraversableOnce, GenTraversable}
 
 /**
- * Matchers for traversables 
+ * Matchers for traversables
  */
 trait TraversableMatchers extends TraversableBaseMatchers with TraversableBeHaveMatchers
 object TraversableMatchers extends TraversableMatchers
@@ -17,7 +18,7 @@ object TraversableMatchers extends TraversableMatchers
 private[specs2]
 trait TraversableBaseMatchers extends LazyParameters { outer =>
   
-  trait TraversableMatcher[T] extends Matcher[Traversable[T]]
+  trait TraversableMatcher[T] extends Matcher[GenTraversable[T]]
   
   /** 
    * match if an traversable contains (t).
@@ -39,8 +40,8 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
   /**
    * Matches if there is one element in the traversable verifying the <code>function</code> parameter: <code>(traversable.exists(function(_))</code>
    */
-  def have[T](function: T => Boolean) = new Matcher[Traversable[T]]{
-    def apply[S <: Traversable[T]](traversable: Expectable[S]) = {
+  def have[T](function: T => Boolean) = new Matcher[GenTraversable[T]]{
+    def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
       result(traversable.value.exists(function(_)),
              "at least one element verifies the property in " + traversable.description, 
              "no element verifies the property in " + traversable.description,
@@ -66,7 +67,7 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
   def length[T : Sized](n: Int) = haveLength[T](n)
 
   /** any scala collection has a size */
-  implicit def scalaTraversableIsSized[I <: TraversableOnce[_]]: Sized[I] = new Sized[I] {
+  implicit def scalaTraversableIsSized[I <: GenTraversableOnce[_]]: Sized[I] = new Sized[I] {
     def size(t: I) = t.size
   }
   /** any scala array has a size */
@@ -85,8 +86,8 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
 
 private[specs2]
 trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatchers =>
-  implicit def traversable[T](s: MatchResult[Traversable[T]]) = new TraversableBeHaveMatchers(s)
-  class TraversableBeHaveMatchers[T](s: MatchResult[Traversable[T]]) {
+  implicit def traversable[T](s: MatchResult[GenTraversable[T]]) = new TraversableBeHaveMatchers(s)
+  class TraversableBeHaveMatchers[T](s: MatchResult[GenTraversable[T]]) {
     def contain(t: LazyParameter[T], ts: LazyParameter[T]*) = new ContainMatchResult(s, outer.contain((t +: ts):_*))
     def containMatch(t: =>String) = s(outer.containMatch(t))
     def containPattern(t: =>String) = s(outer.containPattern(t))
@@ -98,34 +99,34 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
     def length(n: Int) : MatchResult[T] = size(n)
   }
 }
-class ContainMatchResult[T](val s: MatchResult[Traversable[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+class ContainMatchResult[T](val s: MatchResult[GenTraversable[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
   def only = new ContainOnlyMatchResult(s, containMatcher.only)
   def inOrder = new ContainInOrderMatchResult(s, containMatcher.inOrder)
 }
-class ContainOnlyMatchResult[T](val s: MatchResult[Traversable[T]], containMatcher: ContainOnlyMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+class ContainOnlyMatchResult[T](val s: MatchResult[GenTraversable[T]], containMatcher: ContainOnlyMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
   def inOrder = new ContainOnlyInOrderMatchResult(s, containMatcher.inOrder)
 }
-class ContainInOrderMatchResult[T](val s: MatchResult[Traversable[T]], containMatcher: ContainInOrderMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+class ContainInOrderMatchResult[T](val s: MatchResult[GenTraversable[T]], containMatcher: ContainInOrderMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
   def only = new ContainOnlyInOrderMatchResult(s, containMatcher.only)
 }
-class ContainOnlyInOrderMatchResult[T](val s: MatchResult[Traversable[T]], containMatcher: Matcher[Traversable[T]]) extends AbstractContainMatchResult[T] { outer =>
+class ContainOnlyInOrderMatchResult[T](val s: MatchResult[GenTraversable[T]], containMatcher: Matcher[GenTraversable[T]]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
 }
-trait AbstractContainMatchResult[T] extends MatchResult[Traversable[T]] {
-  val matcher: Matcher[Traversable[T]]
-  protected val s: MatchResult[Traversable[T]]
+trait AbstractContainMatchResult[T] extends MatchResult[GenTraversable[T]] {
+  val matcher: Matcher[GenTraversable[T]]
+  protected val s: MatchResult[GenTraversable[T]]
   val expectable = s.expectable
   lazy val matchResult = s(matcher)
 
   override def toResult = matchResult.toResult
-  def not: MatchResult[Traversable[T]] = matchResult.not
-  def apply(matcher: Matcher[Traversable[T]]): MatchResult[Traversable[T]] = matchResult(matcher)
+  def not: MatchResult[GenTraversable[T]] = matchResult.not
+  def apply(matcher: Matcher[GenTraversable[T]]): MatchResult[GenTraversable[T]] = matchResult(matcher)
 }
-class ContainMatcher[T](t: LazyParameter[T]*) extends Matcher[Traversable[T]] {
-  def apply[S <: Traversable[T]](actual: Expectable[S]) = {
+class ContainMatcher[T](t: LazyParameter[T]*) extends Matcher[GenTraversable[T]] {
+  def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
     val expected = t.toList.map(_.value)
     result(actual.value.toList.intersect(expected).sameElementsAs(expected),
            actual.description + " contains " + q(expected.mkString(", ")),
@@ -136,8 +137,8 @@ class ContainMatcher[T](t: LazyParameter[T]*) extends Matcher[Traversable[T]] {
   def exactlyOnce = new ContainExactlyOnceMatcher(t:_*)
 }
 
-class ContainExactlyOnceMatcher[T](t: LazyParameter[T]*) extends Matcher[Traversable[T]] {
-  def apply[S <: Traversable[T]](actual: Expectable[S]) = {
+class ContainExactlyOnceMatcher[T](t: LazyParameter[T]*) extends Matcher[GenTraversable[T]] {
+  def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
     val expected = t.toList.map(_.value)
     result(expected.forall(e => actual.value.toList.filter(_ == e).size == 1),
            actual.description + " contains exactly once " + q(expected.mkString(", ")),
@@ -145,8 +146,8 @@ class ContainExactlyOnceMatcher[T](t: LazyParameter[T]*) extends Matcher[Travers
   }
 }
 
-class ContainAnyOfMatcher[T](t: LazyParameter[T]*) extends Matcher[Traversable[T]] {
-  def apply[S <: Traversable[T]](actual: Expectable[S]) = {
+class ContainAnyOfMatcher[T](t: LazyParameter[T]*) extends Matcher[GenTraversable[T]] {
+  def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
     val expected = t.toList.map(_.value)
     result(actual.value.toList.intersect(expected).nonEmpty,
            actual.description + " contains at least one of " + q(expected.mkString(", ")),
@@ -154,8 +155,8 @@ class ContainAnyOfMatcher[T](t: LazyParameter[T]*) extends Matcher[Traversable[T
   }
 }
 
-class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[Traversable[T]] {
-  def apply[S <: Traversable[T]](actual: Expectable[S]) = {
+class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[GenTraversable[T]] {
+  def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
     val expected = t.toList.map(_.value)
     result(inOrder(actual.value.toList, expected),
            actual.description + " contains in order " + q(expected.mkString(", ")),
@@ -169,22 +170,22 @@ class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[Traversable
     }
   }
 
-  def only: Matcher[Traversable[T]] = (this and new ContainOnlyMatcher(t:_*))
+  def only: Matcher[GenTraversable[T]] = (this and new ContainOnlyMatcher(t:_*))
 }
 
-class ContainOnlyMatcher[T](t: LazyParameter[T]*) extends Matcher[Traversable[T]] {
-  def apply[S <: Traversable[T]](traversable: Expectable[S]) = {
+class ContainOnlyMatcher[T](t: LazyParameter[T]*) extends Matcher[GenTraversable[T]] {
+  def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
     val expected = t.toList.map(_.value)
     val actual = traversable.value
     result(actual.toList.intersect(expected).sameElementsAs(expected) && expected.size == actual.size,
            traversable.description + " contains only " + q(expected.mkString(", ")),
            traversable.description + " doesn't contain only " + q(expected.mkString(", ")), traversable)
   }
-  def inOrder: Matcher[Traversable[T]] = (this and new ContainInOrderMatcher(t:_*))
+  def inOrder: Matcher[GenTraversable[T]] = (this and new ContainInOrderMatcher(t:_*))
 }
 
-class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matcher[Traversable[T]] {
-  def apply[S <: Traversable[T]](traversable: Expectable[S]) = {
+class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matcher[GenTraversable[T]] {
+  def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
     val a = pattern
     result(traversable.value.exists(_.toString.matches(a)), 
            traversable.description + " contains "+matchType+ " " + q(a), 
@@ -193,8 +194,8 @@ class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matche
   def onlyOnce = new ContainLikeOnlyOnceMatcher[T](pattern, matchType)
 }
 
-class ContainLikeOnlyOnceMatcher[T](pattern: =>String, matchType: String) extends Matcher[Traversable[T]] {
-  def apply[S <: Traversable[T]](traversable: Expectable[S]) = {
+class ContainLikeOnlyOnceMatcher[T](pattern: =>String, matchType: String) extends Matcher[GenTraversable[T]] {
+  def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
     val a = pattern
     val matchNumber = traversable.value.filter(_.toString.matches(a)).size
     val koMessage = 
@@ -209,8 +210,8 @@ class ContainLikeOnlyOnceMatcher[T](pattern: =>String, matchType: String) extend
            traversable)
   }
 }
-class HaveTheSameElementsAs[T] (l: =>Traversable[T]) extends Matcher[Traversable[T]] {
-  def apply[S <: Traversable[T]](traversable: Expectable[S]) = {
+class HaveTheSameElementsAs[T] (l: =>Traversable[T]) extends Matcher[GenTraversable[T]] {
+  def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
     result(l.toSeq.sameElementsAs(traversable.value.toSeq),
            traversable.value.toSeq.toDeepString + " has the same elements as " + q(l.toSeq.toDeepString),
            traversable.value.toSeq.toDeepString + " doesn't have the same elements as " + q(l.toSeq.toDeepString),
