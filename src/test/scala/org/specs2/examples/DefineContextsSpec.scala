@@ -1,7 +1,7 @@
 package examples
 
 import org.specs2._
-import specification.{Before, BeforeExample, Scope}
+import specification.{Before, BeforeExample}
 
 /**
  * This specification shows various ways to setup contexts for examples.
@@ -35,16 +35,16 @@ class DefineContextsSpec extends Specification {
   class BeforeMutableSpec extends mutable.Specification {
     "This is a list of examples" >> {
       "example1" >> new clean {
-         aNewSystem must_== "a fresh value"
+        aNewSystem must_== "a fresh value"
       }
       "example2" >> new clean {
-         aNewSystem must_== "a fresh value"
+        aNewSystem must_== "a fresh value"
       }
     }
 
     /** here we need a trait extending `Scope` */
-    trait clean extends Before with Scope {
-      val aNewSystem = "a fresh value"
+    trait clean extends Before {
+      lazy val aNewSystem = "a fresh value"
       def before = println("clean up before each example")
     }
   }

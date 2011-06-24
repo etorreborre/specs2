@@ -11,7 +11,14 @@ import execute._
  * 
  * @see Example to understand why the type T must <% Result
  */
-trait Around extends Context { outer =>
+trait Around extends Context with DelayedInit { outer =>
+  /**
+   * this method allows the around code to be executed around any other code from the body of the Context
+   */
+  override def delayedInit(x: => Unit): Unit = {
+    around { x; Success() }
+  }
+
   def around[T <% Result](t: =>T): Result
   def apply[T <% Result](a: =>T) = around(a)
   

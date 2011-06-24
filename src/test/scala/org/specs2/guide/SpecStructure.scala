@@ -831,7 +831,7 @@ When you make your context trait extend the `Before` trait:
        }
 
        trait trees extends Before {
-         val tree = getATreeWith4NodesFromTheDatabase
+         lazy val tree = getATreeWith4NodesFromTheDatabase
          def before = setupDB
        }
 
@@ -846,7 +846,7 @@ Needless to say, adding `Before` code to an acceptance specification is as simpl
        }
 
        case class trees() extends Before {
-         val tree = getATreeWith4NodesFromTheDatabase
+         lazy val tree = getATreeWith4NodesFromTheDatabase
          def before = setupDB
 
          def e1 = tree.removeNodes(2, 3) must have size(2)

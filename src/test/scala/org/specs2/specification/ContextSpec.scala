@@ -28,7 +28,7 @@ class ContextSpec extends Specification with FragmentExecution { def is =
      * Around
      * Outside
      * BeforeAfter or BeforeAfterAround or AroundOutside for combined functionality
-                                                                                                                        """                                                                                 ^
+                                                                                                                        """^
   "The Before trait can be used to execute methods before Fragments"                                                    ^
     "the before method is executed before a first example"                                                              ! before().e1^
     "the before method is executed before the second example"                                                           ! before().e2^
@@ -61,9 +61,7 @@ class ContextSpec extends Specification with FragmentExecution { def is =
     "the first example will execute"                                                                                    ! c().e7^
     "but it will be reported as an error"                                                                               ! c().e8^
                                                                                                                         p^
-  "Any result can be wrapped in an After context"                                                                       ^
-    "explicitly inside the body of the context"                                                                         ! c().e8_1^
-    "with an implicit"                                                                                                  ! c().e8_2^
+  "Any result can be wrapped in an After context with an implicit"                                                      ! c().e8_1^
                                                                                                                         p^
   "The Around trait can be used to"                                                                                     ^
     "execute the example inside a user provided context"                                                                ! c().e9^
@@ -106,6 +104,11 @@ class ContextSpec extends Specification with FragmentExecution { def is =
     "for a mutable spec"                                                                                                ! applyEach().e2^
     "for an outside context and an acceptance spec"                                                                     ! applyEach().e3^
     "for an outside context and a mutable spec"                                                                         ! applyEach().e4^
+                                                                                                                        p^
+  "In a mutable spec"                                                                                                   ^
+    "the before code must be called before the body code"                                                               ! mutableSpec().before1^
+    "the after code must be called after the body code"                                                                 ! mutableSpec().after1^
+    "the around code must be called around the body code"                                                               ! mutableSpec().around1^
                                                                                                                         end
   implicit val args = main.Arguments()
   case class before() extends FragmentsExecution {
@@ -127,8 +130,7 @@ class ContextSpec extends Specification with FragmentExecution { def is =
     def e6 = executing(ex1_2After).prints("e1", "after", "e2", "after")
     def e7 = executing(ex1_afterFail).prints("e1")
     def e8 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
-    def e8_1 = executing(ex1ExplicitAfter).prints("e1", "after")
-    def e8_2 = executing(ex1ImplicitAfter).prints("e1", "after")
+    def e8_1 = executing(ex1ImplicitAfter).prints("e1", "after")
     def e9 = executing(ex1Around).prints("around", "e1")
     def e9_1 = executing(ex1Outside).prints("outside", "e1")
     def e9_2 = executeBodies(ex1OutsideFail).map(_.message) must_== List("error")
@@ -186,6 +188,12 @@ class ContextSpec extends Specification with FragmentExecution { def is =
     }
   }
 
+  case class mutableSpec() extends FragmentsExecution {
+    def before1 = executing("e1" ! new beforeContext { println("body"); 1 must_== 1 }).prints("before", "body")
+    def after1 = executing("e1" ! new afterContext { println("body"); 1 must_== 1 }).prints("body", "after")
+    def around1 = executing("e1" ! new aroundContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")
+  }
+
   class FragmentsExecution extends MockOutput with ContextData {
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
     case class Executed(r: Seq[Result]) {
@@ -225,11 +233,14 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1_afterFail = "ex1" ! afterWithError(ok1) 
   def ex1_2After = ex1After ^ "ex2" ! after(ok2)
 
+  trait beforeContext extends Before {
+    def before = println("before")
+  }
   trait afterContext extends After {
     def after = println("after")
   }
-  def ex1ExplicitAfter = "ex1" ! new afterContext {
-    this { ok1 }
+  trait aroundContext extends Around {
+    def around[R <% Result](r: =>R) = { println("before"); try { r } finally { println("after") }}
   }
   def ex1ImplicitAfter = "ex1" ! ok1.after(println("after"))
 
