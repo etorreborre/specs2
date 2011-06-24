@@ -189,9 +189,9 @@ class ContextSpec extends Specification with FragmentExecution { def is =
   }
 
   case class mutableSpec() extends FragmentsExecution {
-    def before1 = executing("e1" ! new beforeContext { println("body"); 1 must_== 1 }).prints("before", "body")
-    def after1 = executing("e1" ! new afterContext { println("body"); 1 must_== 1 }).prints("body", "after")
-    def around1 = executing("e1" ! new aroundContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")
+    def before1 = executing("e1" ! new beforeMutableContext { println("body"); 1 must_== 1 }).prints("before", "body")
+    def after1  = executing("e1" ! new afterMutableContext { println("body"); 1 must_== 1 }).prints("body", "after")
+    def around1 = executing("e1" ! new aroundMutableContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")
   }
 
   class FragmentsExecution extends MockOutput with ContextData {
@@ -242,6 +242,17 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   trait aroundContext extends Around {
     def around[R <% Result](r: =>R) = { println("before"); try { r } finally { println("after") }}
   }
+  trait beforeMutableContext extends mutable.Before {
+    def before = println("before")
+  }
+  trait afterMutableContext extends mutable.After {
+    def after = println("after")
+  }
+  trait aroundMutableContext extends mutable.Around {
+    def around[R <% Result](r: =>R) = { println("before"); try { r } finally { println("after") }}
+  }
+
+
   def ex1ImplicitAfter = "ex1" ! ok1.after(println("after"))
 
   def ex1Around = "ex1" ! around(ok1) 
