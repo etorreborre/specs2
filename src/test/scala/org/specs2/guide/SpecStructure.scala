@@ -10,7 +10,6 @@ class SpecStructure extends Specification { def is =
                                                                                                                         """
 ### Presentation
 
-ruc
 In this chapter you will learn how to:
 
  * declare examples
