@@ -28,6 +28,9 @@ class TrimSpec extends Specification { def is =
   "Remove empty lines"                                                                                                  ^
   { "hello\n    \nworld".removeEmptyLines === "hello\nworld" }                                                          ^
                                                                                                                         p^
+  "Remove new lines"                                                                                                    ^
+  { "hello\n\r world".removeNewLines === "hello world" }                                                                ^
+                                                                                                                        p^
   "Split and trim"                                                                                                      ^
   { "a,b,c".splitTrim(",").toSeq === Seq("a", "b", "c") }                                                               ^
   { "a, b , c".splitTrim(",").toSeq === Seq("a", "b", "c") }                                                            ^

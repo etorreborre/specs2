@@ -55,7 +55,7 @@ trait Trim extends control.Debug {
     }
 	
     def removeNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
-      res.removeStart(cur).removeEnd(cur)
+      res.replaceAll(cur, "")
     }
 
     def trimFirst(exp: String) = new Regex(exp).replaceFirstIn(s.trim, "")

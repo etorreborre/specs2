@@ -33,7 +33,7 @@ trait Markdown {
    */
   def toHtmlNoPar(text: String) = {
     val html = toHtml(text)
-    if (html.removeNewLines.contains("\n")) html
+    if (html.trimNewLines.contains("\n")) html
     else html.removeEnclosingXmlTag("p")
   }
 

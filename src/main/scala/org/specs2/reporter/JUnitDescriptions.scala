@@ -114,7 +114,7 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
   /** @return a test name with no newlines */
   def testName(s: String, parentNodes: Seq[String] = Seq()): String = {
     (if (parentNodes.isEmpty || isExecutedFromAnIDE) "" else parentNodes.mkString("", "::", "::")) +
-    Trimmed(s).trimNewLines
+    (if (isExecutedFromAnIDE) Trimmed(s).removeNewLines else Trimmed(s).trimNewLines)
   }
 
 
