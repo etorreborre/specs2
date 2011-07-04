@@ -1,9 +1,6 @@
 package user
 package specification
 
-import org.specs2.io.WithLocation
-
-
 class UserFromSourceSpecification extends org.specs2.Specification { def is = noindent^
                                                                                       p^
   "this is a one-liner"                                                               ^
@@ -16,3 +13,9 @@ class UserFromSourceSpecification extends org.specs2.Specification { def is = no
                                                                                       end
 }
 
+class DifferentSpecification extends org.specs2.Specification { def is = noindent^
+  "first example" ^
+  { 1 must_== 1 } ^
+                  end
+
+}

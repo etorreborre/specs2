@@ -1,8 +1,6 @@
 package org.specs2
 package io
 
-import control.TraceLocation
-
 /**
  * Location of a Fragment in a file
  */
@@ -16,4 +14,3 @@ class Location {
     case other       => false
   }
 }
-

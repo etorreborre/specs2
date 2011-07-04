@@ -8,7 +8,6 @@ import text._
 import execute._
 import matcher.MatchersImplicits._
 import matcher._
-import io.WithLocation
 
 /**
  * Create example descriptions by reading the corresponding line in the source file.
