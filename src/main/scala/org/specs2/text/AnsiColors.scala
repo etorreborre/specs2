@@ -28,7 +28,7 @@ trait AnsiColors {
   /** @return a colored string */
   def color(s: String, color: String, doIt: Boolean = true) = {
     if (doIt) s.split("\n").map(color + _ + reset).mkString("\n")
-    else      s
+    else      removeColors(s, true)
   }
 
   override def toString = all.mkString("AnsiColors(",",",")")

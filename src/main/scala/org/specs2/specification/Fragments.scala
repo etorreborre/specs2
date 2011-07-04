@@ -7,7 +7,7 @@ import control.LazyParameter
 import main.Arguments
 import StandardFragments._
 import org.specs2.internal.scalaz.Monoid
-
+import Fragments._
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
@@ -22,14 +22,17 @@ class Fragments (val specStart: Option[SpecStart] = None, val middle: Seq[Fragme
   def add(a: Arguments): Fragments = new Fragments(Some(start.withArgs(a)), middle, specEnd)
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
+  def examples: Seq[Example] = fragments.collect(isAnExample)
+  def arguments = start.arguments
+
   def overrideArgs(args: Arguments) = new Fragments(Some(start.overrideArgs(args)), middle, specEnd)
   def map(function: Fragment => Fragment) = new Fragments(specStart, middle.map(function), specEnd)
   import StandardFragments._
   override def toString = fragments.mkString("\n")
 
-  def arguments = start.arguments
   def start = specStart.getOrElse(SpecStart(""))
   def end = specEnd.getOrElse(SpecEnd("").withName(start.name))
+
 }
 
 /**

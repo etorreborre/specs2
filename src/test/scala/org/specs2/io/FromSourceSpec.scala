@@ -1,22 +1,26 @@
 package org.specs2
 package io
 import mutable._
+import specification.{SpecificationStructure, Example}
+import user.specification.DifferentSpecification
 
 class FromSourceSpec extends Specification with FromSource {
-  
+  val spec = new user.specification.UserFromSourceSpecification
+
   "An expression can be read from a source file" in {
-    (1 must_== 1).desc.toString must contain("(1 must_== 1)")
+    examples(spec)(0).desc.toString must contain("1 must_== 1")
+  }
+  "An expression can be read from a source file even if it spans several lines" in {
+    examples(spec)(1).desc.toString must contain("val a") and contain("hello world")
   }
   "Even if the specification name is different from the file name" in {
-    DifferentSpecification.result.toString must contain("def result = success.desc")
+    examples(new DifferentSpecification)(0).desc.toString must contain("1 must_== 1")
   }
   "If the file is not found, the full path is shown to the user" in {
      other.NotFound.result.toString must be_==("No source file found at src/test/scala/org/specs2/io/other/FromSourceSpec.scala")
   }
-}
 
-object DifferentSpecification extends org.specs2.Specification { def is = ""
-  def result = success.desc
+  def examples(s: SpecificationStructure) = s.is.examples
 }
 
 package other {

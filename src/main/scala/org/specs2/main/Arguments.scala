@@ -92,6 +92,16 @@ case class Arguments (
       if (other._commandLine.isEmpty) _commandLine else other._commandLine
     )
   }
+
+  def textColor   (s: String) = colors.text   (s, color)
+  def successColor(s: String) = colors.success(s, color)
+  def failureColor(s: String) = colors.failure(s, color)
+  def errorColor  (s: String) = colors.error  (s, color)
+  def pendingColor(s: String) = colors.pending(s, color)
+  def skippedColor(s: String) = colors.skipped(s, color)
+  def statsColor  (s: String) = colors.stats  (s, color)
+  def removeColors(s: String) = colors.removeColors(s)
+
   override def toString = {
     "Arguments("      +
     List(

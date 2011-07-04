@@ -30,14 +30,14 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    */
   def status(implicit args: Arguments = Arguments()): String = {
    if (args.plan)
-      color("*", blue, args.color)
+      args.pendingColor("*")
     else {
       this match {
-    	  case Success(_)            => args.colors.success("+", args.color)
-    	  case Failure(_, _, _, _)   => args.colors.failure("x", args.color)
-    	  case Error(_, _)           => args.colors.error("!", args.color)
-    	  case Pending(_)            => args.colors.pending("*", args.color)
-    	  case Skipped(_, _)         => args.colors.skipped("o", args.color)
+    	  case Success(_)            => args.successColor("+")
+    	  case Failure(_, _, _, _)   => args.failureColor("x")
+    	  case Error(_, _)           => args.errorColor  ("!")
+    	  case Pending(_)            => args.pendingColor("*")
+    	  case Skipped(_, _)         => args.skippedColor("o")
         case DecoratedResult(_, r) => r.status(args)
       }
     }

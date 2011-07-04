@@ -3,8 +3,8 @@ package matcher
 import java.io._
 import execute._
 
-class AnyMatchersSpec extends Specification with ResultMatchers { def is =
-
+class AnyMatchersSpec extends Specification with ResultMatchers { def is = noindent^
+                                                                                                                        p^
   "be_== checks the equality of 2 objects"                                                                              ^
   { "a" must_== "a" }                                                                                                   ^
   { "a" must not be_==(null) }                                                                                          ^
@@ -22,6 +22,10 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is =
   { "a" must not be_===("b") }                                                                                          ^
   { "a" must be_!==("b") }                                                                                              ^
   { "a" must not be_!==("a") }                                                                                          ^
+  { Array(1, 2) must be_==(Array(1, 2)) }                                                                               ^
+  { Array(1, 3) must not be_==(Array(1, 2)) }                                                                           ^
+  { Array(1, 2) must be_===(Array(1, 2)) }                                                                              ^
+  { Array(1, 3) must not be_===(Array(1, 2)) }                                                                          ^
   { (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(e, a)) => e must_== "2" } }                  ^
                                                                                                                         p^
   "beTheSameAs checks if a value is eq to another one"                                                                  ^

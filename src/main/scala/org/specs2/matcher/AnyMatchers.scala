@@ -157,8 +157,14 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
     newMatcher.^^((t: T) => f(t))
   }
   
-  def apply[S <: T](b: Expectable[S]) = {
+  def apply[S <: T](b: Expectable[S]): MatchResult[S] = {
     val a = t
+    def equality =
+      (a, b.value) match {
+        case (arr: Array[T], arr2: Array[T]) => arr.toSeq == arr2.toSeq
+        case other                           => a == b.value
+      }
+
     val (db, qa) = (b.description, q(a)) match {
       case (x, y) if (a != b && q(a) == q(b)) => {
 	      val aClass = className(x)
@@ -168,9 +174,9 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
         else
           (y, x + ". Values have the same string representation but possibly different types like List[Int] and List[String]")
 	    }
-      case other @ _ => other 
+      case other @ _ => other
 	  }
-    result(a == b.value, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b, a.notNull, b.value.notNull.toString)
+    result(equality, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b, a.notNull, b.value.notNull.toString)
   }
 }
 

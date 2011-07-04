@@ -8,6 +8,7 @@ import text._
 import execute._
 import matcher.MatchersImplicits._
 import matcher._
+import io.WithLocation
 
 /**
  * Create example descriptions by reading the corresponding line in the source file.
@@ -34,31 +35,28 @@ private[specs2]
 trait AutoExamples {
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragments(expression: =>MatchResult[_]): Fragments = {
-    val desc = code()
+    val desc = getSourceCode()
     Fragments.create(Example(CodeMarkup(desc), expression.toResult))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragments(expression: =>Boolean): Fragments = {
-    val desc = code()
+    val desc = getSourceCode()
     Fragments.create(Example(CodeMarkup(desc), toResult(expression)))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def resultFragments(expression: =>Result): Fragments = {
-    val desc = code()
+    val desc = getSourceCode()
     Fragments.create(Example(CodeMarkup(desc), expression))
   }
-  implicit def matchExample(expression: =>MatchResult[_]): Example =
-    Example(CodeMarkup(code()), expression.toResult)
 
-  implicit def booleanExample(expression: =>Boolean): Example =
-    Example(CodeMarkup(code()), toResult(expression))
+  implicit def matchExample(expression: =>MatchResult[_]) = Example(CodeMarkup(getSourceCode()), expression.toResult)
 
-  implicit def resultExample(expression: =>execute.Result): Example =
-    Example(CodeMarkup(code()), expression)
+  implicit def booleanExample(expression: =>Boolean) = Example(CodeMarkup(getSourceCode()), toResult(expression))
 
-  private[specs2] def code() = {
-    val codeDepth = 6
-    List("^", "^t", "^bt", "^p", "^br", "^end", "^endp").foldLeft(getCode(codeDepth))(_ trimEnd _).
+  implicit def resultExample(expression: =>execute.Result) = Example(CodeMarkup(getSourceCode()), expression)
+
+  private[specs2] def getSourceCode(startDepth: Int = 6, endDepth: Int = 9): String = {
+    List("^", "^t", "^bt", "^p", "^br", "^end", "^endp").foldLeft(getCodeFromTo(startDepth, endDepth))(_ trimEnd _).
     trimEnclosing("{", "}").
     trimEnclosing("`", "`")
   }

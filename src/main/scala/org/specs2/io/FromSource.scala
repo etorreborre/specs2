@@ -6,6 +6,7 @@ import io.Paths._
 import control.Throwablex._
 import control.Exceptions._
 import main.SystemProperties
+import control.TraceLocation
 
 /**
  * Get source code from the current point of execution
@@ -26,21 +27,37 @@ trait FromSource {
   /**
    * get some source code by:
    *   * fetching the current stacktrace
-   *   * finding the location of the example (4th trace by default)
+   *   * finding the location of the example (6th trace by default)
    */
-  def getCode(depth: Int = 4): String = {
+  def getCode(depth: Int = 6): String = getCodeFromTo(depth, depth)
+
+  /**
+   * get some source code by:
+   *   * fetching the current stacktrace
+   *   * finding the location of the example by taking the trace of the first line and the trace of the last line
+   *    (at depth 6 and 9 by default)
+   */
+  def getCodeFromTo(start: Int = 6, end: Int = 9): String = {
     val stackTrace = new Exception().getStackTrace()
-    val trace = stackTrace.apply(depth)
-    val location = new TraceLocation(trace)
-    tryOr {
-      val content = readLines(srcDir+location.path)
-      content(location.lineNumber - 1)
-    } (e => "No source file found at "+srcDir+location.path)
+    val (startLine, endLine) = (new TraceLocation(stackTrace.apply(start)).lineNumber-1,
+                                new TraceLocation(stackTrace.apply(end)).lineNumber-1)
+    val stackFilter = (st: Seq[StackTraceElement]) => st.filter(_.toString.contains(".getSourceCode(")).drop(1)
+    getCodeFromToWithLocation(startLine, endLine, location(stackFilter))
   }
 
-  def location = {
+  def getCodeFromToWithLocation(startLine: Int, endLine: Int = 9, location: TraceLocation): String = {
+    tryOr {
+      val content = readLines(srcDir+location.path)
+      ((startLine to endLine) map content).mkString("\n")
+    } { e =>
+      println(e)
+      "No source file found at "+srcDir+location.path
+    }
+  }
+
+  def location(stackFilter: Seq[StackTraceElement] => Seq[StackTraceElement]) = {
     val stackTrace = new Exception().getStackTrace().toList
-    val trace = stackTrace.filterNot(_.toString.contains("org.specs2")).headOption
+    val trace = stackFilter(stackTrace).headOption
     new TraceLocation(trace.getOrElse(stackTrace(0)))
   }
 }

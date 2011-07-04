@@ -52,8 +52,6 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   override def printSuccess(message: String)(implicit args: Arguments)   = logInfo(message)
   override def printStats(message: String)(implicit args: Arguments)     = logInfo(message)
   override def printLine(message: String)(implicit args: Arguments)      = logInfo(message)
-  override def status(result: execute.Result)(implicit arguments: Arguments): String =
-    result.status(arguments.overrideWith(args(color = true)))  + " "
 }
 /**
  * Specific events which can be notified to sbt

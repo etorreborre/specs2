@@ -201,12 +201,15 @@ A few things to remember about this feature:
  * the source file is expected to be found in the `src/test/scala` directory.
    This can be overriden by specifying the `specs2.srcTestDir` system property
 
- * the extraction of the source code is rudimentary and will just extract one line of code. It also expects
-   the code to extract to be in the same directory as the package of the specification class it belongs to. If a Specification
+ * the extraction of the source code is rudimentary and may fail on specifications which are built dynamically
+
+ * several lines of code can be extracted provided that the block ends with a `Result` and that there is a `Fragment` following the block to be extracted. The best way to ensure that is to always add an `end` fragment at the end of the `Specification`
+
+ * the code to extract must be in the same directory as the package of the specification class it belongs to. If a Specification
    is declared in `package com.mycompany.accounting` then its source file has to be in the `com/mycompany/accounting` directory
    for Auto-Examples to be working
 
- * for more robustness, but different results, you can use the `descFromExpectations` arguments (creates an
+ * for more robustness, but different results, you can use the `descFromExpectations` argument (creates an
    `args(fromSource=false)`) to take the "ok message" from the expectation as the example description:
 
          // outputs: List(1, 2) must contain(1)

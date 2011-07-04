@@ -81,6 +81,7 @@ The most common type of matcher is `beEqualTo` to test for equality. There are d
        1 must be_!=(2)            // with a negation
        1 !== 2                    // with a negation
 
+The `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`, for `Arrays`. So the `beEqualTo` matcher has been adapted to transform `Arrays` to `Seqs` before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
 
 You can see on the examples above several things which are applicable to all matchers:
 

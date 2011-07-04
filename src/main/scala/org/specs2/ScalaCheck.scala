@@ -10,7 +10,7 @@ import org.scalacheck.Prop
 trait ScalaCheck extends matcher.ScalaCheckMatchers with AutoExamples {
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def propFragments(expression: =>Prop)(implicit p: Parameters): Fragments = {
-    val desc = code()
+    val desc = getSourceCode()
     Fragments.create(Example(CodeMarkup(desc), checkProperty(expression)(p)))
   }
 
