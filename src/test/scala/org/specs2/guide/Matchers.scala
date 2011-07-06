@@ -723,6 +723,7 @@ It is also possible to add all verifications inside a block, when several mocks 
         one(m).get(0)
         two(m).get(1)
       }
+
 ###### Order of calls
 
 The order of method calls can be checked by creating calls and chaining them with then:
@@ -764,6 +765,14 @@ However, working with spies can be tricky:
 As advised in the Mockito documentation, doReturn must be used in that case:
 
      doReturn("one").when(spiedList).get(0)
+
+##### Functions and partial functions
+
+Mocking with Scala functions or partial functions can be a bit tricky. You should especially watch out for:
+
+ * functions as parameters. In that case you can try to create a ["function matcher"](https://groups.google.com/d/msg/specs2-users/R3DS_ZPe29w/WvmkfJqcq8IJ) or use [Borachio](http://borachio.com)
+
+ * mocking partial functions. Auto-boxing might interfere, please have a look at [this discussion](https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion)
 
 ### DataTables
 
