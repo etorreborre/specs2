@@ -54,7 +54,7 @@
       <span class="symbol"> 
         <a href="AbstractContainMatchResult.html"><span class="name">AbstractContainMatchResult</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends MatchResult[Traversable[T]]</span>
+        <span class="result"> extends MatchResult[GenTraversable[T]]</span>
       </span>
       </h4>
       
@@ -235,7 +235,7 @@
       <span class="symbol"> 
         <a href="ContainAnyOfMatcher.html"><span class="name">ContainAnyOfMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[Traversable[T]]</span>
+        <span class="result"> extends Matcher[GenTraversable[T]]</span>
       </span>
       </h4>
       
@@ -246,7 +246,7 @@
       <span class="symbol"> 
         <a href="ContainExactlyOnceMatcher.html"><span class="name">ContainExactlyOnceMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[Traversable[T]]</span>
+        <span class="result"> extends Matcher[GenTraversable[T]]</span>
       </span>
       </h4>
       
@@ -268,7 +268,7 @@
       <span class="symbol"> 
         <a href="ContainInOrderMatcher.html"><span class="name">ContainInOrderMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[Traversable[T]]</span>
+        <span class="result"> extends Matcher[GenTraversable[T]]</span>
       </span>
       </h4>
       
@@ -279,7 +279,7 @@
       <span class="symbol"> 
         <a href="ContainLikeMatcher.html"><span class="name">ContainLikeMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[Traversable[T]]</span>
+        <span class="result"> extends Matcher[GenTraversable[T]]</span>
       </span>
       </h4>
       
@@ -290,7 +290,7 @@
       <span class="symbol"> 
         <a href="ContainLikeOnlyOnceMatcher.html"><span class="name">ContainLikeOnlyOnceMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[Traversable[T]]</span>
+        <span class="result"> extends Matcher[GenTraversable[T]]</span>
       </span>
       </h4>
       
@@ -312,7 +312,7 @@
       <span class="symbol"> 
         <a href="ContainMatcher.html"><span class="name">ContainMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[Traversable[T]]</span>
+        <span class="result"> extends Matcher[GenTraversable[T]]</span>
       </span>
       </h4>
       
@@ -345,7 +345,29 @@
       <span class="symbol"> 
         <a href="ContainOnlyMatcher.html"><span class="name">ContainOnlyMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[Traversable[T]]</span>
+        <span class="result"> extends Matcher[GenTraversable[T]]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.DataTable" data-isabs="false">
+      <a id="DataTable:DataTable"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="DataTable.html"><span class="name">DataTable</span></a>
+        
+        <span class="params">(<span name="titles">titles: Seq[String]</span>, <span name="rows">rows: Seq[DataTableRow]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.DataTableRow" data-isabs="false">
+      <a id="DataTableRow:DataTableRow"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="DataTableRow.html"><span class="name">DataTableRow</span></a>
+        
+        <span class="params">(<span name="cells">cells: Seq[String]</span>, <span name="result">result: Result</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       
@@ -485,7 +507,7 @@ to properties by appending forAll
       <span class="symbol"> 
         <a href="HaveTheSameElementsAs.html"><span class="name">HaveTheSameElementsAs</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[Traversable[T]]</span>
+        <span class="result"> extends Matcher[GenTraversable[T]]</span>
       </span>
       </h4>
       
@@ -1102,6 +1124,28 @@ a match fails
         <a href="AnyMatchers$.html"><span class="name">AnyMatchers</span></a>
         
         <span class="result"> extends AnyMatchers</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.DataTable" data-isabs="false">
+      <a id="DataTable:DataTable"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="DataTable$.html"><span class="name">DataTable</span></a>
+        
+        <span class="result"> extends Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.DataTableRow" data-isabs="false">
+      <a id="DataTableRow:DataTableRow"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="DataTableRow$.html"><span class="name">DataTableRow</span></a>
+        
+        <span class="result"> extends Serializable</span>
       </span>
       </h4>
       

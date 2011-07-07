@@ -24,13 +24,13 @@
       <span class="symbol"> 
         <span class="name">ContainAnyOfMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="result"> extends <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -132,37 +132,37 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#^^" data-isabs="false">
-      <a id="^^[S]((S) ⇒ Traversable[T]):Matcher[S]"></a>
+      <a id="^^[S]((S) ⇒ GenTraversable[T]):Matcher[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">^^</span>
         <span class="tparams">[<span name="S">S</span>]</span>
-        <span class="params">(<span name="f">f: (S) ⇒ Traversable[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]</span>
+        <span class="params">(<span name="f">f: (S) ⇒ <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Adapt a matcher to another.</p><div class="fullcomment"><div class="comment cmt"><p>Adapt a matcher to another.
 ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)</code> can be applied to an exception
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#and" data-isabs="false">
-      <a id="and[S&lt;:Traversable[T]](⇒ Matcher[S]):Matcher[S]"></a>
+      <a id="and[S&lt;:GenTraversable[T]](⇒ Matcher[S]):Matcher[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">and</span>
-        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>]</span>
         <span class="params">(<span name="m">m: ⇒ <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">the logical and between 2 matchers</p><div class="fullcomment"><div class="comment cmt"><p>the logical and between 2 matchers</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd><dt>See also</dt><dd><span class="cmt"><p>MatchResult.and
 </p></span></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ContainAnyOfMatcher#apply" data-isabs="false">
-      <a id="apply[S&lt;:Traversable[T]](Expectable[S]):MatchResult[S]"></a>
+      <a id="apply[S&lt;:GenTraversable[T]](Expectable[S]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">apply</span>
-        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>]</span>
         <span class="params">(<span name="actual">actual: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
       </span>
       </h4>
@@ -180,13 +180,13 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)</code> can be applied to 
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#atLeastOnce" data-isabs="false">
-      <a id="atLeastOnce:Matcher[Traversable[Traversable[T]]]"></a>
+      <a id="atLeastOnce:Matcher[Traversable[GenTraversable[T]]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">atLeastOnce</span>
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[Traversable[T]]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Matcher matching at least one element of a sequence against the current matcher
@@ -228,26 +228,26 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)</code> can be applied to 
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#eventually" data-isabs="false">
-      <a id="eventually(Int,Duration):Matcher[Traversable[T]]"></a>
+      <a id="eventually(Int,Duration):Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">eventually</span>
         
-        <span class="params">(<span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <span name="org.specs2.time.Duration" class="extype">Duration</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="params">(<span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <span name="org.specs2.time.Duration" class="extype">Duration</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a matcher that needs to eventually match, after a given number of retries
 and a sleep time
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#eventually" data-isabs="false">
-      <a id="eventually:Matcher[Traversable[T]]"></a>
+      <a id="eventually:Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">eventually</span>
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a matcher that needs to eventually match, after 40 retries and a sleep time
@@ -268,26 +268,26 @@ of 100 milliseconds
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#forall" data-isabs="false">
-      <a id="forall:Matcher[Traversable[Traversable[T]]]"></a>
+      <a id="forall:Matcher[Traversable[GenTraversable[T]]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">forall</span>
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[Traversable[T]]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Matcher matching all the elements of a sequence against the current matcher, stopping after the first
 failure
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#foreach" data-isabs="false">
-      <a id="foreach:Matcher[Traversable[Traversable[T]]]"></a>
+      <a id="foreach:Matcher[Traversable[GenTraversable[T]]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">foreach</span>
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[Traversable[T]]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Matcher matching all the elements of a sequence against the current matcher, cumulating all failures
@@ -315,13 +315,13 @@ failure
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#iff" data-isabs="false">
-      <a id="iff(Boolean,String):Matcher[Traversable[T]]"></a>
+      <a id="iff(Boolean,String):Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">iff</span>
         
-        <span class="params">(<span name="b">b: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="m">m: String = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="params">(<span name="b">b: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="m">m: String = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">when the condition is true the matcher is applied, when it's false, the matcher must fail</p><div class="fullcomment"><div class="comment cmt"><p>when the condition is true the matcher is applied, when it's false, the matcher must fail</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
@@ -337,26 +337,26 @@ failure
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#lazily" data-isabs="false">
-      <a id="lazily:Matcher[() ⇒ Traversable[T]]"></a>
+      <a id="lazily:Matcher[() ⇒ GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">lazily</span>
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[() ⇒ Traversable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[() ⇒ <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"> The <code>lazily</code> operator returns a Matcher which will match a function returning the expected value
 </p><div class="fullcomment"><div class="comment cmt"><p> The <code>lazily</code> operator returns a Matcher which will match a function returning the expected value
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#mute" data-isabs="false">
-      <a id="mute:Matcher[Traversable[T]]"></a>
+      <a id="mute:Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">mute</span>
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Matcher with no messages
@@ -373,13 +373,13 @@ failure
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#not" data-isabs="false">
-      <a id="not:Matcher[Traversable[T]]"></a>
+      <a id="not:Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">not</span>
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">negate a Matcher</p><div class="fullcomment"><div class="comment cmt"><p>negate a Matcher</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd><dt>See also</dt><dd><span class="cmt"><p>MatchResult.not
@@ -407,73 +407,73 @@ failure
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#or" data-isabs="false">
-      <a id="or[S&lt;:Traversable[T]](⇒ Matcher[S]):Matcher[S]"></a>
+      <a id="or[S&lt;:GenTraversable[T]](⇒ Matcher[S]):Matcher[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">or</span>
-        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>]</span>
         <span class="params">(<span name="m">m: ⇒ <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">the logical or between 2 matchers</p><div class="fullcomment"><div class="comment cmt"><p>the logical or between 2 matchers</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd><dt>See also</dt><dd><span class="cmt"><p>MatchResult.or
 </p></span></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#orSkip" data-isabs="false">
-      <a id="orSkip(String):Matcher[Traversable[T]]"></a>
+      <a id="orSkip(String):Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">orSkip</span>
         
-        <span class="params">(<span name="m">m: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="params">(<span name="m">m: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Skip MatchResult if this matcher fails, prefixing the failure message with a skip message.
 If the skip message is empty, only the failure message is printed
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#orSkip" data-isabs="false">
-      <a id="orSkip:Matcher[Traversable[T]]"></a>
+      <a id="orSkip:Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">orSkip</span>
         
-        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Skip MatchResult if this matcher fails
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="prt" name="org.specs2.matcher.Matcher#result" data-isabs="false">
-      <a id="result[S&lt;:Traversable[T]](MatchResultMessage,Expectable[S]):MatchResult[S]"></a>
+      <a id="result[S&lt;:GenTraversable[T]](MatchResultMessage,Expectable[S]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">result</span>
-        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>]</span>
         <span class="params">(<span name="other">other: <span name="org.specs2.matcher.MatchResultMessages.MatchResultMessage" class="extype">MatchResultMessage</span></span>, <span name="value">value: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a MatchResult using the messages embedded in a MatchResultMessage (i.e. an accumulation of messages from other matches)
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="prt" name="org.specs2.matcher.Matcher#result" data-isabs="false">
-      <a id="result[S&lt;:Traversable[T]](org.specs2.matcher.MatchResult[_],Expectable[S]):MatchResult[S]"></a>
+      <a id="result[S&lt;:GenTraversable[T]](org.specs2.matcher.MatchResult[_],Expectable[S]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">result</span>
-        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>]</span>
         <span class="params">(<span name="other">other: org.specs2.matcher.MatchResult[_]</span>, <span name="value">value: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a MatchResult copied on another one, but with a different expectable
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="prt" name="org.specs2.matcher.Matcher#result" data-isabs="false">
-      <a id="result[S&lt;:Traversable[T]](⇒ Boolean,⇒ String,⇒ String,Expectable[S],String,String):MatchResult[S]"></a>
+      <a id="result[S&lt;:GenTraversable[T]](⇒ Boolean,⇒ String,⇒ String,Expectable[S],String,String):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">result</span>
-        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>]</span>
         <span class="params">(<span name="test">test: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="okMessage">okMessage: ⇒ String</span>, <span name="koMessage">koMessage: ⇒ String</span>, <span name="value">value: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>, <span name="expected">expected: String</span>, <span name="actual">actual: String</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
       </span>
       </h4>
@@ -481,12 +481,12 @@ If the skip message is empty, only the failure message is printed
         to display a failure comparison if necessary
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="prt" name="org.specs2.matcher.Matcher#result" data-isabs="false">
-      <a id="result[S&lt;:Traversable[T]](⇒ Boolean,⇒ String,⇒ String,Expectable[S]):MatchResult[S]"></a>
+      <a id="result[S&lt;:GenTraversable[T]](⇒ Boolean,⇒ String,⇒ String,Expectable[S]):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">result</span>
-        <span class="tparams">[<span name="S">S &lt;: Traversable[T]</span>]</span>
+        <span class="tparams">[<span name="S">S &lt;: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>]</span>
         <span class="params">(<span name="test">test: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="okMessage">okMessage: ⇒ String</span>, <span name="koMessage">koMessage: ⇒ String</span>, <span name="value">value: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
       </span>
       </h4>
@@ -515,13 +515,13 @@ If the skip message is empty, only the failure message is printed
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#unless" data-isabs="false">
-      <a id="unless(Boolean,String):Matcher[Traversable[T]]"></a>
+      <a id="unless(Boolean,String):Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">unless</span>
         
-        <span class="params">(<span name="b">b: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="m">m: String = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="params">(<span name="b">b: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="m">m: String = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">only apply this matcher if the condition is false</p><div class="fullcomment"><div class="comment cmt"><p>only apply this matcher if the condition is false</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
@@ -568,13 +568,13 @@ If the skip message is empty, only the failure message is printed
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#when" data-isabs="false">
-      <a id="when(Boolean,String):Matcher[Traversable[T]]"></a>
+      <a id="when(Boolean,String):Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">when</span>
         
-        <span class="params">(<span name="b">b: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="m">m: String = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="params">(<span name="b">b: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="m">m: String = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">only apply this matcher if the condition is true</p><div class="fullcomment"><div class="comment cmt"><p>only apply this matcher if the condition is true</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
@@ -582,7 +582,7 @@ If the skip message is empty, only the failure message is printed
             </div>
 
         <div name="org.specs2.matcher.Matcher" class="parent">
-              <h3>Inherited from <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</h3>
+              <h3>Inherited from <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

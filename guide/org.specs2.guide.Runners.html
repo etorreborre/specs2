@@ -372,11 +372,7 @@
 <ul>
   <li>for a boolean argument, you need to pass <code class="prettyprint">-Dspecs2.name</code> or <code class="prettyprint">-Dname</code></li>
   <li>for a string argument, you need to pass <code class="prettyprint">-Dspecs2.name=value</code> or <code class="prettyprint">-Dname=value</code></li>
-</ul><p>The recommended format is <code class="prettyprint">-Dname=value</code> but <code class="prettyprint">-Dspecs2.name=value</code> is also available to avoid conflicts with other libraries.</p><a name="Console+output"></a><h3>Console output</h3><p>Executing a specification <code class="prettyprint">com.company.SpecName</code> in the console is very easy:</p><p><code class="prettyprint">scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]</code></p><a name="Colors"></a><h5>Colors</h5><p>By default, the reporting will output colors. If you're running on windows you might either:</p>
-<ul>
-  <li>use the <a href="http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows">following tip</a> to install colors in the DOS console</li>
-  <li>or pass <code class="prettyprint">nocolor</code> as a command line argument</li>
-</ul><a name="Html+output"></a><h3>Html output</h3><p>If you want html pages to be produced for your specification you'll need to execute:</p><p><code class="prettyprint">scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]</code></p><p>By default the files will be created in the <code class="prettyprint">target/specs-report</code> directory but you can change that by setting the<br /><code class="prettyprint">-Dspecs2.outDir</code> system property.</p><a name="JUnit+XML+output"></a><h3>JUnit XML output</h3><p>Many Continuous Integration systems rely on JUnit XML reports to display build and test results. It is possible to produce<br />those result by using the <code class="prettyprint">specs2.junitxml</code> object:</p><p><code class="prettyprint">scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]</code></p><p>By default the files will be created in the <code class="prettyprint">target/test-reports</code> directory but you can change that by setting the<br /><code class="prettyprint">-Dspecs2.junit.outDir</code> system property.</p><a name="Files+Runner"></a><h3>Files Runner</h3><p>The <code class="prettyprint">specs2.files</code> object will, by default, select and execute Specifications found in the test source directory:</p>
+</ul><p>The recommended format is <code class="prettyprint">-Dname=value</code> but <code class="prettyprint">-Dspecs2.name=value</code> is also available to avoid conflicts with other libraries.</p><a name="Console+output"></a><h3>Console output</h3><p>Executing a specification <code class="prettyprint">com.company.SpecName</code> in the console is very easy:</p><p><code class="prettyprint">scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]</code></p><a name="Html+output"></a><h3>Html output</h3><p>If you want html pages to be produced for your specification you'll need to execute:</p><p><code class="prettyprint">scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]</code></p><p>By default the files will be created in the <code class="prettyprint">target/specs-report</code> directory but you can change that by setting the<br /><code class="prettyprint">-Dspecs2.outDir</code> system property.</p><a name="JUnit+XML+output"></a><h3>JUnit XML output</h3><p>Many Continuous Integration systems rely on JUnit XML reports to display build and test results. It is possible to produce<br />those result by using the <code class="prettyprint">specs2.junitxml</code> object:</p><p><code class="prettyprint">scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]</code></p><p>By default the files will be created in the <code class="prettyprint">target/test-reports</code> directory but you can change that by setting the<br /><code class="prettyprint">-Dspecs2.junit.outDir</code> system property.</p><a name="Files+Runner"></a><h3>Files Runner</h3><p>The <code class="prettyprint">specs2.files</code> object will, by default, select and execute Specifications found in the test source directory:</p>
 <ul>
   <li>the source directory is defined as <code class="prettyprint">src/test/scala</code> but can be changed by adjusting the system property <code class="prettyprint">specs2.srcTestDir</code></li>
   <li>the specifications files are selected as classes or object which names match <code class="prettyprint">.*Spec</code>. This value can be changed by<br /> passing a different <code class="prettyprint">specName</code> value as a command-line argument</li>
@@ -405,7 +401,11 @@
   override def testOptions = super.testOptions ++ Seq(TestArgument(&quot;html&quot;, &quot;console&quot;))
 </code></pre><a name="Files+runner"></a><h5>Files runner</h5><p>Any <code class="prettyprint">FilesRunner</code> object can also be invoked by sbt, but you need to specify <code class="prettyprint">console</code> or <code class="prettyprint">html</code> (or both) on the command line:</p>
 <pre><code class="prettyprint">  &gt; test-only allSpecs -- console
-</code></pre><a name="Colors"></a><h5>Colors</h5><p><em>From system properties</em></p><p>The so-called &quot;SmartColors&quot; argument will check if there are colors defined as specs2 properties. If so, the colors used<br />to output text in the Console will be extracted from those properties:</p><p>e.g. <code class="prettyprint">-Dspecs2.color.failure=m</code> will use magenta for failures.</p><p>The property names and default values are:</p>
+</code></pre><a name="Colors"></a><h5>Colors</h5><p>By default, the reporting will output colors. If you're running on windows you might either:</p>
+<ul>
+  <li>use the <a href="http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows">following tip</a> to install colors in the DOS console</li>
+  <li>or pass <code class="prettyprint">nocolor</code> as a command line argument</li>
+</ul><p>Then, there are different ways to set-up the colors you want to use for the output</p><p><em>From system properties</em></p><p>The so-called &quot;SmartColors&quot; argument will check if there are colors defined as specs2 properties. If so, the colors used<br />to output text in the Console will be extracted from those properties:</p><p>e.g. <code class="prettyprint">-Dspecs2.color.failure=m</code> will use magenta for failures.</p><p>The property names and default values are:</p>
 <table>
   <thead>
     <tr>
@@ -437,6 +437,48 @@
     <tr>
       <td><code class="prettyprint">color.skipped</code> </td>
       <td>cyan </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.stats</code> </td>
+      <td>blue </td>
+    </tr>
+  </tbody>
+</table><p>The default values above are provided for a black background. If you have a white background you can use the <code class="prettyprint">specs2.whitebg</code> property and then the default values will be:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Property </th>
+      <th>Default value </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="prettyprint">color.text</code> </td>
+      <td>black </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.success</code> </td>
+      <td>green </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.failure</code> </td>
+      <td>magenta </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.error</code> </td>
+      <td>red </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.pending</code> </td>
+      <td>blue </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.skipped</code> </td>
+      <td>cyan </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.stats</code> </td>
+      <td>blue </td>
     </tr>
   </tbody>
 </table><p>All the available colors are listed here, with their corresponding abbreviation which you can use to refer to them as well:</p>
@@ -481,8 +523,8 @@
       <td>m </td>
     </tr>
   </tbody>
-</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated)<br />where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <code class="prettyprint">org.specs2.reporter.Colors</code><br />trait. For example if you want to output magenta everywhere yellow is used you can write:</p>
-<pre><code class="prettyprint">  object MyColors = new org.specs2.reporter.Colors { override val failureColor = magenta }
+</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated)<br />where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.com/specs2/api/index.html#org.specs2.reporter.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.com/specs2/api/index.html#org.specs2.reporter.Colors"><code class="prettyprint">org.specs2.reporter.Colors</code></a><br />trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
+<pre><code class="prettyprint">  object MyColors = new org.specs2.reporter.ConsoleColors { override val failureColor = magenta }
 
   class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
      // the failure message will be magenta
@@ -535,8 +577,8 @@
   scala&gt; specs2.run(spec1)
 </code></pre>
 <hr /></div><p></p></div><div id="tree">
-      <ul><li id="1735230926"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="1846636110"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1218791978"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-1046360781"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -546,7 +588,7 @@
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="537928966"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="-1570670126"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -584,6 +626,8 @@
         </li><li><a href="org.specs2.guide.SpecStructure.html#ScalaCheck+values">ScalaCheck values</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Single+step">Single step</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Conversions">Conversions</a>
           <ul></ul>
         </li></ul>
         </li></ul>
@@ -627,7 +671,11 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Before%2FAfter+code">Before/After code</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#In+a+mutable+specification">In a mutable specification</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#In+an+acceptance+specification">In an acceptance specification</a>
+          <ul></ul>
+        </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Around+actions">Around actions</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Outside+actions">Outside actions</a>
@@ -660,9 +708,9 @@
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-1991568115"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="2119399150"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -702,7 +750,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -743,7 +791,7 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -783,7 +831,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -823,7 +871,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -863,7 +911,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -903,7 +951,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -943,7 +991,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -983,7 +1031,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1023,7 +1071,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1063,7 +1111,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1103,7 +1151,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1143,7 +1191,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1183,7 +1231,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1223,7 +1271,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1263,7 +1311,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1303,7 +1351,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1343,7 +1391,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1382,7 +1430,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1423,7 +1471,7 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1463,7 +1511,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1502,7 +1550,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1543,7 +1591,7 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1583,7 +1631,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1624,7 +1672,7 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1663,7 +1711,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1704,7 +1752,7 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1744,7 +1792,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1784,7 +1832,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1823,7 +1871,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1862,7 +1910,47 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li><a href="org.specs2.guide.Matchers.html#Functions+and+partial+functions">Functions and partial functions</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1902,7 +1990,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1942,7 +2030,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1982,7 +2070,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2021,7 +2109,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-399078870"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2060,7 +2148,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1025034897"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="-616959649"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -2078,9 +2166,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#Colors">Colors</a>
           <ul></ul>
-        </li></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Html+output">Html output</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#JUnit+XML+output">JUnit XML output</a>
@@ -2106,7 +2192,7 @@
         </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1696465398"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="1629878613"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -2150,7 +2236,7 @@
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="567821684"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="263701199"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -2170,5 +2256,5 @@
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1735230926','1025034897'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1218791978','-616959649'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

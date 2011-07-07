@@ -196,16 +196,46 @@
       <span class="symbol"> 
         <span class="name">getCode</span>
         
-        <span class="params">(<span name="depth">depth: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">4</span></span>)</span><span class="result">: String</span>
+        <span class="params">(<span name="depth">depth: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">6</span></span>)</span><span class="result">: String</span>
       </span>
       </h4>
       <p class="shortcomment cmt">get some source code by:
   * fetching the current stacktrace
-  * finding the location of the example (4th trace by default)
+  * finding the location of the example (6th trace by default)
 </p><div class="fullcomment"><div class="comment cmt"><p>get some source code by:
   * fetching the current stacktrace
-  * finding the location of the example (4th trace by default)
+  * finding the location of the example (6th trace by default)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.io.FromSource#getCodeFromTo" data-isabs="false">
+      <a id="getCodeFromTo(Int,Int):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getCodeFromTo</span>
+        
+        <span class="params">(<span name="start">start: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">6</span></span>, <span name="end">end: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">9</span></span>)</span><span class="result">: String</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">get some source code by:
+  * fetching the current stacktrace
+  * finding the location of the example by taking the trace of the first line and the trace of the last line
+   (at depth 6 and 9 by default)
+</p><div class="fullcomment"><div class="comment cmt"><p>get some source code by:
+  * fetching the current stacktrace
+  * finding the location of the example by taking the trace of the first line and the trace of the last line
+   (at depth 6 and 9 by default)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.io.FromSource#getCodeFromToWithLocation" data-isabs="false">
+      <a id="getCodeFromToWithLocation(Int,Int,TraceLocation):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getCodeFromToWithLocation</span>
+        
+        <span class="params">(<span name="startLine">startLine: <span name="scala.Int" class="extype">Int</span></span>, <span name="endLine">endLine: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">9</span></span>, <span name="location">location: <span name="org.specs2.control.TraceLocation" class="extype">TraceLocation</span></span>)</span><span class="result">: String</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -229,13 +259,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.FromSource#location" data-isabs="false">
-      <a id="location:TraceLocation"></a>
+      <a id="location((Seq[StackTraceElement]) ⇒ Seq[StackTraceElement]):TraceLocation"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">location</span>
         
-        <span class="result">: <span name="org.specs2.control.Throwablex.TraceLocation" class="extype">TraceLocation</span></span>
+        <span class="params">(<span name="stackFilter">stackFilter: (Seq[<span name="java.lang.StackTraceElement" class="extype">StackTraceElement</span>]) ⇒ Seq[<span name="java.lang.StackTraceElement" class="extype">StackTraceElement</span>]</span>)</span><span class="result">: <span name="org.specs2.control.TraceLocation" class="extype">TraceLocation</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></dd></dl></div>

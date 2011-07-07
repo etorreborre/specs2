@@ -28,14 +28,19 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides building blocks to create steps and examples from regular expression.</p><p>It is used to implement a Given-When-Then way of describing systems.</p><p>Fragments are created by adding a <code>Given</code> step to a <code>Text</code>:</p><p> &quot;name: ${Eric}&quot; ^ givenName</p><p>This creates a PreStep object containing the current context (representing all the extracted values) and a list of
-Fragments containing:</p><p> * the Text fragment: Text(&quot;name: ${Eric}&quot;)
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides building blocks to create steps and examples from regular expression.</p><p>It is used to implement a Given-When-Then way of describing systems.</p><p>Fragments are created by adding a <code>Given</code> step to a <code>Text</code>:</p><p> <code>"name: ${Eric}" ^ givenName</code></p><p>This creates a PreStep object containing the current context (representing all the extracted values) and a list of
+Fragments containing:</p><p> * the Text fragment: <code>Text("name: ${Eric}")</code>
  * a Step containing the extraction code to get the value delimited by <code>${}</code></p><p>Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
-stores the additional Text fragment so that values can be extracted from it when a <code>When</code> step is added:</p><p> // this creates a PreStepText object
- &quot;name: ${Eric}&quot; <sup> givenName </sup>
- &quot;age: ${38}&quot;</p><p> // this creates a PreStep object
- &quot;name: ${Eric}&quot; <sup> givenName </sup>
- &quot;age: ${38}&quot;    <sup> thenAge </sup></p><p>Eventually, when a <code>Then</code> step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
+stores the additional Text fragment so that values can be extracted from it when a <code>When</code> step is added:
+<code>
+ // this creates a PreStepText object
+ "name: ${Eric}" ^ givenName ^
+ "age: ${38}"
+
+ // this creates a PreStep object
+ "name: ${Eric}" ^ givenName ^
+ "age: ${38}"    ^ thenAge ^
+</code></p><p>Eventually, when a <code>Then</code> step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
 the current context and the results returned by the <code>Then</code> objects to create Examples.</p><p>The last PostStep object contains the list of all fragments created by the Given/When/Then sequence:</p><p> * Text fragments
  * Steps
  * Examples</p></div><div class="toggleContainer block">
@@ -180,6 +185,19 @@ the current context and the results returned by the <code>Then</code> objects to
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#downcastGiven" data-isabs="false">
+      <a id="downcastGiven[X, Y&lt;:X](Given[Y]):Given[X] { def extract(s: String): Y }"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">downcastGiven</span>
+        <span class="tparams">[<span name="X">X</span>, <span name="Y">Y &lt;: X</span>]</span>
+        <span class="params">(<span name="gv">gv: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[Y]</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[X] { def extract(s: String): Y }</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">implicit conversion to transform a Given[Y] to Given[X] when Y &lt;: X
+</p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a Given[Y] to Given[X] when Y &lt;: X
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -304,6 +322,32 @@ the current context and the results returned by the <code>Then</code> objects to
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#upcastThen" data-isabs="false">
+      <a id="upcastThen[X, Y&lt;:X](Then[X]):Then[Y]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">upcastThen</span>
+        <span class="tparams">[<span name="X">X</span>, <span name="Y">Y &lt;: X</span>]</span>
+        <span class="params">(<span name="th">th: <a name="org.specs2.specification.Then" class="extype" href="Then.html">Then</a>[X]</span>)</span><span class="result">: <a name="org.specs2.specification.Then" class="extype" href="Then.html">Then</a>[Y]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">implicit conversion to transform a Then[Y] to Then[X] when Y &lt;: X
+</p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a Then[Y] to Then[X] when Y &lt;: X
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#updowncastWhen" data-isabs="false">
+      <a id="updowncastWhen[P, Q, R&lt;:P, S&gt;:Q](When[P, Q]):When[R, S]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">updowncastWhen</span>
+        <span class="tparams">[<span name="P">P</span>, <span name="Q">Q</span>, <span name="R">R &lt;: P</span>, <span name="S">S &gt;: Q</span>]</span>
+        <span class="params">(<span name="wh">wh: <a name="org.specs2.specification.When" class="extype" href="When.html">When</a>[P, Q]</span>)</span><span class="result">: <a name="org.specs2.specification.When" class="extype" href="When.html">When</a>[R, S]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">implicit conversion to transform a When[P, Q] to When[R, S] when R &lt;: P and S &gt;: Q
+</p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a When[P, Q] to When[R, S] when R &lt;: P and S &gt;: Q
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">

@@ -263,13 +263,13 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#have" data-isabs="false">
-      <a id="have[T]((T) ⇒ Boolean):Matcher[Traversable[T]]"></a>
+      <a id="have[T]((T) ⇒ Boolean):Matcher[GenTraversable[T]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">have</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="function">function: (T) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+        <span class="params">(<span name="function">function: (T) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Matches if there is one element in the traversable verifying the <code>function</code> parameter: <code>(traversable.exists(function(_))</code>
@@ -399,12 +399,12 @@ This verification does not consider the order of the elements but checks the tra
       </h4>
       <p class="shortcomment cmt">any scala array has a size</p><div class="fullcomment"><div class="comment cmt"><p>any scala array has a size</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#scalaTraversableIsSized" data-isabs="false">
-      <a id="scalaTraversableIsSized[I&lt;:TraversableOnce[_]]:Sized[I]"></a>
+      <a id="scalaTraversableIsSized[I&lt;:scala.collection.GenTraversableOnce[_]]:Sized[I]"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">scalaTraversableIsSized</span>
-        <span class="tparams">[<span name="I">I &lt;: TraversableOnce[_]</span>]</span>
+        <span class="tparams">[<span name="I">I &lt;: scala.collection.GenTraversableOnce[_]</span>]</span>
         <span class="result">: <a name="org.specs2.data.Sized" class="extype" href="../data/Sized.html">Sized</a>[I]</span>
       </span>
       </h4>
@@ -465,13 +465,13 @@ This verification does not consider the order of the elements but checks the tra
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBeHaveMatchers#traversable" data-isabs="false">
-      <a id="traversable[T](MatchResult[Traversable[T]]):TraversableBeHaveMatchers[T]"></a>
+      <a id="traversable[T](MatchResult[GenTraversable[T]]):TraversableBeHaveMatchers[T]"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">traversable</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="s">s: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Traversable[T]]</span>)</span><span class="result">: <span name="org.specs2.matcher.TraversableBeHaveMatchers.TraversableBeHaveMatchers" class="extype">TraversableBeHaveMatchers</span>[T]</span>
+        <span class="params">(<span name="s">s: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>)</span><span class="result">: <span name="org.specs2.matcher.TraversableBeHaveMatchers.TraversableBeHaveMatchers" class="extype">TraversableBeHaveMatchers</span>[T]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>TraversableBeHaveMatchers</dd></dl></div>

@@ -168,8 +168,8 @@
   <li>On top of it, the <code class="prettyprint">Specification</code> trait stacks lots of convenient functionalities to<br /> . use a concise notation for arguments<br /> . use matchers (with both <code class="prettyprint">must</code> and <code class="prettyprint">should</code>)<br /> . use predefined fragments and results (like <code class="prettyprint">p</code>, <code class="prettyprint">br</code>, <code class="prettyprint">success</code>, <code class="prettyprint">pending</code>,...)<br /> . and more</li>
 </ul><p>This way, if there is any conflict with the <code class="prettyprint">Specification</code> trait inherited definitions it should be possible to downgrade<br />to the <code class="prettyprint">BaseSpecification</code> and add the non-conflicting traits.</p>
 <hr /><p><br /></p></div></div><div id="tree">
-      <ul><li id="1457815269"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="151197571"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1218791978"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-1046360781"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -179,7 +179,7 @@
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="747455103"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="-1570670126"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -203,6 +203,8 @@
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Auto-Examples">Auto-Examples</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+the+Example+description">Using the Example description</a>
+          <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Given+%2F+When+%2F+Then">Given / When / Then</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Multiple+steps">Multiple steps</a>
           <ul></ul>
@@ -215,6 +217,8 @@
         </li><li><a href="org.specs2.guide.SpecStructure.html#ScalaCheck+values">ScalaCheck values</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Single+step">Single step</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Conversions">Conversions</a>
           <ul></ul>
         </li></ul>
         </li></ul>
@@ -258,7 +262,11 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Before%2FAfter+code">Before/After code</a>
+          <ul><li><a href="org.specs2.guide.SpecStructure.html#In+a+mutable+specification">In a mutable specification</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#In+an+acceptance+specification">In an acceptance specification</a>
+          <ul></ul>
+        </li></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Around+actions">Around actions</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Outside+actions">Outside actions</a>
@@ -291,9 +299,9 @@
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="1468800887"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="2119399150"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -303,7 +311,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -328,10 +339,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -341,7 +351,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -366,11 +379,10 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -380,7 +392,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -405,10 +420,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -418,7 +432,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -443,10 +460,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -456,7 +472,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -481,10 +500,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -494,7 +512,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -519,10 +540,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -532,7 +552,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -557,10 +580,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -570,7 +592,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -595,10 +620,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -608,7 +632,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -633,10 +660,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -646,7 +672,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -671,10 +700,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -684,7 +712,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -709,10 +740,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -722,7 +752,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -747,10 +780,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -760,7 +792,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -785,10 +820,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -798,7 +832,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -823,10 +860,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -836,7 +872,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -861,10 +900,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -874,7 +912,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -899,10 +940,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -912,7 +952,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -937,10 +980,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -950,7 +992,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -976,8 +1021,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li></ul>
-        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -987,7 +1031,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1012,11 +1059,10 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1026,7 +1072,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1051,10 +1100,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1064,7 +1112,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1090,8 +1141,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li></ul>
-        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1101,7 +1151,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1126,11 +1179,10 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1140,7 +1192,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1165,10 +1220,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1178,7 +1232,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1203,11 +1260,10 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1217,7 +1273,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1243,8 +1302,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li></ul>
-        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1254,7 +1312,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1279,11 +1340,10 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1293,7 +1353,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1318,10 +1381,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1331,7 +1393,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1356,10 +1421,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1369,7 +1433,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1395,8 +1462,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li></ul>
-        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1406,7 +1472,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1432,8 +1501,8 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li></ul>
-        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li><a href="org.specs2.guide.Matchers.html#Functions+and+partial+functions">Functions and partial functions</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1443,7 +1512,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1469,9 +1541,47 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1481,7 +1591,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1506,10 +1619,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1519,7 +1631,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1544,10 +1659,9 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
-        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1557,7 +1671,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1583,8 +1700,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li></ul>
-        </li><li id="-1957200458"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1594,7 +1710,10 @@
         </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
           <ul></ul>
@@ -1620,8 +1739,7 @@
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li></ul>
-        </li><li id="849349606"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="-616959649"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1639,9 +1757,7 @@
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#Colors">Colors</a>
           <ul></ul>
-        </li></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Html+output">Html output</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#JUnit+XML+output">JUnit XML output</a>
@@ -1660,12 +1776,14 @@
         </li></ul>
         </li><li><a href="org.specs2.guide.Runners.html#JUnit">JUnit</a>
           <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#IntelliJ">IntelliJ</a>
+          <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
           <ul></ul>
         </li></ul>
-        </li><li id="878195635"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="1629878613"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1709,7 +1827,7 @@
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="1675391399"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="263701199"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1729,5 +1847,5 @@
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1457815269','878195635'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1218791978','1629878613'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

@@ -195,6 +195,19 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#downcastGiven" data-isabs="false">
+      <a id="downcastGiven[X, Y&lt;:X](Given[Y]):Given[X] { def extract(s: String): Y }"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">downcastGiven</span>
+        <span class="tparams">[<span name="X">X</span>, <span name="Y">Y &lt;: X</span>]</span>
+        <span class="params">(<span name="gv">gv: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[Y]</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[X] { def extract(s: String): Y }</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">implicit conversion to transform a Given[Y] to Given[X] when Y &lt;: X
+</p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a Given[Y] to Given[X] when Y &lt;: X
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -546,6 +559,32 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#upcastThen" data-isabs="false">
+      <a id="upcastThen[X, Y&lt;:X](Then[X]):Then[Y]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">upcastThen</span>
+        <span class="tparams">[<span name="X">X</span>, <span name="Y">Y &lt;: X</span>]</span>
+        <span class="params">(<span name="th">th: <a name="org.specs2.specification.Then" class="extype" href="Then.html">Then</a>[X]</span>)</span><span class="result">: <a name="org.specs2.specification.Then" class="extype" href="Then.html">Then</a>[Y]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">implicit conversion to transform a Then[Y] to Then[X] when Y &lt;: X
+</p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a Then[Y] to Then[X] when Y &lt;: X
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#updowncastWhen" data-isabs="false">
+      <a id="updowncastWhen[P, Q, R&lt;:P, S&gt;:Q](When[P, Q]):When[R, S]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">updowncastWhen</span>
+        <span class="tparams">[<span name="P">P</span>, <span name="Q">Q</span>, <span name="R">R &lt;: P</span>, <span name="S">S &gt;: Q</span>]</span>
+        <span class="params">(<span name="wh">wh: <a name="org.specs2.specification.When" class="extype" href="When.html">When</a>[P, Q]</span>)</span><span class="result">: <a name="org.specs2.specification.When" class="extype" href="When.html">When</a>[R, S]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">implicit conversion to transform a When[P, Q] to When[R, S] when R &lt;: P and S &gt;: Q
+</p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a When[P, Q] to When[R, S] when R &lt;: P and S &gt;: Q
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">

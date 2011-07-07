@@ -47,18 +47,17 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.reporter.Colors" data-isabs="false">
+              <ol><li visbl="pub" name="org.specs2.reporter.Colors" data-isabs="true">
       <a id="Colors:Colors"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">trait</span>
       <span class="symbol"> 
         <a href="Colors.html"><span class="name">Colors</span></a>
         
-        <span class="result"> extends AnsiColors with ConsoleColors</span>
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
-      <p class="comment cmt">This class defines the colors to use to print out text on the Console
-with defaults as AnsiColors for a dark background console
+      <p class="comment cmt">This trait defines the colors which must be used to output text on the console
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.ColorsFromSystemProperties" data-isabs="false">
       <a id="ColorsFromSystemProperties:ColorsFromSystemProperties"></a>
@@ -67,7 +66,7 @@ with defaults as AnsiColors for a dark background console
       <span class="symbol"> 
         <a href="ColorsFromSystemProperties.html"><span class="name">ColorsFromSystemProperties</span></a>
         
-        <span class="result"> extends Colors with ColorsMap</span>
+        <span class="result"> extends ConsoleColors with ColorsMap</span>
       </span>
       </h4>
       
@@ -83,18 +82,18 @@ with defaults as AnsiColors for a dark background console
       </h4>
       <p class="comment cmt">Definition of abbreviated color names
 </p>
-    </li><li visbl="pub" name="org.specs2.reporter.ConsoleColors" data-isabs="true">
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleColors" data-isabs="false">
       <a id="ConsoleColors:ConsoleColors"></a>
       <h4 class="signature">
-      <span class="kind">trait</span>
+      <span class="kind">class</span>
       <span class="symbol"> 
         <a href="ConsoleColors.html"><span class="name">ConsoleColors</span></a>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends AnsiColors with Colors</span>
       </span>
       </h4>
-      <p class="comment cmt">This trait defines the colors which must be used to output text on the console
-</p>
+      <p class="comment cmt">This class defines the colors to use to print out text on the Console
+with defaults as AnsiColors for a dark background console</p>
     </li><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
       <a id="ConsoleReporter:ConsoleReporter"></a>
       <h4 class="signature">
@@ -211,6 +210,18 @@ Output:</p>
       </span>
       </h4>
       <p class="comment cmt">Reports a Specification as an Html page
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.InvertedColors" data-isabs="false">
+      <a id="InvertedColors:InvertedColors"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="InvertedColors.html"><span class="name">InvertedColors</span></a>
+        
+        <span class="result"> extends ConsoleColors</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This color scheme can be used with a white background
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlExporting" data-isabs="true">
       <a id="JUnitXmlExporting:JUnitXmlExporting"></a>
@@ -346,7 +357,7 @@ different types of results.</p>
       <span class="symbol"> 
         <a href="SmartColors.html"><span class="name">SmartColors</span></a>
         
-        <span class="result"> extends Colors with ColorsMap with SystemProperties</span>
+        <span class="result"> extends ConsoleColors with ColorsMap with SystemProperties</span>
       </span>
       </h4>
       <p class="comment cmt">This class checks if colors must be taken from system properties
@@ -496,6 +507,17 @@ at the end of the specification
         <a href="FragmentSeq$.html"><span class="name">FragmentSeq</span></a>
         
         <span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.HandlerEvents" data-isabs="false">
+      <a id="HandlerEvents:HandlerEvents"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="HandlerEvents$.html"><span class="name">HandlerEvents</span></a>
+        
+        <span class="result"> extends HandlerEvents</span>
       </span>
       </h4>
       

@@ -28,7 +28,7 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Pending result</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>Result for description
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Pending result</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.execute.Pending" class="extype" href="">Pending</a></dd><dt>See also</dt><dd><span class="cmt"><p>Result for description
 </p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
@@ -132,6 +132,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.execute.Pending#addExpectationsNb" data-isabs="false">
+      <a id="addExpectationsNb(Int):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">addExpectationsNb</span>
+        
+        <span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">increment the number of expectations
+</p><div class="fullcomment"><div class="comment cmt"><p>increment the number of expectations
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.execute.Pending" class="extype" href="">Pending</a> → <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.execute.Result#and" data-isabs="false">
       <a id="and(⇒ Result):Result"></a>
       <h4 class="signature">
@@ -405,7 +418,7 @@
       <span class="symbol"> 
         <span class="name">or</span>
         
-        <span class="params">(<span name="r2">r2: ⇒ <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></span>
+        <span class="params">(<span name="r">r: ⇒ <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the logical or combination of 2 results
@@ -473,7 +486,7 @@
       <span class="symbol"> 
         <span class="name">statusName</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: String</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the textual status of the result</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></dd></dl></div>
@@ -500,13 +513,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.execute.Pending" class="extype" href="">Pending</a> → AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.execute.Result#updateMessage" data-isabs="false">
-      <a id="updateMessage(String):Product with Serializable with Result { def mute: Product with Serializable with org.specs2.execute.Result }"></a>
+      <a id="updateMessage(String):Result"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">updateMessage</span>
         
-        <span class="params">(<span name="msg">msg: String</span>)</span><span class="result">: <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span> with <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a> { def mute: Product with Serializable with org.specs2.execute.Result }</span>
+        <span class="params">(<span name="msg">msg: String</span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">update the message of a result, keeping the subclass type</p><div class="fullcomment"><div class="comment cmt"><p>update the message of a result, keeping the subclass type</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a></dd></dl></div>
