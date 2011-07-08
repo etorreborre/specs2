@@ -36,8 +36,10 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
                                                                                                                         p^
   "Arguments can also be passed from system properties"                                                                 ^
     "a boolean value just have to exist as -Dname"                                                                      ! e12^
-    "a string value will be -Dname=value"                                                                               ! e13^
-    "properties can also be passed as -Dspecs2.name to avoid conflicts with other properties"                           ! e14^
+    "a boolean value can be -Dname=true"                                                                                ! e13^
+    "a boolean value can be -Dname=false"                                                                               ! e14^
+    "a string value will be -Dname=value"                                                                               ! e15^
+    "properties can also be passed as -Dspecs2.name to avoid conflicts with other properties"                           ! e16^
                                                                                                                         end
 
 
@@ -57,23 +59,13 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
   def e10 = args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
   def e11 = (args(xonly = true) <| args(plan = true)).plan must_== true
 
-  object props extends After {
-    def after = {
-      System.clearProperty("specs2.specname")
-      System.clearProperty("specname")
-      System.clearProperty("plan")
-    }
+  case class properties(map:(String, String)*) extends SystemProperties {
+    override lazy val properties = Map(map:_*)
   }
-  def e12 = props {
-    val sp = new SystemProperties { override def getProperty(name: String) = Some("true") }
-    Arguments.extract(Seq(""), sp).plan must_== true
-  }
-  def e13 = props {
-    val sp = new SystemProperties { override def getProperty(name: String) = Some("spec") }
-    Arguments.extract(Seq(""), sp).specName must_== "spec"
-  }
-  def e14 = props {
-    val sp = new SystemProperties { override def getProperty(name: String) = Some("spec") }
-    Arguments.extract(Seq(""), sp).specName must_== "spec"
-  }
+
+  def e12 = Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
+  def e13 = Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
+  def e14 = Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
+  def e15 = Arguments.extract(Seq(""), properties("specname" -> "spec")).specName must_== "spec"
+  def e16 = Arguments.extract(Seq(""), properties("specs2.specname" -> "spec")).specName must_== "spec"
 }

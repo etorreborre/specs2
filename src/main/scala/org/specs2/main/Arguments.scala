@@ -169,10 +169,10 @@ object Arguments {
   }
   
   private def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
-    args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue).orElse(boolSystemProperty(name, mappedValue))
+    args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue).orElse(boolSystemProperty(name))
   }
-  private def boolSystemProperty(name: String, mappedValue: Boolean = true)(implicit sp: SystemProperties): Option[Boolean] = {
-    sp.getProperty(name).map(a => mappedValue)
+  private def boolSystemProperty(name: String)(implicit sp: SystemProperties): Option[Boolean] = {
+    sp.getPropertyAs[Boolean](name) orElse sp.getProperty(name).map(v => true)
   }
   private def bool(name: String, negatedName: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
     bool(negatedName, false) orElse bool(name)

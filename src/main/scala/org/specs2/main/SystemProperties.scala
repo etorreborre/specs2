@@ -2,6 +2,8 @@ package org.specs2
 package main
 import scala.collection.JavaConversions._
 import text.NotNullStrings._
+import text.FromString
+
 /**
  * Utility methods to get systems properties prefixed with specs2
  */
@@ -15,7 +17,10 @@ trait SystemProperties {
   def getProperty(p: String): Option[String] =        properties.get(specs2Prefix + p).
                                                orElse(properties.get(specs2Prefix + p.toLowerCase)).
                                                orElse(properties.get(p)).
-                                               orElse(properties.get(p.toLowerCase)).map(_.toString)
+                                               orElse(properties.get(p.toLowerCase)).map(_.notNull)
+
+  /** @return the value of the system property p as a given type */
+  def getPropertyAs[T: FromString](p: String): Option[T] = getProperty(p) flatMap implicitly[FromString[T]].fromString
 
   /** @return the value of the system property p or a default value */
   def getOrElse(p: String, defaultValue: String): String = getProperty(p).getOrElse(defaultValue)
