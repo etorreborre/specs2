@@ -33,6 +33,8 @@ javaOptions += "-Xmx2G"
 
 scalacOptions += "-deprecation"
 
+scalacOptions += "-unchecked"
+
 maxErrors := 20 
 
 pollInterval := 1000
