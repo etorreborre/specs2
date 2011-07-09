@@ -2,47 +2,47 @@ package org.specs2
 package specification
 
 import execute._
-import specification.StandardFragments.{Br, End}
 import main.Arguments
 import matcher.MatchResult
+import specification.StandardFragments.{Backtab, Tab, Br, End}
 
 /**
- * This trait provides building blocks to create steps and examples from regular expression.
- *
- * It is used to implement a Given-When-Then way of describing systems.
- *
- * Fragments are created by adding a `Given` step to a `Text`:
- *
- *  <code>"name: ${Eric}" ^ givenName</code>
- *
- * This creates a PreStep object containing the current context (representing all the extracted values) and a list of
- * Fragments containing:
- *
- *  * the Text fragment: <code>Text("name: ${Eric}")</code>
- *  * a Step containing the extraction code to get the value delimited by <code>${}</code>
- *
- * Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
- * stores the additional Text fragment so that values can be extracted from it when a `When` step is added:
- * <code>
- *  // this creates a PreStepText object
- *  "name: ${Eric}" ^ givenName ^
- *  "age: ${38}"
- *
- *  // this creates a PreStep object
- *  "name: ${Eric}" ^ givenName ^
- *  "age: ${38}"    ^ thenAge ^
- * </code>
- *
- * Eventually, when a `Then` step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
- * the current context and the results returned by the `Then` objects to create Examples.
- *
- * The last PostStep object contains the list of all fragments created by the Given/When/Then sequence:
- *
- *  * Text fragments
- *  * Steps
- *  * Examples
- *
- */
+* This trait provides building blocks to create steps and examples from regular expression.
+*
+* It is used to implement a Given-When-Then way of describing systems.
+*
+* Fragments are created by adding a `Given` step to a `Text`:
+*
+*  <code>"name: ${Eric}" ^ givenName</code>
+*
+* This creates a PreStep object containing the current context (representing all the extracted values) and a list of
+* Fragments containing:
+*
+*  * the Text fragment: <code>Text("name: ${Eric}")</code>
+*  * a Step containing the extraction code to get the value delimited by <code>${}</code>
+*
+* Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
+* stores the additional Text fragment so that values can be extracted from it when a `When` step is added:
+* <code>
+*  // this creates a PreStepText object
+*  "name: ${Eric}" ^ givenName ^
+*  "age: ${38}"
+*
+*  // this creates a PreStep object
+*  "name: ${Eric}" ^ givenName ^
+*  "age: ${38}"    ^ thenAge ^
+* </code>
+*
+* Eventually, when a `Then` step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
+* the current context and the results returned by the `Then` objects to create Examples.
+*
+* The last PostStep object contains the list of all fragments created by the Given/When/Then sequence:
+*
+*  * Text fragments
+*  * Steps
+*  * Examples
+*
+*/
 trait RegexSteps {
   /** at any point in time a regex sequence can be transformed as a sequence of Fragments */
   implicit def RegexFragmentToFragments(r: RegexFragment): Fragments = r.fs
@@ -53,6 +53,8 @@ trait RegexSteps {
     def add(f: Fragment): RegexType
     def ^(f: Text): RegexType = add(f)
     def ^(f: Br): RegexType = add(f)
+    def ^(f: Tab): RegexType = add(f)
+    def ^(f: Backtab): RegexType = add(f)
     def ^(f: End) = fs.add(f)
     def ^(a: Arguments) = fs.add(a)
     def ^(fs2: Fragments) = fs.add(fs2)
