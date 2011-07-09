@@ -57,10 +57,10 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   def l(level: Int)(implicit args: Arguments) = "level" + (if (args.noindent) 0 else level)
 
   def wiki(text: String)(implicit args: Arguments) = toXhtml(text)
-  def printLink(link: HtmlLink, level: Int = 0)(implicit args: Arguments) = {
+  def printLink(link: HtmlLink, level: Int = 0, stats: Stats)(implicit args: Arguments) = {
     link match {
-      case slink @ SpecHtmlLink(name, before, link, after, tip, result) =>
-        printElem(<div class={l(level)}><img src={icon(result.statusName)}/> {wiki(before)}<a href={slink.url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div>)
+      case slink @ SpecHtmlLink(name, before, link, after, tip) =>
+        printElem(<div class={l(level)}><img src={icon(stats.result.statusName)}/> {wiki(before)}<a href={slink.url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div>)
       case UrlHtmlLink(url, before, link, after, tip) =>
         printElem(<div class={l(level)}>{before}<a href={url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div>)
     }

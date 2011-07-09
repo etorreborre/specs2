@@ -65,6 +65,8 @@ trait Trees { outer =>
   case class TreeLocx[T](t: TreeLoc[T]) {
     def parentLocs = outer.parentLocs(t)
     def size = outer.size(t)
+    def getParent = t.parent.getOrElse(t)
+    def updateLabel(f: T => T) = t.setLabel(f(t.getLabel))
   }
 
   /**

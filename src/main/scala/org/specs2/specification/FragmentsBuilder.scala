@@ -103,7 +103,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
    * 
    * @see org.specs2.UserGuide
    */
-  implicit def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = new HtmlLinkFragments(HtmlLink(SpecName(""), s, "", "", "", Success()))
+  implicit def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = new HtmlLinkFragments(HtmlLink(SpecName(""), s, "", "", ""))
   class HtmlLinkFragments(link: HtmlLink) {
     def ~(s: SpecificationStructure) = outer.link(HtmlLink(s.content.start.name, "", link.beforeText), s)
     def ~(p: (String, SpecificationStructure)) = outer.link(HtmlLink(p._2.content.start.name, link.beforeText, p._1), p._2)
@@ -115,7 +115,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
     def ~/(p: (String, SpecificationStructure, String, String)) = outer.see(HtmlLink(p._2.content.start.name, link.beforeText, p._1, p._3, p._4), p._2)
   }
 
-  implicit def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = new HtmlLinkFragments2(HtmlLink(SpecName(""), s, "", "", "", Success()))
+  implicit def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = new HtmlLinkFragments2(HtmlLink(SpecName(""), s, "", "", ""))
   class HtmlLinkFragments2(link: HtmlLink) {
     def ~(p: (SpecificationStructure, String)) = outer.link(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2), p._1)
     def ~(p: (SpecificationStructure, String, String)) = outer.link(HtmlLink(p._1.content.start.name, "", link.beforeText, p._2, p._3), p._1)

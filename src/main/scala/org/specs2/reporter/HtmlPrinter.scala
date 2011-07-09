@@ -106,9 +106,15 @@ trait HtmlPrinter {
     flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (leaf(start).loc) { (res, cur) =>
       def updated = res.setLabel(res.getLabel.add(cur))
       cur match {
-        case HtmlLine(HtmlSee(see), _, _, _)                                      => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
-        case HtmlLine(HtmlSpecEnd(end), _, _, _) if (res.getLabel.is(end.name))   => updated.parent.getOrElse(updated)
-        case other                                                                => updated
+        case HtmlLine(HtmlSee(see), _, _, _)                                    => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
+        // when reaching a spec end, go up a level and update the last html line with the statistics of the included spec
+        // the last line should be a See fragment
+        case HtmlLine(HtmlSpecEnd(end), s, _, _) if (res.getLabel.is(end.name)) => {
+          val updatedParent = updated.getParent
+          val parentSee = updatedParent.getLabel.lines.lastOption.map(_.copy(stats = s))
+          updatedParent.updateLabel((u: HtmlLines) => u.copy(lines = u.lines.dropRight(1) ++ parentSee.toList))
+        }
+        case other                                                              => updated
       }
     }.root.tree
   }

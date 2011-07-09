@@ -173,7 +173,7 @@ object Success {
  * This class represents the failure of an execution.
  * It has a message and a stacktrace
  */
-case class Failure(m: String, e: String = "", stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList, details: Details = NoDetails())
+case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList, details: Details = NoDetails())
   extends Result(m, e) with ResultStackTrace { outer =>
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
@@ -237,7 +237,7 @@ case object Error {
   def apply(e: Exception) = new Error(e.getMessage.notNull, e)
   def apply(t: Throwable) = new Error(t.getMessage.notNull, new ThrowableException(t))
   case class ThrowableException(t: Throwable) extends Exception(t)
-  def apply(m: String) = new Error(m, new Exception(m))
+  def apply(m: String = "") = new Error(m, new Exception(m))
 }
 /** 
  * Pending result

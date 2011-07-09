@@ -34,6 +34,10 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
                                                                                                                         p^
     "A data table must"                                                                                                 ^
       "be exported as a proper html table"                                                                              ! tables().ex1^
+                                                                                                                        p^
+  "An included specification must get an icon representing its status"                                                  ^
+    "success if everything succeeds"                                                                                    ! included().e1^
+    "failure if there is a failure"                                                                                     ! included().e2^
                                                                                                                         end
                                                                                           
   implicit val argument = args()
@@ -48,6 +52,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     val spec: Fragments = "Specification".title ^ "t1"
     def e1 = print(spec) must \\(<title>Specification</title>)
   }
+
   case class resources() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1"
     printer.print(outer, spec.fragments.map(executeFragment))
@@ -71,6 +76,18 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     val dataTable = "a" | "b" |> 1 ! 2 | { (a, b) => success }
     val spec: Fragments = "table" ! dataTable
     def ex1 = print(spec) must \\("table")
+  }
+
+  case class included() extends MockHtmlPrinter {
+    val successfulSubSpec = new Specification { def is = "ex1" ! success }
+    val failedSubSpec     = new Specification { def is = "ex1" ! failure }
+
+    val spec1: Fragments = "ex1" ! failure ^ "a " ~ ("successfull spec", successfulSubSpec) ^ end
+    def e1 = print(spec1) must \\("img", "src" -> "./images/icon_success_sml.gif")
+
+    val spec2: Fragments = "ex1" ! success ^ "a " ~ ("failed spec", failedSubSpec) ^ end
+    def e2 = print(spec2) must \\("img", "src" -> "./images/icon_failure_sml.gif")
+
   }
 
   trait MockHtmlPrinter extends FragmentExecution { outer =>

@@ -6,6 +6,7 @@ import Scalaz._
 import collection.Iterablex._
 import main.Arguments
 import execute._
+import org.specs2.execute.StandardResults
 import time._
 import specification._
 
@@ -112,6 +113,14 @@ case class Stats(fragments:    Int = 0,
   def hasFailuresOrErrors = failures + errors > 0
   /** @return true if there are expectations */
   def hasExpectations = expectations > 0
+  /** @return an equivalent result for display */
+  def result =
+    if (failures + errors == 0)
+      if (successes > 0 || skipped + pending == 0) StandardResults.success
+      else if (pending > skipped)                  StandardResults.pending
+      else                                         StandardResults.skipped
+    else if (errors > 0)           StandardResults.anError
+    else                           StandardResults.failure
 }
 case object Stats {
   implicit object StatsMonoid extends Monoid[Stats] {
