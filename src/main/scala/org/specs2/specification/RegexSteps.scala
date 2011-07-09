@@ -51,13 +51,13 @@ trait RegexSteps {
     type RegexType <: RegexFragment
     val fs: Fragments
     def add(f: Fragment): RegexType
-    def ^(f: Text): RegexType = add(f)
-    def ^(f: Br): RegexType = add(f)
-    def ^(f: Tab): RegexType = add(f)
-    def ^(f: Backtab): RegexType = add(f)
-    def ^(f: End) = fs.add(f)
-    def ^(a: Arguments) = fs.add(a)
-    def ^(fs2: Fragments) = fs.add(fs2)
+    def ^(f: Text)        = add(f)
+    def ^(f: Br)          = add(f)
+    def ^(f: Tab)         = add(f)
+    def ^(f: Backtab)     = add(f)
+    def ^(f: End)         = fs.add(f)
+    def ^(a: Arguments)   = fs.add(a)
+    def ^(fs2: Fragments) = fs.add(fs2.middle)
   }
 
   /**
@@ -86,7 +86,7 @@ trait RegexSteps {
     type RegexType = PreStepText[T]
     def ^[R](step: When[T, R]) = {
       lazy val extracted = step.extractContext(context(), text)
-      new PreStep(() => extracted, fs.add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+      new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
     }
     def ^(step: Then[T]) = {
      lazy val extracted = step.extractContext(context(), text)

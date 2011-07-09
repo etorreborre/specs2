@@ -8,11 +8,11 @@ import specification._
  */
 class GivenThenSpec extends Specification { def is =
 
-  "A given-then example for a calculator"                      ^
-    "Given the following number: ${1}"                         ^ number1 ^
-    "Then adding 2 to that number must be: ${3}"               ^ adding2 ^
-    "And it should be >: ${0}"                                 ^ greaterThan ^
-                                                               end ^ noindent
+  "A given-then example for a calculator"                      ^ br^
+    "Given the following number: ${1}"                         ^ number1^
+    "Then adding 2 to that number must be: ${3}"               ^ adding2^
+    "And it should be >: ${0}"                                 ^ greaterThan^
+                                                               end
 
   object number1 extends Given[Addition] {
     def extract(text: String): Addition = Addition(extract1(text).toInt, 2)

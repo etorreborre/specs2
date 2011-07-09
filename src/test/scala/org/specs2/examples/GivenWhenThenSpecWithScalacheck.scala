@@ -11,21 +11,20 @@ import specification.gen._
  */
 class GivenWhenThenSpecWithScalacheck extends Specification with ScalaCheck { def is =
 
-  "A given-when-then example for a calculator"                                   ^
-    "Given a first number n1"                                                    ^ number1 ^
-    "And a second number n2"                                                     ^ number2 ^
-    "When I add them"                                                            ^ add ^
-    "Then I should get n1 + n2"                                                  ^ addResult ^
-    "And it should be positive if the numbers are positive"                      ^ positiveAdd ^
-                                                                                 end^
-                                                                                 p^
-  "Now with the multiplication"                                                  ^
-    "Given a first number n1"                                                    ^ number1 ^
-    "And a second number n2"                                                     ^ number2 ^
-    "When I multiply them"                                                       ^ mult ^
-    "Then I should get n1 * n2"                                                  ^ multResult ^
-    "And it should be positive if the numbers have the same sign"                ^ positiveMult ^
-                                                                                 end ^ noindent
+  "A given-when-then example for a calculator"                                   ^ br^
+    "Given a first number n1"                                                    ^ number1^
+    "And a second number n2"                                                     ^ number2^
+    "When I add them"                                                            ^ add^
+    "Then I should get n1 + n2"                                                  ^ addResult^
+    "And it should be positive if the numbers are positive"                      ^ positiveAdd^
+                                                                                 endp^
+  "Now with the multiplication"                                                  ^ br^
+    "Given a first number n1"                                                    ^ number1^
+    "And a second number n2"                                                     ^ number2^
+    "When I multiply them"                                                       ^ mult^
+    "Then I should get n1 * n2"                                                  ^ multResult^
+    "And it should be positive if the numbers have the same sign"                ^ positiveMult^
+                                                                                 end
 
   object number1 extends Given[Int] {
     def extract(text: String) = choose(-10, 10)

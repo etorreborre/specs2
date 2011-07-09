@@ -7,6 +7,7 @@ import main._
 import matcher._
 import FormattingFragments._
 import scala.PartialFunction
+import specification.StandardFragments.Backtab
 
 /**
  * This trait provides function to create specification Fragments:
@@ -52,7 +53,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
       val text = fs.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
       lazy val extracted = step.extractContext(text)
       def strip(fragments: Fragments) = fragments.map(step.strip)
-      new PreStep(() => extracted, fragmentsFragments(strip(fs) ^ Arguments("noindent")) ^ Step.fromEither(extracted))
+      new PreStep(() => extracted, fragmentsFragments(strip(fs)) ^ Step.fromEither(extracted))
     }
   }
   /** reverse conversion from a Fragment containing a Fragments object to the Fragments object*/
