@@ -40,7 +40,7 @@ trait MockitoStubs extends MocksCreation {
       if (t2.isEmpty) 
         mocker.when(c).thenReturn(t)
       else
-      t2.foldLeft (mocker.when(c).thenReturn(t)) { (res, cur) => res.thenReturn(cur) }
+        t2.foldLeft (mocker.when(c).thenReturn(t)) { (res, cur) => res.thenReturn(cur) }
     }
     def answers(function: Any => T) = mocker.when(c).thenAnswer(new MockAnswer(function))
     def throws[E <: Throwable](e: E*): OngoingStubbing[T] = {
