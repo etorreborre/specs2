@@ -24,10 +24,10 @@ object ShouldExpectations extends ShouldExpectations
 trait ShouldThrownExpectations extends ThrownExpectations with ShouldExpectations {
   override implicit def akaShould[T](tm: Expectable[T]) = new ShouldExpectable(() => tm.value) {
     override private[specs2] val desc = tm.desc
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
+    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
   }
   override protected def createShouldExpectable[T](t: =>T) = new ShouldExpectable(() => t) {
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
+    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
   }
 }
 object ShouldThrownExpectations extends ShouldThrownExpectations

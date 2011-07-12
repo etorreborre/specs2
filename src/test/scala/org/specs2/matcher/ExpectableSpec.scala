@@ -3,7 +3,7 @@ package matcher
 import mutable._
 import execute.FailureException
 
-class ExpectableSpec extends Specification {
+class ExpectableSpec extends Specification with ResultMatchers {
 
   "An expectable can have a precise description with aka(description)" in {
     ("a" aka "the string").description must_== "the string 'a'"
@@ -23,5 +23,8 @@ class ExpectableSpec extends Specification {
   "An expectable can be mapped to another value, keeping its ability to throw exceptions when not matching" in {
     val factory = new ThrownExpectations () {}
     (factory.createExpectable("a").map(1) must_== 2) must throwA[FailureException]
+  }
+  "An expectable must return an error when applied a null matcher" in {
+    ("hello" must (null: Matcher[String])) must throwAn[IllegalArgumentException]("You cannot use a null matcher on 'hello'")
   }
 }
