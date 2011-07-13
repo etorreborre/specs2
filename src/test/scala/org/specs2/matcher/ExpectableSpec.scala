@@ -25,6 +25,14 @@ class ExpectableSpec extends Specification with ResultMatchers {
     (factory.createExpectable("a").map(1) must_== 2) must throwA[FailureException]
   }
   "An expectable must return an error when applied a null matcher" in {
-    ("hello" must (null: Matcher[String])) must throwAn[IllegalArgumentException]("You cannot use a null matcher on 'hello'")
+    ("hello" must (null: Matcher[String])) must throwAn[IllegalArgumentException].like { case e =>
+      e.getMessage must startWith("You cannot use a null matcher on 'hello'")
+    }
+  }
+  "An expectable must match without an exception if the underlying value returns null for its toString value" in {
+    case class NullString() {
+      override def toString = null
+    }
+    NullString() must_== NullString()
   }
 }
