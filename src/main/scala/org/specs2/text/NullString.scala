@@ -3,7 +3,9 @@ package text
 import control.Exceptions._
 
 /**
- * Utility method to replace a null String with ""
+ * Utility methods to replace a null String with "null"
+ *
+ * They also make sure that the toString or mkString methods don't throw exceptions when being evaluated
  */
 private[specs2]
 trait NotNullStrings {
