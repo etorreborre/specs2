@@ -31,15 +31,25 @@ trait AnyBaseMatchers {
   def be_!=[T](t: =>T) = be_==(t).not
   /** matches if a == b */
   def be_===[T](t: =>T) = beTypedEqualTo(t)
+  /** matches if a == b */
+  def ===[T](t: =>T) = be_===(t)
   /** matches if a != b */
   def be_!==[T](t: =>T) = be_===(t).not
+  /** matches if a != b */
+  def !==[T](t: =>T) = be_!==(t)
   /** matches if a == b */
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
   /** matches if a == b */
+  def equalTo[T](t: =>T) = beEqualTo(t)
+  /** matches if a == b */
   def beTypedEqualTo[T](t: =>T) = new BeTypedEqualTo(t)
+  /** matches if a == b */
+  def typedEqualTo[T](t: =>T) = beTypedEqualTo(t)
   /** matches if a == b after an implicit conversion */
   def be_==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = new BeTypedEqualTo(convert(s)).
     adapt(identity, (_:String)+" [original object is: "+q(s)+"]", (_:String)+" [original object is: "+q(s)+"]")
+  /** matches if a == b after an implicit conversion */
+  def ==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = be_==~(s)(convert)
 
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not
@@ -236,7 +246,6 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
   def likeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
   def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
-  def equalTo[T](t: =>T) = beEqualTo(t)
   def oneOf[T](t: T*) = (beOneOf(t:_*))
   def klass[T : ClassManifest]: Matcher[Any] = outer.haveClass[T]
   def superClass[T : ClassManifest]: Matcher[Any] = outer.haveSuperclass[T]

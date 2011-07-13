@@ -57,9 +57,9 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     val spec: Fragments = "Specification".title ^ "t1"
     printer.print(outer, spec.fragments.map(executeFragment))
     
-    def css = there was one(fs).copySpecResourcesDir(equalTo("css"), anyString)
-    def images = there was one(fs).copySpecResourcesDir(equalTo("images"), anyString)
-    def jstheme = there was one(fs).copySpecResourcesDir(equalTo("css/themes/default"), anyString)
+    def css = there was one(fs).copySpecResourcesDir(===("css"), anyString)
+    def images = there was one(fs).copySpecResourcesDir(===("images"), anyString)
+    def jstheme = there was one(fs).copySpecResourcesDir(===("css/themes/default"), anyString)
   }
   case class fragments() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success ^ "*ex2*" ! success ^

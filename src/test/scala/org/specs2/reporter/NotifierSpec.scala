@@ -40,14 +40,14 @@ A Notifier can be used to get a stream of events for the execution of a Specific
 
 
   def start1 = there was one(notified).specStart(anyString, anyString)
-  def text1  = there was atLeastOne(notified).text(equalTo("intro"), anyString)
+  def text1  = there was atLeastOne(notified).text(===("intro"), anyString)
   def text2  = there was atLeastOne(notified).text(anyString, matching(".*.scala.*"))
   def level1 = there was one(notified).contextStart(anyString, anyString)
   def level2 = there was one(notified).contextEnd(anyString, anyString)
   def level3 = there was two(notified(spec2)).contextEnd(anyString, anyString)
-  def ex1    = there was atLeastOne(notified).exampleStarted(equalTo("ex1"), anyString)
+  def ex1    = there was atLeastOne(notified).exampleStarted(===("ex1"), anyString)
   def ex2    = there was atLeastOne(notified).exampleStarted(anyString, matching(".*NotifierSpecification.scala:11.*"))
-  def ex3    = there was atLeastOne(notified).exampleSuccess(equalTo("ex1"), anyLong)
+  def ex3    = there was atLeastOne(notified).exampleSuccess(===("ex1"), anyLong)
   def ex4    = there was atLeastOne(notified).exampleFailure(anyString, anyString, matching(".*NotifierSpecification.scala:13.*"), any[Throwable], any[Details], anyLong)
   def ex5    = there was atLeastOne(notified).exampleError(anyString, anyString, matching(".*NotifierSpecification.scala:15.*"), any[Throwable], anyLong)
   def ex6    = there was atLeastOne(notified).exampleSkipped(anyString, anyString, anyLong)

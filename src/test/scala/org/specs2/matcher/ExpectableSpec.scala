@@ -36,6 +36,7 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
     NullString() must_== NullString()
   }
   "An expectable must match without an exception on a mock" in {
+    1 must beNone
     val l = mock[List[Int]]
     l must be_==(l)
   }

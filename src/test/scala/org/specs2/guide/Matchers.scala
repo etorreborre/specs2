@@ -656,7 +656,7 @@ The built-in Mockito argument matchers can be used to specify the method argumen
 
 ***specs2*** matchers can also be passed directly as arguments:
 
-      m.get(be_==(123)) returns "one"      
+      m.get(===(123)) returns "one"
 
 ##### Callbacks
 
@@ -926,7 +926,7 @@ framework. You can reuse the following traits:
        def e3 = {
          m.get(anyInt) returns "element"
          m.get(999) must_== "element"
-         m.get(be_==(123)) returns "one"
+         m.get(===(123)) returns "one"
          success
        }
      }

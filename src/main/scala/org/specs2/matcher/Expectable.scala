@@ -33,7 +33,7 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
    * apply a matcher on the value and return a MatchResult which can later on be transformed to a simple Result
    */
   def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = {
-    if (m == null) throw new IllegalArgumentException("You cannot use a null matcher on "+description+"\n"+MOCKITO_HINT)
+    if (m == null) throw new IllegalArgumentException("You cannot use a null matcher on "+description)
     m.apply(this)
   }
 
@@ -86,20 +86,4 @@ object Expectable {
     def fmap[A, B](r: Expectable[A], f: A => B) = r.map(f)
   }
 
-  /**
-   * This hint is provided to help debug the case where a null matcher can be passed because of the argThat implicit in the Mockito trait.
-   */
-  lazy val MOCKITO_HINT =
-  """
-  This situation may occur if:
-   * you're using the org.specs2.mock.Mockito trait
-   * you have created expectations like (a: A) must matcher[B] where B is not a supertype of A. This code however typechecks as explained here: http://bit.ly/mockito_typecheck_hole
-
-  You can fix your code by:
-   * checking the types of your expectations if you see where the type mismatch is
-   * overriding the argThat method in your specification class so that it is not implicit anymore:
-     override def argThat[T](m: matcher.Matcher[T]) = super.argThat(m)
-
-     Then compile and check the compiler error
-   """
 }
