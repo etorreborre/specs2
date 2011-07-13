@@ -3,7 +3,7 @@ package matcher
 import mutable._
 import execute.FailureException
 
-class ExpectableSpec extends Specification with ResultMatchers {
+class ExpectableSpec extends Specification with ResultMatchers with org.specs2.mock.Mockito {
 
   "An expectable can have a precise description with aka(description)" in {
     ("a" aka "the string").description must_== "the string 'a'"
@@ -34,5 +34,9 @@ class ExpectableSpec extends Specification with ResultMatchers {
       override def toString = null
     }
     NullString() must_== NullString()
+  }
+  "An expectable must match without an exception on a mock" in {
+    val l = mock[List[Int]]
+    l must be_==(l)
   }
 }
