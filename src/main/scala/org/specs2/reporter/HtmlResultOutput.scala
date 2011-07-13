@@ -57,6 +57,7 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   def l(level: Int)(implicit args: Arguments) = "level" + (if (args.noindent) 0 else level)
 
   def wiki(text: String)(implicit args: Arguments) = toXhtml(text)
+
   def printLink(link: HtmlLink, level: Int = 0, stats: Stats)(implicit args: Arguments) = {
     link match {
       case slink @ SpecHtmlLink(name, before, link, after, tip) =>
@@ -65,26 +66,18 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
         printElem(<div class={l(level)}>{before}<a href={url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div>)
     }
   }
+
   def printWithIcon(message: MarkupString, iconName: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
     if (doIt) printElem(<div class={l(level)}><img src={icon(iconName)}/> {wiki(message.toHtml)}</div>)
     else this
     
   def icon(t: String) = "./images/icon_"+t+"_sml.gif"
 
-  def printSuccess(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
-    printWithIcon(message, "success", level, doIt)
-  
-  def printFailure(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
-    printWithIcon(message, "failure", level, doIt)
-    
-  def printError(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
-    printWithIcon(message, "error", level, doIt)
-  
-  def printSkipped(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments): HtmlResultOutput =
-    printWithIcon(message, "skipped", level, doIt)
-
-  def printPending(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
-    printWithIcon(message, "info", level, doIt)
+  def printSuccess(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "success", level, doIt)
+  def printFailure(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "failure", level, doIt)
+  def printError  (message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "error",   level, doIt)
+  def printSkipped(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "skipped", level, doIt)
+  def printPending(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "info",    level, doIt)
 
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {

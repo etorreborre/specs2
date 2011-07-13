@@ -84,12 +84,12 @@ case class HtmlResult(r: ExecutedResult) extends Html {
     val outDesc = printDesc(desc, level, result)
 
     result match {
-      case f: Failure                                    => printFailureDetails(level + 1, f)(args, outDesc)
-      case e: Error                                      => printErrorDetails(level, e)(args, outDesc).printStack(e, level + 1)
-      case Success(_)                                    => outDesc
-      case Skipped(_, _)                                 => outDesc.printSkipped(NoMarkup(result.message), level, !args.xonly)
-      case Pending(_)                                    => outDesc.printPending(desc, level).printPending(NoMarkup(result.message), level, !args.xonly)
-      case DecoratedResult(table: DataTable, r)          => printDataTable(table, level)(args, outDesc)
+      case f: Failure                           => printFailureDetails(level + 1, f)(args, outDesc)
+      case e: Error                             => printErrorDetails(level, e)(args, outDesc).printStack(e, level + 1)
+      case Success(_)                           => outDesc
+      case Skipped(_, _)                        => outDesc.printSkipped(NoMarkup(result.message), level, !args.xonly)
+      case Pending(_)                           => outDesc.printPending(desc, level).printPending(NoMarkup(result.message), level, !args.xonly)
+      case DecoratedResult(table: DataTable, r) => printDataTable(table, level)(args, outDesc)
     }
   }
 
@@ -104,17 +104,15 @@ case class HtmlResult(r: ExecutedResult) extends Html {
     }
 
   def printFailureDetails(level: Int, f: Failure)(implicit args: Arguments, out: HtmlResultOutput) =
-  if (args.failtrace) out.printCollapsibleExceptionMessage(f, level + 1).
-                          printCollapsibleDetailedFailure(f.details, level + 1, args.diffs.show)
-  else                out.printExceptionMessage(f, level + 1).
-                          printCollapsibleDetailedFailure(f.details, level + 1, args.diffs.show)
+    if (args.failtrace) out.printCollapsibleExceptionMessage(f, level + 1).
+                            printCollapsibleDetailedFailure(f.details, level + 1, args.diffs.show)
+    else                out.printExceptionMessage(f, level + 1).
+                            printCollapsibleDetailedFailure(f.details, level + 1, args.diffs.show)
 
   def printErrorDetails(level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlResultOutput) =
     out.printCollapsibleExceptionMessage(f, level + 1)
 
-  def printDataTable(table: DataTable, level: Int = 0)(implicit args: Arguments, out: HtmlResultOutput) = {
-    printFormResult(Form(table))(args, out)
-  }
+  def printDataTable(table: DataTable, level: Int = 0)(implicit args: Arguments, out: HtmlResultOutput) = printFormResult(Form(table))(args, out)
 
 }
 private[specs2]

@@ -8,10 +8,10 @@ import org.junit.runner.Description
 import scala.collection.JavaConversions._
 import xml.Nodex._
 import execute._
-import io.{FileWriter, FileSystem, Location}
 import main.{Arguments, SystemProperties}
+import io.Location
 import specification._
-import io.Paths._
+
 
 /**
  * The JUnitXml printer is used to create a JUnit xml report of an executed specification.
@@ -24,37 +24,22 @@ import io.Paths._
  *
  */
 trait JUnitXmlPrinter extends Statistics {
-  /** the file system is used to open the file to write */
-  private[specs2] lazy val fileSystem = new FileSystem {}
-  /** the file writer is used to open the file to write */
-  private[specs2] lazy val fileWriter = new FileWriter {}
 
   /**
-   * the output directory is either defined by a specs2 system variable
-   * or chosen as a reports directory in the standard maven "target" directory
+   * create a TestSuite object containing all the examples
    */
-  private[specs2] lazy val outputDir: String = SystemProperties.getOrElse("junit.outDir", "target/test-reports/").dirPath
-
-  /**
-   * print a sequence of executed fragments for a given specification class into a html
-   * file
-   * the name of the html file is the full class name
-   */
-  def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
+  def testSuite(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     /** extract the root Description object and the examples to execute */
     lazy val DescriptionAndExamples(desc, executions) = descriptions(s).foldAll(fs)
     lazy val statistics: Stats = foldAll(fs).total
+    lazy val start = TestSuite(desc, s.getClass.getName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.elapsed)
 
-    fileWriter.write(filePath(desc)) { out =>
-      executions.foldLeft(TestSuite(s.getClass.getName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.elapsed)) { (suite, de) =>
-        val (d, f) = de
-        if (d.isTest) suite.addTest(TestCase(d, f))
-        else          suite
-      }.flush(out)
+    executions.foldLeft(start) { (suite, de) =>
+      val (d, f) = de
+      if (d.isTest) suite.addTest(TestCase(d, f))
+      else          suite
     }
   }
-
-  def filePath(desc: Description) = outputDir + desc.getClassName + ".xml"
 
   /** fold object used to create descriptions */
   def descriptions(s: SpecificationStructure)(implicit args: Arguments) = new JUnitDescriptions[ExecutedFragment](s.getClass) {
@@ -78,7 +63,7 @@ trait JUnitXmlPrinter extends Statistics {
 
   private def formatTime(t: Long) = "%.3f" format (t / 1000.0)
 
-  case class TestSuite(className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq())(implicit args: Arguments) {
+  case class TestSuite(description: Description, className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq())(implicit args: Arguments) {
     def addTest(t: TestCase) = copy(tests = tests :+ t)
     def flush(out: Writer) = XML.write(out, xml, "", false, null)
 
@@ -118,11 +103,13 @@ trait JUnitXmlPrinter extends Statistics {
                                                             type={e.getClass.getName}>{args.traceFilter(er.stackTrace).mkString("\n")}</error>
       case other                                  => NodeSeq.Empty
     }
+
     def testFailure = fragment match {
       case ExecutedResult(_,f @ Failure(m, e, st, d),_,_) => <failure message={m}
                                                                       type={f.exception.getClass.getName}>{args.traceFilter(st).mkString("\n")}</failure>
       case other                                          => NodeSeq.Empty
     }
+
     def testSkipped = fragment match {
       case ExecutedResult(_, Skipped(m, e),_,_) => <skipped/>
       case other                                => NodeSeq.Empty
