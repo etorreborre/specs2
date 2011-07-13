@@ -9,7 +9,7 @@ private[specs2]
 trait NotNullStrings {
   implicit def anyToNotNull(a: Any) = new NotNullAny(a)
   class NotNullAny(a: Any) {
-    def notNull = {
+    def notNull: String = {
       if (a == null) "null"
       else {
         val string = tryOr(a.toString) { (e: Exception) => "Exception when evaluating toString "+e.getMessage }

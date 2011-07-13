@@ -43,8 +43,8 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
   /** @return the description of the matched value, quoted. */
   protected def d[T](value: =>T) = {
     val valueAsString = value match {
-      case ar: Array[_]           => ar.notNull.mkString(", ")
-      case it: TraversableOnce[_] => it.notNull.mkString(", ")
+      case ar: Array[_]           => Option(ar).map(_.mkString(", ")).getOrElse("null")
+      case it: TraversableOnce[_] => Option(it).map(_.mkString(", ")).getOrElse("null")
       case _                      => value.notNull
     }
     desc match {
