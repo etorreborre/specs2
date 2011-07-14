@@ -10,7 +10,10 @@ class UserFromSourceSpecification extends org.specs2.Specification { def is = no
     val b = " world"
     (a + b) must_== "hello world"
   }                                                                                   ^
+  `a call to an example`                                                              ^
                                                                                       end
+
+  def `a call to an example` = success
 }
 
 class DifferentSpecification extends org.specs2.Specification { def is = noindent^

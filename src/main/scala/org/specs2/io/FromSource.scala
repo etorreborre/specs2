@@ -29,7 +29,7 @@ trait FromSource {
    *   * fetching the current stacktrace
    *   * finding the location of the example (6th trace by default)
    */
-  def getCode(depth: Int = 6): String = getCodeFromTo(depth, depth)
+  def getCode(depth: Int = 6): Either[String, String] = getCodeFromTo(depth, depth)
 
   /**
    * get some source code by:
@@ -37,7 +37,7 @@ trait FromSource {
    *   * finding the location of the example by taking the trace of the first line and the trace of the last line
    *    (at depth 6 and 9 by default)
    */
-  def getCodeFromTo(start: Int = 6, end: Int = 9): String = {
+  def getCodeFromTo(start: Int = 6, end: Int = 9): Either[String, String] = {
     val stackTrace = new Exception().getStackTrace()
     val (startLine, endLine) = (new TraceLocation(stackTrace.apply(start)).lineNumber-1,
                                 new TraceLocation(stackTrace.apply(end)).lineNumber-1)
@@ -45,14 +45,12 @@ trait FromSource {
     getCodeFromToWithLocation(startLine, endLine, location(stackFilter))
   }
 
-  def getCodeFromToWithLocation(startLine: Int, endLine: Int = 9, location: TraceLocation): String = {
+  def getCodeFromToWithLocation(startLine: Int, endLine: Int = 9, location: TraceLocation): Either[String, String] = {
     tryOr {
       val content = readLines(srcDir+location.path)
-      ((startLine to endLine) map content).mkString("\n")
-    } { e =>
-      println(e)
-      "No source file found at "+srcDir+location.path
-    }
+      val code = ((startLine to endLine) map content).mkString("\n")
+      Right[String, String](code): Either[String, String]
+    } { e => Left[String, String]("No source file found at "+srcDir+location.path) }
   }
 
   def location(stackFilter: Seq[StackTraceElement] => Seq[StackTraceElement]) = {

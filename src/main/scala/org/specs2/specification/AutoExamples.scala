@@ -55,7 +55,12 @@ trait AutoExamples {
   implicit def resultExample(expression: =>execute.Result) = Example(CodeMarkup(getSourceCode()), expression)
 
   private[specs2] def getSourceCode(startDepth: Int = 6, endDepth: Int = 9): String = {
-    List("^", "^t", "^bt", "^p", "^br", "^end", "^endp").foldLeft(getCodeFromTo(startDepth, endDepth))(_ trimEnd _).
+    val firstTry = getCodeFromTo(startDepth, endDepth)
+    val code = firstTry match {
+      case Right(c) => c
+      case Left(e)  => getCodeFromTo(startDepth, startDepth) match { case Right(r) => r;  case Left(l) => e }
+    }
+    List("^", "t", "bt", "p", "br", "end", "endp", "end", "^").foldLeft(code)(_.trim trimEnd _).
     trimEnclosing("{", "}").
     trimEnclosing("`", "`")
   }

@@ -17,9 +17,11 @@ class FromSourceSpec extends Specification with FromSource {
     examples(new DifferentSpecification)(0).desc.toString must contain("1 must_== 1")
   }
   "If the file is not found, the full path is shown to the user" in {
-     other.NotFound.result.toString must be_==("No source file found at src/test/scala/org/specs2/io/other/FromSourceSpec.scala")
+    other.NotFound.result.toString must be_==("No source file found at src/test/scala/org/specs2/io/other/FromSourceSpec.scala")
   }
-
+  "If the specification doesn't end with an end fragment, the last example description should be found" in {
+    examples(spec)(2).desc.toString must contain("a call to an example")
+  }
   def examples(s: SpecificationStructure) = s.is.examples
 }
 
