@@ -1,7 +1,9 @@
 package org.specs2
 package execute
 
-class ResultSpec extends Specification { def is =
+import matcher.DataTables
+
+class ResultSpec extends Specification with DataTables { def is =
                                                                                                                         """
 Results are the outcome of some execution. There are several kinds of Results, all having a message describing them
 more precisely:
@@ -47,12 +49,24 @@ more precisely:
    { (success1 or failure1).expectationsNb must_== 2 }                                                                  ^
    { (failure1 or failure2).expectationsNb must_== 2 }                                                                  ^
    { (failure1 or error1)  .expectationsNb must_== 2 }                                                                  ^
-                                                                                                                        end
-  val success1 = Success("s1")                                                                                          
+  "results have methods to know their status: isSuccess, isPending, ..."                                                ! statuses^
+                                                                                                                          end
+
+  def statuses =
+  "result" | "isSuccess" | "isFailure" | "isError" | "isSkipped" | "isPending" |>
+  success1 ! true        ! false       ! false     ! false       ! false       |
+  failure1 ! false       ! true        ! false     ! false       ! false       |
+  error1   ! false       ! false       ! true      ! false       ! false       |
+  skipped1 ! false       ! false       ! false     ! true        ! false       |
+  pending1 ! false       ! false       ! false     ! false       ! true        | { (r, s, f, e, sk, p) =>
+    (r.isSuccess, r.isFailure, r.isError, r.isSkipped, r.isPending) must_== (s, f, e, sk, p)
+  }
+
+  val success1: Result = Success("s1")
   val success2 = Success("s2")                                                                                          
   val failure1 = Failure("f1")                                                                                          
   val failure2 = Failure("f2")
   val error1   = Error("e1")
   val skipped1 = Skipped("sk1")
-
+  val pending1 = Pending("p1")
 }    

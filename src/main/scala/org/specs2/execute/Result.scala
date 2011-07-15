@@ -97,7 +97,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   /**
    * @return true if the result is a Pending instance
    */
-  def isPending: Boolean = true
+  def isPending: Boolean = false
   /**
    * @return true if the result is a Failure instance
    */
