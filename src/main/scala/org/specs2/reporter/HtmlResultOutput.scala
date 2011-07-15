@@ -36,25 +36,28 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   private[specs2] lazy val blank = new HtmlResultOutput
   
   def printBr(doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<text><br></br></text>)
+    if (doIt) printElem(<status class='ok'><br></br></status>)
     else this
     
   def printPar(text: String = "", doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<text><p>{wiki(text)}</p></text>)
+    if (doIt) printElem(<status class='ok'><p>{wiki(text)}</p></status>)
     else this
 
   def printText(text: String = "", level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<text><div class={l(level)}>{wiki(text)}</div></text>)
+    if (doIt) printElem(<status class='ok'><div class={l(level)}>{wiki(text)}</div></status>)
     else this
 
   def printTextPar(text: String = "", level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<text><p class={l(level)}>{wiki(text)}</p></text>)
+    if (doIt) printElem(<status class='ok'><p class={l(level)}>{wiki(text)}</p></status>)
     else this
 
   def printSpecStart(name: SpecName, stats: Stats)(implicit args: Arguments): HtmlResultOutput = {
-    val header = <h2>{name.name}</h2>
     printElem(<title>{name.name}</title>).
-    printElem(if (stats.hasIssues) <a href="#" onclick="showHideByName('text')">{header}</a> else header)
+    printElem(
+      if (stats.hasIssues) <h2>{name.name}
+        <notoc><a href="#" onclick="hideByClass('ok');hideById('issuesOnly');showById('all')"><i id='issuesOnly' style="font-size:small">(issues only)</i></a></notoc>
+        <notoc><a href="#" onclick="showByClass('ok');hideById('all');showById('issuesOnly')"><i id='all' style="display:none;font-size:small">(all)</i></a></notoc></h2>
+      else <h2>{name.name}</h2>)
   }
 
   def l(level: Int)(implicit args: Arguments) = "level" + (if (args.noindent) 0 else level)
@@ -62,39 +65,52 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   def wiki(text: String)(implicit args: Arguments) = toXhtml(text)
 
   def printLink(link: HtmlLink, level: Int = 0, stats: Stats)(implicit args: Arguments) = {
+    val linkStatus = if (stats.hasIssues) "ko" else "ok"
     link match {
       case slink @ SpecHtmlLink(name, before, link, after, tip) =>
-        printElem(<link><div class={l(level)}><img src={icon(stats.result.statusName)}/> {wiki(before)}<a href={slink.url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div></link>)
+        printElem(<status class={linkStatus}><div class={l(level)}><img src={icon(stats.result.statusName)}/> {wiki(before)}<a href={slink.url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div></status>)
       case UrlHtmlLink(url, before, link, after, tip) =>
-        printElem(<link><div class={l(level)}>{before}<a href={url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div></link>)
+        printElem(<status class={linkStatus}><div class={l(level)}>{before}<a href={url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div></status>)
     }
   }
 
-  def printWithIcon(message: MarkupString, iconName: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
-    if (doIt) printElem(<text><div class={l(level)}><img src={icon(iconName)}/> {wiki(message.toHtml)}</div></text>)
+  def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
+    if (doIt) printElem(<status class='ok'>{textWithIcon(message, iconName, level)}</status>)
     else this
-    
+
+  def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
+    if (doIt) printElem(<status class='ko'>{textWithIcon(message, iconName, level)}</status>)
+    else this
+
+  private def textWithIcon(message: MarkupString, iconName: String, level: Int = 0)(implicit args: Arguments) =
+    <div class={l(level)}><img src={icon(iconName)}/> {wiki(message.toHtml)}</div>
+
   def icon(t: String) = "./images/icon_"+t+"_sml.gif"
 
-  def printSuccess(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "success", level, doIt)
-  def printFailure(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "failure", level, doIt)
-  def printError  (message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "error",   level, doIt)
-  def printSkipped(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "skipped", level, doIt)
-  def printPending(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = printWithIcon(message, "info",    level, doIt)
+  def printSuccess(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
+    printTextWithIcon(message, "success", level, doIt)
+  def printFailure(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
+    printIssueWithIcon(message, "failure", level, doIt)
+  def printError  (message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
+    printIssueWithIcon(message, "error",   level, doIt)
+  def printSkipped(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
+    printTextWithIcon(message, "skipped", level, doIt)
+  def printPending(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
+    printTextWithIcon(message, "info",    level, doIt)
 
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
       val message = "  "+e.message+" ("+e.location+")"
-      printElem(<issue><div class={l(level)}>{message}</div></issue>)
+      printElem(<status class='ko'><div class={l(level)}>{message}</div></status>)
     } else this
   }
   
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
       val message = "  "+e.message.notNull+" ("+e.location+")"
-      printElem(<issue><div class={l(level)}><img src="images/collapsed.gif" onclick={onclick(e)}/>
+      printElem(<status class='ko'><div class={l(level)}><img src="images/collapsed.gif" onclick={onclick(e)}/>
                  {message}
-                </div></issue>)
+                </div></status>)
     } else this
   }
   private def onclick(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
@@ -107,12 +123,12 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
           val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
           val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
           val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
-          printElem(<issue>
+          printElem(<status class='ko'>
 <div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(d)}/>details</div>
   <div id={id(d)} style="display:none">
     <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
     { if (args.diffs.showFull) <pre class="details">{expectedFull+"\n"+actualFull}</pre> else NodeSeq.Empty }
-  </div></issue>)
+  </div></status>)
         }
         case _ => this
       }
@@ -120,7 +136,7 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   }
 
   def printStack(e: ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
-    if (doIt) enclose((t: NodeSeq) => <issue><div id={System.identityHashCode(e).toString} style="display:none">{t}</div></issue>) {
+    if (doIt) enclose((t: NodeSeq) => <status class='ko'><div id={System.identityHashCode(e).toString} style="display:none">{t}</div></status>) {
       args.traceFilter(e.stackTrace).foldLeft(blank) { (res, cur) =>
         res.printText(cur.toString, level)
       }
@@ -163,9 +179,8 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
     </head>
   
   def javascript = 
-    <script language="javascript">{
-    """ 
-      function init() {  prettyPrint(); };   
+    <script language="javascript"><xml:unparsed>
+      function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
       String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
       function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
@@ -180,16 +195,31 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
         element = document.getElementById(id);
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
-      function showHideByName(name) {
-    		var elements = document.getElementsByTagName(name);
-		    var i = 0;
-        while (i < elements.length) {
+      function showHideByClass(name) {
+		    var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
 		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
-          i++;
         }
       };
-    """
-    }</script>
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </xml:unparsed></script>
 
   /**
    * writing to the output and doing <br></br> replacement by <br/> to avoid newlines to be inserted after the Xhtml

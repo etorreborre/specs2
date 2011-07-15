@@ -25,6 +25,8 @@ class TableOfContentsSpec extends Specification with DataTables { def is =
     { isHeader(<h2/>) must beTrue }                                                                                     ^
     `headersToTree builds a Tree of headers`                                                                            ^
     `headersToTree builds a Tree of headers - 2`                                                                        ^
+    { nodeText(<h2>Hello</h2>) must_== "Hello"}                                                                         ^
+    { nodeText(<h2>Hello<notoc>world</notoc></h2>) must_== "Hello"}                                                     ^
                                                                                                                         end
 
   val aBodyWithHeadersButNoToc           = <body><h1>title</h1>text with <h2>a header</h2></body>

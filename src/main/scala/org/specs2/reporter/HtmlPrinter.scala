@@ -104,13 +104,15 @@ trait HtmlPrinter {
   def reduce(fs: Seq[ExecutedFragment], parentLink: HtmlLink): Tree[HtmlLines] = {
     lazy val start: HtmlLines = HtmlLines(Nil, parentLink)
     flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (leaf(start).loc) { (res, cur) =>
-      def updated = res.setLabel(res.getLabel.add(cur))
+      def updated = res.updateLabel(_.add(cur))
       cur match {
         case HtmlLine(HtmlSee(see), _, _, _)                                    => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
-        // when reaching a spec end, go up a level and update the last html line with the statistics of the included spec
+        // when reaching a spec end:
+        // * update the spec start with the stats
+        // * go up a level and update the last html line with the statistics of the included spec
         // the last line should be a See fragment
         case HtmlLine(HtmlSpecEnd(end), s, _, _) if (res.getLabel.is(end.name)) => {
-          val updatedParent = updated.getParent
+          val updatedParent = updated.updateLabel(_.updateSpecStartStats(s)).getParent
           val parentSee = updatedParent.getLabel.lines.lastOption.map(_.copy(stats = s))
           updatedParent.updateLabel((u: HtmlLines) => u.copy(lines = u.lines.dropRight(1) ++ parentSee.toList))
         }

@@ -99,8 +99,8 @@ trait TableOfContents {
     }.rootLabel
   }
 
-  /** @return the text of the first child of a Node */
-  private def nodeText(n: Node) = n.text
+  /** @return the text of the first child of a Node, removing notoc elements */
+  private[specs2] def nodeText(n: Node) = <a>{n.child.filterNot(_.label == "notoc")}</a>.text
   /** regular expression for a Header Tag */
   private val HeaderTag = "h(\\d)".r
   /** @return true if the element is a header and its number satisfies a function */
