@@ -46,7 +46,8 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 }
 
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
-  override def printSpecStart(message: String)(implicit args: Arguments) = () // do nothing because sbt already displays the specification name
+  // do nothing because sbt already displays the specification name
+  override def printSpecStart(message: String, stats: Stats)(implicit args: Arguments) = ()
   override def printFailure(message: String)(implicit args: Arguments)   = logFailure(message)
   override def printError(message: String)(implicit args: Arguments)     = logError(message)
   override def printSuccess(message: String)(implicit args: Arguments)   = logInfo(message)

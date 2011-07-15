@@ -121,6 +121,11 @@ case class Stats(fragments:    Int = 0,
       else                                         StandardResults.skipped
     else if (errors > 0)           StandardResults.anError
     else                           StandardResults.failure
+
+  /** @return true if there are no issues at all */
+  def isSuccess = result.isSuccess
+  /** @return true if there are failures or errors */
+  def hasIssues = result.isFailure || result.isError
 }
 case object Stats {
   implicit object StatsMonoid extends Monoid[Stats] {

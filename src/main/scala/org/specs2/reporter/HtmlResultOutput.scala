@@ -9,6 +9,7 @@ import EditDistance._
 import NotNullStrings._
 import text.Trim._
 import execute._
+import xml.Nodex._
 import matcher.DataTable
 import specification._
 
@@ -35,24 +36,26 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   private[specs2] lazy val blank = new HtmlResultOutput
   
   def printBr(doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<br></br>)
+    if (doIt) printElem(<text><br></br></text>)
     else this
     
   def printPar(text: String = "", doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<p>{wiki(text)}</p>)
+    if (doIt) printElem(<text><p>{wiki(text)}</p></text>)
     else this
 
   def printText(text: String = "", level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<div class={l(level)}>{wiki(text)}</div>)
+    if (doIt) printElem(<text><div class={l(level)}>{wiki(text)}</div></text>)
     else this
 
   def printTextPar(text: String = "", level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) = 
-    if (doIt) printElem(<p class={l(level)}>{wiki(text)}</p>)
+    if (doIt) printElem(<text><p class={l(level)}>{wiki(text)}</p></text>)
     else this
 
-  def printSpecStart(name: SpecName)(implicit args: Arguments): HtmlResultOutput =
+  def printSpecStart(name: SpecName, stats: Stats)(implicit args: Arguments): HtmlResultOutput = {
+    val header = <h2>{name.name}</h2>
     printElem(<title>{name.name}</title>).
-    printElem(<h2>{name.name}</h2>)
+    printElem(if (stats.hasIssues) <a href="#" onclick="showHideByName('text')">{header}</a> else header)
+  }
 
   def l(level: Int)(implicit args: Arguments) = "level" + (if (args.noindent) 0 else level)
 
@@ -61,14 +64,14 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   def printLink(link: HtmlLink, level: Int = 0, stats: Stats)(implicit args: Arguments) = {
     link match {
       case slink @ SpecHtmlLink(name, before, link, after, tip) =>
-        printElem(<div class={l(level)}><img src={icon(stats.result.statusName)}/> {wiki(before)}<a href={slink.url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div>)
+        printElem(<link><div class={l(level)}><img src={icon(stats.result.statusName)}/> {wiki(before)}<a href={slink.url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div></link>)
       case UrlHtmlLink(url, before, link, after, tip) =>
-        printElem(<div class={l(level)}>{before}<a href={url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div>)
+        printElem(<link><div class={l(level)}>{before}<a href={url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div></link>)
     }
   }
 
   def printWithIcon(message: MarkupString, iconName: String, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
-    if (doIt) printElem(<div class={l(level)}><img src={icon(iconName)}/> {wiki(message.toHtml)}</div>)
+    if (doIt) printElem(<text><div class={l(level)}><img src={icon(iconName)}/> {wiki(message.toHtml)}</div></text>)
     else this
     
   def icon(t: String) = "./images/icon_"+t+"_sml.gif"
@@ -82,16 +85,16 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
       val message = "  "+e.message+" ("+e.location+")"
-      printElem(<div class={l(level)}>{message}</div>)
+      printElem(<issue><div class={l(level)}>{message}</div></issue>)
     } else this
   }
   
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
       val message = "  "+e.message.notNull+" ("+e.location+")"
-      printElem(<div class={l(level)}><img src="images/collapsed.gif" onclick={onclick(e)}/>
+      printElem(<issue><div class={l(level)}><img src="images/collapsed.gif" onclick={onclick(e)}/>
                  {message}
-                </div>)
+                </div></issue>)
     } else this
   }
   private def onclick(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
@@ -104,12 +107,12 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
           val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
           val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
           val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
-          printElem(<t>
+          printElem(<issue>
 <div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(d)}/>details</div>
   <div id={id(d)} style="display:none">
     <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
     { if (args.diffs.showFull) <pre class="details">{expectedFull+"\n"+actualFull}</pre> else NodeSeq.Empty }
-  </div></t>)
+  </div></issue>)
         }
         case _ => this
       }
@@ -117,7 +120,7 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   }
 
   def printStack(e: ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
-    if (doIt) enclose((t: NodeSeq) => <div id={System.identityHashCode(e).toString} style="display:none">{t}</div>) {
+    if (doIt) enclose((t: NodeSeq) => <issue><div id={System.identityHashCode(e).toString} style="display:none">{t}</div></issue>) {
       args.traceFilter(e.stackTrace).foldLeft(blank) { (res, cur) =>
         res.printText(cur.toString, level)
       }
@@ -176,6 +179,14 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
       function showHide(id) {
         element = document.getElementById(id);
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByName(name) {
+    		var elements = document.getElementsByTagName(name);
+		    var i = 0;
+        while (i < elements.length) {
+		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+          i++;
+        }
       };
     """
     }</script>

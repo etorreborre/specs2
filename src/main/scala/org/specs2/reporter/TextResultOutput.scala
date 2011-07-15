@@ -12,14 +12,14 @@ import execute.Result
  */
 class TextResultOutput extends ResultOutput with ConsoleOutput {
 
-  def printSpecStart(message: String)(implicit args: Arguments) = printLines(args.textColor(message))
-  def printSuccess(message: String)(implicit args: Arguments)   = printLines(args.successColor(message))
-  def printFailure(message: String)(implicit args: Arguments)   = printLines(args.failureColor(message))
-  def printError(message: String)(implicit args: Arguments)     = printLines(args.errorColor(message))
-  def printSkipped(message: String)(implicit args: Arguments)   = printLines(args.skippedColor(message))
-  def printPending(message: String)(implicit args: Arguments)   = printLines(args.pendingColor(message))
-  def printStats(message: String)(implicit args: Arguments)     = printLines(args.statsColor(message))
-  def status(result: Result)(implicit args: Arguments): String  = result.status(args) + " "
+  def printSpecStart(message: String, stats: Stats)(implicit args: Arguments) = printLines(args.textColor(message))
+  def printSuccess(message: String)(implicit args: Arguments)                 = printLines(args.successColor(message))
+  def printFailure(message: String)(implicit args: Arguments)                 = printLines(args.failureColor(message))
+  def printError(message: String)(implicit args: Arguments)                   = printLines(args.errorColor(message))
+  def printSkipped(message: String)(implicit args: Arguments)                 = printLines(args.skippedColor(message))
+  def printPending(message: String)(implicit args: Arguments)                 = printLines(args.pendingColor(message))
+  def printStats(message: String)(implicit args: Arguments)                   = printLines(args.statsColor(message))
+  def status(result: Result)(implicit args: Arguments): String                = result.status(args) + " "
   
   /**
    * print some text, splitting it on several lines

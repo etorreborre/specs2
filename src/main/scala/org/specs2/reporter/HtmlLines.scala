@@ -25,6 +25,7 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink) {
   def is(name: SpecName) = link.is(name)
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty
+  def updateSpecStartStats(s: Stats) = copy(lines = lines.headOption.map(_.copy(stats = s)).toList ++ lines.drop(1))
 }
 
 /** 
@@ -54,7 +55,7 @@ sealed trait Html {
 private[specs2]
 case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    if (!args.xonly) out.printSpecStart(start.name)(args) else out
+    if (!args.xonly) out.printSpecStart(start.name, stats)(args) else out
 }
 private[specs2]
 case class HtmlText(t: ExecutedText) extends Html {

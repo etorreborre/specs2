@@ -87,7 +87,7 @@ trait TextPrinter {
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      out.printSpecStart(leveledText(start.name.name, level)(args))(args)
+      out.printSpecStart(leveledText(start.name.name, level)(args), stats)(args)
     } 
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
