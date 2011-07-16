@@ -1,0 +1,14 @@
+This version adds new features on top of 1.5:
+
+ * the link of an included specification in a html report now displays the status of that specification
+ * throwing an exception if a null matcher is passed as an expectable
+ * added a link to html reports so that only issues will be displayed
+  
+And some fixes:
+
+ * fixed the issue with -Dcolor=false not being recognized
+ * reworked the Given/When/Then specifications indentation so that formatting fragments can now be used
+ * fixed a [typechecking issue](https://groups.google.com/d/topic/specs2-users/mYyGuvBYMwI/discussion) with Mockito specifications
+ * fixed auto-examples [when no 'end' fragment is used](https://groups.google.com/d/topic/specs2-users/mEpVvVSSqHA/discussion) at the end of the specification 
+ 
+ ==========================
