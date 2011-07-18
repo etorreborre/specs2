@@ -23,7 +23,7 @@ libraryDependencies ++= Seq(
   "org.hamcrest" % "hamcrest-all" % "1.1",
   "org.mockito" % "mockito-all" % "1.8.5",
   "junit" % "junit" % "4.7",
-  "org.pegdown" % "pegdown" % "1.0.1"
+  "org.pegdown" % "pegdown" % "1.0.2"
 )
 
 /** Compilation */

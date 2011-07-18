@@ -1094,6 +1094,9 @@ There may still be some duplication of code if you have to use the same kind of 
 
 If that's the case you can define your own Specification trait doing the job:
 
+        import org.specs2._
+        import specification._
+
         trait DatabaseSpec extends Specification {
           /** the map method allows to "post-process" the fragments after their creation */
           override def map(fs: =>Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)

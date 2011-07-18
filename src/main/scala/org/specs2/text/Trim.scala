@@ -23,7 +23,7 @@ trait Trim extends control.Debug {
 	  
     def trimEnd(end: String) =
       if (s.trim.endsWith(end)) s.trim.dropRight(end.size)  else s.trim
-    
+
     def trimEnclosing(start: String): String = trimEnclosing(start, start)
 
 	  def trimEnclosing(start: String, end: String): String = if (s.trim.startsWith(start) && s.trim.endsWith(end)) {
@@ -59,6 +59,7 @@ trait Trim extends control.Debug {
     }
 
     def trimFirst(exp: String) = new Regex(exp).replaceFirstIn(s.trim, "")
+
     def removeFirst(exp: String) = new Regex(exp).replaceFirstIn(s, "")
 
     def trimReplace(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>

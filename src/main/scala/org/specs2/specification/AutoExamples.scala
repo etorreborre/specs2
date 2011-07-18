@@ -60,9 +60,14 @@ trait AutoExamples {
       case Right(c) => c
       case Left(e)  => getCodeFromTo(startDepth, startDepth) match { case Right(r) => r;  case Left(l) => e }
     }
+    trimCode(code)
+  }
+
+  private[specs2] def trimCode(code: String) = {
     List("^", "t", "bt", "p", "br", "end", "endp", "end", "^").foldLeft(code)(_.trim trimEnd _).
     trimEnclosing("{", "}").
-    trimEnclosing("`", "`")
+    trimEnclosing("`", "`").
+    removeFirst("`\\(.*\\)").trimFirst("`")
   }
 }
 private[specs2]
