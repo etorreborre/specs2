@@ -51,10 +51,15 @@ trait Statistics {
       }
       case start @ ExecutedSpecStart(name, args, _) => SpecsStatistics(Stats(start = Some(start)))
       case end @ ExecutedSpecEnd(_, _)              => SpecsStatistics(Stats(end = Some(end)))
+      case ExecutedSee(link, _)                     => SpecsStatistics(stats(link))
       case ExecutedNoText(t, _)                     => SpecsStatistics(Stats(timer = t))
       case _                                        => SpecsStatistics(Stats())
     }
   }
+
+  /** @return the statistics of a specification designated by a link if this can be read from the html report */
+  def stats(link: HtmlLink) = Stats()
+
   /**
    * The SpecsStatistics class stores the result of a specification execution, with the
    * a list of 'current' stats for each fragment execution and the total statistics 

@@ -12,6 +12,7 @@ import io.Location
  * which have already been executed to provide a Result
  */
 sealed trait ExecutedFragment {
+  /** @return the location of the executed fragment */
   def location: Location
 }
 case class ExecutedText(text: String, location: Location) extends ExecutedFragment
@@ -33,6 +34,7 @@ case class ExecutedSpecStart(name: SpecName, arguments: Arguments, location: Loc
 case class ExecutedSpecEnd(name: SpecName, location: Location) extends ExecutedFragment {
   override def toString = "ExecutedSpecEnd("+name.name+")"
 }
+
 case class ExecutedSee(link: HtmlLink, location: Location) extends ExecutedFragment
 /**
  * This executed Fragment is used when no text must be displayed (for the successful
