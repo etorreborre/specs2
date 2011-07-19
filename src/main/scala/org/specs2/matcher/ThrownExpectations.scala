@@ -41,3 +41,11 @@ trait ThrownExpectations extends Expectations {
 }
 private [specs2]
 object ThrownExpectations extends ThrownExpectations
+
+/**
+ * This trait can be used to integrate failures and skip messages into specs2
+ */
+trait ThrownMessages { this: ThrownExpectations =>
+  def fail(m: String): Nothing = failure(m)
+  def skip(m: String): Nothing = skipped(m)
+}
