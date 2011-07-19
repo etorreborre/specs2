@@ -106,7 +106,7 @@ trait HtmlPrinter {
     flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (leaf(start).loc) { (res, cur) =>
       def updated = res.updateLabel(_.add(cur))
       cur match {
-        case HtmlLine(HtmlSee(see), _, _, _)                                    => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
+        case HtmlLine(HtmlSee(see @ ExecutedSee(_, false, _)), _, _, _)  => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
         // when reaching a spec end:
         // * update the spec start with the stats
         // * go up a level and update the last html line with the statistics of the included spec
@@ -144,7 +144,7 @@ trait HtmlPrinter {
       case text @ ExecutedText(s, _)              => HtmlText(text)
       case par @ ExecutedBr(_)                    => HtmlBr()
       case end @ ExecutedSpecEnd(_, _)            => HtmlSpecEnd(end)
-      case see @ ExecutedSee(_, _)                => HtmlSee(see)
+      case see @ ExecutedSee(_, _, _)             => HtmlSee(see)
       case fragment                               => HtmlOther(fragment)
     }
   }

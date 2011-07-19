@@ -127,7 +127,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   /** create a link directly on a specification, with a given link */
   def link(s: SpecificationStructure): Fragments = link(HtmlLink(s), s)
   /** create a link directly on a specification, with a given link */
-  def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = See(htmlLink) ^ s.content.fragments
+  def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = Link(htmlLink) ^ s.content.fragments
 
   /** create a html link without including the other specification fragments */
   def see(s: SpecificationStructure): Fragments = see(HtmlLink(s),  s)

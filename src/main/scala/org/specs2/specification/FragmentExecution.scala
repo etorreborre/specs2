@@ -61,7 +61,7 @@ trait FragmentExecution {
 	  case SpecEnd(n)            => ExecutedSpecEnd(n, f.location)
     case s @ Step(_)           => executeStep("step", s, f.location)
     case s @ Action(_)         => executeStep("action", s, f.location)
-    case See(link)             => ExecutedSee(link, f.location)
+    case See(link, seeOnly)    => ExecutedSee(link, seeOnly, f.location)
     case _                     => ExecutedNoText(new SimpleTimer, f.location)
   }
 

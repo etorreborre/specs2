@@ -55,9 +55,9 @@ class UnitSpec extends mutable.Specification {
     "contain 7 characters" in system2().e1
   }
   // you can add links to other specifications with `link`
-  link("how" ~ ("to do hello world", new HelloWorldSpec))
+  link("how" ~ ("to do hello world", new IncludedSpec))
   // you can include other specifications with `include`
-  include(new HelloWorldSpec)
+  include(new IncludedSpec)
 
   // a step to execute after the specification must be declared at the end
   step {
@@ -77,5 +77,7 @@ class UnitSpec extends mutable.Specification {
     val string = "Hey you"
     def e1 = string must have size(7)
   }
+
+  class IncludedSpec extends Specification { def is = "introduction" ^ "example" ! success }
 }
 

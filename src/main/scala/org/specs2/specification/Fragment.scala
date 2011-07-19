@@ -140,9 +140,15 @@ case object Action {
 }
 
 /**
- * A link to another specification
+ * A link to another specification.
+ *
+ * If seeOnly is true, the linked specification is not executed
  */
-case class See(link: HtmlLink) extends Fragment
+case class See(link: HtmlLink, seeOnly: Boolean = true) extends Fragment
+object Link {
+  def apply(link: HtmlLink) = See(link, seeOnly = false)
+  def unapply(see: See) = see match { case See(link, false) => Some(link); case _ => None }
+}
 /**
  * Those standard Fragments are used to format the specification text:
  *  * End() can be used to "reset" the indentation of text
