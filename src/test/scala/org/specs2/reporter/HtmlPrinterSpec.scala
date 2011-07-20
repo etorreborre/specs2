@@ -35,15 +35,18 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     "A data table must"                                                                                                 ^
       "be exported as a proper html table"                                                                              ! tables().ex1^
                                                                                                                         p^
+    "The statistics must"                                                                                               ^
+      "be exported as a <stats> tag"                                                                                    ! stats().ex1^
+                                                                                                                        p^
   "A linked specification"                                                                                              ^
-    "must create a new file"                                                                                            ^
-    "must get an icon representing its status"                                                                          ! included().e1^
+    "must create a new file"                                                                                            ! included().e1^
+    "must get an icon representing its status"                                                                          ^
       "success if everything succeeds"                                                                                  ! included().e2^
       "failure if there is a failure"                                                                                   ! included().e3^
-                                                                                                                        p^
+                                                                                                                        endp^
   "A see specification"                                                                                                 ^
-    "must not create a new file"                                                                                        ^
-    "must get an icon representing its status"                                                                          ! seeIt().e1^
+    "must not create a new file"                                                                                        ! seeIt().e1^
+    "must get an icon representing its status"                                                                          ^
       "success if everything succeeds"                                                                                  ! seeIt().e2^
       "failure if there is a failure"                                                                                   ! seeIt().e3^
                                                                                                                         end
@@ -86,21 +89,31 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     def ex1 = print(spec) must \\("table")
   }
 
+  case class stats() extends MockHtmlPrinter {
+    val spec1: Fragments = "ex1" ! failure ^ end
+    def ex1 = print(spec1) must \\("stats")
+  }
+
   trait LinkedSpecifications extends MockHtmlPrinter {
     val successfulSubSpec = new Specification { def is = "ex1" ! success }
     val failedSubSpec     = new Specification { def is = "ex1" ! failure }
-
-    val spec1: Fragments = "ex1" ! failure ^ "a " ~ ("successfull spec", successfulSubSpec) ^ end
-    val spec2: Fragments = "ex1" ! success ^ "a " ~ ("failed spec", failedSubSpec) ^ end
   }
 
   case class included() extends LinkedSpecifications {
+    val spec1: Fragments = "ex1" ! failure ^ "a " ~ ("successfull spec", successfulSubSpec) ^ end
+    val spec2: Fragments = "ex1" ! success ^ "a " ~ ("failed spec", failedSubSpec) ^ end
+
     def e1 = htmlLines(spec1) must have size(2)
     def e2 = print(spec1) must \\("img", "src" -> "./images/icon_success_sml.gif")
     def e3 = print(spec2) must \\("img", "src" -> "./images/icon_failure_sml.gif")
   }
 
   case class seeIt() extends LinkedSpecifications {
+    val spec1: Fragments = "ex1" ! failure ^ "a " ~/ ("successfull spec", successfulSubSpec) ^ end
+    val spec2: Fragments = "ex1" ! success ^ "a " ~/ ("failed spec", failedSubSpec) ^ end
+
+    fs.readFile(anyString) returns "<body><stats failures=\"2\"/></body>"
+
     def e1 = htmlLines(spec1) must have size(1)
     def e2 = print(spec1) must \\("img", "src" -> "./images/icon_success_sml.gif")
     def e3 = print(spec2) must \\("img", "src" -> "./images/icon_failure_sml.gif")

@@ -1,10 +1,10 @@
 package org.specs2
 package reporter
 
-import scala.xml.NodeSeq
 import org.specs2.internal.scalaz.{Tree, TreeLoc, Reducer, Scalaz, Generator, Show}
 import  Scalaz._
 import Generator._
+import control.Exceptions._
 import html._
 import data.Trees._
 import data.Tuples._
@@ -17,6 +17,7 @@ import specification._
 import Statistics._
 import Levels._
 import SpecsArguments._
+import scala.xml.{Xhtml, NodeSeq}
 
 /**
  * The Html printer is used to create an Html report of an executed specification.
@@ -104,8 +105,18 @@ trait HtmlPrinter {
   def reduce(fs: Seq[ExecutedFragment], parentLink: HtmlLink): Tree[HtmlLines] = {
     lazy val start: HtmlLines = HtmlLines(Nil, parentLink)
     flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (leaf(start).loc) { (res, cur) =>
-      def updated = res.updateLabel(_.add(cur))
+      val updated = res.updateLabel(_.add(cur))
+      def updateSeeStats(node: TreeLoc[HtmlLines], s: Stats) = {
+        val see = node.getLabel.lines.lastOption.map(_.copy(stats = s))
+        node.updateLabel((u: HtmlLines) => u.copy(lines = u.lines.dropRight(1) ++ see.toList))
+      }
+
       cur match {
+        case HtmlLine(HtmlSee(see @ ExecutedSee(link, true, _)), _, _, _)   => {
+          val stats = statsFromFile(link)
+          val updatedSpecStart = updated.updateLabel(_.incrementSpecStartStats(stats))
+          updateSeeStats(updatedSpecStart, stats)
+        }
         case HtmlLine(HtmlSee(see @ ExecutedSee(_, false, _)), _, _, _)  => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
         // when reaching a spec end:
         // * update the spec start with the stats
@@ -113,12 +124,21 @@ trait HtmlPrinter {
         // the last line should be a See fragment
         case HtmlLine(HtmlSpecEnd(end), s, _, _) if (res.getLabel.is(end.name)) => {
           val updatedParent = updated.updateLabel(_.updateSpecStartStats(s)).getParent
-          val parentSee = updatedParent.getLabel.lines.lastOption.map(_.copy(stats = s))
-          updatedParent.updateLabel((u: HtmlLines) => u.copy(lines = u.lines.dropRight(1) ++ parentSee.toList))
+          updateSeeStats(updatedParent, s)
         }
         case other                                                              => updated
       }
     }.root.tree
+  }
+
+  /**
+   * get the statistics from an already existing file
+   */
+  private def statsFromFile(link: HtmlLink): Stats = {
+    val contents = tryOrElse(fileSystem.readFile(reportPath(link.url)))("")
+    val lastStats = "<stats.*></stats>".r.findAllIn(contents).toSeq.lastOption
+    val lastStatsXml = tryOrElse(lastStats.map(scala.xml.XML.loadString))(None)
+    lastStatsXml.map(Stats.fromXml).getOrElse(Stats())
   }
 
   /** flatten the results of the reduction to a list of Html lines */
