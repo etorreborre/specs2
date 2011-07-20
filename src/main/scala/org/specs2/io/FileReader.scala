@@ -33,6 +33,11 @@ trait FileReader {
    * @return a FileInputStream for a given file path
    */
   def inputStream(filePath: String): java.io.InputStream = new java.io.FileInputStream(filePath)
+
+  /**
+   * @return the xml content of a file
+   */
+  def loadXhtmlFile(filePath: String) = scala.xml.parsing.XhtmlParser(scala.io.Source.fromFile(filePath))
 }
 private[specs2]
 object FileReader extends FileReader

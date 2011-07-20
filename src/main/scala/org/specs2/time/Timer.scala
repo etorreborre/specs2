@@ -3,6 +3,7 @@ package time
 
 import java.util.Calendar
 import text.Plural._
+import control.Exceptions._
 
 /**
  * This trait provides Timer functionalities based on the Java Calendar milliseconds
@@ -86,5 +87,11 @@ class SimpleTimer extends HmsTimer[SimpleTimer] {
   override def equals(a: Any) = a match {
     case s: SimpleTimer => true
     case other          => false
+  }
+}
+
+object SimpleTimer {
+  def fromString(s: String) = new SimpleTimer {
+    override val elapsed = tryOrElse(java.lang.Long.parseLong(s))(0)
   }
 }

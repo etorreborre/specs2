@@ -9,6 +9,8 @@ import execute._
 import org.specs2.execute.StandardResults
 import time._
 import specification._
+import control.Exceptions._
+import scala.xml.NodeSeq
 
 /**
  * This trait computes the statistics of a Specification by mapping each ExecutedFragment
@@ -131,6 +133,15 @@ case class Stats(fragments:    Int = 0,
   def isSuccess = result.isSuccess
   /** @return true if there are failures or errors */
   def hasIssues = result.isFailure || result.isError
+
+  def toXml = <stats fragments    = {fragments.toString}
+                     successes    = {successes.toString}
+                     expectations = {expectations.toString}
+                     failures     = {failures.toString}
+                     errors       = {errors.toString}
+                     pending      = {pending.toString}
+                     skipped      = {skipped.toString}
+                     time         = {timer.elapsed.toString} />
 }
 case object Stats {
   implicit object StatsMonoid extends Monoid[Stats] {
@@ -150,5 +161,23 @@ case object Stats {
     }
 
     val zero = Stats()
+  }
+
+  def fromXml(stats: scala.xml.Node) = {
+    if (stats.label != Stats().toXml.label)
+      Stats()
+    else {
+      val map = stats.attributes.asAttrMap
+      def asInt(key: String) = tryOrElse(Integer.parseInt(map(key)))(0)
+      Stats(asInt("fragments"   ),
+            asInt("successes"   ),
+            asInt("expectations"),
+            asInt("failures"    ),
+            asInt("errors"      ),
+            asInt("pending"     ),
+            asInt("skipped"     ),
+            map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer))
+    }
+
   }
 }

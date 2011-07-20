@@ -11,6 +11,7 @@ import execute._
 import matcher.DataTable
 import specification._
 import org.specs2.internal.scalaz.Scalaz._
+import Stats._
 
 /**
  * The HtmlLines groups a list of HtmlLine to print
@@ -25,7 +26,10 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink) {
   def is(name: SpecName) = link.is(name)
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty
-  def updateSpecStartStats(s: Stats) = copy(lines = lines.headOption.map(_.copy(stats = s)).toList ++ lines.drop(1))
+  def updateSpecStartStats(s: Stats) = updateFirstLineStats { (stats: Stats) => s }
+  def incrementSpecStartStats(s: Stats) = updateFirstLineStats { (stats: Stats) => stats |+| s }
+  private def updateFirstLineStats(f: Stats => Stats) =
+    copy(lines = lines.headOption.map { start => start.copy(stats = f(start.stats)) }.toList ++ lines.drop(1))
 }
 
 /** 
@@ -143,7 +147,7 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
         <tr><td>Finished in</td><td class="info">{timer.time}</td></tr>
         <tr><td>Results</td><td class={classStatus}>{numbers}</td></tr>
       </table>
-    }
+    }.printElem(stats.toXml)
   }
 }
 private[specs2]
