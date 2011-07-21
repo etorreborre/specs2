@@ -127,12 +127,12 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   /** create a link directly on a specification, with a given link */
   def link(s: SpecificationStructure): Fragments = link(HtmlLink(s), s)
   /** create a link directly on a specification, with a given link */
-  def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = Link(htmlLink) ^ s.content.fragments
+  def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = Link(SpecificationName(s), htmlLink) ^ s.content.fragments
 
   /** create a html link without including the other specification fragments */
   def see(s: SpecificationStructure): Fragments = see(HtmlLink(s),  s)
   /** create a html link without including the other specification fragments, and passing a specificlink */
-  def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = See(htmlLink) ^ s.content.end
+  def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = See(SpecificationName(s), htmlLink) ^ s.content.end
 
   /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */
   implicit def inScope(s: Scope): Success = Success()

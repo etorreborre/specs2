@@ -29,7 +29,8 @@ import specification._
 trait Reporter extends
        Selection
   with Sequence
-  with ExecutionStrategy 
+  with ExecutionStrategy
+  with Storing
   with Exporting {
 
   /**
@@ -43,7 +44,7 @@ trait Reporter extends
    * @return the reporter
    */
   def report(spec: SpecificationStructure)(implicit arguments: Arguments): this.type = {
-    spec.content |> select |> sequence |> execute |> export(spec)
+    spec.content |> select |> sequence |> execute |> store |> export(spec)
     this
   }
 }

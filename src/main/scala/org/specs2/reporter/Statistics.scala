@@ -25,6 +25,7 @@ import scala.xml.NodeSeq
  */
 private[specs2]
 trait Statistics {
+
   import Stats._
   implicit def SpecsStatisticsMonoid  = new Monoid[SpecsStatistics] {
     def append(s1: SpecsStatistics, s2: =>SpecsStatistics): SpecsStatistics = {
@@ -53,14 +54,11 @@ trait Statistics {
       }
       case start @ ExecutedSpecStart(name, args, _) => SpecsStatistics(Stats(start = Some(start)))
       case end @ ExecutedSpecEnd(_, _)              => SpecsStatistics(Stats(end = Some(end)))
-      case ExecutedSee(link, _)                     => SpecsStatistics(stats(link))
+      case ExecutedSee(_, _, _, stats, _)           => SpecsStatistics(stats)
       case ExecutedNoText(t, _)                     => SpecsStatistics(Stats(timer = t))
       case _                                        => SpecsStatistics(Stats())
     }
   }
-
-  /** @return the statistics of a specification designated by a link if this can be read from the html report */
-  def stats(link: HtmlLink) = Stats()
 
   /**
    * The SpecsStatistics class stores the result of a specification execution, with the
@@ -89,95 +87,3 @@ trait Statistics {
 }
 private [specs2]
 object Statistics extends Statistics
-/**
- * The Stats class store results for the number of:
- * * successes
- * * expectations
- * * failures
- * * errors
- * * pending
- * * skipped
- * 
- *  for each example
- *
- */
-case class Stats(fragments:    Int = 0, 
-                 successes:    Int = 0, 
-                 expectations: Int = 0, 
-                 failures:     Int = 0, 
-                 errors:       Int = 0, 
-                 pending:      Int = 0, 
-                 skipped:      Int = 0,
-                 timer:        SimpleTimer = new SimpleTimer,
-                 start:        Option[ExecutedSpecStart] = None,
-                 end:          Option[ExecutedSpecEnd] = None) {
-  
-  /** @return true if this Stats object is the SpecStart corresponding to the 'end' parameter */
-  def isEnd(end: ExecutedSpecEnd) = {
-    start.map(_.name == end.name).getOrElse(false)
-  }
-  /** @return true if there are errors or failures */
-  def hasFailuresOrErrors = failures + errors > 0
-  /** @return true if there are expectations */
-  def hasExpectations = expectations > 0
-  /** @return an equivalent result for display */
-  def result =
-    if (failures + errors == 0)
-      if (successes > 0 || skipped + pending == 0) StandardResults.success
-      else if (pending > skipped)                  StandardResults.pending
-      else                                         StandardResults.skipped
-    else if (errors > 0)           StandardResults.anError
-    else                           StandardResults.failure
-
-  /** @return true if there are no issues at all */
-  def isSuccess = result.isSuccess
-  /** @return true if there are failures or errors */
-  def hasIssues = result.isFailure || result.isError
-
-  def toXml = <stats fragments    = {fragments.toString}
-                     successes    = {successes.toString}
-                     expectations = {expectations.toString}
-                     failures     = {failures.toString}
-                     errors       = {errors.toString}
-                     pending      = {pending.toString}
-                     skipped      = {skipped.toString}
-                     time         = {timer.elapsed.toString} />
-}
-case object Stats {
-  implicit object StatsMonoid extends Monoid[Stats] {
-    def append(s1: Stats, s2: =>Stats) = {
-      s1.copy(
-        fragments    = s1.fragments       + s2.fragments,
-        successes    = s1.successes       + s2.successes,
-        expectations = s1.expectations    + s2.expectations,
-        failures     = s1.failures        + s2.failures,
-        errors       = s1.errors          + s2.errors,
-        pending      = s1.pending         + s2.pending,
-        skipped      = s1.skipped         + s2.skipped,
-        timer        = s1.timer           add s2.timer,
-        start        = s1.start           orElse s2.start,
-        end          = s2.end             orElse s1.end
-      )
-    }
-
-    val zero = Stats()
-  }
-
-  def fromXml(stats: scala.xml.Node) = {
-    if (stats.label != Stats().toXml.label)
-      Stats()
-    else {
-      val map = stats.attributes.asAttrMap
-      def asInt(key: String) = tryOrElse(Integer.parseInt(map(key)))(0)
-      Stats(asInt("fragments"   ),
-            asInt("successes"   ),
-            asInt("expectations"),
-            asInt("failures"    ),
-            asInt("errors"      ),
-            asInt("pending"     ),
-            asInt("skipped"     ),
-            map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer))
-    }
-
-  }
-}

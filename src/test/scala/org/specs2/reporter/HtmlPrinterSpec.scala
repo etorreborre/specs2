@@ -5,7 +5,7 @@ import mock._
 import specification._
 import matcher.DataTables
 
-class HtmlPrinterSpec extends Specification with Mockito { outer => def is =       sequential ^
+class HtmlPrinterSpec extends Specification with Mockito { outer => def is =
                                                                                                                         """
 The HtmlPrinter class is responsible for opening an html file and writing the specification text.
                                                                                                                         """^p^
@@ -34,9 +34,6 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
                                                                                                                         p^
     "A data table must"                                                                                                 ^
       "be exported as a proper html table"                                                                              ! tables().ex1^
-                                                                                                                        p^
-    "The statistics must"                                                                                               ^
-      "be exported as a <stats> tag"                                                                                    ! stats().ex1^
                                                                                                                         p^
   "A linked specification"                                                                                              ^
     "must create a new file"                                                                                            ! included().e1^
@@ -87,11 +84,6 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     val dataTable = "a" | "b" |> 1 ! 2 | { (a, b) => success }
     val spec: Fragments = "table" ! dataTable
     def ex1 = print(spec) must \\("table")
-  }
-
-  case class stats() extends MockHtmlPrinter {
-    val spec1: Fragments = "ex1" ! failure ^ end
-    def ex1 = print(spec1) must \\("stats")
   }
 
   trait LinkedSpecifications extends MockHtmlPrinter {

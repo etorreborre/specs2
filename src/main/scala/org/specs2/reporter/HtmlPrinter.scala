@@ -112,12 +112,11 @@ trait HtmlPrinter {
       }
 
       cur match {
-        case HtmlLine(HtmlSee(see @ ExecutedSee(link, true, _)), _, _, _)   => {
-          val stats = statsFromFile(link)
+        case HtmlLine(HtmlSee(see @ ExecutedSee(_, link, true, stats, _)), _, _, _)   => {
           val updatedSpecStart = updated.updateLabel(_.incrementSpecStartStats(stats))
           updateSeeStats(updatedSpecStart, stats)
         }
-        case HtmlLine(HtmlSee(see @ ExecutedSee(_, false, _)), _, _, _)  => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
+        case HtmlLine(HtmlSee(see @ ExecutedSee(_, _, false, _, _)), _, _, _)  => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
         // when reaching a spec end:
         // * update the spec start with the stats
         // * go up a level and update the last html line with the statistics of the included spec
@@ -129,16 +128,6 @@ trait HtmlPrinter {
         case other                                                              => updated
       }
     }.root.tree
-  }
-
-  /**
-   * get the statistics from an already existing file
-   */
-  private def statsFromFile(link: HtmlLink): Stats = {
-    val contents = tryOrElse(fileSystem.readFile(reportPath(link.url)))("")
-    val lastStats = "<stats.*></stats>".r.findAllIn(contents).toSeq.lastOption
-    val lastStatsXml = tryOrElse(lastStats.map(scala.xml.XML.loadString))(None)
-    lastStatsXml.map(Stats.fromXml).getOrElse(Stats())
   }
 
   /** flatten the results of the reduction to a list of Html lines */
@@ -164,7 +153,7 @@ trait HtmlPrinter {
       case text @ ExecutedText(s, _)              => HtmlText(text)
       case par @ ExecutedBr(_)                    => HtmlBr()
       case end @ ExecutedSpecEnd(_, _)            => HtmlSpecEnd(end)
-      case see @ ExecutedSee(_, _, _)             => HtmlSee(see)
+      case see @ ExecutedSee(_, _, _, _, _)       => HtmlSee(see)
       case fragment                               => HtmlOther(fragment)
     }
   }

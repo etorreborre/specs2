@@ -147,7 +147,7 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
         <tr><td>Finished in</td><td class="info">{timer.time}</td></tr>
         <tr><td>Results</td><td class={classStatus}>{numbers}</td></tr>
       </table>
-    }.printElem(stats.toXml)
+    }
   }
 }
 private[specs2]

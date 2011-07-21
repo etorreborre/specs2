@@ -35,7 +35,7 @@ case class ExecutedSpecEnd(name: SpecName, location: Location) extends ExecutedF
   override def toString = "ExecutedSpecEnd("+name.name+")"
 }
 
-case class ExecutedSee(link: HtmlLink, seeOnly: Boolean = true, location: Location) extends ExecutedFragment
+case class ExecutedSee(name: SpecName, link: HtmlLink, seeOnly: Boolean = true, stats: Stats = Stats(), location: Location) extends ExecutedFragment
 /**
  * This executed Fragment is used when no text must be displayed (for the successful
  * execution of an Action for example)

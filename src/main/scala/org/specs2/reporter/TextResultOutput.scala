@@ -6,6 +6,7 @@ import main.Arguments
 import text.Plural._
 import text.AnsiColors._
 import execute.Result
+import specification.Stats
 
 /**
  * Implementation of the ResultOutput trait as Text
