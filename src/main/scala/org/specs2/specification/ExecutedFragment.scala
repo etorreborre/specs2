@@ -12,11 +12,30 @@ import io.Location
  * which have already been executed to provide a Result
  */
 sealed trait ExecutedFragment {
-  /** @return the location of the executed fragment */
+  /** @return the location of the executed Fragment */
   def location: Location
+  /** @return the statistics for the execution of a Fragment */
+  def stats = Stats()
 }
+
+private[specs2]
+object ExecutedFragments {
+  /** @return true if the ExecutedFragment is a Text */
+  def isExecutedText: Function[ExecutedFragment, Boolean] = { case ExecutedText(_, _) => true; case _ => false }
+  /** @return the text if the Fragment is a Text */
+  def isSomeExecutedText: PartialFunction[ExecutedFragment, ExecutedText] = { case t @ ExecutedText(_, _) => t }
+  /** @return true if the ExecutedFragment is a result */
+  def isExecutedResult: Function[ExecutedFragment, Boolean] = { case ExecutedResult(_, _, _, _) => true; case _ => false }
+  /** @return true if the ExecutedFragment is a Start */
+  def isExecutedSpecStart: Function[ExecutedFragment, Boolean] = { case ExecutedSpecStart(_, _, _) => true; case _ => false }
+  /** @return true if the ExecutedFragment is an End */
+  def isExecutedSpecEnd: Function[ExecutedFragment, Boolean] = { case ExecutedSpecEnd(_, _) => true; case _ => false }
+}
+
 case class ExecutedText(text: String, location: Location) extends ExecutedFragment
 case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, location: Location) extends ExecutedFragment {
+  
+  override def stats = Stats(result)
   def text(implicit args: Arguments) = s match {
     case CodeMarkup(s) if (!result.expected.isEmpty && !args.fromSource) => CodeMarkup(result.expected)
     case _                                                               => s
@@ -35,7 +54,7 @@ case class ExecutedSpecEnd(name: SpecName, location: Location) extends ExecutedF
   override def toString = "ExecutedSpecEnd("+name.name+")"
 }
 
-case class ExecutedSee(name: SpecName, link: HtmlLink, seeOnly: Boolean = true, stats: Stats = Stats(), location: Location) extends ExecutedFragment
+case class ExecutedSee(name: SpecName, link: HtmlLink, seeOnly: Boolean = true, override val stats: Stats = Stats(), location: Location) extends ExecutedFragment
 /**
  * This executed Fragment is used when no text must be displayed (for the successful
  * execution of an Action for example)

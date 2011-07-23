@@ -48,3 +48,9 @@ trait Reporter extends
     this
   }
 }
+
+trait DefaultReporter extends Reporter 
+    with DefaultSelection
+    with DefaultSequence
+    with DefaultExecutionStrategy
+    with DefaultStoring

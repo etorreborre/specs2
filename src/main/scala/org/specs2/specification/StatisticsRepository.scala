@@ -3,10 +3,11 @@ package specification
 
 
 trait StatisticsRepository {
-  def statsFrom(name: SpecName): Stats
-  def store(name: SpecName, stats: Stats): this.type
+  def statsFrom(fragment: ExecutedFragment): Stats
+  def store(fragment: ExecutedFragment, stats: Stats): this.type
 }
 
 class DefaultStatisticsRepository extends StatisticsRepository {
-  def statsFrom(name: SpecName): Stats = Stats()
+  def statsFrom(fragment: ExecutedFragment): Stats = Stats()
+  def store(fragment: ExecutedFragment, stats: Stats) = this
 }

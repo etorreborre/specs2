@@ -11,10 +11,10 @@ private[specs2]
 trait Storing {
 
   /** @return a function storing ExecutedFragments */
-  def store(s: SpecificationStructure)(implicit args: Arguments): Seq[ExecutedFragment] => Seq[ExecutedFragment]
+  def store(implicit args: Arguments): Seq[ExecutedFragment] => Seq[ExecutedFragment]
 }
 
 private[specs2]
-trait DefaultStoring {
-  def store(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => fragments
+trait DefaultStoring extends Storing {
+  def store(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => fragments
 }

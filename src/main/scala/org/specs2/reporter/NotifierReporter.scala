@@ -14,10 +14,7 @@ import io.Location
 /**
  * Report a Specification by notifying execution events to a Notifier
  */
-trait NotifierReporter extends Reporter
-    with DefaultSelection
-    with DefaultSequence
-    with DefaultExecutionStrategy
+trait NotifierReporter extends DefaultReporter
     with NotifierExporting
 
 trait NotifierExporting extends Exporting {

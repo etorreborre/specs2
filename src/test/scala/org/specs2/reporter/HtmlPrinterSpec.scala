@@ -5,7 +5,7 @@ import mock._
 import specification._
 import matcher.DataTables
 
-class HtmlPrinterSpec extends Specification with Mockito { outer => def is =
+class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is =
                                                                                                                         """
 The HtmlPrinter class is responsible for opening an html file and writing the specification text.
                                                                                                                         """^p^
@@ -115,6 +115,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     val fs = mock[FileSystem]
     val fileWriter = new MockFileWriter {}
     val out = fileWriter.getWriter
+    
     def printer = new HtmlPrinter {
       override lazy val fileSystem = fs
       override lazy val fileWriter = outer.fileWriter

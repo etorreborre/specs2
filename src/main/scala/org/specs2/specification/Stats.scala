@@ -101,6 +101,16 @@ case object Stats {
     val zero = Stats()
   }
 
+  def apply(result: Result): Stats = 
+    result match {
+      case s @ Success(_)        => Stats(fragments = 1, expectations = s.expectationsNb, successes = 1)
+      case Failure(_, _, _, _)   => Stats(fragments = 1, expectations = 1, failures = 1)
+      case Error(_,_)            => Stats(fragments = 1, expectations = 1, errors = 1)
+      case Pending(_)            => Stats(fragments = 1, expectations = 1, pending = 1)
+      case Skipped(_, _)         => Stats(fragments = 1, expectations = 1, skipped = 1)
+      case DecoratedResult(t, r) => Stats(r)
+    }
+  
   def fromXml(stats: scala.xml.Node) = {
     if (stats.label != Stats().toXml.label)
       Stats()

@@ -13,9 +13,6 @@ import io._
  * * ConsoleOutput specifies that the output must be the standard output console
  *
  */
-trait ConsoleReporter extends Reporter 
-    with DefaultSelection
-    with DefaultSequence
-    with DefaultExecutionStrategy
+trait ConsoleReporter extends DefaultReporter 
     with TextExporting
     with ConsoleOutput 

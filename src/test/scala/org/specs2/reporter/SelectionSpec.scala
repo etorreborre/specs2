@@ -105,7 +105,7 @@ Before executing and reporting a specification, the fragments must be selected a
     }
     def step(message: String) = Step({selection.println(message); reporter.println(message)})
     def example(message: String) = message ! { selection.println(message); reporter.println(message); success }
-    val reporter = new Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with Exporting with MockOutput {
+    val reporter = new DefaultReporter with Exporting with MockOutput {
       type ExportType = Unit
 
       def export(s: SpecificationStructure)(implicit args: main.Arguments) = (fragments: Seq[ExecutedFragment]) => ()
