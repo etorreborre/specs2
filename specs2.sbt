@@ -14,12 +14,12 @@ shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project
 
 /** Dependencies */
 resolvers ++= Seq("snapshots-repo" at "http://scala-tools.org/repo-snapshots", 
-                  "Local Maven Repository" at "file://$M2_REPO")
+                  "Local Maven Repository" at "file://c:/Documents and Settings/Eric/.m2/repository")
 
 libraryDependencies ++= Seq(
-  "org.scala-tools.testing" %% "scalacheck" % "1.9", 
+  "org.scala-tools.testing" % "scalacheck_2.9.0-1" % "1.9", 
   "org.scala-tools.testing" % "test-interface" % "0.5", 
-  "org.specs2" %% "specs2-scalaz-core" % "6.0.RC2",
+  "org.specs2" % "specs2-scalaz-core_2.9.0-1" % "6.0.RC2",
   "org.hamcrest" % "hamcrest-all" % "1.1",
   "org.mockito" % "mockito-all" % "1.8.5",
   "junit" % "junit" % "4.7",

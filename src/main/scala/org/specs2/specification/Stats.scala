@@ -1,11 +1,11 @@
 package org.specs2
 package specification
 
-import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
-import Scalaz._
 import collection.Iterablex._
 import main.Arguments
 import execute._
+import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
+import Scalaz._
 import org.specs2.execute.StandardResults
 import time._
 import specification._
@@ -67,6 +67,17 @@ case class Stats(fragments:    Int = 0,
                      pending      = {pending.toString}
                      skipped      = {skipped.toString}
                      time         = {timer.elapsed.toString} />
+                     
+  override def toString =
+    "Stats(fragments = "    + fragments    +", "+
+           "successes = "   + successes    +", "+
+           "expectations = "+ expectations +", "+
+           "failures = "    + failures     +", "+
+           "errors = "      + errors       +", "+
+           "pending = "     + pending      +", "+
+           "skipped = "     + skipped      +", "+
+           start.collect { case ExecutedSpecStart(n, _, _) => n.name }.getOrElse("")+
+           "time = "        + timer.elapsed+")"
 }
 
 /**
