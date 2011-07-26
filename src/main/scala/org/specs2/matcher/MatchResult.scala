@@ -45,7 +45,6 @@ import Expectable._
  * 
  * @see org.specs2.matcher.BeHaveMatchersSpec for examples
  */
-protected[specs2]
 trait MatchResult[+T] {
   /** the value being matched */
   val expectable: Expectable[T]
@@ -89,13 +88,13 @@ trait MatchResult[+T] {
   /** the value being matched */
   protected[specs2] def evaluate[S >: T]: MatchResult[S] = this
 }
-case class MatchSuccess[T](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
+case class MatchSuccess[T] private[specs2](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
   override def toResult = Success(okMessage)
   def not: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def mute = MatchSuccess("", "", expectable)
 }
-case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Expectable[T], details: Details = NoDetails()) extends MatchResult[T] {
+case class MatchFailure[T] private[specs2](okMessage: String, koMessage: String, expectable: Expectable[T], details: Details = NoDetails()) extends MatchResult[T] {
   /** an exception having the same stacktrace */
   val exception = new Exception(koMessage)
   override def toResult = Failure(koMessage, okMessage, exception.getStackTrace.toList, details)
@@ -103,25 +102,25 @@ case class MatchFailure[T](okMessage: String, koMessage: String, expectable: Exp
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def mute = MatchFailure("", "", expectable, details)
 }
-case class MatchSkip[T](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
+case class MatchSkip[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
   def not: MatchResult[T] = this
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def toResult = Skipped(message)
   override def mute = MatchSkip("", expectable)
 }
-case class NotMatch[T](m: MatchResult[T]) extends MatchResult[T] {
+case class NotMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
   def not: MatchResult[T] = NeutralMatch(m)
   def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher.not)
 }
-case class NeutralMatch[T](m: MatchResult[T]) extends MatchResult[T] {
+case class NeutralMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
   def not: MatchResult[T] = NotMatch(m)
   def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher)
 }
-case class AndMatch[T](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResult[T] {
+case class AndMatch[T] private[specs2](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResult[T] {
   val expectable = m1.expectable
   override def evaluate[S >: T] =
     (m1, m2) match {
@@ -139,13 +138,13 @@ case class AndMatch[T](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResu
   def not: MatchResult[T] = new OrMatch(m1.not, m2.not).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2(matcher)
 }
-case class AndNotMatch[T](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResult[T] {
+case class AndNotMatch[T] private[specs2](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResult[T] {
   val expectable = m1.expectable
   override def evaluate[S >: T] = m1 and m2.not
   def not: MatchResult[T] = new OrMatch(m1.not, m2).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2(matcher.not)
 }
-class OrMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
+class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
   val expectable = m1.expectable
   def m1 = first
   def m2 = second
@@ -170,7 +169,7 @@ class OrMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends MatchR
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 or m2(matcher)
   override def toResult = m1.toResult or m2.toResult
 }
-class OrNotMatch[T](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
+class OrNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
   def m1 = first
   def m2 = second
   val expectable = m1.expectable

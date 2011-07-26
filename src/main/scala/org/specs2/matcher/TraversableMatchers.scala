@@ -99,20 +99,20 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
     def length(n: Int) : MatchResult[T] = size(n)
   }
 }
-class ContainMatchResult[T](val s: MatchResult[GenTraversable[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+class ContainMatchResult[T]  private[specs2](val s: MatchResult[GenTraversable[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
   def only = new ContainOnlyMatchResult(s, containMatcher.only)
   def inOrder = new ContainInOrderMatchResult(s, containMatcher.inOrder)
 }
-class ContainOnlyMatchResult[T](val s: MatchResult[GenTraversable[T]], containMatcher: ContainOnlyMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+class ContainOnlyMatchResult[T] private[specs2](val s: MatchResult[GenTraversable[T]], containMatcher: ContainOnlyMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
   def inOrder = new ContainOnlyInOrderMatchResult(s, containMatcher.inOrder)
 }
-class ContainInOrderMatchResult[T](val s: MatchResult[GenTraversable[T]], containMatcher: ContainInOrderMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+class ContainInOrderMatchResult[T]  private[specs2](val s: MatchResult[GenTraversable[T]], containMatcher: ContainInOrderMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
   def only = new ContainOnlyInOrderMatchResult(s, containMatcher.only)
 }
-class ContainOnlyInOrderMatchResult[T](val s: MatchResult[GenTraversable[T]], containMatcher: Matcher[GenTraversable[T]]) extends AbstractContainMatchResult[T] { outer =>
+class ContainOnlyInOrderMatchResult[T] private[specs2](val s: MatchResult[GenTraversable[T]], containMatcher: Matcher[GenTraversable[T]]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
 }
 trait AbstractContainMatchResult[T] extends MatchResult[GenTraversable[T]] {
