@@ -5,7 +5,7 @@ version := "1.6-SNAPSHOT"
 
 organization := "org.specs2"
 
-scalaVersion := "2.9.0-1"
+scalaVersion := "2.9.1"
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
