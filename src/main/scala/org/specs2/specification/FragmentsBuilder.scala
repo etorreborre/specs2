@@ -35,13 +35,13 @@ trait FragmentsBuilder extends RegexSteps { outer =>
     def fragments = fs
     def ^(t: String) = fs add Text(t)
     def ^(f: Fragment) = f match {
-      case s @ SpecStart(n, a, e) => (fs specTitleIs n).overrideArgs(a)
+      case s @ SpecStart(_, _, _, _, _) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
       case _ => fs add f
     }
     def ^(other: Seq[Fragment]) = fs add other
     def ^(other: Fragments) = {
       other.start match {
-        case SpecStart(n, a, e) => (fs add other.middle).specTitleIs(n).overrideArgs(a)
+        case s @ SpecStart(_, _, _, _, _) => (fs add other.middle).specTitleIs(s.specName).overrideArgs(s.arguments)
         case _                  => fs add other.middle
       }
     }

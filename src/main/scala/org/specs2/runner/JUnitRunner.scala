@@ -127,11 +127,11 @@ class JUnitDescriptionsFragments(klass: Class[_]) extends JUnitDescriptions[Frag
      */
     def mapper(klass: Class[_]): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: Fragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case (SpecStart(t, _))            => Some(createDescription(klass, suiteName=testName(t.name)) -> f)
-        case (Text(t))                    => Some(createDescription(klass, suiteName=testName(t)) -> f)
-        case (Example(description, body)) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))) -> f)
-        case (Step(action))               => Some(createDescription(klass, label=nodeLabel.toString, testName="step") -> f)
-        case (Action(action))             => Some(createDescription(klass, label=nodeLabel.toString, testName="action") -> f)
-        case other                        => None
+        case s @ SpecStart(_,_,_,_,_)   => Some(createDescription(klass, suiteName=testName(s.name)) -> f)
+        case Text(t)                    => Some(createDescription(klass, suiteName=testName(t)) -> f)
+        case Example(description, body) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))) -> f)
+        case Step(action)               => Some(createDescription(klass, label=nodeLabel.toString, testName="step") -> f)
+        case Action(action)             => Some(createDescription(klass, label=nodeLabel.toString, testName="action") -> f)
+        case other                      => None
       }
   }
