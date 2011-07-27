@@ -11,27 +11,29 @@ import Fragments._
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-class Fragments (val specStart: Option[SpecStart] = None, val middle: Seq[Fragment] = Nil, val specEnd: Option[SpecEnd] = None) {
-  def fragments = if (middle.isEmpty) Seq() else (start +: middle :+ end)
+case class Fragments(title: Option[SpecName] = None, middle: Seq[Fragment] = Nil, arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
+  def fragments: Seq[Fragment] = if (middle.isEmpty) Seq() else (start +: middle :+ end)
 
-  private def append(e: Fragment) = new Fragments(specStart, middle :+ e, specEnd)
-  def specTitleIs(s: SpecStart): Fragments = new Fragments(Some(start.withName(s.name)), middle, specEnd)
+  private def append(e: Fragment) = copy(middle = middle :+ e)
+  def specTitleIs(name: SpecName): Fragments = copy(title = Some(name))
   def add(e: Fragment): Fragments = append(e)
-  def add(fs: Seq[Fragment]): Fragments = new Fragments(specStart, middle ++ fs, specEnd)
+  def add(fs: Seq[Fragment]): Fragments = copy(middle = middle ++ fs)
   def add(fs: Fragments): Fragments = add(fs.fragments)
-  def add(a: Arguments): Fragments = new Fragments(Some(start.withArgs(a)), middle, specEnd)
+  def add(a: Arguments): Fragments = copy(arguments = arguments.overrideWith(a))
+  
+  def linkIs(htmlLink: HtmlLink) = copy(link = Some(htmlLink))
+  def seeIs(htmlLink: HtmlLink) = copy(middle = Nil, link = Some(htmlLink), seeOnly = true)
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
   def examples: Seq[Example] = fragments.collect(isAnExample)
-  def arguments = start.arguments
 
-  def overrideArgs(args: Arguments) = new Fragments(Some(start.overrideArgs(args)), middle, specEnd)
-  def map(function: Fragment => Fragment) = new Fragments(specStart, middle.map(function), specEnd)
+  def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
+  def map(function: Fragment => Fragment) = copy(middle = middle.map(function))
   import StandardFragments._
   override def toString = fragments.mkString("\n")
 
-  def start = specStart.getOrElse(SpecStart(""))
-  def end = specEnd.getOrElse(SpecEnd("").withName(start.name))
+  def start: SpecStart = SpecStart(title.getOrElse(SpecName("")), arguments, end = this.end, link, seeOnly)
+  def end: SpecEnd = SpecEnd(start)
 
 }
 
@@ -42,14 +44,14 @@ object Fragments {
   /**
    * @return a Fragments object containing only a seq of Fragments.
    */
-  def createList(fs: Fragment*) = new Fragments(middle = fs)
+  def createList(fs: Fragment*) = Fragments(middle = fs)
   /**
    * @return a Fragments object, where the SpecStart might be provided by the passed fragments
    */
   def create(fs: Fragment*) = {
     fs.toList match {
-      case (s @ SpecStart(n, a)) :: rest => new Fragments(Some(s), middle = rest)
-      case _                             => createList(fs:_*)
+      case (s @ SpecStart(n, a, e)) :: rest => Fragments(Some(n), rest, a)
+      case _                                => createList(fs:_*)
     }
   }
 
@@ -69,16 +71,14 @@ object Fragments {
   def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_) => s }
 
   /** @return a Fragments object with the appropriate name set on the SpecStart fragment */
-  def withSpecStartEnd(fragments: Fragments, name: SpecName): Fragments = {
-    val specStart = fragments.start.withName(name)
-    new Fragments(Some(specStart), fragments.middle, Some(fragments.end.withName(specStart.name)))
-  }
+  def withSpecName(fragments: Fragments, name: SpecName): Fragments = fragments.specTitleIs(name)
+  
   /**
    * @return a Fragments object with the appropriate name set on the SpecStart fragment
    *
    * That name is derived from the specification structure name
    */
-  def withSpecStartEnd(fragments: Fragments, s: SpecificationStructure): Fragments = withSpecStartEnd(fragments, SpecName(s))
+  def withSpecName(fragments: Fragments, s: SpecificationStructure): Fragments = withSpecName(fragments, SpecName(s))
 
   /**
    * Fragments can be added as a monoid

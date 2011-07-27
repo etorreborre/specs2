@@ -61,12 +61,12 @@ trait TextPrinter {
     implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment) = fragment match { 
-      case start @ ExecutedSpecStart(_, _, _)     => PrintSpecStart(start)
-      case result @ ExecutedResult(_, _, _, _)    => PrintResult(result)
-      case text @ ExecutedText(s, _)              => PrintText(text)
-      case par @ ExecutedBr(_)                    => PrintBr()
-      case end @ ExecutedSpecEnd(_, _)            => PrintSpecEnd(end)
-      case fragment                               => PrintOther(fragment)
+      case start @ ExecutedSpecStart(_, _)     => PrintSpecStart(start)
+      case result @ ExecutedResult(_, _, _, _) => PrintResult(result)
+      case text @ ExecutedText(s, _)           => PrintText(text)
+      case par @ ExecutedBr(_)                 => PrintBr()
+      case end @ ExecutedSpecEnd(_, _)         => PrintSpecEnd(end)
+      case fragment                            => PrintOther(fragment)
     }
   }
     
@@ -87,7 +87,7 @@ trait TextPrinter {
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      out.printSpecStart(leveledText(start.name.name, level)(args), stats)(args)
+      out.printSpecStart(leveledText(start.name, level)(args), stats)(args)
     } 
   }
   case class PrintResult(r: ExecutedResult)           extends Print {

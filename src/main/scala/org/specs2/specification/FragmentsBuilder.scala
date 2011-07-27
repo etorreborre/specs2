@@ -35,14 +35,14 @@ trait FragmentsBuilder extends RegexSteps { outer =>
     def fragments = fs
     def ^(t: String) = fs add Text(t)
     def ^(f: Fragment) = f match {
-      case s @ SpecStart(n, a) => fs specTitleIs s
+      case s @ SpecStart(n, a, e) => (fs specTitleIs n).overrideArgs(a)
       case _ => fs add f
     }
     def ^(other: Seq[Fragment]) = fs add other
     def ^(other: Fragments) = {
-      other.specStart match {
-        case Some(s) => (fs add other.middle).specTitleIs(s).overrideArgs(s.arguments)
-        case _       => fs add other.middle
+      other.start match {
+        case SpecStart(n, a, e) => (fs add other.middle).specTitleIs(n).overrideArgs(a)
+        case _                  => fs add other.middle
       }
     }
     def ^(other: FragmentsFragment) = fs add other.fragments
@@ -70,11 +70,11 @@ trait FragmentsBuilder extends RegexSteps { outer =>
    * This method allows to add a title to the Specification. It can be used as an operation on a String:
    * `"spec title".title`
    *
-   * @return a SpecStart object from a string 
+   * @return a Fragments object from a string, with the given title 
    */
   implicit def title(s: String): SpecTitle = new SpecTitle(s)
   class SpecTitle(name: String) {
-    def title = new Fragments().specTitleIs(SpecStart(SpecName(name)))
+    def title = new Fragments(title = Some(SpecName(name)))
   }
   /**
    * Example creation
@@ -97,7 +97,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
    * Arguments creation
    * @return a Fragments object which can be chained with other fragments
    */
-  implicit def argumentsFragment(a: Arguments): FragmentsFragment = new FragmentsFragment(new Fragments().overrideArgs(a))
+  implicit def argumentsFragment(a: Arguments): FragmentsFragment = new Fragments().overrideArgs(a)
 
   /**
    * Links to other specifications creation
@@ -127,12 +127,12 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   /** create a link directly on a specification, with a given link */
   def link(s: SpecificationStructure): Fragments = link(HtmlLink(s), s)
   /** create a link directly on a specification, with a given link */
-  def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = Link(SpecificationName(s), htmlLink) ^ s.content.fragments
+  def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = s.content.linkIs(htmlLink)
 
   /** create a html link without including the other specification fragments */
   def see(s: SpecificationStructure): Fragments = see(HtmlLink(s),  s)
   /** create a html link without including the other specification fragments, and passing a specificlink */
-  def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = See(SpecificationName(s), htmlLink) ^ s.content.end
+  def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = s.content.seeIs(htmlLink)
 
   /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */
   implicit def inScope(s: Scope): Success = Success()

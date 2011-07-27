@@ -54,7 +54,7 @@ trait JUnitXmlPrinter extends Statistics {
      */
     def mapper(klass: Class[_]): (ExecutedFragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: ExecutedFragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case ExecutedSpecStart(t, _, _)  => Some(createDescription(klass, suiteName=testName(t.name)) -> f)
+        case s @ ExecutedSpecStart(_, _)  => Some(createDescription(klass, suiteName=testName(s.name)) -> f)
         case ExecutedText(t, _)          => Some(createDescription(klass, suiteName=testName(t)) -> f)
         case r @ ExecutedResult(_,_,_,_) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) -> f)
         case other                       => None

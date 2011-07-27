@@ -68,9 +68,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
           }
           notifier.fireTestFinished(desc)
         }
-        case (desc, ExecutedSpecStart(_, _, _))  => notifier.fireTestRunStarted(desc)
-        case (desc, ExecutedSpecEnd(_, _))       => notifier.fireTestRunFinished(new org.junit.runner.Result)
-        case (desc, _)                           => // don't do anything otherwise too many tests will be counted
+        case (desc, ExecutedSpecStart(_, _))  => notifier.fireTestRunStarted(desc)
+        case (desc, ExecutedSpecEnd(_, _))    => notifier.fireTestRunFinished(new org.junit.runner.Result)
+        case (desc, _)                        => // don't do anything otherwise too many tests will be counted
       }
   }
   /** @return a Throwable expected by JUnit Failure object */

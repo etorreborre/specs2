@@ -112,15 +112,6 @@ trait HtmlPrinter {
       }
 
       cur match {
-        case HtmlLine(HtmlSee(see @ ExecutedSee(_, link, true, stats, _)), _, _, _)   => {
-          val updatedSpecStart = updated.updateLabel(_.incrementSpecStartStats(stats))
-          updateSeeStats(updatedSpecStart, stats)
-        }
-        case HtmlLine(HtmlSee(see @ ExecutedSee(_, _, false, _, _)), _, _, _)  => updated.insertDownLast(leaf(HtmlLines(link = see.link)))
-        // when reaching a spec end:
-        // * update the spec start with the stats
-        // * go up a level and update the last html line with the statistics of the included spec
-        // the last line should be a See fragment
         case HtmlLine(HtmlSpecEnd(end), s, _, _) if (res.getLabel.is(end.name)) => {
           val updatedParent = updated.updateLabel(_.updateSpecStartStats(s)).getParent
           updateSeeStats(updatedParent, s)
@@ -148,12 +139,11 @@ trait HtmlPrinter {
     implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment) = fragment match { 
-      case start @ ExecutedSpecStart(_, _, _)     => HtmlSpecStart(start)
+      case start @ ExecutedSpecStart(_, _)        => HtmlSpecStart(start)
       case result @ ExecutedResult(_, _, _, _)    => HtmlResult(result)
       case text @ ExecutedText(s, _)              => HtmlText(text)
       case par @ ExecutedBr(_)                    => HtmlBr()
       case end @ ExecutedSpecEnd(_, _)            => HtmlSpecEnd(end)
-      case see @ ExecutedSee(_, _, _, _, _)       => HtmlSee(see)
       case fragment                               => HtmlOther(fragment)
     }
   }

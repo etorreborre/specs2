@@ -59,7 +59,7 @@ sealed trait Html {
 private[specs2]
 case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    if (!args.xonly) out.printSpecStart(start.name, stats)(args) else out
+    if (!args.xonly) out.printSpecStart(start.specName, stats)(args) else out
 }
 private[specs2]
 case class HtmlText(t: ExecutedText) extends Html {
@@ -148,12 +148,6 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
         <tr><td>Results</td><td class={classStatus}>{numbers}</td></tr>
       </table>
     }
-  }
-}
-private[specs2]
-case class HtmlSee(see: ExecutedSee) extends Html {
-  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
-    if (!args.xonly) out.printLink(see.link, level, stats)(args) else out
   }
 }
 private[specs2]

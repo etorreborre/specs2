@@ -36,5 +36,5 @@ trait SpecificationStructure {
    * the Specification namespace.
    * SpecStart and SpecEnd fragments are added if the user haven't inserted any
    */
-  private[specs2] lazy val content: Fragments = Fragments.withSpecStartEnd(map(is), this)
+  private[specs2] lazy val content: Fragments = Fragments.withSpecName(map(is), this)
 }

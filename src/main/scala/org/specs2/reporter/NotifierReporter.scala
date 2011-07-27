@@ -35,8 +35,10 @@ trait NotifierExporting extends Exporting {
     }
 
     if (fs.nonEmpty) notify(fs)
-    else             notify(Seq(ExecutedSpecStart(SpecName("empty specification"), Arguments(), new Location()),
-                                ExecutedSpecEnd(SpecName("empty specification"), new Location())))
+    else {             
+      val empty = Fragments().specTitleIs(SpecName("empty specification"))
+      Seq(ExecutedSpecStart(empty.start, new Location()), ExecutedSpecEnd(empty.end, new Location()))
+    }
 
   }
 
@@ -47,12 +49,12 @@ trait NotifierExporting extends Exporting {
 
   private def export(tree: Tree[ExecutedFragment])(implicit args: Arguments) {
     tree.rootLabel match {
-      case f @ ExecutedSpecStart(n, _, _)                                   => {
-        notifier.specStart(n.name, f.location.toString)
+      case f @ ExecutedSpecStart(_, _)                                      => {
+        notifier.specStart(f.name, f.location.toString)
         tree.subForest.foreach(export)
       }
-      case f @ ExecutedSpecEnd(n, _)                                        => {
-        notifier.specEnd(n.name, f.location.toString)
+      case f @ ExecutedSpecEnd(_, _)                                        => {
+        notifier.specEnd(f.name, f.location.toString)
       }
       case f @ ExecutedText(t, _)  if tree.subForest.isEmpty && !args.xonly => notifier.text(t, f.location.toString)
       case f @ ExecutedText(t, _)                                           => {

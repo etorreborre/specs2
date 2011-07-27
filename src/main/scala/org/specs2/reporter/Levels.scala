@@ -46,8 +46,8 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   def allLevels = {
     import NestedBlocks._
     def toNestedBlock(bl: (Block[T], Int)) = bl match {
-      case (b @ Block(SpecStart(_,_)), l)            => BlockStart(Levels(List(bl)))
-      case (b @ Block(ExecutedSpecStart(_,_, _)), l) => BlockStart(Levels(List(bl)))
+      case (b @ Block(SpecStart(_,_,_,_,_)), l)      => BlockStart(Levels(List(bl)))
+      case (b @ Block(ExecutedSpecStart(_, _)), l)   => BlockStart(Levels(List(bl)))
       case (b @ Block(SpecEnd(_)), l)                => BlockEnd(Levels(List(bl)))
       case (b @ Block(ExecutedSpecEnd(_, _)), l)     => BlockEnd(Levels(List(bl)))
       case (b, l)                                    => BlockBit(Levels(List(bl)))

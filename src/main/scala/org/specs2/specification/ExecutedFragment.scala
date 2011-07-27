@@ -27,7 +27,7 @@ object ExecutedFragments {
   /** @return true if the ExecutedFragment is a result */
   def isExecutedResult: Function[ExecutedFragment, Boolean] = { case ExecutedResult(_, _, _, _) => true; case _ => false }
   /** @return true if the ExecutedFragment is a Start */
-  def isExecutedSpecStart: Function[ExecutedFragment, Boolean] = { case ExecutedSpecStart(_, _, _) => true; case _ => false }
+  def isExecutedSpecStart: Function[ExecutedFragment, Boolean] = { case ExecutedSpecStart(_, _) => true; case _ => false }
   /** @return true if the ExecutedFragment is an End */
   def isExecutedSpecEnd: Function[ExecutedFragment, Boolean] = { case ExecutedSpecEnd(_, _) => true; case _ => false }
 }
@@ -47,14 +47,18 @@ case class ExecutedEnd(location: Location) extends ExecutedFragment with Execute
 case class ExecutedTab(n: Int = 1, location: Location) extends ExecutedFragment with ExecutedStandardFragment
 case class ExecutedBacktab(n: Int = 1, location: Location) extends ExecutedFragment with ExecutedStandardFragment
 
-case class ExecutedSpecStart(name: SpecName, arguments: Arguments, location: Location) extends ExecutedFragment {
-  override def toString = "ExecutedSpecStart("+name.name+")"
+case class ExecutedSpecStart(start: SpecStart, location: Location) extends ExecutedFragment {
+  def specName = start.specName
+  def name = start.name
+  def args = start.arguments
+  override def toString = "ExecutedSpecStart("+name+")"
 }
-case class ExecutedSpecEnd(name: SpecName, location: Location) extends ExecutedFragment {
-  override def toString = "ExecutedSpecEnd("+name.name+")"
+case class ExecutedSpecEnd(end: SpecEnd, location: Location) extends ExecutedFragment {
+  def specName = end.specName
+  def name = end.name
+  override def toString = "ExecutedSpecEnd("+name+")"
 }
 
-case class ExecutedSee(name: SpecName, link: HtmlLink, seeOnly: Boolean = true, override val stats: Stats = Stats(), location: Location) extends ExecutedFragment
 /**
  * This executed Fragment is used when no text must be displayed (for the successful
  * execution of an Action for example)

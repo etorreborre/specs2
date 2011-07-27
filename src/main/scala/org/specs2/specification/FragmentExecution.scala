@@ -52,17 +52,16 @@ trait FragmentExecution {
       val timer = new SimpleTimer().start
       ExecutedResult(s, executeBody(e.execute), timer.stop, f.location)
     }
-	  case Text(s)                  => ExecutedText(s, f.location)
-	  case Br()                     => ExecutedBr(f.location)
-    case Tab(n)                   => ExecutedTab(n, f.location)
-    case Backtab(n)               => ExecutedBacktab(n, f.location)
-	  case End()                    => ExecutedEnd(f.location)
-	  case SpecStart(n, args)       => ExecutedSpecStart(n, arguments.overrideWith(args), f.location)
-	  case SpecEnd(n)               => ExecutedSpecEnd(n, f.location)
-    case s @ Step(_)              => executeStep("step", s, f.location)
-    case s @ Action(_)            => executeStep("action", s, f.location)
-    case See(name, link, seeOnly) => ExecutedSee(name, link, seeOnly, Stats(), f.location)
-    case _                        => ExecutedNoText(new SimpleTimer, f.location)
+	case Text(s)                       => ExecutedText(s, f.location)
+	case Br()                          => ExecutedBr(f.location)
+    case Tab(n)                        => ExecutedTab(n, f.location)
+    case Backtab(n)                    => ExecutedBacktab(n, f.location)
+	case End()                         => ExecutedEnd(f.location)
+	case s @ SpecStart(n, a, e, l, so) => ExecutedSpecStart(s.withArgs(arguments.overrideWith(a)), f.location)
+	case e @ SpecEnd(s)                => ExecutedSpecEnd(e, f.location)
+    case s @ Step(_)                   => executeStep("step", s, f.location)
+    case s @ Action(_)                 => executeStep("action", s, f.location)
+    case _                             => ExecutedNoText(new SimpleTimer, f.location)
   }
 
   private def executeStep(stepName: String, s: Executable, location: Location)(implicit args: Arguments) = {

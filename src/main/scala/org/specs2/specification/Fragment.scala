@@ -8,7 +8,8 @@ import main.Arguments
 import execute._
 import text._
 import text.Trim._
-import org.specs2.internal.scalaz.Monoid
+import org.specs2.internal.scalaz.{Monoid, Scalaz}
+import Scalaz._
 import data.IncludedExcluded
 import io.Location
 import scala.Either
@@ -32,21 +33,19 @@ sealed trait Fragment {
  *    That name stores a unique id for the specification
  *  * the arguments for that specification
  */
-case class SpecStart(name: SpecName, arguments: Arguments = Arguments()) extends Fragment {
+case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), end: SpecEnd, link: Option[HtmlLink] = None, seeOnly: Boolean = false) extends Fragment {
+  def name = specName.name
   override def matches(s: String) = name matches s
-  override def toString = "SpecStart("+name.name+")"
+  override def toString = "SpecStart("+name+")"
   /** the new arguments take precedence over the old ones */
-  def withArgs(args: Arguments) = SpecStart(name, arguments.overrideWith(args))
+  def withArgs(args: Arguments) = copy(arguments = args)
+  /** the new arguments take override the old ones where defined */
+  def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
 
   /**
    * The name of the specification can be overriden with a user defined title
    */
-  def withName(n: SpecName) = copy(name = name.overrideWith(n))
-  def overrideArgs(args: Arguments) = SpecStart(name, arguments.overrideWith(args))
-}
-object SpecStart {
-  def apply(name: String): SpecStart  = new SpecStart(SpecName(name))
-  def apply(name: String, args: Arguments): SpecStart = new SpecStart(SpecName(name), args)
+  def withName(n: SpecName) = copy(specName = specName.overrideWith(n))
 }
 
 /**
@@ -54,12 +53,10 @@ object SpecStart {
  *
  * This marks the end of the Specification and must have the same name as the corresponding SpecStart.
  */
-case class SpecEnd(name: SpecName) extends Fragment {
+case class SpecEnd(start: SpecStart) extends Fragment {
+  def specName = start.specName
+  def name = start.name
   override def matches(s: String) = name matches s
-  def withName(n: SpecName) = SpecEnd(n)
-}
-object SpecEnd {
-  def apply(name: String): SpecEnd = new SpecEnd(SpecName(name))
 }
 
 /**
@@ -139,16 +136,6 @@ case object Action {
   def fromEither[T](r: =>Either[Result, T]) = new Action(Step.either(r))
 }
 
-/**
- * A link to another specification.
- *
- * If seeOnly is true, the linked specification is not executed
- */
-case class See(name: SpecName, link: HtmlLink, seeOnly: Boolean = true) extends Fragment
-object Link {
-  def apply(name: SpecName, link: HtmlLink) = See(name, link, seeOnly = false)
-  def unapply(see: See) = see match { case See(name, link, false) => Some((name, link)); case _ => None }
-}
 /**
  * Those standard Fragments are used to format the specification text:
  *  * End() can be used to "reset" the indentation of text

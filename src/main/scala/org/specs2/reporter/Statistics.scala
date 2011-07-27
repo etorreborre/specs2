@@ -44,11 +44,10 @@ trait Statistics {
         val current = resultStats(r)
         SpecsStatistics(current.copy(timer = t))
       }
-      case start @ ExecutedSpecStart(name, args, _) => SpecsStatistics(Stats(start = Some(start)))
-      case end @ ExecutedSpecEnd(_, _)              => SpecsStatistics(Stats(end = Some(end)))
-      case ExecutedSee(_, _, _, stats, _)           => SpecsStatistics(stats)
-      case ExecutedNoText(t, _)                     => SpecsStatistics(Stats(timer = t))
-      case _                                        => SpecsStatistics(Stats())
+      case start @ ExecutedSpecStart(_, _) => SpecsStatistics(Stats(start = Some(start)))
+      case end @ ExecutedSpecEnd(_, _)     => SpecsStatistics(Stats(end = Some(end)))
+      case ExecutedNoText(t, _)            => SpecsStatistics(Stats(timer = t))
+      case _                               => SpecsStatistics(Stats())
     }
   }
 
