@@ -48,12 +48,12 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
    */
   def run(notifier: RunNotifier) {
     executions.collect {
-      case (desc, f @ SpecStart(_, _)) => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Example(_, _))   => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Text(_))         => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Step(_))         => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Action(_))       => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ SpecEnd(_))      => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ SpecStart(_,_,_,_,_)) => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Example(_, _))        => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Text(_))              => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Step(_))              => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Action(_))            => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ SpecEnd(_))           => (desc, executor.executeFragment(args)(f))
     }.
       foreach {
         case (desc, ExecutedResult(_, result, timer, _)) => {

@@ -49,7 +49,7 @@ trait HtmlPrinter {
    */
   def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     copyResources()
-    val parentLink = HtmlLink(s.content.start.name, "", s.content.start.name.name)
+    val parentLink = HtmlLink(s.content.specName, "", s.content.name)
     val htmlFiles = reduce(fs, parentLink)
     lazy val toc = globalToc(htmlFiles)
     htmlFiles.flatten.filter(_.nonEmpty).foreach { lines =>
@@ -112,7 +112,7 @@ trait HtmlPrinter {
       }
 
       cur match {
-        case HtmlLine(HtmlSpecEnd(end), s, _, _) if (res.getLabel.is(end.name)) => {
+        case HtmlLine(HtmlSpecEnd(end), s, _, _) if (res.getLabel.is(end.specName)) => {
           val updatedParent = updated.updateLabel(_.updateSpecStartStats(s)).getParent
           updateSeeStats(updatedParent, s)
         }

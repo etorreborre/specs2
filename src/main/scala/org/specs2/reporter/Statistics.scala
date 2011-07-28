@@ -38,12 +38,7 @@ trait Statistics {
   
   object StatisticsReducer extends Reducer[ExecutedFragment, SpecsStatistics] {
     override def unit(f: ExecutedFragment): SpecsStatistics = f match { 
-      case ExecutedResult(_, r, t, _) => {
-        def resultStats(result: Result): Stats = Stats(result)
-        
-        val current = resultStats(r)
-        SpecsStatistics(current.copy(timer = t))
-      }
+      case ExecutedResult(_, r, t, _)      => SpecsStatistics(Stats(r).copy(timer = t))
       case start @ ExecutedSpecStart(_, _) => SpecsStatistics(Stats(start = Some(start)))
       case end @ ExecutedSpecEnd(_, _)     => SpecsStatistics(Stats(end = Some(end)))
       case ExecutedNoText(t, _)            => SpecsStatistics(Stats(timer = t))

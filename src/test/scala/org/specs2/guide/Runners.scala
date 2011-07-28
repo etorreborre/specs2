@@ -389,7 +389,7 @@ when relevant (i.e. for examples only).
 
 The `specs2.run` object has an `apply` method to execute specifications from the Scala console:
 
-      scala> spec2.run(spec1, spec2)
+      scala> specs2.run(spec1, spec2)
 
       scala> import specs2._  // same thing, importing the run object
       scala> run(spec1, spec2)

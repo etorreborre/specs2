@@ -19,11 +19,13 @@ trait Storing {
 
 private[specs2]
 trait DefaultStoring extends Storing with Statistics {
-  def store(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => 
-    (fragments zip FoldrGenerator[Seq].reduce(StatisticsReducer, fragments).totals).collect { 
+  def store(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+    val totals = fragments zip FoldrGenerator[Seq].reduce(StatisticsReducer, fragments).totals 
+    totals.collect { 
       case (ExecutedSpecStart(st, l), s) => new ExecutedSpecStart(st, l) { override def stats = s }
       case (ExecutedSpecEnd(st, l), s)   => new ExecutedSpecEnd(st, l) { override def stats = s }
       case (other, s)                    => other
     }
+  } 
   
 }

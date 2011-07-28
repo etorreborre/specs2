@@ -11,7 +11,7 @@ import Fragments._
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-case class Fragments(title: Option[SpecName] = None, middle: Seq[Fragment] = Nil, arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
+case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fragment] = Nil, arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
   def fragments: Seq[Fragment] = if (middle.isEmpty) Seq() else (start +: middle :+ end)
 
   private def append(e: Fragment) = copy(middle = middle :+ e)
@@ -32,6 +32,8 @@ case class Fragments(title: Option[SpecName] = None, middle: Seq[Fragment] = Nil
   import StandardFragments._
   override def toString = fragments.mkString("\n")
 
+  def specName = start.specName
+  def name = start.name
   def start: SpecStart = SpecStart(title.getOrElse(SpecName("")), arguments, end = this.end, link, seeOnly)
   def end: SpecEnd = SpecEnd(start)
 

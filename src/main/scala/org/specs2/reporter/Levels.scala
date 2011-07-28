@@ -178,7 +178,7 @@ case object Levels {
       case t @ ExecutedText(_, _)            => BlockIndent(t)
       case t @ ExecutedTab(n, _)             => BlockIndent(t, n)
       case t @ ExecutedBacktab(n, _)         => BlockUnindent(t, n)
-      case t @ ExecutedSpecStart(_, _, _)    => BlockNeutral(t)
+      case t @ ExecutedSpecStart(_, _)       => BlockNeutral(t)
       case t @ ExecutedSpecEnd(_, _)         => BlockNeutral(t)
       case t @ ExecutedEnd( _)               => BlockReset(t)
       case t                                 => BlockNeutral(t)
@@ -188,14 +188,14 @@ case object Levels {
   }
   implicit object FragmentLevelsReducer extends Reducer[Fragment, Levels[Fragment]] {
     implicit def toBlock(f: Fragment): Block[Fragment] = f match {
-      case t @ Example(_, _)   => BlockTerminal(t)     
-      case t @ Tab(n)          => BlockIndent(t, n)
-      case t @ Backtab(n)      => BlockUnindent(t, n)   
-      case t @ Text(_)         => BlockIndent(t)       
-      case t @ SpecStart(_, _) => BlockNeutral(t)
-      case t @ SpecEnd(_)      => BlockNeutral(t)
-      case t @ End()           => BlockReset(t)        
-      case t                   => BlockNeutral(t)        
+      case t @ Example(_, _)         => BlockTerminal(t)     
+      case t @ Tab(n)                => BlockIndent(t, n)
+      case t @ Backtab(n)            => BlockUnindent(t, n)   
+      case t @ Text(_)               => BlockIndent(t)       
+      case t @ SpecStart(_,_,_,_,_)  => BlockNeutral(t)
+      case t @ SpecEnd(_)            => BlockNeutral(t)
+      case t @ End()                 => BlockReset(t)        
+      case t                         => BlockNeutral(t)        
     }
     implicit override def unit(f: Fragment): Levels[Fragment] = Levels(toBlock(f))
   }
