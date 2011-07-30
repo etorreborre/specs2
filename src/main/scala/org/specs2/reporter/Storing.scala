@@ -6,7 +6,7 @@ import Generator._
 import Scalaz._
 import main.Arguments
 import specification._
-
+import NestedBlocks._
 /**
  * This trait defines a very generic way to store the results of an executed specification
  */
@@ -20,12 +20,24 @@ trait Storing {
 private[specs2]
 trait DefaultStoring extends Storing with Statistics {
   def store(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
-    val totals = fragments zip FoldrGenerator[Seq].reduce(StatisticsReducer, fragments).totals 
-    totals.collect { 
-      case (ExecutedSpecStart(st, l), s) => new ExecutedSpecStart(st, l) { override def stats = s }
-      case (ExecutedSpecEnd(st, l), s)   => new ExecutedSpecEnd(st, l) { override def stats = s }
-      case (other, s)                    => other
+    val totals = fragments zip FoldrGenerator[Seq].reduce(StatisticsReducer, fragments).totals
+
+    associateStartEnd(totals map (setStats andThen executedFragmentsToSpecBlock), updateStatsOnSpecStart) map (_.value)
+  }
+
+  private def setStats = (fs: (ExecutedFragment, Stats)) => fs match {
+    case (ExecutedSpecStart(n, l, s), stats) => ExecutedSpecStart(n, l, stats)
+    case (ExecutedSpecEnd(n, l, s), stats)   => ExecutedSpecEnd(n, l, stats)
+    case (other, s)                          => other
+  }
+
+
+  private def updateStatsOnSpecStart = (start: ExecutedFragment, end: ExecutedFragment) => {
+    (start, end) match {
+      case (ExecutedSpecStart(ns, ss, ls), ExecutedSpecEnd(ne, se, le)) => (ExecutedSpecStart(ns, se, le), ExecutedSpecEnd(ne, se, le))
+      case other => (start, end)
     }
-  } 
-  
+  }
+
+
 }

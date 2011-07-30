@@ -33,10 +33,11 @@ sealed trait Fragment {
  *    That name stores a unique id for the specification
  *  * the arguments for that specification
  */
-case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), end: SpecEnd, link: Option[HtmlLink] = None, seeOnly: Boolean = false) extends Fragment {
+case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) extends Fragment {
   def name = specName.name
+  def title = specName.title
   override def matches(s: String) = name matches s
-  override def toString = "SpecStart("+name+")"
+  override def toString = "SpecStart("+title+")"
   /** the new arguments take precedence over the old ones */
   def withArgs(args: Arguments) = copy(arguments = args)
   /** the new arguments take override the old ones where defined */
@@ -53,10 +54,11 @@ case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), end
  *
  * This marks the end of the Specification and must have the same name as the corresponding SpecStart.
  */
-case class SpecEnd(start: SpecStart) extends Fragment {
-  def specName = start.specName
-  def name = start.name
+case class SpecEnd(specName: SpecName) extends Fragment {
+  def name = specName.name
+  def title = specName.title
   override def matches(s: String) = name matches s
+  override def toString = "SpecEnd("+title+")"
 }
 
 /**

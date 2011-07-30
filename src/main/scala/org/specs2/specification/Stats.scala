@@ -39,7 +39,7 @@ case class Stats(fragments:    Int = 0,
 
   /** @return true if this Stats object is the SpecStart corresponding to the 'end' parameter */
   def isEnd(end: ExecutedSpecEnd) = {
-    start.map(_.start.end == end.end).getOrElse(false)
+    start.map(_.start.specName == end.specName).getOrElse(false)
   }
   /** @return true if there are errors or failures */
   def hasFailuresOrErrors = failures + errors > 0
@@ -76,7 +76,7 @@ case class Stats(fragments:    Int = 0,
            "errors = "      + errors       +", "+
            "pending = "     + pending      +", "+
            "skipped = "     + skipped      +", "+
-           start.collect { case s @ ExecutedSpecStart(_, _) => s.name }.getOrElse("")+
+           start.collect { case s @ ExecutedSpecStart(_,_,_) => s.name }.getOrElse("")+
            "time = "        + timer.elapsed+")"
 }
 

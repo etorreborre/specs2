@@ -17,14 +17,14 @@ sealed trait SpecName {
   def matches(p: String) = name matches p
   def show = name+"("+id+")"
 
-  override def toString = name
-  override def equals(o: Any) = {
-    o match {
-      case s: SpecName => s.id == this.id
-      case _ => false
-    }
-  }
+  override def toString = title
+  def is(s: SpecName) = s.id == this.id
   def id = System.identityHashCode(this)
+  
+  override def equals(o: Any) = o match {
+    case s: SpecName => s.name == this.name
+  }
+  
   def overrideWith(n: SpecName): SpecName
 }
 private[specs2]
@@ -40,7 +40,7 @@ case class SpecificationName(s: SpecificationStructure) extends SpecName {
   def url = s.getClass.getName + ".html"
 
   def overrideWith(n: SpecName) = n match {
-    case SpecificationName(s)  => n
+    case SpecificationName(s)  => this
     case SpecificationTitle(t) => new SpecificationName(s) {
       override def id = n.id
       override def title =  t
@@ -58,7 +58,7 @@ case class SpecificationTitle(t: String) extends SpecName {
   def url = t + ".html"
 
   def overrideWith(n: SpecName) = n match {
-    case SpecificationTitle(t)  => n
+    case SpecificationTitle(t)  => this
     case SpecificationName(s) => new SpecificationName(s) {
       override def id = n.id
       override def title = t

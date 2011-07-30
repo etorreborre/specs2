@@ -8,7 +8,7 @@ import main.Arguments
 import execute._
 import specification._
 
-class TextPrinterSpec extends Specification { def is =
+class TextPrinterSpec extends Specification { def is = only("statistics are shown") ^
                                                                                                                         """
   The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
   and outputs them using a `TextResultOutput`.

@@ -35,14 +35,14 @@ trait FragmentsBuilder extends RegexSteps { outer =>
     def fragments = fs
     def ^(t: String) = fs add Text(t)
     def ^(f: Fragment) = f match {
-      case s @ SpecStart(_, _, _, _, _) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
+      case s @ SpecStart( _, _, _, _) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
       case _ => fs add f
     }
     def ^(other: Seq[Fragment]) = fs add other
     def ^(other: Fragments) = {
       other.start match {
-        case s @ SpecStart(_, _, _, _, _) => (fs add other.middle).specTitleIs(s.specName).overrideArgs(s.arguments)
-        case _                  => fs add other.middle
+        case s @ SpecStart(_,_,_,_) => (fs add other.middle).specTitleIs(s.specName).overrideArgs(s.arguments)
+        case _                      => fs add other.middle
       }
     }
     def ^(other: FragmentsFragment) = fs add other.fragments
@@ -74,7 +74,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
    */
   implicit def title(s: String): SpecTitle = new SpecTitle(s)
   class SpecTitle(name: String) {
-    def title = new Fragments(title = Some(SpecName(name)))
+    def title = Fragments(SpecName(name))
   }
   /**
    * Example creation

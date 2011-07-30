@@ -54,9 +54,9 @@ trait JUnitXmlPrinter extends Statistics {
      */
     def mapper(klass: Class[_]): (ExecutedFragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: ExecutedFragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case s @ ExecutedSpecStart(_, _)  => Some(createDescription(klass, suiteName=testName(s.name)) -> f)
-        case ExecutedText(t, _)          => Some(createDescription(klass, suiteName=testName(t)) -> f)
-        case r @ ExecutedResult(_,_,_,_) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) -> f)
+        case s @ ExecutedSpecStart(_,_,_)  => Some(createDescription(klass, suiteName=testName(s.name)) -> f)
+        case ExecutedText(t, _)           => Some(createDescription(klass, suiteName=testName(t)) -> f)
+        case r @ ExecutedResult(_,_,_,_,_)  => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) -> f)
         case other                       => None
       }
   }
@@ -94,25 +94,25 @@ trait JUnitXmlPrinter extends Statistics {
       </testcase>
 
     def time = fragment match {
-      case ExecutedResult(_,_,t,_) => t.elapsed
-      case other                   => 0
+      case ExecutedResult(_,_,t,_,_) => t.elapsed
+      case other                     => 0
     }
 
     def testError = fragment match {
-      case ExecutedResult(_,er @ Error(m, e),_,_) => <error message={m}
+      case ExecutedResult(_,er @ Error(m, e),_,_,_) => <error message={m}
                                                             type={e.getClass.getName}>{args.traceFilter(er.stackTrace).mkString("\n")}</error>
       case other                                  => NodeSeq.Empty
     }
 
     def testFailure = fragment match {
-      case ExecutedResult(_,f @ Failure(m, e, st, d),_,_) => <failure message={m}
+      case ExecutedResult(_,f @ Failure(m, e, st, d),_,_,_) => <failure message={m}
                                                                       type={f.exception.getClass.getName}>{args.traceFilter(st).mkString("\n")}</failure>
-      case other                                          => NodeSeq.Empty
+      case other                                           => NodeSeq.Empty
     }
 
     def testSkipped = fragment match {
-      case ExecutedResult(_, Skipped(m, e),_,_) => <skipped/>
-      case other                                => NodeSeq.Empty
+      case ExecutedResult(_, Skipped(m, e),_,_,_) => <skipped/>
+      case other                                  => NodeSeq.Empty
     }
   }
 

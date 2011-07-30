@@ -15,7 +15,7 @@ case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fra
   def fragments: Seq[Fragment] = if (middle.isEmpty) Seq() else (start +: middle :+ end)
 
   private def append(e: Fragment) = copy(middle = middle :+ e)
-  def specTitleIs(name: SpecName): Fragments = copy(title = Some(name))
+  def specTitleIs(name: SpecName): Fragments = copy(title = title.map(_.overrideWith(name)).orElse(Some(name)))
   def add(e: Fragment): Fragments = append(e)
   def add(fs: Seq[Fragment]): Fragments = copy(middle = middle ++ fs)
   def add(fs: Fragments): Fragments = add(fs.fragments)
@@ -34,8 +34,8 @@ case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fra
 
   def specName = start.specName
   def name = start.name
-  def start: SpecStart = SpecStart(title.getOrElse(SpecName("")), arguments, end = this.end, link, seeOnly)
-  def end: SpecEnd = SpecEnd(start)
+  lazy val start: SpecStart = SpecStart(title.getOrElse(SpecName("")), arguments, link, seeOnly)
+  lazy val end: SpecEnd = SpecEnd(start.specName)
 
 }
 
@@ -43,6 +43,8 @@ case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fra
  * Utility methods for fragments
  */
 object Fragments {
+
+  def apply(t: SpecName) = new Fragments(title = Some(t))
   /**
    * @return a Fragments object containing only a seq of Fragments.
    */
@@ -52,7 +54,7 @@ object Fragments {
    */
   def create(fs: Fragment*) = {
     fs.toList match {
-      case (s @ SpecStart(_, _, _, _, _)) :: rest => Fragments(middle = rest).specTitleIs(s.specName).add(s.arguments)
+      case (s @ SpecStart( _, _, _, _)) :: rest => Fragments(middle = rest).specTitleIs(s.specName).add(s.arguments)
       case _                                      => createList(fs:_*)
     }
   }

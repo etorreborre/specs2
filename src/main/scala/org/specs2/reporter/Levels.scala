@@ -46,11 +46,11 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   def allLevels = {
     import NestedBlocks._
     def toNestedBlock(bl: (Block[T], Int)) = bl match {
-      case (b @ Block(SpecStart(_,_,_,_,_)), l)      => BlockStart(Levels(List(bl)))
-      case (b @ Block(ExecutedSpecStart(_, _)), l)   => BlockStart(Levels(List(bl)))
-      case (b @ Block(SpecEnd(_)), l)                => BlockEnd(Levels(List(bl)))
-      case (b @ Block(ExecutedSpecEnd(_, _)), l)     => BlockEnd(Levels(List(bl)))
-      case (b, l)                                    => BlockBit(Levels(List(bl)))
+      case (b @ Block(SpecStart(_,_,_,_)), l)       => BlockStart(Levels(List(bl)))
+      case (b @ Block(ExecutedSpecStart(_,_,_)), l) => BlockStart(Levels(List(bl)))
+      case (b @ Block(SpecEnd(_)), l)               => BlockEnd(Levels(List(bl)))
+      case (b @ Block(ExecutedSpecEnd(_,_,_)), l)   => BlockEnd(Levels(List(bl)))
+      case (b, l)                                   => BlockBit(Levels(List(bl)))
     }
     import Levels._
     val summed = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T])
@@ -174,12 +174,12 @@ case object Levels {
   }
   implicit object LevelsReducer extends Reducer[ExecutedFragment, Levels[ExecutedFragment]] {
     implicit def toBlock(f: ExecutedFragment): Block[ExecutedFragment] = f match {
-      case t @ ExecutedResult(_, _, _, _)    => BlockTerminal(t)
+      case t @ ExecutedResult(_,_,_,_,_)     => BlockTerminal(t)
       case t @ ExecutedText(_, _)            => BlockIndent(t)
       case t @ ExecutedTab(n, _)             => BlockIndent(t, n)
       case t @ ExecutedBacktab(n, _)         => BlockUnindent(t, n)
-      case t @ ExecutedSpecStart(_, _)       => BlockNeutral(t)
-      case t @ ExecutedSpecEnd(_, _)         => BlockNeutral(t)
+      case t @ ExecutedSpecStart(_,_,_)      => BlockNeutral(t)
+      case t @ ExecutedSpecEnd(_,_,_)        => BlockNeutral(t)
       case t @ ExecutedEnd( _)               => BlockReset(t)
       case t                                 => BlockNeutral(t)
     } 
@@ -192,7 +192,7 @@ case object Levels {
       case t @ Tab(n)                => BlockIndent(t, n)
       case t @ Backtab(n)            => BlockUnindent(t, n)   
       case t @ Text(_)               => BlockIndent(t)       
-      case t @ SpecStart(_,_,_,_,_)  => BlockNeutral(t)
+      case t @ SpecStart(_,_,_,_)  => BlockNeutral(t)
       case t @ SpecEnd(_)            => BlockNeutral(t)
       case t @ End()                 => BlockReset(t)        
       case t                         => BlockNeutral(t)        

@@ -34,7 +34,7 @@ SpecStart/SpecEnd
     "When a title is created there is only one SpecStart in the specification"                                          ! startEnd().e5^
     "A title can be added before arguments are declared"                                                                ! startEnd().e6^
     "A title can be added after arguments are declared"                                                                 ! startEnd().e7^
-    "Arguments can be added in different place in the spec" ^
+    "Arguments can be added in different place in the spec"                                                             ^
       "new Arguments values are added to the existing ones"                                                             ! startEnd().e8^
       "and override them if already declared"                                                                           ! startEnd().e9^
       "it also works with the map method in BaseSpecification"                                                          ! startEnd().e10^
@@ -80,11 +80,11 @@ Other elements
     def fragments = content.fragments
     def e1 = (fragments.head must haveClass[SpecStart]) and (fragments.last must haveClass[SpecEnd])
     def e2 = content.start.arguments.xonly
-    def e3 = content.start.name must beTheSameAs(content.end.name)
-    def e4 = content.start.name.toString must_== "title"
+    def e3 = content.start.specName must beTheSameAs(content.end.specName)
+    def e4 = content.start.title must_== "title"
     def e5 = content.fragments.map(_.toString) must contain(lazyfy("SpecStart(title)")).exactlyOnce
     def e6 = content.start.arguments.xonly must beTrue
-    def e7 = (content2.start.name.toString must_== "title") and (content2.start.arguments.xonly must beTrue)
+    def e7 = (content2.start.title must_== "title") and (content2.start.arguments.xonly must beTrue)
     def e8 = (content3.start.arguments.xonly must beTrue) and (content3.start.arguments.include must_== "t1")
     def e9 = content4.start.arguments.include must_== "t2"
     def e10 = content5.start.arguments.sequential must beTrue

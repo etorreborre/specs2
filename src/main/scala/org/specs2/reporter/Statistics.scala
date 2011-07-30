@@ -38,11 +38,11 @@ trait Statistics {
   
   object StatisticsReducer extends Reducer[ExecutedFragment, SpecsStatistics] {
     override def unit(f: ExecutedFragment): SpecsStatistics = f match { 
-      case ExecutedResult(_, r, t, _)      => SpecsStatistics(Stats(r).copy(timer = t))
-      case start @ ExecutedSpecStart(_, _) => SpecsStatistics(Stats(start = Some(start)))
-      case end @ ExecutedSpecEnd(_, _)     => SpecsStatistics(Stats(end = Some(end)))
-      case ExecutedNoText(t, _)            => SpecsStatistics(Stats(timer = t))
-      case _                               => SpecsStatistics(Stats())
+      case ExecutedResult(_, r, t, _, s)    => SpecsStatistics(Stats(r).copy(timer = t))
+      case start @ ExecutedSpecStart(_,_,_) => SpecsStatistics(Stats(start = Some(start)))
+      case end @ ExecutedSpecEnd(_,_,_)     => SpecsStatistics(Stats(end = Some(end)))
+      case ExecutedNoText(t, _)             => SpecsStatistics(Stats(timer = t))
+      case _                                => SpecsStatistics(Stats())
     }
   }
 
@@ -70,6 +70,22 @@ trait Statistics {
   case object SpecsStatistics {
     def apply(current: Stats) = new SpecsStatistics(List(current))
   }
+
+  /**
+   * The SpecsStats class just stores a list of stats, each one corresponding to a Fragment
+   */
+  case class SpecStats(stats: List[Stats] = Nil)
+  implicit def SpecStatsMonoid  = new Monoid[SpecStats] {
+    def append(s1: SpecStats, s2: =>SpecStats): SpecStats = {
+      SpecStats(s1.stats ++ s2.stats)
+    }
+    val zero = SpecStats()
+  }
+
+  object StatsReducer extends Reducer[ExecutedFragment, SpecStats] {
+    override def unit(f: ExecutedFragment): SpecStats = SpecStats(List(f.stats))
+  }
+
 }
 private [specs2]
 object Statistics extends Statistics

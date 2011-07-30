@@ -26,7 +26,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 
   override def export(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
     fragments foreach {
-      case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _) => {
+      case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
           res match {
             case Success(text)               => handler.handle(succeeded(text))

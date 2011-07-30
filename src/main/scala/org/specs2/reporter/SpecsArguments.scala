@@ -62,16 +62,16 @@ case object SpecsArguments {
   }
   implicit object FragmentSpecsArgumentsReducer extends Reducer[Fragment, SpecsArguments[Fragment]] {
     implicit override def unit(f: Fragment) = f match {
-      case s @ SpecStart(_,_,_,_,_) => SpecsArguments(StartOfArguments(f, s.specName, s.arguments))
+      case s @ SpecStart(_,_,_,_) => SpecsArguments(StartOfArguments(f, s.specName, s.arguments))
       case e @ SpecEnd(_)      => SpecsArguments(EndOfArguments(f, e.specName))
       case _                   => SpecsArguments(NoStartOfArguments(f))
     }
   }
   implicit object SpecsArgumentsReducer extends Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] {
     implicit override def unit(f: ExecutedFragment) = f match {
-      case s @ ExecutedSpecStart(_, _) => SpecsArguments(StartOfArguments(f, s.specName, s.args))
-      case e @ ExecutedSpecEnd(_, _)   => SpecsArguments(EndOfArguments(f, e.specName))
-      case _                           => SpecsArguments(NoStartOfArguments(f))
+      case s @ ExecutedSpecStart(_,_,_) => SpecsArguments(StartOfArguments(f, s.specName, s.args))
+      case e @ ExecutedSpecEnd(_,_,_)   => SpecsArguments(EndOfArguments(f, e.specName))
+      case _                            => SpecsArguments(NoStartOfArguments(f))
     }
   }
 

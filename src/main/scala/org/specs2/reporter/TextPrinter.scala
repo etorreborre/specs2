@@ -38,7 +38,7 @@ trait TextPrinter {
   
   private  val reducer = 
     PrintReducer &&& 
-    StatisticsReducer &&&
+    StatsReducer &&&
     LevelsReducer  &&&
     SpecsArgumentsReducer
   
@@ -50,9 +50,9 @@ trait TextPrinter {
     def print(implicit out: ResultOutput) = lines foreach (_.print)
   }
   
-  def flatten(results: (((List[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
+  def flatten(results: (((List[Print], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
     val (prints, statistics, levels, args) = results.flatten
-    (prints zip statistics.totals zip levels.levels zip args.toList) map {
+    (prints zip statistics.stats zip levels.levels zip args.toList) map {
       case (((t, s), l), a) => PrintLine(t, s, l, a)
     }
   }  
@@ -61,11 +61,11 @@ trait TextPrinter {
     implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment) = fragment match { 
-      case start @ ExecutedSpecStart(_, _)     => PrintSpecStart(start)
-      case result @ ExecutedResult(_, _, _, _) => PrintResult(result)
+      case start @ ExecutedSpecStart(_,_,_)    => PrintSpecStart(start)
+      case result @ ExecutedResult(_,_,_,_,_)  => PrintResult(result)
       case text @ ExecutedText(s, _)           => PrintText(text)
       case par @ ExecutedBr(_)                 => PrintBr()
-      case end @ ExecutedSpecEnd(_, _)         => PrintSpecEnd(end)
+      case end @ ExecutedSpecEnd(_,_,_)        => PrintSpecEnd(end)
       case fragment                            => PrintOther(fragment)
     }
   }

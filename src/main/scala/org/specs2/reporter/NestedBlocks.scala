@@ -3,22 +3,33 @@ package reporter
 
 import org.specs2.internal.scalaz._
 import Scalaz._
+import specification.{SpecEnd, SpecStart, Fragment, ExecutedSpecEnd, ExecutedSpecStart, ExecutedFragment}
 
 /**
- * This trait takes a sequence of delimited blocks and uses that information to either:
- *
- * - define what is the "current" context and makes sure that the current context is overriding the "parent" context
- * - sum the "values" of the current context and cumulate the total of children contexts into the parent context
- *
- */
+* This trait takes a sequence of delimited blocks and uses that information to either:
+*
+* - define what is the "current" context and makes sure that the current context is overriding the "parent" context
+* - sum the "values" of the current context and cumulate the total of children contexts into the parent context
+*
+*/
 private[specs2]
 trait NestedBlocks {
   sealed trait SpecBlock[T] {
     def value: T
+    def update(value: T): SpecBlock[T]
   }
-  case class BlockStart[T](value: T) extends SpecBlock[T]
-  case class BlockEnd[T](value: T) extends SpecBlock[T]
-  case class BlockBit[T](value: T) extends SpecBlock[T]
+  case class BlockStart[T](value: T) extends SpecBlock[T] {
+    def update(value: T) = BlockStart(value)
+  }
+  case class BlockEnd[T](value: T) extends SpecBlock[T]  {
+    def update(value: T) = BlockEnd(value)
+  }
+  case class BlockBit[T](value: T) extends SpecBlock[T] {
+    def update(value: T) = BlockBit(value)
+  }
+  def isBlockStart[T](b: SpecBlock[T]) = b match { case BlockStart(_) => true; case _ => false }
+  def isBlockEnd[T](b: SpecBlock[T])   = b match { case BlockEnd(_) => true; case _ => false }
+  def isBlockBit[T](b: SpecBlock[T])   = b match { case BlockBit(_) => true; case _ => false }
 
   /**
    * The context is overriden when we enter a Nested Block.
@@ -77,6 +88,44 @@ trait NestedBlocks {
     stack.headOption.getOrElse(monoid.zero)
   }
   def pop[T](stack: List[T]) = stack.drop(1)
+  
+  private def lift[T](f: (T, T) => (T, T)): (SpecBlock[T], SpecBlock[T]) => (SpecBlock[T], SpecBlock[T]) = { (b1, b2) =>
+    val (updated1, updated2) = f(b1.value, b2.value)
+    (b1.update(updated1), b2.update(updated2)) 
+  }
+  
+  def associateStartEnd[T](blocks: Seq[SpecBlock[T]], f: (T, T) => (T, T)): Seq[SpecBlock[T]] = {
+    if (blocks isEmpty)
+      blocks
+    else {
+      val (beforeStart, afterStart) = blocks span (b => !isBlockStart(b))
+      val start  = afterStart.headOption
+      val strictlyAfterStart = afterStart.drop(1)
+      val (beforeEnd, afterEnd) = strictlyAfterStart.reverse span (b => !isBlockEnd(b))
+      val middle = afterEnd.drop(1)
+      val end = afterEnd.headOption
+      val updatedStartEnd = (start <**> end)(lift(f))
+      val (s, e) = updatedStartEnd match {
+        case Some((st, en)) => (Some(st), Some(en))
+        case None           => (start, end)
+      }
+
+      beforeStart ++ s.toList ++ associateStartEnd(middle.reverse, f) ++ e.toList ++ beforeEnd.reverse
+    }
+  }
+
+  def fragmentsToSpecBlock = (f: Fragment) => f match {
+    case SpecStart(_,_,_,_)   => BlockStart(f)
+    case SpecEnd(_)           => BlockEnd(f)
+    case other                => BlockBit(f)
+  }
+
+  def executedFragmentsToSpecBlock = (f: ExecutedFragment) => f match {
+    case ExecutedSpecStart(_,_,_) => BlockStart(f)
+    case ExecutedSpecEnd(_,_,_)   => BlockEnd(f)
+    case other                    => BlockBit(f)
+  }
+
 }
 private[specs2]
 object NestedBlocks extends NestedBlocks

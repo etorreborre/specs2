@@ -48,7 +48,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
    */
   def run(notifier: RunNotifier) {
     executions.collect {
-      case (desc, f @ SpecStart(_,_,_,_,_)) => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ SpecStart(_,_,_,_)) => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Example(_, _))        => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Text(_))              => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Step(_))              => (desc, executor.executeFragment(args)(f))
@@ -56,7 +56,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
       case (desc, f @ SpecEnd(_))           => (desc, executor.executeFragment(args)(f))
     }.
       foreach {
-        case (desc, ExecutedResult(_, result, timer, _)) => {
+        case (desc, ExecutedResult(_, result, timer, _, _)) => {
           notifier.fireTestStarted(desc)
           result match {
             case f @ Failure(m, e, st, d)                     => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
@@ -68,8 +68,8 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
           }
           notifier.fireTestFinished(desc)
         }
-        case (desc, ExecutedSpecStart(_, _))  => notifier.fireTestRunStarted(desc)
-        case (desc, ExecutedSpecEnd(_, _))    => notifier.fireTestRunFinished(new org.junit.runner.Result)
+        case (desc, ExecutedSpecStart(_,_,_)) => notifier.fireTestRunStarted(desc)
+        case (desc, ExecutedSpecEnd(_,_,_))   => notifier.fireTestRunFinished(new org.junit.runner.Result)
         case (desc, _)                        => // don't do anything otherwise too many tests will be counted
       }
   }
@@ -127,7 +127,7 @@ class JUnitDescriptionsFragments(klass: Class[_]) extends JUnitDescriptions[Frag
      */
     def mapper(klass: Class[_]): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: Fragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case s @ SpecStart(_,_,_,_,_)   => Some(createDescription(klass, suiteName=testName(s.name)) -> f)
+        case s @ SpecStart(_,_,_,_)   => Some(createDescription(klass, suiteName=testName(s.name)) -> f)
         case Text(t)                    => Some(createDescription(klass, suiteName=testName(t)) -> f)
         case Example(description, body) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))) -> f)
         case Step(action)               => Some(createDescription(klass, label=nodeLabel.toString, testName="step") -> f)
