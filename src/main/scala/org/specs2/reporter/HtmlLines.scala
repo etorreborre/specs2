@@ -55,6 +55,7 @@ private[specs2]
 case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
   def isSeeOnlyLink = start.isSeeOnlyLink
   def isIncludeLink = start.isIncludeLink
+  def isLink        = start.isLink
   def link          = start.link
   
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =

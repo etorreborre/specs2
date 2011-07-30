@@ -52,12 +52,12 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
     else this
 
   def printSpecStart(name: SpecName, stats: Stats)(implicit args: Arguments): HtmlResultOutput = {
-    printElem(<title>{name.name}</title>).
+    printElem(<title>{name.title}</title>).
     printElem(
-      if (stats.hasIssues) <h2>{name.name}
+      if (stats.hasIssues) <h2>{name.title}
         <notoc><a href="#" onclick="hideByClass('ok');hideById('issuesOnly');showById('all')"><i id='issuesOnly' style="font-size:small">(issues only)</i></a></notoc>
         <notoc><a href="#" onclick="showByClass('ok');hideById('all');showById('issuesOnly')"><i id='all' style="display:none;font-size:small">(all)</i></a></notoc></h2>
-      else <h2>{name.name}</h2>)
+      else <h2>{name.title}</h2>)
   }
 
   def l(level: Int)(implicit args: Arguments) = "level" + (if (args.noindent) 0 else level)

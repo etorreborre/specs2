@@ -53,6 +53,8 @@ case class ExecutedSpecStart(start: SpecStart, location: Location = new Location
   
   def isSeeOnlyLink = start.isSeeOnlyLink
   def isIncludeLink = start.isIncludeLink
+  def isLink        = start.isLink
+
   def link          = start.link
   
   def specName = start.specName

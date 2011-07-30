@@ -1,9 +1,9 @@
 package org.specs2
 package reporter
 
-import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable }
-import Generator._
+import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Foldable }
 import control.Throwablex._
+import collection.Iterablex._
 import data.Tuples._
 import time._
 import text._
@@ -34,7 +34,7 @@ trait TextPrinter {
     printLines(fs).print(output)
   
   def printLines(fs: Seq[ExecutedFragment]) = 
-    PrintLines(flatten(FoldrGenerator[Seq].reduce(reducer, fs)))
+    PrintLines(flatten(fs.reduceWith(reducer)))
   
   private  val reducer = 
     PrintReducer &&& 

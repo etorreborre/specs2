@@ -27,7 +27,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
       "be printed as a div"                                                                                             ! fragments().text1^
       "be indented to its level with a css property"                                                                    ! fragments().text2^
       "be formatted as some Mockito text"                                                                               ! fragments().text3^
-	                                                                                                                      p^
+	                                                                                                                    p^
     "An example must"                                                                                                   ^
       "have a success icon if successful"                                                                               ! fragments().ex1^
       "show detailed failures if any"                                                                                   ! fragments().ex2^
@@ -111,7 +111,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     def e3 = print(spec2) must \\("img", "src" -> "./images/icon_failure_sml.gif")
   }
 
-  trait MockHtmlPrinter extends FragmentExecution { outer =>
+  trait MockHtmlPrinter extends FragmentExecution with DefaultStoring { outer =>
     val fs = mock[FileSystem]
     val fileWriter = new MockFileWriter {}
     val out = fileWriter.getWriter
@@ -121,7 +121,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
       override lazy val fileWriter = outer.fileWriter
     }
 
-    def htmlLines(spec: Fragments) = printer.reduce(spec.fragments.map(executeFragment), HtmlLink(SpecName("spec"))).flatten.toSeq
+    def htmlLines(spec: Fragments) = printer.reduce(store(args())(spec.fragments.map(executeFragment)), HtmlLink(SpecName("spec"))).flatten.toSeq
     def print(spec: Fragments) = htmlLines(spec).head.printXml(new HtmlResultOutput).xml
 
     def printSpec(spec: SpecificationStructure) = {
