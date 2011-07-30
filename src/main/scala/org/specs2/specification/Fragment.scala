@@ -42,6 +42,11 @@ case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), lin
   def withArgs(args: Arguments) = copy(arguments = args)
   /** the new arguments take override the old ones where defined */
   def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
+  
+  /** @return true if this spec starts only contains a link referencing another specification */
+  def isSeeOnlyLink = link.isDefined && seeOnly
+  /** @return true if this spec starts only contains a link including another specification */
+  def isIncludeLink = link.isDefined && !seeOnly
 
   /**
    * The name of the specification can be overriden with a user defined title

@@ -29,7 +29,7 @@ trait Statistics {
   import Stats._
   implicit def SpecsStatisticsMonoid  = new Monoid[SpecsStatistics] {
     def append(s1: SpecsStatistics, s2: =>SpecsStatistics): SpecsStatistics = {
-      SpecsStatistics(s1.stats ++ s2.stats)
+      SpecsStatistics(s1.fragments ++ s2.fragments)
     }
     val zero = SpecsStatistics() 
   }
@@ -37,13 +37,7 @@ trait Statistics {
   def foldAll(fs: Seq[ExecutedFragment]) = fs.foldMap(StatisticsReducer.unit)
   
   object StatisticsReducer extends Reducer[ExecutedFragment, SpecsStatistics] {
-    override def unit(f: ExecutedFragment): SpecsStatistics = f match { 
-      case ExecutedResult(_, r, t, _, s)    => SpecsStatistics(Stats(r).copy(timer = t))
-      case start @ ExecutedSpecStart(_,_,_) => SpecsStatistics(Stats(start = Some(start)))
-      case end @ ExecutedSpecEnd(_,_,_)     => SpecsStatistics(Stats(end = Some(end)))
-      case ExecutedNoText(t, _)             => SpecsStatistics(Stats(timer = t))
-      case _                                => SpecsStatistics(Stats())
-    }
+    override def unit(f: ExecutedFragment): SpecsStatistics = SpecsStatistics(f)
   }
 
   /**
@@ -51,24 +45,24 @@ trait Statistics {
    * a list of 'current' stats for each fragment execution and the total statistics 
    * for the whole specification
    */
-  case class SpecsStatistics(stats: List[Stats] = Nil) {
+  case class SpecsStatistics(fragments: List[ExecutedFragment] = Nil) {
     private implicit val statsMonoid = Stats.StatsMonoid
     
     /** @return the list of all current stats, with the total on each line */
     def totals: List[Stats] = {
       import NestedBlocks._
 
-      def toBlock(s: Stats) = s match {
-        case Stats(_,_,_,_,_,_,_,_,Some(_), _) => BlockStart(s)
-        case Stats(_,_,_,_,_,_,_,_,_, Some(_)) => BlockEnd(s)
-        case _                                 => BlockBit(s)
+      def toBlock(f: ExecutedFragment) = f match {
+        case ExecutedSpecStart(_,_,s)  => BlockStart(s)
+        case ExecutedSpecEnd(_,_,s)    => BlockEnd(s)
+        case other                     => BlockBit(f.stats)
       }
-      totalContext(stats.map(toBlock)).toList
+      totalContext(fragments.map(toBlock)).toList
     }
     def total = totals.lastOption.getOrElse(Stats())
   }
   case object SpecsStatistics {
-    def apply(current: Stats) = new SpecsStatistics(List(current))
+    def apply(current: ExecutedFragment) = new SpecsStatistics(List(current))
   }
 
   /**

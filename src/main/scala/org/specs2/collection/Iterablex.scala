@@ -2,6 +2,10 @@ package org.specs2
 package collection
 import Listx._
 import scala.collection.{GenSeq, GenIterable}
+import org.specs2.internal.scalaz._
+import Generator._
+import Scalaz._
+
 
 /**
 * This trait provides additional methods on Iterable
@@ -100,6 +104,8 @@ trait Iterablex {
     def mapFirst(f: T => T): GenSeq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
     /** map the last element with a function */
     def mapLast(f: T => T): Seq[T] = (xs.seq.dropRight(1) ++ xs.seq.takeRight(1).map(f)).toSeq
+    
+    def reduceWith[S](reducer: Reducer[T, S]) = FoldrGenerator[Iterable].reduce(reducer, xs.seq)
   }
 }
 private[specs2]

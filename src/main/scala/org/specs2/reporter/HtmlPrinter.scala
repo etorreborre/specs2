@@ -103,35 +103,29 @@ trait HtmlPrinter {
    * @return the HtmlLines to print
    */
   def reduce(fs: Seq[ExecutedFragment], parentLink: HtmlLink): Tree[HtmlLines] = {
+    val lines = flatten(FoldrGenerator[Seq].reduce(reducer, fs))
     lazy val start: HtmlLines = HtmlLines(Nil, parentLink)
-    flatten(FoldrGenerator[Seq].reduce(reducer, fs)).foldLeft (leaf(start).loc) { (res, cur) =>
+    lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
-      def updateSeeStats(node: TreeLoc[HtmlLines], s: Stats) = {
-        val see = node.getLabel.lines.lastOption.map(_.copy(stats = s))
-        node.updateLabel((u: HtmlLines) => u.copy(lines = u.lines.dropRight(1) ++ see.toList))
-      }
-
       cur match {
-        case HtmlLine(HtmlSpecEnd(end), s, _, _) if (res.getLabel.is(end.specName)) => {
-          val updatedParent = updated.updateLabel(_.updateSpecStartStats(s)).getParent
-          updateSeeStats(updatedParent, s)
-        }
-        case other                                                              => updated
+        case HtmlLine(start @ HtmlSpecStart(_), _, _, _) => updated.insertDownLast(leaf(HtmlLines(link = start.link.getOrElse(parentLink))))
+        case HtmlLine(HtmlSpecEnd(_, _), _, _, _)        => updated.getParent
+        case other                                       => updated
       }
     }.root.tree
   }
 
   /** flatten the results of the reduction to a list of Html lines */
-  private def flatten(results: (((List[Html], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[HtmlLine] = {
-    val (prints, statistics, levels, args) = results.flatten
-    (prints zip statistics.totals zip levels.levels zip args.toList) map {
+  private def flatten(results: (((List[Html], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[HtmlLine] = {
+    val (prints, stats, levels, args) = results.flatten
+    (prints zip stats.stats zip levels.levels zip args.toList) map {
       case (((t, s), l), a) => HtmlLine(t, s, l, a)
     }
   }  
   
   private  val reducer = 
     HtmlReducer &&& 
-    StatisticsReducer &&&
+    StatsReducer &&&
     LevelsReducer  &&&
     SpecsArgumentsReducer
 
@@ -143,7 +137,7 @@ trait HtmlPrinter {
       case result @ ExecutedResult(_,_,_,_,_)     => HtmlResult(result)
       case text @ ExecutedText(s, _)              => HtmlText(text)
       case par @ ExecutedBr(_)                    => HtmlBr()
-      case end @ ExecutedSpecEnd(_,_,_)           => HtmlSpecEnd(end)
+      case end @ ExecutedSpecEnd(_,_,s)           => HtmlSpecEnd(end, s)
       case fragment                               => HtmlOther(fragment)
     }
   }

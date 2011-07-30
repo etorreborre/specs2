@@ -8,7 +8,7 @@ import main.Arguments
 import execute._
 import specification._
 
-class TextPrinterSpec extends Specification { def is = only("statistics are shown") ^
+class TextPrinterSpec extends Specification { def is = 
                                                                                                                         """
   The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
   and outputs them using a `TextResultOutput`.
@@ -230,10 +230,10 @@ class TextPrinterSpec extends Specification { def is = only("statistics are show
     }
   }
 
-  val preReporter = new DefaultSelection with DefaultSequence with DefaultExecutionStrategy {
+  val preReporter = new DefaultSelection with DefaultSequence with DefaultExecutionStrategy with DefaultStoring {
     def exec(spec: SpecificationStructure): Seq[ExecutedFragment] = {
       val args = spec.content.arguments
-      spec.content |> select(args) |> sequence(args) |> execute(args)
+      spec.content |> select(args) |> sequence(args) |> execute(args) |> store(args)
     }
   }
 

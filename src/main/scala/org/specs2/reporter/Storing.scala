@@ -2,11 +2,11 @@ package org.specs2
 package reporter
 
 import org.specs2.internal.scalaz._
-import Generator._
 import Scalaz._
 import main.Arguments
 import specification._
 import NestedBlocks._
+import collection.Iterablex._
 /**
  * This trait defines a very generic way to store the results of an executed specification
  */
@@ -20,8 +20,7 @@ trait Storing {
 private[specs2]
 trait DefaultStoring extends Storing with Statistics {
   def store(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
-    val totals = fragments zip FoldrGenerator[Seq].reduce(StatisticsReducer, fragments).totals
-
+    val totals = fragments zip fragments.reduceWith(StatisticsReducer).totals
     associateStartEnd(totals map (setStats andThen executedFragmentsToSpecBlock), updateStatsOnSpecStart) map (_.value)
   }
 

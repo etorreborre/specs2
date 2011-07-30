@@ -23,13 +23,8 @@ private[specs2]
 case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink) {
   def printXml(implicit out: HtmlResultOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
   def add(line: HtmlLine) = HtmlLines(lines :+ line, link)
-  def is(name: SpecName) = link.is(name)
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty
-  def updateSpecStartStats(s: Stats) = updateFirstLineStats { (stats: Stats) => s }
-  def incrementSpecStartStats(s: Stats) = updateFirstLineStats { (stats: Stats) => stats |+| s }
-  private def updateFirstLineStats(f: Stats => Stats) =
-    copy(lines = lines.headOption.map { start => start.copy(stats = f(start.stats)) }.toList ++ lines.drop(1))
 }
 
 /** 
@@ -58,6 +53,10 @@ sealed trait Html {
 }
 private[specs2]
 case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
+  def isSeeOnlyLink = start.isSeeOnlyLink
+  def isIncludeLink = start.isIncludeLink
+  def link          = start.link
+  
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printSpecStart(start.specName, stats)(args) else out
 }
@@ -121,16 +120,16 @@ case class HtmlResult(r: ExecutedResult) extends Html {
 
 }
 private[specs2]
-case class HtmlSpecEnd(end: ExecutedSpecEnd) extends Html {
+case class HtmlSpecEnd(end: ExecutedSpecEnd, endStats: Stats) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
-    if ((!args.xonly || stats.hasFailuresOrErrors) && stats.hasExpectations && stats.isEnd(end))
+    if ((!args.xonly || stats.hasFailuresOrErrors) && stats.hasExpectations && (stats eq endStats))
       printEndStats(stats)(args, out)
     else out
   }
 
   def printEndStats(stats: Stats)(implicit args: Arguments, out: HtmlResultOutput) = {
     val title = "Total for specification" + (if (end.name.isEmpty) end.name.trim else " "+end.name.trim)
-    val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer, specStart, specEnd) = stats
+    val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer) = stats
     val classStatus = if (failures + errors > 0) "failure" else "success" 
     val numbers = Seq(
             Some(examples qty "example"), 

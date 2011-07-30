@@ -42,7 +42,7 @@ trait TextPrinter {
     LevelsReducer  &&&
     SpecsArgumentsReducer
   
-  case class PrintLine(text: Print = PrintBr(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
+  case class PrintLine(text: Print, stats: Stats, level: Int, args: Arguments) {
     def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
   
@@ -65,7 +65,7 @@ trait TextPrinter {
       case result @ ExecutedResult(_,_,_,_,_)  => PrintResult(result)
       case text @ ExecutedText(s, _)           => PrintText(text)
       case par @ ExecutedBr(_)                 => PrintBr()
-      case end @ ExecutedSpecEnd(_,_,_)        => PrintSpecEnd(end)
+      case end @ ExecutedSpecEnd(_,_, s)       => PrintSpecEnd(end, s)
       case fragment                            => PrintOther(fragment)
     }
   }
@@ -173,22 +173,22 @@ trait TextPrinter {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (!args.xonly) out.printLine(" ")(args)
   }
-  case class PrintSpecEnd(end: ExecutedSpecEnd)       extends Print {
+  case class PrintSpecEnd(end: ExecutedSpecEnd, endStats: Stats)       extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      if (!stats.isEnd(end) && args.xonly && stats.hasFailuresOrErrors)
+      if (!(stats eq endStats) && !args.xonly && stats.hasFailuresOrErrors)
         printEndStats(stats)(args, out)
-      if (stats.isEnd(end))
+      if (stats eq endStats)
         printEndStats(stats)(args, out)
     }
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       out.printLine(" ")
-      out.printStats("Total for specification" + (if (end.name.isEmpty) end.name.trim else " "+end.name.trim))
+      out.printStats("Total for specification" + (if (end.title.isEmpty) end.title.trim else " "+end.title.trim))
       printStats(stats)
       out.printLine(" ")
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
 
-      val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer, specStart, specEnd) = stats
+      val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer) = stats
       out.printLine(args.colors.stats("Finished in " + timer.time, args.color))
       out.printLine(args.colors.stats(
           Seq(Some(examples qty "example"), 

@@ -35,7 +35,7 @@ object ExecutedFragments {
 case class ExecutedText(text: String, location: Location) extends ExecutedFragment {
   val stats: Stats = Stats()
 }
-case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, location: Location, stats: Stats = Stats()) extends ExecutedFragment {
+case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, location: Location, stats: Stats) extends ExecutedFragment {
   def text(implicit args: Arguments) = s match {
     case CodeMarkup(s) if (!result.expected.isEmpty && !args.fromSource) => CodeMarkup(result.expected)
     case _                                                               => s
@@ -50,6 +50,11 @@ case class ExecutedTab(n: Int = 1, location: Location) extends ExecutedStandardF
 case class ExecutedBacktab(n: Int = 1, location: Location) extends ExecutedStandardFragment
 
 case class ExecutedSpecStart(start: SpecStart, location: Location = new Location, stats: Stats = Stats()) extends ExecutedFragment {
+  
+  def isSeeOnlyLink = start.isSeeOnlyLink
+  def isIncludeLink = start.isIncludeLink
+  def link          = start.link
+  
   def specName = start.specName
   def name = start.name
   def args = start.arguments
@@ -58,6 +63,8 @@ case class ExecutedSpecStart(start: SpecStart, location: Location = new Location
 case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stats: Stats = Stats()) extends ExecutedFragment {
   def specName = end.specName
   def name = end.name
+  def title = end.title
+  
   override def toString = "ExecutedSpecEnd("+name+")"
 }
 

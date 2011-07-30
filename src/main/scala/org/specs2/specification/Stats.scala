@@ -33,14 +33,8 @@ case class Stats(fragments:    Int = 0,
                  errors:       Int = 0,
                  pending:      Int = 0,
                  skipped:      Int = 0,
-                 timer:        SimpleTimer = new SimpleTimer,
-                 start:        Option[ExecutedSpecStart] = None,
-                 end:          Option[ExecutedSpecEnd] = None) {
+                 timer:        SimpleTimer = new SimpleTimer) {
 
-  /** @return true if this Stats object is the SpecStart corresponding to the 'end' parameter */
-  def isEnd(end: ExecutedSpecEnd) = {
-    start.map(_.start.specName == end.specName).getOrElse(false)
-  }
   /** @return true if there are errors or failures */
   def hasFailuresOrErrors = failures + errors > 0
   /** @return true if there are expectations */
@@ -76,7 +70,6 @@ case class Stats(fragments:    Int = 0,
            "errors = "      + errors       +", "+
            "pending = "     + pending      +", "+
            "skipped = "     + skipped      +", "+
-           start.collect { case s @ ExecutedSpecStart(_,_,_) => s.name }.getOrElse("")+
            "time = "        + timer.elapsed+")"
 }
 
@@ -103,9 +96,7 @@ case object Stats {
         errors       = s1.errors          + s2.errors,
         pending      = s1.pending         + s2.pending,
         skipped      = s1.skipped         + s2.skipped,
-        timer        = s1.timer           add s2.timer,
-        start        = s1.start           orElse s2.start,
-        end          = s2.end             orElse s1.end
+        timer        = s1.timer           add s2.timer
       )
     }
 
