@@ -23,7 +23,7 @@ import specification._
  * * the current arguments to use
  *
  */
-trait JUnitXmlPrinter extends Statistics {
+trait JUnitXmlPrinter {
 
   /**
    * create a TestSuite object containing all the examples
@@ -31,7 +31,10 @@ trait JUnitXmlPrinter extends Statistics {
   def testSuite(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     /** extract the root Description object and the examples to execute */
     lazy val DescriptionAndExamples(desc, executions) = descriptions(s).foldAll(fs)
-    lazy val statistics: Stats = foldAll(fs).total
+    lazy val statistics: Stats = fs.headOption match {
+      case Some(s @ ExecutedSpecStart(_,_,_)) => s.stats
+      case _                                  => Stats()
+    }
     lazy val start = TestSuite(desc, s.getClass.getName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.elapsed)
 
     executions.foldLeft(start) { (suite, de) =>

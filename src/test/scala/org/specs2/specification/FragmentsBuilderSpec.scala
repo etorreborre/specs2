@@ -21,7 +21,7 @@ class FragmentsBuilderSpec extends Specification with ResultMatchers {  def is =
 
    * `Step` fragments which are not reported but execute an action
 
-   * `See` fragments to create a link to another specification                                                          """^p^
+                                                                                                                        """^p^
                                                                                                                         """
 SpecStart/SpecEnd
 =================                                                                                                       """^
@@ -38,6 +38,10 @@ SpecStart/SpecEnd
       "new Arguments values are added to the existing ones"                                                             ! startEnd().e8^
       "and override them if already declared"                                                                           ! startEnd().e9^
       "it also works with the map method in BaseSpecification"                                                          ! startEnd().e10^
+                                                                                                                        endp^
+    "A specification can be linked"                                                                                     ^
+      "and included"                                                                                                    ! startEnd().e11^
+      "or just referenced"                                                                                              ! startEnd().e12^
                                                                                                                         endp^
                                                                                                                         """
 How to create an Example
@@ -68,10 +72,15 @@ Other elements
                                                                                                                         end
 
   case class startEnd() {
-    lazy val content = new Specification { def is = "title".title ^ xonly ^ "text" }.content
-    lazy val content2 = new Specification { def is = xonly ^ "title".title ^ "text" }.content
+    lazy val spec1 = new Specification { def is = "title".title ^ xonly ^ "text" }
+    lazy val spec2 = new Specification { def is = xonly ^ "title".title ^ "text" }
+    lazy val content = spec1.content
+    lazy val content2 = spec2.content
     lazy val content3 = new Specification { def is = xonly ^ args(include="t1") ^ "title".title ^ "text" }.content
     lazy val content4 = new Specification { def is = args(include="t1") ^ "title".title ^ args(include="t2") ^ "text" }.content
+    lazy val parentSpec1 = new Specification { def is = "e1" ^ link(spec1) }
+    lazy val parentSpec2 = new Specification { def is = "e1" ^ see(spec2) }
+
     trait CustomSpecification extends Specification {
       override def map(fs: =>Fragments) = "title".title ^ fs ^ "end of the spec"
     }
@@ -88,6 +97,10 @@ Other elements
     def e8 = (content3.start.arguments.xonly must beTrue) and (content3.start.arguments.include must_== "t1")
     def e9 = content4.start.arguments.include must_== "t2"
     def e10 = content5.start.arguments.sequential must beTrue
+    def e11 = parentSpec1.content.fragments.toList must
+              beLike { case SpecStart(_,_,_,_) :: Text(_) :: SpecStart(_,_,Some(l), false) :: rest => ok }
+    def e12 = parentSpec2.content.fragments.toList must
+              beLike { case SpecStart(_,_,_,_) :: Text(_) :: SpecStart(_,_,Some(l), true) :: rest => ok }
   }
 
   case class ex() {

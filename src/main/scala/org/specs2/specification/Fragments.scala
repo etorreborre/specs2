@@ -12,7 +12,7 @@ import Fragments._
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
 case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fragment] = Nil, arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
-  def fragments: Seq[Fragment] = if (middle.isEmpty) Seq() else (start +: middle :+ end)
+  def fragments: Seq[Fragment] = if (middle.isEmpty && !link.isDefined) Seq() else (start +: middle :+ end)
 
   private def append(e: Fragment) = copy(middle = middle :+ e)
   def specTitleIs(name: SpecName): Fragments = copy(title = title.map(_.overrideWith(name)).orElse(Some(name)))
@@ -54,8 +54,8 @@ object Fragments {
    */
   def create(fs: Fragment*) = {
     fs.toList match {
-      case (s @ SpecStart( _, _, _, _)) :: rest => Fragments(middle = rest).specTitleIs(s.specName).add(s.arguments)
-      case _                                      => createList(fs:_*)
+      case (s @ SpecStart(n, a, l, so)) :: rest => Fragments(Some(n), rest, a, l, so)
+      case _                                    => createList(fs:_*)
     }
   }
 

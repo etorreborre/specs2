@@ -108,8 +108,8 @@ trait HtmlPrinter {
     lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
       cur match {
-        case HtmlLine(start @ HtmlSpecStart(_), _, _, _) if start.isSeeOnlyLink => updated.insertDownLast(leaf(HtmlLines(link = start.link.getOrElse(parentLink))))
-        case HtmlLine(start @ HtmlSpecStart(_), _, _, _) if start.isIncludeLink => updated
+        case HtmlLine(start @ HtmlSpecStart(_), _, _, _) if start.isIncludeLink =>
+          updated.insertDownLast(leaf(HtmlLines(link = start.link.getOrElse(parentLink))))
         case HtmlLine(HtmlSpecEnd(_, _), _, _, _)                               => updated.getParent
         case other                                                              => updated
       }

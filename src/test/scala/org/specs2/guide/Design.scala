@@ -24,11 +24,11 @@ The structure of a specification is very simple, it is just a list of `Fragments
       +---------------+                           +-----------+
                                                         ^
                                                         |
-             +----------+-----------+-----------+-------------+-------------+----------+--------------+
-             |          |           |           |             |             |          |              |
-         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +------+  +-----------------+
-         | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | See  |  | TaggingFragment |
-         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +------+  +-----------------+
+             +----------+-----------+-----------+-------------+-------------+----------+
+             |          |           |           |             |             |          |
+         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
+         | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | TaggingFragment |
+         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
 
 
 Here's a short description of all the Fragments:
@@ -38,7 +38,6 @@ Here's a short description of all the Fragments:
  * Step / Action: some action on the system which is only reported if there's an exception
  * SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications. The SpecStart
    element holds the Arguments used to tune the execution/reporting
- * See: a link to another specification
  * TaggingFragments: those fragments are used to define which fragments should be included or excluded from the execution
 
 ### Specification creation

@@ -27,7 +27,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
       "be printed as a div"                                                                                             ! fragments().text1^
       "be indented to its level with a css property"                                                                    ! fragments().text2^
       "be formatted as some Mockito text"                                                                               ! fragments().text3^
-	                                                                                                                    p^
+	                                                                                                                      p^
     "An example must"                                                                                                   ^
       "have a success icon if successful"                                                                               ! fragments().ex1^
       "show detailed failures if any"                                                                                   ! fragments().ex2^

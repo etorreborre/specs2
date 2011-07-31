@@ -35,16 +35,20 @@ trait FragmentsBuilder extends RegexSteps { outer =>
     def fragments = fs
     def ^(t: String) = fs add Text(t)
     def ^(f: Fragment) = f match {
-      case s @ SpecStart( _, _, _, _) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
-      case _ => fs add f
+      case s @ SpecStart(_,_,_,_) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
+      case _                      => fs add f
     }
     def ^(other: Seq[Fragment]) = fs add other
+
     def ^(other: Fragments) = {
-      other.start match {
-        case s @ SpecStart(_,_,_,_) => (fs add other.middle).specTitleIs(s.specName).overrideArgs(s.arguments)
-        case _                      => fs add other.middle
+      other match {
+        case Fragments(t, m, a, Some(l), so)    => fs add other.fragments
+        case Fragments(Some(t), m, a, None, so) => (fs add other.middle).specTitleIs(t).overrideArgs(a)
+        case Fragments(None, m, a, None, so)    => (fs add other.middle).overrideArgs(a)
+        case _                                  => fs add other.middle
       }
     }
+    
     def ^(other: FragmentsFragment) = fs add other.fragments
     def ^(a: Arguments) = fs add a
 
@@ -131,7 +135,7 @@ trait FragmentsBuilder extends RegexSteps { outer =>
 
   /** create a html link without including the other specification fragments */
   def see(s: SpecificationStructure): Fragments = see(HtmlLink(s),  s)
-  /** create a html link without including the other specification fragments, and passing a specificlink */
+  /** create a html link without including the other specification fragments, and passing a specific link */
   def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = s.content.seeIs(htmlLink)
 
   /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */

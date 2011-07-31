@@ -25,6 +25,8 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink) {
   def add(line: HtmlLine) = HtmlLines(lines :+ line, link)
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty
+  
+  override def toString = (link +: lines).mkString("\n")
 }
 
 /** 
@@ -38,6 +40,8 @@ case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink) {
 private[specs2]
 case class HtmlLine(text: Html = HtmlBr(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
   def print(implicit out: HtmlResultOutput): HtmlResultOutput = text.print(stats, level, args)
+  
+  override def toString = text.toString
 }
 
 /**
@@ -58,13 +62,20 @@ case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
   def isLink        = start.isLink
   def link          = start.link
   
-  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
-    if (!args.xonly) out.printSpecStart(start.specName, stats)(args) else out
+  def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
+    if (!args.xonly) {
+      start.link.map(l => out.printLink(l, level, stats)(args)).getOrElse(out.printSpecStart(start.specName, stats)(args))
+    } else out
+  }
+
+  override def toString = start.toString
 }
 private[specs2]
 case class HtmlText(t: ExecutedText) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printText(t.text, level, !args.xonly)(args) else out
+
+  override def toString = t.toString
 }
 private[specs2]
 case class HtmlBr() extends Html {
@@ -118,7 +129,9 @@ case class HtmlResult(r: ExecutedResult) extends Html {
     out.printCollapsibleExceptionMessage(f, level + 1)
 
   def printDataTable(table: DataTable, level: Int = 0)(implicit args: Arguments, out: HtmlResultOutput) = printFormResult(Form(table))(args, out)
-
+   
+  override def toString = r.toString
+   
 }
 private[specs2]
 case class HtmlSpecEnd(end: ExecutedSpecEnd, endStats: Stats) extends Html {

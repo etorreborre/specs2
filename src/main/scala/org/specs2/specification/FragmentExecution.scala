@@ -49,18 +49,18 @@ trait FragmentExecution {
       lazy val result = executed.execute
       ExecutedResult(FormMarkup(executed), result, timer.stop, f.location, Stats(result))
     }
-	case e @ Example(s, _)     => {
+	  case e @ Example(s, _)     => {
       val timer = new SimpleTimer().start
       lazy val result = executeBody(e.execute)
       ExecutedResult(s, result, timer.stop, f.location, Stats(result))
     }
-	case Text(s)                       => ExecutedText(s, f.location)
-	case Br()                          => ExecutedBr(f.location)
+	  case Text(s)                       => ExecutedText(s, f.location)
+	  case Br()                          => ExecutedBr(f.location)
     case Tab(n)                        => ExecutedTab(n, f.location)
     case Backtab(n)                    => ExecutedBacktab(n, f.location)
-	case End()                         => ExecutedEnd(f.location)
-	case s @ SpecStart(_, a, l, so)    => ExecutedSpecStart(s.withArgs(arguments.overrideWith(a)), f.location)
-	case e @ SpecEnd(s)                => ExecutedSpecEnd(e, f.location)
+	  case End()                         => ExecutedEnd(f.location)
+	  case s @ SpecStart(_, a, l, so)    => ExecutedSpecStart(s.withArgs(arguments.overrideWith(a)), f.location)
+	  case e @ SpecEnd(s)                => ExecutedSpecEnd(e, f.location)
     case s @ Step(_)                   => executeStep("step", s, f.location)
     case s @ Action(_)                 => executeStep("action", s, f.location)
     case _                             => ExecutedNoText(new SimpleTimer, f.location)
