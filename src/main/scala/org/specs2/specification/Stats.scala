@@ -61,9 +61,7 @@ case class Stats(fragments:    Int = 0,
                      errors       = {errors.toString}
                      pending      = {pending.toString}
                      skipped      = {skipped.toString}
-                     time         = {timer.elapsed.toString}>
-              {trend.map(t => <trend>{t.toXml}</trend>).getOrElse(NodeSeq.Empty)}
-              </stats>
+                     time         = {timer.elapsed.toString}>{trend.map(t => <trend>{t.toXml}</trend>).getOrElse(NodeSeq.Empty)}</stats>
                      
   override def toString =
     "Stats(fragments = "    + fragments    +", "+
@@ -143,21 +141,21 @@ case object Stats {
       case DecoratedResult(t, r) => Stats(r)
     }
   
-  def fromXml(stats: scala.xml.Node): Stats = {
+  def fromXml(stats: scala.xml.Node): Option[Stats] = {
     if (stats.label != Stats().toXml.label)
-      Stats()
+      None
     else {
       val map = stats.attributes.asAttrMap
       def asInt(key: String) = tryOrElse(Integer.parseInt(map(key)))(0)
-      Stats(asInt("fragments"   ),
+      Some(Stats(asInt("fragments"   ),
             asInt("successes"   ),
             asInt("expectations"),
             asInt("failures"    ),
             asInt("errors"      ),
             asInt("pending"     ),
             asInt("skipped"     ),
-            (stats \ "trend" \ "stats").headOption.map(fromXml),
-            map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer))
+            (stats \ "trend" \ "stats").headOption.flatMap(fromXml),
+            map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer)))
     }
 
   }

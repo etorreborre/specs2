@@ -28,7 +28,7 @@ trait DefaultStoring extends Storing with Statistics {
   }
 
   protected def setStats = (fs: (ExecutedFragment, Stats)) => fs match {
-    case (ExecutedSpecEnd(n, l, s), stats) => ExecutedSpecEnd(n, l, stats.updatedFrom(repository.getStatistics(n.specName)))
+    case (ExecutedSpecEnd(n, l, s), stats) => ExecutedSpecEnd(n, l, (repository.getStatistics(n.specName) map stats.updatedFrom).getOrElse(stats))
     case (other, s)                        => other
   }
 
@@ -42,7 +42,8 @@ trait DefaultStoring extends Storing with Statistics {
 
   protected def storeStats = (f: ExecutedFragment) => {
     f match {
-      case ExecutedSpecStart(start @ SpecStart(_,_,_,true), loc, st) => ExecutedSpecStart(start, loc, repository.getStatistics(start.specName))
+      case ExecutedSpecStart(start @ SpecStart(_,_,_,true), loc, st) =>
+        ExecutedSpecStart(start, loc, repository.getStatistics(start.specName).getOrElse(st))
       case ExecutedSpecEnd(end @ SpecEnd(_), loc, st)                => repository.storeStatistics(end.specName, st); f
       case other => other
     }

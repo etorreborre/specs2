@@ -24,7 +24,7 @@ trait FileWriter {
    */
   def write(path: String)(function: Writer => Unit): Unit = {
     createFile(path)
-    appendTo(path)(function)
+    writeToPath(path)(function)
   }
   /**
    * append some content to a file and take care of closing the file.<p>
@@ -37,10 +37,11 @@ trait FileWriter {
    */
   def append(path: String)(function: Writer => Unit): Unit = {
     if (!exists(path)) createFile(path)
-    appendTo(path)(function)
+    writeToPath(path, append = true)(function)
   }
-  private def appendTo(path: String)(function: Writer => Unit): Unit = {
-    val out = getWriter(path)
+
+  private def writeToPath(path: String, append: Boolean = false)(function: Writer => Unit): Unit = {
+    val out = getWriter(path, append)
     try {
       function(out)
     } finally {
@@ -84,14 +85,14 @@ trait FileWriter {
    * @param path path of the file to read
    * @param content content of the file to write
    */
-  def appendToXmlFile(path: String, content: =>Node): Unit = appendToFile(path, Xhtml.toXhtml(content))
+  def appendToXmlFile(path: String, content: =>NodeSeq): Unit = appendToFile(path, Xhtml.toXhtml(content))
 
   /**
    * The getWriter function can be overriden to provide a mock writer writing to the console for example
    * @return a Writer object opened on the file designated by <code>path</code>
    */
-  def getWriter(path: String): Writer =
-    new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), Charset.forName(getOrElse("specs2.file.encoding", "UTF-8"))))
+  def getWriter(path: String, append: Boolean = false): Writer =
+    new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), Charset.forName(getOrElse("specs2.file.encoding", "UTF-8"))))
 }
 
 private[specs2]
@@ -99,5 +100,5 @@ trait MockFileWriter extends FileWriter {
   override def createFile(path: String) = {}
   private val writer = new MockWriter {}
   def getWriter: MockWriter = writer
-  override def getWriter(path: String): Writer = writer
+  override def getWriter(path: String, append: Boolean = false): Writer = writer
 }

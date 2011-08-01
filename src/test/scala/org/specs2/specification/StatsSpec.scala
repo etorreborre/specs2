@@ -48,13 +48,13 @@ class StatsSpec extends mutable.Specification {
       "with no trend" >> {
         Stats.fromXml(
           <stats fragments="1" successes="2" expectations="3" failures="4" errors="5" pending="6" skipped="7" time="0"></stats>) must_==
-        Stats(1, 2, 3, 4, 5, 6, 7)
+        Some(Stats(1, 2, 3, 4, 5, 6, 7))
       }
       "with a trend" >> {
         Stats.fromXml(<stats fragments="1" successes="2" expectations="3" failures="4" errors="5" pending="6" skipped="7" time="0">
           <trend><stats fragments="-1" successes="-2" expectations="0" failures="0" errors="0" pending="0" skipped="0" time="0"></stats></trend>
         </stats>) must_==
-        Stats(1, 2, 3, 4, 5, 6, 7, Some(Stats(-1, -2)))
+        Some(Stats(1, 2, 3, 4, 5, 6, 7, Some(Stats(-1, -2))))
       }
     }
   }

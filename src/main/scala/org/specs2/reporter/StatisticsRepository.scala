@@ -3,22 +3,31 @@ package reporter
 
 import scala.xml._
 import io.FileSystem
+import xml.Nodex._
 import specification.{ExecutedFragment, Stats, SpecName}
 
 private[specs2]
 trait StatisticsRepository {
-  def getStatistics(specName: SpecName): Stats
+  def getStatistics(specName: SpecName): Option[Stats]
   def storeStatistics(specName: SpecName, stats: Stats): this.type
 }
 
 private[specs2]
 trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
 
-  protected val statsFilePath = outputDir + "specs2.stats"
+  protected lazy val statsFileName = "specs2.stats"
+  protected lazy val statsFilePath = outputDir + statsFileName
 
   lazy val allStats = fileSystem.loadXhtmlFile(statsFilePath)
 
-  def getStatistics(specName: SpecName): Stats = Stats.fromXml((allStats \\ specName.name).lastOption.getOrElse(<none/>))
+  /**
+   * @return the latest statistics for a given specification
+   */
+  def getStatistics(specName: SpecName): Option[Stats] = {
+    val allSpecs = (allStats \\ specName.fullName)
+    val specStats = allSpecs.lastOption.flatMap(_.child.headOption).getOrElse(<none/>)
+    Stats.fromXml(specStats)
+  }
 
   def storeStatistics(specName: SpecName, stats: Stats) = {
     fileWriter.appendToXmlFile(statsFilePath, toXml(specName, stats))
@@ -26,7 +35,8 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
   }
 
   private def toXml(specName: SpecName, stats: Stats) = {
-    Elem(null, specName.fullName, null, TopScope, stats.toXml)
+    Elem(null, specName.fullName,
+         new UnprefixedAttribute("timestamp", System.currentTimeMillis().toString, Null), TopScope, stats.toXml) ++ Text("\n")
   }
 }
 private[specs2]

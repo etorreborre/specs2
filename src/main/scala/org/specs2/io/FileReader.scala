@@ -2,7 +2,11 @@ package org.specs2
 package io
 
 import java.io._
-
+import scala.xml.NodeSeq
+import control.Exceptions._
+import scala.xml.parsing._
+import scala.io.Source._
+import xml.Nodex._
 /**
  * The FileReader trait provides functions to read files
  * It can be overridden if necessary to mock that behaviour
@@ -37,12 +41,17 @@ trait FileReader {
   /**
    * @return the xml content of a file
    */
-  def loadXhtmlFile(filePath: String) = scala.xml.parsing.XhtmlParser(scala.io.Source.fromFile(filePath))
+  def loadXmlFile(filePath: String) = tryo(scala.xml.XML.load(filePath))(e => e.printStackTrace).getOrElse(NodeSeq.Empty)
 
   /**
    * @return the xml content of a file
    */
-  def loadXmlFile(filePath: String) = scala.xml.XML.load(filePath)
+  def loadXhtmlFile(filePath: String) = tryo {
+    val fileContent = readFile(filePath)
+    val xhtml = fromString("<e>"+fileContent+"</e>")
+    val result = (XhtmlParser(xhtml)\\"e")(0).child.reduceNodes
+    result
+  }(e => e.printStackTrace).getOrElse(NodeSeq.Empty)
 }
 private[specs2]
 object FileReader extends FileReader
