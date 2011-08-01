@@ -24,8 +24,6 @@ Statistics can be accumulated on each executed specification in order to be disp
     "the total of an inner spec must be ok"                                                                             ! e8^
     "the total of the outer spec must be ok"                                                                            ! e9^
                                                                                                                         p^
-  "A Stats object can be resumed to a Result"                                                                           ^
-    "if there are no failures or errors -> success"                                                                     ! e10^
                                                                                                                         end
                                                                                           
   val spec1 = new Specification { def is =
@@ -64,24 +62,4 @@ Statistics can be accumulated on each executed specification in order to be disp
     (endOfSpecStats.fragments must_== 5) and (endOfSpecStats.successes must_== 1)
   }
   def e9 = (total(spec2).successes must_== 2) and (total(spec2).fragments must_== 7)
-
-  import matcher.DataTables._
-
-  def e10 =
-
-   "success" | "failure" | "error" | "pending" | "skipped" | "result"           |>
-   1         ! 0         ! 0       ! 0         ! 0         ! (success: Result)  |
-   0         ! 1         ! 0       ! 0         ! 0         ! failure            |
-   0         ! 0         ! 1       ! 0         ! 0         ! anError            |
-   0         ! 0         ! 0       ! 1         ! 0         ! pending            |
-   0         ! 0         ! 0       ! 0         ! 1         ! skipped            |
-   1         ! 1         ! 1       ! 1         ! 1         ! anError            |
-   1         ! 1         ! 0       ! 1         ! 1         ! failure            |
-   1         ! 0         ! 0       ! 1         ! 1         ! success            |
-   0         ! 0         ! 0       ! 2         ! 1         ! pending            |
-   0         ! 0         ! 0       ! 2         ! 2         ! skipped            |
-   0         ! 0         ! 0       ! 0         ! 0         ! success            | { (s, f, e, p, sk, r) =>
-     Stats(successes = s, failures = f, errors = e, pending = p, skipped = sk).result must_== r
-   }
-
 }

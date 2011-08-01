@@ -143,7 +143,7 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd, endStats: Stats) extends Html {
 
   def printEndStats(stats: Stats)(implicit args: Arguments, out: HtmlResultOutput) = {
     val title = "Total for specification" + (if (end.name.isEmpty) end.name.trim else " "+end.name.trim)
-    val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer) = stats
+    val Stats(examples, successes, expectations, failures, errors, pending, skipped, trend, timer) = stats
     val classStatus = if (failures + errors > 0) "failure" else "success" 
     val numbers = Seq(
             Some(examples qty "example"), 

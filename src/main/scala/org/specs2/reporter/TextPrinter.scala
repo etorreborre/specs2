@@ -188,7 +188,7 @@ trait TextPrinter {
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
 
-      val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer) = stats
+      val Stats(examples, successes, expectations, failures, errors, pending, skipped, trend, timer) = stats
       out.printLine(args.colors.stats("Finished in " + timer.time, args.color))
       out.printLine(args.colors.stats(
           Seq(Some(examples qty "example"), 

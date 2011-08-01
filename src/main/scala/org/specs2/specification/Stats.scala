@@ -7,12 +7,13 @@ import execute._
 import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
 import Scalaz._
 import org.specs2.execute.StandardResults
+import xml.Nodex._
 import time._
 import specification._
 import control.Exceptions._
-import scala.xml.NodeSeq
 import org.specs2.control.Exceptions._
 import org.specs2.time.SimpleTimer
+import scala.xml.{Elem, NodeSeq}
 
 /**
  * The Stats class store results for the number of:
@@ -33,6 +34,7 @@ case class Stats(fragments:    Int = 0,
                  errors:       Int = 0,
                  pending:      Int = 0,
                  skipped:      Int = 0,
+                 trend:        Stats = Stats(),
                  timer:        SimpleTimer = new SimpleTimer) {
 
   /** @return true if there are errors or failures */
@@ -53,14 +55,16 @@ case class Stats(fragments:    Int = 0,
   /** @return true if there are failures or errors */
   def hasIssues = result.isFailure || result.isError
 
-  def toXml = <stats fragments    = {fragments.toString}
+  def toXml: Elem = <stats fragments    = {fragments.toString}
                      successes    = {successes.toString}
                      expectations = {expectations.toString}
                      failures     = {failures.toString}
                      errors       = {errors.toString}
                      pending      = {pending.toString}
                      skipped      = {skipped.toString}
-                     time         = {timer.elapsed.toString} />
+                     time         = {timer.elapsed.toString}>
+              {<trend>{trend.toXml}</trend> unless trend.isSuccess}
+              </stats>
                      
   override def toString =
     "Stats(fragments = "    + fragments    +", "+
@@ -86,6 +90,7 @@ case class Stats(fragments:    Int = 0,
  *
  */
 case object Stats {
+
   implicit object StatsMonoid extends Monoid[Stats] {
     def append(s1: Stats, s2: =>Stats) = {
       s1.copy(
@@ -96,6 +101,7 @@ case object Stats {
         errors       = s1.errors          + s2.errors,
         pending      = s1.pending         + s2.pending,
         skipped      = s1.skipped         + s2.skipped,
+        trend        = if (s2.isSuccess) s1.trend else (s1.trend |+| s2.trend),
         timer        = s1.timer           add s2.timer
       )
     }
@@ -126,6 +132,7 @@ case object Stats {
             asInt("errors"      ),
             asInt("pending"     ),
             asInt("skipped"     ),
+            Stats(),
             map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer))
     }
 
