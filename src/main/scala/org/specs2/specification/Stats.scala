@@ -14,7 +14,6 @@ import control.Exceptions._
 import org.specs2.control.Exceptions._
 import org.specs2.time.SimpleTimer
 import scala.xml.{Elem, NodeSeq}
-
 /**
  * The Stats class store results for the number of:
  * * successes
@@ -34,7 +33,7 @@ case class Stats(fragments:    Int = 0,
                  errors:       Int = 0,
                  pending:      Int = 0,
                  skipped:      Int = 0,
-                 trend:        Stats = Stats(),
+                 trend:        Option[Stats] = None,
                  timer:        SimpleTimer = new SimpleTimer) {
 
   /** @return true if there are errors or failures */
@@ -63,7 +62,7 @@ case class Stats(fragments:    Int = 0,
                      pending      = {pending.toString}
                      skipped      = {skipped.toString}
                      time         = {timer.elapsed.toString}>
-              {<trend>{trend.toXml}</trend> unless trend.isSuccess}
+              {trend.map(t => <trend>{t.toXml}</trend>).getOrElse(NodeSeq.Empty)}
               </stats>
                      
   override def toString =
@@ -75,6 +74,31 @@ case class Stats(fragments:    Int = 0,
            "pending = "     + pending      +", "+
            "skipped = "     + skipped      +", "+
            "time = "        + timer.elapsed+")"
+
+  /**
+   * @return the "opposite" of this Stats object to be able to do subtractions
+   */
+  def negate =
+    copy(
+      fragments    = -fragments,
+      successes    = -successes,
+      expectations = -expectations,
+      failures     = -failures,
+      errors       = -errors,
+      pending      = -pending,
+      skipped      = -skipped
+    )
+
+  /**
+   * @return this Statistics object with some trend if relevant
+   */
+  def updatedFrom(previous: Stats) = {
+    implicit val monoid = Stats.StatsMonoid
+    val newTrend = this |+| previous.negate
+    if (newTrend.isSuccess) this
+    else copy(trend = Some(newTrend))
+  }
+
 }
 
 /**
@@ -101,7 +125,7 @@ case object Stats {
         errors       = s1.errors          + s2.errors,
         pending      = s1.pending         + s2.pending,
         skipped      = s1.skipped         + s2.skipped,
-        trend        = if (s2.isSuccess) s1.trend else (s1.trend |+| s2.trend),
+        trend        = (s1.trend <**> s2.trend)(_ |+| _),
         timer        = s1.timer           add s2.timer
       )
     }
@@ -119,7 +143,7 @@ case object Stats {
       case DecoratedResult(t, r) => Stats(r)
     }
   
-  def fromXml(stats: scala.xml.Node) = {
+  def fromXml(stats: scala.xml.Node): Stats = {
     if (stats.label != Stats().toXml.label)
       Stats()
     else {
@@ -132,7 +156,7 @@ case object Stats {
             asInt("errors"      ),
             asInt("pending"     ),
             asInt("skipped"     ),
-            Stats(),
+            (stats \ "trend" \ "stats").headOption.map(fromXml),
             map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer))
     }
 
