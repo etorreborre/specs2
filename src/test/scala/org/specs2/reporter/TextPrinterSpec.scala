@@ -178,10 +178,10 @@ class TextPrinterSpec extends Specification { def is =
   case class seq() {
     val sequential: Arguments = args(sequential = true)
     val messages = new MockOutput {}
-    val slowex1 = "e1" ! { Thread.sleep(50); messages.println("e1"); success }
+    val slowex1 = "e1" ! { Thread.sleep(20); messages.println("e1"); success }
     val fastex2 = "e2" ! { messages.println("e2"); success }
     def e1 = {
-      print(args(noindent = true, color = false) ^ slowex1 ^ fastex2) 
+      print(args(noindent = true, color = false, sequential = false) ^ slowex1 ^ fastex2)
       messages.messages must contain("e2", "e1").inOrder
     }
     def e2 = {

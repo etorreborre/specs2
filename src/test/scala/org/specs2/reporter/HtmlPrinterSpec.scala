@@ -5,7 +5,7 @@ import mock._
 import specification._
 import matcher.DataTables
 
-class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is = sequential^
+class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is = 
                                                                                                                         """
 The HtmlPrinter class is responsible for opening an html file and writing the specification text.
                                                                                                                         """^p^
@@ -88,7 +88,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
 
   trait LinkedSpecifications extends MockHtmlPrinter {
     val successfulSubSpec = new Specification { def is = "ex1" ! success }
-    val failedSubSpec     = new Specification { def is = "ex1" ! failure }
+    val failedSubSpec     = new Specification { def is = "failedSubSpec".title ^ "ex1" ! failure }
   }
 
   case class included() extends LinkedSpecifications {
@@ -102,7 +102,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
 
   case class seeIt() extends LinkedSpecifications {
     val spec1: Fragments = "ex1" ! failure ^ "a " ~/ ("successfull spec", successfulSubSpec) ^ end
-    val spec2: Fragments = "spec2".title ^ "ex1" ! success ^ "a " ~/ ("failed spec", failedSubSpec) ^ end
+    val spec2: Fragments = "ex1" ! success ^ "a " ~/ ("failed spec", failedSubSpec) ^ end
 
     fs.readFile(anyString) returns "<body><stats failures=\"2\"/></body>"
 
@@ -129,9 +129,13 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
       out.messages.mkString("\n")
     }
 
+    /**
+     * for the failed subspec, return the statistics as failed when it is linked with "seeOnly"
+     */
     override protected def storeStats = (f: ExecutedFragment) => {
       f match {
-        case ExecutedSpecStart(start @ SpecStart(n,_,_,true), loc, st) if n.title == "spec2" => ExecutedSpecStart(start, loc, Stats(failures = 1))
+        case ExecutedSpecStart(start @ SpecStart(n,_,_,true), loc, st) if n.title == "failedSubSpec" =>
+          ExecutedSpecStart(start, loc, Stats(failures = 1))
         case other => other
       }
     }

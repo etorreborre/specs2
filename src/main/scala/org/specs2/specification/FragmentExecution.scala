@@ -51,7 +51,7 @@ trait FragmentExecution {
     }
 	  case e @ Example(s, _)     => {
       val timer = new SimpleTimer().start
-      lazy val result = executeBody(e.execute)
+      val result = executeBody(e.execute)
       ExecutedResult(s, result, timer.stop, f.location, Stats(result))
     }
 	  case Text(s)                       => ExecutedText(s, f.location)
