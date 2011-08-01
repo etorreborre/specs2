@@ -3,10 +3,17 @@ package reporter
 
 import scala.xml._
 import io.FileSystem
-import specification.{Stats, SpecName}
+import specification.{ExecutedFragment, Stats, SpecName}
 
 private[specs2]
-trait StatisticsRepository extends OutputDir {
+trait StatisticsRepository {
+  def getStatistics(specName: SpecName): Stats
+  def storeStatistics(specName: SpecName, stats: Stats): this.type
+}
+
+private[specs2]
+class DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
+
   private val statsFilePath = outputDir + "specs2.stats"
 
   lazy val allStats = fileSystem.loadXhtmlFile(statsFilePath)

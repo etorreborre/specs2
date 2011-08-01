@@ -3,6 +3,7 @@ package reporter
 import specification._
 import main._
 import ExecutedFragments._
+import mock.Mockito
 
 class StoringSpec extends SpecificationWithJUnit { def is =
   
@@ -17,8 +18,11 @@ class StoringSpec extends SpecificationWithJUnit { def is =
                                                                                         end
 
    
-  trait Stored extends FragmentExecution {
-    val storing = new DefaultStoring {}
+  trait Stored extends FragmentExecution with Mockito { outer =>
+    val repository = mock[StatisticsRepository]
+    val storing = new DefaultStoring {
+      override lazy val repository = outer.repository
+    }
     implicit val arguments = Arguments() 
     def store(fs: Fragments) = storing.store(arguments)(fs.fragments.map(executeFragment))
   }                                                                                        
@@ -32,6 +36,9 @@ class StoringSpec extends SpecificationWithJUnit { def is =
    }
   
    object stored extends Stored {
-     def e1 = pending
+     def e1 = {
+       store("t1":Fragments)
+       there was one(repository).storeStatistics(any[SpecName], any[Stats])
+     }
    }
 }
