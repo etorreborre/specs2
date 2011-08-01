@@ -20,7 +20,7 @@ trait Storing {
 private[specs2]
 trait DefaultStoring extends Storing with Statistics {
 
-  protected lazy val repository: StatisticsRepository = new DefaultStatisticsRepository
+  protected lazy val repository: StatisticsRepository = DefaultStatisticsRepository
 
   def store(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
     val totals = fragments zip fragments.reduceWith(StatisticsReducer).totals
@@ -28,8 +28,8 @@ trait DefaultStoring extends Storing with Statistics {
   }
 
   protected def setStats = (fs: (ExecutedFragment, Stats)) => fs match {
-    case (ExecutedSpecEnd(n, l, s), stats)   => ExecutedSpecEnd(n, l, stats)
-    case (other, s)                          => other
+    case (ExecutedSpecEnd(n, l, s), stats) => ExecutedSpecEnd(n, l, stats.updatedFrom(repository.getStatistics(n.specName)))
+    case (other, s)                        => other
   }
 
 

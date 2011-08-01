@@ -12,9 +12,9 @@ trait StatisticsRepository {
 }
 
 private[specs2]
-class DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
+trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
 
-  private val statsFilePath = outputDir + "specs2.stats"
+  protected val statsFilePath = outputDir + "specs2.stats"
 
   lazy val allStats = fileSystem.loadXhtmlFile(statsFilePath)
 
@@ -29,5 +29,7 @@ class DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
     Elem(null, specName.fullName, null, TopScope, stats.toXml)
   }
 }
+private[specs2]
+object DefaultStatisticsRepository extends DefaultStatisticsRepository
 
 
