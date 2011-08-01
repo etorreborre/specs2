@@ -30,18 +30,8 @@ import scala.xml.{Xhtml, NodeSeq}
  * * the current arguments to use
  *
  */
-trait HtmlPrinter {
-  /** the file system is used to open the file to write */
-  private[specs2] lazy val fileSystem = new FileSystem {}
-  /** the file writer is used to open the file to write */
-  private[specs2] lazy val fileWriter = new FileWriter {}
+trait HtmlPrinter extends OutputDir {
 
-  /** 
-   * the output directory is either defined by a specs2 system variable
-   * or chosen as a reports directory in the standard maven "target" directory
-   */
-  private[specs2] lazy val outputDir: String = SystemProperties.getOrElse("outDir", "target/specs2-reports/").dirPath
-  
   /**
    * print a sequence of executed fragments for a given specification class into a html 
    * file
@@ -73,9 +63,6 @@ trait HtmlPrinter {
       <ul>{toc}</ul>
       <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+root.hashCode+"','"+current.hashCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
     </div>
-
-  /** @return the file path for the html output */
-  def reportPath(url: String) = outputDir + url
 
   /** copy css and images file to the output directory */
   def copyResources() {

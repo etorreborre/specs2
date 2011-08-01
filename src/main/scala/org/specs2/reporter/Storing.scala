@@ -19,24 +19,33 @@ trait Storing {
 
 private[specs2]
 trait DefaultStoring extends Storing with Statistics {
+
+  private lazy val repository: StatisticsRepository = new StatisticsRepository {}
+
   def store(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
     val totals = fragments zip fragments.reduceWith(StatisticsReducer).totals
-    associateStartEnd(totals map (setStats andThen executedFragmentsToSpecBlock), updateStatsOnSpecStart) map (_.value)
+    associateStartEnd(totals map (setStats andThen executedFragmentsToSpecBlock), updateStatsOnSpecStart) map (_.value) map storeStats
   }
 
-  private def setStats = (fs: (ExecutedFragment, Stats)) => fs match {
-    case (ExecutedSpecStart(n, l, s), stats) => ExecutedSpecStart(n, l, stats)
+  protected def setStats = (fs: (ExecutedFragment, Stats)) => fs match {
     case (ExecutedSpecEnd(n, l, s), stats)   => ExecutedSpecEnd(n, l, stats)
     case (other, s)                          => other
   }
 
 
-  private def updateStatsOnSpecStart = (start: ExecutedFragment, end: ExecutedFragment) => {
+  protected def updateStatsOnSpecStart = (start: ExecutedFragment, end: ExecutedFragment) => {
     (start, end) match {
       case (ExecutedSpecStart(ns, ss, ls), ExecutedSpecEnd(ne, se, le)) => (ExecutedSpecStart(ns, se, le), ExecutedSpecEnd(ne, se, le))
       case other => (start, end)
     }
   }
 
+  protected def storeStats = (f: ExecutedFragment) => {
+    f match {
+      case ExecutedSpecStart(start @ SpecStart(_,_,_,true), loc, st) => ExecutedSpecStart(start, loc, repository.getStatistics(start.specName))
+      case ExecutedSpecEnd(end @ SpecEnd(_), loc, st)                => repository.storeStatistics(end.specName, st); f
+      case other => other
+    }
+  }
 
 }

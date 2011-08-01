@@ -10,7 +10,11 @@ class FileWriterSpec extends Specification {  def is =
   "A FileWriter should"                                                                                                 ^
     "write inside a file"                                                                                               ! c().e1^
     "close the file if an exception occurs"                                                                             ! c().e2^
-    "rethrow the exception if an exception occurs"                                                                      ! c().e3
+    "rethrow the exception if an exception occurs"                                                                      ! c().e3^
+                                                                                                                        p^
+  "A FileWriter can"                                                                                                    ^
+    "write a XML Node"                                                                                                  ! c().e4^
+                                                                                                                        end
 
   case class c() extends After {
     val out = new MockWriter {}
@@ -28,6 +32,10 @@ class FileWriterSpec extends Specification {  def is =
     def e3 = this {
       try { fw.write("filePath")(_ => error("bad")); Failure("an exception must be thrown") }
       catch { case e => { e.getMessage must_== "bad" }.toResult }
+    }
+    def e4 = this {
+      fw.writeXmlFile("filePath", <hello/>)
+      out.messages must contain("<hello></hello>")
     }
     def after = { new File("filePath").delete }
   }

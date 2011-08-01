@@ -5,7 +5,7 @@ import mock._
 import specification._
 import matcher.DataTables
 
-class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is =
+class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is = sequential^
                                                                                                                         """
 The HtmlPrinter class is responsible for opening an html file and writing the specification text.
                                                                                                                         """^p^
@@ -102,7 +102,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
 
   case class seeIt() extends LinkedSpecifications {
     val spec1: Fragments = "ex1" ! failure ^ "a " ~/ ("successfull spec", successfulSubSpec) ^ end
-    val spec2: Fragments = "ex1" ! success ^ "a " ~/ ("failed spec", failedSubSpec) ^ end
+    val spec2: Fragments = "spec2".title ^ "ex1" ! success ^ "a " ~/ ("failed spec", failedSubSpec) ^ end
 
     fs.readFile(anyString) returns "<body><stats failures=\"2\"/></body>"
 
@@ -128,6 +128,14 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
       printer.print(spec, spec.content.fragments.map(executeFragment))
       out.messages.mkString("\n")
     }
+
+    override protected def storeStats = (f: ExecutedFragment) => {
+      f match {
+        case ExecutedSpecStart(start @ SpecStart(n,_,_,true), loc, st) if n.title == "spec2" => ExecutedSpecStart(start, loc, Stats(failures = 1))
+        case other => other
+      }
+    }
+
   }
   def printer = new HtmlPrinter {}
 }

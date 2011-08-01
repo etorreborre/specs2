@@ -91,9 +91,6 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
     }
     dir.getParent
   }
-  /** @return true if the file exists */
-  def exists(path: String) = path != null && new File(path).exists  
-
   /** @return true if the file can be read */
   def canRead(path: String) = path != null && new File(path).canRead  
 

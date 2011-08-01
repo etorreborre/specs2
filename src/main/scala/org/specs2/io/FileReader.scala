@@ -38,6 +38,11 @@ trait FileReader {
    * @return the xml content of a file
    */
   def loadXhtmlFile(filePath: String) = scala.xml.parsing.XhtmlParser(scala.io.Source.fromFile(filePath))
+
+  /**
+   * @return the xml content of a file
+   */
+  def loadXmlFile(filePath: String) = scala.xml.XML.load(filePath)
 }
 private[specs2]
 object FileReader extends FileReader
