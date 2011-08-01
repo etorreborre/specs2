@@ -24,11 +24,11 @@ The structure of a specification is very simple, it is just a list of `Fragments
       +---------------+                           +-----------+
                                                         ^
                                                         |
-             +----------+-----------+-----------+-------------+-------------+----------+
-             |          |           |           |             |             |          |
-         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
-         | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | TaggingFragment |
-         +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
+                    +----------+-----------+-----------+-------------+-------------+---------------+
+                    |          |           |           |             |             |               |
+                +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
+                | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | TaggingFragment |
+                +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
 
 
 Here's a short description of all the Fragments:
@@ -36,8 +36,8 @@ Here's a short description of all the Fragments:
  * Text: free text describing the specified system
  * Example: a description and a piece of executable code returning a Result
  * Step / Action: some action on the system which is only reported if there's an exception
- * SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications. The SpecStart
-   element holds the Arguments used to tune the execution/reporting
+ * SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications.
+   The SpecStart element holds: the Arguments used to tune the execution/reporting, the link to an included/referenced specification
  * TaggingFragments: those fragments are used to define which fragments should be included or excluded from the execution
 
 ### Specification creation
@@ -75,7 +75,7 @@ Of course this there is mutation involved here, it's not advised to do anything 
 The execution is triggered by the various reporters and goes through 3 steps:
 
         // code from the Reporter trait
-        spec.content |> select |> sequence |> execute
+        spec.content |> select |> sequence |> execute |> store
 
  1. Selection: the Fragments are filtered according to the Arguments object. In that phase all examples but a few can
     be filtered if the `only("this example")` option is used for instance. Another way to select fragments is to insert
@@ -87,6 +87,10 @@ The execution is triggered by the various reporters and goes through 3 steps:
 
  3. Execution: for each group, the execution of the fragments is concurrent by default and results are collected in
     a sequence of `ExecutedFragments`
+
+ 4. Storing: after an execution we compute the statistics for each specification and store the results in a file (`specs2-reports/specs2.stats`).
+    This allows to do consequent runs based on previous executions: to execute failed specifications only or to create the index page with
+    an indicator of previously executed specifications
 
 ### Specification reporting
 
