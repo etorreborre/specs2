@@ -14,7 +14,16 @@ class StoringSpec extends SpecificationWithJUnit { def is =
          "a failed example must have a stats = 1 failure"                               ! stats.e2^
          "the end of a specification must sum up all the results"                       ! stats.e3^
      "be stored"                                                                        ^
-       "per specification name"                                                         ! stored.e1^
+       "stored per specification name"                                                  ! stored.e1^
+       "and retrieved per specification name"                                           ! stored.e2^
+                                                                                        endp^
+   "It is possible to compute the trends of the statistics"                             ^
+     "between 2 runs"                                                                   ! trends.e1^
+     "the trends can be resetted"                                                       ! trends.e2^
+                                                                                        endp^
+   "It is possible to re-run"                                                           ^
+     "failed specifications only with the 'failedspec' argument"                        ! rerun.e1^
+     "failed examples only with the 'failedexample' argument"                           ! rerun.e2^
                                                                                         end
 
    
@@ -40,5 +49,15 @@ class StoringSpec extends SpecificationWithJUnit { def is =
        store("t1":Fragments)
        there was one(repository).storeStatistics(any[SpecName], any[Stats])
      }
+   }
+
+   object trends extends Stored {
+     def e1 = pending
+     def e2 = pending
+   }
+
+   object rerun extends Stored {
+     def e1 = pending
+     def e2 = pending
    }
 }
