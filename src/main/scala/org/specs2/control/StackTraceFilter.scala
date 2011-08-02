@@ -5,7 +5,7 @@ import data.IncludedExcluded
 import text.Trim._
 
 /**
- * This trait Filters an Exception stacktrace
+ * This trait filters an Exception stacktrace
  */
 trait StackTraceFilter {
   /** @return the filtered stacktrace */

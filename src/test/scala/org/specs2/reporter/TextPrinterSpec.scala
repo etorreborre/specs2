@@ -157,7 +157,7 @@ class TextPrinterSpec extends Specification { def is =
     def e7 = print(diffs(show=true) ^ "" ! {bigString1 must_== bigString2.reverse} ) must not containMatch("\\[")
   }
   case class failtrace() {
-    val failtrace: Arguments = args(failtrace = true)
+    val failtrace: Arguments = args.report(failtrace = true)
     def e1 = print(fullStackTrace <| failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
   }
   case class traces() {
@@ -207,7 +207,7 @@ class TextPrinterSpec extends Specification { def is =
     def e7 = print(t1 ^ "e1\nexample1" ! success) must contain(
         "+ e1",
         "  example1") 
-    def e8 = print(args(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
+    def e8 = print(args.report(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
   }
   case class stats() {
     def e1 = print(t1 ^ ex1) must containMatch("1 example") 

@@ -20,18 +20,23 @@ trait FileReader {
    * @return the content of the file at path
    */
   def readFile(path: String): String = {
-    def appendLines(result: StringBuffer, in: BufferedReader, line: String): Unit = {
-      if (line != null) {
-        result.append(line)
-        result.append("\n")
-        appendLines(result, in, in.readLine)
+    if (!new File(path).exists)
+      ""
+    else {
+      def appendLines(result: StringBuffer, in: BufferedReader, line: String): Unit = {
+        if (line != null) {
+          result.append(line)
+          result.append("\n")
+          appendLines(result, in, in.readLine)
+        }
       }
+      val in = new BufferedReader(new java.io.FileReader(path));
+      try {
+        val result = new StringBuffer
+        appendLines(result, in, in.readLine)
+        result.toString
+      } finally { in.close() }
     }
-    val in = new BufferedReader(new java.io.FileReader(path));
-    val result = new StringBuffer
-    appendLines(result, in, in.readLine)
-    in.close();
-    result.toString
   }
   /**
    * @return a FileInputStream for a given file path

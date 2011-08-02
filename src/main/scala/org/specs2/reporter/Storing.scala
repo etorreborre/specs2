@@ -44,7 +44,8 @@ trait DefaultStoring extends Storing with Statistics {
     f match {
       case ExecutedSpecStart(start @ SpecStart(_,_,_,true), loc, st) =>
         ExecutedSpecStart(start, loc, repository.getStatistics(start.specName).getOrElse(st))
-      case ExecutedSpecEnd(end @ SpecEnd(_), loc, st)                => repository.storeStatistics(end.specName, st); f
+      case ExecutedSpecEnd(end @ SpecEnd(_), loc, st)                =>
+        repository.storeStatistics(end.specName, st); f
       case other => other
     }
   }

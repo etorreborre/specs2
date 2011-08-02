@@ -110,7 +110,7 @@ class ContextSpec extends Specification with FragmentExecution { def is =
     "the after code must be called after the body code"                                                                 ! mutableSpec().after1^
     "the around code must be called around the body code"                                                               ! mutableSpec().around1^
                                                                                                                         end
-  implicit val args = main.Arguments()
+  implicit val arguments = main.Arguments()
   case class before() extends FragmentsExecution {
     def e1 = executing(ex1Before).prints("before", "e1")
     def e2 = executing(ex1_2Before).prints("before", "e1", "before", "e2")

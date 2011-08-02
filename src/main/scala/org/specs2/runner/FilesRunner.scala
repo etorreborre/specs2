@@ -45,7 +45,7 @@ trait FilesRunner extends SpecificationsFinder {
   }
 
   /** @return the Arguments object depending on the command-line options */
-  protected def createArguments(arguments: Array[String]) = Arguments(arguments:_*) <| ArgumentsArgs.args(offset=2)
+  protected def createArguments(arguments: Array[String]) = Arguments(arguments:_*) <| ArgumentsArgs.args.report(offset=2)
 
   /** @return a reporter depending on the provided arguments */
   protected def reporters(implicit arguments: Arguments): List[Reporter] =

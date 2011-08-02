@@ -34,9 +34,11 @@ class StoringSpec extends SpecificationWithJUnit { def is =
     }
     implicit val arguments = Arguments() 
     def store(fs: Fragments) = storing.store(arguments)(fs.fragments.map(executeFragment))
-  }                                                                                        
-   
-   
+
+    repository.getStatistics(any[SpecName]) returns None
+
+  }
+
    object stats extends Stored {
      def e1 = store("t1").filter(isExecutedText)(0).stats must_== Stats() 
      def e2 = store("e1" ! failure).filter(isExecutedResult)(0).stats must_== Stats(fragments = 1, expectations = 1, failures = 1) 
@@ -47,18 +49,18 @@ class StoringSpec extends SpecificationWithJUnit { def is =
    object stored extends Stored {
      def e1 = {
        store("t1":Fragments)
-       there was one(repository).storeStatistics(any[SpecName], any[Stats])
+       there was atLeastOne(repository).storeStatistics(any[SpecName], any[Stats])
      }
      def e2 = {
         store("t1":Fragments)
-        there was one(repository).getStatistics(any[SpecName])
+        there was atLeastOne(repository).getStatistics(any[SpecName])
      }
    }
 
    object trends extends Stored {
      def e1 = {
        repository.getStatistics(any[SpecName]) returns Some(Stats(failures = 1))
-       store("t1":Fragments).head.stats.trend must_== Stats(failures = -1)
+       store("t1":Fragments).head.stats.trend must_== Some(Stats(failures = -1))
      }
      def e2 = pending
    }

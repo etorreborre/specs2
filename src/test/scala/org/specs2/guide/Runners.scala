@@ -28,7 +28,7 @@ There are many ways to execute ***specs2*** specifications:
 You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared
 inside the specification:
 
-      class MySpec extends Specification { def is = args(noindent=true) ^
+      class MySpec extends Specification { def is = args(xonly=true)    ^
         "Clever spec title"                                             ^
         "this will not be indented"                                     ^
         "brilliant expectation"                                         ! success
@@ -40,39 +40,60 @@ From inside a specification, the available arguments are the following:
 
   Name           | Default value                            | Description
  --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
- `ex`            | .*                                       | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
- `xonly`         | false                                    | only reports failures and errors
- `include`       | ""                                       | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- `exclude`       | ""                                       | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- `plan`          | false                                    | only report the text of the specification without executing anything
- `skipAll`       | false                                    | skip all the examples
- `stopOnFail`    | false                                    | skip all examples after the first failure or error
- `failtrace`     | false                                    | report the stacktrace for failures
- `color`         | true                                     | use colors in the output (`nocolor` can also be used on the command line)
- `colors`        | `org.specs2.reporter.SmartColors`        | define alternative colors (replace failureColor from being yellow to magenta for example)
- `noindent`      | false                                    | don't indent automatically text and examples
- `showtimes`     | false                                    | show individual execution times
- `sequential`    | false                                    | don't execute examples concurrently
+  Selection
+ --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+ *`ex`        *  | .*                                       | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
+ *`include`   *  | ""                                       | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ *`exclude`   *  | ""                                       | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ *`failedOnly`*  | false                                    | select only previously failed examples
+ `specName`      | ".*Spec"                                 | regular expression to use when executing specifications with the FilesRunner
+ --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+  Execution
+ --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+ *`plan`      *  | false                                    | only report the text of the specification without executing anything
+ *`skipAll`   *  | false                                    | skip all the examples
+ *`stopOnFail`*  | false                                    | skip all examples after the first failure or error
+ *`sequential`*  | false                                    | don't execute examples concurrently
  `threadsNb`     | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
- `markdown`      | true                                     | interpret text as Markdown in the html reporter
+ --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+  Reporting
+ --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+ *`xonly`   *    | false                                    | only reports failures and errors
+ *`color`   *    | true                                     | use colors in the output (`nocolor` can also be used on the command line)
+ *`noindent`*    | false                                    | don't indent automatically text and examples
+ *`markdown`*    | true                                     | interpret text as Markdown in the html reporter
+ `failtrace`     | false                                    | report the stacktrace for failures
+ `colors`        | `org.specs2.reporter.SmartColors`        | define alternative colors (replace failureColor from being yellow to magenta for example)
+ `showtimes`     | false                                    | show individual execution times
  `debugMarkdown` | false                                    | print more information when Markdown formatting fails
  `fromSource`    | true                                     | true takes an AutoExample description from the file, false from the expectation ok message
  `traceFilter`   | `DefaultStackTraceFilter`                | use a StackTraceFilter instance for filtering the reported stacktrace elements
 
+##### Most/Least frequently used arguments
 
-All those arguments are usually set in a specification with `args(name=value)` but there are some available shortcuts:
+All the arguments above, which are written in bold, can be set in a specification with `args(name=value)`. However Scala would not allow the `args` method to accept *all* the possible
+arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments can be set with an object called `args`, having separate methods for setting all the parameters, by "category". For example:
+
+      args.select(specName = ".*Test", include="slow")
+      args.execute(threadsNb = 2)
+      args.report(showtimes=true, xonly = true)
+
+##### Shortcuts
+
+There are some available shortcuts for some arguments
 
  Name                                                                  | Equivalent                                                                            | Description                                                                                      |
  ---------------                                                       | -----------------------                                                               | -----------                                                                                      |
- `plan`                                                                | `args(plan=true)`                                                                     |                                                                                                  |
- `skipAll`                                                             | `args(skipAll=true)`                                                                  |                                                                                                  |
- `stopOnFail`                                                          | `args(stopOnFail=true)`                                                               |                                                                                                  |
- `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
- `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
  `include(tags: String)`                                               | `args(include=tags)`                                                                  |                                                                                                  |
  `exclude(tags: String)`                                               | `args(exclude=tags)`                                                                  |                                                                                                  |
  `only(examples: String)`                                              | `args(ex=examples)`                                                                   |                                                                                                  |
+ `failedOnly`                                                          | `args(failedOnly=true)`                                                               |                                                                                                  |
+ `plan`                                                                | `args(plan=true)`                                                                     |                                                                                                  |
+ `skipAll`                                                             | `args(skipAll=true)`                                                                  |                                                                                                  |
+ `stopOnFail`                                                          | `args(stopOnFail=true)`                                                               |                                                                                                  |
  `sequential`                                                          | `args(sequential=true)`                                                               |                                                                                                  |
+ `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
+ `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
  `literate`                                                            | `args(noindent=true, sequential=true)`                                                | for specifications where text must not be indented and examples be executed in order             |
  `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
  `descFromExpectations`                                                | `args(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
@@ -135,18 +156,20 @@ On the command line you can pass the following arguments:
   Name            | Value format            | Comments                                                                 |
  ---------------- | ----------------------- | ------------------------------------------------------------------------ |
  `ex`             | regexp                  |                                                                          |
- `xonly`          | boolean                 |                                                                          |
  `include`        | csv                     |                                                                          |
  `exclude`        | csv                     |                                                                          |
+ `failedonly`     | boolean                 |                                                                          |
+ `specname`       | regexp                  |                                                                          |
  `plan`           | boolean                 |                                                                          |
  `skipall`        | boolean                 |                                                                          |
+ `sequential`     | boolean                 |                                                                          |
+ `threadsnb`      | int                     |                                                                          |
+ `xonly`          | boolean                 |                                                                          |
  `failtrace`      | boolean                 |                                                                          |
  `color`          | boolean                 |                                                                          |
  `colors`         | map                     | e.g. text:be, failure:m (see the Colors section)                         |
  `noindent`       | boolean                 |                                                                          |
  `showtimes`      | boolean                 |                                                                          |
- `sequential`     | boolean                 |                                                                          |
- `threadsnb`      | int                     |                                                                          |
  `markdown`       | boolean                 |                                                                          |
  `debugmarkdown`  | boolean                 |                                                                          |
  `fromsource`     | boolean                 |                                                                          |
@@ -394,15 +417,15 @@ The `specs2.run` object has an `apply` method to execute specifications from the
       scala> import specs2._  // same thing, importing the run object
       scala> run(spec1, spec2)
 
-If you want to pass specific arguments you can import the `specs2.args` object member functions:
+If you want to pass specific arguments you can import the `specs2.arguments` object member functions:
 
-      scala> import specs2.args._
+      scala> import specs2.arguments._
 
       scala> specs2.run(spec1)(nocolor)
 
 Or you can set implicit arguments which will be used for any specification execution:
 
-      scala> import specs2.args._
+      scala> import specs2.arguments._
       scala> implicit val myargs = nocolor
 
       scala> specs2.run(spec1)

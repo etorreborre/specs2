@@ -24,7 +24,7 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
    * @return the latest statistics for a given specification
    */
   def getStatistics(specName: SpecName): Option[Stats] = {
-    val allSpecs = (allStats \\ specName.fullName)
+    val allSpecs = (allStats \\ nameTag(specName))
     val specStats = allSpecs.lastOption.flatMap(_.child.headOption).getOrElse(<none/>)
     Stats.fromXml(specStats)
   }
@@ -34,8 +34,10 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
     this
   }
 
+  private def nameTag(specName: SpecName) = specName.fullName.replace(".", ":")
+
   private def toXml(specName: SpecName, stats: Stats) = {
-    Elem(null, specName.fullName,
+    Elem(null, nameTag(specName),
          new UnprefixedAttribute("timestamp", System.currentTimeMillis().toString, Null), TopScope, stats.toXml) ++ Text("\n")
   }
 }

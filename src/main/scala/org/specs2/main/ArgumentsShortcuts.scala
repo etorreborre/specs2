@@ -13,7 +13,7 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    * @return arguments for a literate specification: no auto indent and a sequential
    *         execution
    */
-  def literate: Arguments = args(noindent = true, sequential = true)
+  def literate: Arguments = sequential <| noindent
   /**
    * @return arguments for a specification where examples must be executed sequentially
    */
@@ -41,7 +41,7 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
   /**
    * shortcut to set new Colors
    */
-  def colors(c: Colors): Arguments = args(colors = c)
+  def colors(c: Colors): Arguments = args.report(colors = c)
   /**
    * shortcut to not executing the text and avoid automatic indentation
    */
@@ -63,14 +63,18 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def exclude(tags: String): Arguments = args(exclude = tags)
   /**
+   * shortcut to include only failed examples some tagged fragments
+   */
+  def failedOnly: Arguments = args(failedOnly = true)
+  /**
    * shortcut to display the differences with some specific parameters
    */
   def diffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, diffRatio: Int = 30, shortenSize: Int = 5, full: Boolean = false): Arguments =
-    args(diffs = SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full))
+    args.report(diffs = SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full))
   /**
    * shortcut to display the example descriptions from the expectations ok messages
    */
-  def descFromExpectations = args(fromSource = false)
+  def descFromExpectations = args.report(fromSource = false)
   /**
    * shortcut to create a stackTrace filter to include only some elements
    */
@@ -90,5 +94,5 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
   /**
    * shortcut to filter nothing
    */
-  def fullStackTrace = args(traceFilter = NoStackTraceFilter)
+  def fullStackTrace = args.report(traceFilter = NoStackTraceFilter)
 }
