@@ -26,6 +26,10 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     "1 skipped example, a test ignored must be reported"                                                                ! notified().e6^
     "1 pending example, a test ignored must be reported"                                                                ! notified().e7^
     "1 failing example with be_==, a ComparisonFailure message must be reported"                                        ! notified().e8^
+                                                                                                                        p^
+  "If the console system property is specified"                                                                         ^
+    "then the specification is also printed on the console"                                                             ! export().e1^
+    "the commandline system property can be used to remove colors"                                                      ! export().e2^
                                                                                                                         end
 
   case class notified() {
@@ -76,5 +80,8 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
       c.value.getException must haveSuperclass[ComparisonFailure]
     }
   }
-  
+  case class export() {
+    def e1 = pending
+    def e2 = pending
+  }
 }

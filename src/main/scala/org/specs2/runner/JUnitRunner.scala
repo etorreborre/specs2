@@ -6,7 +6,9 @@ import _root_.org.junit.runners._
 import _root_.org.junit._
 import _root_.org.junit.runner._
 import junit.framework.AssertionFailedError
-import main.Arguments
+import org.specs2.internal.scalaz.Scalaz
+import Scalaz._
+import main.{ Arguments, SystemProperties }
 import io._
 import reflect.Classes._
 import execute._
@@ -23,7 +25,7 @@ import DefaultSelection._
  * of Description objects and a Map relating each Description to a Fragment to execute. 
  *
  */
-class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
+class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with SystemProperties {
 
   private val executor = new FragmentExecution {}
   
@@ -37,6 +39,11 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
   private val descriptions = new JUnitDescriptionsFragments(klass)
   /** extract the root Description object and the examples to execute */
   private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll(select(content.fragments))
+  /** the console exporter can be used to display results in the console */
+  protected lazy val consoleExporter = new TextExporting {}
+  /** the html exporter can be used to output html files */
+  protected lazy val htmlExporter = new HtmlExporting {}
+
   /** @return a Description for the TestSuite */
   def getDescription = desc
 
@@ -47,6 +54,10 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
    *   junit failure or ignored event on the RunNotifier
    */
   def run(notifier: RunNotifier) {
+    executeSpecification |> export |> notifyJUnit(notifier)
+  }
+
+  private def executeSpecification =
     executions.collect {
       case (desc, f @ SpecStart(_, _)) => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Example(_, _))   => (desc, executor.executeFragment(args)(f))
@@ -54,15 +65,34 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
       case (desc, f @ Step(_))         => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Action(_))       => (desc, executor.executeFragment(args)(f))
       case (desc, f @ SpecEnd(_))      => (desc, executor.executeFragment(args)(f))
-    }.
-      foreach {
+    }
+
+  private def export = (executed: Seq[(Description, ExecutedFragment)]) => {
+    val commandLineArgs = getProperty("commandline").getOrElse("").split("\\s")
+    val arguments = Arguments(commandLineArgs:_*) <| args
+    def exportTo(name: String) = isDefined(name) || commandLineArgs.contains(name)
+    
+    if (exportTo("console")) 
+      consoleExporter.export(specification)(arguments)(executed.map(_._2))
+    if (exportTo("html")) 
+      htmlExporter.export(specification)(arguments)(executed.map(_._2))
+
+    executed
+  }
+
+  private def notifyJUnit(notifier: RunNotifier) = (executed: Seq[(Description, ExecutedFragment)]) => {
+    executed foreach {
         case (desc, ExecutedResult(_, result, timer, _)) => {
           notifier.fireTestStarted(desc)
           result match {
-            case f @ Failure(m, e, st, d)                     => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-            case e @ Error(m, st)                             => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
-            case DecoratedResult(_, f @ Failure(m, e, st, d)) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-            case DecoratedResult(_, e @ Error(m, st))         => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
+            case f @ Failure(m, e, st, d)                     =>
+              notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
+            case e @ Error(m, st)                             =>
+              notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
+            case DecoratedResult(_, f @ Failure(m, e, st, d)) =>
+              notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
+            case DecoratedResult(_, e @ Error(m, st))         =>
+              notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
             case Pending(_) | Skipped(_, _)                   => notifier.fireTestIgnored(desc)
             case Success(_) | DecoratedResult(_, _)           => ()
           }
