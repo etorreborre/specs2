@@ -25,7 +25,7 @@ import DefaultSelection._
  * of Description objects and a Map relating each Description to a Fragment to execute. 
  *
  */
-class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with SystemProperties {
+class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
 
   private val executor = new FragmentExecution {}
   
@@ -43,7 +43,8 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Syst
   protected lazy val consoleExporter = new TextExporting {}
   /** the html exporter can be used to output html files */
   protected lazy val htmlExporter = new HtmlExporting {}
-
+  /** system properties */
+  protected lazy val properties: SystemProperties = SystemProperties
   /** @return a Description for the TestSuite */
   def getDescription = desc
 
@@ -68,9 +69,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Syst
     }
 
   private def export = (executed: Seq[(Description, ExecutedFragment)]) => {
-    val commandLineArgs = getProperty("commandline").getOrElse("").split("\\s")
+    val commandLineArgs = properties.getProperty("commandline").getOrElse("").split("\\s")
     val arguments = Arguments(commandLineArgs:_*) <| args
-    def exportTo(name: String) = isDefined(name) || commandLineArgs.contains(name)
+    def exportTo(name: String) = properties.isDefined(name) || commandLineArgs.contains(name)
     
     if (exportTo("console")) 
       consoleExporter.export(specification)(arguments)(executed.map(_._2))
@@ -128,6 +129,12 @@ object JUnitRunner {
   }
   def apply[T <: SpecificationStructure](fragments: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
     override protected lazy val content = fragments	  
+  }
+  def apply[T <: SpecificationStructure](f: Fragments, props: SystemProperties, console: TextExporting, html: HtmlExporting)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
+      override protected lazy val specification = new Specification { def is = f }
+      override protected lazy val properties = props
+      override protected lazy val consoleExporter = console
+      override protected lazy val htmlExporter = html
   }
 }
 /**

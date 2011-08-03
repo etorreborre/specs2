@@ -2,6 +2,8 @@ package org.specs2
 package runner
 import mock._
 import specification._
+import reporter._
+import main._
 import _root_.org.junit.runner.notification.{ RunNotifier, Failure }
 import _root_.org.junit.runner.Description
 import _root_.org.junit.ComparisonFailure
@@ -32,10 +34,19 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     "the commandline system property can be used to remove colors"                                                      ! export().e2^
                                                                                                                         end
 
-  case class notified() {
-	  val notifier = mock[RunNotifier]
-	  abstract class DummySpec extends Specification 
-	  def run(f: Fragments) = JUnitRunner[DummySpec](Fragments.withSpecStartEnd(f, SpecName("DummySpec"))).run(notifier)
+  trait WithNotifier {
+    lazy val notifier   = mock[RunNotifier]
+    lazy val console    = mock[TextExporting]
+    lazy val html       = mock[HtmlExporting]
+    lazy val properties = mock[SystemProperties]
+
+    properties.getProperty("commandline") returns None
+
+    abstract class DummySpec extends Specification
+    def run(f: Fragments) = JUnitRunner.apply[DummySpec](Fragments.withSpecStartEnd(f, SpecName("DummySpec")), properties, console, html).run(notifier)
+  }
+
+  case class notified() extends WithNotifier {
 	  def desc(s: String) = =~(s) ^^ ((_:Description).getDisplayName)
 	  
 	  def e1 = { 
@@ -80,8 +91,21 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
       c.value.getException must haveSuperclass[ComparisonFailure]
     }
   }
-  case class export() {
-    def e1 = pending
-    def e2 = pending
+  case class export() extends WithNotifier {
+
+    def e1 = {
+      properties.isDefined("console") returns true
+      console.export(any[SpecificationStructure])(any[Arguments]) returns ((fs: Seq[ExecutedFragment]) => ())
+
+      run(ex1)
+      there was one(console).export(any[SpecificationStructure])(any[Arguments])
+    }
+    def e2 = {
+      properties.isDefined("html") returns true
+      html.export(any[SpecificationStructure])(any[Arguments]) returns ((fs: Seq[ExecutedFragment]) => ())
+
+      run(ex1)
+      there was one(html).export(any[SpecificationStructure])(any[Arguments])
+    }
   }
 }
