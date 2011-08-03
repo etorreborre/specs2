@@ -30,13 +30,13 @@ import SpecsArguments._
 trait TextPrinter {
   val output: ResultOutput = new TextResultOutput
   
-  def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) =
+  def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) =
     printLines(fs).print(output)
   
-  def printLines(fs: Seq[ExecutedFragment]) = 
+  def printLines(fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments = Arguments()) =
     PrintLines(flatten(fs.reduceWith(reducer)))
-  
-  private  val reducer = 
+
+  private val reducer = 
     PrintReducer &&& 
     StatsReducer &&&
     LevelsReducer  &&&
@@ -50,10 +50,10 @@ trait TextPrinter {
     def print(implicit out: ResultOutput) = lines foreach (_.print)
   }
   
-  def flatten(results: (((List[Print], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
+  def flatten(results: (((List[Print], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment]))(implicit commandLineArgs: Arguments = Arguments()): List[PrintLine] = {
     val (prints, statistics, levels, args) = results.flatten
     (prints zip statistics.stats zip levels.levels zip args.toList) map {
-      case (((t, s), l), a) => PrintLine(t, s, l, a)
+      case (((t, s), l), a) => PrintLine(t, s, l, commandLineArgs <| a)
     }
   }  
     
