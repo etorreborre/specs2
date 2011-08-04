@@ -21,13 +21,19 @@ case class Arguments (
   def ex: String                    = select.ex
   def include: String               = select.include
   def exclude: String               = select.exclude
+  def wasIssue: Boolean             = select.wasIssue
+  def was(s: String): Boolean       = select.was(s)
   def specName: String              = select.specName
+
   def plan: Boolean                 = execute.plan
   def skipAll: Boolean              = execute.skipAll
   def stopOnFail: Boolean           = execute.stopOnFail
   def sequential: Boolean           = execute.sequential
   def threadsNb: Int                = execute.threadsNb
+
   def xonly: Boolean                = report.xonly
+  def onlyStatus(s: String)         = report.onlyStatus(s)
+
   def failtrace: Boolean            = report.failtrace
   def color: Boolean                = report.color
   def colors: Colors                = report.colors
@@ -101,13 +107,15 @@ case class Select(
   _ex:            Option[String]           = None,
   _include:       Option[String]           = None,
   _exclude:       Option[String]           = None,
-  _failedOnly:    Option[Boolean]          = None,
+  _wasIssue:      Option[Boolean]          = None,
+  _was:           Option[String]           = None,
   _specName:      Option[String]           = None) extends ShowArgs {
 
   def ex: String                    = _ex.getOrElse(".*")
   def include: String               = _include.getOrElse("")
   def exclude: String               = _exclude.getOrElse("")
-  def failedOnly: Boolean           = _failedOnly.getOrElse(false)
+  def wasIssue: Boolean             = was("x!")
+  def was(s: String): Boolean       = _wasIssue.map(v => s.split(".") exists v.contains).getOrElse(false)
   def specName: String              = _specName.getOrElse(".*Spec")
 
   def overrideWith(other: Select) = {
@@ -115,16 +123,18 @@ case class Select(
       other._ex              .orElse(_ex),
       other._include         .orElse(_include),
       other._exclude         .orElse(_exclude),
-      other._failedOnly      .orElse(_failedOnly),
+      other._wasIssue        .orElse(_wasIssue),
+      other._was             .orElse(_was),
       other._specName        .orElse(_specName)
     )
   }
 
   override def toString = List(
-    "ex"             -> _ex           ,
-    "include"        -> _include      ,
-    "exclude"        -> _exclude      ,
-    "failedOnly"     -> _failedOnly   ,
+    "ex"             -> _ex         ,
+    "include"        -> _include    ,
+    "exclude"        -> _exclude    ,
+    "wasIssue"       -> _wasIssue   ,
+    "was"            -> _was        ,
     "specName"       -> _specName     ).flatMap(showArg).mkString("Select(", ", ", ")")
 
 }
@@ -136,7 +146,8 @@ object Select extends Extract {
        _ex            = value("ex", ".*"+(_:String)+".*"),
        _include       = value("include"),
        _exclude       = value("exclude"),
-       _failedOnly    = bool("failedonly"),
+       _wasIssue      = bool("wasissue"),
+       _was           = value("was"),
        _specName      = value("specname")
     )
   }
@@ -191,6 +202,7 @@ object Execute extends Extract {
 private[specs2]
 case class Report(
   _xonly:         Option[Boolean]          = None,
+  _onlyStatus:    Option[String]           = None,
   _failtrace:     Option[Boolean]          = None,
   _color:         Option[Boolean]          = None,
   _colors:        Option[Colors]           = None,
@@ -203,7 +215,8 @@ case class Report(
   _fromSource:    Option[Boolean]          = None,
   _traceFilter:   Option[StackTraceFilter] = None) extends ShowArgs {
 
-  def xonly: Boolean                = _xonly.getOrElse(false)
+  def xonly: Boolean                = onlyStatus("x!")
+  def onlyStatus(s: String)         = _onlyStatus.map(v => s.split(".") exists v.contains).getOrElse(false)
   def failtrace: Boolean            = _failtrace.getOrElse(false)
   def color: Boolean                = _color.getOrElse(true)
   def colors: Colors                = _colors.getOrElse(new SmartColors())
@@ -219,6 +232,7 @@ case class Report(
   def overrideWith(other: Report) = {
     new Report(
       other._xonly           .orElse(_xonly),
+      other._onlyStatus      .orElse(_onlyStatus),
       other._failtrace       .orElse(_failtrace),
       other._color           .orElse(_color),
       other._colors          .orElse(_colors),
@@ -235,6 +249,7 @@ case class Report(
 
   override def toString = List(
     "xonly"          -> _xonly        ,
+    "onlyStatus"     -> _onlyStatus   ,
     "failtrace"      -> _failtrace    ,
     "color"          -> _color        ,
     "colors"         -> _colors       ,
@@ -253,6 +268,7 @@ object Report extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report = {
     new Report (
       _xonly         = bool("xonly"),
+      _onlyStatus    = value("onlystatus"),
       _failtrace     = bool("failtrace"),
       _color         = bool("color", "nocolor"),
       _colors        = value("colors").map(SmartColors.fromArgs).orElse(Some(new SmartColors)),

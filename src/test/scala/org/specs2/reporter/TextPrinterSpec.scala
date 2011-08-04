@@ -31,6 +31,15 @@ class TextPrinterSpec extends Specification { def is =
       "error examples are shown"                                                                                        ! xonlyargs().e6^
       "statistics are shown"                                                                                            ! xonlyargs().e7^
                                                                                                                         p^
+    "if onlyStatus = o"                                                                                                 ^
+      "text is not shown"                                                                                               ! skippedonlyargs().e1^
+      "successful examples are not shown"                                                                               ! skippedonlyargs().e2^
+      "skipped examples are shown"                                                                                      ! skippedonlyargs().e3^
+      "pending examples are shown"                                                                                      ! skippedonlyargs().e4^
+      "failure examples are not shown"                                                                                  ! skippedonlyargs().e5^
+      "error examples are not shown"                                                                                    ! skippedonlyargs().e6^
+      "statistics are shown"                                                                                            ! skippedonlyargs().e7^
+                                                                                                                        p^
     "if failtrace = true, failures stacktraces are shown"                                                               ! failtrace().e1^
     "if fullStacktrace = true, all error stacktraces are shown"                                                         ! traces().e1^
     "if plan = true, nothing is executed"                                                                               ! planargs().e1^
@@ -114,17 +123,31 @@ class TextPrinterSpec extends Specification { def is =
                      "+ e1",
                      "+ e2")
   }
+
   case class xonlyargs() {
-    val xonly: Arguments = args(xonly = true)
-    
-    def e1 = print(xonly ^ t1 ^ ex1 ^ fail3) must not containMatch("t1")
-    def e2 = print(xonly ^ t1 ^ ex1 ^ fail3) must not containMatch("e1")
-    def e3 = print(xonly ^ t1 ^ skipped5 ^ fail3) must not containMatch("skip it")
-    def e4 = print(xonly ^ t1 ^ pending6 ^ fail3) must not containMatch("todo")
-    def e5 = print(xonly ^ t1 ^ ex1 ^ fail3) must containMatch("fail3")
-    def e6 = print(xonly ^ t1 ^ ex1 ^ error4) must containMatch("error4")
-    def e7 = print(xonly ^ t1 ^ ex1 ^ ex2) must containMatch("examples")
+    val arguments: Arguments = xonly
+
+    def e1 = print(arguments ^ t1 ^ ex1 ^ fail3) must not containMatch("t1")
+    def e2 = print(arguments ^ t1 ^ ex1 ^ fail3) must not containMatch("e1")
+    def e3 = print(arguments ^ t1 ^ skipped5 ^ fail3) must not containMatch("skip it")
+    def e4 = print(arguments ^ t1 ^ pending6 ^ fail3) must not containMatch("todo")
+    def e5 = print(arguments ^ t1 ^ ex1 ^ fail3) must containMatch("fail3")
+    def e6 = print(arguments ^ t1 ^ ex1 ^ error4) must containMatch("error4")
+    def e7 = print(arguments ^ t1 ^ ex1 ^ ex2) must containMatch("examples")
   }
+
+  case class skippedonlyargs() {
+    val arguments: Arguments = onlyStatus("o")
+
+    def e1 = print(arguments ^ t1 ^ ex1 ^ fail3) must not containMatch("t1")
+    def e2 = print(arguments ^ t1 ^ ex1 ^ fail3) must not containMatch("e1")
+    def e3 = print(arguments ^ t1 ^ skipped5 ^ fail3) must containMatch("skip it")
+    def e4 = print(arguments ^ t1 ^ pending6 ^ fail3) must containMatch("todo")
+    def e5 = print(arguments ^ t1 ^ ex1 ^ fail3) must not containMatch("fail3")
+    def e6 = print(arguments ^ t1 ^ ex1 ^ error4) must not containMatch("error4")
+    def e7 = print(arguments ^ t1 ^ ex1 ^ ex2) must containMatch("examples")
+  }
+
   case class color() {
     import text.AnsiColors._
     import text.Trim._

@@ -63,9 +63,14 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def exclude(tags: String): Arguments = args(exclude = tags)
   /**
-   * shortcut to include only failed examples some tagged fragments
+   * shortcut to include only previousy failed/errors examples
    */
-  def failedOnly: Arguments = args(failedOnly = true)
+  def wasIssue: Arguments = args(wasIssue = true)
+  /**
+   * shortcut to include only examples with some previous statuses
+   */
+  def was(s: String): Arguments = args(was = s)
+
   /**
    * shortcut to display the differences with some specific parameters
    */

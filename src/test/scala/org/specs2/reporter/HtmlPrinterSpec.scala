@@ -5,7 +5,7 @@ import mock._
 import specification._
 import matcher.DataTables
 
-class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is = 
+class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is =
                                                                                                                         """
 The HtmlPrinter class is responsible for opening an html file and writing the specification text.
                                                                                                                         """^p^
@@ -45,7 +45,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     "must not create a new file"                                                                                        ! seeIt().e1^
     "must get an icon representing its status"                                                                          ^
       "success if everything succeeds"                                                                                  ! seeIt().e2^
-      "failure if there is a failure"                                                                                   ! seeIt().e3.pendingUntilFixed^
+      "failure if there is a failure"                                                                                   ! seeIt().e3^
                                                                                                                         end
                                                                                           
   implicit val argument = args()

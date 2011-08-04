@@ -55,8 +55,8 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
     printElem(<title>{name.title}</title>).
     printElem(
       if (stats.hasIssues) <h2>{name.title}
-        <notoc><a href="#" onclick="hideByClass('ok');hideById('issuesOnly');showById('all')"><i id='issuesOnly' style="font-size:small">(issues only)</i></a></notoc>
-        <notoc><a href="#" onclick="showByClass('ok');hideById('all');showById('issuesOnly')"><i id='all' style="display:none;font-size:small">(all)</i></a></notoc></h2>
+        <notoc><a href="#" onclick="hideByClass('ok');hideById('wasIssue');showById('all')"><i id='wasIssue' style="font-size:small">(issues only)</i></a></notoc>
+        <notoc><a href="#" onclick="showByClass('ok');hideById('all');showById('wasIssue')"><i id='all' style="display:none;font-size:small">(all)</i></a></notoc></h2>
       else <h2>{name.title}</h2>)
   }
 
