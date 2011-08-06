@@ -69,7 +69,7 @@ trait DataTables {
 	  }
 	  /** @return the logical and combination of all the results */
     private def allSuccess[R <% Result](results: List[(String, R)]): Result = {
-      results.foldLeft(Success(""): Result)((res, cur) => res and cur._2)
+      results.foldLeft(Success("", results.size): Result)((res, cur) => res and cur._2)
     }
     /** @return the status of the row + the values + the failure message if any */
 	  private def resultLine(desc: String, result: Result): String = {

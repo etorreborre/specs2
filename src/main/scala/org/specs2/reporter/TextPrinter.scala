@@ -97,7 +97,7 @@ trait TextPrinter {
     def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
       val description = statusAndDescription(desc, result, timer)(args, out)
       def print(res: Result) {
-        if (args.showStatus(res.status)) {
+        if (args.canShow(res.status)) {
           res match {
             case f @ Failure(m, e, st, d) => {
               printFailure(desc, f, timer)
@@ -168,18 +168,16 @@ trait TextPrinter {
   }
   case class PrintText(t: ExecutedText)               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      if (args.showStatus("-"))
+      if (args.canShow("-"))
         out.printMessage(leveledText(t.text, level)(args))(args)
   }        
   case class PrintBr()                               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      if (args.showStatus("-")) out.printLine(" ")(args)
+      if (args.canShow("-")) out.printLine(" ")(args)
   }
   case class PrintSpecEnd(end: ExecutedSpecEnd, endStats: Stats)       extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      if (!(stats eq endStats) && !args.xonly && stats.hasFailuresOrErrors)
-        printEndStats(stats)(args, out)
-      if (stats eq endStats)
+      if ((args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1"))
         printEndStats(stats)(args, out)
     }
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {

@@ -53,7 +53,7 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
   /**
    * shortcut to print only some statuses
    */
-  def onlyStatus(s: String): Arguments = args(onlyStatus = s)
+  def showOnly(s: String): Arguments = args(showOnly = s)
   /**
    * shortcut to execute and print only some examples
    */

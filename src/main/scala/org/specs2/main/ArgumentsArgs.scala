@@ -23,7 +23,7 @@ trait ArgumentsArgs extends ArgProperties {
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    onlyStatus:    ArgProperty[String]            = ArgProperty[String](),
+    showOnly:    ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
@@ -41,7 +41,7 @@ trait ArgumentsArgs extends ArgProperties {
               sequential = sequential) <|
      (new ArgumentsNamespace).report(
               xonly      = xonly,
-              onlyStatus = onlyStatus,
+              showOnly = showOnly,
               color      = color,
               noindent   = noindent,
               markdown   = markdown)
@@ -80,7 +80,7 @@ trait ArgumentsArgs extends ArgProperties {
     /** shorthand method to create an Arguments object */
     def report(
       xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      onlyStatus:    ArgProperty[String]            = ArgProperty[String](),
+      showOnly:    ArgProperty[String]            = ArgProperty[String](),
       failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       colors:        ArgProperty[Colors]            = ArgProperty[Colors](),
@@ -92,7 +92,7 @@ trait ArgumentsArgs extends ArgProperties {
       diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter]()) = new Arguments(
-       report = Report(xonly.toOption.map(v => if (v) "x!" else "x!+-o*").orElse(onlyStatus.toOption),
+       report = Report(xonly.toOption.map(v => if (v) "x!" else "x!+-o*").orElse(showOnly.toOption),
                        failtrace.toOption,
                        color.toOption,
                        colors.toOption,

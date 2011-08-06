@@ -32,7 +32,7 @@ case class Arguments (
   def threadsNb: Int                = execute.threadsNb
 
   def xonly: Boolean                = report.xonly
-  def showStatus(s: String)         = report.showStatus(s)
+  def canShow(s: String)            = report.canShow(s)
 
   def failtrace: Boolean            = report.failtrace
   def color: Boolean                = report.color
@@ -206,7 +206,7 @@ object Execute extends Extract {
 
 private[specs2]
 case class Report(
-  _onlyStatus:    Option[String]           = None,
+  _showOnly:      Option[String]           = None,
   _failtrace:     Option[Boolean]          = None,
   _color:         Option[Boolean]          = None,
   _colors:        Option[Colors]           = None,
@@ -221,8 +221,8 @@ case class Report(
 
   import Arguments._
   
-  def xonly: Boolean                = showStatus("x") && showStatus("!") && !showStatus("o*+")
-  def showStatus(s: String)         = hasFlags(s, _onlyStatus)
+  def xonly: Boolean                = canShow("x") && canShow("!") && !canShow("o*+")
+  def canShow(s: String)            = hasFlags(s, _showOnly)
   def failtrace: Boolean            = _failtrace.getOrElse(false)
   def color: Boolean                = _color.getOrElse(true)
   def colors: Colors                = _colors.getOrElse(new SmartColors())
@@ -237,7 +237,7 @@ case class Report(
 
   def overrideWith(other: Report) = {
     new Report(
-      other._onlyStatus      .orElse(_onlyStatus),
+      other._showOnly        .orElse(_showOnly),
       other._failtrace       .orElse(_failtrace),
       other._color           .orElse(_color),
       other._colors          .orElse(_colors),
@@ -253,7 +253,7 @@ case class Report(
   }
 
   override def toString = List(
-    "onlyStatus"     -> _onlyStatus   ,
+    "showOnly"       -> _showOnly   ,
     "failtrace"      -> _failtrace    ,
     "color"          -> _color        ,
     "colors"         -> _colors       ,
@@ -271,7 +271,7 @@ private[specs2]
 object Report extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report = {
     new Report (
-      _onlyStatus    = value("onlystatus").orElse(bool("xonly").map(v => "x!")),
+      _showOnly    = value("showonly").orElse(bool("xonly").map(v => "x!")),
       _failtrace     = bool("failtrace"),
       _color         = bool("color", "nocolor"),
       _colors        = value("colors").map(SmartColors.fromArgs),

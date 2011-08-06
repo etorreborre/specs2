@@ -26,7 +26,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    onlyStatus:    ArgProperty[String]            = ArgProperty[String](),
+    showOnly:    ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
@@ -42,7 +42,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       stopOnFail,
       sequential,
       xonly,
-      onlyStatus,
+      showOnly,
       color,
       noindent,
       markdown))
@@ -81,7 +81,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     /** shorthand method to create an Arguments object */
     override def report(
       xonly:        ArgProperty[Boolean]            = ArgProperty[Boolean](),
-      onlyStatus:    ArgProperty[String]            = ArgProperty[String](),
+      showOnly:    ArgProperty[String]            = ArgProperty[String](),
       failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       colors:        ArgProperty[Colors]            = ArgProperty[Colors](),
@@ -94,7 +94,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter]()) = addArguments(super.report(
         xonly,
-        onlyStatus,
+        showOnly,
         failtrace,
         color,
         colors,
