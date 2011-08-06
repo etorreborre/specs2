@@ -31,7 +31,7 @@ class TextPrinterSpec extends Specification { def is =
       "error examples are shown"                                                                                        ! xonlyargs().e6^
       "statistics are shown"                                                                                            ! xonlyargs().e7^
                                                                                                                         p^
-    "if onlyStatus = o"                                                                                                 ^
+    "if showOnly = o"                                                                                                 ^
       "text is not shown"                                                                                               ! skippedonlyargs().e1^
       "successful examples are not shown"                                                                               ! skippedonlyargs().e2^
       "skipped examples are shown"                                                                                      ! skippedonlyargs().e3^
@@ -137,7 +137,7 @@ class TextPrinterSpec extends Specification { def is =
   }
 
   case class skippedonlyargs() {
-    val arguments: Arguments = onlyStatus("o")
+    val arguments: Arguments = showOnly("o")
 
     def e1 = print(arguments ^ t1 ^ ex1 ^ fail3) must not containMatch("t1")
     def e2 = print(arguments ^ t1 ^ ex1 ^ fail3) must not containMatch("e1")
