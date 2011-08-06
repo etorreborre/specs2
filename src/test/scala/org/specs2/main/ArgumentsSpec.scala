@@ -2,8 +2,10 @@ package org.specs2
 package main
 
 import specification.After
+import matcher.DataTables
+import execute.Result
 
-class ArgumentsSpec extends Specification { def is =
+class ArgumentsSpec extends Specification with DataTables { def is =
                                                                                                                         """
 Arguments can be passed on the command line as an Array of Strings. There are 2 types of arguments:
 
@@ -40,6 +42,10 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
     "a boolean value can be -Dname=false"                                                                               ! e14^
     "a string value will be -Dname=value"                                                                               ! e15^
     "properties can also be passed as -Dspecs2.name to avoid conflicts with other properties"                           ! e16^
+                                                                                                                        p^
+  "Arguments can decide if a result must be shown or not, depending on its status"                                      ^
+    "xonly => showStatus(x)"                                                                                            ! e17^
+    "xonly => showStatus(result.status)"                                                                                ! e18^
                                                                                                                         end
 
 
@@ -68,4 +74,44 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
   def e14 = Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
   def e15 = Arguments.extract(Seq(""), properties("specname" -> "spec")).specName must_== "spec"
   def e16 = Arguments.extract(Seq(""), properties("specs2.specname" -> "spec")).specName must_== "spec"
+
+  def e17 = "args"                        | "status" | "showStatus" |>
+            xonly                         ! "x"      ! true         |
+            xonly                         ! "!"      ! true         |
+            xonly                         ! "o"      ! false        |
+            xonly                         ! "+"      ! false        |
+            xonly                         ! "-"      ! false        |
+            onlyStatus("x!")              ! "x"      ! true         |
+            onlyStatus("x!")              ! "!"      ! true         |
+            onlyStatus("x!")              ! "o"      ! false        |
+            onlyStatus("x!")              ! "+"      ! false        |
+            onlyStatus("x!")              ! "-"      ! false        |
+            onlyStatus("o")               ! "x"      ! false        |
+            onlyStatus("o")               ! "!"      ! false        |
+            onlyStatus("o")               ! "o"      ! true         |
+            onlyStatus("o")               ! "+"      ! false        |
+            onlyStatus("o")               ! "-"      ! false        |
+            Arguments("onlystatus","o")   ! "x"      ! false        |
+            Arguments("onlystatus","o")   ! "!"      ! false        |
+            Arguments("onlystatus","o")   ! "o"      ! true         |
+            Arguments("onlystatus","o")   ! "+"      ! false        |
+            Arguments("onlystatus","o")   ! "-"      ! false        |
+            { (a, s, r) =>  a.showStatus(s) must_== r }
+
+  def e18 = "args"                        | "status"            | "showStatus" |>
+             xonly                        ! (failure:Result)    ! true         |
+             xonly                        ! anError             ! true         |
+             xonly                        ! skipped             ! false        |
+             xonly                        ! success             ! false        |
+             onlyStatus("x!")             ! failure             ! true         |
+             onlyStatus("x!")             ! anError             ! true         |
+             onlyStatus("x!")             ! skipped             ! false        |
+             onlyStatus("x!")             ! success             ! false        |
+             onlyStatus("o")              ! failure             ! false        |
+             onlyStatus("o")              ! anError             ! false        |
+             onlyStatus("o")              ! skipped             ! true         |
+             onlyStatus("o")              ! success             ! false        |
+             { (a, s, r) =>  a.showStatus(s.status) must_== r }
+
+
 }

@@ -26,23 +26,25 @@ trait ArgumentsArgs extends ArgProperties {
     onlyStatus:    ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean]()) = new Arguments(
+    markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
 
-     select = Select(_ex         = ex.toOption.map(".*"+_+".*"),
-                     _include    = include.toOption,
-                     _exclude    = exclude.toOption,
-                     _wasIssue   = wasIssue.toOption,
-                     _was        = was.toOption),
-
-     execute = Execute(_plan       = plan.toOption,
-                       _skipAll    = skipAll.toOption,
-                       _stopOnFail = stopOnFail.toOption,
-                       _sequential = sequential.toOption),
-
-     report = Report(_onlyStatus = onlyStatus.toOption,
-                     _color      = color.toOption,
-                     _noindent   = noindent.toOption,
-                     _markdown   = markdown.toOption))
+     (new ArgumentsNamespace).select(
+            ex         = ex,
+            include    = include,
+            exclude    = exclude,
+            wasIssue   = wasIssue,
+            was        = was)       <|
+      (new ArgumentsNamespace).execute(
+              plan       = plan,
+              skipAll    = skipAll,
+              stopOnFail = stopOnFail,
+              sequential = sequential) <|
+     (new ArgumentsNamespace).report(
+              xonly      = xonly,
+              onlyStatus = onlyStatus,
+              color      = color,
+              noindent   = noindent,
+              markdown   = markdown)
 
 
   private[specs2] class ArgumentsNamespace {
@@ -54,10 +56,11 @@ trait ArgumentsArgs extends ArgProperties {
       wasIssue:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       was:           ArgProperty[String]            = ArgProperty[String](),
       specName:      ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
-       select = Select(ex.toOption.map(".*"+_+".*"),
+       select = Select(
+              ex.toOption.map(".*"+_+".*"),
               include.toOption,
               exclude.toOption,
-              wasIssue.toOption,
+              wasIssue.toOption.map(v => if (v) "x!" else "x!+-o*").orElse(was.toOption),
               specName.toOption))
 
     /** shorthand method to create an Arguments object */
@@ -76,7 +79,7 @@ trait ArgumentsArgs extends ArgProperties {
 
     /** shorthand method to create an Arguments object */
     def report(
-      xonly:         ArgProperty[Boolean]            = ArgProperty[Boolean](),
+      xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       onlyStatus:    ArgProperty[String]            = ArgProperty[String](),
       failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -89,8 +92,7 @@ trait ArgumentsArgs extends ArgProperties {
       diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter]()) = new Arguments(
-       report = Report(xonly.toOption,
-                       onlyStatus.toOption,
+       report = Report(xonly.toOption.map(v => if (v) "x!" else "x!+-o*").orElse(onlyStatus.toOption),
                        failtrace.toOption,
                        color.toOption,
                        colors.toOption,

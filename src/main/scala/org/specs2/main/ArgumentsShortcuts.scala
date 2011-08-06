@@ -51,6 +51,10 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def xonly: Arguments = args(xonly = true)
   /**
+   * shortcut to print only some statuses
+   */
+  def onlyStatus(s: String): Arguments = args(onlyStatus = s)
+  /**
    * shortcut to execute and print only some examples
    */
   def only(examples: String): Arguments = args(ex = examples)

@@ -37,7 +37,7 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
   /**
    * make sure that no empty tag name is used to search the xml stats and replace . with : to help the xpath search
    */
-  private def nameTag(specName: SpecName) = if (specName.fullName.isEmpty) " " else specName.fullName.replace(".", ":")
+  private def nameTag(specName: SpecName) = if (specName.fullName.isEmpty) "-" else specName.fullName.replace(".", ":")
 
   private def toXml(specName: SpecName, stats: Stats) = {
     Elem(null, nameTag(specName),

@@ -19,12 +19,14 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     ex:            ArgProperty[String]            = ArgProperty[String](),
     include:       ArgProperty[String]            = ArgProperty[String](),
     exclude:       ArgProperty[String]            = ArgProperty[String](),
-    wasIssue:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    wasIssue:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    was:           ArgProperty[String]            = ArgProperty[String](),
     plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
     skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    onlyStatus:    ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
@@ -34,11 +36,13 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       include,
       exclude,
       wasIssue,
+      was,
       plan,
       skipAll,
       stopOnFail,
       sequential,
       xonly,
+      onlyStatus,
       color,
       noindent,
       markdown))
@@ -50,12 +54,14 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       ex:            ArgProperty[String]            = ArgProperty[String](),
       include:       ArgProperty[String]            = ArgProperty[String](),
       exclude:       ArgProperty[String]            = ArgProperty[String](),
-      wasIssue:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      wasIssue:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      was:           ArgProperty[String]            = ArgProperty[String](),
       specName:      ArgProperty[String]            = ArgProperty[String]()) = addArguments(super.select(
         ex,
         include,
         exclude,
         wasIssue,
+        was,
         specName))
 
     /** shorthand method to create an Arguments object */
@@ -74,6 +80,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
 
     /** shorthand method to create an Arguments object */
     override def report(
+      xonly:        ArgProperty[Boolean]            = ArgProperty[Boolean](),
       onlyStatus:    ArgProperty[String]            = ArgProperty[String](),
       failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -86,6 +93,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter]()) = addArguments(super.report(
+        xonly,
         onlyStatus,
         failtrace,
         color,
