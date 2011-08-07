@@ -45,7 +45,8 @@ From inside a specification, the available arguments are the following:
  *`ex`        *  | .*                                       | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
  *`include`   *  | ""                                       | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
  *`exclude`   *  | ""                                       | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- *`failedOnly`*  | false                                    | select only previously failed examples
+ *`wasIssue`  *  | false                                    | select only previously failed/error examples
+ *`was`       *  | ""                                       | select only some previously executed examples based on their status
  `specName`      | ".*Spec"                                 | regular expression to use when executing specifications with the FilesRunner
  --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
   Execution
@@ -58,7 +59,8 @@ From inside a specification, the available arguments are the following:
  --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
   Reporting
  --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
- *`xonly`   *    | false                                    | only reports failures and errors
+ *`xonly`   *    | false                                    | only report failures and errors
+ *`showOnly`*    | ""                                       | only report some examples based on their status
  *`color`   *    | true                                     | use colors in the output (`nocolor` can also be used on the command line)
  *`noindent`*    | false                                    | don't indent automatically text and examples
  *`markdown`*    | true                                     | interpret text as Markdown in the html reporter
@@ -87,18 +89,35 @@ There are some available shortcuts for some arguments
  `include(tags: String)`                                               | `args(include=tags)`                                                                  |                                                                                                  |
  `exclude(tags: String)`                                               | `args(exclude=tags)`                                                                  |                                                                                                  |
  `only(examples: String)`                                              | `args(ex=examples)`                                                                   |                                                                                                  |
- `failedOnly`                                                          | `args(failedOnly=true)`                                                               |                                                                                                  |
+ `wasIssue`                                                          | `args(wasIssue=true)`                                                                   |                                                                                                  |
+ `was(status: String)`                                               | `args(was=status)`                                                                      |                                                                                                  |
  `plan`                                                                | `args(plan=true)`                                                                     |                                                                                                  |
  `skipAll`                                                             | `args(skipAll=true)`                                                                  |                                                                                                  |
  `stopOnFail`                                                          | `args(stopOnFail=true)`                                                               |                                                                                                  |
  `sequential`                                                          | `args(sequential=true)`                                                               |                                                                                                  |
  `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
+ `showOnly(status: String)`                                          | `args(showOnly=status)`                                                                 |                                                                                                  |
  `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
  `literate`                                                            | `args(noindent=true, sequential=true)`                                                | for specifications where text must not be indented and examples be executed in order             |
  `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
  `descFromExpectations`                                                | `args(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
  `fullStackTrace`                                                      | `args(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
  `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | to display the differences when doing equality comparison                                        |
+
+##### Status flags
+
+The `was` and `showOnly` arguments expect a String made of "status flags". For example, `xonly` is equivalent to `showOnly("x!")`. Here is the list of all the flags which you can use to control the selection of fragments before execution or their display:
+
+  Flag | Description
+ ----- | ------------
+  `+`  | successful example
+  `x`  | failed example
+  `!`  | error example
+  `o`  | skipped example
+  `*`  | pending example
+  `-`  | text
+  `1`  | statistics
+
 
 ##### Diffs
 
@@ -158,13 +177,15 @@ On the command line you can pass the following arguments:
  `ex`             | regexp                  |                                                                          |
  `include`        | csv                     |                                                                          |
  `exclude`        | csv                     |                                                                          |
- `failedonly`     | boolean                 |                                                                          |
+ `wasIssue`       | boolean                 |                                                                          |
+ `was`            | String                  | see: Status flags                                                        |
  `specname`       | regexp                  |                                                                          |
  `plan`           | boolean                 |                                                                          |
  `skipall`        | boolean                 |                                                                          |
  `sequential`     | boolean                 |                                                                          |
  `threadsnb`      | int                     |                                                                          |
  `xonly`          | boolean                 |                                                                          |
+ `showonly`       | String                  | see: Status flags                                                        |
  `failtrace`      | boolean                 |                                                                          |
  `color`          | boolean                 |                                                                          |
  `colors`         | map                     | e.g. text:be, failure:m (see the Colors section)                         |
