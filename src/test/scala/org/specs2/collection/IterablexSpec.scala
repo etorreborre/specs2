@@ -50,6 +50,9 @@ class IterablexSpec extends Specification with IterableData {
   "mapLast maps the last element with a function if it exists" in
   { Seq(1, 2).mapLast(_ + 1) must_== Seq(1, 3) }
 
+  "a seq can be matched on its last element" in
+  { Seq(1, 2, 3) match { case init :+ last => ok; case _ => ko } }
+
 }
 import org.scalacheck.{ Arbitrary, Gen }
 import org.scalacheck.Gen._

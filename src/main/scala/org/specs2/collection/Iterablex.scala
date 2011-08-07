@@ -109,4 +109,14 @@ trait Iterablex {
   }
 }
 private[specs2]
-object Iterablex extends Iterablex
+object Iterablex extends Iterablex {
+  import scala.collection.SeqLike
+  object +: {
+    def unapply[A, C <: SeqLike[A, C]](seq: C with SeqLike[A, C]) =
+      seq.headOption.map(h => (h, seq.tail))
+  }
+  object :+ {
+    def unapply[A, C <: SeqLike[A, C]](seq: C with SeqLike[A, C]) =
+      seq.headOption.map(h => (seq.init, seq.last ))
+  }
+}
