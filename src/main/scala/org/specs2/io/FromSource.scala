@@ -37,14 +37,14 @@ trait FromSource {
    *   * finding the location of the example by taking the trace of the first line and the trace of the last line
    *    (at depth 6 and 9 by default)
    */
-  def getCodeFromTo(start: Int = 6, end: Int = 9): Either[String, String] = {
+  def getCodeFromTo(start: Int = 6, end: Int = 9, startLineOffset: Int = -1, endLineOffset: Int = -1): Either[String, String] = {
     val stackTrace = new Exception().getStackTrace()
     val (startTrace, endTrace) = (new TraceLocation(stackTrace.apply(start)), new TraceLocation(stackTrace.apply(end)))
     
     if (startTrace.fileName != endTrace.fileName)
       Left("No source file found at "+srcDir+startTrace.path)
     else {
-      val (startLine, endLine) = (startTrace.lineNumber-1, endTrace.lineNumber-1)
+      val (startLine, endLine) = (startTrace.lineNumber+startLineOffset, endTrace.lineNumber+endLineOffset)
       val stackFilter = (st: Seq[StackTraceElement]) => st.filter(_.toString.contains(".getSourceCode(")).drop(1)
       getCodeFromToWithLocation(startLine, endLine, location(stackFilter))
     }
