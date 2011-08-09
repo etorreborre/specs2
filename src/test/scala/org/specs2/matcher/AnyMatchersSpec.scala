@@ -99,6 +99,10 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { new BufferedInputStream(null) must haveSuperclass[InputStream] }                                                    ^
   { 1 must not have superClass[String] }                                                                                ^
                                                                                                                         p^
+  "haveInterface checks if a value has a given interface in the list of its interfaces"                                 ^
+  { new java.util.ArrayList() must haveInterface[java.util.List[_]] }                                                   ^
+  { 1 must not have interface[java.util.List[_]] }                                                                      ^
+                                                                                                                        p^
   "beAssignableFrom checks if a class is assignable from another"                                                       ^
   { classOf[OutputStream] must beAssignableFrom[FileOutputStream] }                                                     ^
                                                                                                                         p^

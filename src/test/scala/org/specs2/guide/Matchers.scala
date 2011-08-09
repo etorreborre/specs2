@@ -104,6 +104,7 @@ An non-exhaustive list of those matchers:
  * `beOneOf(a, b, c)`: to check if an object is one of a given list
  * `haveClass`: to check the class of an object
  * `haveSuperclass`: to check if the class of an object as another class as one of its ancestors
+ * `haveInterface`: to check if an object is implementing a given interface
  * `beAssignableFrom`: to check if a class is assignable from another
  * `beAnInstanceOf[T]`: to check if an object is an instance of type `T`
 

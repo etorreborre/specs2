@@ -121,6 +121,19 @@ trait AnyBaseMatchers {
              x)
     }
   }
+	
+  /** matches if x.getClass.getInterfaces.contains(T) */
+  def haveInterface[T : ClassManifest] = new Matcher[Any] {
+    def apply[S <: Any](x: Expectable[S]) = {
+      val c = implicitly[ClassManifest[T]].erasure
+      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      result(xClass.getInterfaces.contains(c),
+             x.description + " has interface " + q(c.getName),
+             x.description + " doesn't have interface " + q(c.getName) + " but " + xClass.getInterfaces.mkString(", "),
+             x)
+    }
+	}
+	
   /** matches if v.isAssignableFrom(c) */
   def beAssignableFrom[T : ClassManifest] = new Matcher[Class[_]] {
     def apply[S <: Class[_]](x: Expectable[S]) = {
@@ -249,6 +262,7 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   def oneOf[T](t: T*) = (beOneOf(t:_*))
   def klass[T : ClassManifest]: Matcher[Any] = outer.haveClass[T]
   def superClass[T : ClassManifest]: Matcher[Any] = outer.haveSuperclass[T]
+  def interface[T : ClassManifest]: Matcher[Any] = outer.haveInterface[T]
   def assignableFrom[T : ClassManifest] = outer.beAssignableFrom[T]
   def anInstanceOf[T : ClassManifest] = outer.beAnInstanceOf[T]
 }
