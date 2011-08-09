@@ -27,6 +27,7 @@ trait Specification extends SpecificationStructure with SpecificationFeatures
  *           it to the rest of the program
  */
 trait SpecificationFeatures extends FragmentsBuilder
+   with AutoExamples
    with SpecificationInclusion
    with ArgumentsArgs
    with ArgumentsShortcuts
@@ -35,7 +36,6 @@ trait SpecificationFeatures extends FragmentsBuilder
    with FormattingFragments
    with StandardResults
    with StandardMatchResults
-   with AutoExamples
    with TimeConversions
    with PendingUntilFixed
    with Contexts

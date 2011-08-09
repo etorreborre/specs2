@@ -28,38 +28,6 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   implicit def fragments(f: =>Fragment): Fragments = Fragments.createList(f)
   implicit def fragmentFragments(f: =>Fragment): FragmentsFragment = new FragmentsFragment(fragments(f))
   implicit def fragmentsFragments(fs: =>Fragments): FragmentsFragment = new FragmentsFragment(fs)
-  /**
-   * Fragments can be chained with the ^ method
-   */
-  class FragmentsFragment(fs: =>Fragments) {
-    def fragments = fs
-    def ^(t: String) = fs add Text(t)
-    def ^(f: Fragment) = f match {
-      case s @ SpecStart(_,_,_,_) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
-      case _                      => fs add f
-    }
-    def ^(other: Seq[Fragment]) = fs add other
-
-    def ^(other: Fragments) = {
-      other match {
-        case Fragments(t, m, a, Some(l), so)    => fs add other.fragments
-        case Fragments(Some(t), m, a, None, so) => (fs add other.middle).specTitleIs(t).overrideArgs(a)
-        case Fragments(None, m, a, None, so)    => (fs add other.middle).overrideArgs(a)
-        case _                                  => fs add other.middle
-      }
-    }
-    
-    def ^(other: FragmentsFragment) = fs add other.fragments
-    def ^(a: Arguments) = fs add a
-
-    /** start a given-when-then block */
-    def ^[T](step: Given[T]): PreStep[T] = {
-      val text = fs.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
-      lazy val extracted = step.extractContext(text)
-      def strip(fragments: Fragments) = fragments.map(step.strip)
-      new PreStep(() => extracted, fragmentsFragments(strip(fs)) ^ Step.fromEither(extracted))
-    }
-  }
   /** reverse conversion from a Fragment containing a Fragments object to the Fragments object*/
   implicit def fragmentsFragmentToFragments(fs: FragmentsFragment): Fragments = fs.fragments
 
@@ -141,6 +109,42 @@ trait FragmentsBuilder extends RegexSteps { outer =>
   /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */
   implicit def inScope(s: Scope): Success = Success()
 }
+
+/**
+ * Fragments can be chained with the ^ method
+ */
+private[specs2]
+class FragmentsFragment(fs: =>Fragments) {
+  def fragments = fs
+  def ^(t: String) = fs add Text(t)
+  def ^(f: Fragment) = f match {
+    case s @ SpecStart(_,_,_,_) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
+    case _                      => fs add f
+  }
+  def ^(other: Seq[Fragment]) = fs add other
+
+  def ^(other: Fragments) = {
+    other match {
+      case Fragments(t, m, a, Some(l), so)    => fs add other.fragments
+      case Fragments(Some(t), m, a, None, so) => (fs add other.middle).specTitleIs(t).overrideArgs(a)
+      case Fragments(None, m, a, None, so)    => (fs add other.middle).overrideArgs(a)
+      case _                                  => fs add other.middle
+    }
+  }
+
+  def ^(other: FragmentsFragment) = fs add other.fragments
+  def ^(a: Arguments) = fs add a
+
+  /** start a given-when-then block */
+  def ^[T](step: Given[T]): PreStep[T] = {
+    val text = fs.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
+    lazy val extracted = step.extractContext(text)
+    def strip(fragments: Fragments) = fragments.map(step.strip)
+    new PreStep(() => extracted, new FragmentsFragment(strip(fs)) ^ Step.fromEither(extracted))
+  }
+}
+
+
 object FragmentsBuilder extends FragmentsBuilder
 
 import org.specs2.internal.scalaz._

@@ -20,5 +20,28 @@ class DifferentSpecification extends org.specs2.Specification { def is = noinden
   "first example" ^
   { 1 must_== 1 } ^
                   end
-
 }
+class SpecificationWithNoStartingTextSpec extends org.specs2.Specification { def is =
+  { 1 must_== 1 } ^
+  { 1 must_== 1 } ^
+  { 1 must_== 1 } ^
+                  end
+}
+class SpecificationWithNoStartingTextAndNoEndSpec extends org.specs2.Specification { def is =
+  { 1 must_== 1 } ^
+  { 2 must_== 2 }
+}
+
+class SpecificationWithNoStartingText extends org.specs2.Specification { def is =
+  { 1 must_== 1 } ^
+  { 1 must_== 1 } ^
+  { 1 must_== 1 } ^
+                  end
+}
+class SpecificationWithNoStartingTextAndNoEnd extends org.specs2.Specification { def is =
+  { 1 must_== 1 } ^
+  { 1 must_== 1 } ^
+  { 1 must_== 1 }
+}
+
+

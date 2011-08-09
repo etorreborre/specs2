@@ -32,18 +32,32 @@ import matcher._
  */
 private[specs2]
 trait AutoExamples {
+
   /** this implicit def is necessary when the expression is at the start of the spec */
-  implicit def matchFragments(expression: =>MatchResult[_]): Fragments = {
+  implicit def matchFragmentsFragment(expression: =>MatchResult[_]): MatchResultFragment = {
+    new MatchResultFragment(matchFragments(expression))
+  }
+
+  /** this implicit def is necessary when the expression is at the start of the spec */
+  implicit def booleanFragmentsFragment(expression: =>Boolean): BooleanResultFragment =
+    new BooleanResultFragment(booleanFragments(expression))
+
+  /** this implicit def is necessary when the expression is at the start of the spec */
+  implicit def resultFragmentsFragment(expression: =>Result): ResultFragment =
+    new ResultFragment(resultFragments(expression))
+
+  /** this implicit def is necessary when the expression is at the start of the spec */
+  implicit def matchFragments(expression: =>MatchResult[_]) = {
     val desc = getSourceCode()
     Fragments.create(Example(CodeMarkup(desc), expression.toResult))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
-  implicit def booleanFragments(expression: =>Boolean): Fragments = {
+  implicit def booleanFragments(expression: =>Boolean) = {
     val desc = getSourceCode()
     Fragments.create(Example(CodeMarkup(desc), toResult(expression)))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
-  implicit def resultFragments(expression: =>Result): Fragments = {
+  implicit def resultFragments(expression: =>Result) = {
     val desc = getSourceCode()
     Fragments.create(Example(CodeMarkup(desc), expression))
   }
@@ -54,11 +68,11 @@ trait AutoExamples {
 
   implicit def resultExample(expression: =>execute.Result) = Example(CodeMarkup(getSourceCode()), expression)
 
-  private[specs2] def getSourceCode(startDepth: Int = 6, endDepth: Int = 9): String = {
-    val firstTry = getCodeFromTo(startDepth, endDepth)
+  private[specs2] def getSourceCode(startDepth: Int = 6, endDepth: Int = 9, startLineOffset: Int = -1, endLineOffset: Int = -1): String = {
+    val firstTry = getCodeFromTo(startDepth, endDepth, startLineOffset, endLineOffset)
     val code = firstTry match {
       case Right(c) => c
-      case Left(e)  => getCodeFromTo(startDepth, startDepth) match { case Right(r) => r;  case Left(l) => e }
+      case Left(e)  => getCodeFromTo(startDepth, startDepth, startLineOffset, endLineOffset) match { case Right(r) => r;  case Left(l) => e }
     }
     trimCode(code)
   }
@@ -69,6 +83,26 @@ trait AutoExamples {
     trimEnclosing("`", "`").
     removeFirst("`\\(.*\\)").trimFirst("`")
   }
+
+  class MatchResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
+    def ^[T](result: =>T)(implicit toResult: T => Result) = {
+      val desc = getSourceCode(startLineOffset = 4, endLineOffset = 4)
+      new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
+    }
+  }
+  class BooleanResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
+    def ^[T](result: =>T)(implicit toResult: T => Result) = {
+      val desc = getSourceCode()
+      new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
+    }
+  }
+  class ResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
+    def ^[T](result: =>T)(implicit toResult: T => Result) = {
+      val desc = getSourceCode()
+      new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
+    }
+  }
 }
+
 private[specs2]
 object AutoExamples extends AutoExamples

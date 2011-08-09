@@ -40,7 +40,7 @@ trait MatchersImplicits extends Expectations {
    * implicit definition to accept any MatchResult as a Boolean value.
    * It is true if the MatchResult is not an Error or a Failure
    */
-  implicit def fromMatchResult(r: MatchResult[_]): Boolean = r.isSuccess || r.isSkipped || r.isPending
+  implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.isSkipped || r.isPending
   /**
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers

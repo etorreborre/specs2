@@ -2,10 +2,12 @@ package org.specs2
 package io
 import mutable._
 import specification.{SpecificationStructure, Example}
-import user.specification.DifferentSpecification
+import user.specification._
 
 class FromSourceSpec extends Specification with FromSource {
-  val spec = new user.specification.UserFromSourceSpecification
+  val spec  = new UserFromSourceSpecification
+  val spec2 = new SpecificationWithNoStartingText
+  val spec3 = new SpecificationWithNoStartingTextAndNoEnd
 
   "An expression can be read from a source file" in {
     examples(spec)(0).desc.toString must contain("1 must_== 1")
@@ -19,8 +21,14 @@ class FromSourceSpec extends Specification with FromSource {
   "If the file is not found, the full path is shown to the user" in {
     other.NotFound.result.toString must be_==("No source file found at src/test/scala/org/specs2/io/other/FromSourceSpec.scala")
   }
-  "If the specification doesn't end with an end fragment, the last example description should be found" in {
+  "If there is a function call to an example, the example description should be found" in {
     examples(spec)(2).desc.toString must contain("a call to an example")
+  }
+  "If the specification doesn't start with a text fragment, the example description should be found" in {
+    { (e: Example) => e must contain("1 must_== 1") ^^ ((_:Example).desc.toString) }.forall(examples(spec2))
+  }
+  "If the specification doesn't end with an end fragment, the last example description should be found" in {
+    { (e: Example) => e must contain("1 must_== 1") ^^ ((_:Example).desc.toString) }.forall(examples(spec3))
   }
   def examples(s: SpecificationStructure) = s.is.examples
 }
