@@ -25,11 +25,17 @@ class FromSourceSpec extends Specification with FromSource {
     examples(spec)(2).desc.toString must contain("a call to an example")
   }
   "If the specification doesn't start with a text fragment, the example description should be found" in {
-    { (e: Example) => e must contain("1 must_== 1") ^^ ((_:Example).desc.toString) }.forall(examples(spec2))
+    checkExamples(spec2)
   }
   "If the specification doesn't end with an end fragment, the last example description should be found" in {
-    { (e: Example) => e must contain("1 must_== 1") ^^ ((_:Example).desc.toString) }.forall(examples(spec3))
+    checkExamples(spec3)
   }
+
+  def checkExamples(spec: SpecificationStructure) = { (e: (Example, Int)) =>
+    val index = e._2 + 1
+    e._1 must contain(index+" must_== "+index) ^^ ((_:Example).desc.toString)
+  }.forall(examples(spec).zipWithIndex)
+
   def examples(s: SpecificationStructure) = s.is.examples
 }
 

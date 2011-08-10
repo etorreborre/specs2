@@ -11,15 +11,16 @@ import matcher._
 
 /**
  * Create example descriptions by reading the corresponding line in the source file.
- * 
- * { 1 must_== 1 } ^
- *                 end
+ *
+ *     "1 example"     ^
+ *     { 1 must_== 1 } ^
+ *                     end
  *                 
  * will be simply reported as
- * 
- * + 1 must_== 1
+ *     1 example
+ *     + 1 must_== 1
  *                 
- * * An important limitation is that the example code must fit on one line only*
+ * *In some cases, like the case where there is no text beginning the specification, the example code must fit on one line only*
  * 
  * The source dir is assumed to be "src/test/scala/" by default but this can be modified
  * by setting the "specs2.srcDir" System property
@@ -46,19 +47,22 @@ trait AutoExamples {
   implicit def resultFragmentsFragment(expression: =>Result): ResultFragment =
     new ResultFragment(resultFragments(expression))
 
-  /** this implicit def is necessary when the expression is at the start of the spec */
+  /**
+   * this implicit def is necessary when the expression is at the start of the spec
+   * The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
+   */
   implicit def matchFragments(expression: =>MatchResult[_]) = {
-    val desc = getSourceCode()
+    val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
     Fragments.create(Example(CodeMarkup(desc), expression.toResult))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragments(expression: =>Boolean) = {
-    val desc = getSourceCode()
+    val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
     Fragments.create(Example(CodeMarkup(desc), toResult(expression)))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def resultFragments(expression: =>Result) = {
-    val desc = getSourceCode()
+    val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
     Fragments.create(Example(CodeMarkup(desc), expression))
   }
 
@@ -84,21 +88,35 @@ trait AutoExamples {
     removeFirst("`\\(.*\\)").trimFirst("`")
   }
 
+  /**
+   * This class is especially created when the first fragment of a specification is a match result (no text before)
+   * The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
+   */
   class MatchResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
     def ^[T](result: =>T)(implicit toResult: T => Result) = {
-      val desc = getSourceCode(startLineOffset = 4, endLineOffset = 4)
+      val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
       new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
     }
   }
+
+  /**
+   * This class is especially created when the first fragment of a specification is a boolean result (no text before)
+   * The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
+   */
   class BooleanResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
     def ^[T](result: =>T)(implicit toResult: T => Result) = {
-      val desc = getSourceCode()
+      val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
       new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
     }
   }
+
+  /**
+   * This class is especially created when the first fragment of a specification is a Result (no text before)
+   * The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
+   */
   class ResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
     def ^[T](result: =>T)(implicit toResult: T => Result) = {
-      val desc = getSourceCode()
+      val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
       new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
     }
   }

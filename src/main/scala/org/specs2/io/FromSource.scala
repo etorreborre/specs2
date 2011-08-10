@@ -51,11 +51,15 @@ trait FromSource {
   }
 
   def getCodeFromToWithLocation(startLine: Int, endLine: Int = 9, location: TraceLocation): Either[String, String] = {
-    tryOr {
-      val content = readLines(srcDir+location.path)
-      val code = ((startLine to endLine) map content).mkString("\n")
-      Right[String, String](code): Either[String, String]
-    } { e => Left[String, String]("No source file found at "+srcDir+location.path) }
+    if (endLine < startLine) {
+      Left[String, String]("No source file found at "+srcDir+location.path)
+    } else {
+      tryOr {
+        val content = readLines(srcDir+location.path)
+        val code = ((startLine to endLine) map content).mkString("\n")
+        Right[String, String](code): Either[String, String]
+      } { e => Left[String, String]("No source file found at "+srcDir+location.path) }
+    }
   }
 
   def location(stackFilter: Seq[StackTraceElement] => Seq[StackTraceElement]) = {
