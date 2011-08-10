@@ -13,7 +13,7 @@ import specification.StandardFragments.{Backtab, Tab, Br, End}
 *
 * Fragments are created by adding a `Given` step to a `Text`:
 *
-*  <code>"name: ${Eric}" ^ givenName</code>
+*  <code>"name: ${user}" ^ givenName</code>
 *
 * This creates a PreStep object containing the current context (representing all the extracted values) and a list of
 * Fragments containing:
@@ -25,11 +25,11 @@ import specification.StandardFragments.{Backtab, Tab, Br, End}
 * stores the additional Text fragment so that values can be extracted from it when a `When` step is added:
 * <code>
 *  // this creates a PreStepText object
-*  "name: ${Eric}" ^ givenName ^
+*  "name: ${user}" ^ givenName ^
 *  "age: ${38}"
 *
 *  // this creates a PreStep object
-*  "name: ${Eric}" ^ givenName ^
+*  "name: ${user}" ^ givenName ^
 *  "age: ${38}"    ^ thenAge ^
 * </code>
 *
