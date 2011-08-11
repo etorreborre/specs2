@@ -7,24 +7,25 @@ import mock.Mockito
 
 class StoringSpec extends SpecificationWithJUnit { def is =
   
-   "The statistics of a specification must"                                             ^
-     "be computed after execution"                                                      ^
-       "each executed fragment must have a stats member"                                ^
-         "a Text fragment must have stats = 0"                                          ! stats.e1^
-         "a failed example must have a stats = 1 failure"                               ! stats.e2^
-         "the end of a specification must sum up all the results"                       ! stats.e3^
-     "be stored"                                                                        ^
-       "stored per specification name"                                                  ! stored.e1^
-       "and retrieved per specification name"                                           ! stored.e2^
-                                                                                        endp^
-   "It is possible to compute the trends of the statistics"                             ^
-     "between 2 runs"                                                                   ! trends.e1^
-     "the trends can be resetted"                                                       ! trends.e2^
-                                                                                        endp^
-   "It is possible to re-run"                                                           ^
-     "failed specifications only with the 'failedspec' argument"                        ! rerun.e1^
-     "failed examples only with the 'failedexample' argument"                           ! rerun.e2^
-                                                                                        end
+   "The statistics of a specification must"                                                        ^
+     "be computed after execution"                                                                 ^
+       "each executed fragment must have a stats member"                                           ^
+         "a Text fragment must have stats = 0"                                                     ! stats.e1^
+         "a failed example must have a stats = 1 failure"                                          ! stats.e2^
+         "the end of a specification must sum up all the results"                                  ! stats.e3^
+                                                                                                   p^bt^
+     "be stored"                                                                                   ^
+       "stored per specification name"                                                             ! stored.e1^
+       "and retrieved per specification name"                                                      ! stored.e2^
+                                                                                                   endp^
+   "It is possible to compute the trends of the statistics"                                        ^
+     "between 2 runs"                                                                              ! trends.e1^
+     "the trends can be resetted"                                                                  ! trends.e2^
+                                                                                                   endp^
+   "It is possible to re-run"                                                                      ^
+     "failed specifications only with the 'wasIssue' argument"                                     ! rerun.e1^
+     "failed examples only with the 'failedexample' argument"                                      ! rerun.e2^
+                                                                                                   end
 
    
   trait Stored extends FragmentExecution with Mockito { outer =>
@@ -33,7 +34,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
       override lazy val repository = outer.repository
     }
     implicit val arguments = Arguments() 
-    def store(fs: Fragments) = storing.store(arguments)(fs.fragments.map(executeFragment))
+    def store(fs: Fragments)(implicit args: Arguments) = storing.store(args)(fs.fragments.map(executeFragment))
 
     repository.getStatistics(any[SpecName]) returns None
 

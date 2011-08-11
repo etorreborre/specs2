@@ -28,7 +28,7 @@ class StatsSpec extends mutable.Specification {
 
   "Trends" >> {
     "A trend can be computed from between 2 stats" >> {
-      Stats(failures = 0).updatedFrom(Stats(failures = 1)).trend must_== Some(Stats(failures = -1))
+      Stats(failures = 0).updateFrom(Stats(failures = 1)).trend must_== Some(Stats(failures = -1))
     }
   }
   "XML" >> {

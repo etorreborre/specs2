@@ -11,11 +11,9 @@ class StatisticsRepositorySpec extends Specification { def is = sequential ^
 
 
   case class repo() extends DefaultStatisticsRepository with BeforeAfter {
-    // for the following examples, write the results to a different stats file to avoid that file being overwritten
-    // by the StatisticsRepositorySpec run
-    override lazy val statsFileName = "testspecs2.stats"
-
-    def before = new java.io.File(statsFilePath).delete
+    def before = {
+      Seq(specName1, specName2) foreach { s => new java.io.File(specStatsPath(s)).delete }
+    }
     def after = before
     val specName1 = SpecName("spec1")
     val specName2 = SpecName("spec2")

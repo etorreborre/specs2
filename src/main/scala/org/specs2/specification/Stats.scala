@@ -88,13 +88,17 @@ case class Stats(fragments:    Int = 0,
     )
 
   /**
+   * @return this Statistics object with some trend if provided
+   */
+  def updateFrom(previous: Option[Stats]): Stats = (previous map updateFrom).getOrElse(this)
+  /**
    * @return this Statistics object with some trend if relevant
    */
-  def updatedFrom(previous: Stats) = {
+  def updateFrom(previous: Stats): Stats = {
     implicit val monoid = Stats.StatsMonoid
     val newTrend = this |+| previous.negate
     if (newTrend.isSuccess) this
-    else copy(trend = Some(newTrend))
+    else                    copy(trend = Some(newTrend))
   }
 
 }

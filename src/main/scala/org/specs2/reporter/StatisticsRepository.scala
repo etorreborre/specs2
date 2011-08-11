@@ -4,35 +4,51 @@ package reporter
 import scala.xml._
 import io.FileSystem
 import xml.Nodex._
-import specification.{ExecutedFragment, Stats, SpecName}
+import specification.{Example, ExecutedFragment, Stats, SpecName}
+import execute.{Result, Success}
 
 private[specs2]
 trait StatisticsRepository {
   def getStatistics(specName: SpecName): Option[Stats]
   def storeStatistics(specName: SpecName, stats: Stats): this.type
+  /**
+   * @return the previous executed result of an example
+   */
+  def previousResult(e: Example): Option[Result]
 }
 
+/**
+ * This repository store the results in one file per specification, in a special directory
+ *
+ * This solution is preferred over having a single file for all specifications because of the possible
+ * concurrent execution of specifications
+ */
 private[specs2]
 trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
 
-  protected lazy val statsFileName = "specs2.stats"
-  protected lazy val statsFilePath = outputDir + statsFileName
-
-  lazy val allStats = fileSystem.loadXhtmlFile(statsFilePath)
+  protected lazy val statsDirName = "stats/"
+  protected lazy val statsDirPath = outputDir + statsDirName
 
   /**
    * @return the latest statistics for a given specification
    */
   def getStatistics(specName: SpecName): Option[Stats] = {
-    val allSpecs = (allStats \\ nameTag(specName))
-    val specStats = allSpecs.lastOption.flatMap(_.child.headOption).getOrElse(<none/>)
-    Stats.fromXml(specStats)
+    (loadStatistics(specName) \\ nameTag(specName)).lastOption.flatMap(_.child.headOption) flatMap Stats.fromXml
   }
 
+  /**
+   * @return the previous executed result of an example
+   */
+  def previousResult(e: Example) = Some(Success())
+
+  def loadStatistics(specName: SpecName): NodeSeq = fileSystem.loadXhtmlFile(specStatsPath(specName))
+
   def storeStatistics(specName: SpecName, stats: Stats) = {
-    fileWriter.appendToXmlFile(statsFilePath, toXml(specName, stats))
+    fileWriter.appendToXmlFile(specStatsPath(specName), toXml(specName, stats))
     this
   }
+
+  def specStatsPath(specName: SpecName) = statsDirPath + specName.fullName + ".stats"
 
   /**
    * make sure that no empty tag name is used to search the xml stats and replace . with : to help the xpath search
@@ -47,4 +63,11 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
 private[specs2]
 object DefaultStatisticsRepository extends DefaultStatisticsRepository
 
-
+private[specs2]
+trait WithStatisticsRepository {
+  protected def repository: StatisticsRepository
+}
+private[specs2]
+trait WithDefaultStatisticsRepository extends WithStatisticsRepository {
+  protected lazy val repository: StatisticsRepository = DefaultStatisticsRepository
+}

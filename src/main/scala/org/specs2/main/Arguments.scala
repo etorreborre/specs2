@@ -23,6 +23,7 @@ case class Arguments (
   def exclude: String               = select.exclude
   def wasIssue: Boolean             = select.wasIssue
   def was(s: String): Boolean       = select.was(s)
+  def wasIsDefined: Boolean         = select.wasIsDefined
   def specName: String              = select.specName
 
   def plan: Boolean                 = execute.plan
@@ -125,6 +126,7 @@ case class Select(
   def exclude: String               = _exclude.getOrElse("")
   def wasIssue: Boolean             = was("x") || was("!")
   def was(s: String): Boolean       = hasFlags(s, _was)
+  def wasIsDefined: Boolean         = _was.isDefined
   def specName: String              = _specName.getOrElse(".*Spec")
 
   def overrideWith(other: Select) = {

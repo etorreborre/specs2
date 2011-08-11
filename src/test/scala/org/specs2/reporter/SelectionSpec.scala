@@ -36,6 +36,9 @@ Before executing and reporting a specification, the fragments must be selected a
   "If a specification contains the 'sequential' argument"                                                               ^
     "all examples must be executed in a sequence"                                                                       ! seq().e1^
     "with a Reporter"                                                                                                   ! seq().e2^
+                                                                                                                        p^
+  "It is possible to select only some previously executed fragments"                                                    ^
+    "wasIssue selects only the fragments which were failed or in error"                                                 ! rerun().e1^
                                                                                                                         end
   
   case class filter() extends WithSelection {
@@ -89,6 +92,21 @@ Before executing and reporting a specification, the fragments must be selected a
       reporter.messages must contain("e1", "s1", "e2").inOrder
     }
   }
+
+  case class rerun() extends WithSelection {
+    /**
+     * The storing trait 'decides' to keep only the example 1 because of a previous run
+     */
+    override val selection = new DefaultSelection with DefaultSequence with DefaultStoring with MockOutput {
+      override def includePrevious(e: Example, args: Arguments) = e.desc.toString == "e1"
+    }
+
+    def e1 = {
+      val fragments: Fragments = wasIssue ^ sequential ^ example("e1") ^ step("s1") ^ example("e2")
+      select(fragments).toString must_== "List(SpecStart(Object), Example(e1), Step, SpecEnd(Object))"
+    }
+  }
+
 
   val ex1 = "ex1" ! success
   val ex2 = "ex2" ! success

@@ -21,8 +21,12 @@ trait Selection {
 
 /**
  * The DefaultSelection trait filters the fragments to execute by filtering Examples according to their names
+ *
+ * It possibly filters out the previously executed fragments based on their status
  */
-trait DefaultSelection {
+trait DefaultSelection extends WithDefaultStatisticsRepository {
+
+
   /** select function returning a filtered seq of Fragments */
   def select(implicit arguments: Arguments): Fragments => Seq[Fragment] = (fragments: Fragments) => select(fragments.fragments)(arguments)
   /** select function returning a filtered seq of Fragments */
@@ -34,7 +38,7 @@ trait DefaultSelection {
    * @return filter fragments depending on the command line arguments and the current arguments in the specification
    */
   def filter(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
-    fragmentsAndArguments |> filterTags |> filterExamples
+    fragmentsAndArguments |> filterTags |> filterPrevious |> filterExamples
   }
 
   /**
@@ -44,11 +48,26 @@ trait DefaultSelection {
     val fragments = fragmentsAndArguments.map(_._1)
     fragmentsAndArguments.zip(tags(fragments)) collect {
       case ((f, a), t) if !isTag(f) && t.keep(a.overrideWith(commandLineArgs)) => (f, a)
-      case ((f @ SpecStart(_,_,_,_), a), t)                                       => (f, a)
+      case ((f @ SpecStart(_,_,_,_), a), t)                                    => (f, a)
       case ((f @ SpecEnd(_), a), t)                                            => (f, a)
     }
   }
 
+  /**
+   * @return filter fragments according to their previous execution state
+   */
+  def filterPrevious(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
+    fragmentsAndArguments filter {
+      case (e @ Example(_, _), args) => {
+        val currentArgs = args.overrideWith(commandLineArgs)
+        !currentArgs.wasIsDefined || includePrevious(e, currentArgs)
+      }
+      case other => true
+    }
+  }
+
+  protected def includePrevious(e: Example, args: Arguments) = args.was(repository.previousResult(e).map(_.status).getOrElse(""))
+  
   /**
    * From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:
    *
@@ -83,7 +102,7 @@ trait DefaultSelection {
         /** end of section */
         case t1 @ AsSection(_*)                                  => (tagged.mapLast(_ |+| Tag(t1.names:_*)) :+ t1, removeTags(taggingToApply, t1))
         /** beginning of section from the previous fragment */
-        case f                                                  => (tagged :+ ma(taggingToApply).sum, taggingToApply.filter(_.isSection))
+        case f                                                   => (tagged :+ ma(taggingToApply).sum, taggingToApply.filter(_.isSection))
       }
     }
   }._1
