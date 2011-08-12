@@ -37,8 +37,7 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
   /**
    * @return a list of fragments without their corresponding arguments
    */
-  def fragments: Seq[T] =
-    argumentsFragments.collect { case (ApplicableArguments(value)) => value }
+  def fragments: Seq[T] = argumentsFragments.collect { case (ApplicableArguments(value)) => value }
 }
 
 private[specs2]
@@ -63,8 +62,8 @@ case object SpecsArguments {
   implicit object FragmentSpecsArgumentsReducer extends Reducer[Fragment, SpecsArguments[Fragment]] {
     implicit override def unit(f: Fragment) = f match {
       case s @ SpecStart(_,_,_,_) => SpecsArguments(StartOfArguments(f, s.specName, s.arguments))
-      case e @ SpecEnd(_)      => SpecsArguments(EndOfArguments(f, e.specName))
-      case _                   => SpecsArguments(NoStartOfArguments(f))
+      case e @ SpecEnd(_)         => SpecsArguments(EndOfArguments(f, e.specName))
+      case _                      => SpecsArguments(NoStartOfArguments(f))
     }
   }
   implicit object SpecsArgumentsReducer extends Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] {
