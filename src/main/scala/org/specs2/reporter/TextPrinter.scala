@@ -52,7 +52,7 @@ trait TextPrinter {
   
   def flatten(results: (((List[Print], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment]))(implicit commandLineArgs: Arguments = Arguments()): List[PrintLine] = {
     val (prints, statistics, levels, args) = results.flatten
-    (prints zip statistics.stats zip levels.levels zip args.toList) map {
+    (prints zip statistics.stats zip levels.levels zip args.nestedArguments) map {
       case (((t, s), l), a) => PrintLine(t, s, l, commandLineArgs <| a)
     }
   }  

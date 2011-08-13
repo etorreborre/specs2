@@ -63,7 +63,10 @@ class StoringSpec extends SpecificationWithJUnit { def is =
        repository.getStatistics(any[SpecName]) returns Some(Stats(failures = 1))
        store("t1":Fragments).head.stats.trend must_== Some(Stats(failures = -1))
      }
-     def e2 = pending
+     def e2 = {
+       store(args.store(reset=true) ^ "t1":Fragments)
+       there was one(repository).resetStatistics
+     }
    }
 
    object rerun extends Stored {

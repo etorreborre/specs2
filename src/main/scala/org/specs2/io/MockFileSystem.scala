@@ -88,6 +88,9 @@ trait MockFileSystem extends FileSystem {
   /** creates a file with the specified path but an empty content */
   override def createFile(path: String) = {files += (path -> ""); true}
 
+  /** delete a file with the specified path */
+  override def delete(path: String) = {files -= path; true}
+
   /** create a new directory */
   override def mkdirs(path: String) = { createdDirs = path :: createdDirs; true }
   /** create a new directory */

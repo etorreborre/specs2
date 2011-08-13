@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import reflect.ClassName._
+import internal.scalaz.Monoid
 
 /**
  * Name declaration for a specification
@@ -25,6 +26,7 @@ sealed trait SpecName {
   
   override def equals(o: Any) = o match {
     case s: SpecName => s.name == this.name
+    case other       => false
   }
   
   def overrideWith(n: SpecName): SpecName
@@ -33,6 +35,12 @@ private[specs2]
 object SpecName {
   def apply(s: SpecificationStructure): SpecName = SpecificationName(s)
   def apply(s: String): SpecificationTitle = SpecificationTitle(s)
+
+  implicit def SpecNameMonoid: Monoid[SpecName] = new Monoid[SpecName] {
+    def append(a1: SpecName, a2: =>SpecName) = if (a2.name.isEmpty) a1 else a2
+    val zero = SpecName("")
+  }
+
 }
 
 private[specs2]

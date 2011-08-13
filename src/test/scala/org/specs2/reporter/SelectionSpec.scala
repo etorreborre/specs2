@@ -98,7 +98,7 @@ Before executing and reporting a specification, the fragments must be selected a
      * The storing trait 'decides' to keep only the example 1 because of a previous run
      */
     override val selection = new DefaultSelection with DefaultSequence with DefaultStoring with MockOutput {
-      override def includePrevious(e: Example, args: Arguments) = e.desc.toString == "e1"
+      override def includePrevious(specName: SpecName, e: Example, args: Arguments) = e.desc.toString == "e1"
     }
 
     def e1 = {

@@ -37,36 +37,37 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
   /**
    * @return filter fragments depending on the command line arguments and the current arguments in the specification
    */
-  def filter(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
-    fragmentsAndArguments |> filterTags |> filterPrevious |> filterExamples
+  def filter(implicit commandLineArgs: Arguments) = (fan: Seq[(Fragment, Arguments, SpecName)]) => {
+    fan |> filterTags |> filterPrevious |> filterExamples
   }
 
   /**
    * @return filter fragments according to tags by collecting tags as applicable to each fragment and applying them
    */
-  def filterTags(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
-    val fragments = fragmentsAndArguments.map(_._1)
-    fragmentsAndArguments.zip(tags(fragments)) collect {
-      case ((f, a), t) if !isTag(f) && t.keep(a.overrideWith(commandLineArgs)) => (f, a)
-      case ((f @ SpecStart(_,_,_,_), a), t)                                    => (f, a)
-      case ((f @ SpecEnd(_), a), t)                                            => (f, a)
+  def filterTags(implicit commandLineArgs: Arguments) = (fan: Seq[(Fragment, Arguments, SpecName)]) => {
+    val fragments = fan.map(_._1)
+    fan.zip(tags(fragments)) collect {
+      case ((f, a, n), t) if !isTag(f) && t.keep(a.overrideWith(commandLineArgs)) => (f, a, n)
+      case ((f @ SpecStart(_,_,_,_), a, n), t)                                    => (f, a, n)
+      case ((f @ SpecEnd(_), a, n), t)                                            => (f, a, n)
     }
   }
 
   /**
    * @return filter fragments according to their previous execution state
    */
-  def filterPrevious(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
-    fragmentsAndArguments filter {
-      case (e @ Example(_, _), args) => {
+  def filterPrevious(implicit commandLineArgs: Arguments) = (fan: Seq[(Fragment, Arguments, SpecName)]) => {
+    fan filter {
+      case (e @ Example(_, _), args, specName) => {
         val currentArgs = args.overrideWith(commandLineArgs)
-        !currentArgs.wasIsDefined || includePrevious(e, currentArgs)
+        !currentArgs.wasIsDefined || includePrevious(specName, e, currentArgs)
       }
       case other => true
     }
   }
 
-  protected def includePrevious(e: Example, args: Arguments) = args.was(repository.previousResult(e).map(_.status).getOrElse(""))
+  protected def includePrevious(specName: SpecName, e: Example, args: Arguments) =
+    args.was(repository.previousResult(specName, e).map(_.status).getOrElse(""))
   
   /**
    * From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:
@@ -110,11 +111,11 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
    * the filter method filters examples based on their description,
    * keeping only the ones matching the ex attribute of the arguments object
    */
-  protected def filterExamples(implicit commandLineArgs: Arguments) = (fragmentsAndArguments: Seq[(Fragment, Arguments)]) => {
-    fragmentsAndArguments filter {
-      case (e @ Example(_, _), args) => e.matches(args.overrideWith(commandLineArgs).ex)
-      case (f, args)                 => true
-    } collect { case (f, a) => f }
+  protected def filterExamples(implicit commandLineArgs: Arguments) = (fan: Seq[(Fragment, Arguments, SpecName)]) => {
+    fan filter {
+      case (e @ Example(_, _), args, n) => e.matches(args.overrideWith(commandLineArgs).ex)
+      case (f, args, n)                 => true
+    } collect { case (f, a, n) => f }
   }
 }
 object DefaultSelection extends DefaultSelection

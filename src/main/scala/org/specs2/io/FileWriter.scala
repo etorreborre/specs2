@@ -62,6 +62,8 @@ trait FileWriter {
   def exists(path: String) = path != null && new File(path).exists
   /** creates a new directory */
   def mkdirs(path: String) = new File(path).mkdirs
+  /** delete a file */
+  def delete(path: String) = new File(path).delete
   /**
    * writes some content to a file.
    * @param path path of the file to read
@@ -98,6 +100,7 @@ trait FileWriter {
 private[specs2]
 trait MockFileWriter extends FileWriter {
   override def createFile(path: String) = {}
+  override def delete(path: String) = true
   private val writer = new MockWriter {}
   def getWriter: MockWriter = writer
   override def getWriter(path: String, append: Boolean = false): Writer = writer

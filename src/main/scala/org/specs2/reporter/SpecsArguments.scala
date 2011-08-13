@@ -12,7 +12,7 @@ private[specs2]
 case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = Nil) {
   def append(s2: SpecsArguments[T]) = SpecsArguments(argumentsFragments ++ s2.argumentsFragments)
 
-  def toList: List[Arguments] = {
+  def nestedArguments: List[Arguments] = {
     import NestedBlocks._
     def toBlock(a: ApplicableArguments[T]) = a match {
       case StartOfArguments(_, _, args) => BlockStart(args)
@@ -22,18 +22,37 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
     import Arguments._
     overrideContext(argumentsFragments.map(toBlock _)).toList
   }
+
+  /**
+   * @return the list of all applicable spec names
+  */
+  def nestedSpecNames: List[SpecName] = {
+    import NestedBlocks._
+    def toBlock(a: ApplicableArguments[T]) = a match {
+      case StartOfArguments(_, name, _) => BlockStart(name)
+      case NoStartOfArguments(_)        => BlockBit[SpecName](SpecName(""))
+      case EndOfArguments(_, name)      => BlockEnd(name)
+    }
+    import SpecName._
+    overrideContext(argumentsFragments.map(toBlock _)).toList
+  }
   /**
    * filter the fragments with 2 functions:
    *  * one working on the whole fragment list
    *  * one working on each individual fragment
    */
-  def filter(fs: Seq[(T, Arguments)] => Seq[T]): Seq[T] = fragmentAndApplicableArguments |> fs
+  def filter(fs: Seq[(T, Arguments, SpecName)] => Seq[T]): Seq[T] = fragmentAndApplicableArgumentsAndSpecNames |> fs
 
   /**
    * @return a list of pair (fragment, argument) where argument is the applicable arguments for the current fragment)
    */
   def fragmentAndApplicableArguments: Seq[(T, Arguments)] =
-    argumentsFragments.zip(toList).view.collect { case (ApplicableArguments(value), args) => (value, args) }
+    argumentsFragments.view.zip(nestedArguments).collect { case (ApplicableArguments(value), args) => (value, args) }
+  /**
+   * @return a list of pair (fragment, argument) where argument is the applicable arguments for the current fragment)
+   */
+  def fragmentAndApplicableArgumentsAndSpecNames: Seq[(T, Arguments, SpecName)] =
+    argumentsFragments.view.zip(nestedArguments).zip(nestedSpecNames).collect { case ((ApplicableArguments(value), args), name) => (value, args, name) }
   /**
    * @return a list of fragments without their corresponding arguments
    */
@@ -49,7 +68,7 @@ case object SpecsArguments {
    *  * one working on the whole fragment list
    *  * one working on each individual fragment
    */
-  def filter[T](ts: Seq[T])(fs: Seq[(T, Arguments)] => Seq[T])(implicit r: Reducer[T, SpecsArguments[T]]): Seq[T] =
+  def filter[T](ts: Seq[T])(fs: Seq[(T, Arguments, SpecName)] => Seq[T])(implicit r: Reducer[T, SpecsArguments[T]]): Seq[T] =
     foldAll(ts).filter(fs)
 
   implicit def SpecsArgumentsMonoid[T] = new Monoid[SpecsArguments[T]] {

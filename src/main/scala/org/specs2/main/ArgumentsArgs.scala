@@ -23,7 +23,7 @@ trait ArgumentsArgs extends ArgProperties {
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    showOnly:    ArgProperty[String]            = ArgProperty[String](),
+    showOnly:      ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
@@ -78,6 +78,14 @@ trait ArgumentsArgs extends ArgProperties {
                threadsNb.toOption))
 
     /** shorthand method to create an Arguments object */
+    def store(
+      reset:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      never:       ArgProperty[Boolean]           = ArgProperty[Boolean]()
+    ) = new Arguments(
+       store = Store(reset.toOption,
+                     never.toOption))
+
+    /** shorthand method to create an Arguments object */
     def report(
       xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       showOnly:    ArgProperty[String]            = ArgProperty[String](),
@@ -115,6 +123,7 @@ trait ArgProperties {
   implicit def anyToArgProperty[T](t: =>T): ArgProperty[T] = ArgProperty(Property(t))
 }
 object ArgProperties extends ArgProperties
+
 
 case class ArgProperty[T](p: Property[T] = Property[T]()) {
   def toOption: Option[T] = p.toOption

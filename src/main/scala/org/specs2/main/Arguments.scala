@@ -15,6 +15,7 @@ private[specs2]
 case class Arguments (
   select:        Select           = Select(),
   execute:       Execute          = Execute(),
+  store:         Store            = Store(),
   report:        Report           = Report(),
   commandLine:   Seq[String]      = Nil
  ) extends ShowArgs {
@@ -59,6 +60,7 @@ case class Arguments (
     new Arguments(
       select.overrideWith(other.select),
       execute.overrideWith(other.execute),
+      store.overrideWith(other.store),
       report.overrideWith(other.report),
       if (other.commandLine.isEmpty) commandLine else other.commandLine
     )
@@ -93,6 +95,7 @@ object Arguments extends Extract {
     new Arguments (
        select        = Select.extract,
        execute       = Execute.extract,
+       store         = Store.extract,
        report        = Report.extract,
        commandLine   = arguments
     )
@@ -202,6 +205,37 @@ object Execute extends Extract {
       _stopOnFail    = bool("stoponfail"),
       _sequential    = bool("sequential"),
       _threadsNb     = int("threadsnb")
+    )
+  }
+}
+
+private[specs2]
+case class Store(
+  _reset:         Option[Boolean]          = None,
+  _never:         Option[Boolean]          = None) extends ShowArgs {
+
+  def reset: Boolean              = _reset.getOrElse(false)
+  def never: Boolean              = _never.getOrElse(false)
+
+  def overrideWith(other: Store) = {
+    new Store(
+      other._reset         .orElse(_reset),
+      other._never         .orElse(_never)
+    )
+  }
+
+  override def toString =
+    List(
+    "reset"        -> _reset      ,
+    "never"        -> _never      ).flatMap(showArg).mkString("Store(", ", ", ")")
+
+}
+private[specs2]
+object Store extends Extract {
+  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Store = {
+    new Store (
+      _reset       = bool("reset"),
+      _never       = bool("never")
     )
   }
 }

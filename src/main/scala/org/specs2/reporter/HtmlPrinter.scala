@@ -106,7 +106,7 @@ trait HtmlPrinter extends OutputDir {
   /** flatten the results of the reduction to a list of Html lines */
   private def flatten(results: (((List[Html], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[HtmlLine] = {
     val (prints, stats, levels, args) = results.flatten
-    (prints zip stats.stats zip levels.levels zip args.toList) map {
+    (prints zip stats.stats zip levels.levels zip args.nestedArguments) map {
       case (((t, s), l), a) => HtmlLine(t, s, l, a)
     }
   }  

@@ -79,6 +79,14 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
         threadsNb))
 
     /** shorthand method to create an Arguments object */
+    override def store(
+      reset:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      never:       ArgProperty[Boolean]           = ArgProperty[Boolean]()
+    ) = addArguments(super.store(
+                     reset,
+                     never))
+
+    /** shorthand method to create an Arguments object */
     override def report(
       xonly:        ArgProperty[Boolean]            = ArgProperty[Boolean](),
       showOnly:    ArgProperty[String]            = ArgProperty[String](),
