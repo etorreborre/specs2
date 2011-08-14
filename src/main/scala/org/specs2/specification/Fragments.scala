@@ -34,6 +34,7 @@ case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fra
 
   def specName = start.specName
   def name = start.name
+  
   lazy val start: SpecStart = SpecStart(title.getOrElse(SpecName("")), arguments, link, seeOnly)
   lazy val end: SpecEnd = SpecEnd(start.specName)
 

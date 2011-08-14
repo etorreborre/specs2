@@ -34,7 +34,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
       override lazy val repository = outer.repository
     }
     implicit val arguments = Arguments() 
-    def store(fs: Fragments)(implicit args: Arguments) = storing.store(args)(fs.fragments.map(executeFragment))
+    def store(fs: Fragments)(implicit args: Arguments) = storing.store(args <| fs.arguments)(fs.fragments.map(executeFragment))
 
     repository.getStatistics(any[SpecName]) returns None
 
@@ -64,7 +64,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
        store("t1":Fragments).head.stats.trend must_== Some(Stats(failures = -1))
      }
      def e2 = {
-       store(args.store(reset=true) ^ "t1":Fragments)
+       store(args.store(reset=true) ^ "t1")
        there was one(repository).resetStatistics
      }
    }
