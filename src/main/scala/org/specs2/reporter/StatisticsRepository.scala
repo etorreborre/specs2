@@ -11,7 +11,7 @@ private[specs2]
 trait StatisticsRepository {
   def getStatistics(specName: SpecName): Option[Stats]
   def storeStatistics(specName: SpecName, stats: Stats): this.type
-  def storeResult(specName: SpecName, result: ExecutedResult): this.type
+  def storeResults(specName: SpecName, result: Seq[ExecutedResult]): this.type
 
   /**
    * remove previously stored statistics
@@ -56,7 +56,7 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
 
   def loadStatistics(specName: SpecName): NodeSeq = fileSystem.loadXhtmlFile(specStatsPath(specName))
 
-  def storeResult(specName: SpecName, result: ExecutedResult) = this
+  def storeResults(specName: SpecName, result: Seq[ExecutedResult]) = this
 
   def storeStatistics(specName: SpecName, stats: Stats) = {
     fileWriter.appendToXmlFile(specStatsPath(specName), toXml(specName, stats))

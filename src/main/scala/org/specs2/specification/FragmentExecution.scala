@@ -76,9 +76,12 @@ trait FragmentExecution {
     }
   }
 
-  /** this method is used in tests */
+  /** these methods are used in tests */
   def executeBodies(exs: Fragments)(implicit arguments: Arguments=Arguments()): Seq[Result] = {
     exs.fragments.map(f => executeFragment(arguments)(f)). collect { case r: ExecutedResult => r.result }
+  }
+  def executeExamples(exs: Fragments)(implicit arguments: Arguments=Arguments()): Seq[ExecutedResult] = {
+    exs.fragments.map(f => executeFragment(arguments)(f)). collect { case r: ExecutedResult => r }
   }
 }
 

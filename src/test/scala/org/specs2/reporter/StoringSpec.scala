@@ -51,7 +51,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
      }
      def e2 = {
         store("t1" ^ "e1" ! success)
-        there was atLeastOne(repository).storeResult(any[SpecName], any[ExecutedResult])
+        there was atLeastOne(repository).storeResults(any[SpecName], any[Seq[ExecutedResult]])
      }
      def e3 = {
         store("t1":Fragments)
