@@ -35,7 +35,7 @@ class StatisticsRepositorySpec extends Specification { def is = sequential ^
     }
 
     def e3 = this {
-      storeResults(specName1, Seq(execute("e1" ! failure: Fragments)))
+      storeResults(specName1, execute("e1" ! failure: Fragments))
       pending
     }
   }
