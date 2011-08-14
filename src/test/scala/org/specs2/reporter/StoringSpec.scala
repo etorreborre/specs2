@@ -16,7 +16,8 @@ class StoringSpec extends SpecificationWithJUnit { def is =
                                                                                                    p^bt^
      "be stored"                                                                                   ^
        "stored per specification name"                                                             ! stored.e1^
-       "and retrieved per specification name"                                                      ! stored.e2^
+       "each result also"                                                                          ! stored.e2^
+       "and retrieved per specification name"                                                      ! stored.e3^
                                                                                                    endp^
    "It is possible to compute the trends of the statistics"                                        ^
      "between 2 runs"                                                                              ! trends.e1^
@@ -30,7 +31,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
       override lazy val repository = outer.repository
     }
     implicit val arguments = Arguments() 
-    def store(fs: Fragments)(implicit args: Arguments) = storing.store(args <| fs.arguments)(fs.fragments.map(executeFragment))
+    def store(fs: Fragments)(implicit args: Arguments) = storing.store(args <| fs.arguments)(fs.fragments.map(executeFragment)).toList
 
     repository.getStatistics(any[SpecName]) returns None
 
@@ -49,6 +50,10 @@ class StoringSpec extends SpecificationWithJUnit { def is =
        there was atLeastOne(repository).storeStatistics(any[SpecName], any[Stats])
      }
      def e2 = {
+        store("t1" ^ "e1" ! success)
+        there was atLeastOne(repository).storeResult(any[SpecName], any[ExecutedResult])
+     }
+     def e3 = {
         store("t1":Fragments)
         there was atLeastOne(repository).getStatistics(any[SpecName])
      }
