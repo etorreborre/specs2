@@ -21,10 +21,6 @@ class StoringSpec extends SpecificationWithJUnit { def is =
    "It is possible to compute the trends of the statistics"                                        ^
      "between 2 runs"                                                                              ! trends.e1^
      "the trends can be resetted"                                                                  ! trends.e2^
-                                                                                                   endp^
-   "It is possible to re-run"                                                                      ^
-     "failed specifications only with the 'wasIssue' argument"                                     ! rerun.e1^
-     "failed examples only with the 'failedexample' argument"                                      ! rerun.e2^
                                                                                                    end
 
    
@@ -67,10 +63,5 @@ class StoringSpec extends SpecificationWithJUnit { def is =
        store(args.store(reset=true) ^ "t1")
        there was one(repository).resetStatistics
      }
-   }
-
-   object rerun extends Stored {
-     def e1 = pending
-     def e2 = pending
    }
 }

@@ -26,7 +26,7 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
 
   def store(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
     if (args.store.reset) repository.resetStatistics
-    associateStartEnd(statisticsTotals(fragments) , updateStatsOnSpecStart) map (_.value) map storeStats
+    (associateStartEnd(statisticsTotals(fragments) , updateStatsOnSpecStart) map (_.value)) |> storeStatistics
   }
 
   private def statisticsTotals(fragments: Seq[ExecutedFragment]) = {
@@ -49,22 +49,26 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
   private def updateStatsOnSpecStart = (start: ExecutedFragment, end: ExecutedFragment) => {
     (start, end) match {
       case (ExecutedSpecStart(ns, ss, ls), ExecutedSpecEnd(ne, se, le)) => (ExecutedSpecStart(ns, se, le), ExecutedSpecEnd(ne, se, le))
-      case other => (start, end)
+      case other                                                        => (start, end)
     }
   }
 
+  private def storeStatistics = (fragments: Seq[ExecutedFragment]) => {
+    SpecsArguments.foldAll(fragments).fragmentAndSpecNames map storeStats
+  }
   /**
    * store the statistics:
    * * for SpecEnd -> put the stats in the repository
    * * for a SpecStart that's a link -> read the status of the previous execution 
    */
-  protected def storeStats = (f: ExecutedFragment) => {
-    f match {
-      case ExecutedSpecStart(start @ SpecStart(_,_,_,true), loc, st) =>
+  protected def storeStats = (fn: (ExecutedFragment, SpecName)) => {
+    fn match {
+      case (ExecutedSpecStart(start @ SpecStart(_,_,_,true), loc, st), _) =>
         ExecutedSpecStart(start, loc, repository.getStatistics(start.specName).getOrElse(st))
 
-      case ExecutedSpecEnd(end @ SpecEnd(_), loc, st) => repository.storeStatistics(end.specName, st); f
-      case other                                      => other
+      case (f @ ExecutedSpecEnd(end @ SpecEnd(_), loc, st), _) => repository.storeStatistics(end.specName, st); f
+      case (r @ ExecutedResult(_, _, _, _, _), name)           => repository.storeResult(name, r); r
+      case (other, name)                                       => other
     }
   }
 

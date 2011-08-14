@@ -44,12 +44,17 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
   def filter(fs: Seq[(T, Arguments, SpecName)] => Seq[T]): Seq[T] = fragmentAndApplicableArgumentsAndSpecNames |> fs
 
   /**
-   * @return a list of pair (fragment, argument) where argument is the applicable arguments for the current fragment)
+   * @return a list of pairs (fragment, argument) where argument is the applicable arguments for the current fragment)
    */
   def fragmentAndApplicableArguments: Seq[(T, Arguments)] =
     argumentsFragments.view.zip(nestedArguments).collect { case (ApplicableArguments(value), args) => (value, args) }
   /**
-   * @return a list of pair (fragment, argument) where argument is the applicable arguments for the current fragment)
+   * @return a list of pairs (fragment, specName) where specName is the parent specification
+   */
+  def fragmentAndSpecNames: Seq[(T, SpecName)] = argumentsFragments.view.zip(nestedSpecNames).collect { case (ApplicableArguments(value), name) => (value, name) }
+  /**
+   * @return a list of triplets (fragment, argument, specName) where
+   * argument is the applicable arguments for the current fragment and specName is the parent specification
    */
   def fragmentAndApplicableArgumentsAndSpecNames: Seq[(T, Arguments, SpecName)] =
     argumentsFragments.view.zip(nestedArguments).zip(nestedSpecNames).collect { case ((ApplicableArguments(value), args), name) => (value, args, name) }

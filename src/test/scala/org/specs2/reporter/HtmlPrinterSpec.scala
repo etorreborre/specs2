@@ -132,11 +132,11 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     /**
      * for the failed subspec, return the statistics as failed when it is linked with "seeOnly"
      */
-    override protected def storeStats = (f: ExecutedFragment) => {
-      f match {
-        case ExecutedSpecStart(start @ SpecStart(n,_,_,true), loc, st) if n.title == "failedSubSpec" =>
+    override protected def storeStats = (fn: (ExecutedFragment, SpecName)) => {
+      fn match {
+        case (ExecutedSpecStart(start @ SpecStart(n,_,_,true), loc, st), name) if n.title == "failedSubSpec" =>
           ExecutedSpecStart(start, loc, Stats(failures = 1))
-        case other => other
+        case (fragment, name) => fragment
       }
     }
 

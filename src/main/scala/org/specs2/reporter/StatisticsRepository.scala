@@ -4,13 +4,18 @@ package reporter
 import scala.xml._
 import io.FileSystem
 import xml.Nodex._
-import specification.{Example, ExecutedFragment, Stats, SpecName}
+import specification.{Example, ExecutedResult, Stats, SpecName}
 import execute.{Result, Success}
 
 private[specs2]
 trait StatisticsRepository {
   def getStatistics(specName: SpecName): Option[Stats]
   def storeStatistics(specName: SpecName, stats: Stats): this.type
+  def storeResult(specName: SpecName, result: ExecutedResult): this.type
+
+  /**
+   * remove previously stored statistics
+   */
   def resetStatistics: this.type
   /**
    * @return the previous executed result of an example
@@ -50,6 +55,8 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
   def previousResult(specName: SpecName, e: Example) = Some(Success())
 
   def loadStatistics(specName: SpecName): NodeSeq = fileSystem.loadXhtmlFile(specStatsPath(specName))
+
+  def storeResult(specName: SpecName, result: ExecutedResult) = this
 
   def storeStatistics(specName: SpecName, stats: Stats) = {
     fileWriter.appendToXmlFile(specStatsPath(specName), toXml(specName, stats))
