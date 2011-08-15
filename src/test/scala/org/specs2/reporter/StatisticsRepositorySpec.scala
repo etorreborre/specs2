@@ -8,6 +8,8 @@ class StatisticsRepositorySpec extends Specification { def is = sequential ^
     "store / retrieve statistics per specification name"                                                    ! repo().e1^
     "store statistics with a new timestamp so that the retrieval gets the latest statistics"                ! repo().e2^
     "store / retrieve a list of results associated to a spec name"                                          ! repo().e3^
+                                                                                                            p^
+  "findStats must retrieve the statistics of an Example in the stored xml"                                  ! xml.e1^
                                                                                                             end
 
 
@@ -35,8 +37,15 @@ class StatisticsRepositorySpec extends Specification { def is = sequential ^
     }
 
     def e3 = this {
-      storeResults(specName1, execute("e1" ! failure: Fragments))
-      pending
+      val example = Example("e1", failure)
+      storeResults(specName1, execute(example: Fragments))
+      previousResult(specName1, example) must beSome(failure)
     }
+  }
+
+  object xml extends DefaultStatisticsRepository {
+    def execute(fs: Fragments) = FragmentExecution.executeExamples(fs)
+    val example = Example("e1", failure)
+    def e1 = findPreviousStats(example).apply(<result id={"e1".toString.hashCode.toString}>{Stats(failures=1).toXml}</result>) must beSome(failure)
   }
 }

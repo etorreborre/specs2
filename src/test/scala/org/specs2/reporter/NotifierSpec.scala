@@ -6,7 +6,7 @@ import specification._
 import main.Arguments
 import execute._
 
-class NotifierSpec extends Specification with Mockito with Tags { def is = 
+class NotifierSpec extends Specification with Mockito with Tags { def is = sequential ^
                                                                                                                         """
 A Notifier can be used to get a stream of events for the execution of a Specification
                                                                                                                         """^
@@ -21,6 +21,7 @@ A Notifier can be used to get a stream of events for the execution of a Specific
     "when starting"                                                                                                     ^
       "with its description"                                                                                            ! ex1^
       "with its location"                                                                                               ! ex2^
+                                                                                                                        p^
     "when completing"                                                                                                   ^
       "with its description"                                                                                            ! ex3^
       "with its result"                                                                                                 ^

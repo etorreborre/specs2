@@ -40,7 +40,10 @@ case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, l
     case CodeMarkup(s) if (!result.expected.isEmpty && !args.fromSource) => CodeMarkup(result.expected)
     case _                                                               => s
   }
+
+  def isSuccess = stats.isSuccess
 }
+
 trait ExecutedStandardFragment extends ExecutedFragment {
   val stats: Stats = Stats()
 }

@@ -13,19 +13,20 @@ import specification._
 import control.Exceptions._
 import org.specs2.control.Exceptions._
 import org.specs2.time.SimpleTimer
-import scala.xml.{Elem, NodeSeq}
+import scala.xml._
+
 /**
- * The Stats class store results for the number of:
- * * successes
- * * expectations
- * * failures
- * * errors
- * * pending
- * * skipped
- *
- *  for each example
- *
- */
+* The Stats class store results for the number of:
+* * successes
+* * expectations
+* * failures
+* * errors
+* * pending
+* * skipped
+*
+*  for each example
+*
+*/
 case class Stats(fragments:    Int = 0,
                  successes:    Int = 0,
                  expectations: Int = 0,
@@ -54,15 +55,26 @@ case class Stats(fragments:    Int = 0,
   /** @return true if there are failures or errors */
   def hasIssues = result.isFailure || result.isError
 
-  def toXml: Elem = <stats fragments    = {fragments.toString}
-                     successes    = {successes.toString}
-                     expectations = {expectations.toString}
-                     failures     = {failures.toString}
-                     errors       = {errors.toString}
-                     pending      = {pending.toString}
-                     skipped      = {skipped.toString}
-                     time         = {timer.elapsed.toString}>{trend.map(t => <trend>{t.toXml}</trend>).getOrElse(NodeSeq.Empty)}</stats>
-                     
+  /**
+   * @return the xml representation of the statistics. Omit the attributes with 0 as a value for conciseness
+   */
+  def toXml: Elem = {
+    val stats = <stats>{trend.map(t => <trend>{t.toXml}</trend>)}</stats>
+    val attributes = Map(
+                     "fragments"    -> fragments.toString,
+                     "successes"    -> successes.toString,
+                     "expectations" -> expectations.toString,
+                     "failures"     -> failures.toString,
+                     "errors"       -> errors.toString,
+                     "pending"      -> pending.toString,
+                     "skipped"      -> skipped.toString,
+                     "time"         -> timer.elapsed.toString)
+    (stats /: attributes) { (res, cur) =>
+      if (cur == "0") res
+      else            res % new UnprefixedAttribute(cur._1, cur._2, Null)
+    }
+  }
+
   override def toString =
     "Stats(fragments = "    + fragments    +", "+
            "successes = "   + successes    +", "+
@@ -150,14 +162,15 @@ case object Stats {
       None
     else {
       val map = stats.attributes.asAttrMap
-      def asInt(key: String) = tryOrElse(Integer.parseInt(map(key)))(0)
+      def asInt(key: String, defaultValue: Int = 0) = tryOrElse(Integer.parseInt(map(key)))(defaultValue)
+
       Some(Stats(asInt("fragments"   ),
-            asInt("successes"   ),
-            asInt("expectations"),
-            asInt("failures"    ),
-            asInt("errors"      ),
-            asInt("pending"     ),
-            asInt("skipped"     ),
+                 asInt("successes"   ),
+                 asInt("expectations", 1),
+                 asInt("failures"    ),
+                 asInt("errors"      ),
+                 asInt("pending"     ),
+                 asInt("skipped"     ),
             (stats \ "trend" \ "stats").headOption.flatMap(fromXml),
             map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer)))
     }
