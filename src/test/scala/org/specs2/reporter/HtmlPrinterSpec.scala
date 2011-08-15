@@ -45,7 +45,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     "must not create a new file"                                                                                        ! seeIt().e1^
     "must get an icon representing its status"                                                                          ^
       "success if everything succeeds"                                                                                  ! seeIt().e2^
-      "failure if there is a failure"                                                                                   ! seeIt().e3^
+      "afailure if there is a failure"                                                                                   ! seeIt().e3^
                                                                                                                         end
                                                                                           
   implicit val argument = args()
@@ -102,14 +102,11 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
 
   case class seeIt() extends LinkedSpecifications {
     val spec1: Fragments = "ex1" ! failure ^ "a " ~/ ("successfull spec", successfulSubSpec) ^ end
-    val spec2: Fragments = "ex1" ! success ^ "a " ~/ ("failed spec", failedSubSpec) ^ end
+    val spec2: Fragments = "spec2".title ^ "ex1" ! success ^ "a " ~/ ("failed spec", failedSubSpec) ^ end
 
     def e1 = htmlLines(spec1) must have size(1)
     def e2 = print(spec1) must \\("img", "src" -> "./images/icon_success_sml.gif")
-    def e3 ={
-      repository.previousResult(any[SpecName], any[Example]) returns Some(failure)
-      print(spec2) must \\("img", "src" -> "./images/icon_failure_sml.gif")
-    }
+    def e3 = print(spec2) must \\("img", "src" -> "./images/icon_failure_sml.gif")
   }
 
   trait MockHtmlPrinter extends FragmentExecution with DefaultStoring { outer =>
