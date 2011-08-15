@@ -63,7 +63,7 @@ case class ExecutedSpecStart(start: SpecStart, location: Location = new Location
   def specName = start.specName
   def name = start.name
   def args = start.arguments
-  override def toString = "ExecutedSpecStart("+name+")"
+  override def toString = "ExecutedSpecStart("+specName+")"
 }
 case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stats: Stats = Stats()) extends ExecutedFragment {
   def specName = end.specName
