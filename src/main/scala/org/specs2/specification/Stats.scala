@@ -59,7 +59,7 @@ case class Stats(fragments:    Int = 0,
    * @return the xml representation of the statistics. Omit the attributes with 0 as a value for conciseness
    */
   def toXml: Elem = {
-    val stats = <stats>{trend.map(t => <trend>{t.toXml}</trend>)}</stats>
+    val stats = <stats>{trend.map(t => <trend>{t.toXml}</trend>).getOrElse(NodeSeq.Empty)}</stats>
     val attributes = Map(
                      "fragments"    -> fragments.toString,
                      "successes"    -> successes.toString,
@@ -70,7 +70,7 @@ case class Stats(fragments:    Int = 0,
                      "skipped"      -> skipped.toString,
                      "time"         -> timer.elapsed.toString)
     (stats /: attributes) { (res, cur) =>
-      if (cur == "0") res
+      if (cur._2 == "0") res
       else            res % new UnprefixedAttribute(cur._1, cur._2, Null)
     }
   }

@@ -27,13 +27,13 @@ class StatisticsRepositorySpec extends Specification { def is = sequential ^
     def e1 = this {
       storeStatistics(specName1, stats1)
       storeStatistics(specName2, stats2)
-      getStatistics(specName1) must_== Some(Stats(failures = 3))
+      getStatistics(specName1) must_== Some(Stats(failures = 3, expectations = 1))
     }
 
     def e2 = this {
       storeStatistics(specName1, stats1)
       storeStatistics(specName1, stats2)
-      getStatistics(specName1) must_== Some(Stats(failures = 4))
+      getStatistics(specName1) must_== Some(Stats(failures = 4, expectations = 1))
     }
 
     def e3 = this {
