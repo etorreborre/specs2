@@ -45,7 +45,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     "must not create a new file"                                                                                        ! seeIt().e1^
     "must get an icon representing its status"                                                                          ^
       "success if everything succeeds"                                                                                  ! seeIt().e2^
-      "afailure if there is a failure"                                                                                   ! seeIt().e3^
+      "failure if there is a failure"                                                                                   ! seeIt().e3^
                                                                                                                         end
                                                                                           
   implicit val argument = args()
