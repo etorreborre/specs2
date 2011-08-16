@@ -7,6 +7,8 @@ import execute._
 import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
 import Scalaz._
 import org.specs2.execute.StandardResults
+import text._
+import Plural._
 import xml.Nodex._
 import time._
 import specification._
@@ -27,7 +29,7 @@ import scala.xml._
 *  for each example
 *
 */
-case class Stats(fragments:    Int = 0,
+case class Stats(examples:     Int = 0,
                  successes:    Int = 0,
                  expectations: Int = 0,
                  failures:     Int = 0,
@@ -61,7 +63,7 @@ case class Stats(fragments:    Int = 0,
   def toXml: Elem = {
     val stats = <stats>{trend.map(t => <trend>{t.toXml}</trend>).getOrElse(NodeSeq.Empty)}</stats>
     val attributes = Map(
-                     "fragments"    -> fragments.toString,
+                     "examples"     -> examples.toString,
                      "successes"    -> successes.toString,
                      "expectations" -> expectations.toString,
                      "failures"     -> failures.toString,
@@ -76,7 +78,7 @@ case class Stats(fragments:    Int = 0,
   }
 
   override def toString =
-    "Stats(fragments = "    + fragments    +", "+
+    "Stats(examples = "     + examples     +", "+
            "successes = "   + successes    +", "+
            "expectations = "+ expectations +", "+
            "failures = "    + failures     +", "+
@@ -90,7 +92,7 @@ case class Stats(fragments:    Int = 0,
    */
   def negate =
     copy(
-      fragments    = -fragments,
+      examples     = -examples,
       successes    = -successes,
       expectations = -expectations,
       failures     = -failures,
@@ -113,6 +115,26 @@ case class Stats(fragments:    Int = 0,
     else                    copy(trend = Some(newTrend))
   }
 
+  /**
+   * display the statistics on 2 lines, with the time and trend
+   */
+  def display(implicit args: Arguments) = {
+		def diff(f: Stats => Int): String = {
+			val i = trend map (t => f(t)) getOrElse 0
+			if (i == 0) "" else if (i > 0) " (+"+i+")" else " ("+i+")"
+		}
+    args.colors.stats("Finished in "+timer.time+"\n", args.color) +
+    args.colors.stats(
+        Seq(Some((examples qty "example") + diff((_:Stats).examples)),
+            if (expectations != examples) Some((expectations qty "expectation") + diff((_:Stats).expectations)) else None,
+            Some((failures qty "failure") + diff((_:Stats).failures)),
+            Some((errors qty "error")     + diff((_:Stats).errors)),
+            pending optQty ("pending"     + diff((_:Stats).pending)),
+            skipped optInvariantQty ("skipped" + diff((_:Stats).skipped))
+				).flatten.mkString(", "), args.color)
+
+  }
+
 }
 
 /**
@@ -132,7 +154,7 @@ case object Stats {
   implicit object StatsMonoid extends Monoid[Stats] {
     def append(s1: Stats, s2: =>Stats) = {
       s1.copy(
-        fragments    = s1.fragments       + s2.fragments,
+        examples     = s1.examples        + s2.examples,
         successes    = s1.successes       + s2.successes,
         expectations = s1.expectations    + s2.expectations,
         failures     = s1.failures        + s2.failures,
@@ -149,11 +171,11 @@ case object Stats {
 
   def apply(result: Result): Stats = 
     result match {
-      case s @ Success(_)        => Stats(fragments = 1, expectations = s.expectationsNb, successes = 1)
-      case Failure(_, _, _, _)   => Stats(fragments = 1, expectations = 1, failures = 1)
-      case Error(_,_)            => Stats(fragments = 1, expectations = 1, errors = 1)
-      case Pending(_)            => Stats(fragments = 1, expectations = 1, pending = 1)
-      case Skipped(_, _)         => Stats(fragments = 1, expectations = 1, skipped = 1)
+      case s @ Success(_)        => Stats(examples = 1, expectations = s.expectationsNb, successes = 1)
+      case Failure(_, _, _, _)   => Stats(examples = 1, expectations = 1, failures = 1)
+      case Error(_,_)            => Stats(examples = 1, expectations = 1, errors = 1)
+      case Pending(_)            => Stats(examples = 1, expectations = 1, pending = 1)
+      case Skipped(_, _)         => Stats(examples = 1, expectations = 1, skipped = 1)
       case DecoratedResult(t, r) => Stats(r)
     }
   
@@ -164,7 +186,7 @@ case object Stats {
       val map = stats.attributes.asAttrMap
       def asInt(key: String, defaultValue: Int = 0) = tryOrElse(Integer.parseInt(map(key)))(defaultValue)
 
-      Some(Stats(asInt("fragments"   ),
+      Some(Stats(asInt("examples"   ),
                  asInt("successes"   ),
                  asInt("expectations", 1),
                  asInt("failures"    ),

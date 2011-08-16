@@ -99,6 +99,7 @@ class TextPrinterSpec extends Specification { def is =
     "the number of failures"                                                                                            ! stats().e4^
     "the number of errors"                                                                                              ! stats().e5^
     "the execution time"                                                                                                ! stats().e6^
+    "the trend if any"                                                                                                  ! stats().e7^
                                                                                                                         end
 
   implicit val default = Arguments()
@@ -229,6 +230,7 @@ class TextPrinterSpec extends Specification { def is =
             "ok2" ! success) must contain("o ok2")
     }
   }
+
   case class status() {
     def e1 = print(t1 ^ ex1) must containMatch("^\\s*t1") 
     def e2 = print(t1 ^ ex1) must contain("+ e1") 
@@ -241,6 +243,7 @@ class TextPrinterSpec extends Specification { def is =
         "  example1") 
     def e8 = print(args.report(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
   }
+
   case class stats() {
     def e1 = print(t1 ^ ex1) must containMatch("1 example") 
     def e2 = print(t1 ^ ex1) must not containMatch("expectation") 
@@ -248,10 +251,14 @@ class TextPrinterSpec extends Specification { def is =
     def e4 = print(t1 ^ fail3) must containMatch("1 failure") 
     def e5 = print(t1 ^ error4) must containMatch("1 error") 
     def e6 = print(t1 ^ ex1) must containMatch("\\d+ ms")
+    def e7 = print(t1 ^ ex1, Stats(failures=1)) must containMatch("1 example \\(\\+1\\)")
   }
 
-  def print(fragments: Fragments): Seq[String] = printWithColors(fragments).map(removeColors(_))
-  def printWithColors(fs: Fragments): Seq[String] = printer.print(preReporter.exec(new Specification { def is = fs }))
+  def print(fragments: Fragments, previousStats: Stats = Stats()): Seq[String] =
+    printWithColors(fragments, previousStats).map(removeColors(_))
+
+  def printWithColors(fs: Fragments, previousStats: Stats = Stats()): Seq[String] =
+    printer.print(preReporter(previousStats).exec(new Specification { def is = fs }))
 
   val outer = this
   def printer = new TextPrinter {
@@ -262,11 +269,17 @@ class TextPrinterSpec extends Specification { def is =
     }
   }
 
-  val preReporter = new DefaultSelection with DefaultSequence with DefaultExecutionStrategy with DefaultStoring {
+  def preReporter(previousStats: Stats = Stats()) = new DefaultSelection with DefaultSequence with DefaultExecutionStrategy with DefaultStoring {
     def exec(spec: SpecificationStructure): Seq[ExecutedFragment] = {
       val args = spec.content.arguments
       spec.content |> select(args) |> sequence(args) |> execute(args) |> store(args)
     }
+
+    override def setStatsOnSpecEndFragments = (fs: (ExecutedFragment, Stats)) => fs match {
+      case (ExecutedSpecEnd(n, l, s), stats) => ExecutedSpecEnd(n, l, stats.updateFrom(previousStats))
+      case (other, s)                        => other
+    }
+
   }
 
 }

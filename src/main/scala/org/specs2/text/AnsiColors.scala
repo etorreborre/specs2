@@ -27,7 +27,13 @@ trait AnsiColors {
 
   /** @return a colored string */
   def color(s: String, color: String, doIt: Boolean = true) = {
-    if (doIt) s.split("\n").map(color + _ + reset).mkString("\n")
+    if (doIt) {
+		  val colored = s.split("\n").filter(_.nonEmpty).map(color + _ + reset)
+			if (s.startsWith("\n") && s.endsWith("\n")) colored.mkString("\n", "\n", "\n")
+			else if (s.startsWith("\n"))                colored.mkString("\n", "\n", "")  
+			else if (s.endsWith("\n"))                  colored.mkString("", "\n", "\n")  
+			else                                        colored.mkString("\n")  
+		}
     else      removeColors(s, true)
   }
 

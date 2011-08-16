@@ -21,7 +21,7 @@ There are many ways to execute ***specs2*** specifications:
 
  ***specs2*** is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the [sbt dsl](http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies):
 
- <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.specs2" %% "specs2-scalaz-core" % "6.0.RC2"`</td><td class="info">mandatory. This jar bundles the scalaz classes but renamed as `org.specs2.internal.scalaz._`.</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.9"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.0.1"`</td><td class="info">only if using the html runner</td></tr></table>
+ <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.specs2" %% "specs2-scalaz-core" % "6.0.RC2"`</td><td class="info">mandatory. This jar bundles the scalaz classes but renamed as `org.specs2.internal.scalaz._`.</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.9"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.0.2"`</td><td class="info">only if using the html runner</td></tr></table>
 
 ### Arguments
 
@@ -56,6 +56,11 @@ From inside a specification, the available arguments are the following:
  *`stopOnFail`*  | false                                    | skip all examples after the first failure or error
  *`sequential`*  | false                                    | don't execute examples concurrently
  `threadsNb`     | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
+ --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+  Storing
+ --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+ `never`         | false                                    | never store statistics
+ `reset`         | false                                    | remove previously stored statistics
  --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
   Reporting
  --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
@@ -103,6 +108,24 @@ There are some available shortcuts for some arguments
  `descFromExpectations`                                                | `args(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
  `fullStackTrace`                                                      | `args(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
  `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | to display the differences when doing equality comparison                                        |
+
+##### Output directory
+
+All the files created during the execution of a specification will be created in the `target/specs-report` directory. You can change that by setting the
+`-Dspecs2.outDir` system property.
+
+##### Storing previous results
+
+When a specification has been executed its statistics and failed examples will be stored by default in a specific `stats` directory created in the output directory. This data can be used on subsequent runs to:
+
+ * display trends in statistics
+ * compute the statuses of the links of an index page
+ * select only previously failed examples for execution
+
+You can either:
+
+  * disable this functionality (for performance reasons for example) with the `args.store(never=true)` argument (or `neverstore` on the command line)
+  * reset the previous statistics with the `args.store(reset=true)` argument (or `resetstore` on the command line)
 
 ##### Status flags
 
@@ -174,16 +197,29 @@ On the command line you can pass the following arguments:
 
   Name            | Value format            | Comments                                                                 |
  ---------------- | ----------------------- | ------------------------------------------------------------------------ |
+  Selection
+ ---------------- | ------------------------| ------------------------------------------------------------------------ |
  `ex`             | regexp                  |                                                                          |
  `include`        | csv                     |                                                                          |
  `exclude`        | csv                     |                                                                          |
  `wasIssue`       | boolean                 |                                                                          |
  `was`            | String                  | see: Status flags                                                        |
  `specname`       | regexp                  |                                                                          |
+ ---------------- | ------------------------| ------------------------------------------------------------------------ |
+  Execution
+ ---------------- | ------------------------| ------------------------------------------------------------------------ |
  `plan`           | boolean                 |                                                                          |
  `skipall`        | boolean                 |                                                                          |
  `sequential`     | boolean                 |                                                                          |
  `threadsnb`      | int                     |                                                                          |
+ ---------------- | ------------------------| ------------------------------------------------------------------------ |
+  Storing
+ ---------------- | ------------------------| ------------------------------------------------------------------------ |
+ `resetstore`     | boolean                 |                                                                          |
+ `neverstore`     | boolean                 |                                                                          |
+ ---------------- | ------------------------| ------------------------------------------------------------------------ |
+  Reporting
+ ---------------- | ------------------------| ------------------------------------------------------------------------ |
  `xonly`          | boolean                 |                                                                          |
  `showonly`       | String                  | see: Status flags                                                        |
  `failtrace`      | boolean                 |                                                                          |
@@ -221,18 +257,12 @@ If you want html pages to be produced for your specification you'll need to exec
 
 `scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]`
 
-By default the files will be created in the `target/specs-report` directory but you can change that by setting the
-`-Dspecs2.outDir` system property.
-
 ### JUnit XML output
 
 Many Continuous Integration systems rely on JUnit XML reports to display build and test results. It is possible to produce
 those result by using the `specs2.junitxml` object:
 
 `scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]`
-
-By default the files will be created in the `target/test-reports` directory but you can change that by setting the
-`-Dspecs2.junit.outDir` system property.
 
 ### Files Runner
 

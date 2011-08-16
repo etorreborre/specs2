@@ -39,9 +39,9 @@ class StoringSpec extends SpecificationWithJUnit { def is =
 
    object stats extends Stored {
      def e1 = store("t1").filter(isExecutedText)(0).stats must_== Stats() 
-     def e2 = store("e1" ! failure).filter(isExecutedResult)(0).stats must_== Stats(fragments = 1, expectations = 1, failures = 1) 
+     def e2 = store("e1" ! failure).filter(isExecutedResult)(0).stats must_== Stats(examples = 1, expectations = 1, failures = 1)
      def e3 = store("e0" ! success ^ "e1" ! failure).filter(isExecutedSpecEnd)(0).stats.toString must startWith ( 
-       "Stats(fragments = 2, successes = 1, expectations = 2, failures = 1")
+       "Stats(examples = 2, successes = 1, expectations = 2, failures = 1")
    }
   
    object stored extends Stored {

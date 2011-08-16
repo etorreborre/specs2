@@ -57,13 +57,15 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
    * @return filter fragments according to their previous execution state
    */
   def filterPrevious(implicit commandLineArgs: Arguments) = (fan: Seq[(Fragment, Arguments, SpecName)]) => {
-    fan filter {
-      case (e @ Example(_, _), args, specName) => {
-        val currentArgs = args.overrideWith(commandLineArgs)
-        !currentArgs.wasIsDefined || includePrevious(specName, e, currentArgs)
+    if (commandLineArgs.store.never) fan
+    else
+      fan filter {
+        case (e @ Example(_, _), args, specName) => {
+          val currentArgs = args.overrideWith(commandLineArgs)
+          !currentArgs.wasIsDefined || includePrevious(specName, e, currentArgs)
+        }
+        case other => true
       }
-      case other => true
-    }
   }
 
   protected def includePrevious(specName: SpecName, e: Example, args: Arguments) =

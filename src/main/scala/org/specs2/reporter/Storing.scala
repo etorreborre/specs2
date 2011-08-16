@@ -38,7 +38,7 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
    * set the statistics on SpecEndFragments after they've been computed by the StatisticsReducer
    * Those statistics are updated from previously executed statistics to calculate trends
    */
-  private def setStatsOnSpecEndFragments = (fs: (ExecutedFragment, Stats)) => fs match {
+  def setStatsOnSpecEndFragments = (fs: (ExecutedFragment, Stats)) => fs match {
     case (ExecutedSpecEnd(n, l, s), stats) => ExecutedSpecEnd(n, l, stats.updateFrom(repository.getStatistics(n.specName)))
     case (other, s)                        => other
   }

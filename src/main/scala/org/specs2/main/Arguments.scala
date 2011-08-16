@@ -234,8 +234,8 @@ private[specs2]
 object Store extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Store = {
     new Store (
-      _reset       = bool("reset"),
-      _never       = bool("never")
+      _reset       = bool("resetstore"),
+      _never       = bool("neverstore")
     )
   }
 }

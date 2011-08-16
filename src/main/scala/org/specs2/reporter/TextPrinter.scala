@@ -184,19 +184,9 @@ trait TextPrinter {
       out.printLine(" ")
       out.printStats("Total for specification" + (if (end.title.isEmpty) end.title.trim else " "+end.title.trim))
       printStats(stats)
-      out.printLine(" ")
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
-
-      val Stats(examples, successes, expectations, failures, errors, pending, skipped, trend, timer) = stats
-      out.printLine(args.colors.stats("Finished in " + timer.time, args.color))
-      out.printLine(args.colors.stats(
-          Seq(Some(examples qty "example"), 
-              if (expectations != examples) Some(expectations qty "expectation") else None,
-              Some(failures qty "failure"), 
-              Some(errors qty "error"),
-              pending optQty "pending", 
-              skipped optInvariantQty "skipped").flatten.mkString(", "), args.color))
+      out.printLines(stats.display)
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {
