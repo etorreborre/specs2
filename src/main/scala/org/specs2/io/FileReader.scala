@@ -56,7 +56,7 @@ trait FileReader {
     val xhtml = fromString("<e>"+fileContent+"</e>")
     val result = (XhtmlParser(xhtml)\\"e")(0).child.reduceNodes
     result
-  }(e => e.printStackTrace).getOrElse(NodeSeq.Empty)
+  }(e => { scala.Console.println("trying to load: "+filePath+"\n"); e.printStackTrace }).getOrElse(NodeSeq.Empty)
 }
 private[specs2]
 object FileReader extends FileReader

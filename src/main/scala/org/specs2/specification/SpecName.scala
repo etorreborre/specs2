@@ -15,6 +15,8 @@ sealed trait SpecName {
   def name: String
   /** the formal name of the specification, including its package */
   def fullName: String
+  /** the full class name of the specification without embellishment */
+  def javaClassName: String
   /** a unique url for the specification */
   def url: String
   def matches(p: String) = name matches p
@@ -48,6 +50,8 @@ case class SpecificationName(s: SpecificationStructure) extends SpecName {
   def title = name
   def name =  simpleClassName(s)
   def fullName = className(s)
+  def javaClassName = s.getClass.getName
+
   def url = className(s) + ".html"
 
   def overrideWith(n: SpecName) = n match {
@@ -67,6 +71,7 @@ case class SpecificationTitle(t: String) extends SpecName {
   def title = t
   def name = title
   def fullName = name
+  def javaClassName = fullName
   def url = t + ".html"
 
   def overrideWith(n: SpecName) = n match {
