@@ -94,7 +94,7 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
   /**
    * make sure that no empty tag name is used to search the xml stats and replace . with : to help the xpath search
    */
-  private def nameTag(specName: SpecName) = if (specName.fullName.isEmpty) "anon" else specName.fullName.replace(".", ":")
+  private def nameTag(specName: SpecName) = if (specName.fullName.isEmpty) "anon" else specName.fullName
 
   private def statsTag(specName: SpecName) = nameTag(specName)+"-stats"
   private def resultsTag(specName: SpecName) = nameTag(specName)+"-results"

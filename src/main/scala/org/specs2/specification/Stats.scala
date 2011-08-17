@@ -111,26 +111,44 @@ case class Stats(examples:     Int = 0,
   def updateFrom(previous: Stats): Stats = {
     implicit val monoid = Stats.StatsMonoid
     val newTrend = this |+| previous.negate
-    if (newTrend.isSuccess) this
-    else                    copy(trend = Some(newTrend))
+    if (newTrend == monoid.zero) this
+    else                         copy(trend = Some(newTrend))
   }
 
+  /**
+   * @return true if th
+   */
   /**
    * display the statistics on 2 lines, with the time and trend
    */
   def display(implicit args: Arguments) = {
-		def diff(f: Stats => Int): String = {
+
+    def trendIsDefined(f: Stats => Int) = trend map (t => f(t) != 0) getOrElse false
+
+    def displayTrendValue(f: Stats => Int): String = {
 			val i = trend map (t => f(t)) getOrElse 0
 			if (i == 0) "" else if (i > 0) " (+"+i+")" else " ("+i+")"
 		}
+
+    def displayValue(f: Stats => Int, label: String, optional: Boolean = false, invariant: Boolean = false): Option[String] = {
+      val base =
+        if (optional && invariant) f(this) optInvariantQty label
+        else if (optional)         f(this) optQty label
+        else                       Some(f(this) qty label)
+      base map (_ + displayTrendValue(f))
+    }
+
     args.colors.stats("Finished in "+timer.time+"\n", args.color) +
     args.colors.stats(
-        Seq(Some((examples qty "example") + diff((_:Stats).examples)),
-            if (expectations != examples) Some((expectations qty "expectation") + diff((_:Stats).expectations)) else None,
-            Some((failures qty "failure") + diff((_:Stats).failures)),
-            Some((errors qty "error")     + diff((_:Stats).errors)),
-            pending optQty ("pending"     + diff((_:Stats).pending)),
-            skipped optInvariantQty ("skipped" + diff((_:Stats).skipped))
+        Seq(displayValue((_:Stats).examples, "example"),
+            if (expectations != examples || trendIsDefined((_:Stats).expectations))
+              displayValue((_:Stats).expectations, "expectation")
+            else
+              None,
+            displayValue((_:Stats).failures, "failure"),
+            displayValue((_:Stats).errors, "error"),
+            displayValue((_:Stats).pending, "pending", optional = true),
+            displayValue((_:Stats).skipped, "skipped", optional = true, invariant = true)
 				).flatten.mkString(", "), args.color)
 
   }

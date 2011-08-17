@@ -86,20 +86,6 @@ class TextPrinterSpec extends Specification { def is =
   "a pending example must be displayed with a *"                                                                        ! status().e6^
   "a multi-line description must be indented ok"                                                                        ! status().e7^
   "if showtimes is true, each individual time must be shown"                                                            ! status().e8^
-                                                                                                                        endp^
-                                                                                                                        """
-  Statistics
-  ==========                                                                                                            """^
-                                                                                                                        p^
-  "Statistics must show"                                                                                                ^
-    "the number of examples"                                                                                            ! stats().e1^
-    "the number of expectations"                                                                                        ^
-      "not if they are the same as the number of examples"                                                              ! stats().e2^
-      "if they are not the same as the number of examples"                                                              ! stats().e3^bt^
-    "the number of failures"                                                                                            ! stats().e4^
-    "the number of errors"                                                                                              ! stats().e5^
-    "the execution time"                                                                                                ! stats().e6^
-    "the trend if any"                                                                                                  ! stats().e7^
                                                                                                                         end
 
   implicit val default = Arguments()
@@ -242,16 +228,6 @@ class TextPrinterSpec extends Specification { def is =
         "+ e1",
         "  example1") 
     def e8 = print(args.report(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
-  }
-
-  case class stats() {
-    def e1 = print(t1 ^ ex1) must containMatch("1 example") 
-    def e2 = print(t1 ^ ex1) must not containMatch("expectation") 
-    def e3 = print(t1 ^ "ex1"!Success("ok", 2)) must containMatch("2 expectations") 
-    def e4 = print(t1 ^ fail3) must containMatch("1 failure") 
-    def e5 = print(t1 ^ error4) must containMatch("1 error") 
-    def e6 = print(t1 ^ ex1) must containMatch("\\d+ ms")
-    def e7 = print(t1 ^ ex1, Stats(failures=1)) must containMatch("1 example \\(\\+1\\)")
   }
 
   def print(fragments: Fragments, previousStats: Stats = Stats()): Seq[String] =

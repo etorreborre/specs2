@@ -35,9 +35,22 @@ class StatsSpec extends mutable.Specification {
   }
 
   "A Stats object can be displayed" >> {
-    Stats(1, 2, 3, 4, 5, 6, 7, Some(Stats(failures = -2, skipped = 4)), new SimpleTimer).display(nocolor) must_==
-      "Finished in 0 ms\n" +
-      "1 example, 3 expectations, 4 failures (-2), 5 errors, 6 pendings, 7 skipped (+4)"
+    "Trends are shown if they exist" >> {
+      Stats(1, 2, 3, 4, 5, 6, 7, Some(Stats(failures = -2, skipped = 4)), new SimpleTimer).display(nocolor) must_==
+            "Finished in 0 ms\n" +
+            "1 example, 3 expectations, 4 failures (-2), 5 errors, 6 pendings, 7 skipped (+4)"
+    }
+    "Expectations are shown if the trend has changed" >> {
+      Stats(3, 2, 3, 0, 0, 0, 0, Some(Stats(expectations = -2)), new SimpleTimer).display(nocolor) must_==
+            "Finished in 0 ms\n" +
+            "3 examples, 3 expectations (-2), 0 failure, 0 error"
+
+    }
+    "Otherwise they are not shown" >> {
+    Stats(3, 2, 3, 0, 0, 0, 0, Some(Stats()), new SimpleTimer).display(nocolor) must_==
+          "Finished in 0 ms\n" +
+          "3 examples, 0 failure, 0 error"
+    }
   }
 
   "XML" >> {
