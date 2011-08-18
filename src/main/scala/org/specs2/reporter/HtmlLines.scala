@@ -6,12 +6,12 @@ import text.Plural._
 import text._
 import form._
 import Form._
-import main.Arguments
 import execute._
 import matcher.DataTable
 import specification._
 import org.specs2.internal.scalaz.Scalaz._
 import Stats._
+import main.{Report, Arguments}
 
 /**
  * The HtmlLines groups a list of HtmlLine to print
@@ -144,21 +144,13 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd, endStats: Stats) extends Html {
 
   def printEndStats(stats: Stats)(implicit args: Arguments, out: HtmlResultOutput) = {
     val title = "Total for specification" + (if (end.name.isEmpty) end.name.trim else " "+end.name.trim)
-    val Stats(examples, successes, expectations, failures, errors, pending, skipped, trend, timer) = stats
-    val classStatus = if (failures + errors > 0) "failure" else "success" 
-    val numbers = Seq(
-            Some(examples qty "example"), 
-            if (expectations != examples) Some(expectations qty "expectation") else None,
-            Some(failures qty "failure"), 
-            Some(errors qty "error"),
-            pending optQty "pending", 
-            skipped optInvariantQty "skipped").flatten.mkString(", ")
-            
+    val classStatus = if (stats.hasIssues) "failure" else "success"
+ 
     out.printBr().printElem {
       <table class="dataTable">
         <tr><th colSpan="2">{title}</th></tr>
-        <tr><td>Finished in</td><td class="info">{timer.time}</td></tr>
-        <tr><td>Results</td><td class={classStatus}>{numbers}</td></tr>
+        <tr><td>Finished in</td><td class="info">{stats.time}</td></tr>
+        <tr><td>Results</td><td class={classStatus}>{ stats.displayResults(Arguments("nocolor")) }</td></tr>
       </table>
     }
   }

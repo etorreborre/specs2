@@ -56,7 +56,8 @@ case class Stats(examples:     Int = 0,
   def isSuccess = result.isSuccess
   /** @return true if there are failures or errors */
   def hasIssues = result.isFailure || result.isError
-
+  /** @return the execution time */
+  def time = timer.time
   /**
    * @return the xml representation of the statistics. Omit the attributes with 0 as a value for conciseness
    */
@@ -116,13 +117,18 @@ case class Stats(examples:     Int = 0,
   }
 
   /**
-   * @return true if th
-   */
-  /**
    * display the statistics on 2 lines, with the time and trend
    */
   def display(implicit args: Arguments) = {
+    args.colors.stats("Finished in "+timer.time+"\n", args.color) +
+    displayResults
+  }
 
+  /**
+   * display the results on one line, always displaying examples/failures/errors
+   * and only displaying expectations/pending/skipped if necessary
+   */
+  def displayResults(implicit args: Arguments) = {
     def trendIsDefined(f: Stats => Int) = trend map (t => f(t) != 0) getOrElse false
 
     def displayTrendValue(f: Stats => Int): String = {
@@ -138,7 +144,6 @@ case class Stats(examples:     Int = 0,
       base map (_ + displayTrendValue(f))
     }
 
-    args.colors.stats("Finished in "+timer.time+"\n", args.color) +
     args.colors.stats(
         Seq(displayValue((_:Stats).examples, "example"),
             if (expectations != examples || trendIsDefined((_:Stats).expectations))
