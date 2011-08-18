@@ -95,8 +95,8 @@ trait HtmlPrinter extends OutputDir {
     lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
       cur match {
-        case HtmlLine(start @ HtmlSpecStart(s), _, _, _) if start.isIncludeLink =>
-          updated.insertDownLast(leaf(HtmlLines(s.specName, Nil, link = start.link.getOrElse(parentLink))))
+        case HtmlLine(start @ HtmlSpecStart(s), st, l, a) if start.isIncludeLink =>
+          updated.insertDownLast(leaf(HtmlLines(s.specName, List(HtmlLine(start.unlink, st, l, a)), link = start.link.getOrElse(parentLink))))
         case HtmlLine(HtmlSpecEnd(e, _), _, _, _) if e.specName == res.getLabel.specName => updated.getParent
         case other                                                                       => updated
       }

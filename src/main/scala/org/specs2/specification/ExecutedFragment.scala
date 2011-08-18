@@ -57,9 +57,9 @@ case class ExecutedSpecStart(start: SpecStart, location: Location = new Location
   def isSeeOnlyLink = start.isSeeOnlyLink
   def isIncludeLink = start.isIncludeLink
   def isLink        = start.isLink
-
   def link          = start.link
-  
+  def unlink        = ExecutedSpecStart(start.unlink, location, stats)
+
   def specName = start.specName
   def name = start.name
   def args = start.arguments

@@ -61,7 +61,8 @@ case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
   def isIncludeLink = start.isIncludeLink
   def isLink        = start.isLink
   def link          = start.link
-  
+  def unlink        = HtmlSpecStart(start.unlink)
+
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
     if (!args.xonly) {
       start.link.map(l => out.printLink(l, level, stats)(args)).getOrElse(out.printSpecStart(start.specName, stats)(args))

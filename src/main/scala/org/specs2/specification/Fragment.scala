@@ -49,11 +49,10 @@ case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), lin
   def isIncludeLink = isLink && !seeOnly
   /** @return true if this spec starts only contains a link to another specification */
   def isLink        = link.isDefined
-
-  /**
-   * The name of the specification can be overriden with a user defined title
-   */
+  /** The name of the specification can be overriden with a user defined title */
   def withName(n: SpecName) = copy(specName = specName.overrideWith(n))
+  /** @return a non-linked start*/
+  def unlink = SpecStart(specName, arguments)
 }
 
 /**
