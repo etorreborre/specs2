@@ -40,30 +40,23 @@ From inside a specification, the available arguments are the following:
 
   Name           | Default value                            | Description
  --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
-  Selection
- --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+ ***Selection*** |||
  *`ex`        *  | .*                                       | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
  *`include`   *  | ""                                       | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
  *`exclude`   *  | ""                                       | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
  *`wasIssue`  *  | false                                    | select only previously failed/error examples
  *`was`       *  | ""                                       | select only some previously executed examples based on their status
  `specName`      | ".*Spec"                                 | regular expression to use when executing specifications with the FilesRunner
- --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
-  Execution
- --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+  **Execution**  |||
  *`plan`      *  | false                                    | only report the text of the specification without executing anything
  *`skipAll`   *  | false                                    | skip all the examples
  *`stopOnFail`*  | false                                    | skip all examples after the first failure or error
  *`sequential`*  | false                                    | don't execute examples concurrently
  `threadsNb`     | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
- --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
-  Storing
- --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+ ***Storing***   |||
  `never`         | false                                    | never store statistics
  `reset`         | false                                    | remove previously stored statistics
- --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
-  Reporting
- --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+ ***Reporting*** |||
  *`xonly`   *    | false                                    | only report failures and errors
  *`showOnly`*    | ""                                       | only report some examples based on their status
  *`color`   *    | true                                     | use colors in the output (`nocolor` can also be used on the command line)
@@ -78,8 +71,8 @@ From inside a specification, the available arguments are the following:
 
 ##### Most/Least frequently used arguments
 
-All the arguments above, which are written in bold, can be set in a specification with `args(name=value)`. However Scala would not allow the `args` method to accept *all* the possible
-arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments can be set with an object called `args`, having separate methods for setting all the parameters, by "category". For example:
+Most of the arguments above can be set in a specification with `args(name=value)`. However Scala would not allow the `args` method to accept *all* the possible
+arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called `args`, having separate methods for setting all the parameters, by "category". For example:
 
       args.select(specName = ".*Test", include="slow")
       args.execute(threadsNb = 2)
@@ -195,43 +188,36 @@ If this is not what you want, you can either:
 
 On the command line you can pass the following arguments:
 
-  Name            | Value format            | Comments                                                                 |
- ---------------- | ----------------------- | ------------------------------------------------------------------------ |
-  Selection
- ---------------- | ------------------------| ------------------------------------------------------------------------ |
- `ex`             | regexp                  |                                                                          |
- `include`        | csv                     |                                                                          |
- `exclude`        | csv                     |                                                                          |
- `wasIssue`       | boolean                 |                                                                          |
- `was`            | String                  | see: Status flags                                                        |
- `specname`       | regexp                  |                                                                          |
- ---------------- | ------------------------| ------------------------------------------------------------------------ |
-  Execution
- ---------------- | ------------------------| ------------------------------------------------------------------------ |
- `plan`           | boolean                 |                                                                          |
- `skipall`        | boolean                 |                                                                          |
- `sequential`     | boolean                 |                                                                          |
- `threadsnb`      | int                     |                                                                          |
- ---------------- | ------------------------| ------------------------------------------------------------------------ |
-  Storing
- ---------------- | ------------------------| ------------------------------------------------------------------------ |
- `resetstore`     | boolean                 |                                                                          |
- `neverstore`     | boolean                 |                                                                          |
- ---------------- | ------------------------| ------------------------------------------------------------------------ |
-  Reporting
- ---------------- | ------------------------| ------------------------------------------------------------------------ |
- `xonly`          | boolean                 |                                                                          |
- `showonly`       | String                  | see: Status flags                                                        |
- `failtrace`      | boolean                 |                                                                          |
- `color`          | boolean                 |                                                                          |
- `colors`         | map                     | e.g. text:be, failure:m (see the Colors section)                         |
- `noindent`       | boolean                 |                                                                          |
- `showtimes`      | boolean                 |                                                                          |
- `markdown`       | boolean                 |                                                                          |
- `debugmarkdown`  | boolean                 |                                                                          |
- `fromsource`     | boolean                 |                                                                          |
- `fullstacktrace` | boolean                 |                                                                          |
- `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns  |
+  Name            | Value format            | Comments
+ ---------------- | ----------------------- | ------------------------------------------------------------------------
+ ***Selection***  |||
+ `ex`             | regexp                  |
+ `include`        | csv                     |
+ `exclude`        | csv                     |
+ `wasIssue`       | boolean                 |
+ `was`            | String                  | see: Status flags
+ `specname`       | regexp                  |
+ ***Execution***  |||
+ `plan`           | boolean                 |
+ `skipall`        | boolean                 |
+ `sequential`     | boolean                 |
+ `threadsnb`      | int                     |
+ ***Storing***    |||
+ `resetstore`     | boolean                 |
+ `neverstore`     | boolean                 |
+ ***Reporting***  |||
+ `xonly`          | boolean                 |
+ `showonly`       | String                  | see: Status flags
+ `failtrace`      | boolean                 |
+ `color`          | boolean                 |
+ `colors`         | map                     | e.g. text:be, failure:m (see the Colors section)
+ `noindent`       | boolean                 |
+ `showtimes`      | boolean                 |
+ `markdown`       | boolean                 |
+ `debugmarkdown`  | boolean                 |
+ `fromsource`     | boolean                 |
+ `fullstacktrace` | boolean                 |
+ `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 

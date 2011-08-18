@@ -20,9 +20,9 @@ import Stats._
  *
  */
 private[specs2]
-case class HtmlLines(lines : List[HtmlLine] = Nil, link: HtmlLink) {
+case class HtmlLines(specName: SpecName, lines : List[HtmlLine] = Nil, link: HtmlLink) {
   def printXml(implicit out: HtmlResultOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
-  def add(line: HtmlLine) = HtmlLines(lines :+ line, link)
+  def add(line: HtmlLine) = copy(lines = lines :+ line)
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty
   

@@ -40,7 +40,7 @@ trait HtmlPrinter extends OutputDir {
   def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     copyResources()
     val parentLink = HtmlLink(s.content.specName, "", s.content.name)
-    val htmlFiles = reduce(fs, parentLink)
+    val htmlFiles = reduce(s.content.start.specName, fs, parentLink)
     lazy val toc = globalToc(htmlFiles)
     htmlFiles.flatten.filter(_.nonEmpty).foreach { lines =>
       fileWriter.write(reportPath(lines.link.url)) { out =>
@@ -89,16 +89,16 @@ trait HtmlPrinter extends OutputDir {
    *
    * @return the HtmlLines to print
    */
-  def reduce(fs: Seq[ExecutedFragment], parentLink: HtmlLink): Tree[HtmlLines] = {
+  def reduce(specification: SpecName, fs: Seq[ExecutedFragment], parentLink: HtmlLink): Tree[HtmlLines] = {
     val lines = flatten(fs.reduceWith(reducer))
-    lazy val start: HtmlLines = HtmlLines(Nil, parentLink)
+    lazy val start: HtmlLines = HtmlLines(specification, Nil, parentLink)
     lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
       cur match {
-        case HtmlLine(start @ HtmlSpecStart(_), _, _, _) if start.isIncludeLink =>
-          updated.insertDownLast(leaf(HtmlLines(link = start.link.getOrElse(parentLink))))
-        case HtmlLine(HtmlSpecEnd(_, _), _, _, _)                               => updated.getParent
-        case other                                                              => updated
+        case HtmlLine(start @ HtmlSpecStart(s), _, _, _) if start.isIncludeLink =>
+          updated.insertDownLast(leaf(HtmlLines(s.specName, Nil, link = start.link.getOrElse(parentLink))))
+        case HtmlLine(HtmlSpecEnd(e, _), _, _, _) if e.specName == res.getLabel.specName => updated.getParent
+        case other                                                                       => updated
       }
     }.root.tree
   }

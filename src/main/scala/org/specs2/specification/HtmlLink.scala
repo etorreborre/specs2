@@ -28,8 +28,8 @@ case class UrlHtmlLink(override val url: String,
 
 
 object HtmlLink {
- def apply(name: SpecName, beforeText: String = "", linkText: String = "", afterText: String = "", tip: String = ""): HtmlLink  =
+ def apply(name: SpecName, beforeText: String = "", linkText: String = "", afterText: String = "", tip: String = ""): SpecHtmlLink  =
    new SpecHtmlLink(name, beforeText, linkText, afterText, tip)
 
-  def apply(s: SpecificationStructure): HtmlLink = SpecHtmlLink(s.content.specName, linkText = s.content.name)
+  def apply(s: SpecificationStructure): SpecHtmlLink = SpecHtmlLink(s.content.specName, linkText = s.content.name)
 }

@@ -89,12 +89,14 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
     this
   }
 
-  def specStatsPath(specName: SpecName) = statsDirPath + specName.fullName + ".stats"
+  def specStatsPath(specName: SpecName) = statsDirPath + nameTag(specName) + ".stats"
 
   /**
-   * make sure that no empty tag name is used to search the xml stats and replace . with : to help the xpath search
+   * make sure that no empty tag name is used to search the xml stats, and is unique, even for an anonymous class
    */
-  private def nameTag(specName: SpecName) = if (specName.fullName.isEmpty) "anon-"+specName.javaClassName.hashCode else specName.fullName
+  private def nameTag(specName: SpecName) =
+    if (specName.fullName.isEmpty || specName.fullName == "anon") "anon"+specName.javaClassName.hashCode
+    else                                                          specName.fullName
 
   private def statsTag(specName: SpecName) = nameTag(specName)+"-stats"
   private def resultsTag(specName: SpecName) = nameTag(specName)+"-results"
