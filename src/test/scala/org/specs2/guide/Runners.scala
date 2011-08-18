@@ -47,7 +47,7 @@ From inside a specification, the available arguments are the following:
  *`wasIssue`  *  | false                                    | select only previously failed/error examples
  *`was`       *  | ""                                       | select only some previously executed examples based on their status
  `specName`      | ".*Spec"                                 | regular expression to use when executing specifications with the FilesRunner
-  **Execution**  |||
+ ***Execution*** |||
  *`plan`      *  | false                                    | only report the text of the specification without executing anything
  *`skipAll`   *  | false                                    | skip all the examples
  *`stopOnFail`*  | false                                    | skip all examples after the first failure or error
@@ -190,22 +190,22 @@ On the command line you can pass the following arguments:
 
   Name            | Value format            | Comments
  ---------------- | ----------------------- | ------------------------------------------------------------------------
- ***Selection***  |||
+ ***Selection***  ||
  `ex`             | regexp                  |
  `include`        | csv                     |
  `exclude`        | csv                     |
  `wasIssue`       | boolean                 |
  `was`            | String                  | see: Status flags
  `specname`       | regexp                  |
- ***Execution***  |||
+ ***Execution***  ||
  `plan`           | boolean                 |
  `skipall`        | boolean                 |
  `sequential`     | boolean                 |
  `threadsnb`      | int                     |
- ***Storing***    |||
+ ***Storing***    ||
  `resetstore`     | boolean                 |
  `neverstore`     | boolean                 |
- ***Reporting***  |||
+ ***Reporting***  ||
  `xonly`          | boolean                 |
  `showonly`       | String                  | see: Status flags
  `failtrace`      | boolean                 |
