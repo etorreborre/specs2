@@ -30,6 +30,14 @@ object ExecutedFragments {
   def isExecutedSpecStart: Function[ExecutedFragment, Boolean] = { case ExecutedSpecStart(_,_,_) => true; case _ => false }
   /** @return true if the ExecutedFragment is an End */
   def isExecutedSpecEnd: Function[ExecutedFragment, Boolean] = { case ExecutedSpecEnd(_,_,_) => true; case _ => false }
+  /**
+   * @return true if 2 fragments are the corresponding spec start and spec end
+   */
+  def startMatchEnd = (s: ExecutedFragment, e: ExecutedFragment) => (s, e) match {
+    case (start @ ExecutedSpecStart(_,_,_), end @ ExecutedSpecEnd(_,_,_)) => start.specName == end.specName
+    case other => false
+  }
+
 }
 
 case class ExecutedText(text: String, location: Location) extends ExecutedFragment {

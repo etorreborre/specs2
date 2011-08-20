@@ -4,6 +4,7 @@ package reporter
 import org.specs2.internal.scalaz._
 import Scalaz._
 import specification._
+import ExecutedFragments._
 import NestedBlocks._
 import collection.Iterablex._
 import main.{Execute, Arguments}
@@ -26,7 +27,7 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
 
   def store(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
     if (args.store.reset) repository.resetStatistics
-    (associateStartEnd(statisticsTotals(fragments) , updateStatsOnSpecStart) map (_.value)) |> storeStatistics
+    (associateStartEnd(statisticsTotals(fragments) ,startMatchEnd, updateStatsOnSpecStart) map (_.value)) |> storeStatistics
   }
 
   private def statisticsTotals(fragments: Seq[ExecutedFragment]) = {

@@ -94,10 +94,11 @@ trait NestedBlocks {
     (b1.update(updated1), b2.update(updated2)) 
   }
   
-  def associateStartEnd[T](blocks: Seq[SpecBlock[T]], f: (T, T) => (T, T)): Seq[SpecBlock[T]] = {
+  def associateStartEnd[T](blocks: Seq[SpecBlock[T]], matchStartEnd: (T, T) => Boolean, f: (T, T) => (T, T)): Seq[SpecBlock[T]] = {
     if (blocks isEmpty)
       blocks
     else {
+      if (matchSta)
       val (beforeStart, afterStart) = blocks span (b => !isBlockStart(b))
       val start  = afterStart.headOption
       val strictlyAfterStart = afterStart.drop(1)
@@ -110,7 +111,7 @@ trait NestedBlocks {
         case None           => (start, end)
       }
 
-      beforeStart ++ s.toList ++ associateStartEnd(middle.reverse, f) ++ e.toList ++ beforeEnd.reverse
+      beforeStart ++ s.toList ++ associateStartEnd(middle.reverse, matchStartEnd, f) ++ e.toList ++ beforeEnd.reverse
     }
   }
 
