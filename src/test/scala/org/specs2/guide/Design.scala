@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-class Design extends Specification { def is = freetext                                                                  ^
+class Design extends Specification { def is = noindent                                                                  ^
   "specs2 design".title ^
                                                                                                                         """
 ### Presentation

@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-class Runners extends Specification { def is = freetext ^
+class Runners extends Specification { def is = noindent ^
   "Runners guide".title ^
                                                                                                                         """
 ### Presentation
@@ -471,6 +471,12 @@ Or you can set implicit arguments which will be used for any specification execu
 
            	                                                                                                            """ ^
                                                                                                                         br ^
+  include(xonly, argumentsSpec)                                                                                          ^
                                                                                                                         end
 
+  // User guide examples can be added here
+  val argumentsSpec = new Specification { def is =
+    { args.report(color=false).color must beFalse } ^
+                                                    end
+  }
 }

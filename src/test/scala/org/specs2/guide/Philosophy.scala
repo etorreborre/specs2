@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-class Philosophy extends Specification { def is = freetext                                                              ^
+class Philosophy extends Specification { def is = noindent                                                              ^
   "Philosophy".title ^
                                                                                                                         """
 
@@ -350,7 +350,7 @@ design makes sure that a layered architecture is maintained, from low-level pack
 
   +    runner
   +    reporter
-  +    mutable    specification
+  +    specification mutable
   +    mock form
   +    matcher
   +    execute
@@ -386,12 +386,14 @@ to the `BaseSpecification` and add the non-conflicting traits.
 <br/>
 
                                                                                                                         """^
-                                                                                                                        end
+  include(xonly, chaining)                                                                                                 ^
+  include(xonly, context)                                                                                                  ^
+                                                                                                                           end
+
 
   val chaining = new Specification { def is =  args(color=false) ^
     "my example on strings" ! e1             // will fail
-    def e1 = "hello" must have size(10000) and
-                               startWith("hell")
+    def e1 = ("hello" must have size(1000) and startWith("hell")).isSuccess must beFalse
   }
 
   val context = new Specification { def is =
