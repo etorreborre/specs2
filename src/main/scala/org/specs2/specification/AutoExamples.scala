@@ -82,7 +82,7 @@ trait AutoExamples {
   }
 
   private[specs2] def trimCode(code: String) = {
-    List("^", "t", "bt", "p", "br", "end", "endp", "end", "^").foldLeft(code)(_.trim trimEnd _).
+    List("^", "bt", "t", "endp", "br", "end", "p", "^").foldLeft(code)(_.trim trimEnd _).
     trimEnclosing("{", "}").
     trimEnclosing("`", "`").
     removeFirst("`\\(.*\\)").trimFirst("`")

@@ -15,7 +15,7 @@ sealed trait ExecutedFragment {
   /** @return the location of the executed Fragment */
   def location: Location
 
-  val stats: Stats
+  def stats: Stats
 }
 
 private[specs2]
@@ -33,14 +33,14 @@ object ExecutedFragments {
 }
 
 case class ExecutedText(text: String, location: Location) extends ExecutedFragment {
-  val stats: Stats = Stats()
+  def stats: Stats = Stats()
 }
-case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, location: Location, stats: Stats) extends ExecutedFragment {
+case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, location: Location, statistics: Stats) extends ExecutedFragment { outer =>
   def text(implicit args: Arguments) = s match {
     case CodeMarkup(s) if (!result.expected.isEmpty && !args.fromSource) => CodeMarkup(result.expected)
     case _                                                               => s
   }
-
+  def stats = statistics.copy(timer = outer.timer)
   def isSuccess = stats.isSuccess
 }
 
@@ -77,8 +77,8 @@ case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stat
  * This executed Fragment is used when no text must be displayed (for the successful
  * execution of an Action for example)
  */
-case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Location) extends ExecutedFragment {
-  val stats: Stats = Stats()
+case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Location) extends ExecutedFragment { outer =>
+  def stats: Stats = Stats(timer=outer.timer)
 }
 
 import org.specs2.internal.scalaz._
