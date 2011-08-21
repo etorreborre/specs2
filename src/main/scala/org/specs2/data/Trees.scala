@@ -67,6 +67,7 @@ trait Trees { outer =>
     def size = outer.size(t)
     def getParent = t.parent.getOrElse(t)
     def updateLabel(f: T => T) = t.setLabel(f(t.getLabel))
+    def addChild(c: T) = t.insertDownLast(leaf(c)).getParent
   }
 
   /**

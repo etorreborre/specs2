@@ -2,7 +2,8 @@ package org.specs2
 package reporter
 
 import org.specs2.internal.scalaz._
-import Scalaz._
+import  Scalaz._
+import data.Trees._
 import specification.{SpecEnd, SpecStart, Fragment, ExecutedSpecEnd, ExecutedSpecStart, ExecutedFragment}
 
 /**
@@ -82,6 +83,29 @@ trait NestedBlocks {
     }._1
   }
 
+  trait TreeNode[T] {
+    def addStart(b: SpecBlock[T])
+  }
+
+  def associateStartEnd[T](blocks: Seq[SpecBlock[T]], f: (T, T) => (T, T)): Seq[T] = {
+    blocks.headOption match {
+      case None         => Seq()
+      case Some(start)  => {
+        blocks.drop(1).foldLeft(leaf(start).loc) { (res, cur) =>
+          cur match {
+            case BlockStart(value)       => res.insertDownLast(leaf(cur))
+            case BlockBit(value)         => res.addChild(cur)
+            case BlockEnd(value)         => {
+              val (st, en) = f(res.getLabel.value, value)
+              res.updateLabel(_.update(st)).addChild(cur.update(en)).getParent
+            }
+          }
+        }.root.tree.flatten.map(_.value).toSeq
+      }
+    }
+  }
+
+
   def addToTop[T : Monoid](stack: List[T], value: T) = (top(stack) |+| value) :: pop(stack)
   def top[T : Monoid](stack: List[T]): T = {
     val monoid = implicitly[Monoid[T]]
@@ -94,27 +118,6 @@ trait NestedBlocks {
     (b1.update(updated1), b2.update(updated2)) 
   }
   
-  def associateStartEnd[T](blocks: Seq[SpecBlock[T]], matchStartEnd: (T, T) => Boolean, f: (T, T) => (T, T)): Seq[SpecBlock[T]] = {
-    if (blocks isEmpty)
-      blocks
-    else {
-      if (matchSta)
-      val (beforeStart, afterStart) = blocks span (b => !isBlockStart(b))
-      val start  = afterStart.headOption
-      val strictlyAfterStart = afterStart.drop(1)
-      val (beforeEnd, afterEnd) = strictlyAfterStart.reverse span (b => !isBlockEnd(b))
-      val middle = afterEnd.drop(1)
-      val end = afterEnd.headOption
-      val updatedStartEnd = (start <**> end)(lift(f))
-      val (s, e) = updatedStartEnd match {
-        case Some((st, en)) => (Some(st), Some(en))
-        case None           => (start, end)
-      }
-
-      beforeStart ++ s.toList ++ associateStartEnd(middle.reverse, matchStartEnd, f) ++ e.toList ++ beforeEnd.reverse
-    }
-  }
-
   def fragmentsToSpecBlock = (f: Fragment) => f match {
     case SpecStart(_,_,_,_)   => BlockStart(f)
     case SpecEnd(_)           => BlockEnd(f)

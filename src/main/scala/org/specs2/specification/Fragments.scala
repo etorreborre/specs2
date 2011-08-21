@@ -92,14 +92,5 @@ object Fragments {
     val zero = new Fragments()
     def append(s1: Fragments, s2: => Fragments) = s1 add s2
   }
-
-  /**
-   * @return true if 2 fragments are the corresponding spec start and spec end
-   */
-  def startMatchEnd = (s: Fragment, e: Fragment) => (s, e) match {
-    case (SpecStart(ns,_,_,_), SpecEnd(ne)) => ns == ne
-    case other => false
-  }
-
 }
 
