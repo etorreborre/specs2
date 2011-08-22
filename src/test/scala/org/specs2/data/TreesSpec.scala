@@ -18,6 +18,7 @@ class TreesSpec extends Specification with DataTables { def is =
                                                                                                                         endp^
   "A TreeLoc can"                                                                                                       ^
     "return its size"                                                                                                   ! e5^
+    "be added a new child"                                                                                              ! e6^
                                                                                                                         end
 
   /**
@@ -66,6 +67,16 @@ class TreesSpec extends Specification with DataTables { def is =
       tree2  ! 3      |
       tree3  ! 3      | { (tree, size) => tree.loc.size must_== size }
   }
+
+  // note that the TreeLoc stays at the root after the addition of the child node
+  def e6 = tree1.loc.addChild(3).tree.drawTree must beTree(
+  "0",
+  "|",
+  "+- 2",
+  "|  |",
+  "|  `- 2",
+  "|",
+  "`- 3")
 
   def pruneAndDraw(tree: Tree[Int], f: Int => Option[Int]) = tree.prune(f).map(_.drawTree).getOrElse("None\n")
   def beTree(s: String*) = be_==(s.mkString("", "\n", "\n"))
