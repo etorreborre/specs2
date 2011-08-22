@@ -58,7 +58,7 @@ Acceptance specifications extend the `org.specs2.Specification` trait and must d
 
 The `is` method lists *specification fragments* which can be:
 
-* simple text, to describe in the system you're specifying
+* simple text, to describe the system you're specifying
 * an example: a description and some executable code returning a result
 * formatting fragments: `p` adds a blank line and starts a new block of examples
 

@@ -3,8 +3,7 @@ package guide
 
 class Matchers extends Specification { def is = literate ^ "Matchers guide".title ^
 """
-There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns
-a `Result`:
+There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 
   * Boolean
   * Standard result
@@ -44,9 +43,7 @@ Two additional results are also available to track the progress of features:
 
 ### Match results
 
-This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to
-create new ones or be created from scratch by the user. Let's have a look at some of them and refer the reader to the
-API for the complete list:
+This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user. Let's have a look at some of them and refer the reader to the API for the complete list:
 
  * Matchers for Any
  * Option / Either matchers
@@ -108,11 +105,9 @@ An non-exhaustive list of those matchers:
  * `beAssignableFrom`: to check if a class is assignable from another
  * `beAnInstanceOf[T]`: to check if an object is an instance of type `T`
 
- #### With a better description
+#### With a better description
 
-Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information
-is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a
-"ticket list":
+Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a "ticket list":
 
       // will fail with "List(ticket1, ticket2) doesn't have size 3" for example
       machine.tickets must have size(3) // machine is a user-defined object
@@ -386,8 +381,7 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
 
 #### Json matchers
 
-[Json](www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be
-used to verify the presence of appropriate values in Strings representing Json documents:
+[Json](www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:
 
   * `/(value)` checks if a value is present at the root of the document. This can only be the case if that document is
     an Array
@@ -400,8 +394,7 @@ used to verify the presence of appropriate values in Strings representing Json d
 
   * `*/(key -> value)` checks if a pair is present anywhere in a Map of thedocument
 
-Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document.
-For example, for the following document:
+Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document. For example, for the following document:
 
         // taken from an example in the Lift project
         val person = {
@@ -475,8 +468,7 @@ That's only if you want to match the result of other matchers!
 
 #### Scala Interpreter matchers
 
-This trait is not included in the default specification so you'll have to add it in the rare case where you want to use
-the Scala interpreter and execute a script:
+This trait is not included in the default specification so you'll have to add it in the rare case where you want to use the Scala interpreter and execute a script:
 
         class ScalaInterpreterMatchersSpec extends Specification with ScalaInterpreterMatchers {
           def interpret(s: String): String = // you have to provide your own Scala interpreter here
@@ -543,8 +535,7 @@ For example, specifying a Parser for numbers could look like this:
 
 A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
 
-To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can pass functions to the `check` method
-and use the resulting block as your example body:
+To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can pass functions to the `check` method and use the resulting block as your example body:
 
       "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }
 
@@ -563,9 +554,7 @@ Note that if you pass functions using MatchResults you will get better failure m
 
 #### Arbitrary instances
 
-By default `Arbitrary` instances are taken from the surrounding example scope. However you'll certainly need to generate
-your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope
-of the function you're testing:
+By default `Arbitrary` instances are taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope of the function you're testing:
 
         // this arbitrary will be used for all the examples
         implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
@@ -574,8 +563,7 @@ of the function you're testing:
 
          def ex1 = check((s: String) => s must contain("a") or contain("b"))
 
-You can also be very specific if you want to use an `Arbitrary` instance only on one example. In that case, just replace the
-`check` method with the name of your `Arbitrary` instance:
+You can also be very specific if you want to use an `Arbitrary` instance only on one example. In that case, just replace the `check` method with the name of your `Arbitrary` instance:
 
         "a simple property"       ! ex1
         "a more complex property" ! ex2
@@ -588,8 +576,7 @@ You can also be very specific if you want to use an `Arbitrary` instance only on
 
 #### Setting the ScalaCheck properties
 
-ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use
-implicit values:
+ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use implicit values:
 
       implicit val params = set(minTestsOk -> 20) // use display instead of set to get additional console printing
 
@@ -611,8 +598,7 @@ The parameters you can modify are:
 
 At the moment only the [Mockito](http://mockito.org) library is supported.
 
-Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those
-functionalities, you need to extend the `org.specs2.mock.Mockito` trait:
+Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the `org.specs2.mock.Mockito` trait:
 
       import org.specs2.mock._
       class MockitoSpec extends Specification { def is =
@@ -683,13 +669,11 @@ More precisely, it will:
   * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
     `mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString }`
 
-In any other cases, if `f` is a function of 1 parameter, the array of the method parameters will be passed and if the
-function has 2 parameters, the second one will be the mock.
+In any other cases, if `f` is a function of 1 parameter, the array of the method parameters will be passed and if the function has 2 parameters, the second one will be the mock.
 
 ##### Verification
 
-By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you
-want to specify that some methods are indeed called:
+By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you want to specify that some methods are indeed called:
 
        m.get(0)
        m.get(0) was called
@@ -777,8 +761,7 @@ Mocking with Scala functions or partial functions can be a bit tricky. You shoul
 
 ### DataTables
 
-DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the
-addition of integers by providing one example on each row of a table:
+DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table:
 
       class DataTableSpec extends Specification with DataTables { def is =
         "adding integers should just work in scala"  ! e1
@@ -791,13 +774,11 @@ addition of integers by providing one example on each row of a table:
         }
       }
 
-Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you
-can use the `!!` operator to disambiguate (and `||` in the header for good visual balance).
+Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the `!!` operator to disambiguate (and `||` in the header for good visual balance).
 
 ### Forms
 
-Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed
-to be used with the HtmlRunner to get human-readable documentation.
+Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.
 
 Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.
 
@@ -807,8 +788,7 @@ Forms can be designed as reusable pieces of specification where complex forms ca
 
 ### Reusing matchers outside of specs2
 
-The ***specs2*** matchers are a well-delimited piece of functionality that you should be able to reuse in your own test
-framework. You can reuse the following traits:
+The ***specs2*** matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:
 
  * `org.specs2.matcher.MustMatchers` (or `org.specs2.matcher.ShouldMatchers`) to write anything like `1 must be_==(1)` and
    get a `Result` back
@@ -819,6 +799,20 @@ framework. You can reuse the following traits:
 
  * Finally, in a JUnit-like library you can use the `org.specs2.matcher.JUnitMustMatchers` trait which throws
    `AssertionFailureError`s
+
+#### Without any dependency on specs2
+
+The [Testing](https://github.com/spray/spray/wiki/Testing) page of the ***spray*** project explains how you can define a testing trait in your library which can be used with specs2 or scalatest or any framework defining the following methods:
+
+   * `fail(msg: String): Nothing`
+   * `failure(msg: String): Nothing`
+
+In specs2, those 2 methods are defined by the `org.specs2.matcher.ThrownMessages` trait
+
+      trait ThrownMessages { this: ThrownExpectations =>
+        def fail(m: String): Nothing = failure(m)
+        def skip(m: String): Nothing = skipped(m)
+      }
 
    - - -
 
