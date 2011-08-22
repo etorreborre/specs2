@@ -246,6 +246,8 @@ class TextPrinterSpec extends Specification { def is =
   }
 
   def preReporter(previousStats: Stats = Stats()) = new DefaultSelection with DefaultSequence with DefaultExecutionStrategy with DefaultStoring {
+    override lazy val repository = NoStatisticsRepository
+    
     def exec(spec: SpecificationStructure): Seq[ExecutedFragment] = {
       val args = spec.content.arguments
       spec.content |> select(args) |> sequence(args) |> execute(args) |> store(args)
