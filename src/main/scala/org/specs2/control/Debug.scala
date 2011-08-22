@@ -15,11 +15,9 @@ trait Debug {
   implicit def debug[T](t: =>T): Debuggable[T] = new Debuggable(t)
   class Debuggable[T](t: =>T) {
     /** print the object to the console and return it */
-    def pp: T = {
-      Console.println(t)
-      t 
-    } 
-  } 
+    def pp: T = { Console.println(t); t }
+  }
+
 }
 private[specs2] 
 object Debug extends Debug

@@ -33,5 +33,6 @@ class LazyParameter[+T](private val v: () => T) {
   override def toString = tryOrElse(value.toString)("Evaluation error")
   override def equals(o: Any) = value == o
   override def hashCode = value.hashCode
+
 }
 

@@ -46,7 +46,8 @@ trait Iterablex {
       def isNotItsOwnIterable(a: GenIterable[_]) = a.isEmpty || a.iterator.next != a
       def matchTwo(x: T, y: T): Boolean = {
         (x, y) match {
-          case (a: GenIterable[_], b: GenIterable[_]) if (isNotItsOwnIterable(a)) => x.asInstanceOf[GenIterable[T]].sameElementsAs(y.asInstanceOf[GenIterable[T]], f)
+          case (a: GenIterable[_], b: GenIterable[_]) if (isNotItsOwnIterable(a)) =>
+            x.asInstanceOf[GenIterable[T]].sameElementsAs(y.asInstanceOf[GenIterable[T]], f)
           case _ => f(x, y)
         }
       }
@@ -111,10 +112,22 @@ trait Iterablex {
 private[specs2]
 object Iterablex extends Iterablex {
   import scala.collection.SeqLike
+
+  /**
+   * extractor object to extract the first element of a sequence
+   *
+   * l match { case e +: rest => ok }
+   */
   object +: {
     def unapply[A, C <: SeqLike[A, C]](seq: C with SeqLike[A, C]) =
       seq.headOption.map(h => (h, seq.tail))
   }
+
+  /**
+   * extractor object to extract the last element of a sequence
+   *
+   * l match { case init :+ last => ok }
+   */
   object :+ {
     def unapply[A, C <: SeqLike[A, C]](seq: C with SeqLike[A, C]) =
       seq.headOption.map(h => (seq.init, seq.last ))

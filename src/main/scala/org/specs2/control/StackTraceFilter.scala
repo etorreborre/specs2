@@ -33,7 +33,12 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
 }
 
 /**
- * Factory object to build a stack trace filter
+ * Factory object to build a stack trace filter from include/exclude expressions:
+ *
+ * .*specs2                       ==> include .*specs2 traces
+ * .*specs2/scala.*               ==> include .*specs2 traces, exclude scala.* traces
+ * .*specs2,scala/scalaz,eclipse  ==> include .*specs2,scala traces, exclude scalaz and eclipse traces
+ *
  */
 object IncludeExcludeStackTraceFilter {
   def fromString(s: String): StackTraceFilter = {
