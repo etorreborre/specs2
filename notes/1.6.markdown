@@ -1,14 +1,27 @@
-This version adds new features on top of 1.5:
+This version adds new features on top of 1.5. The first features are enabled by the storing of execution results for each run (in the `specs2-report/stats` directory by default):
 
- * the link of an included specification in a html report now displays the status of that specification
+ * executing an index page with `see` links will display their status correctly
+ * it is possible to execute only previously failed/error examples with the `wasIssue` argument
+ * it is possible to display only pending, or skipped examples with a status flag: `show("!o")` will only show errors and skipped examples
+ * reports show the differences with the previous execution: `3 examples, 1 failure (-1), 1 error (+1)`
+ * storing results can be completely deactivated with the `neverStore` argument
+ * the arguments api has evolved a bit because the number of arguments exceeds the maximum number of function parameters
+ * please see the Runners guide for the complete description of the Arguments api and new arguments
+
+The other features are:
+ 
  * throwing an exception if a null matcher is passed as an expectable
  * added a link to html reports so that only issues will be displayed
+ * added a `ThrownMessages` trait for generic integration with other libraries: https://groups.google.com/d/topic/specs2-users/tskUhL5G4jE/discussion
+ * added a `haveInterface` matcher
+ * added a mutable `BeforeAfter` trait (was missing,...)
   
 And some fixes:
 
  * fixed the issue with -Dcolor=false not being recognized
- * reworked the Given/When/Then specifications indentation so that formatting fragments can now be used
+ * reworked the Given/When/Then specifications indentation so that formatting fragments can now be used to adjust the display
  * fixed a [typechecking issue](https://groups.google.com/d/topic/specs2-users/mYyGuvBYMwI/discussion) with Mockito specifications
  * fixed auto-examples [when no 'end' fragment is used](https://groups.google.com/d/topic/specs2-users/mEpVvVSSqHA/discussion) at the end of the specification 
+ * fixed issue 30: IndexOutOfBoundsException with auto-examples
  
  ==========================
