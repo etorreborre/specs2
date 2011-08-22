@@ -30,7 +30,7 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
     (associateStartEnd(statisticsTotals(fragments), updateStatsOnSpecStart) map (_.value)) |> storeStatistics
   }
 
-  private def statisticsTotals(fragments: Seq[ExecutedFragment]) = {
+  private def statisticsTotals(fragments: Seq[ExecutedFragment])(implicit args: Arguments) = {
     val totals = fragments zip fragments.reduceWith(StatisticsReducer).totals
     totals map (setStatsOnSpecEndFragments andThen executedFragmentsToSpecBlock)
   }
@@ -39,9 +39,9 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
    * set the statistics on SpecEndFragments after they've been computed by the StatisticsReducer
    * Those statistics are updated from previously executed statistics to calculate trends
    */
-  def setStatsOnSpecEndFragments = (fs: (ExecutedFragment, Stats)) => fs match {
-    case (ExecutedSpecEnd(n, l, s), stats) => ExecutedSpecEnd(n, l, stats.updateFrom(repository.getStatistics(n.specName)))
-    case (other, s)                        => other
+  def setStatsOnSpecEndFragments(implicit args: Arguments) = (fs: (ExecutedFragment, Stats)) => fs match {
+    case (ExecutedSpecEnd(n, l, s), stats) if !args.store.never => ExecutedSpecEnd(n, l, stats.updateFrom(repository.getStatistics(n.specName)))
+    case (other, s)                                             => other
   }
 
   /**

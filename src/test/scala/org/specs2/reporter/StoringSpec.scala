@@ -9,11 +9,10 @@ class StoringSpec extends SpecificationWithJUnit { def is =
 
    "The statistics of a specification must"                                                        ^
      "be computed after execution"                                                                 ^
-       "each executed fragment must have a stats member"                                           ^
-         "a Text fragment must have stats = 0"                                                     ! stats().e1^
-         "a failed example must have a stats = 1 failure"                                          ! stats().e2^
-         "the end of a specification must sum up all the results"                                  ! stats().e3^
-                                                                                                   p^bt^
+       "a Text fragment must have stats = 0"                                                       ! stats().e1^
+       "a failed example must have a stats = 1 failure"                                            ! stats().e2^
+       "the end of a specification must sum up all the results"                                    ! stats().e3^
+                                                                                                   p^
      "be stored"                                                                                   ^
        "stored per specification name"                                                             ! stored().e1^
        "each result also"                                                                          ! stored().e2^

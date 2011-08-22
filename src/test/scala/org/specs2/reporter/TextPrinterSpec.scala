@@ -253,7 +253,7 @@ class TextPrinterSpec extends Specification { def is =
       spec.content |> select(args) |> sequence(args) |> execute(args) |> store(args)
     }
 
-    override def setStatsOnSpecEndFragments = (fs: (ExecutedFragment, Stats)) => fs match {
+    override def setStatsOnSpecEndFragments(implicit args: Arguments) = (fs: (ExecutedFragment, Stats)) => fs match {
       case (ExecutedSpecEnd(n, l, s), stats) => ExecutedSpecEnd(n, l, stats.updateFrom(previousStats))
       case (other, s)                        => other
     }
