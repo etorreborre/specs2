@@ -16,10 +16,11 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
+   * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
-  def specifications(path: String = "**/*.scala", pattern: String = ".*Spec", basePath: String = FromSource.srcDir, verbose: Boolean = false): Seq[SpecificationStructure] =
-    specificationNames(path, pattern, basePath, verbose).flatMap(n => createSpecification(n))
+  def specifications(path: String = "**/*.scala", pattern: String = ".*Spec", filter: String => Boolean = { (name: String) => true }, basePath: String = FromSource.srcDir, verbose: Boolean = false): Seq[SpecificationStructure] =
+    specificationNames(path, pattern, basePath, verbose).view.filter(filter).flatMap(n => createSpecification(n))
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
