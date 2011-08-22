@@ -54,13 +54,16 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
     }
   }
 
-  private def storeStatistics = (fragments: Seq[ExecutedFragment]) => {
-    val fn = SpecsArguments.foldAll(fragments).fragmentAndSpecNames
-    val results = fn collect { case (r @ ExecutedResult(_, _, _, _, _), name) => (name, r) } groupBy (_._1)
-    results map storeResults
-    // toList is called to "force" the view
-    // the result of storeStats is returned because SpecStarts might have been updated from the repository
-    fn.toList map storeStats
+  private def storeStatistics(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+    if (args.store.never) fragments
+    else {
+      val fn = SpecsArguments.foldAll(fragments).fragmentAndSpecNames
+      val results = fn collect { case (r @ ExecutedResult(_, _, _, _, _), name) => (name, r) } groupBy (_._1)
+      results map storeResults
+      // toList is called to "force" the view
+      // the result of storeStats is returned because SpecStarts might have been updated from the repository
+      fn.toList map storeStats
+    }
   }
   /**
    * store the statistics:

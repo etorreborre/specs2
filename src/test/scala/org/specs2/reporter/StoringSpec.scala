@@ -22,6 +22,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
    "It is possible to compute the trends of the statistics"                                        ^
      "between 2 runs"                                                                              ! trends().e1^
      "the trends can be resetted"                                                                  ! trends().e2^
+     "but only if the store.never argument = false"                                                ! trends().e3^
                                                                                                    end
 
    
@@ -67,6 +68,10 @@ class StoringSpec extends SpecificationWithJUnit { def is =
      def e2 = {
        store(args.store(reset=true) ^ "t1")
        there was one(repository).resetStatistics
+     }
+     def e3 = {
+       store(args.store(never=true) ^ "t1")
+       there was no(repository).storeStatistics(any[SpecName], any[Stats])
      }
    }
 }
