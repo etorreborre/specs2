@@ -94,6 +94,7 @@ is formatted for JUnit reporting tools.
   trait WithReporter {
     val reporter = new JUnitXmlReporter {
       override lazy val fileWriter = new MockFileWriter {}
+      override lazy val repository = NoStatisticsRepository
     }
     def report(fs: Fragments) = reporter.report(JUnitXmlSpecification(fs))(fullStackTrace)
     def xml(fs: Fragments): NodeSeq = {

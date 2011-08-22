@@ -73,7 +73,7 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
   private def attributeValueEquals(value: String)(node: Node) = node.attributes.exists(_.value.toString == value)
 
 
-  def loadStatistics(specName: SpecName): NodeSeq = synchronized { fileSystem.loadXhtmlFile(specStatsPath(specName)) }
+  def loadStatistics(specName: SpecName): NodeSeq = fileSystem.loadXhtmlFile(specStatsPath(specName))
 
   def storeResults(specName: SpecName, results: Seq[ExecutedResult]) = {
     fileWriter.appendToXmlFile(specStatsPath(specName), resultsToXml(specName, results))
@@ -133,4 +133,13 @@ trait WithStatisticsRepository {
 private[specs2]
 trait WithDefaultStatisticsRepository extends WithStatisticsRepository {
   protected lazy val repository: StatisticsRepository = DefaultStatisticsRepository
+}
+
+private[specs2]
+object NoStatisticsRepository extends StatisticsRepository {
+  def getStatistics(specName: SpecName): Option[Stats] = None
+  def storeStatistics(specName: SpecName, stats: Stats) = this
+  def storeResults(specName: SpecName, result: Seq[ExecutedResult]) = this
+  def resetStatistics = this
+  def previousResult(specName: SpecName, e: Example): Option[Result] = None
 }

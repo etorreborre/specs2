@@ -5,7 +5,8 @@ import main._
 import ExecutedFragments._
 import mock.Mockito
 
-class StoringSpec extends SpecificationWithJUnit { def is =       sequential ^
+class StoringSpec extends SpecificationWithJUnit { def is =
+
    "The statistics of a specification must"                                                        ^
      "be computed after execution"                                                                 ^
        "each executed fragment must have a stats member"                                           ^
