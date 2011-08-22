@@ -72,25 +72,23 @@ Of course this there is mutation involved here, it's not advised to do anything 
 
 ### Specification execution
 
-The execution is triggered by the various reporters and goes through 3 steps:
+The execution is triggered by the various reporters and goes through 5 steps:
 
         // code from the Reporter trait
-        spec.content |> select |> sequence |> execute |> store
+        spec.content |> select |> sequence |> execute |> store |> export(spec)
 
- 1. Selection: the Fragments are filtered according to the Arguments object. In that phase all examples but a few can
-    be filtered if the `only("this example")` option is used for instance. Another way to select fragments is to insert
-    `TaggingFragment`s inside the specification.
+ 1. Selection: the Fragments are filtered according to the Arguments object. In that phase all examples but a few can be filtered if the `only("this example")` option is used for instance. Another way to select fragments is to insert `TaggingFragment`s inside the specification.
 
- 2. Sequencing: the Fragments are sorted in groups so that all the elements of a group can be executed concurrently. This
-    usually why Steps are used. If my fragments are: `fragments1 ^ step ^ fragments2` then all fragments1 will be executed,
+ 2. Sequencing: the Fragments are sorted in groups so that all the elements of a group can be executed concurrently. This usually why Steps are used. If my fragments are: `fragments1 ^ step ^ fragments2` then all fragments1 will be executed,
     then step, then fragments2.
 
  3. Execution: for each group, the execution of the fragments is concurrent by default and results are collected in
     a sequence of `ExecutedFragments`
 
  4. Storing: after an execution we compute the statistics for each specification and store the results in a file (`specs2-reports/specs2.stats`).
-    This allows to do consequent runs based on previous executions: to execute failed specifications only or to create the index page with
-    an indicator of previously executed specifications
+    This allows to do consequent runs based on previous executions: to execute failed specifications only or to create the index page with an indicator of previously executed specifications
+
+ 4. Exporting: depending on the exporter, the ExecutedFragments are translated to `PrintLines` or `HtmlLines` to be flushed out to the console or in an html file
 
 ### Specification reporting
 
@@ -101,10 +99,9 @@ All the reporters start of with a sequence of `ExecutedFragments`. A list of `Re
  * The statistics and execution times
  * The applicable arguments (where the arguments of an included specification must override the arguments of its parent)
 
-One of the main difficulties in this 'reduction' is the fact that included specifications change the context of what needs
-to be accumulated. The `reporter.NestedBlocks` trait proveides
+One of the main difficulties in this 'reduction' is the fact that included specifications change the context of what needs to be accumulated. The `reporter.NestedBlocks` trait provides functions to handle this.
 
-This builds a list of objects containing all the text to display:
+Then, each fragment and associated data (level, statistics, arguments,...) is translated to a display element:
 
  * for a console output, `PrintLines`: `PrintSpecStart`, `PrintText`, `PrintResult`,...
  * for a Html output, `HtmlLines`: `HtmlSpecStart`, `HtmlText`, `HtmlResult`,...

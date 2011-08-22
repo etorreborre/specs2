@@ -839,6 +839,8 @@ You make your context trait extend the `mutable.After` trait:
 
 In this case, the clean-up code defined in the `after` method will be executed after each example. This is possible because the `mutable.After` trait extends the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
 
+**Note**: the `org.specs2.mutable.{ Before, After, BeforeAfter }` traits only work for scala > 2.9.0 because previous Scala versions don't provide the `DelayedInit` trait.
+
 ##### In an acceptance specification
 
 In that case you would extend the `specification.After` trait and use the `apply` method:

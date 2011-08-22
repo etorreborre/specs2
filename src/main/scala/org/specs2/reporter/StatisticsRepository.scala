@@ -33,9 +33,6 @@ trait StatisticsRepository {
 private[specs2]
 trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
 
-  protected lazy val statsDirName = "stats/"
-  protected lazy val statsDirPath = outputDir + statsDirName
-
   /**
    * @return the latest statistics for a given specification
    */

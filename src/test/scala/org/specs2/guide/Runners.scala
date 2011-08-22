@@ -9,8 +9,8 @@ class Runners extends Specification { def is = noindent ^
 There are many ways to execute ***specs2*** specifications:
 
  * on the command line, with a console output, and the `specs2.run` runner
- * on the command line, with an html output, and the `specs2.html` runner
- * on the command line, with a console or an html output, and the `specs2.files` runner
+ * on the command line, with a html output, and the `specs2.html` runner
+ * on the command line, with a console or a html output, and the `specs2.files` runner
  * using [sbt](http://code.google.com/p/simple-build-tool)
  * using [JUnit](http://www.junit.org)
  * using [Intellij IDEA](http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA)
@@ -19,14 +19,15 @@ There are many ways to execute ***specs2*** specifications:
 
 ### Dependencies
 
- ***specs2*** is only available with Scala 2.8.1 onwards and uses the following libraries, as specified using the [sbt dsl](http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies):
+ ***specs2*** is available for Scala 2.9.0 onwards and uses the following libraries, as specified using the [sbt dsl](http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies):
 
  <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.specs2" %% "specs2-scalaz-core" % "6.0.RC2"`</td><td class="info">mandatory. This jar bundles the scalaz classes but renamed as `org.specs2.internal.scalaz._`.</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.9"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.8.5"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.0.2"`</td><td class="info">only if using the html runner</td></tr></table>
 
+**Note**: there are versions of specs2 available for Scala 2.8.1 but they [miss some "context" functionalities](org.specs2.guide.SpecStructure.html#In+a+mutable+specification).
+
 ### Arguments
 
-You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared
-inside the specification:
+You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the `args(name=value)` syntax:
 
       class MySpec extends Specification { def is = args(xonly=true)    ^
         "Clever spec title"                                             ^
@@ -66,6 +67,7 @@ From inside a specification, the available arguments are the following:
  `colors`        | `org.specs2.reporter.SmartColors`        | define alternative colors (replace failureColor from being yellow to magenta for example)
  `showtimes`     | false                                    | show individual execution times
  `debugMarkdown` | false                                    | print more information when Markdown formatting fails
+ `diffs`         | `SmartDiffs`                             | use a specific algorithm to display differences
  `fromSource`    | true                                     | true takes an AutoExample description from the file, false from the expectation ok message
  `traceFilter`   | `DefaultStackTraceFilter`                | use a StackTraceFilter instance for filtering the reported stacktrace elements
 
@@ -76,7 +78,8 @@ arguments as parameters (because a method can only have up to 22 parameters). Th
 
       args.select(specName = ".*Test", include="slow")
       args.execute(threadsNb = 2)
-      args.report(showtimes=true, xonly = true)
+      args.report(showtimes = true, xonly = true)
+
 
 ##### Shortcuts
 
@@ -98,9 +101,9 @@ There are some available shortcuts for some arguments
  `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
  `literate`                                                            | `args(noindent=true, sequential=true)`                                                | for specifications where text must not be indented and examples be executed in order             |
  `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
- `descFromExpectations`                                                | `args(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
- `fullStackTrace`                                                      | `args(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
- `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | to display the differences when doing equality comparison                                        |
+ `descFromExpectations`                                                | `args.report(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
+ `fullStackTrace`                                                      | `args.report(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
+ `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args.report(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | to display the differences when doing equality comparison                                        |
 
 ##### Output directory
 
@@ -119,6 +122,8 @@ You can either:
 
   * disable this functionality (for performance reasons for example) with the `args.store(never=true)` argument (or `neverstore` on the command line)
   * reset the previous statistics with the `args.store(reset=true)` argument (or `resetstore` on the command line)
+
+The statistics directory can also be redefined independently of the output directory with the `specs2.statsDir` system variable.
 
 ##### Status flags
 
@@ -146,8 +151,7 @@ For the diffs arguments the values you can specify are:
   * `diffRatio` percentage of differences above which the differences must not be shown (default is 30)
   * `full` displays the full original expected and actual strings
 
-You can also specify your own enhanced algorithm for displaying difference by providing an instance of the `org.specs2.main.Diffs`
-trait:
+You can also specify your own enhanced algorithm for displaying difference by providing an instance of the `org.specs2.main.Diffs` trait:
 
         trait Diffs {
           /** @return true if the differences must be shown */
@@ -165,8 +169,7 @@ trait:
 
 ##### StackTraceFilter
 
-The `traceFilter` argument takes an instance of the `org.specs2.control.StackTraceFilter` trait to define how stacktraces
-should be filtered in a report. By default the `DefaultStackTraceFilter` filter will exclude lines matching the following packages:
+The `traceFilter` argument takes an instance of the `org.specs2.control.StackTraceFilter` trait to define how stacktraces should be filtered in a report. By default the `DefaultStackTraceFilter` filter will exclude lines matching the following packages:
 
  * `org.specs2`
  * `scalaz\\.`
@@ -190,34 +193,34 @@ On the command line you can pass the following arguments:
 
   Name            | Value format            | Comments
  ---------------- | ----------------------- | ------------------------------------------------------------------------
- ***Selection***  ||
- `ex`             | regexp                  |
- `include`        | csv                     |
- `exclude`        | csv                     |
- `wasIssue`       | boolean                 |
- `was`            | String                  | see: Status flags
- `specname`       | regexp                  |
- ***Execution***  ||
- `plan`           | boolean                 |
- `skipall`        | boolean                 |
- `sequential`     | boolean                 |
- `threadsnb`      | int                     |
- ***Storing***    ||
- `resetstore`     | boolean                 |
- `neverstore`     | boolean                 |
- ***Reporting***  ||
- `xonly`          | boolean                 |
- `showonly`       | String                  | see: Status flags
- `failtrace`      | boolean                 |
- `color`          | boolean                 |
- `colors`         | map                     | e.g. text:be, failure:m (see the Colors section)
- `noindent`       | boolean                 |
- `showtimes`      | boolean                 |
- `markdown`       | boolean                 |
- `debugmarkdown`  | boolean                 |
- `fromsource`     | boolean                 |
- `fullstacktrace` | boolean                 |
- `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns
+ ***Selection***  |||
+ `ex`             | regexp                  |                                                                         |
+ `include`        | csv                     |                                                                         |
+ `exclude`        | csv                     |                                                                         |
+ `wasIssue`       | boolean                 |                                                                         |
+ `was`            | String                  | see: Status flags                                                       |
+ `specname`       | regexp                  |                                                                         |
+ ***Execution***  |||
+ `plan`           | boolean                 |                                                                         |
+ `skipall`        | boolean                 |                                                                         |
+ `sequential`     | boolean                 |                                                                         |
+ `threadsnb`      | int                     |                                                                         |
+ ***Storing***    |||
+ `resetstore`     | boolean                 |                                                                         |
+ `neverstore`     | boolean                 |                                                                         |
+ ***Reporting***  |||
+ `xonly`          | boolean                 |                                                                         |
+ `showonly`       | String                  | see: Status flags                                                       |
+ `failtrace`      | boolean                 |                                                                         |
+ `color`          | boolean                 |                                                                         |
+ `colors`         | map                     | e.g. text:be, failure:m (see the Colors section)                        |
+ `noindent`       | boolean                 |                                                                         |
+ `showtimes`      | boolean                 |                                                                         |
+ `markdown`       | boolean                 |                                                                         |
+ `debugmarkdown`  | boolean                 |                                                                         |
+ `fromsource`     | boolean                 |                                                                         |
+ `fullstacktrace` | boolean                 |                                                                         |
+ `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 
@@ -229,7 +232,7 @@ You can pass any argument to ***specs2*** from system properties:
  * for a boolean argument, you need to pass `-Dspecs2.name` or `-Dname`
  * for a string argument, you need to pass `-Dspecs2.name=value` or `-Dname=value`
 
-The recommended format is `-Dname=value` but `-Dspecs2.name=value` is also available to avoid conflicts with other libraries.
+While the format `-Dname=value` can be convenient, `-Dspecs2.name=value` is recommended to avoid conflicts with other libraries.
 
 ### Console output
 
@@ -264,7 +267,9 @@ to your environment if necessary.
 
 ### Simple build tool
 
-In order to use ***specs2*** with sbt you need first to add the following lines to your sbt project:
+#### with sbt 0.7.x
+
+In order to use ***specs2*** with sbt 0.7.x you need first to add the following lines to your sbt project:
 
       def specs2Framework = new TestFramework("org.specs2.runner.SpecsFramework")
       override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
@@ -272,6 +277,22 @@ In order to use ***specs2*** with sbt you need first to add the following lines 
 Then, depending on the naming of your specification, you have to specify which classes you want to include for reporting:
 
       override def includeTest(s: String) = { s.endsWith("Spec") || s.contains("UserGuide") }
+
+#### with sbt > 0.9.x
+
+In this case you don't need to do much because ***specs2*** will be recognized out-of-the-box. However, if you want to filter some specifications you need to add this to your `build.sbt` file (see [here](https://github.com/harrah/xsbt/wiki/Testing) for more information):
+
+      // keep only specifications ending with Spec or Unit
+      testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith(_))))
+
+If you don't want the specifications to be executed in parallel:
+
+      parallelExecution in Test := false
+
+If you want to pass arguments available for all specifications:
+
+      testOptions in Test += Tests.Argument("nocolor", "neverstore")
+
 
 ##### Test-only arguments
 
@@ -285,22 +306,22 @@ The `html` argument is available with sbt to allow the creation of the html repo
 
       > test-only org.specs2.UserGuide -- html
 
-      // or in your project file
-      override def testOptions = super.testOptions ++ Seq(TestArgument("html"))
+      // in your build.sbt file
+      testOptions in Test += Tests.Argument("html")
 
 Similarly, JUnit xml output files can be created by passing the `junitxml` option:
 
       > test-only org.specs2.examples.HelloWorldUnitSpec -- junitxml
 
-      // or in your project file
-      override def testOptions = super.testOptions ++ Seq(TestArgument("junitxml"))
+      // in your build.sbt file
+      testOptions in Test += Tests.Argument("junitxml")
 
 If you want to get a console output as well, don't forget to add the `console` argument:
 
       > test-only org.specs2.UserGuide -- html console
 
-      // or in your project file
-      override def testOptions = super.testOptions ++ Seq(TestArgument("html", "console"))
+      // in your build.sbt file
+      testOptions in Test += Tests.Argument("html", "console")
 
 ##### Files runner
 
@@ -364,8 +385,7 @@ All the available colors are listed here, with their corresponding abbreviation 
 
 *From command-line arguments*
 
-It is also possible to set colors by passing the `colors` argument. This argument must be a list of `key:value` pairs (comma-separated)
-where keys are taken from the property names above without the `color.` prefix and values from the abbreviated color names.
+It is also possible to set colors by passing the `colors` argument. This argument must be a list of `key:value` pairs (comma-separated) where keys are taken from the property names above without the `color.` prefix and values from the abbreviated color names.
 
 For example you can pass on the command line:
 
@@ -377,8 +397,7 @@ If the `colors` option contains `whitebg` then the default colors are considered
 
 *Through the API*
 
-Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.reporter.Colors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.reporter.Colors)
-trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
+Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.reporter.Colors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.reporter.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
 
       object MyColors = new org.specs2.reporter.ConsoleColors { override val failureColor = magenta }
 
@@ -393,11 +412,9 @@ Note also that the the color support for sbt on Windows is a bit tricky. You nee
 
 ### JUnit
 
-It is possible to have ***specs2*** specifications executed as JUnit tests. This enables the integration of ***specs2*** with
-Maven and the JUnit runners of your IDE of choice.
+It is possible to have ***specs2*** specifications executed as JUnit tests. This enables the integration of ***specs2*** with Maven and the JUnit runners of your IDE of choice.
 
-There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The
-simple one is to extend `SpecificationWithJUnit`:
+There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend `SpecificationWithJUnit`:
 
        class MySpecification extends SpecificationWithJUnit {
          def is = // as usual....
@@ -431,8 +448,7 @@ But also:
 
 ### Notifier runner
 
-A `NotifierRunner` accepts a `Notifier` to execute a specification and report execution events. The `Notifier` trait notifies
-of the following:
+A `NotifierRunner` accepts a `Notifier` to execute a specification and report execution events. The `Notifier` trait notifies of the following:
 
  * specification start: the beginning of a specification, with its name
  * specification end: the end of a specification, with its name
@@ -442,8 +458,7 @@ of the following:
  * example start
  * example result: success / failure / error / skipped / pending
 
-All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration
-when relevant (i.e. for examples only).
+All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples only).
 
 ### From the console
 
