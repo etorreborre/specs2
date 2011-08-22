@@ -54,8 +54,9 @@ trait FileReader {
   def loadXhtmlFile(filePath: String) = tryo {
     val fileContent = readFile(filePath)
     val xhtml = fromString("<e>"+fileContent+"</e>")
-    val result = (XhtmlParser(xhtml)\\"e")(0).child.reduceNodes
-    result
+    synchronized {
+      (XhtmlParser(xhtml)\\"e")(0).child.reduceNodes
+    }
   }(e => { scala.Console.println("trying to load: "+filePath+"\n"); e.printStackTrace }).getOrElse(NodeSeq.Empty)
 }
 private[specs2]
