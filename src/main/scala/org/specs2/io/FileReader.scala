@@ -44,12 +44,14 @@ trait FileReader {
   def inputStream(filePath: String): java.io.InputStream = new java.io.FileInputStream(filePath)
 
   /**
-   * @return the xml content of a file
+   * @return the xml content of a file, using the XML parser
    */
   def loadXmlFile(filePath: String) = tryo(scala.xml.XML.load(filePath))(e => e.printStackTrace).getOrElse(NodeSeq.Empty)
 
   /**
-   * @return the xml content of a file
+   * @return the xml content of a file using the Xhtml parser
+   *
+   * if the file contains several nodes, it wraps them up in a single artificial node
    */
   def loadXhtmlFile(filePath: String) = tryo {
     val fileContent = readFile(filePath)

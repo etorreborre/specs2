@@ -25,7 +25,10 @@ trait AnsiColors {
 	  else	    s
   }
 
-  /** @return a colored string */
+  /**
+   * @return a colored string (if args.color == true)
+   * color markers are inserted at the beginning and end of each line so that newlines are preserved
+   */
   def color(s: String, color: String, doIt: Boolean = true) = {
     if (doIt) {
 		  val colored = s.split("\n").filter(_.nonEmpty).map(color + _ + reset)

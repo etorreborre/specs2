@@ -10,6 +10,14 @@ import reporter.{SmartColors, Colors}
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
+ *
+ * The arguments are grouped along 4 functions:
+ *
+ * * select:  for the selection of what must be executed
+ * * execute: for the execution of fragments
+ * * store:   for the storing of execution results
+ * * report:  for the reporting of results
+ *
  */
 private[specs2]  
 case class Arguments (
@@ -66,6 +74,9 @@ case class Arguments (
     )
   }
 
+  /**
+   * shortcut methods to add ansi colors to some text depending on its status
+   */
   def textColor   (s: String) = colors.text   (s, color)
   def successColor(s: String) = colors.success(s, color)
   def failureColor(s: String) = colors.failure(s, color)
@@ -115,6 +126,10 @@ object Arguments extends Extract {
   }
 }
 
+/**
+ * Selection arguments
+ */
+private[specs2]
 case class Select(
   _ex:            Option[String]           = None,
   _include:       Option[String]           = None,
@@ -163,6 +178,9 @@ object Select extends Extract {
   }
 }
 
+/**
+ * Execution arguments
+ */
 private[specs2]
 case class Execute(
   _plan:          Option[Boolean]          = None,
@@ -209,6 +227,9 @@ object Execute extends Extract {
   }
 }
 
+/**
+ * Storing arguments
+ */
 private[specs2]
 case class Store(
   _reset:         Option[Boolean]          = None,
@@ -230,6 +251,7 @@ case class Store(
     "never"        -> _never      ).flatMap(showArg).mkString("Store(", ", ", ")")
 
 }
+
 private[specs2]
 object Store extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Store = {
@@ -240,6 +262,9 @@ object Store extends Extract {
   }
 }
 
+/**
+ * Reporting arguments
+ */
 private[specs2]
 case class Report(
   _showOnly:      Option[String]           = None,
@@ -345,38 +370,6 @@ trait Extract {
     tryo(value(name)(args, sp).map(_.toInt).get)
   }
 
-}
-
-/**
- * this trait is used to define and compute the differences between strings (used by the reporters)
- */
-trait Diffs {
-  /** @return true if the differences must be shown */
-  def show: Boolean
-  /** @return true if the differences must be shown for 2 different strings */
-  def show(expected: String, actual: String): Boolean
-  /** @return the diffs */
-  def showDiffs(expected: String, actual: String): (String, String)
-  /** @return true if the full strings must also be shown */
-  def showFull: Boolean
-  /** @return the separators to use*/
-  def separators: String
-}
-
-/**
- * The SmartDiffs class holds all the required parameters to show differences between 2 strings using the edit distance
- * algorithm
- */
-case class SmartDiffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, shortenSize: Int = 5, diffRatio: Int = 30, showFull: Boolean = false) extends Diffs {
-  import EditDistance._
-
-  def show(expected: String, actual: String): Boolean = show && Seq(expected, actual).exists(_.size >= triggerSize)
-  def showDiffs(expected: String, actual: String) = {
-    if (editDistance(expected, actual).doubleValue / (expected.size + actual.size) < diffRatio.doubleValue / 100)
-      showDistance(expected, actual, separators, shortenSize)
-    else
-      (expected, actual)
-  }
 }
 
 private[specs2]

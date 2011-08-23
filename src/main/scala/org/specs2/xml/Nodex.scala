@@ -37,11 +37,18 @@ trait Nodex {
     def reduceNodes = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ cur }
   }
 
+  /**
+   * reduce a sequence of T's with a function transforming T's to NodeSeq
+   */
   implicit def anyReducable[T](ns: Seq[T]) = new AnyReducable(ns)
   class AnyReducable[T](ns: Seq[T]) {
     def reduceNodes(f: T => NodeSeq) = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ f(cur) }
   }
 
+  /**
+   * this implicit definition adds an 'unless' method to a NodeSeq so that it is only evaluated if a condition is true.
+   * Otherwise NodeSeq.Empty is returned
+   */
   implicit def unless(ns: =>NodeSeq): UnlessEmpty = new UnlessEmpty(ns)
   class UnlessEmpty(ns: =>NodeSeq) {
     def unless(b: Boolean) = if (b) NodeSeq.Empty else ns
