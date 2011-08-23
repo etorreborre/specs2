@@ -117,7 +117,7 @@ trait DataTables {
     }
   }
   case class Table2[T1, T2](override val titles: List[String], rows: List[DataRow2[T1, T2]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |(row: DataRow2[T1, T2]) = Table2(titles, outer.rows :+ row, execute)
+    def |[S1 >: T1, S2 >: T2](row: DataRow2[S1, S2]) = Table2(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1, T2) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1, T2) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2) => R, exec: Boolean): DecoratedResult[DataTable] = {
@@ -127,7 +127,7 @@ trait DataTables {
     }
   }
   case class Table3[T1, T2, T3](override val titles: List[String], rows: List[DataRow3[T1, T2, T3]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |(row: DataRow3[T1, T2, T3]) = Table3(titles, outer.rows :+ row, execute)
+    def |[S1 >: T1, S2 >: T2, S3 >: T3](row: DataRow3[S1, S2, S3]) = Table3(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1, T2, T3) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1, T2, T3) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3) => R, exec: Boolean): DecoratedResult[DataTable] = {
@@ -137,7 +137,7 @@ trait DataTables {
     }
   }
   case class Table4[T1, T2, T3, T4](override val titles: List[String], rows: List[DataRow4[T1, T2, T3, T4]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |(row: DataRow4[T1, T2, T3, T4]) = Table4(titles, outer.rows :+ row, execute)
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4](row: DataRow4[S1, S2, S3, S4]) = Table4(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1, T2, T3, T4) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1, T2, T3, T4) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4) => R, exec: Boolean): DecoratedResult[DataTable] = {
@@ -147,7 +147,7 @@ trait DataTables {
     }
   }
   case class Table5[T1, T2, T3, T4, T5](override val titles: List[String], rows: List[DataRow5[T1, T2, T3, T4, T5]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |(row: DataRow5[T1, T2, T3, T4, T5]) = Table5(titles, outer.rows :+ row, execute)
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5](row: DataRow5[S1, S2, S3, S4, S5]) = Table5(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5) => R, exec: Boolean): DecoratedResult[DataTable] = {
@@ -157,7 +157,7 @@ trait DataTables {
     }
   }
   case class Table6[T1, T2, T3, T4, T5, T6](override val titles: List[String], rows: List[DataRow6[T1, T2, T3, T4, T5, T6]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |(row: DataRow6[T1, T2, T3, T4, T5, T6]) = Table6(titles, outer.rows :+ row, execute)
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6](row: DataRow6[S1, S2, S3, S4, S5, S6]) = Table6(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R, exec: Boolean): DecoratedResult[DataTable] = {
@@ -167,7 +167,7 @@ trait DataTables {
     }
   }
   case class Table7[T1, T2, T3, T4, T5, T6, T7](override val titles: List[String], rows: List[DataRow7[T1, T2, T3, T4, T5, T6, T7]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |(row: DataRow7[T1, T2, T3, T4, T5, T6, T7]) = Table7(titles, outer.rows :+ row, execute)
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7](row: DataRow7[S1, S2, S3, S4, S5, S6, S7]) = Table7(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R, exec: Boolean): DecoratedResult[DataTable] = {
@@ -177,7 +177,7 @@ trait DataTables {
     }
   }
   case class Table8[T1, T2, T3, T4, T5, T6, T7, T8](override val titles: List[String], rows: List[DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |(row: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) = Table8(titles, outer.rows :+ row, execute)
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7, S8 >: T8](row: DataRow8[S1, S2, S3, S4, S5, S6, S7, S8]) = Table8(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R, exec: Boolean): DecoratedResult[DataTable] = {
@@ -187,7 +187,7 @@ trait DataTables {
     }
   }
   case class Table9[T1, T2, T3, T4, T5, T6, T7, T8, T9](override val titles: List[String], rows: List[DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |(row: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) = Table9(titles, outer.rows :+ row, execute)
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7, S8 >: T8, S9 >: T9](row: DataRow9[S1, S2, S3, S4, S5, S6, S7, S8, S9]) = Table9(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R, exec: Boolean): DecoratedResult[DataTable] = {
@@ -197,7 +197,7 @@ trait DataTables {
     }
   }
   case class Table10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](override val titles: List[String], rows: List[DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |(row: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) = Table10(titles, outer.rows :+ row, execute)
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7, S8 >: T8, S9 >: T9, S10 >: T10](row: DataRow10[S1, S2, S3, S4, S5, S6, S7, S8, S9, S10]) = Table10(titles, outer.rows :+ row, execute)
     def |[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, execute)
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R, exec: Boolean): DecoratedResult[DataTable] = {
@@ -295,7 +295,7 @@ private object DataTablesGenerator {
     (1 to n).map { i =>  
       List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false) extends "+ 
              "Table(titles, execute) { outer =>",
-           "  def |(row: "+dataRow(i)+") = "+table(i)+"(titles, outer.rows :+ row, execute)",
+           "  def |[st(i)](row: "+dataRow(i, letter=\"S\")+") = "+table(i)+"(titles, outer.rows :+ row, execute)",
            "  def |[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, execute)",
            "  def |>[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, true)",
            "  def executeRow[R <% Result](f: "+typesTuple(i)+" => R, exec: Boolean): DecoratedResult[DataTable] = {",
@@ -322,13 +322,14 @@ private object DataTablesGenerator {
   }
   def parametersList(i: Int) = (1 to i).map(j => "t"+j+": T"+j).mkString("(",", ", ")")
   def parameters(i: Int) = (1 to i).map("t"+_).mkString("(",", ", ")")
-  def variantTypes(i: Int) = typesAsList(i).map("+"+_).mkString("[",", ", "]")
+  def variantTypes(i: Int, letter: String = "T") = typesAsList(i, letter).map("+"+_).mkString("[",", ", "]")
   def types(i: Int) = typesAsList(i).mkString("[",", ", "]")
-  def typesAsList(i: Int): String =  (1 to i).map("T"+_)
+  def st(i: Int) = (1 to i).map(j => "S"+j+" >: T"+j).mkString("[",", ", "]")
+  def typesAsList(i: Int, letter: String = "T"): String =  (1 to i).map(letter+_)
   def typesList(i: Int): String = typesAsList(i).mkString(", ")
   def typesList(i: Int, n: Int): String =  (List(typesList(i)) ::: (i+1 to n).map(t => "Any").toList).mkString(", ")
   def typesTuple(i: Int) =  typesAsList(i).mkString("(",", ", ")")
-  def dataRow(i: Int) = "DataRow"+i+variantTypes(i)
+  def dataRow(i: Int, letter: String = "T") = "DataRow"+i+variantTypes(i, letter)
   def table(i: Int) = "Table"+i
 }
 */

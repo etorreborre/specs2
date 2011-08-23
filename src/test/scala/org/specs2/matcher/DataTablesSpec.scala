@@ -44,7 +44,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
 
   def e5_1 =
     "a"           ||  "b"      | "c"            |
-    ("Hello":Any) !! "world"   !  "Hello world" |
+    "Hello"       !! "world"   !  "Hello world" |
     1             !! "world"   !  "1 world"     |> { (a, b, c) =>  a +" "+b must_== c }
 
   def e6 =
@@ -55,7 +55,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
 
   def e7 =
 	  "a"         | "b"       |>
-	  (0: Any)    ! "0"       |
-	  (List("a")) ! "List(a)" | { (a, b) =>  a.toString must_== b }
+	  0           ! "0"       |
+	  List("a")   ! "List(a)" | { (a, b) =>  a.toString must_== b }
 
 }
