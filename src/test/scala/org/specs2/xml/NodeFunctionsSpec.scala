@@ -15,6 +15,12 @@ class NodeFunctionsSpec extends Specification { def is =
       "there is a match on the node label"                                                                              ! e5^
       "and a match on all attribute names"                                                                              ! e6^
       "and a match on all attribute names and values"                                                                   ! e7^
+                                                                                                                        endp^
+  "The equalIgnoreSpace function must"                                                                                  ^
+    "return false if 2 nodes are not equal after evaluation"                                                            ^
+    { <a>{"a"}</a> must not ==/(<a>{"b"}</a>) }                                                                         ^
+    "return true if 2 nodes are equal even with spaces"                                                                 ^
+    { <a>{"a"}</a> must ==/(<a>{" a "}</a>) }                                                                           ^
                                                                                                                         end
 
   def e1 = <a/>.matchNode(<a/>)                                                                                          

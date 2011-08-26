@@ -19,6 +19,8 @@ class XmlMatchersSpec extends Specification { def is =
                                                                                                                         p^
     "match if the attributes are not in the same order"                                                                 ^
     { <a><b t="1" s="2"/><c/></a> must ==/(<a> <c/><b s="2" t="1"/></a>) }                                              ^
+    "not match when there is evaluation of != elements"                                                                 ^
+    { <a>{"a"}</a> must not ==/(<a>{"b"}</a>) }                                                                         ^
     "provide a way to specify that the comparison should be ordered"                                                    ^
     { <a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered }                                                             ^
                                                                                                                         p^
