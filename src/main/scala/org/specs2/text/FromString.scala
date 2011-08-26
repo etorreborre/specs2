@@ -17,7 +17,7 @@ object FromString {
   }
 
   implicit def IntFromString = new FromString[Int] {
-    def fromString(s: String): Option[Int] = tryo(Integer.decode(s))
+    def fromString(s: String): Option[Int] = tryo(s.toInt)
   }
 
   implicit def BooleanFromString = new FromString[Boolean] {
