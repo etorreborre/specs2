@@ -5,7 +5,7 @@ version := "1.6-SNAPSHOT"
 
 organization := "org.specs2"
 
-scalaVersion := "2.9.1.RC4"
+scalaVersion := "2.9.1"
 
 crossScalaVersions := Seq("2.9.0", "2.9.0-1") ++ (1 to 4).map(i => "2.9.1.RC"+i)
 
