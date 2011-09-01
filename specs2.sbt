@@ -19,7 +19,7 @@ resolvers ++= Seq("snapshots-repo" at "http://scala-tools.org/repo-snapshots",
                   "Local Maven Repository" at "file://c:/Documents and Settings/Eric/.m2/repository")
 
 libraryDependencies ++= Seq(
-  "org.scala-tools.testing" % "scalacheck_2.9.0-1" % "1.9" % "optional", 
+  "org.scala-tools.testing" % "scalacheck_2.9.1.RC3" % "1.9" % "optional", 
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional", 
   "org.specs2" % "specs2-scalaz-core_2.9.1" % "6.0.1",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
