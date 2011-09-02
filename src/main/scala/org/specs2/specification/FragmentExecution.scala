@@ -77,12 +77,23 @@ trait FragmentExecution {
   }
 
   /** these methods are used in tests */
+  private[specs2]
   def executeBodies(exs: Fragments)(implicit arguments: Arguments=Arguments()): Seq[Result] = {
     exs.fragments.map(f => executeFragment(arguments)(f)). collect { case r: ExecutedResult => r.result }
   }
+
+  private[specs2]
   def executeExamples(exs: Fragments)(implicit arguments: Arguments=Arguments()): Seq[ExecutedResult] = {
     exs.fragments.map(f => executeFragment(arguments)(f)). collect { case r: ExecutedResult => r }
   }
+
+  private[specs2]
+  def executeExamplesResult(exs: Fragments)(implicit arguments: Arguments=Arguments()): Result =
+    executeExamples(exs)(arguments).foldLeft(Success():Result) { (res, cur) => res and cur.result }
+
+  private[specs2]
+  def executeSpecificationResult(spec: SpecificationStructure)(implicit arguments: Arguments=Arguments()): Result =
+    executeExamplesResult(spec.content)(arguments)
 }
 
 private[specs2]

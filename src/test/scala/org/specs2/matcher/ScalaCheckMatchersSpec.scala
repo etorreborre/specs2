@@ -9,7 +9,7 @@ import io._
 import sys.error
 import specification._
 
-class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { def is =
+class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties with ResultMatchers { def is =
 
   "A ScalaCheck property can be used in the body of an Example"                                                         ^
     "Here are some examples with"                                                                                       ^
@@ -39,6 +39,8 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
     "if it is a function which is always false, it will yield a Failure"                                                ! prop3^
     "if it is a property throwing an exception, it will yield an Error"                                                 ! prop4^
     "a Property can be used with check"                                                                                 ! prop5^
+                                                                                                                        end^
+  "It can also be used at the beginning of a specification"                                                             ! fragment1^
                                                                                                                         p^
   "A specs2 matcher can be returned by a function to be checked with ScalaCheck"                                        ^
     "if it is a MatchSuccess the execution will yield a Success"                                                        ! matcher1^
@@ -76,6 +78,11 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   def prop3 = execute(identityFunction.forAll).message must startWith("A counter-example is 'false'")
   def prop4 = execute(exceptionProp).toString must startWith("Error(A counter-example is")
   def prop5 = execute(check(proved)) must beSuccessful
+
+  def fragment1 = {
+    val spec = new Specification { def is = check((i: Int) => i == i) ^ end }
+    FragmentExecution.executeSpecificationResult(spec).isSuccess
+  }
 
   def partial1 = execute(partialFunction.forAll) must_== success100tries
   def partial2 = execute { check { (s1: Boolean, s2: Boolean) => s1 && s2 must_== s2 && s1 } } must_== success100tries
