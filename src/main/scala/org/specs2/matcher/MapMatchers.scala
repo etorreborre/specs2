@@ -79,21 +79,27 @@ private[specs2]
 trait MapBeHaveMatchers { outer: MapBaseMatchers =>
   implicit def toMapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) = new MapKeyResultMatcher(result)
   class MapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) {
-    def key(k: K) = result(haveKey(k))
+    def key(k: K) = result(outer.haveKey(k))
+    def haveKey(k: K) = result(outer.haveKey(k))
   }
   implicit def toMapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) = new MapValueResultMatcher(result)
   class MapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) {
-    def value(v: V) = result(haveValue(v))
+    def value(v: V) = result(outer.haveValue(v))
+    def haveValue(v: V) = result(outer.haveValue(v))
   }
   implicit def toMapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) = new MapResultMatcher(result)
   class MapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) {
-    def pair(p: (K, V)) = result(havePair(p))
-    def pairs(pairs: (K, V)*) = result(havePairs(pairs:_*))
+    def pair(p: (K, V)) = result(outer.havePair(p))
+    def pairs(pairs: (K, V)*) = result(outer.havePairs(pairs:_*))
+    def havePair(p: (K, V)) = result(outer.havePair(p))
+    def havePairs(pairs: (K, V)*) = result(outer.havePairs(pairs:_*))
   }
   implicit def toPartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) = new PartialFunctionResultMatcher(result)
-  class PartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) {
-    def definedAt(values: K*) = result(beDefinedAt(values:_*))
-    def definedBy(values: (K, V)*) = result(beDefinedBy(values:_*))
+  class PartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) { 
+    def definedAt(values: K*) = result(outer.beDefinedAt(values:_*))
+    def beDefinedAt(values: K*) = result(outer.beDefinedAt(values:_*))
+    def definedBy(values: (K, V)*) = result(outer.beDefinedBy(values:_*))
+    def beDefinedBy(values: (K, V)*) = result(outer.beDefinedBy(values:_*))
   }
   def key[K](k: K) = haveKey(k)   
   def value[V](v: V) = haveValue(v) 
