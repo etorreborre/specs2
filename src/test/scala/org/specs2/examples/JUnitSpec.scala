@@ -24,7 +24,7 @@ class JUnitSpec extends JUnitMustMatchers {
 
   @Test
   def test4 {
-    "Hello world2" must endWithWorld
+    "Hello world" must endWithWorld
   }
 
   // custom matchers can be created by coercing a function T => (Boolean, String, String) to Matcher[T]
