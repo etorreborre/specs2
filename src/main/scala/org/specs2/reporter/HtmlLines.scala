@@ -89,7 +89,7 @@ case class HtmlResult(r: ExecutedResult) extends Html {
     if (!args.xonly || !r.result.isSuccess) {
       r match {
         case ExecutedResult(FormMarkup(form),_,_,_,_) => printFormResult(form)(args, out)
-        case _                                         => printResult(r.text(args), level, r.result)(args, out)
+        case _                                        => printResult(r.text(args), level, r.result)(args, out)
       }
 
     }
@@ -105,7 +105,7 @@ case class HtmlResult(r: ExecutedResult) extends Html {
       case e: Error                             => printErrorDetails(level, e)(args, outDesc).printStack(e, level + 1)
       case Success(_)                           => outDesc
       case Skipped(_, _)                        => outDesc.printSkipped(NoMarkup(result.message), level, !args.xonly)
-      case Pending(_)                           => outDesc.printPending(desc, level).printPending(NoMarkup(result.message), level, !args.xonly)
+      case Pending(_)                           => outDesc.printPending(NoMarkup(result.message), level, !args.xonly)
       case DecoratedResult(table: DataTable, r) => printDataTable(table, level)(args, outDesc)
     }
   }
@@ -115,8 +115,8 @@ case class HtmlResult(r: ExecutedResult) extends Html {
       case f: Failure                           => out.printFailure(desc, level)
       case e: Error                             => out.printError(desc, level)
       case Success(_)                           => out.printSuccess(desc, level, !args.xonly)
-      case Skipped(_, _)                        => out.printSkipped(desc, level).printSkipped(NoMarkup(result.message), level, !args.xonly)
-      case Pending(_)                           => out.printPending(desc, level).printPending(NoMarkup(result.message), level, !args.xonly)
+      case Skipped(_, _)                        => out.printSkipped(desc, level)
+      case Pending(_)                           => out.printPending(desc, level)
       case DecoratedResult(table: DataTable, r) => printDesc(desc, level, r)
     }
 

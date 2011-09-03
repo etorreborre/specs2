@@ -43,6 +43,10 @@ case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, l
   def stats = statistics.copy(timer = outer.timer)
   def isSuccess = stats.isSuccess
 }
+private[specs2]
+object ExecutedResult {
+  def apply(desc: String, r: Result): ExecutedResult = ExecutedResult(NoMarkup(desc), r, new SimpleTimer, new Location, Stats())
+}
 
 trait ExecutedStandardFragment extends ExecutedFragment {
   val stats: Stats = Stats()
