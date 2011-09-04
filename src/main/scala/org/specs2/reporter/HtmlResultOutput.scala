@@ -96,7 +96,7 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
   def printSkipped(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
     printTextWithIcon(message, "skipped", level, doIt)
   def printPending(message: MarkupString, level: Int = 0, doIt: Boolean = true)(implicit args: Arguments) =
-    printTextWithIcon(message, "info",    level, doIt)
+    printTextWithIcon(message, "pending",    level, doIt)
 
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int, doIt: Boolean = true)(implicit args: Arguments) = {
     if (doIt) {
