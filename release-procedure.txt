@@ -11,11 +11,11 @@
 8. publish the gh pages
 
 9. set the specs2-test project version
-10. tag and push the new version
+10. tag and push the new version (check "include tags")
 11. create a new snapshot branch
 
 12. test/publish the jars
-13. tag and push the new version
+13. tag and push the new version (check "include tags")
 14. create a new specs2 branch for the next SNAPSHOT
 
 15. download the test-project and test it
