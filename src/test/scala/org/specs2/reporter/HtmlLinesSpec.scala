@@ -27,8 +27,8 @@ class HtmlLinesSpec extends Specification { def is =
                 <status class="ok"><div class="level0"><img src="./images/icon_skipped_sml.gif"></img> skipped</div></status>).mkString("")
 
   def results5 = results(pending).toString must_== Seq(
-    <status class="ok"><div class="level0"><img src="./images/icon_info_sml.gif"></img> desc</div></status>,
-    <status class="ok"><div class="level0"><img src="./images/icon_info_sml.gif"></img> PENDING</div></status>).mkString("")
+    <status class="ok"><div class="level0"><img src="./images/icon_pending_sml.gif"></img> desc</div></status>,
+    <status class="ok"><div class="level0"><img src="./images/icon_pending_sml.gif"></img> PENDING</div></status>).mkString("")
 
   def results(r: Result) = HtmlResult(ExecutedResult("desc", r)).print(Stats(), 0, Arguments())(new HtmlResultOutput).xml
 
