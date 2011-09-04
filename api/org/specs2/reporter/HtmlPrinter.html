@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">HtmlPrinter</span>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends <span name="org.specs2.reporter.OutputDir" class="extype">OutputDir</span></span>
       </span>
       </h4>
       
@@ -33,7 +33,7 @@
 * the statistics
 * the current arguments to use</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="org.specs2.reporter.OutputDir" class="extype">OutputDir</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a name="org.specs2.reporter.HtmlExporting" class="extype" href="HtmlExporting.html">HtmlExporting</a>, <a name="org.specs2.reporter.HtmlReporter" class="extype" href="HtmlReporter.html">HtmlReporter</a></div>
@@ -52,7 +52,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.reporter.HtmlPrinter" class="in"><span>HtmlPrinter</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.reporter.HtmlPrinter" class="in"><span>HtmlPrinter</span></li><li name="org.specs2.reporter.OutputDir" class="in"><span>OutputDir</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -216,7 +216,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -300,13 +300,13 @@ the name of the html file is the full class name
         html lines to print
 </p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#reduce" data-isabs="false">
-      <a id="reduce(Seq[ExecutedFragment],HtmlLink):Tree[HtmlLines]"></a>
+      <a id="reduce(SpecName,Seq[ExecutedFragment],HtmlLink):Tree[HtmlLines]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">reduce</span>
         
-        <span class="params">(<span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>, <span name="parentLink">parentLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="../specification/HtmlLink.html">HtmlLink</a></span>)</span><span class="result">: <span name="org.specs2.internal.scalaz.Tree" class="extype">Tree</span>[<span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>]</span>
+        <span class="params">(<span name="specification">specification: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>, <span name="parentLink">parentLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="../specification/HtmlLink.html">HtmlLink</a></span>)</span><span class="result">: <span name="org.specs2.internal.scalaz.Tree" class="extype">Tree</span>[<span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
@@ -314,7 +314,7 @@ into a single block that will be reported on a different html page</p><div class
 into a single block that will be reported on a different html page</p><p>This works by using a List of HtmlLines as a stack where the head of the list is the current block of lines
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the HtmlLines to print
 </p></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#reportPath" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.OutputDir#reportPath" data-isabs="false">
       <a id="reportPath(String):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -324,7 +324,7 @@ into a single block that will be reported on a different html page</p><p>This wo
         <span class="params">(<span name="url">url: String</span>)</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the file path for the html output</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the file path for the html output</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>OutputDir</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -392,7 +392,11 @@ into a single block that will be reported on a different html page</p><p>This wo
     </li></ol>
             </div>
 
-        <div name="scala.AnyRef" class="parent">
+        
+
+        <div name="org.specs2.reporter.OutputDir" class="parent">
+              <h3>Inherited from <span name="org.specs2.reporter.OutputDir" class="extype">OutputDir</span></h3>
+            </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

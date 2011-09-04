@@ -28,27 +28,28 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides building blocks to create steps and examples from regular expression.</p><p>It is used to implement a Given-When-Then way of describing systems.</p><p>Fragments are created by adding a <code>Given</code> step to a <code>Text</code>:</p><p> <code>"name: ${Eric}" ^ givenName</code></p><p>This creates a PreStep object containing the current context (representing all the extracted values) and a list of
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides building blocks to create steps and examples from regular expression.</p><p>It is used to implement a Given-When-Then way of describing systems.</p><p>Fragments are created by adding a <code>Given</code> step to a <code>Text</code>:</p><p> <code>"name: ${user}" ^ givenName</code></p><p>This creates a PreStep object containing the current context (representing all the extracted values) and a list of
 Fragments containing:</p><p> * the Text fragment: <code>Text("name: ${Eric}")</code>
  * a Step containing the extraction code to get the value delimited by <code>${}</code></p><p>Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
 stores the additional Text fragment so that values can be extracted from it when a <code>When</code> step is added:
 <code>
  // this creates a PreStepText object
- "name: ${Eric}" ^ givenName ^
+ "name: ${user}" ^ givenName ^
  "age: ${38}"
 
  // this creates a PreStep object
- "name: ${Eric}" ^ givenName ^
+ "name: ${user}" ^ givenName ^
  "age: ${38}"    ^ thenAge ^
 </code></p><p>Eventually, when a <code>Then</code> step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
 the current context and the results returned by the <code>Then</code> objects to create Examples.</p><p>The last PostStep object contains the list of all fragments created by the Given/When/Then sequence:</p><p> * Text fragments
  * Steps
- * Examples</p></div><div class="toggleContainer block">
+ * Examples
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.specification.AfterContextExample" class="extype" href="AfterContextExample.html">AfterContextExample</a>, <a name="org.specs2.specification.AfterExample" class="extype" href="AfterExample.html">AfterExample</a>, <a name="org.specs2.specification.AroundContextExample" class="extype" href="AroundContextExample.html">AroundContextExample</a>, <a name="org.specs2.specification.AroundExample" class="extype" href="AroundExample.html">AroundExample</a>, <a name="org.specs2.specification.BaseSpecification" class="extype" href="BaseSpecification.html">BaseSpecification</a>, <a name="org.specs2.specification.BeforeAfterAroundContextExample" class="extype" href="BeforeAfterAroundContextExample.html">BeforeAfterAroundContextExample</a>, <a name="org.specs2.specification.BeforeAfterAroundExample" class="extype" href="BeforeAfterAroundExample.html">BeforeAfterAroundExample</a>, <a name="org.specs2.specification.BeforeAfterContextExample" class="extype" href="BeforeAfterContextExample.html">BeforeAfterContextExample</a>, <a name="org.specs2.specification.BeforeAfterExample" class="extype" href="BeforeAfterExample.html">BeforeAfterExample</a>, <a name="org.specs2.specification.BeforeContextExample" class="extype" href="BeforeContextExample.html">BeforeContextExample</a>, <a name="org.specs2.specification.BeforeExample" class="extype" href="BeforeExample.html">BeforeExample</a>, <a name="org.specs2.specification.FragmentsBuilder" class="extype" href="FragmentsBuilder$.html">FragmentsBuilder</a>, <a name="org.specs2.mutable.FragmentsBuilder" class="extype" href="../mutable/FragmentsBuilder.html">FragmentsBuilder</a>, <a name="org.specs2.mutable.Specification" class="extype" href="../mutable/Specification.html">Specification</a>, <a name="org.specs2.Specification" class="extype" href="../Specification.html">Specification</a>, <a name="org.specs2.mutable.SpecificationFeatures" class="extype" href="../mutable/SpecificationFeatures.html">SpecificationFeatures</a>, <a name="org.specs2.SpecificationFeatures" class="extype" href="../SpecificationFeatures.html">SpecificationFeatures</a>, <a name="org.specs2.mutable.SpecificationWithJUnit" class="extype" href="../mutable/SpecificationWithJUnit.html">SpecificationWithJUnit</a>, <a name="org.specs2.SpecificationWithJUnit" class="extype" href="../SpecificationWithJUnit.html">SpecificationWithJUnit</a></div>
+          <div class="subClasses hiddenContent"><a name="org.specs2.specification.AfterContextExample" class="extype" href="AfterContextExample.html">AfterContextExample</a>, <a name="org.specs2.specification.AfterExample" class="extype" href="AfterExample.html">AfterExample</a>, <a name="org.specs2.specification.AroundContextExample" class="extype" href="AroundContextExample.html">AroundContextExample</a>, <a name="org.specs2.specification.AroundExample" class="extype" href="AroundExample.html">AroundExample</a>, <a name="org.specs2.specification.BaseSpecification" class="extype" href="BaseSpecification.html">BaseSpecification</a>, <a name="org.specs2.specification.BeforeAfterAroundContextExample" class="extype" href="BeforeAfterAroundContextExample.html">BeforeAfterAroundContextExample</a>, <a name="org.specs2.specification.BeforeAfterAroundExample" class="extype" href="BeforeAfterAroundExample.html">BeforeAfterAroundExample</a>, <a name="org.specs2.specification.BeforeAfterContextExample" class="extype" href="BeforeAfterContextExample.html">BeforeAfterContextExample</a>, <a name="org.specs2.specification.BeforeAfterExample" class="extype" href="BeforeAfterExample.html">BeforeAfterExample</a>, <a name="org.specs2.specification.BeforeContextExample" class="extype" href="BeforeContextExample.html">BeforeContextExample</a>, <a name="org.specs2.specification.BeforeExample" class="extype" href="BeforeExample.html">BeforeExample</a>, <a name="org.specs2.specification.FragmentsBuilder" class="extype" href="FragmentsBuilder$.html">FragmentsBuilder</a>, <a name="org.specs2.mutable.FragmentsBuilder" class="extype" href="../mutable/FragmentsBuilder.html">FragmentsBuilder</a>, <a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps$.html">RegexSteps</a>, <a name="org.specs2.mutable.Specification" class="extype" href="../mutable/Specification.html">Specification</a>, <a name="org.specs2.Specification" class="extype" href="../Specification.html">Specification</a>, <a name="org.specs2.mutable.SpecificationFeatures" class="extype" href="../mutable/SpecificationFeatures.html">SpecificationFeatures</a>, <a name="org.specs2.SpecificationFeatures" class="extype" href="../SpecificationFeatures.html">SpecificationFeatures</a>, <a name="org.specs2.mutable.SpecificationWithJUnit" class="extype" href="../mutable/SpecificationWithJUnit.html">SpecificationWithJUnit</a>, <a name="org.specs2.SpecificationWithJUnit" class="extype" href="../SpecificationWithJUnit.html">SpecificationWithJUnit</a></div>
         </div></div>
         
 
@@ -74,21 +75,7 @@ the current context and the results returned by the <code>Then</code> objects to
 
         
 
-        <div class="types members" id="types">
-              <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.specification.RegexSteps.RegexFragment" data-isabs="true">
-      <a id="RegexFragment:RegexFragment"></a>
-      <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="RegexSteps$RegexFragment.html"><span class="name">RegexFragment</span></a>
         
-        <span class="result"> extends AnyRef</span>
-      </span>
-      </h4>
-      
-    </li></ol>
-            </div>
         
         
 
@@ -156,7 +143,7 @@ the current context and the results returned by the <code>Then</code> objects to
       <span class="symbol"> 
         <span class="name">RegexFragmentToFragments</span>
         
-        <span class="params">(<span name="r">r: <a name="org.specs2.specification.RegexSteps.RegexFragment" class="extype" href="RegexSteps$RegexFragment.html">RegexFragment</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+        <span class="params">(<span name="r">r: <span name="org.specs2.specification.RegexFragment" class="extype">RegexFragment</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">at any point in time a regex sequence can be transformed as a sequence of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>at any point in time a regex sequence can be transformed as a sequence of Fragments</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
@@ -244,7 +231,7 @@ the current context and the results returned by the <code>Then</code> objects to
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -392,6 +379,8 @@ the current context and the results returned by the <code>Then</code> objects to
         </dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>

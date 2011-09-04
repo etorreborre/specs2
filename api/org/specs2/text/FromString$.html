@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.reporter.Stats.StatsMonoid</title>
+          <title>org.specs2.text.FromString</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -14,23 +14,23 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../../lib/object_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.reporter" class="extype" href="package.html">reporter</a>.<a name="org.specs2.reporter.Stats" class="extype" href="Stats$.html">Stats</a></p>
-        <h1>StatsMonoid</h1>
+        <a title="Go to companion" href="FromString.html"><img src="../../../lib/object_to_trait_big.png" /></a>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.text" class="extype" href="package.html">text</a></p>
+        <h1><a title="Go to companion" href="FromString.html">FromString</a></h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">object</span>
       <span class="symbol"> 
-        <span class="name">StatsMonoid</span>
+        <span class="name">FromString</span>
         
-        <span class="result"> extends <span name="org.specs2.internal.scalaz.Monoid" class="extype">Monoid</span>[<a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a>]</span>
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="org.specs2.internal.scalaz.Monoid" class="extype">Monoid</span>[<a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a>], <span name="org.specs2.internal.scalaz.Semigroup" class="extype">Semigroup</span>[<a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a>], <span name="org.specs2.internal.scalaz.Zero" class="extype">Zero</span>[<a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a>], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -46,7 +46,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.reporter.Stats.StatsMonoid" class="in"><span>StatsMonoid</span></li><li name="org.specs2.internal.scalaz.Monoid" class="in"><span>Monoid</span></li><li name="org.specs2.internal.scalaz.Semigroup" class="in"><span>Semigroup</span></li><li name="org.specs2.internal.scalaz.Zero" class="in"><span>Zero</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.text.FromString" class="in"><span>FromString</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -117,17 +117,39 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Stats.StatsMonoid#append" data-isabs="false">
-      <a id="append(Stats,⇒ Stats):Stats"></a>
+    </li><li visbl="pub" name="org.specs2.text.FromString#BooleanFromString" data-isabs="false">
+      <a id="BooleanFromString:FromString[Boolean]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">implicit def</span>
       <span class="symbol"> 
-        <span class="name">append</span>
+        <span class="name">BooleanFromString</span>
         
-        <span class="params">(<span name="s1">s1: <a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a></span>, <span name="s2">s2: ⇒ <a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a></span>)</span><span class="result">: <a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a></span>
+        <span class="result">: <a name="org.specs2.text.FromString" class="extype" href="FromString.html">FromString</a>[<span name="scala.Boolean" class="extype">Boolean</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.Stats.StatsMonoid" class="extype" href="">StatsMonoid</a> → Semigroup</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.text.FromString#IntFromString" data-isabs="false">
+      <a id="IntFromString:FromString[Int]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">IntFromString</span>
+        
+        <span class="result">: <a name="org.specs2.text.FromString" class="extype" href="FromString.html">FromString</a>[<span name="scala.Int" class="extype">Int</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.text.FromString#StringFromString" data-isabs="false">
+      <a id="StringFromString:FromString[String]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">StringFromString</span>
+        
+        <span class="result">: <a name="org.specs2.text.FromString" class="extype" href="FromString.html">FromString</a>[String]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -199,7 +221,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -319,27 +341,12 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Stats.StatsMonoid#zero" data-isabs="false">
-      <a id="zero:Stats"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">zero</span>
-        
-        <span class="result">: <a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.Stats.StatsMonoid" class="extype" href="">StatsMonoid</a> → Zero</dd></dl></div>
     </li></ol>
             </div>
 
-        <div name="org.specs2.internal.scalaz.Monoid" class="parent">
-              <h3>Inherited from <span name="org.specs2.internal.scalaz.Monoid" class="extype">Monoid</span>[<a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a>]</h3>
-            </div><div name="org.specs2.internal.scalaz.Semigroup" class="parent">
-              <h3>Inherited from <span name="org.specs2.internal.scalaz.Semigroup" class="extype">Semigroup</span>[<a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a>]</h3>
-            </div><div name="org.specs2.internal.scalaz.Zero" class="parent">
-              <h3>Inherited from <span name="org.specs2.internal.scalaz.Zero" class="extype">Zero</span>[<a name="org.specs2.reporter.Stats" class="extype" href="Stats.html">Stats</a>]</h3>
-            </div><div name="scala.AnyRef" class="parent">
+        
+
+        <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

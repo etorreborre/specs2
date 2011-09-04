@@ -24,11 +24,11 @@
       <span class="symbol"> 
         <span class="name">ExecutedResult</span>
         
-        <span class="params">(<span name="s">s: <span name="org.specs2.text.MarkupString" class="extype">MarkupString</span></span>, <span name="result">result: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>, <span name="timer">timer: <a name="org.specs2.time.SimpleTimer" class="extype" href="../time/SimpleTimer.html">SimpleTimer</a></span>, <span name="location">location: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>)</span><span class="result"> extends <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="s">s: <span name="org.specs2.text.MarkupString" class="extype">MarkupString</span></span>, <span name="result">result: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>, <span name="timer">timer: <a name="org.specs2.time.SimpleTimer" class="extype" href="../time/SimpleTimer.html">SimpleTimer</a></span>, <span name="location">location: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>, <span name="statistics">statistics: <a name="org.specs2.specification.Stats" class="extype" href="Stats.html">Stats</a></span>)</span><span class="result"> extends <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.specification.ExecutedResult" class="extype" href="">ExecutedResult</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">ExecutedResult</span>
         
-        <span class="params">(<span name="s">s: <span name="org.specs2.text.MarkupString" class="extype">MarkupString</span></span>, <span name="result">result: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>, <span name="timer">timer: <a name="org.specs2.time.SimpleTimer" class="extype" href="../time/SimpleTimer.html">SimpleTimer</a></span>, <span name="location">location: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>)</span>
+        <span class="params">(<span name="s">s: <span name="org.specs2.text.MarkupString" class="extype">MarkupString</span></span>, <span name="result">result: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>, <span name="timer">timer: <a name="org.specs2.time.SimpleTimer" class="extype" href="../time/SimpleTimer.html">SimpleTimer</a></span>, <span name="location">location: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>, <span name="statistics">statistics: <a name="org.specs2.specification.Stats" class="extype" href="Stats.html">Stats</a></span>)</span>
       </span>
       </h4>
       
@@ -213,7 +213,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.ExecutedResult#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -236,6 +236,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedResult#isSuccess" data-isabs="false">
+      <a id="isSuccess:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isSuccess</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.ExecutedResult#location" data-isabs="false">
       <a id="location:Location"></a>
       <h4 class="signature">
@@ -246,7 +257,7 @@
         <span class="result">: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.ExecutedResult" class="extype" href="">ExecutedResult</a> → <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the location of the executed Fragment</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.ExecutedResult" class="extype" href="">ExecutedResult</a> → <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -346,6 +357,28 @@
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedResult#statistics" data-isabs="false">
+      <a id="statistics:Stats"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">statistics</span>
+        
+        <span class="result">: <a name="org.specs2.specification.Stats" class="extype" href="Stats.html">Stats</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedResult#stats" data-isabs="false">
+      <a id="stats:Stats"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">stats</span>
+        
+        <span class="result">: <a name="org.specs2.specification.Stats" class="extype" href="Stats.html">Stats</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.ExecutedResult" class="extype" href="">ExecutedResult</a> → <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -432,7 +465,12 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Deprecated Value Members</h3>
+              <ol><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
       <a id="productElements:Iterator[Any]"></a>
       <h4 class="signature">
       <span class="kind">def</span>

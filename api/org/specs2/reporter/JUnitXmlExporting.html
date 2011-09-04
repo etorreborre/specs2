@@ -28,10 +28,9 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Trait for exporting the specification as JUnit xml files
-</p></div><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Trait for exporting the specification as JUnit xml files</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.reporter.JUnitXmlPrinter" class="extype" href="JUnitXmlPrinter.html">JUnitXmlPrinter</a>, <span name="org.specs2.reporter.Statistics" class="extype">Statistics</span>, <span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.reporter.JUnitXmlPrinter" class="extype" href="JUnitXmlPrinter.html">JUnitXmlPrinter</a>, <span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a name="org.specs2.reporter.JUnitXmlReporter" class="extype" href="JUnitXmlReporter.html">JUnitXmlReporter</a></div>
@@ -50,7 +49,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.reporter.JUnitXmlExporting" class="in"><span>JUnitXmlExporting</span></li><li name="org.specs2.reporter.JUnitXmlPrinter" class="in"><span>JUnitXmlPrinter</span></li><li name="org.specs2.reporter.Statistics" class="in"><span>Statistics</span></li><li name="org.specs2.reporter.Exporting" class="in"><span>Exporting</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.reporter.JUnitXmlExporting" class="in"><span>JUnitXmlExporting</span></li><li name="org.specs2.reporter.JUnitXmlPrinter" class="in"><span>JUnitXmlPrinter</span></li><li name="org.specs2.reporter.Exporting" class="in"><span>Exporting</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -91,7 +90,7 @@
       <span class="symbol"> 
         <a href="JUnitXmlPrinter$TestSuite.html"><span class="name">TestSuite</span></a>
         
-        <span class="params">(<span name="className">className: String</span>, <span name="errors">errors: Int</span>, <span name="failures">failures: Int</span>, <span name="skipped">skipped: Int</span>, <span name="time">time: Long</span>, <span name="tests">tests: Seq[TestCase]</span>, <span name="args">args: Arguments</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="description">description: Description</span>, <span name="className">className: String</span>, <span name="errors">errors: Int</span>, <span name="failures">failures: Int</span>, <span name="skipped">skipped: Int</span>, <span name="time">time: Long</span>, <span name="tests">tests: Seq[TestCase]</span>, <span name="args">args: Arguments</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       
@@ -157,17 +156,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Statistics#SpecsStatisticsMonoid" data-isabs="false">
-      <a id="SpecsStatisticsMonoid:Monoid[SpecsStatistics]"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">SpecsStatisticsMonoid</span>
-        
-        <span class="result">: <span name="org.specs2.internal.scalaz.Monoid" class="extype">Monoid</span>[<span name="org.specs2.reporter.Statistics.SpecsStatistics" class="extype">SpecsStatistics</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>Statistics</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -237,7 +225,7 @@
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting ExecutedFragments</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.JUnitXmlExporting" class="extype" href="">JUnitXmlExporting</a> → Exporting</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter#filePath" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlExporting#filePath" data-isabs="false">
       <a id="filePath(Description):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -247,7 +235,7 @@
         <span class="params">(<span name="desc">desc: <span name="org.junit.runner.Description" class="extype">Description</span></span>)</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.JUnitXmlPrinter" class="extype" href="JUnitXmlPrinter.html">JUnitXmlPrinter</a></dd></dl></div>
+      
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -262,17 +250,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Statistics#foldAll" data-isabs="false">
-      <a id="foldAll(Seq[ExecutedFragment]):SpecsStatistics"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">foldAll</span>
-        
-        <span class="params">(<span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="result">: <span name="org.specs2.reporter.Statistics.SpecsStatistics" class="extype">SpecsStatistics</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Statistics</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -283,7 +260,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -339,7 +316,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter#print" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlExporting#print" data-isabs="false">
       <a id="print(SpecificationStructure,Seq[ExecutedFragment])(Arguments):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -352,10 +329,7 @@
       <p class="shortcomment cmt">print a sequence of executed fragments for a given specification class into a html
 file
 the name of the html file is the full class name
-</p><div class="fullcomment"><div class="comment cmt"><p>print a sequence of executed fragments for a given specification class into a html
-file
-the name of the html file is the full class name
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.JUnitXmlPrinter" class="extype" href="JUnitXmlPrinter.html">JUnitXmlPrinter</a></dd></dl></div>
+</p>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -367,6 +341,19 @@ the name of the html file is the full class name
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter#testSuite" data-isabs="false">
+      <a id="testSuite(SpecificationStructure,Seq[ExecutedFragment])(Arguments):TestSuite"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">testSuite</span>
+        
+        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <a name="org.specs2.reporter.JUnitXmlPrinter.TestSuite" class="extype" href="JUnitXmlPrinter$TestSuite.html">TestSuite</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a TestSuite object containing all the examples
+</p><div class="fullcomment"><div class="comment cmt"><p>create a TestSuite object containing all the examples
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.JUnitXmlPrinter" class="extype" href="JUnitXmlPrinter.html">JUnitXmlPrinter</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -423,10 +410,10 @@ the name of the html file is the full class name
     </li></ol>
             </div>
 
+        
+
         <div name="org.specs2.reporter.JUnitXmlPrinter" class="parent">
               <h3>Inherited from <a name="org.specs2.reporter.JUnitXmlPrinter" class="extype" href="JUnitXmlPrinter.html">JUnitXmlPrinter</a></h3>
-            </div><div name="org.specs2.reporter.Statistics" class="parent">
-              <h3>Inherited from <span name="org.specs2.reporter.Statistics" class="extype">Statistics</span></h3>
             </div><div name="org.specs2.reporter.Exporting" class="parent">
               <h3>Inherited from <span name="org.specs2.reporter.Exporting" class="extype">Exporting</span></h3>
             </div><div name="scala.AnyRef" class="parent">

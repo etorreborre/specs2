@@ -20,18 +20,18 @@
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <span class="name">Fragments</span>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="params">(<span name="title">title: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.specification.SpecName" class="extype">SpecName</span>]</span>, <span name="middle">middle: Seq[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="link">link: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a>]</span>, <span name="seeOnly">seeOnly: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>A Fragments object is a list of fragments with a SpecStart and a SpecEnd
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -47,7 +47,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.specification.Fragments" class="in"><span>Fragments</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.specification.Fragments" class="in"><span>Fragments</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -64,7 +64,7 @@
       <span class="symbol"> 
         <span class="name">Fragments</span>
         
-        <span class="params">(<span name="specStart">specStart: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.SpecStart" class="extype" href="SpecStart.html">SpecStart</a>]</span>, <span name="middle">middle: Seq[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>, <span name="specEnd">specEnd: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.SpecEnd" class="extype" href="SpecEnd.html">SpecEnd</a>]</span>)</span>
+        <span class="params">(<span name="title">title: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.specification.SpecName" class="extype">SpecName</span>]</span>, <span name="middle">middle: Seq[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="link">link: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a>]</span>, <span name="seeOnly">seeOnly: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
       
@@ -179,7 +179,7 @@
     </li><li visbl="pub" name="org.specs2.specification.Fragments#arguments" data-isabs="false">
       <a id="arguments:Arguments"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">arguments</span>
         
@@ -198,6 +198,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#canEqual" data-isabs="false">
+      <a id="canEqual(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">canEqual</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a> → Equals</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -215,7 +226,7 @@
     </li><li visbl="pub" name="org.specs2.specification.Fragments#end" data-isabs="false">
       <a id="end:SpecEnd"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">lazy val</span>
       <span class="symbol"> 
         <span class="name">end</span>
         
@@ -234,7 +245,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -244,7 +255,7 @@
         <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a> → Equals → AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.Fragments#examples" data-isabs="false">
       <a id="examples:Seq[Example]"></a>
       <h4 class="signature">
@@ -288,7 +299,7 @@
       <span class="symbol"> 
         <span class="name">fragments</span>
         
-        <span class="result">: <span name="scala.collection.Seq" class="extype">Seq</span>[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>
+        <span class="result">: Seq[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>
       </span>
       </h4>
       
@@ -302,8 +313,8 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -313,7 +324,7 @@
         <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a> → AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -325,6 +336,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#link" data-isabs="false">
+      <a id="link:Option[HtmlLink]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">link</span>
+        
+        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#linkIs" data-isabs="false">
+      <a id="linkIs(HtmlLink):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">linkIs</span>
+        
+        <span class="params">(<span name="htmlLink">htmlLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.Fragments#map" data-isabs="false">
       <a id="map((Fragment) ⇒ Fragment):Fragments"></a>
       <h4 class="signature">
@@ -344,6 +377,17 @@
         <span class="name">middle</span>
         
         <span class="result">: Seq[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#name" data-isabs="false">
+      <a id="name:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">name</span>
+        
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -391,43 +435,98 @@
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.specification.Fragments#specEnd" data-isabs="false">
-      <a id="specEnd:Option[SpecEnd]"></a>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#productArity" data-isabs="false">
+      <a id="productArity:Int"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">specEnd</span>
+        <span class="name">productArity</span>
         
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.SpecEnd" class="extype" href="SpecEnd.html">SpecEnd</a>]</span>
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#productElement" data-isabs="false">
+      <a id="productElement(Int):Any"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">productElement</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Any" class="extype">Any</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="scala.Product#productIterator" data-isabs="false">
+      <a id="productIterator:Iterator[Any]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">productIterator</span>
+        
+        <span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#productPrefix" data-isabs="false">
+      <a id="productPrefix:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">productPrefix</span>
+        
+        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#seeIs" data-isabs="false">
+      <a id="seeIs(HtmlLink):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">seeIs</span>
+        
+        <span class="params">(<span name="htmlLink">htmlLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.specification.Fragments#specStart" data-isabs="false">
-      <a id="specStart:Option[SpecStart]"></a>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#seeOnly" data-isabs="false">
+      <a id="seeOnly:Boolean"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">specStart</span>
+        <span class="name">seeOnly</span>
         
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.SpecStart" class="extype" href="SpecStart.html">SpecStart</a>]</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#specName" data-isabs="false">
+      <a id="specName:SpecName"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">specName</span>
+        
+        <span class="result">: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>
       </span>
       </h4>
       
     </li><li visbl="pub" name="org.specs2.specification.Fragments#specTitleIs" data-isabs="false">
-      <a id="specTitleIs(SpecStart):Fragments"></a>
+      <a id="specTitleIs(SpecName):Fragments"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">specTitleIs</span>
         
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecStart" class="extype" href="SpecStart.html">SpecStart</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a></span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="">Fragments</a></span>
       </span>
       </h4>
       
     </li><li visbl="pub" name="org.specs2.specification.Fragments#start" data-isabs="false">
       <a id="start:SpecStart"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">lazy val</span>
       <span class="symbol"> 
         <span class="name">start</span>
         
@@ -502,7 +601,34 @@
     </li></ol>
             </div>
 
-        <div name="scala.AnyRef" class="parent">
+        <div class="values members" id="values">
+              <h3>Deprecated Value Members</h3>
+              <ol><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
+      <a id="productElements:Iterator[Any]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name deprecated">productElements</span>
+        
+        <span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p>use productIterator instead</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div name="scala.Serializable" class="parent">
+              <h3>Inherited from <span name="scala.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="java.io.Serializable" class="parent">
+              <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="scala.Product" class="parent">
+              <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
+            </div><div name="scala.Equals" class="parent">
+              <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
+            </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

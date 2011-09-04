@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.io.FromSource</title>
+          <title>org.specs2.text.FromString</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -14,28 +14,24 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a title="Go to companion" href="FromSource$.html"><img src="../../../lib/trait_to_object_big.png" /></a>
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.io" class="extype" href="package.html">io</a></p>
-        <h1><a title="Go to companion" href="FromSource$.html">FromSource</a></h1>
+        <a title="Go to companion" href="FromString$.html"><img src="../../../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.text" class="extype" href="package.html">text</a></p>
+        <h1><a title="Go to companion" href="FromString$.html">FromString</a></h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
-        <span class="name">FromSource</span>
-        
+        <span class="name">FromString</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
         <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Get source code from the current point of execution</p><p>* An important limitation is that only the content of one line will be returned *</p><p>It must also be noted that this only work if the code being executed is in a file which has the same name as
-the class containing the code.</p><p>The source dir is assumed to be &quot;src/test/scala/&quot; by default but this can be modified
-by setting the &quot;specs2.srcTestDir&quot; System property</p></div><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This typeclass is used to describe any instance which can be decoded from a String
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
-        </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.io.FromSource" class="extype" href="FromSource$.html">FromSource</a></div>
         </div></div>
         
 
@@ -51,7 +47,7 @@ by setting the &quot;specs2.srcTestDir&quot; System property</p></div><div class
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.io.FromSource" class="in"><span>FromSource</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.text.FromString" class="in"><span>FromString</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -63,10 +59,24 @@ by setting the &quot;specs2.srcTestDir&quot; System property</p></div><div class
 
         
         
+        <div class="values members" id="values">
+              <h3>Abstract Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.text.FromString#fromString" data-isabs="true">
+      <a id="fromString(String):Option[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">fromString</span>
         
+        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li></ol>
+            </div>
 
         <div class="values members" id="values">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -193,47 +203,7 @@ by setting the &quot;specs2.srcTestDir&quot; System property</p></div><div class
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.FromSource#getCode" data-isabs="false">
-      <a id="getCode(Int):String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getCode</span>
-        
-        <span class="params">(<span name="depth">depth: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">6</span></span>)</span><span class="result">: String</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">get some source code by:
-  * fetching the current stacktrace
-  * finding the location of the example (6th trace by default)
-</p>
-    </li><li visbl="pub" name="org.specs2.io.FromSource#getCodeFromTo" data-isabs="false">
-      <a id="getCodeFromTo(Int,Int):String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getCodeFromTo</span>
-        
-        <span class="params">(<span name="start">start: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">6</span></span>, <span name="end">end: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">9</span></span>)</span><span class="result">: String</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">get some source code by:
-  * fetching the current stacktrace
-  * finding the location of the example by taking the trace of the first line and the trace of the last line
-   (at depth 6 and 9 by default)
-</p>
-    </li><li visbl="pub" name="org.specs2.io.FromSource#getCodeFromToWithLocation" data-isabs="false">
-      <a id="getCodeFromToWithLocation(Int,Int,TraceLocation):String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getCodeFromToWithLocation</span>
-        
-        <span class="params">(<span name="startLine">startLine: <span name="scala.Int" class="extype">Int</span></span>, <span name="endLine">endLine: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">9</span></span>, <span name="location">location: <span name="org.specs2.control.TraceLocation" class="extype">TraceLocation</span></span>)</span><span class="result">: String</span>
-      </span>
-      </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -256,17 +226,6 @@ by setting the &quot;specs2.srcTestDir&quot; System property</p></div><div class
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.FromSource#location" data-isabs="false">
-      <a id="location((Seq[StackTraceElement]) ⇒ Seq[StackTraceElement]):TraceLocation"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">location</span>
-        
-        <span class="params">(<span name="stackFilter">stackFilter: (Seq[<span name="java.lang.StackTraceElement" class="extype">StackTraceElement</span>]) ⇒ Seq[<span name="java.lang.StackTraceElement" class="extype">StackTraceElement</span>]</span>)</span><span class="result">: <span name="org.specs2.control.TraceLocation" class="extype">TraceLocation</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -366,6 +325,8 @@ by setting the &quot;specs2.srcTestDir&quot; System property</p></div><div class
         </dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>

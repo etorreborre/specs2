@@ -28,8 +28,9 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Factory object to build a stack trace filter
-</p></div><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Factory object to build a stack trace filter from include/exclude expressions:</p><p>.*specs2                       ==&gt; include .*specs2 traces
+.*specs2/scala.*               ==&gt; include .*specs2 traces, exclude scala.* traces
+.*specs2,scala/scalaz,eclipse  ==&gt; include .*specs2,scala traces, exclude scalaz and eclipse traces</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -200,7 +201,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -333,6 +334,8 @@
         </dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="scala.Serializable" class="parent">
               <h3>Inherited from <span name="scala.Serializable" class="extype">Serializable</span></h3>

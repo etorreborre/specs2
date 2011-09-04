@@ -42,7 +42,7 @@ English-like combination of Matchers:</p><p><code>1 must be equalTo(1) and not b
     This results in equalTo being applied to the AndNotMatch, effectively doing:
     MatchSuccess and MatchSkip.apply(equalTo(2).not), which is
     MatchSuccess and expectable.applyMatcher(equalTo(2).not) which is MatchSuccess
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="org.specs2" class="extype" href="../package.html">specs2</a>] </dd><dt>See also</dt><dd><span class="cmt"><p>org.specs2.matcher.BeHaveMatchersSpec for examples
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>org.specs2.matcher.BeHaveMatchersSpec for examples
 </p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
@@ -298,7 +298,7 @@ English-like combination of Matchers:</p><p><code>1 must be equalTo(1) and not b
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -498,6 +498,8 @@ English-like combination of Matchers:</p><p><code>1 must be equalTo(1) and not b
         </dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>

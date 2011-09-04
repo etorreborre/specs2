@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">TestSuite</span>
         
-        <span class="params">(<span name="className">className: String</span>, <span name="errors">errors: <span name="scala.Int" class="extype">Int</span></span>, <span name="failures">failures: <span name="scala.Int" class="extype">Int</span></span>, <span name="skipped">skipped: <span name="scala.Int" class="extype">Int</span></span>, <span name="time">time: <span name="scala.Long" class="extype">Long</span></span>, <span name="tests">tests: Seq[<a name="org.specs2.reporter.JUnitXmlPrinter.TestCase" class="extype" href="JUnitXmlPrinter$TestCase.html">TestCase</a>]</span>, <span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="description">description: <span name="org.junit.runner.Description" class="extype">Description</span></span>, <span name="className">className: String</span>, <span name="errors">errors: <span name="scala.Int" class="extype">Int</span></span>, <span name="failures">failures: <span name="scala.Int" class="extype">Int</span></span>, <span name="skipped">skipped: <span name="scala.Int" class="extype">Int</span></span>, <span name="time">time: <span name="scala.Long" class="extype">Long</span></span>, <span name="tests">tests: Seq[<a name="org.specs2.reporter.JUnitXmlPrinter.TestCase" class="extype" href="JUnitXmlPrinter$TestCase.html">TestCase</a>]</span>, <span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">TestSuite</span>
         
-        <span class="params">(<span name="className">className: String</span>, <span name="errors">errors: <span name="scala.Int" class="extype">Int</span></span>, <span name="failures">failures: <span name="scala.Int" class="extype">Int</span></span>, <span name="skipped">skipped: <span name="scala.Int" class="extype">Int</span></span>, <span name="time">time: <span name="scala.Long" class="extype">Long</span></span>, <span name="tests">tests: Seq[<a name="org.specs2.reporter.JUnitXmlPrinter.TestCase" class="extype" href="JUnitXmlPrinter$TestCase.html">TestCase</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span>
+        <span class="params">(<span name="description">description: <span name="org.junit.runner.Description" class="extype">Description</span></span>, <span name="className">className: String</span>, <span name="errors">errors: <span name="scala.Int" class="extype">Int</span></span>, <span name="failures">failures: <span name="scala.Int" class="extype">Int</span></span>, <span name="skipped">skipped: <span name="scala.Int" class="extype">Int</span></span>, <span name="time">time: <span name="scala.Long" class="extype">Long</span></span>, <span name="tests">tests: Seq[<a name="org.specs2.reporter.JUnitXmlPrinter.TestCase" class="extype" href="JUnitXmlPrinter$TestCase.html">TestCase</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span>
       </span>
       </h4>
       
@@ -189,6 +189,17 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter.TestSuite#description" data-isabs="false">
+      <a id="description:Description"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">description</span>
+        
+        <span class="result">: <span name="org.junit.runner.Description" class="extype">Description</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -268,7 +279,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter.TestSuite#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -487,7 +498,12 @@
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Deprecated Value Members</h3>
+              <ol><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
       <a id="productElements:Iterator[Any]"></a>
       <h4 class="signature">
       <span class="kind">def</span>

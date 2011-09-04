@@ -288,7 +288,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -453,6 +453,18 @@
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>arguments for a specification where examples must be executed sequentially
 </p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts#showOnly" data-isabs="false">
+      <a id="showOnly(String):Arguments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">showOnly</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">shortcut to print only some statuses
+</p>
     </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts#skipAll" data-isabs="false">
       <a id="skipAll:Arguments"></a>
       <h4 class="signature">
@@ -541,6 +553,30 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts#was" data-isabs="false">
+      <a id="was(String):Arguments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">was</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">shortcut to include only examples with some previous statuses
+</p>
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts#wasIssue" data-isabs="false">
+      <a id="wasIssue:Arguments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">wasIssue</span>
+        
+        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">shortcut to include only previousy failed/errors examples
+</p>
     </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts#xonly" data-isabs="false">
       <a id="xonly:Arguments"></a>
       <h4 class="signature">
@@ -555,6 +591,8 @@
 </p>
     </li></ol>
             </div>
+
+        
 
         <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>

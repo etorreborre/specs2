@@ -13,8 +13,8 @@
       <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
       <script type="text/javascript" src="css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./css/tooltip.js"></script>
-      <script language="javascript"> 
-      function init() {  prettyPrint(); };   
+      <script language="javascript">
+      function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
       String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
       function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
@@ -29,13 +29,37 @@
         element = document.getElementById(id);
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
+      function showHideByClass(name) {
+		    var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
     </script>
       <script language="javascript">window.onload=init;</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Matchers guide</title><a name="Matchers+guide"></a><h2>Matchers guide</h2><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns<br />a <code class="prettyprint">Result</code>:</p>
+    </head><body><div id="container"><title>Matchers guide</title><a name="Matchers+guide"></a><h2>Matchers guide</h2><status class="ok"><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -59,7 +83,7 @@
 <ul>
   <li><code class="prettyprint">done</code>: a <code class="prettyprint">Success</code> with the message &quot;DONE&quot;</li>
   <li><code class="prettyprint">todo</code>: a <code class="prettyprint">Pending</code> with the message &quot;TODO&quot;</li>
-</ul><a name="Match+results"></a><h3>Match results</h3><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to<br />create new ones or be created from scratch by the user. Let's have a look at some of them and refer the reader to the<br />API for the complete list:</p>
+</ul><a name="Match+results"></a><h3>Match results</h3><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user. Let's have a look at some of them and refer the reader to the API for the complete list:</p>
 <ul>
   <li>Matchers for Any</li>
   <li>Option / Either matchers</li>
@@ -109,9 +133,10 @@
   <li><code class="prettyprint">beOneOf(a, b, c)</code>: to check if an object is one of a given list</li>
   <li><code class="prettyprint">haveClass</code>: to check the class of an object</li>
   <li><code class="prettyprint">haveSuperclass</code>: to check if the class of an object as another class as one of its ancestors</li>
+  <li><code class="prettyprint">haveInterface</code>: to check if an object is implementing a given interface</li>
   <li><code class="prettyprint">beAssignableFrom</code>: to check if a class is assignable from another</li>
   <li><code class="prettyprint">beAnInstanceOf[T]</code>: to check if an object is an instance of type <code class="prettyprint">T</code></li>
-</ul><p>#### With a better description</p><p>Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information<br />is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a<br />&quot;ticket list&quot;:</p>
+</ul><a name="With+a+better+description"></a><h4>With a better description</h4><p>Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a &quot;ticket list&quot;:</p>
 <pre><code class="prettyprint">  // will fail with &quot;List(ticket1, ticket2) doesn't have size 3&quot; for example
   machine.tickets must have size(3) // machine is a user-defined object
 </code></pre><p>If you wish to get a more precise failure message you can set an alias with the <code class="prettyprint">aka</code> method (<em>also known as</em>):</p>
@@ -261,13 +286,13 @@ iterator.next must be_==(3).eventually
   <li><p>You can also check attribute names<br /><code class="prettyprint">&lt;a&gt;&lt;b name=&quot;value&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;name&quot;)</code></p></li>
   <li><p>And attribute names and values as well<br /><code class="prettyprint">&lt;a&gt;&lt;b n=&quot;v&quot; n2=&quot;v2&quot; n3=&quot;v3&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v2&quot;)</code></p></li>
   <li><p>The equivalent of <code class="prettyprint">\</code> for a &quot;deep&quot; match is simply <code class="prettyprint">\\</code><br /><code class="prettyprint">&lt;a&gt;&lt;s&gt;&lt;c&gt;&lt;/c&gt;&lt;/s&gt;&lt;/a&gt; must \\(&quot;c&quot;)</code></p></li>
-</ul><a name="Json+matchers"></a><h4>Json matchers</h4><p><a href="www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be<br />used to verify the presence of appropriate values in Strings representing Json documents:</p>
+</ul><a name="Json+matchers"></a><h4>Json matchers</h4><p><a href="www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:</p>
 <ul>
   <li><p><code class="prettyprint">/(value)</code> checks if a value is present at the root of the document. This can only be the case if that document is<br />an Array</p></li>
   <li><p><code class="prettyprint">/(key -&gt; value)</code> checks if a pair is present at the root of the document. This can only be the case if that document is<br />a Map</p></li>
   <li><p><code class="prettyprint">*/(value)</code> checks if a value is present anywhere in the document, either as an entry in an Array, or as the value<br />for a key in a Map</p></li>
   <li><p><code class="prettyprint">*/(key -&gt; value)</code> checks if a pair is present anywhere in a Map of thedocument</p></li>
-</ul><p>Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document.<br />For example, for the following document:</p>
+</ul><p>Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document. For example, for the following document:</p>
 <pre><code class="prettyprint">    // taken from an example in the Lift project
     val person = {
       &quot;person&quot;: {
@@ -322,7 +347,7 @@ iterator.next must be_==(3).eventually
         (&quot;Hello&quot; must beMatching(&quot;h.*&quot;)) must beSuccessful
       }
     }
-</code></pre><a name="Scala+Interpreter+matchers"></a><h4>Scala Interpreter matchers</h4><p>This trait is not included in the default specification so you'll have to add it in the rare case where you want to use<br />the Scala interpreter and execute a script:</p>
+</code></pre><a name="Scala+Interpreter+matchers"></a><h4>Scala Interpreter matchers</h4><p>This trait is not included in the default specification so you'll have to add it in the rare case where you want to use the Scala interpreter and execute a script:</p>
 <pre><code class="prettyprint">    class ScalaInterpreterMatchersSpec extends Specification with ScalaInterpreterMatchers {
       def interpret(s: String): String = // you have to provide your own Scala interpreter here
 
@@ -372,7 +397,7 @@ iterator.next must be_==(3).eventually
       /** this parser returns an error */
       val error: Parser[String] = err(&quot;Error&quot;)
     }
-</code></pre><a name="ScalaCheck+properties"></a><h3>ScalaCheck properties</h3><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions to the <code class="prettyprint">check</code> method<br />and use the resulting block as your example body:</p>
+</code></pre><a name="ScalaCheck+properties"></a><h3>ScalaCheck properties</h3><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions to the <code class="prettyprint">check</code> method and use the resulting block as your example body:</p>
 <pre><code class="prettyprint">  &quot;addition and multiplication are related&quot; ! check { (a: Int) =&gt; a + a == 2 * a }
 </code></pre><p>The function that is checked can either return:</p>
 <pre><code class="prettyprint">  // a Boolean
@@ -383,14 +408,14 @@ iterator.next must be_==(3).eventually
 
   // a Prop
   &quot;addition and multiplication are related&quot; ! check { (a: Int) =&gt; (a &gt; 0) ==&gt; (a + a must_== 2 * a) }
-</code></pre><p>Note that if you pass functions using MatchResults you will get better failure messages so you are encouraged to do so.</p><a name="Arbitrary+instances"></a><h4>Arbitrary instances</h4><p>By default <code class="prettyprint">Arbitrary</code> instances are taken from the surrounding example scope. However you'll certainly need to generate<br />your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope<br />of the function you're testing:</p>
+</code></pre><p>Note that if you pass functions using MatchResults you will get better failure messages so you are encouraged to do so.</p><a name="Arbitrary+instances"></a><h4>Arbitrary instances</h4><p>By default <code class="prettyprint">Arbitrary</code> instances are taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope of the function you're testing:</p>
 <pre><code class="prettyprint">    // this arbitrary will be used for all the examples
     implicit def a = Arbitrary { for { a &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;); b &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;) } yield a+b }
 
     &quot;a simple property&quot; ! ex1
 
      def ex1 = check((s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
-</code></pre><p>You can also be very specific if you want to use an <code class="prettyprint">Arbitrary</code> instance only on one example. In that case, just replace the<br /><code class="prettyprint">check</code> method with the name of your <code class="prettyprint">Arbitrary</code> instance:</p>
+</code></pre><p>You can also be very specific if you want to use an <code class="prettyprint">Arbitrary</code> instance only on one example. In that case, just replace the <code class="prettyprint">check</code> method with the name of your <code class="prettyprint">Arbitrary</code> instance:</p>
 <pre><code class="prettyprint">    &quot;a simple property&quot;       ! ex1
     &quot;a more complex property&quot; ! ex2
 
@@ -399,7 +424,7 @@ iterator.next must be_==(3).eventually
 
     // use a tuple if there are several parameters to your function
     def ex2 = (abStrings, abStrings)((s1: String, s2: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
-</code></pre><a name="Setting+the+ScalaCheck+properties"></a><h4>Setting the ScalaCheck properties</h4><p>ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use<br />implicit values:</p>
+</code></pre><a name="Setting+the+ScalaCheck+properties"></a><h4>Setting the ScalaCheck properties</h4><p>ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use implicit values:</p>
 <pre><code class="prettyprint">  implicit val params = set(minTestsOk -&gt; 20) // use display instead of set to get additional console printing
 </code></pre><p>It is also possible to specifically set the execution parameters on a given property:</p>
 <pre><code class="prettyprint">  &quot;this is a specific property&quot; ! check { (a: Int, b: Int) =&gt;
@@ -412,7 +437,7 @@ iterator.next must be_==(3).eventually
   <li><code class="prettyprint">minSize</code>: minimum size for the &quot;sized&quot; data generators, like list generators (default=0)</li>
   <li><code class="prettyprint">maxSize</code>: maximum size for the &quot;sized&quot; data generators (default=100)</li>
   <li><code class="prettyprint">workers</code>: number of threads checking the property (default=1)</li>
-</ul><a name="Mock+expectations"></a><h3>Mock expectations</h3><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those<br />functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait:</p>
+</ul><a name="Mock+expectations"></a><h3>Mock expectations</h3><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait:</p>
 <pre><code class="prettyprint">  import org.specs2.mock._
   class MockitoSpec extends Specification { def is =
 
@@ -445,7 +470,7 @@ iterator.next must be_==(3).eventually
 <pre><code class="prettyprint">  m.get(anyInt()) returns &quot;element&quot;
   m.get(999) must_== &quot;element&quot;
 </code></pre><p><strong><em>specs2</em></strong> matchers can also be passed directly as arguments:</p>
-<pre><code class="prettyprint">  m.get(be_==(123)) returns &quot;one&quot;      
+<pre><code class="prettyprint">  m.get(===(123)) returns &quot;one&quot;
 </code></pre><a name="Callbacks"></a><h5>Callbacks</h5><p>In some rare cases, it is necessary to have the return value depend on the parameters passed to the mocked method:</p>
 <pre><code class="prettyprint">  m.get(anyInt) answers { i =&gt; &quot;The parameter is &quot; + i.toString }
 </code></pre><p>The function passed to answers will be called with each parameter passed to the stubbed method:</p>
@@ -456,7 +481,7 @@ iterator.next must be_==(3).eventually
   <li>pass the mock object if both the method has no parameters and the function has one parameter:<br /> <code class="prettyprint">mock.size answers { mock =&gt; mock.hashCode }</code></li>
   <li>pass the parameter if both the method and the function have one parameter:<br /> <code class="prettyprint">mock.get(0) answers ( i =&gt; i.toString )</code></li>
   <li>pass the parameter and the mock object if the method has 1 parameter and the function has 2:<br /><code class="prettyprint">mock.get(0) answers { (i, mock) =&gt; i.toString + &quot; for mock &quot; + mock.toString }</code></li>
-</ul><p>In any other cases, if <code class="prettyprint">f</code> is a function of 1 parameter, the array of the method parameters will be passed and if the<br />function has 2 parameters, the second one will be the mock.</p><a name="Verification"></a><h5>Verification</h5><p>By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you<br />want to specify that some methods are indeed called:</p>
+</ul><p>In any other cases, if <code class="prettyprint">f</code> is a function of 1 parameter, the array of the method parameters will be passed and if the function has 2 parameters, the second one will be the mock.</p><a name="Verification"></a><h5>Verification</h5><p>By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you want to specify that some methods are indeed called:</p>
 <pre><code class="prettyprint">   m.get(0)
    m.get(0) was called
    m.get(1) wasnt called
@@ -518,7 +543,7 @@ iterator.next must be_==(3).eventually
 <ul>
   <li><p>functions as parameters. In that case you can try to create a <a href="https://groups.google.com/d/msg/specs2-users/R3DS_ZPe29w/WvmkfJqcq8IJ">&quot;function matcher&quot;</a> or use <a href="http://borachio.com">Borachio</a></p></li>
   <li><p>mocking partial functions. Auto-boxing might interfere, please have a look at <a href="https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion">this discussion</a></p></li>
-</ul><a name="DataTables"></a><h3>DataTables</h3><p>DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the<br />addition of integers by providing one example on each row of a table:</p>
+</ul><a name="DataTables"></a><h3>DataTables</h3><p>DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table:</p>
 <pre><code class="prettyprint">  class DataTableSpec extends Specification with DataTables { def is =
     &quot;adding integers should just work in scala&quot;  ! e1
 
@@ -529,19 +554,28 @@ iterator.next must be_==(3).eventually
        (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
     }
   }
-</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you<br />can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"></a><h3>Forms</h3><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed<br />to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div><div class="level0"><a name="Reusing+matchers+outside+of+specs2"></a><h3>Reusing matchers outside of specs2</h3><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test<br />framework. You can reuse the following traits:</p>
+</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"></a><h3>Forms</h3><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Reusing+matchers+outside+of+specs2"></a><h3>Reusing matchers outside of specs2</h3><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
   <li><p>Finally, in a JUnit-like library you can use the <code class="prettyprint">org.specs2.matcher.JUnitMustMatchers</code> trait which throws<br /> <code class="prettyprint">AssertionFailureError</code>s</p></li>
-</ul>
-<hr /></div><p></p><br /><table class="dataTable">
-        <tr><th colSpan="2">Total for specification Matchers guide</th></tr>
-        <tr><td>Finished in</td><td class="info">1 second, 254 ms</td></tr>
+</ul><a name="Without+any+dependency+on+specs2"></a><h4>Without any dependency on specs2</h4><p>The <a href="https://github.com/spray/spray/wiki/Testing">Testing</a> page of the <strong><em>spray</em></strong> project explains how you can define a testing trait in your library which can be used with specs2 or scalatest or any framework defining the following methods:</p>
+<ul>
+  <li><code class="prettyprint">fail(msg: String): Nothing</code></li>
+  <li><code class="prettyprint">failure(msg: String): Nothing</code></li>
+</ul><p>In specs2, those 2 methods are defined by the <code class="prettyprint">org.specs2.matcher.ThrownMessages</code> trait</p>
+<pre><code class="prettyprint">  trait ThrownMessages { this: ThrownExpectations =&gt;
+    def fail(m: String): Nothing = failure(m)
+    def skip(m: String): Nothing = skipped(m)
+  }
+</code></pre>
+<hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
+        <tr><th colSpan="2">Total for specification Matchers</th></tr>
+        <tr><td>Finished in</td><td class="info">2 seconds, 595 ms</td></tr>
         <tr><td>Results</td><td class="success">45 examples, 479 expectations, 0 failure, 0 error</td></tr>
       </table></div><div id="tree">
-      <ul><li id="1218791978"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="-1046360781"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="-1911826422"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-589647733"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -551,7 +585,7 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1570670126"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="-14757443"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -671,9 +705,9 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2119399150"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="340893365"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -713,7 +747,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -754,7 +788,47 @@ iterator.next must be_==(3).eventually
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -794,7 +868,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -834,7 +908,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -874,7 +948,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -914,7 +988,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -954,7 +1028,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -994,7 +1068,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1034,7 +1108,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1074,7 +1148,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1114,7 +1188,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1154,7 +1228,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1194,7 +1268,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1234,7 +1308,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1274,7 +1348,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1314,7 +1388,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1354,7 +1428,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1393,7 +1467,7 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1434,7 +1508,7 @@ iterator.next must be_==(3).eventually
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1474,7 +1548,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1513,7 +1587,7 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1554,7 +1628,7 @@ iterator.next must be_==(3).eventually
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1594,7 +1668,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1635,7 +1709,7 @@ iterator.next must be_==(3).eventually
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1674,7 +1748,7 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1715,7 +1789,7 @@ iterator.next must be_==(3).eventually
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1755,7 +1829,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1795,7 +1869,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1834,7 +1908,7 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1874,7 +1948,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Functions+and+partial+functions">Functions and partial functions</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1913,7 +1987,7 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1953,7 +2027,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1993,7 +2067,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2033,7 +2107,8 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2072,7 +2147,7 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2111,14 +2186,63 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-616959649"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li><li id="1260626783"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
           <ul><li><a href="org.specs2.guide.Runners.html#In+a+Specification">In a Specification</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#Diffs">Diffs</a>
+          <ul><li><a href="org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Shortcuts">Shortcuts</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Output+directory">Output directory</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Storing+previous+results">Storing previous results</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Status+flags">Status flags</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Diffs">Diffs</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#StackTraceFilter">StackTraceFilter</a>
           <ul></ul>
@@ -2137,6 +2261,9 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Simple+build+tool">Simple build tool</a>
+          <ul><li><a href="org.specs2.guide.Runners.html#with+sbt+0.7.x">with sbt 0.7.x</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x">with sbt &gt; 0.9.x</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Test-only+arguments">Test-only arguments</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Output+formats">Output formats</a>
@@ -2145,6 +2272,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Colors">Colors</a>
           <ul></ul>
+        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Runners.html#JUnit">JUnit</a>
           <ul></ul>
@@ -2155,7 +2283,7 @@ iterator.next must be_==(3).eventually
         </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1629878613"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="-694002029"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -2199,7 +2327,7 @@ iterator.next must be_==(3).eventually
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="263701199"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="-1576123140"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -2219,5 +2347,5 @@ iterator.next must be_==(3).eventually
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1218791978','2119399150'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['-1911826422','340893365'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

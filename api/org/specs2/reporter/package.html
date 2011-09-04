@@ -101,11 +101,22 @@ with defaults as AnsiColors for a dark background console</p>
       <span class="symbol"> 
         <a href="ConsoleReporter.html"><span class="name">ConsoleReporter</span></a>
         
-        <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with TextExporting with ConsoleOutput</span>
+        <span class="result"> extends DefaultReporter with TextExporting with ConsoleOutput</span>
       </span>
       </h4>
       <p class="comment cmt">The console reporter executes a Specification and exports the results to the Console
 Output:</p>
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultReporter" data-isabs="true">
+      <a id="DefaultReporter:DefaultReporter"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="DefaultReporter.html"><span class="name">DefaultReporter</span></a>
+        
+        <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with DefaultStoring</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection" data-isabs="true">
       <a id="DefaultSelection:DefaultSelection"></a>
       <h4 class="signature">
@@ -113,11 +124,10 @@ Output:</p>
       <span class="symbol"> 
         <a href="DefaultSelection.html"><span class="name">DefaultSelection</span></a>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends WithDefaultStatisticsRepository</span>
       </span>
       </h4>
-      <p class="comment cmt">The DefaultSelection trait filters the fragments to execute by filtering Examples according to their names
-</p>
+      <p class="comment cmt">The DefaultSelection trait filters the fragments to execute by filtering Examples according to their names</p>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSequence" data-isabs="true">
       <a id="DefaultSequence:DefaultSequence"></a>
       <h4 class="signature">
@@ -195,7 +205,7 @@ Output:</p>
       <span class="symbol"> 
         <a href="HtmlPrinter.html"><span class="name">HtmlPrinter</span></a>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends OutputDir</span>
       </span>
       </h4>
       <p class="comment cmt">The Html printer is used to create an Html report of an executed specification.</p>
@@ -206,7 +216,7 @@ Output:</p>
       <span class="symbol"> 
         <a href="HtmlReporter.html"><span class="name">HtmlReporter</span></a>
         
-        <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with HtmlExporting with ConsoleOutput</span>
+        <span class="result"> extends DefaultReporter with HtmlExporting with ConsoleOutput</span>
       </span>
       </h4>
       <p class="comment cmt">Reports a Specification as an Html page
@@ -233,8 +243,7 @@ Output:</p>
         <span class="result"> extends Exporting with JUnitXmlPrinter</span>
       </span>
       </h4>
-      <p class="comment cmt">Trait for exporting the specification as JUnit xml files
-</p>
+      <p class="comment cmt">Trait for exporting the specification as JUnit xml files</p>
     </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter" data-isabs="true">
       <a id="JUnitXmlPrinter:JUnitXmlPrinter"></a>
       <h4 class="signature">
@@ -242,7 +251,7 @@ Output:</p>
       <span class="symbol"> 
         <a href="JUnitXmlPrinter.html"><span class="name">JUnitXmlPrinter</span></a>
         
-        <span class="result"> extends Statistics</span>
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       <p class="comment cmt">The JUnitXml printer is used to create a JUnit xml report of an executed specification.</p>
@@ -253,7 +262,7 @@ Output:</p>
       <span class="symbol"> 
         <a href="JUnitXmlReporter.html"><span class="name">JUnitXmlReporter</span></a>
         
-        <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with JUnitXmlExporting with ConsoleOutput</span>
+        <span class="result"> extends DefaultReporter with JUnitXmlExporting with ConsoleOutput</span>
       </span>
       </h4>
       <p class="comment cmt">This trait execute specifications and exports them as JUnit xml files in the target/test-reports directory (by default).</p>
@@ -298,7 +307,7 @@ seen as a Tree of Fragments.</p>
       <span class="symbol"> 
         <a href="NotifierReporter.html"><span class="name">NotifierReporter</span></a>
         
-        <span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with NotifierExporting</span>
+        <span class="result"> extends DefaultReporter with NotifierExporting</span>
       </span>
       </h4>
       <p class="comment cmt">Report a Specification by notifying execution events to a Notifier
@@ -310,7 +319,7 @@ seen as a Tree of Fragments.</p>
       <span class="symbol"> 
         <a href="Reporter.html"><span class="name">Reporter</span></a>
         
-        <span class="result"> extends Selection with Sequence with ExecutionStrategy with Exporting</span>
+        <span class="result"> extends Selection with Sequence with ExecutionStrategy with Storing with Exporting</span>
       </span>
       </h4>
       <p class="comment cmt">A Reporter will report the execution of a Specification following 3 steps:</p>
@@ -373,23 +382,6 @@ different types of results.</p>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.reporter.Stats" data-isabs="false">
-      <a id="Stats:Stats"></a>
-      <h4 class="signature">
-      <span class="kind">case class</span>
-      <span class="symbol"> 
-        <a href="Stats.html"><span class="name">Stats</span></a>
-        
-        <span class="params">(<span name="fragments">fragments: Int</span>, <span name="successes">successes: Int</span>, <span name="expectations">expectations: Int</span>, <span name="failures">failures: Int</span>, <span name="errors">errors: Int</span>, <span name="pending">pending: Int</span>, <span name="skipped">skipped: Int</span>, <span name="timer">timer: SimpleTimer</span>, <span name="start">start: Option[ExecutedSpecStart]</span>, <span name="end">end: Option[ExecutedSpecEnd]</span>)</span><span class="result"> extends Product with Serializable</span>
-      </span>
-      </h4>
-      <p class="comment cmt">The Stats class store results for the number of:
-* successes
-* expectations
-* failures
-* errors
-* pending
-* skipped</p>
     </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceReporter" data-isabs="false">
       <a id="TestInterfaceReporter:TestInterfaceReporter"></a>
       <h4 class="signature">
@@ -521,19 +513,10 @@ at the end of the specification
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.reporter.Stats" data-isabs="false">
-      <a id="Stats:Stats"></a>
-      <h4 class="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
-        <a href="Stats$.html"><span class="name">Stats</span></a>
-        
-        <span class="result"> extends Product with Serializable</span>
-      </span>
-      </h4>
-      
     </li></ol>
             </div>
+
+        
 
         
 

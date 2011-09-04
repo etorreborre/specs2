@@ -13,6 +13,9 @@
       <div class="name">f</div>
       <div class="occurrences"><a name="org.specs2.execute.FailureException" class="extype" href="../org/specs2/execute/FailureException.html">FailureException</a> <a name="org.specs2.execute.SkipException" class="extype" href="../org/specs2/execute/SkipException.html">SkipException</a> <a name="org.specs2.form.FieldCell" class="extype" href="../org/specs2/form/FieldCell.html">FieldCell</a> <a name="org.specs2.specification.FormMarkup" class="extype" href="../org/specs2/specification/FormMarkup.html">FormMarkup</a> </div>
     </div><div class="entry">
+      <div class="name">fail</div>
+      <div class="occurrences"><a name="org.specs2.matcher.ThrownMessages" class="extype" href="../org/specs2/matcher/ThrownMessages.html">ThrownMessages</a> </div>
+    </div><div class="entry">
       <div class="name">Failure</div>
       <div class="occurrences"><a name="org.specs2.execute" class="extype" href="../org/specs2/execute/package.html">execute</a> <a name="org.specs2.execute.StandardResults" class="extype" href="../org/specs2/execute/StandardResults.html">StandardResults</a> <a name="org.specs2.matcher.ThrownExpectations" class="extype" href="../org/specs2/matcher/ThrownExpectations.html">ThrownExpectations</a> <a name="org.specs2.reporter.Colors" class="extype" href="../org/specs2/reporter/Colors.html">Colors</a> <a name="org.specs2.reporter.ConsoleColors" class="extype" href="../org/specs2/reporter/ConsoleColors.html">ConsoleColors</a> <a name="org.specs2.reporter.HandlerEvents" class="extype" href="../org/specs2/reporter/HandlerEvents.html">HandlerEvents</a> </div>
     </div><div class="entry">
@@ -26,7 +29,7 @@
       <div class="occurrences"><a name="org.specs2.execute" class="extype" href="../org/specs2/execute/package.html">execute</a> </div>
     </div><div class="entry">
       <div class="name">failures</div>
-      <div class="occurrences"><a name="org.specs2.reporter.JUnitXmlPrinter.TestSuite" class="extype" href="../org/specs2/reporter/JUnitXmlPrinter$TestSuite.html">TestSuite</a> <a name="org.specs2.reporter.Stats" class="extype" href="../org/specs2/reporter/Stats.html">Stats</a> </div>
+      <div class="occurrences"><a name="org.specs2.reporter.JUnitXmlPrinter.TestSuite" class="extype" href="../org/specs2/reporter/JUnitXmlPrinter$TestSuite.html">TestSuite</a> <a name="org.specs2.specification.Stats" class="extype" href="../org/specs2/specification/Stats.html">Stats</a> </div>
     </div><div class="entry">
       <div class="name">Field</div>
       <div class="occurrences"><a name="org.specs2.form" class="extype" href="../org/specs2/form/package.html">form</a> </div>
@@ -41,7 +44,7 @@
       <div class="occurrences"><a name="org.specs2.matcher" class="extype" href="../org/specs2/matcher/package.html">matcher</a> </div>
     </div><div class="entry">
       <div class="name">filePath</div>
-      <div class="occurrences"><a name="org.specs2.reporter.JUnitXmlPrinter" class="extype" href="../org/specs2/reporter/JUnitXmlPrinter.html">JUnitXmlPrinter</a> </div>
+      <div class="occurrences"><a name="org.specs2.reporter.JUnitXmlExporting" class="extype" href="../org/specs2/reporter/JUnitXmlExporting.html">JUnitXmlExporting</a> </div>
     </div><div class="entry">
       <div class="name">filePaths</div>
       <div class="occurrences"><a name="org.specs2.io.MockFileSystem" class="extype" href="../org/specs2/io/MockFileSystem.html">MockFileSystem</a> </div>
@@ -59,6 +62,9 @@
       <div class="occurrences"><a name="org.specs2.control.Property" class="extype" href="../org/specs2/control/Property.html">Property</a> <a name="org.specs2.reporter.DefaultSelection" class="extype" href="../org/specs2/reporter/DefaultSelection.html">DefaultSelection</a> </div>
     </div><div class="entry">
       <div class="name">filterExamples</div>
+      <div class="occurrences"><a name="org.specs2.reporter.DefaultSelection" class="extype" href="../org/specs2/reporter/DefaultSelection.html">DefaultSelection</a> </div>
+    </div><div class="entry">
+      <div class="name">filterPrevious</div>
       <div class="occurrences"><a name="org.specs2.reporter.DefaultSelection" class="extype" href="../org/specs2/reporter/DefaultSelection.html">DefaultSelection</a> </div>
     </div><div class="entry">
       <div class="name">filterTags</div>
@@ -131,7 +137,7 @@
       <div class="occurrences"><a name="org.specs2.specification" class="extype" href="../org/specs2/specification/package.html">specification</a> </div>
     </div><div class="entry">
       <div class="name">fragments</div>
-      <div class="occurrences"><a name="org.specs2.reporter.FragmentSeq" class="extype" href="../org/specs2/reporter/FragmentSeq.html">FragmentSeq</a> <a name="org.specs2.reporter.Stats" class="extype" href="../org/specs2/reporter/Stats.html">Stats</a> <a name="org.specs2.specification" class="extype" href="../org/specs2/specification/package.html">specification</a> <a name="org.specs2.specification.Fragments" class="extype" href="../org/specs2/specification/Fragments.html">Fragments</a> </div>
+      <div class="occurrences"><a name="org.specs2.reporter.FragmentSeq" class="extype" href="../org/specs2/reporter/FragmentSeq.html">FragmentSeq</a> <a name="org.specs2.specification" class="extype" href="../org/specs2/specification/package.html">specification</a> <a name="org.specs2.specification.Fragments" class="extype" href="../org/specs2/specification/Fragments.html">Fragments</a> </div>
     </div><div class="entry">
       <div class="name">FragmentsBuilder</div>
       <div class="occurrences"><a name="org.specs2.mutable" class="extype" href="../org/specs2/mutable/package.html">mutable</a> <a name="org.specs2.specification" class="extype" href="../org/specs2/specification/package.html">specification</a> </div>
@@ -160,17 +166,14 @@
       <div class="name">fromMatchResult</div>
       <div class="occurrences"><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="../org/specs2/matcher/MatchersImplicits.html">MatchersImplicits</a> </div>
     </div><div class="entry">
-      <div class="name">FromSource</div>
-      <div class="occurrences"><a name="org.specs2.io" class="extype" href="../org/specs2/io/package.html">io</a> </div>
-    </div><div class="entry">
       <div class="name">fromString</div>
-      <div class="occurrences"><a name="org.specs2.control.IncludeExcludeStackTraceFilter" class="extype" href="../org/specs2/control/IncludeExcludeStackTraceFilter$.html">IncludeExcludeStackTraceFilter</a> </div>
+      <div class="occurrences"><a name="org.specs2.control.IncludeExcludeStackTraceFilter" class="extype" href="../org/specs2/control/IncludeExcludeStackTraceFilter$.html">IncludeExcludeStackTraceFilter</a> <a name="org.specs2.text" class="extype" href="../org/specs2/text/package.html">text</a> <a name="org.specs2.text.FromString" class="extype" href="../org/specs2/text/FromString.html">FromString</a> <a name="org.specs2.time.SimpleTimer" class="extype" href="../org/specs2/time/SimpleTimer$.html">SimpleTimer</a> </div>
     </div><div class="entry">
       <div class="name">fromSystemProperties</div>
       <div class="occurrences"><a name="org.specs2.reporter.SmartColors" class="extype" href="../org/specs2/reporter/SmartColors.html">SmartColors</a> </div>
     </div><div class="entry">
-      <div class="name">fs</div>
-      <div class="occurrences"><a name="org.specs2.specification.RegexSteps.RegexFragment" class="extype" href="../org/specs2/specification/RegexSteps$RegexFragment.html">RegexFragment</a> </div>
+      <div class="name">fromXml</div>
+      <div class="occurrences"><a name="org.specs2.specification.Stats" class="extype" href="../org/specs2/specification/Stats$.html">Stats</a> </div>
     </div><div class="entry">
       <div class="name">fullStackTrace</div>
       <div class="occurrences"><a name="org.specs2.main.ArgumentsShortcuts" class="extype" href="../org/specs2/main/ArgumentsShortcuts.html">ArgumentsShortcuts</a> </div>

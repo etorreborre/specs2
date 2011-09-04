@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">ExecutedSpecStart</span>
         
-        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="location">location: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>)</span><span class="result"> extends <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="start">start: <a name="org.specs2.specification.SpecStart" class="extype" href="SpecStart.html">SpecStart</a></span>, <span name="location">location: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>, <span name="stats">stats: <a name="org.specs2.specification.Stats" class="extype" href="Stats.html">Stats</a></span>)</span><span class="result"> extends <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">ExecutedSpecStart</span>
         
-        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="location">location: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>)</span>
+        <span class="params">(<span name="start">start: <a name="org.specs2.specification.SpecStart" class="extype" href="SpecStart.html">SpecStart</a></span>, <span name="location">location: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>, <span name="stats">stats: <a name="org.specs2.specification.Stats" class="extype" href="Stats.html">Stats</a></span>)</span>
       </span>
       </h4>
       
@@ -131,12 +131,12 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#arguments" data-isabs="false">
-      <a id="arguments:Arguments"></a>
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#args" data-isabs="false">
+      <a id="args:Arguments"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">arguments</span>
+        <span class="name">args</span>
         
         <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
       </span>
@@ -224,7 +224,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -236,6 +236,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.ExecutedSpecStart" class="extype" href="">ExecutedSpecStart</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#isIncludeLink" data-isabs="false">
+      <a id="isIncludeLink:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isIncludeLink</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -247,6 +258,39 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#isLink" data-isabs="false">
+      <a id="isLink:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isLink</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#isSeeOnlyLink" data-isabs="false">
+      <a id="isSeeOnlyLink:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isSeeOnlyLink</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#link" data-isabs="false">
+      <a id="link:Option[HtmlLink]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">link</span>
+        
+        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#location" data-isabs="false">
       <a id="location:Location"></a>
       <h4 class="signature">
@@ -257,15 +301,15 @@
         <span class="result">: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.ExecutedSpecStart" class="extype" href="">ExecutedSpecStart</a> → <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the location of the executed Fragment</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.ExecutedSpecStart" class="extype" href="">ExecutedSpecStart</a> → <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#name" data-isabs="false">
-      <a id="name:SpecName"></a>
+      <a id="name:String"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">name</span>
         
-        <span class="result">: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -346,6 +390,39 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.ExecutedSpecStart" class="extype" href="">ExecutedSpecStart</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#specName" data-isabs="false">
+      <a id="specName:SpecName"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">specName</span>
+        
+        <span class="result">: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#start" data-isabs="false">
+      <a id="start:SpecStart"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">start</span>
+        
+        <span class="result">: <a name="org.specs2.specification.SpecStart" class="extype" href="SpecStart.html">SpecStart</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#stats" data-isabs="false">
+      <a id="stats:Stats"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">stats</span>
+        
+        <span class="result">: <a name="org.specs2.specification.Stats" class="extype" href="Stats.html">Stats</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.ExecutedSpecStart" class="extype" href="">ExecutedSpecStart</a> → <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -368,6 +445,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.ExecutedSpecStart" class="extype" href="">ExecutedSpecStart</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart#unlink" data-isabs="false">
+      <a id="unlink:ExecutedSpecStart"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">unlink</span>
+        
+        <span class="result">: <a name="org.specs2.specification.ExecutedSpecStart" class="extype" href="">ExecutedSpecStart</a></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -410,7 +498,12 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Deprecated Value Members</h3>
+              <ol><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
       <a id="productElements:Iterator[Any]"></a>
       <h4 class="signature">
       <span class="kind">def</span>

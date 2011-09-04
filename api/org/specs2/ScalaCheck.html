@@ -374,6 +374,17 @@
       </span>
       </h4>
       <p class="shortcomment cmt">this implicit def is necessary when the expression is at the start of the spec</p><div class="fullcomment"><div class="comment cmt"><p>this implicit def is necessary when the expression is at the start of the spec</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamples#booleanFragmentsFragment" data-isabs="false">
+      <a id="booleanFragmentsFragment(⇒ Boolean):BooleanResultFragment"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">booleanFragmentsFragment</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamples.BooleanResultFragment" class="extype">BooleanResultFragment</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this implicit def is necessary when the expression is at the start of the spec</p><div class="fullcomment"><div class="comment cmt"><p>this implicit def is necessary when the expression is at the start of the spec</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check" data-isabs="false">
       <a id="check(Prop)(Parameters):Result"></a>
       <h4 class="signature">
@@ -771,7 +782,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -813,6 +824,21 @@
         <span class="name">matchFragments</span>
         
         <span class="params">(<span name="expression">expression: ⇒ org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this implicit def is necessary when the expression is at the start of the spec
+The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
+</p><div class="fullcomment"><div class="comment cmt"><p>this implicit def is necessary when the expression is at the start of the spec
+The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamples#matchFragmentsFragment" data-isabs="false">
+      <a id="matchFragmentsFragment(⇒ org.specs2.matcher.MatchResult[_]):MatchResultFragment"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">matchFragmentsFragment</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamples.MatchResultFragment" class="extype">MatchResultFragment</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">this implicit def is necessary when the expression is at the start of the spec</p><div class="fullcomment"><div class="comment cmt"><p>this implicit def is necessary when the expression is at the start of the spec</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
@@ -1054,11 +1080,22 @@ The naming is a bit different, in order to keep short names for frequent use cas
     </li><li visbl="pub" name="org.specs2.ScalaCheck#propFragments" data-isabs="false">
       <a id="propFragments(⇒ Prop)(Parameters):Fragments"></a>
       <h4 class="signature">
-      <span class="kind">implicit def</span>
+      <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">propFragments</span>
         
         <span class="params">(<span name="expression">expression: ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="p">p: <a name="org.specs2.matcher.Parameters" class="extype" href="matcher/Parameters.html">Parameters</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.ScalaCheck#propFragmentsFragments" data-isabs="false">
+      <a id="propFragmentsFragments(⇒ Prop):FragmentsFragment"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">propFragmentsFragments</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">this implicit def is necessary when the expression is at the start of the spec</p><div class="fullcomment"><div class="comment cmt"><p>this implicit def is necessary when the expression is at the start of the spec</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
@@ -1081,6 +1118,17 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">resultFragments</span>
         
         <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.Result" class="extype" href="execute/Result.html">Result</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this implicit def is necessary when the expression is at the start of the spec</p><div class="fullcomment"><div class="comment cmt"><p>this implicit def is necessary when the expression is at the start of the spec</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamples#resultFragmentsFragment" data-isabs="false">
+      <a id="resultFragmentsFragment(⇒ Result):ResultFragment"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">resultFragmentsFragment</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.Result" class="extype" href="execute/Result.html">Result</a></span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamples.ResultFragment" class="extype">ResultFragment</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">this implicit def is necessary when the expression is at the start of the spec</p><div class="fullcomment"><div class="comment cmt"><p>this implicit def is necessary when the expression is at the start of the spec</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
@@ -1218,6 +1266,8 @@ The naming is a bit different, in order to keep short names for frequent use cas
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckParameters" class="extype" href="matcher/ScalaCheckParameters.html">ScalaCheckParameters</a></dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="org.specs2.specification.AutoExamples" class="parent">
               <h3>Inherited from <span name="org.specs2.specification.AutoExamples" class="extype">AutoExamples</span></h3>

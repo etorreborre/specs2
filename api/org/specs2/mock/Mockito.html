@@ -256,13 +256,13 @@
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an object allowing the chaining of returned values on doNothing calls.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.mock.mockito.MockitoStubs" class="extype" href="mockito/MockitoStubs.html">MockitoStubs</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.mock.mockito.MockitoStubs#anArgThat" data-isabs="false">
-      <a id="anArgThat[T](Matcher[T]):T"></a>
+      <a id="anArgThat[T, U&lt;:T](Matcher[U]):T"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">anArgThat</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="m">m: <span name="org.hamcrest.Matcher" class="extype">Matcher</span>[T]</span>)</span><span class="result">: T</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="U">U &lt;: T</span>]</span>
+        <span class="params">(<span name="m">m: <span name="org.hamcrest.Matcher" class="extype">Matcher</span>[U]</span>)</span><span class="result">: T</span>
       </span>
       </h4>
       <p class="shortcomment cmt">allows to use a hamcrest matchers to match parameters.</p><div class="fullcomment"><div class="comment cmt"><p>allows to use a hamcrest matchers to match parameters.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.mock.mockito.MockitoStubs" class="extype" href="mockito/MockitoStubs.html">MockitoStubs</a></dd></dl></div>
@@ -377,13 +377,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.mock.mockito.MockitoMatchers" class="extype" href="mockito/MockitoMatchers.html">MockitoMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.mock.mockito.MockitoStubs#argThat" data-isabs="false">
-      <a id="argThat[T](Matcher[T]):T"></a>
+      <a id="argThat[T, U&lt;:T](Matcher[U]):T"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">argThat</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="m">m: <a name="org.specs2.matcher.Matcher" class="extype" href="../matcher/Matcher.html">Matcher</a>[T]</span>)</span><span class="result">: T</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="U">U &lt;: T</span>]</span>
+        <span class="params">(<span name="m">m: <a name="org.specs2.matcher.Matcher" class="extype" href="../matcher/Matcher.html">Matcher</a>[U]</span>)</span><span class="result">: T</span>
       </span>
       </h4>
       <p class="shortcomment cmt">allows to use a specs matcher to match parameters by encapsulating it as a Hamcrest matcher.</p><div class="fullcomment"><div class="comment cmt"><p>allows to use a specs matcher to match parameters by encapsulating it as a Hamcrest matcher.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.mock.mockito.MockitoStubs" class="extype" href="mockito/MockitoStubs.html">MockitoStubs</a></dd></dl></div>
@@ -658,7 +658,7 @@ It is equivalent to writting a must_== b
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.mock.mockito.CalledMatchers#got" data-isabs="false">
       <a id="got[T](⇒ T):MatchResult[T]"></a>
       <h4 class="signature">
@@ -985,6 +985,8 @@ doReturn("one").when(s).get(0) // instead of s.get(0) returns "one" which would 
         </dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="org.specs2.mock.mockito.MockitoMatchers" class="parent">
               <h3>Inherited from <a name="org.specs2.mock.mockito.MockitoMatchers" class="extype" href="mockito/MockitoMatchers.html">MockitoMatchers</a></h3>

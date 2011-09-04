@@ -210,7 +210,9 @@
         <span class="params">(<span name="s">s: String</span>, <span name="color">color: String</span>, <span name="doIt">doIt: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: String</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a colored string</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.text.AnsiColors" class="extype" href="../text/AnsiColors.html">AnsiColors</a></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a colored string (if args.color == true)
+color markers are inserted at the beginning and end of each line so that newlines are preserved
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.text.AnsiColors" class="extype" href="../text/AnsiColors.html">AnsiColors</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.ColorsMap#colors" data-isabs="false">
       <a id="colors:Map[String, String]"></a>
       <h4 class="signature">
@@ -334,7 +336,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.ColorsMap#getColor" data-isabs="false">
       <a id="getColor(String):Option[String]"></a>
       <h4 class="signature">
@@ -676,6 +678,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.text.AnsiColors" class="extype" href="../text/AnsiColors.html">AnsiColors</a></dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="org.specs2.reporter.ColorsMap" class="parent">
               <h3>Inherited from <a name="org.specs2.reporter.ColorsMap" class="extype" href="ColorsMap.html">ColorsMap</a></h3>

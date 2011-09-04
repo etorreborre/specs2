@@ -356,13 +356,13 @@ It is equivalent to writting a must_== b
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#fromMatchResult" data-isabs="false">
-      <a id="fromMatchResult(org.specs2.matcher.MatchResult[_]):Boolean"></a>
+      <a id="fromMatchResult(⇒ org.specs2.matcher.MatchResult[_]):Boolean"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">fromMatchResult</span>
         
-        <span class="params">(<span name="r">r: org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+        <span class="params">(<span name="r">r: ⇒ org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">implicit definition to accept any MatchResult as a Boolean value.</p><div class="fullcomment"><div class="comment cmt"><p>implicit definition to accept any MatchResult as a Boolean value.
@@ -430,7 +430,7 @@ It is true if the MatchResult is not an Error or a Failure
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -643,6 +643,8 @@ This avoids writing b must beTrue
         </dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="org.specs2.matcher.Expectations" class="parent">
               <h3>Inherited from <a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></h3>

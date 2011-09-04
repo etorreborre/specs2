@@ -157,6 +157,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#!==" data-isabs="false">
+      <a id="!==[T](⇒ T):Matcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">!==</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if a != b</p><div class="fullcomment"><div class="comment cmt"><p>matches if a != b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
       <a id="##():Int"></a>
       <h4 class="signature">
@@ -190,6 +201,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#===" data-isabs="false">
+      <a id="===[T](⇒ T):BeTypedEqualTo[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">===</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.BeTypedEqualTo" class="extype" href="BeTypedEqualTo.html">BeTypedEqualTo</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if a == b</p><div class="fullcomment"><div class="comment cmt"><p>matches if a == b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#==~" data-isabs="false">
+      <a id="==~[T, S](⇒ S)((S) ⇒ T):Matcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">==~</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span>
+        <span class="params">(<span name="s">s: ⇒ S</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="convert">convert: (S) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if a == b after an implicit conversion</p><div class="fullcomment"><div class="comment cmt"><p>matches if a == b after an implicit conversion</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.AnyBeHaveMatchers#anInstanceOf" data-isabs="false">
       <a id="anInstanceOf[T](ClassManifest[T]):Matcher[Any]"></a>
       <h4 class="signature">
@@ -501,7 +534,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.matcher.AnyBeHaveMatchers#equalTo" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#equalTo" data-isabs="false">
       <a id="equalTo[T](⇒ T):BeEqualTo"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -511,7 +544,7 @@
         <span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.BeEqualTo" class="extype" href="BeEqualTo.html">BeEqualTo</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.AnyBeHaveMatchers" class="extype" href="AnyBeHaveMatchers.html">AnyBeHaveMatchers</a></dd></dl></div>
+      <p class="shortcomment cmt">matches if a == b</p><div class="fullcomment"><div class="comment cmt"><p>matches if a == b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
@@ -547,7 +580,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -570,6 +603,17 @@
       </span>
       </h4>
       <p class="shortcomment cmt">matches if v.</p><div class="fullcomment"><div class="comment cmt"><p>matches if v.getClass == c</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#haveInterface" data-isabs="false">
+      <a id="haveInterface[T](ClassManifest[T]):Matcher[Any]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">haveInterface</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if x.</p><div class="fullcomment"><div class="comment cmt"><p>matches if x.getClass.getInterfaces.contains(T)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#haveSuperclass" data-isabs="false">
       <a id="haveSuperclass[T](ClassManifest[T]):Matcher[Any]"></a>
       <h4 class="signature">
@@ -581,6 +625,17 @@
       </span>
       </h4>
       <p class="shortcomment cmt">matches if c.</p><div class="fullcomment"><div class="comment cmt"><p>matches if c.isAssignableFrom(v.getClass.getSuperclass)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.AnyBeHaveMatchers#interface" data-isabs="false">
+      <a id="interface[T](ClassManifest[T]):Matcher[Any]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">interface</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.AnyBeHaveMatchers" class="extype" href="AnyBeHaveMatchers.html">AnyBeHaveMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -757,6 +812,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#typedEqualTo" data-isabs="false">
+      <a id="typedEqualTo[T](⇒ T):BeTypedEqualTo[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">typedEqualTo</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.BeTypedEqualTo" class="extype" href="BeTypedEqualTo.html">BeTypedEqualTo</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if a == b</p><div class="fullcomment"><div class="comment cmt"><p>matches if a == b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -801,6 +867,8 @@
         </dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="org.specs2.matcher.AnyBeHaveMatchers" class="parent">
               <h3>Inherited from <a name="org.specs2.matcher.AnyBeHaveMatchers" class="extype" href="AnyBeHaveMatchers.html">AnyBeHaveMatchers</a></h3>

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.io.FromSource</title>
+          <title>org.specs2.mutable.BeforeAfter</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -12,25 +12,25 @@
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value">
+        <body class="type">
       <div id="definition">
-        <a title="Go to companion" href="FromSource.html"><img src="../../../lib/object_to_trait_big.png" /></a>
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.io" class="extype" href="package.html">io</a></p>
-        <h1><a title="Go to companion" href="FromSource.html">FromSource</a></h1>
+        <img src="../../../lib/trait_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.mutable" class="extype" href="package.html">mutable</a></p>
+        <h1>BeforeAfter</h1>
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">object</span>
+      <span class="kind">trait</span>
       <span class="symbol"> 
-        <span class="name">FromSource</span>
+        <span class="name">BeforeAfter</span>
         
-        <span class="result"> extends <a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></span>
+        <span class="result"> extends <a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a> with <span name="scala.DelayedInit" class="extype">DelayedInit</span></span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.DelayedInit" class="extype">DelayedInit</span>, <a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a>, <a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a>, <a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a>, <a name="org.specs2.specification.Context" class="extype" href="../specification/Context.html">Context</a>, <a name="org.specs2.specification.Scope" class="extype" href="../specification/Scope.html">Scope</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -46,7 +46,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.io.FromSource" class="in"><span>FromSource</span></li><li name="org.specs2.io.FromSource" class="in"><span>FromSource</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.mutable.BeforeAfter" class="in"><span>BeforeAfter</span></li><li name="scala.DelayedInit" class="in"><span>DelayedInit</span></li><li name="org.specs2.specification.BeforeAfter" class="in"><span>BeforeAfter</span></li><li name="org.specs2.specification.After" class="in"><span>After</span></li><li name="org.specs2.specification.Before" class="in"><span>Before</span></li><li name="org.specs2.specification.Context" class="in"><span>Context</span></li><li name="org.specs2.specification.Scope" class="in"><span>Scope</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -58,10 +58,35 @@
 
         
         
+        <div class="values members" id="values">
+              <h3>Abstract Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.specification.After#after" data-isabs="true">
+      <a id="after:Any"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">after</span>
         
+        <span class="result">: <span name="scala.Any" class="extype">Any</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">override this method to provide the after behavior</p><div class="fullcomment"><div class="comment cmt"><p>override this method to provide the after behavior</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Before#before" data-isabs="true">
+      <a id="before:Any"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">before</span>
+        
+        <span class="result">: <span name="scala.Any" class="extype">Any</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">override this method to provide the before behavior</p><div class="fullcomment"><div class="comment cmt"><p>override this method to provide the before behavior</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a></dd></dl></div>
+    </li></ol>
+            </div>
 
         <div class="values members" id="values">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -117,6 +142,21 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfter#apply" data-isabs="false">
+      <a id="apply[T](⇒ T)((T) ⇒ Result):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">apply</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="a">a: ⇒ T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (T) ⇒ <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">execute an action returning a Result
+and finally the after action
+</p><div class="fullcomment"><div class="comment cmt"><p>execute an action returning a Result
+and finally the after action
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a> → <a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a> → <a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a> → <a name="org.specs2.specification.Context" class="extype" href="../specification/Context.html">Context</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -142,6 +182,50 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfter#compose" data-isabs="false">
+      <a id="compose(BeforeAfter):BeforeAfter"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">compose</span>
+        
+        <span class="params">(<span name="b">b: <a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a></span>)</span><span class="result">: <a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">compose the actions of 2 BeforeAfter traits</p><div class="fullcomment"><div class="comment cmt"><p>compose the actions of 2 BeforeAfter traits</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.After#compose" data-isabs="false">
+      <a id="compose(After):After"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">compose</span>
+        
+        <span class="params">(<span name="a">a: <a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a></span>)</span><span class="result">: <a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">compose the actions of 2 After traits</p><div class="fullcomment"><div class="comment cmt"><p>compose the actions of 2 After traits</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Before#compose" data-isabs="false">
+      <a id="compose(Before):Before"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">compose</span>
+        
+        <span class="params">(<span name="b">b: <a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a></span>)</span><span class="result">: <a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">compose the actions of 2 Before traits</p><div class="fullcomment"><div class="comment cmt"><p>compose the actions of 2 Before traits</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.mutable.BeforeAfter#delayedInit" data-isabs="false">
+      <a id="delayedInit(⇒ Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">delayedInit</span>
+        
+        <span class="params">(<span name="x">x: ⇒ <span name="scala.Unit" class="extype">Unit</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.mutable.BeforeAfter" class="extype" href="">BeforeAfter</a> → DelayedInit</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -188,54 +272,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.FromSource#getCode" data-isabs="false">
-      <a id="getCode(Int):String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getCode</span>
-        
-        <span class="params">(<span name="depth">depth: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">6</span></span>)</span><span class="result">: String</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">get some source code by:
-  * fetching the current stacktrace
-  * finding the location of the example (6th trace by default)
-</p><div class="fullcomment"><div class="comment cmt"><p>get some source code by:
-  * fetching the current stacktrace
-  * finding the location of the example (6th trace by default)
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.FromSource#getCodeFromTo" data-isabs="false">
-      <a id="getCodeFromTo(Int,Int):String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getCodeFromTo</span>
-        
-        <span class="params">(<span name="start">start: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">6</span></span>, <span name="end">end: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">9</span></span>)</span><span class="result">: String</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">get some source code by:
-  * fetching the current stacktrace
-  * finding the location of the example by taking the trace of the first line and the trace of the last line
-   (at depth 6 and 9 by default)
-</p><div class="fullcomment"><div class="comment cmt"><p>get some source code by:
-  * fetching the current stacktrace
-  * finding the location of the example by taking the trace of the first line and the trace of the last line
-   (at depth 6 and 9 by default)
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.FromSource#getCodeFromToWithLocation" data-isabs="false">
-      <a id="getCodeFromToWithLocation(Int,Int,TraceLocation):String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getCodeFromToWithLocation</span>
-        
-        <span class="params">(<span name="startLine">startLine: <span name="scala.Int" class="extype">Int</span></span>, <span name="endLine">endLine: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">9</span></span>, <span name="location">location: <span name="org.specs2.control.TraceLocation" class="extype">TraceLocation</span></span>)</span><span class="result">: String</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -258,17 +295,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.FromSource#location" data-isabs="false">
-      <a id="location((Seq[StackTraceElement]) ⇒ Seq[StackTraceElement]):TraceLocation"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">location</span>
-        
-        <span class="params">(<span name="stackFilter">stackFilter: (Seq[<span name="java.lang.StackTraceElement" class="extype">StackTraceElement</span>]) ⇒ Seq[<span name="java.lang.StackTraceElement" class="extype">StackTraceElement</span>]</span>)</span><span class="result">: <span name="org.specs2.control.TraceLocation" class="extype">TraceLocation</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -313,6 +339,39 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfter#then" data-isabs="false">
+      <a id="then(BeforeAfter):BeforeAfter"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">then</span>
+        
+        <span class="params">(<span name="b">b: <a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a></span>)</span><span class="result">: <a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">sequence the actions of 2 BeforeAfter traits</p><div class="fullcomment"><div class="comment cmt"><p>sequence the actions of 2 BeforeAfter traits</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.After#then" data-isabs="false">
+      <a id="then(After):After"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">then</span>
+        
+        <span class="params">(<span name="a">a: <a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a></span>)</span><span class="result">: <a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">sequence the actions of 2 After traits</p><div class="fullcomment"><div class="comment cmt"><p>sequence the actions of 2 After traits</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Before#then" data-isabs="false">
+      <a id="then(Before):Before"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">then</span>
+        
+        <span class="params">(<span name="b">b: <a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a></span>)</span><span class="result">: <a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">sequence the actions of 2 Before traits</p><div class="fullcomment"><div class="comment cmt"><p>sequence the actions of 2 Before traits</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -369,8 +428,20 @@
     </li></ol>
             </div>
 
-        <div name="org.specs2.io.FromSource" class="parent">
-              <h3>Inherited from <a name="org.specs2.io.FromSource" class="extype" href="FromSource.html">FromSource</a></h3>
+        
+
+        <div name="scala.DelayedInit" class="parent">
+              <h3>Inherited from <span name="scala.DelayedInit" class="extype">DelayedInit</span></h3>
+            </div><div name="org.specs2.specification.BeforeAfter" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.BeforeAfter" class="extype" href="../specification/BeforeAfter.html">BeforeAfter</a></h3>
+            </div><div name="org.specs2.specification.After" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.After" class="extype" href="../specification/After.html">After</a></h3>
+            </div><div name="org.specs2.specification.Before" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.Before" class="extype" href="../specification/Before.html">Before</a></h3>
+            </div><div name="org.specs2.specification.Context" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.Context" class="extype" href="../specification/Context.html">Context</a></h3>
+            </div><div name="org.specs2.specification.Scope" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.Scope" class="extype" href="../specification/Scope.html">Scope</a></h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

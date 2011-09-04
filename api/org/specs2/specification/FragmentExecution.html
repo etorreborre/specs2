@@ -35,7 +35,7 @@ and returns executed fragments
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.reporter.ConsoleReporter" class="extype" href="../reporter/ConsoleReporter.html">ConsoleReporter</a>, <a name="org.specs2.specification.FragmentExecution" class="extype" href="FragmentExecution$.html">FragmentExecution</a>, <a name="org.specs2.reporter.HtmlReporter" class="extype" href="../reporter/HtmlReporter.html">HtmlReporter</a>, <a name="org.specs2.reporter.JUnitXmlReporter" class="extype" href="../reporter/JUnitXmlReporter.html">JUnitXmlReporter</a>, <a name="org.specs2.reporter.NotifierReporter" class="extype" href="../reporter/NotifierReporter.html">NotifierReporter</a>, <a name="org.specs2.reporter.TestInterfaceReporter" class="extype" href="../reporter/TestInterfaceReporter.html">TestInterfaceReporter</a></div>
+          <div class="subClasses hiddenContent"><a name="org.specs2.reporter.ConsoleReporter" class="extype" href="../reporter/ConsoleReporter.html">ConsoleReporter</a>, <a name="org.specs2.reporter.DefaultReporter" class="extype" href="../reporter/DefaultReporter.html">DefaultReporter</a>, <a name="org.specs2.specification.FragmentExecution" class="extype" href="FragmentExecution$.html">FragmentExecution</a>, <a name="org.specs2.reporter.HtmlReporter" class="extype" href="../reporter/HtmlReporter.html">HtmlReporter</a>, <a name="org.specs2.reporter.JUnitXmlReporter" class="extype" href="../reporter/JUnitXmlReporter.html">JUnitXmlReporter</a>, <a name="org.specs2.reporter.NotifierReporter" class="extype" href="../reporter/NotifierReporter.html">NotifierReporter</a>, <a name="org.specs2.reporter.TestInterfaceReporter" class="extype" href="../reporter/TestInterfaceReporter.html">TestInterfaceReporter</a></div>
         </div></div>
         
 
@@ -169,29 +169,18 @@ and returns executed fragments
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="prt" name="org.specs2.specification.FragmentExecution#execute" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.specification.FragmentExecution#execute" data-isabs="false">
       <a id="execute(Fragment)(Arguments):Product with Serializable with ExecutedFragment"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">execute</span>
         
-        <span class="params">(<span name="f">f: <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span> with <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></span>
+        <span class="params">(<span name="f">f: <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span> with <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">execute a Fragment.</p><div class="fullcomment"><div class="comment cmt"><p>execute a Fragment.</p><p>A Form is executed separately by executing each row and cell, setting the results on each cell
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentExecution#executeBodies" data-isabs="false">
-      <a id="executeBodies(Fragments)(Arguments):Seq[Result]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">executeBodies</span>
-        
-        <span class="params">(<span name="exs">exs: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: Seq[<a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">this method is used in tests</p>
+</p></div></div>
     </li><li visbl="pub" name="org.specs2.specification.FragmentExecution#executeBody" data-isabs="false">
       <a id="executeBody(⇒ Result)(Arguments):Result"></a>
       <h4 class="signature">
@@ -240,7 +229,7 @@ Example
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -362,6 +351,8 @@ Example
         </dd></dl></div>
     </li></ol>
             </div>
+
+        
 
         <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>

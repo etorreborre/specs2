@@ -14,9 +14,9 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a title="Go to companion" href="SpecStart$.html"><img src="../../../lib/class_to_object_big.png" /></a>
+        <img src="../../../lib/class_big.png" />
         <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.specification" class="extype" href="package.html">specification</a></p>
-        <h1><a title="Go to companion" href="SpecStart$.html">SpecStart</a></h1>
+        <h1>SpecStart</h1>
       </div>
 
       <h4 class="signature" id="signature">
@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">SpecStart</span>
         
-        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result"> extends <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="specName">specName: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="link">link: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a>]</span>, <span name="seeOnly">seeOnly: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -66,7 +66,7 @@
       <span class="symbol"> 
         <span class="name">SpecStart</span>
         
-        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span>
+        <span class="params">(<span name="specName">specName: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="link">link: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a>]</span>, <span name="seeOnly">seeOnly: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
       
@@ -227,7 +227,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.SpecStart#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -239,6 +239,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecStart" class="extype" href="">SpecStart</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart#isIncludeLink" data-isabs="false">
+      <a id="isIncludeLink:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isIncludeLink</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if this spec starts only contains a link including another specification</p></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -250,6 +261,39 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart#isLink" data-isabs="false">
+      <a id="isLink:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isLink</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if this spec starts only contains a link to another specification</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart#isSeeOnlyLink" data-isabs="false">
+      <a id="isSeeOnlyLink:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isSeeOnlyLink</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if this spec starts only contains a link referencing another specification</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart#link" data-isabs="false">
+      <a id="link:Option[HtmlLink]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">link</span>
+        
+        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.Fragment#linkedTo" data-isabs="false">
       <a id="linkedTo:Option[SpecificationStructure]"></a>
       <h4 class="signature">
@@ -284,13 +328,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecStart" class="extype" href="">SpecStart</a> → <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.SpecStart#name" data-isabs="false">
-      <a id="name:SpecName"></a>
+      <a id="name:String"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">name</span>
         
-        <span class="result">: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -337,7 +381,7 @@
         <span class="params">(<span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <a name="org.specs2.specification.SpecStart" class="extype" href="">SpecStart</a></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">the new arguments take override the old ones where defined</p>
     </li><li visbl="pub" name="org.specs2.specification.SpecStart#productArity" data-isabs="false">
       <a id="productArity:Int"></a>
       <h4 class="signature">
@@ -382,6 +426,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecStart" class="extype" href="">SpecStart</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart#seeOnly" data-isabs="false">
+      <a id="seeOnly:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">seeOnly</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart#specName" data-isabs="false">
+      <a id="specName:SpecName"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">specName</span>
+        
+        <span class="result">: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -393,6 +459,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart#title" data-isabs="false">
+      <a id="title:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">title</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.SpecStart#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -404,6 +481,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecStart" class="extype" href="">SpecStart</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart#unlink" data-isabs="false">
+      <a id="unlink:SpecStart"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">unlink</span>
+        
+        <span class="result">: <a name="org.specs2.specification.SpecStart" class="extype" href="">SpecStart</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a non-linked start</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -467,9 +555,13 @@
         <span class="params">(<span name="n">n: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>)</span><span class="result">: <a name="org.specs2.specification.SpecStart" class="extype" href="">SpecStart</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">The name of the specification can be overriden with a user defined title
-</p>
-    </li><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
+      <p class="shortcomment cmt">The name of the specification can be overriden with a user defined title</p>
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Deprecated Value Members</h3>
+              <ol><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
       <a id="productElements:Iterator[Any]"></a>
       <h4 class="signature">
       <span class="kind">def</span>

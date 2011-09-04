@@ -24,14 +24,14 @@
       <span class="symbol"> 
         <span class="name">Fragments</span>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Utility methods for fragments
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -47,7 +47,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.specification.Fragments" class="in"><span>Fragments</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.specification.Fragments" class="in"><span>Fragments</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -118,6 +118,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#apply" data-isabs="false">
+      <a id="apply(SpecName):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">apply</span>
+        
+        <span class="params">(<span name="t">t: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -226,7 +237,7 @@
         <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -359,6 +370,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.specification.Fragments#readResolve" data-isabs="false">
+      <a id="readResolve():AnyRef"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">readResolve</span>
+        
+        <span class="params">()</span><span class="result">: AnyRef</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -423,24 +445,24 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.Fragments#withSpecStartEnd" data-isabs="false">
-      <a id="withSpecStartEnd(Fragments,SpecificationStructure):Fragments"></a>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#withSpecName" data-isabs="false">
+      <a id="withSpecName(Fragments,SpecificationStructure):Fragments"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">withSpecStartEnd</span>
+        <span class="name">withSpecName</span>
         
         <span class="params">(<span name="fragments">fragments: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object with the appropriate name set on the SpecStart fragment</p><p>That name is derived from the specification structure name
 </p></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.Fragments#withSpecStartEnd" data-isabs="false">
-      <a id="withSpecStartEnd(Fragments,SpecName):Fragments"></a>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#withSpecName" data-isabs="false">
+      <a id="withSpecName(Fragments,SpecName):Fragments"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">withSpecStartEnd</span>
+        <span class="name">withSpecName</span>
         
         <span class="params">(<span name="fragments">fragments: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>, <span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
       </span>
@@ -449,7 +471,13 @@
     </li></ol>
             </div>
 
-        <div name="scala.AnyRef" class="parent">
+        
+
+        <div name="scala.Serializable" class="parent">
+              <h3>Inherited from <span name="scala.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="java.io.Serializable" class="parent">
+              <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

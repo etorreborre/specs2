@@ -13,8 +13,8 @@
       <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
       <script type="text/javascript" src="css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./css/tooltip.js"></script>
-      <script language="javascript"> 
-      function init() {  prettyPrint(); };   
+      <script language="javascript">
+      function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
       String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
       function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
@@ -29,13 +29,37 @@
         element = document.getElementById(id);
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
+      function showHideByClass(name) {
+		    var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
     </script>
       <script language="javascript">window.onload=init;</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"></a><h2>Specification structure</h2><div class="level0"><a name="Presentation"></a><h3>Presentation</h3><p>In this chapter you will learn how to:</p>
+    </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"></a><h2>Specification structure</h2><status class="ok"><div class="level0"><a name="Presentation"></a><h3>Presentation</h3><p>In this chapter you will learn how to:</p>
 <ul>
   <li>declare examples</li>
   <li>share examples</li>
@@ -104,7 +128,7 @@
 <ul>
   <li>success: the example is ok</li>
   <li>failure: there is a non-met expectation</li>
-  <li>anError: a non-expected exception occurred</li>
+  <li>anError: a unexpected exception occurred</li>
   <li>skipped: the example is skipped possibly at runtime because some conditions are not met</li>
   <li>pending: usually means &quot;not implemented yet&quot;</li>
 </ul><p>Two additional results are also available to track the progress of features:</p>
@@ -134,7 +158,7 @@
   &quot;this example fails for now&quot; ! {
     1 must_== 2
   }.pendingUntilFixed(&quot;ISSUE-123&quot;)
-</code></pre><p>The example above will be reported as <code class="prettyprint">Pending</code> until it succeeds. Then it is marked as a failure so that you can remember<br />to remove the <code class="prettyprint">pendingUntilFixed</code> marker.</p><a name="Auto-Examples"></a><h4>Auto-Examples</h4><p>If your specification is about showing the use of a DSL or of an API and all expectations fit on one line, you can elid<br />a description for the Example. This functionality is used in <strong><em>specs2</em></strong> to specify matchers:</p>
+</code></pre><p>The example above will be reported as <code class="prettyprint">Pending</code> until it succeeds. Then it is marked as a failure so that you can remember<br />to remove the <code class="prettyprint">pendingUntilFixed</code> marker.</p><a name="Auto-Examples"></a><h4>Auto-Examples</h4><p>If your specification is about showing the use of a DSL or of an API, you can elid a description for the Example. This functionality is used in <strong><em>specs2</em></strong> to specify matchers:</p>
 <pre><code class="prettyprint"> &quot;beNone checks if an element is None&quot;                             ^
  { None must beNone }                                              ^
  { Some(1) must not be none }                                      ^
@@ -148,7 +172,7 @@
   <li><p>the extraction of the source code is rudimentary and may fail on specifications which are built dynamically</p></li>
   <li><p>several lines of code can be extracted provided that the block ends with a <code class="prettyprint">Result</code> and that there is a <code class="prettyprint">Fragment</code> following the block to be extracted. The best way to ensure that is to always add an <code class="prettyprint">end</code> fragment at the end of the <code class="prettyprint">Specification</code></p></li>
   <li><p>the code to extract must be in the same directory as the package of the specification class it belongs to. If a Specification<br /> is declared in <code class="prettyprint">package com.mycompany.accounting</code> then its source file has to be in the <code class="prettyprint">com/mycompany/accounting</code> directory<br /> for Auto-Examples to be working</p></li>
-  <li><p>for more robustness, but different results, you can use the <code class="prettyprint">descFromExpectations</code> argument (creates an<br /> <code class="prettyprint">args(fromSource=false)</code>) to take the &quot;ok message&quot; from the expectation as the example description:</p>
+  <li><p>for more robustness, but different results, you can use the <code class="prettyprint">descFromExpectations</code> argument (creates an<br /> <code class="prettyprint">args(fromSource=false)</code> argument) to take the &quot;ok message&quot; from the expectation as the example description:</p>
   <pre><code class="prettyprint"> // outputs: List(1, 2) must contain(1)
  { List(1, 2) must contain(1) }
 
@@ -156,9 +180,9 @@
  descFromExpectations ^
  { List(1, 2) must contain(1) }
 </code></pre></li>
-</ul><a name="Using+the+Example+description"></a><h4>Using the Example description</h4><p>The Example descirption can be used to create an expectation in the Example body:</p>
+</ul><a name="Using+the+Example+description"></a><h4>Using the Example description</h4><p>The Example description can be used to create an expectation in the Example body:</p>
 <pre><code class="prettyprint">  &quot;This is a long, long, long description&quot; ! ((s: String) =&gt; s.size must be_&gt;(10))
-</code></pre><a name="Given+%2F+When+%2F+Then"></a><h4>Given / When / Then</h4><p>More sophisticated is the Given/When/Then style of writing specifications is supported by interspersing Text fragments,<br />with Given/When/Then <code class="prettyprint">RegexSteps</code> which extract meaningful values from the text. Here's an example specification for a simple<br />calculator:</p>
+</code></pre><a name="Given+%2F+When+%2F+Then"></a><h4>Given / When / Then</h4><p>More sophisticated is the Given/When/Then style of writing specifications. This style is supported by interspersing Text fragments,<br />with Given/When/Then <code class="prettyprint">RegexSteps</code> which extract meaningful values from the text. Here's an example specification for a simple<br />calculator:</p>
 <pre><code class="prettyprint">    &quot;A given-when-then example for the addition&quot;                 ^
       &quot;Given the following number: ${1}&quot;                         ^ number1 ^
       &quot;And a second number: ${2}&quot;                                ^ number2 ^
@@ -345,11 +369,11 @@
      &quot;the the second one&quot;               ! e2 ^
                                         end
    }
-</code></pre><p>For the complete list of arguments and shortcut methods read the <a href="org.specs2.guide.Runners.html">Runners</a> page.</p><a name="Layout"></a><h3>Layout</h3><p>For an <em>acceptance</em> specification you can tweak out the layout of Texts and Examples.</p><a name="The+rules"></a><h5>The rules</h5><p>The layout of text in <strong><em>specs2</em></strong> is mostly done automatically so that the text in the source code should look like the<br />displayed text after execution.</p><p>By default the layout of a specification will be computed automatically based on intuitive rules:</p>
+</code></pre><p>For the complete list of arguments and shortcut methods read the <a href="org.specs2.guide.Runners.html">Runners</a> page.</p><a name="Layout"></a><h3>Layout</h3><p>For an <em>acceptance</em> specification you can tweak the layout of Texts and Examples.</p><a name="The+rules"></a><h5>The rules</h5><p>The layout of text in <strong><em>specs2</em></strong> is mostly done automatically so that the text in the source code should look like the displayed text after execution.</p><p>By default the layout of a specification will be computed automatically based on intuitive rules:</p>
 <ul>
   <li>when an example follows a text, it is indented</li>
   <li>2 successive examples will be at the same indentation level</li>
-  <li>when a text follows an example, this means that you want to describe a &quot;subcontext&quot;, so the next examples will be<br />indented with one more level</li>
+  <li>when a text follows an example, this means that you want to describe a &quot;subcontext&quot;, so the next examples will be indented with one more level</li>
 </ul><p>Let's see a standard example of this. The following fragments:</p>
 <pre><code class="prettyprint">&quot;this is some presentation text&quot;      ^
   &quot;and the first example&quot;             ! success^
@@ -390,7 +414,7 @@ And another block of examples
 <ul>
   <li>add a blank line (this can also be done with a simple <code class="prettyprint">br</code>)</li>
   <li>decrement the current indentation level by 1 (Otherwise the new Text would be seen as a subcontext)</li>
-</ul><a name="Reset+the+levels"></a><h6>Reset the levels</h6><p>When you start having deep levels of indentation, you might need to start the next group of examples at level 0. For<br />example, in this specification</p>
+</ul><a name="Reset+the+levels"></a><h6>Reset the levels</h6><p>When you start having deep levels of indentation, you might need to start the next group of examples at level 0. For example, in this specification</p>
 <pre><code class="prettyprint">&quot;There are several options for displaying the text&quot;      ^
   &quot;xonly displays nothing but failures&quot;                  ! success^
   &quot;there is also a color option&quot;                         ^
@@ -417,7 +441,7 @@ And another block of examples
   + nocolor dont color anything
 There are different ways of hiding the text
 + by tagging the text
-</code></pre><p>And if you want to reset the indentation level <em>and</em> add a blank line you can use <code class="prettyprint">end ^ br</code> (or <code class="prettyprint">endbr</code> as seen in<br />&quot;Combinations&quot; below).</p><a name="Changing+the+indentation+level"></a><h6>Changing the indentation level</h6><p>If, for whatever reason, you wish to have more or less indentation, you can use the <code class="prettyprint">t</code> and <code class="prettyprint">bt</code> fragments (as in &quot;tab&quot; and<br />&quot;backtab&quot;):</p>
+</code></pre><p>And if you want to reset the indentation level <em>and</em> add a blank line you can use <code class="prettyprint">end ^ br</code> (or <code class="prettyprint">endbr</code> as seen in &quot;Combinations&quot; below).</p><a name="Changing+the+indentation+level"></a><h6>Changing the indentation level</h6><p>If, for whatever reason, you wish to have more or less indentation, you can use the <code class="prettyprint">t</code> and <code class="prettyprint">bt</code> fragments (as in &quot;tab&quot; and &quot;backtab&quot;):</p>
 <pre><code class="prettyprint">&quot;this text&quot;                                     ^ bt^
 &quot;doesn't actually have an indented example&quot;     ! success
 
@@ -432,17 +456,17 @@ There are different ways of hiding the text
 <pre><code class="prettyprint">  class MySpecWithNoIndent extends Specification {
     def is = noindent ^ ....
   }
-</code></pre><a name="Include+or+link+specifications"></a><h3>Include or link specifications</h3><a name="Include+specifications"></a><h6>Include specifications</h6><p>There is a simple mechanism for including &quot;children&quot; specification in a given specification. You can simply add the child<br />specification as if it was a simple fragment:</p>
+</code></pre><a name="Include+or+link+specifications"></a><h3>Include or link specifications</h3><a name="Include+specifications"></a><h6>Include specifications</h6><p>There is a simple mechanism for including &quot;children&quot; specification in a given specification. You can simply add the child specification as if it was a simple fragment:</p>
 <pre><code class="prettyprint">&quot;This is an included specification&quot;     ^
   childSpec
 </code></pre><p>Otherwise, if you want to include several specifications at once you can use the <code class="prettyprint">include</code> method:</p>
 <pre><code class="prettyprint">&quot;This is the included specifications&quot;         ^
   include(childSpec1, childSpec2, childSpec3)
-</code></pre><p>The effect of doing so is that all the fragments of the children specification will be inlined in the parent one. This<br />is exactly what is done in this page of the user guide, but with a twist</p>
+</code></pre><p>The effect of doing so is that all the fragments of the children specification will be inlined in the parent one. This is exactly what is done in this page of the user guide, but with a twist</p>
 <pre><code class="prettyprint">include(xonly, new GivenWhenThenSpec)        ^
 include(xonly, exampleTextIndentation)       ^
 include(xonly, resetTextIndentation)         ^
-</code></pre><p>In this case I give specific arguments to the included specification so that it is only displayed when there are failures.</p><a name="Link+specifications"></a><h6>Link specifications</h6><p>In order to create a User Guide such as this one, you might want to have the &quot;included&quot; specification being written to<br />another html file. The syntax to do this is the following:</p>
+</code></pre><p>In this case I give specific arguments to the included specification so that it is only displayed when there are failures.</p><a name="Link+specifications"></a><h6>Link specifications</h6><p>In order to create a User Guide such as this one, you might want to have the &quot;included&quot; specification being written to another html file. The syntax to do this is the following:</p>
 <pre><code class="prettyprint">&quot;a &quot; ~ (&quot;quick start guide&quot;, new QuickStart)                                            ^
 &quot;how to &quot; ~ (&quot;structure your specification&quot;, new SpecStructure)                         ^
 &quot;how to use &quot; ~ (&quot;matchers&quot;, new Matchers)                                              ^
@@ -459,14 +483,14 @@ include(xonly, resetTextIndentation)         ^
  &quot;text to highlight&quot; ~ (specification, &quot;after text&quot;)
  &quot;text to highlight&quot; ~ (specification, &quot;after text&quot;, &quot;tooltip&quot;)
  link(specification)
-</code></pre><p>It is also desirable sometimes to create a page with links to other specifications where the linked specifications will not<br />give raise to the creation of subsequent pages. There will be just html links:</p>
+</code></pre><p>It is also desirable sometimes to create a page with links to other specifications where the linked specifications will not give raise to the creation of subsequent pages. There will be just html links:</p>
 <pre><code class="prettyprint"> &quot;before text&quot; ~/ (&quot;text to highlight&quot;, specification, &quot;after text&quot;)
  &quot;before text&quot; ~/ (&quot;text to highlight&quot;, specification, &quot;after text&quot;, &quot;tooltip&quot;)
  &quot;text to highlight&quot; ~/ specification
  &quot;text to highlight&quot; ~/ (specification, &quot;after text&quot;)
  &quot;text to highlight&quot; ~/ (specification, &quot;after text&quot;, &quot;tooltip&quot;)
  see(specification)
-</code></pre><a name="Specification+title"></a><h3>Specification title</h3><p>Usually the title of a specification is derived from the specification class name. However if you want to give a more<br />readable name to your specification report you can do the following:</p>
+</code></pre><a name="Specification+title"></a><h3>Specification title</h3><p>Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:</p>
 <pre><code class="prettyprint"> class MySpec extends Specification { def is =
     &quot;My beautiful specifications&quot;.title                           ^
                                                                   p^
@@ -486,30 +510,31 @@ include(xonly, resetTextIndentation)         ^
 
     def examplesLinks(t: String) = {
       specifications(&quot;**/examples/*.scala&quot;).
-        foldLeft(t.title) { (res, cur) =&gt; res ^ link(cur) }
+        foldLeft(t.title) { (res, cur) =&gt; res ^ see(cur) }
     }
   }
 </code></pre><p>The specification above creates an index.html file in the <code class="prettyprint">target/specs2-reports</code> directory. The specifications method<br />creates specifications using the following parameters:</p>
 <ul>
-  <li><code class="prettyprint">pattern</code>: glob pattern to filter specification files. Default value is <code class="prettyprint">**/*.scala</code></li>
-  <li><code class="prettyprint">specPattern</code>: pattern to use when trying to retrieve the specification names from the source files. Default value = <code class="prettyprint">.*Spec</code></li>
+  <li><code class="prettyprint">path</code>: glob pattern to filter specification files. Default value is <code class="prettyprint">**/*.scala</code></li>
+  <li><code class="prettyprint">pattern</code>: pattern to use when trying to retrieve the specification names from the source files. Default value = <code class="prettyprint">.*Spec</code></li>
+  <li><code class="prettyprint">filter</code>: function to keep only some specifications depending on their name. Default value = <code class="prettyprint">(name: String) =&gt; true</code></li>
   <li><code class="prettyprint">basePath</code>: the path where to start the search. Default value: the <code class="prettyprint">specs2.srcTestDir</code> system value = <code class="prettyprint">src/test/scala</code></li>
   <li><code class="prettyprint">verbose</code>: boolean indicating if information about finding files and specifications must be printed. Default value = <code class="prettyprint">false</code></li>
-</ul><a name="Contexts"></a><h3>Contexts</h3><p>In a specification some examples are very simple and just check that a function is behaving as expected. However other examples<br />can be more complex and require a more elaborate set-up of data to:</p>
+</ul><a name="Contexts"></a><h3>Contexts</h3><p>In a specification some examples are very simple and just check that a function is behaving as expected. However other examples can be more complex and require a more elaborate set-up of data to:</p>
 <ul>
   <li>to create inter-related domain objects</li>
   <li>to put the environment (database, filesystem, external system) in the appropriate state</li>
 </ul><p>And there are usually 3 difficulties in doing that:</p>
 <ol>
-  <li><em>Variables isolation</em>: making sure that each example can be executed with its own data without being impacted by<br /> the undesired side-effects of other examples</li>
+  <li><em>Variables isolation</em>: making sure that each example can be executed with its own data without being impacted by the undesired side-effects of other examples</li>
   <li><em>Before/After code</em>: running code before or after every example without repeating that code in the body of each example</li>
-  <li><em>Global setup/teardown code</em>: setting some state when this could take lots of resources, so you need to do it just once<br /> before anything runs</li>
+  <li><em>Global setup/teardown code</em>: setting some state when this could take lots of resources, so you need to do it just once before anything runs</li>
 </ol><p>How does a library like <a href="http://junit.org/">JUnit</a> solves this?</p>
 <ol>
   <li><em>Variables isolation</em>: for each test run a new class instance is created so that there are new &quot;fresh&quot; variables for the current test case</li>
   <li><em>Before/After code</em>: there are <code class="prettyprint">@Before</code> and <code class="prettyprint">@After</code> annotations to declare once the code that must be executed before or after each example</li>
   <li><em>Global setup/teardown code</em>: there are <code class="prettyprint">@BeforeClass</code> and <code class="prettyprint">@AfterClass</code> annotations dedicated to that kind of code</li>
-</ol><p>Now let's see how this can be achieved with <strong><em>specs2</em></strong>.</p><a name="Variables+isolation"></a><h4>Variables isolation</h4><p><strong><em>specs2</em></strong> solves this issue simply by relying on Scala features: creating a new Trait or a case class opens a new scope<br />with fresh variables!</p><p>Let's see an example with a mutable specification:</p>
+</ol><p>Now let's see how this can be achieved with <strong><em>specs2</em></strong>.</p><a name="Variables+isolation"></a><h4>Variables isolation</h4><p><strong><em>specs2</em></strong> solves this issue simply by relying on Scala features: creating a new Trait or a case class opens a new scope with fresh variables!</p><p>Let's see an example with a mutable specification:</p>
 <pre><code class="prettyprint">   class ContextSpec extends mutable.Specification {
      &quot;this is the first example&quot; in new trees {
        tree.removeNodes(2, 3) must have size(2)
@@ -523,7 +548,7 @@ include(xonly, resetTextIndentation)         ^
    trait trees extends Scope {
      val tree = createATreeWith4Nodes
    }
-</code></pre><p>Each example of that specification gets a new instance of the <code class="prettyprint">trees</code> trait. So it will have a brand new <code class="prettyprint">tree</code> variable<br />and even if this data is mutated by an example, other examples will be isolated from these changes.</p><a name="Scope"></a><h5><code class="prettyprint">Scope</code></h5><p>You might wonder why the <code class="prettyprint">trees</code> trait is extending the <code class="prettyprint">org.specs2.specification.Scope</code> trait? The reason is that the body<br />of an Example only accepts objects which are convertible to a <code class="prettyprint">Result</code>. By extending <code class="prettyprint">Scope</code> we can take advantage of<br /> an implicit conversion provided by the <code class="prettyprint">Specification</code> trait to convert our context object to a <code class="prettyprint">Result</code>.</p><a name="With+acceptance+specifications"></a><h5>With acceptance specifications</h5><p>The same kind of variable isolation can be achieved in acceptance specifications by using case classes:</p>
+</code></pre><p>Each example of that specification gets a new instance of the <code class="prettyprint">trees</code> trait. So it will have a brand new <code class="prettyprint">tree</code> variable and even if this data is mutated by an example, other examples will be isolated from these changes.</p><a name="Scope"></a><h5><code class="prettyprint">Scope</code></h5><p>You might wonder why the <code class="prettyprint">trees</code> trait is extending the <code class="prettyprint">org.specs2.specification.Scope</code> trait? The reason is that the body of an Example only accepts objects which are convertible to a <code class="prettyprint">Result</code>. By extending <code class="prettyprint">Scope</code> we can take advantage of an implicit conversion provided by the <code class="prettyprint">Specification</code> trait to convert our context object to a <code class="prettyprint">Result</code>.</p><a name="With+acceptance+specifications"></a><h5>With acceptance specifications</h5><p>The same kind of variable isolation can be achieved in acceptance specifications by using case classes:</p>
 <pre><code class="prettyprint">   class ContextSpec extends Specification { def is =
      &quot;this is the first example&quot; ! trees().e1 ^
      &quot;this is the first example&quot; ! trees().e2
@@ -535,7 +560,7 @@ include(xonly, resetTextIndentation)         ^
      def e1 = tree.removeNodes(2, 3) must have size(2)
      def e2 = tree.removeNodes(2, 3, 4) must have size(1)
    }
-</code></pre><p>In this case we don't need to extend the <code class="prettyprint">Scope</code> trait because the examples <code class="prettyprint">e1</code> and <code class="prettyprint">e2</code> already return <code class="prettyprint">Result</code>s.</p><a name="Contexts+inheritance"></a><h5>Contexts inheritance</h5><p>One very cool property of using traits to define context variables is that we can use inheritance to describe more and more<br />specific contexts:</p>
+</code></pre><p>In this case we don't need to extend the <code class="prettyprint">Scope</code> trait because the examples <code class="prettyprint">e1</code> and <code class="prettyprint">e2</code> already return <code class="prettyprint">Result</code>s.</p><a name="Contexts+inheritance"></a><h5>Contexts inheritance</h5><p>One very cool property of using traits to define context variables is that we can use inheritance to describe more and more specific contexts:</p>
 <pre><code class="prettyprint">  trait LoggedIn extends Scope {
     val user = logInUser
     // do something with the user
@@ -574,7 +599,7 @@ include(xonly, resetTextIndentation)         ^
      lazy val tree = getATreeWith4NodesFromTheDatabase
      def after = cleanupDB
    }
-</code></pre><p>In this case, the clean-up code defined in the <code class="prettyprint">after</code> method will be executed after each example. This is possible because the <code class="prettyprint">mutable.After</code> trait extends the Scala <code class="prettyprint">DelayedInit</code> trait allowing to insert code around the execution of the body of an object.</p><a name="In+an+acceptance+specification"></a><h5>In an acceptance specification</h5><p>In that case you would extend the <code class="prettyprint">specification.After</code> trait and use the <code class="prettyprint">apply</code> method:</p>
+</code></pre><p>In this case, the clean-up code defined in the <code class="prettyprint">after</code> method will be executed after each example. This is possible because the <code class="prettyprint">mutable.After</code> trait extends the Scala <code class="prettyprint">DelayedInit</code> trait allowing to insert code around the execution of the body of an object.</p><p><strong>Note</strong>: the <code class="prettyprint">org.specs2.mutable.{ Before, After, BeforeAfter }</code> traits only work for scala &gt; 2.9.0 because previous Scala versions don't provide the <code class="prettyprint">DelayedInit</code> trait.</p><a name="In+an+acceptance+specification"></a><h5>In an acceptance specification</h5><p>In that case you would extend the <code class="prettyprint">specification.After</code> trait and use the <code class="prettyprint">apply</code> method:</p>
 <pre><code class="prettyprint">   class ContextSpec extends Specification { def is =
      &quot;this is the first example&quot; ! trees().e1 ^
      &quot;this is the first example&quot; ! trees().e2
@@ -595,7 +620,7 @@ include(xonly, resetTextIndentation)         ^
   <li>declare a <code class="prettyprint">before</code> method for all the examples of a Specification without even having to create a context object</li>
   <li>use an implicit context to avoid duplication</li>
   <li>create a new context object by combining existing ones</li>
-</ol><a name="Around+actions"></a><h4><code class="prettyprint">Around</code> actions</h4><p>Some examples need to be executed in a given context. For example you're testing a web application and your specification<br />code needs to have your example executed inside an Http session.</p><p>In that case you can extend the <code class="prettyprint">Around</code> trait and specify the <code class="prettyprint">around</code> method:</p>
+</ol><a name="Around+actions"></a><h4><code class="prettyprint">Around</code> actions</h4><p>Some examples need to be executed in a given context. For example you're testing a web application and your specification code needs to have your example executed inside an Http session.</p><p>In that case you can extend the <code class="prettyprint">Around</code> trait and specify the <code class="prettyprint">around</code> method:</p>
 <pre><code class="prettyprint">  object http extends Around {
     def around[T &lt;% Result](t: =&gt;T) = openHttpSession(&quot;test&quot;) {
       t  // execute t inside a http session
@@ -604,7 +629,7 @@ include(xonly, resetTextIndentation)         ^
 
   &quot;this is a first example where the code executes inside a http session&quot; ! http(e1)
   &quot;and another one&quot;                                                       ! http(e2)
-</code></pre><p>Note that the context here is an object instead of a trait or case class instance because in this specification we don't need<br />any variable isolation. We also take the advantage that objects extending <code class="prettyprint">Context</code> traits (like <code class="prettyprint">Before</code> / <code class="prettyprint">After</code> / <code class="prettyprint">Around</code>,...).<br />have an <code class="prettyprint">apply</code> method so we can directly write <code class="prettyprint">http(e1)</code> meaning <code class="prettyprint">http.apply(e1)</code>.</p><a name="Outside+actions"></a><h4><code class="prettyprint">Outside</code> actions</h4><p><code class="prettyprint">Outside</code> is bit like <code class="prettyprint">Around</code> except that you can get access to the application state that you're setting in your Context<br />object. Let's see that with an example (with a mutable Specification for a change):</p>
+</code></pre><p>Note that the context here is an object instead of a trait or case class instance because in this specification we don't need any variable isolation. We also take the advantage that objects extending <code class="prettyprint">Context</code> traits (like <code class="prettyprint">Before</code> / <code class="prettyprint">After</code> / <code class="prettyprint">Around</code>,...) have an <code class="prettyprint">apply</code> method so we can directly write <code class="prettyprint">http(e1)</code> meaning <code class="prettyprint">http.apply(e1)</code>.</p><a name="Outside+actions"></a><h4><code class="prettyprint">Outside</code> actions</h4><p><code class="prettyprint">Outside</code> is bit like <code class="prettyprint">Around</code> except that you can get access to the application state that you're setting in your Context object. Let's see that with an example (with a mutable Specification for a change):</p>
 <pre><code class="prettyprint">  object http extends Outside[HttpReq] with Scope {
     // prepare a valid HttpRequest
     def outside: HttpReq = createRequest
@@ -631,7 +656,7 @@ include(xonly, resetTextIndentation)         ^
 
   &quot;this is a first example where the code executes uses a http request&quot; ! http((request: HttpReq) =&gt; success)
   &quot;and another one&quot;                                                     ! http((request: HttpReq) =&gt; success)
-</code></pre><a name="Without+creating+a+context+object%3A+BeforeExample"></a><h4>Without creating a context object: <code class="prettyprint">BeforeExample</code></h4><p>When you just need to have set-up code executed before each example and if you don't need to have variable isolation, you<br />can simply use the <code class="prettyprint">BeforeExample</code> trait.</p><p>The <code class="prettyprint">BeforeExample</code> trait allows you to define a <code class="prettyprint">before</code> method exactly like the one you define in the <code class="prettyprint">Before</code> trait and<br />apply it to all the examples of the specification:</p>
+</code></pre><a name="Without+creating+a+context+object%3A+BeforeExample"></a><h4>Without creating a context object: <code class="prettyprint">BeforeExample</code></h4><p>When you just need to have set-up code executed before each example and if you don't need to have variable isolation, you can simply use the <code class="prettyprint">BeforeExample</code> trait.</p><p>The <code class="prettyprint">BeforeExample</code> trait allows you to define a <code class="prettyprint">before</code> method exactly like the one you define in the <code class="prettyprint">Before</code> trait and apply it to all the examples of the specification:</p>
 <pre><code class="prettyprint">    class MySpecification extends mutable.Specification with BeforeExample {
       def before = cleanDatabase
 
@@ -640,7 +665,7 @@ include(xonly, resetTextIndentation)         ^
         &quot;second example&quot; in { success }
       }
     }
-</code></pre><p>As you can guess, the <code class="prettyprint">AfterExample</code>, <code class="prettyprint">AroundExample</code>,... traits work similarly by requiring the corresponding <code class="prettyprint">after</code>,<br /><code class="prettyprint">around</code>,... methods to be defined.</p><a name="Implicit+context"></a><h4>Implicit context</h4><p>The <code class="prettyprint">BeforeExample</code> trait is a nice shortcut to avoid the creation of a context object, but there is another possibility<br />to avoid the repetition of the context name for each example. If your specification is:</p>
+</code></pre><p>As you can guess, the <code class="prettyprint">AfterExample</code>, <code class="prettyprint">AroundExample</code>,... traits work similarly by requiring the corresponding <code class="prettyprint">after</code>, <code class="prettyprint">around</code>,... methods to be defined.</p><a name="Implicit+context"></a><h4>Implicit context</h4><p>The <code class="prettyprint">BeforeExample</code> trait is a nice shortcut to avoid the creation of a context object, but there is another possibility to avoid the repetition of the context name for each example. If your specification is:</p>
 <pre><code class="prettyprint">    class ContextSpec extends mutable.Specification {
       object myContext = new Before { def before = cleanUp }
 
@@ -658,7 +683,7 @@ include(xonly, resetTextIndentation)         ^
         &quot;second example&quot; in { 1 must_== 1 }
       }
     }
-</code></pre><p>There is just one gotcha that you need to be aware of. If your implicit context is an <code class="prettyprint">Outside[String]</code> context this will<br />not work:</p>
+</code></pre><p>There is just one gotcha that you need to be aware of. If your implicit context is an <code class="prettyprint">Outside[String]</code> context this will not work:</p>
 <pre><code class="prettyprint">    class ContextSpec extends mutable.Specification {
       implicit object myContext = new Outside[String] { def outside = &quot;hello&quot; }
 
@@ -667,12 +692,12 @@ include(xonly, resetTextIndentation)         ^
         &quot;second example&quot; in { (s: String) =&gt; s must_== s }
       }
     }
-</code></pre><p>Indeed in both examples above the <code class="prettyprint">s</code> string that will be passed is the Example description as specified <a href="http://etorreborre.github.com/specs2/guide/org.specs2.guide.SpecStructure.html#Using+the+Example+description">here</a>.</p><a name="Composing+contexts"></a><h4>Composing contexts</h4><a name="Combinations"></a><h5>Combinations</h5><p><strong><em>specs2</em></strong> contexts can be combined in several ways. When you want to define both <code class="prettyprint">Before</code> and <code class="prettyprint">After</code> behavior, you can<br />do it by simply extending those 2 traits:</p>
+</code></pre><p>Indeed in both examples above the <code class="prettyprint">s</code> string that will be passed is the Example description as specified <a href="http://etorreborre.github.com/specs2/guide/org.specs2.guide.SpecStructure.html#Using+the+Example+description">here</a>.</p><a name="Composing+contexts"></a><h4>Composing contexts</h4><a name="Combinations"></a><h5>Combinations</h5><p><strong><em>specs2</em></strong> contexts can be combined in several ways. When you want to define both <code class="prettyprint">Before</code> and <code class="prettyprint">After</code> behavior, you can do it by simply extending those 2 traits:</p>
 <pre><code class="prettyprint">case class withFile extends Before with After {
   def before = createFile(&quot;test&quot;)
   def after  = deleteFile(&quot;test&quot;)
 }
-</code></pre><p>But, as we've seen with the <code class="prettyprint">AroundOutside</code> example, <strong><em>specs2</em></strong> likes to help save keystrokes so you can directly extend<br />the <code class="prettyprint">BeforeAfter</code> trait:</p>
+</code></pre><p>But, as we've seen with the <code class="prettyprint">AroundOutside</code> example, <strong><em>specs2</em></strong> likes to help save keystrokes so you can directly extend the <code class="prettyprint">BeforeAfter</code> trait:</p>
 <pre><code class="prettyprint">case class withFile extends BeforeAfter {
   def before = createFile(&quot;test&quot;)
   def after  = deleteFile(&quot;test&quot;)
@@ -687,7 +712,7 @@ case class withDatabase extends Before {
 val init = withFile() compose withDatabase()
 
 &quot;Do something on the full system&quot; ! init(success)
-</code></pre><a name="Steps+and+Actions"></a><h4>Steps and Actions</h4><a name="Steps"></a><h5>Steps</h5><p>Some set-up actions are very time-consuming and should be executed only once for the whole specification. This can be achieved<br />by inserting some silent <code class="prettyprint">Step</code>s in between fragments:</p>
+</code></pre><a name="Steps+and+Actions"></a><h4>Steps and Actions</h4><a name="Steps"></a><h5>Steps</h5><p>Some set-up actions are very time-consuming and should be executed only once for the whole specification. This can be achieved by inserting some silent <code class="prettyprint">Step</code>s in between fragments:</p>
 <pre><code class="prettyprint">class DatabaseSpec extends Specification { def is =
 
   &quot;This specification opens a database and execute some tests&quot;     ^ Step(openDatabase) ^
@@ -696,7 +721,7 @@ val init = withFile() compose withDatabase()
                                                                    Step(closeDatabase)^
                                                                    end
 }
-</code></pre><p>The examples are (by default) executed concurrently between the 2 steps and the &quot;result&quot; of those steps will never be<br />reported unless if there is a failure.</p><a name="Actions"></a><h5>Actions</h5><p><code class="prettyprint">Step</code>s are very useful because they will really be executed sequentially, before anything else, but if you need to execute<br />some actions which are completely independent of the rest of the specification, there is an equivalent to <code class="prettyprint">Step</code> adequately<br />called <code class="prettyprint">Action</code>:</p>
+</code></pre><p>The examples are (by default) executed concurrently between the 2 steps and the &quot;result&quot; of those steps will never be reported unless if there is a failure.</p><a name="Actions"></a><h5>Actions</h5><p><code class="prettyprint">Step</code>s are very useful because they will really be executed sequentially, before anything else, but if you need to execute some actions which are completely independent of the rest of the specification, there is an equivalent to <code class="prettyprint">Step</code> adequately called <code class="prettyprint">Action</code>:</p>
 <pre><code class="prettyprint">class DatabaseSpec extends Specification { def is =
 
   &quot;This specification opens a database and execute some tests&quot;     ^ Step(openDatabase) ^
@@ -721,11 +746,14 @@ val init = withFile() compose withDatabase()
   step(closeDatabase)
 }
 </code></pre><a name="Generic+specification+with+setup+and+teardown+steps"></a><h4>Generic specification with setup and teardown steps</h4><p>There may still be some duplication of code if you have to use the same kind of set-up procedure for several specifications.</p><p>If that's the case you can define your own Specification trait doing the job:</p>
-<pre><code class="prettyprint">    trait DatabaseSpec extends Specification {
+<pre><code class="prettyprint">    import org.specs2._
+    import specification._
+
+    trait DatabaseSpec extends Specification {
       /** the map method allows to &quot;post-process&quot; the fragments after their creation */
       override def map(fs: =&gt;Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
     }
-</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one<br />executed after all of them.</p><a name="Other+unit+specification+methods"></a><h3>Other unit specification methods</h3><p>Other methods can be used to create fragments in a unit specification:</p>
+</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="Other+unit+specification+methods"></a><h3>Other unit specification methods</h3><p>Other methods can be used to create fragments in a unit specification:</p>
 <ul>
   <li><code class="prettyprint">can</code> to create a group of Examples, with the preceding Text fragment appended with <code class="prettyprint">can</code></li>
   <li><code class="prettyprint">&gt; &gt;</code> to create an Example or a group of Examples (with no appended text)</li>
@@ -818,7 +846,7 @@ val init = withFile() compose withDatabase()
       def e1 = string must have size(7)
     }
   }
-</code></pre><a name="Tags"></a><h3>Tags</h3><p>Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution.<br />Let's have a look at one example:</p>
+</code></pre><a name="Tags"></a><h3>Tags</h3><p>Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution. Let's have a look at one example:</p>
 <pre><code class="prettyprint">    /**
      * use the org.specs2.specification.Tags trait to define tags and sections
      */
@@ -876,13 +904,13 @@ val init = withFile() compose withDatabase()
   <li><p>when the <code class="prettyprint">section</code> call is inserted on a new line, this opens a section for all the following fragments. This should<br /> be closed by a corresponding <code class="prettyprint">section</code> call on a new line. For example, <code class="prettyprint">example 3</code> and <code class="prettyprint">example 4</code> are part of the<br /> &quot;checkin&quot; section</p></li>
   <li><p>when the <code class="prettyprint">section</code> call is appended to a block of Fragments on the same line, all the fragments of that block are part of<br /> the section: <code class="prettyprint">example 5</code> and <code class="prettyprint">example 6</code> are tagged with <code class="prettyprint">slow</code></p></li>
 </ul>
-<hr /></div><p></p><br /><table class="dataTable">
-        <tr><th colSpan="2">Total for specification Specification structure</th></tr>
-        <tr><td>Finished in</td><td class="info">19 ms</td></tr>
+<hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
+        <tr><th colSpan="2">Total for specification SpecStructure</th></tr>
+        <tr><td>Finished in</td><td class="info">35 ms</td></tr>
         <tr><td>Results</td><td class="success">17 examples, 0 failure, 0 error</td></tr>
       </table></div><div id="tree">
-      <ul><li id="1218791978"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="-1046360781"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="-1911826422"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-589647733"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -892,7 +920,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1570670126"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="-14757443"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -1012,9 +1040,9 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="2119399150"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="340893365"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1054,7 +1082,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1095,7 +1123,47 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1135,7 +1203,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1175,7 +1243,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1215,7 +1283,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1255,7 +1323,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1295,7 +1363,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1335,7 +1403,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1375,7 +1443,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1415,7 +1483,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1455,7 +1523,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1495,7 +1563,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1535,7 +1603,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1575,7 +1643,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1615,7 +1683,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1655,7 +1723,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1695,7 +1763,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1734,7 +1802,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1775,7 +1843,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1815,7 +1883,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1854,7 +1922,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1895,7 +1963,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1935,7 +2003,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1976,7 +2044,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2015,7 +2083,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2056,7 +2124,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Constraints+on+call+expectations">Constraints on call expectations</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2096,7 +2164,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2136,7 +2204,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2175,7 +2243,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2215,7 +2283,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Functions+and+partial+functions">Functions and partial functions</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2254,7 +2322,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2294,7 +2362,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2334,7 +2402,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2374,7 +2442,8 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
+          <ul><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2413,7 +2482,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1919585313"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2452,14 +2521,63 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-616959649"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="-364620437"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li><li id="1260626783"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
           <ul><li><a href="org.specs2.guide.Runners.html#In+a+Specification">In a Specification</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#Diffs">Diffs</a>
+          <ul><li><a href="org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Shortcuts">Shortcuts</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Output+directory">Output directory</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Storing+previous+results">Storing previous results</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Status+flags">Status flags</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#Diffs">Diffs</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#StackTraceFilter">StackTraceFilter</a>
           <ul></ul>
@@ -2478,6 +2596,9 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Simple+build+tool">Simple build tool</a>
+          <ul><li><a href="org.specs2.guide.Runners.html#with+sbt+0.7.x">with sbt 0.7.x</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x">with sbt &gt; 0.9.x</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Test-only+arguments">Test-only arguments</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Output+formats">Output formats</a>
@@ -2486,6 +2607,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Colors">Colors</a>
           <ul></ul>
+        </li></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Runners.html#JUnit">JUnit</a>
           <ul></ul>
@@ -2496,7 +2618,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1629878613"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="-694002029"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -2540,7 +2662,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="263701199"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="-1576123140"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -2560,5 +2682,5 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1218791978','-1570670126'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['-1911826422','-14757443'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
