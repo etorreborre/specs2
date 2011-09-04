@@ -14,15 +14,15 @@
 10. tag and push the new version
 11. create a new snapshot branch
 
-publish the jars
+12. test/publish the jars
+13. tag and push the new version
+14. create a new specs2 branch for the next SNAPSHOT
 
-download the test-project and test it
+15. download the test-project and test it
 
-tag and push the new version
-create a new specs2 branch for the next SNAPSHOT
+16. close the milestone on github and create a new one
+17. change the default branch on github
 
-close the milestone on github and create a new one
-change the default branch on github
-
-publish the posterous notes
-send a message on the scala-announce mailing-list
+18. publish the posterous notes
+19. send a message on the scala-announce mailing-list
+20. send a message on the twitter account
