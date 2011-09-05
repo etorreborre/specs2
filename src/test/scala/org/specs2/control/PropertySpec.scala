@@ -65,10 +65,10 @@ It has an Option-like structure, supporting the same kind of operations and can 
     def e8 = p.orElse(Property(2)) must_== Property(1)
   }
 
-  case class either() extends Before with MockOutput {
-    def before = clear()
+  case class either() {
     val p = Property(1)
     def e1 = p.toLeft(2) must_== Left(1)
     def e2 = p.toRight(2) must_== Right(1)
   }
+
 }
