@@ -14,7 +14,7 @@ import Stats._
 import main.{Report, Arguments}
 
 /**
- * The HtmlLines groups a list of HtmlLine to print
+ * The HtmlLines class groups a list of HtmlLine objects to print
  * 
  * It can be written ('flushed') to an HtmlResultOuput by printing them one by one to this output
  *
@@ -55,6 +55,7 @@ private[specs2]
 sealed trait Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput): HtmlResultOutput
 }
+
 private[specs2]
 case class HtmlSpecStart(start: ExecutedSpecStart) extends Html {
   def isSeeOnlyLink = start.isSeeOnlyLink
@@ -83,6 +84,7 @@ case class HtmlBr() extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) =
     if (!args.xonly) out.printPar("", !args.xonly)(args) else out
 }
+
 private[specs2]
 case class HtmlResult(r: ExecutedResult) extends Html {
   def print(stats: Stats, level: Int, args: Arguments)(implicit out: HtmlResultOutput) = {
