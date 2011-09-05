@@ -3,6 +3,7 @@ package mock
 package mockito
 
 import org.mockito.stubbing.Answer
+import org.mockito.invocation.InvocationOnMock
 
 /**
  * shortcuts to standard Mockito functions

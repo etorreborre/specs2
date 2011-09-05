@@ -3,7 +3,8 @@ package mock
 package mockito
 import control.Property
 import reflect.ClassesOf
-
+import org.mockito.stubbing._
+import org.mockito.invocation._
 /**
  * This trait provides methods to create mocks and spies.
  */
@@ -37,15 +38,18 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
     def as(n: String) = settings(name = n)
     def smart = Mocked[T](mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS)).done 
     def defaultReturn(a: Any) = settings(defaultReturn = a)
+    def defaultAnswer[S](answer: InvocationOnMock => S) = settings(defaultAnswer = (i: InvocationOnMock) => answer(i): Any)
     def extraInterface[T : ClassManifest] = settings(extraInterface = implicitly[ClassManifest[T]].erasure)
 
 		def settings(name            : MockProperty[String] = MockProperty[String](),
 		             smart           : MockProperty[Boolean] = MockProperty[Boolean](),
+						     defaultAnswer   : MockProperty[InvocationOnMock => Any] = MockProperty[InvocationOnMock => Any](),
 						     defaultReturn   : MockProperty[Any] = MockProperty[Any](),
 						     extraInterface  : MockProperty[Class[_]] = MockProperty[Class[_]](),
 		             extraInterfaces : MockProperty[Seq[Class[_]]] = MockProperty[Seq[Class[_]]]()) = {
 			update(name)(n => mockitoSettings.name(n)).
 			update(smart)(s => if (s) mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS) else mockitoSettings).
+      update(defaultAnswer)(a => mockitoSettings.defaultAnswer(mocker.answer(a))).
       update(defaultReturn)(r => mockitoSettings.defaultAnswer(mocker.answer(r))).
       update(extraInterface)(i => mockitoSettings.extraInterfaces(i)).
       update(extraInterfaces)(i => mockitoSettings.extraInterfaces(i:_*)).done

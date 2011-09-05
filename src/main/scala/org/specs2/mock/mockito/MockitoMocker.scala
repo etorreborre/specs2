@@ -3,6 +3,7 @@ package mock
 
 import org.mockito.InOrder
 import org.mockito.stubbing.Answer
+import org.mockito.invocation._
 import org.mockito.verification.VerificationMode
 import org.mockito.MockSettings
 /**
@@ -34,5 +35,6 @@ trait MockitoMocker {
   def doThrow[E <: Throwable](e: E) = org.mockito.Mockito.doThrow(e)
   def doNothing = org.mockito.Mockito.doNothing
 	
-	def answer[A](a: A): Answer[A] = new Answer[A] { def answer(invocation: org.mockito.invocation.InvocationOnMock) = a }
+	def answer[A](a: A): Answer[A] = answer((i: InvocationOnMock) => a)
+	def answer[A](f: InvocationOnMock => A): Answer[A] = new Answer[A] { def answer(i: InvocationOnMock): A = f(i) }
 }
