@@ -628,17 +628,28 @@ Mockito allows to specify stubbed values and to verify that some calls are expec
 Mockito offers the possibility to provide specific settings for the mock being created:
   
  * its name
-   `val m = mock[List[String]].as("list1")`
+   
+        val m = mock[List[String]].as("list1")
         
  * "smart" return values
-    `val m = mock[List[String]].smart`
+   
+        val m = mock[List[String]].smart
 
  * specific return values
-    `val m = mock[List[String]].defaultReturn(10)`
+   
+        val m = mock[List[String]].defaultReturn(10)
+
+ * specific answers
+        
+        // a function InvocationOnMock => V is used in place of the org.mockito.stubbing.Answer type
+		// for better conciseness
+        val helloObject = (p1: InvocationOnMock) => "hello "+p1.toString 
+        val m = mock[List[String]].defaultAnswer(helloObject)
 
  * extra interfaces       
-    `val m = mock[List[String]].extraInterface[Cloneable]`
-    `val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])`
+ 
+        val m = mock[List[String]].extraInterface[Cloneable]
+        val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
 
 Now, if you want to combine several of those settings together you need to call the `settings` method:
   

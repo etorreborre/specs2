@@ -5,6 +5,8 @@ import execute.Result
 import control.Exceptions._
 import org.hamcrest.core.{ IsNull }
 import org.mockito.Matchers.{ anyInt }
+import org.mockito.stubbing._
+import org.mockito.invocation._
 import matcher._
 import junit.framework.AssertionFailedError
 
@@ -19,6 +21,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "with a name" 								                                                                                      ! creation().e1^
     "with a default return value"                            					                                                  ! creation().e2^
     "with a name and default return value"                            					                                        ! creation().e3^
+    "with a default answer"                                           					                                        ! creation().e4^
 																																																												p^
   "When a mock is created with the mock method"                                                                         ^
     "it is possible to call methods on the mock" 								                                                        ! aMock().call1^
@@ -71,6 +74,10 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
 			val list = mock[java.util.List[String]].settings(name = "list1", defaultReturn = 10, extraInterfaces = classesOf[Cloneable, Serializable])
       (list.size must_== 10) and 
 			((there was one(list).add("one")).message must contain("list1.add(\"one\")"))
+    }
+    def e4 = {
+			val list = mock[java.util.List[String]].defaultAnswer((p1: InvocationOnMock) => "hello")
+      list.get(0) must_== "hello" 
     }
 	}
 	
