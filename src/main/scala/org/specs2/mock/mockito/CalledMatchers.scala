@@ -94,32 +94,33 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
     else               Some(new org.mockito.internal.InOrderImpl(java.util.Arrays.asList(mocks:_*)))
   
   /** no call made to the mock */
-  def no[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.never())(anOrder)
+  def no[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.never())(anOrder)
   /** one call only made to the mock */
-  def one[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.times(1))(anOrder)
+  def one[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.times(1))(anOrder)
   /** two calls only made to the mock */
-  def two[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.times(2))(anOrder)
+  def two[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.times(2))(anOrder)
   /** three calls only made to the mock */
-  def three[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.times(3))(anOrder)
+  def three[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.times(3))(anOrder)
   /** at least n calls made to the mock */
-  def atLeast[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atLeast(i))(anOrder)
+  def atLeast[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atLeast(i))(anOrder)
   /** at least 1 call made to the mock */
-  def atLeastOne[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atLeast(1))(anOrder)
+  def atLeastOne[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atLeast(1))(anOrder)
   /** at least 2 calls made to the mock */
-  def atLeastTwo[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atLeast(2))(anOrder)
+  def atLeastTwo[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atLeast(2))(anOrder)
   /** at least 3 calls made to the mock */
-  def atLeastThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atLeast(3))(anOrder)
+  def atLeastThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atLeast(3))(anOrder)
   /** at most n calls made to the mock */
-  def atMost[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atMost(i))(anOrder)
+  def atMost[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(i))(anOrder)
   /** at most 1 call made to the mock */
-  def atMostOne[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atMost(1))(anOrder)
+  def atMostOne[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(1))(anOrder)
   /** at most 2 calls made to the mock */
-  def atMostTwo[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atMost(2))(anOrder)
+  def atMostTwo[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(2))(anOrder)
   /** at most 3 calls made to the mock */
-  def atMostThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atMost(3))(anOrder)
+  def atMostThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(3))(anOrder)
   /** no more calls made to the mock */
-  def noMoreCallsTo[T <: AnyRef](mock: T) = mocker.verifyNoMoreInteractions(mock)
-  /** implicit def supporting calls in order */
+  def noMoreCallsTo[T <: AnyRef](mock: T): Unit = mocker.verifyNoMoreInteractions(mock)
+
+	/** implicit def supporting calls in order */
   implicit def toInOrderMode[T <% Result](calls: =>T): ToInOrderMode[T] = new ToInOrderMode(calls)
   /** 
    * class defining a then method to declare that calls must be made in a specific order.

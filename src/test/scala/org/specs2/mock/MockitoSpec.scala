@@ -15,6 +15,11 @@ Mockito is a Java library for mocking.
 The following samples are taken from the main documentation which can be found here:
 http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
                                                                                                                         """^p^
+  "Mocks can be created"                                                                                                ^
+    "with a name" 								                                                                                      ! creation().e1^
+    "with a default return value"                            					                                                  ! creation().e2^
+    "with a name and default return value"                            					                                        ! creation().e3^
+																																																												p^
   "When a mock is created with the mock method"                                                                         ^
     "it is possible to call methods on the mock" 								                                                        ! aMock().call1^
     "it is possible to verify that a method has been called" 					                                                  ! aMock().verify1^
@@ -53,7 +58,23 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "in JUnit"                                                                                                          ! reuse().e2^
                                                                                                                         end
     
-  case class aMock() {
+  case class creation() {
+    def e1 = { 
+			val list = mock[java.util.List[String]].as("list1")
+			(there was one(list).add("one")).message must contain("list1.add(\"one\")")
+		}
+    def e2 = {
+			val list = mock[java.util.List[String]].settings(defaultReturn = 10)
+      list.size must_== 10
+    }
+    def e3 = {
+			val list = mock[java.util.List[String]].settings(name = "list1", defaultReturn = 10, extraInterfaces = classesOf[Cloneable, Serializable])
+      (list.size must_== 10) and 
+			((there was one(list).add("one")).message must contain("list1.add(\"one\")"))
+    }
+	}
+	
+	case class aMock() {
     val list = mock[java.util.List[String]]
     def call1 = { list.add("one"); success }
     def verify1 = {

@@ -1,12 +1,13 @@
 package org.specs2
 package mock
 package mockito
-
+import control.Property
+import reflect.ClassesOf
 
 /**
  * This trait provides methods to create mocks and spies.
  */
-trait MocksCreation extends TheMockitoMocker {
+trait MocksCreation extends TheMockitoMocker with ClassesOf {
   /**
    * create a mock object: val m = mock[java.util.List[String]]
    */
@@ -14,23 +15,64 @@ trait MocksCreation extends TheMockitoMocker {
   /**
    * create a mock object with a name: val m = mockAs[java.util.List[String]]("name")
    */
-  def mockAs[T : ClassManifest](name: String): T = mocker.mock(name)
+  def mockAs[T : ClassManifest](name: String): T = Mocked[T]().as(name)
   /**
-   * implicit allowing the following syntax for a named mock: val m = mock[java.util.List[String]],as("name")
+   * create a mock object with some specific settings: val m = mockWith[java.util.List[String]](settings)
    */
-  implicit def mockToAs[T : ClassManifest](t: =>T) = new NamedMock(t)
-  
-  /** support class to create a mock object with a name */
-  class NamedMock[T : ClassManifest](t: =>T) {
-    def as(name: String): T = mockAs[T](name)
+  def mockWith[T : ClassManifest](settings: org.mockito.MockSettings): T = Mocked[T](settings).done
+  /**
+   * implicit allowing to define the mock settings with a nice syntax:
+	 *  * named mock: val m = mock[java.util.List[String]].as("name")
+	 *  * smart mock: val m = mock[java.util.List[String]].smart
+	 *  * other settings: val m = mock[java.util.List[String]].
+   *	       settings(name = "list", 
+   *	                defaultReturn = 10, 
+	 *                  extraInterfaces = classesOf[Cloneable, Serializable])
+   */
+  implicit def mocked[T : ClassManifest](t: =>T) = Mocked[T]()
+
+  /** support class to create a mock object with specific settings */
+  private[specs2]
+  case class Mocked[T : ClassManifest](mockitoSettings: org.mockito.MockSettings = org.mockito.Mockito.withSettings) {
+    def as(n: String) = settings(name = n)
+    def smart = Mocked[T](mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS)).done 
+    def defaultReturn(a: Any) = settings(defaultReturn = a)
+    def extraInterface[T : ClassManifest] = settings(extraInterface = implicitly[ClassManifest[T]].erasure)
+
+		def settings(name            : MockProperty[String] = MockProperty[String](),
+		             smart           : MockProperty[Boolean] = MockProperty[Boolean](),
+						     defaultReturn   : MockProperty[Any] = MockProperty[Any](),
+						     extraInterface  : MockProperty[Class[_]] = MockProperty[Class[_]](),
+		             extraInterfaces : MockProperty[Seq[Class[_]]] = MockProperty[Seq[Class[_]]]()) = {
+			update(name)(n => mockitoSettings.name(n)).
+			update(smart)(s => if (s) mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS) else mockitoSettings).
+      update(defaultReturn)(r => mockitoSettings.defaultAnswer(mocker.answer(r))).
+      update(extraInterface)(i => mockitoSettings.extraInterfaces(i)).
+      update(extraInterfaces)(i => mockitoSettings.extraInterfaces(i:_*)).done
+		}
+    /**
+		 * @return the mock object
+		 */
+	  def done: T = mocker.mock[T](mockitoSettings)
+		
+		/** update the settings with a new setting value if available */
+		private def update[P](prop: MockProperty[P])(f: P => org.mockito.MockSettings) = prop.toOption.map(p => Mocked[T](f(p))).getOrElse(this)
   }
 
+  /**
+   * this implicit helps with defining optional values for mockito settings
+   */	
+  implicit def anyToMockProperty[T](t: =>T): MockProperty[T] = MockProperty(Property(t))
+  case class MockProperty[T](p: Property[T] = Property[T]()) {
+    def toOption: Option[T] = p.toOption
+  }
+	
   /**
    * create a mock object with smart return values: val m = smartMock[java.util.List[String]]
    * 
    * This is the equivalent of Mockito.mock(List.class, SMART_NULLVALUES) but testing shows that it is not working well with Scala.
    */
-  def smartMock[T : ClassManifest]: T = mocker.smartMock
+  def smartMock[T : ClassManifest]: T = Mocked[T]().smart
   /**
    * create a spy on an object. 
    * 
@@ -44,3 +86,5 @@ trait MocksCreation extends TheMockitoMocker {
    */
   def spy[T](m: T): T = mocker.spy(m)
 }
+
+	
