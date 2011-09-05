@@ -1,0 +1,5 @@
+This version adds new features on top of 1.6.1:
+
+ * Mockito settings (name, defaultAnswer, extraInterfaces) can be specified during mock creation
+ 
+ ==========================

@@ -663,7 +663,7 @@ Now, if you want to combine several of those settings together you need to call 
 Finally, in case the Mockito library gets new settings, you can declare the following:
 	
       val settings = org.mockito.Mockito.withSettings
-      val m = mockWith[List[String]](settings)
+      val m = mock[List[String]](settings)
 
 ##### Stubbing
 
