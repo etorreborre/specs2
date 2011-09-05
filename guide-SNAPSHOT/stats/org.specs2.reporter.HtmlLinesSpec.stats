@@ -1,0 +1,8 @@
+<org.specs2.reporter.HtmlLinesSpec-stats timestamp="1315121083931"><stats expectations="5" examples="5" successes="5" time="304"></stats></org.specs2.reporter.HtmlLinesSpec-stats>
+<org.specs2.reporter.HtmlLinesSpec-results timestamp="1315131229116"><result location="scala.Option (Option.scala:133)" id="-682587753"><stats expectations="1" examples="1" failures="1" time="88"></stats></result>
+</org.specs2.reporter.HtmlLinesSpec-results>
+<org.specs2.reporter.HtmlLinesSpec-stats timestamp="1315131229122"><stats expectations="5" successes="4" examples="5" failures="1" time="3149"><trend><stats failures="1" successes="-1" time="3453"></stats></trend></stats></org.specs2.reporter.HtmlLinesSpec-stats>
+<org.specs2.reporter.HtmlLinesSpec-stats timestamp="1315131302933"><stats expectations="5" examples="5" successes="5" time="2058"><trend><stats failures="-1" successes="1" time="5207"></stats></trend></stats></org.specs2.reporter.HtmlLinesSpec-stats>
+<org.specs2.reporter.HtmlLinesSpec-stats timestamp="1315174378093"><stats expectations="1" examples="1" successes="1" time="854"><trend><stats expectations="-4" examples="-4" successes="-4" time="2912"></stats></trend></stats></org.specs2.reporter.HtmlLinesSpec-stats>
+<org.specs2.reporter.HtmlLinesSpec-stats timestamp="1315203100490"><stats expectations="1" examples="1" successes="1" time="80"></stats></org.specs2.reporter.HtmlLinesSpec-stats>
+<org.specs2.reporter.HtmlLinesSpec-stats timestamp="1315206562753"><stats expectations="1" examples="1" successes="1" time="910"></stats></org.specs2.reporter.HtmlLinesSpec-stats>

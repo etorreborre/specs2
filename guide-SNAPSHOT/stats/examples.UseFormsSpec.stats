@@ -1,0 +1,6 @@
+<examples.UseFormsSpec-stats timestamp="1315121051003"><stats></stats></examples.UseFormsSpec-stats>
+<examples.UseFormsSpec-stats timestamp="1315121056745"><stats expectations="25" examples="3" successes="3" time="30"><trend><stats expectations="24" examples="3" successes="3" time="30"></stats></trend></stats></examples.UseFormsSpec-stats>
+<examples.UseFormsSpec-stats timestamp="1315203067381"><stats expectations="25" examples="3" successes="3" time="28"></stats></examples.UseFormsSpec-stats>
+<examples.UseFormsSpec-stats timestamp="1315203103722"><stats><trend><stats expectations="-25" examples="-3" successes="-3" time="28"></stats></trend></stats></examples.UseFormsSpec-stats>
+<examples.UseFormsSpec-stats timestamp="1315206560154"><stats><trend><stats expectations="-1"></stats></trend></stats></examples.UseFormsSpec-stats>
+<examples.UseFormsSpec-stats timestamp="1315206582700"><stats expectations="25" examples="3" successes="3" time="2"><trend><stats expectations="24" examples="3" successes="3" time="2"></stats></trend></stats></examples.UseFormsSpec-stats>

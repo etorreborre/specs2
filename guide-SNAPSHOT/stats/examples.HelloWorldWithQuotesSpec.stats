@@ -1,0 +1,6 @@
+<examples.HelloWorldWithQuotesSpec-stats timestamp="1315121045600"><stats expectations="3" examples="3" successes="3" time="86"></stats></examples.HelloWorldWithQuotesSpec-stats>
+<examples.HelloWorldWithQuotesSpec-stats timestamp="1315121050995"><stats><trend><stats expectations="-3" examples="-3" successes="-3" time="86"></stats></trend></stats></examples.HelloWorldWithQuotesSpec-stats>
+<examples.HelloWorldWithQuotesSpec-stats timestamp="1315203103430"><stats expectations="3" examples="3" successes="3" time="80"><trend><stats expectations="2" examples="3" successes="3" time="80"></stats></trend></stats></examples.HelloWorldWithQuotesSpec-stats>
+<examples.HelloWorldWithQuotesSpec-stats timestamp="1315203103702"><stats><trend><stats expectations="-3" examples="-3" successes="-3" time="80"></stats></trend></stats></examples.HelloWorldWithQuotesSpec-stats>
+<examples.HelloWorldWithQuotesSpec-stats timestamp="1315206557634"><stats expectations="3" examples="3" successes="3" time="185"><trend><stats expectations="2" examples="3" successes="3" time="185"></stats></trend></stats></examples.HelloWorldWithQuotesSpec-stats>
+<examples.HelloWorldWithQuotesSpec-stats timestamp="1315206560145"><stats><trend><stats expectations="-3" examples="-3" successes="-3" time="185"></stats></trend></stats></examples.HelloWorldWithQuotesSpec-stats>

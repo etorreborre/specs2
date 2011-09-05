@@ -1,0 +1,16 @@
+<examples.HelloWorldUnitSpec-stats timestamp="1315121050993"><stats></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315121056067"><stats expectations="3" examples="3" successes="3" time="62"><trend><stats expectations="2" examples="3" successes="3" time="62"></stats></trend></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315121064093"><stats successes="3" examples="3" expectations="3"></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315121067993"><stats successes="3" examples="3" expectations="3"></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315203077033"><stats expectations="3" examples="3" successes="3" time="35"></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315203090598"><stats expectations="3" examples="3" successes="3" time="1"></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315203103702"><stats successes="3" examples="3" expectations="3"></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315203103702"><stats><trend><stats expectations="-3" examples="-3" successes="-3" time="1"></stats></trend></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315206299198"><stats expectations="3" examples="3" successes="3" time="52"><trend><stats expectations="2" examples="3" successes="3" time="52"></stats></trend></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315206511343"><stats expectations="3" examples="3" successes="3" time="38"></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315206560143"><stats><trend><stats expectations="-3" examples="-3" successes="-3" time="38"></stats></trend></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315206563136"><stats successes="3" examples="3" expectations="3"><trend><stats successes="3" examples="3" expectations="2"></stats></trend></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315206563536"><stats expectations="3" examples="3" successes="3" time="10"></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315206579244"><stats successes="3" examples="3" expectations="3"></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315206779255"><stats expectations="3" examples="3" successes="3" time="64"></stats></examples.HelloWorldUnitSpec-stats>
+<examples.HelloWorldUnitSpec-stats timestamp="1315206876727"><stats expectations="3" examples="3" successes="3" time="19"></stats></examples.HelloWorldUnitSpec-stats>
