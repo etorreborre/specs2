@@ -24,36 +24,36 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
   /**
    * transform a Function returning a MatchResult (or anything which can be converted to a Prop) as a ScalaCheck property
    */
-  def check[T, R](result: T => R)(implicit toProp: R => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = check1(result)
-  implicit def check1[T, R](result: T => R)(implicit toProp: R => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = Prop.forAll((t: T) => result(t))
+  def check[T, R](result: T => R)(implicit toProp: (=>R) => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = check1(result)
+  implicit def check1[T, R](result: T => R)(implicit toProp: (=>R) => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = Prop.forAll((t: T) => toProp(result(t)))
 
-  def check[T1, T2, R](result: (T1, T2) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2]): Prop = check2(result)
-  implicit def check2[T1, T2, R](result: (T1, T2) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2]): Prop =
-    Prop.forAll((t1: T1, t2: T2) => result(t1, t2))
+  def check[T1, T2, R](result: (T1, T2) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2]): Prop = check2(result)
+  implicit def check2[T1, T2, R](result: (T1, T2) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2]): Prop =
+    Prop.forAll((t1: T1, t2: T2) => toProp(result(t1, t2)))
 
-  def check[T1, T2, T3, R](result: (T1, T2, T3) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3]): Prop = check3(result)
-  implicit def check3[T1, T2, T3, R](result: (T1, T2, T3) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3]): Prop =
-    Prop.forAll((t1: T1, t2: T2, t3: T3) => result(t1, t2, t3))
+  def check[T1, T2, T3, R](result: (T1, T2, T3) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3]): Prop = check3(result)
+  implicit def check3[T1, T2, T3, R](result: (T1, T2, T3) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3]): Prop =
+    Prop.forAll((t1: T1, t2: T2, t3: T3) => toProp(result(t1, t2, t3)))
 
-  def check[T1, T2, T3, T4, R](result: (T1, T2, T3, T4) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4]): Prop = check4(result)
-  implicit def check4[T1, T2, T3, T4, R](result: (T1, T2, T3, T4) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4]): Prop =
-    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4) => result(t1, t2, t3, t4))
+  def check[T1, T2, T3, T4, R](result: (T1, T2, T3, T4) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4]): Prop = check4(result)
+  implicit def check4[T1, T2, T3, T4, R](result: (T1, T2, T3, T4) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4]): Prop =
+    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4) => toProp(result(t1, t2, t3, t4)))
 
-  def check[T1, T2, T3, T4, T5, R](result: (T1, T2, T3, T4, T5) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5]): Prop = check5(result)
-  implicit def check5[T1, T2, T3, T4, T5, R](result: (T1, T2, T3, T4, T5) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5]): Prop =
-    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => result(t1, t2, t3, t4, t5))
+  def check[T1, T2, T3, T4, T5, R](result: (T1, T2, T3, T4, T5) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5]): Prop = check5(result)
+  implicit def check5[T1, T2, T3, T4, T5, R](result: (T1, T2, T3, T4, T5) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5]): Prop =
+    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => toProp(result(t1, t2, t3, t4, t5)))
 
-  def check[T1, T2, T3, T4, T5, T6, R](result: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1],a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6]): Prop = check6(result)
-  implicit def check6[T1, T2, T3, T4, T5, T6, R](result: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1],a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6]): Prop =
-    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => result(t1, t2, t3, t4, t5, t6))
+  def check[T1, T2, T3, T4, T5, T6, R](result: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1],a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6]): Prop = check6(result)
+  implicit def check6[T1, T2, T3, T4, T5, T6, R](result: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1],a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6]): Prop =
+    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => toProp(result(t1, t2, t3, t4, t5, t6)))
 
-  def check[T1, T2, T3, T4, T5, T6, T7, R](result: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2],a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7]): Prop = check7(result)
-  implicit def check7[T1, T2, T3, T4, T5, T6, T7, R](result: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2],a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7]): Prop =
-    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => result(t1, t2, t3, t4, t5, t6, t7))
+  def check[T1, T2, T3, T4, T5, T6, T7, R](result: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2],a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7]): Prop = check7(result)
+  implicit def check7[T1, T2, T3, T4, T5, T6, T7, R](result: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2],a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7]): Prop =
+    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => toProp(result(t1, t2, t3, t4, t5, t6, t7)))
 
-  def check[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7], a8: Arbitrary[T8], s8: Shrink[T8]): Prop = check8(result)
-  implicit def check8[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: R => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7], a8: Arbitrary[T8], s8: Shrink[T8]): Prop =
-    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => result(t1, t2, t3, t4, t5, t6, t7, t8))
+  def check[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7], a8: Arbitrary[T8], s8: Shrink[T8]): Prop = check8(result)
+  implicit def check8[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7], a8: Arbitrary[T8], s8: Shrink[T8]): Prop =
+    Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => toProp(result(t1, t2, t3, t4, t5, t6, t7, t8)))
   
   /** execute a PartialFunction as a ScalaCheck property */
   def check[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = checkPartial(f)
@@ -106,19 +106,21 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       val s = prettyTestRes(results)(defaultPrettyParams)
       printf("\r%s %s%s\n", if (results.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
     }
+
+    def counterExampleMessage(args: Prop.Args, n: Int, labels: Set[String]) =
+      "A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels)
+
     results match {
       case Result(Proved(as), succeeded, discarded, _, _) => execute.Success(noCounterExample(succeeded), succeeded)
       case Result(Passed, succeeded, discarded, _, _)     => execute.Success(noCounterExample(succeeded), succeeded)
-      case r @ Result(GenException(e), n, _, _, _)        => execute.Failure(prettyTestRes(r)(defaultPrettyParams), "", e.getStackTrace().toList)
+      case r @ Result(GenException(execute.FailureException(f)), n, _, _, _) =>   f
+      case r @ Result(GenException(e), n, _, _, _)        => execute.Failure(prettyTestRes(r)(defaultPrettyParams), e.getMessage(), e.getStackTrace().toList)
       case r @ Result(Exhausted, n, _, _, _)              => execute.Failure(prettyTestRes(r)(defaultPrettyParams))
-      case Result(Failed(args, labels), n, _, _, _)       =>
-        execute.Failure("A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels))
+      case Result(Failed(args, labels), n, _, _, _)       => execute.Failure(counterExampleMessage(args, n, labels))
       case Result(PropException(args, ex, labels), n, _, _, _) =>
         ex match {
-          case execute.FailureException(f) =>
-            execute.Failure("A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels+f.message))
-          case e: java.lang.Exception         =>
-            execute.Error("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels), e)
+          case execute.FailureException(f) => execute.Failure(counterExampleMessage(args, n, labels+f.message))
+          case e: java.lang.Exception      => execute.Error("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels), e)
           case throwable    => throw ex
         }
 
@@ -193,14 +195,18 @@ trait PartialFunctionPropertyImplicits {
 object PartialFunctionPropertyImplicits extends PartialFunctionPropertyImplicits
 trait ResultPropertyImplicits {
 
-  implicit def matchResultToProp(m: MatchResult[_]): Prop = resultProp(m.toResult)
-  implicit def resultToProp[T](t: T)(implicit toResult: T => execute.Result): Prop = resultProp(toResult(t))
-  private def resultProp(r: execute.Result): Prop = {
-    r match {
-      case execute.Failure(ko, _, _, _) => false :| ko
-      case execute.Error(ko, _)         => false :| ko
-	    case _                            => true  :| r.message
-	  }
+  implicit def propToProp(p: =>Prop): Prop = p
+  implicit def booleanToProp(b: =>Boolean): Prop = resultProp(if (b) execute.Success() else execute.Failure())
+  implicit def matchResultToProp(m: =>MatchResult[_]): Prop = resultProp(m.toResult)
+  implicit def resultToProp[T](t: =>T)(implicit toResult: (=>T) => execute.Result): Prop = resultProp(toResult(t))
+  private def resultProp(r: =>execute.Result): Prop = {
+    new Prop {
+      def apply(params: Prop.Params) = {
+        lazy val result = execute.ResultExecution.execute(r)
+        val prop = if (result.isSuccess) Prop.passed else Prop.falsified :| result.message
+        prop.apply(params)
+      }
+    }
   }
 }
 
@@ -211,35 +217,35 @@ trait ApplicableArbitraries { this: ScalaCheckMatchers =>
 
   implicit def applicableArbitrary[T](a: Arbitrary[T]): ApplicableArbitrary[T] = ApplicableArbitrary(a)
   case class ApplicableArbitrary[T](a: Arbitrary[T]) {
-    def apply[R](f: T => R)(implicit toProp: R => Prop, s: Shrink[T]) = check(f)(toProp, a, s)
+    def apply[R](f: T => R)(implicit toProp: (=>R) => Prop, s: Shrink[T]) = check(f)(toProp, a, s)
   }
   implicit def applicableArbitrary2[T1, T2](a: (Arbitrary[T1], Arbitrary[T2])) = ApplicableArbitrary2(a._1, a._2)
   case class ApplicableArbitrary2[T1, T2](a1: Arbitrary[T1], a2: Arbitrary[T2]) {
-    def apply[R](f: (T1, T2) => R)(implicit toProp: R => Prop, s1: Shrink[T1], s2: Shrink[T2]) = check(f)(toProp, a1, s1, a2, s2)
+    def apply[R](f: (T1, T2) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2]) = check(f)(toProp, a1, s1, a2, s2)
   }
   implicit def applicableArbitrary3[T1, T2, T3](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3])) = ApplicableArbitrary3(a._1, a._2, a._3)
   case class ApplicableArbitrary3[T1, T2, T3](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3]) {
-    def apply[R](f: (T1, T2, T3) => R)(implicit toProp: R => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3]) = check(f)(toProp, a1, s1, a2, s2, a3, s3)
+    def apply[R](f: (T1, T2, T3) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3]) = check(f)(toProp, a1, s1, a2, s2, a3, s3)
   }
   implicit def applicableArbitrary4[T1, T2, T3, T4](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4])) = ApplicableArbitrary4(a._1, a._2, a._3, a._4)
   case class ApplicableArbitrary4[T1, T2, T3, T4](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4]) {
-    def apply[R](f: (T1, T2, T3, T4) => R)(implicit toProp: R => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4)
+    def apply[R](f: (T1, T2, T3, T4) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4)
   }
   implicit def applicableArbitrary5[T1, T2, T3, T4, T5](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4], Arbitrary[T5])) = ApplicableArbitrary5(a._1, a._2, a._3, a._4, a._5)
   case class ApplicableArbitrary5[T1, T2, T3, T4, T5](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5]) {
-    def apply[R](f: (T1, T2, T3, T4, T5) => R)(implicit toProp: R => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5)
+    def apply[R](f: (T1, T2, T3, T4, T5) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5)
   }
   implicit def applicableArbitrary6[T1, T2, T3, T4, T5, T6](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4], Arbitrary[T5], Arbitrary[T6])) = ApplicableArbitrary6(a._1, a._2, a._3, a._4, a._5, a._6)
   case class ApplicableArbitrary6[T1, T2, T3, T4, T5, T6](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6]) {
-    def apply[R](f: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: R => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5, a6, s6)
+    def apply[R](f: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5, a6, s6)
   }
   implicit def applicableArbitrary7[T1, T2, T3, T4, T5, T6, T7](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4], Arbitrary[T5], Arbitrary[T6], Arbitrary[T7])) = ApplicableArbitrary7(a._1, a._2, a._3, a._4, a._5, a._6, a._7)
   case class ApplicableArbitrary7[T1, T2, T3, T4, T5, T6, T7](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7]) {
-    def apply[R](f: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: R => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6], s7: Shrink[T7]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5, a6, s6, a7, s7)
+    def apply[R](f: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6], s7: Shrink[T7]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5, a6, s6, a7, s7)
   }
   implicit def applicableArbitrary8[T1, T2, T3, T4, T5, T6, T7, T8](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4], Arbitrary[T5], Arbitrary[T6], Arbitrary[T7], Arbitrary[T8])) = ApplicableArbitrary8(a._1, a._2, a._3, a._4, a._5, a._6, a._7, a._8)
   case class ApplicableArbitrary8[T1, T2, T3, T4, T5, T6, T7, T8](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7], a8: Arbitrary[T8]) {
-    def apply[R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: R => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6], s7: Shrink[T7], s8: Shrink[T8]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5, a6, s6, a7, s7, a8, s8)
+    def apply[R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6], s7: Shrink[T7], s8: Shrink[T8]) = check(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5, a6, s6, a7, s7, a8, s8)
   }
 
 }
