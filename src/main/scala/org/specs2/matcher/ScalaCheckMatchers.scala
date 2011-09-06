@@ -106,19 +106,21 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       val s = prettyTestRes(results)(defaultPrettyParams)
       printf("\r%s %s%s\n", if (results.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
     }
+
+    def counterExampleMessage(args: Prop.Args, n: Int, labels: Set[String]) =
+      "A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels)
+
     results match {
       case Result(Proved(as), succeeded, discarded, _, _) => execute.Success(noCounterExample(succeeded), succeeded)
       case Result(Passed, succeeded, discarded, _, _)     => execute.Success(noCounterExample(succeeded), succeeded)
-      case r @ Result(GenException(e), n, _, _, _)        => execute.Failure(prettyTestRes(r)(defaultPrettyParams), "", e.getStackTrace().toList)
+      case r @ Result(GenException(execute.FailureException(f)), n, _, _, _) =>   f
+      case r @ Result(GenException(e), n, _, _, _)        => execute.Failure(prettyTestRes(r)(defaultPrettyParams), e.getMessage(), e.getStackTrace().toList)
       case r @ Result(Exhausted, n, _, _, _)              => execute.Failure(prettyTestRes(r)(defaultPrettyParams))
-      case Result(Failed(args, labels), n, _, _, _)       =>
-        execute.Failure("A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels))
+      case Result(Failed(args, labels), n, _, _, _)       => execute.Failure(counterExampleMessage(args, n, labels))
       case Result(PropException(args, ex, labels), n, _, _, _) =>
         ex match {
-          case execute.FailureException(f) =>
-            execute.Failure("A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels+f.message))
-          case e: java.lang.Exception         =>
-            execute.Error("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels), e)
+          case execute.FailureException(f) => execute.Failure(counterExampleMessage(args, n, labels+f.message))
+          case e: java.lang.Exception      => execute.Error("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels), e)
           case throwable    => throw ex
         }
 
@@ -200,9 +202,9 @@ trait ResultPropertyImplicits {
   private def resultProp(r: =>execute.Result): Prop = {
     new Prop {
       def apply(params: Prop.Params) = {
-        lazy val result = r
-        val prop = if (result.isSuccess) Prop.passed else Prop.falsified
-        prop.label(result.message).apply(params)
+        lazy val result = execute.ResultExecution.execute(r)
+        val prop = if (result.isSuccess) Prop.passed else Prop.falsified :| result.message
+        prop.apply(params)
       }
     }
   }

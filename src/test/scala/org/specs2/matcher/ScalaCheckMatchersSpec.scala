@@ -40,6 +40,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
     "if it is a function which is always false, it will yield a Failure"                                                ! prop3^
     "if it is a property throwing an exception, it will yield an Error"                                                 ! prop4^
     "a Property can be used with check"                                                                                 ! prop5^
+    "a FailureException can be thrown from a Prop"                                                                      ! prop6^
                                                                                                                         end^
   "It can also be used at the beginning of a specification"                                                             ! fragment1^
                                                                                                                         p^
@@ -79,6 +80,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
   def prop3 = execute(identityFunction.forAll).message must startWith("A counter-example is 'false'")
   def prop4 = execute(exceptionProp).toString must startWith("Error(A counter-example is")
   def prop5 = execute(check(proved)) must beSuccessful
+  def prop6 = execute(failureExceptionProp).toString must startWith("A counter-example is")
 
   def fragment1 = {
     val spec = new Specification { def is = check((i: Int) => i == i) ^ end }
@@ -135,4 +137,5 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
     Prop.forAll((i: Int) => i > 0)
   }
   def exceptionProp = forAll((b: Boolean) => {throw new java.lang.Exception("boom"); true})
+  def failureExceptionProp = forAll((b: Boolean) => {throw new execute.FailureException(failure); true})
 }
