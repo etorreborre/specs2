@@ -21,6 +21,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
         forAll { (i:Int) => i > 0 || i <=0 }                                                                            ^p^
       "an implication and a match result"                                                                               ^
         check { (i:Int) => (i > 0) ==> (i must be_>(0)) }                                                               ^p^
+        check { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) }                                                       ^p^
       "an implication and a boolean value"                                                                              ^
         check { (i:Int) => (i > 0) ==> (i > 0) }                                                                        ^p^
       "a specific arbitrary instance in the enclosing scope"                                                            ^ {

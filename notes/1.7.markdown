@@ -2,4 +2,8 @@ This version adds new features on top of 1.6.1:
 
  * Mockito settings (name, defaultAnswer, extraInterfaces) can be specified during mock creation
  
+And fixes some issues:
+
+ * delayed a MatchResult evaluation when transforming it to a Prop avoid issues with properties implication
+ 
  ==========================
