@@ -23,15 +23,12 @@ import specification._
  *
  */
 private[specs2]
-case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutput with HtmlOutput {
-	/** concrete output type */
-  type Out = HtmlResultOutput
-  def create(n: NodeSeq): Out = copy(xml = n)
-	
+case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutput {
+
   private[specs2] lazy val blank = new HtmlResultOutput
   
-  def printHtml(n: NodeSeq) = print(<html>{n}</html>)
-  def printBody(n: NodeSeq) = print(<body>{n}</body>)
+  def printHtml(n: =>NodeSeq) = print(<html>{n}</html>)
+  def printBody(n: =>NodeSeq) = print(<body>{n}</body>)
   def printHead = print(xml ++ head)
 	
   def printBr                                         = printOkStatus(<br></br>)
@@ -39,7 +36,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
   def printText(text: String = "", level: Int = 0)    = printOkStatus(div(wiki(text), level))
   def printTextPar(text: String = "", level: Int = 0) = printOkStatus(p(wiki(text), level))
 
-  def printSpecStart(name: SpecName, stats: Stats): Out = {
+  def printSpecStart(name: SpecName, stats: Stats) = {
     print(<title>{name.title}</title>).
     print(
       if (stats.hasIssues) <h2>{name.title}
@@ -48,7 +45,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
       else <h2>{name.title}</h2>)
   }
 
-  def printLink(link: HtmlLink, level: Int = 0, stats: Stats): Out = {
+  def printLink(link: HtmlLink, level: Int = 0, stats: Stats) = {
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
     link match {
       case slink @ SpecHtmlLink(name, before, link, after, tip) =>
@@ -60,13 +57,13 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
 
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
   def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0) = printKoStatus(textWithIcon(message, iconName, level))
-  def printExceptionMessage(e: Result with ResultStackTrace, level: Int) = printKoStatus(div("  "+e.message+" ("+e.location+")", level))
+  def printExceptionMessage(e: Result with ResultStackTrace, level: Int)          = printKoStatus(div("  "+e.message+" ("+e.location+")", level))
   
-  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int) = 
+  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int) =
     printKoStatus(div(<img src="images/collapsed.gif" onclick={onclick(e)}/> ++ 
 		                   t("  "+e.message.notNull+" ("+e.location+")"), level))
 
-  def printCollapsibleDetailedFailure(details: Details, level: Int, diffs: Diffs) = {
+  def printDetailedFailure(details: Details, level: Int, diffs: Diffs) = {
     details match {
       case FailureDetails(expected, actual) if diffs.show(expected, actual) => {
         val (expectedDiff, actualDiff) = diffs.showDiffs(expected, actual)
@@ -90,7 +87,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
       }
     }
 
-  def printStats(title: String, stats: Stats): Out = {
+  def printStats(title: String, stats: Stats) = {
     val classStatus = if (stats.hasIssues) "failure" else "success"
     print(
       <table class="dataTable">
@@ -187,21 +184,6 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
       };
     </xml:unparsed></script>
 
-}
-
-private[specs2]
-trait HtmlOutput {
-	type Out <: HtmlOutput
-	
-	/**
-	 * create a new output
-	 */
-	def create(xml: NodeSeq): Out
-	/**
-	 * xml output
-	 */
-	def xml: NodeSeq
-
   /**
    * Usage: out.enclose((t: NodeSeq) => <body>{t}</body>)(<div>inside</div>))
    *
@@ -209,40 +191,9 @@ trait HtmlOutput {
    *
    * @return some xml (rest) enclosed in another block
    */
-  def enclose(f: NodeSeq => NodeSeq)(rest: =>HtmlReportOutput): Out = print(f(rest.xml))
-  def print(xml2: NodeSeq): Out = create(xml ++ xml2)
-  def print(xml2: Elem): Out = create(xml ++ xml2)
+  private def enclose(f: NodeSeq => NodeSeq)(rest: =>HtmlResultOutput): HtmlResultOutput = print(f(rest.xml))
+  private def print(xml2: NodeSeq): HtmlResultOutput = HtmlResultOutput(xml ++ xml2)
+  private def print(xml2: Elem): HtmlResultOutput = HtmlResultOutput(xml ++ xml2)
+
 }
 
-trait HtmlReportOutput {
-	def xml: NodeSeq
-	def printHtml(n: NodeSeq): HtmlReportOutput
-  def printBody(n: NodeSeq): HtmlReportOutput
-  def printHead: HtmlReportOutput
-
-	def printBr: HtmlReportOutput
-  def printPar(text: String = ""): HtmlReportOutput
-  def printText(text: String = "", level: Int = 0): HtmlReportOutput
-  def printTextPar(text: String = "", level: Int = 0): HtmlReportOutput
-
-  def printSpecStart(name: SpecName, stats: Stats): HtmlReportOutput
-
-  def printLink(link: HtmlLink, level: Int = 0, stats: Stats): HtmlReportOutput
-  def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
-  def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
-
-  def printSuccess(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "success",  level)
-  def printFailure(message: MarkupString, level: Int = 0) = printIssueWithIcon(message, "failure", level)
-  def printError  (message: MarkupString, level: Int = 0) = printIssueWithIcon(message, "error",   level)
-  def printSkipped(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "skipped",  level)
-  def printPending(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "pending",  level)
-  def printExceptionMessage(e: Result with ResultStackTrace, level: Int): HtmlReportOutput
-  
-  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int): HtmlReportOutput
-  def printCollapsibleDetailedFailure(details: Details, level: Int, diffs: Diffs): HtmlReportOutput
-  def printStack(e: ResultStackTrace, level: Int, traceFilter: StackTraceFilter): HtmlReportOutput
-
-	def printForm(form: NodeSeq): HtmlReportOutput
-
-  def printStats(title: String, stats: Stats): HtmlReportOutput
-}
