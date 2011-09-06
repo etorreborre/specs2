@@ -79,7 +79,7 @@ trait HtmlPrinter extends OutputDir {
   def printHtml(output: =>HtmlReportOutput, lines: HtmlLines, globalToc: NodeSeq)(implicit args: Arguments) = {
     output printHtml (
 		  output.printHead.
-		         printBody(addToc(<div id="container">{lines.printXml(output)}</div>) ++ globalToc).xml
+		         printBody(addToc(<div id="container">{lines.printXml(output).xml}</div>) ++ globalToc).xml
 		)
 	}
 
