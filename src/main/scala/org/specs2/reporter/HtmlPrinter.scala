@@ -45,18 +45,22 @@ trait HtmlPrinter extends OutputDir {
     lazy val toc = globalToc(htmlFiles)
     htmlFiles.flatten.filter(_.nonEmpty).foreach { lines =>
       fileWriter.write(reportPath(lines.link.url)) { out =>
-       write(printHtml(new HtmlResultOutput, lines, globalTocDiv(toc, htmlFiles.rootLabel, lines)))(out)
+       write(printHtml(output, lines, globalTocDiv(toc, htmlFiles.rootLabel, lines)))(out)
       }
     }
   }
 
+  /** @return a new HtmlReportOutput object creating html elements */
+  def output: HtmlReportOutput = new HtmlResultOutput
+
+  /** write the xml output to a Writer */
   def write(report: HtmlReportOutput)(out: Writer) = out.write(Xhtml.toXhtml(report.xml))
 
   /** @return a global toc */
   private def globalToc(htmlFiles: Tree[HtmlLines])(implicit args: Arguments) = {
     def itemsList(tree: Tree[HtmlLines]): NodeSeq = {
       val root = tree.rootLabel
-      tocElements(root.printXml(new HtmlResultOutput).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduceNodes })
+      tocElements(root.printXml(output).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduceNodes })
     }
     itemsList(htmlFiles)
   }
@@ -73,7 +77,7 @@ trait HtmlPrinter extends OutputDir {
   }
     
   /**
-   * @return an HtmlResultOutput object containing all the html corresponding to the
+   * @return an HtmlReportOutput object containing all the html corresponding to the
    *         html lines to print  
    */  
   def printHtml(output: =>HtmlReportOutput, lines: HtmlLines, globalToc: NodeSeq)(implicit args: Arguments) = {
