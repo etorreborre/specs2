@@ -17,6 +17,7 @@ trait TableOfContents {
    * create anchors for each header element and add a table of content to the node if the <toc/> tag is present
    */
   def addToc(body: Node): NodeSeq = anchor.addTo(body) |> insertToc
+  def addToc(body: NodeSeq): NodeSeq = addToc(<n>{body}</n>) \ "n"
 
   /** sanitize a string so that it can be used as a href */
   def sanitize(s: String) = java.net.URLEncoder.encode(s, "UTF-8")

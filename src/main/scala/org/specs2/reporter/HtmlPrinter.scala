@@ -18,6 +18,7 @@ import Statistics._
 import Levels._
 import SpecsArguments._
 import scala.xml.{Xhtml, NodeSeq}
+import java.io.Writer
 
 /**
  * The Html printer is used to create an Html report of an executed specification.
@@ -44,10 +45,12 @@ trait HtmlPrinter extends OutputDir {
     lazy val toc = globalToc(htmlFiles)
     htmlFiles.flatten.filter(_.nonEmpty).foreach { lines =>
       fileWriter.write(reportPath(lines.link.url)) { out =>
-        printHtml(new HtmlResultOutput, lines, globalTocDiv(toc, htmlFiles.rootLabel, lines)).flush(out)
+       write(printHtml(new HtmlResultOutput, lines, globalTocDiv(toc, htmlFiles.rootLabel, lines)))(out)
       }
     }
   }
+
+  def write(report: HtmlReportOutput)(out: Writer) = out.write(Xhtml.toXhtml(report.xml))
 
   /** @return a global toc */
   private def globalToc(htmlFiles: Tree[HtmlLines])(implicit args: Arguments) = {
@@ -73,13 +76,12 @@ trait HtmlPrinter extends OutputDir {
    * @return an HtmlResultOutput object containing all the html corresponding to the
    *         html lines to print  
    */  
-  def printHtml(output: HtmlResultOutput, lines: HtmlLines, globalToc: NodeSeq)(implicit args: Arguments) = {
-    output.enclose((t: NodeSeq) => <html>{t}</html>) {
-      output.blank.printHead.enclose((t: NodeSeq) => addToc(<body><div id="container">{t}</div>{globalToc}</body>)) {
-        lines.printXml(output.blank)
-      }
-    }
-  }
+  def printHtml(output: =>HtmlReportOutput, lines: HtmlLines, globalToc: NodeSeq)(implicit args: Arguments) = {
+    output printHtml (
+		  output.printHead.
+		         printBody(addToc(<div id="container">{lines.printXml(output)}</div>) ++ globalToc).xml
+		)
+	}
 
   /**
    * Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link

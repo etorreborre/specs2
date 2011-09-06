@@ -2,7 +2,9 @@ package org.specs2
 package reporter
 import java.io.Writer
 import scala.xml._
-import main.Arguments
+import control._
+import Exceptions._
+import main.{ Arguments, Diffs }
 import text.Markdown._
 import text._
 import EditDistance._
@@ -21,111 +23,76 @@ import specification._
  *
  */
 private[specs2]
-class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
-  
+case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutput with HtmlOutput {
+	/** concrete output type */
+  type Out = HtmlResultOutput
+  def create(n: NodeSeq): Out = copy(xml = n)
+	
   private[specs2] lazy val blank = new HtmlResultOutput
   
-  def printBr(implicit args: Arguments) =
-    printElem(<status class='ok'><br></br></status>)
+  def printHtml(n: NodeSeq) = print(<html>{n}</html>)
+  def printBody(n: NodeSeq) = print(<body>{n}</body>)
+  def printHead = print(xml ++ head)
+	
+  def printBr                                         = printOkStatus(<br></br>)
+  def printPar(text: String = "")                     = printOkStatus(<p>{wiki(text)}</p>)
+  def printText(text: String = "", level: Int = 0)    = printOkStatus(div(wiki(text), level))
+  def printTextPar(text: String = "", level: Int = 0) = printOkStatus(p(wiki(text), level))
 
-  def printPar(text: String = "")(implicit args: Arguments) =
-    printElem(<status class='ok'><p>{wiki(text)}</p></status>)
-
-  def printText(text: String = "", level: Int = 0)(implicit args: Arguments) =
-    printElem(<status class='ok'><div class={l(level)}>{wiki(text)}</div></status>)
-
-  def printTextPar(text: String = "", level: Int = 0)(implicit args: Arguments) =
-    printElem(<status class='ok'><p class={l(level)}>{wiki(text)}</p></status>)
-
-  def printSpecStart(name: SpecName, stats: Stats)(implicit args: Arguments): HtmlResultOutput = {
-    printElem(<title>{name.title}</title>).
-    printElem(
+  def printSpecStart(name: SpecName, stats: Stats): Out = {
+    print(<title>{name.title}</title>).
+    print(
       if (stats.hasIssues) <h2>{name.title}
         <notoc><a href="#" onclick="hideByClass('ok');hideById('wasIssue');showById('all')"><i id='wasIssue' style="font-size:small">(issues only)</i></a></notoc>
         <notoc><a href="#" onclick="showByClass('ok');hideById('all');showById('wasIssue')"><i id='all' style="display:none;font-size:small">(all)</i></a></notoc></h2>
       else <h2>{name.title}</h2>)
   }
 
-  def l(level: Int)(implicit args: Arguments) = "level" + (if (args.noindent) 0 else level)
-
-  def wiki(text: String)(implicit args: Arguments) = toXhtml(text)
-
-  def printLink(link: HtmlLink, level: Int = 0, stats: Stats)(implicit args: Arguments) = {
+  def printLink(link: HtmlLink, level: Int = 0, stats: Stats): Out = {
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
     link match {
       case slink @ SpecHtmlLink(name, before, link, after, tip) =>
-        printElem(<status class={linkStatus}><div class={l(level)}><img src={icon(stats.result.statusName)}/> {wiki(before)}<a href={slink.url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div></status>)
+        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ wiki(" "+before) ++ <a href={slink.url} tooltip={tip}>{wiki(link)}</a> ++ wiki(after), level), linkStatus)
       case UrlHtmlLink(url, before, link, after, tip) =>
-        printElem(<status class={linkStatus}><div class={l(level)}>{before}<a href={url} tooltip={tip}>{wiki(link)}</a>{wiki(after)}</div></status>)
+        printStatus(div(t(before) ++ <a href={url} tooltip={tip}>{wiki(link)}</a> ++ wiki(after), level), linkStatus)
     }
   }
 
-  def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)(implicit args: Arguments) =
-    printElem(<status class='ok'>{textWithIcon(message, iconName, level)}</status>)
-
-  def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0)(implicit args: Arguments) =
-    printElem(<status class='ko'>{textWithIcon(message, iconName, level)}</status>)
-
-  private def textWithIcon(message: MarkupString, iconName: String, level: Int = 0)(implicit args: Arguments) =
-    <div class={l(level)}><img src={icon(iconName)}/> {wiki(message.toHtml)}</div>
-
-  def icon(t: String) = "./images/icon_"+t+"_sml.gif"
-
-  def printSuccess(message: MarkupString, level: Int = 0)(implicit args: Arguments) =
-    printTextWithIcon(message, "success", level)
-
-  def printFailure(message: MarkupString, level: Int = 0)(implicit args: Arguments) =
-    printIssueWithIcon(message, "failure", level)
-
-  def printError  (message: MarkupString, level: Int = 0)(implicit args: Arguments) =
-    printIssueWithIcon(message, "error",   level)
-
-  def printSkipped(message: MarkupString, level: Int = 0)(implicit args: Arguments) =
-    printTextWithIcon(message, "skipped", level)
-
-  def printPending(message: MarkupString, level: Int = 0)(implicit args: Arguments) =
-    printTextWithIcon(message, "pending", level)
-
-  def printExceptionMessage(e: Result with ResultStackTrace, level: Int)(implicit args: Arguments) = {
-    printElem(<status class='ko'><div class={l(level)}>{"  "+e.message+" ("+e.location+")"}</div></status>)
-  }
+  def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
+  def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0) = printKoStatus(textWithIcon(message, iconName, level))
+  def printExceptionMessage(e: Result with ResultStackTrace, level: Int) = printKoStatus(div("  "+e.message+" ("+e.location+")", level))
   
-  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int)(implicit args: Arguments) = {
-    printElem(<status class='ko'><div class={l(level)}><img src="images/collapsed.gif" onclick={onclick(e)}/>
-               {"  "+e.message.notNull+" ("+e.location+")"}
-              </div></status>)
-  }
+  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int) = 
+    printKoStatus(div(<img src="images/collapsed.gif" onclick={onclick(e)}/> ++ 
+		                   t("  "+e.message.notNull+" ("+e.location+")"), level))
 
-  private def onclick(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
-  private def id(a: Any) = System.identityHashCode(a).toString
-
-  def printCollapsibleDetailedFailure(d: Details, level: Int)(implicit args: Arguments) = {
-    d match {
-      case FailureDetails(expected, actual) if args.diffs.show(expected, actual) => {
-        val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
+  def printCollapsibleDetailedFailure(details: Details, level: Int, diffs: Diffs) = {
+    details match {
+      case FailureDetails(expected, actual) if diffs.show(expected, actual) => {
+        val (expectedDiff, actualDiff) = diffs.showDiffs(expected, actual)
         val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
         val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
-        printElem(<status class='ko'>
-<div class={l(level)}><img src="images/collapsed.gif"  onclick={onclick(d)}/>details</div>
-  <div id={id(d)} style="display:none">
-    <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
-    { if (args.diffs.showFull) <pre class="details">{expectedFull+"\n"+actualFull}</pre> else NodeSeq.Empty }
-  </div></status>)
+        
+				printKoStatus(div(<img src="images/collapsed.gif"  onclick={onclick(details)}/> ++ t("details"), level) ++
+          <div id={id(details)} style="display:none">
+            <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
+            { <pre class="details">{expectedFull+"\n"+actualFull}</pre> unless (diffs.showFull)  }
+          </div>)
       }
       case _ => this
     }
   }
 
-  def printStack(e: ResultStackTrace, level: Int)(implicit args: Arguments) =
-    enclose((t: NodeSeq) => <status class='ko'><div id={System.identityHashCode(e).toString} style="display:none">{t}</div></status>) {
-      args.traceFilter(e.stackTrace).foldLeft(blank) { (res, cur) =>
+  def printStack(e: ResultStackTrace, level: Int, traceFilter: StackTraceFilter) =
+    enclose((t: NodeSeq) => koStatus(<div id={System.identityHashCode(e).toString} style="display:none">{t}</div>)) {
+      traceFilter(e.stackTrace).foldLeft(blank) { (res, cur) =>
         res.printText(cur.toString, level)
       }
     }
 
-  def printStats(title: String, stats: Stats)(implicit args: Arguments) = {
+  def printStats(title: String, stats: Stats): Out = {
     val classStatus = if (stats.hasIssues) "failure" else "success"
-    printElem(
+    print(
       <table class="dataTable">
         <tr><th colSpan="2">{title}</th></tr>
         <tr><td>Finished in</td><td class="info">{stats.time}</td></tr>
@@ -133,8 +100,26 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
       </table>)
   }
 
-  def printHead = new HtmlResultOutput(xml ++ head)
-  
+	def printForm(form: NodeSeq) = print(form)
+	
+	protected def printOkStatus(n: NodeSeq) = print(okStatus(n))
+	protected def printKoStatus(n: NodeSeq) = print(koStatus(n))
+	protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
+
+  protected def textWithIcon(message: MarkupString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ t(" ") ++ wiki(message.toHtml), level)
+  protected def icon(t: String) = "./images/icon_"+t+"_sml.gif"
+
+	protected def okStatus(n: NodeSeq) = status(n, "ok")
+	protected def koStatus(n: NodeSeq) = status(n, "ko")
+	protected def status(n: NodeSeq, st: String) = <status class={st}>{n}</status>
+	protected def div(string: String, level: Int): NodeSeq  = div(t(string), level)
+	protected def div(n: NodeSeq, level: Int): NodeSeq = <div class={"level"+level}>{n}</div>
+	protected def p(n: NodeSeq, level: Int) = <p class={"level"+level}>{n}</p>
+	protected def t(text: String): NodeSeq = scala.xml.Text(text)
+  protected def onclick(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
+  protected def id(a: Any) = System.identityHashCode(a).toString
+  protected def wiki(text: String) = toXhtml(text)
+
   def head = 
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -202,11 +187,20 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
       };
     </xml:unparsed></script>
 
-  /**
-   * writing to the output and doing <br></br> replacement by <br/> to avoid newlines to be inserted after the Xhtml
-   * parsing
-   */
-  def flush(out: Writer) = out.write(Xhtml.toXhtml(xml))
+}
+
+private[specs2]
+trait HtmlOutput {
+	type Out <: HtmlOutput
+	
+	/**
+	 * create a new output
+	 */
+	def create(xml: NodeSeq): Out
+	/**
+	 * xml output
+	 */
+	def xml: NodeSeq
 
   /**
    * Usage: out.enclose((t: NodeSeq) => <body>{t}</body>)(<div>inside</div>))
@@ -215,7 +209,40 @@ class HtmlResultOutput(val xml: NodeSeq = NodeSeq.Empty) {
    *
    * @return some xml (rest) enclosed in another block
    */
-  def enclose(f: NodeSeq => NodeSeq)(rest: =>HtmlResultOutput)(implicit args: Arguments) = printNodeSeq(f(rest.xml))
-  def printNodeSeq(xml2: NodeSeq)(implicit args: Arguments) = new HtmlResultOutput(xml ++ xml2)
-  def printElem(xml2: Elem)(implicit args: Arguments) = new HtmlResultOutput(xml ++ xml2)
+  def enclose(f: NodeSeq => NodeSeq)(rest: =>HtmlReportOutput): Out = print(f(rest.xml))
+  def print(xml2: NodeSeq): Out = create(xml ++ xml2)
+  def print(xml2: Elem): Out = create(xml ++ xml2)
+}
+
+trait HtmlReportOutput {
+	def xml: NodeSeq
+	def printHtml(n: NodeSeq): HtmlReportOutput
+  def printBody(n: NodeSeq): HtmlReportOutput
+  def printHead: HtmlReportOutput
+
+	def printBr: HtmlReportOutput
+  def printPar(text: String = ""): HtmlReportOutput
+  def printText(text: String = "", level: Int = 0): HtmlReportOutput
+  def printTextPar(text: String = "", level: Int = 0): HtmlReportOutput
+
+  def printSpecStart(name: SpecName, stats: Stats): HtmlReportOutput
+
+  def printLink(link: HtmlLink, level: Int = 0, stats: Stats): HtmlReportOutput
+  def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
+  def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
+
+  def printSuccess(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "success",  level)
+  def printFailure(message: MarkupString, level: Int = 0) = printIssueWithIcon(message, "failure", level)
+  def printError  (message: MarkupString, level: Int = 0) = printIssueWithIcon(message, "error",   level)
+  def printSkipped(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "skipped",  level)
+  def printPending(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "pending",  level)
+  def printExceptionMessage(e: Result with ResultStackTrace, level: Int): HtmlReportOutput
+  
+  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int): HtmlReportOutput
+  def printCollapsibleDetailedFailure(details: Details, level: Int, diffs: Diffs): HtmlReportOutput
+  def printStack(e: ResultStackTrace, level: Int, traceFilter: StackTraceFilter): HtmlReportOutput
+
+	def printForm(form: NodeSeq): HtmlReportOutput
+
+  def printStats(title: String, stats: Stats): HtmlReportOutput
 }

@@ -7,7 +7,8 @@ package control
  */
 private[specs2]
 class Identityx[T](t: =>T) {
-  def ?>(f: T => T)(implicit doIt: Boolean = true) = if (doIt) f(t) else t
+  def ?>(f: T => T)(implicit condition: Boolean = true) = when(condition)(f)
+	def when(condition: Boolean)(f: T => T) = if (condition) f(t) else t
 }
 
 private[specs2]
