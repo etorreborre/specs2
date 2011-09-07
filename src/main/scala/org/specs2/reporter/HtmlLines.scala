@@ -16,13 +16,13 @@ import control.Identityx._
 import html.TableOfContents._
 
 /**
-* The HtmlLines class groups a list of HtmlLine objects to print to an output file for a given specification (identified by specName)
+* The HtmlFile class groups a list of HtmlLine objects to print to an output file for a given specification (identified by specName)
 * and a html link for that file.
 *
 * It can be written ('flushed') to an HtmlResultOuput by printing the lines one by one to this output
 */
 private[specs2]
-case class HtmlLines(specName: SpecName, lines : List[HtmlLine] = Nil, link: HtmlLink) {
+case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : List[HtmlLine] = Nil) {
   def print(out: =>HtmlReportOutput, toc: NodeSeq) = {
     out.printHtml (
 		  out.printHead.

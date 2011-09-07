@@ -40,17 +40,17 @@ trait HtmlPrinter extends HtmlFileWriter {
   def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     val htmlFiles = reduce(name, fs, parentLink = HtmlLink(name, "", name.name))
     lazy val toc = createToc(htmlFiles)
-    writeFiles(htmlFiles.flatten) { (lines: HtmlLines) =>
-      printHtml(output, lines, toTree(toc, htmlFiles.rootLabel.hashCode)(lines.hashCode))
-    }
+    writeFiles(htmlFiles.flatten.map { (file: HtmlLinesFile) =>
+      HtmlFile(file.link.url, printHtml(output, file, toTree(toc, htmlFiles.rootLabel.hashCode)(file.hashCode)))
+    })
   }
 
   /** @return a new HtmlReportOutput object creating html elements */
   def output: HtmlReportOutput = new HtmlResultOutput
 
   /** @return a global toc */
-  def createToc(htmlFiles: Tree[HtmlLines])(implicit args: Arguments) = {
-    def itemsList(tree: Tree[HtmlLines]): NodeSeq = {
+  def createToc(htmlFiles: Tree[HtmlLinesFile])(implicit args: Arguments) = {
+    def itemsList(tree: Tree[HtmlLinesFile]): NodeSeq = {
       val root = tree.rootLabel
       tocElements(root.printLines(output).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduceNodes })
     }
@@ -69,7 +69,7 @@ trait HtmlPrinter extends HtmlFileWriter {
    * @return an HtmlReportOutput object containing all the html corresponding to the
    *         html lines to print  
    */  
-  def printHtml(output: =>HtmlReportOutput, lines: HtmlLines, toc: NodeSeq) = lines.print(output, toc).xml
+  def printHtml(output: =>HtmlReportOutput, files: HtmlLinesFile, toc: NodeSeq) = files.print(output, toc).xml
 
   /**
    * Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
@@ -79,14 +79,14 @@ trait HtmlPrinter extends HtmlFileWriter {
    *
    * @return the HtmlLines to print
    */
-  def reduce(specification: SpecName, fs: Seq[ExecutedFragment], parentLink: HtmlLink): Tree[HtmlLines] = {
+  def reduce(specification: SpecName, fs: Seq[ExecutedFragment], parentLink: HtmlLink): Tree[HtmlLinesFile] = {
     val lines = flatten(fs.reduceWith(reducer))
-    lazy val start: HtmlLines = HtmlLines(specification, Nil, parentLink)
+    lazy val start = HtmlLinesFile(specification, parentLink, Nil)
     lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
       cur match {
         case HtmlLine(start @ HtmlSpecStart(s), st, l, a) if start.isIncludeLink =>
-          updated.insertDownLast(leaf(HtmlLines(s.specName, List(HtmlLine(start.unlink, st, l, a)), link = start.link.getOrElse(parentLink))))
+          updated.insertDownLast(leaf(HtmlLinesFile(s.specName, start.link.getOrElse(parentLink), List(HtmlLine(start.unlink, st, l, a)))))
         case HtmlLine(HtmlSpecEnd(e, _), _, _, _) if e.specName == res.getLabel.specName => updated.getParent
         case other                                                                       => updated
       }
@@ -122,22 +122,26 @@ trait HtmlPrinter extends HtmlFileWriter {
 
 }
 
+case class HtmlFile(url: String, xml: NodeSeq) {
+  def nonEmpty = xml.nonEmpty
+}
+
 trait HtmlFileWriter extends OutputDir {
 
-  def writeFiles(htmlFiles: Seq[HtmlLines])(printLines: HtmlLines => NodeSeq) = {
+  def writeFiles(htmlFiles: Seq[HtmlFile]) = {
     copyResources()
-    htmlFiles.filter(_.nonEmpty) foreach writeFile(printLines)
+    htmlFiles.filter(_.nonEmpty) foreach writeFile
   }
 
-  def writeFile(printLines: HtmlLines => NodeSeq) = (lines: HtmlLines) => {
-    fileWriter.write(reportPath(lines.link.url))(writeXml(printLines(lines)))
+  protected def writeFile = (file: HtmlFile) => {
+    fileWriter.write(reportPath(file.url))(writeXml(file.xml))
   }
 
  /** write the xml output to a Writer */
-  def writeXml(xml: NodeSeq)(out: Writer) = out.write(Xhtml.toXhtml(xml))
+  protected def writeXml(xml: NodeSeq)(out: Writer) = out.write(Xhtml.toXhtml(xml))
 
    /** copy css and images file to the output directory */
-  def copyResources() {
+  protected def copyResources() {
     Seq("css", "images", "css/themes/default").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
   }
 }
