@@ -13,15 +13,25 @@ import org.specs2.internal.scalaz.Scalaz._
 import Stats._
 import main.{Report, Arguments}
 import control.Identityx._
+import html.TableOfContents._
+
 /**
- * The HtmlLines class groups a list of HtmlLine objects to print to an output file for a given specification (identified by specName)
- * and a html link for that file.
- * 
- * It can be written ('flushed') to an HtmlResultOuput by printing the lines one by one to this output
- */
+* The HtmlLines class groups a list of HtmlLine objects to print to an output file for a given specification (identified by specName)
+* and a html link for that file.
+*
+* It can be written ('flushed') to an HtmlResultOuput by printing the lines one by one to this output
+*/
 private[specs2]
 case class HtmlLines(specName: SpecName, lines : List[HtmlLine] = Nil, link: HtmlLink) {
-  def printXml(implicit out: HtmlReportOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
+  def print(out: =>HtmlReportOutput, toc: NodeSeq) = {
+    out.printHtml (
+		  out.printHead.
+		         printBody(addToc(<div id="container">{printLines(out).xml}</div>) ++ toc).xml
+    )
+  }
+
+  def printLines(out: HtmlReportOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
+  
   def add(line: HtmlLine) = copy(lines = lines :+ line)
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty

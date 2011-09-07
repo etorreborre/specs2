@@ -31,61 +31,45 @@ import java.io.Writer
  * * the current arguments to use
  *
  */
-trait HtmlPrinter extends OutputDir {
+trait HtmlPrinter extends HtmlFileWriter {
 
   /**
-   * print a sequence of executed fragments for a given specification class into a html 
-   * file
+   * print a sequence of executed fragments for a given specification class into a html file
    * the name of the html file is the full class name
    */
   def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
-    copyResources()
-    val parentLink = HtmlLink(name, "", name.name)
-    val htmlFiles = reduce(name, fs, parentLink)
-    lazy val toc = globalToc(htmlFiles)
-    htmlFiles.flatten.filter(_.nonEmpty).foreach { lines =>
-      fileWriter.write(reportPath(lines.link.url)) { out =>
-       write(printHtml(output, lines, globalTocDiv(toc, htmlFiles.rootLabel, lines)))(out)
-      }
+    val htmlFiles = reduce(name, fs, parentLink = HtmlLink(name, "", name.name))
+    lazy val toc = createToc(htmlFiles)
+    writeFiles(htmlFiles.flatten) { (lines: HtmlLines) =>
+      printHtml(output, lines, toTree(toc, htmlFiles.rootLabel.hashCode)(lines.hashCode))
     }
   }
 
   /** @return a new HtmlReportOutput object creating html elements */
   def output: HtmlReportOutput = new HtmlResultOutput
 
-  /** write the xml output to a Writer */
-  def write(report: HtmlReportOutput)(out: Writer) = out.write(Xhtml.toXhtml(report.xml))
-
   /** @return a global toc */
-  private def globalToc(htmlFiles: Tree[HtmlLines])(implicit args: Arguments) = {
+  def createToc(htmlFiles: Tree[HtmlLines])(implicit args: Arguments) = {
     def itemsList(tree: Tree[HtmlLines]): NodeSeq = {
       val root = tree.rootLabel
-      tocElements(root.printXml(output).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduceNodes })
+      tocElements(root.printLines(output).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduceNodes })
     }
     itemsList(htmlFiles)
   }
-  /** @return a global toc to be displayed with jstree, focusing on the current section */
-  private def globalTocDiv(toc: NodeSeq, root: HtmlLines, current: HtmlLines)(implicit args: Arguments) =
+
+  /** @return a function global toc to be displayed with jstree, focusing on the current section */
+  def toTree(toc: NodeSeq, rootCode: Int) = (currentCode: Int) =>
     <div id="tree">
       <ul>{toc}</ul>
-      <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+root.hashCode+"','"+current.hashCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
+      <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+rootCode+"','"+currentCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
     </div>
 
-  /** copy css and images file to the output directory */
-  def copyResources() {
-    Seq("css", "images", "css/themes/default").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
-  }
-    
+
   /**
    * @return an HtmlReportOutput object containing all the html corresponding to the
    *         html lines to print  
    */  
-  def printHtml(output: =>HtmlReportOutput, lines: HtmlLines, globalToc: NodeSeq)(implicit args: Arguments) = {
-    output printHtml (
-		  output.printHead.
-		         printBody(addToc(<div id="container">{lines.printXml(output).xml}</div>) ++ globalToc).xml
-		)
-	}
+  def printHtml(output: =>HtmlReportOutput, lines: HtmlLines, toc: NodeSeq) = lines.print(output, toc).xml
 
   /**
    * Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
@@ -136,4 +120,24 @@ trait HtmlPrinter extends OutputDir {
     }
   }
 
+}
+
+trait HtmlFileWriter extends OutputDir {
+
+  def writeFiles(htmlFiles: Seq[HtmlLines])(printLines: HtmlLines => NodeSeq) = {
+    copyResources()
+    htmlFiles.filter(_.nonEmpty) foreach writeFile(printLines)
+  }
+
+  def writeFile(printLines: HtmlLines => NodeSeq) = (lines: HtmlLines) => {
+    fileWriter.write(reportPath(lines.link.url))(writeXml(printLines(lines)))
+  }
+
+ /** write the xml output to a Writer */
+  def writeXml(xml: NodeSeq)(out: Writer) = out.write(Xhtml.toXhtml(xml))
+
+   /** copy css and images file to the output directory */
+  def copyResources() {
+    Seq("css", "images", "css/themes/default").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
+  }
 }

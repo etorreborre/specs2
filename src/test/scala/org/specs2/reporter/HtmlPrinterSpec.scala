@@ -124,7 +124,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     }
 
     def htmlLines(spec: Fragments) = printer.reduce(spec.specName, store(args())(spec.fragments.map(executeFragment)), HtmlLink(SpecName("spec"))).flatten.toSeq
-    def print(spec: Fragments) = htmlLines(spec).head.printXml(new HtmlResultOutput).xml
+    def print(spec: Fragments) = htmlLines(spec).head.printLines(new HtmlResultOutput).xml
 
     def printSpec(spec: SpecificationStructure) = {
       printer.print(spec.content.specName, spec.content.fragments.map(executeFragment))
