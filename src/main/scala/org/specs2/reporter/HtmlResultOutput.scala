@@ -49,7 +49,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
     link match {
       case slink @ SpecHtmlLink(name, before, link, after, tip) =>
-        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ wiki(" "+before) ++ <a href={slink.url} tooltip={tip}>{wiki(link)}</a> ++ wiki(after), level), linkStatus)
+        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ wiki(before) ++ <a href={slink.url} tooltip={tip}>{wiki(link)}</a> ++ wiki(after), level), linkStatus)
       case UrlHtmlLink(url, before, link, after, tip) =>
         printStatus(div(t(before) ++ <a href={url} tooltip={tip}>{wiki(link)}</a> ++ wiki(after), level), linkStatus)
     }
@@ -87,7 +87,10 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
       }
     }
 
-  def printStats(title: String, stats: Stats) = {
+  def printStats(n: SpecName, stats: Stats) = {
+
+    val title = "Total for specification" + ((" "+n.name.trim) unless n.name.isEmpty)
+
     val classStatus = if (stats.hasIssues) "failure" else "success"
     print(
       <table class="dataTable">

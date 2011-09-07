@@ -147,10 +147,8 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd, endStats: Stats) extends Html {
     implicit val doIt = (!args.xonly || stats.hasFailuresOrErrors) && stats.hasExpectations && (stats eq endStats)
     implicit val arguments = args
     
-    out ?> (_.printBr.printStats(title(end), stats))
+    out ?> (_.printBr.printStats(end.specName, stats))
   }
-
-  private def title(end: ExecutedSpecEnd) = "Total for specification" + (if (end.name.isEmpty) end.name.trim else " "+end.name.trim)
 }
 
 private[specs2]

@@ -103,6 +103,9 @@ trait Trim extends control.Debug {
     /** split and trim each, removing empty strings */
     def splitTrim(separator: String): Seq[String] = (s.split(separator).collect { case t if !t.trim.isEmpty => t.trim }).toSeq
 
+    /** @return the string or empty if the condition is true */
+    def unless(condition: Boolean) = if (condition) "" else s
+
     private def toReplace(c: String) = c.map { letter => if ("()[]{}+-\\^$|?.*".contains(letter)) ("\\" + letter) else letter }.mkString("")
   }
 }

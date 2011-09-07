@@ -64,5 +64,5 @@ trait HtmlReportOutput {
   /** print the html for a Form */
 	def printForm(form: NodeSeq): HtmlReportOutput
   /** print the statistics of a specification */
-  def printStats(title: String, stats: Stats): HtmlReportOutput
+  def printStats(name: SpecName, stats: Stats): HtmlReportOutput
 }

@@ -36,6 +36,12 @@ class TrimSpec extends Specification { def is =
   { "a, b , c".splitTrim(",").toSeq === Seq("a", "b", "c") }                                                            ^
   { "a,  ,c".splitTrim(",").toSeq === Seq("a", "c") }                                                                   ^
                                                                                                                         p^
+  "string unless condition"                                                                                             ^
+    "returns the string if the condition is false"                                                                      ^
+    { "hello" unless false must_== "hello" }                                                                            ^
+    "returns an empty string if the condition is true"                                                                  ^bt^
+    { "hello" unless true must_== "" }                                                                                  ^
+                                                                                                                        endp^
   "Last block returns the last block when lines are separated by empty lines"                                           ! e2^
                                                                                                                         end
 
