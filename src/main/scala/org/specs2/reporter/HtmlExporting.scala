@@ -9,8 +9,8 @@ import specification._
 trait HtmlExporting extends Exporting with HtmlPrinter {
   type ExportType = Unit
   
-  def export(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
-    print(s, fragments)
+  def export(name: SpecName)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+    print(name, fragments)
   }
 
 }

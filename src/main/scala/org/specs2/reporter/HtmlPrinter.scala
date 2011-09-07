@@ -38,10 +38,10 @@ trait HtmlPrinter extends OutputDir {
    * file
    * the name of the html file is the full class name
    */
-  def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
+  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     copyResources()
-    val parentLink = HtmlLink(s.content.specName, "", s.content.name)
-    val htmlFiles = reduce(s.content.start.specName, fs, parentLink)
+    val parentLink = HtmlLink(name, "", name.name)
+    val htmlFiles = reduce(name, fs, parentLink)
     lazy val toc = globalToc(htmlFiles)
     htmlFiles.flatten.filter(_.nonEmpty).foreach { lines =>
       fileWriter.write(reportPath(lines.link.url)) { out =>

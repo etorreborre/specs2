@@ -139,15 +139,15 @@ class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def i
   def toDescription(fragments: Fragments)(implicit descMaker: JUnitDescriptionsFragments): Description = toDescription(fragments.fragments:_*)(descMaker)
   def toDescription(fragments: Fragment*)(implicit descMaker: JUnitDescriptionsFragments): Description = {
     import Levels._
-    val descriptionTree = foldAll(fragments).toTree(descMaker.mapper(classOf[JUnitDescriptionsSpec]))
+    val descriptionTree = foldAll(fragments).toTree(descMaker.mapper(classOf[JUnitDescriptionsSpec].getName))
     descMaker.asOneDescription(descriptionTree)
   }
 
-  implicit val descriptionsMaker = new JUnitDescriptionsFragments(getClass) {
+  implicit val descriptionsMaker = new JUnitDescriptionsFragments(getClass.getName) {
     override lazy val isExecutedFromAnIDE = false
   }
 
-  val descriptionsMakerIDE = new JUnitDescriptionsFragments(getClass) {
+  val descriptionsMakerIDE = new JUnitDescriptionsFragments(getClass.getName) {
     override lazy val isExecutedFromAnIDE = true
   }
 

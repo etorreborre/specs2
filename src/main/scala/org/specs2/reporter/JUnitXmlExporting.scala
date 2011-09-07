@@ -13,8 +13,8 @@ import org.junit.runner.Description
 trait JUnitXmlExporting extends Exporting with JUnitXmlPrinter {
   type ExportType = Unit
 
-  def export(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
-    print(s, fragments)
+  def export(name: SpecName)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+    print(name, fragments)
   }
 
   /** the file system is used to open the file to write */
@@ -33,8 +33,8 @@ trait JUnitXmlExporting extends Exporting with JUnitXmlPrinter {
    * file
    * the name of the html file is the full class name
    */
-  def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
-    lazy val suite = testSuite(s, fs)
+  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
+    lazy val suite = testSuite(name, fs)
     fileWriter.write(filePath(suite.description)) { out => suite.flush(out) }
   }
 

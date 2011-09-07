@@ -44,7 +44,7 @@ trait Reporter extends
    * @return the reporter
    */
   def report(spec: SpecificationStructure)(implicit arguments: Arguments): this.type = {
-    spec.content |> select |> sequence |> execute |> store |> export(spec)
+    spec.content |> select |> sequence |> execute |> store |> export(spec.content.specName)
     this
   }
 }

@@ -28,14 +28,14 @@ trait JUnitXmlPrinter {
   /**
    * create a TestSuite object containing all the examples
    */
-  def testSuite(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
+  def testSuite(name: SpecName, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     /** extract the root Description object and the examples to execute */
-    lazy val DescriptionAndExamples(desc, executions) = descriptions(s).foldAll(fs)
+    lazy val DescriptionAndExamples(desc, executions) = descriptions(name).foldAll(fs)
     lazy val statistics: Stats = fs.headOption match {
       case Some(s @ ExecutedSpecStart(_,_,_)) => s.stats
       case _                                  => Stats()
     }
-    lazy val start = TestSuite(desc, s.getClass.getName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.elapsed)
+    lazy val start = TestSuite(desc, name.javaClassName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.elapsed)
 
     executions.foldLeft(start) { (suite, de) =>
       val (d, f) = de
@@ -45,8 +45,8 @@ trait JUnitXmlPrinter {
   }
 
   /** fold object used to create descriptions */
-  def descriptions(s: SpecificationStructure)(implicit args: Arguments) = new JUnitDescriptions[ExecutedFragment](s.getClass) {
-    def initialFragment(s: Class[_]) = ExecutedText(s.getName, new Location())
+  def descriptions(name: SpecName)(implicit args: Arguments) = new JUnitDescriptions[ExecutedFragment](name.javaClassName) {
+    def initialFragment(className: String) = ExecutedText(className, new Location())
     /**
      * This function is used to map each node in a Tree[Fragment] to a pair of
      * (Description, Fragment)
@@ -55,11 +55,11 @@ trait JUnitXmlPrinter {
      * It is used to create a unique description of the example to executed which is required
      * by JUnit
      */
-    def mapper(klass: Class[_]): (ExecutedFragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
+    def mapper(className: String): (ExecutedFragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: ExecutedFragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case s @ ExecutedSpecStart(_,_,_)  => Some(createDescription(klass, suiteName=testName(s.name)) -> f)
-        case ExecutedText(t, _)           => Some(createDescription(klass, suiteName=testName(t)) -> f)
-        case r @ ExecutedResult(_,_,_,_,_)  => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) -> f)
+        case s @ ExecutedSpecStart(_,_,_)  => Some(createDescription(className, suiteName=testName(s.name)) -> f)
+        case ExecutedText(t, _)            => Some(createDescription(className, suiteName=testName(t)) -> f)
+        case r @ ExecutedResult(_,_,_,_,_) => Some(createDescription(className, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) -> f)
         case other                       => None
       }
   }

@@ -95,17 +95,17 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
 
     def e1 = {
       properties.isDefined("console") returns true
-      console.export(any[SpecificationStructure])(any[Arguments]) returns ((fs: Seq[ExecutedFragment]) => ())
+      console.export(any[SpecName])(any[Arguments]) returns ((fs: Seq[ExecutedFragment]) => ())
 
       run(ex1)
-      there was one(console).export(any[SpecificationStructure])(any[Arguments])
+      there was one(console).export(any[SpecName])(any[Arguments])
     }
     def e2 = {
       properties.isDefined("html") returns true
-      html.export(any[SpecificationStructure])(any[Arguments]) returns ((fs: Seq[ExecutedFragment]) => ())
+      html.export(any[SpecName])(any[Arguments]) returns ((fs: Seq[ExecutedFragment]) => ())
 
       run(ex1)
-      there was one(html).export(any[SpecificationStructure])(any[Arguments])
+      there was one(html).export(any[SpecName])(any[Arguments])
     }
   }
 }

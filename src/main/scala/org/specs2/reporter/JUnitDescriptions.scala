@@ -26,15 +26,15 @@ import java.util.regex.Matcher
  * 
  */
 private[specs2]
-abstract class JUnitDescriptions[F](specificationClass: Class[_])(implicit reducer: Reducer[F, Levels[F]]) extends JUnitDescriptionMaker[F] {
+abstract class JUnitDescriptions[F](className: String)(implicit reducer: Reducer[F, Levels[F]]) extends JUnitDescriptionMaker[F] {
   import Levels._
 
   /**
    * @return fragment that must be used as the root description if the specification is empty
    */
-  def initialFragment(s: Class[_]): F
+  def initialFragment(className: String): F
 
-  implicit lazy val initial = (specificationDescription, initialFragment(specificationClass))
+  implicit lazy val initial = (specificationDescription, initialFragment(className))
 
   def foldAll(fs: Seq[F])(implicit args: Arguments) = {
     val leveledFragments = Levels.foldAll(fs)
@@ -42,7 +42,7 @@ abstract class JUnitDescriptions[F](specificationClass: Class[_])(implicit reduc
     if (leveledFragments.isEmpty)
       DescriptionAndExamples(specificationDescription, Seq(initial).toStream)
     else {
-      val descriptionTree = leveledFragments.toTree[DescribedFragment](mapper(specificationClass))
+      val descriptionTree = leveledFragments.toTree[DescribedFragment](mapper(className))
       val removeDanglingText = (t: Tree[DescribedFragment]) => {
         t.rootLabel  match {
           case (desc, Text(_)) if t.subForest.isEmpty  => (None:Option[DescribedFragment])
@@ -54,7 +54,7 @@ abstract class JUnitDescriptions[F](specificationClass: Class[_])(implicit reduc
     }
   }
 
-  lazy val specificationDescription = createDescription(specificationClass, specificationClass.getName)
+  lazy val specificationDescription = createDescription(className, className)
 }
 
 private[specs2]
@@ -68,7 +68,7 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
    * It is used to create a unique description of the example to executed which is required
    * by JUnit
    */
-  def mapper(klass: Class[_]): (F, Seq[DescribedFragment], Int) => Option[DescribedFragment]
+  def mapper(className: String): (F, Seq[DescribedFragment], Int) => Option[DescribedFragment]
   /**
    * @return a Description with parent-child relationships to other Description objects
    *         from a Tree[Description]
@@ -94,13 +94,13 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
     result
   }
   /** @return a sanitized description */
-  def createDescription(testClass: Class[_], suiteName: String = "", testName: String = "", label: String = "") = {
+  def createDescription(className: String, suiteName: String = "", testName: String = "", label: String = "") = {
     val origin =
       if (isExecutedFromAnIDE && !label.isEmpty) label
-      else testClass.getName
+      else className
 
     val desc=
-      if (testName.isEmpty) (if (suiteName.isEmpty) testClass.getName else suiteName)
+      if (testName.isEmpty) (if (suiteName.isEmpty) className else suiteName)
       else sanitize(testName)+"("+origin+")"
     
     Description.createSuiteDescription(desc)

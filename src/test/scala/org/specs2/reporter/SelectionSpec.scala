@@ -126,7 +126,7 @@ Before executing and reporting a specification, the fragments must be selected a
     val reporter = new DefaultReporter with Exporting with MockOutput {
       type ExportType = Unit
 
-      def export(s: SpecificationStructure)(implicit args: main.Arguments) = (fragments: Seq[ExecutedFragment]) => ()
+      def export(name: SpecName)(implicit args: main.Arguments) = (fragments: Seq[ExecutedFragment]) => ()
     }
   }
 

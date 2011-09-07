@@ -21,10 +21,10 @@ import specification._
 class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends ConsoleReporter
   with HandlerEvents {  
 	
-  override def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit arguments: Arguments) =
+  override def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit arguments: Arguments) =
     printLines(fs).print(new TestInterfaceResultOutput(loggers))
 
-  override def export(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+  override def export(name: SpecName)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
     fragments foreach {
       case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
@@ -41,7 +41,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
       }
       case _ => ()
     }
-    print(s, fragments)
+    print(name, fragments)
   }
 }
 

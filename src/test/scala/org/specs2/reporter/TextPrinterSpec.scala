@@ -240,7 +240,7 @@ class TextPrinterSpec extends Specification { def is =
   def printer = new TextPrinter {
     override val output = new TextResultOutput with MockOutput
     def print(fs: Seq[ExecutedFragment]) = {
-      super.print(outer, fs)
+      super.print(outer.content.specName, fs)
       output.messages
     }
   }

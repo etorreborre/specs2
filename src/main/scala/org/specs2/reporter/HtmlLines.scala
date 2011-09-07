@@ -129,7 +129,7 @@ case class HtmlResult(r: ExecutedResult) extends Html {
       if (args.failtrace) out.printCollapsibleExceptionMessage(f, level + 1)
       else                out.printExceptionMessage(f, level + 1)
 
-    outMessage.when(!args.diffs.show)(_.printDetailedFailure(f.details, level + 1, args.diffs))
+    outMessage.when(args.diffs.show)(_.printDetailedFailure(f.details, level + 1, args.diffs))
   }
 
   def printErrorDetails(level: Int, f: Result with ResultStackTrace)(implicit args: Arguments, out: HtmlReportOutput) =

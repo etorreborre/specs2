@@ -30,7 +30,7 @@ import SpecsArguments._
 trait TextPrinter {
   val output: ResultOutput = new TextResultOutput
   
-  def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) =
+  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) =
     printLines(fs).print(output)
   
   def printLines(fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments = Arguments()) =

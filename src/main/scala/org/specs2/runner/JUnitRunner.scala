@@ -36,7 +36,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
   /** arguments for the specification */
   implicit lazy val args: Arguments = content.arguments
   /** fold object used to create descriptions */
-  private val descriptions = new JUnitDescriptionsFragments(klass)
+  private val descriptions = new JUnitDescriptionsFragments(klass.getName)
   /** extract the root Description object and the examples to execute */
   private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll(select(content.fragments))
   /** the console exporter can be used to display results in the console */
@@ -74,9 +74,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
     def exportTo(name: String) = properties.isDefined(name) || commandLineArgs.contains(name)
     
     if (exportTo("console")) 
-      consoleExporter.export(specification)(arguments)(executed.map(_._2))
+      consoleExporter.export(specification.content.specName)(arguments)(executed.map(_._2))
     if (exportTo("html")) 
-      htmlExporter.export(specification)(arguments)(executed.map(_._2))
+      htmlExporter.export(specification.content.specName)(arguments)(executed.map(_._2))
 
     executed
   }
@@ -152,8 +152,8 @@ class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError
 /**
  * Descriptions for a seq of Fragments to execute
  */
-class JUnitDescriptionsFragments(klass: Class[_]) extends JUnitDescriptions[Fragment](klass) {
-    def initialFragment(s: Class[_]) = Text(s.getName)
+class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fragment](className) {
+    def initialFragment(className: String) = Text(className)
     /**
      * This function is used to map each node in a Tree[Fragment] to a pair of
      * (Description, Fragment)
@@ -162,13 +162,13 @@ class JUnitDescriptionsFragments(klass: Class[_]) extends JUnitDescriptions[Frag
      * It is used to create a unique description of the example to executed which is required
      * by JUnit
      */
-    def mapper(klass: Class[_]): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
+    def mapper(className: String): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: Fragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case s @ SpecStart(_,_,_,_)   => Some(createDescription(klass, suiteName=testName(s.name)) -> f)
-        case Text(t)                    => Some(createDescription(klass, suiteName=testName(t)) -> f)
-        case Example(description, body) => Some(createDescription(klass, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))) -> f)
-        case Step(action)               => Some(createDescription(klass, label=nodeLabel.toString, testName="step") -> f)
-        case Action(action)             => Some(createDescription(klass, label=nodeLabel.toString, testName="action") -> f)
+        case s @ SpecStart(_,_,_,_)     => Some(createDescription(className, suiteName=testName(s.name)) -> f)
+        case Text(t)                    => Some(createDescription(className, suiteName=testName(t)) -> f)
+        case Example(description, body) => Some(createDescription(className, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))) -> f)
+        case Step(action)               => Some(createDescription(className, label=nodeLabel.toString, testName="step") -> f)
+        case Action(action)             => Some(createDescription(className, label=nodeLabel.toString, testName="action") -> f)
         case other                      => None
       }
   }
