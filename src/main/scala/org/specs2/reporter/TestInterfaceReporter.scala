@@ -24,8 +24,8 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
   override def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit arguments: Arguments) =
     printLines(fs).print(new TestInterfaceResultOutput(loggers))
 
-  override def export(name: SpecName)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
-    fragments foreach {
+  override def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
+    spec.fragments foreach {
       case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
           res match {
@@ -41,7 +41,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
       }
       case _ => ()
     }
-    print(name, fragments)
+    print(spec.name, spec.fragments)
   }
 }
 

@@ -78,8 +78,9 @@ during the specification execution. There are 2 types of tags for marking a sing
 
   def includeTag(fs: Fragments) = includeTags(fs, "t1")
   def excludeTag(fs: Fragments) = excludeTags(fs, "t1")
-  def includeTags(fs: Fragments, tags: String*) = select(args(include=tags.mkString(",")))(fs).map(_.toString)
-  def excludeTags(fs: Fragments, tags: String*) = select(args(exclude=tags.mkString(",")))(fs).map(_.toString)
+  def includeTags(fs: Fragments, tags: String*) = withTags(fs, args(include=tags.mkString(",")))
+  def excludeTags(fs: Fragments, tags: String*) = withTags(fs, args(exclude=tags.mkString(",")))
+  def withTags(fs: Fragments, args: Arguments) = select(args)(SpecificationStructure(fs)).content.fragments.map(_.toString)
 
   def includeMatch(fs: Fragments, tag: String, names: String*) = {
     (includeTags(fs, tag) must containMatch(_:String)).forall(names)
@@ -141,7 +142,7 @@ during the specification execution. There are 2 types of tags for marking a sing
     def e1 = {
       val properties = MapSystemProperties("specs2.include" -> "t1", "specs2.exclude" -> "")
       val arguments = Arguments.extract(Seq(), properties)
-      select(arguments)(tagged).map(_.toString) must containMatch("e1")
+      select(arguments)(SpecificationStructure(tagged)).fragments.fragments.map(_.toString) must containMatch("e1")
     }
   }
 }

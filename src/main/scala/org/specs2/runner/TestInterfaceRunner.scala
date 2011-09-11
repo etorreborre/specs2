@@ -80,13 +80,13 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   }
 
   protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {
-    override def export(name: SpecName)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
+    override def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
       if (args.contains("html"))
-        (new HtmlExporting {}).export(name)(args)(fragments)
+        (new HtmlExporting {}).export(args)(spec)
       if (args.contains("junitxml"))
-        (new JUnitXmlExporting {}).export(name)(args)(fragments)
+        (new JUnitXmlExporting {}).export(args)(spec)
       if (args.contains("console") || !Seq("html", "junitxml").exists(args.contains))
-        new TestInterfaceReporter(handler, loggers).export(name)(args)(fragments)
+        new TestInterfaceReporter(handler, loggers).export(args)(spec)
     }
   }
 

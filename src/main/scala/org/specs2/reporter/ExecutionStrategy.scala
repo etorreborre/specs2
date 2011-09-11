@@ -18,7 +18,7 @@ import main.Arguments._
  */
 private[specs2]
 trait ExecutionStrategy {
-  def execute(implicit arguments: Arguments): Seq[FragmentSeq] => Seq[ExecutedFragment]
+  def execute(implicit arguments: Arguments): ExecutableSpecification => ExecutedSpecification
 }
 
 /**
@@ -36,13 +36,14 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
    *
    * If the stopOnFail argument is true, we check that the execution is ok before executing the next sequence.
    */
-  def execute(implicit arguments: Arguments) = (fragments: Seq[FragmentSeq]) => {
-     fragments.foldLeft((Nil:List[ExecutedFragment], true)) { (res, fs) =>
-       val (executedFragments, executionOk) = res
-       val fsArgs = arguments <| fs.arguments
-       val executed = executeSequence(fs)(executionArgs(fsArgs, executionOk))
-       (executedFragments ++ executed, !fsArgs.stopOnFail || (executionOk && executed.forall(isOk(_))))
-     }._1
+  def execute(implicit arguments: Arguments) = (spec: ExecutableSpecification) => {
+    val executed = spec.fs.foldLeft((Nil:List[ExecutedFragment], true)) { (res, fs) =>
+      val (executedFragments, executionOk) = res
+      val fsArgs = arguments <| fs.arguments
+      val executed = executeSequence(fs)(executionArgs(fsArgs, executionOk))
+      (executedFragments ++ executed, !fsArgs.stopOnFail || (executionOk && executed.forall(isOk(_))))
+    }._1
+    ExecutedSpecification(spec.name, executed)
   }
 
   private def executionArgs(arguments: Arguments, previousExecutionOk: Boolean) =

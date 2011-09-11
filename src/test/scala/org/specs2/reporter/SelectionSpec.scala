@@ -107,7 +107,6 @@ Before executing and reporting a specification, the fragments must be selected a
     }
   }
 
-
   val ex1 = "ex1" ! success
   val ex2 = "ex2" ! success
 
@@ -115,18 +114,18 @@ Before executing and reporting a specification, the fragments must be selected a
     val selection = new DefaultSelection with DefaultSequence with MockOutput
 
     def selectSequence(fs: Fragments): Seq[FragmentSeq] = {
-      selection.sequence(selection.select(fs.arguments)(fs))(fs.arguments).toList
+      selection.sequence(selection.select(fs.arguments)(SpecificationStructure(fs)).fragments.fragments)(fs.arguments).toList
     }
     def select(f: Fragments)(implicit args: Arguments = Arguments()) = {
       val fs = new Specification { def is = f }.content
-      selection.select(args)(fs).toList.map(_.toString)
+      selection.select(args)(SpecificationStructure(fs)).content.fragments.toList.map(_.toString)
     }
     def step(message: String) = Step({selection.println(message); reporter.println(message)})
     def example(message: String) = message ! { selection.println(message); reporter.println(message); success }
     val reporter = new DefaultReporter with Exporting with MockOutput {
       type ExportType = Unit
 
-      def export(name: SpecName)(implicit args: main.Arguments) = (fragments: Seq[ExecutedFragment]) => ()
+      def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => ()
     }
   }
 

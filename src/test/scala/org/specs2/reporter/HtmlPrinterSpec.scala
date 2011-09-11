@@ -123,7 +123,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
       override lazy val fileWriter = outer.fileWriter
     }
 
-    def htmlLines(spec: Fragments) = printer.reduce(spec.specName, store(args())(spec.fragments.map(executeFragment)), HtmlLink(SpecName("spec"))).flatten.toSeq
+    def htmlLines(spec: Fragments) = printer.reduce(spec.specName, store(args())(ExecutedSpecification(spec.fragments.map(executeFragment))).fragments, HtmlLink(SpecName("spec"))).flatten.toSeq
     def print(spec: Fragments) = htmlLines(spec).head.printLines(new HtmlResultOutput).xml
 
     def printSpec(spec: SpecificationStructure) = {

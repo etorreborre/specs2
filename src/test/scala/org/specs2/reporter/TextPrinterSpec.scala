@@ -234,7 +234,7 @@ class TextPrinterSpec extends Specification { def is =
     printWithColors(fragments, previousStats).map(removeColors(_))
 
   def printWithColors(fs: Fragments, previousStats: Stats = Stats()): Seq[String] =
-    printer.print(preReporter(previousStats).exec(new Specification { def is = fs }))
+    printer.print(preReporter(previousStats).exec(new Specification { def is = fs }).fragments)
 
   val outer = this
   def printer = new TextPrinter {
@@ -248,9 +248,9 @@ class TextPrinterSpec extends Specification { def is =
   def preReporter(previousStats: Stats = Stats()) = new DefaultSelection with DefaultSequence with DefaultExecutionStrategy with DefaultStoring {
     override lazy val repository = NoStatisticsRepository
     
-    def exec(spec: SpecificationStructure): Seq[ExecutedFragment] = {
+    def exec(spec: SpecificationStructure): ExecutedSpecification = {
       val args = spec.content.arguments
-      spec.content |> select(args) |> sequence(args) |> execute(args) |> store(args)
+      spec |> select(args) |> sequence(args) |> execute(args) |> store(args)
     }
 
     override def setStatsOnSpecEndFragments(implicit args: Arguments) = (fs: (ExecutedFragment, Stats)) => fs match {

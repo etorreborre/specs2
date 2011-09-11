@@ -15,8 +15,8 @@ import TagsFragments._
  * The Selection trait implements the logic for filtering the fragments to execute
  */
 trait Selection {
-  /** select function returning a filtered and ordered seq of seq of Fragments */
-  def select(implicit arguments: Arguments): Fragments => Seq[Fragment]
+  /** select function returning a specification with filtered */
+  def select(implicit arguments: Arguments): SpecificationStructure => SpecificationStructure
 }
 
 /**
@@ -28,7 +28,9 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
 
 
   /** select function returning a filtered seq of Fragments */
-  def select(implicit arguments: Arguments): Fragments => Seq[Fragment] = (fragments: Fragments) => select(fragments.fragments)(arguments)
+  def select(implicit arguments: Arguments): SpecificationStructure => SpecificationStructure = (spec: SpecificationStructure) =>
+    SpecificationStructure(select(spec.content.fragments)(arguments))
+
   /** select function returning a filtered seq of Fragments */
   def select(fragments: Seq[Fragment])(implicit commandLineArgs: Arguments = Arguments()): Seq[Fragment] = {
     SpecsArguments.foldAll(fragments).filter(filter(commandLineArgs))

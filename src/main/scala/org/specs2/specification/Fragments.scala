@@ -1,6 +1,7 @@
 package org.specs2
 package specification
 
+import collection.Iterablex._
 import execute.Executable
 import control.LazyParameters._
 import control.LazyParameter
@@ -54,9 +55,10 @@ object Fragments {
    * @return a Fragments object, where the SpecStart might be provided by the passed fragments
    */
   def create(fs: Fragment*) = {
-    fs.toList match {
-      case (s @ SpecStart(n, a, l, so)) :: rest => Fragments(Some(n), rest, a, l, so)
-      case _                                    => createList(fs:_*)
+    fs match {
+      case (s @ SpecStart(n, a, l, so)) +: rest :+ SpecEnd(_) => Fragments(Some(n), rest, a, l, so)
+      case (s @ SpecStart(n, a, l, so)) +: rest               => Fragments(Some(n), rest, a, l, so)
+      case _                                                  => createList(fs:_*)
     }
   }
 

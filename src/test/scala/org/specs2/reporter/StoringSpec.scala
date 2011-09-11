@@ -31,7 +31,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
       override lazy val repository = outer.repository
     }
     implicit def arguments = Arguments()
-    def store(fs: Fragments)(implicit args: Arguments) = storing.store(args <| fs.arguments)(fs.fragments.map(executeFragment)).toList
+    def store(fs: Fragments)(implicit args: Arguments) = storing.store(args <| fs.arguments)(ExecutedSpecification(fs.fragments.map(executeFragment))).fragments.toList
 
     repository.getStatistics(any[SpecName]) returns None
 

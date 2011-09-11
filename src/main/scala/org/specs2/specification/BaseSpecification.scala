@@ -38,3 +38,19 @@ trait SpecificationStructure {
    */
   private[specs2] lazy val content: Fragments = Fragments.withSpecName(map(is), this)
 }
+
+/**
+ * methods for creating SpecificationStructure instances from fragments
+ */
+private[specs2]
+object SpecificationStructure {
+  import collection.Iterablex._
+  
+  def apply(fs: Fragments): SpecificationStructure = new SpecificationStructure {
+    def is = fs.fragments match {
+      case SpecStart(n,a,l,so) +: middle :+ SpecEnd(_) => Fragments(Some(n), middle, a, l, so)
+      case other                                       => fs
+    }
+  }
+  def apply(fs: Seq[Fragment]): SpecificationStructure = apply(Fragments.create(fs:_*))
+}

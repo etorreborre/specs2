@@ -13,7 +13,7 @@ trait TextExporting extends TextPrinter with Exporting { outer =>
 
   type ExportType = Unit
   
-  def export(name: SpecName)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
-    print(name, fragments)
+  def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
+    print(spec.name, spec.fragments)
   }
 } 

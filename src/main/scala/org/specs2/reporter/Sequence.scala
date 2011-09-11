@@ -12,16 +12,21 @@ import SpecsArguments._
  */
 trait Sequence {
   /** select function returning a filtered and ordered seq of seq of Fragments */
-  def sequence(implicit arguments: Arguments): Seq[Fragment] => Seq[FragmentSeq]
+  def sequence(implicit arguments: Arguments): SpecificationStructure => ExecutableSpecification
 }
+
+/**
+ * this case class transports the fragments to execute, grouped in sequences of examples which can be executed concurrently
+ */
+case class ExecutableSpecification(name: SpecName, fs: Seq[FragmentSeq])
 
 /**
  * The DefaultSequence trait sorts the Fragments by making sure Steps will be executed before Examples
  */
 trait DefaultSequence {
   /** sequence function returning an ordered seq of seq of Fragments */
-  def sequence(implicit arguments: Arguments): Seq[Fragment] => Seq[FragmentSeq] =
-    (fragments: Seq[Fragment]) => sequence(fragments)(arguments)
+  def sequence(implicit arguments: Arguments): SpecificationStructure => ExecutableSpecification =
+    (spec: SpecificationStructure) => ExecutableSpecification(spec.content.specName, sequence(spec.content.fragments)(arguments))
 
   /**
    * the sequence method returns sequences of fragments which can be executed concurrently.

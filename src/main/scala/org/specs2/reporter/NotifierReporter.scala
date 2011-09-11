@@ -21,11 +21,11 @@ trait NotifierExporting extends Exporting {
   type ExportType = Unit
   val notifier: Notifier
   /** @return a function exporting ExecutedFragments */
-  def export(name: SpecName)(implicit args: Arguments): Seq[ExecutedFragment] => ExportType = (fs: Seq[ExecutedFragment]) => {
-    notifyExport(fs)
-    if (args.contains("console")) new TextExporting {}.export(name)(args)(fs)
-    if (args.contains("html")) new HtmlExporting {}.export(name)(args)(fs)
-    if (args.contains("junitxml")) new JUnitXmlExporting {}.export(name)(args)(fs)
+  def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
+    notifyExport(spec.fragments)
+    if (args.contains("console")) new TextExporting {}.export(args)(spec)
+    if (args.contains("html")) new HtmlExporting {}.export(args)(spec)
+    if (args.contains("junitxml")) new JUnitXmlExporting {}.export(args)(spec)
   }
 
   private def notifyExport(fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
