@@ -10,17 +10,10 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
 The HtmlPrinter class is responsible for opening an html file and writing the specification text.
                                                                                                                         """^p^
   "The file path must"                                                                                                  ^
-    "use target/specs-reports as a default value for the output directory"                                              ! filepath().e1^
-    "use the `outDir` system variable if set"                                                                           ! filepath().e2^
-    "use class name of the specification as file name"                                                                  ! filepath().e3^
+    "use class name of the specification as file name"                                                                  ! filepath().e1^
                                                                                                                         p^
   "The page title"                                                                                                      ^
     "must be the title of the specification"                                                                            ! title().e1^
-                                                                                                                        p^
-  "Resources"                                                                                                           ^
-    "there must be a directory for css files"                                                                           ! resources().css^
-    "there must be a directory for images files"                                                                        ! resources().images^
-    "there must be a directory for the js tree theme files"                                                             ! resources().jstheme^
                                                                                                                         p^
   "Fragments"                                                                                                           ^
     "A text block must"                                                                                                 ^
@@ -50,10 +43,7 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
                                                                                           
   implicit val argument = args()
   case class filepath() {
-    def e1 = printer.reportPath("") must startWith("target/specs2-reports")
-    def e2 = new HtmlPrinter { override lazy val outputDir = "output/" }.reportPath("") must
-             startWith("output/")
-    def e3 = SpecName(outer).url must endWith(outer.getClass.getName + ".html")
+    def e1 = SpecName(outer).url must endWith(outer.getClass.getName + ".html")
   }
 
   case class title() extends MockHtmlPrinter {
@@ -61,14 +51,6 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     def e1 = print(spec) must \\(<title>Specification</title>)
   }
 
-  case class resources() extends MockHtmlPrinter {
-    val spec: Fragments = "Specification".title ^ "t1"
-    printer.print(outer.content.specName, spec.fragments.map(executeFragment))
-    
-    def css = there was one(fs).copySpecResourcesDir(===("css"), anyString)
-    def images = there was one(fs).copySpecResourcesDir(===("images"), anyString)
-    def jstheme = there was one(fs).copySpecResourcesDir(===("css/themes/default"), anyString)
-  }
   case class fragments() extends MockHtmlPrinter {
     val spec: Fragments = "Specification".title ^ "t1" ^ "t2" ^ "ex1" ! success ^ "*ex2*" ! success ^
                           "ex2" ! { "abcdefghijklmnopqrstuvwxyz" must_== "abcdefghijklnmopqrstuvwxyz" }
@@ -118,16 +100,13 @@ The HtmlPrinter class is responsible for opening an html file and writing the sp
     repository.previousResult(any[SpecName], any[Example]) returns Some(success)
     repository.getStatistics(any[SpecName]) returns Some(Stats())
 
-    def printer = new HtmlPrinter {
-      override lazy val fileSystem = fs
-      override lazy val fileWriter = outer.fileWriter
-    }
+    def printer = new HtmlPrinter { }
 
     def htmlLines(spec: Fragments) = printer.reduce(spec.specName, store(args())(ExecutedSpecification(spec.fragments.map(executeFragment))).fragments, HtmlLink(SpecName("spec"))).flatten.toSeq
     def print(spec: Fragments) = htmlLines(spec).head.printLines(new HtmlResultOutput).xml
 
     def printSpec(spec: SpecificationStructure) = {
-      printer.print(spec.content.specName, spec.content.fragments.map(executeFragment))
+      printer.print(ExecutedSpecification(spec.content.specName, spec.content.fragments.map(executeFragment)))
       out.messages.mkString("\n")
     }
 

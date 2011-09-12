@@ -9,14 +9,11 @@ The HtmlExporting trait is responsible for exporting the executed specification:
 
   ExecutedSpecification => Unit
 
-While the formal type of output is Unit, as for any export, it is expected that we have intermediate Html files written to disk:
+While the formal type of output is Unit, there is actually a transformation to a sequence of HtmlFiles to write to disk:
 
-  (specName, Seq[ExecutedFragment]) => Seq[HtmlLinesFile] => Seq[HtmlFile] => Unit
+  ExecutedSpecification(specName, Seq[ExecutedFragment]) => Seq[HtmlFile] => Unit
 
-   
-  HtmlFile  = (url, NodeSeq)
-  HtmlLinesFi
-
+  HtmlFile  = (Url, NodeSeq)
                                                                                                                                             """
 
 "The HtmlExporting trait is responsible for exporting the executed specification"

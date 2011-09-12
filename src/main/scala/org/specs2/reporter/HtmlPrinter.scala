@@ -31,18 +31,19 @@ import java.io.Writer
  * * the current arguments to use
  *
  */
-trait HtmlPrinter extends HtmlFileWriter {
+trait HtmlPrinter {
 
   /**
    * print a sequence of executed fragments for a given specification class into a html file
    * the name of the html file is the full class name
    */
-  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
+  def print(spec: ExecutedSpecification)(implicit args: Arguments) = {
+    val (name, fs) = (spec.name, spec.fragments)
     val htmlFiles = reduce(name, fs, parentLink = HtmlLink(name, "", name.name))
     lazy val toc = createToc(htmlFiles)
-    writeFiles(htmlFiles.flatten.map { (file: HtmlLinesFile) =>
+    htmlFiles.flatten.map { (file: HtmlLinesFile) =>
       HtmlFile(file.link.url, printHtml(output, file, toTree(toc, htmlFiles.rootLabel.hashCode)(file.hashCode)))
-    })
+    }
   }
 
   /** @return a new HtmlReportOutput object creating html elements */
@@ -126,22 +127,3 @@ case class HtmlFile(url: String, xml: NodeSeq) {
   def nonEmpty = xml.nonEmpty
 }
 
-trait HtmlFileWriter extends OutputDir {
-
-  def writeFiles(htmlFiles: Seq[HtmlFile]) = {
-    copyResources()
-    htmlFiles.filter(_.nonEmpty) foreach writeFile
-  }
-
-  protected def writeFile = (file: HtmlFile) => {
-    fileWriter.write(reportPath(file.url))(writeXml(file.xml))
-  }
-
- /** write the xml output to a Writer */
-  protected def writeXml(xml: NodeSeq)(out: Writer) = out.write(Xhtml.toXhtml(xml))
-
-   /** copy css and images file to the output directory */
-  protected def copyResources() {
-    Seq("css", "images", "css/themes/default").foreach(fileSystem.copySpecResourcesDir(_, outputDir))
-  }
-}
