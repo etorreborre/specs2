@@ -37,7 +37,10 @@ case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), lin
   def name = specName.name
   def title = specName.title
   override def matches(s: String) = name matches s
-  override def toString = "SpecStart("+title+link.map(l => ", link:"+l.toString+", seeOnly:"+seeOnly).getOrElse("")+")"
+  override def toString = "SpecStart("+title+linkToString+")"
+
+  def linkToString = link.map(l => ", link:"+l.toString+", seeOnly:"+seeOnly).getOrElse("")
+
   /** the new arguments take precedence over the old ones */
   def withArgs(args: Arguments) = copy(arguments = args)
   /** the new arguments take override the old ones where defined */

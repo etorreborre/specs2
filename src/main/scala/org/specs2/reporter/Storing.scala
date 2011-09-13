@@ -4,7 +4,7 @@ package reporter
 import org.specs2.internal.scalaz._
 import Scalaz._
 import specification._
-import ExecutedFragments._
+import ExecutedFragment._
 import NestedBlocks._
 import collection.Iterablex._
 import main.{Execute, Arguments}

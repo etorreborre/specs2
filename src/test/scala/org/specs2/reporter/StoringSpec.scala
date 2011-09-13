@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 import specification._
 import main._
-import ExecutedFragments._
+import ExecutedFragment._
 import mock.Mockito
 
 class StoringSpec extends SpecificationWithJUnit { def is =

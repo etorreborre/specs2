@@ -198,7 +198,6 @@ trait ResultPropertyImplicits {
   implicit def propToProp(p: =>Prop): Prop = p
   implicit def booleanToProp(b: =>Boolean): Prop = resultProp(if (b) execute.Success() else execute.Failure())
   implicit def matchResultToProp(m: =>MatchResult[_]): Prop = resultProp(m.toResult)
-  implicit def resultToProp[T](t: =>T)(implicit toResult: (=>T) => execute.Result): Prop = resultProp(toResult(t))
   private def resultProp(r: =>execute.Result): Prop = {
     new Prop {
       def apply(params: Prop.Params) = {

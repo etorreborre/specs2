@@ -2,40 +2,46 @@ package org.specs2
 package reporter
 import specification._
 import main._
+import ExecutedSpecificationData._
 
-class HtmlExportingSpec extends Specification { def is =
+class HtmlExportingSpec extends Specification with ScalaCheck { def is =
                                                                                                                                             """
 The HtmlExporting trait is responsible for exporting the executed specification:
 
   ExecutedSpecification => Unit
 
-While the formal type of output is Unit, there is actually a transformation to a sequence of HtmlFiles to write to disk:
+While the formal type of output is Unit, the HtmlExporting trait actually transforms the ExecutedSpecification to a sequence of HtmlFiles to write to disk:
 
-  ExecutedSpecification(specName, Seq[ExecutedFragment]) => Seq[HtmlFile] => Unit
+  `ExecutedSpecification => Seq[HtmlFile] => Unit`
 
-  HtmlFile  = (Url, NodeSeq)
-                                                                                                                                            """
+  where `HtmlFile  = (Url, NodeSeq)`
+                                                                                                                                            """^
+  "The number of created HtmlFile must be 1 + number of linked specifications"                                                              ! e1^
+                                                                                                                                            end
+  def exporter = new HtmlExporting {}
 
-"The HtmlExporting trait is responsible for exporting the executed specification"
-  spec[ExecutedSpecification, Arguments, Unit](new HtmlExporting0Spec)
-
-  def spec[A, B](spec: FunctionSpecification[A, B]): FunctionSpecification[A, B] = spec
-  def spec[A, B, C](spec: Function2Specification[A, B, C]): Function2Specification[A, B, C] = spec
-
-
-  trait HtmlExporting1 {
-    import internal.scalaz.Scalaz._
-    def fragmentsToLines: ExecutedSpecification  => Seq[HtmlLinesFile]
-    def linesToHtml: Seq[HtmlLinesFile] => Seq[HtmlFile]
-    def writeFiles: Seq[HtmlFile] => Unit
-
-    def export: (ExecutedSpecification, Arguments) => Unit = { case (spec, args) =>
-      spec |> fragmentsToLines |> linesToHtml |> writeFiles
-    }
+  def e1 = check { (spec: ExecutedSpecification) =>
+    (1 + spec.includedLinkedSpecifications.size) === exporter.print(spec)(Arguments()).size
   }
-
-
 }
+
+//spec[ExecutedSpecification, Arguments, Unit](new HtmlExporting0Spec)
+//
+//def spec[A, B](spec: FunctionSpecification[A, B]): FunctionSpecification[A, B] = spec
+//def spec[A, B, C](spec: Function2Specification[A, B, C]): Function2Specification[A, B, C] = spec
+//
+//
+//trait HtmlExporting1 {
+//  import internal.scalaz.Scalaz._
+//  def fragmentsToLines: ExecutedSpecification  => Seq[HtmlLinesFile]
+//  def linesToHtml: Seq[HtmlLinesFile] => Seq[HtmlFile]
+//  def writeFiles: Seq[HtmlFile] => Unit
+//
+//  def export: (ExecutedSpecification, Arguments) => Unit = { case (spec, args) =>
+//    spec |> fragmentsToLines |> linesToHtml |> writeFiles
+//  }
+//}
+
 
 trait FunctionSpecification[A, B] extends Specification with Function[A, B] {
   def data: DataSpecificationStructure[A]
@@ -55,11 +61,11 @@ class HtmlExporting0Spec extends Function2Specification[ExecutedSpecification, A
   def is = success
 }
 
-trait DataSpecificationStructure[+T] extends SpecificationStructure
-trait DataSpecification[+T] extends DataSpecificationStructure[T] with Specification
+
 class ExecutedSpecificationSpec extends DataSpecification[ExecutedSpecification] {
   def is = success
 } 
+
 
 class ArgumentsSpec extends DataSpecification[Arguments] {
   def is = success

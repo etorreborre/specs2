@@ -19,7 +19,7 @@ sealed trait ExecutedFragment {
 }
 
 private[specs2]
-object ExecutedFragments {
+object ExecutedFragment {
   /** @return true if the ExecutedFragment is a Text */
   def isExecutedText: Function[ExecutedFragment, Boolean] = { case ExecutedText(_, _) => true; case _ => false }
   /** @return the text if the Fragment is a Text */
@@ -32,7 +32,7 @@ object ExecutedFragments {
   def isExecutedSpecEnd: Function[ExecutedFragment, Boolean] = { case ExecutedSpecEnd(_,_,_) => true; case _ => false }
 }
 
-case class ExecutedText(text: String, location: Location) extends ExecutedFragment {
+case class ExecutedText(text: String, location: Location = new Location) extends ExecutedFragment {
   def stats: Stats = Stats()
 }
 case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, location: Location, statistics: Stats) extends ExecutedFragment { outer =>
@@ -51,10 +51,10 @@ object ExecutedResult {
 trait ExecutedStandardFragment extends ExecutedFragment {
   val stats: Stats = Stats()
 }
-case class ExecutedBr(location: Location) extends ExecutedStandardFragment
-case class ExecutedEnd(location: Location) extends ExecutedStandardFragment
-case class ExecutedTab(n: Int = 1, location: Location) extends ExecutedStandardFragment
-case class ExecutedBacktab(n: Int = 1, location: Location) extends ExecutedStandardFragment
+case class ExecutedBr(location: Location = new Location) extends ExecutedStandardFragment
+case class ExecutedEnd(location: Location = new Location) extends ExecutedStandardFragment
+case class ExecutedTab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment
+case class ExecutedBacktab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment
 
 case class ExecutedSpecStart(start: SpecStart, location: Location = new Location, stats: Stats = Stats()) extends ExecutedFragment {
   
@@ -67,7 +67,8 @@ case class ExecutedSpecStart(start: SpecStart, location: Location = new Location
   def specName = start.specName
   def name = start.name
   def args = start.arguments
-  override def toString = "ExecutedSpecStart("+specName+")"
+  override def toString = "ExecutedSpecStart("+specName+(if (isLink) ","+start.linkToString else "")+")"
+
 }
 case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stats: Stats = Stats()) extends ExecutedFragment {
   def specName = end.specName
@@ -81,7 +82,7 @@ case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stat
  * This executed Fragment is used when no text must be displayed (for the successful
  * execution of an Action for example)
  */
-case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Location) extends ExecutedFragment { outer =>
+case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Location = new Location) extends ExecutedFragment { outer =>
   def stats: Stats = Stats(timer=outer.timer)
 }
 
