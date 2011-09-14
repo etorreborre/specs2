@@ -508,7 +508,7 @@ include(xonly, resetTextIndentation)         ^
 
     examplesLinks(&quot;Example specifications&quot;)
 
-         // see the SpecificationsFinder object for the parameters of the 'specifications' method
+    // see the SpecificationsFinder trait for the parameters of the 'specifications' method
     def examplesLinks(t: String) = specifications().foldLeft(t.title) { (res, cur) =&gt; res ^ see(cur) }
 
   }
