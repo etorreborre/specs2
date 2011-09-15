@@ -8,6 +8,7 @@ class FromSourceSpec extends Specification with FromSource {
   val spec  = new UserFromSourceSpecification
   val spec2 = new SpecificationWithNoStartingText
   val spec3 = new SpecificationWithNoStartingTextAndNoEnd
+  val scalaCheckSpec  = new UserFromSourceScalaCheckSpecification
 
   "An expression can be read from a source file" in {
     examples(spec)(0).desc.toString must contain("1 must_== 1")
@@ -29,6 +30,12 @@ class FromSourceSpec extends Specification with FromSource {
   }
   "If the specification doesn't end with an end fragment, the last example description should be found" in {
     checkExamples(spec3)
+  }
+  "If there is a function call to a scalacheck example, the example description should be found" in {
+    examples(scalaCheckSpec)(0).desc.toString must contain("a call to an example")
+  }
+  "A scalacheck expression can be read from a source file even if it spans several lines" in {
+    examples(scalaCheckSpec)(1).desc.toString must contain("check") and contain("a.size")
   }
 
   def checkExamples(spec: SpecificationStructure) = { (e: (Example, Int)) =>

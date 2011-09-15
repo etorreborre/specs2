@@ -11,8 +11,11 @@ trait ScalaCheck extends matcher.ScalaCheckMatchers with AutoExamples {
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def propFragmentsFragments(expression: =>Prop): FragmentsFragment = new FragmentsFragment(propFragments(expression))
 
-  def propFragments(expression: =>Prop)(implicit p: Parameters): Fragments = {
-    val desc = getSourceCode()
+  implicit def propFragments(expression: =>Prop)(implicit p: Parameters): Fragments = {
+    val desc = getSourceCode(startDepth = 10, endDepth = 13, startLineOffset = 0, endLineOffset = 0)
     Fragments.create(Example(CodeMarkup(desc), checkProperty(expression)(p)))
   }
+
+  implicit def propExample(expression: =>Prop)(implicit p: Parameters) = Example(CodeMarkup(getSourceCode()),  checkProperty(expression)(p) )
+
 }
