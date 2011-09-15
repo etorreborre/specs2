@@ -698,16 +698,15 @@ The title can be defined either:
 Here's something you can do to automatically create an index page for your specifications:
 
       import org.specs2._
-      import runner.FilesRunner
+      import runner.SpecificationsFinder._
 
-      class index extends Specification with FilesRunner { def is =
+      class index extends Specification { def is =
 
         examplesLinks("Example specifications")
-
-        def examplesLinks(t: String) = {
-          specifications("**/examples/*.scala").
-            foldLeft(t.title) { (res, cur) => res ^ see(cur) }
-        }
+        
+				// see the SpecificationsFinder trait for the parameters of the 'specifications' method
+        def examplesLinks(t: String) = specifications().foldLeft(t.title) { (res, cur) => res ^ see(cur) }
+        
       }
 
 The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method

@@ -97,3 +97,5 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
   def createSpecification(className: String, printMessage: Boolean, printStackTrace: Boolean): Option[SpecificationStructure] =
     createObject[SpecificationStructure](className, printMessage, printStackTrace)
 }
+
+object SpecificationsFinder extends SpecificationsFinder
