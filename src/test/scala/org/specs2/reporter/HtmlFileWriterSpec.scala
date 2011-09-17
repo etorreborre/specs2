@@ -7,7 +7,7 @@ import matcher.DataTables
 
 class HtmlFileWriterSpec extends Specification with Mockito { outer => def is =
                                                                                                                         """
-The HtmlFileWriter class is responsible for wrting a html reports to disk.
+The HtmlFileWriter class is responsible for writing a html reports to disk.
                                                                                                                         """^p^
   "Resources"                                                                                                           ^
     "there must be a directory for css files"                                                                           ! resources().css^

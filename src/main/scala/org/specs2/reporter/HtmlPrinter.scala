@@ -38,12 +38,13 @@ trait HtmlPrinter {
    * the name of the html file is the full class name
    */
   def print(spec: ExecutedSpecification)(implicit args: Arguments) = {
-    val (name, fs) = (spec.name, spec.fragments)
-    val htmlFiles = reduce(name, fs, parentLink = HtmlLink(name, "", name.name))
-    lazy val toc = createToc(htmlFiles)
-    htmlFiles.flatten.map { (file: HtmlLinesFile) =>
-      HtmlFile(file.link.url, printHtml(output, file, toTree(toc, htmlFiles.rootLabel.hashCode)(file.hashCode)))
-    }
+    val htmlFiles = reduce(spec) |> sortByFile(spec.name, parentLink = HtmlLink(spec.name, "", spec.name.name))
+    val toc = createToc(htmlFiles)
+    htmlFiles.flatten map printHtml(toc, output)
+  }
+
+  def printHtml(toc: TreeToc, output: =>HtmlReportOutput): HtmlLinesFile => HtmlFile = (file: HtmlLinesFile) => {
+    HtmlFile(file.link.url, printHtml(output, file, toc.toTree(file.hashCode)))
   }
 
   /** @return a new HtmlReportOutput object creating html elements */
@@ -55,22 +56,14 @@ trait HtmlPrinter {
       val root = tree.rootLabel
       tocElements(root.printLines(output).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduceNodes })
     }
-    itemsList(htmlFiles)
+    TreeToc(htmlFiles.rootLabel.hashCode, itemsList(htmlFiles))
   }
-
-  /** @return a function global toc to be displayed with jstree, focusing on the current section */
-  def toTree(toc: NodeSeq, rootCode: Int) = (currentCode: Int) =>
-    <div id="tree">
-      <ul>{toc}</ul>
-      <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+rootCode+"','"+currentCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
-    </div>
-
 
   /**
    * @return an HtmlReportOutput object containing all the html corresponding to the
    *         html lines to print  
    */  
-  def printHtml(output: =>HtmlReportOutput, files: HtmlLinesFile, toc: NodeSeq) = files.print(output, toc).xml
+  def printHtml(output: =>HtmlReportOutput, file: HtmlLinesFile, toc: NodeSeq): NodeSeq = file.print(output, toc).xml
 
   /**
    * Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
@@ -80,9 +73,10 @@ trait HtmlPrinter {
    *
    * @return the HtmlLines to print
    */
-  def reduce(specification: SpecName, fs: Seq[ExecutedFragment], parentLink: HtmlLink): Tree[HtmlLinesFile] = {
-    val lines = flatten(fs.reduceWith(reducer))
-    lazy val start = HtmlLinesFile(specification, parentLink, Nil)
+  def reduce(spec: ExecutedSpecification): Seq[HtmlLine] = flatten(spec.fragments.reduceWith(reducer))
+
+  def sortByFile(specName: SpecName, parentLink: HtmlLink) = (lines: Seq[HtmlLine]) => {
+    lazy val start = HtmlLinesFile(specName, parentLink, Nil)
     lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
       cur match {
@@ -127,3 +121,15 @@ case class HtmlFile(url: String, xml: NodeSeq) {
   def nonEmpty = xml.nonEmpty
 }
 
+/**
+ * Table of contents, represented as a NodeSeq
+ */
+case class TreeToc(rootCode: Int, toc: NodeSeq) {
+  /** @return a function global toc to be displayed with jstree, focusing on the current section */
+  def toTree = (currentCode: Int) =>
+    <div id="tree">
+      <ul>{toc}</ul>
+      <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+rootCode+"','"+currentCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
+    </div>
+
+}

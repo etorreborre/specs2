@@ -4,7 +4,7 @@ import specification._
 import main._
 import ExecutedSpecificationData._
 
-class HtmlExportingSpec extends Specification with ScalaCheck { def is =
+class HtmlExportingSpec extends Specification with ScalaCheck { def is = noindent^
                                                                                                                                             """
 The HtmlExporting trait is responsible for exporting the executed specification:
 
@@ -12,16 +12,20 @@ The HtmlExporting trait is responsible for exporting the executed specification:
 
 While the formal type of output is Unit, the HtmlExporting trait actually transforms the ExecutedSpecification to a sequence of HtmlFiles to write to disk:
 
-  `ExecutedSpecification => Seq[HtmlFile] => Unit`
+
+                         `print`               `writeFiles`
+  `ExecutedSpecification   =>    Seq[HtmlFile]      =>       Unit`
 
   where `HtmlFile  = (Url, NodeSeq)`
                                                                                                                                             """^
-  "The number of created HtmlFile must be 1 + number of linked specifications"                                                              ! e1^
+  "The number of created HtmlFiles must be 1 + number of linked specifications"                                                             ! e1^
+  "The HtmlPrinter trait creates the `HtmlFiles`" ~/ new HtmlPrinterSpec                                                                    ^
+  "The HtmlFileWriter trait writes the `HtmlFiles` to disk" ~/ new HtmlFileWriterSpec                                                       ^
                                                                                                                                             end
   def exporter = new HtmlExporting {}
-
+  
   def e1 = check { (spec: ExecutedSpecification) =>
-    (1 + spec.includedLinkedSpecifications.size) === exporter.print(spec)(Arguments()).size
+    (1 + spec.includedLinkedSpecifications.size) === exporter.print(spec)(args()).size
   }
 }
 
