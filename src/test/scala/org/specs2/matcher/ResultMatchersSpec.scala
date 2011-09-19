@@ -6,9 +6,10 @@ import execute._
 class ResultMatchersSpec extends Specification with ResultMatchers { def is =
                                                                                                                         """
 The ResultMatchers trait provides matchers to check Result instances.
-                                                                                                                        """^p^
+                                                                                                                        """^
+                                                                                                                        p^
   "beSuccessful checks if a Result is a Success"                                                                        ^
-  { success must  beSuccessful }                                                                                         ^
+  { success must  beSuccessful }                                                                                        ^
   { success must be successful }                                                                                        ^
   { Failure("f") must not beSuccessful }                                                                                ^
   { Failure("f") must not be successful }                                                                               ^
@@ -20,5 +21,18 @@ The ResultMatchers trait provides matchers to check Result instances.
   { success must not be failing }                                                                                       ^
   { success must not beFailing }                                                                                        ^
   { (1 must_== 2).toResult must be failing }                                                                            ^
+                                                                                                                        p^
+  "beSuccessful checks if a MatchResult is a Success"                                                                   ^
+  { (1 === 1) must  beSuccessful }                                                                                      ^
+  { (1 === 1) must be successful }                                                                                      ^
+  { (1 !== 1) must not beSuccessful }                                                                                   ^
+  { (1 !== 1) must not be successful }                                                                                  ^
+                                                                                                                        p^
+  "beFailing checks if a MatchResult is a Failure"                                                                      ^
+  { (1 !== 1) must beFailing }                                                                                          ^
+  { (1 !== 1) must beFailing(message = "'1' is equal to '1'") }                                                         ^
+  { (1 === 1) must not be failing }                                                                                     ^
+  { (1 === 1) must not beFailing }                                                                                      ^
+  { (1 !== 1) must be failing }                                                                                         ^
                                                                                                                         end
 }
