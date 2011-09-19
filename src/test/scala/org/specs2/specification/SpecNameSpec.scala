@@ -1,6 +1,8 @@
 package org.specs2
 package specification
 
+import specification.SpecName._
+
 class SpecNameSpec extends mutable.Specification {
   
   "A spec name can be built from a single string" >> { 
@@ -45,7 +47,11 @@ class SpecNameSpec extends mutable.Specification {
     val spec = new Specification { def is = "title".title ^ "text" }
     spec.content.start.title must_== "title"
     spec.content.start.name must_== "Object"
-  } 
+  }
+
+  "A SpecName can define a url" >> {
+    SpecName(this).url must endWith(getClass.getName + ".html")
+  }
 }
 
 class TestSpecification extends Specification { def is  = "e1" ! success }

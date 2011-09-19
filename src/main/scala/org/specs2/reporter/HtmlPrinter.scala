@@ -80,19 +80,19 @@ trait HtmlPrinter {
     lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
       cur match {
-        case HtmlLine(start @ HtmlSpecStart(s), st, l, a) if start.isIncludeLink =>
-          updated.insertDownLast(leaf(HtmlLinesFile(s.specName, start.link.getOrElse(parentLink), List(HtmlLine(start.unlink, st, l, a)))))
-        case HtmlLine(HtmlSpecEnd(e, _), _, _, _) if e.specName == res.getLabel.specName => updated.getParent
-        case other                                                                       => updated
+        case start @ HtmlSpecStart(s, st, l, a) if start.isIncludeLink =>
+          updated.insertDownLast(leaf(HtmlLinesFile(s.specName, start.link.getOrElse(parentLink), List(start.unlink))))
+        case HtmlSpecEnd(e, _, _, _) if e.specName == res.getLabel.specName => updated.getParent
+        case other                                                          => updated
       }
     }.root.tree
   }
 
-  /** flatten the results of the reduction to a list of Html lines */
-  private def flatten(results: (((List[Html], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[HtmlLine] = {
+  /** flatten the results of the reduction to a seq of Html lines */
+  private def flatten(results: (((Seq[HtmlLine], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): Seq[HtmlLine] = {
     val (prints, stats, levels, args) = results.flatten
     (prints zip stats.stats zip levels.levels zip args.nestedArguments) map {
-      case (((t, s), l), a) => HtmlLine(t, s, l, a)
+      case (((t, s), l), a) => t.set(s, l, a)
     }
   }  
   
@@ -102,8 +102,8 @@ trait HtmlPrinter {
     LevelsReducer  &&&
     SpecsArgumentsReducer
 
-  implicit object HtmlReducer extends Reducer[ExecutedFragment, List[Html]] {
-    implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
+  implicit object HtmlReducer extends Reducer[ExecutedFragment, Seq[HtmlLine]] {
+    implicit override def unit(fragment: ExecutedFragment) = Seq(print(fragment))
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment) = fragment match { 
       case start @ ExecutedSpecStart(_,_,_)       => HtmlSpecStart(start)
