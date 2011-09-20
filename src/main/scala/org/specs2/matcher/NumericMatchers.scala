@@ -6,7 +6,17 @@ import text.Quote._
  * Matchers for Numerical values
  */
 trait NumericMatchers extends NumericBaseMatchers with NumericBeHaveMatchers
-object NumericMatchers extends NumericMatchers
+object NumericMatchers extends NumericMatchers {
+  import text.NotNullStrings._
+
+  private[specs2] def description[S](e: Expectable[S]) = {
+    e.desc match {
+      case Some(d) => d(e.value.notNull)
+      case None    => e.value.notNull
+    }
+  }
+}
+import NumericMatchers._
 
 private[specs2]
 trait NumericBaseMatchers {
@@ -106,8 +116,8 @@ class BeLessThanOrEqualTo[T <% Ordered[T]](n: T) extends Matcher[T] {
     val r = a.value <= n
     val isEqual = a.value == n  
     result(r, 
-           if (isEqual) a.value.toString + " is equal to " + n.toString else a.value.toString + " is less than " + n.toString, 
-           a.value.toString + " is greater than " + n.toString,
+           if (isEqual) description(a) + " is equal to " + n.toString else description(a) + " is less than " + n.toString,
+           description(a) + " is greater than " + n.toString,
            a)
   }
 }
@@ -115,8 +125,8 @@ class BeLessThan[T <% Ordered[T]](n: T) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {
     val r = a.value < n
     result(r, 
-           a.value.toString + " is less than " + n.toString, 
-           a.value.toString + " is not less than " + n.toString,
+           description(a) + " is less than " + n.toString,
+           description(a) + " is not less than " + n.toString,
            a)
   }
 }
@@ -124,7 +134,7 @@ class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T] {
   def apply[S <: T](x: Expectable[S]) = {
     val num = implicitly[Numeric[T]]
     result(num.lteq(num.minus(n, delta), x.value) && num.lteq(x.value, num.plus(n, delta)), 
-           x.description + " is close to " + n.toString + " +/- " + delta, 
-           x.description + " is not close to " + n.toString + " +/- " + delta, x)
+           description(x) + " is close to " + n.toString + " +/- " + delta,
+           description(x) + " is not close to " + n.toString + " +/- " + delta, x)
   }
 }
