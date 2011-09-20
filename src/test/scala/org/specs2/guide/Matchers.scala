@@ -717,15 +717,6 @@ In any other cases, if `f` is a function of 1 parameter, the array of the method
 
 By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you want to specify that some methods are indeed called:
 
-       m.get(0)
-       m.get(0) was called
-       m.get(1) wasnt called
-       m.get(2) was notCalled
-
-###### Constraints on call expectations
-
-You can be even more precise when specifying the number of calls on a mock:
-
       there was one(m).get(0)              // one call only to get(0)
       there was no(m).get(0)               // no calls to get(0)
 
