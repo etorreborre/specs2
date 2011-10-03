@@ -65,6 +65,8 @@ trait Throwablex {
       t
     }
 
+    /** @return the exception message and its cause if any */
+    def messageAndCause = t.getMessage + (if (t.getCause != null) ". Cause: "+t.getCause.getMessage else "")
   }
   /** utility method to create a default stacktrace element */
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 

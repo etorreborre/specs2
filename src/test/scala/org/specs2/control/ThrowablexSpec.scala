@@ -10,6 +10,7 @@ The Throwablex trait provides extensions to regular throwables:
   "It provides methods to access nested exceptions"						                                                          ^
     "chainedExceptions returns a list of nested exceptions" 			                                                      ! chained.e1^
     "getFullStackTrace returns a list of all nested stackTraceElements"                                                 ! chained.e2^
+    "messageAndCause returns the exception message and its cause if any"                                                ! chained.e3^
                                                                                                                         p^
   "It has location methods"                                                                                             ^
     "to get the name of the file and the line from an exception"                                                        ! location.e1^
@@ -30,6 +31,7 @@ The Throwablex trait provides extensions to regular throwables:
 	  def e1 = e.chainedExceptions must_== List(e.getCause)
 	  def e2 = e.getFullStackTrace.size must_==
 	           e.getStackTrace.size + e.getCause.getStackTrace.size
+    def e3 = e.messageAndCause must_== "message. Cause: cause"
   }
   object location extends ThrowablexContext {
     def e1 = e.location must_== "ThrowablexContext.scala:6"

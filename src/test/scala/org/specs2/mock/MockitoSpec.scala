@@ -48,6 +48,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "if the mocked method has been called atMost n times"                                                               ! calls().calls4^
     "if the mocked method has never been called"                                                                        ! calls().calls5^
     "if the mocked method has not been called after some calls"                                                         ! calls().calls6^
+    "if the verification fails with a specific cause (like ClassNotFoundException), the cause is returned"              ! calls().calls7^
                                                                                                                         p^
   "The order of calls to a mocked method can be checked"^
     "with 2 calls that were indeed in order"                                                                            ! ordered().asExpected^
@@ -137,6 +138,11 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       there was one(list).add("one")
       there were two(list).add("two")
       there were noMoreCallsTo(list)
+    }
+    def calls7 = {
+      val cause = new Exception("cause")
+      val e = new Exception("error", cause)
+      (there was no(list).add(be_==={throw e; "four"})).message must_== "The mock was not called as expected: error. Cause: cause"
     }
   }
   case class callbacks() {

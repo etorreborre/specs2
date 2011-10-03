@@ -2,6 +2,7 @@ package org.specs2
 package mock
 package mockito
 
+import control.Throwablex._
 import org.mockito.InOrder
 import org.mockito.verification.{ VerificationMode }
 import control.Exceptions._
@@ -47,8 +48,8 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
         case Right(v) => new MatchSuccess("The mock was called as expected", "The mock was not called as expected", Expectable(v))
         case Left(e) => {
           new MatchFailure("The mock was called as expected",
-                           "The mock was not called as expected: " + e.getMessage,
-                           createExpectable(s.value, e.getMessage))
+                           "The mock was not called as expected: " + e.messageAndCause,
+                           createExpectable(s.value, e.messageAndCause))
         }
       }
     }
