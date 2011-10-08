@@ -58,6 +58,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
   "Callbacks can be created to control the returned a value"                                                            ! callbacks().c1^
                                                                                                                         p^
   "A parameter can be captured in order to check its value"                                                             ! captured().e1^
+  "A parameter can be captured in order to check its successive values"                                                 ! captured().e2^
                                                                                                                         p^
   "The Mockito trait is reusable in other contexts"                                                                     ^
     "in mutable specs"                                                                                                  ! reuse().e1^
@@ -186,11 +187,19 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
   }
   case class captured() {
     val list = mock[java.util.List[String]]
-     def e1 = {
-      list.get(1)
+    def e1 = {
+     list.get(1)
       val c = capture[Int]
-      there was one(list).get(c)
+       there was one(list).get(c)
       c.value must_== 1
+    }
+
+    def e2 = {
+      list.get(1)
+      list.get(2)
+      val c = capture[Int]
+      there was two(list).get(c)
+      c.values.toString must_== "[1, 2]"
     }
   }
 

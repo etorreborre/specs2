@@ -20,6 +20,7 @@ trait CapturedArgument {
 class ArgumentCapture[T](implicit m: ClassManifest[T]) {
   lazy private val captor: ArgumentCaptor[T] = ArgumentCaptor.forClass(m.erasure).asInstanceOf[ArgumentCaptor[T]]
   def value = captor.getValue
+  def values = captor.getAllValues
   def capture = captor.capture()
 }
 
