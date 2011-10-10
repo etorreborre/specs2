@@ -19,6 +19,8 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { "a" === "a" }                                                                                                       ^
   { "a" !== "b" }                                                                                                       ^
   { "a" must be_===("a") }                                                                                              ^
+  // doesn't compile
+  // { "a" ==== 1 }                                                                                                  ^
   { "a" must not be_===("b") }                                                                                          ^
   { "a" must be_!==("b") }                                                                                              ^
   { "a" must not be_!==("a") }                                                                                          ^
