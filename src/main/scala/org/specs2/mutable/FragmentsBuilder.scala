@@ -48,11 +48,19 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
     def >>(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
 
     def >>(e: =>Example)       : Example = in(e)
+    def >>(block: =>Unit)      : Unit    = in(block)
+
     def in(e: =>Example)       : Example = {
       addFragments(s)
       val ex = e
       addFragments(p)
       ex
+    }
+    def in(block: =>Unit)       : Unit = {
+      addFragments(s)
+      val b = block
+      addFragments(p)
+      b
     }
     def in(fs: =>Fragments): Fragments = fs
     def >>(fs: =>Fragments): Fragments = fs
