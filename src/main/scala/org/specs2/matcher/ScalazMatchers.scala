@@ -2,8 +2,8 @@ package org.specs2
 package matcher
 
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
-import org.specs2.internal.scalaz._, Scalaz._
-
+import org.specs2.internal._
+import scalaz._, Scalaz._
 /**
  * This trait provides matchers for some Scalaz (http://code.google.com/p/scalaz) datatypes.
  */
@@ -31,5 +31,24 @@ trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMa
   }
 
   def isMonoid[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]) = isAssociative and hasNeutralElement
+
+  import MatchersImplicits._
+
+  /** success matcher for a Validation */
+  def beSuccessful[E, A]: Matcher[Validation[E, A]] = (v: Validation[E, A]) => (v.fold(_ => false, _ => true), v+" successful", v+" is not successfull")
+
+  /** failure matcher for a Validation */
+  def beAFailure[E, A]: Matcher[Validation[E, A]] = (v: Validation[E, A]) => (v.fold(_ => true, _ => false), v+" is a failure", v+" is not a failure")
+
+  /** success matcher for a Validation with a specific value */
+  def succeedWith[E, A](a: =>A) = validationWith[E, A](Success(a))
+
+  /** failure matcher for a Validation with a specific value */
+  def failWith[E, A](e: =>E) = validationWith[E, A](Failure(e))
+
+  private def validationWith[E, A](f: =>Validation[E, A]): Matcher[Validation[E, A]] = (v: Validation[E, A]) => {
+    val expected = f
+    (expected == v, v+" is a "+expected, v+" is not a "+expected)
+  }
 
 }
