@@ -11,7 +11,7 @@ import org.mockito.invocation._
 import matcher._
 import junit.framework.AssertionFailedError
 
-class MockitoSpec extends Specification with Mockito {  def is =
+class MockitoSpec extends Specification with Mockito with ResultMatchers {  def is =
                                                                                                                         """
 Mockito is a Java library for mocking.
 
@@ -48,7 +48,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "if the mocked method has been called atMost n times"                                                               ! calls().calls4^
     "if the mocked method has never been called"                                                                        ! calls().calls5^
     "if the mocked method has not been called after some calls"                                                         ! calls().calls6^
-    "if the verification fails with a specific cause (like ClassNotFoundException), the cause is returned"              ! calls().calls7^
+    "if the verification throws an exception, it will be reported as an Error"                                          ! calls().calls7^
                                                                                                                         p^
   "The order of calls to a mocked method can be checked"^
     "with 2 calls that were indeed in order"                                                                            ! ordered().asExpected^
@@ -91,12 +91,20 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
 	
 	case class aMock() {
     val list = mock[java.util.List[String]]
+    val queue = mock[scala.collection.immutable.Queue[String]]
+
     def call1 = { list.add("one"); success }
     def verify1 = {
       list.add("one")
       there was one(list).add("one")
     }
     def verify2 = (there was one(list).add("one")).message must startWith("The mock was not called as expected")
+
+    def verify3 = {
+      queue.enqueue("msg")
+      there was one(queue).enqueue("msg2") must beError("NullPointerException")
+    }
+
     def return1 = {
       list.add("one") returns true
       list.add("one") must_== true
@@ -143,7 +151,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     def calls7 = {
       val cause = new Exception("cause")
       val e = new Exception("error", cause)
-      (there was no(list).add(be_==={throw e; "four"})).message must_== "The mock was not called as expected: error. Cause: cause"
+      (there was no(list).add(be_==={throw e; "four"})) must throwAn[Exception]
     }
   }
   case class callbacks() {
