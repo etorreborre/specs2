@@ -19,8 +19,8 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   def printError(message: String)(implicit args: Arguments)                   = printLines(args.errorColor(message))
   def printSkipped(message: String)(implicit args: Arguments)                 = printLines(args.skippedColor(message))
   def printPending(message: String)(implicit args: Arguments)                 = printLines(args.pendingColor(message))
-  def printStats(message: String)(implicit args: Arguments)                   = printLines(args.statsColor(message))
   def printText(message: String)(implicit args: Arguments)                    = printLines(args.textColor(message))
+  def printStats(message: String)(implicit args: Arguments)                   = printLines(args.statsColor(message))
   def status(result: Result)(implicit args: Arguments): String                = result.coloredStatus(args) + " "
   
   /**
@@ -39,4 +39,17 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   def printLine(message: String)(implicit args: Arguments) = 
     println((" "*args.offset) + message)
   
+}
+
+/**
+ * This trait only outputs statistics. It is used to finally display the statistics when streaming the results to the console
+ */
+class StatsOnlyTextResultOutput extends TextResultOutput {
+  override def printSpecStart(message: String, stats: Stats)(implicit args: Arguments) = ()
+  override def printSuccess(message: String)(implicit args: Arguments)                 = ()
+  override def printFailure(message: String)(implicit args: Arguments)                 = ()
+  override def printError(message: String)(implicit args: Arguments)                   = ()
+  override def printSkipped(message: String)(implicit args: Arguments)                 = ()
+  override def printPending(message: String)(implicit args: Arguments)                 = ()
+  override def printText(message: String)(implicit args: Arguments)                    = ()
 }

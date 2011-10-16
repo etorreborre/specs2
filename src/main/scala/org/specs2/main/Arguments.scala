@@ -276,6 +276,7 @@ case class Report(
   _offset:        Option[Int]              = None,
   _markdown:      Option[Boolean]          = None,
   _debugMarkdown: Option[Boolean]          = None,
+  _streaming:     Option[Boolean]          = None,
   _diffs:         Option[Diffs]            = None,
   _fromSource:    Option[Boolean]          = None,
   _traceFilter:   Option[StackTraceFilter] = None) extends ShowArgs {
@@ -292,6 +293,7 @@ case class Report(
   def offset: Int                   = _offset.getOrElse(0)
   def markdown: Boolean             = _markdown.getOrElse(true)
   def debugMarkdown: Boolean        = _debugMarkdown.getOrElse(false)
+  def streaming: Boolean            = _streaming.getOrElse(false)
   def diffs: Diffs                  = _diffs.getOrElse(SmartDiffs())
   def fromSource: Boolean           = _fromSource.getOrElse(true)
   def traceFilter: StackTraceFilter = _traceFilter.getOrElse(DefaultStackTraceFilter)
@@ -307,6 +309,7 @@ case class Report(
       other._offset          .orElse(_offset),
       other._markdown        .orElse(_markdown),
       other._debugMarkdown   .orElse(_debugMarkdown),
+      other._streaming       .orElse(_streaming),
       other._diffs           .orElse(_diffs),
       other._fromSource      .orElse(_fromSource),
       other._traceFilter     .orElse(_traceFilter)
@@ -323,6 +326,7 @@ case class Report(
     "offset"         -> _offset       ,
     "markdown"       -> _markdown     ,
     "debugMarkdown"  -> _debugMarkdown,
+    "streaming"      -> _streaming,
     "diffs"          -> _diffs,
     "fromSource"     -> _fromSource,
     "traceFilter"    -> _traceFilter).flatMap(showArg).mkString("Report(", ", ", ")")
@@ -341,6 +345,7 @@ object Report extends Extract {
       _offset        = int("offset"),
       _markdown      = bool("markdown", "nomarkdown"),
       _debugMarkdown = bool("debugmarkdown"),
+      _streaming     = bool("streaming"),
       _fromSource    = bool("fromsource"),
       _traceFilter   = bool("fullstacktrace").map(t=>NoStackTraceFilter).
                        orElse(value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_)))

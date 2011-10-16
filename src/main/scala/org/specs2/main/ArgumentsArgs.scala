@@ -97,6 +97,7 @@ trait ArgumentsArgs extends ArgProperties {
       offset:        ArgProperty[Int]               = ArgProperty[Int](),
       markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       debugMarkdown: ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      streaming:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter]()) = new Arguments(
@@ -109,6 +110,7 @@ trait ArgumentsArgs extends ArgProperties {
                        offset.toOption,
                        markdown.toOption,
                        debugMarkdown.toOption,
+                       streaming.toOption,
                        diffs.toOption,
                        fromSource.toOption,
                        traceFilter.toOption))

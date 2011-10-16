@@ -80,12 +80,6 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   }
 
   protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {
-    override def execute(implicit arguments: Arguments) = {
-      if (args.contains("streaming") && !args.contains("console"))
-        new StreamingTestInterfaceReporter(handler, loggers).execute(arguments)
-      else super.execute(arguments)
-    }
-    
     override def export(implicit arguments: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
       exporters(args, handler).foreach { e => e.export(arguments)(spec) }
     }
@@ -93,14 +87,12 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
 
   def exporters(args: Array[String], handler: EventHandler): Seq[Exporting] = {
     def reportIs(reportTypes: String*) = reportTypes.exists(args.contains)
+
     def exporter(condition: Boolean)(e: =>Exporting) = if (condition) Some(e) else None
     def exportHtml     = exporter(reportIs("html"))(HtmlExporting)
     def exportJunitxml = exporter(reportIs("junitxml"))(JUnitXmlExporting)
-    def streaming      =
-      exporter(!reportIs("html", "junitxml", "console") && reportIs("streaming") ||
-                reportIs("html", "junitxml") && !reportIs("console") && reportIs("streaming"))(new StreamingTestInterfaceReporter(handler, loggers))
-    
-    def console        = exporter(!reportIs("html", "junitxml", "streaming") || reportIs("console"))(new TestInterfaceReporter(handler, loggers))
-    Seq(exportHtml, exportJunitxml, streaming, console).flatten
+    def console        = exporter(!reportIs("html", "junitxml") || reportIs("console"))(new TestInterfaceReporter(handler, loggers))
+
+    Seq(exportHtml, exportJunitxml, console).flatten
   }
 }

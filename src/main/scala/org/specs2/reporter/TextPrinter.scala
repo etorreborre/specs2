@@ -28,11 +28,14 @@ import SpecsArguments._
  *
  */
 trait TextPrinter {
-  val output: ResultOutput = new TextResultOutput
-  
+  lazy val textOutput: ResultOutput = new TextResultOutput
+  lazy val streamingOutput: ResultOutput = new StatsOnlyTextResultOutput
+
+  def output(args: Arguments) = if (args.report.streaming) streamingOutput else textOutput
+
   def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) =
-    printLines(fs).print(output)
-  
+    printLines(fs).print(output(commandLineArgs))
+
   def printLines(fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments = Arguments()) =
     PrintLines(flatten(fs.reduceWith(reducer)))
 

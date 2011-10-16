@@ -65,19 +65,15 @@ case class reporting() extends Mockito with matcher.MustExpectations with MockLo
 
   def e2 = {
     def export(condition: Boolean, e: String) = if (condition) Some(e) else None
-    def selectedExporters(c: Boolean, s: Boolean, h: Boolean, j: Boolean) =
-      Set(export(c, "TestInterfaceReporter"), export(s, "StreamingTestInterfaceReporter"), export(h, "HtmlExporting$"), export(j, "JUnitXmlExporting$")).flatten
+    def selectedExporters(c: Boolean, h: Boolean, j: Boolean) =
+      Set(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(j, "JUnitXmlExporting$")).flatten
 
-    "args"                                || "console" | "streaming" | "html" | "junitxml" |
-    "junitxml"                            !! false     ! false       ! false  ! true       |
-    "junitxml,console"                    !! true      ! false       ! false  ! true       |
-    "junitxml,html,console"               !! true      ! false       ! true   ! true       |
-    "junitxml,html,console,streaming"     !! true      ! false       ! true   ! true       |
-    "streaming"                           !! false     ! true        ! false  ! false      |
-    "html"                                !! false     ! false       ! true   ! false      |
-    "html,streaming"                      !! false     ! true        ! true   ! false      |
-    "junitxml,html,streaming"             !! false     ! true        ! true   ! true       |> { (arguments, c, s, h, j) =>
-      (runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName).toSet must_== selectedExporters(c, s, h, j)).toResult
+    "args"                                || "console" | "html" | "junitxml" |
+    "junitxml"                            !! false     ! false  ! true       |
+    "junitxml,console"                    !! true      ! false  ! true       |
+    "junitxml,html,console"               !! true      ! true   ! true       |
+    "junitxml,html,console"               !! true      ! true   ! true       |> { (arguments, c, h, j) =>
+      (runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName).toSet must_== selectedExporters(c, h, j)).toResult
     }
 
   }

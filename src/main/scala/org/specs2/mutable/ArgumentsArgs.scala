@@ -98,6 +98,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       offset:        ArgProperty[Int]               = ArgProperty[Int](),
       markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       debugMarkdown: ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      streaming:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter]()) = addArguments(super.report(
@@ -111,6 +112,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
         offset,
         markdown,
         debugMarkdown,
+        streaming,
         diffs,
         fromSource,
         traceFilter))
