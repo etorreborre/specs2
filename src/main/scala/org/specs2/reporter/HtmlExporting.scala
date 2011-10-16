@@ -14,3 +14,4 @@ trait HtmlExporting extends Exporting with HtmlPrinter with HtmlFileWriter {
     print(spec) |> writeFiles
 
 }
+object HtmlExporting extends HtmlExporting

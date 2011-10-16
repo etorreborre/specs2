@@ -20,6 +20,7 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   def printSkipped(message: String)(implicit args: Arguments)                 = printLines(args.skippedColor(message))
   def printPending(message: String)(implicit args: Arguments)                 = printLines(args.pendingColor(message))
   def printStats(message: String)(implicit args: Arguments)                   = printLines(args.statsColor(message))
+  def printText(message: String)(implicit args: Arguments)                    = printLines(args.textColor(message))
   def status(result: Result)(implicit args: Arguments): String                = result.coloredStatus(args) + " "
   
   /**

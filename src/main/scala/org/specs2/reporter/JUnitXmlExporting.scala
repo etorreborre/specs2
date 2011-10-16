@@ -41,3 +41,5 @@ trait JUnitXmlExporting extends Exporting with JUnitXmlPrinter {
   def filePath(desc: Description) = outputDir + desc.getClassName + ".xml"
 
 }
+
+object JUnitXmlExporting extends JUnitXmlExporting

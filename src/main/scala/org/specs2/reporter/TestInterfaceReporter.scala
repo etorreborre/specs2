@@ -25,7 +25,12 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
     printLines(fs).print(new TestInterfaceResultOutput(loggers))
 
   override def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
-    spec.fragments foreach {
+    spec.fragments foreach handleFragment(args)
+    print(spec.name, spec.fragments)
+  }
+
+  protected def handleFragment(implicit args: Arguments) = (f: ExecutedFragment) => {
+    f match {
       case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
           res match {
@@ -38,10 +43,10 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
           }
         }
         handleResult(result)
+        f
       }
-      case _ => ()
+      case _ => f
     }
-    print(spec.name, spec.fragments)
   }
 }
 
@@ -53,7 +58,9 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   override def printSuccess(message: String)(implicit args: Arguments)   = logInfo(message)
   override def printStats(message: String)(implicit args: Arguments)     = logInfo(message)
   override def printLine(message: String)(implicit args: Arguments)      = logInfo(message)
+  override def printText(message: String)(implicit args: Arguments)      = logInfo(message)
 }
+
 /**
  * Specific events which can be notified to sbt
  */

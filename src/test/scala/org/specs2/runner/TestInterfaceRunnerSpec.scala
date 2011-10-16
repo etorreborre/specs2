@@ -1,11 +1,12 @@
 package org.specs2
 package runner
-import _root_.org.scalatools.testing._
 import main.Arguments
 import io._
 import mock.Mockito
-import reporter._
 import specification.SpecificationStructure
+import matcher.DataTables
+import reporter._
+import org.scalatools.testing._
 
 class TestInterfaceRunnerSpec extends Specification { def is =
                                                                                                                         """
@@ -23,6 +24,7 @@ class TestInterfaceRunnerSpec extends Specification { def is =
     "the cause stacktrace must be nicely separated from the top exception"                                              ! instance().e3^
                                                                                                                         end^
   "if the specification instance can be created it must be passed to TestInterfaceReporter"                             ! reporting().e1^
+  "Additional report types can be passed on the command line"                                                           ! reporting().e2^
                                                                                                                         end
 
   case class missing() {
@@ -48,9 +50,10 @@ class TestInterfaceRunnerSpec extends Specification { def is =
   }
 
 }
-case class reporting() extends Mockito with matcher.MustExpectations with MockLogger {
+case class reporting() extends Mockito with matcher.MustExpectations with MockLogger with DataTables {
   val outer = this
   val reporter = mock[Reporter]
+  val handler = mock[EventHandler]
   val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger)) {
     override def reporter(handler: EventHandler)(args: Array[String]): Reporter = outer.reporter
   }
@@ -58,6 +61,25 @@ case class reporting() extends Mockito with matcher.MustExpectations with MockLo
   def e1 = {
     reportSpec
     there was one(reporter).report(any[specification.SpecificationStructure])(any[Arguments])
+  }
+
+  def e2 = {
+    def export(condition: Boolean, e: String) = if (condition) Some(e) else None
+    def selectedExporters(c: Boolean, s: Boolean, h: Boolean, j: Boolean) =
+      Set(export(c, "TestInterfaceReporter"), export(s, "StreamingTestInterfaceReporter"), export(h, "HtmlExporting$"), export(j, "JUnitXmlExporting$")).flatten
+
+    "args"                                || "console" | "streaming" | "html" | "junitxml" |
+    "junitxml"                            !! false     ! false       ! false  ! true       |
+    "junitxml,console"                    !! true      ! false       ! false  ! true       |
+    "junitxml,html,console"               !! true      ! false       ! true   ! true       |
+    "junitxml,html,console,streaming"     !! true      ! false       ! true   ! true       |
+    "streaming"                           !! false     ! true        ! false  ! false      |
+    "html"                                !! false     ! false       ! true   ! false      |
+    "html,streaming"                      !! false     ! true        ! true   ! false      |
+    "junitxml,html,streaming"             !! false     ! true        ! true   ! true       |> { (arguments, c, s, h, j) =>
+      (runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName).toSet must_== selectedExporters(c, s, h, j)).toResult
+    }
+
   }
 }
 

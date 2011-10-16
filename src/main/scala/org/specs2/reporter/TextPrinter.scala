@@ -169,7 +169,7 @@ trait TextPrinter {
   case class PrintText(t: ExecutedText)               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (args.canShow("-"))
-        out.printMessage(leveledText(t.text, level)(args))(args)
+        out.printText(leveledText(t.text, level)(args))(args)
   }        
   case class PrintBr()                               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =

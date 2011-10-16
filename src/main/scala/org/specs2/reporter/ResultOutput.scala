@@ -17,7 +17,8 @@ trait ResultOutput {
   def printSkipped(message: String)                (implicit args: Arguments)
   def printPending(message: String)                (implicit args: Arguments)
   def printStats(message: String)                  (implicit args: Arguments)
-  /** print some text, splitting it o              n several lines */
+  def printText(message: String)                   (implicit args: Arguments)
+  /** print some text, splitting it on several lines */
   def printMessage(message: String)                (implicit args: Arguments)
   def printLines(message: String)                  (implicit args: Arguments)
   /** print one line */
