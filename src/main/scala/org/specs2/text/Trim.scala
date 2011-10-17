@@ -3,6 +3,7 @@ package text
 import scala.util.matching.Regex
 import Regex.Match
 import java.io.StringWriter
+import java.util.regex.Pattern
 
 /**
  * Utility methods for trimming text
@@ -98,7 +99,7 @@ trait Trim extends control.Debug {
     def isTrimEmpty = s.trim.isEmpty
 
     def remove(toRemove: String*) = toRemove.foldLeft(s) { (res, cur) => res.replace(cur, "") }
-    def removeAll(remove: String) = s.replaceAll(toReplace(remove), "")
+    def removeAll(remove: String) = s.replaceAll(Pattern.quote(remove), "")
 
     /** split and trim each, removing empty strings */
     def splitTrim(separator: String): Seq[String] = (s.split(separator).collect { case t if !t.trim.isEmpty => t.trim }).toSeq
@@ -106,7 +107,6 @@ trait Trim extends control.Debug {
     /** @return the string or empty if the condition is true */
     def unless(condition: Boolean) = if (condition) "" else s
 
-    private def toReplace(c: String) = c.map { letter => if ("()[]{}+-\\^$|?.*".contains(letter)) ("\\" + letter) else letter }.mkString("")
   }
 }
 private[specs2]

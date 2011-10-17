@@ -5,6 +5,7 @@ import control.Exceptions._
 import execute._
 import util.matching.Regex
 import execute.Error._
+import text.Trim
 
 /**
  * A Regular expression step which takes a text and extracts meaningful values according to
@@ -52,7 +53,12 @@ abstract class RegexStep[P, T](regex: String = "", defaultRegex: String = RegexS
 
 object RegexStep {
   private val DEFAULT_REGEX = """\$\{([^}]+)\}"""
-  def strip(text: String, regex: String = DEFAULT_REGEX): String = regex.r.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v })
+
+  /**
+   * Apparently, the expression to replace can have any regex special character except '\'
+   */
+  def strip(text: String, regex: String = DEFAULT_REGEX): String =
+    regex.r.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v.replace("\\", "\\\\") })
 }
 
 /**

@@ -4,7 +4,7 @@ import execute._
 import matcher._
 import Fragments._
 
-class RegexStepsSpec extends Specification with ResultMatchers { def is =
+class RegexStepsSpec extends Specification with ResultMatchers with DataTables { def is =
 
   "Given/When/Then specifications can be written by adding extractors after Text fragments"                             ^
     "A Given[T] extractor extracts the text from the previous Text fragment"                                            ^
@@ -20,6 +20,8 @@ class RegexStepsSpec extends Specification with ResultMatchers { def is =
     "A Given[Y] extractor can be used as a Given[X] step if Y <: X, with an implicit conversion"                        ! convert1^
     "A Then[X] extractor can be used as a Then[Y] step if Y <: X, with an implicit conversion"                          ! convert2^
     "A When[P, Q] extractor can be used as a When[R, S] step if P <: R and Q >: S, with an implicit conversion"         ! convert3^
+                                                                                                                        p^
+    "Variables delimiters must be removed from descriptions"                                                            ! strip^
                                                                                                                         end
 
 
@@ -50,6 +52,13 @@ class RegexStepsSpec extends Specification with ResultMatchers { def is =
     val whenPQ = new When[P, Q] { def extract(p: P, s: String) = new Q {} }
     val whenRS: When[R, S] = whenPQ
     whenRS.extract(new R {}, "").toString must_== "Q"
+  }
+
+  def strip = {
+    "string"                       || "result"                           |>
+    "${abc}"                       !! "abc"                              |
+    "${abc\\def}"                  !! "abc\\def"                         |
+    { (toStrip, result) => RegexStep.strip(toStrip) === result }
   }
 
   object number1 extends Given[Int] {
