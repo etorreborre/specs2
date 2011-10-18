@@ -84,7 +84,7 @@ trait Trim extends control.Debug {
 
     /** replace each group with something else */
     def replaceAll(exp: String, f: String => String) = {
-      new Regex(exp).replaceAllIn(s, (m: Match) => f(m.group(0)))
+      new Regex(exp).replaceAllIn(s, (m: Match) => f(m.group(0).replace("\\", "\\\\")))
     }
 
     /** @return a sequence of lines by splitting on newlines */
