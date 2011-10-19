@@ -11,7 +11,7 @@ class TrimSpec extends Specification { def is =
   "Trim lines and replace characters"                                                                                   ^
   { " hello\rworld\n  ".trimNewLines === "hello\rworld" }                                                               ^
   { " hello (world)  ".trimReplace("(" -> "[", ")" -> "]") === "hello [world]" }                                        ^
-  { " hello \\world  ".trimReplaceAll("h" -> "H", "w" -> "W").aka("backslash must be kept") === "Hello \\World" }       ^
+  { " hello \\world  ".trimReplaceAll("h" -> "H", "w" -> "W") === "Hello \\World" }                                     ^
                                                                                                                         p^
   "Trim enclosing symbols"                                                                                              ^
   { " (hello world)  ".trimEnclosing("(", ")") === "hello world" }                                                      ^
