@@ -31,8 +31,8 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
     if (arguments.report.streaming)
       printLines(fs).print(new TestInterfaceStatsOnlyResultOutput(loggers))
     else {
-      fs foreach handleFragment(arguments)
       printLines(fs).print(new TestInterfaceResultOutput(loggers))
+      //fs foreach handleFragment(arguments)
     }
   }
 
@@ -55,7 +55,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
     executed
   }
 
-  protected def handleFragment(implicit args: Arguments) = (f: ExecutedFragment) => {
+  protected def handleFragment(implicit args: Arguments): ExecutedFragment => ExecutedFragment = (f: ExecutedFragment) => {
     f match {
       case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
@@ -71,7 +71,8 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
         handleResult(result)
         f
       }
-      case _ => f
+      case p @ PromisedExecutedFragment(_)   => handleFragment(args)(p.get)
+      case _                                 => f
     }
   }
 }

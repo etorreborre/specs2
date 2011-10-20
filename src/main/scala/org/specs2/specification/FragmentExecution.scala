@@ -25,9 +25,9 @@ trait FragmentExecution {
    * Example
    */
   def executeBody(body: =>Result)(implicit arguments: Arguments): Result =
-    if (arguments.plan) Success("plan")
+    if (arguments.plan)         Success("plan")
     else if (arguments.skipAll) Skipped()
-    else ResultExecution.execute(body)
+    else                        ResultExecution.execute(body)
 
   /**
    * execute a Fragment.
@@ -51,7 +51,7 @@ trait FragmentExecution {
     }
 	  case e @ Example(s, _)     => {
       val timer = new SimpleTimer().start
-      val result = executeBody(e.execute)
+      lazy val result = executeBody(e.execute)
       ExecutedResult(s, result, timer.stop, f.location, Stats(result))
     }
 	  case Text(s)                       => ExecutedText(s, f.location)

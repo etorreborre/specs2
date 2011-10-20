@@ -27,7 +27,8 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
 
   def store(implicit args: Arguments): ExecutedSpecification => ExecutedSpecification = (spec: ExecutedSpecification) => {
     if (args.store.reset) repository.resetStatistics
-    spec.copy(fragments = (associateStartEnd(statisticsTotals(spec.fragments), updateStatsOnSpecStart) map (_.value)) |> storeStatistics)
+    //spec.copy(fragments = (associateStartEnd(statisticsTotals(spec.fragments), updateStatsOnSpecStart) map (_.value)) |> storeStatistics)
+    spec
   }
 
   private def statisticsTotals(fragments: Seq[ExecutedFragment])(implicit args: Arguments) = {

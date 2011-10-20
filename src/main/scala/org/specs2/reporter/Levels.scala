@@ -173,7 +173,7 @@ case object Levels {
     fs.foldMap(reducer.unit)
   }
   implicit object LevelsReducer extends Reducer[ExecutedFragment, Levels[ExecutedFragment]] {
-    implicit def toBlock(f: ExecutedFragment): Block[ExecutedFragment] = f match {
+    implicit def toBlock: ExecutedFragment => Block[ExecutedFragment] = (f: ExecutedFragment) => f match {
       case t @ ExecutedResult(_,_,_,_,_)     => BlockTerminal(t)
       case t @ ExecutedText(_, _)            => BlockIndent(t)
       case t @ ExecutedTab(n, _)             => BlockIndent(t, n)
@@ -181,6 +181,7 @@ case object Levels {
       case t @ ExecutedSpecStart(_,_,_)      => BlockNeutral(t)
       case t @ ExecutedSpecEnd(_,_,_)        => BlockNeutral(t)
       case t @ ExecutedEnd( _)               => BlockReset(t)
+      case t @ PromisedExecutedFragment(_)   => toBlock(t.get)
       case t                                 => BlockNeutral(t)
     } 
     implicit override def unit(f: ExecutedFragment): Levels[ExecutedFragment] = Levels[ExecutedFragment](toBlock(f))
@@ -192,7 +193,7 @@ case object Levels {
       case t @ Tab(n)                => BlockIndent(t, n)
       case t @ Backtab(n)            => BlockUnindent(t, n)   
       case t @ Text(_)               => BlockIndent(t)       
-      case t @ SpecStart(_,_,_,_)  => BlockNeutral(t)
+      case t @ SpecStart(_,_,_,_)    => BlockNeutral(t)
       case t @ SpecEnd(_)            => BlockNeutral(t)
       case t @ End()                 => BlockReset(t)        
       case t                         => BlockNeutral(t)        

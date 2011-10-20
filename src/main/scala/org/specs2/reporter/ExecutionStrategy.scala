@@ -6,7 +6,7 @@ import execute.{ Error, Failure }
 import org.specs2.internal.scalaz._
 import Scalaz._
 import concurrent._
-import Strategy.Executor
+import Strategy._
 import specification._
 import control.NamedThreadFactory
 import main.{ArgumentsArgs, Arguments}
@@ -37,40 +37,40 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
    * If the stopOnFail argument is true, we check that the execution is ok before executing the next sequence.
    */
   def execute(implicit arguments: Arguments) = (spec: ExecutableSpecification) => {
-    val executed = spec.fs.foldLeft((Nil:List[ExecutedFragment], true)) { (res, fs) =>
+    implicit val executor = Executors.newFixedThreadPool(spec.arguments.threadsNb, new NamedThreadFactory("specs2.DefaultExecutionStrategy"))
+
+    val executed = spec.fs.view.foldLeft((Seq[ExecutedFragment](), true)) { (res, fs) =>
       val (executedFragments, executionOk) = res
       val fsArgs = arguments <| fs.arguments
-      val executed = executeSequence(fs)(executionArgs(fsArgs, executionOk))
-      (executedFragments ++ executed, !fsArgs.stopOnFail || (executionOk && executed.forall(isOk(_))))
+      val executed = executeSequence(fs)(executionArgs(fsArgs, executionOk), Executor(executor))
+      (executedFragments ++ executed, !fsArgs.stopOnFail || (executionOk && executed.forall(isOk)))
     }._1
     ExecutedSpecification(spec.name, executed)
   }
 
   private def executionArgs(arguments: Arguments, previousExecutionOk: Boolean) =
     if (!arguments.stopOnFail || previousExecutionOk) arguments
-    else (arguments <| args(skipAll=true))
+    else                                              arguments <| args(skipAll=true)
 
   /**
    * @return true if the executed fragment is not a Failure or an Error
    */
   private def isOk(e: ExecutedFragment) = e match {
     case ExecutedResult(_,r,_,_,_) if r.isFailure || r.isError => false
-    case other                                                => true
+    case other                                                 => true
   }
 
-  private def executeSequence(fs: FragmentSeq)(implicit args: Arguments): Seq[ExecutedFragment] = {
-    if (fs.fragments.size > 1 && !args.sequential)
-      executeConcurrently(fs, args)
-    else
-      fs.fragments.map(f => executeFragment(args)(f))
+  private def executeSequence(fs: FragmentSeq)(implicit args: Arguments, strategy: Strategy): Seq[ExecutedFragment] = {
+    if (fs.fragments.size > 1 && !args.sequential) executeConcurrently(fs, args)(strategy)
+    else                                           fs.fragments map executeFragment(args)
   }
 
-  private def executeConcurrently(fs: FragmentSeq, args: Arguments) = {
-    implicit val executor = Executors.newFixedThreadPool(args.threadsNb, new NamedThreadFactory("specs2.DefaultExecutionStrategy"))
-    try {
-      fs.fragments.map(f => promise(executeFragment(args)(f))).sequence.get
-    } finally {
-      executor.shutdown()
+  private def executeConcurrently(fs: FragmentSeq, args: Arguments)(implicit strategy: Strategy) = {
+    fs.fragments.map {
+      case f: Example  => PromisedExecutedFragment(promise(executeFragment(args)(f))(strategy))
+      case f: Step     => PromisedExecutedFragment(promise(executeFragment(args)(f))(strategy))
+      case f: Action   => PromisedExecutedFragment(promise(executeFragment(args)(f))(strategy))
+      case f           => executeFragment(args)(f)
     }
   }
 }

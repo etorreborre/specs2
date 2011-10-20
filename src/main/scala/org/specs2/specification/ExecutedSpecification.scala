@@ -7,11 +7,8 @@ import collection.Iterablex._
  * an executed specification with a name and a sequence of executed fragments
  */
 case class ExecutedSpecification(name: SpecName, fragments: Seq[ExecutedFragment]) {
-  def includedLinkedSpecifications: Seq[ExecutedSpecStart] = 
-	  fragments collect { case s @ ExecutedSpecStart(_,_,_) if s.isIncludeLink => s }
-		
-  def includedSeeOnlySpecifications: Seq[ExecutedSpecStart] = 
-	  fragments collect { case s @ ExecutedSpecStart(_,_,_) if s.isSeeOnlyLink => s }
+  def includedLinkedSpecifications: Seq[ExecutedSpecStart]  = fragments collect isIncludeLink
+  def includedSeeOnlySpecifications: Seq[ExecutedSpecStart] = fragments collect isSeeOnlyLink
 }
 
 /**

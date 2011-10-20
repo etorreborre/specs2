@@ -34,41 +34,42 @@ trait TextPrinter {
   def output(args: Arguments) = if (args.report.streaming) streamingOutput else textOutput
 
   def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) =
-    printLines(fs).print(output(commandLineArgs))
+    printLines(fs.view).print(output(commandLineArgs))
 
   def printLines(fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments = Arguments()) =
     PrintLines(flatten(fs.reduceWith(reducer)))
 
   private val reducer = 
-    PrintReducer &&& 
-    StatsReducer &&&
-    LevelsReducer  &&&
+    PrintReducer          &&&
+    StatsReducer          &&&
+    LevelsReducer         &&&
     SpecsArgumentsReducer
   
   case class PrintLine(text: Print, stats: Stats, level: Int, args: Arguments) {
     def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
   
-  case class PrintLines(lines : List[PrintLine] = Nil) {
+  case class PrintLines(lines : Seq[PrintLine] = Nil) {
     def print(implicit out: ResultOutput) = lines foreach (_.print)
   }
   
-  def flatten(results: (((List[Print], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment]))(implicit commandLineArgs: Arguments = Arguments()): List[PrintLine] = {
+  def flatten(results: (((Seq[Print], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment]))(implicit commandLineArgs: Arguments = Arguments()): Seq[PrintLine] = {
     val (prints, statistics, levels, args) = results.flatten
     (prints zip statistics.stats zip levels.levels zip args.nestedArguments) map {
       case (((t, s), l), a) => PrintLine(t, s, l, commandLineArgs <| a)
     }
   }  
     
-  implicit object PrintReducer extends Reducer[ExecutedFragment, List[Print]] {
-    implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
+  implicit object PrintReducer extends Reducer[ExecutedFragment, Seq[Print]] {
+    implicit override def unit(fragment: ExecutedFragment) = Seq(print(fragment))
     /** print an ExecutedFragment and its associated statistics */
-    def print(fragment: ExecutedFragment) = fragment match { 
+    def print: ExecutedFragment => Print = (fragment: ExecutedFragment) => fragment match {
       case start @ ExecutedSpecStart(_,_,_)    => PrintSpecStart(start)
       case result @ ExecutedResult(_,_,_,_,_)  => PrintResult(result)
       case text @ ExecutedText(s, _)           => PrintText(text)
       case par @ ExecutedBr(_)                 => PrintBr()
       case end @ ExecutedSpecEnd(_,_, s)       => PrintSpecEnd(end, s)
+      case f @ PromisedExecutedFragment(_)     => print(f.get)
       case fragment                            => PrintOther(fragment)
     }
   }

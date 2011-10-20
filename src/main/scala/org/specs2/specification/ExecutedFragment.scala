@@ -7,14 +7,16 @@ import time.SimpleTimer
 import execute._
 import main._
 import io.Location
+import internal.scalaz.concurrent.Promise
+
 /**
- * The Executed Fragments represent pieces of a Specification
- * which have already been executed to provide a Result
- */
+* The Executed Fragments represent pieces of a Specification
+* which have already been executed to provide a Result
+*/
 sealed trait ExecutedFragment {
   /** @return the location of the executed Fragment */
   def location: Location
-
+  /** @return the statistics of the executed Fragment */
   def stats: Stats
 }
 
@@ -30,6 +32,10 @@ object ExecutedFragment {
   def isExecutedSpecStart: Function[ExecutedFragment, Boolean] = { case ExecutedSpecStart(_,_,_) => true; case _ => false }
   /** @return true if the ExecutedFragment is an End */
   def isExecutedSpecEnd: Function[ExecutedFragment, Boolean] = { case ExecutedSpecEnd(_,_,_) => true; case _ => false }
+  /** @return true if the ExecutedFragment is a start with a link */
+  def isIncludeLink: PartialFunction[ExecutedFragment, ExecutedSpecStart] = { case s @ ExecutedSpecStart(_,_,_) if s.isIncludeLink => s }
+  /** @return true if the ExecutedFragment is a start with a see only link */
+  def isSeeOnlyLink: PartialFunction[ExecutedFragment, ExecutedSpecStart] =  { case s @ ExecutedSpecStart(_,_,_) if s.isSeeOnlyLink => s }
 }
 
 case class ExecutedText(text: String, location: Location = new Location) extends ExecutedFragment {
@@ -84,6 +90,15 @@ case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stat
  */
 case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Location = new Location) extends ExecutedFragment { outer =>
   def stats: Stats = Stats(timer=outer.timer)
+}
+
+/**
+ * embed an executed Fragment into a promise
+ */
+case class PromisedExecutedFragment(promised: Promise[ExecutedFragment]) extends ExecutedFragment {
+  def get      = { new Exception().printStackTrace; promised.get }
+  def location = get.location
+  def stats    = get.stats
 }
 
 import org.specs2.internal.scalaz._
