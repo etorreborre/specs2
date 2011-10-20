@@ -31,13 +31,19 @@ trait Throwablex {
      * Select all traces of this exception matching a given pattern
      */
     def filter(pattern: String) = {
-      setStackTrace(t.getStackTrace.toList.filter(_.toString matches (".*"+pattern+".*")))
+      setStackTrace(t.getStackTrace.toList.filter(patternMatches(pattern)))
     }
+    /** match a stacktrace element with a pattern */
+    private def patternMatches(p: String) = (_:StackTraceElement).toString matches (".*"+p+".*")
     /**
      * Select all traces of this exception not matching a given pattern
      */
     def filterNot(pattern: String) = {
-      setStackTrace(t.getStackTrace.toList.filterNot(_.toString matches (".*"+pattern+".*")))
+      setStackTrace(t.getStackTrace.toList.filterNot(patternMatches(pattern)))
+    }
+    /** @return true if the pattern exists in one of the traces */
+    def exists(pattern: String) = {
+      t.getStackTrace.toList.exists(patternMatches(pattern))
     }
     /** @return the list of chained exceptions */
     def chainedExceptions: List[Throwable] = {

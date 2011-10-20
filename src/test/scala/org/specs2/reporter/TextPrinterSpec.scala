@@ -43,7 +43,9 @@ class TextPrinterSpec extends Specification { def is =
     "if showOnly = 1"                                                                                                   ^
        "statistics are shown"                                                                                           ! statsonlyargs().e1^
                                                                                                                         p^
-    "if failtrace = true, failures stacktraces are shown"                                                               ! failtrace().e1^
+    "if failtrace = false, only the location of a failure is shown"                                                     ! failtrace().e1^
+    "if failtrace = false, only the location of a failure is shown - mutable spec"                                      ! failtrace().e2^
+    "if failtrace = true, failures stacktraces are shown"                                                               ! failtrace().e3^
     "if fullStacktrace = true, all error stacktraces are shown"                                                         ! traces().e1^
     "if plan = true, nothing is executed"                                                                               ! planargs().e1^
     "if sequential = false examples are executed concurrently"                                                          ! seq().e1^
@@ -177,7 +179,9 @@ class TextPrinterSpec extends Specification { def is =
   }
   case class failtrace() {
     val failtrace: Arguments = args.report(failtrace = true)
-    def e1 = print(fullStackTrace <| failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
+    def e1 = print((new user.reporter.MutableSpecification).content) must containMatch("MutableSpecification.scala:7")
+    def e2 = print((new user.reporter.AcceptanceSpecification).content) must containMatch("AcceptanceSpecification.scala:11")
+    def e3 = print(fullStackTrace <| failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
   }
   case class traces() {
     def e1 = print(fullStackTrace ^ t1 ^ ex1 ^ "e" ! {throw new Exception("ouch"); ok}) must containMatch("org.specs2")

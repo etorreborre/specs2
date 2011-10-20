@@ -6,5 +6,6 @@ This version adds new features on top of 1.6.1:
 And fixes some issues:
 
  * delayed a MatchResult evaluation when transforming it to a Prop avoid issues with properties implication
+ * issue #40: incorrect line number for a failure in a mutable specification
  
  ==========================
