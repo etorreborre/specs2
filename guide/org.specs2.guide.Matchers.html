@@ -447,7 +447,7 @@ iterator.next must be_==(3).eventually
        &quot;You can verify that a method was not called&quot;                                ! c().verify2^
                                                                                     end
      case class c() extends Mockito {
-       val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock(new java.util.LinkedList[String])
+       val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
        def stub = {
          m.get(0) returns &quot;one&quot;             // stub a method call with a return value
          m.get(0) must_== &quot;one&quot;             // call the method
