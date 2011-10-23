@@ -41,6 +41,8 @@ maxErrors := 20
 
 pollInterval := 1000
 
+logBuffered := false
+
 testOptions := Seq(Tests.Filter(s =>
   Seq("Spec", "Suite", "Unit", "all").exists(s.endsWith(_)) &&
     ! s.endsWith("FeaturesSpec") ||

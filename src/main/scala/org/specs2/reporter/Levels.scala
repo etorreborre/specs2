@@ -27,7 +27,7 @@ import StandardFragments._
  * 
  */
 private[specs2]
-case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
+case class Levels[T](blocks: Seq[(Block[T], Int)] = Seq()) {
   /** @return the first block */
   private def headOption = blocks.map(_._1).headOption
   /** @return the last block */
@@ -37,7 +37,7 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   /** @return the last level or zero */
   private def lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
   /** @return the last level block in a Levels object */
-  private def lastAsLevel = Levels(blocks.lastOption.toList)
+  private def lastAsLevel = Levels(blocks.lastOption.toSeq)
   /** @return true if there are no blocks */
   def isEmpty = blocks.isEmpty
   /** @return alias for the last level */
@@ -46,11 +46,11 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
   def allLevels = {
     import NestedBlocks._
     def toNestedBlock(bl: (Block[T], Int)) = bl match {
-      case (b @ Block(SpecStart(_,_,_,_)), l)       => BlockStart(Levels(List(bl)))
-      case (b @ Block(ExecutedSpecStart(_,_,_)), l) => BlockStart(Levels(List(bl)))
-      case (b @ Block(SpecEnd(_)), l)               => BlockEnd(Levels(List(bl)))
-      case (b @ Block(ExecutedSpecEnd(_,_,_)), l)   => BlockEnd(Levels(List(bl)))
-      case (b, l)                                   => BlockBit(Levels(List(bl)))
+      case (b @ Block(SpecStart(_,_,_,_)), l)       => BlockStart(Levels(Seq(bl)))
+      case (b @ Block(ExecutedSpecStart(_,_,_)), l) => BlockStart(Levels(Seq(bl)))
+      case (b @ Block(SpecEnd(_)), l)               => BlockEnd(Levels(Seq(bl)))
+      case (b @ Block(ExecutedSpecEnd(_,_,_)), l)   => BlockEnd(Levels(Seq(bl)))
+      case (b, l)                                   => BlockBit(Levels(Seq(bl)))
     }
     import Levels._
     val summed = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T])
@@ -149,7 +149,7 @@ case class Levels[T](blocks: List[(Block[T], Int)] = Nil) {
 private[specs2]
 case object Levels {
   /** @return a new Levels object for one Block */
-  def apply[T](b: Block[T]) = new Levels(List((b, 0)))
+  def apply[T](b: Block[T]) = new Levels(Seq((b, 0)))
   /** monoid for Levels */
   def LevelsMonoid[T] = new Monoid[Levels[T]] {
     def append(b1: Levels[T], b2: =>Levels[T]) =

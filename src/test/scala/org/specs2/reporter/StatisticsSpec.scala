@@ -36,7 +36,7 @@ Statistics can be accumulated on each executed specification in order to be disp
   }
 
   def statistics(s: SpecificationStructure) = foldAll(s.content.fragments.map(f => execute(f)))
-  def last(ss: List[Stats]) = ss.lastOption.getOrElse(Stats())
+  def last(ss: Seq[Stats]) = ss.lastOption.getOrElse(Stats())
   def total(s: SpecificationStructure) = last(statistics(s).totals)
   def totals(s: SpecificationStructure) = statistics(s).totals
   def execute(f: Fragment) = new FragmentExecution {}.executeFragment(Arguments())(f)

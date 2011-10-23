@@ -56,10 +56,6 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   override def printStats(message: String)(implicit args: Arguments)     = logInfo(message)
   override def printLine(message: String)(implicit args: Arguments)      = logInfo(message)
   override def printText(message: String)(implicit args: Arguments)      = logInfo(message)
-
-  override def logInfo(message: String) = println("[info] "+message)
-  override def logFailure(message: String) = println("[error] "+message)
-  override def logError(message: String) = println("[error] "+message)
 }
 
 /**

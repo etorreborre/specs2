@@ -33,7 +33,7 @@ trait TextPrinter {
   def textOutput: ResultOutput = new TextResultOutput
 
   def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) = {
-    fs.reduceWith(reducer)
+    (Vector() ++ fs).reduceWith(reducer)
   }
 
   private def reducer(implicit args: Arguments) =
@@ -48,7 +48,8 @@ trait TextPrinter {
     new Reducer[ToPrint, ToPrint] {
       override def unit(line: ToPrint) = {
         line.flatten match {
-          case (p, s, l, a) => PrintLine(p.last, s.total, l.level, args <| a.last).print(output)
+          case (p, s, l, a) => PrintLine(p.last, Stats(), 0, Arguments()).print(output)
+//          case (p, s, l, a) => PrintLine(p.last, s.total, l.level, args <| a.last).print(output)
         }
         line
       }

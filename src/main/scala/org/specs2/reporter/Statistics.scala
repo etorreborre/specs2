@@ -45,11 +45,11 @@ trait Statistics {
    * a list of 'current' stats for each fragment execution and the total statistics 
    * for the whole specification
    */
-  case class SpecsStatistics(fragments: List[ExecutedFragment] = Nil) {
+  case class SpecsStatistics(fragments: Seq[ExecutedFragment] = Seq()) {
     private implicit val statsMonoid = Stats.StatsMonoid
     
     /** @return the list of all current stats, with the total on each line */
-    def totals: List[Stats] = {
+    def totals: Seq[Stats] = {
       import NestedBlocks._
 
       def toBlock(f: ExecutedFragment) = f match {
@@ -57,18 +57,18 @@ trait Statistics {
         case ExecutedSpecEnd(_,_,s)    => BlockEnd(s)
         case other                     => BlockBit(f.stats)
       }
-      totalContext(fragments.map(toBlock)).toList
+      totalContext(fragments.map(toBlock))
     }
     def total = totals.lastOption.getOrElse(Stats())
   }
   case object SpecsStatistics {
-    def apply(current: ExecutedFragment) = new SpecsStatistics(List(current))
+    def apply(current: ExecutedFragment) = new SpecsStatistics(Seq(current))
   }
 
   /**
    * The SpecsStats class just stores a list of stats, each one corresponding to a Fragment
    */
-  case class SpecStats(stats: List[Stats] = Nil) {
+  case class SpecStats(stats: Seq[Stats] = Seq()) {
     def last = stats.lastOption.getOrElse(Stats())
   }
   implicit def SpecStatsMonoid  = new Monoid[SpecStats] {
@@ -79,7 +79,7 @@ trait Statistics {
   }
 
   object StatsReducer extends Reducer[ExecutedFragment, SpecStats] {
-    override def unit(f: ExecutedFragment): SpecStats = SpecStats(List(f.stats))
+    override def unit(f: ExecutedFragment): SpecStats = SpecStats(Seq(f.stats))
   }
 
 }
