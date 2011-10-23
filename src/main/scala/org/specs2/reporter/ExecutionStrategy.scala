@@ -39,13 +39,13 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
   def execute(implicit arguments: Arguments) = (spec: ExecutableSpecification) => {
     implicit val executor = Executors.newFixedThreadPool(spec.arguments.threadsNb, new NamedThreadFactory("specs2.DefaultExecutionStrategy"))
 
-    val executed = spec.fs.view.foldLeft((Seq[ExecutedFragment](), true)) { (res, fs) =>
+    val executed = spec.fs.foldLeft((Seq[ExecutedFragment](), true)) { (res, fs) =>
       val (executedFragments, executionOk) = res
       val fsArgs = arguments <| fs.arguments
       val executed = executeSequence(fs)(executionArgs(fsArgs, executionOk), Executor(executor))
       (executedFragments ++ executed, !fsArgs.stopOnFail || (executionOk && executed.forall(isOk)))
     }._1
-    ExecutedSpecification(spec.name, executed)
+    ExecutedSpecification(spec.name, executed, executor)
   }
 
   private def executionArgs(arguments: Arguments, previousExecutionOk: Boolean) =

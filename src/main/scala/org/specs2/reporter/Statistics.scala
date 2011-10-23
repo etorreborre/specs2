@@ -68,7 +68,9 @@ trait Statistics {
   /**
    * The SpecsStats class just stores a list of stats, each one corresponding to a Fragment
    */
-  case class SpecStats(stats: List[Stats] = Nil)
+  case class SpecStats(stats: List[Stats] = Nil) {
+    def last = stats.lastOption.getOrElse(Stats())
+  }
   implicit def SpecStatsMonoid  = new Monoid[SpecStats] {
     def append(s1: SpecStats, s2: =>SpecStats): SpecStats = {
       SpecStats(s1.stats ++ s2.stats)

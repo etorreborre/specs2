@@ -23,6 +23,7 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
     overrideContext(argumentsFragments.map(toBlock _)).toList
   }
 
+  def last = nestedArguments.lastOption.getOrElse(Arguments())
   /**
    * @return the list of all applicable spec names
   */

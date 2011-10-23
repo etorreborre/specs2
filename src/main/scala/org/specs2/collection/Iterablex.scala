@@ -106,7 +106,7 @@ trait Iterablex {
     /** map the last element with a function */
     def mapLast(f: T => T): Seq[T] = (xs.seq.dropRight(1) ++ xs.seq.takeRight(1).map(f)).toSeq
     
-    def reduceWith[S](reducer: Reducer[T, S]) = FoldrGenerator[Iterable].reduce(reducer, xs.seq)
+    def reduceWith[S](reducer: Reducer[T, S]) = FoldlGenerator[Iterable].reduce(reducer, xs.seq)
   }
 }
 private[specs2]

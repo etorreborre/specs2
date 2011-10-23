@@ -96,7 +96,7 @@ case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Locati
  * embed an executed Fragment into a promise
  */
 case class PromisedExecutedFragment(promised: Promise[ExecutedFragment]) extends ExecutedFragment {
-  def get      = { new Exception().printStackTrace; promised.get }
+  def get      = promised.get
   def location = get.location
   def stats    = get.stats
 }

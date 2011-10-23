@@ -19,15 +19,4 @@ import specification.ExecutedFragment._
 trait ConsoleReporter extends DefaultReporter 
     with TextExporting
     with ConsoleOutput {
-
-  /**
-   * if we want to stream the results, execute a Fragment and print it right away (during the execution phase of the reporter)
-   */
-  override def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = (f: Fragment) => {
-    val executed = super.executeFragment(arguments)(f)
-    if (arguments.report.streaming)
-      printLines(Seq(executed) filter { e => isExecutedText(e) || isExecutedResult(e) }).print(new TextResultOutput)
-    executed
-  }
-
 }
