@@ -1,7 +1,7 @@
 This version adds new features on top of 1.6.1:
 
  * Mockito settings (name, defaultAnswer, extraInterfaces) can be specified during mock creation
- * added a `streaming` argument for sbt so that results are printed as soon as executed
+ * issue #39: results are now printed to the console as soon as executed
  
 And fixes some issues:
 
