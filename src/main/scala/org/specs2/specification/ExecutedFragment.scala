@@ -36,6 +36,12 @@ object ExecutedFragment {
   def isIncludeLink: PartialFunction[ExecutedFragment, ExecutedSpecStart] = { case s @ ExecutedSpecStart(_,_,_) if s.isIncludeLink => s }
   /** @return true if the ExecutedFragment is a start with a see only link */
   def isSeeOnlyLink: PartialFunction[ExecutedFragment, ExecutedSpecStart] =  { case s @ ExecutedSpecStart(_,_,_) if s.isSeeOnlyLink => s }
+  /** @return true if the executed fragment is not a Failure or an Error */
+  def isOk = (e: ExecutedFragment) => e match {
+    case ExecutedResult(_,r,_,_,_) if r.isFailure || r.isError => false
+    case other                                                 => true
+  }
+
 }
 
 case class ExecutedText(text: String, location: Location = new Location) extends ExecutedFragment {

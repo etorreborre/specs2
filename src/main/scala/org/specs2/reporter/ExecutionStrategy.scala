@@ -12,6 +12,7 @@ import control.NamedThreadFactory
 import main.{ArgumentsArgs, Arguments}
 import scala.collection.immutable.List._
 import main.Arguments._
+import ExecutedFragment._
 
 /**
  * Generic trait for executing Fragments, which are sorted according to their dependencies
@@ -51,14 +52,6 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
   private def executionArgs(arguments: Arguments, previousExecutionOk: Boolean) =
     if (!arguments.stopOnFail || previousExecutionOk) arguments
     else                                              arguments <| args(skipAll=true)
-
-  /**
-   * @return true if the executed fragment is not a Failure or an Error
-   */
-  private def isOk(e: ExecutedFragment) = e match {
-    case ExecutedResult(_,r,_,_,_) if r.isFailure || r.isError => false
-    case other                                                 => true
-  }
 
   private def executeSequence(fs: FragmentSeq)(implicit args: Arguments, strategy: Strategy): Seq[ExecutedFragment] = {
     if (fs.fragments.size > 1 && !args.sequential) executeConcurrently(fs, args)(strategy)
