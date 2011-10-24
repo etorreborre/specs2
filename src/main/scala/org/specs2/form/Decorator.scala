@@ -12,8 +12,8 @@ package form
  */
 case class Decorator(label: Any => Any = identity,
                      value: Any => Any = identity,
-                     labelStyles: List[String] = Nil,
-                     valueStyles: List[String] = Nil) {
+                     labelStyles: Seq[String] = Vector(),
+                     valueStyles: Seq[String] = Vector()) {
 
   def decorateWith(f: Any => Any) = copy(label = f compose label, value = f compose value)
   def decorateLabelWith(f: Any => Any) = copy(label = f compose label)

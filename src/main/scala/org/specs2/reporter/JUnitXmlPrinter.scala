@@ -60,7 +60,7 @@ trait JUnitXmlPrinter {
         case s @ ExecutedSpecStart(_,_,_)  => Some(createDescription(className, suiteName=testName(s.name)) -> f)
         case ExecutedText(t, _)            => Some(createDescription(className, suiteName=testName(t)) -> f)
         case r @ ExecutedResult(_,_,_,_,_) => Some(createDescription(className, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) -> f)
-        case other                       => None
+        case other                         => None
       }
   }
 

@@ -78,8 +78,8 @@ trait Trees { outer =>
   /**
    * @return the list of all parent locs from a given TreeLoc
    */
-  def parentLocs[T](t: TreeLoc[T], ps: List[TreeLoc[T]] = Nil): List[TreeLoc[T]] = t.parent match {
-    case Some(p) => parentLocs(p, p :: ps)
+  def parentLocs[T](t: TreeLoc[T], ps: Seq[TreeLoc[T]] = Vector()): Seq[TreeLoc[T]] = t.parent match {
+    case Some(p) => parentLocs(p, p +: ps)
     case None    => ps
   }
 }

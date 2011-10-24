@@ -45,7 +45,7 @@ trait Statistics {
    * a list of 'current' stats for each fragment execution and the total statistics 
    * for the whole specification
    */
-  case class SpecsStatistics(fragments: Seq[ExecutedFragment] = Seq()) {
+  case class SpecsStatistics(fragments: Seq[ExecutedFragment] = Vector()) {
     private implicit val statsMonoid = Stats.StatsMonoid
     
     /** @return the list of all current stats, with the total on each line */
@@ -62,13 +62,13 @@ trait Statistics {
     def total = totals.lastOption.getOrElse(Stats())
   }
   case object SpecsStatistics {
-    def apply(current: ExecutedFragment) = new SpecsStatistics(Seq(current))
+    def apply(current: ExecutedFragment) = new SpecsStatistics(Vector(current))
   }
 
   /**
    * The SpecsStats class just stores a list of stats, each one corresponding to a Fragment
    */
-  case class SpecStats(stats: Seq[Stats] = Seq()) {
+  case class SpecStats(stats: Seq[Stats] = Vector()) {
     def last = stats.lastOption.getOrElse(Stats())
   }
   implicit def SpecStatsMonoid  = new Monoid[SpecStats] {
@@ -79,7 +79,7 @@ trait Statistics {
   }
 
   object StatsReducer extends Reducer[ExecutedFragment, SpecStats] {
-    override def unit(f: ExecutedFragment): SpecStats = SpecStats(Seq(f.stats))
+    override def unit(f: ExecutedFragment): SpecStats = SpecStats(Vector(f.stats))
   }
 
 }

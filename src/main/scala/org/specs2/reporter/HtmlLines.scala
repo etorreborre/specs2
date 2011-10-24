@@ -22,7 +22,7 @@ import html.TableOfContents._
 * It can be written ('flushed') to an HtmlResultOuput by printing the lines one by one to this output
 */
 private[specs2]
-case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : List[HtmlLine] = Nil) {
+case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLine] = Vector()) {
   def print(out: =>HtmlReportOutput, toc: NodeSeq) = {
     out.printHtml (
 		  out.printHead.

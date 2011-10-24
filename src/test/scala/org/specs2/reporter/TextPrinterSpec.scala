@@ -234,7 +234,7 @@ class TextPrinterSpec extends Specification { def is =
     printWithColors(fragments, previousStats).map(removeColors(_))
 
   def printWithColors(fs: Fragments, previousStats: Stats = Stats()): Seq[String] =
-    printer.print(preReporter(previousStats).exec(new Specification { def is = fs }).fragments)
+    preReporter(previousStats).exec(new Specification { def is = fs }).foreach((n, fs) => printer.print(fs))
 
   val outer = this
   def printer = new TextPrinter {

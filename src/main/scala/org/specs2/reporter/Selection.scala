@@ -91,7 +91,7 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
         }
       }
 
-    fragments.foldLeft((Nil, Nil): (Seq[TaggingFragment], Seq[TaggingFragment])) { (res, cur) =>
+    fragments.foldLeft((Vector(), Vector()): (Seq[TaggingFragment], Seq[TaggingFragment])) { (res, cur) =>
       val (tagged, taggingToApply) = res
       cur match {
         /** tag the next fragment */

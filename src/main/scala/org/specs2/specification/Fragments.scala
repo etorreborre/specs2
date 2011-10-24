@@ -12,7 +12,7 @@ import Fragments._
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fragment] = Nil, arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
+case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fragment] = Vector(), arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
   def fragments: Seq[Fragment] = if (middle.isEmpty && !link.isDefined) Seq() else (start +: middle :+ end)
 
   private def append(e: Fragment) = copy(middle = middle :+ e)
@@ -23,7 +23,7 @@ case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fra
   def add(a: Arguments): Fragments = copy(arguments = arguments.overrideWith(a))
   
   def linkIs(htmlLink: HtmlLink) = copy(link = Some(htmlLink))
-  def seeIs(htmlLink: HtmlLink) = copy(middle = Nil, link = Some(htmlLink), seeOnly = true)
+  def seeIs(htmlLink: HtmlLink) = copy(middle = Vector(), link = Some(htmlLink), seeOnly = true)
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
   def examples: Seq[Example] = fragments.collect(isAnExample)

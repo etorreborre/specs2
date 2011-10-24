@@ -25,7 +25,7 @@ case class Arguments (
   execute:       Execute          = Execute(),
   store:         Store            = Store(),
   report:        Report           = Report(),
-  commandLine:   Seq[String]      = Nil
+  commandLine:   Seq[String]      = Seq()
  ) extends ShowArgs {
   def ex: String                    = select.ex
   def include: String               = select.include
@@ -90,7 +90,7 @@ case class Arguments (
     (List(select.toString,
          execute.toString,
          report.toString) ++
-         (if (commandLine.isEmpty) Nil else List("commandLine = "+commandLine.mkString(", ")))).mkString("Arguments(", ", ", ")")
+         (if (commandLine.isEmpty) Seq() else Seq("commandLine = "+commandLine.mkString(", ")))).mkString("Arguments(", ", ", ")")
 
 }
 import main.{SystemProperties => sysProperties}

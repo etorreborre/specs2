@@ -14,15 +14,11 @@ trait Reducerx {
      */
     def >>>(to: Reducer[M, M]) = new Reducer[T, M] {
       override def snoc(m: M, t: T): M = {
-        val effect = to.unit(r.snoc(m, t))
-        m |+| effect
+        val result = r.snoc(m, t)
+        val effect = to.unit(result)
+        result
       }
     }
-  }
-
-  implicit lazy val unitIsMonoid = new Monoid[Unit] {
-    val zero = ()
-    def append(u: Unit, u2: =>Unit) = u2
   }
 }
 

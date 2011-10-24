@@ -3,10 +3,7 @@ package reporter
 
 import org.specs2.internal.scalaz._
 import Scalaz._
-import control.Exceptions._
 import main.Arguments
-import io._
-import reflect._
 import specification._
 
 /**

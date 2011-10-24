@@ -76,7 +76,7 @@ trait HtmlPrinter {
   def reduce(spec: ExecutedSpecification): Seq[HtmlLine] = flatten(spec.fragments.reduceWith(reducer))
 
   def sortByFile(specName: SpecName, parentLink: HtmlLink) = (lines: Seq[HtmlLine]) => {
-    lazy val start = HtmlLinesFile(specName, parentLink, Nil)
+    lazy val start = HtmlLinesFile(specName, parentLink, Vector())
     lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
       cur match {

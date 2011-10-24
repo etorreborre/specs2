@@ -14,8 +14,6 @@ trait TextExporting extends TextPrinter with Exporting { outer =>
   type ExportType = Unit
   
   def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
-    try {
-      print(spec.name, spec.fragments)
-    } finally { spec.terminate }
+    spec.foreach { (name, fragments) =>  print(name, fragments) }
   }
 } 

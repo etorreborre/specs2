@@ -5,7 +5,7 @@ import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Foldable, Applicati
 import control.Throwablex._
 import Scalaz._
 import data.Reducerx._
-import collection.Iterablex._
+import collection.Seqx._
 import data.Tuples._
 import time._
 import text._
@@ -33,7 +33,7 @@ trait TextPrinter {
   def textOutput: ResultOutput = new TextResultOutput
 
   def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) = {
-    (Vector() ++ fs).reduceWith(reducer)
+    fs.reduceWith(reducer)
   }
 
   private def reducer(implicit args: Arguments) =
@@ -48,8 +48,7 @@ trait TextPrinter {
     new Reducer[ToPrint, ToPrint] {
       override def unit(line: ToPrint) = {
         line.flatten match {
-          case (p, s, l, a) => PrintLine(p.last, Stats(), 0, Arguments()).print(output)
-//          case (p, s, l, a) => PrintLine(p.last, s.total, l.level, args <| a.last).print(output)
+          case (p, s, l, a) => PrintLine(p.last, s.total, l.level, args <| a.last).print(output)
         }
         line
       }

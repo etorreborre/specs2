@@ -9,7 +9,7 @@ import specification._
  * The SpecsArguments trait allows to fold a list of Fragments into the list of applicable arguments for each fragment
  */
 private[specs2]
-case class SpecsArguments[T](argumentsFragments: Seq[ApplicableArguments[T]] = Seq()) {
+case class SpecsArguments[T](argumentsFragments: Seq[ApplicableArguments[T]] = Vector()) {
   def append(s2: SpecsArguments[T]) = SpecsArguments(argumentsFragments ++ s2.argumentsFragments)
 
   def nestedArguments: Seq[Arguments] = {
@@ -67,7 +67,7 @@ case class SpecsArguments[T](argumentsFragments: Seq[ApplicableArguments[T]] = S
 
 private[specs2]
 case object SpecsArguments {
-  def apply[T](s: ApplicableArguments[T]) = new SpecsArguments(Seq(s))
+  def apply[T](s: ApplicableArguments[T]) = new SpecsArguments(Vector(s))
 
   /**
    * filter the fragments with 2 functions:
