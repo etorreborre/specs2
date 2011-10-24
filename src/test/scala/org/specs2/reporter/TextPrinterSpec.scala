@@ -195,16 +195,17 @@ class TextPrinterSpec extends Specification { def is =
     }
   }
   case class seq() {
-    val sequential: Arguments = args(sequential = true)
     val messages = new MockOutput {}
-    val slowex1 = "e1" ! { Thread.sleep(20); messages.println("e1"); success }
-    val fastex2 = "e2" ! { messages.println("e2"); success }
+    val slowex1 = "e1" ! { Thread.sleep(500); messages.println("e1"); success }
+    val fastex2 = "e2" ! { Thread.sleep(10); messages.println("e2"); success }
+    val fastex3 = "e3" ! { Thread.sleep(10); messages.println("e3"); success }
+
     def e1 = {
-      print(args(noindent = true, color = false, sequential = false) ^ slowex1 ^ fastex2)
+      print(fastex3 ^ slowex1 ^ fastex2 ^ fastex3)
       messages.messages must contain("e2", "e1").inOrder
     }
     def e2 = {
-      print(args(sequential = true, noindent = true, color = false) ^ slowex1 ^ fastex2)
+      print(args(sequential = true) ^ slowex1 ^ fastex2)
       messages.messages must contain("e1", "e2").inOrder
     }
   }
@@ -234,7 +235,7 @@ class TextPrinterSpec extends Specification { def is =
     printWithColors(fragments, previousStats).map(removeColors(_))
 
   def printWithColors(fs: Fragments, previousStats: Stats = Stats()): Seq[String] =
-    preReporter(previousStats).exec(new Specification { def is = fs }).foreach((n, fs) => printer.print(fs))
+    preReporter(previousStats).exec(fs).foreach((n, fs) => printer.print(fs))
 
   val outer = this
   def printer = new TextPrinter {
@@ -245,19 +246,12 @@ class TextPrinterSpec extends Specification { def is =
     }
   }
 
-  def preReporter(previousStats: Stats = Stats()) = new DefaultSelection with DefaultSequence with DefaultExecutionStrategy with DefaultStoring {
-    override lazy val repository = NoStatisticsRepository
-    
-    def exec(spec: SpecificationStructure): ExecutedSpecification = {
-      val args = spec.content.arguments
-      spec |> select(args) |> sequence(args) |> execute(args) |> store(args)
-    }
+  def preReporter(previousStats: Stats = Stats()) = new ConsoleReporter {
 
-    override def setStatsOnSpecEndFragments(implicit args: Arguments) = (fs: (ExecutedFragment, Stats)) => fs match {
-      case (ExecutedSpecEnd(n, l, s), stats) => ExecutedSpecEnd(n, l, stats.updateFrom(previousStats))
-      case (other, s)                        => other
+    def exec(fs: Fragments): ExecutedSpecification = {
+      val args = fs.arguments
+      new Specification { def is = fs } |> select(args) |> sequence(args) |> execute(args)
     }
-
   }
 
 }
