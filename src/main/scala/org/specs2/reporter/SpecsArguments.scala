@@ -9,10 +9,10 @@ import specification._
  * The SpecsArguments trait allows to fold a list of Fragments into the list of applicable arguments for each fragment
  */
 private[specs2]
-case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = Nil) {
+case class SpecsArguments[T](argumentsFragments: Seq[ApplicableArguments[T]] = Vector()) {
   def append(s2: SpecsArguments[T]) = SpecsArguments(argumentsFragments ++ s2.argumentsFragments)
 
-  def nestedArguments: List[Arguments] = {
+  def nestedArguments: Seq[Arguments] = {
     import NestedBlocks._
     def toBlock(a: ApplicableArguments[T]) = a match {
       case StartOfArguments(_, _, args) => BlockStart(args)
@@ -20,13 +20,14 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
       case EndOfArguments(_, _)         => BlockEnd(Arguments())
     }
     import Arguments._
-    overrideContext(argumentsFragments.map(toBlock _)).toList
+    overrideContext(argumentsFragments.map(toBlock _)).toSeq
   }
 
+  def last = nestedArguments.lastOption.getOrElse(Arguments())
   /**
    * @return the list of all applicable spec names
   */
-  def nestedSpecNames: List[SpecName] = {
+  def nestedSpecNames: Seq[SpecName] = {
     import NestedBlocks._
     def toBlock(a: ApplicableArguments[T]) = a match {
       case StartOfArguments(_, name, _) => BlockStart(name)
@@ -34,7 +35,7 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
       case EndOfArguments(_, name)      => BlockEnd(name)
     }
     import SpecName._
-    overrideContext(argumentsFragments.map(toBlock _)).toList
+    overrideContext(argumentsFragments.map(toBlock _)).toSeq
   }
   /**
    * filter the fragments with 2 functions:
@@ -66,7 +67,7 @@ case class SpecsArguments[T](argumentsFragments: List[ApplicableArguments[T]] = 
 
 private[specs2]
 case object SpecsArguments {
-  def apply[T](s: ApplicableArguments[T]) = new SpecsArguments(List(s))
+  def apply[T](s: ApplicableArguments[T]) = new SpecsArguments(Vector(s))
 
   /**
    * filter the fragments with 2 functions:

@@ -1,7 +1,6 @@
 package org.specs2
 package collection
 
-import matcher.MustExpectable._
 import scala.collection.immutable.List._
 
 /**

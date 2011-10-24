@@ -323,12 +323,6 @@ If you want to get a console output as well, don't forget to add the `console` a
       // in your build.sbt file
       testOptions in Test += Tests.Argument("html", "console")
 
-And in some cases, if the execution of your examples takes a long time before anything is displayed, you can use the `streaming` argument to print out the results as soon as they are available:
-
-      > test-only org.specs2.examples.HelloWorldUnitSpec -- streaming
-
-The drawback with the `streaming` argument is that the order of the displayed statements will be different from the one in your specification.
-
 ##### Files runner
 
 Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console` or `html` (or both) on the command line:

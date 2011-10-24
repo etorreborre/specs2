@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 import scala.xml._
-import collection.Listx._
+import collection.Seqx._
 import collection.Iterablex._
 import xml.Nodex._
 import text.Trim._
@@ -18,16 +18,16 @@ import DecoratedProperties._
  * 
  * A Form can be executed by executing each row and collecting the results.
  */
-class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Row]),  val result: Option[Result] = None) extends Executable with Text {
+class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val result: Option[Result] = None) extends Executable with Text {
 
   /** @return all rows, including the header */
-  lazy val allRows = title.map(t => Row.tr(TextCell(t))).toList ::: rows
+  lazy val allRows = title.map(t => Row.tr(TextCell(t))).toSeq ++ rows
 
   /** @return the maximum cell size, column by column */
   lazy val maxSizes = allRows.map(_.cells).safeTranspose.map(l => l.map(_.width).max[Int])
 
   /** @return a new Form. This method can be overriden to return a more accurate subtype */
-  protected def newForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) =
+  protected def newForm(title: Option[String] = None, rows: Seq[Row] = Vector(), result: Option[Result] = None) =
     new Form(title, rows, result)
   /** @return a Form where every Row is executed with a Success */
   def setSuccess = newForm(title, rows.map(_.setSuccess), Some(success))

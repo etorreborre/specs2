@@ -609,7 +609,7 @@ Mockito allows to specify stubbed values and to verify that some calls are expec
            "You can verify that a method was not called"                                ! c().verify2^
                                                                                         end
          case class c() extends Mockito {
-           val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock(new java.util.LinkedList[String])
+           val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
            def stub = {
              m.get(0) returns "one"             // stub a method call with a return value
              m.get(0) must_== "one"             // call the method
@@ -919,7 +919,7 @@ In specs2, those 2 methods are defined by the `org.specs2.matcher.ThrownMessages
        "You can verify that a method was not called"                                ! c().verify2^
                                                                                     end
      case class c() extends Mockito {
-       val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock(new java.util.LinkedList[String])
+       val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
        def stub = {
          m.get(0) returns "one"             // stub a method call with a return value
          m.get(0) must_== "one"             // call the method

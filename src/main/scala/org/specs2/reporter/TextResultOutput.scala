@@ -40,16 +40,3 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
     println((" "*args.offset) + message)
   
 }
-
-/**
- * This trait only outputs statistics. It is used to finally display the statistics when streaming the results to the console
- */
-class StatsOnlyTextResultOutput extends TextResultOutput {
-  override def printSpecStart(message: String, stats: Stats)(implicit args: Arguments) = ()
-  override def printSuccess(message: String)(implicit args: Arguments)                 = ()
-  override def printFailure(message: String)(implicit args: Arguments)                 = ()
-  override def printError(message: String)(implicit args: Arguments)                   = ()
-  override def printSkipped(message: String)(implicit args: Arguments)                 = ()
-  override def printPending(message: String)(implicit args: Arguments)                 = ()
-  override def printText(message: String)(implicit args: Arguments)                    = ()
-}

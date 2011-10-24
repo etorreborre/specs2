@@ -29,17 +29,17 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return the colored textual status of the result
    */
   def coloredStatus(implicit args: Arguments = Arguments()): String = {
-   if (args.plan)
-     args.pendingColor("*")
-   else {
-     this match {
-      case Success(_)            => args.successColor("+")
-      case Failure(_, _, _, _)   => args.failureColor("x")
-      case Error(_, _)           => args.errorColor  ("!")
-      case Pending(_)            => args.pendingColor("*")
-      case Skipped(_, _)         => args.skippedColor("o")
-       case DecoratedResult(_, r) => r.coloredStatus(args)
-     }
+    if (args.plan)
+      args.pendingColor("*")
+    else {
+      this match {
+        case Success(_)            => args.successColor("+")
+        case Failure(_, _, _, _)   => args.failureColor("x")
+        case Error(_, _)           => args.errorColor  ("!")
+        case Pending(_)            => args.pendingColor("*")
+        case Skipped(_, _)         => args.skippedColor("o")
+        case DecoratedResult(_, r) => r.coloredStatus(args)
+      }
     }
   }
 

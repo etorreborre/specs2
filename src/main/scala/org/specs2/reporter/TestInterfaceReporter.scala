@@ -2,16 +2,12 @@ package org.specs2
 package reporter
 
 import _root_.org.scalatools.testing.{ EventHandler, Logger, Event, Result }
-import control.Throwablex._
 import main.Arguments
-import main.ArgumentsArgs._
-import io._
 import text._
 import time._
 import AnsiColors._
 import execute.{ Success, Failure, Error, Skipped, Pending, DecoratedResult }
 import specification._
-import specification.ExecutedFragment._
 
 /**
  * Reporter for the test interface defined for sbt
@@ -22,40 +18,14 @@ import specification.ExecutedFragment._
 class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger]) extends ConsoleReporter
   with HandlerEvents {
 
-  /**
-   * print the executed fragments.
-   *
-   * print only the statistics if 'streaming" = true
-   */
-  override def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit arguments: Arguments) = {
-    if (arguments.report.streaming)
-      printLines(fs).print(new TestInterfaceStatsOnlyResultOutput(loggers))
-    else {
-      fs foreach handleFragment(arguments)
-      printLines(fs).print(new TestInterfaceResultOutput(loggers))
-    }
-  }
+  override def textOutput = new TestInterfaceResultOutput(loggers)
 
   override def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
-    print(spec.name, spec.fragments)
+    super.export(args)(spec)
+    spec.fragments foreach handleFragment(args)
   }
 
-  /**
-   * if "streaming" is true, execute a Fragment and print it right away (during the execution phase of the reporter)
-   */
-  /**
-   * if we want to stream the results, execute a Fragment and print it right away (during the execution phase of the reporter)
-   */
-  override def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = (f: Fragment) => {
-    val executed = super.executeFragment(arguments)(f)
-    if (arguments.report.streaming) {
-      handleFragment(arguments)(executed)
-      printLines(Seq(executed) filter { e => isExecutedText(e) || isExecutedResult(e) }).print(new TestInterfaceResultOutput(loggers))
-    }
-    executed
-  }
-
-  protected def handleFragment(implicit args: Arguments) = (f: ExecutedFragment) => {
+  protected def handleFragment(implicit args: Arguments): ExecutedFragment => ExecutedFragment = (f: ExecutedFragment) => {
     f match {
       case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
@@ -71,7 +41,8 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
         handleResult(result)
         f
       }
-      case _ => f
+      case p @ PromisedExecutedFragment(_)   => handleFragment(args)(p.get)
+      case _                                 => f
     }
   }
 }
@@ -85,16 +56,6 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   override def printStats(message: String)(implicit args: Arguments)     = logInfo(message)
   override def printLine(message: String)(implicit args: Arguments)      = logInfo(message)
   override def printText(message: String)(implicit args: Arguments)      = logInfo(message)
-}
-
-/**
- * This "TestInterface" result output only prints the last statistics during the export phase
- */
-class TestInterfaceStatsOnlyResultOutput(override val loggers: Array[Logger]) extends TestInterfaceResultOutput(loggers) {
-  override def printFailure(message: String)(implicit args: Arguments)   = ()
-  override def printError(message: String)(implicit args: Arguments)     = ()
-  override def printSuccess(message: String)(implicit args: Arguments)   = ()
-  override def printText(message: String)(implicit args: Arguments)      = ()
 }
 
 /**

@@ -1,9 +1,11 @@
 package org.specs2
 package reporter
 
-import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Foldable }
+import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Foldable, Applicative, State }
 import control.Throwablex._
-import collection.Iterablex._
+import Scalaz._
+import data.Reducerx._
+import collection.Seqx._
 import data.Tuples._
 import time._
 import text._
@@ -28,47 +30,44 @@ import SpecsArguments._
  *
  */
 trait TextPrinter {
-  lazy val textOutput: ResultOutput = new TextResultOutput
-  lazy val streamingOutput: ResultOutput = new StatsOnlyTextResultOutput
+  def textOutput: ResultOutput = new TextResultOutput
 
-  def output(args: Arguments) = if (args.report.streaming) streamingOutput else textOutput
+  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) = {
+    fs.reduceWith(reducer)
+  }
 
-  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) =
-    printLines(fs).print(output(commandLineArgs))
+  private def reducer(implicit args: Arguments) =
+    (PrintReducer           &&&
+     StatisticsReducer      &&&
+     LevelsReducer          &&&
+     SpecsArgumentsReducer) >>> IOReducer(textOutput)(args)
 
-  def printLines(fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments = Arguments()) =
-    PrintLines(flatten(fs.reduceWith(reducer)))
+  type ToPrint = (((Seq[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])
 
-  private val reducer = 
-    PrintReducer &&& 
-    StatsReducer &&&
-    LevelsReducer  &&&
-    SpecsArgumentsReducer
-  
+  def IOReducer(output: ResultOutput)(implicit args: Arguments) =
+    new Reducer[ToPrint, ToPrint] {
+      override def unit(line: ToPrint) = {
+        line.flatten match {
+          case (p, s, l, a) => PrintLine(p.last, s.total, l.level, args <| a.last).print(output)
+        }
+        line
+      }
+    }
+
   case class PrintLine(text: Print, stats: Stats, level: Int, args: Arguments) {
     def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
   
-  case class PrintLines(lines : List[PrintLine] = Nil) {
-    def print(implicit out: ResultOutput) = lines foreach (_.print)
-  }
-  
-  def flatten(results: (((List[Print], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment]))(implicit commandLineArgs: Arguments = Arguments()): List[PrintLine] = {
-    val (prints, statistics, levels, args) = results.flatten
-    (prints zip statistics.stats zip levels.levels zip args.nestedArguments) map {
-      case (((t, s), l), a) => PrintLine(t, s, l, commandLineArgs <| a)
-    }
-  }  
-    
-  implicit object PrintReducer extends Reducer[ExecutedFragment, List[Print]] {
-    implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
+  implicit object PrintReducer extends Reducer[ExecutedFragment, Seq[Print]] {
+    implicit override def unit(fragment: ExecutedFragment) = Seq(print(fragment))
     /** print an ExecutedFragment and its associated statistics */
-    def print(fragment: ExecutedFragment) = fragment match { 
+    def print: ExecutedFragment => Print = (fragment: ExecutedFragment) => fragment match {
       case start @ ExecutedSpecStart(_,_,_)    => PrintSpecStart(start)
       case result @ ExecutedResult(_,_,_,_,_)  => PrintResult(result)
       case text @ ExecutedText(s, _)           => PrintText(text)
       case par @ ExecutedBr(_)                 => PrintBr()
       case end @ ExecutedSpecEnd(_,_, s)       => PrintSpecEnd(end, s)
+      case f @ PromisedExecutedFragment(_)     => print(f.get)
       case fragment                            => PrintOther(fragment)
     }
   }
@@ -195,5 +194,4 @@ trait TextPrinter {
   case class PrintOther(fragment: ExecutedFragment)   extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {}
   }
- 
 }
