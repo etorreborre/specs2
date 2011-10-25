@@ -93,6 +93,6 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     def exportJunitxml = exporter(reportIs("junitxml"))(JUnitXmlExporting)
     def console        = exporter(!reportIs("html", "junitxml") || reportIs("console"))(new TestInterfaceReporter(handler, loggers))
 
-    Seq(exportHtml, exportJunitxml, console).flatten
+    Seq(console, exportHtml, exportJunitxml).flatten
   }
 }
