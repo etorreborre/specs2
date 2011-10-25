@@ -293,6 +293,9 @@ If you want to pass arguments available for all specifications:
 
       testOptions in Test += Tests.Argument("nocolor", "neverstore")
 
+If you want the examples results to be displayed as soon as they've been executed you need to add:
+
+      logBuffered := false
 
 ##### Test-only arguments
 

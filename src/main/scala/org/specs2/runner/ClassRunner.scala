@@ -24,7 +24,7 @@ class ClassRunner extends Classes with ConsoleOutput {
 	  e.printStackTrace
   }
 
-  def main(arguments: Array[String]) = start(arguments:_*)
+  def main(arguments: Array[String]) { start(arguments:_*) }
   
   def start(arguments: String*) = {
     if (arguments.length == 0)
