@@ -57,7 +57,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
   "A function with 5 parameters, returning a MatchResult be used in the body of the Example"                            ! partial5^
                                                                                                                         p^
   "Arbitrary instances can be specified for a given property"                                                           ! check(arb1)^
-  "Gen instances can be used for a any property"                                                                        ! check(arb2)^
+  "Gen instances can be used for a any property"                                                                        ! gen1^
                                                                                                                         p^
   "A ScalaCheck property will create a Result"                                                                          ^
     "with a number of expectations that is equal to the minTestsOk"                                                     ! result1^
@@ -105,9 +105,9 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
   case class Left() extends Side
   case class Right() extends Side
 
-  def arb2: Prop = {
-    implicit def side: Arbitrary[Side] = Gen.oneOf(Left(), Right())
-    (s: Side) => s must be_==(Left()) or be_==(Right())
+  def gen1 = {
+    def sides = Gen.oneOf(Left(), Right())
+    forAll(sides) { (s: Side) => s must be_==(Left()) or be_==(Right()) }
   }
 
   def matcher1 = execute(check(alwaysTrueWithMatcher)) must_== success100tries

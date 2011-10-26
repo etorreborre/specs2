@@ -192,11 +192,13 @@ trait PartialFunctionPropertyImplicits {
   }
 }
 object PartialFunctionPropertyImplicits extends PartialFunctionPropertyImplicits
+
 trait ResultPropertyImplicits {
 
   implicit def propToProp(p: =>Prop): Prop = p
   implicit def booleanToProp(b: =>Boolean): Prop = resultProp(if (b) execute.Success() else execute.Failure())
-  implicit def matchResultToProp(m: =>MatchResult[_]): Prop = resultProp(m.toResult)
+  implicit def callByNameMatchResultToProp[T](m: =>MatchResult[T]): Prop = resultProp(m.toResult)
+  implicit def matchResultToProp[T](m: MatchResult[T]): Prop = resultProp(m.toResult)
   private def resultProp(r: =>execute.Result): Prop = {
     new Prop {
       def apply(params: Prop.Params) = {
@@ -212,9 +214,6 @@ trait ResultPropertyImplicits {
  * This trait enables some syntactic sugar when it is necessary to pass several arbitrary instances
  */
 trait ApplicableArbitraries { this: ScalaCheckMatchers =>
-
-  /** this implicit function transforms Generators to Arbitraries */
-  implicit def genToArbitrary[T](gen: =>Gen[T]): Arbitrary[T] = Arbitrary(gen)
 
   implicit def applicableArbitrary[T](a: Arbitrary[T]): ApplicableArbitrary[T] = ApplicableArbitrary(a)
   case class ApplicableArbitrary[T](a: Arbitrary[T]) {
