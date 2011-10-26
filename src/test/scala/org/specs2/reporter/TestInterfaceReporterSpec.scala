@@ -10,7 +10,7 @@ import org.scalatools.testing.{Event, Logger, EventHandler}
 class TestInterfaceReporterSpec extends Specification with DataTables { def is =
 
   "A TestInterfaceReporter should"                                                                                      ^
-    "not print the specification title"                                                                                 ! report().e1^
+    "print the specification title if defined"                                                                          ! report().e1^
     "report datatables ok"                                                                                              ! report().e2^
                                                                                                                         end
 
@@ -23,7 +23,7 @@ class TestInterfaceReporterSpec extends Specification with DataTables { def is =
 
     def e1 = {
       report("title".title ^ "text")
-      there was no(logger).info("title")
+      there was one(logger).info("title")
     }
     def e2 = {
       report("ex" ! ("a" | "b" |> 1 ! 2 | { (a, b) => success } ))

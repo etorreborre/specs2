@@ -78,6 +78,7 @@ case class ExecutedSpecStart(start: SpecStart, location: Location = new Location
 
   def specName = start.specName
   def name = start.name
+  def title = start.title
   def args = start.arguments
   override def toString = "ExecutedSpecStart("+specName+(if (isLink) ","+start.linkToString else "")+")"
 

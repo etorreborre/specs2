@@ -48,14 +48,14 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 }
 
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
-  // do nothing because sbt already displays the specification name
-  override def printSpecStart(message: String, stats: Stats)(implicit args: Arguments) = ()
-  override def printFailure(message: String)(implicit args: Arguments)   = logFailure(message)
-  override def printError(message: String)(implicit args: Arguments)     = logError(message)
-  override def printSuccess(message: String)(implicit args: Arguments)   = logInfo(message)
-  override def printStats(message: String)(implicit args: Arguments)     = logInfo(message)
-  override def printLine(message: String)(implicit args: Arguments)      = logInfo(message)
-  override def printText(message: String)(implicit args: Arguments)      = logInfo(message)
+  override def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  = logInfo(message)
+  override def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) = logInfo(message)
+  override def printFailure(message: String)(implicit args: Arguments)                      = logFailure(message)
+  override def printError(message: String)(implicit args: Arguments)                        = logError(message)
+  override def printSuccess(message: String)(implicit args: Arguments)                      = logInfo(message)
+  override def printStats(message: String)(implicit args: Arguments)                        = logInfo(message)
+  override def printLine(message: String)(implicit args: Arguments)                         = logInfo(message)
+  override def printText(message: String)(implicit args: Arguments)                         = logInfo(message)
 }
 
 /**

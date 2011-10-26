@@ -89,8 +89,10 @@ trait TextPrinter {
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      out.printSpecStart(leveledText(start.name, level)(args), stats)(args)
-    } 
+      if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
+      else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
+      out.printLine("")(args)
+    }
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
@@ -186,6 +188,7 @@ trait TextPrinter {
       out.printLine(" ")
       out.printStats("Total for specification" + (if (end.title.isEmpty) end.title.trim else " "+end.title.trim))
       printStats(stats)
+      out.printLine("")
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       out.printLines(stats.display)

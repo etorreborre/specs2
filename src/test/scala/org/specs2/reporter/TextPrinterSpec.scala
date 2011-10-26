@@ -88,6 +88,12 @@ class TextPrinterSpec extends Specification { def is =
   "a pending example must be displayed with a *"                                                                        ! status().e6^
   "a multi-line description must be indented ok"                                                                        ! status().e7^
   "if showtimes is true, each individual time must be shown"                                                            ! status().e8^
+                                                                                                                        endp^
+                                                                                                                        """
+  Title
+  =====================                                                                                                 """^
+                                                                                                                        p^
+  "the title of a specification is displayed if it is different from the name"                                          ! specTitle().e1^
                                                                                                                         end
 
   implicit val default = Arguments()
@@ -233,6 +239,10 @@ class TextPrinterSpec extends Specification { def is =
         "+ e1",
         "  example1") 
     def e8 = print(args.report(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
+  }
+
+  case class specTitle() {
+    def e1 = print("a title".title ^ ex1) must contain("a title")
   }
 
   def print(fragments: Fragments, previousStats: Stats = Stats()): Seq[String] =
