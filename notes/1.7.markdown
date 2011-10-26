@@ -2,10 +2,12 @@ This version adds new features on top of 1.6.1:
 
  * Mockito settings (name, defaultAnswer, extraInterfaces) can be specified during mock creation
  * issue #39: results are now printed to the console as soon as executed
+ * added an implicit function to allow the use of generators in ScalaCheck properties: `forAll(generator) { p => p must matchSomething }`
  
 And fixes some issues:
 
  * delayed a MatchResult evaluation when transforming it to a Prop avoid issues with properties implication
  * issue #40: incorrect line number for a failure in a mutable specification
+ * issue #41: missing specification title when using sbt
  
  ==========================
