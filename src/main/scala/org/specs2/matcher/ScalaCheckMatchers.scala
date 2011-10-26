@@ -1,14 +1,13 @@
 package org.specs2
 package matcher
 
-import org.scalacheck.{ Prop, Arg, Test, Arbitrary, Shrink }
 import org.scalacheck.util.StdRand
 import org.scalacheck.Prop._
 import org.scalacheck.Test.{ Params, Proved, Passed, Failed, Exhausted, GenException, PropException, Result }
 import org.scalacheck.Pretty._
-import org.scalacheck.Pretty
 import scala.collection.Map
 import io.ConsoleOutput
+import org.scalacheck._
 
 
 /**
@@ -213,6 +212,9 @@ trait ResultPropertyImplicits {
  * This trait enables some syntactic sugar when it is necessary to pass several arbitrary instances
  */
 trait ApplicableArbitraries { this: ScalaCheckMatchers =>
+
+  /** this implicit function transforms Generators to Arbitraries */
+  implicit def genToArbitrary[T](gen: =>Gen[T]): Arbitrary[T] = Arbitrary(gen)
 
   implicit def applicableArbitrary[T](a: Arbitrary[T]): ApplicableArbitrary[T] = ApplicableArbitrary(a)
   case class ApplicableArbitrary[T](a: Arbitrary[T]) {
