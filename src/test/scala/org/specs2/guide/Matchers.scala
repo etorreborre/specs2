@@ -554,7 +554,7 @@ Note that if you pass functions using MatchResults you will get better failure m
 
 #### Arbitrary instances
 
-By default `Arbitrary` instances are taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope of the function you're testing:
+By default ScalaCheck uses `Arbitrary` instances taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you can create an `Arbitrary` instance and make sure it is in the scope of the function you're testing:
 
         // this arbitrary will be used for all the examples
         implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
@@ -573,6 +573,19 @@ You can also be very specific if you want to use an `Arbitrary` instance only on
 
         // use a tuple if there are several parameters to your function
         def ex2 = (abStrings, abStrings)((s1: String, s2: String) => s must contain("a") or contain("b"))
+
+#### With Generators
+
+ScalaCheck also allows to create `Prop`s directly with the `Prop.forAll` method accepting `Gen` instances:
+
+        "a simple property"       ! ex1
+        "a more complex property" ! ex2
+
+        def abStrings = for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b
+
+        def ex1 = forAll(abStrings) { (s: String) => s must contain("a") or contain("b") }
+        def ex2 = forAll(abStrings, abStrings) { (s1: String, s2: String) => s must contain("a") or contain("b") }
+
 
 #### Setting the ScalaCheck properties
 
