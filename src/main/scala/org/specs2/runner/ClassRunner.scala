@@ -25,7 +25,7 @@ class ClassRunner extends Classes with ConsoleOutput {
   }
 
   def main(arguments: Array[String]) { start(arguments:_*) }
-  
+
   def start(arguments: String*) = {
     if (arguments.length == 0)
       println("The first argument should at least be the specification class name")
