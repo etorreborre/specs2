@@ -20,7 +20,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { "a" !== "b" }                                                                                                       ^
   { "a" must be_===("a") }                                                                                              ^
   // doesn't compile
-  // { "a" ==== 1 }                                                                                                  ^
+  // { "a" ==== 1 }                                                                                                     ^
   { "a" must not be_===("b") }                                                                                          ^
   { "a" must be_!==("b") }                                                                                              ^
   { "a" must not be_!==("a") }                                                                                          ^
@@ -28,6 +28,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { Array(1, 3) must not be_==(Array(1, 2)) }                                                                           ^
   { Array(1, 2) must be_===(Array(1, 2)) }                                                                              ^
   { Array(1, 3) must not be_===(Array(1, 2)) }                                                                          ^
+  { (Array(1, 3) must not be_===(Array(1, 2))).message === "'Array(1, 3)' is not equal to 'Array(1, 2)'" }              ^
   { (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(e, a)) => e must_== "2" } }                  ^
                                                                                                                         p^
   "beTheSameAs checks if a value is eq to another one"                                                                  ^

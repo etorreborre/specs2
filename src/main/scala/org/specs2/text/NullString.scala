@@ -12,34 +12,38 @@ trait NotNullStrings {
 
   implicit def anyToNotNull(a: Any) = new NotNullAny(a)
   class NotNullAny(a: Any) {
-    def notNull: String = {
+    def  notNull: String = {
       if (a == null) "null"
       else {
-        val string = tryOr(a.toString) { (e: Exception) => "Exception when evaluating toString "+e.getMessage }
-        if (string == null) "null"
-        else                string
+        a match {
+          case ar: Array[_]           => ar.notNullMkString(", ", "Array(", ")")
+          case it: TraversableOnce[_] => it.notNullMkString(", ")
+          case _                      => evaluate(a, "Exception when evaluating toString ")
+        }
       }
     }
   }
 
-  trait NotNullMkString {
-    def notNullMkString(sep: String): String
+  private def evaluate(value: =>Any, msg: String) = {
+    val string = tryOr(value.toString) { (e: Exception) => msg + e.getMessage }
+    if (string == null) "null"
+    else                string
   }
-  implicit def arrayToNotNull[T](a: Array[T]) = if (a == null) new NullMkString else new NotNullTraversableOnce(a.toSeq)
+
+  trait NotNullMkString {
+    def notNullMkString(sep: String, start: String = "", end: String = ""): String
+  }
+  implicit def arrayToNotNull[T](a: Array[T]): NotNullMkString = if (a == null) new NullMkString else new NotNullTraversableOnce(a.toSeq)
 
   class NullMkString extends NotNullMkString {
-    def notNullMkString(sep: String): String = "null"
+    def notNullMkString(sep: String, start: String = "", end: String = ""): String = "null"
   }
 
-  implicit def traversableOnceToNotNull[T](a: =>TraversableOnce[T]) = new NotNullTraversableOnce(a)
+  implicit def traversableOnceToNotNull[T](a: =>TraversableOnce[T]): NotNullTraversableOnce[T] = new NotNullTraversableOnce(a)
   class NotNullTraversableOnce[T](a: =>TraversableOnce[T]) extends NotNullMkString {
-    def notNullMkString(sep: String): String = {
+    def notNullMkString(sep: String, start: String = "", end: String = ""): String = {
       if (a == null) "null"
-      else {
-        val string = tryOr(a.mkString(sep)) { (e: Exception) => "Exception when evaluating mkString "+e.getMessage }
-        if (string == null) "null"
-        else                string
-      }
+      else evaluate(a.mkString(start, sep, end), "Exception when evaluating mkString ")
     }
   }
 

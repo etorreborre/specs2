@@ -9,5 +9,6 @@ And fixes some issues:
  * delayed a MatchResult evaluation when transforming it to a Prop avoid issues with properties implication
  * issue #40: incorrect line number for a failure in a mutable specification
  * issue #41: missing specification title when using sbt
+ * display of Arrays in failures like `Array(1, 2) === Array(1, 3)`
  
  ==========================

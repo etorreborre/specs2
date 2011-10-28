@@ -1,3 +1,4 @@
+
 /** Project */
 name := "specs2"
 
@@ -52,8 +53,6 @@ testOptions := Seq(Tests.Filter(s =>
 
 /** Console */
 initialCommands in console := "import org.specs2._"
-
-// Packaging
 
 /** Publishing */
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
