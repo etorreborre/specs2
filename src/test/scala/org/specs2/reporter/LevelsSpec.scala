@@ -6,11 +6,12 @@ import matcher.{ ScalazMatchers, Matcher, Expectable, MatchResult, MustExpectabl
 import org.specs2.internal.scalaz._
 import Scalaz._
 import specification._
+import collection.Seqx._
 import Levels._
 import FragmentLevelsReducer._
 import specification.FragmentsShow._
 
-class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with ArbitraryFragments { def is = sequential^
+class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with ArbitraryFragments with Tags { def is = sequential^
                                                                                                                         """
   The Levels class is used to compute the 'level' of Fragments in a list of Fragments.
                                                                                                                         """^p^
@@ -32,6 +33,7 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
                                                                                                                         p^
   "Tabs can be used to further indent a fragment"                                                                       ^
   { level(t1 ^ ex1 ^ t ^ t2 ^ ex2) must_== List(0, 1, 1, 2, 3) }                                                        ^
+  { level(ex1 ^ t ^ ex2) must_== List(0, 0, 1) }                                                                        ^
   { level(t1 ^ ex1 ^ t(2) ^ t2 ^ ex2) must_== List(0, 1, 1, 3, 4) }                                                     ^
                                                                                                                         p^
   "Backtabs can be used to further unindent a fragment"                                                                 ^
@@ -158,7 +160,7 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
     Gen.sized(sz => sizedList(sz))
   }
 
-  def fold(fs: Seq[Fragment]) = fs.foldMap(unit)(implicitly[Foldable[Seq]], LevelsConcatMonoid[Fragment])
+  def fold(fs: Seq[Fragment]) = fs.reduceWith(FragmentLevelsReducer)
   def level(fs: Fragments) = fold(fs.middle).levels
   def tree(fs: Fragments) = fold(spec(fs).fragments).toTree
   def spec(fs: Fragments) = new Specification { def is = "start".title ^ fs }.content
