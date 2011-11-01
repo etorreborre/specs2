@@ -63,7 +63,17 @@ trait MatchersImplicits extends Expectations {
     def toSet = new Function1[Set[S], Matcher[Set[T]]] {
       def apply(s: Set[S]) = new SetMatcher(s, f)
     }
+
+    /**
+     * check that the function is valid for all value, stopping after the first failure
+     */
+    def forall(values: Seq[S]): MatchResult[Seq[T]] = ((s: S) => f(s)) forall values
+    /**
+     * check that the function is valid for each value, showing all the failures
+     */
+    def foreach(values: Seq[S]): MatchResult[Seq[T]] = ((s: S) => f(s)) foreach values
   }
+
   class MatcherFunction2[T](f: T => Matcher[T]) {
     /**
      * @return a function which will return the composition of a matcher and a function
@@ -139,9 +149,8 @@ trait MatchersImplicits extends Expectations {
    */
   implicit def functionAndMessagesToMatcher[T](f: (T => Boolean, T => String, T => String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
-      val expectable = s
-      val functionResult = f._1(expectable.value)
-      result(functionResult,  f._2(s.value), f._3(s.value), expectable)
+      val functionResult = f._1(s.value)
+      result(functionResult,  f._2(s.value), f._3(s.value), s)
     }
   }
   /**
@@ -149,9 +158,8 @@ trait MatchersImplicits extends Expectations {
    */
   implicit def pairFunctionToMatcher[T](f: T =>(Boolean, String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
-      val expectable = s
-      val functionResult = f(expectable.value)
-      result(functionResult._1, "not ("+functionResult._2+")", functionResult._2, expectable)
+      val functionResult = f(s.value)
+      result(functionResult._1, "not ("+functionResult._2+")", functionResult._2, s)
     }
   }
   /**
@@ -159,9 +167,17 @@ trait MatchersImplicits extends Expectations {
    */
   implicit def tripletFunctionToMatcher[T](f: T =>(Boolean, String, String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
-      val expectable = s
-      val functionResult = f(expectable.value)
-      result(functionResult._1, functionResult._2,  functionResult._3, expectable)
+      val functionResult = f(s.value)
+      result(functionResult._1, functionResult._2,  functionResult._3, s)
+    }
+  }
+  /**
+   * This method transform a function returning a MatchResult to a Matcher
+   */
+  implicit def matchResultFunctionToMatcher[T](f: T => MatchResult[_]): Matcher[T] = new Matcher[T] {
+    def apply[S <: T](s: Expectable[S]) = {
+      val functionResult = f(s.value)
+      result(functionResult.isSuccess, functionResult.message, functionResult.message, s)
     }
   }
 
