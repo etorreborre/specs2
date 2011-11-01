@@ -435,6 +435,10 @@ You can use the second one if your IDE doesn't work with the first one:
 
 [*some [tricks](http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse) described on the specs website can still be useful there*]
 
+#### Arguments
+
+You can pass arguments to the `JUnitRunner` for generating the html files for the specifications or for displaying the console output. To do that, you can use the `-Dspecs2.commandline` property and pass it the `html` or `console` values.
+
 ### IntelliJ
 
 IntelliJ offers a nice integration with ***specs2***. You can:
