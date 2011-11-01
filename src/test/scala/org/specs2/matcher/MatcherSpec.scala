@@ -15,6 +15,10 @@ class MatcherSpec extends Specification { def is =
   "a matcher can be defined by a function with 2 functions for the messages"                                            ! e5^
   "a matcher can be muted and will output no message"                                                                   ! e6^
   "a matcher can be defined by a function returning a MatchResult"                                                      ! e7^
+  "a matcher for a seq of values can be defined by a function returning a MatchResult and used forall values"+
+    "meaning that the first failure will fail all"                                                                      ! e8^
+  "a matcher for a seq of values can be defined by a function returning a MatchResult and used foreach values"+
+    "meaning that all failures will be collected"                                                                       ! e9^
                                                                                                                         end
 
   def e1 = new Exception("message")  must be_==("message") ^^ ((_:Exception).getMessage)
@@ -55,4 +59,15 @@ class MatcherSpec extends Specification { def is =
     def beOdd: Matcher[Int] = ((i: Int) => beEven.apply(theValue(i)).not)
     (2 must beOdd) returns "2 is even"
   }
+
+  def e8 = {
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
+    ((i: Int) => beEven).forall(Seq(1, 2, 3)) returns "1 is odd"
+  }
+
+  def e9 = {
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
+    ((i: Int) => beEven).foreach(Seq(1, 2, 3)) returns "1 is odd; 3 is odd"
+  }
+
 }

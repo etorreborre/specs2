@@ -64,14 +64,6 @@ trait MatchersImplicits extends Expectations {
       def apply(s: Set[S]) = new SetMatcher(s, f)
     }
 
-    /**
-     * check that the function is valid for all value, stopping after the first failure
-     */
-    def forall(values: Seq[S]): MatchResult[Seq[T]] = ((s: S) => f(s)) forall values
-    /**
-     * check that the function is valid for each value, showing all the failures
-     */
-    def foreach(values: Seq[S]): MatchResult[Seq[T]] = ((s: S) => f(s)) foreach values
   }
 
   class MatcherFunction2[T](f: T => Matcher[T]) {
@@ -85,6 +77,15 @@ trait MatchersImplicits extends Expectations {
           result(r, b)
         }
       }
+
+    /**
+     * check that the function is valid for all value, stopping after the first failure
+     */
+    def forall(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).forall(values)
+    /**
+     * check that the function is valid for each value, showing all the failures
+     */
+    def foreach(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).foreach(values)
   }
 
   /**
