@@ -55,7 +55,7 @@ A Notifier can be used to get a stream of events for the execution of a Specific
   def ex7    = there was atLeastOne(notified).examplePending(anyString, anyString, anyLong)
   def ex8    = there was no(notified(withXOnly)).exampleSuccess(anyString, anyLong)
   def ex9    = there was atLeastOne(notified).
-               exampleFailure(anyString, anyString, anyString, containMatch("specs2") ^^ ((t:Throwable) => t.getStackTrace().map(_.toString)), any[Details], anyLong)
+               exampleFailure(anyString, anyString, anyString, containMatch("specs2") ^^ ((t:Throwable) => t.getStackTrace().map(_.toString).toList), any[Details], anyLong)
   def ex10   = there was atLeastOne(notified).exampleSuccess(anyString, anyLong)
 
 

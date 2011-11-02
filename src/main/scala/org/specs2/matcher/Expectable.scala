@@ -57,8 +57,24 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
     case Some(de) => de(unq(value))
   }
 
+  /**
+   * apply a function to the expectable value
+   */
   def map[S](f: T => S): Expectable[S] = Expectable(f(value), desc)
+  /**
+   * apply a function to the value
+   */
+  def flatMap[S](f: T => Expectable[S]): Expectable[S] = f(value)
+  /**
+   * change the expectable value
+   */
   def map[S](other: S): Expectable[S] = map(t => other)
+  /**
+   * apply a function to the description function
+   */
+  def mapDescription(d: Option[String => String]): Expectable[T] = Expectable(value, d)
+  def mapDescription(d: String => String): Expectable[T] = mapDescription(Some(d))
+  def mapDescription(d: String): Expectable[T] = mapDescription((_:String) => d)
 }
 
 /**

@@ -141,6 +141,7 @@ There are many ways to create matchers for your specific usage. The simplest way
  * adapting the actual value. This matcher adapts the existing `be_<=` matcher to a matcher applicable to `Any`
 
         def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size }
+        def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size aka "the string size" }
 
  * adapting the actual and expected values. This matcher compares 2 `Human` objects but set their `wealth` field to 0
    so that the equals method will not fail on that field:

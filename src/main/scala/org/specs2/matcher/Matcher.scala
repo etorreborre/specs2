@@ -75,7 +75,7 @@ trait Matcher[-T] { outer =>
     Matcher.result(other.isSuccess, okMessage, koMessage, value)
   }
  
-  /** 
+  /**
    * Adapt a matcher to another.
    * ex: `be_==("message") ^^ (_.getMessage)` can be applied to an exception
    */
@@ -85,7 +85,18 @@ trait Matcher[-T] { outer =>
       result.map((t: T) => a.value)
     }
   }
-
+  /**
+   * Adapt a matcher to another.
+   * ex: `be_==("message") ^^ (_.getMessage aka "trimmed")` can be applied to an exception
+   *
+   * The dummy value is used to help to disambiguate with the overloaded ^^ function
+   */
+  def ^^[S](f: S => Expectable[T], dummy: Int = 0) = new Matcher[S] {
+    def apply[U <: S](a: Expectable[U]) = {
+      val result = outer.apply(a.flatMap(f))
+      result.map((t: T) => a.value)
+    }
+  }
   /**
    * negate a Matcher
    * @see MatchResult.not
