@@ -65,7 +65,6 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
   private def executeConcurrently(fs: FragmentSeq, args: Arguments)(implicit strategy: Strategy) = {
     fs.fragments.map {
       case f: Example  => PromisedExecutedFragment(promise(executeFragment(args)(f))(strategy))
-      case f: Step     => PromisedExecutedFragment(promise(executeFragment(args)(f))(strategy))
       case f: Action   => PromisedExecutedFragment(promise(executeFragment(args)(f))(strategy))
       case f           => executeFragment(args)(f)
     }
