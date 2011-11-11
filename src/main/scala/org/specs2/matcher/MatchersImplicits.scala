@@ -9,7 +9,7 @@ import Generator._
 import text.Quote._
 import text.Plural._
 import MatchResultMessages._
-
+import Result.ResultFailureMonoid
 /**
  * This trait provides implicit definitions from MatchResults and Booleans to Results.
  *
@@ -214,7 +214,7 @@ trait MatchersImplicits extends Expectations {
           res |+| t.apply(cur).toResult
         }
         Matcher.result(r.isSuccess,
-                       "All elements of "+q(seq.mkString(", "))+" are matching ok",
+                       "All elements of "+q(seq.mkString(", "))+" are successful",
                        r.message,
                        createExpectable(seq))
 
