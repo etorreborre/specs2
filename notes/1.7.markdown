@@ -3,6 +3,7 @@ This version adds new features on top of 1.6.1:
  * Mockito settings (name, defaultAnswer, extraInterfaces) can be specified during mock creation
  * issue #39: results are now printed to the console as soon as executed
  * added an implicit function to allow the use of generators in ScalaCheck properties: `forAll(generator) { p => p must matchSomething }`
+ * added `TerminationMatchers` to check if that a block of code terminates within a reasonable amount of time
  
 And fixes some issues:
 

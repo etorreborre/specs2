@@ -433,8 +433,9 @@ The Java api for files is more or less mimicked as matchers which can operate on
   * `haveAsCanonicalPath` checks if a path has a given canonical path
   * `haveParentPath` checks if a path has a given parent path
   * `listPaths` checks if a path has a given list of children
-  * `exist` checks if a file exists
-  * `beReadable` checks if a file is readable
+  * `exist` checks if a file existsy
+
+   * `beReadable` checks if a file is readable
   * `beWritable` checks if a file is writable
   * `beAbsolute` checks if a file is absolute
   * `beHidden` checks if a file is hidden
@@ -446,6 +447,15 @@ The Java api for files is more or less mimicked as matchers which can operate on
   * `haveParent` checks if a file has a given parent path
   * `haveList` checks if a file has a given list of children
 
+#### TerminationMatchers
+
+Sometimes you just want to specify that a block of code is going to terminate. The `TerminationMatchers` trait is here to help. If you mix in that trait, you can write:
+
+      Thread.sleep(100) must terminate
+      Thread.sleep(100) must terminate(retries=1, sleep=60.millis)
+
+Note that the behaviour of this matcher is a bit different from the `eventually` operator. In this case, we let the current Thread sleep during the given `sleep` time and then we check if the computation is finished, then, we retry for the given number of `retries`.
+
 #### Scalaz matchers
 
 It was useful to check some Scalaz properties during the development of ***specs2*** so they are available as matchers:
@@ -454,7 +464,7 @@ It was useful to check some Scalaz properties during the development of ***specs
  * `monoid.hasNeutralElement` checks if a `Monoid` zero value is really a neutral element
  * `monoid.isMonoid` checks if a `Monoid` has a neutral element and respects the associativity rule
 
-Note that you need to extend the `ScalaCheck` trait if you want to use these matchers in a specification.
+However specs2 is not using a publicly available version of Scalaz but an "internal" one. This decision was taken to avoid potential clashes with people using a different version  of Scalaz, including the Scalaz project itself! So, you can have a look at the implementation of those matchers in the specs2 source code, to reuse them for your own specifications.
 
 #### Result matchers
 
