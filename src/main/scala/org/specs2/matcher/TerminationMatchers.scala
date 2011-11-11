@@ -9,7 +9,10 @@ import Futures._
 /**
  * This trait provides matchers to check if a block of code is terminating or not
  */
-trait TerminationMatchers {
+trait TerminationMatchers extends TerminationBaseMatchers with TerminationNotMatchers
+
+private[specs2]
+trait TerminationBaseMatchers {
 
   /**
    * this matchers will check if a block of code terminates within a given duration, after just one try
@@ -32,4 +35,18 @@ trait TerminationMatchers {
         retry(originalRetries, retries - 1, sleep, a, future)
     }
   }
+}
+
+/**
+ * This trait adds the necessary implicit to write 'action must not terminate'
+ */
+private[specs2]
+trait TerminationNotMatchers { outer: TerminationBaseMatchers =>
+
+   implicit def toTerminationResultMatcher[T](result: MatchResult[T]) = new TerminationResultMatcher(result)
+
+   class TerminationResultMatcher[T](result: MatchResult[T]) {
+     def terminate = result(outer.terminate)
+     def terminate(retries: Int = 0, sleep: Duration = 100.millis) = result(outer.terminate(retries, sleep))
+   }
 }
