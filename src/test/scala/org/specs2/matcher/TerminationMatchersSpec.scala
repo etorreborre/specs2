@@ -2,6 +2,8 @@ package org.specs2
 package matcher
 
 import io.MockOutput
+import scala.actors.Futures._
+import java.util.concurrent._
 
 class TerminationMatchersSpec extends Specification with TerminationMatchers { def is =
 
@@ -17,6 +19,8 @@ class TerminationMatchersSpec extends Specification with TerminationMatchers { d
     "if the termination fails, the computation is stopped"                                         ! e5^
                                                                                                    p^
     "We can write 'action must not terminate'"                                                     ! e6^
+                                                                                                   p^
+  "We should be able to observe that an action unblocks another"                                   ! e7^
                                                                                                    end
 
   def e1 = { Thread.sleep(50) must terminate }
@@ -26,8 +30,13 @@ class TerminationMatchersSpec extends Specification with TerminationMatchers { d
   def e5 = {
     val out = new MockOutput { }
     val terminated = (1 to 5).foreach (i => {Thread.sleep(50); out.println(i) }) must not terminate(retries=5, sleep=20.millis)
-    Thread.sleep(300)
+    Thread.sleep(300) // wait until all the messages are possibly written to out if the action was not terminated
     terminated and (out.messages must not contain("3"))
   }
-  def e6 = { Thread.sleep(150) must not terminate }
+  def e6 = Thread.sleep(150) must not terminate
+
+  def e7 = {
+    val queue = new ArrayBlockingQueue[Int](1)
+    queue.take() must terminate.when("adding an element", queue.add(1))
+  }
 }
