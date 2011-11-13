@@ -20,7 +20,10 @@ class TerminationMatchersSpec extends Specification with TerminationMatchers { d
                                                                                                    p^
     "We can write 'action must not terminate'"                                                     ! e6^
                                                                                                    p^
-  "We should be able to observe that an action unblocks another"                                   ! e7^
+  "We should be able to observe that an action unblocks another"                                   ^
+    "with a when clause"                                                                           ! e7^
+    "with an onlyWhen clause"                                                                      ! e8^
+    "with a list of actions"                                                                       ! e9^
                                                                                                    end
 
   def e1 = { Thread.sleep(50) must terminate }
@@ -39,4 +42,18 @@ class TerminationMatchersSpec extends Specification with TerminationMatchers { d
     val queue = new ArrayBlockingQueue[Int](1)
     queue.take() must terminate.when("adding an element", queue.add(1))
   }
+
+  def e8 = {
+    val queue = new ArrayBlockingQueue[Int](1)
+    val noMessage = (queue.add(1) must terminate.onlyWhen(queue.add(1))) returns "the action terminates before the second action"
+    val message = (queue.add(1) must terminate.onlyWhen("adding an element", queue.add(1))) returns "the action terminates before adding an element"
+    noMessage and message
+  }
+
+  def e9 = {
+    val queue = new ArrayBlockingQueue[Int](1)
+    val actions = Seq(() => queue.take(), () => { Thread.sleep(50); queue.add(1) }).par
+    actions.map(_()).seq must terminate
+  }
+
 }
