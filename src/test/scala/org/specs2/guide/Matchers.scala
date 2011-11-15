@@ -218,14 +218,20 @@ If you have the same "MatchResult" expression that you'd like to verify for diff
         // stop after the first failure
         ((_:Int) must be_>(2)).forall(Seq(3, 4, 5))
         forall(Seq(3, 4, 5)) ((_:Int) must be_>(2))
+        // check only the elements defined for the partial function
+        forallLike(Seq(3, 10, 15)) { case a if a > 3 => a must be_>(5) }
 
         // try to match all values and collect the results
         ((_:Int) must be_>(2)).foreach(Seq(3, 4, 5))
         foreach(Seq(3, 4, 5)) ((_:Int) must be_>(2))
+        // check only the elements defined for the partial function
+        foreachLike(Seq(3, 10, 15)) { case a if a > 3 => a must be_>(5) }
 
         // succeeds after the first success
         ((_:Int) must be_>(2)).atLeastOnce(Seq(3, 4, 5))
         atLeastOnce(Seq(3, 4, 5)) ((_:Int) must be_>(2))
+        // check only the elements defined for the partial function
+        atLeastOnceLike(Seq(3, 4, 10)) { case a if a > 3 => a must be_>(5) }
 
 #### Matchers for Option / Either
 
