@@ -79,6 +79,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
  "atLeastOnce allows to transform a single matcher to a matcher checking that one element of a Seq is matching"         ^
   { Seq(2, 3, 4) must be_>=(2).atLeastOnce }                                                                            ^
   { atLeastOnce(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }                                                ^
+  { atLeastOnce(Seq(Some(1), None)) { _ must beSome(1) } }                                                              ^
   { (Seq(2, 3, 4) must be_<=(1).atLeastOnce) returns "No element of '2, 3, 4' is matching ok" }                         ^
                                                                                                                         p^
   "beNull matches null values"                                                                                          ^

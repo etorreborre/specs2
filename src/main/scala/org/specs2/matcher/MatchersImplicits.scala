@@ -136,8 +136,11 @@ trait MatchersImplicits extends Expectations {
     }
   }
 
+  /** verify the function f for all the values, stopping after the first failure */
   def forall[T, U](values: GenTraversable[T])(f: T => MatchResult[U])      = verifyFunction(f).forall(values.seq.toSeq)
+  /** verify the function f for all the values, and collect all failures */
   def foreach[T, U](values: GenTraversable[T])(f: T => MatchResult[U])     = verifyFunction(f).foreach(values.seq.toSeq)
+  /** verify the function f for at least one value */
   def atLeastOnce[T, U](values: GenTraversable[T])(f: T => MatchResult[U]) = verifyFunction(f).atLeastOnce(values.seq.toSeq)
   /**
    * This method transform a function to a Matcher
