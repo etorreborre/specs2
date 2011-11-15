@@ -10,14 +10,16 @@ import text.Quote._
 import text.Plural._
 import MatchResultMessages._
 import Result.ResultFailureMonoid
+import scala.collection.GenTraversable
+
 /**
- * This trait provides implicit definitions from MatchResults and Booleans to Results.
- *
- * It also allows to:
- *
- * * create matchers from functions
- * * create matchers for seqs and sets from single matchers
- */
+* This trait provides implicit definitions from MatchResults and Booleans to Results.
+*
+* It also allows to:
+*
+* * create matchers from functions
+* * create matchers for seqs and sets from single matchers
+*/
 trait MatchersImplicits extends Expectations {
   /** 
    * implicit definition to transform a Seq of MatchResults to a Result
@@ -86,6 +88,10 @@ trait MatchersImplicits extends Expectations {
      * check that the function is valid for each value, showing all the failures
      */
     def foreach(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).foreach(values)
+    /**
+     * check that the function is valid at least once
+     */
+    def atLeastOnce(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).atLeastOnce(values)
   }
 
   /**
@@ -130,6 +136,9 @@ trait MatchersImplicits extends Expectations {
     }
   }
 
+  def forall[T, U](values: GenTraversable[T])(f: T => MatchResult[U])      = verifyFunction(f).forall(values.seq.toSeq)
+  def foreach[T, U](values: GenTraversable[T])(f: T => MatchResult[U])     = verifyFunction(f).foreach(values.seq.toSeq)
+  def atLeastOnce[T, U](values: GenTraversable[T])(f: T => MatchResult[U]) = verifyFunction(f).atLeastOnce(values.seq.toSeq)
   /**
    * This method transform a function to a Matcher
    */

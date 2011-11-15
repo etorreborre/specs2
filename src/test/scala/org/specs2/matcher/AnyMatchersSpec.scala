@@ -65,17 +65,20 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
                                                                                                                         p^
  "forall allows to transform a single matcher to a matcher checking that all elements of a Seq are matching"            ^
   { Seq(2, 3, 4) must be_>=(2).forall }                                                                                 ^
+  { forall(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }                                                     ^
   { (Seq(2, 3, 4) must contain(_:Int)).forall(Seq(2, 4)) }                                                              ^
   { (Seq(2, 3, 4) must be_<=(2).forall) returns
     "In the sequence '2, 3, 4', the 2nd element is failing: 3 is greater than 2" }                                      ^
                                                                                                                         p^
   "foreach is like forall but will execute all matchers and collect the results"                                        ^
   { Seq(2, 3, 4) must be_>=(2).foreach }                                                                                ^
+  { foreach(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }                                                    ^
   { ((_:Int) must be_>=(2)).foreach(Seq(2, 3, 4)) }                                                                     ^
   { (Seq(2, 3, 4) must be_<=(2).foreach) returns "3 is greater than 2; 4 is greater than 2" }                           ^
                                                                                                                         p^
  "atLeastOnce allows to transform a single matcher to a matcher checking that one element of a Seq is matching"         ^
   { Seq(2, 3, 4) must be_>=(2).atLeastOnce }                                                                            ^
+  { atLeastOnce(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }                                                ^
   { (Seq(2, 3, 4) must be_<=(1).atLeastOnce) returns "No element of '2, 3, 4' is matching ok" }                         ^
                                                                                                                         p^
   "beNull matches null values"                                                                                          ^
