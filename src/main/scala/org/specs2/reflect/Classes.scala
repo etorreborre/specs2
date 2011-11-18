@@ -57,26 +57,34 @@ trait Classes extends Output {
   def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean= true, printStackTrace: Boolean = true,
                                      loader: ClassLoader = Thread.currentThread.getContextClassLoader)
                                     (implicit m: ClassManifest[T]): Option[T] = {
+
+    lazy val canPrintMessage    = printMessage    || System.getProperty("debugCreateObject") != null
+    lazy val canPrintStackTrace = printStackTrace || System.getProperty("debugCreateObject") != null
+
     loadClass(className) match {
       case None => None
       case Some(c: Class[_]) => {
         try {
           val constructors = c.getDeclaredConstructors.toList
-          if (constructors.isEmpty)
+          if (constructors.isEmpty) {
+            if (canPrintMessage) println("Can't find a constructor for class"+c.getName)
             None
+          }
           else if (constructors.toList(0).getParameterTypes.isEmpty)
             createInstanceOf[T](Some[Class[T]](c.asInstanceOf[Class[T]]))
           else if (constructors.toList(0).getParameterTypes.size == 1) {
             val outerClassName = getOuterClassName(c)
             tryToCreateObject[T](outerClassName, printMessage, printStackTrace).map(constructors(0).newInstance(_).asInstanceOf[T])
           }
-          else
+          else {
+            if (canPrintMessage) println("Can't find a suitable constructor for class"+c.getName)
             None
+          }
         } catch {
           case e => {
-            if (printMessage || System.getProperty("debugCreateObject") != null) println("Could not instantiate class " + className + ": " + e)
-            if (printStackTrace || System.getProperty("debugCreateObject") != null) e.getFullStackTrace foreach (s => println(s.toString))
-            return None
+            if (canPrintMessage) println("Could not instantiate class " + className + ": " + e)
+            if (canPrintStackTrace) e.getFullStackTrace foreach (s => println(s.toString))
+            None
           }
         }
       }
