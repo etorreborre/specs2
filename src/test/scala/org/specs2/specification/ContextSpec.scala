@@ -7,7 +7,7 @@ import reporter._
 import matcher._
 import matcher.MustExpectable._
 
-class ContextSpec extends Specification with FragmentExecution { def is =
+class ContextSpec extends Specification with FragmentExecution with ResultMatchers { def is =
                                                                                                                         """
   It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments
   and clean it up afterwards. This may be for example:
@@ -56,6 +56,7 @@ class ContextSpec extends Specification with FragmentExecution { def is =
   "The After trait can be used to execute methods after Fragments"                                                      ^
     "the after method is executed after a first example"                                                                ! c().e5^
     "the after method is executed after the second example"                                                             ! c().e6^
+    "if the expectation fails then the example must fail as well"                                                       ! c().e6_1^
                                                                                                                         p^
   "If the after method throws an exception"                                                                             ^
     "the first example will execute"                                                                                    ! c().e7^
@@ -128,6 +129,7 @@ class ContextSpec extends Specification with FragmentExecution { def is =
   case class c() extends FragmentsExecution {
     def e5 = executing(ex1After).prints("e1", "after")
     def e6 = executing(ex1_2After).prints("e1", "after", "e2", "after")
+    def e6_1 = executeBodies(ex1FailAfter).head must beFailing
     def e7 = executing(ex1_afterFail).prints("e1")
     def e8 = executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
     def e8_1 = executing(ex1ImplicitAfter).prints("e1", "after")
@@ -230,7 +232,8 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1_2Before = ex1Before ^ "ex2" ! before(ok2)
 
   def ex1After = "ex1" ! after(ok1) 
-  def ex1_afterFail = "ex1" ! afterWithError(ok1) 
+  def ex1FailAfter = "ex1" ! after(failure)
+  def ex1_afterFail = "ex1" ! afterWithError(ok1)
   def ex1_2After = ex1After ^ "ex2" ! after(ok2)
 
   trait beforeContext extends Before {

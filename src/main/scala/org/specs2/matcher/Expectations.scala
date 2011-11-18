@@ -51,7 +51,11 @@ trait Expectations {
   /** @return an Expectable with a description function */
   def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] = Expectable(t, alias)
 
+  /** this method can be overriden to throw exceptions when checking the match result */
+  protected def checkFailure[T](m: MatchResult[T]) = {
+    checkResultFailure(m.toResult)
+    m
+  }
   /** this method can be overriden to throw exceptions when checking the result */
-  protected def checkFailure[T](m: MatchResult[T]) = m
-
+  protected def checkResultFailure(r: Result): Result = r
 }

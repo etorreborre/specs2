@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import execute.{FailureException, SkipException, Failure, Skipped}
+import execute.{FailureException, SkipException, Failure, Skipped, Result}
 
 /**
  * Thrown expectations will throw a FailureException if a match fails
@@ -27,13 +27,13 @@ trait ThrownExpectations extends Expectations {
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
       override def evaluate = createExpectable(value, desc)
     }
-  override protected def checkFailure[T](m: MatchResult[T]) = {
-    m match {
-      case f @ MatchFailure(ok, ko, _, _) => throw new FailureException(f.toResult)
-      case f @ MatchSkip(m, _)            => throw new SkipException(f.toResult)
-      case _ => ()
+  override protected def checkResultFailure(r: Result) = {
+    r match {
+      case f @ Failure(_,_,_,_) => throw new FailureException(f)
+      case s @ Skipped(_,_)     => throw new SkipException(s)
+      case _                    => ()
     }
-    m
+    r
   }
   protected def failure(m: String): Nothing = failure(Failure(m))
   protected def failure(f: Failure): Nothing = throw new FailureException(f)

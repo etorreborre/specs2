@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 import sys._
+import execute.FailureException
 
 class DataTablesSpec extends Specification with DataTables with ResultMatchers { def is =
                                                                                                                         """
@@ -14,6 +15,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
   "!! can be used as a cell separator with any type"                                                                    ! e5_1^
   "A table can be built with just one column"                                                                           ! e6^
   "A table must work with values of different subtypes of the first row"                                                ! e7^
+  "A table must work ok in a mutable spec"                                                                              ! e8^
                                                                                                                         end
 
   def boom = error("boom")
@@ -58,4 +60,12 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
 	  0           ! "0"       |
 	  List("a")   ! "List(a)" | { (a, b) =>  a.toString must_== b }
 
+  def e8 = (new InAMutableContext).result must throwA[FailureException]
 }
+
+class InAMutableContext extends MustThrownMatchers with DataTables {
+  lazy val result =
+      "a"         | "b"    |>
+        1          ! 2      | { (a, b) =>  a must_== b }
+}
+

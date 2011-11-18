@@ -32,7 +32,7 @@ import text.Trim._
  * 
  * @see org.specs2.matcher.DataTablesSpec for examples
  */
-trait DataTables {
+trait DataTables extends Expectations {
   
   /** @return a TableHeader with one heading only */
   implicit def toTableHeader(a: String) = new TableHeader(List(a))
@@ -62,10 +62,13 @@ trait DataTables {
 	   	  case Success(_) => showTitles
 	   	  case other      => "  " + showTitles  
 	    }
-      DecoratedResult(DataTable(titles, results), result.updateMessage {
-	      header+"\n"+
-        results.map((cur: (String, R)) => resultLine(cur._1, cur._2)).mkString("\n")
-	    })
+      val decorated =
+        DecoratedResult(DataTable(titles, results), result.updateMessage {
+      	      header+"\n"+
+              results.map((cur: (String, R)) => resultLine(cur._1, cur._2)).mkString("\n")
+      	})
+      checkResultFailure(decorated.result)
+      decorated
 	  }
 	  /** @return the logical and combination of all the results */
     private def allSuccess[R <% Result](results: List[(String, R)]): Result = {
