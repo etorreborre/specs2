@@ -1,13 +1,8 @@
 package org.specs2
 package specification
 
-import control.LazyParameters._
 import execute._
 import main._
-import matcher._
-import FormattingFragments._
-import scala.PartialFunction
-import specification.StandardFragments.Backtab
 
 /**
  * This trait provides function to create specification Fragments:
@@ -18,7 +13,7 @@ import specification.StandardFragments.Backtab
  * 
  */
 private[specs2]
-trait FragmentsBuilder extends RegexSteps { outer =>
+trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
 
   /**
    * Methods for chaining fragments
@@ -62,8 +57,6 @@ trait FragmentsBuilder extends RegexSteps { outer =>
     /** @return an Example which a function using values extracted from the text */
 	  def !(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
   }
-
-  private[specs2] implicit def exampleFactory: ExampleFactory = new DefaultExampleFactory
 
   /**
    * Arguments creation

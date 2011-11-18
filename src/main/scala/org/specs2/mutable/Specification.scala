@@ -6,14 +6,14 @@ import time._
 import execute._
 import matcher._
 import main.ArgumentsShortcuts
-import specification._
+import specification.{AutoExamples, SpecificationStructure, FormattingFragments, Contexts, Context, Outside}
 
 trait Specification extends SpecificationStructure with SpecificationFeatures {
   def is = specFragments
 }
 
 trait SpecificationFeatures extends FragmentsBuilder
-   with SpecificationInclusion
+   with mutable.SpecificationInclusion
    with ArgumentsArgs
    with ArgumentsShortcuts
    with MustThrownMatchers

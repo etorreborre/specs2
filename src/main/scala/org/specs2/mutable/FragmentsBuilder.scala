@@ -2,9 +2,8 @@ package org.specs2
 package mutable
 import execute._
 import main._
-import specification._
+import specification.{Action, Step, SpecificationStructure, FormattingFragments, Fragments, FragmentsFragment, Example, GivenThen}
 import FormattingFragments._
-import matcher.MatchResult
 
 /**
  * Adding new implicits to support specs-like naming: "the system" should "do this" in { ... }
@@ -13,7 +12,7 @@ import matcher.MatchResult
  * is created.
  *
  */
-trait FragmentsBuilder extends specification.FragmentsBuilder {
+trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFactory {
   /** local mutable contents of the specification */
   protected[specs2] var specFragments: Fragments = new Fragments()
 
@@ -64,13 +63,6 @@ trait FragmentsBuilder extends specification.FragmentsBuilder {
     }
     def in(fs: =>Fragments): Fragments = fs
     def >>(fs: =>Fragments): Fragments = fs
-  }
-
-  private[specs2]
-  override implicit def exampleFactory: ExampleFactory = new MutableExampleFactory
-
-  private[specs2] class MutableExampleFactory extends DefaultExampleFactory {
-    override def newExample(e: Example): Example = addExample(e)
   }
 
   /**
