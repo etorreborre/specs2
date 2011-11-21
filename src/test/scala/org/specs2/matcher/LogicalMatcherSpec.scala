@@ -18,6 +18,7 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
   "it is possible also to 'or' 2 match expressions"                                                                     ^
     "if the first is ok, the result is ok"                                                                              ! or7^
     "if the first is not ok, the second is not evaluated"                                                               ! or8^
+    "ko and ok and ko is ok"                                                                                            ! or9^
                                                                                                                         p^
   "a matcher can be and-ed with another one"                                                                            ^
     "if both matches are ok the result is ok"                                                                           ! and1^
@@ -25,6 +26,7 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
   "it is possible also to 'and' 2 match expressions"                                                                    ^
     "if both matches are ok the result is ok"                                                                           ! and2^
     "if the first is not ok, the second is not evaluated"                                                               ! and3^
+    "ok and ko and ok is ko"                                                                                            ! and4^
                                                                                                                         p^
   "a matcher can be ok or be skipped"                                                                                   ^
     "if it is ok, it returns a MatchSuccess result"                                                                     ! skip1^
@@ -63,6 +65,7 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
     ("eric" must be matching("e.*")) or { out.println("DONT"); "torreborre" must be matching(".*tor.*") }
     out.messages must not contain("DONT")
   }
+  def or9 = ((true === false) or (true === true) or (true === false)) must beSuccessful
 
   def and1 = "eric" must be matching("e.*") and be matching(".*c")
   def and2 = ("eric" must be matching("e.*")) and ("torreborre" must be matching(".*tor.*"))
@@ -71,6 +74,7 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
     ("eric" must be matching("x.*")) and { out.println("DONT"); "torreborre" must be matching(".*tor.*") }
     out.messages must not contain("DONT")
   }
+  def and4 = ((true === true) and (true === false) and (true === true)) must beFailing
 
   def skip1 = 1 must be_==(1).orSkip
   def skip2 = (1 must be_==(2).orSkip).toResult must_== Skipped("'1' is not equal to '2'")
