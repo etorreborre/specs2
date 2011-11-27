@@ -157,7 +157,7 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
   def m2 = second
   override def evaluate[S >: T] = {
     m1 match {
-      case MatchSuccess(_, _, _) => m1
+      case MatchSuccess(_, _, _) => new OrMatch(m1, MatchSkip("", expectable))
       case _ => {
         (m1, m2) match {
           case (_, NeutralMatch(_)) => new OrMatch(m1, MatchSkip("", expectable))
