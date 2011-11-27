@@ -27,10 +27,12 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
    * @see the HtmlPrinterSpec failing with a NPE if that method is missing 
    */
   def contain[T](t: =>T): ContainMatcher[T] = contain(lazyfy(t))
+  /** match if traversable contains (seq2). n is a dummy paramter to allow overloading */
+  def containAllOf[T](seq: Seq[T]): ContainMatcher[T] = new ContainMatcher(seq.map(lazyfy(_)):_*)
   /** match if traversable contains (t1, t2) */
   def contain[T](t: LazyParameter[T]*): ContainMatcher[T] = new ContainMatcher(t:_*)
   /** match if traversable contains one of (t1, t2) */
-  def containAnyOf[T](t: LazyParameter[T]*): ContainAnyOfMatcher[T] = new ContainAnyOfMatcher(t:_*)
+  def containAnyOf[T](seq: Seq[T]): ContainAnyOfMatcher[T] = new ContainAnyOfMatcher(seq.map(lazyfy(_)):_*)
 
   /** match if traversable contains (x matches p) */
   def containPattern[T](t: =>String): ContainLikeMatcher[T] = containLike[T](t, "pattern")

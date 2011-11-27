@@ -324,6 +324,13 @@ Iterables can be checked with several matchers:
   * to check if only some elements are contained in the iterable and in the same order
     `List(2, 4) must contain(2, 4).only.inOrder`
 
+  * to check if a sequence contains another one
+    `List(2, 4) must containAllOf(List(4, 2))`
+    `List(2, 4) must containAllOf(List(2, 4)).inOrder`
+
+  * to check if a sequence contains any element of another one
+    `List(2, 4) must containAnyOf(List(4, 2))`
+
   * to check the size of an iterable
     `List(1, 2) must have size(2)`
     `List(1, 2) must have length(2)` // equivalent to size

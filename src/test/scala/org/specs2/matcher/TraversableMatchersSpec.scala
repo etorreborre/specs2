@@ -9,6 +9,7 @@ class TraversableMatchersSpec extends Specification { def is =
   "we can check if one or several elements are present in a traversable"                                                ^
     { List(1, 2) must contain(1) }                                                                                      ^
     { List(1, 2, 3) must contain(3, 2) }                                                                                ^
+    { List(1, 2, 3) must containAllOf(List(1, 3)).inOrder }                                                             ^
     { List(1, 2, 3) must contain(3) and  contain(2) }                                                                   ^
     // corner case with type inference. If not specified 'Any', the contain 'String' Matcher is selected
     { List("1", "2", "3") must contain("3") and contain("2":Any) }                                                      ^
@@ -17,7 +18,7 @@ class TraversableMatchersSpec extends Specification { def is =
     "with a subclass"                                                                                                   ! subclass().e1^
                                                                                                                         p^
   "we can check if at least one or several elements are present in a traversable"                                       ^
-    { List(1, 2) must containAnyOf(1, 4) }                                                                              ^
+    { List(1, 2) must containAnyOf(Seq(1, 4)) }                                                                         ^
                                                                                                                         p^
   "we can check the traversable contains another element exactly once"                                                   ^
     { List(1, 2) must contain(1).exactlyOnce }                                                                          ^
