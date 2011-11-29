@@ -1,4 +1,3 @@
-
 /** Project */
 name := "specs2"
 
@@ -62,3 +61,5 @@ publishTo <<= (version) { version: String =>
   if (version.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus+"snapshots/") 
   else                                   Some("releases" at nexus+"releases/")
 }
+
+seq(lsSettings :_*)
