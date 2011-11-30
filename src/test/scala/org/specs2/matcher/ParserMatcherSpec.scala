@@ -12,7 +12,9 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   { number("1") must beASuccess }                                                                                       ^
   { number("1") must be aSuccess }                                                                                      ^
   { number("i") must not be aSuccess }                                                                                  ^
+  { number must succeedOn("12ab").partially }                                                                           ^
   { number must succeedOn("12").withResult(12) }                                                                        ^
+  { number must succeedOn("12ab").partially.withResult(12) }                                                            ^
   { number must succeedOn("12").withResult(equalTo(12)) }                                                               ^
   { number must not succeedOn("abc") }                                                                                  ^
   { number must not(succeedOn("abc").withResult(equalTo(13))) }                                                         ^
@@ -31,6 +33,9 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   { number("i") must beAFailure }                                                                                       ^
   { number("1") must not be aFailure }                                                                                  ^
   { number("i") must be aFailure }                                                                                      ^
+  { number("i2") must be aFailure }                                                                                     ^
+  { number("1i") must beAPartialSuccess }                                                                               ^
+  { number("1i") must be aPartialSuccess }                                                                              ^
                                                                                                                         p^
   "haveFailureMsg tests if the parser returns a given message when failing"                                             ^
   { number("abc") must haveFailureMsg("a' found") }                                                                     ^

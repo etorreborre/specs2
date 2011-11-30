@@ -528,9 +528,9 @@ You can specify your own parsers by:
 
  * extending the `ParserMatchers` trait
  * defining the `val parsers` variable with your parsers definition
- * use the `beASuccess`, `beAFailure`, `successOn`, `failOn`, `errorOn` matchers to specify the results of parsing input
-   strings
- * use `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
+ * using the `beASuccess`, `beAFailure`, `succeedOn`, `failOn`, `errorOn` matchers to specify the results of parsing input
+   strings. `beAPartialSuccess`, `be aPartialSuccess`, `succeedOn.partially` will allow a successful match only on part of the input
+ * using `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
    a String or a matcher so that
    . `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
    . `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
@@ -545,7 +545,9 @@ For example, specifying a Parser for numbers could look like this:
                                                                                                   p^
           "beASuccess and succeedOn check if the parse succeeds"                                  ^
           { number("1") must beASuccess }                                                         ^
+          { number("1i") must beAPartialSuccess }                                                 ^
           { number must succeedOn("12") }                                                         ^
+          { number must succeedOn("12ab").partially }                                             ^
           { number must succeedOn("12").withResult(12) }                                          ^
           { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
           { number("1") must haveSuccessResult("1") }                                             ^
