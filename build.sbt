@@ -1,3 +1,7 @@
+import sbtrelease._
+import Release._
+import ReleaseKeys._
+
 /** Project */
 name := "specs2"
 
@@ -29,7 +33,7 @@ libraryDependencies ++= Seq(
 )
 
 /** Compilation */
-javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss4m")
+javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss6m")
 
 javaOptions += "-Xmx2G"
 
@@ -53,6 +57,27 @@ testOptions := Seq(Tests.Filter(s =>
 /** Console */
 initialCommands in console := "import org.specs2._"
 
+seq(releaseSettings: _*)
+
+releaseProcess <<= thisProjectRef apply { ref =>
+  import ReleaseStateTransformations._
+  Seq[ReleasePart](
+    initialGitChecks,                     
+    checkSnapshotDependencies,    
+    releaseTask(check in Posterous in ref),  
+    inquireVersions,                        
+    setReleaseVersion,                      
+    runTest,                                
+    commitReleaseVersion,                   
+    tagRelease,                             
+    releaseTask(publish in Global in ref),
+    releaseTask(publish in Posterous in ref),    
+    setNextVersion,                         
+    commitNextVersion                       
+  )
+}
+
+
 /** Publishing */
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
@@ -63,3 +88,6 @@ publishTo <<= (version) { version: String =>
 }
 
 seq(lsSettings :_*)
+
+(LsKeys.ghBranch in LsKeys.lsync) := Some("1.7")
+
