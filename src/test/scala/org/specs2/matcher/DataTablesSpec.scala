@@ -16,6 +16,9 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
   "A table can be built with just one column"                                                                           ! e6^
   "A table must work with values of different subtypes of the first row"                                                ! e7^
   "A table must work ok in a mutable spec"                                                                              ! e8^
+  "A table must be formatted with equal-length cells"                                                                   ^
+    "when succeeding"                                                                                                   ! e9^
+    "when failing"                                                                                                      ! e10^
                                                                                                                         end
 
   def boom = error("boom")
@@ -61,6 +64,35 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
 	  List("a")   ! "List(a)" | { (a, b) =>  a.toString must_== b }
 
   def e8 = (new InAMutableContext).result must throwA[FailureException]
+
+  def e9 = {
+    val table =
+      "a"     || "b"     | "c"         |>
+      "hello" !! "you"   ! "hello you" |
+      "you"   !! "hello" ! "you hello" |
+      "y"     !! "h"     ! "y h"       | { (a, b, c) =>  a+" "+b must_== c }
+
+    table.message ===
+      "  | a     | b     | c         | "+"\n"+
+      "+ | hello | you   | hello you | "+"\n"+
+      "+ | you   | hello | you hello | "+"\n"+
+      "+ | y     | h     | y h       | "
+  }
+
+  def e10 = {
+    val table =
+      "a"     || "b"     | "c"          |>
+      "hello" !! "you"   ! "hello you"  |
+      "you"   !! "hello" ! "you hello2" |
+      "y"     !! "h"     ! "y h"        | { (a, b, c) =>  a+" "+b must_== c }
+
+    table.message ===
+      "  | a     | b     | c          |                                         "+"\n"+
+      "+ | hello | you   | hello you  |                                         "+"\n"+
+      "x | you   | hello | you hello2 | 'you hello' is not equal to 'you hello2'"+"\n"+
+      "+ | y     | h     | y h        |                                         "
+  }
+
 }
 
 class InAMutableContext extends MustThrownMatchers with DataTables {

@@ -3,9 +3,8 @@ package matcher
 
 import execute._
 import ResultExecution._
-import main.Arguments
-import scala.xml.NodeSeq
-import text.Trim._
+import text.{Trim, TextTable}
+import Trim._
 
 /**
  * This trait provides implicit definitions and types to create DataTables.
@@ -46,43 +45,30 @@ trait DataTables extends Expectations {
    * hold.
    */
   abstract class Table(val titles: List[String], val execute: Boolean = false) {
-    /**
-     * @return the header as a | separated string
-     */
-	  def showTitles = titles.mkString("|", "|", "|")
 
 	  /**
 	   * Collect the results of each row
 	   * @param results list of (row description, row execution result)
      * @return an aggregated Result from a list of results
      */
-    protected def collect[R <% Result](results: List[(String, R)]): DecoratedResult[DataTable] = {
+    protected def collect[R <% Result](results: List[(Seq[String], R)]): DecoratedResult[DataTable] = {
 	    val result = allSuccess(results)
-	    val header = result match {
-	   	  case Success(_) => showTitles
-	   	  case other      => "  " + showTitles  
-	    }
       val decorated =
         DecoratedResult(DataTable(titles, results), result.updateMessage {
-      	      header+"\n"+
-              results.map((cur: (String, R)) => resultLine(cur._1, cur._2)).mkString("\n")
+      	   TextTable("" +: titles :+ "", results.map { case (line, r) => resultLine(line, r) }:_*).show
       	})
       checkResultFailure(decorated.result)
       decorated
 	  }
 	  /** @return the logical and combination of all the results */
-    private def allSuccess[R <% Result](results: List[(String, R)]): Result = {
+    private def allSuccess[R <% Result](results: List[(Seq[String], R)]): Result = {
       results.foldLeft(Success("", results.size): Result)((res, cur) => res and cur._2)
     }
     /** @return the status of the row + the values + the failure message if any */
-	  private def resultLine(desc: String, result: Result): String = {
-	    result.status+" "+desc+{
-	   	  result match {
-	   	    case Success(_) => ""
-	   	    case _ => " " + result.message
-	   	  }
-	    }
-	  }
+	  private def resultLine(line: Seq[String], result: Result): Seq[String] = {
+      val message = result match { case Success(_) => ""; case _  => result.message }
+      result.status +: line :+ message
+    }
   }
   /** GENERATED */
   case class TableHeader(titles: List[String]) {
@@ -115,7 +101,7 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow1[T1]) => (d.show, implicitly[R => Result].apply(f(d.t1)).execute) })
+        collect(rows map { (d: DataRow1[T1]) => (d.showCells, implicitly[R => Result].apply(f(d.t1)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
@@ -125,7 +111,7 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1, T2) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow2[T1, T2]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2)).execute) })
+        collect(rows map { (d: DataRow2[T1, T2]) => (d.showCells, implicitly[R => Result].apply(f(d.t1,d.t2)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
@@ -135,7 +121,7 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1, T2, T3) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow3[T1, T2, T3]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3)).execute) })
+        collect(rows map { (d: DataRow3[T1, T2, T3]) => (d.showCells, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
@@ -145,7 +131,7 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1, T2, T3, T4) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow4[T1, T2, T3, T4]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4)).execute) })
+        collect(rows map { (d: DataRow4[T1, T2, T3, T4]) => (d.showCells, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
@@ -155,7 +141,7 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow5[T1, T2, T3, T4, T5]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5)).execute) })
+        collect(rows map { (d: DataRow5[T1, T2, T3, T4, T5]) => (d.showCells, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
@@ -165,7 +151,7 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow6[T1, T2, T3, T4, T5, T6]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6)).execute) })
+        collect(rows map { (d: DataRow6[T1, T2, T3, T4, T5, T6]) => (d.showCells, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
@@ -175,7 +161,7 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow7[T1, T2, T3, T4, T5, T6, T7]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7)).execute) })
+        collect(rows map { (d: DataRow7[T1, T2, T3, T4, T5, T6, T7]) => (d.showCells, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
@@ -185,7 +171,7 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8)).execute) })
+        collect(rows map { (d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) => (d.showCells, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
@@ -195,7 +181,7 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9)).execute) })
+        collect(rows map { (d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) => (d.showCells, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
@@ -205,13 +191,14 @@ trait DataTables extends Expectations {
     def |>[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, true)
     def executeRow[R <% Result](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) => (d.show, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10)).execute) })
+        collect(rows map { (d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) => (d.showCells, implicitly[R => Result].apply(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
   }
 
   abstract class DataRow[+T1, +T2, +T3, +T4, +T5, +T6, +T7, +T8, +T9, +T10] extends Product {
     def show = productIterator.mkString("|", "|", "|")
+    def showCells = productIterator.map(_.toString).toSeq
   }
 
   case class DataRow1[T1](t1: T1) extends DataRow[T1, Any, Any, Any, Any, Any, Any, Any, Any, Any] {
@@ -259,7 +246,7 @@ case class DataTable(titles: Seq[String], rows: Seq[DataTableRow]) {
   def isSuccess = rows.forall(_.isSuccess)
 }
 object DataTable {
-  def apply[R <% Result](titles: Seq[String], results: Seq[(String, R)]): DataTable = DataTable(titles, results.collect { case (v, r) => DataTableRow(v, r) })
+  def apply[R <% Result](titles: Seq[String], results: Seq[(Seq[String], R)]): DataTable = DataTable(titles, results.collect { case (v, r) => DataTableRow(v, r) })
 }
 case class DataTableRow(cells: Seq[String], result: Result) {
   def isSuccess = result.isSuccess
@@ -303,7 +290,7 @@ private object DataTablesGenerator {
            "  def |>[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, true)",
            "  def executeRow[R <% Result](f: "+typesTuple(i)+" => R, exec: Boolean): DecoratedResult[DataTable] = {",
            "    if (exec)",
-           "      collect(rows map { (d: "+dataRow(i)+") => (d.show, implicitly[R => Result].apply(f("+(1 to i).map("d.t"+_).mkString(",")+")).execute) })",
+           "      collect(rows map { (d: "+dataRow(i)+") => (d.showCells, implicitly[R => Result].apply(f("+(1 to i).map("d.t"+_).mkString(",")+")).execute) })",
            "    else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success(\"ok\"))",
            "  }",
            "}").mkString("\n")    
