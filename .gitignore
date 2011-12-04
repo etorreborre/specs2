@@ -1,3 +1,6 @@
+.cache
+.history
+.target/
 project-old/lib_managed/
 project-old/boot/
 project-old/plugins/lib_managed/
