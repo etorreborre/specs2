@@ -105,11 +105,14 @@ trait ParserBaseMatchers {
       (parseResult: TMatchee => ParseResult[T]) extends ParseResultMatcher[T, TMatchee] {
     val clazz = implicitly[ClassManifest[TNoSuccess]].erasure
 
-    def apply0(s: Expectable[ParseResult[T]]) = Matcher.result(
-      clazz.isInstance(s.value),
-      s.description,
-      s.description+" isn't a "+clazz.getSimpleName,
-      s)
+    def apply0(s: Expectable[ParseResult[T]]) = {
+      s.value match {
+        case PSuccess(_, next) if !next.atEnd =>
+          Matcher.result(true, s.description+" is a Success and the input was not completely parsed: "+next.source, s.description, s)
+        case _                                                =>
+          Matcher.result(clazz.isInstance(s.value), s.description, s.description+" isn't a "+clazz.getSimpleName, s)
+      }
+    }
 
     /** check if the failure message is as expected */
     def withMsg(msg: ExpectedParsedResult[String]): Matcher[TMatchee] = withMsg(new BeMatching(".*"+msg.t+".*"))
@@ -120,7 +123,7 @@ trait ParserBaseMatchers {
         val pResult = parseResult(s.value)
         lazy val msgMatcherResult = pResult match {
           case pNoSuccess: NoSuccess => msgMatcher(Expectable(pNoSuccess.msg))
-          case _ => MatchFailure("Parse has not succeeded", "Parse didn't not succeed correctly", s.map(pResult))
+          case _                     => MatchFailure("Parse failed", "Parse succeeded", s.map(pResult))
         }
 
         (apply0(Expectable(pResult)) and msgMatcherResult).map(_ => s.value)
@@ -133,7 +136,7 @@ trait ParserBaseMatchers {
         val pResult = parseResult(s.value)
         lazy val msgMatcherResult = pResult match {
           case pNoSuccess: NoSuccess => msgMatcher(Expectable(pNoSuccess.msg))
-          case _ => MatchSuccess("Parse has not succeeded", "Parse didn't not succeed correctly", s.map(pResult))
+          case _                     => MatchSuccess("Parse failed", "Parse succeeded", s.map(pResult))
         }
         msgMatcherResult.map(_ => s.value)
       }
