@@ -15,6 +15,7 @@ class StringMatchersSpec extends Specification {  def is =
                                                                                                                         p^
     "find ... withGroups, to check for groups"                                                                          ^
     { "erirec" must find("(e|i).").withGroups("e", "i", "e") }                                                          ^
+    { "abcd" must find("(a.)(c.)").withGroups("ab", "cd") }                                                             ^
                                                                                                                         endp^
   "The length of a string can be checked"                                                                               ^
     "with have length"                                                                                                  ^

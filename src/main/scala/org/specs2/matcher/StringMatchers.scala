@@ -105,7 +105,10 @@ trait StringBaseMatchers { outer =>
     def found(a: String, b: String) = {
       val matcher = Pattern.compile(a).matcher(b)
       val groupsFound = new scala.collection.mutable.ListBuffer[String]()
-      while (matcher.find) { groupsFound += matcher.group(1) }
+      (1 to matcher.groupCount).foreach { i =>
+        matcher.reset()
+        while (matcher.find) { groupsFound += matcher.group(i) }
+      }
       groupsFound.toList
     }
     def apply[S <: String](b: Expectable[S]) = {
