@@ -18,5 +18,6 @@ And fixes some issues:
  * issue #45: fixed the evaluation of `result1 and result2` so that `result2` doesn't get evaluated if `result1` succeeds
  * issue #46: fixed the parser matchers which should consume all input 
  * issue #47: proper display of DataTables in the console
+ * fixed the `find.withGroups` matcher (was not matching several groups)
  
  ==========================
