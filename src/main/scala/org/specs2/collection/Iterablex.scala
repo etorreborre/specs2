@@ -13,12 +13,12 @@ import Scalaz._
 private[specs2]
 trait Iterablex {
   /**
-   * implicit definition to transform an iterable to an ExtendedIterable
+   * implicit definition to transform an Iterable to an ExtendedIterable
    */
   implicit def extendIterable[T](xs : GenIterable[T]): ExtendedIterable[T] = new ExtendedIterable(xs)
 
   /**
-   * See the description of the ExtendedIterable object
+   * Additional methods for Iterable objects
    */
   class ExtendedIterable[T](xs: GenIterable[T]) {
 

@@ -1,7 +1,7 @@
 package examples
 
 import org.specs2._
-import specification.{Before, BeforeExample}
+import specification.{Before, BeforeExample, Context, Outside}
 
 /**
  * This specification shows various ways to setup contexts for examples.
@@ -27,6 +27,36 @@ class DefineContextsSpec extends Specification {
       def e1 = this { aNewSystem must_== "a fresh value" }
       def e2 = this { aNewSystem must_== "a fresh value" }
     }
+  }
+
+  /**
+   * This specification uses an implicit context for each example
+   */
+  class BeforeWithImplicitContextSpec extends Specification { def is = sequential^
+    "This is a list of examples" ^
+      "example1" ! { i += 1; i must_== 1 } ^
+      "example2" ! { i += 1; i must_== 1 } ^
+                                           end
+
+    var i = 0
+    implicit val before: Context = new Before { def before = i = 0 }
+
+  }
+
+  /**
+   * This specification uses an implicit Outside context for each example
+   */
+  class OutsideWithImplicitContextSpec extends Specification { def is =
+
+    "This is a list of examples"                                     ^
+      "example1"                                                     ! e1^
+      "example2"                                                     ! e2^
+                                                                     end
+
+    implicit val outside: Outside[Int] = new Outside[Int] { def outside = 1 }
+
+    def e1 = (i: Int) => i must_== 1
+    def e2 = (i: Int) => i must_== 1
   }
 
   /**
@@ -75,5 +105,10 @@ class DefineContextsSpec extends Specification {
 
   def println(s: String) = s // change this definition to see messages in the console
 
-  def is = new BeforeSpec ^ new BeforeMutableSpec ^ new BeforeExampleMutableSpec ^ new BeforeExampleSpec
+  def is = new BeforeSpec ^
+           new BeforeWithImplicitContextSpec ^
+           new OutsideWithImplicitContextSpec ^
+           new BeforeMutableSpec ^
+           new BeforeExampleMutableSpec ^
+           new BeforeExampleSpec
 }

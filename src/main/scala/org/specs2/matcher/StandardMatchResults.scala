@@ -10,6 +10,7 @@ package matcher
 trait StandardMatchResults extends Expectations {
   def ok(m: String) = new MatchSuccess(m, "ko", createExpectable(None))
   def ko(m: String) = new MatchFailure("ok", m, createExpectable(None))
+
   lazy val ok = new MatchSuccess("ok", "ko", createExpectable(None))
   lazy val ko = new MatchFailure("ok", "ko", createExpectable(None))
 }
