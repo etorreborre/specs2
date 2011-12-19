@@ -47,11 +47,13 @@ pollInterval := 1000
 
 logBuffered := false
 
+cancelable := true
+
 testOptions := Seq(Tests.Filter(s =>
   Seq("Spec", "Suite", "Unit", "all").exists(s.endsWith(_)) &&
     ! s.endsWith("FeaturesSpec") ||
     s.contains("UserGuide") || 
-	s.contains("index") ||
+  	s.contains("index") ||
     s.matches("org.specs2.guide.*")))
 
 /** Console */
