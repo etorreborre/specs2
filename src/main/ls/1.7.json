@@ -2,7 +2,7 @@
 {
  "organization":"org.specs2",
  "name":"specs2",
- "version":"1.7-SNAPSHOT",
+ "version":"1.7",
  "description":"specs2",
  "site":"",
  "tags":[],
