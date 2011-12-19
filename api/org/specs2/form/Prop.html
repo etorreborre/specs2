@@ -28,10 +28,7 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The Prop class is a named property which holds:
-  * an expected value
-  * an actual value
-  * a constraint to check if the actual value conforms to the expected one</p><p>This property can be executed and can be inserted in a Form.</p><p>A Prop is meant to be declared as &quot;bound&quot; to an actual value:</p><p>  <code>val customerName = Prop(&quot;Customer name&quot;, person.name)</code></p><p>[the actual value is not evaluated until the Prop is executed]</p><p>Then it can be associated an expected value with the apply method (usually in a Form declaration):</p><p>  <code>customerName(&quot;Bill&quot;)</code></p><p>The actual and the expected values can have different types and the constraint which is
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The Prop class is a named property which holds:</p><ul><li>an expected value</li><li>an actual value</li><li>a constraint to check if the actual value conforms to the expected one</li></ul><p>This property can be executed and can be inserted in a Form.</p><p>A Prop is meant to be declared as &quot;bound&quot; to an actual value:</p><p>  <code>val customerName = Prop(&quot;Customer name&quot;, person.name)</code></p><p>[the actual value is not evaluated until the Prop is executed]</p><p>Then it can be associated an expected value with the apply method (usually in a Form declaration):</p><p>  <code>customerName(&quot;Bill&quot;)</code></p><p>The actual and the expected values can have different types and the constraint which is
 applied to them can be anything returning a result.</p><p>However the Prop companion object provides a method to create a Property with a constraint
 using a beEqualTo matcher:</p><p><code>Prop(&quot;Name&quot;, &quot;Eric&quot;)(&quot;Eric&quot;) must_== Success(&quot;'Eric' is equal to 'Eric'&quot;)</code></p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>

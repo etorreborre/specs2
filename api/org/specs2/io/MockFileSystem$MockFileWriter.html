@@ -30,7 +30,7 @@
       
           <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <span name="org.specs2.io.MockWriter" class="extype">MockWriter</span>, <span name="org.specs2.io.MockOutput" class="extype">MockOutput</span>, <span name="org.specs2.io.Output" class="extype">Output</span>, <span name="java.io.Writer" class="extype">Writer</span>, <span name="java.io.Flushable" class="extype">Flushable</span>, <span name="java.io.Closeable" class="extype">Closeable</span>, <span name="java.lang.Appendable" class="extype">Appendable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <span name="org.specs2.io.MockWriter" class="extype">MockWriter</span>, <span name="org.specs2.io.MockOutput" class="extype">MockOutput</span>, <span name="org.specs2.io.Output" class="extype">Output</span>, <span name="java.io.Writer" class="extype">Writer</span>, <span name="java.io.Flushable" class="extype">Flushable</span>, <span name="java.io.Closeable" class="extype">Closeable</span>, <span name="java.lang.AutoCloseable" class="extype">AutoCloseable</span>, <span name="java.lang.Appendable" class="extype">Appendable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -46,7 +46,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.io.MockFileSystem.MockFileWriter" class="in"><span>MockFileWriter</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.specs2.io.MockWriter" class="in"><span>MockWriter</span></li><li name="org.specs2.io.MockOutput" class="in"><span>MockOutput</span></li><li name="org.specs2.io.Output" class="in"><span>Output</span></li><li name="java.io.Writer" class="in"><span>Writer</span></li><li name="java.io.Flushable" class="in"><span>Flushable</span></li><li name="java.io.Closeable" class="in"><span>Closeable</span></li><li name="java.lang.Appendable" class="in"><span>Appendable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.io.MockFileSystem.MockFileWriter" class="in"><span>MockFileWriter</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.specs2.io.MockWriter" class="in"><span>MockWriter</span></li><li name="org.specs2.io.MockOutput" class="in"><span>MockOutput</span></li><li name="org.specs2.io.Output" class="in"><span>Output</span></li><li name="java.io.Writer" class="in"><span>Writer</span></li><li name="java.io.Flushable" class="in"><span>Flushable</span></li><li name="java.io.Closeable" class="in"><span>Closeable</span></li><li name="java.lang.AutoCloseable" class="in"><span>AutoCloseable</span></li><li name="java.lang.Appendable" class="in"><span>Appendable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -230,7 +230,7 @@
         <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">closes the Writer</p><div class="fullcomment"><div class="comment cmt"><p>closes the Writer</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MockWriter → Writer → Closeable</dd></dl></div>
+      <p class="shortcomment cmt">closes the Writer</p><div class="fullcomment"><div class="comment cmt"><p>closes the Writer</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MockWriter → Writer → Closeable → AutoCloseable</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.MockWriter#closed" data-isabs="false">
       <a id="closed:Boolean"></a>
       <h4 class="signature">
@@ -645,6 +645,8 @@ otherwise it is added to the last message
               <h3>Inherited from <span name="java.io.Flushable" class="extype">Flushable</span></h3>
             </div><div name="java.io.Closeable" class="parent">
               <h3>Inherited from <span name="java.io.Closeable" class="extype">Closeable</span></h3>
+            </div><div name="java.lang.AutoCloseable" class="parent">
+              <h3>Inherited from <span name="java.lang.AutoCloseable" class="extype">AutoCloseable</span></h3>
             </div><div name="java.lang.Appendable" class="parent">
               <h3>Inherited from <span name="java.lang.Appendable" class="extype">Appendable</span></h3>
             </div><div name="scala.AnyRef" class="parent">

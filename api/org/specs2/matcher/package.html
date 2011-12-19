@@ -72,11 +72,11 @@
     </li><li visbl="pub" name="org.specs2.matcher.AndMatch" data-isabs="false">
       <a id="AndMatch:AndMatch[T]"></a>
       <h4 class="signature">
-      <span class="kind">case class</span>
+      <span class="kind">class</span>
       <span class="symbol"> 
         <a href="AndMatch.html"><span class="name">AndMatch</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="m1">m1: MatchResult[T]</span>, <span name="m2">m2: MatchResult[T]</span>)</span><span class="result"> extends MatchResult[T] with Product with Serializable</span>
+        <span class="result"> extends MatchResult[T]</span>
       </span>
       </h4>
       
@@ -378,7 +378,7 @@
       <span class="symbol"> 
         <a href="DataTables.html"><span class="name">DataTables</span></a>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends Expectations</span>
       </span>
       </h4>
       <p class="comment cmt">This trait provides implicit definitions and types to create DataTables.</p>
@@ -1051,6 +1051,29 @@ a match fails
       </span>
       </h4>
       <p class="comment cmt">The <code>StringMatchers</code> trait provides matchers which are applicable to String objects
+</p>
+    </li><li visbl="pub" name="org.specs2.matcher.TerminationMatcher" data-isabs="false">
+      <a id="TerminationMatcher:TerminationMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="TerminationMatcher.html"><span class="name">TerminationMatcher</span></a>
+        <span class="tparams">[<span name="T">-T</span>]</span>
+        <span class="result"> extends Matcher[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.TerminationMatchers" data-isabs="true">
+      <a id="TerminationMatchers:TerminationMatchers"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="TerminationMatchers.html"><span class="name">TerminationMatchers</span></a>
+        
+        <span class="result"> extends TerminationBaseMatchers with TerminationNotMatchers</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait provides matchers to check if a block of code is terminating or not
 </p>
     </li><li visbl="pub" name="org.specs2.matcher.ThrownExpectations" data-isabs="true">
       <a id="ThrownExpectations:ThrownExpectations"></a>

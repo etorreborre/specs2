@@ -29,10 +29,10 @@
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait reduces a list of ExecutedFragments to a list of PrintLines.</p><p>Each line contains:
-* A description (text or example description)
-* A level, to work out the indenting
-* Some statistics, to print on SpecEnd
-* The current arguments, to control the conditional printing of text, statistics,...</p></div><div class="toggleContainer block">
+- A description (text or example description)
+- A level, to work out the indenting
+- Some statistics, to print on SpecEnd
+- The current arguments, to control the conditional printing of text, statistics,...</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
@@ -98,17 +98,6 @@
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines" data-isabs="false">
-      <a id="PrintLines:PrintLines"></a>
-      <h4 class="signature">
-      <span class="kind">case class</span>
-      <span class="symbol"> 
-        <a href="TextPrinter$PrintLines.html"><span class="name">PrintLines</span></a>
-        
-        <span class="params">(<span name="lines">lines: List[PrintLine]</span>)</span><span class="result"> extends Product with Serializable</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintOther" data-isabs="false">
       <a id="PrintOther:PrintOther"></a>
       <h4 class="signature">
@@ -161,6 +150,17 @@
         <a href="TextPrinter$PrintText.html"><span class="name">PrintText</span></a>
         
         <span class="params">(<span name="t">t: ExecutedText</span>)</span><span class="result"> extends Print with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#ToPrint" data-isabs="false">
+      <a id="ToPrint:()"></a>
+      <h4 class="signature">
+      <span class="kind">type</span>
+      <span class="symbol"> 
+        <span class="name">ToPrint</span>
+        
+        <span class="result"> = (((Seq[<a name="org.specs2.reporter.TextPrinter.Print" class="extype" href="TextPrinter$Print.html">Print</a>], <span name="org.specs2.reporter.Statistics.SpecsStatistics" class="extype">SpecsStatistics</span>), <span name="org.specs2.reporter.Levels" class="extype">Levels</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]), <span name="org.specs2.reporter.SpecsArguments" class="extype">SpecsArguments</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>])</span>
       </span>
       </h4>
       
@@ -226,6 +226,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#IOReducer" data-isabs="false">
+      <a id="IOReducer(ResultOutput)(Arguments):Reducer[(), ()]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">IOReducer</span>
+        
+        <span class="params">(<span name="output">output: <a name="org.specs2.reporter.ResultOutput" class="extype" href="ResultOutput.html">ResultOutput</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[(), ()]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintReducer" data-isabs="false">
       <a id="PrintReducer:PrintReducer"></a>
       <h4 class="signature">
@@ -233,7 +244,7 @@
       <span class="symbol"> 
         <a href="TextPrinter$PrintReducer$.html"><span class="name">PrintReducer</span></a>
         
-        <span class="result"> extends Reducer[ExecutedFragment, List[Print]]</span>
+        <span class="result"> extends Reducer[ExecutedFragment, Seq[Print]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
@@ -298,17 +309,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#flatten" data-isabs="false">
-      <a id="flatten((((List[Print], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment]))(Arguments):List[PrintLine]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">flatten</span>
-        
-        <span class="params">(<span name="results">results: (((List[<a name="org.specs2.reporter.TextPrinter.Print" class="extype" href="TextPrinter$Print.html">Print</a>], <span name="org.specs2.reporter.Statistics.SpecStats" class="extype">SpecStats</span>), <span name="org.specs2.reporter.Levels" class="extype">Levels</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]), <span name="org.specs2.reporter.SpecsArguments" class="extype">SpecsArguments</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>])</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: List[<a name="org.specs2.reporter.TextPrinter.PrintLine" class="extype" href="TextPrinter$PrintLine.html">PrintLine</a>]</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -375,36 +375,14 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#output" data-isabs="false">
-      <a id="output:ResultOutput"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">output</span>
-        
-        <span class="result">: <a name="org.specs2.reporter.ResultOutput" class="extype" href="ResultOutput.html">ResultOutput</a></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#print" data-isabs="false">
-      <a id="print(SpecificationStructure,Seq[ExecutedFragment])(Arguments):Unit"></a>
+      <a id="print(SpecName,Seq[ExecutedFragment])(Arguments):(((Seq[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">print</span>
         
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#printLines" data-isabs="false">
-      <a id="printLines(Seq[ExecutedFragment])(Arguments):PrintLines"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">printLines</span>
-        
-        <span class="params">(<span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <a name="org.specs2.reporter.TextPrinter.PrintLines" class="extype" href="TextPrinter$PrintLines.html">PrintLines</a></span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (((Seq[<a name="org.specs2.reporter.TextPrinter.Print" class="extype" href="TextPrinter$Print.html">Print</a>], <span name="org.specs2.reporter.Statistics.SpecsStatistics" class="extype">SpecsStatistics</span>), <span name="org.specs2.reporter.Levels" class="extype">Levels</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]), <span name="org.specs2.reporter.SpecsArguments" class="extype">SpecsArguments</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>])</span>
       </span>
       </h4>
       
@@ -419,6 +397,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#textOutput" data-isabs="false">
+      <a id="textOutput:ResultOutput"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">textOutput</span>
+        
+        <span class="result">: <a name="org.specs2.reporter.ResultOutput" class="extype" href="ResultOutput.html">ResultOutput</a></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">

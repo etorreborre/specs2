@@ -163,6 +163,18 @@ Output:</p>
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification" data-isabs="false">
+      <a id="ExecutableSpecification:ExecutableSpecification"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="ExecutableSpecification.html"><span class="name">ExecutableSpecification</span></a>
+        
+        <span class="params">(<span name="name">name: SpecName</span>, <span name="arguments">arguments: Arguments</span>, <span name="fs">fs: Seq[FragmentSeq]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">this case class transports the fragments to execute, grouped in sequences of examples which can be executed concurrently
+</p>
     </li><li visbl="pub" name="org.specs2.reporter.FragmentSeq" data-isabs="false">
       <a id="FragmentSeq:FragmentSeq"></a>
       <h4 class="signature">
@@ -193,11 +205,33 @@ Output:</p>
       <span class="symbol"> 
         <a href="HtmlExporting.html"><span class="name">HtmlExporting</span></a>
         
-        <span class="result"> extends Exporting with HtmlPrinter</span>
+        <span class="result"> extends Exporting with HtmlPrinter with HtmlFileWriter</span>
       </span>
       </h4>
       <p class="comment cmt">Trait for exporting the specification as Html files
 </p>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlFile" data-isabs="false">
+      <a id="HtmlFile:HtmlFile"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="HtmlFile.html"><span class="name">HtmlFile</span></a>
+        
+        <span class="params">(<span name="url">url: String</span>, <span name="xml">xml: NodeSeq</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlFileWriter" data-isabs="true">
+      <a id="HtmlFileWriter:HtmlFileWriter"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="HtmlFileWriter.html"><span class="name">HtmlFileWriter</span></a>
+        
+        <span class="result"> extends OutputDir</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter" data-isabs="true">
       <a id="HtmlPrinter:HtmlPrinter"></a>
       <h4 class="signature">
@@ -205,10 +239,24 @@ Output:</p>
       <span class="symbol"> 
         <a href="HtmlPrinter.html"><span class="name">HtmlPrinter</span></a>
         
-        <span class="result"> extends OutputDir</span>
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       <p class="comment cmt">The Html printer is used to create an Html report of an executed specification.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlReportOutput" data-isabs="true">
+      <a id="HtmlReportOutput:HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="HtmlReportOutput.html"><span class="name">HtmlReportOutput</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait defines how the specification elements should be translated as xhtml
+An implementation of that trait must accumulate the results and return the created xhmtl
+with the xml method
+</p>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlReporter" data-isabs="true">
       <a id="HtmlReporter:HtmlReporter"></a>
       <h4 class="signature">
@@ -451,6 +499,18 @@ at the end of the specification
       </h4>
       <p class="comment cmt">Implementation of the ResultOutput trait as Text
 </p>
+    </li><li visbl="pub" name="org.specs2.reporter.TreeToc" data-isabs="false">
+      <a id="TreeToc:TreeToc"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="TreeToc.html"><span class="name">TreeToc</span></a>
+        
+        <span class="params">(<span name="rootCode">rootCode: Int</span>, <span name="toc">toc: NodeSeq</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Table of contents, represented as a NodeSeq
+</p>
     </li></ol>
             </div>
         
@@ -510,6 +570,28 @@ at the end of the specification
         <a href="HandlerEvents$.html"><span class="name">HandlerEvents</span></a>
         
         <span class="result"> extends HandlerEvents</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlExporting" data-isabs="false">
+      <a id="HtmlExporting:HtmlExporting"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="HtmlExporting$.html"><span class="name">HtmlExporting</span></a>
+        
+        <span class="result"> extends HtmlExporting</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlExporting" data-isabs="false">
+      <a id="JUnitXmlExporting:JUnitXmlExporting"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="JUnitXmlExporting$.html"><span class="name">JUnitXmlExporting</span></a>
+        
+        <span class="result"> extends JUnitXmlExporting</span>
       </span>
       </h4>
       

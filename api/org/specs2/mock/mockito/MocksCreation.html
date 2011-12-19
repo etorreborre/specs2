@@ -24,14 +24,14 @@
       <span class="symbol"> 
         <span class="name">MocksCreation</span>
         
-        <span class="result"> extends <a name="org.specs2.mock.mockito.TheMockitoMocker" class="extype" href="TheMockitoMocker.html">TheMockitoMocker</a></span>
+        <span class="result"> extends <a name="org.specs2.mock.mockito.TheMockitoMocker" class="extype" href="TheMockitoMocker.html">TheMockitoMocker</a> with <a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a></span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides methods to create mocks and spies.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.mock.mockito.TheMockitoMocker" class="extype" href="TheMockitoMocker.html">TheMockitoMocker</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a>, <a name="org.specs2.mock.mockito.TheMockitoMocker" class="extype" href="TheMockitoMocker.html">TheMockitoMocker</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a name="org.specs2.mock.Mockito" class="extype" href="../Mockito.html">Mockito</a>, <a name="org.specs2.mock.mockito.MockitoStubs" class="extype" href="MockitoStubs.html">MockitoStubs</a></div>
@@ -50,7 +50,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.mock.mockito.MocksCreation" class="in"><span>MocksCreation</span></li><li name="org.specs2.mock.mockito.TheMockitoMocker" class="in"><span>TheMockitoMocker</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.mock.mockito.MocksCreation" class="in"><span>MocksCreation</span></li><li name="org.specs2.reflect.ClassesOf" class="in"><span>ClassesOf</span></li><li name="org.specs2.mock.mockito.TheMockitoMocker" class="in"><span>TheMockitoMocker</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -62,17 +62,17 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation.NamedMock" data-isabs="false">
-      <a id="NamedMock:NamedMock[T]"></a>
+              <ol><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation.MockProperty" data-isabs="false">
+      <a id="MockProperty:MockProperty[T]"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
-        <a href="MocksCreation$NamedMock.html"><span class="name">NamedMock</span></a>
+        <a href="MocksCreation$MockProperty.html"><span class="name">MockProperty</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends AnyRef</span>
+        <span class="params">(<span name="p">p: Property[T]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">support class to create a mock object with a name</p>
+      
     </li></ol>
             </div>
         
@@ -135,6 +135,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation#anyToMockProperty" data-isabs="false">
+      <a id="anyToMockProperty[T](⇒ T):MockProperty[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">anyToMockProperty</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.mock.mockito.MocksCreation.MockProperty" class="extype" href="MocksCreation$MockProperty.html">MockProperty</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this implicit helps with defining optional values for mockito settings
+</p><div class="fullcomment"><div class="comment cmt"><p>this implicit helps with defining optional values for mockito settings
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -146,6 +159,50 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reflect.ClassesOf#classesOf" data-isabs="false">
+      <a id="classesOf[T1, T2, T3, T4, T5](ClassManifest[T1],ClassManifest[T2],ClassManifest[T3],ClassManifest[T4],ClassManifest[T5]):Seq[java.lang.Class[_ &gt;: _$1 with _$1 with _$1 with _$1 with _$1]] forSome { type _$1; type _$1; type _$1; type _$1; type _$1 }"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">classesOf</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T1]</span>, <span name="arg1">arg1: ClassManifest[T2]</span>, <span name="arg2">arg2: ClassManifest[T3]</span>, <span name="arg3">arg3: ClassManifest[T4]</span>, <span name="arg4">arg4: ClassManifest[T5]</span>)</span><span class="result">: Seq[java.lang.Class[_ &gt;: _$1 with _$1 with _$1 with _$1 with _$1]] forSome { type _$1; type _$1; type _$1; type _$1; type _$1 }</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reflect.ClassesOf#classesOf" data-isabs="false">
+      <a id="classesOf[T1, T2, T3, T4](ClassManifest[T1],ClassManifest[T2],ClassManifest[T3],ClassManifest[T4]):Seq[java.lang.Class[_ &gt;: _$1 with _$1 with _$1 with _$1]] forSome { type _$1; type _$1; type _$1; type _$1 }"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">classesOf</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T1]</span>, <span name="arg1">arg1: ClassManifest[T2]</span>, <span name="arg2">arg2: ClassManifest[T3]</span>, <span name="arg3">arg3: ClassManifest[T4]</span>)</span><span class="result">: Seq[java.lang.Class[_ &gt;: _$1 with _$1 with _$1 with _$1]] forSome { type _$1; type _$1; type _$1; type _$1 }</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reflect.ClassesOf#classesOf" data-isabs="false">
+      <a id="classesOf[T1, T2, T3](ClassManifest[T1],ClassManifest[T2],ClassManifest[T3]):Seq[java.lang.Class[_ &gt;: _$1 with _$1 with _$1]] forSome { type _$1; type _$1; type _$1 }"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">classesOf</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T1]</span>, <span name="arg1">arg1: ClassManifest[T2]</span>, <span name="arg2">arg2: ClassManifest[T3]</span>)</span><span class="result">: Seq[java.lang.Class[_ &gt;: _$1 with _$1 with _$1]] forSome { type _$1; type _$1; type _$1 }</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reflect.ClassesOf#classesOf" data-isabs="false">
+      <a id="classesOf[T1, T2](ClassManifest[T1],ClassManifest[T2]):Seq[java.lang.Class[_ &gt;: _$1 with _$1]] forSome { type _$1; type _$1 }"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">classesOf</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T1]</span>, <span name="arg1">arg1: ClassManifest[T2]</span>)</span><span class="result">: Seq[java.lang.Class[_ &gt;: _$1 with _$1]] forSome { type _$1; type _$1 }</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -230,6 +287,18 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation#mock" data-isabs="false">
+      <a id="mock[T](MockSettings)(ClassManifest[T]):T"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">mock</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="settings">settings: <span name="org.mockito.MockSettings" class="extype">MockSettings</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T]</span>)</span><span class="result">: T</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a mock object with some specific settings: val m = mock[java.</p><div class="fullcomment"><div class="comment cmt"><p>create a mock object with some specific settings: val m = mock[java.util.List[String]](settings)
+</p></div></div>
+    </li><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation#mock" data-isabs="false">
       <a id="mock[T](ClassManifest[T]):T"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -253,18 +322,21 @@
       </h4>
       <p class="shortcomment cmt">create a mock object with a name: val m = mockAs[java.</p><div class="fullcomment"><div class="comment cmt"><p>create a mock object with a name: val m = mockAs[java.util.List[String]](&quot;name&quot;)
 </p></div></div>
-    </li><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation#mockToAs" data-isabs="false">
-      <a id="mockToAs[T](⇒ T)(ClassManifest[T]):NamedMock[T]"></a>
+    </li><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation#mocked" data-isabs="false">
+      <a id="mocked[T](⇒ T)(ClassManifest[T]):Mocked[T]"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
-        <span class="name">mockToAs</span>
+        <span class="name">mocked</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T]</span>)</span><span class="result">: <a name="org.specs2.mock.mockito.MocksCreation.NamedMock" class="extype" href="MocksCreation$NamedMock.html">NamedMock</a>[T]</span>
+        <span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T]</span>)</span><span class="result">: <span name="org.specs2.mock.mockito.MocksCreation.Mocked" class="extype">Mocked</span>[T]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">implicit allowing the following syntax for a named mock: val m = mock[java.</p><div class="fullcomment"><div class="comment cmt"><p>implicit allowing the following syntax for a named mock: val m = mock[java.util.List[String]],as(&quot;name&quot;)
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
+      <p class="shortcomment cmt">implicit allowing to define the mock settings with a nice syntax:</p><div class="fullcomment"><div class="comment cmt"><p>implicit allowing to define the mock settings with a nice syntax:</p><ul><li>named mock: val m = mock[java.util.List[String]].as(&quot;name&quot;)</li><li>smart mock: val m = mock[java.util.List[String]].smart</li><li>other settings: val m = mock[java.util.List[String]].
+       settings(name = &quot;list&quot;,
+                defaultReturn = 10,
+                 extraInterfaces = classesOf[Cloneable, Serializable])
+</li></ul></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -397,7 +469,9 @@ doReturn("one").when(s).get(0) // instead of s.get(0) returns "one" which would 
 
         
 
-        <div name="org.specs2.mock.mockito.TheMockitoMocker" class="parent">
+        <div name="org.specs2.reflect.ClassesOf" class="parent">
+              <h3>Inherited from <a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a></h3>
+            </div><div name="org.specs2.mock.mockito.TheMockitoMocker" class="parent">
               <h3>Inherited from <a name="org.specs2.mock.mockito.TheMockitoMocker" class="extype" href="TheMockitoMocker.html">TheMockitoMocker</a></h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>

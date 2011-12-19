@@ -24,13 +24,13 @@
       <span class="symbol"> 
         <span class="name">HtmlReducer</span>
         
-        <span class="result"> extends <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, List[<span name="org.specs2.reporter.Html" class="extype">Html</span>]]</span>
+        <span class="result"> extends <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]]</span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, List[<span name="org.specs2.reporter.Html" class="extype">Html</span>]], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -96,13 +96,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.internal.scalaz.Reducer#&amp;&amp;&amp;" data-isabs="false">
-      <a id="&amp;&amp;&amp;[N](Reducer[ExecutedFragment, N]):Reducer[ExecutedFragment, (List[Html], N)]"></a>
+      <a id="&amp;&amp;&amp;[N](Reducer[ExecutedFragment, N]):Reducer[ExecutedFragment, (Seq[HtmlLine], N)]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">&amp;&amp;&amp;</span>
         <span class="tparams">[<span name="N">N</span>]</span>
-        <span class="params">(<span name="r">r: <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, N]</span>)</span><span class="result">: <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, (List[<span name="org.specs2.reporter.Html" class="extype">Html</span>], N)]</span>
+        <span class="params">(<span name="r">r: <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, N]</span>)</span><span class="result">: <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, (Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>], N)]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Reducer</dd></dl></div>
@@ -154,13 +154,13 @@
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.internal.scalaz.Reducer#cons" data-isabs="false">
-      <a id="cons(ExecutedFragment,List[Html]):List[Html]"></a>
+      <a id="cons(ExecutedFragment,Seq[HtmlLine]):Seq[HtmlLine]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">cons</span>
         
-        <span class="params">(<span name="c">c: <a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a></span>, <span name="m">m: List[<span name="org.specs2.reporter.Html" class="extype">Html</span>]</span>)</span><span class="result">: List[<span name="org.specs2.reporter.Html" class="extype">Html</span>]</span>
+        <span class="params">(<span name="c">c: <a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a></span>, <span name="m">m: Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]</span>)</span><span class="result">: Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Reducer</dd></dl></div>
@@ -234,13 +234,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.internal.scalaz.Reducer#monoid" data-isabs="false">
-      <a id="monoid:Monoid[List[Html]]"></a>
+      <a id="monoid:Monoid[Seq[HtmlLine]]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">monoid</span>
         
-        <span class="result">: <span name="org.specs2.internal.scalaz.Monoid" class="extype">Monoid</span>[List[<span name="org.specs2.reporter.Html" class="extype">Html</span>]]</span>
+        <span class="result">: <span name="org.specs2.internal.scalaz.Monoid" class="extype">Monoid</span>[Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Reducer</dd></dl></div>
@@ -278,24 +278,24 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter.HtmlReducer#print" data-isabs="false">
-      <a id="print(ExecutedFragment):Product with Serializable with Html"></a>
+      <a id="print(ExecutedFragment):Product with Serializable with HtmlLine { def set(stats: org.specs2.specification.Stats,level: Int,args: org.specs2.main.Arguments): Product with Serializable with org.specs2.reporter.HtmlLine }"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">print</span>
         
-        <span class="params">(<span name="fragment">fragment: <a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a></span>)</span><span class="result">: <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span> with <span name="org.specs2.reporter.Html" class="extype">Html</span></span>
+        <span class="params">(<span name="fragment">fragment: <a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a></span>)</span><span class="result">: <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span> with <span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span> { def set(stats: org.specs2.specification.Stats,level: Int,args: org.specs2.main.Arguments): Product with Serializable with org.specs2.reporter.HtmlLine }</span>
       </span>
       </h4>
       <p class="shortcomment cmt">print an ExecutedFragment and its associated statistics</p>
     </li><li visbl="pub" name="org.specs2.internal.scalaz.Reducer#snoc" data-isabs="false">
-      <a id="snoc(List[Html],ExecutedFragment):List[Html]"></a>
+      <a id="snoc(Seq[HtmlLine],ExecutedFragment):Seq[HtmlLine]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">snoc</span>
         
-        <span class="params">(<span name="m">m: List[<span name="org.specs2.reporter.Html" class="extype">Html</span>]</span>, <span name="c">c: <a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a></span>)</span><span class="result">: List[<span name="org.specs2.reporter.Html" class="extype">Html</span>]</span>
+        <span class="params">(<span name="m">m: Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]</span>, <span name="c">c: <a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a></span>)</span><span class="result">: Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Reducer</dd></dl></div>
@@ -322,13 +322,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter.HtmlReducer#unit" data-isabs="false">
-      <a id="unit(ExecutedFragment):List[Product with Serializable with Html]"></a>
+      <a id="unit(ExecutedFragment):Seq[Product with Serializable with HtmlLine { def set(stats: org.specs2.specification.Stats,level: Int,args: org.specs2.main.Arguments): Product with Serializable with org.specs2.reporter.HtmlLine }]"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">unit</span>
         
-        <span class="params">(<span name="fragment">fragment: <a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a></span>)</span><span class="result">: <span name="scala.collection.immutable.List" class="extype">List</span>[<span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span> with <span name="org.specs2.reporter.Html" class="extype">Html</span>]</span>
+        <span class="params">(<span name="fragment">fragment: <a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a></span>)</span><span class="result">: <span name="scala.collection.Seq" class="extype">Seq</span>[<span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span> with <span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span> { def set(stats: org.specs2.specification.Stats,level: Int,args: org.specs2.main.Arguments): Product with Serializable with org.specs2.reporter.HtmlLine }]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.reporter.HtmlPrinter.HtmlReducer" class="extype" href="">HtmlReducer</a> → Reducer</dd></dl></div>
@@ -380,7 +380,7 @@
         
 
         <div name="org.specs2.internal.scalaz.Reducer" class="parent">
-              <h3>Inherited from <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, List[<span name="org.specs2.reporter.Html" class="extype">Html</span>]]</h3>
+              <h3>Inherited from <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>, Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]]</h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

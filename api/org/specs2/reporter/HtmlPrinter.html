@@ -24,19 +24,19 @@
       <span class="symbol"> 
         <span class="name">HtmlPrinter</span>
         
-        <span class="result"> extends <span name="org.specs2.reporter.OutputDir" class="extype">OutputDir</span></span>
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The Html printer is used to create an Html report of an executed specification.</p><p>To do this, it uses a reducer to prepare print blocks with:</p><p>* the text to print
-* the indentation level
-* the statistics
-* the current arguments to use</p></div><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The Html printer is used to create an Html report of an executed specification.</p><p>To do this, it uses a reducer to prepare print blocks with:</p><p>- the text to print
+- the indentation level
+- the statistics
+- the current arguments to use</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="org.specs2.reporter.OutputDir" class="extype">OutputDir</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.reporter.HtmlExporting" class="extype" href="HtmlExporting.html">HtmlExporting</a>, <a name="org.specs2.reporter.HtmlReporter" class="extype" href="HtmlReporter.html">HtmlReporter</a></div>
+          <div class="subClasses hiddenContent"><a name="org.specs2.reporter.HtmlExporting" class="extype" href="HtmlExporting.html">HtmlExporting</a>, <a name="org.specs2.reporter.HtmlExporting" class="extype" href="HtmlExporting$.html">HtmlExporting</a>, <a name="org.specs2.reporter.HtmlReporter" class="extype" href="HtmlReporter.html">HtmlReporter</a></div>
         </div></div>
         
 
@@ -52,7 +52,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.reporter.HtmlPrinter" class="in"><span>HtmlPrinter</span></li><li name="org.specs2.reporter.OutputDir" class="in"><span>OutputDir</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.reporter.HtmlPrinter" class="in"><span>HtmlPrinter</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -130,7 +130,7 @@
       <span class="symbol"> 
         <a href="HtmlPrinter$HtmlReducer$.html"><span class="name">HtmlReducer</span></a>
         
-        <span class="result"> extends Reducer[ExecutedFragment, List[Html]]</span>
+        <span class="result"> extends Reducer[ExecutedFragment, Seq[HtmlLine]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
@@ -159,17 +159,17 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#copyResources" data-isabs="false">
-      <a id="copyResources():Unit"></a>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#createToc" data-isabs="false">
+      <a id="createToc(Tree[HtmlLinesFile])(Arguments):TreeToc"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">copyResources</span>
+        <span class="name">createToc</span>
         
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="params">(<span name="htmlFiles">htmlFiles: <span name="org.specs2.internal.scalaz.Tree" class="extype">Tree</span>[<span name="org.specs2.reporter.HtmlLinesFile" class="extype">HtmlLinesFile</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <a name="org.specs2.reporter.TreeToc" class="extype" href="TreeToc.html">TreeToc</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">copy css and images file to the output directory</p>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a global toc</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -272,41 +272,62 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#output" data-isabs="false">
+      <a id="output:HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">output</span>
+        
+        <span class="result">: <a name="org.specs2.reporter.HtmlReportOutput" class="extype" href="HtmlReportOutput.html">HtmlReportOutput</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a new HtmlReportOutput object creating html elements</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#print" data-isabs="false">
-      <a id="print(SpecificationStructure,Seq[ExecutedFragment])(Arguments):Unit"></a>
+      <a id="print(ExecutedSpecification)(Arguments):Stream[HtmlFile]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">print</span>
         
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="params">(<span name="spec">spec: <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="scala.collection.immutable.Stream" class="extype">Stream</span>[<a name="org.specs2.reporter.HtmlFile" class="extype" href="HtmlFile.html">HtmlFile</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">print a sequence of executed fragments for a given specification class into a html
-file
+      <p class="shortcomment cmt">print a sequence of executed fragments for a given specification class into a html file
 the name of the html file is the full class name
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#printHtml" data-isabs="false">
-      <a id="printHtml(HtmlResultOutput,HtmlLines,NodeSeq)(Arguments):HtmlResultOutput"></a>
+      <a id="printHtml(⇒ HtmlReportOutput,HtmlLinesFile,NodeSeq):NodeSeq"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">printHtml</span>
         
-        <span class="params">(<span name="output">output: <span name="org.specs2.reporter.HtmlResultOutput" class="extype">HtmlResultOutput</span></span>, <span name="lines">lines: <span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span></span>, <span name="globalToc">globalToc: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="org.specs2.reporter.HtmlResultOutput" class="extype">HtmlResultOutput</span></span>
+        <span class="params">(<span name="output">output: ⇒ <a name="org.specs2.reporter.HtmlReportOutput" class="extype" href="HtmlReportOutput.html">HtmlReportOutput</a></span>, <span name="file">file: <span name="org.specs2.reporter.HtmlLinesFile" class="extype">HtmlLinesFile</span></span>, <span name="toc">toc: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an HtmlResultOutput object containing all the html corresponding to the
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an HtmlReportOutput object containing all the html corresponding to the
         html lines to print
 </p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#printHtml" data-isabs="false">
+      <a id="printHtml(TreeToc,⇒ HtmlReportOutput):(HtmlLinesFile) ⇒ HtmlFile"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">printHtml</span>
+        
+        <span class="params">(<span name="toc">toc: <a name="org.specs2.reporter.TreeToc" class="extype" href="TreeToc.html">TreeToc</a></span>, <span name="output">output: ⇒ <a name="org.specs2.reporter.HtmlReportOutput" class="extype" href="HtmlReportOutput.html">HtmlReportOutput</a></span>)</span><span class="result">: (<span name="org.specs2.reporter.HtmlLinesFile" class="extype">HtmlLinesFile</span>) ⇒ <a name="org.specs2.reporter.HtmlFile" class="extype" href="HtmlFile.html">HtmlFile</a></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#reduce" data-isabs="false">
-      <a id="reduce(SpecName,Seq[ExecutedFragment],HtmlLink):Tree[HtmlLines]"></a>
+      <a id="reduce(ExecutedSpecification):Seq[HtmlLine]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">reduce</span>
         
-        <span class="params">(<span name="specification">specification: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>, <span name="parentLink">parentLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="../specification/HtmlLink.html">HtmlLink</a></span>)</span><span class="result">: <span name="org.specs2.internal.scalaz.Tree" class="extype">Tree</span>[<span name="org.specs2.reporter.HtmlLines" class="extype">HtmlLines</span>]</span>
+        <span class="params">(<span name="spec">spec: <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>)</span><span class="result">: Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
@@ -314,17 +335,17 @@ into a single block that will be reported on a different html page</p><div class
 into a single block that will be reported on a different html page</p><p>This works by using a List of HtmlLines as a stack where the head of the list is the current block of lines
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the HtmlLines to print
 </p></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.OutputDir#reportPath" data-isabs="false">
-      <a id="reportPath(String):String"></a>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter#sortByFile" data-isabs="false">
+      <a id="sortByFile(SpecName,HtmlLink):(Seq[HtmlLine]) ⇒ Tree[HtmlLinesFile]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">reportPath</span>
+        <span class="name">sortByFile</span>
         
-        <span class="params">(<span name="url">url: String</span>)</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+        <span class="params">(<span name="specName">specName: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="parentLink">parentLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="../specification/HtmlLink.html">HtmlLink</a></span>)</span><span class="result">: (Seq[<span name="org.specs2.reporter.HtmlLine" class="extype">HtmlLine</span>]) ⇒ <span name="org.specs2.internal.scalaz.Tree" class="extype">Tree</span>[<span name="org.specs2.reporter.HtmlLinesFile" class="extype">HtmlLinesFile</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the file path for the html output</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>OutputDir</dd></dl></div>
+      
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -394,9 +415,7 @@ into a single block that will be reported on a different html page</p><p>This wo
 
         
 
-        <div name="org.specs2.reporter.OutputDir" class="parent">
-              <h3>Inherited from <span name="org.specs2.reporter.OutputDir" class="extype">OutputDir</span></h3>
-            </div><div name="scala.AnyRef" class="parent">
+        <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

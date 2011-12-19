@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.reporter.TextPrinter.PrintLines</title>
+          <title>org.specs2.reporter.ExecutableSpecification</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -15,20 +15,21 @@
         <body class="type">
       <div id="definition">
         <img src="../../../lib/class_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.reporter" class="extype" href="package.html">reporter</a>.<a name="org.specs2.reporter.TextPrinter" class="extype" href="TextPrinter.html">TextPrinter</a></p>
-        <h1>PrintLines</h1>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.reporter" class="extype" href="package.html">reporter</a></p>
+        <h1>ExecutableSpecification</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">case class</span>
       <span class="symbol"> 
-        <span class="name">PrintLines</span>
+        <span class="name">ExecutableSpecification</span>
         
-        <span class="params">(<span name="lines">lines: List[<a name="org.specs2.reporter.TextPrinter.PrintLine" class="extype" href="TextPrinter$PrintLine.html">PrintLine</a>]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>this case class transports the fragments to execute, grouped in sequences of examples which can be executed concurrently
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -46,7 +47,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.reporter.TextPrinter.PrintLines" class="in"><span>PrintLines</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.reporter.ExecutableSpecification" class="in"><span>ExecutableSpecification</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -56,14 +57,14 @@
 
         <div class="members" id="constructors">
               <h3>Instance Constructors</h3>
-              <ol><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#this" data-isabs="false">
-      <a id="this:PrintLines"></a>
+              <ol><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#this" data-isabs="false">
+      <a id="this:ExecutableSpecification"></a>
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol"> 
-        <span class="name">PrintLines</span>
+        <span class="name">ExecutableSpecification</span>
         
-        <span class="params">(<span name="lines">lines: List[<a name="org.specs2.reporter.TextPrinter.PrintLine" class="extype" href="TextPrinter$PrintLine.html">PrintLine</a>]</span>)</span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>)</span>
       </span>
       </h4>
       
@@ -131,6 +132,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#arguments" data-isabs="false">
+      <a id="arguments:Arguments"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">arguments</span>
+        
+        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -142,7 +154,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#canEqual" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#canEqual" data-isabs="false">
       <a id="canEqual(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -152,7 +164,7 @@
         <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter.PrintLines" class="extype" href="">PrintLines</a> → Equals</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="">ExecutableSpecification</a> → Equals</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -178,7 +190,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#equals" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -188,7 +200,7 @@
         <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter.PrintLines" class="extype" href="">PrintLines</a> → Equals → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="">ExecutableSpecification</a> → Equals → AnyRef → Any</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -203,6 +215,17 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#fs" data-isabs="false">
+      <a id="fs:Seq[FragmentSeq]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">fs</span>
+        
+        <span class="result">: Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -214,7 +237,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#hashCode" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -224,7 +247,7 @@
         <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter.PrintLines" class="extype" href="">PrintLines</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="">ExecutableSpecification</a> → AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -236,14 +259,14 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#lines" data-isabs="false">
-      <a id="lines:List[PrintLine]"></a>
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#name" data-isabs="false">
+      <a id="name:SpecName"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">lines</span>
+        <span class="name">name</span>
         
-        <span class="result">: List[<a name="org.specs2.reporter.TextPrinter.PrintLine" class="extype" href="TextPrinter$PrintLine.html">PrintLine</a>]</span>
+        <span class="result">: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>
       </span>
       </h4>
       
@@ -280,18 +303,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#print" data-isabs="false">
-      <a id="print(ResultOutput):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">print</span>
-        
-        <span class="params">(<span class="implicit">implicit </span><span name="out">out: <a name="org.specs2.reporter.ResultOutput" class="extype" href="ResultOutput.html">ResultOutput</a></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#productArity" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#productArity" data-isabs="false">
       <a id="productArity:Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -301,8 +313,8 @@
         <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter.PrintLines" class="extype" href="">PrintLines</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#productElement" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="">ExecutableSpecification</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#productElement" data-isabs="false">
       <a id="productElement(Int):Any"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -312,7 +324,7 @@
         <span class="params">(<span name="arg0">arg0: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Any" class="extype">Any</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter.PrintLines" class="extype" href="">PrintLines</a> → Product</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="">ExecutableSpecification</a> → Product</dd></dl></div>
     </li><li visbl="pub" name="scala.Product#productIterator" data-isabs="false">
       <a id="productIterator:Iterator[Any]"></a>
       <h4 class="signature">
@@ -324,7 +336,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#productPrefix" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#productPrefix" data-isabs="false">
       <a id="productPrefix:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -334,7 +346,7 @@
         <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter.PrintLines" class="extype" href="">PrintLines</a> → Product</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="">ExecutableSpecification</a> → Product</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -346,7 +358,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines#toString" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -356,7 +368,7 @@
         <span class="params">()</span><span class="result">: String</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter.PrintLines" class="extype" href="">PrintLines</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="">ExecutableSpecification</a> → AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">

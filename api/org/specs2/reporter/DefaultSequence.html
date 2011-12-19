@@ -274,13 +274,13 @@ Among the constraints to respect, any Step Fragment must be executed before any 
 so that &quot;first&quot; and &quot;last&quot; actions are executed properly in a Specification</p><p>If the arguments specify that the specification is sequential, then each fragment will be executed individually
 </p></div></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSequence#sequence" data-isabs="false">
-      <a id="sequence(Arguments):(Seq[Fragment]) ⇒ Seq[FragmentSeq]"></a>
+      <a id="sequence(Arguments):(SpecificationStructure) ⇒ ExecutableSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">sequence</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]) ⇒ Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>) ⇒ <a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="ExecutableSpecification.html">ExecutableSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">sequence function returning an ordered seq of seq of Fragments</p>

@@ -119,6 +119,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.mock.MockitoMocker#answer" data-isabs="false">
+      <a id="answer[A]((InvocationOnMock) ⇒ A):Answer[A]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">answer</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="f">f: (<span name="org.mockito.invocation.InvocationOnMock" class="extype">InvocationOnMock</span>) ⇒ A</span>)</span><span class="result">: <span name="org.mockito.stubbing.Answer" class="extype">Answer</span>[A]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.mock.MockitoMocker#answer" data-isabs="false">
+      <a id="answer[A](A):Answer[A]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">answer</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="a">a: A</span>)</span><span class="result">: <span name="org.mockito.stubbing.Answer" class="extype">Answer</span>[A]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.mock.MockitoMocker#any" data-isabs="false">
       <a id="any[T](ClassManifest[T]):T"></a>
       <h4 class="signature">
@@ -269,24 +291,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.mock.MockitoMocker#mock" data-isabs="false">
-      <a id="mock[T, A](ClassManifest[T],Answer[A]):T"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">mock</span>
-        <span class="tparams">[<span name="T">T</span>, <span name="A">A</span>]</span>
-        <span class="params">(<span class="implicit">implicit </span><span name="m">m: ClassManifest[T]</span>, <span name="a">a: <span name="org.mockito.stubbing.Answer" class="extype">Answer</span>[A]</span>)</span><span class="result">: T</span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.specs2.mock.MockitoMocker#mock" data-isabs="false">
-      <a id="mock[T](String)(ClassManifest[T]):T"></a>
+      <a id="mock[T](MockSettings)(ClassManifest[T]):T"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">mock</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="name">name: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T]</span>)</span><span class="result">: T</span>
+        <span class="params">(<span name="settings">settings: <span name="org.mockito.MockSettings" class="extype">MockSettings</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T]</span>)</span><span class="result">: T</span>
       </span>
       </h4>
       
@@ -334,17 +345,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.mock.MockitoMocker#smartMock" data-isabs="false">
-      <a id="smartMock[T](ClassManifest[T]):T"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">smartMock</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[T]</span>)</span><span class="result">: T</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="org.specs2.mock.MockitoMocker#spy" data-isabs="false">
       <a id="spy[T](T):T"></a>
       <h4 class="signature">

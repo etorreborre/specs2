@@ -31,7 +31,7 @@
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>For each created example use a given after method
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.specification.AfterExample" class="extype" href="">AfterExample</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.specification.AfterContextExample" class="extype" href="AfterContextExample.html">AfterContextExample</a>[<a name="org.specs2.specification.After" class="extype" href="After.html">After</a>], <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span>, <a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.specification.AfterContextExample" class="extype" href="AfterContextExample.html">AfterContextExample</a>[<a name="org.specs2.specification.After" class="extype" href="After.html">After</a>], <a name="org.specs2.specification.ExamplesFactory" class="extype" href="ExamplesFactory.html">ExamplesFactory</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -47,7 +47,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.specification.AfterExample" class="in"><span>AfterExample</span></li><li name="org.specs2.specification.AfterContextExample" class="in"><span>AfterContextExample</span></li><li name="org.specs2.specification.FragmentsBuilder" class="in"><span>FragmentsBuilder</span></li><li name="org.specs2.specification.RegexSteps" class="in"><span>RegexSteps</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.specification.AfterExample" class="in"><span>AfterExample</span></li><li name="org.specs2.specification.AfterContextExample" class="in"><span>AfterContextExample</span></li><li name="org.specs2.specification.ExamplesFactory" class="in"><span>ExamplesFactory</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -132,17 +132,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#RegexFragmentToFragments" data-isabs="false">
-      <a id="RegexFragmentToFragments(RegexFragment):Fragments"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">RegexFragmentToFragments</span>
-        
-        <span class="params">(<span name="r">r: <span name="org.specs2.specification.RegexFragment" class="extype">RegexFragment</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">at any point in time a regex sequence can be transformed as a sequence of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>at any point in time a regex sequence can be transformed as a sequence of Fragments</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.AfterExample#afterContext" data-isabs="false">
       <a id="afterContext:After"></a>
       <h4 class="signature">
@@ -154,18 +143,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.AfterExample" class="extype" href="">AfterExample</a> → <a name="org.specs2.specification.AfterContextExample" class="extype" href="AfterContextExample.html">AfterContextExample</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#argumentsFragment" data-isabs="false">
-      <a id="argumentsFragment(Arguments):FragmentsFragment"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">argumentsFragment</span>
-        
-        <span class="params">(<span name="a">a: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Arguments creation</p><div class="fullcomment"><div class="comment cmt"><p>Arguments creation</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object which can be chained with other fragments
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -191,19 +168,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#downcastGiven" data-isabs="false">
-      <a id="downcastGiven[X, Y&lt;:X](Given[Y]):Given[X] { def extract(s: String): Y }"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">downcastGiven</span>
-        <span class="tparams">[<span name="X">X</span>, <span name="Y">Y &lt;: X</span>]</span>
-        <span class="params">(<span name="gv">gv: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[Y]</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[X] { def extract(s: String): Y }</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">implicit conversion to transform a Given[Y] to Given[X] when Y &lt;: X
-</p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a Given[Y] to Given[X] when Y &lt;: X
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -226,6 +190,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AfterContextExample#exampleFactory" data-isabs="false">
+      <a id="exampleFactory:ExampleFactory"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exampleFactory</span>
+        
+        <span class="result">: <span name="org.specs2.specification.ExampleFactory" class="extype">ExampleFactory</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.AfterContextExample" class="extype" href="AfterContextExample.html">AfterContextExample</a> → <a name="org.specs2.specification.ExamplesFactory" class="extype" href="ExamplesFactory.html">ExamplesFactory</a></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -240,62 +215,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#forExample" data-isabs="false">
-      <a id="forExample(String):ExampleDesc"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">forExample</span>
-        
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsBuilder.ExampleDesc" class="extype">ExampleDesc</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Example creation</p><div class="fullcomment"><div class="comment cmt"><p>Example creation</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Example description from a string, to create a full Example once the body is defined
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragmentFragments" data-isabs="false">
-      <a id="fragmentFragments(⇒ Fragment):FragmentsFragment"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">fragmentFragments</span>
-        
-        <span class="params">(<span name="f">f: ⇒ <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragments" data-isabs="false">
-      <a id="fragments(⇒ Fragment):Fragments"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">fragments</span>
-        
-        <span class="params">(<span name="f">f: ⇒ <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object from a single Fragment</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragmentsFragmentToFragments" data-isabs="false">
-      <a id="fragmentsFragmentToFragments(FragmentsFragment):Fragments"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">fragmentsFragmentToFragments</span>
-        
-        <span class="params">(<span name="fs">fs: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">reverse conversion from a Fragment containing a Fragments object to the Fragments object</p><div class="fullcomment"><div class="comment cmt"><p>reverse conversion from a Fragment containing a Fragments object to the Fragments object</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#fragmentsFragments" data-isabs="false">
-      <a id="fragmentsFragments(⇒ Fragments):FragmentsFragment"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">fragmentsFragments</span>
-        
-        <span class="params">(<span name="fs">fs: ⇒ <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -318,17 +237,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#inScope" data-isabs="false">
-      <a id="inScope(Scope):Success"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">inScope</span>
-        
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.Scope" class="extype" href="Scope.html">Scope</a></span>)</span><span class="result">: <a name="org.specs2.execute.Success" class="extype" href="../execute/Success.html">Success</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">transform a scope to a success to be able to create traits containing any variables and usable in any Examples</p><div class="fullcomment"><div class="comment cmt"><p>transform a scope to a success to be able to create traits containing any variables and usable in any Examples</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -340,28 +248,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#link" data-isabs="false">
-      <a id="link(HtmlLink,SpecificationStructure):Fragments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">link</span>
-        
-        <span class="params">(<span name="htmlLink">htmlLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">create a link directly on a specification, with a given link</p><div class="fullcomment"><div class="comment cmt"><p>create a link directly on a specification, with a given link</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#link" data-isabs="false">
-      <a id="link(SpecificationStructure):Fragments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">link</span>
-        
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">create a link directly on a specification, with a given link</p><div class="fullcomment"><div class="comment cmt"><p>create a link directly on a specification, with a given link</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -395,53 +281,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#see" data-isabs="false">
-      <a id="see(HtmlLink,SpecificationStructure):Fragments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">see</span>
-        
-        <span class="params">(<span name="htmlLink">htmlLink: <a name="org.specs2.specification.HtmlLink" class="extype" href="HtmlLink.html">HtmlLink</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">create a html link without including the other specification fragments, and passing a specific link</p><div class="fullcomment"><div class="comment cmt"><p>create a html link without including the other specification fragments, and passing a specific link</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#see" data-isabs="false">
-      <a id="see(SpecificationStructure):Fragments"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">see</span>
-        
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">create a html link without including the other specification fragments</p><div class="fullcomment"><div class="comment cmt"><p>create a html link without including the other specification fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#stringToHtmlLinkFragments" data-isabs="false">
-      <a id="stringToHtmlLinkFragments(String):HtmlLinkFragments"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">stringToHtmlLinkFragments</span>
-        
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsBuilder.HtmlLinkFragments" class="extype">HtmlLinkFragments</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Links to other specifications creation
-</p><div class="fullcomment"><div class="comment cmt"><p>Links to other specifications creation
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd><dt>See also</dt><dd><span class="cmt"><p>org.specs2.UserGuide
-</p></span></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#stringToHtmlLinkFragments2" data-isabs="false">
-      <a id="stringToHtmlLinkFragments2(String):HtmlLinkFragments2"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">stringToHtmlLinkFragments2</span>
-        
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsBuilder.HtmlLinkFragments2" class="extype">HtmlLinkFragments2</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -453,42 +292,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#textFragment" data-isabs="false">
-      <a id="textFragment(String):FragmentsFragment"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">textFragment</span>
-        
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>create a Text Fragment from a string and allow it to be chained to other fragments</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#textStart" data-isabs="false">
-      <a id="textStart(String):Fragments"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">textStart</span>
-        
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object from a string</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder#title" data-isabs="false">
-      <a id="title(String):SpecTitle"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">title</span>
-        
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsBuilder.SpecTitle" class="extype">SpecTitle</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">This method allows to add a title to the Specification.</p><div class="fullcomment"><div class="comment cmt"><p>This method allows to add a title to the Specification. It can be used as an operation on a String:
-<code>&quot;spec title&quot;.title</code>
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object from a string, with the given title
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -500,32 +303,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#upcastThen" data-isabs="false">
-      <a id="upcastThen[X, Y&lt;:X](Then[X]):Then[Y]"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">upcastThen</span>
-        <span class="tparams">[<span name="X">X</span>, <span name="Y">Y &lt;: X</span>]</span>
-        <span class="params">(<span name="th">th: <a name="org.specs2.specification.Then" class="extype" href="Then.html">Then</a>[X]</span>)</span><span class="result">: <a name="org.specs2.specification.Then" class="extype" href="Then.html">Then</a>[Y]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">implicit conversion to transform a Then[Y] to Then[X] when Y &lt;: X
-</p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a Then[Y] to Then[X] when Y &lt;: X
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#updowncastWhen" data-isabs="false">
-      <a id="updowncastWhen[P, Q, R&lt;:P, S&gt;:Q](When[P, Q]):When[R, S]"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">updowncastWhen</span>
-        <span class="tparams">[<span name="P">P</span>, <span name="Q">Q</span>, <span name="R">R &lt;: P</span>, <span name="S">S &gt;: Q</span>]</span>
-        <span class="params">(<span name="wh">wh: <a name="org.specs2.specification.When" class="extype" href="When.html">When</a>[P, Q]</span>)</span><span class="result">: <a name="org.specs2.specification.When" class="extype" href="When.html">When</a>[R, S]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">implicit conversion to transform a When[P, Q] to When[R, S] when R &lt;: P and S &gt;: Q
-</p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a When[P, Q] to When[R, S] when R &lt;: P and S &gt;: Q
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -575,10 +352,8 @@
 
         <div name="org.specs2.specification.AfterContextExample" class="parent">
               <h3>Inherited from <a name="org.specs2.specification.AfterContextExample" class="extype" href="AfterContextExample.html">AfterContextExample</a>[<a name="org.specs2.specification.After" class="extype" href="After.html">After</a>]</h3>
-            </div><div name="org.specs2.specification.FragmentsBuilder" class="parent">
-              <h3>Inherited from <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span></h3>
-            </div><div name="org.specs2.specification.RegexSteps" class="parent">
-              <h3>Inherited from <a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps.html">RegexSteps</a></h3>
+            </div><div name="org.specs2.specification.ExamplesFactory" class="parent">
+              <h3>Inherited from <a name="org.specs2.specification.ExamplesFactory" class="extype" href="ExamplesFactory.html">ExamplesFactory</a></h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

@@ -24,12 +24,11 @@
       <span class="symbol"> 
         <span class="name">Decorator</span>
         
-        <span class="params">(<span name="label">label: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="value">value: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="labelStyles">labelStyles: List[String]</span>, <span name="valueStyles">valueStyles: List[String]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="label">label: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="value">value: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="labelStyles">labelStyles: Seq[String]</span>, <span name="valueStyles">valueStyles: Seq[String]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This class contains functions to decorate and style a label and a value:</p><p> * with a function taking the xml for the label/value and returning some xml
- * with some xml attributes &quot;name&quot;:&quot;value&quot; to style those labels/values</p><p>The methods of that class allow to stack new decoration, new styling attributes but also define standard decoration
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This class contains functions to decorate and style a label and a value:</p><ul><li>with a function taking the xml for the label/value and returning some xml</li><li>with some xml attributes &quot;name&quot;:&quot;value&quot; to style those labels/values</li></ul><p>The methods of that class allow to stack new decoration, new styling attributes but also define standard decoration
 and styles for bold / italic / centered ... text.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -66,7 +65,7 @@ and styles for bold / italic / centered ... text.
       <span class="symbol"> 
         <span class="name">Decorator</span>
         
-        <span class="params">(<span name="label">label: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="value">value: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="labelStyles">labelStyles: List[String]</span>, <span name="valueStyles">valueStyles: List[String]</span>)</span>
+        <span class="params">(<span name="label">label: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="value">value: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="labelStyles">labelStyles: Seq[String]</span>, <span name="valueStyles">valueStyles: Seq[String]</span>)</span>
       </span>
       </h4>
       
@@ -746,13 +745,13 @@ and styles for bold / italic / centered ... text.
       </h4>
       
     </li><li visbl="pub" name="org.specs2.form.Decorator#labelStyles" data-isabs="false">
-      <a id="labelStyles:List[String]"></a>
+      <a id="labelStyles:Seq[String]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">labelStyles</span>
         
-        <span class="result">: List[String]</span>
+        <span class="result">: Seq[String]</span>
       </span>
       </h4>
       
@@ -999,13 +998,13 @@ and styles for bold / italic / centered ... text.
       </h4>
       
     </li><li visbl="pub" name="org.specs2.form.Decorator#valueStyles" data-isabs="false">
-      <a id="valueStyles:List[String]"></a>
+      <a id="valueStyles:Seq[String]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">valueStyles</span>
         
-        <span class="result">: List[String]</span>
+        <span class="result">: Seq[String]</span>
       </span>
       </h4>
       

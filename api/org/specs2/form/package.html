@@ -100,7 +100,7 @@
       <span class="symbol"> 
         <a href="Decorator.html"><span class="name">Decorator</span></a>
         
-        <span class="params">(<span name="label">label: (Any) ⇒ Any</span>, <span name="value">value: (Any) ⇒ Any</span>, <span name="labelStyles">labelStyles: List[String]</span>, <span name="valueStyles">valueStyles: List[String]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="label">label: (Any) ⇒ Any</span>, <span name="value">value: (Any) ⇒ Any</span>, <span name="labelStyles">labelStyles: Seq[String]</span>, <span name="valueStyles">valueStyles: Seq[String]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">This class contains functions to decorate and style a label and a value:</p>
@@ -228,10 +228,7 @@
         <span class="params">(<span name="label">label: String</span>, <span name="actual">actual: Property[T]</span>, <span name="expected">expected: Property[S]</span>, <span name="constraint">constraint: (T, S) ⇒ Result</span>, <span name="decorator">decorator: Decorator</span>)</span><span class="result"> extends Executable with DecoratedProperty[Prop[T, S]] with Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">The Prop class is a named property which holds:
-  * an expected value
-  * an actual value
-  * a constraint to check if the actual value conforms to the expected one</p>
+      <p class="comment cmt">The Prop class is a named property which holds:</p>
     </li><li visbl="pub" name="org.specs2.form.PropCell" data-isabs="false">
       <a id="PropCell:PropCell"></a>
       <h4 class="signature">
@@ -364,10 +361,7 @@
         <span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt"> Companion object of a Form to create:
-  * an empty Form
-  * a Form with no rows but a title
-  * a Form with no title but one row</p>
+      <p class="comment cmt"> Companion object of a Form to create:</p>
     </li><li visbl="pub" name="org.specs2.form.FormCell" data-isabs="false">
       <a id="FormCell:FormCell"></a>
       <h4 class="signature">

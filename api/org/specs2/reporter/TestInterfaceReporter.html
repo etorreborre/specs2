@@ -129,17 +129,6 @@ and publishes events to sbt event handlers
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintLines" data-isabs="false">
-      <a id="PrintLines:PrintLines"></a>
-      <h4 class="signature">
-      <span class="kind">case class</span>
-      <span class="symbol"> 
-        <a href="TextPrinter$PrintLines.html"><span class="name">PrintLines</span></a>
-        
-        <span class="params">(<span name="lines">lines: List[PrintLine]</span>)</span><span class="result"> extends Product with Serializable</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintOther" data-isabs="false">
       <a id="PrintOther:PrintOther"></a>
       <h4 class="signature">
@@ -195,6 +184,17 @@ and publishes events to sbt event handlers
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#ToPrint" data-isabs="false">
+      <a id="ToPrint:()"></a>
+      <h4 class="signature">
+      <span class="kind">type</span>
+      <span class="symbol"> 
+        <span class="name">ToPrint</span>
+        
+        <span class="result"> = (((Seq[<a name="org.specs2.reporter.TextPrinter.Print" class="extype" href="TextPrinter$Print.html">Print</a>], <span name="org.specs2.reporter.Statistics.SpecsStatistics" class="extype">SpecsStatistics</span>), <span name="org.specs2.reporter.Levels" class="extype">Levels</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]), <span name="org.specs2.reporter.SpecsArguments" class="extype">SpecsArguments</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>])</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter" class="extype" href="TextPrinter.html">TextPrinter</a></dd></dl></div>
     </li></ol>
             </div>
         
@@ -257,6 +257,17 @@ and publishes events to sbt event handlers
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#IOReducer" data-isabs="false">
+      <a id="IOReducer(ResultOutput)(Arguments):Reducer[(), ()]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">IOReducer</span>
+        
+        <span class="params">(<span name="output">output: <a name="org.specs2.reporter.ResultOutput" class="extype" href="ResultOutput.html">ResultOutput</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="org.specs2.internal.scalaz.Reducer" class="extype">Reducer</span>[(), ()]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter" class="extype" href="TextPrinter.html">TextPrinter</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.TextPrinter.PrintReducer" data-isabs="false">
       <a id="PrintReducer:PrintReducer"></a>
       <h4 class="signature">
@@ -264,7 +275,7 @@ and publishes events to sbt event handlers
       <span class="symbol"> 
         <a href="TextPrinter$PrintReducer$.html"><span class="name">PrintReducer</span></a>
         
-        <span class="result"> extends Reducer[ExecutedFragment, List[Print]]</span>
+        <span class="result"> extends Reducer[ExecutedFragment, Seq[Print]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
@@ -349,13 +360,13 @@ and publishes events to sbt event handlers
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.HandlerEvents" class="extype" href="HandlerEvents.html">HandlerEvents</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultExecutionStrategy#execute" data-isabs="false">
-      <a id="execute(Arguments):(Seq[FragmentSeq]) ⇒ List[ExecutedFragment]"></a>
+      <a id="execute(Arguments):(ExecutableSpecification) ⇒ ExecutedSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">execute</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]) ⇒ List[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="ExecutableSpecification.html">ExecutableSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">execute sequences of Fragments.</p><div class="fullcomment"><div class="comment cmt"><p>execute sequences of Fragments.</p><p>If the stopOnFail argument is true, we check that the execution is ok before executing the next sequence.
@@ -400,16 +411,16 @@ Example
       <p class="shortcomment cmt">execute a Fragment.</p><div class="fullcomment"><div class="comment cmt"><p>execute a Fragment.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.FragmentExecution" class="extype" href="../specification/FragmentExecution.html">FragmentExecution</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceReporter#export" data-isabs="false">
-      <a id="export(SpecificationStructure)(Arguments):(Seq[ExecutedFragment]) ⇒ Unit"></a>
+      <a id="export(Arguments):(ExecutedSpecification) ⇒ ExportType"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">export</span>
         
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]) ⇒ <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>) ⇒ ExportType</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting ExecutedFragments</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TestInterfaceReporter" class="extype" href="">TestInterfaceReporter</a> → <a name="org.specs2.reporter.TextExporting" class="extype" href="TextExporting.html">TextExporting</a> → Exporting</dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting an ExecutedSpecification</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TestInterfaceReporter" class="extype" href="">TestInterfaceReporter</a> → <a name="org.specs2.reporter.TextExporting" class="extype" href="TextExporting.html">TextExporting</a> → Exporting</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.HandlerEvents#failure" data-isabs="false">
       <a id="failure(String,Throwable):NamedEvent"></a>
       <h4 class="signature">
@@ -486,17 +497,6 @@ keeping only the ones matching the ex attribute of the arguments object
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#flatten" data-isabs="false">
-      <a id="flatten((((List[Print], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment]))(Arguments):List[PrintLine]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">flatten</span>
-        
-        <span class="params">(<span name="results">results: (((List[<a name="org.specs2.reporter.TextPrinter.Print" class="extype" href="TextPrinter$Print.html">Print</a>], <span name="org.specs2.reporter.Statistics.SpecStats" class="extype">SpecStats</span>), <span name="org.specs2.reporter.Levels" class="extype">Levels</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]), <span name="org.specs2.reporter.SpecsArguments" class="extype">SpecsArguments</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>])</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: List[<a name="org.specs2.reporter.TextPrinter.PrintLine" class="extype" href="TextPrinter$PrintLine.html">PrintLine</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter" class="extype" href="TextPrinter.html">TextPrinter</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.ConsoleOutput#flush" data-isabs="false">
       <a id="flush():Unit"></a>
       <h4 class="signature">
@@ -532,6 +532,17 @@ keeping only the ones matching the ex attribute of the arguments object
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.reporter.TestInterfaceReporter#handleFragment" data-isabs="false">
+      <a id="handleFragment(Arguments):(ExecutedFragment) ⇒ ExecutedFragment"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">handleFragment</span>
+        
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>) ⇒ <a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceReporter#handler" data-isabs="false">
       <a id="handler:EventHandler"></a>
       <h4 class="signature">
@@ -631,28 +642,6 @@ keeping only the ones matching the ex attribute of the arguments object
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#output" data-isabs="false">
-      <a id="output:ResultOutput"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">output</span>
-        
-        <span class="result">: <a name="org.specs2.reporter.ResultOutput" class="extype" href="ResultOutput.html">ResultOutput</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter" class="extype" href="TextPrinter.html">TextPrinter</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceReporter#print" data-isabs="false">
-      <a id="print(SpecificationStructure,Seq[ExecutedFragment])(Arguments):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">print</span>
-        
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TestInterfaceReporter" class="extype" href="">TestInterfaceReporter</a> → <a name="org.specs2.reporter.TextPrinter" class="extype" href="TextPrinter.html">TextPrinter</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.Output#print" data-isabs="false">
       <a id="print(Any):Unit"></a>
       <h4 class="signature">
@@ -666,14 +655,14 @@ keeping only the ones matching the ex attribute of the arguments object
       <p class="shortcomment cmt">print an object with no newline
 </p><div class="fullcomment"><div class="comment cmt"><p>print an object with no newline
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>Output</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#printLines" data-isabs="false">
-      <a id="printLines(Seq[ExecutedFragment])(Arguments):PrintLines"></a>
+    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter#print" data-isabs="false">
+      <a id="print(SpecName,Seq[ExecutedFragment])(Arguments):(((Seq[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">printLines</span>
+        <span class="name">print</span>
         
-        <span class="params">(<span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <a name="org.specs2.reporter.TextPrinter.PrintLines" class="extype" href="TextPrinter$PrintLines.html">PrintLines</a></span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (((Seq[<a name="org.specs2.reporter.TextPrinter.Print" class="extype" href="TextPrinter$Print.html">Print</a>], <span name="org.specs2.reporter.Statistics.SpecsStatistics" class="extype">SpecsStatistics</span>), <span name="org.specs2.reporter.Levels" class="extype">Levels</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]), <span name="org.specs2.reporter.SpecsArguments" class="extype">SpecsArguments</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>])</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TextPrinter" class="extype" href="TextPrinter.html">TextPrinter</a></dd></dl></div>
@@ -715,7 +704,7 @@ keeping only the ones matching the ex attribute of the arguments object
       <p class="shortcomment cmt">print an object with a newline
 </p><div class="fullcomment"><div class="comment cmt"><p>print an object with a newline
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>Output</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Reporter#report" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleReporter#report" data-isabs="false">
       <a id="report(SpecificationStructure)(Arguments):TestInterfaceReporter.this.type"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -725,20 +714,9 @@ keeping only the ones matching the ex attribute of the arguments object
         <span class="params">(<span name="spec">spec: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: TestInterfaceReporter.this.type</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">report Fragments by:
-  * extracting arguments from the Fragments
-  * selecting them
-  * sequencing fragments in groups
-  * executing fragments
-  * exporting the results to the output format
-</p><div class="fullcomment"><div class="comment cmt"><p>report Fragments by:
-  * extracting arguments from the Fragments
-  * selecting them
-  * sequencing fragments in groups
-  * executing fragments
-  * exporting the results to the output format
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the reporter
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.Reporter" class="extype" href="Reporter.html">Reporter</a></dd></dl></div>
+      <p class="shortcomment cmt">report Fragments by:</p><div class="fullcomment"><div class="comment cmt"><p>report Fragments by:</p><ul><li>extracting arguments from the Fragments</li><li>selecting them</li><li>sequencing fragments in groups</li><li>executing fragments</li><li>exporting the results to the output format
+</li></ul></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the reporter
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ConsoleReporter" class="extype" href="ConsoleReporter.html">ConsoleReporter</a> → <a name="org.specs2.reporter.Reporter" class="extype" href="Reporter.html">Reporter</a></dd></dl></div>
     </li><li visbl="prt" name="org.specs2.reporter.WithDefaultStatisticsRepository#repository" data-isabs="false">
       <a id="repository:StatisticsRepository"></a>
       <h4 class="signature">
@@ -762,13 +740,13 @@ keeping only the ones matching the ex attribute of the arguments object
       </h4>
       <p class="shortcomment cmt">select function returning a filtered seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered seq of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection#select" data-isabs="false">
-      <a id="select(Arguments):(Fragments) ⇒ Seq[Fragment]"></a>
+      <a id="select(Arguments):(SpecificationStructure) ⇒ SpecificationStructure"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">select</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.Fragments" class="extype" href="../specification/Fragments.html">Fragments</a>) ⇒ Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>) ⇒ <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">select function returning a filtered seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered seq of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a></dd></dl></div>
@@ -787,13 +765,13 @@ Among the constraints to respect, any Step Fragment must be executed before any 
 so that &quot;first&quot; and &quot;last&quot; actions are executed properly in a Specification</p><p>If the arguments specify that the specification is sequential, then each fragment will be executed individually
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSequence" class="extype" href="DefaultSequence.html">DefaultSequence</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSequence#sequence" data-isabs="false">
-      <a id="sequence(Arguments):(Seq[Fragment]) ⇒ Seq[FragmentSeq]"></a>
+      <a id="sequence(Arguments):(SpecificationStructure) ⇒ ExecutableSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">sequence</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]) ⇒ Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>) ⇒ <a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="ExecutableSpecification.html">ExecutableSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">sequence function returning an ordered seq of seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>sequence function returning an ordered seq of seq of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSequence" class="extype" href="DefaultSequence.html">DefaultSequence</a></dd></dl></div>
@@ -824,13 +802,13 @@ Those statistics are updated from previously executed statistics to calculate tr
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.HandlerEvents" class="extype" href="HandlerEvents.html">HandlerEvents</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultStoring#store" data-isabs="false">
-      <a id="store(Arguments):(Seq[ExecutedFragment]) ⇒ Seq[ExecutedFragment]"></a>
+      <a id="store(Arguments):(ExecutedSpecification) ⇒ ExecutedSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">store</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]) ⇒ Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function storing ExecutedFragments</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>DefaultStoring → Storing</dd></dl></div>
@@ -858,11 +836,11 @@ Those statistics are updated from previously executed statistics to calculate tr
       </span>
       </h4>
       <p class="shortcomment cmt">store the statistics:
-* for SpecEnd -&gt; put the stats in the repository
-* for a SpecStart that's a link -&gt; read the status of the previous execution
+- for SpecEnd -&gt; put the stats in the repository
+- for a SpecStart that's a link -&gt; read the status of the previous execution
 </p><div class="fullcomment"><div class="comment cmt"><p>store the statistics:
-* for SpecEnd -&gt; put the stats in the repository
-* for a SpecStart that's a link -&gt; read the status of the previous execution
+- for SpecEnd -&gt; put the stats in the repository
+- for a SpecStart that's a link -&gt; read the status of the previous execution
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>DefaultStoring</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.HandlerEvents#succeeded" data-isabs="false">
       <a id="succeeded(String):NamedEvent"></a>
@@ -896,11 +874,19 @@ Those statistics are updated from previously executed statistics to calculate tr
         <span class="params">(<span name="fragments">fragments: Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>)</span><span class="result">: Seq[<a name="org.specs2.specification.TagsFragments.TaggingFragment" class="extype" href="../specification/TagsFragments$$TaggingFragment.html">TaggingFragment</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p><div class="fullcomment"><div class="comment cmt"><p>From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p><p> * a <code>TaggedAs</code> fragment is applicable to the the previous fragment
- * a <code>Tag</code> fragment is applicable to the the next fragment
- * a <code>AsSection</code> fragment is applicable to the the previous fragment to the next <code>AsSection</code> fragment with the same name
- * a <code>Section</code> fragment is applicable to the the next fragment to the next <code>Section</code> fragment with the same name
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a></dd></dl></div>
+      <p class="shortcomment cmt">From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p><div class="fullcomment"><div class="comment cmt"><p>From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p><ul><li>a <code>TaggedAs</code> fragment is applicable to the the previous fragment</li><li>a <code>Tag</code> fragment is applicable to the the next fragment</li><li>a <code>AsSection</code> fragment is applicable to the the previous fragment to the next <code>AsSection</code> fragment with the same name</li><li>a <code>Section</code> fragment is applicable to the the next fragment to the next <code>Section</code> fragment with the same name
+</li></ul></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceReporter#textOutput" data-isabs="false">
+      <a id="textOutput:TestInterfaceResultOutput"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">textOutput</span>
+        
+        <span class="result">: <a name="org.specs2.reporter.TestInterfaceResultOutput" class="extype" href="TestInterfaceResultOutput.html">TestInterfaceResultOutput</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TestInterfaceReporter" class="extype" href="">TestInterfaceReporter</a> → <a name="org.specs2.reporter.TextPrinter" class="extype" href="TextPrinter.html">TextPrinter</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">

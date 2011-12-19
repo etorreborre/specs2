@@ -167,14 +167,25 @@
 This definition looks redundant with the one below but it is necessary to
 avoid the implicit argThat method from Mockito to infer an improper matcher</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd><dt>See also</dt><dd><span class="cmt"><p>the HtmlPrinterSpec failing with a NPE if that method is missing
 </p></span></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#containAllOf" data-isabs="false">
+      <a id="containAllOf[T](Seq[T]):ContainMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">containAllOf</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="seq">seq: Seq[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.ContainMatcher" class="extype" href="ContainMatcher.html">ContainMatcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">match if traversable contains (seq2).</p><div class="fullcomment"><div class="comment cmt"><p>match if traversable contains (seq2). n is a dummy paramter to allow overloading</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#containAnyOf" data-isabs="false">
-      <a id="containAnyOf[T](LazyParameter[T]*):ContainAnyOfMatcher[T]"></a>
+      <a id="containAnyOf[T](Seq[T]):ContainAnyOfMatcher[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">containAnyOf</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="t">t: <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[T]*</span>)</span><span class="result">: <a name="org.specs2.matcher.ContainAnyOfMatcher" class="extype" href="ContainAnyOfMatcher.html">ContainAnyOfMatcher</a>[T]</span>
+        <span class="params">(<span name="seq">seq: Seq[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.ContainAnyOfMatcher" class="extype" href="ContainAnyOfMatcher.html">ContainAnyOfMatcher</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">match if traversable contains one of (t1, t2)</p><div class="fullcomment"><div class="comment cmt"><p>match if traversable contains one of (t1, t2)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>

@@ -64,7 +64,7 @@
       <span class="symbol"> 
         <span class="name">JUnitDescriptionsFragments</span>
         
-        <span class="params">(<span name="klass">klass: Class[_]</span>)</span>
+        <span class="params">(<span name="className">className: String</span>)</span>
       </span>
       </h4>
       
@@ -185,13 +185,13 @@
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.JUnitDescriptionMaker#createDescription" data-isabs="false">
-      <a id="createDescription(Class[_],String,String,String):Description"></a>
+      <a id="createDescription(String,String,String,String):Description"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">createDescription</span>
         
-        <span class="params">(<span name="testClass">testClass: Class[_]</span>, <span name="suiteName">suiteName: String = <span class="symbol">&quot;&quot;</span></span>, <span name="testName">testName: String = <span class="symbol">&quot;&quot;</span></span>, <span name="label">label: String = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span name="org.junit.runner.Description" class="extype">Description</span></span>
+        <span class="params">(<span name="className">className: String</span>, <span name="suiteName">suiteName: String = <span class="symbol">&quot;&quot;</span></span>, <span name="testName">testName: String = <span class="symbol">&quot;&quot;</span></span>, <span name="label">label: String = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span name="org.junit.runner.Description" class="extype">Description</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a sanitized description</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>JUnitDescriptionMaker</dd></dl></div>
@@ -276,13 +276,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>JUnitDescriptions</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.runner.JUnitDescriptionsFragments#initialFragment" data-isabs="false">
-      <a id="initialFragment(Class[_]):Text"></a>
+      <a id="initialFragment(String):Text"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">initialFragment</span>
         
-        <span class="params">(<span name="s">s: Class[_]</span>)</span><span class="result">: <a name="org.specs2.specification.Text" class="extype" href="../specification/Text.html">Text</a></span>
+        <span class="params">(<span name="className">className: String</span>)</span><span class="result">: <a name="org.specs2.specification.Text" class="extype" href="../specification/Text.html">Text</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>fragment that must be used as the root description if the specification is empty
@@ -379,13 +379,13 @@ In the first the test case names don't need to have the hashcode example.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.runner.JUnitDescriptionsFragments#mapper" data-isabs="false">
-      <a id="mapper(Class[_]):(Fragment, Seq[()], Int) ⇒ Option[()]"></a>
+      <a id="mapper(String):(Fragment, Seq[()], Int) ⇒ Option[()]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">mapper</span>
         
-        <span class="params">(<span name="klass">klass: Class[_]</span>)</span><span class="result">: (<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>, Seq[()], <span name="scala.Int" class="extype">Int</span>) ⇒ <span name="scala.Option" class="extype">Option</span>[()]</span>
+        <span class="params">(<span name="className">className: String</span>)</span><span class="result">: (<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>, Seq[()], <span name="scala.Int" class="extype">Int</span>) ⇒ <span name="scala.Option" class="extype">Option</span>[()]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">This function is used to map each node in a Tree[Fragment] to a pair of

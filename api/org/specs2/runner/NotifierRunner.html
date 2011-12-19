@@ -24,14 +24,14 @@
       <span class="symbol"> 
         <span class="name">NotifierRunner</span>
         
-        <span class="params">(<span name="notifier">notifier: <a name="org.specs2.reporter.Notifier" class="extype" href="../reporter/Notifier.html">Notifier</a></span>)</span><span class="result"> extends <a name="org.specs2.runner.ClassRunner" class="extype" href="ClassRunner.html">ClassRunner</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="notifier">notifier: <a name="org.specs2.reporter.Notifier" class="extype" href="../reporter/Notifier.html">Notifier</a></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This runner can be used with any class implementing the Notifier trait
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.runner.NotifierRunner" class="extype" href="">NotifierRunner</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.runner.ClassRunner" class="extype" href="ClassRunner.html">ClassRunner</a>, <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <span name="org.specs2.reflect.Classes" class="extype">Classes</span>, <span name="org.specs2.io.Output" class="extype">Output</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -47,7 +47,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.runner.NotifierRunner" class="in"><span>NotifierRunner</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.specs2.runner.ClassRunner" class="in"><span>ClassRunner</span></li><li name="org.specs2.io.ConsoleOutput" class="in"><span>ConsoleOutput</span></li><li name="org.specs2.reflect.Classes" class="in"><span>Classes</span></li><li name="org.specs2.io.Output" class="in"><span>Output</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.runner.NotifierRunner" class="in"><span>NotifierRunner</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -132,23 +132,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.runner.ClassRunner#apply" data-isabs="false">
-      <a id="apply(SpecificationStructure*)(Arguments):Either[Reporter, Unit]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">apply</span>
-        
-        <span class="params">(<span name="specifications">specifications: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[<a name="org.specs2.reporter.Reporter" class="extype" href="../reporter/Reporter.html">Reporter</a>, <span name="scala.Unit" class="extype">Unit</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">This method can be called directly from the console with the specs2.</p><div class="fullcomment"><div class="comment cmt"><p>This method can be called directly from the console with the specs2.run object:</p><p>    &gt; specs2.run(spec1, spec2)
-or  &gt; import specs2._
-    &gt; run(spec1, spec2)</p><p>If you want to pass specific arguments you can pass:</p><p>   &gt; import specs2.args._
-   &gt; specs2.run(spec1)(nocolor)</p><p>Or you can set specific default with an implicit value:</p><p>   &gt; import specs2.args._
-   &gt; implicit val myargs = nocolor
-   &gt; specs2.run(spec1)
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.ClassRunner" class="extype" href="ClassRunner.html">ClassRunner</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -185,66 +168,6 @@ or  &gt; import specs2._
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reflect.Classes#create" data-isabs="false">
-      <a id="create[T&lt;:AnyRef](String,ClassLoader)(ClassManifest[T]):Either[Throwable, T]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">create</span>
-        <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String = <span class="symbol">&quot;&quot;</span></span>, <span name="classLoader">classLoader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../../../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[Throwable, T]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class, returning either the instance, or an exception</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reflect.Classes#createObject" data-isabs="false">
-      <a id="createObject[T&lt;:AnyRef](String,Boolean,Boolean)(ClassManifest[T]):Option[T]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">createObject</span>
-        <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">A system property 'debugCreateObject' can be set to override the printMessage and printStackTrace parameters
-so that the exception message and stacktrace are printed when the object can't be created
-</p><div class="fullcomment"><div class="comment cmt"><p>A system property 'debugCreateObject' can be set to override the printMessage and printStackTrace parameters
-so that the exception message and stacktrace are printed when the object can't be created
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reflect.Classes#createObject" data-isabs="false">
-      <a id="createObject[T&lt;:AnyRef](String,Boolean)(ClassManifest[T]):Option[T]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">createObject</span>
-        <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class and optionally print message if the class can't be loaded</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reflect.Classes#createObject" data-isabs="false">
-      <a id="createObject[T&lt;:AnyRef](String)(ClassManifest[T]):Option[T]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">createObject</span>
-        <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
-    </li><li visbl="prt" name="org.specs2.runner.ClassRunner#createSpecification" data-isabs="false">
-      <a id="createSpecification(String,ClassLoader):SpecificationStructure"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">createSpecification</span>
-        
-        <span class="params">(<span name="className">className: String</span>, <span name="classLoader">classLoader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../../../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="result">: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.runner.ClassRunner" class="extype" href="ClassRunner.html">ClassRunner</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -267,17 +190,6 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.NotifierRunner" class="extype" href="">NotifierRunner</a> → Equals → AnyRef → Any</dd></dl></div>
-    </li><li visbl="prt" name="org.specs2.runner.ClassRunner#errorHandler" data-isabs="false">
-      <a id="errorHandler:PartialFunction[Throwable, Unit]"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">errorHandler</span>
-        
-        <span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[Throwable, <span name="scala.Unit" class="extype">Unit</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.runner.ClassRunner" class="extype" href="ClassRunner.html">ClassRunner</a></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -292,19 +204,6 @@ so that the exception message and stacktrace are printed when the object can't b
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.ConsoleOutput#flush" data-isabs="false">
-      <a id="flush():Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">flush</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">flush the content if necessary
-</p><div class="fullcomment"><div class="comment cmt"><p>flush the content if necessary
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConsoleOutput → Output</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -338,7 +237,7 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.runner.ClassRunner#main" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.runner.NotifierRunner#main" data-isabs="false">
       <a id="main(Array[String]):Either[Reporter, Unit]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -348,7 +247,7 @@ so that the exception message and stacktrace are printed when the object can't b
         <span class="params">(<span name="arguments">arguments: <span name="scala.Array" class="extype">Array</span>[String]</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[<a name="org.specs2.reporter.Reporter" class="extype" href="../reporter/Reporter.html">Reporter</a>, <span name="scala.Unit" class="extype">Unit</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.ClassRunner" class="extype" href="ClassRunner.html">ClassRunner</a></dd></dl></div>
+      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -393,57 +292,6 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.Output#print" data-isabs="false">
-      <a id="print(Any):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">print</span>
-        
-        <span class="params">(<span name="m">m: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">print an object with no newline
-</p><div class="fullcomment"><div class="comment cmt"><p>print an object with no newline
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>Output</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.Output#printStackTrace" data-isabs="false">
-      <a id="printStackTrace(Throwable):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">printStackTrace</span>
-        
-        <span class="params">(<span name="t">t: Throwable</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">print stacktraces
-</p><div class="fullcomment"><div class="comment cmt"><p>print stacktraces
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>Output</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.ConsoleOutput#printf" data-isabs="false">
-      <a id="printf(String,Any*):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">printf</span>
-        
-        <span class="params">(<span name="s">s: String</span>, <span name="args">args: <span name="scala.Any" class="extype">Any</span>*</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">print several objects according to a format string (see Console.</p><div class="fullcomment"><div class="comment cmt"><p>print several objects according to a format string (see Console.printf)
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConsoleOutput → Output</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.io.Output#println" data-isabs="false">
-      <a id="println(Any):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">println</span>
-        
-        <span class="params">(<span name="m">m: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">print an object with a newline
-</p><div class="fullcomment"><div class="comment cmt"><p>print an object with a newline
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>Output</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.runner.NotifierRunner#productArity" data-isabs="false">
       <a id="productArity:Int"></a>
       <h4 class="signature">
@@ -488,28 +336,6 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.NotifierRunner" class="extype" href="">NotifierRunner</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.runner.NotifierRunner#reporter" data-isabs="false">
-      <a id="reporter:Reporter"></a>
-      <h4 class="signature">
-      <span class="kind">lazy val</span>
-      <span class="symbol"> 
-        <span class="name">reporter</span>
-        
-        <span class="result">: <a name="org.specs2.reporter.Reporter" class="extype" href="../reporter/Reporter.html">Reporter</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.NotifierRunner" class="extype" href="">NotifierRunner</a> → <a name="org.specs2.runner.ClassRunner" class="extype" href="ClassRunner.html">ClassRunner</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.runner.ClassRunner#start" data-isabs="false">
-      <a id="start(String*):Either[Reporter, Unit]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">start</span>
-        
-        <span class="params">(<span name="arguments">arguments: String*</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[<a name="org.specs2.reporter.Reporter" class="extype" href="../reporter/Reporter.html">Reporter</a>, <span name="scala.Unit" class="extype">Unit</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.ClassRunner" class="extype" href="ClassRunner.html">ClassRunner</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -532,20 +358,6 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.NotifierRunner" class="extype" href="">NotifierRunner</a> → AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reflect.Classes#tryToCreateObject" data-isabs="false">
-      <a id="tryToCreateObject[T&lt;:AnyRef](String,Boolean,Boolean,ClassLoader)(ClassManifest[T]):Option[T]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">tryToCreateObject</span>
-        <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="loader">loader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../../../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Try to create an instance of a given class by using whatever constructor is available
-and trying to instantiate the first parameter recursively if there is a parameter for that constructor.</p><div class="fullcomment"><div class="comment cmt"><p>Try to create an instance of a given class by using whatever constructor is available
-and trying to instantiate the first parameter recursively if there is a parameter for that constructor.</p><p>This is useful to instantiate nested classes which are referencing their outer class in their constructor
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -618,14 +430,6 @@ and trying to instantiate the first parameter recursively if there is a paramete
               <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
             </div><div name="scala.Equals" class="parent">
               <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
-            </div><div name="org.specs2.runner.ClassRunner" class="parent">
-              <h3>Inherited from <a name="org.specs2.runner.ClassRunner" class="extype" href="ClassRunner.html">ClassRunner</a></h3>
-            </div><div name="org.specs2.io.ConsoleOutput" class="parent">
-              <h3>Inherited from <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span></h3>
-            </div><div name="org.specs2.reflect.Classes" class="parent">
-              <h3>Inherited from <span name="org.specs2.reflect.Classes" class="extype">Classes</span></h3>
-            </div><div name="org.specs2.io.Output" class="parent">
-              <h3>Inherited from <span name="org.specs2.io.Output" class="extype">Output</span></h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

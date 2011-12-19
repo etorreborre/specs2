@@ -28,14 +28,14 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The JUnitXml printer is used to create a JUnit xml report of an executed specification.</p><p>To do this, it uses a reducer to prepare print blocks with:</p><p>* the text to print
-* the statistics
-* the current arguments to use</p></div><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The JUnitXml printer is used to create a JUnit xml report of an executed specification.</p><p>To do this, it uses a reducer to prepare print blocks with:</p><p>- the text to print
+- the statistics
+- the current arguments to use</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.reporter.JUnitXmlExporting" class="extype" href="JUnitXmlExporting.html">JUnitXmlExporting</a>, <a name="org.specs2.reporter.JUnitXmlReporter" class="extype" href="JUnitXmlReporter.html">JUnitXmlReporter</a></div>
+          <div class="subClasses hiddenContent"><a name="org.specs2.reporter.JUnitXmlExporting" class="extype" href="JUnitXmlExporting.html">JUnitXmlExporting</a>, <a name="org.specs2.reporter.JUnitXmlExporting" class="extype" href="JUnitXmlExporting$.html">JUnitXmlExporting</a>, <a name="org.specs2.reporter.JUnitXmlReporter" class="extype" href="JUnitXmlReporter.html">JUnitXmlReporter</a></div>
         </div></div>
         
 
@@ -173,13 +173,13 @@
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter#descriptions" data-isabs="false">
-      <a id="descriptions(SpecificationStructure)(Arguments):JUnitDescriptions[ExecutedFragment] { def initialFragment(s: Class[_]): org.specs2.specification.ExecutedText }"></a>
+      <a id="descriptions(SpecName)(Arguments):JUnitDescriptions[ExecutedFragment] { def initialFragment(className: String): org.specs2.specification.ExecutedText }"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">descriptions</span>
         
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="org.specs2.reporter.JUnitDescriptions" class="extype">JUnitDescriptions</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>] { def initialFragment(s: Class[_]): org.specs2.specification.ExecutedText }</span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="org.specs2.reporter.JUnitDescriptions" class="extype">JUnitDescriptions</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>] { def initialFragment(className: String): org.specs2.specification.ExecutedText }</span>
       </span>
       </h4>
       <p class="shortcomment cmt">fold object used to create descriptions</p>
@@ -297,13 +297,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter#testSuite" data-isabs="false">
-      <a id="testSuite(SpecificationStructure,Seq[ExecutedFragment])(Arguments):TestSuite"></a>
+      <a id="testSuite(SpecName,Seq[ExecutedFragment])(Arguments):TestSuite"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">testSuite</span>
         
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <a name="org.specs2.reporter.JUnitXmlPrinter.TestSuite" class="extype" href="JUnitXmlPrinter$TestSuite.html">TestSuite</a></span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <a name="org.specs2.reporter.JUnitXmlPrinter.TestSuite" class="extype" href="JUnitXmlPrinter$TestSuite.html">TestSuite</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">create a TestSuite object containing all the examples

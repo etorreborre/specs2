@@ -28,16 +28,9 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The result of an execution, either:</p><p> * a success: the execution is ok
- * a failure: an expectation is not met
- * an error: an exception occurred
- * a pending execution: the user has decided that execution must not be performed
- * a skipped execution: based on dynamic conditions (a database not available for instance)
-   the execution is not performed</p><p>A Result has:
- * a message describing the outcome
- * a message describing the expectation
- * possibly a number of expectations
-   when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>sealed abstract </dd></dl><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The result of an execution, either:</p><ul><li>a success: the execution is ok</li><li>a failure: an expectation is not met</li><li>an error: an exception occurred</li><li>a pending execution: the user has decided that execution must not be performed</li><li>a skipped execution: based on dynamic conditions (a database not available for instance)
+   the execution is not performed</li></ul><p>A Result has:</p><ul><li>a message describing the outcome</li><li>a message describing the expectation</li><li>possibly a number of expectations
+   when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).</li></ul></div><dl class="attributes block"> <dt>Attributes</dt><dd>sealed abstract </dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">

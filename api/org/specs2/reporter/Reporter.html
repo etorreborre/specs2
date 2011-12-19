@@ -28,14 +28,7 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>A Reporter will report the execution of a Specification following 3 steps:</p><p>1. an extraction of the Fragments to report (like creating Descriptions for JUnit)
-  * filtering out some elements if necessary</p><p>2. an ordering of the Fragments to execute:
-  * action steps must be executed in order
-  * dependency between Fragments can be specified
-  * other Fragments can be executed concurrently (unless specified otherwise)</p><p>3. a reporting to:
-  * the console (ConsoleRunner or sbt)
-  * a listener object (junit or sbt)
-  * a file (html, xml, junit-report)</p></div><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>A Reporter will report the execution of a Specification following 3 steps:</p><p>1. an extraction of the Fragments to report (like creating Descriptions for JUnit)</p><ul><li>filtering out some elements if necessary</li></ul><p>2. an ordering of the Fragments to execute:</p><ul><li>action steps must be executed in order</li><li>dependency between Fragments can be specified</li><li>other Fragments can be executed concurrently (unless specified otherwise)</li></ul><p>3. a reporting to:</p><ul><li>the console (ConsoleRunner or sbt)</li><li>a listener object (junit or sbt)</li><li>a file (html, xml, junit-report)</li></ul></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>, <span name="org.specs2.reporter.Storing" class="extype">Storing</span>, <span name="org.specs2.reporter.ExecutionStrategy" class="extype">ExecutionStrategy</span>, <a name="org.specs2.reporter.Sequence" class="extype" href="Sequence.html">Sequence</a>, <a name="org.specs2.reporter.Selection" class="extype" href="Selection.html">Selection</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
@@ -85,57 +78,57 @@
         <div class="values members" id="values">
               <h3>Abstract Value Members</h3>
               <ol><li visbl="pub" name="org.specs2.reporter.ExecutionStrategy#execute" data-isabs="true">
-      <a id="execute(Arguments):(Seq[FragmentSeq]) ⇒ Seq[ExecutedFragment]"></a>
+      <a id="execute(Arguments):(ExecutableSpecification) ⇒ ExecutedSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">execute</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]) ⇒ Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="ExecutableSpecification.html">ExecutableSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd>ExecutionStrategy</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.Exporting#export" data-isabs="true">
-      <a id="export(SpecificationStructure)(Arguments):(Seq[ExecutedFragment]) ⇒ ExportType"></a>
+      <a id="export(Arguments):(ExecutedSpecification) ⇒ ExportType"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">export</span>
         
-        <span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]) ⇒ ExportType</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>) ⇒ ExportType</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting ExecutedFragments</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd>Exporting</dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting an ExecutedSpecification</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd>Exporting</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.Selection#select" data-isabs="true">
-      <a id="select(Arguments):(Fragments) ⇒ Seq[Fragment]"></a>
+      <a id="select(Arguments):(SpecificationStructure) ⇒ SpecificationStructure"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">select</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.Fragments" class="extype" href="../specification/Fragments.html">Fragments</a>) ⇒ Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>) ⇒ <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">select function returning a filtered and ordered seq of seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered and ordered seq of seq of Fragments</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd><a name="org.specs2.reporter.Selection" class="extype" href="Selection.html">Selection</a></dd></dl></div>
+      <p class="shortcomment cmt">select function returning a specification with filtered</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a specification with filtered</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd><a name="org.specs2.reporter.Selection" class="extype" href="Selection.html">Selection</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.Sequence#sequence" data-isabs="true">
-      <a id="sequence(Arguments):(Seq[Fragment]) ⇒ Seq[FragmentSeq]"></a>
+      <a id="sequence(Arguments):(SpecificationStructure) ⇒ ExecutableSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">sequence</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]) ⇒ Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>) ⇒ <a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="ExecutableSpecification.html">ExecutableSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">select function returning a filtered and ordered seq of seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered and ordered seq of seq of Fragments</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd><a name="org.specs2.reporter.Sequence" class="extype" href="Sequence.html">Sequence</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.Storing#store" data-isabs="true">
-      <a id="store(Arguments):(Seq[ExecutedFragment]) ⇒ Seq[ExecutedFragment]"></a>
+      <a id="store(Arguments):(ExecutedSpecification) ⇒ ExecutedSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">store</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]) ⇒ Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function storing ExecutedFragments</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd>Storing</dd></dl></div>
@@ -336,19 +329,8 @@
         <span class="params">(<span name="spec">spec: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: Reporter.this.type</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">report Fragments by:
-  * extracting arguments from the Fragments
-  * selecting them
-  * sequencing fragments in groups
-  * executing fragments
-  * exporting the results to the output format
-</p><div class="fullcomment"><div class="comment cmt"><p>report Fragments by:
-  * extracting arguments from the Fragments
-  * selecting them
-  * sequencing fragments in groups
-  * executing fragments
-  * exporting the results to the output format
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the reporter
+      <p class="shortcomment cmt">report Fragments by:</p><div class="fullcomment"><div class="comment cmt"><p>report Fragments by:</p><ul><li>extracting arguments from the Fragments</li><li>selecting them</li><li>sequencing fragments in groups</li><li>executing fragments</li><li>exporting the results to the output format
+</li></ul></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the reporter
 </p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>

@@ -78,7 +78,7 @@ where an action must be executing after the main executable action
       <span class="symbol"> 
         <a href="AfterContextExample.html"><span class="name">AfterContextExample</span></a>
         <span class="tparams">[<span name="C">C &lt;: After</span>]</span>
-        <span class="result"> extends FragmentsBuilder</span>
+        <span class="result"> extends ExamplesFactory</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given After context
@@ -136,7 +136,7 @@ execute some code inside the around method provided by the context.</p>
       <span class="symbol"> 
         <a href="AroundContextExample.html"><span class="name">AroundContextExample</span></a>
         <span class="tparams">[<span name="C">C &lt;: Around</span>]</span>
-        <span class="result"> extends FragmentsBuilder</span>
+        <span class="result"> extends ExamplesFactory</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given Around context
@@ -232,7 +232,7 @@ to execute before and after an Example
       <span class="symbol"> 
         <a href="BeforeAfterAroundContextExample.html"><span class="name">BeforeAfterAroundContextExample</span></a>
         <span class="tparams">[<span name="C">C &lt;: BeforeAfterAround</span>]</span>
-        <span class="result"> extends FragmentsBuilder</span>
+        <span class="result"> extends ExamplesFactory</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given BeforeAfterAround context
@@ -267,7 +267,7 @@ to execute before and after an Example
       <span class="symbol"> 
         <a href="BeforeAfterContextExample.html"><span class="name">BeforeAfterContextExample</span></a>
         <span class="tparams">[<span name="C">C &lt;: BeforeAfter</span>]</span>
-        <span class="result"> extends FragmentsBuilder</span>
+        <span class="result"> extends ExamplesFactory</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given BeforeAfter context
@@ -302,7 +302,7 @@ to execute before and after an Example
       <span class="symbol"> 
         <a href="BeforeContextExample.html"><span class="name">BeforeContextExample</span></a>
         <span class="tparams">[<span name="C">C &lt;: Before</span>]</span>
-        <span class="result"> extends FragmentsBuilder</span>
+        <span class="result"> extends ExamplesFactory</span>
       </span>
       </h4>
       <p class="comment cmt">For each created example use a given Before context
@@ -364,6 +364,17 @@ to execute before and after an Example
       </span>
       </h4>
       <p class="comment cmt">A Example is:</p>
+    </li><li visbl="pub" name="org.specs2.specification.ExamplesFactory" data-isabs="true">
+      <a id="ExamplesFactory:ExamplesFactory"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ExamplesFactory.html"><span class="name">ExamplesFactory</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.ExecutedBacktab" data-isabs="false">
       <a id="ExecutedBacktab:ExecutedBacktab"></a>
       <h4 class="signature">
@@ -408,8 +419,7 @@ to execute before and after an Example
       </span>
       </h4>
       <p class="comment cmt">The Executed Fragments represent pieces of a Specification
-which have already been executed to provide a Result
-</p>
+which have already been executed to provide a Result</p>
     </li><li visbl="pub" name="org.specs2.specification.ExecutedNoText" data-isabs="false">
       <a id="ExecutedNoText:ExecutedNoText"></a>
       <h4 class="signature">
@@ -456,6 +466,17 @@ execution of an Action for example)
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecification" data-isabs="false">
+      <a id="ExecutedSpecification:ExecutedSpecification"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="ExecutedSpecification.html"><span class="name">ExecutedSpecification</span></a>
+        
+        <span class="params">(<span name="name">name: SpecName</span>, <span name="fs">fs: Seq[ExecutedFragment]</span>, <span name="executor">executor: ExecutorService</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">an executed specification with a name and a sequence of executed fragments</p>
     </li><li visbl="pub" name="org.specs2.specification.ExecutedStandardFragment" data-isabs="true">
       <a id="ExecutedStandardFragment:ExecutedStandardFragment"></a>
       <h4 class="signature">
@@ -617,6 +638,18 @@ link elements.</p>
       </h4>
       <p class="comment cmt">The Outside trait can be inherited by classes which will
 execute some code inside the outside method provided by the context.</p>
+    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment" data-isabs="false">
+      <a id="PromisedExecutedFragment:PromisedExecutedFragment"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="PromisedExecutedFragment.html"><span class="name">PromisedExecutedFragment</span></a>
+        
+        <span class="params">(<span name="promised">promised: Promise[ExecutedFragment]</span>)</span><span class="result"> extends ExecutedFragment with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">embed an executed Fragment into a promise
+</p>
     </li><li visbl="pub" name="org.specs2.specification.RegexStep" data-isabs="true">
       <a id="RegexStep:RegexStep[P, T]"></a>
       <h4 class="signature">
@@ -721,12 +754,12 @@ Specification
       </span>
       </h4>
       <p class="comment cmt">The Stats class store results for the number of:
-* successes
-* expectations
-* failures
-* errors
-* pending
-* skipped</p>
+- successes
+- expectations
+- failures
+- errors
+- pending
+- skipped</p>
     </li><li visbl="pub" name="org.specs2.specification.Step" data-isabs="false">
       <a id="Step:Step"></a>
       <h4 class="signature">
@@ -914,12 +947,12 @@ Error Result if there is an exception or a Success.</p>
       </span>
       </h4>
       <p class="comment cmt">The Stats class store results for the number of:
-* successes
-* expectations
-* failures
-* errors
-* pending
-* skipped</p>
+- successes
+- expectations
+- failures
+- errors
+- pending
+- skipped</p>
     </li><li visbl="pub" name="org.specs2.specification.Step" data-isabs="false">
       <a id="Step:Step"></a>
       <h4 class="signature">

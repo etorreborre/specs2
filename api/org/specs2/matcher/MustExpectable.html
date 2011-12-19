@@ -211,7 +211,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="prt" name="org.specs2.matcher.Expectable#evaluate" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.matcher.Expectable#evaluate" data-isabs="false">
       <a id="evaluate:Expectable[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -221,7 +221,7 @@
         <span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">evaluate the value once and return the same expectable</p><div class="fullcomment"><div class="comment cmt"><p>evaluate the value once and return the same expectable</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="org.specs2" class="extype" href="../package.html">specs2</a>] </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a></dd></dl></div>
+      <p class="shortcomment cmt">evaluate the value once and return the same expectable</p><div class="fullcomment"><div class="comment cmt"><p>evaluate the value once and return the same expectable</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -236,6 +236,19 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Expectable#flatMap" data-isabs="false">
+      <a id="flatMap[S]((T) ⇒ Expectable[S]):Expectable[S]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">flatMap</span>
+        <span class="tparams">[<span name="S">S</span>]</span>
+        <span class="params">(<span name="f">f: (T) ⇒ <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">apply a function to the value
+</p><div class="fullcomment"><div class="comment cmt"><p>apply a function to the value
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -279,7 +292,9 @@
         <span class="params">(<span name="other">other: S</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a></dd></dl></div>
+      <p class="shortcomment cmt">change the expectable value
+</p><div class="fullcomment"><div class="comment cmt"><p>change the expectable value
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Expectable#map" data-isabs="false">
       <a id="map[S]((T) ⇒ S):Expectable[S]"></a>
       <h4 class="signature">
@@ -290,7 +305,44 @@
         <span class="params">(<span name="f">f: (T) ⇒ S</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>
       </span>
       </h4>
+      <p class="shortcomment cmt">apply a function to the expectable value
+</p><div class="fullcomment"><div class="comment cmt"><p>apply a function to the expectable value
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Expectable#mapDescription" data-isabs="false">
+      <a id="mapDescription(String):Expectable[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">mapDescription</span>
+        
+        <span class="params">(<span name="d">d: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>
+      </span>
+      </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Expectable#mapDescription" data-isabs="false">
+      <a id="mapDescription((String) ⇒ String):Expectable[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">mapDescription</span>
+        
+        <span class="params">(<span name="d">d: (String) ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Expectable#mapDescription" data-isabs="false">
+      <a id="mapDescription(Option[(String) ⇒ String]):Expectable[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">mapDescription</span>
+        
+        <span class="params">(<span name="d">d: <span name="scala.Option" class="extype">Option</span>[(String) ⇒ String]</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">apply a function to the description function
+</p><div class="fullcomment"><div class="comment cmt"><p>apply a function to the description function
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.MustExpectable#must" data-isabs="false">
       <a id="must(⇒ Matcher[T]):MatchResult[T]"></a>
       <h4 class="signature">

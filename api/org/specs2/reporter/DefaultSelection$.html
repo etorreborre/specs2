@@ -329,13 +329,13 @@ keeping only the ones matching the ex attribute of the arguments object
       </h4>
       <p class="shortcomment cmt">select function returning a filtered seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered seq of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection#select" data-isabs="false">
-      <a id="select(Arguments):(Fragments) ⇒ Seq[Fragment]"></a>
+      <a id="select(Arguments):(SpecificationStructure) ⇒ SpecificationStructure"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">select</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.Fragments" class="extype" href="../specification/Fragments.html">Fragments</a>) ⇒ Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>) ⇒ <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">select function returning a filtered seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered seq of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a></dd></dl></div>
@@ -360,11 +360,8 @@ keeping only the ones matching the ex attribute of the arguments object
         <span class="params">(<span name="fragments">fragments: Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>)</span><span class="result">: Seq[<a name="org.specs2.specification.TagsFragments.TaggingFragment" class="extype" href="../specification/TagsFragments$$TaggingFragment.html">TaggingFragment</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p><div class="fullcomment"><div class="comment cmt"><p>From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p><p> * a <code>TaggedAs</code> fragment is applicable to the the previous fragment
- * a <code>Tag</code> fragment is applicable to the the next fragment
- * a <code>AsSection</code> fragment is applicable to the the previous fragment to the next <code>AsSection</code> fragment with the same name
- * a <code>Section</code> fragment is applicable to the the next fragment to the next <code>Section</code> fragment with the same name
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a></dd></dl></div>
+      <p class="shortcomment cmt">From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p><div class="fullcomment"><div class="comment cmt"><p>From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:</p><ul><li>a <code>TaggedAs</code> fragment is applicable to the the previous fragment</li><li>a <code>Tag</code> fragment is applicable to the the next fragment</li><li>a <code>AsSection</code> fragment is applicable to the the previous fragment to the next <code>AsSection</code> fragment with the same name</li><li>a <code>Section</code> fragment is applicable to the the next fragment to the next <code>Section</code> fragment with the same name
+</li></ul></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSelection" class="extype" href="DefaultSelection.html">DefaultSelection</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">

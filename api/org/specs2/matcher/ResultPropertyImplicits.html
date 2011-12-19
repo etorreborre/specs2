@@ -131,6 +131,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ResultPropertyImplicits#booleanToProp" data-isabs="false">
+      <a id="booleanToProp(⇒ Boolean):Prop"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">booleanToProp</span>
+        
+        <span class="params">(<span name="b">b: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ResultPropertyImplicits#callByNameMatchResultToProp" data-isabs="false">
+      <a id="callByNameMatchResultToProp[T](⇒ MatchResult[T]):Prop"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">callByNameMatchResultToProp</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="m">m: ⇒ <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -215,13 +237,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ResultPropertyImplicits#matchResultToProp" data-isabs="false">
-      <a id="matchResultToProp(org.specs2.matcher.MatchResult[_]):Prop"></a>
+      <a id="matchResultToProp[T](MatchResult[T]):Prop"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">matchResultToProp</span>
-        
-        <span class="params">(<span name="m">m: org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="m">m: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
@@ -258,14 +280,14 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.matcher.ResultPropertyImplicits#resultToProp" data-isabs="false">
-      <a id="resultToProp[T](T)((T) ⇒ Result):Prop"></a>
+    </li><li visbl="pub" name="org.specs2.matcher.ResultPropertyImplicits#propToProp" data-isabs="false">
+      <a id="propToProp(⇒ Prop):Prop"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
-        <span class="name">resultToProp</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="t">t: T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toResult">toResult: (T) ⇒ <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
+        <span class="name">propToProp</span>
+        
+        <span class="params">(<span name="p">p: ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>

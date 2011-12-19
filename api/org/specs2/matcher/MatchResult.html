@@ -28,8 +28,8 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Result of a Match.</p><p>A MatchResult contains several information about a match on an expectable:</p><p>* the expectable value, to allow the chaining of matches
-* a pair of messages ok message / ko message to allow the easy creation of the negation
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Result of a Match.</p><p>A MatchResult contains several information about a match on an expectable:</p><p>- the expectable value, to allow the chaining of matches
+- a pair of messages ok message / ko message to allow the easy creation of the negation
   of a match</p><p>A MatchResult can be transformed to a simple Result object to be the body of an Example.</p><p>There are different kinds of MatchResults, some of them being only created to support
 English-like combination of Matchers:</p><p><code>1 must be equalTo(1) and not be equalTo(2)</code></p><p>In an Expectation like the one above, there is a left to right evaluation:</p><ol class="decimal"><li>be is a NeutralMatcher, returning a NeutralMatch doing nothing yet, just storing
     the expectable</li></ol><p> 2. equalTo(1) is a real Matcher which is applied to the NeutralMatch MatchResult

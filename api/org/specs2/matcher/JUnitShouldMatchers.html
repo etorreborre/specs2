@@ -863,6 +863,28 @@ write("./dir/hello.txt") { out =>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.AnyBeHaveMatchers" class="extype" href="AnyBeHaveMatchers.html">AnyBeHaveMatchers</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#atLeastOnce" data-isabs="false">
+      <a id="atLeastOnce[T, U](GenTraversable[T])((T) ⇒ MatchResult[U]):MatchResult[Seq[T]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">atLeastOnce</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span>
+        <span class="params">(<span name="values">values: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>)</span><span class="params">(<span name="f">f: (T) ⇒ <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[U]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scala.collection.Seq" class="extype">Seq</span>[T]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">verify the function f for at least one value</p><div class="fullcomment"><div class="comment cmt"><p>verify the function f for at least one value</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#atLeastOnceWhen" data-isabs="false">
+      <a id="atLeastOnceWhen[T, U](GenTraversable[T])(PartialFunction[T, MatchResult[U]]):MatchResult[Seq[T]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">atLeastOnceWhen</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span>
+        <span class="params">(<span name="values">values: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>)</span><span class="params">(<span name="f">f: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[T, <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[U]]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scala.collection.Seq" class="extype">Seq</span>[T]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">verify the function f for at least one value, where the PartialFunction is defined</p><div class="fullcomment"><div class="comment cmt"><p>verify the function f for at least one value, where the PartialFunction is defined</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.BeHaveMatchers#be" data-isabs="false">
       <a id="be:NeutralMatcher[Any]"></a>
       <h4 class="signature">
@@ -1579,7 +1601,18 @@ It is equivalent to writting a must_== b
         <span class="params">(<span name="m">m: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">this method can be overriden to throw exceptions when checking the result</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overriden to throw exceptions when checking the result</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.JUnitExpectations" class="extype" href="JUnitExpectations.html">JUnitExpectations</a> → <a name="org.specs2.matcher.ThrownExpectations" class="extype" href="ThrownExpectations.html">ThrownExpectations</a> → <a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
+      <p class="shortcomment cmt">this method can be overriden to throw exceptions when checking the match result</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overriden to throw exceptions when checking the match result</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.JUnitExpectations" class="extype" href="JUnitExpectations.html">JUnitExpectations</a> → <a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.matcher.ThrownExpectations#checkResultFailure" data-isabs="false">
+      <a id="checkResultFailure(Result):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">checkResultFailure</span>
+        
+        <span class="params">(<span name="r">r: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this method can be overriden to throw exceptions when checking the result</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overriden to throw exceptions when checking the result</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ThrownExpectations" class="extype" href="ThrownExpectations.html">ThrownExpectations</a> → <a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -1663,14 +1696,25 @@ It is equivalent to writting a must_== b
 This definition looks redundant with the one below but it is necessary to
 avoid the implicit argThat method from Mockito to infer an improper matcher</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd><dt>See also</dt><dd><span class="cmt"><p>the HtmlPrinterSpec failing with a NPE if that method is missing
 </p></span></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#containAllOf" data-isabs="false">
+      <a id="containAllOf[T](Seq[T]):ContainMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">containAllOf</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="seq">seq: Seq[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.ContainMatcher" class="extype" href="ContainMatcher.html">ContainMatcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">match if traversable contains (seq2).</p><div class="fullcomment"><div class="comment cmt"><p>match if traversable contains (seq2). n is a dummy paramter to allow overloading</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#containAnyOf" data-isabs="false">
-      <a id="containAnyOf[T](LazyParameter[T]*):ContainAnyOfMatcher[T]"></a>
+      <a id="containAnyOf[T](Seq[T]):ContainAnyOfMatcher[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">containAnyOf</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="t">t: <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[T]*</span>)</span><span class="result">: <a name="org.specs2.matcher.ContainAnyOfMatcher" class="extype" href="ContainAnyOfMatcher.html">ContainAnyOfMatcher</a>[T]</span>
+        <span class="params">(<span name="seq">seq: Seq[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.ContainAnyOfMatcher" class="extype" href="ContainAnyOfMatcher.html">ContainAnyOfMatcher</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">match if traversable contains one of (t1, t2)</p><div class="fullcomment"><div class="comment cmt"><p>match if traversable contains one of (t1, t2)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
@@ -2096,6 +2140,50 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       </span>
       </h4>
       <p class="shortcomment cmt">matches if the regexp a is found inside b</p><div class="fullcomment"><div class="comment cmt"><p>matches if the regexp a is found inside b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#forall" data-isabs="false">
+      <a id="forall[T, U](GenTraversable[T])((T) ⇒ MatchResult[U]):MatchResult[Seq[T]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">forall</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span>
+        <span class="params">(<span name="values">values: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>)</span><span class="params">(<span name="f">f: (T) ⇒ <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[U]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scala.collection.Seq" class="extype">Seq</span>[T]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">verify the function f for all the values, stopping after the first failure</p><div class="fullcomment"><div class="comment cmt"><p>verify the function f for all the values, stopping after the first failure</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#forallWhen" data-isabs="false">
+      <a id="forallWhen[T, U](GenTraversable[T])(PartialFunction[T, MatchResult[U]]):MatchResult[Seq[T]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">forallWhen</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span>
+        <span class="params">(<span name="values">values: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>)</span><span class="params">(<span name="f">f: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[T, <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[U]]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scala.collection.Seq" class="extype">Seq</span>[T]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined</p><div class="fullcomment"><div class="comment cmt"><p>verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#foreach" data-isabs="false">
+      <a id="foreach[T, U](GenTraversable[T])((T) ⇒ MatchResult[U]):MatchResult[Seq[T]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">foreach</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span>
+        <span class="params">(<span name="values">values: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>)</span><span class="params">(<span name="f">f: (T) ⇒ <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[U]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scala.collection.Seq" class="extype">Seq</span>[T]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">verify the function f for all the values, and collect all failures</p><div class="fullcomment"><div class="comment cmt"><p>verify the function f for all the values, and collect all failures</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#foreachWhen" data-isabs="false">
+      <a id="foreachWhen[T, U](GenTraversable[T])(PartialFunction[T, MatchResult[U]]):MatchResult[Seq[T]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">foreachWhen</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span>
+        <span class="params">(<span name="values">values: <span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]</span>)</span><span class="params">(<span name="f">f: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[T, <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[U]]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scala.collection.Seq" class="extype">Seq</span>[T]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">verify the function f for all the values, and collect all failures, where the PartialFunction is defined</p><div class="fullcomment"><div class="comment cmt"><p>verify the function f for all the values, and collect all failures, where the PartialFunction is defined</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#fromMatchResult" data-isabs="false">
       <a id="fromMatchResult(⇒ org.specs2.matcher.MatchResult[_]):Boolean"></a>
       <h4 class="signature">
@@ -2776,6 +2864,19 @@ This verification does not consider the order of the elements but checks the tra
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file, using the XML parser
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#matchResultFunctionToMatcher" data-isabs="false">
+      <a id="matchResultFunctionToMatcher[T]((T) ⇒ org.specs2.matcher.MatchResult[_]):Matcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">matchResultFunctionToMatcher</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="f">f: (T) ⇒ org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">This method transform a function returning a MatchResult to a Matcher
+</p><div class="fullcomment"><div class="comment cmt"><p>This method transform a function returning a MatchResult to a Matcher
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#matcherFunction" data-isabs="false">
       <a id="matcherFunction[S, T]((S) ⇒ Matcher[T]):MatcherFunction[S, T]"></a>
       <h4 class="signature">

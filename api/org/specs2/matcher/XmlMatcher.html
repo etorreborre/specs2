@@ -225,6 +225,19 @@ search function which tries to match the result of the preceding function. For e
       </h4>
       
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#^^" data-isabs="false">
+      <a id="^^[S]((S) ⇒ Expectable[Seq[Node]],Int):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">^^</span>
+        <span class="tparams">[<span name="S">S</span>]</span>
+        <span class="params">(<span name="f">f: (S) ⇒ <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[Seq[<span name="scala.xml.Node" class="extype">Node</span>]]</span>, <span name="dummy">dummy: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[S]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Adapt a matcher to another.</p><div class="fullcomment"><div class="comment cmt"><p>Adapt a matcher to another.
+ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage aka &quot;trimmed&quot;)</code> can be applied to an exception</p><p>The dummy value is used to help to disambiguate with the overloaded ^^ function
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Matcher#^^" data-isabs="false">
       <a id="^^[S]((S) ⇒ Seq[Node]):Matcher[S]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
