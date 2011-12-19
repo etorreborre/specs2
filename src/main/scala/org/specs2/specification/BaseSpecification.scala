@@ -7,9 +7,9 @@ import Fragments._
 /**
  * A Base specification contains the minimum elements for a Specification
  * 
- * * a Seq of Fragments, available through the SpecificationStructure trait
- * * methods for creating Fragments from the FragmentsBuilder trait
- * * methods to include other specifications
+ * - a Seq of Fragments, available through the SpecificationStructure trait
+ * - methods for creating Fragments from the FragmentsBuilder trait
+ * - methods to include other specifications
  *
  */
 trait BaseSpecification extends SpecificationStructure with FragmentsBuilder with SpecificationInclusion

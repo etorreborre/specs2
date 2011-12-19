@@ -6,10 +6,10 @@ import main._
 
 /**
  * This trait provides function to create specification Fragments:
- *  * a SpecStart fragment with title
- *  * a Text fragment with text
- *  * an Example fragment with a body
- *  * a group of fragments (when including another specification for example)
+ *  - a SpecStart fragment with title
+ *  - a Text fragment with text
+ *  - an Example fragment with a body
+ *  - a group of fragments (when including another specification for example)
  * 
  */
 private[specs2]

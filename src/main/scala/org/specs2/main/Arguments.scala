@@ -13,10 +13,10 @@ import reporter.{SmartColors, Colors}
  *
  * The arguments are grouped along 4 functions:
  *
- * * select:  for the selection of what must be executed
- * * execute: for the execution of fragments
- * * store:   for the storing of execution results
- * * report:  for the reporting of results
+ * - select:  for the selection of what must be executed
+ * - execute: for the execution of fragments
+ * - store:   for the storing of execution results
+ * - report:  for the reporting of results
  *
  */
 private[specs2]  

@@ -18,8 +18,8 @@ import specification.StandardFragments.{Backtab, Tab, Br, End}
 * This creates a PreStep object containing the current context (representing all the extracted values) and a list of
 * Fragments containing:
 *
-*  * the Text fragment: <code>Text("name: ${Eric}")</code>
-*  * a Step containing the extraction code to get the value delimited by <code>${}</code>
+*  - the Text fragment: <code>Text("name: ${Eric}")</code>
+*  - a Step containing the extraction code to get the value delimited by <code>${}</code>
 *
 * Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
 * stores the additional Text fragment so that values can be extracted from it when a `When` step is added:
@@ -38,9 +38,9 @@ import specification.StandardFragments.{Backtab, Tab, Br, End}
 *
 * The last PostStep object contains the list of all fragments created by the Given/When/Then sequence:
 *
-*  * Text fragments
-*  * Steps
-*  * Examples
+*  - Text fragments
+*  - Steps
+*  - Examples
 *
 */
 trait RegexSteps {

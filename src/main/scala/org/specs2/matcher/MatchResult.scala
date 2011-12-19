@@ -10,8 +10,8 @@ import Expectable._
  * 
  * A MatchResult contains several information about a match on an expectable:
  * 
- * * the expectable value, to allow the chaining of matches
- * * a pair of messages ok message / ko message to allow the easy creation of the negation
+ * - the expectable value, to allow the chaining of matches
+ * - a pair of messages ok message / ko message to allow the easy creation of the negation
  *   of a match
  * 
  * A MatchResult can be transformed to a simple Result object to be the body of an Example.

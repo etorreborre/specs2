@@ -50,8 +50,8 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
 
   /** 
    * run the suite by executing each fragment related to a description:
-   * * execute all fragments (including Steps which are reported as steps)
-   * * for each result, report the failure/error/skipped or pending message as a
+   * - execute all fragments (including Steps which are reported as steps)
+   * - for each result, report the failure/error/skipped or pending message as a
    *   junit failure or ignored event on the RunNotifier
    */
   def run(notifier: RunNotifier) {

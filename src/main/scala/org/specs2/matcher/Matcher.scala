@@ -22,10 +22,10 @@ import time.Duration
  * Matchers can be composed.
  * 
  * Implementation notes:
- *   * the parameter to the apply method must be a by-name parameter.
+ *   - the parameter to the apply method must be a by-name parameter.
  *     This allows some values to be evaluated only when necessary.
  *     
- *   * However in the implementation of the apply function, it must be taken care of not
+ *   - However in the implementation of the apply function, it must be taken care of not
  *     evaluating the parameter twice. Assigning it to a val is the solution to this issue.
  */
 trait Matcher[-T] { outer =>

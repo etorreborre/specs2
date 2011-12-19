@@ -29,9 +29,9 @@ sealed trait Fragment {
  *
  * This fragment keeps 2 important pieces of information:
  *
- *  * the name of the specification (which is derived from the specification class or from a user-defined title)
+ *  - the name of the specification (which is derived from the specification class or from a user-defined title)
  *    That name stores a unique id for the specification
- *  * the arguments for that specification
+ *  - the arguments for that specification
  */
 case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) extends Fragment {
   def name = specName.name
@@ -80,8 +80,8 @@ case class Text(t: String) extends Fragment {
 /**
  * A Example is:
  *
- * * a description: some text, with possibly some markup annotations for rendering code fragments (used in AutoExamples)
- * * a body: some executable code returning a Result
+ * - a description: some text, with possibly some markup annotations for rendering code fragments (used in AutoExamples)
+ * - a body: some executable code returning a Result
  */
 case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable {
   def execute = body()
@@ -149,10 +149,10 @@ case object Action {
 
 /**
  * Those standard Fragments are used to format the specification text:
- *  * End() can be used to "reset" the indentation of text
- *  * Br() can be used to insert a newline
- *  * Tab() can be used to increment the indentation level
- *  * Backtab() can be used to decrement the indentation level
+ *  - End() can be used to "reset" the indentation of text
+ *  - Br() can be used to insert a newline
+ *  - Tab() can be used to increment the indentation level
+ *  - Backtab() can be used to decrement the indentation level
  */
 private[specs2]
 object StandardFragments {

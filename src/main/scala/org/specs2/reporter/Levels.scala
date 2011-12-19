@@ -15,15 +15,15 @@ import StandardFragments._
  * 
  * It does so by considering that:
  * 
- * * when a Text fragment follows a Text fragment we're going up one level
+ * - when a Text fragment follows a Text fragment we're going up one level
  *   (so the second text fragment can be indented relatively to the first one)
- * * when an Example fragment follows a Text fragment we're going up one level
- * * when an Example fragment follows an Example fragment we're staying on the same level
- * * when a Text fragment follows an Example fragment we're going down one level
- * * when a paragraph follows anything, we're going down one level
- * * when there is a end, we reset the levels to zero
- * * when there is a tab we indent everything following the tab (1 level is the default)
- * * when there is a backtab we unindent everything following the tab (1 level is the default)
+ * - when an Example fragment follows a Text fragment we're going up one level
+ * - when an Example fragment follows an Example fragment we're staying on the same level
+ * - when a Text fragment follows an Example fragment we're going down one level
+ * - when a paragraph follows anything, we're going down one level
+ * - when there is a end, we reset the levels to zero
+ * - when there is a tab we indent everything following the tab (1 level is the default)
+ * - when there is a backtab we unindent everything following the tab (1 level is the default)
  * 
  */
 private[specs2]

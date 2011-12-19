@@ -39,8 +39,8 @@ case class SpecsArguments[T](argumentsFragments: Seq[ApplicableArguments[T]] = V
   }
   /**
    * filter the fragments with 2 functions:
-   *  * one working on the whole fragment list
-   *  * one working on each individual fragment
+   *  - one working on the whole fragment list
+   *  - one working on each individual fragment
    */
   def filter(fs: Seq[(T, Arguments, SpecName)] => Seq[T]): Seq[T] = fragmentAndApplicableArgumentsAndSpecNames |> fs
 
@@ -71,8 +71,8 @@ case object SpecsArguments {
 
   /**
    * filter the fragments with 2 functions:
-   *  * one working on the whole fragment list
-   *  * one working on each individual fragment
+   *  - one working on the whole fragment list
+   *  - one working on each individual fragment
    */
   def filter[T](ts: Seq[T])(fs: Seq[(T, Arguments, SpecName)] => Seq[T])(implicit r: Reducer[T, SpecsArguments[T]]): Seq[T] =
     foldAll(ts).filter(fs)

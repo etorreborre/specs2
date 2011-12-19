@@ -4,7 +4,7 @@ package control
 /** 
  * This trait describes something which has a stackTrace with:
  *
- *  * a list of stacktrace element
+ *  - a list of stacktrace element
  */
 private[specs2]
 trait HasStackTrace {

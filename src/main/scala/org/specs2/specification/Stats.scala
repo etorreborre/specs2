@@ -19,12 +19,12 @@ import scala.xml._
 
 /**
 * The Stats class store results for the number of:
-* * successes
-* * expectations
-* * failures
-* * errors
-* * pending
-* * skipped
+* - successes
+* - expectations
+* - failures
+* - errors
+* - pending
+* - skipped
 *
 *  for each example
 *
@@ -162,12 +162,12 @@ case class Stats(examples:     Int = 0,
 
 /**
  * The Stats class store results for the number of:
- * * successes
- * * expectations
- * * failures
- * * errors
- * * pending
- * * skipped
+ * - successes
+ * - expectations
+ * - failures
+ * - errors
+ * - pending
+ * - skipped
  * 
  *  for each example
  *

@@ -17,8 +17,8 @@ import scala.collection.GenTraversable
 *
 * It also allows to:
 *
-* * create matchers from functions
-* * create matchers for seqs and sets from single matchers
+* - create matchers from functions
+* - create matchers for seqs and sets from single matchers
 */
 trait MatchersImplicits extends Expectations {
   /** 

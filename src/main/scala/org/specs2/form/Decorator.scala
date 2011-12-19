@@ -4,8 +4,8 @@ package form
 /**
  * This class contains functions to decorate and style a label and a value:
  *
- *  * with a function taking the xml for the label/value and returning some xml
- *  * with some xml attributes "name":"value" to style those labels/values
+ *  - with a function taking the xml for the label/value and returning some xml
+ *  - with some xml attributes "name":"value" to style those labels/values
  *
  * The methods of that class allow to stack new decoration, new styling attributes but also define standard decoration
  * and styles for bold / italic / centered ... text.

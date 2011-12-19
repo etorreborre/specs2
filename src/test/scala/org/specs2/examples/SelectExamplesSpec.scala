@@ -6,9 +6,9 @@ import specification.Tags
 /**
  * There are several ways to select the examples to execute:
  *
- *  * by using arguments and a regular expression matching on the example name
- *  * by using tags
- *  * by using sections
+ *  - by using arguments and a regular expression matching on the example name
+ *  - by using tags
+ *  - by using sections
  *
  * For more details @see org.specs2.guide.SpecStructure
  */

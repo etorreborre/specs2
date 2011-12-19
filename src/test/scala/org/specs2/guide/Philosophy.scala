@@ -141,7 +141,7 @@ This is one of the expected advantages of using functional programming technique
 
 ##### A simple structure
 
-This principle comes from the desire to unite the traditional ***specs*** approach of using blocks with `should` and `in` keywords with a more *literate* approach of having just free text.
+This principle comes from the desire to unify the traditional ***specs*** approach of using blocks with `should` and `in` keywords with a more *literate* approach of having just free text.
 
 In other words, there is no fundamental difference between an "Acceptance Testing" specification and a "Unit Test" specification. This is just a matter of the scale at which you're looking at things.
 

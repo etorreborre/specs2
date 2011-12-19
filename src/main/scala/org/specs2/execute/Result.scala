@@ -10,17 +10,17 @@ import org.specs2.internal.scalaz.Monoid
 /**
  * The result of an execution, either:
  *
- *  * a success: the execution is ok
- *  * a failure: an expectation is not met
- *  * an error: an exception occurred
- *  * a pending execution: the user has decided that execution must not be performed
- *  * a skipped execution: based on dynamic conditions (a database not available for instance)
+ *  - a success: the execution is ok
+ *  - a failure: an expectation is not met
+ *  - an error: an exception occurred
+ *  - a pending execution: the user has decided that execution must not be performed
+ *  - a skipped execution: based on dynamic conditions (a database not available for instance)
  *    the execution is not performed 
  * 
  * A Result has:
- *  * a message describing the outcome
- *  * a message describing the expectation
- *  * possibly a number of expectations
+ *  - a message describing the outcome
+ *  - a message describing the expectation
+ *  - possibly a number of expectations
  *    when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).
  * 
  */

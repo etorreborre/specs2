@@ -23,9 +23,9 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
   def mock[T : ClassManifest](settings: org.mockito.MockSettings): T = Mocked[T](settings).done
   /**
    * implicit allowing to define the mock settings with a nice syntax:
-	 *  * named mock: val m = mock[java.util.List[String]].as("name")
-	 *  * smart mock: val m = mock[java.util.List[String]].smart
-	 *  * other settings: val m = mock[java.util.List[String]].
+	 *  - named mock: val m = mock[java.util.List[String]].as("name")
+	 *  - smart mock: val m = mock[java.util.List[String]].smart
+	 *  - other settings: val m = mock[java.util.List[String]].
    *	       settings(name = "list", 
    *	                defaultReturn = 10, 
 	 *                  extraInterfaces = classesOf[Cloneable, Serializable])

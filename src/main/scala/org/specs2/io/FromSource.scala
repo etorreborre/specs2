@@ -25,15 +25,15 @@ trait FromSource {
 
   /**
    * get some source code by:
-   *   * fetching the current stacktrace
-   *   * finding the location of the example (6th trace by default)
+   *   - fetching the current stacktrace
+   *   - finding the location of the example (6th trace by default)
    */
   def getCode(depth: Int = 6): Either[String, String] = getCodeFromTo(depth, depth)
 
   /**
    * get some source code by:
-   *   * fetching the current stacktrace
-   *   * finding the location of the example by taking the trace of the first line and the trace of the last line
+   *   - fetching the current stacktrace
+   *   - finding the location of the example by taking the trace of the first line and the trace of the last line
    *    (at depth 6 and 9 by default)
    *
    * @return Left(error) if the startTrace and endTrace do not cover the same file

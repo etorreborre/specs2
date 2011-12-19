@@ -143,9 +143,9 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
 /**
  *  Companion object of a Form to create:
- *   * an empty Form
- *   * a Form with no rows but a title
- *   * a Form with no title but one row
+ *   - an empty Form
+ *   - a Form with no rows but a title
+ *   - a Form with no title but one row
  *
  */
 case object Form {

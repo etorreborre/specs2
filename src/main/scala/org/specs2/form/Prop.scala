@@ -10,9 +10,9 @@ import text.NotNullStrings._
 
 /**
  * The Prop class is a named property which holds:
- *   * an expected value
- *   * an actual value
- *   * a constraint to check if the actual value conforms to the expected one
+ *   - an expected value
+ *   - an actual value
+ *   - a constraint to check if the actual value conforms to the expected one
  * 
  * This property can be executed and can be inserted in a Form.
  *

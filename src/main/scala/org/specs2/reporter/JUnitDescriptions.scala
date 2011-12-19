@@ -16,9 +16,9 @@ import java.util.regex.Matcher
  * The JUnit descriptions class transforms a list of fragments
  * to:
  * 
- * * a Description object having children Descriptions. It is used by the JUnitRunner
+ * - a Description object having children Descriptions. It is used by the JUnitRunner
  *   to display the suites and tests to execute
- * * a Map of Fragments to execute, or executed fragments, indexed by Description: Description -> Fragment
+ * - a Map of Fragments to execute, or executed fragments, indexed by Description: Description -> Fragment
  * 
  * The Description object creation works by using the Levels reducer to build a Tree[Description].
  * That Tree is then folded bottom-up to create the necessary associations between the 

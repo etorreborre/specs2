@@ -42,10 +42,10 @@ case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLin
 /** 
  * An HtmlLine encapsulates:
  * 
- * * an executed fragment to print
- * * the current statistics
- * * the current level
- * * the current arguments
+ * - an executed fragment to print
+ * - the current statistics
+ * - the current level
+ * - the current arguments
  */
 private[specs2]
 sealed trait HtmlLine {

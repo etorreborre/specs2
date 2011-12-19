@@ -13,7 +13,7 @@ import main.{Execute, Arguments}
 * This trait stores the results of an executed specification
 * It also updates the statistics of:
 *
-*  * SpecStart fragments from SpecEnd fragments
+*  - SpecStart fragments from SpecEnd fragments
 */
 private[specs2]
 trait Storing {
@@ -67,8 +67,8 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
   }
   /**
    * store the statistics:
-   * * for SpecEnd -> put the stats in the repository
-   * * for a SpecStart that's a link -> read the status of the previous execution 
+   * - for SpecEnd -> put the stats in the repository
+   * - for a SpecStart that's a link -> read the status of the previous execution
    */
   protected def storeStats = (fn: (ExecutedFragment, SpecName)) => {
     fn match {

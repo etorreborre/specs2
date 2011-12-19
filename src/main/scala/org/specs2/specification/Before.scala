@@ -27,9 +27,9 @@ trait Before extends Context { outer =>
    * 
    * The action will be aborted if the before block fails:
    *
-   * * with an exception
-   * * with a non-Success result
-   * * with a non-Success match result
+   * - with an exception
+   * - with a non-Success result
+   * - with a non-Success match result
    */
   def apply[T <% Result](a: =>T): Result = {
     ResultExecution.execute(before)((any: Any) => a)

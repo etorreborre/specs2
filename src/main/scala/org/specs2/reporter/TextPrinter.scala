@@ -23,10 +23,10 @@ import SpecsArguments._
  * This trait reduces a list of ExecutedFragments to a list of PrintLines.
  * 
  * Each line contains:
- * * A description (text or example description)
- * * A level, to work out the indenting
- * * Some statistics, to print on SpecEnd
- * * The current arguments, to control the conditional printing of text, statistics,...
+ * - A description (text or example description)
+ * - A level, to work out the indenting
+ * - Some statistics, to print on SpecEnd
+ * - The current arguments, to control the conditional printing of text, statistics,...
  *
  */
 trait TextPrinter {

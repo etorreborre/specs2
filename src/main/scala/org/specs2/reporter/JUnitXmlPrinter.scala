@@ -18,9 +18,9 @@ import specification._
  *
  * To do this, it uses a reducer to prepare print blocks with:
  *
- * * the text to print
- * * the statistics
- * * the current arguments to use
+ * - the text to print
+ * - the statistics
+ * - the current arguments to use
  *
  */
 trait JUnitXmlPrinter {

@@ -76,10 +76,10 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
   /**
    * From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:
    *
-   *  * a `TaggedAs` fragment is applicable to the the previous fragment
-   *  * a `Tag` fragment is applicable to the the next fragment
-   *  * a `AsSection` fragment is applicable to the the previous fragment to the next `AsSection` fragment with the same name
-   *  * a `Section` fragment is applicable to the the next fragment to the next `Section` fragment with the same name
+   *  - a `TaggedAs` fragment is applicable to the the previous fragment
+   *  - a `Tag` fragment is applicable to the the next fragment
+   *  - a `AsSection` fragment is applicable to the the previous fragment to the next `AsSection` fragment with the same name
+   *  - a `Section` fragment is applicable to the the next fragment to the next `Section` fragment with the same name
    */
   def tags(fragments: Seq[Fragment]): Seq[TaggingFragment] = {
 
