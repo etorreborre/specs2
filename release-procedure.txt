@@ -1,28 +1,30 @@
-1. set the version to next number
-2. update the gh pages and modify the versions (new version and next snapshot)
+1. update the gh pages and modify the versions (new version and next snapshot)
+2. review the posterous notes
 
 3. create the user guide
 4. copy the user guide to the gh-pages
 
 5. create the scaladoc
-6. preview / adjust the scaladoc
+6. copy the scaladoc to the gh-pages
 
-7. review the posterous notes
-8. publish the gh pages
+7. use the release plugin to
+   - set the version to next number
+   - test/publish the jars
+   - publish the posterous notes
+   - tag the released version
+   
+8. push the new version (check "include tags")
+9. create a new specs2 branch for the next SNAPSHOT
 
-9. set the specs2-test project version
-10. tag and push the new version (check "include tags")
-11. create a new snapshot branch
+10. publish the gh pages
 
-12. test/publish the jars
-13. tag and push the new version (check "include tags")
-14. create a new specs2 branch for the next SNAPSHOT
+11 set the specs2-test project version
+12. tag and push the new version (check "include tags")
+13. create a new snapshot branch
+14. download the test-project and test it
 
-15. download the test-project and test it
+15. close the milestone on github and create a new one
+16. change the default branch on github
 
-16. close the milestone on github and create a new one
-17. change the default branch on github
-
-18. publish the posterous notes
-19. send a message on the scala-announce mailing-list
-20. send a message on the twitter account
+17. send a message on the scala-announce mailing-list
+18. send a message on the twitter account
