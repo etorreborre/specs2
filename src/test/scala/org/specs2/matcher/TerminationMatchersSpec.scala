@@ -52,7 +52,7 @@ class   TerminationMatchersSpec extends Specification with TerminationMatchers {
 
   def e9 = {
     val queue = new ArrayBlockingQueue[Int](1)
-    val actions = Seq(() => queue.take(), () => { Thread.sleep(10); queue.add(1) }).par
+    val actions = Seq(() => { Thread.sleep(10); queue.take() }, () => { Thread.sleep(50); queue.add(1) }).par
     actions.map(_()).seq must terminate(sleep=200.millis)
   }
 
