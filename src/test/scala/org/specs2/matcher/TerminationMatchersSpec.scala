@@ -28,7 +28,7 @@ class   TerminationMatchersSpec extends Specification with TerminationMatchers {
 
   def e1 = { Thread.sleep(50) must terminate }
   def e2 = { (Thread.sleep(150) must terminate) returns "the action is blocking with retries=0 and sleep=100" }
-  def e3 = { Thread.sleep(50) must terminate(retries=2, sleep=20.millis) }
+  def e3 = { Thread.sleep(50) must terminate(retries=2, sleep=20.millis).orSkip }
   def e4 = { (Thread.sleep(1000) must terminate(retries=3, sleep=20.millis)) returns "the action is blocking with retries=3 and sleep=20" }
   def e5 = {
     val out = new MockOutput { }
@@ -53,7 +53,7 @@ class   TerminationMatchersSpec extends Specification with TerminationMatchers {
   def e9 = {
     val queue = new ArrayBlockingQueue[Int](1)
     val actions = Seq(() => { Thread.sleep(10); queue.take() }, () => { Thread.sleep(50); queue.add(1) }).par
-    actions.map(_()).seq must terminate(sleep=200.millis)
+    actions.map(_()).seq must terminate(sleep=200.millis).orSkip
   }
 
 }
