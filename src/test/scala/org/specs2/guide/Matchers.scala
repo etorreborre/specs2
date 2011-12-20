@@ -121,7 +121,7 @@ There is also a shortcut for `value aka value.toString` which is simply `value.a
 
 And when you want to other ways to customize the description, you can use:
 
- * `post`: `"a" post " is the first letter"` prints `a is the first letter`
+ * `post`: `"a" post "is the first letter"` prints `a is the first letter`
  * `as`: `"b" as ((s:String) => "a"+s+"c")` prints `abc`
 
 

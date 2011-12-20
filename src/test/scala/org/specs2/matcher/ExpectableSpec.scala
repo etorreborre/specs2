@@ -15,7 +15,7 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
     ("a" aka).description must_== "a 'a'"
   }
   "An expectable described with post will have some description text appended to its toString value" in {
-    ("a" post " is the first letter").description must_== "a is the first letter"
+    ("a" post "is the first letter").description must_== "a is the first letter"
   }
   "An expectable can be described with a function taking its toString value" in {
     ("b" as ((s:String) => "a"+s+"c")).description must_== "abc"

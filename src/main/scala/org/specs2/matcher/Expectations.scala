@@ -21,7 +21,7 @@ trait Expectations {
     /** @return an expectable with an alias description */
     def aka(alias: String): Expectable[T] = createExpectable(value, alias)
     /** @return an expectable with an alias description, after the value string */
-    def post(alias: String): Expectable[T] = as((_:String) + alias)
+    def post(alias: String): Expectable[T] = as((_:String)+" "+alias)
     /** @return an expectable with an alias description, after the value string */
     def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
   }
