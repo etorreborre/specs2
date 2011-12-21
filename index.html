@@ -168,11 +168,11 @@
 	  <div class="tabbertab" title="sbt">
   	    <code class="prettyprint">
   libraryDependencies ++= Seq(
-    "org.specs2" %% "specs2" % "1.7" % "test",
+    "org.specs2" %% "specs2" % "1.7" % "test"
 	
-    // with Scala 2.8.1 (specs2 1.5 is the latest version for scala 2.8.1)
-    "org.specs2" %% "specs2" % "1.5",
-    "org.specs2" %% "specs2-scalaz-core" % "5.1-SNAPSHOT" % "test",
+    // with Scala 2.8.x (specs2 1.5 is the latest version for scala 2.8.x)
+    // "org.specs2" %% "specs2" % "1.5" % "test",
+    // "org.specs2" %% "specs2-scalaz-core" % "5.1-SNAPSHOT" % "test"
   )
 
   resolvers ++= Seq("snapshots" at "http://scala-tools.org/repo-snapshots",
@@ -188,13 +188,10 @@
  &lt;/dependency>
 
  &lt;!--
-with Scala 2.8.1, change the 2 dependencies to:
+with Scala 2.8.1, change the dependency to:
 
    &lt;artifactId>specs2_2.8.1&lt;/artifactId> 
    &lt;version>1.5&lt;/version> 
-
-   &lt;artifactId>specs2-scalaz-core_2.8.1&lt;/artifactId> 
-   &lt;version>5.1-SNAPSHOT&lt;/version> 
 
 --> 
 
