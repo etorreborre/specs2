@@ -22,15 +22,17 @@ shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project
 resolvers ++= Seq("snapshots-repo" at "http://scala-tools.org/repo-snapshots", 
                   "Local Maven Repository" at "file://c:/Documents and Settings/Eric/.m2/repository")
 
-libraryDependencies ++= Seq(
+libraryDependencies <<= scalaVersion { scala_version => Seq(
+  "org.specs2" %% "specs2-scalaz-core" % "6.0.1",
+  "org.scala-lang" % "scala-compiler" % scala_version % "optional", 
   "org.scala-tools.testing" %% "scalacheck" % "1.9" % "optional", 
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional", 
-  "org.specs2" %% "specs2-scalaz-core" % "6.0.1",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
   "org.mockito" % "mockito-all" % "1.8.5" % "optional",
   "junit" % "junit" % "4.7" % "optional",
   "org.pegdown" % "pegdown" % "1.0.2" % "optional"
-)
+  )
+}
 
 /** Compilation */
 javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss6m")
