@@ -35,7 +35,6 @@ object TimeConversions extends TimeConversions
  * Time duration. Along with the conversions provided by the TimeConversions object.
  * Durations can be created by adding the time unit to a number: 1.minute
  */
-private[specs2]
 class Duration(val at: Long) {
   def inDays = (inHours / 24)
   def inHours = (inMinutes / 60)
@@ -65,7 +64,6 @@ class Duration(val at: Long) {
   def <=(other: Duration) = at <= other.at
 }
 
-private[specs2]
 class Time(at: Long) extends Duration(at) {
   override def +(delta: Duration) = new Time(at + delta.inMillis)
   override def -(delta: Duration) = new Time(at - delta.inMillis)
