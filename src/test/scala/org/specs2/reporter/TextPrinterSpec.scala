@@ -2,7 +2,8 @@ package org.specs2
 package reporter
 import org.specs2.internal.scalaz.Scalaz
 import Scalaz._
-import text.AnsiColors._
+import text._
+import AnsiColors._
 import io.MockOutput
 import main.Arguments
 import execute._

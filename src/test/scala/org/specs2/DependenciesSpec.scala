@@ -13,8 +13,8 @@ class DependenciesSpec extends Specification with Analysis { def is = noindent ^
     "mock      form",
     "matcher",
     "execute",
-    "reflect analysis  xml  time html",
-    "collection control io   text main data").withPrefix("org.specs2")                    ^
+    "reflect analysis time html",
+    "collection control io xml text main data").withPrefix("org.specs2")                    ^
                                                                                           end
 
 }

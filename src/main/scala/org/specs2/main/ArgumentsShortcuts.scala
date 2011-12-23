@@ -2,8 +2,7 @@ package org.specs2
 package main
 
 import control.{NoStackTraceFilter, IncludeExcludeStackTraceFilter, DefaultStackTraceFilter}
-import text.AnsiColors
-import reporter.Colors
+import text._
 
 /**
  * This trait provides shortcuts for frequently used arguments

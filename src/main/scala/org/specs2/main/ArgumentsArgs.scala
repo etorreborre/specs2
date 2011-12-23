@@ -2,7 +2,7 @@ package org.specs2
 package main
 
 import control._
-import reporter.Colors
+import text._
 
 /**
  * This trait provides shortcuts to create Arguments instances
