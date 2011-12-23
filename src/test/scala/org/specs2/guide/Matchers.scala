@@ -576,11 +576,11 @@ For example, specifying a Parser for numbers could look like this:
 
 #### Dependency matchers
 
-It is possible to specify that your project should have dependencies between packages organized as "layers": each package on a layer can only depend on a package on a lower layer.
+It is highly desirable to have acyclic dependencies between the packages of a project. This often leads to describing the packages structure as "layered": each package on a layer can only depend on a package on a lower layer. ***specs2*** helps you enforce this design property with specific matchers.
 
 ##### Layers definition
 
-The first step is to define the packages and their expected dependencies. To do this you can mix-in the `org.specs2.specification.Analysis` trait and define, for example:
+First you need to define the packages and their expected dependencies. Mix-in the `org.specs2.specification.Analysis` trait and define, (taking ***specs2*** as an example):
 
       layers (
         "runner",
@@ -590,17 +590,17 @@ The first step is to define the packages and their expected dependencies. To do 
         "matcher",
         "execute",
         "reflect    xml  time html",
-        "collection control io   text main data").withPrefix("org.specs2")
+        "collection control io text main data").withPrefix("org.specs2")
 
-In the example above each layer is simply defined as a `String` containing space-separated package names. It is supplemented by a `withPrefix` declaration to factor out the common package prefix between all these packages.
+The above expression defines layers as an ordered list of `String`s containing space-separated package names. It is supplemented by a `withPrefix` declaration to factor out the common package prefix between all these packages.
 
-By default, the packages are supposed to correspond to directories in the `src/main/scala` directory but your project has a different layout you can specify another source directory:
+By default, the packages are supposed to correspond to directories in the `src/main/scala` directory. If your project has a different layout you can declare another source directory:
 
       layers(...).inSourceDir("src")
 
 ###### Inclusion/Exclusion
 
-Every rule can have exceptions so, in some rare cases, it is desirable to exclude a class from being checked on a given layer. To do this, we can use the `include/exclude` methods on the `Layer` class:
+Every rule has exceptions :-). In some rare cases, it might be desirable to exclude a class from being checked on a given layer. To do this, you can use the `include/exclude` methods on the `Layer` class:
 
       layers (
         "runner",
@@ -609,8 +609,8 @@ Every rule can have exceptions so, in some rare cases, it is desirable to exclud
         "mock      form",
         "matcher",
         "execute",
-        "reflect    xml  time html",
-        "collection control io   text main data").withPrefix("org.specs2")
+        "reflect  xml  time html",
+        "collection control io text main data").withPrefix("org.specs2")
 
 The `include/exclude` methods accept a list of regular expressions to:
 
@@ -619,19 +619,20 @@ The `include/exclude` methods accept a list of regular expressions to:
 
 ##### Verification
 
-Once you've defined layers, you can use the `beRespected` matcher to check if all the dependencies are verified:
+Now you've defined layers, you can use the `beRespected` matcher to check if all the dependencies are verified:
 
       val design = layers(...)
       design must beRespected
 
-This works by invoking the Scala `BuildManager` which will recompile the files contained in the source directory. Since this operation is potentially time-consuming, you might want to use the `inSourceDir` method to restrict the compilation to a sub-directory. Then, we the files are compiled, the `BuildManager` knows all the dependencies between classes and if one of them is not in accordance with what you specified, you'll get a failure message showing all the broken dependencies:
+This works by invoking the Scala `BuildManager` which will recompile the files contained in the source directory (this operation is potentially time-consuming). Once the the `BuildManager` knows all the dependencies between classes, if some of them contradict what you specified, you'll get a failure message showing all the broken dependencies:
 
        those dependencies are not satisfied:
-       org.specs2.main -> org.specs2.io (org.specs2.io.FileSystem -> org.specs2.main.Arguments)
-       org.specs2.main -> org.specs2.io (org.specs2.io.FileSystem -> org.specs2.main.ArgumentsArgs)
+       org.specs2.main x-> org.specs2.io because org.specs2.io.FileSystem -> org.specs2.main.Arguments
+       org.specs2.main x-> org.specs2.io because org.specs2.io.FileSystem -> org.specs2.main.ArgumentsArgs
 
 Note: this functionality relies on the scala compiler library, so you need to add it to your build file:
 
+      // use sbt's scalaVersion Setting to define the scala-compiler library version
       libraryDependencies <<= scalaVersion { scala_version => Seq(
          "org.specs2" %% "specs2" % "1.7" % "test",
          "org.scala-lang" % "scala-compiler" % scala_version % "test")
@@ -640,7 +641,7 @@ Note: this functionality relies on the scala compiler library, so you need to ad
 
 ##### Layers as an `Example`
 
-The `Analysis` trait allows to directly embed the layers definition in an example and turn it into an `Example`:
+The `Analysis` trait allows to directly embed the layers definition in a `Specification` and turn it into an `Example`:
 
        class DependenciesSpec extends Specification with Analysis { def is =
           "this is the application design" ^
