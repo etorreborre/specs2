@@ -11,10 +11,17 @@ case class Dependency(className: String, dependentClassName: String) {
   private def packageName(n: String) = ClassName.packageName(n)
   def dependentPackageName = packageName(dependentClassName)
 
-  def show: String = show(true)
-  def show(showBreak: Boolean): String = {
-    packageName(dependentClassName)+" -> "+packageName(className)+(if (showBreak) " ("+dependentClassName+" -> "+className+")" else "")
-  }
+  /**
+   * @return a String showing the dependency
+   */
+  def show: String =
+    packageName(dependentClassName)+" -> "+packageName(className)+" ("+dependentClassName+" -> "+className+")"
+
+  /**
+   * @return a String showing that the actual dependency reveals a broken expected one
+   */
+  def showBreak: String =
+    packageName(className)+" x-> "+packageName(dependentClassName)+" because "+dependentClassName+" -> "+className
 
   def dependsOn(names: Seq[String]) = names contains dependentPackageName
 }
@@ -28,6 +35,6 @@ object Dependency {
 
 case class Dependencies(dependencies: Seq[Dependency]) {
   def isEmpty = dependencies.isEmpty
-  def show(showAllBreaks: Boolean = true) = dependencies.map(_.show(showAllBreaks)).mkString("\n")
+  def showBreaks = dependencies.map(_.showBreak).mkString("\n")
 }
 
