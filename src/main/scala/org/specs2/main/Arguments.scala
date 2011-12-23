@@ -5,8 +5,7 @@ import org.specs2.internal.scalaz.{ Monoid, Scalaz }
 import Scalaz._
 import control._
 import Exceptions._
-import text.{Colors, AnsiColors, DiffShortener, EditDistance}
-import reporter.SmartColors
+import text._
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
