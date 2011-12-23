@@ -17,4 +17,9 @@ class LayersSpec extends mutable.Specification with Analysis {
     Dependency("p1.classA", "p2.classDependingOnClassA").show must_== "p2 -> p1 (p2.classDependingOnClassA -> p1.classA)"
   }
 
+  "A class can be excluded from the dependency check" >> {
+    val l = "p1 p2".withPrefix("com")
+    l.inThisLayer(Dependency("p3.A", "com.p1.SpecificationWithJUnit")) === true
+    l.exclude("SpecificationWithJUnit").inThisLayer(Dependency("p3.A", "com.p1.SpecificationWithJUnit")) === false
+  }
 }

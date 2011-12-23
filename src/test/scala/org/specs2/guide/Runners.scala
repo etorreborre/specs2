@@ -64,7 +64,7 @@ From inside a specification, the available arguments are the following:
  *`noindent`*    | false                                    | don't indent automatically text and examples
  *`markdown`*    | true                                     | interpret text as Markdown in the html reporter
  `failtrace`     | false                                    | report the stacktrace for failures
- `colors`        | `org.specs2.reporter.SmartColors`        | define alternative colors (replace failureColor from being yellow to magenta for example)
+ `colors`        | `org.specs2.text.SmartColors`            | define alternative colors (replace failureColor from being yellow to magenta for example)
  `showtimes`     | false                                    | show individual execution times
  `debugMarkdown` | false                                    | print more information when Markdown formatting fails
  `diffs`         | `SmartDiffs`                             | use a specific algorithm to display differences
@@ -396,13 +396,13 @@ For example you can pass on the command line:
 
  to have the text colored in blue and the failures in Magenta.
 
-If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.reporter.Colors)
+If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.text.Colors)
 
 *Through the API*
 
-Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.reporter.Colors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.reporter.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
+Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
 
-      object MyColors = new org.specs2.reporter.ConsoleColors { override val failureColor = magenta }
+      object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
       class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
          // the failure message will be magenta

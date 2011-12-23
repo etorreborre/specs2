@@ -598,6 +598,25 @@ By default, the packages are supposed to correspond to directories in the `src/m
 
       layers(...).inSourceDir("src")
 
+###### Inclusion/Exclusion
+
+Every rule can have exceptions so, in some rare cases, it is desirable to exclude a class from being checked on a given layer. To do this, we can use the `include/exclude` methods on the `Layer` class:
+
+      layers (
+        "runner",
+        "reporter",
+        "specification mutable".exclude("mutable.SpecificationWithJUnit"),
+        "mock      form",
+        "matcher",
+        "execute",
+        "reflect    xml  time html",
+        "collection control io   text main data").withPrefix("org.specs2")
+
+The `include/exclude` methods accept a list of regular expressions to:
+
+ - exclude fully qualified class names (generally, only `exclude` will be necessary)
+ - re-include fully qualified class names if the exclusion list is to big
+
 ##### Verification
 
 Once you've defined layers, you can use the `beRespected` matcher to check if all the dependencies are verified:

@@ -21,7 +21,7 @@ trait DependencyFinder {
     val dependencies = sourceDependencies(sourceDir)
     // for each file in the package directory, get its dependencies
     packageDirectory(packageName, sourceDir).iterator.filter(_.path.endsWith(".scala")).toSeq flatMap { (file: AbstractFile) =>
-      dependencies.dependentFiles(depth = Int.MaxValue, Set(file)).map { dependent =>
+      dependencies.dependentFiles(depth = 1, Set(file)).map { dependent =>
         Dependency(file, dependent, sourceDir)
       }
     }

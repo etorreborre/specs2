@@ -1,6 +1,8 @@
 package org.specs2
 package analysis
 
+import data.IncludedExcluded
+
 /**
  * This trait allows to define expected dependencies between packages layers
  */
@@ -22,7 +24,8 @@ trait LayersAnalysis extends DependencyFinder {
    *
    * If those packages share a common prefix, it will be stored in the `prefix` member
    */
-  case class Layer(names: Set[String], prefix: String = "", sourceDir: String = "src/main/scala/") {
+  case class Layer(names: Set[String], prefix: String = "", sourceDir: String = "src/main/scala/",
+                   included: Seq[String] = Seq(), excluded: Seq[String] = Seq()) {
     /** specify a prefix for this layer packages */
     def withPrefix(p: String) = copy(prefix = if (this.prefix.isEmpty) p else p+"."+this.prefix)
     /** specify a source directory for this layer packages */
@@ -41,9 +44,24 @@ trait LayersAnalysis extends DependencyFinder {
      */
     def dependsOn(otherLayer: Layer) = otherLayer.getDependents.filter(inThisLayer)
 
-    /** @return true if the dependent class of this dependency has its package in this layer */
-    private def inThisLayer(d: Dependency) = packageNames contains d.dependentPackageName
+    /** use regexes to include fully qualified class names in the layer */
+    def include(names: String*) = copy(included = names.map(n => ".*"+n+".*"))
+    /** use regexes to exclude fully qualified class names from the layer */
+    def exclude(names: String*) = copy(excluded = names.map(n => ".*"+n+".*"))
 
+    /** @return true if the dependent class of this dependency has its package in this layer */
+    def inThisLayer(d: Dependency) = includedExcluded.keep(d.dependentClassName) && (packageNames contains d.dependentPackageName)
+
+    /**
+     * check if a class name should be included or excluded from the dependency analysis, based on include/exclude regular expressions
+     */
+    private def includedExcluded = new IncludedExcluded[String] {
+      val matchFunction = (n: String, tags: Seq[String]) => tags.exists(t => n.matches(prefixed(t)))
+      val include = included
+      val exclude = excluded
+    }
+
+    private def prefixed(n: String) = if (prefix.isEmpty) n else prefix+"."+n
   }
 
   /**

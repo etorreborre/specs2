@@ -9,12 +9,12 @@ class DependenciesSpec extends Specification with Analysis { def is = noindent ^
   layers (
     "runner",
     "reporter",
-    "specification mutable",
+    "specification mutable".exclude("mutable.SpecificationWithJUnit"),
     "mock      form",
     "matcher",
     "execute",
     "reflect analysis time html",
-    "collection control io xml text main data").withPrefix("org.specs2")                    ^
+    "collection control io xml text main data").withPrefix("org.specs2")                  ^
                                                                                           end
 
 }
