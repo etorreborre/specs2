@@ -45,7 +45,7 @@ import Expectable._
  * 
  * @see org.specs2.matcher.BeHaveMatchersSpec for examples
  */
-trait MatchResult[+T] {
+trait MatchResult[+T] extends ResultLike {
   /** the value being matched */
   val expectable: Expectable[T]
   

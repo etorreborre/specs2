@@ -3,11 +3,10 @@ package execute
 
 import control.Exceptions._
 import execute.Error._
-import matcher.MatchResult
 import control.Property
 
 /**
- * This trait executes a Result and returns an approriate value when a specs2 exception is thrown
+ * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
  */
 trait ResultExecution { outer =>
   /** this implicit allows the execution of a Result with an `execute` method */
@@ -45,12 +44,12 @@ trait ResultExecution { outer =>
   def executeEither[T, R](code: =>T)(implicit convert: T => R): Either[Result, R] = {
     val executed = trye(code)(identity)
     executed match {
-      case Left(FailureException(f))                => Left(f)
-      case Left(SkipException(f))                   => Left(f)
-      case Left(e)                                  => Left(Error(e))
-      case Right(m: MatchResult[_]) if !m.isSuccess => Left(m.toResult)
-      case Right(r: Result)         if !r.isSuccess => Left(r)
-      case Right(other)                             => Right(convert(other))
+      case Left(FailureException(f))                         => Left(f)
+      case Left(SkipException(f))                            => Left(f)
+      case Left(e)                                           => Left(Error(e))
+      case Right(m: ResultLike)     if !m.toResult.isSuccess => Left(m.toResult)
+      case Right(r: Result)         if !r.isSuccess          => Left(r)
+      case Right(other)                                      => Right(convert(other))
     }
   }
 

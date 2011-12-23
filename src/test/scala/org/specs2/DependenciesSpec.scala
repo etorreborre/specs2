@@ -9,6 +9,7 @@ class DependenciesSpec extends Specification with Analysis { def is = noindent ^
   layers (
     "runner",
     "reporter",
+                                    // this class is excluded because it contains its own runner
     "specification mutable".exclude("mutable.SpecificationWithJUnit"),
     "mock      form",
     "matcher",
