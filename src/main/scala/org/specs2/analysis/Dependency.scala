@@ -1,16 +1,19 @@
 package org.specs2
 package analysis
 
-import tools.nsc.io.AbstractFile
+import scala.tools.nsc.io.AbstractFile
+import reflect.ClassName
 
 /**
  * This class represents a dependency between two classes in the user's project
  */
 case class Dependency(className: String, dependentClassName: String) {
-  private def packageName(n: String) = n.split("\\.").headOption.getOrElse("")
-  def dependentPackageName = dependentClassName.split("\\.").headOption.getOrElse("")
-  def show(showBreak: Boolean = true) = {
-    packageName(className)+" -> "+packageName(dependentClassName)+(if (showBreak) " ("+className+" -> "+dependentClassName+")" else "")
+  private def packageName(n: String) = ClassName.packageName(n)
+  def dependentPackageName = packageName(dependentClassName)
+
+  def show: String = show(true)
+  def show(showBreak: Boolean): String = {
+    packageName(dependentClassName)+" -> "+packageName(className)+(if (showBreak) " ("+dependentClassName+" -> "+className+")" else "")
   }
 
   def dependsOn(names: Seq[String]) = names contains dependentPackageName

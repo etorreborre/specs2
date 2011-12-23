@@ -6,7 +6,6 @@ import main.Arguments
 import org.specs2.internal.scalaz._
 import Scalaz._
 import specification.{ExecutedSpecification, SpecificationStructure}
-
 /**
 * The console reporter executes a Specification and exports the results to the Console
 * Output:

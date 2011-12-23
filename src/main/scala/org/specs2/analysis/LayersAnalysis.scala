@@ -32,11 +32,14 @@ trait LayersAnalysis extends DependencyFinder {
     /** @return the package names */
     lazy val packageNames = names.map(n => if (prefix.isEmpty) n else prefix+"."+n)
 
-    /** @return the list of dependents of each package */
+    /** @return the list of dependents of each package of this layer */
     lazy val getDependents: Set[Dependency] = packageNames.flatMap(p => getPackageDependents(p, sourceDir))
 
-    /** @return the list of dependencies showing that this layer depends on the `other` layer */
-    def dependenciesWith(otherLayer: Layer) = otherLayer.getDependents.filter(inThisLayer)
+    /**
+     * @return the list of dependencies showing that this layer depends on the `other` layer
+     * meaning thisLayer -- depends on --> otherLayer
+     */
+    def dependsOn(otherLayer: Layer) = otherLayer.getDependents.filter(inThisLayer)
 
     /** @return true if the dependent class of this dependency has its package in this layer */
     private def inThisLayer(d: Dependency) = packageNames contains d.dependentPackageName
@@ -65,7 +68,7 @@ trait LayersAnalysis extends DependencyFinder {
      * - getting all the dependencies of the last element of a sequence with all its parents (should always be empty)
      */
     private lazy val unsatisfiedDependencies = {
-      layers.inits.filter(_.size > 1).flatMap(parents => parents.dropRight(1).flatMap(l => parents.last.dependenciesWith(l))).toSeq
+      layers.inits.filter(_.size > 1).flatMap(parents => parents.dropRight(1).flatMap(p => parents.last.dependsOn(p))).toSeq
     }
   }
 

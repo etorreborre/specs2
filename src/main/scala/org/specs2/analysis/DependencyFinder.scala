@@ -1,26 +1,26 @@
 package org.specs2
 package analysis
 
+import scala.collection.mutable.{Map, HashMap}
 import scala.tools.nsc._
-
+import interactive._
 import io._
 import java.net.URLClassLoader
 import java.net.URLDecoder
 import org.specs2.io.fs
-
+import reflect.PackageName._
 /**
  * This trait provides a way to analyse the dependencies of a given package
  */
 trait DependencyFinder {
-
   /**
    * @return the class depending on the classes of a given package
    */
   def getPackageDependents(packageName: String, sourceDir: String): Seq[Dependency] = {
     // load all dependencies for this source directory (compiles all files)
-    val dependencies = sourceDependencies(selectFiles(sourceDir))
+    val dependencies = sourceDependencies(sourceDir)
     // for each file in the package directory, get its dependencies
-    packageDirectory(packageName, sourceDir).iterator.toSeq flatMap { (file: AbstractFile) =>
+    packageDirectory(packageName, sourceDir).iterator.filter(_.path.endsWith(".scala")).toSeq flatMap { (file: AbstractFile) =>
       dependencies.dependentFiles(depth = Int.MaxValue, Set(file)).map { dependent =>
         Dependency(file, dependent, sourceDir)
       }
@@ -33,19 +33,22 @@ trait DependencyFinder {
   def selectFiles(sourceDir: String) = fs.filePaths(sourceDir, "**/*.scala")
 
   /** @return all the dependencies of source files in a given source directory by compiling them */
-  private def sourceDependencies(filePaths: Seq[String]) =
+  private def sourceDependencies(sourceDir: String) =
     NullPrintStream.sinkingOutAndErr {
-      buildManager(filePaths).compiler.dependencyAnalysis.dependencies
+      buildManager(sourceDir).compiler.dependencyAnalysis.dependencies
     }
 
-  /**
-   * @return a new `BuildManager` for scala files in a source directory
-   */
-  private def buildManager(filePaths: Seq[String]) = {
-    val manager = new interactive.SimpleBuildManager(newSettings)
-    manager.addSourceFiles(filePaths.map(f => new PlainFile(f)).toSet)
+  private lazy val managers: Map[String, SimpleBuildManager] = new HashMap[String, SimpleBuildManager].withDefault { sourceDir =>
+    val manager = new SimpleBuildManager(newSettings)
+    manager.addSourceFiles(selectFiles(sourceDir).map(f => new PlainFile(f)).toSet)
+    managers.put(sourceDir, manager)
     manager
   }
+  /**
+   * @return a new `BuildManager` for scala files in a source directory
+   * the managers are memoized per sourceDir
+   */
+  private def buildManager(sourceDir: String) = managers(sourceDir)
 
   /**
    * @return a new Settings object for doing dependency analysis. It adds the current classpath and set-up a new directory for
@@ -80,5 +83,5 @@ trait DependencyFinder {
    * @return a new package directory object from a source directory and a package name
    */
   private def packageDirectory(packageName: String, sourceDir: String) =
-    new PlainDirectory(new Directory(new java.io.File(sourceDir+packageName.replace("\\.", "/"))))
+    new PlainDirectory(new Directory(new java.io.File(sourceDir+packageName.toPath)))
 }

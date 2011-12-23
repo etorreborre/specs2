@@ -2,7 +2,7 @@ package org.specs2
 
 import specification.Analysis
 
-class DependenciesSpec extends Specification with Analysis { def is = noindent  ^
+class DependenciesSpec extends Specification with Analysis { def is = noindent ^
                                                                                           """
   The following dependencies must be enforced in specs2:
                                                                                           """ ^

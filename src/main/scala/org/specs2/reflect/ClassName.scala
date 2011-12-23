@@ -34,6 +34,12 @@ trait ClassName {
     } else remainingDollarNames(0)
     result
   }
+
+  /**
+   * @return the package name from the decoded class name
+   */
+  def packageName(name: String): String = className(name).split("\\.").dropRight(1).mkString(".")
+
   /**
    * @return the class name
    */

@@ -18,7 +18,10 @@ class ClassNameSpec extends Specification {
   }                                                                                       
   "The class name of a String should be String" in {
     simpleName("1".getClass) must_== "String"
-  }                                                                                       
+  }
+  "The package name of a String should be java.lang" in {
+    packageName("1".getClass.getName) must_== "java.lang"
+  }
   "The human name of a class should uncamel case it" in {
     humanName(classOf[ThisClass]) must_== "this class"
   }                                                                                       
