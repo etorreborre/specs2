@@ -1,8 +1,8 @@
 package org.specs2
 
-import specification.Analysis
+import specification._
 
-class DependenciesSpec extends Specification with Analysis { def is = noindent ^
+class DependenciesSpec extends Specification with Analysis with Tags { def is = noindent ^ section("slow") ^
                                                                                           """
   The following dependencies must be enforced in specs2:
                                                                                           """ ^
@@ -15,7 +15,7 @@ class DependenciesSpec extends Specification with Analysis { def is = noindent ^
     "matcher",
     "execute",
     "reflect analysis time html",
-    "collection control io xml text main data").withPrefix("org.specs2")                  ^
+    "collection control io xml text main data").withPrefix("org.specs2")                  ^ section("slow") ^
                                                                                           end
 
 }
