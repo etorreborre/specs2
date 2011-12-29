@@ -68,6 +68,7 @@ trait TextPrinter {
       case par @ ExecutedBr(_)                 => PrintBr()
       case end @ ExecutedSpecEnd(_,_, s)       => PrintSpecEnd(end, s)
       case f @ PromisedExecutedFragment(_)     => print(f.get)
+      case f @ LazyExecutedFragment(_)         => print(f.get)
       case fragment                            => PrintOther(fragment)
     }
   }

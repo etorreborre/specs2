@@ -108,6 +108,16 @@ case class PromisedExecutedFragment(promised: Promise[ExecutedFragment]) extends
   def stats    = get.stats
 }
 
+/**
+ * embed an executed Fragment into a function to execute it on demand
+ */
+case class LazyExecutedFragment(f: ()=>ExecutedFragment) extends ExecutedFragment {
+  def get      = f()
+  def location = get.location
+  def stats    = get.stats
+}
+
+
 import org.specs2.internal.scalaz._
 private[specs2]
 trait ExecutedFragmentsShow {

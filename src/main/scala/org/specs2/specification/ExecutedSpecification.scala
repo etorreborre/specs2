@@ -12,7 +12,15 @@ case class ExecutedSpecification(name: SpecName, fs: Seq[ExecutedFragment], exec
   def includedLinkedSpecifications: Seq[ExecutedSpecStart]  = fragments collect isIncludeLink
   def includedSeeOnlySpecifications: Seq[ExecutedSpecStart] = fragments collect isSeeOnlyLink
 
-  def fragments = foreach { (n, fs) => fs.map { f => f match { case t: PromisedExecutedFragment => t.get; case other => other }} }
+  def fragments = foreach { (n, fs) =>
+    fs.map { f =>
+      f match {
+        case t: PromisedExecutedFragment => t.get
+        case t: LazyExecutedFragment => t.get
+        case other => other
+      }
+    }
+  }
 
   def foreach[T](f: (SpecName, Seq[ExecutedFragment]) => T) =
     try { f(name, fs) } finally { terminate }
