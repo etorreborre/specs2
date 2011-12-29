@@ -53,7 +53,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers { def is
     { Seq(2, 1, 3) must not beSorted }                                                                                  ^
     // this doesn't compile because of 'diverging implicit'
     //{ Seq(2, 1, 3) must not be sorted }                                                                                 ^
-    { (Seq(2, 1, 3) must beSorted) returns "'Seq(2, 1, 3)' is not sorted" }                                             ^
+    { (Seq(2, 1, 3) must beSorted) returns "'2, 1, 3' is not sorted" }                                                  ^
                                                                                                                         p^
   "we can check the size of an Array"                                                                                   ^
     { Array(1, 2) must have size(2) }                                                                                   ^
