@@ -13,8 +13,8 @@ import org.junit.runner.Description
 trait JUnitXmlExporting extends Exporting with JUnitXmlPrinter {
   type ExportType = Unit
 
-  def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
-    print(spec.name, spec.fragments)
+  def export(implicit args: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => {
+    print(spec.execute.name, spec.execute.fragments)
   }
 
   /** the file system is used to open the file to write */

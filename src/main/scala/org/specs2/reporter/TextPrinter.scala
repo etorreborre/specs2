@@ -61,14 +61,12 @@ trait TextPrinter {
   implicit object PrintReducer extends Reducer[ExecutedFragment, Seq[Print]] {
     implicit override def unit(fragment: ExecutedFragment) = Seq(print(fragment))
     /** print an ExecutedFragment and its associated statistics */
-    def print: ExecutedFragment => Print = (fragment: ExecutedFragment) => fragment match {
+    def print: ExecutedFragment => Print = (fragment: ExecutedFragment) => fragment.get match {
       case start @ ExecutedSpecStart(_,_,_)    => PrintSpecStart(start)
       case result @ ExecutedResult(_,_,_,_,_)  => PrintResult(result)
       case text @ ExecutedText(s, _)           => PrintText(text)
       case par @ ExecutedBr(_)                 => PrintBr()
       case end @ ExecutedSpecEnd(_,_, s)       => PrintSpecEnd(end, s)
-      case f @ PromisedExecutedFragment(_)     => print(f.get)
-      case f @ LazyExecutedFragment(_)         => print(f.get)
       case fragment                            => PrintOther(fragment)
     }
   }

@@ -10,14 +10,26 @@ import io.Location
 import internal.scalaz.concurrent.Promise
 
 /**
-* The Executed Fragments represent pieces of a Specification
-* which have already been executed to provide a Result
-*/
+ * The Executing Fragment trait represent a Fragment being executed.
+ *
+ * Some fragments are executed right away, other ones on demand synchronously, and other ones concurrently
+ */
+sealed trait ExecutingFragment {
+  /** @return a fragment, completely executed */
+  def get: ExecutedFragment
+}
+
+/**
+ * The Executed Fragments represent pieces of a Specification
+ * which have already been executed to provide a Result
+ */
 sealed trait ExecutedFragment {
   /** @return the location of the executed Fragment */
   def location: Location
   /** @return the statistics of the executed Fragment */
   def stats: Stats
+  /** @return wait for this fragment to be completely executed */
+  def get: ExecutedFragment = this
 }
 
 private[specs2]
@@ -100,21 +112,24 @@ case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Locati
 }
 
 /**
- * embed an executed Fragment into a promise
+ * embed an already executed Fragment
  */
-case class PromisedExecutedFragment(promised: Promise[ExecutedFragment]) extends ExecutedFragment {
-  def get      = promised.get
-  def location = get.location
-  def stats    = get.stats
+case class FinishedExecutingFragment(f: ExecutedFragment) extends ExecutingFragment {
+  def get = f
 }
 
 /**
- * embed an executed Fragment into a function to execute it on demand
+ * embed an executed Fragment into a promise
  */
-case class LazyExecutedFragment(f: ()=>ExecutedFragment) extends ExecutedFragment {
-  def get      = f()
-  def location = get.location
-  def stats    = get.stats
+case class PromisedExecutingFragment(promised: Promise[ExecutedFragment]) extends ExecutingFragment {
+  def get = promised.get
+}
+
+/**
+ * embed an executing Fragment into a function to execute it on demand
+ */
+case class LazyExecutingFragment(f: ()=>ExecutedFragment) extends ExecutingFragment {
+  def get = f()
 }
 
 

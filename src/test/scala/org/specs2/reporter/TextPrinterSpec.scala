@@ -263,7 +263,7 @@ class TextPrinterSpec extends Specification { def is =
 
   def preReporter(previousStats: Stats = Stats()) = new ConsoleReporter {
 
-    def exec(fs: Fragments): ExecutedSpecification = {
+    def exec(fs: Fragments): ExecutingSpecification = {
       val args = fs.arguments
       new Specification { def is = fs } |> select(args) |> sequence(args) |> execute(args)
     }

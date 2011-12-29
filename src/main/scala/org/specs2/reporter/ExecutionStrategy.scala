@@ -19,7 +19,7 @@ import ExecutedFragment._
  */
 private[specs2]
 trait ExecutionStrategy {
-  def execute(implicit arguments: Arguments): ExecutableSpecification => ExecutedSpecification
+  def execute(implicit arguments: Arguments): ExecutableSpecification => ExecutingSpecification
 }
 
 /**
@@ -40,13 +40,13 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
   def execute(implicit arguments: Arguments) = (spec: ExecutableSpecification) => {
     implicit val executor = Executors.newFixedThreadPool(spec.arguments.threadsNb, new NamedThreadFactory("specs2.DefaultExecutionStrategy"))
     try {
-      val executed = spec.fs.foldLeft((Seq[ExecutedFragment](), true)) { (res, fs) =>
-        val (executedFragments, executionOk) = res
+      val executing = spec.fs.foldLeft((Seq[ExecutingFragment](), true)) { (res, fs) =>
+        val (executingFragments, executionOk) = res
         val fsArgs = arguments <| fs.arguments
-        val executed = executeSequence(fs)(executionArgs(fsArgs, executionOk), Executor(executor))
-        (executedFragments ++ executed, !fsArgs.stopOnFail || (executionOk && executed.forall(isOk)))
+        val executing = executeSequence(fs)(executionArgs(fsArgs, executionOk), Executor(executor))
+        (executingFragments ++ executing, !fsArgs.stopOnFail || (executionOk && executing.forall(f => isOk(f.get))))
       }._1
-      ExecutedSpecification(spec.name, executed, executor)
+      ExecutingSpecification(spec.name, executing, executor)
     } catch {
       // just in case something bad happens, or if there's an InterruptedException, shutdown the executor
       case e => executor.shutdown; throw e
@@ -57,17 +57,17 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     if (!arguments.stopOnFail || previousExecutionOk) arguments
     else                                              arguments <| args(skipAll=true)
 
-  private def executeSequence(fs: FragmentSeq)(implicit args: Arguments, strategy: Strategy): Seq[ExecutedFragment] = {
+  private def executeSequence(fs: FragmentSeq)(implicit args: Arguments, strategy: Strategy): Seq[ExecutingFragment] = {
     if (fs.fragments.size > 1 && !args.sequential) executeConcurrently(fs, args)(strategy)
-    else                                           fs.fragments map executeFragment(args)
+    else                                           fs.fragments.map(f => FinishedExecutingFragment(executeFragment(args)(f)))
   }
 
   private def executeConcurrently(fs: FragmentSeq, args: Arguments)(implicit strategy: Strategy) = {
     fs.fragments.map {
-      case f: Example  => PromisedExecutedFragment(promise(executeFragment(args)(f))(strategy))
-      case f: Action   => PromisedExecutedFragment(promise(executeFragment(args)(f))(strategy))
-      case f: Step     => LazyExecutedFragment(() => executeFragment(args)(f))
-      case f           => executeFragment(args)(f)
+      case f: Example  => PromisedExecutingFragment(promise(executeFragment(args)(f))(strategy))
+      case f: Action   => PromisedExecutingFragment(promise(executeFragment(args)(f))(strategy))
+      case f: Step     => LazyExecutingFragment(() => executeFragment(args)(f))
+      case f           => FinishedExecutingFragment(executeFragment(args)(f))
     }
   }
 }

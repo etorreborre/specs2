@@ -58,13 +58,13 @@ class HtmlFileLinesSpec extends Specification with Mockito { def is =
     def printer = new HtmlPrinter { }
 
     def htmlLines(spec: Fragments) = {
-      val executedSpec = ExecutedSpecification(SpecName("spec"), store(args())(ExecutedSpecification(spec.fragments.map(executeFragment))).fragments)
-      printer.reduce(executedSpec)
+      val executedSpec = store(args())(ExecutingSpecification.create(SpecName("spec"), spec.fragments.map(executeFragment)))
+      printer.reduce(executedSpec.execute)
     }
     def print(spec: Fragments) = printer.sortByFile(SpecName("spec"), HtmlLink(SpecName("spec"), "", "spec"))(htmlLines(spec)).flatten.toSeq.head.printLines(new HtmlResultOutput).xml
 
     def printSpec(spec: SpecificationStructure) = {
-      printer.print(ExecutedSpecification(spec.content.specName, spec.content.fragments.map(executeFragment)))
+      printer.print(ExecutingSpecification.create(spec.content.specName, spec.content.fragments.map(executeFragment)).execute)
       out.messages.mkString("\n")
     }
 

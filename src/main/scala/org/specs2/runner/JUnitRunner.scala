@@ -74,9 +74,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
     def exportTo(name: String) = properties.isDefined(name) || commandLineArgs.contains(name)
     
     if (exportTo("console")) 
-      consoleExporter.export(arguments)(ExecutedSpecification(specification.content.specName, executed.map(_._2)))
+      consoleExporter.export(arguments)(ExecutingSpecification.create(specification.content.specName, executed.map(_._2)))
     if (exportTo("html")) 
-      htmlExporter.export(arguments)(ExecutedSpecification(specification.content.specName, executed.map(_._2)))
+      htmlExporter.export(arguments)(ExecutingSpecification.create(specification.content.specName, executed.map(_._2)))
 
     executed
   }

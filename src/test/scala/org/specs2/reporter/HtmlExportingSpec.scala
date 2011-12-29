@@ -10,7 +10,7 @@ The HtmlExporting trait is responsible for exporting the executed specification:
 
   ExecutedSpecification => Unit
 
-While the formal type of output is Unit, the HtmlExporting trait actually transforms the ExecutedSpecification to a sequence of HtmlFiles to write to disk:
+While the formal type of output is Unit, the HtmlExporting trait actually transforms the ExecutingSpecification to a sequence of HtmlFiles to write to disk:
 
 
                          `print`               `writeFiles`
@@ -59,14 +59,14 @@ trait Function2Specification[A, B, C] extends Specification with Function2[A, B,
 }
 
 
-class HtmlExporting0Spec extends Function2Specification[ExecutedSpecification, Arguments, Unit] {
+class HtmlExporting0Spec extends Function2Specification[ExecutingSpecification, Arguments, Unit] {
   def data = (new ExecutedSpecificationSpec, new ArgumentsSpec)
   def function = { case (spec, args) => new HtmlExporting {}.export(args)(spec) }
   def is = success
 }
 
 
-class ExecutedSpecificationSpec extends DataSpecification[ExecutedSpecification] {
+class ExecutedSpecificationSpec extends DataSpecification[ExecutingSpecification] {
   def is = success
 } 
 

@@ -47,14 +47,14 @@ trait ExecutedSpecificationData extends Data[ExecutedSpecification] {
     def genExecutedSpecification(size: Int): Gen[ExecutedSpecification] =
       for {
         includedSpecNb      <- Gen.choose(0, 0)
-				fragmentOrIncluded  <- Gen.listOfN(size, Gen.frequency(
-				                          (includedSpecNb, arbLinkedExecutedSpecificationFragments(seeOnly = false).arbitrary),
-				                          (includedSpecNb, arbLinkedExecutedSpecificationFragments(seeOnly = true).arbitrary),
-				                          (10, arbExecutedFragmentSeq.arbitrary)))
+        fragmentOrIncluded  <- Gen.listOfN(size, Gen.frequency(
+          (includedSpecNb, arbLinkedExecutedSpecificationFragments(seeOnly = false).arbitrary),
+          (includedSpecNb, arbLinkedExecutedSpecificationFragments(seeOnly = true).arbitrary),
+          (10, arbExecutedFragmentSeq.arbitrary)))
         name                <- arbAsciiString.arbitrary
       }
-      yield new ExecutedSpecification(SpecName(name),
-                                      ExecutedSpecStart(SpecStart(SpecName(name))) +: fragmentOrIncluded.flatten :+ ExecutedSpecEnd(SpecEnd(SpecName(name))))
+      yield ExecutedSpecification(SpecName(name),
+        ExecutedSpecStart(SpecStart(SpecName(name))) +: fragmentOrIncluded.flatten :+ ExecutedSpecEnd(SpecEnd(SpecName(name))))
 
     def sizedList(size: Int): Gen[ExecutedSpecification] = {
       if (size <= 0) genExecutedSpecification(1)

@@ -18,16 +18,19 @@ import main.{Execute, Arguments}
 private[specs2]
 trait Storing {
   /** @return a function storing ExecutedFragments */
-  def store(implicit args: Arguments): ExecutedSpecification => ExecutedSpecification
+  def store(implicit args: Arguments): ExecutingSpecification => ExecutingSpecification
 
 }
 
 private[specs2]
 trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsRepository {
 
-  def store(implicit args: Arguments): ExecutedSpecification => ExecutedSpecification = (spec: ExecutedSpecification) => {
+  def store(implicit args: Arguments): ExecutingSpecification => ExecutingSpecification = (spec: ExecutingSpecification) => {
     if (args.store.reset) repository.resetStatistics
-    spec.copy(fs = (associateStartEnd(statisticsTotals(spec.fragments), updateStatsOnSpecStart) map (_.value)) |> storeStatistics)
+    val fragmentsWithSpecStartUpdatedWithStatistics =
+      associateStartEnd(statisticsTotals(spec.execute.fragments), updateStatsOnSpecStart) |> storeStatistics
+
+    ExecutingSpecification.create(spec.name, fragmentsWithSpecStartUpdatedWithStatistics)
   }
 
   private def statisticsTotals(fragments: Seq[ExecutedFragment])(implicit args: Arguments) = {

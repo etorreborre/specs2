@@ -181,7 +181,6 @@ case object Levels {
       case t @ ExecutedSpecStart(_,_,_)      => BlockNeutral(t)
       case t @ ExecutedSpecEnd(_,_,_)        => BlockNeutral(t)
       case t @ ExecutedEnd( _)               => BlockReset(t)
-      case t @ PromisedExecutedFragment(_)   => toBlock(t.get)
       case t                                 => BlockNeutral(t)
     } 
     implicit override def unit(f: ExecutedFragment): Levels[ExecutedFragment] = Levels[ExecutedFragment](toBlock(f))

@@ -21,8 +21,8 @@ trait NotifierExporting extends Exporting {
   type ExportType = Unit
   val notifier: Notifier
   /** @return a function exporting ExecutedFragments */
-  def export(implicit args: Arguments): ExecutedSpecification => ExportType = (spec: ExecutedSpecification) => {
-    notifyExport(spec.fragments)
+  def export(implicit args: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => {
+    notifyExport(spec.execute.fragments)
     if (args.contains("console")) new TextExporting {}.export(args)(spec)
     if (args.contains("html")) new HtmlExporting {}.export(args)(spec)
     if (args.contains("junitxml")) new JUnitXmlExporting {}.export(args)(spec)
