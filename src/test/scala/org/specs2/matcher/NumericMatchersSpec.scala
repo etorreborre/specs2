@@ -10,6 +10,9 @@ types and more generally with Ordered types.
   { 1 must be_<=(2) }                                                                                                   ^
   { 2 must be <=(2) }                                                                                                   ^
   { 1 must beLessThanOrEqualTo(2) }                                                                                     ^
+  { 2 must not beLessThanOrEqualTo(1) }                                                                                 ^
+  { 2 must not be <=(1) }                                                                                               ^
+  { 2 must not be_<=(1) }                                                                                               ^
   { 1 must be lessThanOrEqualTo(2) }                                                                                    ^
    "and return a failure if the comparison fails"                                                                       ! e1^
    "and return a failure if the comparison fails - with aka"                                                            ! e1_1^
@@ -17,6 +20,9 @@ types and more generally with Ordered types.
   "beLessThan compares any Ordered type with <"                                                                         ^
   { 1 must be_<(2) }                                                                                                    ^
   { 1 must be <(2) }                                                                                                    ^
+  { 2 must not be <(1) }                                                                                                ^
+  { 2 must not be_<(1) }                                                                                                ^
+  { 2 must not beLessThan(1) }                                                                                          ^
   { 1 must beLessThan(2) }                                                                                              ^
   { 1 must be lessThan(2) }                                                                                             ^
   "and return a failure if the comparison fails"                                                                        ! e2^
@@ -25,6 +31,9 @@ types and more generally with Ordered types.
   "beGreaterThanOrEqualTo compares any Ordered type with >="                                                            ^
   { 2 must be_>=(1) }                                                                                                   ^
   { 2 must be >=(1) }                                                                                                   ^
+  { 2 must not be_>=(3) }                                                                                               ^
+  { 2 must not be >=(3) }                                                                                               ^
+  { 2 must not beGreaterThanOrEqualTo(3) }                                                                              ^
   { 2 must beGreaterThanOrEqualTo(1) }                                                                                  ^
   { 2 must be greaterThanOrEqualTo(1) }                                                                                 ^
    "and return a failure if the comparison fails"                                                                       ! e3^
@@ -33,6 +42,9 @@ types and more generally with Ordered types.
   "beGreaterThan compares any Ordered type with >"                                                                      ^
   { 2 must be_>(1) }                                                                                                    ^
   { 2 must be >(1) }                                                                                                    ^
+  { 2 must not be >(3) }                                                                                                ^
+  { 2 must not be_>(3) }                                                                                                ^
+  { 2 must not beGreaterThan(3) }                                                                                       ^
   { 2 must beGreaterThan(1) }                                                                                           ^
   { 2 must be greaterThan(1) }                                                                                          ^
   "and return a failure if the comparison fails"                                                                        ! e4^

@@ -79,14 +79,22 @@ trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
    */
   implicit def toOrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) = new OrderedResultMatcher(result)
   class OrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) {
-    def <=(n: S) = result(beLessThanOrEqualTo(n))
-    def lessThanOrEqualTo(n: S) = result(beLessThanOrEqualTo(n))
-    def <(n: S) = result(beLessThan(n))
-    def lessThan(n: S) = result(beLessThan(n))
-    def >=(n: S) = result(beGreaterThanOrEqualTo(n))
-    def greaterThanOrEqualTo(n: S) = result(beGreaterThanOrEqualTo(n))
-    def >(n: S) = result(beGreaterThan(n))
-    def greaterThan(n: S) = result(beGreaterThan(n))
+    def be_<=(n: S) = result(outer.beLessThanOrEqualTo(n))
+    def <=(n: S) = result(outer.beLessThanOrEqualTo(n))
+    def lessThanOrEqualTo(n: S) = result(outer.beLessThanOrEqualTo(n))
+    def beLessThanOrEqualTo(n: S) = result(outer.beLessThanOrEqualTo(n))
+    def be_<(n: S) = result(outer.beLessThan(n))
+    def <(n: S) = result(outer.beLessThan(n))
+    def lessThan(n: S) = result(outer.beLessThan(n))
+    def beLessThan(n: S) = result(outer.beLessThan(n))
+    def be_>=(n: S) = result(outer.beGreaterThanOrEqualTo(n))
+    def >=(n: S) = result(outer.beGreaterThanOrEqualTo(n))
+    def beGreaterThanOrEqualTo(n: S) = result(outer.beGreaterThanOrEqualTo(n))
+    def greaterThanOrEqualTo(n: S) = result(outer.beGreaterThanOrEqualTo(n))
+    def be_>(n: S) = result(outer.beGreaterThan(n))
+    def >(n: S) = result(outer.beGreaterThan(n))
+    def greaterThan(n: S) = result(outer.beGreaterThan(n))
+    def beGreaterThan(n: S) = result(outer.beGreaterThan(n))
   }
   implicit def toNumericResultMatcher[S : Numeric](result: MatchResult[S]) = new NumericResultMatcher(result)
   class NumericResultMatcher[S : Numeric](result: MatchResult[S]) {
@@ -98,12 +106,13 @@ trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
   implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered = 
     new NeutralMatcherOrdered(result)
   class NeutralMatcherOrdered(result: NeutralMatcher[Any]) {
-    def <=[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n) 
-    def <[S <% Ordered[S]](n: S) = beLessThan(n) 
-    def >=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n) 
-    def >[S <% Ordered[S]](n: S) = beGreaterThan(n) 
+    def <=[S <% Ordered[S]](n: S)    = outer.beLessThanOrEqualTo(n)
+    def <[S <% Ordered[S]](n: S)     = outer.beLessThan(n)
+    def >=[S <% Ordered[S]](n: S)    = outer.beGreaterThanOrEqualTo(n)
+    def >[S <% Ordered[S]](n: S)     = outer.beGreaterThan(n)
   }
-  implicit def toNeutralMatcherNumeric(result: NeutralMatcher[Any]) : NeutralMatcherNumeric = 
+
+  implicit def toNeutralMatcherNumeric(result: NeutralMatcher[Any]) : NeutralMatcherNumeric =
     new NeutralMatcherNumeric(result)
   class NeutralMatcherNumeric(result: NeutralMatcher[Any]) {
     def ~[S : Numeric](n: S, delta: S) = beCloseTo(n, delta)

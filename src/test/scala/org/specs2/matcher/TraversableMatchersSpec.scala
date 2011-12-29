@@ -4,7 +4,7 @@ import java.util.Arrays._
 import scala.collection.JavaConversions.{ collectionAsScalaIterable }
 import scala.collection.parallel.ParSeq
 
-class TraversableMatchersSpec extends Specification { def is =
+class TraversableMatchersSpec extends Specification with ResultMatchers { def is =
 
   "we can check if one or several elements are present in a traversable"                                                ^
     { List(1, 2) must contain(1) }                                                                                      ^
@@ -39,6 +39,7 @@ class TraversableMatchersSpec extends Specification { def is =
   "we can check the size of an traversable"                                                                             ^
     { Nil must beEmpty }                                                                                                ^
     { Nil must be empty }                                                                                               ^
+    { (Nil must not be empty) must beFailing }                                                                          ^
     { List(1, 2) must haveSize(2) }                                                                                     ^
     { List(1, 2) must have size(2) }                                                                                    ^
     { List(1, 2) must not have size(1) }                                                                                ^
