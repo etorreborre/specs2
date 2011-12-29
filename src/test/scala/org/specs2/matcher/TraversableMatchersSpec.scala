@@ -47,6 +47,14 @@ class TraversableMatchersSpec extends Specification with ResultMatchers { def is
     { List(1, 2) must have length(2) }                                                                                  ^
     { List(1, 2) must not have length(1) }                                                                              ^
                                                                                                                         p^
+  "we can check if a sequence is sorted"                                                                                ^
+    { Seq(1, 2, 3) must beSorted }                                                                                      ^
+    { Seq(1, 2, 3) must be sorted }                                                                                     ^
+    { Seq(2, 1, 3) must not beSorted }                                                                                  ^
+    // this doesn't compile because of 'diverging implicit'
+    //{ Seq(2, 1, 3) must not be sorted }                                                                                 ^
+    { (Seq(2, 1, 3) must beSorted) returns "'Seq(2, 1, 3)' is not sorted" }                                             ^
+                                                                                                                        p^
   "we can check the size of an Array"                                                                                   ^
     { Array(1, 2) must have size(2) }                                                                                   ^
     { (Array(1, 2) must have size(1)).message must_== "'Array(1, 2)' doesn't have size 1 but size 2" }                  ^

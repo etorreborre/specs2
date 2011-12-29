@@ -7,7 +7,7 @@ import text.Quote._
 import text.Plural._
 import collection.Iterablex._
 import MatchersImplicits._
-import scala.collection.{GenTraversableOnce, GenTraversable}
+import scala.collection.{GenSeq, GenTraversableOnce, GenTraversable}
 
 /**
  * Matchers for traversables
@@ -68,6 +68,11 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
   /** alias for haveSize */
   def length[T : Sized](n: Int) = haveLength[T](n)
 
+  /** @return a matcher checking if the elements are ordered */
+  def beSorted[T : Ordering] = new OrderingMatcher[T]
+  /** alias for beSorted */
+  def sorted[T : Ordering] = beSorted[T]
+
   /** any scala collection has a size */
   implicit def scalaTraversableIsSized[I <: GenTraversableOnce[_]]: Sized[I] = new Sized[I] {
     def size(t: I) = t.size
@@ -95,11 +100,19 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
     def containPattern(t: =>String) = s(outer.containPattern(t))
     def have(f: T => Boolean) = s(outer.have(f))
   }
+
   implicit def sized[T : Sized](s: MatchResult[T]) = new HasSize(s)
   class HasSize[T : Sized](s: MatchResult[T]) {
     def size(n: Int) : MatchResult[T] = s(outer.haveSize[T](n))
     def length(n: Int) : MatchResult[T] = size(n)
   }
+
+  implicit def orderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]) = new OrderedSeqMatchResult(result)
+  class OrderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]) {
+    def sorted = result(outer.beSorted[T])
+    def beSorted = result(outer.beSorted[T])
+  }
+
 }
 class ContainMatchResult[T]  private[specs2](val s: MatchResult[GenTraversable[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
@@ -228,5 +241,13 @@ class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T] {
     result(valueSize == n,
            traversable.description + " have "+sizeWord+" "+ n,
            traversable.description + " doesn't have "+sizeWord+" " + n + " but "+sizeWord+" " + valueSize, traversable)
+  }
+}
+
+class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]] {
+  def apply[S <: Seq[T]](traversable: Expectable[S]) = {
+    result(traversable.value == traversable.value.sorted,
+      traversable.description + " is sorted",
+      traversable.description + " is not sorted", traversable)
   }
 }
