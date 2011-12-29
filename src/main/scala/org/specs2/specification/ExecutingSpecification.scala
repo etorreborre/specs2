@@ -17,6 +17,9 @@ case class ExecutingSpecification(name: SpecName, fs: Seq[ExecutingFragment], ex
   def foreach[T](f: (SpecName, Seq[ExecutedFragment]) => T) =
     try { f(name, fs.view.map(_.get)) } finally { terminate }
 
+  /** @return an ExecutingSpecification where each executed fragment is mapped to another one */
+  def map(f: ExecutedFragment => ExecutedFragment) =  copy(fs = fs.map(_.map(f)))
+
   def terminate = executor.shutdown()
 }
 

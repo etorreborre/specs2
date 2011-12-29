@@ -44,7 +44,7 @@ trait ExecutedSpecificationData extends Data[ExecutedSpecification] {
 
   implicit lazy val arbExecutedSpecification: Arbitrary[ExecutedSpecification] = Arbitrary {
 
-    def genExecutedSpecification(size: Int): Gen[ExecutedSpecification] =
+    def genExecutedSpecification = (size: Int) => {
       for {
         includedSpecNb      <- Gen.choose(0, 0)
         fragmentOrIncluded  <- Gen.listOfN(size, Gen.frequency(
@@ -53,16 +53,18 @@ trait ExecutedSpecificationData extends Data[ExecutedSpecification] {
           (10, arbExecutedFragmentSeq.arbitrary)))
         name                <- arbAsciiString.arbitrary
       }
-      yield ExecutedSpecification(SpecName(name),
-        ExecutedSpecStart(SpecStart(SpecName(name))) +: fragmentOrIncluded.flatten :+ ExecutedSpecEnd(SpecEnd(SpecName(name))))
-
-    def sizedList(size: Int): Gen[ExecutedSpecification] = {
-      if (size <= 0) genExecutedSpecification(1)
-      else           genExecutedSpecification(size)
+      yield ExecutedSpecification(SpecName(name), start(name) +: fragmentOrIncluded.flatten :+ end(name))
     }
-    Gen.sized(size => sizedList(size))
+    sizeOf1(genExecutedSpecification)
+
   }
 
+  def sizeOf1[T](gen: Int => Gen[T]) = Gen.sized { size =>
+    if (size <= 0) gen(1)
+    else           gen(size)
+  }
 
+  def start(name: String) = ExecutedSpecStart(SpecStart(SpecName(name)))
+  def end(name: String)   = ExecutedSpecEnd(SpecEnd(SpecName(name)))
 }
 object ExecutedSpecificationData extends ExecutedSpecificationData

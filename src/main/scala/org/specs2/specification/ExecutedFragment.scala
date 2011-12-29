@@ -17,6 +17,8 @@ import internal.scalaz.concurrent.Promise
 sealed trait ExecutingFragment {
   /** @return a fragment, completely executed */
   def get: ExecutedFragment
+  /** @return and executing fragment, with another embedded ExecutedFragment */
+  def map(f: ExecutedFragment => ExecutedFragment): ExecutingFragment
 }
 
 /**
@@ -116,6 +118,7 @@ case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Locati
  */
 case class FinishedExecutingFragment(f: ExecutedFragment) extends ExecutingFragment {
   def get = f
+  def map(function: ExecutedFragment => ExecutedFragment) = FinishedExecutingFragment(function(f))
 }
 
 /**
@@ -123,6 +126,7 @@ case class FinishedExecutingFragment(f: ExecutedFragment) extends ExecutingFragm
  */
 case class PromisedExecutingFragment(promised: Promise[ExecutedFragment]) extends ExecutingFragment {
   def get = promised.get
+  def map(function: ExecutedFragment => ExecutedFragment) = PromisedExecutingFragment(promised.map(function))
 }
 
 /**
@@ -130,6 +134,7 @@ case class PromisedExecutingFragment(promised: Promise[ExecutedFragment]) extend
  */
 case class LazyExecutingFragment(f: ()=>ExecutedFragment) extends ExecutingFragment {
   def get = f()
+  def map(function: ExecutedFragment => ExecutedFragment) = LazyExecutingFragment(() => function(f()))
 }
 
 
