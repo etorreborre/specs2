@@ -109,7 +109,10 @@ case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stat
  * This executed Fragment is used when no text must be displayed (for the successful
  * execution of an Action for example)
  */
-case class ExecutedNoText(timer: SimpleTimer = new SimpleTimer, location: Location = new Location) extends ExecutedFragment { outer =>
+case class ExecutedNoText(isAction: Boolean = false,
+                          timer: SimpleTimer = new SimpleTimer,
+                          location: Location = new Location) extends ExecutedFragment { outer =>
+
   def stats: Stats = Stats(timer=outer.timer)
 }
 
@@ -134,7 +137,7 @@ case class PromisedExecutingFragment(promised: Promise[ExecutedFragment]) extend
  */
 case class LazyExecutingFragment(f: ()=>ExecutedFragment) extends ExecutingFragment {
   def get = f()
-  def map(function: ExecutedFragment => ExecutedFragment) = LazyExecutingFragment(() => function(f()))
+  def map(function: ExecutedFragment => ExecutedFragment) = LazyExecutingFragment(() =>function(f()))
 }
 
 

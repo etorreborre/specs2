@@ -20,6 +20,8 @@ case class ExecutingSpecification(name: SpecName, fs: Seq[ExecutingFragment], ex
   /** @return an ExecutingSpecification where each executed fragment is mapped to another one */
   def map(f: ExecutedFragment => ExecutedFragment) =  copy(fs = fs.map(_.map(f)))
 
+  override def toString = fs.mkString("\n")
+
   def terminate = executor.shutdown()
 }
 

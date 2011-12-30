@@ -12,13 +12,11 @@ import specification.{ExecutingSpecification, SpecificationStructure}
 *
 * - DefaultSelection filters and sorts the Fragments
 * - DefaultExecutionStrategy executes the Examples concurrently by default
-* - TextExporting prints the results in a Tree manner
-* - ConsoleOutput specifies that the output must be the standard output console
+* - TextExporting prints the results in a Tree manner (using a TextOutput)
 *
 */
 trait ConsoleReporter extends DefaultReporter 
-    with TextExporting
-    with ConsoleOutput {
+    with TextExporting {
 
   override def report(spec: SpecificationStructure)(implicit arguments: Arguments): this.type = {
     // store the statistics and export the specification results in parallel to avoid

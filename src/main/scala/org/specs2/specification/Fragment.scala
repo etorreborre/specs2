@@ -87,7 +87,8 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
   def execute = body()
   override def matches(s: String) = desc.toString.removeAll("\n").removeAll("\r").matches(s)
   override def toString = "Example("+desc+")"
-  def map(f: Result => Result) = Example(desc, () =>f(body()))
+  override def map(f: Result => Result) = Example(desc, f(body()))
+
   override def equals(a: Any) = {
     a match {
       case e: Example => desc == e.desc
@@ -115,6 +116,8 @@ case object Example {
 case class Step (step: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable {
   def execute = step.value
   override def toString = "Step"
+
+  override def map(f: Result => Result) = Step(step map f)
 }
 case object Step {
   /** create a Step object from either a previous result, or a value to evaluate */
@@ -139,6 +142,8 @@ case object Step {
 case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable {
   def execute = action.value
   override def toString = "Action"
+
+  override def map(f: Result => Result) = Action(action map f)
 }
 case object Action {
   /** create an Action object from any value */

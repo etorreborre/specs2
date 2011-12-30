@@ -112,6 +112,11 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return the result with no message
    */
   def mute: Result
+
+  /**
+   * @return Success if it is a failure and vice-versa
+   */
+  def not: Result = this
 }
 object Result {
   implicit val ResultMonoid: Monoid[Result] = new Monoid[Result] {
@@ -189,6 +194,11 @@ case class Success(m: String = "")  extends Result(m, m) {
   def addExpectationsNb(n: Int): Result = Success(m, expectationsNb + n)
 
   def mute = Success()
+
+  /**
+   * @return Success if it is a failure and vice-versa
+   */
+  override def not: Result = Failure(m)
 }
 /**
  * Companion object to the Success class providing 
@@ -230,6 +240,11 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   }
   override def hashCode = m.hashCode + e.hashCode
   override def isFailure: Boolean = true
+
+  /**
+   * @return a Success
+   */
+  override def not: Result = Success(m)
 }
 
 /**

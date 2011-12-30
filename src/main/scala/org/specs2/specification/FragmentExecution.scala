@@ -63,7 +63,7 @@ trait FragmentExecution {
 	  case e @ SpecEnd(s)                => ExecutedSpecEnd(e, f.location)
     case s @ Step(_)                   => executeStep("step", s, f.location)
     case s @ Action(_)                 => executeStep("action", s, f.location)
-    case _                             => ExecutedNoText(new SimpleTimer, f.location)
+    case _                             => ExecutedNoText(isAction = true, new SimpleTimer, f.location)
   }
 
   private def executeStep(stepName: String, s: Executable, location: Location)(implicit args: Arguments) = {
@@ -72,7 +72,7 @@ trait FragmentExecution {
       case err if err.isError  => ExecutedResult(NoMarkup(stepName+" error"), err, timer.stop, location, Stats(err))
       case f   if f.isFailure  => ExecutedResult(NoMarkup(stepName+" failure"), f, timer.stop, location, Stats(f))
       case sk  @ Skipped(_, _) => ExecutedResult(NoMarkup("skipped "+stepName), sk, timer.stop, location, Stats(sk))
-      case other               => ExecutedNoText(new SimpleTimer, location)
+      case other               => ExecutedNoText(isAction = stepName == "action", new SimpleTimer, location)
     }
   }
 

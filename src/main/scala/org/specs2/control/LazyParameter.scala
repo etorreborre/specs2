@@ -34,5 +34,6 @@ class LazyParameter[+T](private val v: () => T) {
   override def equals(o: Any) = value == o
   override def hashCode = value.hashCode
 
+  def map[S >: T](f: T => S) = LazyParameters.lazyfy(f(v()))
 }
 
