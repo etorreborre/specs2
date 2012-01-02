@@ -5,13 +5,13 @@ import ReleaseKeys._
 /** Project */
 name := "specs2"
 
-version := "1.8-SNAPSHOT"
+version := "1.7.1"
 
 organization := "org.specs2"
 
 scalaVersion := "2.9.1"
 
-crossScalaVersions := Seq("2.9.0", "2.9.0-1") ++ (1 to 4).map(i => "2.9.1.RC"+i)
+crossScalaVersions := Seq("2.9.0")
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
