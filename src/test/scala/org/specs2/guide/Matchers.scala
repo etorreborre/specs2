@@ -953,7 +953,7 @@ Forms are a way to represent domain objects or service, and declare expected val
 Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.
 
 """ ^
-  "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms)                                                          ^
+  "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms) ^
 """
 
 ### Reusing matchers outside of specs2
