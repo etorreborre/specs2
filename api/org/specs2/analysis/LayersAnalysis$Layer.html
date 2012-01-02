@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.specification.PromisedExecutedFragment</title>
+          <title>org.specs2.analysis.LayersAnalysis.Layer</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -15,23 +15,23 @@
         <body class="type">
       <div id="definition">
         <img src="../../../lib/class_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.specification" class="extype" href="package.html">specification</a></p>
-        <h1>PromisedExecutedFragment</h1>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.analysis" class="extype" href="package.html">analysis</a>.<a name="org.specs2.analysis.LayersAnalysis" class="extype" href="LayersAnalysis.html">LayersAnalysis</a></p>
+        <h1>Layer</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">case class</span>
       <span class="symbol"> 
-        <span class="name">PromisedExecutedFragment</span>
+        <span class="name">Layer</span>
         
-        <span class="params">(<span name="promised">promised: <span name="org.specs2.internal.scalaz.concurrent.Promise" class="extype">Promise</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="result"> extends <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="names">names: Set[String]</span>, <span name="prefix">prefix: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="included">included: Seq[String]</span>, <span name="excluded">excluded: Seq[String]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>embed an executed Fragment into a promise
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The Layer class represent a list of packages.</p><p>If those packages share a common prefix, it will be stored in the <code>prefix</code> member
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -47,7 +47,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.specification.PromisedExecutedFragment" class="in"><span>PromisedExecutedFragment</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.specs2.specification.ExecutedFragment" class="in"><span>ExecutedFragment</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.analysis.LayersAnalysis.Layer" class="in"><span>Layer</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -57,14 +57,14 @@
 
         <div class="members" id="constructors">
               <h3>Instance Constructors</h3>
-              <ol><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#this" data-isabs="false">
-      <a id="this:PromisedExecutedFragment"></a>
+              <ol><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#this" data-isabs="false">
+      <a id="this:Layer"></a>
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol"> 
-        <span class="name">PromisedExecutedFragment</span>
+        <span class="name">Layer</span>
         
-        <span class="params">(<span name="promised">promised: <span name="org.specs2.internal.scalaz.concurrent.Promise" class="extype">Promise</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>]</span>)</span>
+        <span class="params">(<span name="names">names: Set[String]</span>, <span name="prefix">prefix: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="included">included: Seq[String]</span>, <span name="excluded">excluded: Seq[String]</span>)</span>
       </span>
       </h4>
       
@@ -143,7 +143,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#canEqual" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#canEqual" data-isabs="false">
       <a id="canEqual(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -153,7 +153,7 @@
         <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutedFragment" class="extype" href="">PromisedExecutedFragment</a> → Equals</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a> → Equals</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -168,6 +168,19 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#dependsOn" data-isabs="false">
+      <a id="dependsOn(Layer):Set[Dependency]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">dependsOn</span>
+        
+        <span class="params">(<span name="otherLayer">otherLayer: <a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a></span>)</span><span class="result">: <span name="scala.collection.immutable.Set" class="extype">Set</span>[<a name="org.specs2.analysis.Dependency" class="extype" href="Dependency.html">Dependency</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the list of dependencies showing that this layer depends on the <code>other</code> layer
+meaning thisLayer -- depends on --&gt; otherLayer
+</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -179,7 +192,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#equals" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -189,7 +202,29 @@
         <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutedFragment" class="extype" href="">PromisedExecutedFragment</a> → Equals → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a> → Equals → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#exclude" data-isabs="false">
+      <a id="exclude(String*):Layer"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exclude</span>
+        
+        <span class="params">(<span name="names">names: String*</span>)</span><span class="result">: <a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">use regexes to exclude fully qualified class names from the layer</p>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#excluded" data-isabs="false">
+      <a id="excluded:Seq[String]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">excluded</span>
+        
+        <span class="result">: Seq[String]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -204,17 +239,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#get" data-isabs="false">
-      <a id="get:ExecutedFragment"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">get</span>
-        
-        <span class="result">: <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -226,7 +250,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#hashCode" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#getDependents" data-isabs="false">
+      <a id="getDependents:Set[Dependency]"></a>
+      <h4 class="signature">
+      <span class="kind">lazy val</span>
+      <span class="symbol"> 
+        <span class="name">getDependents</span>
+        
+        <span class="result">: Set[<a name="org.specs2.analysis.Dependency" class="extype" href="Dependency.html">Dependency</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the list of dependents of each package of this layer</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -236,7 +271,51 @@
         <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutedFragment" class="extype" href="">PromisedExecutedFragment</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#inSourceDir" data-isabs="false">
+      <a id="inSourceDir(String):Layer"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">inSourceDir</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">specify a source directory for this layer packages</p>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#inThisLayer" data-isabs="false">
+      <a id="inThisLayer(Dependency):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">inThisLayer</span>
+        
+        <span class="params">(<span name="d">d: <a name="org.specs2.analysis.Dependency" class="extype" href="Dependency.html">Dependency</a></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the dependent class of this dependency has its package in this layer</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#include" data-isabs="false">
+      <a id="include(String*):Layer"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">include</span>
+        
+        <span class="params">(<span name="names">names: String*</span>)</span><span class="result">: <a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">use regexes to include fully qualified class names in the layer</p>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#included" data-isabs="false">
+      <a id="included:Seq[String]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">included</span>
+        
+        <span class="result">: Seq[String]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -248,17 +327,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#location" data-isabs="false">
-      <a id="location:Location"></a>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#names" data-isabs="false">
+      <a id="names:Set[String]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">location</span>
+        <span class="name">names</span>
         
-        <span class="result">: <a name="org.specs2.io.Location" class="extype" href="../io/Location.html">Location</a></span>
+        <span class="result">: Set[String]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the location of the executed Fragment</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutedFragment" class="extype" href="">PromisedExecutedFragment</a> → <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></dd></dl></div>
+      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -292,7 +371,29 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#productArity" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#packageNames" data-isabs="false">
+      <a id="packageNames:Set[String]"></a>
+      <h4 class="signature">
+      <span class="kind">lazy val</span>
+      <span class="symbol"> 
+        <span class="name">packageNames</span>
+        
+        <span class="result">: <span name="scala.collection.immutable.Set" class="extype">Set</span>[String]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the package names</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#prefix" data-isabs="false">
+      <a id="prefix:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">prefix</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#productArity" data-isabs="false">
       <a id="productArity:Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -302,8 +403,8 @@
         <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutedFragment" class="extype" href="">PromisedExecutedFragment</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#productElement" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#productElement" data-isabs="false">
       <a id="productElement(Int):Any"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -313,7 +414,7 @@
         <span class="params">(<span name="arg0">arg0: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Any" class="extype">Any</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutedFragment" class="extype" href="">PromisedExecutedFragment</a> → Product</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a> → Product</dd></dl></div>
     </li><li visbl="pub" name="scala.Product#productIterator" data-isabs="false">
       <a id="productIterator:Iterator[Any]"></a>
       <h4 class="signature">
@@ -325,7 +426,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#productPrefix" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#productPrefix" data-isabs="false">
       <a id="productPrefix:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -335,29 +436,18 @@
         <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutedFragment" class="extype" href="">PromisedExecutedFragment</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#promised" data-isabs="false">
-      <a id="promised:Promise[ExecutedFragment]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#sourceDir" data-isabs="false">
+      <a id="sourceDir:String"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">promised</span>
+        <span class="name">sourceDir</span>
         
-        <span class="result">: <span name="org.specs2.internal.scalaz.concurrent.Promise" class="extype">Promise</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>]</span>
+        <span class="result">: String</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#stats" data-isabs="false">
-      <a id="stats:Stats"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">stats</span>
-        
-        <span class="result">: <a name="org.specs2.specification.Stats" class="extype" href="Stats.html">Stats</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the statistics of the executed Fragment</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutedFragment" class="extype" href="">PromisedExecutedFragment</a> → <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -369,17 +459,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment#toString" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">toString</span>
         
-        <span class="params">()</span><span class="result">: String</span>
+        <span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutedFragment" class="extype" href="">PromisedExecutedFragment</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a> → AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -422,6 +512,17 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#withPrefix" data-isabs="false">
+      <a id="withPrefix(String):Layer"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">withPrefix</span>
+        
+        <span class="params">(<span name="p">p: String</span>)</span><span class="result">: <a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">specify a prefix for this layer packages</p>
     </li></ol>
             </div>
 
@@ -452,8 +553,6 @@
               <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
             </div><div name="scala.Equals" class="parent">
               <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
-            </div><div name="org.specs2.specification.ExecutedFragment" class="parent">
-              <h3>Inherited from <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

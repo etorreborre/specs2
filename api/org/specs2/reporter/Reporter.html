@@ -78,27 +78,27 @@
         <div class="values members" id="values">
               <h3>Abstract Value Members</h3>
               <ol><li visbl="pub" name="org.specs2.reporter.ExecutionStrategy#execute" data-isabs="true">
-      <a id="execute(Arguments):(ExecutableSpecification) ⇒ ExecutedSpecification"></a>
+      <a id="execute(Arguments):(ExecutableSpecification) ⇒ ExecutingSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">execute</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="ExecutableSpecification.html">ExecutableSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="ExecutableSpecification.html">ExecutableSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd>ExecutionStrategy</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.Exporting#export" data-isabs="true">
-      <a id="export(Arguments):(ExecutedSpecification) ⇒ ExportType"></a>
+      <a id="export(Arguments):(ExecutingSpecification) ⇒ ExportType"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">export</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>) ⇒ ExportType</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ ExportType</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting an ExecutedSpecification</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd>Exporting</dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting an ExecutingSpecification</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd>Exporting</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.Selection#select" data-isabs="true">
       <a id="select(Arguments):(SpecificationStructure) ⇒ SpecificationStructure"></a>
       <h4 class="signature">
@@ -122,13 +122,13 @@
       </h4>
       <p class="shortcomment cmt">select function returning a filtered and ordered seq of seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered and ordered seq of seq of Fragments</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd><a name="org.specs2.reporter.Sequence" class="extype" href="Sequence.html">Sequence</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.Storing#store" data-isabs="true">
-      <a id="store(Arguments):(ExecutedSpecification) ⇒ ExecutedSpecification"></a>
+      <a id="store(Arguments):(ExecutingSpecification) ⇒ ExecutingSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">store</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function storing ExecutedFragments</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd><dt>Definition Classes</dt><dd>Storing</dd></dl></div>

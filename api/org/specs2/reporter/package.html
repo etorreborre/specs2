@@ -47,61 +47,14 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.reporter.Colors" data-isabs="true">
-      <a id="Colors:Colors"></a>
-      <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="Colors.html"><span class="name">Colors</span></a>
-        
-        <span class="result"> extends AnyRef</span>
-      </span>
-      </h4>
-      <p class="comment cmt">This trait defines the colors which must be used to output text on the console
-</p>
-    </li><li visbl="pub" name="org.specs2.reporter.ColorsFromSystemProperties" data-isabs="false">
-      <a id="ColorsFromSystemProperties:ColorsFromSystemProperties"></a>
-      <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="ColorsFromSystemProperties.html"><span class="name">ColorsFromSystemProperties</span></a>
-        
-        <span class="result"> extends ConsoleColors with ColorsMap</span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.specs2.reporter.ColorsMap" data-isabs="true">
-      <a id="ColorsMap:ColorsMap"></a>
-      <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="ColorsMap.html"><span class="name">ColorsMap</span></a>
-        
-        <span class="result"> extends AnyRef</span>
-      </span>
-      </h4>
-      <p class="comment cmt">Definition of abbreviated color names
-</p>
-    </li><li visbl="pub" name="org.specs2.reporter.ConsoleColors" data-isabs="false">
-      <a id="ConsoleColors:ConsoleColors"></a>
-      <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="ConsoleColors.html"><span class="name">ConsoleColors</span></a>
-        
-        <span class="result"> extends AnsiColors with Colors</span>
-      </span>
-      </h4>
-      <p class="comment cmt">This class defines the colors to use to print out text on the Console
-with defaults as AnsiColors for a dark background console</p>
-    </li><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
+              <ol><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
       <a id="ConsoleReporter:ConsoleReporter"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
         <a href="ConsoleReporter.html"><span class="name">ConsoleReporter</span></a>
         
-        <span class="result"> extends DefaultReporter with TextExporting with ConsoleOutput</span>
+        <span class="result"> extends DefaultReporter with TextExporting</span>
       </span>
       </h4>
       <p class="comment cmt">The console reporter executes a Specification and exports the results to the Console
@@ -269,18 +222,6 @@ with the xml method
       </h4>
       <p class="comment cmt">Reports a Specification as an Html page
 </p>
-    </li><li visbl="pub" name="org.specs2.reporter.InvertedColors" data-isabs="false">
-      <a id="InvertedColors:InvertedColors"></a>
-      <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="InvertedColors.html"><span class="name">InvertedColors</span></a>
-        
-        <span class="result"> extends ConsoleColors</span>
-      </span>
-      </h4>
-      <p class="comment cmt">This color scheme can be used with a white background
-</p>
     </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlExporting" data-isabs="true">
       <a id="JUnitXmlExporting:JUnitXmlExporting"></a>
       <h4 class="signature">
@@ -406,18 +347,6 @@ different types of results.</p>
       </span>
       </h4>
       <p class="comment cmt">The Sequence trait implements the logic for the fragments to execute according to their dependencies
-</p>
-    </li><li visbl="pub" name="org.specs2.reporter.SmartColors" data-isabs="false">
-      <a id="SmartColors:SmartColors"></a>
-      <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="SmartColors.html"><span class="name">SmartColors</span></a>
-        
-        <span class="result"> extends ConsoleColors with ColorsMap with SystemProperties</span>
-      </span>
-      </h4>
-      <p class="comment cmt">This class checks if colors must be taken from system properties
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.StartOfArguments" data-isabs="false">
       <a id="StartOfArguments:StartOfArguments[T]"></a>

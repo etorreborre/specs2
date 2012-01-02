@@ -235,13 +235,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultExecutionStrategy#execute" data-isabs="false">
-      <a id="execute(Arguments):(ExecutableSpecification) ⇒ ExecutedSpecification"></a>
+      <a id="execute(Arguments):(ExecutableSpecification) ⇒ ExecutingSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">execute</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="ExecutableSpecification.html">ExecutableSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="ExecutableSpecification.html">ExecutableSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">execute sequences of Fragments.</p><div class="fullcomment"><div class="comment cmt"><p>execute sequences of Fragments.</p><p>If the stopOnFail argument is true, we check that the execution is ok before executing the next sequence.
@@ -286,16 +286,16 @@ Example
       <p class="shortcomment cmt">execute a Fragment.</p><div class="fullcomment"><div class="comment cmt"><p>execute a Fragment.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.FragmentExecution" class="extype" href="../specification/FragmentExecution.html">FragmentExecution</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.HtmlExporting#export" data-isabs="false">
-      <a id="export(Arguments):(ExecutedSpecification) ⇒ ExportType"></a>
+      <a id="export(Arguments):(ExecutingSpecification) ⇒ ExportType"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">export</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>) ⇒ ExportType</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ ExportType</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting an ExecutedSpecification</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.HtmlExporting" class="extype" href="HtmlExporting.html">HtmlExporting</a> → Exporting</dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting an ExecutingSpecification</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.HtmlExporting" class="extype" href="HtmlExporting.html">HtmlExporting</a> → Exporting</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection#filter" data-isabs="false">
       <a id="filter(Arguments):(Seq[(Fragment, Arguments, SpecName)]) ⇒ Seq[Fragment]"></a>
       <h4 class="signature">
@@ -698,13 +698,13 @@ Those statistics are updated from previously executed statistics to calculate tr
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.HtmlPrinter" class="extype" href="HtmlPrinter.html">HtmlPrinter</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultStoring#store" data-isabs="false">
-      <a id="store(Arguments):(ExecutedSpecification) ⇒ ExecutedSpecification"></a>
+      <a id="store(Arguments):(ExecutingSpecification) ⇒ ExecutingSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">store</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function storing ExecutedFragments</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>DefaultStoring → Storing</dd></dl></div>

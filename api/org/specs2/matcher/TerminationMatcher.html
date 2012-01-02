@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">TerminationMatcher</span>
         
-        <span class="params">(<span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <span name="org.specs2.time.Duration" class="extype">Duration</span></span>, <span name="whenAction">whenAction: <span name="scala.Option" class="extype">Option</span>[() ⇒ <span name="scala.Any" class="extype">Any</span>]</span>, <span name="whenDesc">whenDesc: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="onlyWhen">onlyWhen: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
+        <span class="params">(<span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <a name="org.specs2.time.Duration" class="extype" href="../time/Duration.html">Duration</a></span>, <span name="whenAction">whenAction: <span name="scala.Option" class="extype">Option</span>[() ⇒ <span name="scala.Any" class="extype">Any</span>]</span>, <span name="whenDesc">whenDesc: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="onlyWhen">onlyWhen: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
       
@@ -247,7 +247,7 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)</code> can be applied to 
       <span class="symbol"> 
         <span class="name">eventually</span>
         
-        <span class="params">(<span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <span name="org.specs2.time.Duration" class="extype">Duration</span></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
+        <span class="params">(<span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <a name="org.specs2.time.Duration" class="extype" href="../time/Duration.html">Duration</a></span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a matcher that needs to eventually match, after a given number of retries
@@ -534,7 +534,7 @@ If the skip message is empty, only the failure message is printed
       <span class="symbol"> 
         <span class="name">retry</span>
         <span class="tparams">[<span name="S">S &lt;: T</span>]</span>
-        <span class="params">(<span name="originalRetries">originalRetries: <span name="scala.Int" class="extype">Int</span></span>, <span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <span name="org.specs2.time.Duration" class="extype">Duration</span></span>, <span name="a">a: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>, <span name="promise">promise: <span name="org.specs2.internal.scalaz.concurrent.Promise" class="extype">Promise</span>[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
+        <span class="params">(<span name="originalRetries">originalRetries: <span name="scala.Int" class="extype">Int</span></span>, <span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <a name="org.specs2.time.Duration" class="extype" href="../time/Duration.html">Duration</a></span>, <span name="a">a: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[S]</span>, <span name="promise">promise: <span name="org.specs2.internal.scalaz.concurrent.Promise" class="extype">Promise</span>[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[S]</span>
       </span>
       </h4>
       

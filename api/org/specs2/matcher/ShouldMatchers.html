@@ -1358,6 +1358,17 @@ write("./dir/hello.txt") { out =>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#beSorted" data-isabs="false">
+      <a id="beSorted[T](Ordering[T]):OrderingMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">beSorted</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: Ordering[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.OrderingMatcher" class="extype" href="OrderingMatcher.html">OrderingMatcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a matcher checking if the elements are ordered</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#beTheSameAs" data-isabs="false">
       <a id="beTheSameAs[T&lt;:AnyRef](⇒ T):BeTheSameAs[T]"></a>
       <h4 class="signature">
@@ -2054,7 +2065,7 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       <span class="symbol"> 
         <span class="name">eventually</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <span name="org.specs2.time.Duration" class="extype">Duration</span></span>)</span><span class="params">(<span name="nested">nested: ⇒ <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
+        <span class="params">(<span name="retries">retries: <span name="scala.Int" class="extype">Int</span></span>, <span name="sleep">sleep: <a name="org.specs2.time.Duration" class="extype" href="../time/Duration.html">Duration</a></span>)</span><span class="params">(<span name="nested">nested: ⇒ <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a matcher that will retry the nested matcher a given number of times
@@ -2991,6 +3002,17 @@ returning actual matchers
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.AnyBeHaveMatchers" class="extype" href="AnyBeHaveMatchers.html">AnyBeHaveMatchers</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBeHaveMatchers#orderedSeqMatchResult" data-isabs="false">
+      <a id="orderedSeqMatchResult[T](MatchResult[Seq[T]])(Ordering[T]):OrderedSeqMatchResult[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">orderedSeqMatchResult</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="result">result: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[Seq[T]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: Ordering[T]</span>)</span><span class="result">: <span name="org.specs2.matcher.TraversableBeHaveMatchers.OrderedSeqMatchResult" class="extype">OrderedSeqMatchResult</span>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>TraversableBeHaveMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.MapBeHaveMatchers#pair" data-isabs="false">
       <a id="pair[K, V]((K, V)):Matcher[Iterable[(K, V)]]"></a>
       <h4 class="signature">
@@ -3218,6 +3240,17 @@ returning actual matchers
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>OptionBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#sorted" data-isabs="false">
+      <a id="sorted[T](Ordering[T]):OrderingMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">sorted</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: Ordering[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.OrderingMatcher" class="extype" href="OrderingMatcher.html">OrderingMatcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for beSorted</p><div class="fullcomment"><div class="comment cmt"><p>alias for beSorted</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#startWith" data-isabs="false">
       <a id="startWith(⇒ String):Matcher[String]"></a>
       <h4 class="signature">

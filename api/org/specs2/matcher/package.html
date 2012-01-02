@@ -382,6 +382,29 @@
       </span>
       </h4>
       <p class="comment cmt">This trait provides implicit definitions and types to create DataTables.</p>
+    </li><li visbl="pub" name="org.specs2.matcher.DependencyBeHaveMatchers" data-isabs="true">
+      <a id="DependencyBeHaveMatchers:DependencyBeHaveMatchers"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="DependencyBeHaveMatchers.html"><span class="name">DependencyBeHaveMatchers</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.DependencyMatchers" data-isabs="true">
+      <a id="DependencyMatchers:DependencyMatchers"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="DependencyMatchers.html"><span class="name">DependencyMatchers</span></a>
+        
+        <span class="result"> extends DependencyBaseMatchers with DependencyBeHaveMatchers</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The dependency matchers trait provides a way to specify the dependencies that should be verified in your project
+and then to check that there's no unwanted dependency in the code.</p>
     </li><li visbl="pub" name="org.specs2.matcher.EitherMatchers" data-isabs="true">
       <a id="EitherMatchers:EitherMatchers"></a>
       <h4 class="signature">
@@ -611,7 +634,7 @@ to properties by appending forAll
       <span class="symbol"> 
         <a href="MatchResult.html"><span class="name">MatchResult</span></a>
         <span class="tparams">[<span name="T">+T</span>]</span>
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends ResultLike</span>
       </span>
       </h4>
       <p class="comment cmt">Result of a Match.</p>
@@ -817,6 +840,17 @@ a match fails
         <a href="OrNotMatch.html"><span class="name">OrNotMatch</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
         <span class="result"> extends MatchResult[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.OrderingMatcher" data-isabs="false">
+      <a id="OrderingMatcher:OrderingMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="OrderingMatcher.html"><span class="name">OrderingMatcher</span></a>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="result"> extends Matcher[Seq[T]]</span>
       </span>
       </h4>
       

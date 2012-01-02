@@ -106,6 +106,18 @@ where an action must be executing after the main executable action
       </h4>
       <p class="comment cmt">For each created example use a given after method
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.Analysis" data-isabs="true">
+      <a id="Analysis:Analysis"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="Analysis.html"><span class="name">Analysis</span></a>
+        
+        <span class="result"> extends DependencyMatchers</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait provides integrated analysis method for a scala project
+</p>
     </li><li visbl="pub" name="org.specs2.specification.Apply" data-isabs="true">
       <a id="Apply:Apply"></a>
       <h4 class="signature">
@@ -419,7 +431,8 @@ to execute before and after an Example
       </span>
       </h4>
       <p class="comment cmt">The Executed Fragments represent pieces of a Specification
-which have already been executed to provide a Result</p>
+which have already been executed to provide a Result
+</p>
     </li><li visbl="pub" name="org.specs2.specification.ExecutedNoText" data-isabs="false">
       <a id="ExecutedNoText:ExecutedNoText"></a>
       <h4 class="signature">
@@ -427,7 +440,7 @@ which have already been executed to provide a Result</p>
       <span class="symbol"> 
         <a href="ExecutedNoText.html"><span class="name">ExecutedNoText</span></a>
         
-        <span class="params">(<span name="timer">timer: SimpleTimer</span>, <span name="location">location: Location</span>)</span><span class="result"> extends ExecutedFragment with Product with Serializable</span>
+        <span class="params">(<span name="isAction">isAction: Boolean</span>, <span name="timer">timer: SimpleTimer</span>, <span name="location">location: Location</span>)</span><span class="result"> extends ExecutedFragment with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">This executed Fragment is used when no text must be displayed (for the successful
@@ -473,10 +486,11 @@ execution of an Action for example)
       <span class="symbol"> 
         <a href="ExecutedSpecification.html"><span class="name">ExecutedSpecification</span></a>
         
-        <span class="params">(<span name="name">name: SpecName</span>, <span name="fs">fs: Seq[ExecutedFragment]</span>, <span name="executor">executor: ExecutorService</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="name">name: SpecName</span>, <span name="fs">fs: Seq[ExecutedFragment]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">an executed specification with a name and a sequence of executed fragments</p>
+      <p class="comment cmt">A specification with a name and all of its fragments already executed
+</p>
     </li><li visbl="pub" name="org.specs2.specification.ExecutedStandardFragment" data-isabs="true">
       <a id="ExecutedStandardFragment:ExecutedStandardFragment"></a>
       <h4 class="signature">
@@ -510,6 +524,41 @@ execution of an Action for example)
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.specification.ExecutingFragment" data-isabs="true">
+      <a id="ExecutingFragment:ExecutingFragment"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ExecutingFragment.html"><span class="name">ExecutingFragment</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The Executing Fragment trait represent a Fragment being executed.</p>
+    </li><li visbl="pub" name="org.specs2.specification.ExecutingSpecification" data-isabs="false">
+      <a id="ExecutingSpecification:ExecutingSpecification"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="ExecutingSpecification.html"><span class="name">ExecutingSpecification</span></a>
+        
+        <span class="params">(<span name="name">name: SpecName</span>, <span name="fs">fs: Seq[ExecutingFragment]</span>, <span name="executor">executor: ExecutorService</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">a specification with a name and a sequence of fragments being executed
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.FinishedExecutingFragment" data-isabs="false">
+      <a id="FinishedExecutingFragment:FinishedExecutingFragment"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="FinishedExecutingFragment.html"><span class="name">FinishedExecutingFragment</span></a>
+        
+        <span class="params">(<span name="f">f: ExecutedFragment</span>)</span><span class="result"> extends ExecutingFragment with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">embed an already executed Fragment
+</p>
     </li><li visbl="pub" name="org.specs2.specification.FormMarkup" data-isabs="false">
       <a id="FormMarkup:FormMarkup"></a>
       <h4 class="signature">
@@ -626,6 +675,18 @@ Allow a Form to be used as an example body and return a Result automatically
       </h4>
       <p class="comment cmt">The HtmlLink class represents a link in a specification with an identifier (either a spec name, or a string) and
 link elements.</p>
+    </li><li visbl="pub" name="org.specs2.specification.LazyExecutingFragment" data-isabs="false">
+      <a id="LazyExecutingFragment:LazyExecutingFragment"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="LazyExecutingFragment.html"><span class="name">LazyExecutingFragment</span></a>
+        
+        <span class="params">(<span name="f">f: () ⇒ ExecutedFragment</span>)</span><span class="result"> extends ExecutingFragment with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">embed an executing Fragment into a function to execute it on demand
+</p>
     </li><li visbl="pub" name="org.specs2.specification.Outside" data-isabs="true">
       <a id="Outside:Outside[T]"></a>
       <h4 class="signature">
@@ -638,14 +699,14 @@ link elements.</p>
       </h4>
       <p class="comment cmt">The Outside trait can be inherited by classes which will
 execute some code inside the outside method provided by the context.</p>
-    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutedFragment" data-isabs="false">
-      <a id="PromisedExecutedFragment:PromisedExecutedFragment"></a>
+    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutingFragment" data-isabs="false">
+      <a id="PromisedExecutingFragment:PromisedExecutingFragment"></a>
       <h4 class="signature">
       <span class="kind">case class</span>
       <span class="symbol"> 
-        <a href="PromisedExecutedFragment.html"><span class="name">PromisedExecutedFragment</span></a>
+        <a href="PromisedExecutingFragment.html"><span class="name">PromisedExecutingFragment</span></a>
         
-        <span class="params">(<span name="promised">promised: Promise[ExecutedFragment]</span>)</span><span class="result"> extends ExecutedFragment with Product with Serializable</span>
+        <span class="params">(<span name="promised">promised: Promise[ExecutedFragment]</span>)</span><span class="result"> extends ExecutingFragment with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">embed an executed Fragment into a promise

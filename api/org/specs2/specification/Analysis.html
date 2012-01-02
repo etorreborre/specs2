@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.reporter.ColorsMap</title>
+          <title>org.specs2.specification.Analysis</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -15,26 +15,23 @@
         <body class="type">
       <div id="definition">
         <img src="../../../lib/trait_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.reporter" class="extype" href="package.html">reporter</a></p>
-        <h1>ColorsMap</h1>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.specification" class="extype" href="package.html">specification</a></p>
+        <h1>Analysis</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
-        <span class="name">ColorsMap</span>
+        <span class="name">Analysis</span>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends <a name="org.specs2.matcher.DependencyMatchers" class="extype" href="../matcher/DependencyMatchers.html">DependencyMatchers</a></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Definition of abbreviated color names
-</p></div><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides integrated analysis method for a scala project
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.specification.Analysis" class="extype" href="">Analysis</a> with <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span> with <a name="org.specs2.matcher.Expectations" class="extype" href="../matcher/Expectations.html">Expectations</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
-        </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.reporter.ColorsFromSystemProperties" class="extype" href="ColorsFromSystemProperties.html">ColorsFromSystemProperties</a>, <a name="org.specs2.reporter.SmartColors" class="extype" href="SmartColors.html">SmartColors</a></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.DependencyMatchers" class="extype" href="../matcher/DependencyMatchers.html">DependencyMatchers</a>, <a name="org.specs2.matcher.DependencyBeHaveMatchers" class="extype" href="../matcher/DependencyBeHaveMatchers.html">DependencyBeHaveMatchers</a>, <span name="org.specs2.matcher.DependencyBaseMatchers" class="extype">DependencyBaseMatchers</span>, <a name="org.specs2.analysis.LayersAnalysis" class="extype" href="../analysis/LayersAnalysis.html">LayersAnalysis</a>, <a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -50,7 +47,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.reporter.ColorsMap" class="in"><span>ColorsMap</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.specification.Analysis" class="in"><span>Analysis</span></li><li name="org.specs2.matcher.DependencyMatchers" class="in"><span>DependencyMatchers</span></li><li name="org.specs2.matcher.DependencyBeHaveMatchers" class="in"><span>DependencyBeHaveMatchers</span></li><li name="org.specs2.matcher.DependencyBaseMatchers" class="in"><span>DependencyBaseMatchers</span></li><li name="org.specs2.analysis.LayersAnalysis" class="in"><span>LayersAnalysis</span></li><li name="org.specs2.analysis.DependencyFinder" class="in"><span>DependencyFinder</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -60,7 +57,44 @@
 
         
 
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer" data-isabs="false">
+      <a id="Layer:Layer"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="../analysis/LayersAnalysis$Layer.html"><span class="name">Layer</span></a>
         
+        <span class="params">(<span name="names">names: Set[String]</span>, <span name="prefix">prefix: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="included">included: Seq[String]</span>, <span name="excluded">excluded: Seq[String]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The Layer class represent a list of packages.</p>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layers" data-isabs="false">
+      <a id="Layers:Layers"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="../analysis/LayersAnalysis$Layers.html"><span class="name">Layers</span></a>
+        
+        <span class="params">(<span name="layers">layers: Seq[Layer]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class represents an ordered set of layers, where each package on a given layer can only depend on packages defined in lower layers
+</p>
+    </li><li visbl="pub" name="org.specs2.matcher.DependencyBeHaveMatchers.LayersResultMatcher" data-isabs="false">
+      <a id="LayersResultMatcher:LayersResultMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="../matcher/DependencyBeHaveMatchers$LayersResultMatcher.html"><span class="name">LayersResultMatcher</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
         
         
 
@@ -121,17 +155,32 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.ColorsMap#abbreviatedColors" data-isabs="false">
-      <a id="abbreviatedColors:Map[String, String]"></a>
+    </li><li visbl="pub" name="org.specs2.specification.Analysis#LayersToExample" data-isabs="false">
+      <a id="LayersToExample(Layers):Example"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">implicit def</span>
       <span class="symbol"> 
-        <span class="name">abbreviatedColors</span>
+        <span class="name">LayersToExample</span>
         
-        <span class="result">: <span name="scala.collection.immutable.Map" class="extype">Map</span>[<span name="java.lang.String" class="extype">String</span>, <span name="java.lang.String" class="extype">String</span>]</span>
+        <span class="params">(<span name="layers">layers: <a name="org.specs2.analysis.LayersAnalysis.Layers" class="extype" href="../analysis/LayersAnalysis$Layers.html">Layers</a></span>)</span><span class="result">: <a name="org.specs2.specification.Example" class="extype" href="Example.html">Example</a></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">this implicit definition allows to insert a Layers definition directly into the specification, as a Fragment
+</p><div class="fullcomment"><div class="comment cmt"><p>this implicit definition allows to insert a Layers definition directly into the specification, as a Fragment
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Analysis#LayersToResult" data-isabs="false">
+      <a id="LayersToResult(Layers):Result"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">LayersToResult</span>
+        
+        <span class="params">(<span name="layers">layers: <a name="org.specs2.analysis.LayersAnalysis.Layers" class="extype" href="../analysis/LayersAnalysis$Layers.html">Layers</a></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this implicit definition allows to check if a Layers definition is respected
+</p><div class="fullcomment"><div class="comment cmt"><p>this implicit definition allows to check if a Layers definition is respected
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -143,6 +192,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.DependencyBaseMatchers#beRespected" data-isabs="false">
+      <a id="beRespected:LayersDependenciesMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">beRespected</span>
+        
+        <span class="result">: <span name="org.specs2.matcher.DependencyBaseMatchers.LayersDependenciesMatcher" class="extype">LayersDependenciesMatcher</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matcher for Layers declarations</p><div class="fullcomment"><div class="comment cmt"><p>matcher for Layers declarations</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>DependencyBaseMatchers</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -157,17 +217,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.ColorsMap#colors" data-isabs="false">
-      <a id="colors:Map[String, String]"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">colors</span>
-        
-        <span class="result">: <span name="scala.collection.immutable.Map" class="extype">Map</span>[<span name="java.lang.String" class="extype">String</span>, <span name="java.lang.String" class="extype">String</span>]</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -215,17 +264,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.ColorsMap#getColor" data-isabs="false">
-      <a id="getColor(String):Option[String]"></a>
+    </li><li visbl="pub" name="org.specs2.analysis.DependencyFinder#getPackageDependents" data-isabs="false">
+      <a id="getPackageDependents(String,String):Seq[Dependency]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">getColor</span>
+        <span class="name">getPackageDependents</span>
         
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="java.lang.String" class="extype">String</span>]</span>
+        <span class="params">(<span name="packageName">packageName: String</span>, <span name="sourceDir">sourceDir: String</span>)</span><span class="result">: Seq[<a name="org.specs2.analysis.Dependency" class="extype" href="../analysis/Dependency.html">Dependency</a>]</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the class depending on the classes of a given package
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -248,6 +298,30 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis#layer" data-isabs="false">
+      <a id="layer(String*):Layer"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">layer</span>
+        
+        <span class="params">(<span name="names">names: String*</span>)</span><span class="result">: <a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="../analysis/LayersAnalysis$Layer.html">Layer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a new Layer object. If a prefix is defined, it will apply to each given name
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis" class="extype" href="../analysis/LayersAnalysis.html">LayersAnalysis</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis#layers" data-isabs="false">
+      <a id="layers(Layer*):Layers"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">layers</span>
+        
+        <span class="params">(<span name="ls">ls: <a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="../analysis/LayersAnalysis$Layer.html">Layer</a>*</span>)</span><span class="result">: <a name="org.specs2.analysis.LayersAnalysis.Layers" class="extype" href="../analysis/LayersAnalysis$Layers.html">Layers</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a new Layers object, composed of other layers. If a prefix is defined it will apply to each layer
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis" class="extype" href="../analysis/LayersAnalysis.html">LayersAnalysis</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -281,6 +355,29 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.DependencyBeHaveMatchers#respected" data-isabs="false">
+      <a id="respected:LayersDependenciesMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">respected</span>
+        
+        <span class="result">: <span name="org.specs2.matcher.DependencyBaseMatchers.LayersDependenciesMatcher" class="extype">LayersDependenciesMatcher</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.DependencyBeHaveMatchers" class="extype" href="../matcher/DependencyBeHaveMatchers.html">DependencyBeHaveMatchers</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.DependencyFinder#selectFiles" data-isabs="false">
+      <a id="selectFiles(String):Seq[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">selectFiles</span>
+        
+        <span class="params">(<span name="sourceDir">sourceDir: String</span>)</span><span class="result">: Seq[String]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a seq of all scala files in the source directory
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -292,6 +389,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis#toLayer" data-isabs="false">
+      <a id="toLayer(String):Layer"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">toLayer</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="../analysis/LayersAnalysis$Layer.html">Layer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this implicit definition allows to use a single string instead of a Layer object</p><div class="fullcomment"><div class="comment cmt"><p>this implicit definition allows to use a single string instead of a Layer object</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.analysis.LayersAnalysis" class="extype" href="../analysis/LayersAnalysis.html">LayersAnalysis</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.DependencyBeHaveMatchers#toLayersResultMatcher" data-isabs="false">
+      <a id="toLayersResultMatcher(MatchResult[Layers]):LayersResultMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">toLayersResultMatcher</span>
+        
+        <span class="params">(<span name="result">result: <a name="org.specs2.matcher.MatchResult" class="extype" href="../matcher/MatchResult.html">MatchResult</a>[<a name="org.specs2.analysis.LayersAnalysis.Layers" class="extype" href="../analysis/LayersAnalysis$Layers.html">Layers</a>]</span>)</span><span class="result">: <a name="org.specs2.matcher.DependencyBeHaveMatchers.LayersResultMatcher" class="extype" href="../matcher/DependencyBeHaveMatchers$LayersResultMatcher.html">LayersResultMatcher</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.DependencyBeHaveMatchers" class="extype" href="../matcher/DependencyBeHaveMatchers.html">DependencyBeHaveMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -350,7 +469,17 @@
 
         
 
-        <div name="scala.AnyRef" class="parent">
+        <div name="org.specs2.matcher.DependencyMatchers" class="parent">
+              <h3>Inherited from <a name="org.specs2.matcher.DependencyMatchers" class="extype" href="../matcher/DependencyMatchers.html">DependencyMatchers</a></h3>
+            </div><div name="org.specs2.matcher.DependencyBeHaveMatchers" class="parent">
+              <h3>Inherited from <a name="org.specs2.matcher.DependencyBeHaveMatchers" class="extype" href="../matcher/DependencyBeHaveMatchers.html">DependencyBeHaveMatchers</a></h3>
+            </div><div name="org.specs2.matcher.DependencyBaseMatchers" class="parent">
+              <h3>Inherited from <span name="org.specs2.matcher.DependencyBaseMatchers" class="extype">DependencyBaseMatchers</span></h3>
+            </div><div name="org.specs2.analysis.LayersAnalysis" class="parent">
+              <h3>Inherited from <a name="org.specs2.analysis.LayersAnalysis" class="extype" href="../analysis/LayersAnalysis.html">LayersAnalysis</a></h3>
+            </div><div name="org.specs2.analysis.DependencyFinder" class="parent">
+              <h3>Inherited from <a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a></h3>
+            </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
