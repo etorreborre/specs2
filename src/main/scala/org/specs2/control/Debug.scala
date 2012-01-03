@@ -14,8 +14,13 @@ trait Debug {
   
   implicit def debug[T](t: =>T): Debuggable[T] = new Debuggable(t)
   class Debuggable[T](t: =>T) {
+    lazy val value = t
     /** print the object to the console and return it */
-    def pp: T = { Console.println(t); t }
+    def pp: T = { Console.println(value); value }
+    /** print the object to the console and return it, if the condition is satisfied*/
+    def pp(condition: Boolean): T = pp(v => condition)
+    /** print the object to the console and return it, if the condition is satisfied*/
+    def pp(condition: T => Boolean): T = if (condition(value)) pp else value
   }
 
 }
