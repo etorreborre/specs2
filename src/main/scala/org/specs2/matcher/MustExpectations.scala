@@ -16,6 +16,16 @@ trait MustExpectations extends Expectations {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
   }
 }
+
+/**
+ * This trait can be used to remove aka and must methods on any value
+ */
+trait NoMustExpectations extends MustExpectations {
+  override def akaMust[T](tm: Expectable[T]) = super.akaMust(tm)
+  override def theValue[T](t: =>T): MustExpectable[T] = super.theValue(t)
+  override def theBlock(t: =>Nothing): MustExpectable[Nothing] = super.theBlock(t)
+}
+
 object MustExpectations extends MustExpectations
 
 /**

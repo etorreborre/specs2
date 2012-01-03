@@ -15,6 +15,15 @@ trait ShouldExpectations extends Expectations {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
   }
 }
+/**
+ * This trait can be used to remove aka and should methods on any value
+ */
+trait NoShouldExpectations extends ShouldExpectations {
+  override def akaShould[T](tm: Expectable[T]) = super.akaShould(tm)
+  override def thisValue[T](t: =>T): ShouldExpectable[T] = super.thisValue(t)
+  override def thisBlock(t: =>Nothing): ShouldExpectable[Nothing] = super.thisBlock(t)
+}
+
 object ShouldExpectations extends ShouldExpectations
 
 /**

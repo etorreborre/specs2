@@ -122,6 +122,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { (type1 must beAnInstanceOf[Type2]).message must_== "'type1' is not an instance of 'org.specs2.matcher.Type2'" }     ^
                                                                                                                         p^
   "the === implicits can be deactivated with the NoCanBeEqual trait"                                                    ! e2^
+  "the must implicits can be deactivated with the NoMustExpectations trait"                                             ! e3^
                                                                                                                         end
                                                                                           
   def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
@@ -140,6 +141,18 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
     spec.result
   }
 
+  def e3 = {
+    // if this specification compiles and if result is ok, this means that the must implicit could be redefined
+    // thanks to the NoMustExpectations trait
+    val spec = new mutable.Specification with NoMustExpectations {
+      implicit def aValue[T](t: =>T) = new {
+        def must(other: Int) = other
+      }
+      val result = (1 must 2) === 2
+      "an example" >> result
+    }
+    spec.result
+  }
   val aValue: String = "a value"
 
   val type1 = new Type1 {
