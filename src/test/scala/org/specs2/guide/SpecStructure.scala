@@ -20,6 +20,7 @@ In this chapter you will learn how to:
  * give a title to your specification
  * define contexts and actions to execute before/after examples
  * tag examples or sections of the Specification
+ * remove some implicit definitions conflicting with your code
 
 ### Declare examples
 
@@ -1245,6 +1246,14 @@ For that specification above:
  * when the `section` call is appended to a block of Fragments on the same line, all the fragments of that block are part of
    the section: `example 5` and `example 6` are tagged with `slow`
 
+### Removing implicit definitions
+
+By default, the `Specification` trait imports quite a few implicit definitions (following a "batteries included" approach). However there might be some conflicts with implicits existing in your own user code. Among the usual examples of conflicts are conflicts with the `===` sign in Scalaz and the `Duration` methods in Akka.
+
+An easy way to avoid this situation is to "deactivate" the specs2 implicits by mixing-in the relevant trait:
+
+ * `org.specs2.matcher.NoCanBeEqual`: deactivate the `===` method on any type `T`
+ * `org.specs2.time.NoTimeConversions`: deactivate the `millis`, `seconds`,... methods on `Int`s and `Long`s
 
  - - -
                                                                                                                         """^

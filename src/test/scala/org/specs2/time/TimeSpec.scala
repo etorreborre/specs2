@@ -1,7 +1,5 @@
 package org.specs2
 package time
-import TimeConversions._
-import Time._
 
 class TimeSpec extends Specification { def is =
   
@@ -15,5 +13,18 @@ class TimeSpec extends Specification { def is =
   "Time can"                                                                                                            ^
     "be frozen so different durations can safely refer to 'now'"                                                        !
     { Time.freeze; (1.minute.fromNow - Time.now).inSeconds must_== 60 }                                                 ^
+                                                                                                                        p^
+  "Duration implicits can be deactivated with the NoTimeConversion trait"                                               ! e1^
                                                                                                                         end
+
+  def e1 = {
+    val spec = new Specification with NoTimeConversions {
+      implicit def intToMyMillis(i: Int) = new {
+        def millis = i * 2
+      }
+      val result = 1.millis === 2
+      def is = result
+    }
+    spec.result
+  }
 }

@@ -29,6 +29,15 @@ trait TimeConversions {
   implicit def intToRichLong(v: Int) = new RichLong(v.toLong)
   implicit def longToRichLong(v: Long) = new RichLong(v)
 }
+
+/**
+ * This trait can be used to deactivate the time conversions (to avoid conflicts with Akka's conversions for example
+ */
+trait NoTimeConversions extends TimeConversions {
+  override def intToRichLong(v: Int)   = super.intToRichLong(v)
+  override def longToRichLong(v: Long) = super.longToRichLong(v)
+}
+
 object TimeConversions extends TimeConversions
  
 /**
