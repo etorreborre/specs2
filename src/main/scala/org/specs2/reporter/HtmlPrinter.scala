@@ -38,10 +38,16 @@ trait HtmlPrinter {
    * the name of the html file is the full class name
    */
   def print(spec: ExecutedSpecification)(implicit args: Arguments) = {
-    val htmlFiles = reduce(spec) |> sortByFile(spec.name, parentLink = HtmlLink(spec.name, "", spec.name.name))
+    val htmlFiles = createHtmlLinesFiles(spec)
     val toc = createToc(htmlFiles)
     htmlFiles.flatten map printHtml(toc, output)
   }
+
+  /**
+   * map the executed fragments to HtmlLines and sort them by file
+   */
+  def createHtmlLinesFiles(spec: ExecutedSpecification) =
+    reduce(spec) |> sortByFile(spec.name, parentLink = HtmlLink(spec.name, "", spec.name.name))
 
   def printHtml(toc: TreeToc, output: =>HtmlReportOutput): HtmlLinesFile => HtmlFile = (file: HtmlLinesFile) => {
     HtmlFile(file.link.url, printHtml(output, file, toc.toTree(file.hashCode)))
