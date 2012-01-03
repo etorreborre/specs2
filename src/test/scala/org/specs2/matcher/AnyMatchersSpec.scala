@@ -120,10 +120,26 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { type1 must beAnInstanceOf[Type1] }                                                                                  ^
   { type1 must not be anInstanceOf[Type2] }                                                                             ^
   { (type1 must beAnInstanceOf[Type2]).message must_== "'type1' is not an instance of 'org.specs2.matcher.Type2'" }     ^
+                                                                                                                        p^
+  "the === implicits can be deactivated with the NoCanBeEqual trait"                                                    ! e2^
                                                                                                                         end
                                                                                           
   def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
            "'3' is not equal to '2'"
+
+  def e2 = {
+    // if this specification compiles and if result is ok, this means that the === implicit could be redefined
+    // thanks to the NoCanBeEqual trait
+    val spec = new Specification with NoCanBeEqual {
+      implicit def otherTripleEqualUse[T](t: =>T) = new {
+        def ===[S](other: S) = other
+      }
+      val result = (1 === 2) must_== 2
+      def is = result
+    }
+    spec.result
+  }
+
   val aValue: String = "a value"
 
   val type1 = new Type1 {
