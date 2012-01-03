@@ -1250,7 +1250,7 @@ For that specification above:
 
 By default, the `Specification` trait imports quite a few implicit definitions (following a "batteries included" approach). However there might be some conflicts with implicits existing in your own user code. Among the usual examples of conflicts are conflicts with the `===` sign in Scalaz and the `Duration` methods in Akka.
 
-An easy way to avoid this situation is to "deactivate" the specs2 implicits by mixing-in the relevant trait:
+An easy way to avoid this situation is to "deactivate" the specs2 implicits by mixing-in the relevant trait from this list:
 
  * `org.specs2.matcher.NoCanBeEqual`: deactivate the `===` method on any type `T`
  * `org.specs2.time.NoTimeConversions`: deactivate the `millis`, `seconds`,... methods on `Int`s and `Long`s
@@ -1258,6 +1258,7 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
  * `org.specs2.main.NoArgProperties`: deactivate the `toOption: Option[T]` method on any value of type `T`
  * `org.specs2.matcher.NoMustExpectations`: deactivate the `must`, `must_==`,... methods on any value of type `T`
  * `org.specs2.matcher.NoShouldExpectations`: deactivate the `should`, `should_==`,... methods on any value of type `T`
+ * `org.specs2.control.NoDebug`: deactivate the `pp` method on objects
 
   - - -
                                                                                                                         """^

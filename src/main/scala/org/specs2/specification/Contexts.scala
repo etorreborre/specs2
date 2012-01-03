@@ -50,4 +50,13 @@ trait Contexts {
 
 }
 
+/**
+ * Use this trait to deactivate the Contexts implicits
+ */
+trait NoContexts extends Contexts {
+  override def doBefore[T <% Result](t: =>T) = super.doBefore(t)
+  override def doAround[T <% Result](t: =>T) = super.doAround(t)
+  override def doAfter[T <% Result](t: =>T) = super.doAfter(t)
+}
+
 object Contexts extends Contexts

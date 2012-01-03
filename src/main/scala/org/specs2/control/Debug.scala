@@ -19,5 +19,13 @@ trait Debug {
   }
 
 }
+
+/**
+ * Use this trait to disable the `pp` method on objects
+ */
+trait NoDebug extends Debug {
+  override def debug[T](t: =>T) = super.debug(t)
+}
+
 private[specs2] 
 object Debug extends Debug

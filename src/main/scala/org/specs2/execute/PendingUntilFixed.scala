@@ -24,6 +24,14 @@ trait PendingUntilFixed {
     }
   }
 }
+
+/**
+ * use this trait to remove the pending until fixed implicit conversion
+ */
+trait NoPendingUntilFixed extends PendingUntilFixed {
+  override def toPendingUntilFixed[T <% Result](t: =>T) = super.toPendingUntilFixed(t)
+}
+
 object PendingUntilFixed extends PendingUntilFixed
 
 
