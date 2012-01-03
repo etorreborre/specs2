@@ -20,6 +20,7 @@ In this chapter you will learn how to:
  * give a title to your specification
  * define contexts and actions to execute before/after examples
  * tag examples or sections of the Specification
+ * adding debug statements
  * remove some implicit definitions conflicting with your code
 
 ### Declare examples
@@ -1245,6 +1246,14 @@ For that specification above:
 
  * when the `section` call is appended to a block of Fragments on the same line, all the fragments of that block are part of
    the section: `example 5` and `example 6` are tagged with `slow`
+
+### Adding debug statements
+
+When quick and hacky `println` statements are what you want, the `Debug` trait, mixed in every `Specification`, provides useful methods:
+
+ * `pp` or "print and pass", prints a value to the console, then return it to be used in the rest of the expression: "graph.pp must haveSize(3)"
+ * `pp(condition)` prints a value if a condition holds
+ * `pp(f: T => Boolean)` prints a value if a condition on that value holds
 
 ### Removing implicit definitions
 
