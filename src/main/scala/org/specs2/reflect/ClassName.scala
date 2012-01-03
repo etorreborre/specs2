@@ -27,10 +27,11 @@ trait ClassName {
     val decoded = NameTransformer.decode(name)
     val remainingDollarNames = decoded.split("\\$")
     val result = if (remainingDollarNames.size > 1) {
-      if (remainingDollarNames(remainingDollarNames.size - 1).matches("\\d"))
+      val lastName = remainingDollarNames(remainingDollarNames.size - 1)
+      if (lastName.matches("\\d") || lastName == "class")
         remainingDollarNames(remainingDollarNames.size - 2)
       else
-        remainingDollarNames(remainingDollarNames.size - 1)
+        lastName
     } else remainingDollarNames(0)
     result
   }

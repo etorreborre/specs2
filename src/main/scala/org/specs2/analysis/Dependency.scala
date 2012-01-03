@@ -35,6 +35,6 @@ object Dependency {
 
 case class Dependencies(dependencies: Seq[Dependency]) {
   def isEmpty = dependencies.isEmpty
-  def showBreaks = dependencies.map(_.showBreak).mkString("\n")
+  def showBreaks = dependencies.map(_.showBreak).sorted.mkString("\n")
 }
 

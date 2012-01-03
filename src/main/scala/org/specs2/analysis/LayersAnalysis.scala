@@ -2,11 +2,11 @@ package org.specs2
 package analysis
 
 import data.IncludedExcluded
-
+import util.Properties._
 /**
  * This trait allows to define expected dependencies between packages layers
  */
-trait LayersAnalysis extends DependencyFinder {
+trait LayersAnalysis extends ClassycleDependencyFinder {
 
   /** this implicit definition allows to use a single string instead of a Layer object */
   implicit def toLayer(s: String): Layer = layer(s.split("\\s").map(l => l.trim):_*)
@@ -24,19 +24,23 @@ trait LayersAnalysis extends DependencyFinder {
    *
    * If those packages share a common prefix, it will be stored in the `prefix` member
    */
-  case class Layer(names: Set[String], prefix: String = "", sourceDir: String = "src/main/scala/",
+  case class Layer(names: Set[String], prefix: String = "",
+                   sourceDir: String = "src/main/scala/",
+                   targetDir: String = "target/scala-"+releaseVersion.orElse(developmentVersion).getOrElse("2.9.1")+"/classes/",
                    included: Seq[String] = Seq(), excluded: Seq[String] = Seq()) {
     /** specify a prefix for this layer packages */
     def withPrefix(p: String) = copy(prefix = if (this.prefix.isEmpty) p else p+"."+this.prefix)
     /** specify a source directory for this layer packages */
     def inSourceDir(s: String) = copy(sourceDir = s)
+    /** specify a target directory for this layer packages */
+    def inTargetDir(s: String) = copy(targetDir = s)
 
     override def toString = names.mkString("\n") + (if (prefix == "") "" else " ("+prefix+")")
     /** @return the package names */
     lazy val packageNames = names.map(n => if (prefix.isEmpty) n else prefix+"."+n)
 
     /** @return the list of dependents of each package of this layer */
-    lazy val getDependents: Set[Dependency] = packageNames.flatMap(p => getPackageDependents(p, sourceDir))
+    lazy val getDependents: Set[Dependency] = packageNames.flatMap(p => getPackageDependents(p, sourceDir, targetDir))
 
     /**
      * @return the list of dependencies showing that this layer depends on the `other` layer
@@ -72,6 +76,8 @@ trait LayersAnalysis extends DependencyFinder {
     def withPrefix(p: String) = copy(layers = layers.map(_.withPrefix(p)))
     /** specify a source directory for all layers */
     def inSourceDir(s: String) = copy(layers = layers.map(_.inSourceDir(s)))
+    /** specify a target directory for all layers */
+    def inTargetDir(s: String) = copy(layers = layers.map(_.inTargetDir(s)))
 
     override def toString = layers.mkString("\n")
     /** @return the layers as Markdown bullet points */

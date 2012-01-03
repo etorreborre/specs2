@@ -597,9 +597,9 @@ First you need to define the packages and their expected dependencies. Mix-in th
 
 The above expression defines layers as an ordered list of `String`s containing space-separated package names. It is supplemented by a `withPrefix` declaration to factor out the common package prefix between all these packages.
 
-By default, the packages are supposed to correspond to directories in the `src/main/scala` directory. If your project has a different layout you can declare another source directory:
+By default, the packages are supposed to correspond to directories in the `src/target/scala-<version>/classes` directory. If your project has a different layout you can declare another target directory:
 
-      layers(...).inSourceDir("src")
+      layers(...).inTargetDir("out/classes")
 
 ###### Inclusion/Exclusion
 
@@ -654,6 +654,14 @@ The `Analysis` trait allows to directly embed the layers definition in a `Specif
             "backend"
           )
        }
+
+##### Alternate implementation
+
+Another implementation of the same functionality is available through the `org.specs2.analysis.CompilerDependencyFinder` trait. This implementation uses the compiler dependency analysis functionality but needs more time, since it recompiles the sources.
+
+The source files are taken from the `src/main/scala` directory by default but you can change this value by using the `Layers.inSourceDir` method.
+
+While this implementation is slower than the Classycle one, it might retrieve more dependencies, for example when constants are inlined in class files.
 
 ### ScalaCheck properties
 

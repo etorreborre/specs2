@@ -17,7 +17,7 @@ class DependenciesSpec extends Specification with Analysis with Tags { def is = 
     "execute",                                      // execution of anything that returns a Result
     "reflect analysis time html",                   // support classes for reflection, time measurement,...
     "collection control io xml text json main data" // utility classes for io, main arguments, control structures,...
-  ).withPrefix("org.specs2")                  ^ section("slow") ^
+  ).withPrefix("org.specs2")                                                               ^ section("slow") ^
                                                                                           end
 
 }

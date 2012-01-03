@@ -3,12 +3,20 @@ package reflect
 
 import mutable.Specification
 import ClassName._
+import matcher.DataTables
 
-class ClassNameSpec extends Specification {
+class ClassNameSpec extends Specification with DataTables {
 
-  "The class name of a fully qualified class must return only the last part" in { 
+  "Class names must be decoded" in {
+    "name"                   || "decoded"                |>
+    "org.specs2.name"        !! "org.specs2.name"        |
+    "org.specs2.name$2"      !! "org.specs2.name"        |
+    "org.specs2.name"        !! "org.specs2.name"        |
+    { (name, decoded) => className(name) === decoded }
+  }
+  "The class name of a fully qualified class must return only the last part" in {
     simpleName(classOf[ClassNameSpec]) must_== "ClassNameSpec"
-  }                                                                                       
+  }
   "The class name of an internal class should only return the last name" in {
     class ThisClassName
     simpleName(classOf[ThisClassName]) must_== "ThisClassName"

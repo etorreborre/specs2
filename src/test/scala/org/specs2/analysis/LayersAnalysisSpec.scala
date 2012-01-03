@@ -51,7 +51,7 @@ class LayersAnalysisSpec extends Specification with DependencyMatchers with Scal
   lazy val packageNames = Seq("a", "b", "c", "d", "e", "f")
 
   // return dependent packages according to the alphabetical order
-  override def getPackageDependents(packageName: String, sourceDir: String) =
+  override def getPackageDependents(packageName: String, sourceDir: String, targetDir: String) =
     dependentPackages(packageName).map(p => Dependency(packageName+".AClass", p+".ADependentClass"))
 
   // dependent packages are all the packages which are lower is the alphabetical order
