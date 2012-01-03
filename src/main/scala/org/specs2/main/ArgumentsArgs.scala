@@ -124,6 +124,15 @@ object ArgumentsArgs extends ArgumentsArgs
 trait ArgProperties {
   implicit def anyToArgProperty[T](t: =>T): ArgProperty[T] = ArgProperty(Property(t))
 }
+
+/**
+ * This trait can be used to deactivate the conversion of any value to an ArgsProperty
+ */
+trait NoArgProperties extends ArgProperties {
+  override def anyToArgProperty[T](t: =>T): ArgProperty[T] = super.anyToArgProperty(t)
+}
+
+
 object ArgProperties extends ArgProperties
 
 
