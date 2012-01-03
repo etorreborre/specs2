@@ -104,6 +104,17 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
 }
 
 /**
+ * This trait can be used to deactivate implicits for building fragments
+ */
+trait NoFragmentsBuilder extends FragmentsBuilder {
+  override def textStart(s: String): Fragments = super.textStart(s)
+  override def textFragment(s: String): FragmentsFragment = super.textFragment(s)
+  override def title(s: String): SpecTitle = super.title(s)
+  override def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = super.stringToHtmlLinkFragments(s)
+  override def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = super.stringToHtmlLinkFragments2(s)
+}
+
+/**
  * Fragments can be chained with the ^ method
  */
 private[specs2]

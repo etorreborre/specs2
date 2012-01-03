@@ -110,3 +110,10 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 
 }
 
+/**
+ * This trait can be used to deactivate implicits for building fragments
+ */
+trait NoFragmentsBuilder extends FragmentsBuilder {
+  override def described(s: String): Described = super.described(s)
+  override def inExample(s: String): InExample = super.inExample(s)
+}
