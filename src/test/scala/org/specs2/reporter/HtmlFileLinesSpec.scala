@@ -15,9 +15,9 @@ class HtmlFileLinesSpec extends Specification { def is =
   lazy val spec2: Fragments = "ex1" ! failure ^ "a " ~/ ("successfull spec", successfulSubSpec) ^ end
   lazy val successfulSubSpec = new Specification { def is = "ex1" ! success }
 
-  def e1 = htmlFileLines(spec1).flatten must have size(1)
-  def e2 = htmlFileLines(spec2).subForest must have size(1)
-  def e3 = htmlFileLines(spec2).flatten must have size(2)
+  def e1 = htmlFileLines(spec1).flatten must have size(2)
+  def e2 = htmlFileLines(spec1).subForest must have size(1)
+  def e3 = htmlFileLines(spec2).flatten must have size(1)
 
   def printer = new HtmlPrinter { }
   def htmlFileLines(spec: Fragments) = printer.createHtmlLinesFiles(execute(spec))
