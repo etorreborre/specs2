@@ -23,7 +23,7 @@ resolvers ++= Seq("snapshots-repo" at "http://scala-tools.org/repo-snapshots",
                   "Local Maven Repository" at "file://c:/Documents and Settings/Eric/.m2/repository")
 
 libraryDependencies <<= scalaVersion { scala_version => Seq(
-  "org.specs2" %% "specs2-scalaz-core" % "6.0.1",
+  "org.specs2" %% "specs2-scalaz-core" % "6.0.RC2",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional", 
   "org.scala-tools.testing" %% "scalacheck" % "1.9" % "optional", 
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional", 
