@@ -21,8 +21,8 @@ class LayersAnalysisSpec extends Specification with DependencyMatchers with Scal
                                                                                                                                             end
 
 
-  def d1: Prop = forAll(okLayers) { (ls: Layers) => ls must beRespected }
-  def d2: Prop = forAll(koLayers) { (ls: Layers) => ls must not beRespected }
+  def d1 = forAll(okLayers) { (ls: Layers) => ls must beRespected }
+  def d2 = forAll(koLayers) { (ls: Layers) => ls must not beRespected }.set(maxDiscarded -> 1000)
 
   /**
    * The data generation strategy is to create layers of packages represented by alphabetical letters from a to f.
