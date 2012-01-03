@@ -122,5 +122,14 @@ trait AutoExamples {
   }
 }
 
+/**
+ * This trait can be used to deactivate the Boolean conversions to fragments and examples
+ */
+trait NoBooleanAutoExamples extends AutoExamples {
+  override def booleanFragmentsFragment(expression: =>Boolean): BooleanResultFragment = super.booleanFragmentsFragment(expression)
+  override def booleanFragments(expression: =>Boolean) = super.booleanFragments(expression)
+  override def booleanExample(expression: =>Boolean) = super.booleanExample(expression)
+}
+
 private[specs2]
 object AutoExamples extends AutoExamples
