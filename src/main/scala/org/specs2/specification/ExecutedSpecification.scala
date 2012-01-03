@@ -16,3 +16,4 @@ case class ExecutedSpecification(name: SpecName, fs: Seq[ExecutedFragment]) {
   def fragments = fs
 
 }
+

@@ -1,13 +1,10 @@
 package org.specs2
 package reporter
-import io._
 import mock._
-import specification._
 import text.MarkdownHeaders._
-import matcher.DataTables
-import specification.HtmlLink._
 
 class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is =
+
   h4> "Introduction"^
                                                                                                                         """
 The HtmlPrinter class is responsible for opening an html file and writing the specification text:

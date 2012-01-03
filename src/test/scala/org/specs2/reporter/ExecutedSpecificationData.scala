@@ -31,7 +31,10 @@ trait ExecutedSpecificationData extends Data[ExecutedSpecification] with Fragmen
 	}
 
   implicit lazy val arbExecutedSpecification: Arbitrary[ExecutedSpecification] =
-    Arbitrary { arbSpecification.arbitrary.map(spec => (spec |> sequence |> execute).execute)  }
+    Arbitrary { arbSpecification.arbitrary.map(execute)  }
+
+  def execute(fs: Fragments): ExecutedSpecification = execute(new Specification { def is = fs })
+  def execute(spec: SpecificationStructure): ExecutedSpecification = (spec |> sequence |> execute).execute
 
   def start(name: String) = ExecutedSpecStart(SpecStart(SpecName(name)))
   def end(name: String)   = ExecutedSpecEnd(SpecEnd(SpecName(name)))

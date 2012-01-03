@@ -51,6 +51,7 @@ private[specs2]
 sealed trait HtmlLine {
   def level: Int
   def args: Arguments
+  def stats: Stats
   lazy val indent = if (args.noindent) 0 else level
   def print(out: HtmlReportOutput): HtmlReportOutput
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()): HtmlLine

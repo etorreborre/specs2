@@ -1,10 +1,8 @@
 package org.specs2
 package reporter
 import specification._
-import execute._
 import io._
 import org.specs2.mock._
-import main._
 
 class HtmlFileLinesSpec extends Specification with Mockito { def is =
 
