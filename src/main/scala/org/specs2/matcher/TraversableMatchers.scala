@@ -152,7 +152,7 @@ class ContainMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) ==
   def exactlyOnce = new ContainExactlyOnceMatcher(expected, equality)
 
   /** use a specific equality function */
-  def ^^[S](equality: (T, T) => Boolean) = new ContainMatcher[T](expected, equality)
+  def ^^[S](eq: (T, T) => Boolean) = new ContainMatcher[T](expected, eq)
   /** use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one */
   def ^^[S](m: T => Matcher[T]) = new ContainMatcher[T](expected, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)
   /** use a specific adaption function before checking for equality */
@@ -168,7 +168,7 @@ class ContainExactlyOnceMatcher[T](expected: Seq[T], equality: (T, T) => Boolean
   }
 
   /** use a specific equality function */
-  def ^^[S](equality: (T, T) => Boolean) = new ContainExactlyOnceMatcher[T](expected, equality)
+  def ^^[S](eq: (T, T) => Boolean) = new ContainExactlyOnceMatcher[T](expected, eq)
   /** use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one */
   def ^^[S](m: T => Matcher[T]) = new ContainExactlyOnceMatcher[T](expected, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)
   /** use a specific adaption function before checking for equality */
@@ -178,13 +178,13 @@ class ContainExactlyOnceMatcher[T](expected: Seq[T], equality: (T, T) => Boolean
 
 class ContainAnyOfMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends Matcher[GenTraversable[T]] {
   def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
-    result(actual.value.toList.exist((v: T) => expected.exist((e: T) => equality(v, e))).nonEmpty,
+    result(actual.value.toList.exists((v: T) => expected.exists((e: T) => equality(v, e))),
            actual.description + " contains at least one of " + q(expected.mkString(", ")),
            actual.description + " doesn't contain any of " + q(expected.mkString(", ")), actual)
   }
 
   /** use a specific equality function */
-  def ^^[S](equality: (T, T) => Boolean) = new ContainAnyOfMatcher[T](expected, equality)
+  def ^^[S](eq: (T, T) => Boolean) = new ContainAnyOfMatcher[T](expected, eq)
 
   /** use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one */
   def ^^[S](m: T => Matcher[T]) = new ContainAnyOfMatcher[T](expected, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)
@@ -201,10 +201,11 @@ class ContainInOrderMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (
            actual.description + " doesn't contain in order " + q(expected.mkString(", ")), actual)
   }
   
-  private def inOrder[T](l1: List[T], l2: List[T], equality: (T, T) => Boolean): Boolean = {
-   l1 match {
-      case Nil                      => l2 == Nil
-      case x :: rest if !l2.isEmpty => equality(x, l2.head) && inOrder(l1.drop(1), l2.drop(1)) || inOrder(l1.drop(1), l2)
+  private def inOrder[T](l1: Seq[T], l2: Seq[T], equality: (T, T) => Boolean): Boolean = {
+   l1.toList match {
+      case Nil                      => l2.isEmpty
+      case x :: rest if !l2.isEmpty => equality(x, l2.head) && inOrder(l1.drop(1), l2.drop(1), equality) ||
+                                       inOrder(l1.drop(1), l2, equality)
       case other                    => false
     }
   }
@@ -212,7 +213,7 @@ class ContainInOrderMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (
   def only: Matcher[GenTraversable[T]] = (this and new ContainOnlyMatcher(expected))
 
   /** use a specific equality function */
-  def ^^[S](equality: (T, T) => Boolean) = new ContainInOrderMatcher[T](expected, equality)
+  def ^^[S](eq: (T, T) => Boolean) = new ContainInOrderMatcher[T](expected, eq)
 
   /** use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one */
   def ^^[S](m: T => Matcher[T]) = new ContainInOrderMatcher[T](expected, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)

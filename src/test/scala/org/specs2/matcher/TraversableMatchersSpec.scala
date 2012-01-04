@@ -16,6 +16,10 @@ class TraversableMatchersSpec extends Specification with ResultMatchers { def is
     { "abc" must contain('b') }                                                                                         ^
     { (List(1, 2) must contain(0)) returns "'1, 2' doesn't contain '0'" }                                               ^
     "with a subclass"                                                                                                   ! subclass().e1^
+    "with adapation"                                                                                                    ^
+    { List(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1) }                                           ^
+    { List(1, 2, 3) must contain(3, 2, 1) ^^ ((i: Int) => be_<(10-i)) }                                                 ^
+    { List(1, 2, 3) must contain(3, 2, 1) ^^^ ((_:Int) - 1) }                                                           ^
                                                                                                                         p^
   "we can check if at least one or several elements are present in a traversable"                                       ^
     { List(1, 2) must containAnyOf(Seq(1, 4)) }                                                                         ^
@@ -83,7 +87,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers { def is
     { List("Hello", "World") must
        haveTheSameElementsAs(List("ello", "orld")) ^^ ((t1:String, t2: String) => t1.last == t2.last) }                 ^
     { List("Hello", "World") must
-       haveTheSameElementsAs(List("ello", "orld")) ^^ ((t:String) => endWith(t.last)) }                                 ^                                                                                                                                                      endp^
+       haveTheSameElementsAs(List("ello", "orld")) ^^^ ((t:String) => endWith(t.last.toString)) }                       ^                                                                                                                                                      endp^
   "Java collections can also be used with Traversable matchers"                                                         ^bt^
   "But generally require explicit conversion"                                                                           ^
     { asList("Hello", "World") must haveSize(2) }                                                                       ^
