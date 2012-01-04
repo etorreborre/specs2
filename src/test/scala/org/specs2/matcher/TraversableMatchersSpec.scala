@@ -78,7 +78,12 @@ class TraversableMatchersSpec extends Specification with ResultMatchers { def is
     "regardless of the order"                                                                                           ^
     { List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello")) }                                       ^
     "recursively"                                                                                                       ! sameElems().e1 ^
-                                                                                                                        endp^
+    "with an adaptation"                                                                                                ^
+    { List("Hello", "World") must haveTheSameElementsAs(List("ello", "orld")) ^^^ ((_:String).drop(1).mkString) }       ^
+    { List("Hello", "World") must
+       haveTheSameElementsAs(List("ello", "orld")) ^^ ((t1:String, t2: String) => t1.last == t2.last) }                 ^
+    { List("Hello", "World") must
+       haveTheSameElementsAs(List("ello", "orld")) ^^ ((t:String) => endWith(t.last)) }                                 ^                                                                                                                                                      endp^
   "Java collections can also be used with Traversable matchers"                                                         ^bt^
   "But generally require explicit conversion"                                                                           ^
     { asList("Hello", "World") must haveSize(2) }                                                                       ^
