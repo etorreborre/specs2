@@ -11,7 +11,7 @@ organization := "org.specs2"
 
 scalaVersion := "2.9.1"
 
-crossScalaVersions := Seq("2.9.0")
+crossScalaVersions := Seq("2.9.0", "2.9.0-1")
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -23,7 +23,7 @@ resolvers ++= Seq("snapshots-repo" at "http://scala-tools.org/repo-snapshots",
                   "Local Maven Repository" at "file://c:/Documents and Settings/Eric/.m2/repository")
 
 libraryDependencies <<= scalaVersion { scala_version => Seq(
-  "org.specs2" %% "specs2-scalaz-core" % "6.0.RC2",
+  "org.specs2" % "specs2-scalaz-core_2.9.0" % "6.0.RC2",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional", 
   "org.scala-tools.testing" %% "scalacheck" % "1.9" % "optional", 
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional", 
