@@ -31,9 +31,6 @@ class IterablexSpec extends Specification with IterableData {
         i1.sameElementsAs(i2)
       }
     }
-    "for long sequences of elements, without stackoverflow" >> {
-      (1 to 10000).sameElementsAs(1 to 10000)
-    }
   }
   "A containsInOrder function" should {
     "check that some values are contained inside an Iterable, in the same order" in {

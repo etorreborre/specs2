@@ -188,12 +188,13 @@ class ContainInOrderMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (
   }
   
   private def inOrder[T](l1: Seq[T], l2: Seq[T], equality: (T, T) => Boolean): Boolean = {
-   l1.toList match {
-      case Nil                      => l2.isEmpty
-      case a :: rest if !l2.isEmpty => equality(a, l2.head) && inOrder(l1.drop(1), l2.drop(1), equality) ||
-                                       inOrder(l1.drop(1), l2, equality)
-      case other                    => false
-    }
+    (l1.toList, l2.toList) match {
+      case (Nil, Nil)                 => true
+      case (Nil, _)                   => false
+      case (_, Nil)                   => true
+      case (a1 :: rest1, a2 :: rest2) => equality(a1, a2) && inOrder(rest1, rest2, equality) || inOrder(rest1, l2, equality)
+      case other => false
+     }
   }
 
   def only: Matcher[GenTraversable[T]] = (this and new ContainOnlyMatcher(expected))
