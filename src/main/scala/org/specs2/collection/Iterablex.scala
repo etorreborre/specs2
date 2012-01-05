@@ -53,18 +53,15 @@ trait Iterablex {
       }
       val ita = xs.iterator.toList
       val itb = that.iterator.toList
-      var res = true
       (ita, itb) match {
         case (Nil, Nil) => true
         case (a: GenIterable[_], b: GenIterable[_]) => {
-          if (a.headOption.isDefined && b.headOption.isDefined) {
+           (a.headOption.isDefined && b.headOption.isDefined) && {
             val (x, y, resta, restb) = (a.head, b.head, a.drop(1), b.drop(1))
             matchTwo(x, y) && resta.sameElementsAs(restb, f) ||
-            resta.exists(matchTwo(_, y)) && restb.exists(matchTwo(_, x)) &&
-              resta.removeFirst(matchTwo(_, y)).sameElementsAs(restb.removeFirst(matchTwo(_, x)), f)
+            resta.exists(matchTwo(_, y)) && restb.exists(matchTwo(x, _)) &&
+              resta.removeFirst(matchTwo(_, y)).sameElementsAs(restb.removeFirst(matchTwo(x, _)), f)
           }
-          else
-            false
         }
         case _ => ita == itb
       }

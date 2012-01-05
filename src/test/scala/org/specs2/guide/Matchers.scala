@@ -352,6 +352,28 @@ Iterables can be checked with several matchers:
   * to check if a sequence is sorted (works with any type `T` which has an `Ordering`)
     `Seq(1, 2, 3) must beSorted`
 
+###### Adaptation
+
+The `contain` and `haveTheSameElementsAs` matchers can be "adapted" to use a different notion of equality than `==` when checking for the existence of elements in an iterable.
+
+`^^ (f: (T, T) => Boolean)` can be used instead of `==`. For example:
+
+         Seq(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1)
+
+will check if each value in the first list is contained in the second list with possibly an error margin of 1.
+
+`^^ (f: T => Matcher[T])` can be used to compare values with a matcher. For example:
+
+         val equalIgnoreCase = (s: String) => be_==(s.toLowerCase)
+         Seq("Eric", "Bob") must contain("bob", "eric") ^^ equalIgnoreCase
+
+`^^^ (f: T => S)` can be used to compare values with a function. For example:
+
+         val usersFromDb = Seq(User(id=1, name="eric"), User(id=2, name="Bob"))
+         usersFromDb must contain(User(id=0, name="eric"), User(id=0, name="Bob") ^^^ ((_:User).copy(id=0))
+
+_Note_: the last operator used here is slightly different. It is `^^^` instead of simply `^^` because the same function is used to "adapt" both values at the same time. On the other hand the first 2 operators are more or less using a function taking 2 parameters.
+
 #### Map matchers
 
 Maps have their own matchers as well, to check keys and values:

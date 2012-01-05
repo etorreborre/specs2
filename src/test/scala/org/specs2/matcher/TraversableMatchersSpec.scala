@@ -1,10 +1,12 @@
 package org.specs2
 package matcher
+
+import specification._
 import java.util.Arrays._
 import scala.collection.JavaConversions.{ collectionAsScalaIterable }
 import scala.collection.parallel.ParSeq
 
-class TraversableMatchersSpec extends Specification with ResultMatchers { def is =
+class TraversableMatchersSpec extends Specification with ResultMatchers with Tags { def is =
 
   "we can check if one or several elements are present in a traversable"                                                ^
     { List(1, 2) must contain(1) }                                                                                      ^
@@ -16,6 +18,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers { def is
     { "abc" must contain('b') }                                                                                         ^
     { (List(1, 2) must contain(0)) returns "'1, 2' doesn't contain '0'" }                                               ^
     "with a subclass"                                                                                                   ! subclass().e1^
+                                                                                                                        bt^
     "with adapation"                                                                                                    ^
     { List(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1) }                                           ^
     { List(1, 2, 3) must contain(3, 2, 1) ^^ ((i: Int) => be_<(10-i)) }                                                 ^
@@ -82,12 +85,16 @@ class TraversableMatchersSpec extends Specification with ResultMatchers { def is
     "regardless of the order"                                                                                           ^
     { List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello")) }                                       ^
     "recursively"                                                                                                       ! sameElems().e1 ^
+                                                                                                                        bt^
     "with an adaptation"                                                                                                ^
-    { List("Hello", "World") must haveTheSameElementsAs(List("ello", "orld")) ^^^ ((_:String).drop(1).mkString) }       ^
+    { List("Hello", "World") must haveTheSameElementsAs(List("W", "H")) ^^^ ((_:String).head) }                         ^
     { List("Hello", "World") must
        haveTheSameElementsAs(List("ello", "orld")) ^^ ((t1:String, t2: String) => t1.last == t2.last) }                 ^
-    { List("Hello", "World") must
-       haveTheSameElementsAs(List("ello", "orld")) ^^^ ((t:String) => endWith(t.last.toString)) }                       ^                                                                                                                                                      endp^
+    { val beEqualIgnoreCase = be_===(_:String) ^^^ ((_:String).toLowerCase)
+      List("Hello", "World") must haveTheSameElementsAs(List("world", "hello")) ^^ beEqualIgnoreCase }                  ^
+    { val startsWitha = (s: String) => be_==("a"+s)
+      List("Hello", "World") must haveTheSameElementsAs(List("aWorld", "aHello")) ^^ startsWitha }                      ^ tag("drop")^
+                                                                                                                        endp^
   "Java collections can also be used with Traversable matchers"                                                         ^bt^
   "But generally require explicit conversion"                                                                           ^
     { asList("Hello", "World") must haveSize(2) }                                                                       ^

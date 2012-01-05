@@ -54,7 +54,7 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
    * Matches if there l contains the same elements as the Traversable <code>traversable</code>.<br>
    * This verification does not consider the order of the elements but checks the traversables recursively
    */
-  def haveTheSameElementsAs[T](l: =>Traversable[T]) = new HaveTheSameElementsAs(l)
+  def haveTheSameElementsAs[T](l: =>Traversable[T]) = new HaveTheSameElementsAs(l.toSeq)
 
   private def containLike[T](pattern: =>String, matchType: String) =
     new ContainLikeMatcher[T](pattern, matchType) 
@@ -141,60 +141,46 @@ trait AbstractContainMatchResult[T] extends MatchResult[GenTraversable[T]] {
   def apply(matcher: Matcher[GenTraversable[T]]): MatchResult[GenTraversable[T]] = matchResult(matcher)
 }
 
-class ContainMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends Matcher[GenTraversable[T]] {
+class ContainMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends AbstractContainMatcher(expected, equality) {
+  type M[T] = ContainMatcher[T]
+  def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new ContainMatcher[T](seq, eq)
+
   def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
-    result(actual.value.toList.intersect(expected).sameElementsAs(expected, equality),
+    result(actual.value.toList.exists(a => expected.exists(e => equality(a, e))),
            actual.description + " contains " + q(expected.mkString(", ")),
            actual.description + " doesn't contain " + q(expected.mkString(", ")), actual)
   }
   def inOrder = new ContainInOrderMatcher(expected, equality)
   def only = new ContainOnlyMatcher(expected, equality)
   def exactlyOnce = new ContainExactlyOnceMatcher(expected, equality)
-
-  /** use a specific equality function */
-  def ^^[S](eq: (T, T) => Boolean) = new ContainMatcher[T](expected, eq)
-  /** use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one */
-  def ^^[S](m: T => Matcher[T]) = new ContainMatcher[T](expected, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)
-  /** use a specific adaption function before checking for equality */
-  def ^^^[S](adaptator: T => S) = new ContainMatcher[T](expected, (t1: T, t2: T) => adaptator(t1) == adaptator(t2))
-
 }
 
-class ContainExactlyOnceMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends Matcher[GenTraversable[T]] {
+class ContainExactlyOnceMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends AbstractContainMatcher(expected, equality) {
+  type M[T] = ContainExactlyOnceMatcher[T]
+  def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new ContainExactlyOnceMatcher[T](seq, eq)
+
   def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
-    result(expected.forall(e => actual.value.filter(v => equality(v, e)).size == 1),
+    result(expected.forall(e => actual.value.filter(a => equality(a, e)).size == 1),
            actual.description + " contains exactly once " + q(expected.mkString(", ")),
            actual.description + " doesn't contain exactly once " + q(expected.mkString(", ")), actual)
   }
-
-  /** use a specific equality function */
-  def ^^[S](eq: (T, T) => Boolean) = new ContainExactlyOnceMatcher[T](expected, eq)
-  /** use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one */
-  def ^^[S](m: T => Matcher[T]) = new ContainExactlyOnceMatcher[T](expected, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)
-  /** use a specific adaption function before checking for equality */
-  def ^^^[S](adaptator: T => S) = new ContainExactlyOnceMatcher[T](expected, (t1: T, t2: T) => adaptator(t1) == adaptator(t2))
-
 }
 
-class ContainAnyOfMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends Matcher[GenTraversable[T]] {
+class ContainAnyOfMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends AbstractContainMatcher(expected, equality) {
+  type M[T] = ContainAnyOfMatcher[T]
+  def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new ContainAnyOfMatcher[T](seq, eq)
+
   def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
-    result(actual.value.toList.exists((v: T) => expected.exists((e: T) => equality(v, e))),
+    result(actual.value.toList.exists((a: T) => expected.exists((e: T) => equality(a, e))),
            actual.description + " contains at least one of " + q(expected.mkString(", ")),
            actual.description + " doesn't contain any of " + q(expected.mkString(", ")), actual)
   }
-
-  /** use a specific equality function */
-  def ^^[S](eq: (T, T) => Boolean) = new ContainAnyOfMatcher[T](expected, eq)
-
-  /** use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one */
-  def ^^[S](m: T => Matcher[T]) = new ContainAnyOfMatcher[T](expected, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)
-
-  /** use a specific adaption function before checking for equality */
-  def ^^^[S](adaptator: T => S) = new ContainAnyOfMatcher[T](expected, (t1: T, t2: T) => adaptator(t1) == adaptator(t2))
-
 }
 
-class ContainInOrderMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends Matcher[GenTraversable[T]] {
+class ContainInOrderMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends AbstractContainMatcher(expected, equality) {
+  type M[T] = ContainInOrderMatcher[T]
+  def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new ContainInOrderMatcher[T](seq, eq)
+
   def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
     result(inOrder(actual.value.toList, expected, equality),
            actual.description + " contains in order " + q(expected.mkString(", ")),
@@ -204,26 +190,19 @@ class ContainInOrderMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (
   private def inOrder[T](l1: Seq[T], l2: Seq[T], equality: (T, T) => Boolean): Boolean = {
    l1.toList match {
       case Nil                      => l2.isEmpty
-      case x :: rest if !l2.isEmpty => equality(x, l2.head) && inOrder(l1.drop(1), l2.drop(1), equality) ||
+      case a :: rest if !l2.isEmpty => equality(a, l2.head) && inOrder(l1.drop(1), l2.drop(1), equality) ||
                                        inOrder(l1.drop(1), l2, equality)
       case other                    => false
     }
   }
 
   def only: Matcher[GenTraversable[T]] = (this and new ContainOnlyMatcher(expected))
-
-  /** use a specific equality function */
-  def ^^[S](eq: (T, T) => Boolean) = new ContainInOrderMatcher[T](expected, eq)
-
-  /** use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one */
-  def ^^[S](m: T => Matcher[T]) = new ContainInOrderMatcher[T](expected, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)
-
-  /** use a specific adaption function before checking for equality */
-  def ^^^[S](adaptator: T => S) = new ContainInOrderMatcher[T](expected, (t1: T, t2: T) => adaptator(t1) == adaptator(t2))
-
 }
 
-class ContainOnlyMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends Matcher[GenTraversable[T]] {
+class ContainOnlyMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends AbstractContainMatcher(expected, equality) {
+  type M[T] = ContainOnlyMatcher[T]
+  def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new ContainOnlyMatcher[T](seq, eq)
+
   def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
     val actual = traversable.value
     result(actual.toList.intersect(expected).sameElementsAs(expected, equality) && expected.size == actual.size,
@@ -263,23 +242,31 @@ class ContainLikeOnlyOnceMatcher[T](pattern: =>String, matchType: String) extend
 /**
  * This matcher checks if a traversable has the same elements as another one (that is, recursively, in any order)
  */
-class HaveTheSameElementsAs[T](l: =>Traversable[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends Matcher[GenTraversable[T]] {
+class HaveTheSameElementsAs[T](l: =>Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends AbstractContainMatcher(l, equality) {
+  type M[T] = HaveTheSameElementsAs[T]
+  def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new HaveTheSameElementsAs[T](seq, eq)
+
   def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
-    result(l.toSeq.sameElementsAs(traversable.value.toSeq, equality),
+    result(traversable.value.toSeq.sameElementsAs(l.toSeq, equality),
            traversable.value.toSeq.toDeepString + " has the same elements as " + q(l.toSeq.toDeepString),
            traversable.value.toSeq.toDeepString + " doesn't have the same elements as " + q(l.toSeq.toDeepString),
            traversable)
   }
 
+}
+
+abstract class AbstractContainMatcher[T](l: =>Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends Matcher[GenTraversable[T]] {
+  type M[T] <: AbstractContainMatcher[T]
+  def create(seq: =>Seq[T], eq: (T, T) => Boolean): M[T]
+
   /** use a specific equality function */
-  def ^^[S](equality: (T, T) => Boolean) = new HaveTheSameElementsAs[T](l, equality)
+  def ^^[S](equality: (T, T) => Boolean) = create(l, equality)
 
   /** use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one */
-  def ^^[S](m: T => Matcher[T]) = new HaveTheSameElementsAs[T](l, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)
+  def ^^[S](m: T => Matcher[T]) = create(l, (t1: T, t2: T) => m(t1).apply(Expectable(t2)).isSuccess)
 
   /** use a specific adaption function before checking for equality */
-  def ^^^[S](adaptator: T => S) = new HaveTheSameElementsAs[T](l, (t1: T, t2: T) => adaptator(t1) == adaptator(t2))
-
+  def ^^^[S](adaptator: T => S) = create(l, (t1: T, t2: T) => adaptator(t1) == adaptator(t2))
 }
 
 class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T] {
