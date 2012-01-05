@@ -12,6 +12,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     { List(1, 2) must contain(1) }                                                                                      ^
     { List(1, 2, 3) must contain(3, 2) }                                                                                ^
     { List(1, 2, 3) must containAllOf(List(1, 3)).inOrder }                                                             ^
+    { List(1, 2, 3, 4, 5) must containAllOf(List(2, 4)).inOrder }                                                       ^
     { List(1, 2, 3) must contain(3) and  contain(2) }                                                                   ^
     // corner case with type inference. If not specified 'Any', the contain 'String' Matcher is selected
     { List("1", "2", "3") must contain("3") and contain("2":Any) }                                                      ^
@@ -93,7 +94,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     { val beEqualIgnoreCase = be_===(_:String) ^^^ ((_:String).toLowerCase)
       List("Hello", "World") must haveTheSameElementsAs(List("world", "hello")) ^^ beEqualIgnoreCase }                  ^
     { val startsWitha = (s: String) => be_==("a"+s)
-      List("Hello", "World") must haveTheSameElementsAs(List("aWorld", "aHello")) ^^ startsWitha }                      ^ tag("drop")^
+      List("Hello", "World") must haveTheSameElementsAs(List("aWorld", "aHello")) ^^ startsWitha }                      ^
                                                                                                                         endp^
   "Java collections can also be used with Traversable matchers"                                                         ^bt^
   "But generally require explicit conversion"                                                                           ^
