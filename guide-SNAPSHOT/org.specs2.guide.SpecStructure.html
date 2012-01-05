@@ -69,6 +69,8 @@
   <li>give a title to your specification</li>
   <li>define contexts and actions to execute before/after examples</li>
   <li>tag examples or sections of the Specification</li>
+  <li>adding debug statements</li>
+  <li>remove some implicit definitions conflicting with your code</li>
 </ul><a name="Declare+examples"></a><h3>Declare examples</h3><a name="Structure+of+a+Specification"></a><h4>Structure of a Specification</h4><p>The <a href="org.specs2.guide.QuickStart.html">Quick Start</a> guide describes 2 styles of specifications, the <em>unit</em> style and the <em>acceptance</em> style.<br />Both styles actually build a specification as a list of <em>fragments</em>.</p><a name="Acceptance+specification"></a><h5><em>Acceptance</em> specification</h5><p>In an <em>acceptance</em> specification you build a list of <em>fragments</em> with the <code class="prettyprint">^</code> operator:</p>
 <pre><code class="prettyprint">  &quot;this is my specification&quot;                          ^
     &quot;and example 1&quot;                                   ! e1^
@@ -902,10 +904,26 @@ val init = withFile() compose withDatabase()
   <li><p>when the <code class="prettyprint">tag</code> is appended to an example, it applies to that example: <code class="prettyprint">example 2</code> is tagged with <code class="prettyprint">integration</code></p></li>
   <li><p>when the <code class="prettyprint">section</code> call is inserted on a new line, this opens a section for all the following fragments. This should<br /> be closed by a corresponding <code class="prettyprint">section</code> call on a new line. For example, <code class="prettyprint">example 3</code> and <code class="prettyprint">example 4</code> are part of the<br /> &quot;checkin&quot; section</p></li>
   <li><p>when the <code class="prettyprint">section</code> call is appended to a block of Fragments on the same line, all the fragments of that block are part of<br /> the section: <code class="prettyprint">example 5</code> and <code class="prettyprint">example 6</code> are tagged with <code class="prettyprint">slow</code></p></li>
+</ul><a name="Adding+debug+statements"></a><h3>Adding debug statements</h3><p>When quick and hacky <code class="prettyprint">println</code> statements are what you want, the <code class="prettyprint">Debug</code> trait, mixed in every <code class="prettyprint">Specification</code>, provides useful methods:</p>
+<ul>
+  <li><code class="prettyprint">pp</code> or &quot;print and pass&quot;, prints a value to the console, then return it to be used in the rest of the expression: &quot;graph.pp must haveSize(3)&quot;</li>
+  <li><code class="prettyprint">pp(condition)</code> prints a value if a condition holds</li>
+  <li><code class="prettyprint">pp(f: T =&gt; Boolean)</code> prints a value if a condition on that value holds</li>
+</ul><a name="Removing+implicit+definitions"></a><h3>Removing implicit definitions</h3><p>By default, the <code class="prettyprint">Specification</code> trait imports quite a few implicit definitions (following a &quot;batteries included&quot; approach). However there might be some conflicts with implicits existing in your own user code. Among the usual examples of conflicts are conflicts with the <code class="prettyprint">===</code> sign in Scalaz and the <code class="prettyprint">Duration</code> methods in Akka.</p><p>An easy way to avoid this situation is to &quot;deactivate&quot; the specs2 implicits by mixing-in the relevant trait from this list:</p>
+<ul>
+  <li><code class="prettyprint">org.specs2.control.NoDebug</code>: deactivate the <code class="prettyprint">pp</code> method on objects</li>
+  <li><code class="prettyprint">org.specs2.time.NoTimeConversions</code>: deactivate the <code class="prettyprint">millis</code>, <code class="prettyprint">seconds</code>,... methods on <code class="prettyprint">Int</code>s and <code class="prettyprint">Long</code>s</li>
+  <li><code class="prettyprint">org.specs2.main.NoArgProperties</code>: deactivate the <code class="prettyprint">toOption: Option[T]</code> method on any value of type <code class="prettyprint">T</code></li>
+  <li><code class="prettyprint">org.specs2.matcher.NoCanBeEqual</code>: deactivate the <code class="prettyprint">===</code> method on any type <code class="prettyprint">T</code></li>
+  <li><code class="prettyprint">org.specs2.matcher.NoMustExpectations</code>: deactivate the <code class="prettyprint">must</code>, <code class="prettyprint">must_==</code>,... methods on any value of type <code class="prettyprint">T</code></li>
+  <li><code class="prettyprint">org.specs2.matcher.NoShouldExpectations</code>: deactivate the <code class="prettyprint">should</code>, <code class="prettyprint">should_==</code>,... methods on any value of type <code class="prettyprint">T</code></li>
+  <li><code class="prettyprint">org.specs2.specification.NoBooleanAutoExamples</code>: deactivate the conversions from <code class="prettyprint">Boolean</code> to <code class="prettyprint">Fragment</code> or <code class="prettyprint">Example</code>, which allows to use the <code class="prettyprint">^</code> method on booleans for example</li>
+  <li><code class="prettyprint">org.specs2.specification.NoFragmentsBuilder</code>: deactivate the implicit conversions from <code class="prettyprint">String</code> to <code class="prettyprint">Fragment</code>s</li>
+  <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt; &gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
 </ul>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="-1572246842"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="-1921243428"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="324270203"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-86872361"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -915,7 +933,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1049443683"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="1284463562"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -1034,10 +1052,14 @@ val init = withFile() compose withDatabase()
           <ul><li><a href="org.specs2.guide.SpecStructure.html#In+a+unit+specification">In a unit specification</a>
           <ul></ul>
         </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Adding+debug+statements">Adding debug statements</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
+          <ul></ul>
         </li></ul>
-        </li><li id="682977854"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="-1495407835"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1077,7 +1099,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1118,7 +1140,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1158,7 +1180,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1198,7 +1220,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1238,7 +1260,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1278,7 +1300,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1318,7 +1340,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1358,7 +1380,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1398,7 +1420,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1438,7 +1460,47 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Adaptation">Adaptation</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1478,7 +1540,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1518,7 +1580,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1558,7 +1620,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1598,7 +1660,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1638,7 +1700,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#TerminationMatchers">TerminationMatchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1678,7 +1740,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1718,7 +1780,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1758,7 +1820,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1798,7 +1860,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1840,7 +1902,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Matchers.html#Dependency+matchers">Dependency matchers</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Layers+definition">Layers definition</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Inclusion%2FExclusion">Inclusion/Exclusion</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1879,7 +1941,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1919,7 +1981,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1959,7 +2021,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Layers+as+an+Example">Layers as an Example</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1998,7 +2060,8 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li><a href="org.specs2.guide.Matchers.html#Alternate+implementation">Alternate implementation</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2037,7 +2100,46 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2078,7 +2180,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2118,7 +2220,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2158,7 +2260,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2197,7 +2299,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2238,7 +2340,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Mocks+creation+and+settings">Mocks creation and settings</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2278,7 +2380,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2318,7 +2420,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2359,7 +2461,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2398,7 +2500,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2439,7 +2541,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2479,7 +2581,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2518,7 +2620,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2558,7 +2660,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Functions+and+partial+functions">Functions and partial functions</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2597,7 +2699,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2637,7 +2739,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2677,7 +2779,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2718,7 +2820,7 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2757,7 +2859,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2796,7 +2898,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2835,7 +2937,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1017111792"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="-652199330"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -2895,7 +2997,7 @@ val init = withFile() compose withDatabase()
         </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1327759119"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="235204473"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -2939,7 +3041,7 @@ val init = withFile() compose withDatabase()
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-1587759113"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="2105044892"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -2959,5 +3061,5 @@ val init = withFile() compose withDatabase()
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['-1572246842','1049443683'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['324270203','1284463562'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

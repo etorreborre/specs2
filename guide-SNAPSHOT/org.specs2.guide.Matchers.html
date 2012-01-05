@@ -281,7 +281,16 @@ iterator.next must be_==(3).eventually
   <li><p>to check if an <code class="prettyprint">Iterable[String]</code> contains matching strings, but only once<br /><code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must containMatch(&quot;ll&quot;).onlyOnce</code></p></li>
   <li><p>to check if one of the elements has a given property<br /><code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must have(_.size &gt;= 5)</code></p></li>
   <li><p>to check if an iterable has the same elements as another one, regardless of the order<br /><code class="prettyprint">List(&quot;Hello&quot;, &quot;World&quot;) must haveTheSameElementsAs(List(&quot;World&quot;, &quot;Hello&quot;))</code></p></li>
-</ul><a name="Map+matchers"></a><h4>Map matchers</h4><p>Maps have their own matchers as well, to check keys and values:</p>
+  <li><p>to check if a sequence is sorted (works with any type <code class="prettyprint">T</code> which has an <code class="prettyprint">Ordering</code>)<br /><code class="prettyprint">Seq(1, 2, 3) must beSorted</code></p></li>
+</ul><a name="Adaptation"></a><h6>Adaptation</h6><p>The <code class="prettyprint">contain</code> and <code class="prettyprint">haveTheSameElementsAs</code> matchers can be &quot;adapted&quot; to use a different notion of equality than <code class="prettyprint">==</code> when checking for the existence of elements in an iterable.</p><p><code class="prettyprint">^^ (f: (T, T) =&gt; Boolean)</code> can be used instead of <code class="prettyprint">==</code>. For example:</p>
+<pre><code class="prettyprint">     Seq(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) =&gt; i-j &lt;= 1)
+</code></pre><p>will check if each value in the first list is contained in the second list with possibly an error margin of 1.</p><p><code class="prettyprint">^^ (f: T =&gt; Matcher[T])</code> can be used to compare values with a matcher. For example:</p>
+<pre><code class="prettyprint">     val equalIgnoreCase = (s: String) =&gt; be_==(s.toLowerCase)
+     Seq(&quot;Eric&quot;, &quot;Bob&quot;) must contain(&quot;bob&quot;, &quot;eric&quot;) ^^ equalIgnoreCase
+</code></pre><p><code class="prettyprint">^^^ (f: T =&gt; S)</code> can be used to compare values with a function. For example:</p>
+<pre><code class="prettyprint">     val usersFromDb = Seq(User(id=1, name=&quot;eric&quot;), User(id=2, name=&quot;Bob&quot;))
+     usersFromDb must contain(User(id=0, name=&quot;eric&quot;), User(id=0, name=&quot;Bob&quot;) ^^^ ((_:User).copy(id=0))
+</code></pre><p><em>Note</em>: the last operator used here is slightly different. It is <code class="prettyprint">^^^</code> instead of simply <code class="prettyprint">^^</code> because the same function is used to &quot;adapt&quot; both values at the same time. On the other hand the first 2 operators are more or less using a function taking 2 parameters.</p><a name="Map+matchers"></a><h4>Map matchers</h4><p>Maps have their own matchers as well, to check keys and values:</p>
 <ul>
   <li><p><code class="prettyprint">haveKey</code> checks if a Map has a given key<br /><code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must haveKey(1)</code></p></li>
   <li><p><code class="prettyprint">haveValue</code> checks if a Map has a given value<br /> <code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must haveValue(&quot;1&quot;)</code></p></li>
@@ -433,8 +442,8 @@ iterator.next must be_==(3).eventually
     &quot;execute&quot;,
     &quot;reflect    xml  time html&quot;,
     &quot;collection control io text main data&quot;).withPrefix(&quot;org.specs2&quot;)
-</code></pre><p>The above expression defines layers as an ordered list of <code class="prettyprint">String</code>s containing space-separated package names. It is supplemented by a <code class="prettyprint">withPrefix</code> declaration to factor out the common package prefix between all these packages.</p><p>By default, the packages are supposed to correspond to directories in the <code class="prettyprint">src/main/scala</code> directory. If your project has a different layout you can declare another source directory:</p>
-<pre><code class="prettyprint">  layers(...).inSourceDir(&quot;src&quot;)
+</code></pre><p>The above expression defines layers as an ordered list of <code class="prettyprint">String</code>s containing space-separated package names. It is supplemented by a <code class="prettyprint">withPrefix</code> declaration to factor out the common package prefix between all these packages.</p><p>By default, the packages are supposed to correspond to directories in the <code class="prettyprint">src/target/scala-&lt;version&gt;/classes</code> directory. If your project has a different layout you can declare another target directory:</p>
+<pre><code class="prettyprint">  layers(...).inTargetDir(&quot;out/classes&quot;)
 </code></pre><a name="Inclusion%2FExclusion"></a><h6>Inclusion/Exclusion</h6><p>Every rule has exceptions :-). In some rare cases, it might be desirable to exclude a class from being checked on a given layer. To do this, you can use the <code class="prettyprint">include/exclude</code> methods on the <code class="prettyprint">Layer</code> class:</p>
 <pre><code class="prettyprint">  layers (
     &quot;runner&quot;,
@@ -471,7 +480,7 @@ iterator.next must be_==(3).eventually
         &quot;backend&quot;
       )
    }
-</code></pre><a name="ScalaCheck+properties"></a><h3>ScalaCheck properties</h3><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions to the <code class="prettyprint">check</code> method and use the resulting block as your example body:</p>
+</code></pre><a name="Alternate+implementation"></a><h5>Alternate implementation</h5><p>Another implementation of the same functionality is available through the <code class="prettyprint">org.specs2.analysis.CompilerDependencyFinder</code> trait. This implementation uses the compiler dependency analysis functionality but needs more time, since it recompiles the sources.</p><p>The source files are taken from the <code class="prettyprint">src/main/scala</code> directory by default but you can change this value by using the <code class="prettyprint">Layers.inSourceDir</code> method.</p><p>While this implementation is slower than the Classycle one, it might retrieve more dependencies, for example when constants are inlined in class files.</p><a name="ScalaCheck+properties"></a><h3>ScalaCheck properties</h3><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions to the <code class="prettyprint">check</code> method and use the resulting block as your example body:</p>
 <pre><code class="prettyprint">  &quot;addition and multiplication are related&quot; ! check { (a: Int) =&gt; a + a == 2 * a }
 </code></pre><p>The function that is checked can either return:</p>
 <pre><code class="prettyprint">  // a Boolean
@@ -678,8 +687,8 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
   }
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="-1572246842"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="-1921243428"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="324270203"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="-86872361"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -689,7 +698,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1049443683"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="1284463562"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -808,10 +817,14 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul><li><a href="org.specs2.guide.SpecStructure.html#In+a+unit+specification">In a unit specification</a>
           <ul></ul>
         </li></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Adding+debug+statements">Adding debug statements</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
+          <ul></ul>
         </li></ul>
-        </li><li id="682977854"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="-1495407835"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -851,7 +864,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -892,7 +905,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Any">Matchers for Any</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -932,7 +945,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -972,7 +985,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1012,7 +1025,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1052,7 +1065,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Matchers+for+Option+%2F+Either">Matchers for Option / Either</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1092,7 +1105,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#String+matchers">String matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1132,7 +1145,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Numeric+matchers">Numeric matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1172,7 +1185,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Exception+matchers">Exception matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1212,7 +1225,47 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Iterable+matchers">Iterable matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Adaptation">Adaptation</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1252,7 +1305,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Map+matchers">Map matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1292,7 +1345,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Xml+matchers">Xml matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1332,7 +1385,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Json+matchers">Json matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1372,7 +1425,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#File+matchers">File matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1412,7 +1465,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#TerminationMatchers">TerminationMatchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1452,7 +1505,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scalaz+matchers">Scalaz matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1492,7 +1545,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Result+matchers">Result matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1532,7 +1585,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Scala+Interpreter+matchers">Scala Interpreter matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1572,7 +1625,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Parser+matchers">Parser matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1614,7 +1667,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Matchers.html#Dependency+matchers">Dependency matchers</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Layers+definition">Layers definition</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Inclusion%2FExclusion">Inclusion/Exclusion</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1653,7 +1706,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1693,7 +1746,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1733,7 +1786,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Layers+as+an+Example">Layers as an Example</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1772,7 +1825,8 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li><a href="org.specs2.guide.Matchers.html#Alternate+implementation">Alternate implementation</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1811,7 +1865,46 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
+          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          <ul></ul>
+        </li></ul>
+        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          <ul></ul>
+        </li></ul>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1852,7 +1945,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1892,7 +1985,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1932,7 +2025,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1971,7 +2064,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2012,7 +2105,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Mocks+creation+and+settings">Mocks creation and settings</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2052,7 +2145,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2092,7 +2185,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2133,7 +2226,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2172,7 +2265,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2213,7 +2306,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2253,7 +2346,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2292,7 +2385,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2332,7 +2425,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Functions+and+partial+functions">Functions and partial functions</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2371,7 +2464,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2411,7 +2504,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2451,7 +2544,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2492,7 +2585,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
-          <ul><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2531,7 +2624,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2570,7 +2663,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1421244587"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+        </li><li id="-193398780"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -2609,7 +2702,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1017111792"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="-652199330"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -2669,7 +2762,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
           <ul></ul>
         </li></ul>
-        </li><li id="-1327759119"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="235204473"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -2713,7 +2806,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="-1587759113"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="2105044892"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -2733,5 +2826,5 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['-1572246842','682977854'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['324270203','-1495407835'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
