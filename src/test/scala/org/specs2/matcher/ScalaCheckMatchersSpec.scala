@@ -38,7 +38,10 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
     "if it is proved the execution will yield a Success"                                                                ! prop1^
     "if it is a function which is always true, it will yield a Success"                                                 ! prop2^
     "if it is a function which is always false, it will yield a Failure"                                                ! prop3^
-    "if it is a property throwing an exception, it will yield an Error"                                                 ! prop4^
+    "if it is a property throwing an exception"                                                                         ^
+      "it will yield an Error"                                                                                          ! prop4^
+      "showing the exception type if the message is null"                                                               ! prop4_1^
+      "showing the cause"                                                                                               ! prop4_2^
     "a Property can be used with check"                                                                                 ! prop5^
     "a FailureException can be thrown from a Prop"                                                                      ! prop6^
                                                                                                                         end^
@@ -79,7 +82,11 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
   def prop1 = execute(proved) must_== Success("The property passed without any counter-example after 1 try")
   def prop2 = execute(trueStringFunction.forAll) must_== success100tries
   def prop3 = execute(identityFunction.forAll).message must startWith("A counter-example is 'false'")
-  def prop4 = execute(exceptionProp).toString must startWith("Error(A counter-example is")
+
+  def prop4   = execute(exceptionProp()).toString must startWith("Error(A counter-example is")
+  def prop4_1 = execute(exceptionProp("null")).toString must contain("java.lang.Exception")
+  def prop4_2 = execute(exceptionProp()).toString must contain("java.lang.IllegalArgumentException")
+
   def prop5 = execute(check(proved)) must beSuccessful
   def prop6 = execute(failureExceptionProp).toString must startWith("A counter-example is")
 
@@ -146,6 +153,9 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
     implicit def arb: Arbitrary[Int] = Arbitrary { for (n <- Gen.choose(1, 3)) yield { error("boo"); n }}
     Prop.forAll((i: Int) => i > 0)
   }
-  def exceptionProp = forAll((b: Boolean) => {throw new java.lang.Exception("boom"); true})
+
+  def exceptionWithCause(msg: String) = new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
+  def exceptionProp(msg: String = "boom") = forAll((b: Boolean) => {throw exceptionWithCause(msg); true})
+
   def failureExceptionProp = forAll((b: Boolean) => {throw new execute.FailureException(failure); true})
 }

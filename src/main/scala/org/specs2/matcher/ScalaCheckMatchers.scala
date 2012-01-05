@@ -119,7 +119,8 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       case Result(PropException(args, ex, labels), n, _, _, _) =>
         ex match {
           case execute.FailureException(f) => execute.Failure(counterExampleMessage(args, n, labels+f.message))
-          case e: java.lang.Exception      => execute.Error("A counter-example is "+counterExample(args)+": " + ex + " ("+afterNTries(n)+")"+ failedLabels(labels), e)
+          case e: java.lang.Exception      => execute.Error("A counter-example is "+counterExample(args)+": " + ex + getCause(e) +
+                                                            " ("+afterNTries(n)+")"+ failedLabels(labels), e)
           case throwable    => throw ex
         }
 
@@ -137,6 +138,8 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
         else " = "
      }.mkString(" - shrinked (", ",", ")")
   }
+  /** @return the cause of the exception as a String if there is one */
+  private[matcher] def getCause(e: java.lang.Exception) = Option(e.getCause).map(c => "(caused by "+c+")").getOrElse("")
 
   private [matcher] def counterExample(args: List[Arg[_]]) = {
     if (args.size == 1)
