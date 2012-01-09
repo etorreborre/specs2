@@ -146,9 +146,10 @@ class ContainMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) ==
   def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new ContainMatcher[T](seq, eq)
 
   def apply[S <: GenTraversable[T]](actual: Expectable[S]) = {
-    result(actual.value.toList.exists(a => expected.exists(e => equality(a, e))),
+    val missing = expected.filterNot(e => actual.value.toList.exists(a => equality(a, e)))
+    result(missing.isEmpty,
            actual.description + " contains " + q(expected.mkString(", ")),
-           actual.description + " doesn't contain " + q(expected.mkString(", ")), actual)
+           actual.description + " doesn't contain " + q(missing.mkString(", ")), actual)
   }
   def inOrder = new ContainInOrderMatcher(expected, equality)
   def only = new ContainOnlyMatcher(expected, equality)

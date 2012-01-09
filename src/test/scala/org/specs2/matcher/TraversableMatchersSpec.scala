@@ -11,6 +11,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   "we can check if one or several elements are present in a traversable"                                                ^
     { List(1, 2) must contain(1) }                                                                                      ^
     { List(1, 2, 3) must contain(3, 2) }                                                                                ^
+    { (List(1, 2, 3) must contain(3, 4)) returns "'1, 2, 3' doesn't contain '4'" }                                      ^
     { List(1, 2, 3) must containAllOf(List(1, 3)).inOrder }                                                             ^
     { List(1, 2, 3, 4, 5) must containAllOf(List(2, 4)).inOrder }                                                       ^
     { List(1, 2, 3) must contain(3) and  contain(2) }                                                                   ^
