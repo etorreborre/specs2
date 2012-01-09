@@ -329,4 +329,7 @@ case class DecoratedResult[T](decorator: T, result: Result) extends Result(resul
   override def isSkipped: Boolean       = result.isSkipped
   override def isPending: Boolean       = result.isPending
   override def isFailure: Boolean       = result.isFailure
+
+  /** use another decorator */
+  def decorate[S](otherDecorator: S) = DecoratedResult(otherDecorator, result)
 }

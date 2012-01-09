@@ -18,6 +18,7 @@ import specification._
 import Statistics._
 import Levels._
 import SpecsArguments._
+import matcher.DataTable
 
 /**
  * This trait reduces a list of ExecutedFragments to a list of PrintLines.
@@ -95,42 +96,47 @@ trait TextPrinter {
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      printResult(leveledText(r.text(args).toString, level)(args), r.result, r.timer)(args, out)
+      printResult(leveledText(r.text(args).toString, level)(args), r.hasDescription, r.result, r.timer)(args, out)
       
-    def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
-      val description = statusAndDescription(desc, result, timer)(args, out)
-      def print(res: Result) {
+    def printResult(desc: String, hasDescription: Boolean, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
+      def print(res: Result, desc: String, isDataTable: Boolean) {
+        def decoratedDescription(d: String) = statusAndDescription(d, result, timer, isDataTable)(args, out)
+
         if (args.canShow(res.status)) {
           res match {
             case f @ Failure(m, e, st, d) => {
-              printFailure(desc, f, timer)
+              printFailure(desc, f, timer, isDataTable)
               printFailureDetails(d)
             }
             case e: Error => {
-              printError(desc, e, timer)
+              printError(desc, e, timer, isDataTable)
               args.traceFilter(e.stackTrace).foreach(t => out.printError(t.toString))
               e.exception.chainedExceptions.foreach { (t: Throwable) =>
                 out.printError(t.getMessage.notNull)
                 args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
               }
             }
-            case Success(_)    => out.printSuccess(description)
-            case Pending(_)    => out.printPending(description + " " + result.message)
+            case Success(_)    => out.printSuccess(decoratedDescription(desc))
+            case Pending(_)    => out.printPending(decoratedDescription(desc) + " " + result.message)
             case Skipped(_, _) => {
-              out.printSkipped(description)
+              out.printSkipped(decoratedDescription(desc))
               if (!result.message.isEmpty)
                 out.printSkipped(result.message)
             }
-            case DecoratedResult(_, r) => print(r)
+            case DecoratedResult(dt: DataTable, r) if !hasDescription && r.isSuccess  => print(r, dt.show, isDataTable = true)
+            case DecoratedResult(dt: DataTable, r) if !hasDescription && !r.isSuccess => print(r, "", isDataTable = true)
+            case DecoratedResult(dt, r)                                               => print(r, desc, isDataTable = true)
           }
         }
       }
-      print(result)
+      print(result, desc, false)
     }
-    def printFailure(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
-      val description = statusAndDescription(desc, f, timer)
+    def printFailure(desc: String, f: Result with ResultStackTrace,
+                     timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
+      val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
       out.printFailure(description)
-      out.printFailure(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
+      out.printFailure((if (isDataTable) "" else desc.takeWhile(_ == ' ')+" ") +
+                       f.message + " ("+f.location+")")
       if (args.failtrace)
         args.traceFilter(f.stackTrace).foreach(t => out.printFailure(t.toString))
     }
@@ -149,26 +155,30 @@ trait TextPrinter {
         case _ => ()
       }
     }
-    def printError(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
-      val description = statusAndDescription(desc, f, timer)
+    def printError(desc: String, f: Result with ResultStackTrace,
+                   timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
+      val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
       out.printError(description)
-      out.printError(desc.takeWhile(_ == ' ') + "  " + f.exception.getClass.getSimpleName + ": " + f.message + " ("+f.location+")")
+      val exceptionName = f.exception.getClass.getSimpleName
+      out.printError((if (isDataTable) "" else desc.takeWhile(_ == ' ')+"  "+exceptionName+": ") +
+                     f.message + " ("+f.location+")")
     }
     /**
      * add the status to the description
      * making sure that the description is still properly aligned, even with several lines
      */
-    def statusAndDescription(text: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
+    def statusAndDescription(text: String, result: Result, timer: SimpleTimer, isDataTable: Boolean)(implicit args: Arguments, out: ResultOutput) = {
       val textLines = text.split("\n")
+      val firstLine = textLines.headOption.getOrElse("")
+      val indentation = firstLine.takeWhile(_ == ' ').dropRight(2)
       def time = if (args.showtimes) " ("+timer.time+")" else ""
-      val firstLine = textLines.take(1).map { s =>
-        s.takeWhile(_ == ' ').dropRight(2) +
-        out.status(result)(args) + s.dropWhile(_ == ' ') + time
-      }
-      val rest = textLines.drop(1)
-      (firstLine ++ rest).mkString("\n")
+
+      val decoratedFirstLine = indentation + out.status(result)(args) + firstLine.dropWhile(_ == ' ') + time
+      val rest = textLines.drop(1).map(l => indentation + (if (isDataTable) "  " else "") + l)
+      (decoratedFirstLine +: rest).mkString("\n")
     }
   }
+
   case class PrintText(t: ExecutedText)               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (args.canShow("-"))

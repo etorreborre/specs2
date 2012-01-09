@@ -32,7 +32,15 @@ import matcher._
  * 
  */
 private[specs2]
-trait AutoExamples {
+trait AutoExamples extends AutoExamplesLowImplicits {
+  /** specific implicits for datatables */
+  implicit def dataTableFragments(result: =>DecoratedResult[DataTable]): Fragments = Fragments.create(dataTableExample(result))
+  implicit def dataTableExample(result: =>execute.DecoratedResult[DataTable]) = Example(EmptyMarkup(), result)
+
+}
+
+private[specs2]
+trait AutoExamplesLowImplicits {
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragmentsFragment(expression: =>MatchResult[_]): MatchResultFragment = {
@@ -44,7 +52,7 @@ trait AutoExamples {
     new BooleanResultFragment(booleanFragments(expression))
 
   /** this implicit def is necessary when the expression is at the start of the spec */
-  implicit def resultFragmentsFragment(expression: =>Result): ResultFragment =
+  def resultFragmentsFragment(expression: =>Result): ResultFragment =
     new ResultFragment(resultFragments(expression))
 
   /**
@@ -61,9 +69,8 @@ trait AutoExamples {
     Fragments.create(Example(CodeMarkup(desc), toResult(expression)))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
-  implicit def resultFragments(expression: =>Result) = {
-    val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-    Fragments.create(Example(CodeMarkup(desc), expression))
+  implicit def resultFragments(result: =>Result): Fragments = {
+    Fragments.create(Example(CodeMarkup(getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)), result))
   }
 
   implicit def matchExample(expression: =>MatchResult[_]) = Example(CodeMarkup(getSourceCode()), expression.toResult)
@@ -120,6 +127,8 @@ trait AutoExamples {
       new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
     }
   }
+
+
 }
 
 /**

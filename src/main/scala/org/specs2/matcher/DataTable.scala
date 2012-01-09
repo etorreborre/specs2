@@ -244,6 +244,7 @@ trait DataTables extends Expectations {
 
 case class DataTable(titles: Seq[String], rows: Seq[DataTableRow]) {
   def isSuccess = rows.forall(_.isSuccess)
+  def show = TextTable(titles, rows.map(row => row.cells.map(_.toString))).show
 }
 object DataTable {
   def apply[R <% Result](titles: Seq[String], results: Seq[(Seq[String], R)]): DataTable = DataTable(titles, results.collect { case (v, r) => DataTableRow(v, r) })

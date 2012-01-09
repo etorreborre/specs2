@@ -1,5 +1,6 @@
 package org.specs2
 package reporter
+
 import org.specs2.internal.scalaz.Scalaz
 import Scalaz._
 import text._
@@ -8,8 +9,9 @@ import io.MockOutput
 import main.Arguments
 import execute._
 import specification._
+import matcher.DataTables
 
-class TextPrinterSpec extends Specification { def is = 
+class TextPrinterSpec extends Specification with DataTables { def is =
                                                                                                                         """
   The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
   and outputs them using a `TextResultOutput`.
@@ -89,6 +91,13 @@ class TextPrinterSpec extends Specification { def is =
   "a pending example must be displayed with a *"                                                                        ! status().e6^
   "a multi-line description must be indented ok"                                                                        ! status().e7^
   "if showtimes is true, each individual time must be shown"                                                            ! status().e8^
+  "a datatable must"                                                                                                    ^
+    "be used as a description if the example description is empty (meaning it's an auto-example)"                       ! status().e9^
+    "have no description if failing/in error (because the result shows all)"                                            ! status().e10^
+    "be properly aligned"                                                                                               ^
+      "when successful"                                                                                                 ! status().e11^
+      "when failing"                                                                                                    ! status().e12^
+      "when in error"                                                                                                   ! status().e13^
                                                                                                                         endp^
                                                                                                                         """
   Title
@@ -108,7 +117,11 @@ class TextPrinterSpec extends Specification { def is =
   val bigString1 = "abcdefghijklmnopqrstuvwxyz"
   val bigString2 = "abcdefghijklnmopqrstuvwxyz"
   val bigFail    = "with diffs" ! { bigString1 must_== bigString2 }
-  
+
+  val tableOk: Example    = "a" | "b" |> 1 ! 1 | { (a, b) => a must_== b }
+  val tableKo: Example    = "a" | "b" |> 1 ! 2 | { (a, b) => a must_== b }
+  val tableError: Example = "a" | "b" |> 1 ! 2 | { (a, b) => throw new Exception("boom"); a must_== b }
+
   case class prez() {
     val noindent = args(noindent = true)
     
@@ -174,6 +187,7 @@ class TextPrinterSpec extends Specification { def is =
     })
     def e11  = SmartColors.fromArgs("whitebg,success:b").textColor must_== black
   }
+
   case class diffs() {
     def test = bigString1 must_== bigString2
     def e1 = print(bigFail) must containMatch("hijkl\\[mn\\]opqrs")
@@ -184,19 +198,23 @@ class TextPrinterSpec extends Specification { def is =
     def e6 = print(diffs(show=false) ^ bigFail) must not containMatch("kl[mn]op")
     def e7 = print(diffs(show=true) ^ "" ! {bigString1 must_== bigString2.reverse} ) must not containMatch("\\[")
   }
+
   case class failtrace() {
     val failtrace: Arguments = args.report(failtrace = true)
     def e1 = print((new user.reporter.MutableSpecification).content) must containMatch("MutableSpecification.scala:7")
     def e2 = print((new user.reporter.AcceptanceSpecification).content) must containMatch("AcceptanceSpecification.scala:11")
     def e3 = print(fullStackTrace <| failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
   }
+
   case class traces() {
     def e1 = print(fullStackTrace ^ t1 ^ ex1 ^ "e" ! {throw new Exception("ouch"); ok}) must containMatch("org.specs2")
   }
+
   case class planargs() {
     val plan: Arguments = args(plan = true)
     def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("* e1") and not containMatch("\\+ e1") 
   }
+
   case class skipAllargs() {
     val sk: Arguments = args(skipAll = true)
     def e1 = {
@@ -205,6 +223,7 @@ class TextPrinterSpec extends Specification { def is =
       (spec must contain("o fail3"))
     }
   }
+
   case class seq() {
     val messages = new MockOutput {}
     val slowex1 = "e1" ! { Thread.sleep(500); messages.println("e1"); success }
@@ -240,6 +259,17 @@ class TextPrinterSpec extends Specification { def is =
         "+ e1",
         "  example1") 
     def e8 = print(args.report(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
+
+    def e9 = print(t1 ^ tableOk) must contain("+ a | b")
+    def e10 = print(t1 ^ tableKo) must contain("x ")
+    def e11 = print(t1 ^ tableOk) must contain("+ a | b",
+                                               "  1 | 1")
+    def e12 = print(t1 ^ tableKo) must contain("x ",
+                                               "  | a | b |",
+                                               "x | 1 | 2 | '1' is not equal to '2'") ^^ ((s1: String, s2: String) => s1.startsWith(s2))
+    def e13 = print(t1 ^ tableError) must contain("! ",
+                                                  "  | a | b |",
+                                                  "! | 1 | 2 | boom") ^^ ((s1: String, s2: String) => s1.startsWith(s2))
   }
 
   case class specTitle() {
