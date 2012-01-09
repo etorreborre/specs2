@@ -1,0 +1,43 @@
+
+{
+ "organization":"org.specs2",
+ "name":"specs2",
+ "version":"1.7.1",
+ "description":"specs2",
+ "site":"http://specs2.org",
+ "tags":["bdd","testing"],
+ "docs":"http://http://etorreborre.github.com/specs2/guide/org.specs2.UserGuide.html",
+ "licenses": ["MIT"],
+ "resolvers": ["http://scala-tools.org/repo-releases"],
+ "dependencies": [{
+   "organization":"org.specs2",
+   "name": "specs2-scalaz-core",
+   "version": "6.0.1"
+  },{
+   "organization":"org.scala-tools.testing",
+   "name": "scalacheck",
+   "version": "1.9"
+  },{
+   "organization":"org.scala-tools.testing",
+   "name": "test-interface",
+   "version": "0.5"
+  },{
+   "organization":"org.hamcrest",
+   "name": "hamcrest-all",
+   "version": "1.1"
+  },{
+   "organization":"org.mockito",
+   "name": "mockito-all",
+   "version": "1.8.5"
+  },{
+   "organization":"junit",
+   "name": "junit",
+   "version": "4.7"
+  },{
+   "organization":"org.pegdown",
+   "name": "pegdown",
+   "version": "1.0.2"
+  }],
+ "scalas": ["2.9.0"],
+ "sbt": false
+}
