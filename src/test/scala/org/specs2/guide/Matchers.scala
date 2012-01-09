@@ -976,6 +976,25 @@ DataTables are a very effective way of grouping several similar examples into on
 
 Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the `!!` operator to disambiguate (and `||` in the header for good visual balance).
 
+DataTables are generally used to pack lots of expectations inside one example. In that case the table is only displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:
+
+      class DataTableSpec extends Specification with DataTables { def is =
+
+        "adding integers should just work in scala"  ^ {
+          "a"   | "b" | "c" |
+           2    !  2  !  4  |
+           1    !  1  !  2  |> {
+           (a, b, c) =>  a + b must_== c
+        }
+      }
+
+This specification will be rendered as:
+
+        adding integers should just work in scala
+        +  a | b | c |
+           2 | 2 | 4 |
+           1 | 1 | 2 |
+
 ### Forms
 
 Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.
