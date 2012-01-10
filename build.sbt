@@ -92,5 +92,5 @@ publishTo <<= (version) { version: String =>
 
 seq(lsSettings :_*)
 
-(LsKeys.ghBranch in LsKeys.lsync) := Some("1.7")
+(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8-SNAPSHOT")
 
