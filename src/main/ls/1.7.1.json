@@ -4,10 +4,10 @@
  "name":"specs2",
  "version":"1.7.1",
  "description":"specs2",
- "site":"http://specs2.org",
+ "site":"",
  "tags":["bdd","testing"],
- "docs":"http://http://etorreborre.github.com/specs2/guide/org.specs2.UserGuide.html",
- "licenses": ["MIT"],
+ "docs":"",
+ "licenses": [],
  "resolvers": ["http://scala-tools.org/repo-releases"],
  "dependencies": [{
    "organization":"org.specs2",
