@@ -38,6 +38,6 @@
    "name": "pegdown",
    "version": "1.0.2"
   }],
- "scalas": ["2.9.0"],
+ "scalas": ["2.9.0", "2.9.0-1"],
  "sbt": false
 }
