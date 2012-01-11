@@ -8,3 +8,7 @@ addSbtPlugin("me.lessis" % "ls-sbt" % "0.1.1")
 resolvers += "gseitz@github.com" at "http://gseitz.github.com/maven/"
 
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.4")
+
+resolvers += "sbt-idea-repo" at "http://mpeltonen.github.com/maven/"
+
+addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "0.11.0")
