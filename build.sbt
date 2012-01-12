@@ -1,4 +1,7 @@
-
+//import sbtrelease._
+//import Release._
+//import ReleaseKeys._
+ 
 /** Project */
 name := "specs2"
 
@@ -28,7 +31,7 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.mockito" % "mockito-all" % "1.8.5" % "optional",
   "junit" % "junit" % "4.7" % "optional",
   "org.pegdown" % "pegdown" % "1.0.2" % "optional",
-  "classycle" % "classycle" % "1.4" % "optional"
+  "org.specs2" %% "classycle" % "1.4" % "optional"
   )
 }
 
@@ -67,6 +70,27 @@ publishTo <<= (version) { version: String =>
   if (version.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus+"snapshots/") 
   else                                   Some("releases" at nexus+"releases/")
 }
+
+ 
+//seq(releaseSettings: _*)
+
+//releaseProcess <<= thisProjectRef apply { ref =>
+//  import ReleaseStateTransformations._
+//  Seq[ReleasePart](
+//    initialGitChecks,                     
+//    checkSnapshotDependencies,    
+//    releaseTask(check in Posterous in ref),  
+//    inquireVersions,                        
+ //   setReleaseVersion,                      
+  //  runTest,                                
+//    commitReleaseVersion,                   
+//    tagRelease,                             
+//    releaseTask(publish in Global in ref),
+//    releaseTask(publish in Posterous in ref),    
+//    setNextVersion,                         
+//    commitNextVersion                       
+ // )
+//}
 
 //seq(lsSettings :_*)
 
