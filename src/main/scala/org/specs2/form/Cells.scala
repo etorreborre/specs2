@@ -7,6 +7,7 @@ import text.NotNullStrings._
 import main.Arguments
 import execute._
 import StandardResults._
+import text.Markdown
 
 /**
  * A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.
@@ -66,7 +67,7 @@ object Xml {
 
   /** @return  the number of columns for a given cell */
   def colnumber(cell: Cell): Int = cell match {
-    case TextCell(_, _)   => 1 // just the string
+    case TextCell(_,_,_)  => 1 // just the string
     case FieldCell(_, _)  => 3 // label + value + optional error
     case PropCell(_, _)   => 3 // label + value + optional error/failure
     case EffectCell(_, _) => 2 // label + optional error
@@ -79,16 +80,24 @@ object Xml {
 /**
  * Simple Cell embedding an arbitrary String
  */
-case class TextCell(s: String, result: Result = skipped) extends Cell {
+case class TextCell(s: String, result: Option[Result] = None, decorator: Decorator = Decorator()) extends Cell with DecoratedProperty[TextCell] {
 
   def text = s
 
-  def xml(implicit args: Arguments) = <td class={execute.statusName}>{s}</td>
+  def xml(implicit args: Arguments) = <td class={result.map(_.statusName).getOrElse("none")} style="info">{decorateValue(Markdown.toXhtml(text))}</td>
 
-  def execute = result
+  def execute = result.getOrElse(Skipped())
   def setSuccess = TextCell(s, success)
   def setFailure = TextCell(s, failure)
   def executeCell = this
+
+  /** set a new Decorator */
+  def decoratorIs(d: Decorator) = copy(decorator = d)
+
+}
+
+object TextCell {
+  def apply(s: String, result: Result): TextCell = new TextCell(s, Some(result))
 }
 /**
  * Cell embedding a Field

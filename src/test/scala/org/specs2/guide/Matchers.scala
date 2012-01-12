@@ -1,7 +1,10 @@
 package org.specs2
 package guide
 
-class Matchers extends Specification { def is = literate ^ "Matchers guide".title ^
+import specification.Forms._
+
+class Matchers extends Specification with MatcherCards { def is = literate ^ "Matchers guide".title ^
+  toTabs^
 """
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 
