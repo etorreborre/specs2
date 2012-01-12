@@ -8,7 +8,7 @@ import Form._
 
 trait MatcherCards extends Cards {
   def title = "Matchers"
-  def cards = Seq(AnyMatchers)
+  def cards = Seq(AnyMatchers, OptionEitherMatchers)
 }
 trait Cards {
   def title: String
@@ -19,26 +19,30 @@ trait Cards {
 trait Card {
   def title: String
   def text: String
-  def toTab: Tab = Tab(title, Form.tr(TextCell(text).bkWhite).setSuccess)
+  def toTab: Tab = Tab(title, Form.tr(TextCell(text).bkWhite))
 }
 object AnyMatchers extends Card {
   def title = "Matchers for Any"
   def text =  """
   The most common type of matcher is `beEqualTo` to test for equality. There are different ways to use this matcher:
 
-       1 must beEqualTo(1)
-       1 must be_==(1)            // with a shorter matcher
-       1 must_== 1                // my favorite!
-       1 mustEqual 1              // if you dislike underscores
-       1 should_== 1              // for should lovers
-       1 === 1                    // the ultimate shortcut
-       1 must be equalTo(1)       // with a literate style
+ Matcher                    |  Comment
+ -------------------------- | --------------------------
+ `1 must beEqualTo(1)      `| the normal way
+ `1 must be_==(1)          `| with a shorter matcher
+ `1 must_== 1              `| my favorite!
+ `1 mustEqual 1            `| if you dislike underscores
+ `1 should_== 1            `| for should lovers
+ `1 === 1                  `| the ultimate shortcut
+ `1 must be equalTo(1)     `| with a literate style
 
-       1 must not be equalTo(2)   // with a negation
-       1 must_!= 2                // with a negation
-       1 mustNotEqual 2           // with a negation
-       1 must be_!=(2)            // with a negation
-       1 !== 2                    // with a negation
+   *with a negation*        |
+ -------------------------- |
+ `1 must not be equalTo(2) `|
+ `1 must_!= 2              `|
+ `1 mustNotEqual 2         `|
+ `1 must be_!=(2)          `|
+ `1 !== 2                  `|
 
 The `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`, for `Arrays`. So the `beEqualTo` matcher has been adapted to transform `Arrays` to `Seqs` before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
 
@@ -69,4 +73,20 @@ An non-exhaustive list of those matchers:
 
   """
 }
-  
+
+object OptionEitherMatchers extends Card {
+  def title = "Option/Either Matchers"
+  def text =  """
+  There are several matchers to check Option and Either instances:
+
+ * `beSome` checks if an element is Some(_)
+ * `beSome.which(function)` checks if an element is Some(_) and satisfies a function returning a boolean
+ * `beSome.like(partial function)` checks if an element is Some(_) and satisfies a partial function returning a `MatchResult`
+ * `beNone` checks if an element is None
+ * `beAsNoneAs` checks if 2 values are equal to None at the same time
+ * `beRight` checks if an element is Right(_)
+ * `beRight.like(partial function)` checks if an element is Right(_) and satisfies a partial function returning a `MatchResult`
+ * `beLeft` checks if an element is Left(_)
+ * `beLeft.like(partial function)` checks if an element is Left(_) and satisfies a partial function returning a `MatchResult`
+  """
+}

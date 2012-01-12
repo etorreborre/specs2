@@ -4,7 +4,7 @@ package guide
 import specification.Forms._
 
 class Matchers extends Specification with MatcherCards { def is = literate ^ "Matchers guide".title ^
-  toTabs^
+//  toTabs^
 """
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 

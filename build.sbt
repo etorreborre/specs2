@@ -1,6 +1,3 @@
-import sbtrelease._
-import Release._
-import ReleaseKeys._
 
 /** Project */
 name := "specs2"
@@ -31,7 +28,7 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.mockito" % "mockito-all" % "1.8.5" % "optional",
   "junit" % "junit" % "4.7" % "optional",
   "org.pegdown" % "pegdown" % "1.0.2" % "optional",
-  "org.specs2" %% "classycle" % "1.4" % "optional"
+  "classycle" % "classycle" % "1.4" % "optional"
   )
 }
 
@@ -60,25 +57,6 @@ testOptions := Seq(Tests.Filter(s =>
 /** Console */
 initialCommands in console := "import org.specs2._"
 
-seq(releaseSettings: _*)
-
-releaseProcess <<= thisProjectRef apply { ref =>
-  import ReleaseStateTransformations._
-  Seq[ReleasePart](
-    initialGitChecks,                     
-    checkSnapshotDependencies,    
-    releaseTask(check in Posterous in ref),  
-    inquireVersions,                        
-    setReleaseVersion,                      
-    runTest,                                
-    commitReleaseVersion,                   
-    tagRelease,                             
-    releaseTask(publish in Global in ref),
-    releaseTask(publish in Posterous in ref),    
-    setNextVersion,                         
-    commitNextVersion                       
-  )
-}
 
 
 /** Publishing */
@@ -90,7 +68,7 @@ publishTo <<= (version) { version: String =>
   else                                   Some("releases" at nexus+"releases/")
 }
 
-seq(lsSettings :_*)
+//seq(lsSettings :_*)
 
-(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8")
+//(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8")
 
