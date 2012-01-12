@@ -1,6 +1,6 @@
-//import sbtrelease._
-//import Release._
-//import ReleaseKeys._
+import sbtrelease._
+import Release._
+import ReleaseKeys._
  
 /** Project */
 name := "specs2"
@@ -72,27 +72,27 @@ publishTo <<= (version) { version: String =>
 }
 
  
-//seq(releaseSettings: _*)
+seq(releaseSettings: _*)
 
-//releaseProcess <<= thisProjectRef apply { ref =>
-//  import ReleaseStateTransformations._
-//  Seq[ReleasePart](
-//    initialGitChecks,                     
-//    checkSnapshotDependencies,    
-//    releaseTask(check in Posterous in ref),  
-//    inquireVersions,                        
- //   setReleaseVersion,                      
-  //  runTest,                                
-//    commitReleaseVersion,                   
-//    tagRelease,                             
-//    releaseTask(publish in Global in ref),
-//    releaseTask(publish in Posterous in ref),    
-//    setNextVersion,                         
-//    commitNextVersion                       
- // )
-//}
+releaseProcess <<= thisProjectRef apply { ref =>
+  import ReleaseStateTransformations._
+  Seq[ReleasePart](
+    initialGitChecks,                     
+    checkSnapshotDependencies,    
+    releaseTask(check in Posterous in ref),  
+    inquireVersions,                        
+    setReleaseVersion,                      
+    runTest,                                
+    commitReleaseVersion,                   
+    tagRelease,                             
+    releaseTask(publish in Global in ref),
+    releaseTask(publish in Posterous in ref),    
+    setNextVersion,                         
+    commitNextVersion                       
+  )
+}
 
-//seq(lsSettings :_*)
+seq(lsSettings :_*)
 
-//(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8")
+(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8")
 
