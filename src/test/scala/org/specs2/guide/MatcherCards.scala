@@ -560,7 +560,7 @@ The `Analysis` trait allows to directly embed the layers definition in a `Specif
           )
       }
 
-##### Alternate implementation
+##### Alternative implementation
 
 Another implementation of the same functionality is available through the `org.specs2.analysis.CompilerDependencyFinder` trait. This implementation uses the compiler dependency analysis functionality but needs more time, since it recompiles the sources.
 
