@@ -45,17 +45,22 @@ Two additional results are also available to track the progress of features:
 
 ### Match results
 
-This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user. The most common matchers are automatically available when extending the `Specification` trait:
+This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.
+
+#### Out-of-the-box matchers
+
+The most common matchers are automatically available when extending the `Specification` trait:
 """^
   MatcherCards.toTabs^p^
 """
-You can see on the examples above several things which are applicable to all matchers:
+The examples above show how to use matchers:
 
- * the general form for using a matcher is `a must matcher`
- * you can use `should` instead of `must` if you prefer
- * there are only 2 shortcuts provided because the equality matcher is so ubiquitous `must_==` and `===`
- * for most of the matchers you can use a form where the ` be` word (or the `have` word) is detached
- * you can as well negate a matcher by adding not before it (or after it, as a method call)
+ * the general form for using a matcher is: `a must matcher`
+ * but can use `should` instead of `must` if you prefer
+ * for most matchers you can use a form where the ` be` word (or the `have` word) is detached
+ * you can as well negate a matcher by adding `not` before it (or after it, as a method call)
+
+#### Optional matchers
 
 These other matchers need to be selectively added to the specification by adding a new trait:
 """^
