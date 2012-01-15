@@ -31,7 +31,8 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   { number must failOn("abc").withMsg("expected") }                                                                               ^
   { number must not failOn("12") }                                                                                                ^
   { number must failOn("12a") }                                                                                                   ^
-  { (number must failOn("12a")) returns "'[1.3] parsed: 12' is a Success and the input was not completely parsed. Remaining: a" } ^
+  { (number must failOn("12a ")) returns
+    "'[1.3] parsed: 12' is a Success and the input was not completely parsed. 2 characters remaining: 'a '" }                    ^
   { number("i") must beAFailure }                                                                                                 ^
   { number("1") must not be aFailure }                                                                                            ^
   { number("i") must be aFailure }                                                                                                ^

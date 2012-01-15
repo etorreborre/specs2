@@ -4,7 +4,8 @@ package matcher
 import util.parsing.combinator.Parsers
 import util.parsing.input.{CharSequenceReader, Reader}
 import org.specs2.internal.scalaz.Scalaz._
-
+import text.Plural._
+import text.Quote._
 /**
  * Matchers for parser combinators
  *
@@ -55,7 +56,10 @@ trait ParserBaseMatchers {
 
     def apply[S <: TMatchee](s: Expectable[S]) = apply0(s.map(parseResult)).map(_ => s.value)
 
-    protected def remaining(next: Input) = next.source.subSequence(next.offset, next.source.length())
+    protected def remaining(next: Input) = {
+      val size = next.source.length - next.offset
+      size.qty("character") + " remaining: " + q(next.source.subSequence(next.offset, next.source.length()))
+    }
   }
 
   case class ParseSuccessMatcher[T, TMatchee](parseResult: TMatchee => ParseResult[T], isPartial: Boolean = false) extends ParseResultMatcher[T, TMatchee] {
@@ -67,7 +71,7 @@ trait ParserBaseMatchers {
           Matcher.result(true, s.description, s.description+" isn't a Success", s)
         case PSuccess(_, next) if !next.atEnd && !isPartial =>
           Matcher.result(false, s.description,
-                         s.description+" is a Success but the input was not completely parsed. Remaining "+ remaining(next), s)
+                         s.description+" is a Success but the input was not completely parsed. "+ remaining(next), s)
         case _                                                =>
           Matcher.result(false, s.description, s.description+" isn't a Success", s)
       }
@@ -112,7 +116,7 @@ trait ParserBaseMatchers {
       s.value match {
         case PSuccess(_, next) if !next.atEnd =>
           Matcher.result(true,
-                         s.description+" is a Success and the input was not completely parsed. Remaining: "+
+                         s.description+" is a Success and the input was not completely parsed. "+
                          remaining(next), s.description, s)
         case _                                                =>
           Matcher.result(clazz.isInstance(s.value), s.description, s.description+" isn't a "+clazz.getSimpleName, s)
