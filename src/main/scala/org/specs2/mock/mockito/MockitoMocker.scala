@@ -13,6 +13,9 @@ import org.mockito.MockSettings
  */
 trait MockitoMocker {
   def verify(mode: VerificationMode) = org.mockito.Mockito.verify(org.mockito.Mockito.mock(classOf[List[Int]]), mode)
+  def verifyZeroInteractions[T <: AnyRef](mocks: T*) = for (m <- mocks) org.mockito.Mockito.verifyZeroInteractions(m)
+  def verifyNoMoreInteractions[T <: AnyRef](mocks: T*) = for (m <- mocks) org.mockito.Mockito.verifyNoMoreInteractions(m)
+
   def mock[T : ClassManifest]: T = org.mockito.Mockito.mock(implicitly[ClassManifest[T]].erasure).asInstanceOf[T]
   def mock[T : ClassManifest](settings: MockSettings): T = org.mockito.Mockito.mock(implicitly[ClassManifest[T]].erasure, settings).asInstanceOf[T]
 
@@ -28,7 +31,6 @@ trait MockitoMocker {
     }
   }
   def verify[M](m: M, v: VerificationMode) = org.mockito.Mockito.verify(m, v)
-  def verifyNoMoreInteractions[T <: AnyRef](mocks: T*) = for (m <- mocks) org.mockito.Mockito.verifyNoMoreInteractions(m)
 
   def doReturn[T](t: T) = org.mockito.Mockito.doReturn(t)
   def doAnswer[T](a: Answer[T]) = org.mockito.Mockito.doAnswer(a)
