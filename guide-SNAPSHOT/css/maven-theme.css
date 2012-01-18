@@ -125,6 +125,9 @@ table.dataTable tr.error {
 table.dataTable tr.skipped {
   background-color: #DDDDDD;
 }
+table.dataTable tr.none {
+  background-color: #FFFFFF;
+}
 table.dataTable th.success {
   background-color: #CCFFCC;
 }
@@ -136,6 +139,9 @@ table.dataTable th.error {
 }
 table.dataTable th.skipped {
   background-color: #DDDDDD;
+}
+table.dataTable tr.none {
+  background-color: #FFFFFF;
 }
 
 
@@ -177,7 +183,9 @@ table.dataTable td.error {
 table.dataTable td.skipped {
   background-color: #DDDDDD;
 }
-
+table.dataTable td.none {
+  background-color: #FFFFFF;
+}
 
 table.bodyTable tr.a {
   background-color: #ddd;
