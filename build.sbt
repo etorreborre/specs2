@@ -31,7 +31,7 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.mockito" % "mockito-all" % "1.8.5" % "optional",
   "junit" % "junit" % "4.7" % "optional",
   "org.pegdown" % "pegdown" % "1.0.2" % "optional",
-  "org.specs2" %% "classycle" % "1.4" % "optional"
+  "classycle" % "classycle" % "1.4" % "optional"
   )
 }
 
