@@ -35,7 +35,10 @@ case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLin
   def add(line: HtmlLine) = copy(lines = lines :+ line)
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty
-  
+
+  /** a unique identifier for this file */
+  def id = specName.id
+
   override def toString = (link +: lines).mkString("\n")
 }
 

@@ -50,7 +50,7 @@ trait HtmlPrinter {
     reduce(spec) |> sortByFile(spec.name, parentLink = HtmlLink(spec.name, "", spec.name.name))
 
   def printHtml(toc: TreeToc, output: =>HtmlReportOutput): HtmlLinesFile => HtmlFile = (file: HtmlLinesFile) => {
-    HtmlFile(file.link.url, printHtml(output, file, toc.toTree(file.hashCode)))
+    HtmlFile(file.link.url, printHtml(output, file, toc.toTree(file.id)))
   }
 
   /** @return a new HtmlReportOutput object creating html elements */
@@ -60,9 +60,10 @@ trait HtmlPrinter {
   def createToc(htmlFiles: Tree[HtmlLinesFile])(implicit args: Arguments) = {
     def itemsList(tree: Tree[HtmlLinesFile]): NodeSeq = {
       val root = tree.rootLabel
-      tocElements(root.printLines(output).xml, root.link.url, root.hashCode, { tree.subForest.map(itemsList).reduceNodes })
+      tocElements(root.printLines(output).xml, root.link.url, root.specName.id,
+                  Map(tree.subForest.map(subSpec => (subSpec.rootLabel.id.toString, itemsList(subSpec))):_*))
     }
-    TreeToc(htmlFiles.rootLabel.hashCode, itemsList(htmlFiles))
+    TreeToc(htmlFiles.rootLabel.id, itemsList(htmlFiles))
   }
 
   /**

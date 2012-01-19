@@ -49,6 +49,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
     link match {
       case slink @ SpecHtmlLink(name, before, link, after, tip) =>
+        print(<subtoc id={name.id.toString}/>).
         printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ wiki(before) ++ <a href={slink.url} tooltip={tip}>{wiki(link)}</a> ++ wiki(after), level), linkStatus)
       case UrlHtmlLink(url, before, link, after, tip) =>
         printStatus(div(t(before) ++ <a href={url} tooltip={tip}>{wiki(link)}</a> ++ wiki(after), level), linkStatus)
