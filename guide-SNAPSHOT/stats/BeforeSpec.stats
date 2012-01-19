@@ -1,6 +1,0 @@
-<BeforeSpec-stats timestamp="1315121048886"><stats expectations="8" examples="8" successes="8" time="666"></stats></BeforeSpec-stats>
-<BeforeSpec-stats timestamp="1315121050986"><stats><trend><stats expectations="-8" examples="-8" successes="-8" time="666"></stats></trend></stats></BeforeSpec-stats>
-<BeforeSpec-stats timestamp="1315203103430"><stats expectations="8" examples="8" successes="8" time="130"><trend><stats expectations="7" examples="8" successes="8" time="130"></stats></trend></stats></BeforeSpec-stats>
-<BeforeSpec-stats timestamp="1315203103692"><stats><trend><stats expectations="-8" examples="-8" successes="-8" time="130"></stats></trend></stats></BeforeSpec-stats>
-<BeforeSpec-stats timestamp="1315206558214"><stats expectations="8" examples="8" successes="8" time="213"><trend><stats expectations="7" examples="8" successes="8" time="213"></stats></trend></stats></BeforeSpec-stats>
-<BeforeSpec-stats timestamp="1315206560135"><stats><trend><stats expectations="-8" examples="-8" successes="-8" time="213"></stats></trend></stats></BeforeSpec-stats>

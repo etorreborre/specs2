@@ -1,6 +1,0 @@
-<examples.StackSpec-stats timestamp="1315121051000"><stats></stats></examples.StackSpec-stats>
-<examples.StackSpec-stats timestamp="1315121061867"><stats expectations="19" examples="19" successes="19" time="1785"><trend><stats expectations="18" examples="19" successes="19" time="1785"></stats></trend></stats></examples.StackSpec-stats>
-<examples.StackSpec-stats timestamp="1315203069434"><stats expectations="19" examples="19" successes="19" time="160"></stats></examples.StackSpec-stats>
-<examples.StackSpec-stats timestamp="1315203103722"><stats><trend><stats expectations="-19" examples="-19" successes="-19" time="160"></stats></trend></stats></examples.StackSpec-stats>
-<examples.StackSpec-stats timestamp="1315206560151"><stats><trend><stats expectations="-1"></stats></trend></stats></examples.StackSpec-stats>
-<examples.StackSpec-stats timestamp="1315206576139"><stats expectations="19" examples="19" successes="19" time="232"><trend><stats expectations="18" examples="19" successes="19" time="232"></stats></trend></stats></examples.StackSpec-stats>

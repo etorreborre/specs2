@@ -1,9 +1,0 @@
-<anon697314909-results timestamp="1315121059115"><result location="scala.collection.TraversableLike (TraversableLike.scala:194)" id="100831"><stats expectations="1" examples="1" failures="1" time="1"></stats></result>
-</anon697314909-results>
-<anon697314909-stats timestamp="1315121059139"><stats expectations="2" successes="1" examples="2" failures="1" time="1"></stats></anon697314909-stats>
-<anon697314909-results timestamp="1315203070313"><result location="scala.collection.TraversableLike (TraversableLike.scala:194)" id="100831"><stats failures="1" examples="1" expectations="1"></stats></result>
-</anon697314909-results>
-<anon697314909-stats timestamp="1315203070314"><stats failures="1" examples="2" successes="1" expectations="2"></stats></anon697314909-stats>
-<anon697314909-results timestamp="1315206578981"><result location="scala.collection.TraversableLike (TraversableLike.scala:194)" id="100831"><stats expectations="1" examples="1" failures="1" time="1"></stats></result>
-</anon697314909-results>
-<anon697314909-stats timestamp="1315206578982"><stats expectations="2" successes="1" examples="2" failures="1" time="1"></stats></anon697314909-stats>

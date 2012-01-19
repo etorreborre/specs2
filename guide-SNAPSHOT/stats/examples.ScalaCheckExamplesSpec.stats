@@ -1,6 +1,0 @@
-<examples.ScalaCheckExamplesSpec-stats timestamp="1315121020665"><stats expectations="400" examples="4" successes="4" time="615"></stats></examples.ScalaCheckExamplesSpec-stats>
-<examples.ScalaCheckExamplesSpec-stats timestamp="1315121050997"><stats><trend><stats expectations="-400" examples="-4" successes="-4" time="615"></stats></trend></stats></examples.ScalaCheckExamplesSpec-stats>
-<examples.ScalaCheckExamplesSpec-stats timestamp="1315203089445"><stats expectations="400" examples="4" successes="4" time="281"><trend><stats expectations="399" examples="4" successes="4" time="281"></stats></trend></stats></examples.ScalaCheckExamplesSpec-stats>
-<examples.ScalaCheckExamplesSpec-stats timestamp="1315203103712"><stats><trend><stats expectations="-400" examples="-4" successes="-4" time="281"></stats></trend></stats></examples.ScalaCheckExamplesSpec-stats>
-<examples.ScalaCheckExamplesSpec-stats timestamp="1315206560147"><stats><trend><stats expectations="-1"></stats></trend></stats></examples.ScalaCheckExamplesSpec-stats>
-<examples.ScalaCheckExamplesSpec-stats timestamp="1315206591613"><stats expectations="400" examples="4" successes="4" time="250"><trend><stats expectations="399" examples="4" successes="4" time="250"></stats></trend></stats></examples.ScalaCheckExamplesSpec-stats>
