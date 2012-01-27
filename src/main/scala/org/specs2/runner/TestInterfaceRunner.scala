@@ -81,18 +81,35 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
 
   protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {
     override def export(implicit arguments: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => {
-      exporters(args, handler).foreach { e => e.export(arguments)(spec) }
+      exporters(args, handler).foreach(_.export(arguments)(spec))
     }
   }
+
+  protected def finalExporter(handler: EventHandler) = FinalResultsReporter(handler, loggers)
 
   def exporters(args: Array[String], handler: EventHandler): Seq[Exporting] = {
     def reportIs(reportTypes: String*) = reportTypes.exists(args.contains)
 
     def exporter(condition: Boolean)(e: =>Exporting) = if (condition) Some(e) else None
     def exportHtml     = exporter(reportIs("html"))(HtmlExporting)
-    def exportJunitxml = exporter(reportIs("junitxml"))(JUnitXmlExporting)
-    def console        = exporter(!reportIs("html", "junitxml") || reportIs("console"))(new TestInterfaceReporter(handler, loggers))
 
-    Seq(console, exportHtml, exportJunitxml).flatten
+    def exportJunitxml   = exporter(reportIs("junitxml"))(JUnitXmlExporting)
+    def exportFinalStats = exporter(reportIs("html", "junitxml") && !reportIs("console"))(finalExporter(handler))
+    def console          = exporter(!reportIs("html", "junitxml") || reportIs("console"))(new TestInterfaceReporter(handler, loggers))
+
+    Seq(console, exportHtml, exportJunitxml, exportFinalStats).flatten
   }
 }
+
+/**
+ * This reporter will just notify the test interface about test results for the end statistics
+ *
+ * It is only used if we are not using the Console exporter
+ */
+case class FinalResultsReporter(override val handler: EventHandler,
+                                override val loggers: Array[Logger]) extends TestInterfaceReporter(handler, loggers) {
+  override def export(implicit args: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => {
+    spec.execute.fragments foreach handleFragment(args)
+  }
+}
+
