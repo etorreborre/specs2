@@ -375,7 +375,7 @@ But Maps are also Partial Functions, so:
 
   * `beDefinedBy` checks if a PartialFunction is defined for a given value
     and returns another one
-    `partial` must beDefinedBy(1 -> true) 
+    `partial` must beDefinedBy(1 -> true)
 
 #### Xml matchers
 
@@ -539,7 +539,7 @@ You can specify your own parsers by:
    . `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
    . `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
 
-For example, specifying a Parser for numbers could look like this:   
+For example, specifying a Parser for numbers could look like this:
 
         import util.parsing.combinator.RegexParsers
         import NumberParsers.{number, error}
@@ -763,42 +763,42 @@ Mockito allows to specify stubbed values and to verify that some calls are expec
 ##### Mocks creation and settings
 
 Mockito offers the possibility to provide specific settings for the mock being created:
-  
+
  * its name
-   
+
         val m = mock[List[String]].as("list1")
-        
+
  * "smart" return values
-   
+
         val m = mock[List[String]].smart
 
  * specific return values
-   
+
         val m = mock[List[String]].defaultReturn(10)
 
  * specific answers
-        
+
         // a function InvocationOnMock => V is used in place of the org.mockito.stubbing.Answer type
 		// for better conciseness
-        val helloObject = (p1: InvocationOnMock) => "hello "+p1.toString 
+        val helloObject = (p1: InvocationOnMock) => "hello "+p1.toString
         val m = mock[List[String]].defaultAnswer(helloObject)
 
- * extra interfaces       
- 
+ * extra interfaces
+
         val m = mock[List[String]].extraInterface[Cloneable]
         val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
 
 Now, if you want to combine several of those settings together you need to call the `settings` method:
-  
-      val m = mock[List[String]].settings(name = "list1", 
-                                          defaultReturn = 10, 
+
+      val m = mock[List[String]].settings(name = "list1",
+                                          defaultReturn = 10,
                                           extraInterfaces = classesOf[Cloneable, Serializable]))
       // or
-      val m = mock[List[String]].settings(smart = true, 
+      val m = mock[List[String]].settings(smart = true,
                                           extraInterface = classeOf[Cloneable]))
 
 Finally, in case the Mockito library gets new settings, you can declare the following:
-	
+
       val settings = org.mockito.Mockito.withSettings
       val m = mock[List[String]](settings)
 
@@ -1046,7 +1046,7 @@ In specs2, those 2 methods are defined by the `org.specs2.matcher.ThrownMessages
              s)
     }
   }
-  
+
   import org.specs2.mock._
   class MockitoSpecification extends Specification { def is =
 
@@ -1075,7 +1075,7 @@ In specs2, those 2 methods are defined by the `org.specs2.matcher.ThrownMessages
      "matchers"                                ! c().e3 ^
                                                end
      import org.mockito.Matchers._
-     
+
      case class c() extends Mockito {
        val m = mock[java.util.List[String]]
        def e1 = {

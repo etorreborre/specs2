@@ -23,12 +23,12 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   def printText(message: String)(implicit args: Arguments)                         = printLines(args.textColor(message))
   def printStats(message: String)(implicit args: Arguments)                        = printLines(args.statsColor(message))
   def status(result: Result)(implicit args: Arguments): String                     = result.coloredStatus(args) + " "
-  
+
   /**
    * print some text, splitting it on several lines
    */
   def printMessage(message: String)(implicit args: Arguments) = printLines(args.textColor(message))
-  
+
   def printLines(message: String)(implicit args: Arguments) = {
     val splitted = message.split("\n")
     if (splitted.size > 1) splitted.foreach(m => printLine(m))
@@ -37,7 +37,7 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   /**
    * print one line
    */
-  def printLine(message: String)(implicit args: Arguments) = 
+  def printLine(message: String)(implicit args: Arguments) =
     println((" "*args.offset) + message)
-  
+
 }

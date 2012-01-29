@@ -71,7 +71,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
     "the exceptions that happen on generation"                                                                          ! config().e4^
                                                                                                                         end
 
-  
+
   val success100tries = Success("The property passed without any counter-example after 100 tries")
 
   def execute[R <% Result](r: =>R): Result  = ("example" ! r).execute

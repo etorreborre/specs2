@@ -17,7 +17,7 @@ class FormsSpec extends Specification with FormsBuilder { def is =
     "subset(l1 + l2, l1) == l1 - ok + l2 - ko"                                            ! subset.e6^
                                                                                           p^
   "The subsequence method allows to check if a list of forms is a subsequence "           +
-  "of another one"                                                                        ^ 
+  "of another one"                                                                        ^
     "subsequence(ab + cd, ab) == abcd - ok"                                               ! subsequence.e1^
     "subsequence(bac + d, abc) == b - ko + a - ok + c - ko + d - ok"                      ! subsequence.e2^
     "subsequence(cd, ab) == cd - ok + ab - ko"                                            ! subsequence.e3^
@@ -38,15 +38,15 @@ class FormsSpec extends Specification with FormsBuilder { def is =
                                                                                           end
 
   def sameExecution(f1: Seq[Form], f2: Seq[Form]) = f1.map(_.execute.message) must_== f2.map(_.execute.message)
-  
+
   object subset {
     val set1 = List(Form.tr("a"), Form.tr("b"))
     val set2 = List(Form.tr("c"), Form.tr("d"))
-    
+
     def e1 = FormDiffs.subset(set1 ++ set2, set2) must_== set1 ++ ok(set2)
     def e2 = FormDiffs.subset(set1, set2) must_== set1 ++ ko(set2)
     def e3 = FormDiffs.subset(set1, set1 ++ set2) must_== ok(set1) ++ ko(set2)
-    
+
     def e4 = FormDiffs.subset(set1 ++ set2, set1).forall(_.isSuccess) must beTrue
     def e5 = FormDiffs.subset(set1, set2).forall(_.isSuccess)  must_== false
     def e6 = FormDiffs.subset(set1, set1 ++ set2).exists(_.isSuccess) &&
@@ -65,11 +65,11 @@ class FormsSpec extends Specification with FormsBuilder { def is =
   val d = List(Form.tr("d"))
 
   object subsequence {
-    
+
     def e1 = sameExecution(FormDiffs.subsequence(ab ++ cd, ab), ok(ab ++ cd))
     def e2 = sameExecution(FormDiffs.subsequence(bac ++ d, abc), ko(b) ++ ok(a) ++ ko(c) ++ ok(d))
     def e3 = sameExecution(FormDiffs.subsequence(cd, ab), cd ++ ko(ab))
-                         
+
     def e4 = sameExecution(FormDiffs.subsequence(ab, ab ++ cd), ok(ab) ++ ko(cd))
     def e5 = sameExecution(FormDiffs.subsequence(ab, ba ++ cd), ko(a) ++ ok(b) ++ ko(cd))
   }
@@ -77,15 +77,15 @@ class FormsSpec extends Specification with FormsBuilder { def is =
   object set {
     val set1 = List(Form.tr("a"), Form.tr("b"))
     val set2 = List(Form.tr("c"), Form.tr("d"))
-    
+
     def e1 = sameExecution(FormDiffs.set(set1, set1 ++ set2), ok(set1) ++ ko(set2))
     def e2 = sameExecution(FormDiffs.set(set1 ++ set2, set2), ko(set1) ++ ok(set2))
     def e3 = sameExecution(FormDiffs.set(set1, set2), ko(set1 ++ set2))
     def e4 = sameExecution(FormDiffs.set(set1, set1), ok(set1))
   }
-  
+
   object sequence {
-    
+
     def e1 = sameExecution(FormDiffs.sequence(ab, ab ++ cd), ok(ab) ++ ko(cd))
     def e2 = sameExecution(FormDiffs.sequence(ab, ba), ko(a) ++ ok(b))
     def e3 = sameExecution(FormDiffs.sequence(ab, ba ++ c), ko(a) ++ ok(b) ++ ko(c))

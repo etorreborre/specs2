@@ -16,11 +16,11 @@ class ContextSpec extends Specification with FragmentExecution with ResultMatche
      * inserting some data
      * executing the example
      * closing the connection after each example
-     
+
   It may also be very convenient to have each example executed "inside" a specific context, like a  web application
   session. Finally, some setups or cleanups are very expensive so one might want to add arbitrary actions that will
   be executed only once, at the beginning of the specification or the end.
-  
+
   All of this can be achieved in specs2 by using case classes which extend the following traits:
 
      * Before
@@ -142,7 +142,7 @@ class ContextSpec extends Specification with FragmentExecution with ResultMatche
     def e12 = executing(firstThenEx1).prints("first", "e1")
     def e13 = executeBodies(silentFirstThenEx1).map(_.message) must_== List("success")
     def e14 = executeBodies(failingFirstThenEx1).map(_.message) must_== List("error", "success")
- 
+
   }
   case class compose() extends FragmentsExecution {
     def e1 = executing(ex1BeforeComposeBefore2).prints("before2", "before", "e1")
@@ -201,7 +201,7 @@ class ContextSpec extends Specification with FragmentExecution with ResultMatche
     case class Executed(r: Seq[Result]) {
       def prints(ms: String*): Result = {
         messages must_== List(ms:_*)
-      }  
+      }
     }
   }
 }
@@ -210,28 +210,28 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ok(name: String) = { println(name); success }
   def ok1 = ok("e1")
   def ok2 = ok("e2")
-  
-  def ex1 = "ex1" ! ok1  
-  def ex1Before = "ex1" ! before(ok1) 
-  def ex1BeforeComposeBefore2 = "ex1" ! (before compose before2)(ok1)  
-  def ex1BeforeThenBefore2 = "ex1" ! (before then before2)(ok1)  
-  def ex1AfterComposeAfter2 = "ex1" ! (after compose after2)(ok1)  
-  def ex1AfterThenAfter2 = "ex1" ! (after then after2)(ok1)  
-  def ex1BeforeAfterComposeBefore2After2 = "ex1" ! (beforeAfter compose before2After2)(ok1)  
-  def ex1BeforeAfterThenBefore2After2 = "ex1" ! (beforeAfter then before2After2)(ok1)  
-  def ex1AroundComposeAround2 = "ex1" ! (around compose around2)(ok1)  
-  def ex1AroundThenAround2 = "ex1" ! (around then around2)(ok1)  
-  def ex1BeforeAfterAroundComposeBefore2After2Around2 = "ex1" ! (beforeAfterAround compose before2After2Around2)(ok1)  
-  def ex1BeforeAfterAroundThenBefore2After2Around2 = "ex1" ! (beforeAfterAround then before2After2Around2)(ok1)  
 
-  def ex1_beforeFail = "ex1" ! beforeWithError(ok1) 
+  def ex1 = "ex1" ! ok1
+  def ex1Before = "ex1" ! before(ok1)
+  def ex1BeforeComposeBefore2 = "ex1" ! (before compose before2)(ok1)
+  def ex1BeforeThenBefore2 = "ex1" ! (before then before2)(ok1)
+  def ex1AfterComposeAfter2 = "ex1" ! (after compose after2)(ok1)
+  def ex1AfterThenAfter2 = "ex1" ! (after then after2)(ok1)
+  def ex1BeforeAfterComposeBefore2After2 = "ex1" ! (beforeAfter compose before2After2)(ok1)
+  def ex1BeforeAfterThenBefore2After2 = "ex1" ! (beforeAfter then before2After2)(ok1)
+  def ex1AroundComposeAround2 = "ex1" ! (around compose around2)(ok1)
+  def ex1AroundThenAround2 = "ex1" ! (around then around2)(ok1)
+  def ex1BeforeAfterAroundComposeBefore2After2Around2 = "ex1" ! (beforeAfterAround compose before2After2Around2)(ok1)
+  def ex1BeforeAfterAroundThenBefore2After2Around2 = "ex1" ! (beforeAfterAround then before2After2Around2)(ok1)
+
+  def ex1_beforeFail = "ex1" ! beforeWithError(ok1)
   def ex1_beforeSkipped = "ex1" ! beforeWithSkipped(ok1)
   def ex1_beforeMatchFailed = "ex1" ! beforeWithMatchFailed(ok1)
   def ex1_beforeSkippedThrown = "ex1" ! beforeWithSkippedThrown(ok1)
   def ex1_beforeMatchFailedThrown = "ex1" ! beforeWithMatchFailedThrown(ok1)
   def ex1_2Before = ex1Before ^ "ex2" ! before(ok2)
 
-  def ex1After = "ex1" ! after(ok1) 
+  def ex1After = "ex1" ! after(ok1)
   def ex1FailAfter = "ex1" ! after(failure)
   def ex1_afterFail = "ex1" ! afterWithError(ok1)
   def ex1_2After = ex1After ^ "ex2" ! after(ok2)
@@ -258,13 +258,13 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
 
   def ex1ImplicitAfter = "ex1" ! ok1.after(println("after"))
 
-  def ex1Around = "ex1" ! around(ok1) 
+  def ex1Around = "ex1" ! around(ok1)
   def ex1Outside = "ex1" ! outside((s:String) => ok1)
   def ex1OutsideFail = "ex1" ! outsideWithError((s:String) => ok1)
   def ex1AroundOutside = "ex1" ! aroundOutside((s:String) => ok1)
   def ex1BeforeAfter = "ex1" ! beforeAfter(ok1)
   def ex1BeforeAfterAround = "ex1" ! beforeAfterAround(ok1)
-  
+
   def firstThenEx1 = Step(println("first")) ^ ex1
   def silentFirstThenEx1 = Step("first") ^ ex1
   def failingFirstThenEx1 = Step { error("error"); 1 } ^ ex1
@@ -304,10 +304,10 @@ trait ContextsForFragments extends MockOutput {
 	  def after = error("error")
   }
   object around extends Around {
-	  def around[T <% Result](a: =>T) = { println("around"); a } 
+	  def around[T <% Result](a: =>T) = { println("around"); a }
   }
   object around2 extends Around {
-    def around[T <% Result](a: =>T) = { println("around2"); a } 
+    def around[T <% Result](a: =>T) = { println("around2"); a }
   }
   object outside extends Outside[String] {
 	  def outside = { println("outside"); "string" }
@@ -333,11 +333,11 @@ trait ContextsForFragments extends MockOutput {
   object beforeAfterAround extends BeforeAfterAround {
 	  def before = println("before")
 	  def after = println("after")
-	  def around[T <% Result](a: =>T) = { println("around"); a } 
+	  def around[T <% Result](a: =>T) = { println("around"); a }
   }
   object before2After2Around2 extends BeforeAfterAround {
     def before = println("before2")
     def after = println("after2")
-    def around[T <% Result](a: =>T) = { println("around2"); a } 
+    def around[T <% Result](a: =>T) = { println("around2"); a }
   }
 }

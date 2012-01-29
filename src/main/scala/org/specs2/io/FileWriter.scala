@@ -53,8 +53,8 @@ trait FileWriter {
    * creates a file for a given path. Create the parent directory if necessary.
    */
   def createFile(path: String) = {
-    if (new File(path).getParentFile != null && !new File(path).getParentFile.exists) 
-      mkdirs(new File(path).getParent) 
+    if (new File(path).getParentFile != null && !new File(path).getParentFile.exists)
+      mkdirs(new File(path).getParent)
     if (!exists(path))
       new File(path).createNewFile
   }

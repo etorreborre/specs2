@@ -15,7 +15,7 @@ trait ShowDescription {
   implicit object show extends Show[Description] {
     def show(d: Description) = d.getDisplayName.toList
   }
-  implicit def toTree(desc: Description): Tree[Description] = 
+  implicit def toTree(desc: Description): Tree[Description] =
 	  desc.unfoldTree((d: Description) => (d, () => d.getChildren.toStream))
 }
 private[specs2]

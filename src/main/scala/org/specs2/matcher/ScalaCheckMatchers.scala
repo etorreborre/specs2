@@ -53,7 +53,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
   def check[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7], a8: Arbitrary[T8], s8: Shrink[T8]): Prop = check8(result)
   implicit def check8[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7], a8: Arbitrary[T8], s8: Shrink[T8]): Prop =
     Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => toProp(result(t1, t2, t3, t4, t5, t6, t7, t8)))
-  
+
   /** execute a PartialFunction as a ScalaCheck property */
   def check[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = checkPartial(f)
   implicit def checkPartial[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop =
@@ -69,7 +69,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
     def set(p: (Symbol, Int)*) = check(prop)(outer.set(p:_*))
     def display(p: (Symbol, Int)*) = check(prop)(outer.display(p:_*))
   }
-  
+
   /**
    * checks if the property is true for each generated value, and with the specified
    * generation parameters <code>p</code>. <code>p</code> is transformed into a scalacheck parameters
@@ -147,7 +147,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       args.map(_.arg).mkString("[", ", ", "]")
   }
   private [matcher] def failedLabels(labels: Set[String]) = {
-    if (labels.isEmpty)  ""  
+    if (labels.isEmpty)  ""
     else labels.mkString("\n", ", ", "\n")
   }
 }
@@ -272,7 +272,7 @@ trait ScalaCheckParameters {
     */
    implicit def defaultParameters = new Parameters(setParams(Nil))
 
-   /** default parameters to display pretty messages */		   
+   /** default parameters to display pretty messages */
    val defaultPrettyParams = Pretty.defaultParams
    /**
     * Default values for ScalaCheck parameters

@@ -8,18 +8,18 @@ import org.mockito.stubbing.{ OngoingStubbing, Stubber }
 
 /**
  * This trait provides functionalities to declare stub values on method calls.
- * 
+ *
  * Usage:<code>
- * 
+ *
  * mockedList.get(0) returns "one"
  * mockedList.get(0) returns ("one", "two")
  * mockedList.get(0) throws new Exception("unexpected")
  * mockedList.get(0) answers ( i => "value " + i.toString )
- * 
+ *
  * </code>
- * 
+ *
  * It is also possible to chain stubs like this: <code>
- * 
+ *
  * mockedList.get(0) returns "one" thenReturns "two"
  * mockedList.get(0) returns "one" thenThrows new Exception("unexpected now")
  * </code>
@@ -27,17 +27,17 @@ import org.mockito.stubbing.{ OngoingStubbing, Stubber }
 trait MockitoStubs extends MocksCreation {
   /** delegate to MockitoMocker doAnswer with a MockAnswer object using the function f. */
   def doAnswer[T](f: Any => T) = mocker.doAnswer(new MockAnswer(f))
-  
+
   /** @return an object supporting the stub methods. */
   implicit def theStubbed[T](c: =>T) = new Stubbed(c)
 
-  /** 
+  /**
    * This class provide stub methods like returns, throws and answers.
    * Internally it calls Mockito.when(mock call).thenReturn(returnValue)
    */
   class Stubbed [T](c: =>T) {
     def returns(t: T, t2: T*): OngoingStubbing[T] = {
-      if (t2.isEmpty) 
+      if (t2.isEmpty)
         mocker.when(c).thenReturn(t)
       else
         t2.foldLeft (mocker.when(c).thenReturn(t)) { (res, cur) => res.thenReturn(cur) }
@@ -67,23 +67,23 @@ trait MockitoStubs extends MocksCreation {
   /** allows to use a hamcrest matchers to match parameters. */
   def anArgThat[T, U <: T](m: org.hamcrest.Matcher[U]): T = org.mockito.Matchers.argThat(m)
 
-  /** 
+  /**
    * This class is an implementation of the Answer interface allowing to pass functions as an answer.
-   * 
+   *
    * It does a bit of work for the client:
-   * 
+   *
    * // if the method has one parameter and the function also, the parameter is passed
    * mock.get(0) answers ( i => i.toString )
-   * 
+   *
    * // if the method has one parameter and the function has two, the mock is passed as the second argument
-   * mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString } 
-   * 
+   * mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString }
+   *
    * Similarly a mocked method with no parameters can use a function with one parameter. In that case, the mock will be passed
-   * mock.size answers { mock => mock.hashCode } 
-   * 
+   * mock.size answers { mock => mock.hashCode }
+   *
    * In any other cases, if f is a function of 1 parameter, the array of the method parameters will be passed and if the function has
    * 2 parameters, the second one will be the mock.
-   * 
+   *
    */
   class MockAnswer[T](function: Any => T) extends Answer[T] {
      def answer(invocation: InvocationOnMock): T = {
@@ -109,6 +109,6 @@ trait MockitoStubs extends MocksCreation {
            case f2: Function2[_, _, _] => return f2(args, mock)
          }
        }
-     } 
+     }
   }
 }

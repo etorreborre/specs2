@@ -9,7 +9,7 @@ import main.Arguments
 import execute._
 import specification._
 
-class TextPrinterSpec extends Specification { def is = 
+class TextPrinterSpec extends Specification { def is =
                                                                                                                         """
   The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
   and outputs them using a `TextResultOutput`.
@@ -108,16 +108,16 @@ class TextPrinterSpec extends Specification { def is =
   val bigString1 = "abcdefghijklmnopqrstuvwxyz"
   val bigString2 = "abcdefghijklnmopqrstuvwxyz"
   val bigFail    = "with diffs" ! { bigString1 must_== bigString2 }
-  
+
   case class prez() {
     val noindent = args(noindent = true)
-    
-    def e1 = print(t1 ^ ex1 ^ ex2) must 
+
+    def e1 = print(t1 ^ ex1 ^ ex2) must
              contain("t1",
                      "+ e1",
                      "+ e2")
-    
-    def e2 = print(noindent ^ t1 ^ "  e1"!success ^ " e2"! success) must 
+
+    def e2 = print(noindent ^ t1 ^ "  e1"!success ^ " e2"! success) must
              contain("t1",
                      "+ e1",
                      "+ e2")
@@ -156,7 +156,7 @@ class TextPrinterSpec extends Specification { def is =
   case class color() {
     import text.AnsiColors._
     import text.Trim._
-    
+
     def e1 = printWithColors(t1) must containMatch(white.remove("\033["))
     def e2 = printWithColors(ex1) must containMatch(green.remove("\033["))
     def e3 = printWithColors(fail3) must containMatch(yellow.remove("\033["))
@@ -195,7 +195,7 @@ class TextPrinterSpec extends Specification { def is =
   }
   case class planargs() {
     val plan: Arguments = args(plan = true)
-    def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("* e1") and not containMatch("\\+ e1") 
+    def e1 = print(plan ^ t1 ^ ex1 ^ fail3) must contain("* e1") and not containMatch("\\+ e1")
   }
   case class skipAllargs() {
     val sk: Arguments = args(skipAll = true)
@@ -230,15 +230,15 @@ class TextPrinterSpec extends Specification { def is =
   }
 
   case class status() {
-    def e1 = print(t1 ^ ex1) must containMatch("^\\s*t1") 
-    def e2 = print(t1 ^ ex1) must contain("+ e1") 
-    def e3 = print(t1 ^ fail3) must contain("x fail3") 
-    def e4 = print(t1 ^ error4) must contain("! error4") 
-    def e5 = print(t1 ^ skipped5) must contain("o skip it") 
-    def e6 = print(t1 ^ pending6) must containMatch("\\* todo") 
+    def e1 = print(t1 ^ ex1) must containMatch("^\\s*t1")
+    def e2 = print(t1 ^ ex1) must contain("+ e1")
+    def e3 = print(t1 ^ fail3) must contain("x fail3")
+    def e4 = print(t1 ^ error4) must contain("! error4")
+    def e5 = print(t1 ^ skipped5) must contain("o skip it")
+    def e6 = print(t1 ^ pending6) must containMatch("\\* todo")
     def e7 = print(t1 ^ "e1\nexample1" ! success) must contain(
         "+ e1",
-        "  example1") 
+        "  example1")
     def e8 = print(args.report(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
   }
 

@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-/** 
+/**
  * This trait describes something which has a stackTrace with:
  *
  *  - a list of stacktrace element

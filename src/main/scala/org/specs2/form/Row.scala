@@ -8,19 +8,19 @@ import StandardResults._
 
 /**
  * A Row is a non-empty list of Cells
- * 
+ *
  * A Row can be executed by executing each Cell and collecting the results.
  */
 case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
   /** @return all the cells */
   def cells = cellList.list.toSeq
-  
+
   /** @return a Row where every cell is executed with a Success */
   def setSuccess = new Row(cellList.map(_.setSuccess))
   /** @return a Row where every cell is executed with a Failure */
   def setFailure = new Row(cellList.map(_.setFailure))
-  
-  /** 
+
+  /**
    * execute all cells
    * @return a logical `and` on all results
    */

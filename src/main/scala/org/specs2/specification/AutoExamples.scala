@@ -15,13 +15,13 @@ import matcher._
  *     "1 example"     ^
  *     { 1 must_== 1 } ^
  *                     end
- *                 
+ *
  * will be simply reported as
  *     1 example
  *     + 1 must_== 1
- *                 
+ *
  * -In some cases, like the case where there is no text beginning the specification, the example code must fit on one line only*
- * 
+ *
  * The source dir is assumed to be "src/test/scala/" by default but this can be modified
  * by setting the "specs2.srcDir" System property
  *
@@ -29,7 +29,7 @@ import matcher._
  *  - boolean expressions
  *  - match results
  *  - results
- * 
+ *
  */
 private[specs2]
 trait AutoExamples {

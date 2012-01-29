@@ -12,9 +12,9 @@ import StandardFragments._
 /**
  * This class computes the 'level' of a given fragment. It is used to indent Fragments in
  * a ConsoleReporter and to create a tree or Descriptions in the JUnit runner
- * 
+ *
  * It does so by considering that:
- * 
+ *
  * - when a Text fragment follows a Text fragment we're going up one level
  *   (so the second text fragment can be indented relatively to the first one)
  * - when an Example fragment follows a Text fragment we're going up one level
@@ -24,7 +24,7 @@ import StandardFragments._
  * - when there is a end, we reset the levels to zero
  * - when there is a tab we indent everything following the tab (1 level is the default)
  * - when there is a backtab we unindent everything following the tab (1 level is the default)
- * 
+ *
  */
 private[specs2]
 case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
@@ -62,8 +62,8 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
 
   /** @return the concatenation of 2 levels */
   def add(other: Levels[T]) = Levels(this.blocks ++ other.blocks)
-  /** 
-   * @return reset the levels of all blocks by incrementing or decrementing the level 
+  /**
+   * @return reset the levels of all blocks by incrementing or decrementing the level
    *         value, until a Reset block is met
    */
   def resetLevel(f: Int => Int) = {
@@ -74,7 +74,7 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
   }
 
   /** =
-   * @return reset all the levels of all blocks by incrementing or decrementing the level 
+   * @return reset all the levels of all blocks by incrementing or decrementing the level
    *         value
    */
   private def mapLevel(f: (Block[T], Int) => (Block[T], Int)) = Levels(blocks.map(f.tupled))
@@ -108,9 +108,9 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
   def toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, parentsPath: Seq[T], i: Int) => Some(t))
   /**
    * WARNING this method assumes that the Levels are not empty!!
-   * 
+   *
    * @return a Tree[S] based on the level of each block, mapping each node to value of type
-   *         S and possibly skipping nodes, passing the numeric label of the current node. 
+   *         S and possibly skipping nodes, passing the numeric label of the current node.
    * @see JUnitDescriptions
    */
   def toTreeLoc[S](m: (T, Seq[S], Int) => Option[S]): TreeLoc[S] = {
@@ -124,7 +124,7 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
         case None    => treeLoc
       }
     }
-  } 
+  }
   private val isReset = (b: (Block[T], Int)) => b._1 match {
     case BlockReset(t) => true
     case other         => false
@@ -182,20 +182,20 @@ case object Levels {
       case t @ ExecutedSpecEnd(_,_,_)        => BlockNeutral(t)
       case t @ ExecutedEnd( _)               => BlockReset(t)
       case t                                 => BlockNeutral(t)
-    } 
+    }
     implicit override def unit(f: ExecutedFragment): Levels[ExecutedFragment] = Levels[ExecutedFragment](toBlock(f))
-    
+
   }
   implicit object FragmentLevelsReducer extends Reducer[Fragment, Levels[Fragment]] {
     implicit def toBlock(f: Fragment): Block[Fragment] = f match {
-      case t @ Example(_, _)         => BlockTerminal(t)     
+      case t @ Example(_, _)         => BlockTerminal(t)
       case t @ Tab(n)                => BlockIndent(t, n)
-      case t @ Backtab(n)            => BlockUnindent(t, n)   
-      case t @ Text(_)               => BlockIndent(t)       
+      case t @ Backtab(n)            => BlockUnindent(t, n)
+      case t @ Text(_)               => BlockIndent(t)
       case t @ SpecStart(_,_,_,_)    => BlockNeutral(t)
       case t @ SpecEnd(_)            => BlockNeutral(t)
-      case t @ End()                 => BlockReset(t)        
-      case t                         => BlockNeutral(t)        
+      case t @ End()                 => BlockReset(t)
+      case t                         => BlockNeutral(t)
     }
     implicit override def unit(f: Fragment): Levels[Fragment] = Levels(toBlock(f))
   }

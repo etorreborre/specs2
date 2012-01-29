@@ -12,7 +12,7 @@
    - test/publish the jars
    - publish the posterous notes
    - tag the released version
-   
+
 8. push the new version (check "include tags")
 9. create a new specs2 branch for the next SNAPSHOT
 

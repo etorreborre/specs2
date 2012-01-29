@@ -20,15 +20,15 @@ import DefaultSelection._
 /**
  * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
  * to execute a specification as a JUnit suite.
- * 
+ *
  * The implementation is using a description Fold to fold the fragments into a tree
- * of Description objects and a Map relating each Description to a Fragment to execute. 
+ * of Description objects and a Map relating each Description to a Fragment to execute.
  *
  */
 class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
 
   private val executor = new FragmentExecution {}
-  
+
   /** specification to execute */
   protected lazy val specification = tryToCreateObject[SpecificationStructure](klass.getName).get
 
@@ -48,7 +48,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
   /** @return a Description for the TestSuite */
   def getDescription = desc
 
-  /** 
+  /**
    * run the suite by executing each fragment related to a description:
    * - execute all fragments (including Steps which are reported as steps)
    * - for each result, report the failure/error/skipped or pending message as a
@@ -72,10 +72,10 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
     val commandLineArgs = properties.getProperty("commandline").getOrElse("").split("\\s")
     val arguments = Arguments(commandLineArgs:_*) <| args
     def exportTo(name: String) = properties.isDefined(name) || commandLineArgs.contains(name)
-    
-    if (exportTo("console")) 
+
+    if (exportTo("console"))
       consoleExporter.export(arguments)(ExecutingSpecification.create(specification.content.specName, executed.map(_._2)))
-    if (exportTo("html")) 
+    if (exportTo("html"))
       htmlExporter.export(arguments)(ExecutingSpecification.create(specification.content.specName, executed.map(_._2)))
 
     executed
@@ -125,10 +125,10 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
 object JUnitRunner {
   def apply[T <: SpecificationStructure](implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure)
   def apply[T <: SpecificationStructure](s: T)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
-    override protected lazy val specification = s	  
+    override protected lazy val specification = s
   }
   def apply[T <: SpecificationStructure](fragments: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
-    override protected lazy val content = fragments	  
+    override protected lazy val content = fragments
   }
   def apply[T <: SpecificationStructure](f: Fragments, props: SystemProperties, console: TextExporting, html: HtmlExporting)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
       override protected lazy val specification = new Specification { def is = f }

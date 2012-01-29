@@ -8,7 +8,7 @@ import matcher._
 import scala.xml.NodeSeq
 
 /**
- * Utility methods to build Fields, Props and Forms and insert them in other Forms or 
+ * Utility methods to build Fields, Props and Forms and insert them in other Forms or
  * Fragments.
  */
 private[specs2]
@@ -49,7 +49,7 @@ trait FormsBuilder {
 
   /** @return a new Field with a label and several values */
   def field(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, value1, values:_*)
-  
+
   /** @return a new Prop with an actual value only */
   def prop[T](act: =>T) = new Prop[T, T](actual = Property(act))
 

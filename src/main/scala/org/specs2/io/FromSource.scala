@@ -10,17 +10,17 @@ import control.TraceLocation
 
 /**
  * Get source code from the current point of execution
- * 
+ *
  * There are constants in this trait designed to grab exactly the proper stacktraces, corresponding to the code in the specification
  *
  * It must be noted that this only work if the code being executed is in a file which has the same name as the class containing the code.
- * 
+ *
  * The source dir is assumed to be "src/test/scala/" by default but this can be modified by setting the "specs2.srcTestDir" System property
  *
  */
 private[specs2]
 trait FromSource {
-  
+
   private[specs2] lazy val srcDir: String = SystemProperties.getOrElse("srcTestDir", "src/test/scala").dirPath
 
   /**

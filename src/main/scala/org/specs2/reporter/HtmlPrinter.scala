@@ -22,9 +22,9 @@ import java.io.Writer
 
 /**
  * The Html printer is used to create an Html report of an executed specification.
- * 
+ *
  * To do this, it uses a reducer to prepare print blocks with:
- * 
+ *
  * - the text to print
  * - the indentation level
  * - the statistics
@@ -61,8 +61,8 @@ trait HtmlPrinter {
 
   /**
    * @return an HtmlReportOutput object containing all the html corresponding to the
-   *         html lines to print  
-   */  
+   *         html lines to print
+   */
   def printHtml(output: =>HtmlReportOutput, file: HtmlLinesFile, toc: NodeSeq): NodeSeq = file.print(output, toc).xml
 
   /**
@@ -94,10 +94,10 @@ trait HtmlPrinter {
     (prints zip stats.stats zip levels.levels zip args.nestedArguments) map {
       case (((t, s), l), a) => t.set(s, l, a)
     }
-  }  
-  
-  private  val reducer = 
-    HtmlReducer &&& 
+  }
+
+  private  val reducer =
+    HtmlReducer &&&
     StatsReducer &&&
     LevelsReducer  &&&
     SpecsArgumentsReducer
@@ -105,7 +105,7 @@ trait HtmlPrinter {
   implicit object HtmlReducer extends Reducer[ExecutedFragment, Seq[HtmlLine]] {
     implicit override def unit(fragment: ExecutedFragment) = Seq(print(fragment))
     /** print an ExecutedFragment and its associated statistics */
-    def print(fragment: ExecutedFragment) = fragment match { 
+    def print(fragment: ExecutedFragment) = fragment match {
       case start @ ExecutedSpecStart(_,_,_)       => HtmlSpecStart(start)
       case result @ ExecutedResult(_,_,_,_,_)     => HtmlResult(result)
       case text @ ExecutedText(s, _)              => HtmlText(text)

@@ -43,7 +43,7 @@ trait MockFileSystem extends FileSystem {
   /** adds a new child to a given file */
   def addChild(parent: String, child: String): Unit = {
     children.get(parent) match {
-      case Some(l) => () 
+      case Some(l) => ()
       case None => children.put(parent, new ListBuffer)
     }
     children.get(parent).get += child
@@ -110,9 +110,9 @@ trait MockFileSystem extends FileSystem {
     writableFiles = Nil
     this
   }
-  
+
   override def exists(path: String) = files.contains(path)
-  
+
   override def inputStream(filePath: String) = new java.io.InputStream {
     val reader = new java.io.StringReader(readFile(filePath))
     def read() = reader.read()

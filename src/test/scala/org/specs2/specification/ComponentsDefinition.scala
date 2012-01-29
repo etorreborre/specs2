@@ -6,22 +6,22 @@ import FormsBuilder._
 trait ComponentsDefinitions {
   case class Address(street: String, number: Int) {
     def form = fill(street, number)
-    def fill(s: String, n: Int) = 
+    def fill(s: String, n: Int) =
       Form("Address").
           tr(prop("street", s)(street)).
           tr(prop("number", n)(number))
   }
   case class Customer(name: String, address: Address) {
-    def form = fill(name, address.form) 
+    def form = fill(name, address.form)
     def fill(na: String, a: Form) =
       Form("Customer").
           tr(prop("name", na)(name)).
           tr(a)
-         
+
   }
   case class initials(form: Form = Form.tr("First name", "Last name", "Initials")) {
     def computeInitials(f: String, l: String) = f(0).toUpper+"."+l(0).toUpper+"."
-    
+
     def tr(firstName: String, lastName: String, expected: String) = initials {
       form.tr(firstName, lastName, prop(computeInitials(firstName, lastName))(expected))
     }

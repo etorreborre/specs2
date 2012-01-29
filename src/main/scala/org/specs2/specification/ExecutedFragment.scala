@@ -83,7 +83,7 @@ case class ExecutedTab(n: Int = 1, location: Location = new Location) extends Ex
 case class ExecutedBacktab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment
 
 case class ExecutedSpecStart(start: SpecStart, location: Location = new Location, stats: Stats = Stats()) extends ExecutedFragment {
-  
+
   def isSeeOnlyLink = start.isSeeOnlyLink
   def isIncludeLink = start.isIncludeLink
   def isLink        = start.isLink
@@ -101,7 +101,7 @@ case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stat
   def specName = end.specName
   def name = end.name
   def title = end.title
-  
+
   override def toString = "ExecutedSpecEnd("+name+")"
 }
 

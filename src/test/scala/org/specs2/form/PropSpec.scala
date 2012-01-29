@@ -49,7 +49,7 @@ the actual value is equal to the expected value.
   val expectedOnly = new Prop("", Property(), Property(18))
   val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
   val withMatcher = Prop("name", "eric", contain(_:String))
-  
+
   object creation {
     def e1 = noValues.label must_== "name"
     def e2 = actualOnly.actual.get must_== 18
@@ -59,7 +59,7 @@ the actual value is equal to the expected value.
     def e6 = Prop("", 1, be_>(0).mute).execute must_== Success("")
     def e7 = Prop("", 1, 2, be_>(0).mute).execute must_== Success("")
   }
-                                              
+
   object display {
     def e1 = new Prop("name", expected = Property("eric")).toString must_== "name: eric (actual: _)"
     def e2 = new Prop("name", actual = Property("eric")).toString must_== "name: _ (actual: eric)"
@@ -80,4 +80,4 @@ the actual value is equal to the expected value.
     def e9 = withMatcher("e").execute.isSuccess must beTrue
     def e10 = withMatcher("a").execute.message must_== "'eric' doesn't contain 'a'"
   }
-}    
+}

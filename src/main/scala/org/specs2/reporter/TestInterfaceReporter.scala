@@ -11,7 +11,7 @@ import specification._
 
 /**
  * Reporter for the test interface defined for sbt
- * 
+ *
  * It prints out the result to the output defined by the sbt loggers
  * and publishes events to sbt event handlers
  */

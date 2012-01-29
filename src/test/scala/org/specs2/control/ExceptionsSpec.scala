@@ -48,7 +48,7 @@ The Exceptions trait provide functional ways to catch exceptions and deal with t
     "the result if the expression doesn't throw an exception"                                                           ! catchAllOr1^
     "a default value if the expression throws an exception"                                                             ! catchAllOr2^
                                                                                                                         end
-    
+
   def boom = { error("boom"); "a" }
 
   def tryo1 = tryo("a") must_== Some("a")

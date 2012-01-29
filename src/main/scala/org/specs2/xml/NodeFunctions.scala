@@ -38,7 +38,7 @@ trait NodeFunctions extends control.Debug {
     def sameAs(nodes1: NodeSeq, nodes2: NodeSeq) = nodes1.toList.sameElementsAs(nodes2.toSeq, isEqualIgnoringSpace _)
     isEqualIgnoringSpace(node, n, sameAs(_, _))
   }
-  
+
   /**
    * @return true if two Nodes are equal without considering spaces, taking a function
    *               to apply recursively to compare children nodes
@@ -46,14 +46,14 @@ trait NodeFunctions extends control.Debug {
   def isEqualIgnoringSpace(node: NodeSeq, n: NodeSeq, iterableComparison: Function2[NodeSeq, NodeSeq, Boolean]): Boolean = {
     def isAtom: Function[Node, Boolean] = { case (n: Atom[_]) => true; case _ => false }
     def compareChildren(n1: List[Node], n2: List[Node]) = {
-      (n1.takeWhile(isAtom), n2) match { 
+      (n1.takeWhile(isAtom), n2) match {
          case (Nil, _) => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
          case (atoms, (n2: Text) :: rest2) => {
            atoms.mkString.trim == n2.toString.trim &&
            iterableComparison(NodeSeq.fromSeq(n1.dropWhile(isAtom)), NodeSeq.fromSeq(rest2))
          }
          case _ => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
-      } 
+      }
     }
     (node, n) match {
       case (null, other)             => other == null
@@ -63,7 +63,7 @@ trait NodeFunctions extends control.Debug {
       case (n1: Atom[_], n2:Text)    => n1.text.trim == n2.text.trim
       case (n1: Atom[_], n2:Atom[_]) => n1.text.trim == n2.text.trim
       case (n1: Node, n2:Node) => (isSpaceNode(n1) && isSpaceNode(n2)) ||
-                                  n1.prefix == n2.prefix && 
+                                  n1.prefix == n2.prefix &&
                                   attributesSet(n1) == attributesSet(n2) &&
                                   n1.label == n2.label &&
                                   compareChildren(n1.child.toList.filter(!isSpaceNode(_)), n2.child.toList.filter(!isSpaceNode(_)))
@@ -73,39 +73,39 @@ trait NodeFunctions extends control.Debug {
 
   /** @return the set of attributes as a set of key/value */
   private def attributesSet(n: Node): Set[(String, String)] = n.attributes.toSet.map((n:MetaData) => (n.key, n.value.mkString(",")))
-  
+
   /**
    * @return true if the node found with a label also satisfies the attributes and/or values requirement
    */
   def matchNode(node: Node, other: Node, attributes: List[String] = Nil, attributeValues: Map[String, String] = Map(), exactMatch: Boolean = false): Boolean = {
-    def attributesNamesExactMatch(m: MetaData) =  
+    def attributesNamesExactMatch(m: MetaData) =
       m.map((a: MetaData) => a.key).toList.intersect(attributes) == attributes
-      
+
     def attributesNamesPartialMatch(m: MetaData) = {
       val attributesNames = m.map((a: MetaData) => a.key).toList
       attributes.forall(attributesNames.contains(_))
-    } 
+    }
 
-    def attributesValuesNamesExactMatch(m: MetaData) =  
+    def attributesValuesNamesExactMatch(m: MetaData) =
       Map(m.map((a: MetaData) => a.key -> a.value.toString).toList: _*) == attributeValues
-      
+
     def attributesValuesNamesPartialMatch(m: MetaData) = {
       val attributesNamesAndValues: Map[String, String] = Map(m.map((a: MetaData) => a.key -> a.value.toString).toList: _*)
       attributeValues.forall((pair: (String, String)) =>  attributesNamesAndValues.isDefinedAt(pair._1) && attributesNamesAndValues(pair._1) == pair._2)
     }
 
-    def attributesNamesMatch(m: MetaData) = 
-      attributes.isEmpty                            || 
+    def attributesNamesMatch(m: MetaData) =
+      attributes.isEmpty                            ||
       exactMatch && attributesNamesExactMatch(m)    ||
-      !exactMatch && attributesNamesPartialMatch(m)   
-      
-    def attributesValuesMatch(m: MetaData) = 
-      attributeValues.isEmpty                             || 
+      !exactMatch && attributesNamesPartialMatch(m)
+
+    def attributesValuesMatch(m: MetaData) =
+      attributeValues.isEmpty                             ||
       exactMatch && attributesValuesNamesExactMatch(m)    ||
-      !exactMatch && attributesValuesNamesPartialMatch(m) 
-      
+      !exactMatch && attributesValuesNamesPartialMatch(m)
+
     // returns true if the node matches the specified children
-    def childrenMatch(n: Node) = 
+    def childrenMatch(n: Node) =
       other.child.isEmpty || isEqualIgnoringSpace(fromSeq(n.child), fromSeq(other.child))
 
     attributesNamesMatch(node.attributes) && attributesValuesMatch(node.attributes) && childrenMatch(node)
@@ -113,4 +113,4 @@ trait NodeFunctions extends control.Debug {
 
 }
 private[specs2]
-object NodeFunctions extends NodeFunctions 
+object NodeFunctions extends NodeFunctions

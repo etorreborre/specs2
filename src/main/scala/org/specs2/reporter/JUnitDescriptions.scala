@@ -15,15 +15,15 @@ import java.util.regex.Matcher
 /**
  * The JUnit descriptions class transforms a list of fragments
  * to:
- * 
+ *
  * - a Description object having children Descriptions. It is used by the JUnitRunner
  *   to display the suites and tests to execute
  * - a Map of Fragments to execute, or executed fragments, indexed by Description: Description -> Fragment
- * 
+ *
  * The Description object creation works by using the Levels reducer to build a Tree[Description].
- * That Tree is then folded bottom-up to create the necessary associations between the 
- * Description objects. 
- * 
+ * That Tree is then folded bottom-up to create the necessary associations between the
+ * Description objects.
+ *
  */
 private[specs2]
 abstract class JUnitDescriptions[F](className: String)(implicit reducer: Reducer[F, Levels[F]]) extends JUnitDescriptionMaker[F] {
@@ -61,9 +61,9 @@ private[specs2]
 trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
   type DescribedFragment = (Description, F)
   /**
-   * This function is used to map each node in a Tree[Fragment] to a pair of 
+   * This function is used to map each node in a Tree[Fragment] to a pair of
    * (Description, Fragment)
-   * 
+   *
    * The Int argument is the numeric label of the current TreeNode being mapped.
    * It is used to create a unique description of the example to executed which is required
    * by JUnit
@@ -79,7 +79,7 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
     else
       descriptionTree.bottomUp(addChildren).rootLabel._1
   }
-  /** 
+  /**
    * unfolding function attaching children descriptions their parent
    */
   private val addChildren = (desc: (Description, F), children: Stream[DescribedFragment]) => {
@@ -102,7 +102,7 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
     val desc=
       if (testName.isEmpty) (if (suiteName.isEmpty) className else suiteName)
       else sanitize(testName)+"("+origin+")"
-    
+
     Description.createSuiteDescription(desc)
   }
 

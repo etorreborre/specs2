@@ -10,7 +10,7 @@ import main._
  *  - a Text fragment with text
  *  - an Example fragment with a body
  *  - a group of fragments (when including another specification for example)
- * 
+ *
  */
 private[specs2]
 trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
@@ -37,7 +37,7 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
    * This method allows to add a title to the Specification. It can be used as an operation on a String:
    * `"spec title".title`
    *
-   * @return a Fragments object from a string, with the given title 
+   * @return a Fragments object from a string, with the given title
    */
   implicit def title(s: String): SpecTitle = new SpecTitle(s)
   class SpecTitle(name: String) {
@@ -66,7 +66,7 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
 
   /**
    * Links to other specifications creation
-   * 
+   *
    * @see org.specs2.UserGuide
    */
   implicit def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = new HtmlLinkFragments(HtmlLink(SpecName(""), s, "", "", ""))

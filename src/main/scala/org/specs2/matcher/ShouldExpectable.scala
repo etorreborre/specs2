@@ -3,11 +3,11 @@ package matcher
 
 /**
  * This kind of expectable can be followed by the verb should to apply a matcher:
- * 
+ *
  * `1 should beEqualTo(1)`
- * 
+ *
  * For convenience, several shouldMatcher methods have also been defined as shortcuts to equivalent:
- * 
+ *
  * `a should matcher`
  */
 class ShouldExpectable[T] private[specs2] (tm: () => T) extends Expectable[T](tm){

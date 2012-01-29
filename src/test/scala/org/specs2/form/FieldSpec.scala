@@ -5,7 +5,7 @@ import sys._
 
 class FieldSpec extends Specification { def is =
                                                                                                                         """
-A Field is a labelled property with can be embedded in a Form.                                                        
+A Field is a labelled property with can be embedded in a Form.
                                                                                                                         """^
   "A Field can be created"                                                                                              ^
     "from just a value (then its name is empty)"                                                                        ! creation.e1^
@@ -26,7 +26,7 @@ A Field is a labelled property with can be embedded in a Form.
 
   case object creation {
     def e1 = Field(18).label must_== ""
-    def e2 = age() must_== 18 
+    def e2 = age() must_== 18
     def e3 = {
       Field("person", name, age).toString must_== "person: eric/18"
     }

@@ -3,7 +3,7 @@ package org.specs2.reflect
 /**
  * Utility methods which are useful when the type of the object is not known at compile time
  */
-private[specs2] 
+private[specs2]
 trait Anyx { outer =>
 
   /** @return an ExtendedAny object */
@@ -18,5 +18,5 @@ trait Anyx { outer =>
     case _ => false
   }
 }
-private[specs2] 
-object Anyx extends Anyx 
+private[specs2]
+object Anyx extends Anyx

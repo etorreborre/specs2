@@ -96,9 +96,9 @@ class TraversableMatchersSpec extends Specification with ResultMatchers { def is
     def e1 = diner  must contain(Pizza())
   }
   case class order() {
-    def fail1 = (List(1, 2, 3, 4) must contain(2, 5).inOrder) returns 
+    def fail1 = (List(1, 2, 3, 4) must contain(2, 5).inOrder) returns
                 "'1, 2, 3, 4' doesn't contain in order '2, 5'"
-    def fail2 = (List(1, 2, 3, 4) must contain(4, 2).inOrder) returns  
+    def fail2 = (List(1, 2, 3, 4) must contain(4, 2).inOrder) returns
                  "'1, 2, 3, 4' doesn't contain in order '4, 2'"
   }
 
@@ -108,14 +108,14 @@ class TraversableMatchersSpec extends Specification with ResultMatchers { def is
     def fail2 = (List("Hello", "Bella") must containMatch("ll").onlyOnce) returns
                  "'Hello, Bella' contains match '.*ll.*' 2 times"
   }
-  
+
   case class sameElems() {
-    def e1 = List("Hello", List("Dear", "World"), "!") must 
+    def e1 = List("Hello", List("Dear", "World"), "!") must
              haveTheSameElementsAs(List("!", "Hello", List("World", "Dear")))
   }
 
   case class sameSeq() {
     def e1 = (List("Hello", "World") must contain("Hello2", "World2").inOrder.only) returns
              "'Hello, World' doesn't contain in order 'Hello2, World2'"
-  } 
-}                                                                                          
+  }
+}

@@ -5,7 +5,7 @@ import Exceptions._
 /**
  * This trait can be used to allow some function to be called with varargs, with values being
  * evaluated lazily:<code>
- * 
+ *
  *   def method[T](values: LazyParameter[T]*) = {
  *     values.toStream // use the toStream method to consume the values lazily
  *   }
@@ -29,7 +29,7 @@ class LazyParameter[+T](private val v: () => T) {
    *         specifications, if the user has defined a 'value' method somewhere in his code
    */
   private[specs2] def value = evaluated
-  
+
   override def toString = tryOrElse(value.toString)("Evaluation error")
   override def equals(o: Any) = value == o
   override def hashCode = value.hashCode

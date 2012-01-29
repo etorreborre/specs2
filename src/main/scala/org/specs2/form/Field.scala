@@ -9,10 +9,10 @@ import text.NotNullStrings._
 
 /**
  * A Field is a property which is used only to display input values or output values.
- * 
+ *
  * The apply method can be used to retrieve the Field value:
  *   `Field(label, 1).apply() must_== 1`
- * 
+ *
  * The value is stored in a Property object so it will not be evaluated until explicitly
  * queried.
  */
@@ -27,7 +27,7 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   }
   lazy val valueOrResult: Either[Result, T] = ResultExecution.executeProperty(value)
   /**
-   * set a new value on the field. 
+   * set a new value on the field.
    */
   def apply(v: =>T) = new Field(label, value(v), decorator)
   /** @return the field value */
@@ -60,12 +60,12 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
 /**
  * Factory methods for creating Fields. Fields values can also be concatenated to produce
  * "summary" fields.
- * 
+ *
  * val f1 = Field(label, "hello")
  * val f2 = Field(label, "world")
  * val concatenatedFields = Field(label, f1, f2)
  * concatenatedFields.toString == label: hello/world
- * 
+ *
  * val concatenatedFields2 = Field(label, ", ", f1, f2)
  * concatenatedFields2.toString == label: hello, world
  */

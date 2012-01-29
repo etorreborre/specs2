@@ -24,7 +24,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
      "but only if the store.never argument = false"                                                ! trends().e3^
                                                                                                    end
 
-   
+
   trait StoringContext extends FragmentExecution with Mockito { outer =>
     lazy val repository = mock[StatisticsRepository]
     lazy val storing = new DefaultStoring {
@@ -39,12 +39,12 @@ class StoringSpec extends SpecificationWithJUnit { def is =
   }
 
    case class stats() extends StoringContext {
-     def e1 = store("t1").filter(isExecutedText)(0).stats must_== Stats() 
+     def e1 = store("t1").filter(isExecutedText)(0).stats must_== Stats()
      def e2 = store("e1" ! failure).filter(isExecutedResult)(0).stats must_== Stats(examples = 1, expectations = 1, failures = 1)
-     def e3 = store("e0" ! success ^ "e1" ! failure).filter(isExecutedSpecEnd)(0).stats.toString must startWith ( 
+     def e3 = store("e0" ! success ^ "e1" ! failure).filter(isExecutedSpecEnd)(0).stats.toString must startWith (
        "Stats(examples = 2, successes = 1, expectations = 2, failures = 1")
    }
-  
+
    case class stored() extends StoringContext {
      def e1 = {
        store("t1":Fragments)

@@ -25,12 +25,12 @@ sealed trait SpecName {
   override def toString = title
   def is(s: SpecName) = s.id == this.id
   def id = System.identityHashCode(this)
-  
+
   override def equals(o: Any) = o match {
     case s: SpecName => s.name == this.name
     case other       => false
   }
-  
+
   def overrideWith(n: SpecName): SpecName
 }
 private[specs2]

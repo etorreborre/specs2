@@ -83,11 +83,11 @@ trait ExceptionBaseMatchers extends Expectations {
     }
   }
   private def checkExceptionValue[T](expectable: Expectable[T], f: Throwable => Boolean, expectedAsString: String) = {
-    checkException(expectable, 
+    checkException(expectable,
 		               f,
-		               (e: Throwable) => "Got the exception " + e, 
+		               (e: Throwable) => "Got the exception " + e,
 		               (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead",
-		               "Got the exception " + expectedAsString, 
+		               "Got the exception " + expectedAsString,
 	 	               "Expected: "+ expectedAsString + ". Got nothing")
   }
   private def checkExceptionValueWithMatcher[T, E <: Throwable](expectable: Expectable[T], e: Throwable => Boolean, f: PartialFunction[E, MatchResult[Any]], expectedAsString: String) = {
@@ -101,7 +101,7 @@ trait ExceptionBaseMatchers extends Expectations {
   private def checkException[T](expectable: Expectable[T], f: Throwable => Boolean,
 		  someOk: Throwable => String, someKo: Throwable => String,
 		  noneOk: String, noneKo: String) = {
-    
+
     getException(expectable.value) match {
 	    case Some(e) => Matcher.result(f(e), someOk(e), someKo(e), expectable)
 	    case None    => Matcher.result(false, noneOk, noneKo, expectable)
@@ -132,17 +132,17 @@ trait ExceptionBaseMatchers extends Expectations {
       case other => other.toString
     }
   }
-  /** 
+  /**
    * Evaluates a value and return any exception that is thrown
    * In the case of the use of the like method (throwAn[Exception].like) the value
    * will be an Expectable encapsulating the real value which needs to be evaluated
    */
   private def getException[E <: Throwable](value: =>Any): Option[Throwable] = {
-    catchAll { 
-      value match { 
-    	  case e: Expectable[_] => e.value 
-    	  case _ => value 
-      } 
+    catchAll {
+      value match {
+    	  case e: Expectable[_] => e.value
+    	  case _ => value
+      }
     }(identity).left.toOption
   }
 }

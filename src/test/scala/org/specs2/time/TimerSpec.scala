@@ -15,7 +15,7 @@ class TimerSpec extends Specification { def is =
   "A Timer can also have nested starts and stops"                                                                       ^
     "it will then return cumulated times"                                                                               ! e5^
                                                                                                                         end
-    
+
   def e1 = TestTimer().start.hms must_== "0 second"
   def e1_1 = TestTimer().set(currentTime = 0L).start.
                          set(currentTime = 500L).stop.
@@ -24,11 +24,11 @@ class TimerSpec extends Specification { def is =
   def e2 = TestTimer().set(currentTime = 1000L).start.
                        set(currentTime = 2000L).stop.
            hms must_== "1 second"
-  
+
   def e3 = TestTimer().set(currentTime = 1000L).start.
                        set(currentTime = 2500L).stop.
            time must beMatching("1 second, 500 ms")
-                                                                                         
+
   def e4 = TestTimer().set(currentTime = 0L).start.
                        set(currentTime = 3800010L).stop.
            time must beMatching("1 hour 3 minutes 20 seconds, 10 ms")
@@ -38,14 +38,14 @@ class TimerSpec extends Specification { def is =
                        set(currentTime = 3000L).stop.
                        set(currentTime = 4000L).stop.
            time must beMatching("3 seconds, 0 ms")
-    
+
 
   case class TestTimer(currentTime: Long = 0L) extends HmsTimer[TestTimer] { outer =>
     override def getTime = currentTime
-    
-    def set(currentTime: Long = 0L) = newTestTimer(currentTime, elapsed, millis) 
+
+    def set(currentTime: Long = 0L) = newTestTimer(currentTime, elapsed, millis)
     def copy(e: Long, m: List[Long]) = newTestTimer(currentTime, e, m)
-    
+
     def newTestTimer(currentTime: Long, e: Long, m: List[Long]) =
       new TestTimer(currentTime) {
         override val elapsed = e

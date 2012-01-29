@@ -33,12 +33,12 @@ for each example by the sheer virtue of creating a fresh context object
 	  var local2 = 0
   }
   case class c() extends Env {
-	  def e1 = { local += 1; success } 
-	  def e2 = { local must_== 0 } 
+	  def e1 = { local += 1; success }
+	  def e2 = { local must_== 0 }
   }
   case class c1() extends Env {
-	  def e3 = { local += 1; local2 +=1; success } 
-	  def e4 = { local must_== 0; local2 must_== 0 } 
+	  def e3 = { local += 1; local2 +=1; success }
+	  def e4 = { local must_== 0; local2 must_== 0 }
   }
 }
 trait UserInteractions extends StandardResults with MustMatchers  {

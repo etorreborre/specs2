@@ -12,7 +12,7 @@ object ResultMatchers extends ResultMatchers
 
 private[specs2]
 trait ResultBaseMatchers {
-  
+
   def beSuccessful[T](implicit toResult: T => Result) = new Matcher[T] {
     def apply[S <: T](value: Expectable[S]) = {
       result(toResult(value.value).isSuccess,

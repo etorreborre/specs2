@@ -16,15 +16,15 @@ trait Exceptions {
    * this implicit avoids having to pass a function when no effect is desired on the Exception being thrown (on the tryo method for example)
    */
   implicit def implicitUnit[T](t: T): Unit = ()
-  
+
   /**
    * try to evaluate an expression, returning an Option
-   * 
+   *
    * A function Exception => Unit can be used as a side-effect to print the exception
    * to the console for example.
-   * 
+   *
    * The 'tryo' name comes from the lift project: http://liftweb.net
-   * 
+   *
    * @return None if there is an exception, or Some(value)
    */
   def tryo[T](a: =>T)(implicit f: Exception => Unit): Option[T] = {
@@ -36,7 +36,7 @@ trait Exceptions {
   }
   /**
    * try to evaluate an expression, returning a value T
-   * 
+   *
    * If the expression throws an Exception a function f is used to return a value
    * of the expected type.
    */
@@ -74,7 +74,7 @@ trait Exceptions {
   def tryOk[T](a: =>T) = tryMap(a)(true)(false)
   /**
    * try to evaluate an expression, returning Either
-   * 
+   *
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
@@ -84,7 +84,7 @@ trait Exceptions {
   }
   /**
    * try to evaluate an expression, returning Either
-   * 
+   *
    * If the expression throws any Throwable a function f is used to return the left value
    * of the Either returned value.
    */

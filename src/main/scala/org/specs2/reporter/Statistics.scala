@@ -15,11 +15,11 @@ import scala.xml.NodeSeq
 /**
  * This trait computes the statistics of a Specification by mapping each ExecutedFragment
  * to a Stats object
- * 
+ *
  * Some stats objects embed their corresponding ExecutedSpecStart or ExecutedSpecEnd
  * fragment to be able to determine when the total Stats corresponding to all executed
  * specifications must be displayed
- * 
+ *
  * @see Stats.isEnd
  *
  */
@@ -31,23 +31,23 @@ trait Statistics {
     def append(s1: SpecsStatistics, s2: =>SpecsStatistics): SpecsStatistics = {
       SpecsStatistics(s1.fragments ++ s2.fragments)
     }
-    val zero = SpecsStatistics() 
+    val zero = SpecsStatistics()
   }
 
   def foldAll(fs: Seq[ExecutedFragment]) = fs.foldMap(StatisticsReducer.unit)
-  
+
   object StatisticsReducer extends Reducer[ExecutedFragment, SpecsStatistics] {
     override def unit(f: ExecutedFragment): SpecsStatistics = SpecsStatistics(f)
   }
 
   /**
    * The SpecsStatistics class stores the result of a specification execution, with the
-   * a list of 'current' stats for each fragment execution and the total statistics 
+   * a list of 'current' stats for each fragment execution and the total statistics
    * for the whole specification
    */
   case class SpecsStatistics(fragments: Seq[ExecutedFragment] = Vector()) {
     private implicit val statsMonoid = Stats.StatsMonoid
-    
+
     /** @return the list of all current stats, with the total on each line */
     def totals: Seq[Stats] = {
       import NestedBlocks._

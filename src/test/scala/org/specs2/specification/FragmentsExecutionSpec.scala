@@ -20,7 +20,7 @@ class FragmentsExecutionSpec extends Specification {
     "with a specific message" in e2
     "it must change to failed when the example succeeds" in e3
     "with a specific message" in e4
-    
+
   "An executed result must have its own Stats" in {
     FragmentExecution.execute("e1" ! failure).stats.failures must_== 1
   }

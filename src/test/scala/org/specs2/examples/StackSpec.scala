@@ -7,7 +7,7 @@ import org.specs2._
  * For example `isNonEmpty` is a list of examples which can be reused with both a `normal` or a `full` stack.
  */
 class StackSpec extends Specification { def is =
-  
+
   "Specification for a Stack with a limited capacity".title                                       ^
                                                                                                   p^
   "An empty stack should"                                                                         ^
@@ -58,12 +58,12 @@ class StackSpec extends Specification { def is =
       stack.top must_== stack.size
     }
     def pop1 = {
-      val topElement = stack.size 
+      val topElement = stack.size
       stack.pop must_== topElement
     }
     def pop2 = {
       stack.pop
-      stack.top must_== stack.size 
+      stack.top must_== stack.size
     }
   }
   case class notfull(stack: SizedStack) {
@@ -81,7 +81,7 @@ object Stack {
 }
 class SizedStack(val capacity: Int) extends scala.collection.mutable.Stack[Int] {
   override def push(a: Int) = {
-    if (size == capacity) throw new Error("full stack") 
+    if (size == capacity) throw new Error("full stack")
     super.push(a)
   }
   def fill(range: Range) = {

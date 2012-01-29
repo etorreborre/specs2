@@ -651,7 +651,7 @@ specification.
                     tr(effect("submit", "submit"))
 
   val selectForm = Form("select").tr(field("selection step"))
-  
+
   val checkTotalForm = Form("Check Total").
                          tr(effect("Compute total", 100)).
                          tr(prop("Total", 100)(100))

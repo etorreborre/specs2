@@ -45,7 +45,7 @@ case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), lin
   def withArgs(args: Arguments) = copy(arguments = args)
   /** the new arguments take override the old ones where defined */
   def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
-  
+
   /** @return true if this spec starts only contains a link referencing another specification */
   def isSeeOnlyLink = isLink && seeOnly
   /** @return true if this spec starts only contains a link including another specification */
@@ -177,7 +177,7 @@ object TagsFragments {
       val include = args.include.splitTrim(",")
       val exclude = args.exclude.splitTrim(",")
     }
-    
+
     /** tagging names */
     val names: Seq[String]
     /** @return true if the fragment tagged with this must be kept */

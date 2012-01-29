@@ -8,8 +8,8 @@ class NestedBlocksSpec extends Specification { def is =
                                                                                                           """
   associateStartEnd takes a seq of blocks and associating start and end blocks with a function:
      f: (start, end) => (updatedStart, updatedEnd)
-  
-  It is used to copy the computed statistics on ExecutedSpecEnd fragments to the corresponding 
+
+  It is used to copy the computed statistics on ExecutedSpecEnd fragments to the corresponding
   ExecutedSpecStart fragments.
                                                                                                           """ ! e1^
   "It works also when several specs are included in a parent one"                                             ! e2^
@@ -28,7 +28,7 @@ class NestedBlocksSpec extends Specification { def is =
     case (SpecStart(_,_,_,_), SpecEnd(en)) => (SpecStart(SpecName(en.title+"-swapped")), SpecEnd(en))
     case other                             => other
   }
-  
+
   def e1 = associate(spec, List("spec-swapped", "sub1-swapped", "sub1", "spec"))
 
   def e2 = associate(spec2, List("spec-swapped", "sub1-swapped", "sub1", "sub2-swapped", "sub2", "spec"))

@@ -40,12 +40,12 @@ class TestInterfaceRunnerSpec extends Specification { def is =
     object run extends MockLogger {
       val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
 	    runner.run("org.specs2.runner.SpecificationForSbtWithException", mock[TestFingerprint], mock[EventHandler], Array(""))
-    }	  
-	  def e1 = run.logger.messages must 
+    }
+	  def e1 = run.logger.messages must
 	           contain("error: Could not create an instance of org.specs2.runner.SpecificationForSbtWithException\n")
-	  def e2 = run.logger.messages must 
+	  def e2 = run.logger.messages must
 	           contain("error:   caused by java.lang.IllegalArgumentException: cause")
-	  def e3 = run.logger.messages must 
+	  def e3 = run.logger.messages must
 	           contain("error:   caused by java.lang.Exception: fail")
   }
 

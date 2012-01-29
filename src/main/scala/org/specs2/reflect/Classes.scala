@@ -21,7 +21,7 @@ trait Classes extends Output {
   /** @return an instance of a given class */
   def createObject[T <: AnyRef](className: String)(implicit m: ClassManifest[T]): Option[T] =
     createObject[T](className, false)(m)
-  
+
   /** @return an instance of a given class and optionally print message if the class can't be loaded */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean)
                                (implicit m: ClassManifest[T]): Option[T] =
@@ -30,7 +30,7 @@ trait Classes extends Output {
   /**
    * A system property 'debugCreateObject' can be set to override the printMessage and printStackTrace parameters
    * so that the exception message and stacktrace are printed when the object can't be created
-   * 
+   *
    * @return an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
    */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
@@ -51,7 +51,7 @@ trait Classes extends Output {
   /**
    * Try to create an instance of a given class by using whatever constructor is available
    * and trying to instantiate the first parameter recursively if there is a parameter for that constructor.
-   * 
+   *
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
   def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean= true, printStackTrace: Boolean = true,
@@ -113,7 +113,7 @@ trait Classes extends Output {
   }
   /**
    * Load a class, given the class name
-   * 
+   *
    * If the 'debugLoadClass' property is set, then an error message is printed out to the Console
    */
   private[reflect] def loadClass[T <: AnyRef](className: String, loader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[Class[T]] = {

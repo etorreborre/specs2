@@ -29,16 +29,16 @@ This will create a html file in the target/specs2-reports directory
        fill("Rose Cr.", 3))
    }                                                                                                                    ^
                                                                                                                         end
-                                                                                          
-  def person(first: String, last: String, initials: String) =  
+
+  def person(first: String, last: String, initials: String) =
      Form("Person").
        tr(field("first name", first)).
        tr(field("last name", last)).
        tr(prop("initials", Person(first, last).initials)(initials))
 
   case class Person(firstName: String, lastName: String) {
-    def initials = firstName.take(1).capitalize+"."+lastName.take(1).capitalize+"."      
-  }              
+    def initials = firstName.take(1).capitalize+"."+lastName.take(1).capitalize+"."
+  }
 }
 
 import specification.Forms._

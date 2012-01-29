@@ -190,7 +190,7 @@ table.nested td {
   border: 1px #666666 solid
 }
 table.nested td.noBorder {
-  border: 0px #666666 
+  border: 0px #666666
 }
 table.nested td.failureMessage {
   border: 1px #900 dashed;
@@ -324,16 +324,16 @@ table td {
 }
 
 #container {
-      
+
   width: 83%;
 
   margin-top:-18px;
   float:right;
-    
+
 }
 
 #tree {
-	  
+
   position: fixed;
   margin-top:2px;
   border: solid #AAAAAA;
@@ -350,5 +350,5 @@ table td {
 
  white-space:normal !important;
  height: auto;
-	
+
 }

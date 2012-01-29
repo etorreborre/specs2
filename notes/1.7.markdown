@@ -8,7 +8,7 @@ This version adds new features on top of 1.6.1:
  * added `TerminationMatchers` to check if that a block of code terminates within a reasonable amount of time
  * added `containAllOf/containAnyOf` collection matchers taking sequences as parameters (instead of varargs)
  * added new matchers to allow Parser matchers to partially consume their input: `beAPartialSuccess` (issue #46)
- 
+
 And fixes some issues:
 
  * delayed a MatchResult evaluation when transforming it to a Prop avoid issues with properties implication
@@ -16,8 +16,8 @@ And fixes some issues:
  * issue #40: incorrect line number for a failure in a mutable specification
  * issue #41: missing specification title when using sbt
  * issue #45: fixed the evaluation of `result1 and result2` so that `result2` doesn't get evaluated if `result1` succeeds
- * issue #46: fixed the parser matchers which should consume all input 
+ * issue #46: fixed the parser matchers which should consume all input
  * issue #47: proper display of DataTables in the console
  * fixed the `find.withGroups` matcher (was not matching several groups)
- 
+
  ==========================

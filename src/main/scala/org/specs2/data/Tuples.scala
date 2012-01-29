@@ -16,7 +16,7 @@ trait Tuples { outer =>
     def flatten = outer.flatten(t)
   }
   def flatten[T1, T2, T3](t: ((T1, T2), T3)): (T1, T2, T3) = (t._1._1, t._1._2, t._2)
-  def flatten[T1, T2, T3, T4](t: (((T1, T2), T3), T4)): (T1, T2, T3, T4) = { 
+  def flatten[T1, T2, T3, T4](t: (((T1, T2), T3), T4)): (T1, T2, T3, T4) = {
     val f = flatten(t._1)
     (f._1, f._2, f._3, t._2)
   }

@@ -8,31 +8,31 @@ import Trim._
 
 /**
  * This trait provides implicit definitions and types to create DataTables.
- * 
+ *
  * A DataTable has a header defining column names and rows holding values.
  * It is possible to apply a function taking the row values and returning a MatchResult.
- * 
+ *
  * A TableHeader is defined by separating the column names with '|':
- * ` "a" | "b" | "c"`  
- * 
+ * ` "a" | "b" | "c"`
+ *
  * A DataRow is defined by separating the row values with '!':
- * ` 1 ! 2 ! 3`  
- * 
- * Note that the '!' method can conflict with the creation of Examples when the value is a 
+ * ` 1 ! 2 ! 3`
+ *
+ * Note that the '!' method can conflict with the creation of Examples when the value is a
  * string. In that case it is possible to use the '!!! method to disambiguate:
- * 
+ *
  * `"1" !! "2" ! "3"`
- * 
+ *
  * In that case the first column of the header can also be defined with '||' for pure
  * symmetry reasons:
- *  
- * `"a" || "b" | "c"`  
+ *
+ * `"a" || "b" | "c"`
  * `"1" !! "2" ! "3"`
- * 
+ *
  * @see org.specs2.matcher.DataTablesSpec for examples
  */
 trait DataTables extends Expectations {
-  
+
   /** @return a TableHeader with one heading only */
   implicit def toTableHeader(a: String) = new TableHeader(List(a))
   /** @return a DataRow with one value only */
@@ -260,12 +260,12 @@ object DataTables extends DataTables
 /**
 private object DataTablesGenerator {
   def main(args: Array[String]) = {
-    println(all(10))  
+    println(all(10))
   }
   def all(n: Int) = {
-    List(tableHeader(n), 
-         tableClasses(n), 
-         dataRowClass(n), 
+    List(tableHeader(n),
+         tableClasses(n),
+         dataRowClass(n),
          dataRowClasses(n)).mkString("\n\n").replace("\n", "\n  ")
   }
 
@@ -274,16 +274,16 @@ private object DataTablesGenerator {
       "  def |(title: String) = copy(titles = this.titles :+ title)\n"+
       (1 to n).flatMap { i =>
         val addRow = types(i)+"(row: "+dataRow(i)+") = new "+table(i)+"(titles, List(row)"
-        val addRowStill = "def |"+addRow 
-        val addRowExecute = "def |>"+addRow 
+        val addRowStill = "def |"+addRow
+        val addRowExecute = "def |>"+addRow
       List(addRowStill, addRowExecute+", execute = true").map(_+")")
       }.mkString("  ", "\n  ", "\n") +
       "}"
   }
-  
+
   def tableClasses(n: Int) = {
-    (1 to n).map { i =>  
-      List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false) extends "+ 
+    (1 to n).map { i =>
+      List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false) extends "+
              "Table(titles, execute) { outer =>",
            "  def |[st(i)](row: "+dataRow(i, letter=\"S\")+") = "+table(i)+"(titles, outer.rows :+ row, execute)",
            "  def |[R <% Result](f: "+typesTuple(i)+" => R) = executeRow(f, execute)",
@@ -293,7 +293,7 @@ private object DataTablesGenerator {
            "      collect(rows map { (d: "+dataRow(i)+") => (d.showCells, implicitly[R => Result].apply(f("+(1 to i).map("d.t"+_).mkString(",")+")).execute) })",
            "    else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success(\"ok\"))",
            "  }",
-           "}").mkString("\n")    
+           "}").mkString("\n")
     }.mkString("\n")
   }
   def dataRowClass(n: Int) = {
@@ -302,7 +302,7 @@ private object DataTablesGenerator {
       "}"
   }
   def dataRowClasses(n: Int) = {
-    (1 to n).map { i =>  
+    (1 to n).map { i =>
         List(
           "case class "+dataRow(i)+parametersList(i)+" extends DataRow["+typesList(i, n)+"] {",
           if (i < n) "  def ![S"+(i+1)+"](t"+(i+1)+": S"+(i+1)+") = "+"DataRow"+(i+1)+parameters(i+1) else "",

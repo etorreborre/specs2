@@ -15,14 +15,14 @@ import org.specs2.internal.scalaz.Monoid
  *  - an error: an exception occurred
  *  - a pending execution: the user has decided that execution must not be performed
  *  - a skipped execution: based on dynamic conditions (a database not available for instance)
- *    the execution is not performed 
- * 
+ *    the execution is not performed
+ *
  * A Result has:
  *  - a message describing the outcome
  *  - a message describing the expectation
  *  - possibly a number of expectations
  *    when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).
- * 
+ *
  */
 sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1) {
   /**
@@ -87,7 +87,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return the logical or combination of 2 results
    */
   def or(r: =>Result) = this.addExpectationsNb(r.expectationsNb)
-   
+
   /**
    * @return true if the result is a Success instance
    */
@@ -175,7 +175,7 @@ object Result {
     }
   }
 }
-/** 
+/**
  * This class represents the success of an execution
  */
 case class Success(m: String = "")  extends Result(m, m) {
@@ -201,7 +201,7 @@ case class Success(m: String = "")  extends Result(m, m) {
   override def not: Result = Failure(m)
 }
 /**
- * Companion object to the Success class providing 
+ * Companion object to the Success class providing
  * a method to set the expectations number
  */
 object Success {
@@ -209,7 +209,7 @@ object Success {
 	  override val expectationsNb = expNb
   }
 }
-/** 
+/**
  * This class represents the failure of an execution.
  * It has a message and a stacktrace
  */
@@ -253,7 +253,7 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
 sealed trait Details
 case class FailureDetails(expected: String, actual: String) extends Details
 case class NoDetails() extends Details
-/** 
+/**
  * This class represents an exception occurring during an execution.
  */
 case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrace { outer =>
@@ -275,7 +275,7 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
   override def hashCode = m.hashCode
   override def isError: Boolean = true
 }
-/** 
+/**
  * This object allows to create an Error from an exception
  */
 case object Error {
@@ -284,7 +284,7 @@ case object Error {
   case class ThrowableException(t: Throwable) extends Exception(t)
   def apply(m: String = "") = new Error(m, new Exception(m))
 }
-/** 
+/**
  * Pending result
  * @see Result for description
  */
@@ -297,9 +297,9 @@ case class Pending(m: String = "")  extends Result(m) { outer =>
 
   override def isPending: Boolean = true
 }
-/** 
+/**
  * Skipped result
- * @see Result for description 
+ * @see Result for description
  */
 case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer =>
 
@@ -321,7 +321,7 @@ case class DecoratedResult[T](decorator: T, result: Result) extends Result(resul
   def addExpectationsNb(n: Int): Result = new DecoratedResult(decorator, result) {
     override val expectationsNb = outer.expectationsNb + n
   }
-    
+
   override def and(r: =>Result): Result = DecoratedResult(decorator, result and r)
   override def or(r2: =>Result): Result = DecoratedResult(decorator, result or r2)
   override def isSuccess: Boolean       = result.isSuccess

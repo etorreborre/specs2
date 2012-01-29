@@ -13,7 +13,7 @@ This version adds new features on top of 1.3:
  * removed the possibility to use the description of an Example in the body of the example (use the Given-When-Then support instead)
  * added a `be_==~` matcher to match with an implicit conversion
  * using sbt 0.10.0
-  
+
 And some fixes:
 
  * better display for Array expectables
@@ -21,5 +21,5 @@ And some fixes:
  * various fixes for Forms and Properties evaluations
  * fixed the `ThrownExpectation` issue where mixing it to an Acceptance spec had no effect
  * fixed a sequencing issue when there are 2 consecutive Steps with no example in between
- 
+
  ==========================

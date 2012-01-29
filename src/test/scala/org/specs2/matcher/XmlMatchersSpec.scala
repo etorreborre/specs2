@@ -89,15 +89,15 @@ class XmlMatchersSpec extends Specification { def is =
 
     def fail1 = (<a><b/></a> must ==/(<a> <c/></a>)) returns
                 "'<a><b></b></a>' is not equal to '<a> <c></c></a>'"
-    def fail2 = (new Atom("hello").toSeq aka "the seq" must ==/(new Text("world").toSeq)) returns 
+    def fail2 = (new Atom("hello").toSeq aka "the seq" must ==/(new Text("world").toSeq)) returns
                 "the seq 'hello' is not equal to 'world'"
 
   }
   case class firstChild() {
     def fail1 = (<a></a> must \("a")) returns "'<a></a>' doesn't contain subnode 'a'"
-    def fail2 = (<a><b><c></c></b></a> must \("c")) returns                                 
+    def fail2 = (<a><b><c></c></b></a> must \("c")) returns
                 "'<a><b><c></c></b></a>' doesn't contain subnode 'c'"
-    def fail3 = (<a><b name2="value"></b></a> must \("b", "name")) returns 
+    def fail3 = (<a><b name2="value"></b></a> must \("b", "name")) returns
                 "'<a><b name2=\"value\"></b></a>' doesn't contain subnode 'b' with attributes: name"
     def fail4 = (<a><b n="v"></b></a> must \("b", "n"->"v1")) returns
                 "'<a><b n=\"v\"></b></a>' doesn't contain subnode 'b' with attributes: n=\"v1\""
@@ -105,16 +105,16 @@ class XmlMatchersSpec extends Specification { def is =
                 "'<a><b n=\"v\"></b></a>' doesn't contain subnode 'b' with attributes: n1=\"v\""
     def fail6 = (<a><b n="v"></b></a> must \("b", "n"->"v", "n2"->"v2")) returns
                 "'<a><b n=\"v\"></b></a>' doesn't contain subnode 'b' with attributes: n=\"v\" n2=\"v2\""
-    def fail7 = (<a><b n="v" n2="v"></b></a> must \("b", "n"->"v").exactly) returns 
+    def fail7 = (<a><b n="v" n2="v"></b></a> must \("b", "n"->"v").exactly) returns
                 "'<a><b n=\"v\" n2=\"v\"></b></a>' doesn't contain subnode 'b' with attributes: n=\"v\""
-    def fail8 = (<a><b><c></c></b></a> must \(<b><d></d></b>)) returns 
+    def fail8 = (<a><b><c></c></b></a> must \(<b><d></d></b>)) returns
                 "'<a><b><c></c></b></a>' doesn't contain <b><d></d></b>"
   }
   case class deepChild() {
     def fail1 = (<a></a> must \\("a")) returns "'<a></a>' doesn't contain node 'a'"
-    def fail2 = (<a><b><c></c></b></a> must \\("c")) returns                                 
+    def fail2 = (<a><b><c></c></b></a> must \\("c")) returns
                 "'<a><b><c></c></b></a>' doesn't contain subnode 'c'"
-    def fail3 = (<a><b name2="value"></b></a> must \\("b", "name")) returns 
+    def fail3 = (<a><b name2="value"></b></a> must \\("b", "name")) returns
                 "'<a><b name2=\"value\"></b></a>' doesn't contain node 'b' with attributes: name"
     def fail4 = (<a><b n="v"></b></a> must \\("b", "n"->"v1")) returns
                 "'<a><b n=\"v\"></b></a>' doesn't contain node 'b' with attributes: n=\"v1\""
@@ -122,13 +122,13 @@ class XmlMatchersSpec extends Specification { def is =
                 "'<a><b n=\"v\"></b></a>' doesn't contain node 'b' with attributes: n1=\"v\""
     def fail6 = (<a><b n="v"></b></a> must \\("b", "n"->"v", "n2"->"v2")) returns
                 "'<a><b n=\"v\"></b></a>' doesn't contain node 'b' with attributes: n=\"v\" n2=\"v2\""
-    def fail7 = (<a><b n="v" n2="v"></b></a> must \\("b", "n"->"v").exactly) returns 
+    def fail7 = (<a><b n="v" n2="v"></b></a> must \\("b", "n"->"v").exactly) returns
                 "'<a><b n=\"v\" n2=\"v\"></b></a>' doesn't contain node 'b' with attributes: n=\"v\""
-    def fail8 = (<a><b><c></c></b></a> must \\(<b><d></d></b>)) returns 
+    def fail8 = (<a><b><c></c></b></a> must \\(<b><d></d></b>)) returns
                 "'<a><b><c></c></b></a>' doesn't contain <b><d></d></b>"
-    def fail9 = (<a><b>hello</b></a> must \\(<b>world</b>)) returns 
+    def fail9 = (<a><b>hello</b></a> must \\(<b>world</b>)) returns
 	            "'<a><b>hello</b></a>' doesn't contain <b>world</b>"
-    def fail10 = (<a><b>{"hello"}</b></a> must \\(<b>world</b>)) returns 
+    def fail10 = (<a><b>{"hello"}</b></a> must \\(<b>world</b>)) returns
 	             "'<a><b>hello</b></a>' doesn't contain <b>world</b>"
   }
 }

@@ -5,7 +5,7 @@ import Forms._
 import matcher._
 import execute.DecoratedResult
 
-class FormSpec extends Specification with ResultMatchers { def is = 
+class FormSpec extends Specification with ResultMatchers { def is =
                                                                                                                         """
 A Form is a generic table which has an optional title and rows. Each row contains cells which can be created from
 Fields, Props or other Forms.
@@ -95,13 +95,13 @@ Upon execution a Form will return a Result value summarizing the execution of ea
     def e3 = Form.tr(name).text must_== "| name: eric |"
     def e4 = Form.tr(name, age).text must_== "| name: eric | age: 18 |"
     def e5 = form("title").tr(name).text must_==
-             "| title      |\n" +    
+             "| title      |\n" +
              "| name: eric |"
     def e6 = form("title").tr(name, age).text must_==
-             "| title                |\n" + 
+             "| title                |\n" +
              "| name: eric | age: 18 |"
   }
-  
+
   object exec {
     def e1 = Form.tr("a").setSuccess.execute must_== success
     def e2 = Form.tr("a").setSuccess.rows.forall(_.execute.isSuccess) must beTrue
@@ -127,8 +127,8 @@ Upon execution a Form will return a Result value summarizing the execution of ea
   }
 
   object equality {
-    def e1 = Row.tr(TextCell("a")) must_== Row.tr(TextCell("a"))   
-    def e2 = TextCell("a") must_== TextCell("a")   
+    def e1 = Row.tr(TextCell("a")) must_== Row.tr(TextCell("a"))
+    def e2 = TextCell("a") must_== TextCell("a")
  }
 
   object xhtml {

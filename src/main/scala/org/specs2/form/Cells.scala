@@ -11,7 +11,7 @@ import StandardResults._
 /**
  * A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.
  * A more general XmlCell is also available to be able to input any kind of Xml inside a Form
- * 
+ *
  * A Cell can be executed by executing the underlying element but also by setting the cell to a specific result (success or failure).
  * This feature is used to display rows of values with were expected and found ok in Forms.
  *

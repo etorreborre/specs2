@@ -19,12 +19,12 @@ class HamcrestMatcherAdapterSpec extends Specification { def is =
       matchMessage(1, 2) must_== "'1' is not equal to '2'"
                                                                                                                         }^
                                                                                                                         end
-                                                                                          
+
   def matchMessage(value1: Int, value2: Int) = {
     val m = HamcrestMatcherAdapter(beEqualTo(value2))
     m.matchesSafely(value1)
     val description = new org.hamcrest.StringDescription
     m.describeTo(description)
     description.toString
-  }                                                                                          
+  }
 }

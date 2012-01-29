@@ -21,19 +21,19 @@ import scala.collection.GenTraversable
 * - create matchers for seqs and sets from single matchers
 */
 trait MatchersImplicits extends Expectations {
-  /** 
+  /**
    * implicit definition to transform a Seq of MatchResults to a Result
-   */ 
+   */
   implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.reduceLeft(_ and _).toResult
-  /** 
+  /**
    * implicit definition to transform any MatchResult to a Result
-   */ 
+   */
   implicit def asResult[T](r: MatchResult[T]): Result = r.toResult
-  
-  /** 
+
+  /**
    * implicit definition to accept any boolean value as a Result
-   * This avoids writing b must beTrue 
-   */ 
+   * This avoids writing b must beTrue
+   */
   implicit def toResult(b: Boolean): Result = {
     new BeTrueMatcher().apply(createExpectable(b)).toResult
   }
@@ -51,7 +51,7 @@ trait MatchersImplicits extends Expectations {
   implicit def matcherFunction2[T](f: T => Matcher[T]) = new MatcherFunction2(f)
 
   class MatcherFunction[S, T](f: S => Matcher[T]) {
-  
+
     /**
      * @return a function which will return a matcher checking a sequence of objects
      */
@@ -72,7 +72,7 @@ trait MatchersImplicits extends Expectations {
     /**
      * @return a function which will return the composition of a matcher and a function
      */
-    def ^^^[A](g: A => T) = (a: A) => 
+    def ^^^[A](g: A => T) = (a: A) =>
       new Matcher[A] {
         def apply[B <: A](b: Expectable[B]) = {
           val r = f(g(a)).apply(b.map(g))
@@ -120,7 +120,7 @@ trait MatchersImplicits extends Expectations {
     def apply[U <: Set[T]](t: Expectable[U]) = {
       val setToTest = t
       if (s.size != setToTest.value.size)
-        result(false, 
+        result(false,
                "the sets contain the same number of elements",
                 setToTest.description + " contains " + setToTest.value.size + " elements while " + q(s) + " contains " + s.size + " elements",
                 setToTest)

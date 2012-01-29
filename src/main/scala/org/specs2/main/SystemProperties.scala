@@ -12,8 +12,8 @@ trait SystemProperties {
   val specs2Prefix = "specs2."
 
   lazy val properties: Map[String, String] = Map(System.getProperties.toSeq.map(s => s._1.notNull -> s._2.notNull):_*)
-    
-  /** @return the value of the system property p */  
+
+  /** @return the value of the system property p */
   def getProperty(p: String): Option[String] =        properties.get(specs2Prefix + p).
                                                orElse(properties.get(specs2Prefix + p.toLowerCase)).
                                                orElse(properties.get(p)).

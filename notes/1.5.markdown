@@ -5,7 +5,7 @@ This version adds new features on top of 1.4:
  * added a `specs2.whitebg` property to specify a white background and get a better color scheme in the console
  * using the `DelayedInit` trait to allow the proper use of `mutable.Before/After` traits in mutable specifications
  * Auto-examples can now span several lines
-  
+
 And some fixes:
 
  * fixed issue 20: reflection error when using maven/surefire
@@ -17,6 +17,6 @@ And some fixes:
  * fixed issue 24: html resources not found
  * fixed the output of html files to use utf-8
  * fixed issue 26: newlines in descriptions are causing display issues with Eclipse
- 
- 
+
+
  ==========================

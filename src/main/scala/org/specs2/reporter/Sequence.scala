@@ -39,7 +39,7 @@ trait DefaultSequence {
     if (arguments.sequential) fragments.map(f => FragmentSeq.create(f))
     else isolateSteps(fragments)(arguments).reverse
   }
-  
+
   protected def isolateSteps(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[FragmentSeq] = {
     fragments.foldLeft(Vector(): Seq[FragmentSeq]) { (res, f) =>
       res.toList match {

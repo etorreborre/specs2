@@ -14,9 +14,9 @@ trait AnsiColors {
   val magenta = "\033[35m"
   val cyan    = "\033[36m"
   val white   = "\033[37m"
-    
+
   val reset   = "\033[0m"
-    
+
   val all = Seq(black, red, green, yellow, blue, magenta, cyan, white, reset)
 
   /** @return a string with no color codes */
@@ -33,9 +33,9 @@ trait AnsiColors {
     if (doIt) {
 		  val colored = s.split("\n").filter(_.nonEmpty).map(color + _ + reset)
 			if (s.startsWith("\n") && s.endsWith("\n")) colored.mkString("\n", "\n", "\n")
-			else if (s.startsWith("\n"))                colored.mkString("\n", "\n", "")  
-			else if (s.endsWith("\n"))                  colored.mkString("", "\n", "\n")  
-			else                                        colored.mkString("\n")  
+			else if (s.startsWith("\n"))                colored.mkString("\n", "\n", "")
+			else if (s.endsWith("\n"))                  colored.mkString("", "\n", "\n")
+			else                                        colored.mkString("\n")
 		}
     else      removeColors(s, true)
   }

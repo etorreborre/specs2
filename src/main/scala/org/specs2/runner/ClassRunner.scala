@@ -11,7 +11,7 @@ import sys._
 /**
  * This class can be used to executed a Specification in the Console
  * by specifying its name as the first argument on the command line
- * 
+ *
  * @see specs2.run
  * @see org.specs2.main.Arguments for other command line options
  */

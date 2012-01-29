@@ -7,10 +7,10 @@ import execute._
 /**
  * The Outside trait can be inherited by classes which will
  * execute some code inside the outside method provided by the context.
- * 
+ *
  * This can be used for example to execute some code inside a webapp session, using the session object to
  * create expectations
- * 
+ *
  * @see Example to understand why the type T must <% Result
  */
 trait Outside[T] { outer =>

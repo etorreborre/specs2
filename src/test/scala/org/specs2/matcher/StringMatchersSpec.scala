@@ -4,7 +4,7 @@ import execute._
 import specification._
 
 class StringMatchersSpec extends Specification {  def is =
-  
+
   "A string can be matched against a pattern using"                                                                     ^
     "beMatching"                                                                                                        ^
     { "eric" must beMatching("e.*") }                                                                                   ^
@@ -60,7 +60,7 @@ class StringMatchersSpec extends Specification {  def is =
   { "Eric" must endWith("ic") }                                                                                         ^
   { "Eric" must not endWith("rac") }                                                                                    ^
                                                                                                                         end
-  
+
   def e3 = ("eric".aka must beEqualTo("Xric").ignoreCase) returns "ignoring case"
   def e4 = ("eric".aka must beEqualTo("a eric ").ignoreSpace) returns "ignoring space"
   def e5 = ("eric".aka must beEqualTo("xric ").ignoreSpace.ignoreCase) returns

@@ -31,17 +31,17 @@ case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLin
   }
 
   def printLines(out: HtmlReportOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
-  
+
   def add(line: HtmlLine) = copy(lines = lines :+ line)
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty
-  
+
   override def toString = (link +: lines).mkString("\n")
 }
 
-/** 
+/**
  * An HtmlLine encapsulates:
- * 
+ *
  * - an executed fragment to print
  * - the current statistics
  * - the current level
@@ -67,7 +67,7 @@ case class HtmlSpecStart(start: ExecutedSpecStart, stats: Stats = Stats(), level
   def print(out: HtmlReportOutput) = {
     out.when(!args.xonly) { output =>
       start.link.map(l => output.printLink(l, indent, stats)).getOrElse(output.printSpecStart(start.specName, stats))
-    } 
+    }
   }
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)
 
@@ -97,7 +97,7 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
       }
     }
   }
-	
+
   def printFormResult(form: Form)(out: HtmlReportOutput): HtmlReportOutput = out.printForm(form.toXml(args))
 
   def printResult(desc: MarkupString, result: Result)(implicit out: HtmlReportOutput): HtmlReportOutput = {
@@ -136,10 +136,10 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
     out.printCollapsibleExceptionMessage(f, indent + 1)
 
   def printDataTable(table: DataTable)(out: HtmlReportOutput) = printFormResult(Form(table))(out)
-   
+
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)
   override def toString = r.toString
-   
+
 }
 
 private[specs2]
@@ -147,7 +147,7 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd, stats: Stats = Stats(), level: Int 
   def print(out: HtmlReportOutput) = {
     implicit val doIt = (!args.xonly || stats.hasFailuresOrErrors) && stats.hasExpectations && (stats eq end.stats)
     implicit val arguments = args
-    
+
     out ?> (_.printBr.printStats(end.specName, end.stats))
   }
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)

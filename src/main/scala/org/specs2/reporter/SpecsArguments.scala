@@ -81,7 +81,7 @@ case object SpecsArguments {
     def append(a1: SpecsArguments[T], a2: =>SpecsArguments[T]) = a1 append a2
     val zero = new SpecsArguments[T]()
   }
-  def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, SpecsArguments[T]]): SpecsArguments[T] = { 
+  def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, SpecsArguments[T]]): SpecsArguments[T] = {
     fs.foldMap(reducer.unit)
   }
   implicit object FragmentSpecsArgumentsReducer extends Reducer[Fragment, SpecsArguments[Fragment]] {

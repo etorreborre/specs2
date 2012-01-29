@@ -25,7 +25,7 @@ Statistics can be accumulated on each executed specification in order to be disp
     "the total of an inner spec must be ok"                                                                             ! e8^
     "the total of the outer spec must be ok"                                                                            ! e9^
                                                                                                                         end
-                                                                                          
+
   val spec1 = new Specification { def is =
     "spec1.title"           ^
     "e1" ! Success("ok", 2) ^
@@ -40,7 +40,7 @@ Statistics can be accumulated on each executed specification in order to be disp
   def total(s: SpecificationStructure) = last(statistics(s).totals)
   def totals(s: SpecificationStructure) = statistics(s).totals
   def execute(f: Fragment) = new FragmentExecution {}.executeFragment(Arguments())(f)
-    
+
   def e1 = total(spec1).examples must_== 5
   def e2 = total(spec1).expectations must_== 6
   def e3 = total(spec1).successes must_== 1
@@ -48,7 +48,7 @@ Statistics can be accumulated on each executed specification in order to be disp
   def e5 = total(spec1).errors must_== 1
   def e6 = total(spec1).pending must_== 1
   def e7 = total(spec1).skipped must_== 1
-  
+
   val spec2 = new Specification { def is =
     "spec2".title                 ^
     "e1" ! Success("ok", 2)       ^
@@ -56,7 +56,7 @@ Statistics can be accumulated on each executed specification in order to be disp
     include(spec1)                ^
                                   end
   }
-  
+
   def e8 = {
     val endOfSpecStats = totals(spec2).apply(11) // the end stat for the inner specification
     (endOfSpecStats.examples must_== 5) and (endOfSpecStats.successes must_== 1)

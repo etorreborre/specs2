@@ -10,7 +10,7 @@ import time.TimeConversions._
  * This was contributed by @robey (http://robey.lag.net)
  */
 trait EventuallyMatchers {
-  
+
   /**
    * @return a matcher that will retry the nested matcher a given number of times
    */
@@ -31,4 +31,4 @@ trait EventuallyMatchers {
   /** @return a matcher that will retry the nested matcher a given 40 times  */
   def eventually[T](nested: =>Matcher[T]): Matcher[T] = eventually(40, 100.milliseconds)(nested)
 }
-object EventuallyMatchers extends EventuallyMatchers 
+object EventuallyMatchers extends EventuallyMatchers

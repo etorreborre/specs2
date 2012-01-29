@@ -9,9 +9,9 @@ import text.NotNullStrings._
 import Expectable._
 /**
  * The Expectable class models anything which can be checked by applying a Matcher
- * 
+ *
  * It stores a value which is only evaluated when necessary and an optional additional description for that value.
- * 
+ *
  * The Expectable object is responsible for creating its own description, based on the value toString method and
  * and an additional description.
  *
@@ -19,7 +19,7 @@ import Expectable._
 class Expectable[+T] private[specs2] (t: () => T) { outer =>
   /** the value is only evaluated if necessary */
   lazy val value = t()
-  
+
   /**
    * optional additional description: it is a function which takes value.toString and returns a String
    */
@@ -92,7 +92,7 @@ object Expectable {
   private[specs2] def apply[T](t: =>T, d1: Option[String => String]) = new Expectable(() => t) {
     override val desc: Option[String => String] = d1
   }
-  
+
   /** Expectable is a Functor and can use the fmap function to modify its value */
   implicit val ExpectableFunctor: Functor[Expectable] = new Functor[Expectable] {
     def fmap[A, B](r: Expectable[A], f: A => B) = r.map(f)

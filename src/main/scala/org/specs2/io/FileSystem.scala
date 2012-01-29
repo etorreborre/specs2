@@ -11,13 +11,13 @@ import java.lang.String._
 /**
  * The FileSystem trait abstracts file system operations to allow easier mocking of file system related functionalities.
  * <p>
- * It mixes the <code>FileReader</code> and <code>FileWriter</code> traits to provide easy read/write operations.  
+ * It mixes the <code>FileReader</code> and <code>FileWriter</code> traits to provide easy read/write operations.
  */
 private[specs2]
 trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter {
   /**
    * @param path glob expression, for example: <code>./dir/**/*.xml</code>
-   * @return the list of paths represented by the "glob" definition <code>path</path>  
+   * @return the list of paths represented by the "glob" definition <code>path</path>
    */
   def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean = false): Seq[String] = {
     val found = recurse(new File(basePath))
@@ -44,7 +44,7 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
 	  import Stream._
 	  cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.filterNot(isVersionFile).flatMap(recurse(_)))
   }
-  
+
   /**
    * @return the regular expression equivalent to a glob pattern (see the specs for Fragments)
    */
@@ -57,10 +57,10 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
                       .replace("*", authorizedNamePattern)
                       .replace(star, "*")
     if (!pattern.startsWith("\\./"))
-      pattern = "\\./" + pattern 
+      pattern = "\\./" + pattern
     pattern
   }
-  
+
   /**
    * @return true if the File represented by this path is a directory
    */
@@ -76,14 +76,14 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
    */
   def removeDir(path: String): String = {
     val dir = new File(path)
-    if (dir.isDirectory) { 
+    if (dir.isDirectory) {
       if (dir.listFiles == null || dir.listFiles.isEmpty)
         dir.delete
       else {
-        dir.listFiles.foreach { file => 
-          if (file.isFile) 
+        dir.listFiles.foreach { file =>
+          if (file.isFile)
             file.delete
-          else 
+          else
             removeDir(file.getPath)
         }
         dir.delete
@@ -92,45 +92,45 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
     dir.getParent
   }
   /** @return true if the file can be read */
-  def canRead(path: String) = path != null && new File(path).canRead  
+  def canRead(path: String) = path != null && new File(path).canRead
 
   /** @return true if the file can be written */
-  def canWrite(path: String) = path != null && new File(path).canWrite  
+  def canWrite(path: String) = path != null && new File(path).canWrite
 
   /** @return true if the file is absolute */
-  def isAbsolute(path: String) = path != null && new File(path).isAbsolute  
+  def isAbsolute(path: String) = path != null && new File(path).isAbsolute
 
   /** @return true if the file is a file */
-  def isFile(path: String) = path != null && new File(path).isFile  
+  def isFile(path: String) = path != null && new File(path).isFile
 
   /** @return true if the file is a directory */
-  def isDirectory(path: String) = path != null && new File(path).isDirectory  
+  def isDirectory(path: String) = path != null && new File(path).isDirectory
 
   /** @return true if the file is hidden */
-  def isHidden(path: String) = path != null && new File(path).isHidden  
+  def isHidden(path: String) = path != null && new File(path).isHidden
 
   /** @return the file name */
-  def getName(path: String) = new File(path).getName  
+  def getName(path: String) = new File(path).getName
 
   /** @return the file absolute path */
-  def getAbsolutePath(path: String) = new File(path).getAbsolutePath  
+  def getAbsolutePath(path: String) = new File(path).getAbsolutePath
 
   /** @return the file canonical path */
-  def getCanonicalPath(path: String) = new File(path).getCanonicalPath  
+  def getCanonicalPath(path: String) = new File(path).getCanonicalPath
 
   /** @return the file parent path */
-  def getParent(path: String) = new File(path).getParent  
+  def getParent(path: String) = new File(path).getParent
 
   /** @return the files of that directory */
   def listFiles(path: String): List[String] = if (new File(path).list == null) List() else new File(path).list.toList
-  
-  /** 
+
+  /**
    * copy the content of a directory to another.
    * @param url url of the directory to copy
    * @param dest destination directory path
    */
   def copyDir(url: URL, dest: String) { copyDir(new File(url.toURI).getPath, dest) }
-   /** 
+   /**
    * copy the content of a directory to another.
    * @param path path of the directory to copy
    * @param dest destination directory path
@@ -141,7 +141,7 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
       if (new File(path).isDirectory) copyDir(path, dest) else copyFile(path, dest)
     }
   }
-  /** 
+  /**
    * Copy the content of a directory to another.
    * @param path path of the file to copy
    * @param dest destination directory path
@@ -156,15 +156,15 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
     output.flush
     output.close
     input.close
-  }  
-  /** 
+  }
+  /**
    * Unjar the jar (or zip file) specified by "path" to the "dest" directory.
    * @param path path of the jar file
    * @param dest destination directory path
    */
   def unjar(path: String, dest: String) { unjar(path, dest, ".*") }
-  
-  /** 
+
+  /**
    * Unjar the jar (or zip file) specified by "path" to the "dest" directory.
    * Filters files which shouldn't be extracted with a regular expression.
    * @param path path of the jar file
@@ -189,16 +189,16 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
              dest.flush
 		       dest.close
 		     }
-         
+
        }
        extractEntry(zis.getNextEntry)
      }
-   } 
+   }
    extractEntry(zis.getNextEntry)
    zis.close
   }
-  
-  /** 
+
+  /**
    * Copy an input stream to an output stream.
    * @param input input stream
    * @param output output stream
@@ -215,9 +215,9 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
     readData(input.read(data, 0, 2048))
   }
 
-  /** 
+  /**
    * Copy specs resources found either in the specs jar or in the classpath directories to an output directory
-   * 
+   *
    * @param src name of the resource directory to copy
    * @param outputDir output directory where to copy the files to
    */

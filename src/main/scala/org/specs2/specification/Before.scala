@@ -14,17 +14,17 @@ trait Context extends Scope {
 /**
  * The Before trait can be inherited by classes representing a context
  * where an action must be executing before the main executable action
- * 
+ *
  * @see Example to understand why the type T must <% Result
  */
 trait Before extends Context { outer =>
 
   /** override this method to provide the before behavior */
   def before: Any
-  /** 
+  /**
    * execute an action returning a Result
    * and finally the before action.
-   * 
+   *
    * The action will be aborted if the before block fails:
    *
    * - with an exception
@@ -34,7 +34,7 @@ trait Before extends Context { outer =>
   def apply[T <% Result](a: =>T): Result = {
     ResultExecution.execute(before)((any: Any) => a)
   }
-  
+
   /** compose the actions of 2 Before traits */
   def compose(b: Before): Before = new Before {
     def before = { b.before; outer.before }

@@ -112,12 +112,12 @@ trait NestedBlocks {
     stack.headOption.getOrElse(monoid.zero)
   }
   def pop[T](stack: Seq[T]) = stack.drop(1)
-  
+
   private def lift[T](f: (T, T) => (T, T)): (SpecBlock[T], SpecBlock[T]) => (SpecBlock[T], SpecBlock[T]) = { (b1, b2) =>
     val (updated1, updated2) = f(b1.value, b2.value)
-    (b1.update(updated1), b2.update(updated2)) 
+    (b1.update(updated1), b2.update(updated2))
   }
-  
+
   def fragmentsToSpecBlock = (f: Fragment) => f match {
     case SpecStart(_,_,_,_)   => BlockStart(f)
     case SpecEnd(_)           => BlockEnd(f)

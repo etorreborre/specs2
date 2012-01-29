@@ -5,8 +5,8 @@ import execute._
 
 /**
  * The BeforeAfter trait allows to declare before and after actions
- * to execute before and after an Example 
- * 
+ * to execute before and after an Example
+ *
  * @see Before
  * @see After
  */
@@ -15,7 +15,7 @@ trait BeforeAfter extends Before with After { outer =>
 	  lazy val result = super[Before].apply(a)
 	  super[After].apply(result)
   }
-  
+
   /** compose the actions of 2 BeforeAfter traits */
   def compose(b: BeforeAfter): BeforeAfter = new BeforeAfter {
     def before = { b.before; outer.before }
@@ -32,7 +32,7 @@ trait BeforeAfter extends Before with After { outer =>
 
 /**
  * The BeforeAfter trait allows to declare before, around and after actions
- * 
+ *
  * @see Before
  * @see After
  * @see Around

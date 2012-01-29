@@ -36,7 +36,7 @@ class MapMatchersSpec extends Specification { def is =
   { partial must not be definedBy(1 -> false) }                                                                         ^
   { partial must not beDefinedBy(1 -> false) }                                                                          ^
                                                                                                                         end
-                                                                                          
-  val partial: PartialFunction[Int, Boolean] = { case (i: Int) if (i == 1) => true }                                                                                        
-  val partial2: PartialFunction[Int, Boolean] = { case (i: Int) => (i == 1) }                                                                                        
+
+  val partial: PartialFunction[Int, Boolean] = { case (i: Int) if (i == 1) => true }
+  val partial2: PartialFunction[Int, Boolean] = { case (i: Int) => (i == 1) }
 }

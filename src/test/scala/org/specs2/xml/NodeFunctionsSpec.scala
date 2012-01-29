@@ -23,12 +23,12 @@ class NodeFunctionsSpec extends Specification { def is =
     { <a>{"a"}</a> must ==/(<a>{" a "}</a>) }                                                                           ^
                                                                                                                         end
 
-  def e1 = <a/>.matchNode(<a/>)                                                                                          
-  def e2 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n"))                                                                                          
-  def e3 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"))                                                                                          
-  def e4 = <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v"))                                                                                          
-                                                                                          
-  def e5 = <a/>.matchNode(<a/>, exactMatch = true)                                                                                          
-  def e6 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"), exactMatch = true)                                                                                          
-  def e7 = <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v", "n2" -> "v2"), exactMatch = true)                                                                                          
+  def e1 = <a/>.matchNode(<a/>)
+  def e2 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n"))
+  def e3 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"))
+  def e4 = <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v"))
+
+  def e5 = <a/>.matchNode(<a/>, exactMatch = true)
+  def e6 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"), exactMatch = true)
+  def e7 = <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v", "n2" -> "v2"), exactMatch = true)
 }

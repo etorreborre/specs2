@@ -9,7 +9,7 @@ import internal.scalaz.Scalaz._
  */
 trait HtmlExporting extends Exporting with HtmlPrinter with HtmlFileWriter {
   type ExportType = Unit
-  
+
   def export(implicit args: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) =>
     print(spec.execute) |> writeFiles
 

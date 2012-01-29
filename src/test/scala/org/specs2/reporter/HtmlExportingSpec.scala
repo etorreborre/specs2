@@ -23,7 +23,7 @@ While the formal type of output is Unit, the HtmlExporting trait actually transf
   "The HtmlFileWriter trait writes the `HtmlFiles` to disk" ~/ new HtmlFileWriterSpec                                                       ^
                                                                                                                                             end
   def exporter = new HtmlExporting {}
-  
+
   def e1 = check { (spec: ExecutedSpecification) =>
     (1 + spec.includedLinkedSpecifications.size) === exporter.print(spec)(args()).size
   }
@@ -68,7 +68,7 @@ class HtmlExporting0Spec extends Function2Specification[ExecutingSpecification, 
 
 class ExecutedSpecificationSpec extends DataSpecification[ExecutingSpecification] {
   def is = success
-} 
+}
 
 
 class ArgumentsSpec extends DataSpecification[Arguments] {

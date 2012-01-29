@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 import sys._
- 
+
 class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
 
   "Exception matchers allow to check that exceptions are thrown"                          				                      ^
@@ -34,39 +34,39 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
 
   def e2 = (theBlock(error("boom")) must throwA[RuntimeException]).message must_==
 	        "Got the exception java.lang.RuntimeException: boom"
-	  
-  def e3 = (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must_== 
+
+  def e3 = (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must_==
 	        "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead"
-	  
+
   def e3_1 = (1 must not throwA(new Exception)).toResult must beSuccessful
 
   def e4 = (theBlock(error("boom")) must throwA[RuntimeException].like { case e => e.getMessage()(0) === 'b' }).message must_==
 	        "Got the exception java.lang.RuntimeException: boom ('b' is equal to 'b')"
-	  
+
   def e4_1 = (theBlock(error("boom")) must throwA[RuntimeException](message = "boo")).message must_==
 	        "Got the exception java.lang.RuntimeException: boom ('boom' matches '.*boo.*')"
 
   def e5 = (theBlock(error("boom")) must throwA[RuntimeException].like { case e => e.getMessage()(0) === 'a' }).message must_==
 	        "Expected: java.lang.RuntimeException. Got: java.lang.RuntimeException: boom instead ('b' is not equal to 'a')"
-	  
+
   def e6 = ("hello" must throwA(new RuntimeException("boom"))).message must_==
   		    "Expected: java.lang.RuntimeException: boom. Got nothing"
-	  
-  def e7 = (theBlock(error("boom")) must throwAn(new RuntimeException("boom"))).message must_== 
+
+  def e7 = (theBlock(error("boom")) must throwAn(new RuntimeException("boom"))).message must_==
 		    "Got the exception java.lang.RuntimeException: boom"
 
-  def e8 = (theBlock(error("boom")) must throwAn(new IllegalArgumentException("boom"))).message must_== 
+  def e8 = (theBlock(error("boom")) must throwAn(new IllegalArgumentException("boom"))).message must_==
 		    "Expected: java.lang.IllegalArgumentException: boom. Got: java.lang.RuntimeException: boom instead"
 
-  def e9 = (theBlock(error("boom")) must throwAn(new RuntimeException("bang"))).message must_== 
+  def e9 = (theBlock(error("boom")) must throwAn(new RuntimeException("bang"))).message must_==
 		    "Expected: java.lang.RuntimeException: bang. Got: java.lang.RuntimeException: boom instead"
 
-  case class UserError(name: String, message: String) extends RuntimeException(message)	  
+  case class UserError(name: String, message: String) extends RuntimeException(message)
   def e10 = (theBlock(throw UserError("me", "boom")) must throwAn(UserError("me2", "boom")).
 		    like { case UserError(name, _) => name must endWith("2") }).message must endWith("('me' doesn't end with '2')")
 
   def e11 = (theBlock(throw UserError("me", "boom")) must throwAn(UserError("me2", "boom")).
 		     like { case UserError(name, _) => name must startWith("m") }).message must beMatching("Got the exception .*")
-		    	
+
   def e12 = (1 must not(throwAn[Exception])).toResult.message must_== "Expected: java.lang.Exception. Got nothing"
 }

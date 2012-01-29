@@ -21,7 +21,7 @@ class IterablexSpec extends Specification with IterableData {
     }
     "for 2 iterables created with same elements in a different order" >> {
       implicit val iterables = sameIterables
-      Prop.forAll { t: (Iterable[Any], Iterable[Any]) => val (i1, i2) = t 
+      Prop.forAll { t: (Iterable[Any], Iterable[Any]) => val (i1, i2) = t
         i1.sameElementsAs(i2)
       }
     }
@@ -63,10 +63,10 @@ trait IterableData extends ScalaCheck {
       i1 <- listOf(oneOf(1, 4, 5, i0))
       i2 <- listOf(oneOf(i0, i1, 2, 3))
     } yield (i2, i2.scramble)
-  }                           
+  }
   val sameIterablesOfDifferentTypes: Arbitrary[(Iterable[Any], Iterable[Any])] = Arbitrary {
     for {
-      i1 <- listOf(oneOf(1, 2, 3, listOf(oneOf(1, 2, 3))))    
+      i1 <- listOf(oneOf(1, 2, 3, listOf(oneOf(1, 2, 3))))
     } yield (i1.toStream, i1.scramble.toList)
   }
 }

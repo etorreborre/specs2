@@ -6,13 +6,13 @@ package text
  * their plural form
  *
  */
-private[specs2] 
+private[specs2]
 trait Plural {
-  
+
   /** @return a Noun object which can be pluralized */
   implicit def noun(s: String) = Noun(s)
   case class Noun(s: String) {
-    def plural(v: Int) = if (v > 1) s+"s" else s    
+    def plural(v: Int) = if (v > 1) s+"s" else s
     def plural(v: Long) = if (v > 1) s+"s" else s
     def bePlural(v: Int) = if (v > 1) s+"are" else s+"is"
     def bePlural(v: Long) = if (v > 1) s+"are" else s+"is"
@@ -22,9 +22,9 @@ trait Plural {
   case class Quantity(i: Int) {
     /** @return a pluralized string describing this quantity */
 	  def qty(s: String) = i.toString + " " + s.plural(i)
-    /** 
-     * @return a Option with a pluralized string describing this quantity if it is 
-     * greater than 0 
+    /**
+     * @return a Option with a pluralized string describing this quantity if it is
+     * greater than 0
      */
 	  def optQty(s: String): Option[String] = if (i > 0) Some(qty(s)) else None
     /**
@@ -46,5 +46,5 @@ trait Plural {
        else             "th")
   }
 }
-private[specs2] 
+private[specs2]
 object Plural extends Plural

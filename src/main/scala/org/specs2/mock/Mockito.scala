@@ -9,8 +9,8 @@ import matcher.Expectations
  */
 trait Mockito extends MocksCreation
   with CalledMatchers
-  with MockitoStubs 
-  with CapturedArgument 
+  with MockitoStubs
+  with CapturedArgument
   with MockitoMatchers
   with Expectations
 

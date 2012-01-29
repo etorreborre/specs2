@@ -5,7 +5,7 @@ import Trim._
 class TrimSpec extends Specification { def is =
                                                                                                                         """
 ### Trait for trimming strings
- 
+
   The *Trim* trait can be used to trim all sorts of strings.
                                                                                                                         """^p^
   "Trim lines and replace characters"                                                                                   ^

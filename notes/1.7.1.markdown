@@ -1,11 +1,11 @@
 This version fixes an important issue from 1.7:
 
  * following the change in 1.7 which allowed results to be displayed as soon as computed on the console, there was no more guarantee that steps would execute stricly after the preceding group of examples
-   
-There are a few improvements:  
-  
+
+There are a few improvements:
+
  * the `org.specs2.time.Duration` class is made public to get a better control over time implicits
  * there is a new `beSorted` matcher for sequences
  * [experimental] new `Analysis` trait to specify expected dependencies between the project packages
- 
+
  ==========================

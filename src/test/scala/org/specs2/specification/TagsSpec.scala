@@ -5,7 +5,7 @@ import main._
 import reporter.DefaultSelection
 import matcher.ThrownExpectations
 
-class TagsSpec extends Specification with ThrownExpectations with Tags { def is = 
+class TagsSpec extends Specification with ThrownExpectations with Tags { def is =
                                                                                                                         """
 A specification can be tagged with some meaningful names like "integration" or "accounts". Creating tags amounts to
 adding new fragments in the specification. Then those fragments are used to determine which other fragments must be executed

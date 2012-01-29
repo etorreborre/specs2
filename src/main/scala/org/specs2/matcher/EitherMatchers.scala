@@ -13,7 +13,7 @@ object EitherMatchers extends EitherMatchers
 
 private[specs2]
 trait EitherBaseMatchers {
-  
+
   def beRight[T](t: =>T) = new Matcher[Either[_, T]] {
     def apply[S <: Either[_, T]](value: Expectable[S]) = {
       val expected = t

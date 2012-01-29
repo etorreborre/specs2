@@ -11,10 +11,10 @@ import text.Quote._
 trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers
 object StringMatchers extends StringMatchers
 
-/** 
+/**
  * This trait provides base matchers for strings.
- * 
- * IgnoreCase and ignoreSpace matchers are created by adapting the BeEqualTo matcher.  
+ *
+ * IgnoreCase and ignoreSpace matchers are created by adapting the BeEqualTo matcher.
  */
 private[specs2]
 trait StringBaseMatchers { outer =>
@@ -26,14 +26,14 @@ trait StringBaseMatchers { outer =>
     def ignoreCase: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
     def ignoreSpace: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.trim, ignoringSpace, ignoringSpace)
   }
-  
-  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
+
+  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */
   def ==/(s: String) = be_==/(s)
-  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
+  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */
   def be_==/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace
-  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
+  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */
   def be_!=/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace
-  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
+  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */
   def !=/(s: String) = be_!=/(s)
   /** matches if (b contains a) */
   def contain(t: String) = new Matcher[String] {
@@ -58,30 +58,30 @@ trait StringBaseMatchers { outer =>
   /** alias for beMatching but matching just a fragment of the string*/
   def =~(t: =>String) = new BeMatching(".*"+t+".*")
   /** matches if b.startsWith(a) */
-  def startWith(t: =>String) = new Matcher[String] { 
+  def startWith(t: =>String) = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(b.value!= null && a!= null && b.value.startsWith(a),
-             b.description + " starts with " + q(a), 
+             b.description + " starts with " + q(a),
              b.description + " doesn't start with " + q(a), b)
     }
   }
-  /** matches if b.endsWith(a) */   
-  def endWith(t: =>String) = new Matcher[String] { 
+  /** matches if b.endsWith(a) */
+  def endWith(t: =>String) = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(b.value!= null && a!= null && b.value.endsWith(a),
-             b.description  + " ends with " + q(a), 
+             b.description  + " ends with " + q(a),
              b.description  + " doesn't end with " + q(a), b)
     }
   }
-  /** matches if the regexp a is found inside b */   
+  /** matches if the regexp a is found inside b */
   def find(a: String) = new FindMatcher(a)
 
-  /** 
+  /**
    * Matcher to find if the regexp a is found inside b.
    * This matcher can be specialized to a FindMatcherWithGroups which will also check the found groups
-   */   
+   */
   class FindMatcher(t: =>String) extends Matcher[String] {
     def found(a: String, b: String) = {
       val matcher = Pattern.compile(a).matcher(b)
@@ -92,15 +92,15 @@ trait StringBaseMatchers { outer =>
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(a != null && b.value != null && found(a, b.value),
-             q(a) + " is found in " + b.description, 
+             q(a) + " is found in " + b.description,
              q(a) + " isn't found in " + b.description, b)
-      } 
+      }
   }
 
   /**
-   * Matcher to find if the regexp a is found inside b. 
+   * Matcher to find if the regexp a is found inside b.
    * This matcher checks if the found groups are really the ones expected
-   */   
+   */
   class FindMatcherWithGroups(t: =>String, groups: String*) extends Matcher[String] {
     def found(a: String, b: String) = {
       val matcher = Pattern.compile(a).matcher(b)
@@ -116,18 +116,18 @@ trait StringBaseMatchers { outer =>
       val groupsFound = found(a, b.value)
       val withGroups = if (groups.size > 1) " with groups " else " with group "
       def foundText = {
-        if (groupsFound.isEmpty) 
-          ". Found nothing" 
-        else 
+        if (groupsFound.isEmpty)
+          ". Found nothing"
+        else
            ". Found: " + q(groupsFound.mkString(", "))
       }
       val groupsToFind = if (groups == null) Nil else groups.toList
-      result(a != null && b.value != null && groupsFound == groupsToFind, 
-             q(a) + " is found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")), 
+      result(a != null && b.value != null && groupsFound == groupsToFind,
+             q(a) + " is found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")),
              q(a) + " isn't found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")) + foundText, b)
-    } 
+    }
   }
-  
+
 }
 
 private[specs2]

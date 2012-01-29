@@ -21,7 +21,7 @@ import SpecsArguments._
 
 /**
  * This trait reduces a list of ExecutedFragments to a list of PrintLines.
- * 
+ *
  * Each line contains:
  * - A description (text or example description)
  * - A level, to work out the indenting
@@ -57,7 +57,7 @@ trait TextPrinter {
   case class PrintLine(text: Print, stats: Stats, level: Int, args: Arguments) {
     def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
-  
+
   implicit object PrintReducer extends Reducer[ExecutedFragment, Seq[Print]] {
     implicit override def unit(fragment: ExecutedFragment) = Seq(print(fragment))
     /** print an ExecutedFragment and its associated statistics */
@@ -70,16 +70,16 @@ trait TextPrinter {
       case fragment                            => PrintOther(fragment)
     }
   }
-    
+
   sealed trait Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput): Unit
-    
+
     /**
      * indent the text to the wanted level.
      * If the text contains several lines, each line is indented
      */
-    protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = { 
-      if (args.noindent) s 
+    protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = {
+      if (args.noindent) s
       else {
         val indent = "  "*level
         s.trim.split("\n").map(indent+_).mkString("\n")
@@ -96,7 +96,7 @@ trait TextPrinter {
   case class PrintResult(r: ExecutedResult)           extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       printResult(leveledText(r.text(args).toString, level)(args), r.result, r.timer)(args, out)
-      
+
     def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
       val description = statusAndDescription(desc, result, timer)(args, out)
       def print(res: Result) {
@@ -173,7 +173,7 @@ trait TextPrinter {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (args.canShow("-"))
         out.printText(leveledText(t.text, level)(args))(args)
-  }        
+  }
   case class PrintBr()                               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (args.canShow("-")) out.printLine(" ")(args)

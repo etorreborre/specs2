@@ -12,15 +12,15 @@ class AnsiColorsSpec extends Specification { def is =
 	  "if empty"                                                                                                            ! e6^
                                                                                                                           end
 
-  
+
 	import AnsiColors._
-	
-	def e1 = removeColors("hello" + AnsiColors.red) must_== "hello"  
-	
+
+	def e1 = removeColors("hello" + AnsiColors.red) must_== "hello"
+
 	def e2 = color("\nhello\n", "*") must_== "\n*hello"+reset+"\n"
 	def e3 = color("\nhello", "*") must_== "\n*hello"+reset
 	def e4 = color("hello\n", "*") must_== "*hello"+reset+"\n"
 	def e5 = color("hello", "*") must_== "*hello"+reset
 	def e6 = color("", "*") must_== ""
-	
+
 }

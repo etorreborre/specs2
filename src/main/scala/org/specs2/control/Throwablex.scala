@@ -11,7 +11,7 @@ trait Throwablex {
   /**
    * Implicit method to add additional methods to Throwable objects
    */
-  implicit def extend[T <: Throwable](t: T) = new ExtendedThrowable(t)  
+  implicit def extend[T <: Throwable](t: T) = new ExtendedThrowable(t)
   /**
    * See the ExtendedExceptions object description
    */
@@ -27,7 +27,7 @@ trait Throwablex {
     def apply(i: Int) = t.getStackTrace()(i)
     /** @return the first stacktrace element as an option */
     def headOption = t.getStackTrace().toList.headOption
-    /** 
+    /**
      * Select all traces of this exception matching a given pattern
      */
     def filter(pattern: String) = {
@@ -47,7 +47,7 @@ trait Throwablex {
     }
     /** @return the list of chained exceptions */
     def chainedExceptions: List[Throwable] = {
-      if (t.getCause == null) List() 
+      if (t.getCause == null) List()
       else t.getCause :: t.getCause.chainedExceptions
     }
     /** @return the list of all stacktrace elements */
@@ -60,7 +60,7 @@ trait Throwablex {
        val pr = new PrintWriter(stringWriter)
        try { t.printStackTrace(pr) } finally { pr.close }
        stringWriter.toString
-    } 
+    }
 
     /** print all the stacktrace for t, including the traces from its causes */
     def printFullStackTrace = t.getFullStackTrace.foreach(println(_))
@@ -75,7 +75,7 @@ trait Throwablex {
     def messageAndCause = t.getMessage + (if (t.getCause != null) ". Cause: "+t.getCause.getMessage else "")
   }
   /** utility method to create a default stacktrace element */
-  def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 
+  def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) =
 	   new StackTraceElement(m, className, fileName, lineNumber)
   /** @return an exception with the given message and stacktrace */
   def exception(m: String, st: Seq[StackTraceElement]): Exception = {

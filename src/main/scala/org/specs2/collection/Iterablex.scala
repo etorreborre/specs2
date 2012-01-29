@@ -23,7 +23,7 @@ trait Iterablex {
   class ExtendedIterable[T](xs: GenIterable[T]) {
 
     /**
-     * @return true if the 2 iterables contain the same elements, in the same order, 
+     * @return true if the 2 iterables contain the same elements, in the same order,
      *         according to a function f
      */
     def isSimilar[S >: T](that: GenIterable[S], f: Function2[T, S, Boolean]): Boolean = {
@@ -94,7 +94,7 @@ trait Iterablex {
       if (!xs.isEmpty && xs == xs.iterator.next)
         xs.toString
       else
-        "[" + xs.toList.map { x => 
+        "[" + xs.toList.map { x =>
           x match {
             case i: GenIterable[_] => i.toDeepString
             case _ => x.toString

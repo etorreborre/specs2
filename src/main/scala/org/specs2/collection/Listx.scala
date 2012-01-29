@@ -17,7 +17,7 @@ trait Listx { outer =>
   class ExtendedNestedList[T](list: List[List[T]]) {
     def safeTranspose = outer.transpose(list)
   }
-  
+
   /** @return an extension for a list */
   implicit def extendList[T](list: List[T]): ExtendedList[T] = new ExtendedList(list)
   /**
@@ -37,11 +37,11 @@ trait Listx { outer =>
      */
     def scramble = list.sortWith((a, b) => (new java.util.Random).nextInt(1) > 0)
   }
-  
+
   /**
    * This methods works like the transpose method defined on Traversable
    * but it doesn't fail when the input is not formatted like a regular matrix
-   * 
+   *
    *  List(List("a",  "bb", "ccc"),
    *       List("dd", "e",  "fff")) =>
    *  List(List("a",  "dd"),

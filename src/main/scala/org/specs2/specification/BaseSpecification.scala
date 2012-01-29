@@ -6,7 +6,7 @@ import main.Arguments
 import Fragments._
 /**
  * A Base specification contains the minimum elements for a Specification
- * 
+ *
  * - a Seq of Fragments, available through the SpecificationStructure trait
  * - methods for creating Fragments from the FragmentsBuilder trait
  * - methods to include other specifications
@@ -26,12 +26,12 @@ trait SpecificationInclusion { this: FragmentsBuilder =>
 /**
  * The structure of a Specification is simply defined as a sequence of fragments
  */
-trait SpecificationStructure { 
+trait SpecificationStructure {
   /** declaration of Fragments from the user */
   def is: Fragments
   /** this method can be overriden to map additional behavior in the user-defined fragments */
   def map(fs: =>Fragments): Fragments = fs
-  /** 
+  /**
    * this "cached" version of the Fragments is kept hidden from the user to avoid polluting
    * the Specification namespace.
    * SpecStart and SpecEnd fragments are added if the user haven't inserted any
@@ -45,7 +45,7 @@ trait SpecificationStructure {
 private[specs2]
 object SpecificationStructure {
   import collection.Iterablex._
-  
+
   def apply(fs: Fragments): SpecificationStructure = new SpecificationStructure {
     def is = fs.fragments match {
       case SpecStart(n,a,l,so) +: middle :+ SpecEnd(_) => Fragments(Some(n), middle, a, l, so)

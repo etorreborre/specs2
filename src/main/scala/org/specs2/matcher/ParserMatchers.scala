@@ -74,7 +74,7 @@ trait ParserBaseMatchers {
     def withResult(result: String): Matcher[TMatchee] = withResult(new BeMatching(".*"+result+".*") ^^ ((_:Any).toString))
     /** check if the parsed value is as expected */
     def withResult(result: ExpectedParsedResult[T]): Matcher[TMatchee] = withResult(new BeEqualTo(result.t))
-    
+
     /** check if the parsed value is as expected, using a matcher */
     def withResult(resultMatcher: Matcher[T]): Matcher[TMatchee] = new Matcher[TMatchee] {
       def apply[S <: TMatchee](s: Expectable[S]) = {
@@ -148,7 +148,7 @@ trait ParserBaseMatchers {
 private[specs2]
 trait ParserBeHaveMatchers { outer: ParserBaseMatchers =>
   import parsers.{Success => PSuccess, Failure => PFailure, Error => PError, _}
-  
+
   implicit def toParsedResultMatcher[T](result: MatchResult[ParseResult[T]]) = new ParsedResultMatcher(result)
   class ParsedResultMatcher[T](result: MatchResult[ParseResult[T]]) {
     def aSuccess                           = result(beASuccess)

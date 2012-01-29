@@ -41,10 +41,10 @@ trait FilesRunnerFingerprint extends TestFingerprint {
 /**
  * Runner for TestInterface.
  * It creates a Specification class with the given classLoader the classes which can be executed by the specs2 library.
- * 
+ *
  * Then it uses a NotifierRunner to notify the EventHandler of the test events.
  */
-class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) extends _root_.org.scalatools.testing.Runner 
+class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) extends _root_.org.scalatools.testing.Runner
   with HandlerEvents with TestLoggers {
   import reflect.Classes._
 
@@ -59,7 +59,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
       reporter(handler)(args).report(s)(s.content.arguments.overrideWith(Arguments(args:_*)))
     }
   }
-  
+
   def runFilesRunner(classname: String, handler: EventHandler, args: Array[String]) =
     toRun[FilesRunner](classname, handler).right.toOption.map(_.main(args))
 

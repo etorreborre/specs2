@@ -12,7 +12,7 @@ import reporter._
 /**
  * This trait finds specifications in the source directory, instantiate them as one big
  * specification and report them using the ConsoleReporter or the HtmlReporter depending on the presence of the html flag
- * 
+ *
  * @see org.specs2.io.FromSource for the definition of the source directory
  * @see org.specs2.main.Arguments for the regular expression defining the specification names
  * to extract and other options

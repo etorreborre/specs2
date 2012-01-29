@@ -121,8 +121,8 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { type1 must not be anInstanceOf[Type2] }                                                                             ^
   { (type1 must beAnInstanceOf[Type2]).message must_== "'type1' is not an instance of 'org.specs2.matcher.Type2'" }     ^
                                                                                                                         end
-                                                                                          
-  def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
+
+  def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns
            "'3' is not equal to '2'"
   val aValue: String = "a value"
 

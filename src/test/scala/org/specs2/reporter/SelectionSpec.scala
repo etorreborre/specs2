@@ -40,7 +40,7 @@ Before executing and reporting a specification, the fragments must be selected a
   "It is possible to select only some previously executed fragments"                                                    ^
     "wasIssue selects only the fragments which were failed or in error"                                                 ! rerun().e1^
                                                                                                                         end
-  
+
   case class filter() extends WithSelection {
     def e1 = select(args(ex = "ex1") ^ ex1 ^ ex2).toString must not contain("ex2")
     def e2 = select(ex1 ^ ex2)(Arguments("ex", "ex1")).toString must not contain("ex2")
@@ -54,7 +54,7 @@ Before executing and reporting a specification, the fragments must be selected a
       val selected = selectSequence(fs ^ step("1"))
       val selected2 = selectSequence(fs ^ step("1") ^ step("2"))
       selected2 must not have size(selected.size)
-    }           
+    }
     def e2 = check { (fs: Fragments) =>
       val selected = selectSequence(fs ^ ex1)
       val selected2 = selectSequence(fs ^ ex1 ^ ex2)

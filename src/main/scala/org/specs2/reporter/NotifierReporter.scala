@@ -36,7 +36,7 @@ trait NotifierExporting extends Exporting {
     }
 
     if (fs.nonEmpty) notify(fs)
-    else {             
+    else {
       val empty = Fragments().specTitleIs(SpecName("empty specification"))
       Seq(ExecutedSpecStart(empty.start), ExecutedSpecEnd(empty.end))
     }

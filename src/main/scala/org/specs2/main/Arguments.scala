@@ -18,7 +18,7 @@ import text._
  * - report:  for the reporting of results
  *
  */
-private[specs2]  
+private[specs2]
 case class Arguments (
   select:        Select           = Select(),
   execute:       Execute          = Execute(),
@@ -59,7 +59,7 @@ case class Arguments (
   def contains(a: String) = commandLine contains a
   /** alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
-  
+
   /**
    * @return a new Arguments object where the values of this are overriden with the values of other if defined
    */
@@ -94,9 +94,9 @@ case class Arguments (
 }
 import main.{SystemProperties => sysProperties}
 
-private[specs2]  
+private[specs2]
 object Arguments extends Extract {
-  
+
   /** @return new arguments from command-line arguments */
   def apply(implicit arguments: String*): Arguments = {
     extract(arguments, sysProperties)
@@ -110,7 +110,7 @@ object Arguments extends Extract {
        commandLine   = arguments
     )
   }
-  
+
   implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments] {
     def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
     val zero = Arguments()
@@ -137,7 +137,7 @@ case class Select(
   _specName:      Option[String]           = None) extends ShowArgs {
 
   import Arguments._
-  
+
   def ex: String                    = _ex.getOrElse(".*")
   def include: String               = _include.getOrElse("")
   def exclude: String               = _exclude.getOrElse("")
@@ -281,7 +281,7 @@ case class Report(
   _traceFilter:   Option[StackTraceFilter] = None) extends ShowArgs {
 
   import Arguments._
-  
+
   def xonly: Boolean                = canShow("x") && canShow("!") && !canShow("o*+")
   def canShow(s: String)            = hasFlags(s, _showOnly)
   def failtrace: Boolean            = _failtrace.getOrElse(false)

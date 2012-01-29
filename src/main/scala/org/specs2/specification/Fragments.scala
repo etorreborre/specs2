@@ -21,7 +21,7 @@ case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fra
   def add(fs: Seq[Fragment]): Fragments = copy(middle = middle ++ fs)
   def add(fs: Fragments): Fragments = add(fs.fragments)
   def add(a: Arguments): Fragments = copy(arguments = arguments.overrideWith(a))
-  
+
   def linkIs(htmlLink: HtmlLink) = copy(link = Some(htmlLink))
   def seeIs(htmlLink: HtmlLink) = copy(middle = Vector(), link = Some(htmlLink), seeOnly = true)
 
@@ -35,7 +35,7 @@ case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fra
 
   def specName = start.specName
   def name = start.name
-  
+
   lazy val start: SpecStart = SpecStart(title.getOrElse(SpecName("")), arguments, link, seeOnly)
   lazy val end: SpecEnd = SpecEnd(start.specName)
 
@@ -79,7 +79,7 @@ object Fragments {
 
   /** @return a Fragments object with the appropriate name set on the SpecStart fragment */
   def withSpecName(fragments: Fragments, name: SpecName): Fragments = fragments.specTitleIs(name)
-  
+
   /**
    * @return a Fragments object with the appropriate name set on the SpecStart fragment
    *

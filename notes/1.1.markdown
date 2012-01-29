@@ -16,10 +16,10 @@ This version provides lots of fixes and adjustments since 1.0:
  * Upgraded to the latest Pegdown version
  * Added a new `Scope` trait to make the creation of contexts easier in a `mutable.Specification`
  * Added an `Outside` trait creating a "context" object to pass to each example
- * Added a `Tags` trait to tag fragments in a Specification and include/exclude them during the execution 
+ * Added a `Tags` trait to tag fragments in a Specification and include/exclude them during the execution
  * Added filtering to stacktraces which are shown as compact by default
  * Smarter and more configurable differences with matchers
- 
+
 Many of these fixes and changes were driven by the migration of the [Lift specifications](https://github.com/etorreborre/framework/tree/eto-wip-specs2).
 You can refer to that project to read more examples of ***specs2*** specifications.
 

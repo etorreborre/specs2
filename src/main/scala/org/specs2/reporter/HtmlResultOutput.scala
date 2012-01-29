@@ -17,7 +17,7 @@ import specification._
 
 /**
  * This class stores the html to print to a file (as a NodeSeq object)
- * 
+ *
  * An instance of that class is immutable so each print method returns another instance
  * containing more xml to print.
  *
@@ -26,11 +26,11 @@ private[specs2]
 case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutput {
 
   private[specs2] lazy val blank = new HtmlResultOutput
-  
+
   def printHtml(n: =>NodeSeq) = print(<html>{n}</html>)
   def printBody(n: =>NodeSeq) = print(<body>{n}</body>)
   def printHead = print(xml ++ head)
-	
+
   def printBr                                         = printOkStatus(<br></br>)
   def printPar(text: String = "")                     = printOkStatus(<p>{wiki(text)}</p>)
   def printText(text: String = "", level: Int = 0)    = printOkStatus(div(wiki(text), level))
@@ -58,9 +58,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
   def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0) = printKoStatus(textWithIcon(message, iconName, level))
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int)          = printKoStatus(div("  "+e.message+" ("+e.location+")", level))
-  
+
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int) =
-    printKoStatus(div(<img src="images/collapsed.gif" onclick={onclick(e)}/> ++ 
+    printKoStatus(div(<img src="images/collapsed.gif" onclick={onclick(e)}/> ++
 		                   t("  "+e.message.notNull+" ("+e.location+")"), level))
 
   def printDetailedFailure(details: Details, level: Int, diffs: Diffs) = {
@@ -69,7 +69,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
         val (expectedDiff, actualDiff) = diffs.showDiffs(expected, actual)
         val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
         val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
-        
+
 				printKoStatus(div(<img src="images/collapsed.gif"  onclick={onclick(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
             <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
@@ -101,7 +101,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
   }
 
 	def printForm(form: NodeSeq) = print(form)
-	
+
 	protected def printOkStatus(n: NodeSeq) = print(okStatus(n))
 	protected def printKoStatus(n: NodeSeq) = print(koStatus(n))
 	protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
@@ -120,7 +120,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
   protected def id(a: Any) = System.identityHashCode(a).toString
   protected def wiki(text: String) = toXhtml(text)
 
-  def head = 
+  def head =
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
       <style type="text/css" media="all">
@@ -140,11 +140,11 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
       <script language="javascript">window.onload={"init;"}</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
-      <script type="text/javascript" src="./css/tabber.js"></script> 
-      <link rel="stylesheet" href="./css/tabber.css" type="text/css" media="screen"/> 
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link rel="stylesheet" href="./css/tabber.css" type="text/css" media="screen"/>
     </head>
-  
-  def javascript = 
+
+  def javascript =
     <script language="javascript"><xml:unparsed>
       function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
@@ -152,9 +152,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
       function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
       function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
       function toggleImage(image) {
-        if (image.src.endsWith('images/expanded.gif')) 
+        if (image.src.endsWith('images/expanded.gif'))
           image.src = 'images/collapsed.gif';
-        else 
+        else
           image.src = 'images/expanded.gif';
       };
       function showHide(id) {

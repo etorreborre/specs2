@@ -2,9 +2,9 @@ package org.specs2
 package matcher
 
 /**
- * Trait aggregating all of specs2 matchers 
+ * Trait aggregating all of specs2 matchers
  */
-trait Matchers extends AnyMatchers 
+trait Matchers extends AnyMatchers
                   with TraversableMatchers
                   with MapMatchers
                   with StringMatchers

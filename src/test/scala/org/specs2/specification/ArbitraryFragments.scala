@@ -9,7 +9,7 @@ import control.LazyParameters._
 trait ArbitraryFragments extends execute.StandardResults with FormattingFragments {
 
   implicit def arbitraryFragment: Arbitrary[Fragment] = Arbitrary {
-    Gen.frequency ( 
+    Gen.frequency (
       (1, Gen.value(Step(success))),
       (10, Gen.value(Text("text"))),
       (8, Gen.value(Example("ex1", success))),

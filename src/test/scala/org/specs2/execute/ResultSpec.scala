@@ -63,10 +63,10 @@ more precisely:
   }
 
   val success1: Result = Success("s1")
-  val success2 = Success("s2")                                                                                          
-  val failure1 = Failure("f1")                                                                                          
+  val success2 = Success("s2")
+  val failure1 = Failure("f1")
   val failure2 = Failure("f2")
   val error1   = Error("e1")
   val skipped1 = Skipped("sk1")
   val pending1 = Pending("p1")
-}    
+}

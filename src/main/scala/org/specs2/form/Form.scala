@@ -15,7 +15,7 @@ import DecoratedProperties._
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
  * It has an optional title and possibly no rows.
- * 
+ *
  * A Form can be executed by executing each row and collecting the results.
  */
 class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val result: Option[Result] = None) extends Executable with Text {
@@ -55,7 +55,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
   /**
    * execute all rows
-   * @return a logical and on all results 
+   * @return a logical and on all results
    */
   def execute = result getOrElse (executeForm.result getOrElse success)
   def executeRows = rows.map(_.executeRow)

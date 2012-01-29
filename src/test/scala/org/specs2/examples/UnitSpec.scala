@@ -14,7 +14,7 @@ class UnitSpec extends mutable.Specification {
   "MutableSpec".title
   // arguments are simply declared at the beginning of the specification if needed
   args(xonly=true)
-  
+
   // a step to execute before the specification must be declared first
   step {
     // setup your data or initialize your database here

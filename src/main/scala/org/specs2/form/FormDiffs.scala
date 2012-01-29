@@ -23,7 +23,7 @@ trait FormDiffs {
 
     start.collect {
       case f if form2 contains f => f.setFailure
-      case f                     => f 
+      case f                     => f
     } ++
     (rest zip form2).map { cur => cur match {
         case (f1, f2) if (f1 == f2)           => f2.setSuccess

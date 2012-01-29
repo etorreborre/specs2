@@ -8,4 +8,4 @@ import io.ConsoleOutput
  */
 trait HtmlReporter extends DefaultReporter
     with HtmlExporting
-    with ConsoleOutput 
+    with ConsoleOutput

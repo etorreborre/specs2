@@ -10,7 +10,7 @@ function showToolTipWithIcon(title,icon,msg,evt){
    if (document.all) evt = event;
    var st = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
 
-   if (navigator.userAgent.toLowerCase().indexOf('safari')>=0)st=0; 
+   if (navigator.userAgent.toLowerCase().indexOf('safari')>=0)st=0;
    var leftPos = evt.clientX-2;
    if (leftPos<0) leftPos = 0;
 
@@ -27,7 +27,7 @@ function showToolTip(title,msg,evt){
     if (document.all) evt = event;
     var st = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
 
-    if (navigator.userAgent.toLowerCase().indexOf('safari')>=0)st=0; 
+    if (navigator.userAgent.toLowerCase().indexOf('safari')>=0)st=0;
     var leftPos = evt.clientX-2;
     if(leftPos<0)leftPos = 0;
 

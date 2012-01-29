@@ -11,11 +11,11 @@ object OptionMatchers extends OptionMatchers
 
 private[specs2]
 trait OptionBaseMatchers {
-  
+
   def beSome[T](t: =>T) = new Matcher[Option[T]] {
     def apply[S <: Option[T]](value: Expectable[S]) = {
       val expected = t
-      result(value.value == Some(t), 
+      result(value.value == Some(t),
              value.description + " is Some with value " + q(expected),
              value.description + " is not Some with value " + q(expected),
              value)
@@ -36,7 +36,7 @@ trait OptionBaseMatchers {
   def beAsNoneAs[T](other: =>Option[T]) = new Matcher[Option[T]] {
     def apply[S <: Option[T]](a: Expectable[S]) = {
       val b = other
-      result(a.value == None && b == None || a.value != None && b != None, 
+      result(a.value == None && b == None || a.value != None && b != None,
              a.description + " is None as well",
              if (a.value == None) b + " is not None" else a.description + " is not None",
              a)

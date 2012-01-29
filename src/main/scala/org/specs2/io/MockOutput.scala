@@ -24,11 +24,11 @@ trait MockOutput extends Output {
 	  else if (msgs.isEmpty)
 	    msgs += formatted
 	  else {
-	    val last = msgs.last 
+	    val last = msgs.last
 	    msgs.dropRight(1)
 	    msgs += (last + formatted)
 	  }
   }
-  
+
   def clear() = msgs.clear()
 }

@@ -17,14 +17,14 @@ object TraversableMatchers extends TraversableMatchers
 
 private[specs2]
 trait TraversableBaseMatchers extends LazyParameters { outer =>
-  
+
   trait TraversableMatcher[T] extends Matcher[GenTraversable[T]]
-  
-  /** 
+
+  /**
    * match if an traversable contains (t).
-   * This definition looks redundant with the one below but it is necessary to 
+   * This definition looks redundant with the one below but it is necessary to
    * avoid the implicit argThat method from Mockito to infer an improper matcher
-   * @see the HtmlPrinterSpec failing with a NPE if that method is missing 
+   * @see the HtmlPrinterSpec failing with a NPE if that method is missing
    */
   def contain[T](t: =>T): ContainMatcher[T] = contain(lazyfy(t))
   /** match if traversable contains (seq2). n is a dummy paramter to allow overloading */
@@ -45,7 +45,7 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
   def have[T](function: T => Boolean) = new Matcher[GenTraversable[T]]{
     def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
       result(traversable.value.exists(function(_)),
-             "at least one element verifies the property in " + traversable.description, 
+             "at least one element verifies the property in " + traversable.description,
              "no element verifies the property in " + traversable.description,
              traversable)
     }
@@ -57,7 +57,7 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
   def haveTheSameElementsAs[T](l: =>Traversable[T]) = new HaveTheSameElementsAs(l)
 
   private def containLike[T](pattern: =>String, matchType: String) =
-    new ContainLikeMatcher[T](pattern, matchType) 
+    new ContainLikeMatcher[T](pattern, matchType)
 
   /** match if there is a way to size T */
   def haveSize[T : Sized](n: Int) = new SizedMatcher[T](n, "size")
@@ -177,7 +177,7 @@ class ContainInOrderMatcher[T](t: LazyParameter[T]*) extends Matcher[GenTraversa
            actual.description + " contains in order " + q(expected.mkString(", ")),
            actual.description + " doesn't contain in order " + q(expected.mkString(", ")), actual)
   }
-  
+
   private def inOrder[T](l1: List[T], l2: List[T]): Boolean = {
    l1 match {
       case Nil => l2 == Nil
@@ -202,8 +202,8 @@ class ContainOnlyMatcher[T](t: LazyParameter[T]*) extends Matcher[GenTraversable
 class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matcher[GenTraversable[T]] {
   def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
     val a = pattern
-    result(traversable.value.exists(_.toString.matches(a)), 
-           traversable.description + " contains "+matchType+ " " + q(a), 
+    result(traversable.value.exists(_.toString.matches(a)),
+           traversable.description + " contains "+matchType+ " " + q(a),
            traversable.description + " doesn't contain "+matchType+ " " + q(a), traversable)
   }
   def onlyOnce = new ContainLikeOnlyOnceMatcher[T](pattern, matchType)
@@ -213,15 +213,15 @@ class ContainLikeOnlyOnceMatcher[T](pattern: =>String, matchType: String) extend
   def apply[S <: GenTraversable[T]](traversable: Expectable[S]) = {
     val a = pattern
     val matchNumber = traversable.value.filter(_.toString.matches(a)).size
-    val koMessage = 
+    val koMessage =
       if (matchNumber == 0)
         traversable.description + " doesn't contain "+matchType+ " " + q(a)
       else
         traversable.description + " contains "+matchType+ " " + q(a) + " "+ (matchNumber qty "time")
-        
-    result(matchNumber == 1, 
-           traversable.description + " contains "+matchType+ " " + q(a) + " only once", 
-           koMessage, 
+
+    result(matchNumber == 1,
+           traversable.description + " contains "+matchType+ " " + q(a) + " only once",
+           koMessage,
            traversable)
   }
 }

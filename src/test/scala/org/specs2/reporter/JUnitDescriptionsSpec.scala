@@ -57,14 +57,14 @@ class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def i
   		   "JUnitDescriptionsSpec",
   		   "|",
   		   "`- ex1(org.specs2.reporter.JUnitDescriptionsSpec)\n")
-  		   
+
   def e2 = descriptionIs(ex1 ^ ex2)(
   		   "JUnitDescriptionsSpec",
   		   "|",
   		   "+- ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
   		   "|",
   		   "`- ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
-  		   
+
   def e3 = descriptionIs(level1)(
   		   "JUnitDescriptionsSpec",
   		   "|",
@@ -103,7 +103,7 @@ class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def i
   		   "   +- level2::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
   		   "   |",
   		   "   `- level2::ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
-  		   
+
   def e6 = descriptionIs(level1 ^ end ^ ex3)(
   		   "JUnitDescriptionsSpec",
   		   "|",
@@ -133,9 +133,9 @@ class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def i
 
   def descriptionIs(f: Fragments, descMaker: JUnitDescriptionsFragments = descriptionsMaker)(tree: String*) =
     showDescriptionTree("JUnitDescriptionsSpec".title ^ f)(descMaker) must_== tree.toList.mkString("\n")
-  
+
   def showDescriptionTree(fragments: Fragments)(implicit descMaker: JUnitDescriptionsFragments): String = toDescription(fragments)(descMaker).drawTree
-  
+
   def toDescription(fragments: Fragments)(implicit descMaker: JUnitDescriptionsFragments): Description = toDescription(fragments.fragments:_*)(descMaker)
   def toDescription(fragments: Fragment*)(implicit descMaker: JUnitDescriptionsFragments): Description = {
     import Levels._

@@ -61,7 +61,7 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
     "for start ^ t1 ^ ex1 ^ p ^ t2 ^ ex2"                                                                               ! tree().e3^
     "for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2"                                                                   ! tree().e4^
                                                                                                                         end
-  
+
 
   def tryAppend = {
     implicit val l = Levels.LevelsMonoid[String]
@@ -136,23 +136,23 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
       "   |",
       "   `- SpecEnd(start)")
 
-    def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ { 
+    def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ {
       tree: Tree[Fragment] => tree.drawTree
     }
   }
 
   implicit def params = set(maxSize -> 5, minTestsOk -> 1000)
 
-  import Arbitrary._                                                                                       
+  import Arbitrary._
   implicit val arbitraryBlock: Arbitrary[Block[Fragment]] = Arbitrary {
      for (f <- arbitrary[Fragment]) yield f
   }
   implicit val arbitraryBlocks: Arbitrary[Levels[Fragment]] = Arbitrary {
-    
+
     def genBlockLevels(sz: Int) = for {
       l <- Gen.listOfN(sz, arbitrary[Block[Fragment]])
     } yield l.foldMap(Levels[Fragment](_))
-    
+
     def sizedList(sz: Int): Gen[Levels[Fragment]] = {
       if (sz <= 0) genBlockLevels(1)
       else genBlockLevels(sz)

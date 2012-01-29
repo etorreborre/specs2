@@ -72,7 +72,7 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
 
   protected def includePrevious(specName: SpecName, e: Example, args: Arguments) =
     args.was(repository.previousResult(specName, e).map(_.status).getOrElse(""))
-  
+
   /**
    * From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:
    *
@@ -111,7 +111,7 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
       }
     }
   }._1
-  /** 
+  /**
    * the filter method filters examples based on their description,
    * keeping only the ones matching the ex attribute of the arguments object
    */

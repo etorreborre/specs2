@@ -15,7 +15,7 @@ A Notifier can be used to get a stream of events for the execution of a Specific
     "with its location"                                                                                                 ! text2^
   "Going up a level is notified"                                                                                        ! level1^
   "Going down a level is notified"                                                                                      ! level2^
-  "If there are 2 'contexts' they are both notified"                                                                    ! level3^ 
+  "If there are 2 'contexts' they are both notified"                                                                    ! level3^
                                                                                                                         p^
   "An example is notified"                                                                                              ^
     "when starting"                                                                                                     ^

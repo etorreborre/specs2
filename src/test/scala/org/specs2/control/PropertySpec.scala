@@ -42,10 +42,10 @@ It has an Option-like structure, supporting the same kind of operations and can 
   def creation4 = Property(1).updateValue(Some(2)).optionalValue must_== Some(2)
   def creation5 = Property(1).toString must_== "Some(1)"
 
-  case class exec() extends Before with MockOutput { 
+  case class exec() extends Before with MockOutput {
     def before = clear()
     def e1 = Property(1).toOption.get must_== 1
-    def e2 = {  
+    def e2 = {
       val p = Property({print("one"); 1}).toOption
       p.get
       messages.size must_== 1

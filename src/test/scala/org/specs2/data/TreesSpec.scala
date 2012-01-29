@@ -80,7 +80,7 @@ class TreesSpec extends Specification with DataTables { def is =
 
   def pruneAndDraw(tree: Tree[Int], f: Int => Option[Int]) = tree.prune(f).map(_.drawTree).getOrElse("None\n")
   def beTree(s: String*) = be_==(s.mkString("", "\n", "\n"))
-  
+
   implicit def anyToStream[A](a: A): Stream[A] = Stream(a)
   implicit def listToStream[A](a: List[A]): Stream[A] = a.toStream
 }

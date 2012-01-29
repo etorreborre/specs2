@@ -4,7 +4,7 @@ import NotNullStrings._
  * Quote and unquote strings
  *
  */
-private[specs2] 
+private[specs2]
 trait Quote {
   def q(a: Any) = "'"+a.notNull+"'"
 
@@ -16,4 +16,4 @@ trait Quote {
     def prefix(separator: String, other: String) = Seq(s, other).filter(_.nonEmpty).mkString(separator)
   }
 }
-private[specs2] object Quote extends Quote 
+private[specs2] object Quote extends Quote

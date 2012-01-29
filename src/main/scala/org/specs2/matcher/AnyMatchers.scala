@@ -53,12 +53,12 @@ trait AnyBaseMatchers {
 
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not
-  
+
   /** matches if a.isEmpty */
   def beEmpty[T <% Any { def isEmpty: Boolean }] = new Matcher[T] {
     def apply[S <: T](iterable: Expectable[S]) = {
       result(iterable.value.isEmpty,
-             iterable.description + " is empty", 
+             iterable.description + " is empty",
              iterable.description + " is not empty", iterable)
     }
   }
@@ -72,8 +72,8 @@ trait AnyBaseMatchers {
       val x = a;
       result(x == null && y.value == null || x != null && y.value != null,
              "both values are null",
-             if (x == null) y.description + " is not null" else q(x) + " is not null" + 
-             y.optionalDescription.map(" but " + _ + " is null").getOrElse(""), 
+             if (x == null) y.description + " is not null" else q(x) + " is not null" +
+             y.optionalDescription.map(" but " + _ + " is null").getOrElse(""),
              y)
     }
   }
@@ -82,9 +82,9 @@ trait AnyBaseMatchers {
   def beOneOf[T](t: T*): Matcher[T] = new Matcher[T] {
     def apply[S <: T](y: Expectable[S]) = {
       val x = t.toSeq
-      result(x.exists(_ == y.value), 
-             y.description + " is one of " + q(x.mkString(", ")), 
-             y.description + " is not one of " + q(x.mkString(", ")), 
+      result(x.exists(_ == y.value),
+             y.description + " is one of " + q(x.mkString(", ")),
+             y.description + " is not one of " + q(x.mkString(", ")),
              y)
     }
   }
@@ -121,7 +121,7 @@ trait AnyBaseMatchers {
              x)
     }
   }
-	
+
   /** matches if x.getClass.getInterfaces.contains(T) */
   def haveInterface[T : ClassManifest] = new Matcher[Any] {
     def apply[S <: Any](x: Expectable[S]) = {
@@ -133,14 +133,14 @@ trait AnyBaseMatchers {
              x)
     }
 	}
-	
+
   /** matches if v.isAssignableFrom(c) */
   def beAssignableFrom[T : ClassManifest] = new Matcher[Class[_]] {
     def apply[S <: Class[_]](x: Expectable[S]) = {
       val c = implicitly[ClassManifest[T]].erasure
-      result(x.value.isAssignableFrom(c), 
-             x.description + " is assignable from " + q(c.getName), 
-             x.description + " is not assignable from " + q(c.getName), 
+      result(x.value.isAssignableFrom(c),
+             x.description + " is assignable from " + q(c.getName),
+             x.description + " is not assignable from " + q(c.getName),
              x)
     }
   }
@@ -161,7 +161,7 @@ trait AnyBaseMatchers {
  */
 class BeTrueMatcher extends Matcher[Boolean] {
   def apply[S <: Boolean](v: Expectable[S]) = {
-    result(v.value, v.description + " is true", v.description + " is false", v) 
+    result(v.value, v.description + " is true", v.description + " is false", v)
   }
 }
 /**
@@ -171,15 +171,15 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
   import AnyMatchers._
   protected val ok: String => String = identity
   protected val ko: String => String = identity
-  
+
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
     val newMatcher = new BeTypedEqualTo(f(t)) {
       override protected val ok: String => String = okFunction compose outer.ok
       override protected val ko: String => String = koFunction compose outer.ko
-    } 
+    }
     newMatcher.^^((t: T) => f(t))
   }
-  
+
   def apply[S <: T](b: Expectable[S]): MatchResult[S] = {
     val a = t
     def equality =
@@ -209,7 +209,7 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
 class BeEqualTo(t: =>Any) extends BeTypedEqualTo(t)
 /**
  * This trait allows to write expressions like
- * 
+ *
  *  `1 must be equalTo(1)`
  */
 trait AnyBeHaveMatchers { outer: AnyMatchers =>
@@ -241,8 +241,8 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   class ClassMatcherResult(result: MatchResult[Class[_]]) {
     def assignableFrom = result(outer.beAssignableFrom)
   }
-  
-  implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) = 
+
+  implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) =
     new AnyWithEmptyMatchers(result)
 
   class AnyWithEmptyMatchers[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) {

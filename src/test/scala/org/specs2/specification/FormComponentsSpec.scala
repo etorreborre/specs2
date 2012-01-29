@@ -37,10 +37,10 @@ Second example: Aggregate entity
 
   The second example shows how to specify 2 domain objects, in a parent-child
   relationship like Customer-Address:
-    
-    * the Customer case class defines a name attribute and embeds an instance of the 
+
+    * the Customer case class defines a name attribute and embeds an instance of the
       Address class
-    * the Customer Form is defined by setting the name on one row and the Address form 
+    * the Customer Form is defined by setting the name on one row and the Address form
       on the second row                                                                                                 """^
                                                                                                                         p^
     components.customer.form                                                                                            ^
@@ -55,7 +55,7 @@ Third example: Decision table
 
   The third example shows how to specify a table with columns where some columns must be
   the result of a computation involving other columns:
-  
+
     * the initials column specifies the expected values for a given first name and last name
       "eric" "torreborre" => "E.T."
                                                                                                                         """^
@@ -71,7 +71,7 @@ Fourth example: 1-n relationship
   The third example shows how to specify an entity, Order, which has several aggregated
   entities, OrderLines.
   In that case there are several things that we might want to specify:
-  
+
     * the expected rows are included in the actual rows, with no specific order
       (this is the default case)
     * the expected rows are included in the actual rows, in the same order
@@ -101,20 +101,20 @@ Fourth example: 1-n relationship
   object components extends ComponentsDefinitions {
     val address = Address(street = "Rose Crescent", number = 2)
     val customer = Customer(name = "Eric", address = Address(street = "Rose Crescent", number = 2))
-    
+
     val initialsTable = initials().
       tr("eric",  "torreborre", "E.T.").
-      tr("hello", "world",      "H.Wo.")  
-   
+      tr("hello", "world",      "H.Wo.")
+
     val order = Order().
-      line(OrderLine("PIS", 1)).            
+      line(OrderLine("PIS", 1)).
       line(OrderLine("PS", 2)).
       line(OrderLine("Beginning Scala", 3))
-    
-    def e1 = address.fill("Rose Crescent", 5).execute.message must_== "'5' is not equal to '2'" 
-    def e2 = customer.fill("Eric", 
+
+    def e1 = address.fill("Rose Crescent", 5).execute.message must_== "'5' is not equal to '2'"
+    def e2 = customer.fill("Eric",
                            customer.address.fill("Rose Crescent", 5)).execute.message must_== "'5' is not equal to '2'"
-                             
+
     def e3 = initialsTable.form.execute.message must_== "'H.W.' is not equal to 'H.Wo.'"
     def e4 = {
       order.fillSubset(
@@ -123,7 +123,7 @@ Fourth example: 1-n relationship
       ).execute must_== success
     }
     def e5 = {
-      order.fillSubset( 
+      order.fillSubset(
         OrderLine("PS", 2),
         OrderLine("BS", 3)
       ).execute.isSuccess must beFalse
@@ -138,23 +138,23 @@ Fourth example: 1-n relationship
         OrderLine("PIS", 1),
         OrderLine("PS", 2)
       ).execute.isSuccess must beFalse
-      
+
     def e8 = order.fillSet(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2),
         OrderLine("PIS", 1)
       ).execute.isSuccess must beTrue
-      
+
     def e9 = order.fillSet(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)
       ).execute.isSuccess must beFalse
-      
+
     def e10 = order.fillSequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PIS", 1)
       ).execute.isSuccess must beFalse
-      
+
     def e11 = order.fillSequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)

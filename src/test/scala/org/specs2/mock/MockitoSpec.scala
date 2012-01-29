@@ -64,9 +64,9 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "in mutable specs"                                                                                                  ! reuse().e1^
     "in JUnit"                                                                                                          ! reuse().e2^
                                                                                                                         end
-    
+
   case class creation() {
-    def e1 = { 
+    def e1 = {
 			val list = mock[java.util.List[String]].as("list1")
 			(there was one(list).add("one")).message must contain("list1.add(\"one\")")
 		}
@@ -76,19 +76,19 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     }
     def e3 = {
 			val list = mock[java.util.List[String]].settings(name = "list1", defaultReturn = 10, extraInterfaces = classesOf[Cloneable, Serializable])
-      (list.size must_== 10) and 
+      (list.size must_== 10) and
 			((there was one(list).add("one")).message must contain("list1.add(\"one\")"))
     }
     def e4 = {
 			val list = mock[java.util.List[String]].defaultAnswer((p1: InvocationOnMock) => "hello")
-      list.get(0) must_== "hello" 
+      list.get(0) must_== "hello"
     }
     def e5 = {
 			val list = mock[java.util.List[String]](withSettings.name("list1"))
 			(there was one(list).add("one")).message must contain("list1.add(\"one\")")
 		}
 	}
-	
+
 	case class aMock() {
     val list = mock[java.util.List[String]]
     val queue = mock[scala.collection.immutable.Queue[String]]
@@ -132,7 +132,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       list.clear()
     } must throwAn[IllegalArgumentException]
   }
-  
+
   case class calls() {
     val list = mock[java.util.List[String]]
     list.add("one")

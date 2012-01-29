@@ -11,10 +11,10 @@ import DecoratedProperties._
  *
  * If the side effect throws an exception, the Effect will display it alongside to the label. Otherwise only the label
  * is displayed.
- * 
+ *
  * The apply method can be used to execute the Effect effect and possibly get a value out of it (but usually not displayed):
  *   `Effect(label, 1).apply() must_== 1`
- * 
+ *
  * The value is stored in a Property object so it will not be evaluated until explicitly queried.
  */
 case class Effect[T](label: String, value: Property[T], decorator: Decorator = Decorator()) extends Executable with StandardResults
@@ -53,12 +53,12 @@ case class Effect[T](label: String, value: Property[T], decorator: Decorator = D
 /**
  * Factory methods for creating Effects. Effects values can also be concatenated to produce
  * "summary" effects.
- * 
+ *
  * val e1 = Effect("hello", print("hello"))
  * val e2 = Effect("world", print("world"))
  * val concatenatedEffects = Effect(e1, e2)
  * concatenatedEffects.toString == hello/world
- * 
+ *
  * val concatenatedEffect = Effect(", ", e1, e2)
  * concatenatedEffects2.toString == hello, world
  */
