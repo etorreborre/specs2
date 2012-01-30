@@ -44,11 +44,19 @@ trait HtmlPrinter {
   }
 
   /**
-   * map the executed fragments to HtmlLines and sort them by file
+   * map the executed fragments to HtmlLines and sort them by destination file, one file per specification
+   *
+   * @return a Tree of HtmlLinesFile where the root is the parent specification and children are the included specifications
    */
-  def createHtmlLinesFiles(spec: ExecutedSpecification) =
+  def createHtmlLinesFiles(spec: ExecutedSpecification): Tree[HtmlLinesFile] =
     reduce(spec) |> sortByFile(spec.name, parentLink = HtmlLink(spec.name, "", spec.name.name))
 
+  /**
+   * a function printing html lines to a file given:
+   *
+   * - the table of contents for the full document
+   * - an output object responsible for printing each HtmlLine as xhtml
+   */
   def printHtml(toc: TreeToc, output: =>HtmlReportOutput): HtmlLinesFile => HtmlFile = (file: HtmlLinesFile) => {
     HtmlFile(file.link.url, printHtml(output, file, toc.toTree(file.id)))
   }

@@ -7,7 +7,7 @@ class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def
 
   h4> "Introduction"^
                                                                                                                               """
-The HtmlPrinter class is responsible for opening an html file and writing the specification text:
+The HtmlPrinter class is responsible for creating html files from an executed specifications:
 
                            print
 
@@ -30,10 +30,10 @@ This actually works in 4 steps:
       "The HtmlLine objects are aggregrated to a Tree of HtmlFileLines" ~/(new HtmlFileLinesSpec)                               ^
                                                                                                                                 p^
   h4> "Creating the table of contents"                                                                                          ^
-      "The tree of HtmlFileLine must be used to create a table of contents for the whole specification" ~/(new HtmlTocSpec)     ^
+      "The tree of HtmlFileLine are used to create a table of contents for the whole specification" ~/(new HtmlTocSpec)         ^
                                                                                                                                 p^
   h4> "Printing the lines as xhtml"                                                                                             ^
-      "The HtmlFileLines must be created as xhtml to be written to files" ~/(new HtmlFileSpec)                                  ^
+      "The HtmlFileLines objects are used to create xhtml (HtmlFile) to be written to files" ~/(new HtmlFileSpec)               ^
                                                                                                                                 end
 }
 
