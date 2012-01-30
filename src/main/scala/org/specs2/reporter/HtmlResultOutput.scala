@@ -25,26 +25,52 @@ import specification._
 private[specs2]
 case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutput {
 
+  /**
+   * start of the output
+   */
   private[specs2] lazy val blank = new HtmlResultOutput
-  
+
+  /** print the NodeSeq inside the html tags */
   def printHtml(n: =>NodeSeq) = print(<html>{n}</html>)
+  /** print the NodeSeq inside the body tags */
   def printBody(n: =>NodeSeq) = print(<body>{n}</body>)
+  /** print the head of the document */
   def printHead = print(xml ++ head)
-	
+
+  /** print a br tag */
   def printBr                                         = printOkStatus(<br></br>)
+  /** print a paragraph for some text */
   def printPar(text: String = "")                     = printOkStatus(<p>{wiki(text)}</p>)
+  /** print some text */
   def printText(text: String = "", level: Int = 0)    = printOkStatus(div(wiki(text), level))
+  /** print some text in a paragraph */
   def printTextPar(text: String = "", level: Int = 0) = printOkStatus(p(wiki(text), level))
 
+  /**
+   * print the xhtml for a specification start:
+   *
+   * - the html title is the specification title
+   * - if there are no issues then print a h2 header with the title of the specification
+   * - if there are issues add a toggle link so that only issues can be displayed
+   */
   def printSpecStart(name: SpecName, stats: Stats) = {
     print(<title>{name.title}</title>).
     print(
       if (stats.hasIssues) <h2>{name.title}
-        <notoc><a href="#" onclick="hideByClass('ok');hideById('wasIssue');showById('all')"><i id='wasIssue' style="font-size:small">(issues only)</i></a></notoc>
-        <notoc><a href="#" onclick="showByClass('ok');hideById('all');showById('wasIssue')"><i id='all' style="display:none;font-size:small">(all)</i></a></notoc></h2>
+                           <notoc>{showOnlyShowAllLinks(elementClass = "ok", "(issues only)", "(all)")}</notoc></h2>
       else <h2>{name.title}</h2>)
   }
 
+  /**
+   * print a link
+   *
+   * - if it is a link to another specification:
+   *   - if it has issues, set a corresponding icon
+   *   - add a subtoc element with the specification id so that the TableOfContents class knows where to insert the sub table content corresponding
+   *     to the linked specification when building the global table of contents
+   *
+   * - if this is an arbitrary link, print a normal html link
+   */
   def printLink(link: HtmlLink, level: Int = 0, stats: Stats) = {
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
     link match {
@@ -56,14 +82,25 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
     }
   }
 
+  /** print some text with a status icon (with an ok class) */
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
+  /** print an issue with a status icon (with a ko class) */
   def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0) = printKoStatus(textWithIcon(message, iconName, level))
+  /** print an exception message (with a ko class) */
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int)          = printKoStatus(div("  "+e.message+" ("+e.location+")", level))
-  
+
+  /**
+   * print a collapsible exception message (with a ko class)
+   *
+   * the message in enclosed in a div which has a unique id and associated onclick function to show/hide it
+   */
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int) =
-    printKoStatus(div(<img src="images/collapsed.gif" onclick={onclick(e)}/> ++ 
+    printKoStatus(div(<img src="images/collapsed.gif" onclick={toggleElement(e)}/> ++
 		                   t("  "+e.message.notNull+" ("+e.location+")"), level))
 
+  /**
+   * print the details of a Failure message in a collapsible div
+   */
   def printDetailedFailure(details: Details, level: Int, diffs: Diffs) = {
     details match {
       case FailureDetails(expected, actual) if diffs.show(expected, actual) => {
@@ -71,7 +108,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
         val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
         val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
         
-				printKoStatus(div(<img src="images/collapsed.gif"  onclick={onclick(details)}/> ++ t("details"), level) ++
+				printKoStatus(div(<img src="images/collapsed.gif"  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
             <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
             { <pre class="details">{expectedFull+"\n"+actualFull}</pre> unless (diffs.showFull)  }
@@ -81,13 +118,19 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
     }
   }
 
+  /**
+   * print a stacktrace for a failure or an exception
+   *
+   * The stacktrace elements are filtered with the traceFilter parameter
+   */
   def printStack(e: ResultStackTrace, level: Int, traceFilter: StackTraceFilter) =
     enclose((t: NodeSeq) => koStatus(<div id={System.identityHashCode(e).toString} style="display:none">{t}</div>)) {
-      traceFilter(e.stackTrace).foldLeft(blank) { (res, cur) =>
-        res.printText(cur.toString, level)
-      }
+      traceFilter(e.stackTrace).foldLeft(blank) { (res, cur) => res.printText(cur.toString, level) }
     }
 
+  /**
+   * print the final statistics for a specification as a table
+   */
   def printStats(n: SpecName, stats: Stats) = {
 
     val title = "Total for specification" + ((" "+n.name.trim) unless n.name.isEmpty)
@@ -101,6 +144,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
       </table>)
   }
 
+  /**
+   * print the html for a Form, by just adding the corresponding xml to the current output
+   */
 	def printForm(form: NodeSeq) = print(form)
 	
 	protected def printOkStatus(n: NodeSeq) = print(okStatus(n))
@@ -112,15 +158,29 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
 
 	protected def okStatus(n: NodeSeq) = status(n, "ok")
 	protected def koStatus(n: NodeSeq) = status(n, "ko")
+  /** print a NodeSeq with a given status class */
 	protected def status(n: NodeSeq, st: String) = <status class={st}>{n}</status>
+  /** create a div around some markup text to be displayed at a certain level of identation */
 	protected def div(string: String, level: Int): NodeSeq  = div(t(string), level)
+  /** create a div around a NodeSeq to be displayed at a certain level of identation */
 	protected def div(n: NodeSeq, level: Int): NodeSeq = <div class={"level"+level}>{n}</div>
+  /** create a paragraph around a NodeSeq to be displayed at a certain level of identation */
 	protected def p(n: NodeSeq, level: Int) = <p class={"level"+level}>{n}</p>
+  /** create a Text node */
 	protected def t(text: String): NodeSeq = scala.xml.Text(text)
-  protected def onclick(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
+  protected def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
   protected def id(a: Any) = System.identityHashCode(a).toString
+  /** render some markup text as xhtml */
   protected def wiki(text: String) = toXhtml(text)
 
+  /**
+   * Head of the html document. It contains:
+   *
+   *  - links to the prettify css and javascript functions to render code
+   *  - jquery scripts to render the table of contents as a tree
+   *  - tabber css and scripts to display tabs
+   *  - show and hide functions
+   */
   def head = 
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -144,7 +204,10 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link rel="stylesheet" href="./css/tabber.css" type="text/css" media="screen"/> 
     </head>
-  
+
+  /**
+   * define custom javascript functions to manipulate elements on the page, mostly to show and hide elements
+   */
   def javascript = 
     <script language="javascript"><xml:unparsed>
       function init() {  prettyPrint(); };
@@ -198,6 +261,22 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
   private def enclose(f: NodeSeq => NodeSeq)(rest: =>HtmlResultOutput): HtmlResultOutput = print(f(rest.xml))
   private def print(xml2: NodeSeq): HtmlResultOutput = HtmlResultOutput(xml ++ xml2)
   private def print(xml2: Elem): HtmlResultOutput = HtmlResultOutput(xml ++ xml2)
+
+  /**
+   * @param elementClass class of elements to show/hide
+   * @param showOnlyLabel label to display for the elements to show only
+   * @param showAllLabel label to display for showing all the elements
+   *
+   * @return 2 links allowing to show/hide some elements on a html page
+   */
+  protected def showOnlyShowAllLinks(elementClass: String, showOnlyLabel: String, showAllLabel: String): NodeSeq = {
+    val (showOnlyId, showAllId) = ("onlyIssuesLink", "allElementsLink")
+    val showOnlyOnclick = "hideByClass('"+elementClass+"');hideById('"+showOnlyId+"');showById('"+showAllId+"')"
+    val showAllOnclick  = "showByClass('"+elementClass+"');hideById('"+showAllId+"');showById('"+showOnlyId+"')"
+    <a href="#" onclick={showOnlyOnclick}><i id={showOnlyId} style="font-size:small">{showOnlyLabel}</i></a> ++
+    <a href="#" onclick={showAllOnclick}><i id={showAllId} style="display:none;font-size:small">{showAllLabel}</i></a>
+  }
+
 
 }
 
