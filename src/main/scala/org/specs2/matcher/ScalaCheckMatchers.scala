@@ -110,17 +110,24 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       "A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels)
 
     results match {
-      case Result(Proved(as), succeeded, discarded, _, _) => execute.Success(noCounterExample(succeeded), succeeded)
-      case Result(Passed, succeeded, discarded, _, _)     => execute.Success(noCounterExample(succeeded), succeeded)
-      case r @ Result(GenException(execute.FailureException(f)), n, _, _, _) =>   f
-      case r @ Result(GenException(e), n, _, _, _)        => execute.Failure(prettyTestRes(r)(defaultPrettyParams), e.getMessage(), e.getStackTrace().toList)
-      case r @ Result(Exhausted, n, _, _, _)              => execute.Failure(prettyTestRes(r)(defaultPrettyParams))
-      case Result(Failed(args, labels), n, _, _, _)       => execute.Failure(counterExampleMessage(args, n, labels))
-      case Result(PropException(args, ex, labels), n, _, _, _) =>
+      case Result(Proved(as), succeeded, discarded, fq, _) => 
+        execute.Success(noCounterExample(succeeded) + frequencies(fq), succeeded)
+      case Result(Passed, succeeded, discarded, fq, _)     => 
+        execute.Success(noCounterExample(succeeded) + frequencies(fq), succeeded)
+      case r @ Result(GenException(execute.FailureException(f)), n, _, fq, _) => f
+      case r @ Result(GenException(e), n, _, fq, _)        => 
+        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage(), e.getStackTrace().toList)
+      case r @ Result(Exhausted, n, _, fq, _)              => 
+        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq))
+      case Result(Failed(args, labels), n, _, fq, _) => 
+        execute.Failure(counterExampleMessage(args, n, labels) + frequencies(fq))
+      case Result(PropException(args, ex, labels), n, _, fq, _) =>
         ex match {
-          case execute.FailureException(f) => execute.Failure(counterExampleMessage(args, n, labels+f.message))
-          case e: java.lang.Exception      => execute.Error("A counter-example is "+counterExample(args)+": " + ex + getCause(e) +
-                                                            " ("+afterNTries(n)+")"+ failedLabels(labels), e)
+          case execute.FailureException(f) => 
+            execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq))
+          case e: java.lang.Exception      => 
+            execute.Error("A counter-example is "+counterExample(args)+": " + ex + getCause(e) +
+                                                " ("+afterNTries(n)+")"+ failedLabels(labels), e) + frequencies(fq)
           case throwable    => throw ex
         }
 
@@ -152,6 +159,11 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
   private [matcher] def failedLabels(labels: Set[String]) = {
     if (labels.isEmpty)  ""  
     else labels.mkString("\n", ", ", "\n")
+  }
+
+  private[matcher] def frequencies(fq: Prop.FM)(implicit params: Pretty.Params) = {
+    if (fq.getRatios.isEmpty) ""
+    else "\n" + Pretty.prettyFreqMap(fq)(params)
   }
 }
 object ScalaCheckMatchers extends ScalaCheckMatchers
@@ -276,7 +288,7 @@ trait ScalaCheckParameters {
    implicit def defaultParameters = new Parameters(setParams(Nil))
 
    /** default parameters to display pretty messages */		   
-   val defaultPrettyParams = Pretty.defaultParams
+   implicit val defaultPrettyParams = Pretty.defaultParams
    /**
     * Default values for ScalaCheck parameters
     */

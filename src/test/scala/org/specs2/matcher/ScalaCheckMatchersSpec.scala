@@ -72,6 +72,8 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
     "the executed tests by setting up display parameters locally"                                                       ! config().e2^
     "the labels that are set on properties"                                                                             ! config().e3^
     "the exceptions that happen on generation"                                                                          ! config().e4^
+    "the collected frequencies"                                                                                         ! config().e5^
+
                                                                                                                         end
 
   
@@ -131,6 +133,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
     def e2 = executionMessages(trueFunction.forAll) must contain("passed 20 tests")
     def e3 = executionMessages(falseFunction.forAll :| "my property") must contain("my property")
     def e4 = executionMessages(propertyWithGenerationException) must contain("boo")
+    def e5 = executionMessages(propertyWithDataCollection) must contain("Collected test data")
   }
 }
 
@@ -152,6 +155,13 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
   val propertyWithGenerationException = {
     implicit def arb: Arbitrary[Int] = Arbitrary { for (n <- Gen.choose(1, 3)) yield { error("boo"); n }}
     Prop.forAll((i: Int) => i > 0)
+  }
+  val propertyWithDataCollection = forAll { l: List[Int] =>
+    Prop.classify(l.reverse == l, "ordered") {
+      Prop.classify(l.length > 5, "large", "small") {
+        l.reverse.reverse == l
+      }
+    }
   }
 
   def exceptionWithCause(msg: String) = new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
