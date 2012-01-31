@@ -201,23 +201,23 @@ trait MatchersImplicits extends Expectations {
   }
 
   implicit def verifyFunction[U, T](t: U => MatchResult[T]) = new MatchResultFunctionVerification(t)
-  class MatchResultFunctionVerification[U, T](t: U => MatchResult[T]) {
+  class MatchResultFunctionVerification[U, T](function: U => MatchResult[T]) {
     def forall[S <: Traversable[U]](seq: S) = {
       if (seq.isEmpty)
         Matcher.result(true, "ok", "ko", createExpectable(seq))
       else {
-        val r = seq.drop(1).foldLeft(t.apply(seq.head)) { (res, cur) =>
-          if (res.isSuccess) t.apply(cur)
-          else res
+        val (result, lastValueTried) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
+          if (res._1.isSuccess) executeFunctionAndReturnValue(cur)
+          else                  res
         }
-        lazy val failingElementIndex = if (r.isSuccess) -1 else seq.toSeq.indexOf(r.expectable.value)
+        lazy val failingElementIndex = if (result.isSuccess) -1 else seq.toSeq.indexOf(lastValueTried)
         lazy val failingElementMessage =
           if (failingElementIndex >= 0)
-            "In the sequence "+q(seq.mkString(", "))+", the "+(failingElementIndex+1).th+" element is failing: "+r.message
+            "In the sequence "+q(seq.mkString(", "))+", the "+(failingElementIndex+1).th+" element is failing: "+result.message
           else
-            r.message
+            result.message
 
-        Matcher.result(r.isSuccess,
+        Matcher.result(result.isSuccess,
                        "All elements of "+q(seq.mkString(", "))+" are matching ok",
                        failingElementMessage,
                        createExpectable(seq))
@@ -228,8 +228,8 @@ trait MatchersImplicits extends Expectations {
       if (seq.isEmpty)
         Matcher.result(true, "ok", "ko", createExpectable(seq))
       else {
-        val r = seq.drop(1).foldLeft(t.apply(seq.head).toResult) { (res, cur) =>
-          res |+| t.apply(cur).toResult
+        val r = seq.drop(1).foldLeft(executeFunction(seq.head)) { (res, cur) =>
+          res |+| executeFunction(cur)
         }
         Matcher.result(r.isSuccess,
                        "All elements of "+q(seq.mkString(", "))+" are successful",
@@ -243,16 +243,19 @@ trait MatchersImplicits extends Expectations {
       if (seq.isEmpty)
         Matcher.result(false, "ok", "ko", createExpectable(seq))
       else {
-        val r = seq.drop(1).foldLeft(t.apply(seq.head)) { (res, cur) =>
-          if (res.isSuccess) res
-          else t.apply(cur)
+        val (result, lastTriedValue) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
+          if (res._1.isSuccess) res
+          else                  executeFunctionAndReturnValue(cur)
         }
-        Matcher.result(r.isSuccess,
-          "In the sequence "+q(seq.mkString(", "))+", the "+(seq.toSeq.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
+        Matcher.result(result.isSuccess,
+          "In the sequence "+q(seq.mkString(", "))+", the "+(seq.toSeq.indexOf(lastTriedValue)+1).th+" element is matching: "+result.message,
           "No element of "+q(seq.mkString(", "))+" is matching ok",
           createExpectable(seq))
       }
     }
+
+    private def executeFunctionAndReturnValue(value: U): (Result, U) = (executeFunction(value), value)
+    private def executeFunction(value: U): Result = ResultExecution.execute(function(value).toResult)
   }
 }
 private[specs2]

@@ -8,7 +8,7 @@ class HtmlFileLinesSpec extends Specification { def is =
 
   "A linked specification must create a new file"                                                                     ! e1^
     "that file must be linked to the parent file"                                                                     ! e2^
-  "A see specification must not create a new file"                                                                    ! e3^
+  "A see specification must not create a new file but just a link"                                                    ! e3^
                                                                                                                       end
 
   lazy val spec1: Fragments = "ex1" ! failure ^ "a " ~  ("successfull spec", successfulSubSpec) ^ end

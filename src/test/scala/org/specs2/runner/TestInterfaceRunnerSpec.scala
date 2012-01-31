@@ -50,33 +50,40 @@ class TestInterfaceRunnerSpec extends Specification { def is =
   }
 
 }
-case class reporting() extends Mockito with matcher.MustExpectations with MockLogger with DataTables {
+case class reporting() extends Mockito with matcher.MustMatchers with MockLogger with DataTables {
   val outer = this
   val reporter = mock[Reporter]
   val handler = mock[EventHandler]
+
   val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger)) {
     override def reporter(handler: EventHandler)(args: Array[String]): Reporter = outer.reporter
   }
-  def reportSpec = runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], Array(""))
+
+  def reportSpec(args: Array[String] = Array("")) =
+    runner.run("org.specs2.runner.SpecificationForSbt", mock[TestFingerprint], mock[EventHandler], args)
+
   def e1 = {
-    reportSpec
+    reportSpec()
     there was one(reporter).report(any[specification.SpecificationStructure])(any[Arguments])
   }
 
   def e2 = {
     def export(condition: Boolean, e: String) = if (condition) Some(e) else None
     def selectedExporters(c: Boolean, h: Boolean, j: Boolean) =
-      Set(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(j, "JUnitXmlExporting$")).flatten
+      Seq(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(j, "JUnitXmlExporting$")).flatten
 
     "args"                                || "console" | "html" | "junitxml" |
     "junitxml"                            !! false     ! false  ! true       |
     "junitxml,console"                    !! true      ! false  ! true       |
     "junitxml,html,console"               !! true      ! true   ! true       |
     "junitxml,html,console"               !! true      ! true   ! true       |> { (arguments, c, h, j) =>
-      (runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName).toSet must_== selectedExporters(c, h, j)).toResult
+      runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName) must containAllOf(selectedExporters(c, h, j))
     }
 
   }
+
+  def e3 = runner.exporters(Array("html"), handler).map(_.getClass.getSimpleName) must_== Seq("HtmlExporting$", "FinalResultsReporter")
+
 }
 
 trait MockLogger extends matcher.MustExpectations with Mockito {

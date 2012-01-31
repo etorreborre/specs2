@@ -79,8 +79,10 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { (Seq(2, 3, 4) must be_<=(2).foreach) returns "3 is greater than 2; 4 is greater than 2" }                           ^
                                                                                                                         p^
  "atLeastOnce allows to transform a single matcher to a matcher checking that one element of a Seq is matching"         ^
-  { Seq(2, 3, 4) must be_>=(2).atLeastOnce }                                                                            ^
-  { atLeastOnce(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }                                                ^
+  { Seq(2, 3, 4) must be_>(2).atLeastOnce }                                                                             ^
+  { ((_:Int) must be_>(2)).atLeastOnce(Seq(2, 3, 4)) }                                                                  ^
+  { ((i:Int) => MustExpectations.theValue(i) must be_>(2)).atLeastOnce(Seq(2, 3, 4)) }                                  ^
+  { atLeastOnce(Seq((4, 2), (3, 4))) { case (a, b) => a must be_<(b) } }                                                ^
   { atLeastOnceWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }                                   ^
   { atLeastOnce(Seq(Some(1), None)) { _ must beSome(1) } }                                                              ^
   { (Seq(2, 3, 4) must be_<=(1).atLeastOnce) returns "No element of '2, 3, 4' is matching ok" }                         ^

@@ -7,11 +7,11 @@ import matcher.DataTables
 import text.NoMarkup
 
 class HtmlResultOutputSpec extends Specification with DataTables { def is =
-                                                                                                                                            """
+                                                                                                                     """
   The HtmlResultOutput class build xml fragments according to the HtmlReportOutput interface.
-                                                                                                                                            """ ^
-  "There are functions to display a description with the corresponding icon"                                                                ! descriptions^
-                                                                                                                                            end
+                                                                                                                     """ ^
+  "There are functions to display a description with the corresponding icon"                                         !  descriptions^
+                                                                                                                     end
 
   def descriptions = {
     val (out, desc) = (new HtmlResultOutput, NoMarkup("desc"))
