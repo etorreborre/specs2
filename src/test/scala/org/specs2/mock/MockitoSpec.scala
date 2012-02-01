@@ -34,13 +34,15 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
   "It is also possible to return a specific value from a mocked method"                                                 ^
     "then when the mocked method is called, the same values will be returned" 	                                        ! aMock().return1^
     "different successive values can even be returned" 						                                                      ! aMock().return2^
-    "a value can be returned when a parameter of the method matches" 			                                              ! aMock().return3^
+    "a value can be returned when a parameter of the method matches" 			                                              ^
       "a hamcrest matcher" 													                                                                    ! aMock().return3^
       "a specs2 matcher" 														                                                                    ! aMock().return4^
-                                                                                                                        p^
+                                                                                                                        endp^
   "It is also possible to throw an exception from a mocked method"                                                      ^
     "then when the mocked method is called, the exception will be thrown" 		                                          ! aMock().throw1^
     "different successive exceptions can even be thrown" 						                                                    ! aMock().throw2^
+                                                                                                                        p^
+  "A mock can be created and stubbed at the same time"                        	                                        ! aMock().mockAndStub^
                                                                                                                         p^
   "The number of calls to a mocked method can be checked"                                                               ^
     "if the mocked method has been called once"                                                                         ! calls().calls1^
@@ -134,6 +136,12 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       tryo(list.clear())
       list.clear()
     } must throwAn[IllegalArgumentException]
+
+    def mockAndStub = {
+      val mocked: java.util.List[String] = mock[java.util.List[String]].contains("o") returns true
+      mocked.contains("o") must beTrue
+    }
+
   }
   
   case class calls() {

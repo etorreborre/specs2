@@ -24,7 +24,7 @@ import org.mockito.stubbing.{ OngoingStubbing, Stubber }
  * mockedList.get(0) returns "one" thenThrows new Exception("unexpected now")
  * </code>
  */
-trait MockitoStubs extends MocksCreation {
+trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
   /** delegate to MockitoMocker doAnswer with a MockAnswer object using the function f. */
   def doAnswer[T](f: Any => T) = mocker.doAnswer(new MockAnswer(f))
   
@@ -91,24 +91,28 @@ trait MockitoStubs extends MocksCreation {
        val mock = invocation.getMock
        if (args.size == 0) {
          function match {
-           case f: Function0[_] => return f()
-           case f: Function1[_,_] => return f(mock)
+           case f: Function0[_]   => f()
+           case f: Function1[_,_] => f(mock)
          }
        } else if (args.size == 1) {
          function match {
-           case f: Function1[_, _] => return f(args(0))
+           case f: Function1[_, _]     => return f(args(0))
          }
          function match {
-           case f2: Function2[_, _, _] => return f2(args(0), mock)
+           case f2: Function2[_, _, _] => f2(args(0), mock)
          }
        } else {
          function match {
-           case f: Function1[_, _] => return f(args)
+           case f: Function1[_, _]     => return f(args)
          }
          function match {
-           case f2: Function2[_, _, _] => return f2(args, mock)
+           case f2: Function2[_, _, _] => f2(args, mock)
          }
        }
      } 
   }
+}
+
+trait MockitoStubsLowerImplicits {
+  implicit def ongoingStubbing[M](stubbing: =>OngoingStubbing[_]): M = stubbing.getMock[M]
 }

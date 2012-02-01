@@ -354,7 +354,15 @@ You can specify different consecutive returned values by appending thenReturns o
       m.get(1) returns "one" thenReturns "two"
       m.get(2) throws new RuntimeException("forbidden") thenReturns "999"
 
+###### Mocking and Stubbing at the same time
+
+It is also possible to create a mock while stubbing one of its methods, provided that you declare the type of the expected mock:
+
+      val mocked: java.util.List[String] = mock[java.util.List[String]].contains("o") returns true
+      mocked.contains("o") must beTrue
+
 ##### Argument matchers
+
 The built-in Mockito argument matchers can be used to specify the method arguments for stubbing:
 
       m.get(anyInt()) returns "element"
