@@ -64,14 +64,18 @@ trait HtmlPrinter {
   /** @return a new HtmlReportOutput object creating html elements */
   def output: HtmlReportOutput = new HtmlResultOutput
 
-  /** @return a global toc */
+  /**
+   * @return a global toc from the Tree of html files
+   */
   def createToc(htmlFiles: Tree[HtmlLinesFile])(implicit args: Arguments) = {
-    def itemsList(tree: Tree[HtmlLinesFile]): NodeSeq = {
+    def tocItems(tree: Tree[HtmlLinesFile]): NodeSeq = {
       val root = tree.rootLabel
-      tocElements(root.printLines(output).xml, root.link.url, root.specName.id,
-                  Map(tree.subForest.map(subSpec => (subSpec.rootLabel.id.toString, itemsList(subSpec))):_*))
+      tocItemList(body    = root.printLines(output).xml,
+                  url     = root.link.url,
+                  id      = root.id.toString,
+                  subTocs = Map(tree.subForest.map(subSpec => (subSpec.rootLabel.id.toString, tocItems(subSpec))):_*))
     }
-    TreeToc(htmlFiles.rootLabel.id, itemsList(htmlFiles))
+    TreeToc(htmlFiles.rootLabel.id, tocItems(htmlFiles))
   }
 
   /**
@@ -90,10 +94,16 @@ trait HtmlPrinter {
    */
   def reduce(spec: ExecutedSpecification): Seq[HtmlLine] = flatten(spec.fragments.reduceWith(reducer))
 
+  /**
+   * Sort HtmlLines into a Tree of HtmlLinesFile object where the tree represents the tree of included specifications
+   *
+   * The goal is to create a file per included specification and to use the Tree of files to create a table of contents for the root specification
+   */
   def sortByFile(specName: SpecName, parentLink: HtmlLink) = (lines: Seq[HtmlLine]) => {
     lazy val start = HtmlLinesFile(specName, parentLink, Vector())
     lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
+      // html lines for an included specification are placed into HtmlSpecStart and HtmlSpecEnd fragments
       cur match {
         case start @ HtmlSpecStart(s, st, l, a) if start.isIncludeLink =>
           updated.insertDownLast(leaf(HtmlLinesFile(s.specName, start.link.getOrElse(parentLink), List(start.unlink))))
@@ -140,7 +150,7 @@ case class HtmlFile(url: String, xml: NodeSeq) {
  * Table of contents, represented as a NodeSeq
  */
 case class TreeToc(rootCode: Int, toc: NodeSeq) {
-  /** @return a function global toc to be displayed with jstree, focusing on the current section */
+  /** @return a "tree" div to be used with jstree, focusing on the current section */
   def toTree = (currentCode: Int) =>
     <div id="tree">
       <ul>{toc}</ul>
