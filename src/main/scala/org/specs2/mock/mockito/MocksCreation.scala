@@ -89,6 +89,10 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
    * </code>
    */
   def spy[T](m: T): T = mocker.spy(m)
+  /**
+   * ignore stubbed methods when verifying that a mock has no more interactions
+   */
+  def ignoreStubs(mocks: AnyRef*): Array[AnyRef] = mocker.ignoreStubs(mocks:_*)
 }
 
 	

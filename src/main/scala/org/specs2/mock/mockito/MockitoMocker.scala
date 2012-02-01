@@ -13,8 +13,8 @@ import org.mockito.MockSettings
  */
 trait MockitoMocker {
   def verify(mode: VerificationMode) = org.mockito.Mockito.verify(org.mockito.Mockito.mock(classOf[List[Int]]), mode)
-  def verifyZeroInteractions[T <: AnyRef](mocks: T*) = for (m <- mocks) org.mockito.Mockito.verifyZeroInteractions(m)
-  def verifyNoMoreInteractions[T <: AnyRef](mocks: T*) = for (m <- mocks) org.mockito.Mockito.verifyNoMoreInteractions(m)
+  def verifyZeroInteractions[T <: AnyRef](mocks: T*) = org.mockito.Mockito.verifyZeroInteractions(mocks:_*)
+  def verifyNoMoreInteractions[T <: AnyRef](mocks: T*) = org.mockito.Mockito.verifyNoMoreInteractions(mocks:_*)
 
   def mock[T : ClassManifest]: T = org.mockito.Mockito.mock(implicitly[ClassManifest[T]].erasure).asInstanceOf[T]
   def mock[T : ClassManifest](settings: MockSettings): T = org.mockito.Mockito.mock(implicitly[ClassManifest[T]].erasure, settings).asInstanceOf[T]
@@ -39,4 +39,6 @@ trait MockitoMocker {
 	
 	def answer[A](a: A): Answer[A] = answer((i: InvocationOnMock) => a)
 	def answer[A](f: InvocationOnMock => A): Answer[A] = new Answer[A] { def answer(i: InvocationOnMock): A = f(i) }
+
+  def ignoreStubs(mocks: AnyRef*): Array[AnyRef] = org.mockito.Mockito.ignoreStubs(mocks:_*)
 }

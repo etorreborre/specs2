@@ -50,10 +50,11 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "if the mocked method has been called atLeast n times"                                                              ! calls().calls3^
     "if the mocked method has been called atMost n times"                                                               ! calls().calls4^
     "if the mocked method has never been called"                                                                        ! calls().calls5^
-    "if the mocked method has not been called after some calls"                                                         ! calls().calls6^
-    "if the verification throws an exception, it will be reported as an Error"                                          ! calls().calls7^
+    "if the verification throws an exception, it will be reported as an Error"                                          ! calls().calls6^
+    "if the mocked method has not been called after some calls"                                                         ! calls().calls7^
+    "if the mocked method has not been called after some calls - ignoring stubs"                                        ! calls().calls8^
                                                                                                                         p^
-  "The order of calls to a mocked method can be checked"^
+  "The order of calls to a mocked method can be checked"                                                                ^
     "with 2 calls that were indeed in order"                                                                            ! ordered().asExpected^
     "with 2 calls that were indeed not in order"                                                                        ! ordered().failed^
     "with 3 calls that were indeed not in order"                                                                        ! ordered().failed2^
@@ -146,8 +147,10 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
   
   case class calls() {
     val list = mock[java.util.List[String]]
+    val list2 = mock[java.util.List[String]]
     list.add("one")
     1 to 2 foreach { i => list.add("two") }
+    list2.add("one")
 
     def calls1 = got { one(list).add("one") }  // equivalent to 'there was one(list).add("one")'
     def calls2 = there were two(list).add("two")
@@ -155,14 +158,25 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     def calls4 = there were atMost(2)(list).add("two")
     def calls5 = there was no(list).add("four")
     def calls6 = {
+      val cause = new Exception("cause")
+      val e = new Exception("error", cause)
+      (there was no(list).add(be_==={throw e; "four"})) must throwAn[Exception]
+    }
+    def calls7 = {
       there was one(list).add("one")
       there were two(list).add("two")
       there were noMoreCallsTo(list)
     }
-    def calls7 = {
-      val cause = new Exception("cause")
-      val e = new Exception("error", cause)
-      (there was no(list).add(be_==={throw e; "four"})) must throwAn[Exception]
+    def calls8 = {
+      list.contains("1") returns false
+      list2.contains("2") returns false
+
+      list.contains("1")
+      list2.contains("2")
+
+      there was one(list).add("one")
+      there were one(list2).add("one")
+      there were noMoreCallsTo(ignoreStubs(list, list2))
     }
   }
   case class callbacks() {

@@ -123,7 +123,7 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
   /** at most 3 calls made to the mock */
   def atMostThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(3))(anOrder)
   /** no more calls made to the mock */
-  def noMoreCallsTo[T <: AnyRef](mock: T): Unit = mocker.verifyNoMoreInteractions(mock)
+  def noMoreCallsTo[T <: AnyRef](mocks: T*): Unit = mocker.verifyNoMoreInteractions(mocks:_*)
 
 	/** implicit def supporting calls in order */
   implicit def toInOrderMode[T <% Result](calls: =>T): ToInOrderMode[T] = new ToInOrderMode(calls)
