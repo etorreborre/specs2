@@ -73,7 +73,6 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
     "the labels that are set on properties"                                                                             ! config().e3^
     "the exceptions that happen on generation"                                                                          ! config().e4^
     "the collected frequencies"                                                                                         ! config().e5^
-
                                                                                                                         end
 
   
@@ -156,7 +155,7 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
     implicit def arb: Arbitrary[Int] = Arbitrary { for (n <- Gen.choose(1, 3)) yield { error("boo"); n }}
     Prop.forAll((i: Int) => i > 0)
   }
-  val propertyWithDataCollection = forAll { l: List[Int] =>
+  val propertyWithDataCollection = Prop.forAll { l: List[Int] =>
     Prop.classify(l.reverse == l, "ordered") {
       Prop.classify(l.length > 5, "large", "small") {
         l.reverse.reverse == l

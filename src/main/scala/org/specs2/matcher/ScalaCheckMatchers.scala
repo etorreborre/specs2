@@ -127,7 +127,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
             execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq))
           case e: java.lang.Exception      => 
             execute.Error("A counter-example is "+counterExample(args)+": " + ex + getCause(e) +
-                                                " ("+afterNTries(n)+")"+ failedLabels(labels), e) + frequencies(fq)
+                                                " ("+afterNTries(n)+")"+ failedLabels(labels) + frequencies(fq), e)
           case throwable    => throw ex
         }
 
@@ -288,7 +288,7 @@ trait ScalaCheckParameters {
    implicit def defaultParameters = new Parameters(setParams(Nil))
 
    /** default parameters to display pretty messages */		   
-   implicit val defaultPrettyParams = Pretty.defaultParams
+   implicit def defaultPrettyParams = Pretty.defaultParams
    /**
     * Default values for ScalaCheck parameters
     */
