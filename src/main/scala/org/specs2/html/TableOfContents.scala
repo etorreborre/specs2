@@ -72,13 +72,18 @@ trait TableOfContents { outer =>
   /** create a sanitized anchor name */
   def anchorName(name: String) = "#"+sanitize(name)
 
-  /** @return all the headers of a document */
-  def headers(body: NodeSeq): NodeSeq = {
+  /**
+   * @return all the headers and all the subtoc elements of a document
+   */
+  def headers(body: NodeSeq): NodeSeq = filter(body, (e: Node) => isHeader(e) || isSubtoc(e))
+
+  /** @return all the nodes satisfying a condition as a NodeSeq */
+  def filter(body: NodeSeq, condition: Node => Boolean): NodeSeq = {
     body.toList match {
-      case e :: rest if isHeader(e) || isSubtoc(e)  => e ++ headers(rest)
-      case (e:Elem) :: rest                         => headers(e.child) ++ headers(rest)
-      case e :: rest                                => headers(rest)
-      case Nil                                      => Nil
+      case e :: rest if condition(e)  => e ++ headers(rest)
+      case (e:Elem) :: rest           => headers(e.child) ++ headers(rest)
+      case e :: rest                  => headers(rest)
+      case Nil                        => Nil
     }
   }
 
