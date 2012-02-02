@@ -148,6 +148,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
   case class calls() {
     val list = mock[java.util.List[String]]
     val list2 = mock[java.util.List[String]]
+
     list.add("one")
     1 to 2 foreach { i => list.add("two") }
     list2.add("one")
@@ -170,13 +171,12 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     def calls8 = {
       list.contains("1") returns false
       list2.contains("2") returns false
-
       list.contains("1")
       list2.contains("2")
 
       there was one(list).add("one")
       there were one(list2).add("one")
-      there were noMoreCallsTo(ignoreStubs(list, list2))
+      there were noMoreCallsTo(ignoreStubs(list, list2):_*)
     }
   }
   case class callbacks() {

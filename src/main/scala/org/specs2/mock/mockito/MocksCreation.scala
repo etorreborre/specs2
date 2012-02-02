@@ -92,7 +92,7 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
   /**
    * ignore stubbed methods when verifying that a mock has no more interactions
    */
-  def ignoreStubs(mocks: AnyRef*): Array[AnyRef] = mocker.ignoreStubs(mocks:_*)
+  def ignoreStubs(mocks: AnyRef*): Seq[AnyRef] = mocker.ignoreStubs(mocks:_*)
 }
 
 	

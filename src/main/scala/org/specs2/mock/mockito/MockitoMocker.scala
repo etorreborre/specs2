@@ -40,5 +40,5 @@ trait MockitoMocker {
 	def answer[A](a: A): Answer[A] = answer((i: InvocationOnMock) => a)
 	def answer[A](f: InvocationOnMock => A): Answer[A] = new Answer[A] { def answer(i: InvocationOnMock): A = f(i) }
 
-  def ignoreStubs(mocks: AnyRef*): Array[AnyRef] = org.mockito.Mockito.ignoreStubs(mocks:_*)
+  def ignoreStubs(mocks: AnyRef*): Seq[AnyRef] = org.mockito.Mockito.ignoreStubs(mocks:_*).toSeq
 }
