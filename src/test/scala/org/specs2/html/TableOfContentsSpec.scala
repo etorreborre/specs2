@@ -3,7 +3,7 @@ package html
 import TableOfContents._
 import matcher.DataTables
 
-class TableOfContentsSpec extends Specification with DataTables { def is =
+class TableOfContentsSpec extends Specification with DataTables with HtmlDocuments { def is =
 
   "Creating a table of content for a body creates nothing when there are"                                               ^
     `no toc elements`                                                                                                  ^
@@ -19,32 +19,7 @@ class TableOfContentsSpec extends Specification with DataTables { def is =
                                                                                                                         p^
     "2 h3 headers with one h4 header each"                                                                              ^
       `create links to the anchors with a nested <ul> element`                                                          ^
-                                                                                                                        endp^
-  "support functions"                                                                                                   ^
-    { isHeader(<h1/>) must beTrue }                                                                                     ^
-    { isHeader(<h2/>) must beTrue }                                                                                     ^
-    `headersToTree builds a Tree of headers`                                                                            ^
-    `headersToTree builds a Tree of headers - 2`                                                                        ^
-    { nodeText(<h2>Hello</h2>) must_== "Hello"}                                                                         ^
-    { nodeText(<h2>Hello<notoc>world</notoc></h2>) must_== "Hello"}                                                     ^
                                                                                                                         end
-
-  val aBodyWithHeadersButNoToc           = <body><h1>title</h1>text with <h2>a header</h2></body>
-  val aBodyWithNoHeaders                 = <body><h1>title</h1>text with <toc/><i>other nodes</i></body>
-  val aBodyWithH1HeadersOnly             = <body><h1>title</h1>text with <toc/><h1>a h1 header</h1></body>
-  val aBodyWithH2HeadersOnly             = <body><h1>title</h1>text with <toc/><h2>a h2 header</h2></body>
-  val aBodyWithOneH3Header               = <body><h1>title</h1>text with <toc/><h3>a h3 header</h3></body>
-  val aBodyWithTwoH3Headers              = <body><h1>title</h1>text with <toc/><h3>a h3 header</h3>other text<h3>another h3 header</h3></body>
-  val aBodyWithTwoH3HeadersAndOneH4Each  =
-    <h1>title</h1>             ++
-      <h3>a h3 header</h3>     ++
-      <h4>first h4</h4>        ++
-    <h3>another h3 header</h3> ++
-      <h4>second h4</h4>
-
-  val aBodyWithAH3ThenAH2Header  =
-      <h3>a h3 header</h3>     ++
-      <h2>a h2 header</h2>
 
   def `no toc elements` = addToc(aBodyWithHeadersButNoToc) must not \\(<li/>)
   def `no headers except the title` = addToc(aBodyWithNoHeaders) must not \\(<li/>)
@@ -66,22 +41,5 @@ class TableOfContentsSpec extends Specification with DataTables { def is =
         </li>
       </ul>
     }
-
-  def `headersToTree builds a Tree of headers` = headersToTree(aBodyWithTwoH3HeadersAndOneH4Each).toTree.drawTree.trim must_==
-    """.title
-       .|
-       .+- a h3 header
-       .|  |
-       .|  `- first h4
-       .|
-       .`- another h3 header
-       .   |
-       .   `- second h4""".stripMargin('.').replace("\r", "")
-
-  def `headersToTree builds a Tree of headers - 2` = headersToTree(aBodyWithAH3ThenAH2Header).toTree.drawTree.trim must_==
-    """.|
-       .+- a h3 header
-       .|
-       .`- a h2 header""".stripMargin('.').replace("\r", "")
 
 }

@@ -55,7 +55,8 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "if the mocked method has not been called after some calls - ignoring stubs"                                        ! calls().calls8^
                                                                                                                         p^
   "The order of calls to a mocked method can be checked"                                                                ^
-    "with 2 calls that were indeed in order"                                                                            ! ordered().asExpected^
+    "with 2 calls that were indeed in order"                                                                            ! ordered().asExpected1^
+    "with 2 calls that were indeed in order - ignoring stubbed methods"                                                 ! ordered().asExpected2^
     "with 2 calls that were indeed not in order"                                                                        ! ordered().failed^
     "with 3 calls that were indeed not in order"                                                                        ! ordered().failed2^
                                                                                                                         p^
@@ -169,14 +170,20 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       there were noMoreCallsTo(list)
     }
     def calls8 = {
-      list.contains("1") returns false
-      list2.contains("2") returns false
-      list.contains("1")
-      list2.contains("2")
+      val list3 = mock[java.util.List[String]]
+      val list4 = mock[java.util.List[String]]
+      list3.contains("3") returns false
+      list4.contains("4") returns false
 
-      there was one(list).add("one")
-      there were one(list2).add("one")
-      there were noMoreCallsTo(ignoreStubs(list, list2):_*)
+      list3.add("one")
+      list4.add("one"); list4.add("one")
+      list3.contains("3")
+      list4.contains("4")
+
+      there was one(list3).add("one")
+      there were two(list4).add("one")
+
+      there were noMoreCallsTo(ignoreStubs(list3, list4))
     }
   }
   case class callbacks() {
@@ -190,12 +197,25 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     val list1 = mock[java.util.List[String]]
     val list2 = mock[java.util.List[String]]
 
-    def asExpected: Result = {
+    def asExpected1: Result = {
       list1.get(0)
       list2.get(0)
       implicit val order = inOrder(list1, list2)
       (there was one(list1).get(0) then
                  one(list2).get(0)).message must_== "The mock was called as expected"
+    }
+
+    def asExpected2: Result = {
+      list1.get(1) returns "1"
+
+      // there is an out of order call but to a stubbed method
+      list1.get(1)
+      list1.get(0)
+      list2.get(0)
+
+      implicit val order = inOrder(ignoreStubs(list1, list2))
+      (there was one(list1).get(0) then
+        one(list2).get(0)).message must_== "The mock was called as expected"
     }
 
     def failed = {

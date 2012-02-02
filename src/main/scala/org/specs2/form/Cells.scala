@@ -94,6 +94,13 @@ case class TextCell(s: String, result: Option[Result] = None, decorator: Decorat
   /** set a new Decorator */
   def decoratorIs(d: Decorator) = copy(decorator = d)
 
+  override def equals(other: Any) = {
+    other match {
+      case TextCell(s1, result1, _) => s == s1 && result == result1
+      case _                        => false
+    }
+  }
+
 }
 
 object TextCell {

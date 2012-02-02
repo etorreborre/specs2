@@ -10,7 +10,7 @@ import collection.Iterablex._
  * This object provides useful functions for Nodes and NodeSeqs
  */
 private[specs2]
-trait NodeFunctions extends control.Debug {
+trait NodeFunctions {
   /**
    * @return true if the Node represents some empty text (containing spaces or newlines)
    */
@@ -109,6 +109,16 @@ trait NodeFunctions extends control.Debug {
       other.child.isEmpty || isEqualIgnoringSpace(fromSeq(n.child), fromSeq(other.child))
 
     attributesNamesMatch(node.attributes) && attributesValuesMatch(node.attributes) && childrenMatch(node)
+  }
+
+  /** @return all the nodes satisfying a condition as a NodeSeq */
+  def filter(nodes: NodeSeq, condition: Node => Boolean): NodeSeq = {
+    nodes.toList match {
+      case e :: rest if condition(e)  => e ++ filter(rest, condition)
+      case (e:Elem) :: rest           => filter(e.child, condition) ++ filter(rest, condition)
+      case e :: rest                  => filter(rest, condition)
+      case Nil                        => Nil
+    }
   }
 
 }

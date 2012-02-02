@@ -96,6 +96,8 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
     if (mocks.isEmpty) None
     else               Some(new org.mockito.internal.InOrderImpl(java.util.Arrays.asList(mocks:_*)))
 
+  def inOrder(stubbed: IgnoreStubs): Option[InOrder] = inOrder(stubbed.mocks:_*)
+
   /** no calls made to the mock */
   def noCallsTo[T <: AnyRef](mocks: T*) = mocker.verifyZeroInteractions(mocks:_*)
   /** no call made to the mock */
@@ -124,6 +126,8 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
   def atMostThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(3))(anOrder)
   /** no more calls made to the mock */
   def noMoreCallsTo[T <: AnyRef](mocks: T*): Unit = mocker.verifyNoMoreInteractions(mocks:_*)
+  /** no more calls made to the mock */
+  def noMoreCallsTo[T <: AnyRef](stubbed: IgnoreStubs): Unit = noMoreCallsTo(stubbed.mocks:_*)
 
 	/** implicit def supporting calls in order */
   implicit def toInOrderMode[T <% Result](calls: =>T): ToInOrderMode[T] = new ToInOrderMode(calls)
