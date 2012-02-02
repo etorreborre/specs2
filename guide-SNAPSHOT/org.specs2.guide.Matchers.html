@@ -722,6 +722,9 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
 </code></pre><p>You can specify different consecutive returned values by appending thenReturns or thenThrows:</p>
 <pre><code class="prettyprint">  m.get(1) returns &quot;one&quot; thenReturns &quot;two&quot;
   m.get(2) throws new RuntimeException(&quot;forbidden&quot;) thenReturns &quot;999&quot;
+</code></pre><a name="Mocking+and+Stubbing+at+the+same+time"></a><h6>Mocking and Stubbing at the same time</h6><p>It is also possible to create a mock while stubbing one of its methods, provided that you declare the type of the expected mock:</p>
+<pre><code class="prettyprint">  val mocked: java.util.List[String] = mock[java.util.List[String]].contains(&quot;o&quot;) returns true
+  mocked.contains(&quot;o&quot;) must beTrue
 </code></pre><a name="Argument+matchers"></a><h5>Argument matchers</h5><p>The built-in Mockito argument matchers can be used to specify the method arguments for stubbing:</p>
 <pre><code class="prettyprint">  m.get(anyInt()) returns &quot;element&quot;
   m.get(999) must_== &quot;element&quot;
@@ -773,7 +776,14 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
   // when several mocks are involved, the expected order must be specified as an implicit value
   implicit val order = inOrder(m1, m2)
   there was one(m1).get(0) then one(m2).get(0)
-</code></pre><a name="Spies"></a><h6>Spies</h6><p>Spies can be used in order to do some &quot;partial mocking&quot; of real objects:</p>
+</code></pre><a name="Ignoring+stubs"></a><h6>Ignoring stubs</h6><p>When specifying the behavior of an object in relation to others you may want to verify that some mocks have been called as collaborators and you don't really want to specify what happens to other mocks because they are just playing the role of stubs.</p><p>In this case the <code class="prettyprint">ignoreStubs</code> method can be used:</p>
+<pre><code class="prettyprint">  val (stub1, stub2) = (mock[AStub], mock[AStub])
+  ...
+  ...
+  there were noMoreCallsTo(ignoreStubs(stub1, stub2))
+</code></pre><p>This method is also available with the <code class="prettyprint">inOrder</code> method:</p>
+<pre><code class="prettyprint">  implicit val order = inOrder(ignoreStubs(list1, list2))
+</code></pre><p>For more documentation about this Mockito functionality, please read <a href="http://docs.mockito.googlecode.com/hg/1.9.0/org/mockito/Mockito.html#25">here</a>.</p><a name="Spies"></a><h6>Spies</h6><p>Spies can be used in order to do some &quot;partial mocking&quot; of real objects:</p>
 <pre><code class="prettyprint">  val spiedList = spy(new LinkedList[String])
 
   // methods can be stubbed on a spy
@@ -820,7 +830,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
     +  a | b | c |
        2 | 2 | 4 |
        1 | 1 | 2 |
-</code></pre><a name="Forms"></a><h3>Forms</h3><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc id="631270424"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Reusing+matchers+outside+of+specs2"></a><h3>Reusing matchers outside of specs2</h3><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</code></pre><a name="Forms"></a><h3>Forms</h3><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc id="1928199401"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Reusing+matchers+outside+of+specs2"></a><h3>Reusing matchers outside of specs2</h3><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -836,8 +846,8 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
   }
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="927023219"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="1523625976"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="508898706"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+          <ul><li id="1080140469"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
           <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -847,7 +857,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
           <ul></ul>
         </li></ul>
-        </li><li id="493777690"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+        </li><li id="598714522"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
           <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -971,7 +981,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
           <ul></ul>
         </li></ul>
-        </li><li id="301612955"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+        </li><li id="971399760"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1012,7 +1022,9 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul><li><a href="org.specs2.guide.Matchers.html#Mocks+creation+and+settings">Mocks creation and settings</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
+          <ul><li><a href="org.specs2.guide.Matchers.html#Mocking+and+Stubbing+at+the+same+time">Mocking and Stubbing at the same time</a>
           <ul></ul>
+        </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
@@ -1021,6 +1033,8 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
+          <ul></ul>
+        </li><li><a href="org.specs2.guide.Matchers.html#Ignoring+stubs">Ignoring stubs</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
           <ul></ul>
@@ -1031,7 +1045,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="631270424"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+          <ul><li id="1928199401"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
           <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1075,7 +1089,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="397347250"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+        </li><li id="1273757229"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
           <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1135,7 +1149,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
           <ul></ul>
         </li></ul>
-        </li><li id="1387918387"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+        </li><li id="1601519719"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
           <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1179,7 +1193,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           <ul></ul>
         </li></ul>
         </li></ul>
-        </li><li id="79544133"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+        </li><li id="1939020522"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
           <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
           <ul></ul>
         </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1199,5 +1213,5 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
         </li></ul>
         </li></ul>
         </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['927023219','301612955'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['508898706','971399760'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
