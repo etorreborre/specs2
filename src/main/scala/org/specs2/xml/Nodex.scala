@@ -8,7 +8,7 @@ import collection.Iterablex._
  * Extension methods for NodeSeqs and Nodes
  */
 private[specs2]
-trait Nodex {
+trait Nodex { outer =>
   /** extend a NodeSeq */
   implicit def extendNodeSeq(ns: NodeSeq): ExtendedNodeSeq = new ExtendedNodeSeq(ns)
   /**
@@ -18,6 +18,7 @@ trait Nodex {
     def ==/(n: NodeSeq): Boolean = NodeFunctions.isEqualIgnoringSpace(ns, n)
     def isEqualIgnoringSpace(n: NodeSeq): Boolean = NodeFunctions.isEqualIgnoringSpace(ns, n)
     def isEqualIgnoringSpaceOrdered(n: NodeSeq): Boolean = NodeFunctions.isEqualIgnoringSpaceOrdered(ns, n)
+    def filter(condition: Node => Boolean) = NodeFunctions.filter(ns, condition)
   }
   implicit def extendNode(n: Node): ExtendedNode = new ExtendedNode(n)
   /**
