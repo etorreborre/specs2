@@ -92,7 +92,10 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
   /**
    * ignore stubbed methods when verifying that a mock has no more interactions
    */
-  def ignoreStubs(mocks: AnyRef*): Seq[AnyRef] = mocker.ignoreStubs(mocks:_*)
+  def ignoreStubs(mocks: AnyRef*): IgnoreStubs = IgnoreStubs(mocker.ignoreStubs(mocks:_*))
 }
 
-	
+/**
+ * This class encapsulate mocks which must have their stubbed methods ignored in verification methods
+ */
+case class IgnoreStubs(mocks: Seq[AnyRef])
