@@ -444,6 +444,23 @@ The order of method calls can be checked by creating calls and chaining them wit
       implicit val order = inOrder(m1, m2)
       there was one(m1).get(0) then one(m2).get(0)
 
+###### Ignoring stubs
+
+When specifying the behavior of an object in relation to others you may want to verify that some mocks have been called as collaborators and you don't really want to specify what happens to other mocks because they are just playing the role of stubs.
+
+In this case the `ignoreStubs` method can be used:
+
+      val (stub1, stub2) = (mock[AStub], mock[AStub])
+      ...
+      ...
+      there were noMoreCallsTo(ignoreStubs(stub1, stub2))
+
+This method is also available with the `inOrder` method:
+
+      implicit val order = inOrder(ignoreStubs(list1, list2))
+
+For more documentation about this Mockito functionality, please read [here](http://docs.mockito.googlecode.com/hg/1.9.0/org/mockito/Mockito.html#25).
+
 ###### Spies
 
 Spies can be used in order to do some "partial mocking" of real objects:
