@@ -33,7 +33,8 @@ trait TableOfContents { outer =>
     def headersTocItemList(body: NodeSeq, url: String = "", id: String = "", subTocs: Map[String, NodeSeq] = Map()) = {
       body.headersTree.
         bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-        if (h.isRoot) {
+        if (h.isSubtoc) subTocs.get(h.id).getOrElse(NodeSeq.Empty) ++ s.reduceNodes
+        else if (h.isRoot) {
           val headers = s.flatMap(_.toSeq).reduceNodes.toList
           val headersWithId = headers match {
             case (e:Elem) :: rest => (e % ("id" -> id.toString)) :: rest
@@ -41,7 +42,6 @@ trait TableOfContents { outer =>
           }
           headersWithId.reduceNodes
         }
-        else if (h.isSubtoc) subTocs.get(h.id).getOrElse(NodeSeq.Empty) ++ s.reduceNodes
         else
           <li><a href={url+h.anchorName}>{h.name}</a>
             { <ul>{s.toSeq}</ul> }
