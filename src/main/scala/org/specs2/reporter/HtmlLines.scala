@@ -26,7 +26,7 @@ case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLin
   def print(out: =>HtmlReportOutput, toc: NodeSeq) = {
     out.printHtml (
 		  out.printHead.
-		         printBody(addToc(<div id="container">{printLines(out).xml}</div>) ++ toc).xml
+		      printBody(<div id="container">{printLines(out).xml}</div> ++ toc).xml
     )
   }
 

@@ -5,18 +5,23 @@ import scala.xml._
 import transform.{RuleTransformer, RewriteRule}
 import org.specs2.internal.scalaz.{ TreeLoc, Scalaz, Show }
 import Scalaz._
+
 /**
- * This trait provide additional methods on a NodeSeq representing an html document
+ * This trait provide additional methods on a NodeSeq or a Node representing an html document
  */
 private[specs2]
 trait Htmlx { outer =>
 
-  implicit def extendNodeSeq(ns: NodeSeq) = ExtendedHtml(ns)
+  implicit def extendHtmlNodeSeq(ns: NodeSeq) = ExtendedHtml(ns)
   case class ExtendedHtml(ns: NodeSeq) {
     def headers = outer.headers(ns)
     def headersTree = outer.headersToTree(ns).toTree
   }
 
+  implicit def extendHtmlNode(n: Node) = ExtendedHtmlNode(n)
+  case class ExtendedHtmlNode(n: Node) {
+    def addHeadersAnchors = outer.headersAnchors.addTo(n)
+  }
   /**
    * @return all the headers and all the subtoc elements of a document
    */
@@ -68,8 +73,11 @@ trait Htmlx { outer =>
 
   case class Header(level: Int = 1, node: Node = new Atom("first level")) {
     def name = nodeText(node)
+    def isRoot = name.isEmpty
     def isSubtoc = outer.isSubtoc(node)
+
     def id: String = node.attributes.get("id").map(_.toString).getOrElse("")
+    def anchorName = name.anchorName
   }
   implicit object HeaderShow extends Show[Header] {
     def show(h : Header) = h.name.toList
@@ -94,10 +102,10 @@ trait Htmlx { outer =>
   }
 
   /** This rule can be used to add anchors to header elements */
-  object headerAnchors extends RewriteRule {
+  object headersAnchors extends RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
       case e: Elem if isHeader(e) => <a name={nodeText(e).sanitize}/> ++ e
-      case other => other
+      case other                  => other
     }
     def addTo(n: Node) = new RuleTransformer(this).apply(n)
   }

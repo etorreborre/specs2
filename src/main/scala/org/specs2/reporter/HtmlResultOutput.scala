@@ -14,6 +14,7 @@ import execute._
 import xml.Nodex._
 import matcher.DataTable
 import specification._
+import html.Htmlx._
 
 /**
  * This class stores the html to print to a file (as a NodeSeq object)
@@ -32,8 +33,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
 
   /** print the NodeSeq inside the html tags */
   def printHtml(n: =>NodeSeq) = print(<html>{n}</html>)
-  /** print the NodeSeq inside the body tags */
-  def printBody(n: =>NodeSeq) = print(<body>{n}</body>)
+  /** print the NodeSeq inside the body tags, with anchors for header tags */
+  def printBody(n: =>NodeSeq) = print((<body>{n}</body>).addHeadersAnchors)
   /** print the head of the document */
   def printHead = print(xml ++ head)
 
