@@ -18,7 +18,7 @@ trait Nodex { outer =>
     def ==/(n: NodeSeq): Boolean = NodeFunctions.isEqualIgnoringSpace(ns, n)
     def isEqualIgnoringSpace(n: NodeSeq): Boolean = NodeFunctions.isEqualIgnoringSpace(ns, n)
     def isEqualIgnoringSpaceOrdered(n: NodeSeq): Boolean = NodeFunctions.isEqualIgnoringSpaceOrdered(ns, n)
-    def filter(condition: Node => Boolean) = NodeFunctions.filter(ns, condition)
+    def filterNodes(condition: Node => Boolean) = NodeFunctions.filter(ns, condition)
   }
   implicit def extendNode(n: Node): ExtendedNode = new ExtendedNode(n)
   /**

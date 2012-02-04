@@ -28,27 +28,18 @@ trait TableOfContents { outer =>
    *
    * @return the toc of a document
    */
-  def tocItemList(body: NodeSeq, url: String = "", id: String = "", subTocs: Map[String, NodeSeq] = Map()): NodeSeq = {
-    /** @return the toc of a document by building a Tree of all the headers and mapping it to a list of <li/> */
-    def headersTocItemList(body: NodeSeq, url: String = "", id: String = "", subTocs: Map[String, NodeSeq] = Map()) = {
-      body.headersTree.
-        bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-        if (h.isSubtoc) subTocs.get(h.id).getOrElse(NodeSeq.Empty) ++ s.reduceNodes
-        else if (h.isRoot) {
-          val headers = s.flatMap(_.toSeq).reduceNodes.toList
-          val headersWithId = headers match {
-            case (e:Elem) :: rest => (e % ("id" -> id.toString)) :: rest
-            case other            => other
-          }
-          headersWithId.reduceNodes
-        }
-        else
-          <li><a href={url+h.anchorName}>{h.name}</a>
-            { <ul>{s.toSeq}</ul> }
-          </li>
-      }.rootLabel
-    }
-    headersTocItemList(headers(body), url, id, subTocs)
+  def tocItemList(body: NodeSeq, url: String, id: String, subTocs: Map[String, NodeSeq]): NodeSeq = {
+    body.headersTree.
+      bottomUp { (h: Header, s: Stream[NodeSeq]) =>
+      if (h.isRoot)
+        s.flatMap(_.toSeq).updateHead { case (e: Elem) => e % ("id" -> id.toString) }
+      else if (h.isSubtoc)
+        subTocs.get(h.id).getOrElse(NodeSeq.Empty) ++ s.reduceNodes
+      else
+        <li><a href={url+h.anchorName}>{h.name}</a>
+          { <ul>{s.toSeq}</ul> }
+        </li>
+    }.rootLabel
   }
 }
 private[specs2]
