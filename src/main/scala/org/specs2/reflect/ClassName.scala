@@ -49,7 +49,8 @@ trait ClassName {
    * @return the class name without the package name
    */
   def simpleName(klass: Class[_]): String = {
-    val result = className(klass.getSimpleName)
+    // klass.getSimpleName can throw an error in the REPL
+    val result = catchAllOrElse(className(klass.getSimpleName))("specification")
     if (result.contains("anon") && klass.getSuperclass != null) simpleName(klass.getSuperclass)
     else result
   }

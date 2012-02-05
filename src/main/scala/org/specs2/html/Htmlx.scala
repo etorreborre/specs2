@@ -5,22 +5,42 @@ import scala.xml._
 import transform.{RuleTransformer, RewriteRule}
 import org.specs2.internal.scalaz.{ TreeLoc, Scalaz, Show }
 import Scalaz._
+import xml.Nodex._
+
 /**
- * This trait provide additional methods on a NodeSeq representing an html document
+ * This trait provide additional methods on a NodeSeq or a Node representing an html document
  */
 private[specs2]
 trait Htmlx { outer =>
 
-  implicit def extendNodeSeq(ns: NodeSeq) = ExtendedHtml(ns)
+  implicit def extendHtmlNodeSeq(ns: NodeSeq) = ExtendedHtml(ns)
   case class ExtendedHtml(ns: NodeSeq) {
     def headers = outer.headers(ns)
-    def headersTree = outer.headersToTree(ns).toTree
+    def headersTree = outer.headersToTree(ns.headers).toTree
+  }
+
+  implicit def extendHtmlNode(n: Node) = ExtendedHtmlNode(n)
+  case class ExtendedHtmlNode(n: Node) {
+    def addHeadersAnchors = outer.headersAnchors.addTo(n)
+  }
+
+  implicit def extendHtmlSeqNode(ns: Seq[Node]) = ExtendedHtmlSeqNode(ns)
+  case class ExtendedHtmlSeqNode(ns: Seq[Node]) {
+    def updateHead(f: PartialFunction[Node, Node]) = {
+      (ns.toList match {
+        case (e:Node) :: rest if f.isDefinedAt(e) => f(e) :: rest
+        case other                                => other
+      }).reduceNodes
+    }
+
+    def updateHeadAttribute(name: String, value: String): NodeSeq = updateHead { case (e: Elem) => e % (name -> value) }
+    def updateHeadAttribute(name: String, value: Int): NodeSeq = updateHeadAttribute(name, value.toString)
   }
 
   /**
    * @return all the headers and all the subtoc elements of a document
    */
-  def headers(nodes: NodeSeq): NodeSeq = nodes.filter((e: Node) => isHeader(e) || isSubtoc(e))
+  def headers(nodes: NodeSeq): NodeSeq = nodes.filterNodes((e: Node) => isHeader(e) || isSubtoc(e))
 
   /** collect all the headers as a Tree */
   def headersToTree(body: NodeSeq, headers: TreeLoc[Header] = leaf(Header()).loc): TreeLoc[Header] = {
@@ -53,8 +73,6 @@ trait Htmlx { outer =>
     }
   }
 
-
-
   implicit def href(s: String) = HRef(s)
   case class HRef(s: String) {
     def sanitize = outer.sanitize(s)
@@ -68,9 +86,14 @@ trait Htmlx { outer =>
 
   case class Header(level: Int = 1, node: Node = new Atom("first level")) {
     def name = nodeText(node)
+    def isRoot = name.isEmpty && !isSubtoc
     def isSubtoc = outer.isSubtoc(node)
+
     def id: String = node.attributes.get("id").map(_.toString).getOrElse("")
+    def anchorName: String = name.anchorName
+    def anchorName(baseUrl: String): String = baseUrl + anchorName
   }
+
   implicit object HeaderShow extends Show[Header] {
     def show(h : Header) = h.name.toList
   }
@@ -94,10 +117,10 @@ trait Htmlx { outer =>
   }
 
   /** This rule can be used to add anchors to header elements */
-  object headerAnchors extends RewriteRule {
+  object headersAnchors extends RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
       case e: Elem if isHeader(e) => <a name={nodeText(e).sanitize}/> ++ e
-      case other => other
+      case other                  => other
     }
     def addTo(n: Node) = new RuleTransformer(this).apply(n)
   }

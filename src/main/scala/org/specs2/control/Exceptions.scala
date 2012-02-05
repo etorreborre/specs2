@@ -54,6 +54,12 @@ trait Exceptions {
 	  catch { case e: Throwable => f(e) }
   }
   /**
+   * try to evaluate an expression, returning a value T
+   *
+   * If the expression throws a Throwable, then return a default value
+   */
+  def catchAllOrElse[T](a: =>T)(ko: =>T): T = catchAllOr(a)((e: Throwable) => ko)
+  /**
    * try to evaluate an expression and return it if nothing fails.
    * return ko otherwise
    */
