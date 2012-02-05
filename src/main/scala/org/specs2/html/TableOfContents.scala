@@ -2,6 +2,7 @@ package org.specs2
 package html
 
 import scala.xml._
+import NodeSeq._
 import transform.{RewriteRule, RuleTransformer}
 import xml.Nodex._
 import Htmlx._
@@ -31,16 +32,17 @@ trait TableOfContents { outer =>
   def tocItemList(body: NodeSeq, url: String, id: String, subTocs: Map[String, NodeSeq]): NodeSeq = {
     body.headersTree.
       bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-      if (h.isRoot)
-        s.flatMap(_.toSeq).updateHead { case (e: Elem) => e % ("id" -> id.toString) }
-      else if (h.isSubtoc)
-        subTocs.get(h.id).getOrElse(NodeSeq.Empty) ++ s.reduceNodes
-      else
-        <li><a href={url+h.anchorName}>{h.name}</a>
-          { <ul>{s.toSeq}</ul> }
-        </li>
+        if (h.isRoot)
+          s.reduceNodes.updateHeadAttribute("id", id)
+        else if (h.isSubtoc)
+          subTocs.get(h.id).getOrElse(Empty) ++ s.reduceNodes
+        else
+          <li><a href={h.anchorName(url)}>{h.name}</a>
+            { <ul>{s.toSeq}</ul> }
+          </li>
     }.rootLabel
   }
 }
+
 private[specs2]
 object TableOfContents extends TableOfContents

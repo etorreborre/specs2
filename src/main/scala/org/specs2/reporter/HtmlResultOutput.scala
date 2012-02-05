@@ -56,10 +56,17 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
    */
   def printSpecStart(name: SpecName, stats: Stats) = {
     print(<title>{name.title}</title>).
-    print(
-      if (stats.hasIssues) <h2>{name.title}
-                           <notoc>{showOnlyShowAllLinks(elementClass = "ok", "(issues only)", "(all)")}</notoc></h2>
-      else <h2>{name.title}</h2>)
+    print {
+     val header =
+       if (stats.hasIssues)
+        <h2>{name.title}
+          <notoc>{showOnlyShowAllLinks(elementClass = "ok", "(issues only)", "(all)")}</notoc>
+        </h2>
+      else
+        <h2>{name.title}</h2>
+
+      header.updateHeadAttribute("id", name.id)
+    }
   }
 
   /**

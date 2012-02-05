@@ -27,11 +27,14 @@ trait Htmlx { outer =>
   implicit def extendHtmlSeqNode(ns: Seq[Node]) = ExtendedHtmlSeqNode(ns)
   case class ExtendedHtmlSeqNode(ns: Seq[Node]) {
     def updateHead(f: PartialFunction[Node, Node]) = {
-      ns.toList {
+      (ns.toList match {
         case (e:Node) :: rest if f.isDefinedAt(e) => f(e) :: rest
         case other                                => other
-      }.reduceNodes
+      }).reduceNodes
     }
+
+    def updateHeadAttribute(name: String, value: String): NodeSeq = updateHead { case (e: Elem) => e % (name -> value) }
+    def updateHeadAttribute(name: String, value: Int): NodeSeq = updateHeadAttribute(name, value.toString)
   }
 
   /**
@@ -87,7 +90,8 @@ trait Htmlx { outer =>
     def isSubtoc = outer.isSubtoc(node)
 
     def id: String = node.attributes.get("id").map(_.toString).getOrElse("")
-    def anchorName = name.anchorName
+    def anchorName: String = name.anchorName
+    def anchorName(baseUrl: String): String = baseUrl + anchorName
   }
 
   implicit object HeaderShow extends Show[Header] {
