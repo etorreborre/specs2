@@ -26,16 +26,23 @@ trait Htmlx { outer =>
 
   implicit def extendHtmlSeqNode(ns: Seq[Node]) = ExtendedHtmlSeqNode(ns)
   case class ExtendedHtmlSeqNode(ns: Seq[Node]) {
-    def updateHead(f: PartialFunction[Node, Node]) = {
-      (ns.toList match {
-        case (e:Node) :: rest if f.isDefinedAt(e) => f(e) :: rest
-        case other                                => other
-      }).reduceNodes
-    }
-
-    def updateHeadAttribute(name: String, value: String): NodeSeq = updateHead { case (e: Elem) => e % (name -> value) }
-    def updateHeadAttribute(name: String, value: Int): NodeSeq = updateHeadAttribute(name, value.toString)
+    def updateHead(f: PartialFunction[Node, Node]) = outer.updateHead(ns)(f)
+    def updateHeadAttribute(name: String, value: String): NodeSeq = outer.updateHeadAttribute(ns, name, value)
+    def updateHeadAttribute(name: String, value: Int): NodeSeq = outer.updateHeadAttribute(ns, name, value)
   }
+
+  /** @return a NodeSeq where the first Node is updated with a partial function */
+  def updateHead(ns: NodeSeq)(f: PartialFunction[Node, Node]) = {
+    (ns.toList match {
+      case (e:Node) :: rest if f.isDefinedAt(e) => f(e) :: rest
+      case other                                => other
+    }).reduceNodes
+  }
+
+  /** @return a NodeSeq where the first Node attribute named 'named' has a new value */
+  def updateHeadAttribute(ns: NodeSeq, name: String, value: String): NodeSeq = updateHead(ns) { case (e: Elem) => e % (name -> value) }
+  /** @return a NodeSeq where the first Node attribute named 'named' has a new value, from an Int */
+  def updateHeadAttribute(ns: NodeSeq, name: String, value: Int): NodeSeq = updateHeadAttribute(ns, name, value.toString)
 
   /**
    * @return all the headers and all the subtoc elements of a document
@@ -119,7 +126,7 @@ trait Htmlx { outer =>
   /** This rule can be used to add anchors to header elements */
   object headersAnchors extends RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
-      case e: Elem if isHeader(e) => <a name={nodeText(e).sanitize}/> ++ e
+      case e: Elem if isHeader(e) => <a name={nodeText(e).sanitize}>{e}</a>
       case other                  => other
     }
     def addTo(n: Node) = new RuleTransformer(this).apply(n)

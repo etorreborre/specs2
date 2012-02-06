@@ -9,6 +9,8 @@ class HtmlxSpec extends Specification with HtmlDocuments { def is =
     { isHeader(<h2/>) must beTrue }                                                                                     ^
     `headersToTree builds a Tree of headers from a html document`                                                       ^
     `headersToTree builds a Tree of headers - 2`                                                                        ^
+    { (<h2 id="1"/> ++ <h3/>).updateHeadAttribute("id", 3) === (<h2 id="3"/> ++ <h3/>) }                                ^
+    { <h2>hello</h2>.addHeadersAnchors === <a name="hello"><h2>hello</h2></a> }                                         ^
                                                                                                                         p^
   "nodeText extracts the text from a Node"                                                                              ^
     { nodeText(<h2>Hello</h2>) must_== "Hello"}                                                                         ^
