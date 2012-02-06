@@ -25,6 +25,10 @@ trait Seqx { outer =>
    */
   class ExtendedSeq[T](seq: Seq[T]) {
     def reduceWith[S](reducer: Reducer[T, S]) = FoldlGenerator[Seq].reduce(reducer, seq)
+    def updateLast(f: T => T) = seq match {
+      case seq :+ last => seq :+ f(last)
+      case other       => other
+    }
   }
 
   /**
@@ -43,5 +47,16 @@ trait Seqx { outer =>
     else filtered.map(_.head) +: transpose(filtered.map(_.tail))
   }
 }
+
+/**
+ * extrator for the last element of Seq[T]
+ */
+object :+ {
+  def unapply[T](l: Seq[T]): Option[(Seq[T], T)] = {
+    if(l.isEmpty) None
+    else          Some(l.init, l.last)
+  }
+}
+
 private[specs2]
 object Seqx extends Seqx
