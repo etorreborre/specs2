@@ -208,6 +208,18 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
  */
 class BeEqualTo(t: =>Any) extends BeTypedEqualTo(t)
 /**
+ * This matcher always matches any value of type T
+ */
+case class AlwaysMatcher[T]() extends Matcher[T] {
+  def apply[S <: T](e: Expectable[S]) = result(true, "ok", "ko", e)
+}
+/**
+ * This matcher never matches any value of type T
+ */
+case class NeverMatcher[T]() extends Matcher[T] {
+  def apply[S <: T](e: Expectable[S]) = result(false, "ok", "ko", e)
+}
+/**
  * This trait allows to write expressions like
  * 
  *  `1 must be equalTo(1)`
