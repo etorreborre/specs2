@@ -8,7 +8,7 @@ import xml.Nodex._
 import text.Quote._
 import org.specs2.xml.NodeFunctions._
 import StringToElem._
-
+import collection.Seqx._
 /**
  * The XmlMatchers trait provides matchers which are applicable to xml nodes
  */
@@ -72,13 +72,13 @@ trait XmlBaseMatchers { outer =>
   def equalToIgnoringSpace(node: Elem) = beEqualToIgnoringSpace(node)
 
   private def deepMatch(node: Node, attributes: List[String]) =
-    new XmlMatcher(List(new PathFunction(node, deepNodeSearch _, attributes)))
+    new XmlMatcher(Seq(new PathFunction(node, deepNodeSearch _, attributes)))
   private def deepMatch(node: Node, attributes: Map[String, String]) =
-    new XmlMatcher(List(new PathFunction(node, deepNodeSearch _, attributeValues = attributes)))
+    new XmlMatcher(Seq(new PathFunction(node, deepNodeSearch _, attributeValues = attributes)))
   private def firstMatch(node: Node, attributes: List[String]) =
-    new XmlMatcher(List(new PathFunction(node, firstNodeSearch _, attributes)))
+    new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch _, attributes)))
   private def firstMatch(node: Node, attributes: Map[String, String]) =
-    new XmlMatcher(List(new PathFunction(node, firstNodeSearch _, attributeValues = attributes)))
+    new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch _, attributeValues = attributes)))
 }
 
 private[specs2]
@@ -144,7 +144,7 @@ class EqualIgnoringSpaceMatcherOrdered(node: Seq[Node]) extends Matcher[Seq[Node
  * search function which tries to match the result of the preceding function. For example<pre>
  * <a><b><c><d></d></c></b></a> must \\("c").\("d")</pre> will be ok.
 */
-case class XmlMatcher(functions: List[PathFunction]) extends Matcher[Seq[Node]] {
+case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]] {
   /** do an exact match on attributes and attributes values */
   def exactly = XmlMatcher(functions.map(_.exactly))
   /**
@@ -174,12 +174,24 @@ case class XmlMatcher(functions: List[PathFunction]) extends Matcher[Seq[Node]] 
   def \\(label: String, attributeNames: String*): XmlMatcher = \\(label.toElem, attributeNames:_*)
   def \\(label: String, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher = 
     \\(label.toElem, attributeValues, attributeValues2:_*)
-  
+
+  /**
+   * specify the value of the node text
+   */
+  def textIs(t: String) = XmlMatcher(functions.updateLast(f => f.textIs(t)))
+  /** alias for textIs */
+  def \>(t: String) = textIs(t)
+  /**
+   * specify the value of the node text
+   */
+  def textMatches(regexp: String) = XmlMatcher(functions.updateLast(f => f.textMatches(regexp)))
+  /** alias for textMatches */
+  def \>~(t: String) = textIs(t)
   /**
    * checks that the <code>nodes</code> satisfy the <code>functions</code>
    * @return a MatcherResult
    */
-  def checkFunctions(pathFunctions: List[PathFunction], nodes: Seq[Node], messages: (Boolean, String, String)): (Boolean, String, String) = {
+  def checkFunctions(pathFunctions: Seq[PathFunction], nodes: Seq[Node], messages: (Boolean, String, String)): (Boolean, String, String) = {
     // check the rest of the functions, with the nodes returned by the current function
     // and build a MatcherResult being a success if the function retrieves some node
     pathFunctions match {
@@ -221,17 +233,26 @@ trait XPathFunctions {
  * The PathFunction object encapsulate a search for a node and/or attributes or attributeValues with an XPath function
  * If <code>node</code> has some children, then they are searched using equality
  */
-class PathFunction(val node: Node, val function: XPathFunction, val attributes: List[String] = Nil, val attributeValues: Map[String, String] = Map(), exactMatch: Boolean = false) extends Function1[Seq[Node], Seq[Node]] with XPathFunctions {
+case class PathFunction(val node: Node,
+                        val function: XPathFunction,
+                        val attributes: List[String] = Nil,
+                        val attributeValues: Map[String, String] = Map(),
+                        exactMatch: Boolean = false,
+                        textMatcher: Matcher[String] = AlwaysMatcher[String]()) extends Function1[Seq[Node], Seq[Node]] with XPathFunctions {
 
   /**
    * @return the node if it is found and matching the searched attributes and/or attribute values when specified
    */
   def apply(nodes: Seq[Node]): Seq[Node] = 
     for { n     <- nodes
-          found <- function(n, node.label) if (found.matchNode(node, attributes, attributeValues, exactMatch)) } 
+          found <- function(n, node.label) if (found.matchNode(node, attributes, attributeValues, exactMatch, textMatcher.test)) }
     yield found 
 
-  def exactly = new PathFunction(node, function, attributes, attributeValues, true)
+  def exactly = copy(exactMatch = true)
+  /** add a matcher for the node text */
+  def textIs(t: String) = copy(textMatcher = new BeEqualTo(t))
+  /** add a matcher for the node text with a regular exp */
+  def textMatches(regexp: String) = copy(textMatcher = new BeMatching(regexp))
   /**
    * @return "subnode" or "node" depending on the type of search a direct child search or a general search
    */

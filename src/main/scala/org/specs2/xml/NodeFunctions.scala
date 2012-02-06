@@ -77,8 +77,14 @@ trait NodeFunctions {
   /**
    * @return true if the node found with a label also satisfies the attributes and/or values requirement
    */
-  def matchNode(node: Node, other: Node, attributes: List[String] = Nil, attributeValues: Map[String, String] = Map(), exactMatch: Boolean = false): Boolean = {
-    def attributesNamesExactMatch(m: MetaData) =  
+  def matchNode(node: Node,
+                other: Node,
+                attributes: List[String] = Nil,
+                attributeValues: Map[String, String] = Map(),
+                exactMatch: Boolean = false,
+                textTest: String => Boolean = (s:String) => true): Boolean = {
+
+    def attributesNamesExactMatch(m: MetaData) =
       m.map((a: MetaData) => a.key).toList.intersect(attributes) == attributes
       
     def attributesNamesPartialMatch(m: MetaData) = {
@@ -108,7 +114,9 @@ trait NodeFunctions {
     def childrenMatch(n: Node) = 
       other.child.isEmpty || isEqualIgnoringSpace(fromSeq(n.child), fromSeq(other.child))
 
-    attributesNamesMatch(node.attributes) && attributesValuesMatch(node.attributes) && childrenMatch(node)
+    def textMatch(n: Node) = textTest(n.text)
+
+    attributesNamesMatch(node.attributes) && attributesValuesMatch(node.attributes) && childrenMatch(node) && textMatch(node)
   }
 
   /** @return all the nodes satisfying a condition as a NodeSeq */
