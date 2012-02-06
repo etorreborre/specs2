@@ -37,10 +37,10 @@ class XmlMatchersSpec extends Specification { def is =
   "A \\ matcher should match if a node is a direct child of another"                                                    ^
     { <a><b/></a> must \("b") }                                                                                         ^
     { <a><b></b></a> must \("b") }                                                                                      ^
-    { <a>hello</a> must \("a").textIs("hello") }                                                                        ^
-    { <a>hello</a> must \("a") \> ("hello") }                                                                           ^
-    { <a>hello</a> must \("a").textMatches("h.*") }                                                                     ^
-    { <a>hello</a> must \("a") \>~ ("h.*") }                                                                            ^
+    { <a>hello</a> must \\("a").textIs("hello") }                                                                       ^
+    { <a>hello</a> must \\("a") \> ("hello") }                                                                          ^
+    { <a>hello</a> must \\("a").textMatches("h.*") }                                                                    ^
+    { <a>hello</a> must \\("a") \>~ ("h.*") }                                                                           ^
     { <a><b><c></c></b></a> must \(<b><c></c></b>) }                                                                    ^
     "checking attribute names"                                                                                          ^
     { <a><b name="value"></b></a> must \("b", "name") }                                                                 ^

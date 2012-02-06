@@ -186,7 +186,7 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]] {
    */
   def textMatches(regexp: String) = XmlMatcher(functions.updateLast(f => f.textMatches(regexp)))
   /** alias for textMatches */
-  def \>~(t: String) = textIs(t)
+  def \>~(t: String) = textMatches(t)
   /**
    * checks that the <code>nodes</code> satisfy the <code>functions</code>
    * @return a MatcherResult
