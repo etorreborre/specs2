@@ -3,6 +3,8 @@ package matcher
 
 import scala.xml._
 import scala.xml.NodeSeq._
+import internal.scalaz.Zero._
+import control.Identityx._
 import XPathFunctions._
 import xml.Nodex._
 import text.Quote._
@@ -197,7 +199,7 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]] {
     pathFunctions match {
       case search :: functions => {
          val nextNodes = search(nodes)
-         val searched = search.searchedElements
+         val searched  = search.searchedElements
          val (ok, ko) = (messages._2, messages._3)
          val (newOk, newKo) = 
              (ok + " contains " + searched, 
@@ -238,6 +240,7 @@ case class PathFunction(val node: Node,
                         val attributes: List[String] = Nil,
                         val attributeValues: Map[String, String] = Map(),
                         exactMatch: Boolean = false,
+                        textMessage: Option[String] = None,
                         textMatcher: Matcher[String] = AlwaysMatcher[String]()) extends Function1[Seq[Node], Seq[Node]] with XPathFunctions {
 
   /**
@@ -250,9 +253,9 @@ case class PathFunction(val node: Node,
 
   def exactly = copy(exactMatch = true)
   /** add a matcher for the node text */
-  def textIs(t: String) = copy(textMatcher = new BeEqualTo(t))
+  def textIs(t: String) = copy(textMessage = Some("with text: "+t), textMatcher = new BeEqualTo(t))
   /** add a matcher for the node text with a regular exp */
-  def textMatches(regexp: String) = copy(textMatcher = new BeMatching(regexp))
+  def textMatches(regexp: String) = copy(textMessage = Some("with text matching: "+regexp), textMatcher = new BeMatching(regexp))
   /**
    * @return "subnode" or "node" depending on the type of search a direct child search or a general search
    */
@@ -269,9 +272,12 @@ case class PathFunction(val node: Node,
   def searchedElements = {
     val n = if (node.child.isEmpty) nodeLabel
             else node.toString
-    val attrs = if (attributes.isEmpty && attributeValues.isEmpty) "" 
-                else " with attributes: " + searchedAttributes
-    n + attrs
+
+    val exactly = "exactly the " unless exactMatch
+    val attrs = if (attributes.isEmpty && attributeValues.isEmpty) None
+                else Some("with "+exactly+"attributes: " + searchedAttributes)
+
+    Seq(Some(n), attrs, textMessage).flatten.mkString(" ")
   }
 
 }

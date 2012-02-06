@@ -39,6 +39,7 @@ class XmlMatchersSpec extends Specification { def is =
     { <a><b></b></a> must \("b") }                                                                                      ^
     { <a>hello</a> must \\("a").textIs("hello") }                                                                       ^
     { <a>hello</a> must \\("a") \> ("hello") }                                                                          ^
+    { (<a>hello</a> must \\("a") \> ("world")) returns "'<a>hello</a>' doesn't contain node 'a' with text: world"}      ^
     { <a>hello</a> must \\("a").textMatches("h.*") }                                                                    ^
     { <a>hello</a> must \\("a") \>~ ("h.*") }                                                                           ^
     { <a><b><c></c></b></a> must \(<b><c></c></b>) }                                                                    ^
@@ -110,7 +111,7 @@ class XmlMatchersSpec extends Specification { def is =
     def fail6 = (<a><b n="v"></b></a> must \("b", "n"->"v", "n2"->"v2")) returns
                 "'<a><b n=\"v\"></b></a>' doesn't contain subnode 'b' with attributes: n=\"v\" n2=\"v2\""
     def fail7 = (<a><b n="v" n2="v"></b></a> must \("b", "n"->"v").exactly) returns 
-                "'<a><b n=\"v\" n2=\"v\"></b></a>' doesn't contain subnode 'b' with attributes: n=\"v\""
+                "'<a><b n=\"v\" n2=\"v\"></b></a>' doesn't contain subnode 'b' with exactly the attributes: n=\"v\""
     def fail8 = (<a><b><c></c></b></a> must \(<b><d></d></b>)) returns 
                 "'<a><b><c></c></b></a>' doesn't contain <b><d></d></b>"
   }
@@ -127,7 +128,7 @@ class XmlMatchersSpec extends Specification { def is =
     def fail6 = (<a><b n="v"></b></a> must \\("b", "n"->"v", "n2"->"v2")) returns
                 "'<a><b n=\"v\"></b></a>' doesn't contain node 'b' with attributes: n=\"v\" n2=\"v2\""
     def fail7 = (<a><b n="v" n2="v"></b></a> must \\("b", "n"->"v").exactly) returns 
-                "'<a><b n=\"v\" n2=\"v\"></b></a>' doesn't contain node 'b' with attributes: n=\"v\""
+                "'<a><b n=\"v\" n2=\"v\"></b></a>' doesn't contain node 'b' with exactly the attributes: n=\"v\""
     def fail8 = (<a><b><c></c></b></a> must \\(<b><d></d></b>)) returns 
                 "'<a><b><c></c></b></a>' doesn't contain <b><d></d></b>"
     def fail9 = (<a><b>hello</b></a> must \\(<b>world</b>)) returns 
