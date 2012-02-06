@@ -40,7 +40,7 @@ trait TableOfContents { outer =>
           subTocs.get(h.specId).getOrElse(Empty) ++ s.reduceNodes
         else
           <li><a href={h.anchorName(url)}>{h.name}</a>
-            { <ul>{s.toSeq}</ul> }
+            { <ul>{s.toSeq}</ul> unless (s.toSeq.isEmpty) }
           </li>
     }.rootLabel
   }
