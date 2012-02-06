@@ -200,6 +200,11 @@ trait Matcher[-T] { outer =>
   def mute = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = outer.apply(s).mute
   }
+
+  /**
+   * @return a test function corresponding to this matcher
+   */
+  def test = (t: T) => apply(Expectable(t)).isSuccess
 }
 
 object Matcher {
