@@ -59,14 +59,14 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>specs2 design</title><a name="specs2+design"></a><h2>specs2 design</h2><status class="ok"><div class="level0"><a name="Presentation"></a><h3>Presentation</h3><p>This page explains the overall design of <em>specs2</em>:</p>
+    </head><body><div id="container"><title>specs2 design</title><a name="specs2+design"><h2 specId="1532001279">specs2 design</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>This page explains the overall design of <em>specs2</em>:</p>
 <ul>
   <li>the structure of a specification</li>
   <li>how the specification is built</li>
   <li>how the specification is executed</li>
   <li>how the reporting works</li>
   <li>the packages dependencies</li>
-</ul><a name="Specification+structure"></a><h3>Specification structure</h3><p>The structure of a specification is very simple, it is just a list of <code class="prettyprint">Fragments</code> provided by the <code class="prettyprint">is</code> method of the<br /><code class="prettyprint">SpecificationStructure</code> trait:</p>
+</ul><a name="Specification+structure"><h3>Specification structure</h3></a><p>The structure of a specification is very simple, it is just a list of <code class="prettyprint">Fragments</code> provided by the <code class="prettyprint">is</code> method of the<br /><code class="prettyprint">SpecificationStructure</code> trait:</p>
 <pre><code class="prettyprint">  +---------------+                     1..n  +-----------+
   | Specification | ------------------------&gt; | Fragment  |
   +---------------+                           +-----------+
@@ -84,7 +84,7 @@
   <li>Step / Action: some action on the system which is only reported if there's an exception</li>
   <li>SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications.<br /> The SpecStart element holds: the Arguments used to tune the execution/reporting, the link to an included/referenced specification</li>
   <li>TaggingFragments: those fragments are used to define which fragments should be included or excluded from the execution</li>
-</ul><a name="Specification+creation"></a><h3>Specification creation</h3><a name="Creating+Fragments"></a><h4>Creating Fragments</h4><p>There are implicits to create Fragments (found in the <code class="prettyprint">org.specs2.specification.FragmentsBuilder</code> trait):</p>
+</ul><a name="Specification+creation"><h3>Specification creation</h3></a><a name="Creating+Fragments"><h4>Creating Fragments</h4></a><p>There are implicits to create Fragments (found in the <code class="prettyprint">org.specs2.specification.FragmentsBuilder</code> trait):</p>
 <ul>
   <li><code class="prettyprint">String =&gt; Text</code>, to create a simple Text Fragment</li>
   <li><code class="prettyprint">String ! Result =&gt; Example</code>, to create an Example</li>
@@ -93,11 +93,11 @@
 <pre><code class="prettyprint">    val fragments: Fragments =
       &quot;this text&quot; ^
       &quot;is related to this Example&quot; ! success
-</code></pre><p>The <code class="prettyprint">Fragments</code> object is used to hold temporarily a sequence of Fragments as it is built and it makes sure that when<br />the building is done, the Fragments passed for execution will start and end with proper SpecStart and SpecEnd fragments.</p><a name="Mutable+Specification"></a><h4>Mutable Specification</h4><p>In a mutable Specification there is no visible &quot;link&quot; between Fragments, they're all created and linked through side-effects<br />(thanks to an enhanced version of the <code class="prettyprint">FragmentsBuilder</code> trait in the <code class="prettyprint">org.specs2.mutable</code> package):</p>
+</code></pre><p>The <code class="prettyprint">Fragments</code> object is used to hold temporarily a sequence of Fragments as it is built and it makes sure that when<br />the building is done, the Fragments passed for execution will start and end with proper SpecStart and SpecEnd fragments.</p><a name="Mutable+Specification"><h4>Mutable Specification</h4></a><p>In a mutable Specification there is no visible &quot;link&quot; between Fragments, they're all created and linked through side-effects<br />(thanks to an enhanced version of the <code class="prettyprint">FragmentsBuilder</code> trait in the <code class="prettyprint">org.specs2.mutable</code> package):</p>
 <pre><code class="prettyprint">    // build an Example and add it to the specFragments variable
     &quot;this example must succeed&quot; in { success }
     &quot;same thing here&quot; in { success }
-</code></pre><p>Of course this there is mutation involved here, it's not advised to do anything concurrent at that point.</p><a name="Specification+execution"></a><h3>Specification execution</h3><p>The execution is triggered by the various reporters and goes through 5 steps:</p>
+</code></pre><p>Of course this there is mutation involved here, it's not advised to do anything concurrent at that point.</p><a name="Specification+execution"><h3>Specification execution</h3></a><p>The execution is triggered by the various reporters and goes through 5 steps:</p>
 <pre><code class="prettyprint">    // code from the Reporter trait
     spec.content |&gt; select |&gt; sequence |&gt; execute |&gt; store |&gt; export(spec)
 </code></pre>
@@ -107,7 +107,7 @@
   <li><p>Execution: for each group, the execution of the fragments is concurrent by default and results are collected in<br />a sequence of <code class="prettyprint">ExecutedFragments</code></p></li>
   <li><p>Storing: after an execution we compute the statistics for each specification and store the results in a file (<code class="prettyprint">specs2-reports/specs2.stats</code>).<br />This allows to do consequent runs based on previous executions: to execute failed specifications only or to create the index page with an indicator of previously executed specifications</p></li>
   <li><p>Exporting: depending on the exporter, the ExecutedFragments are translated to <code class="prettyprint">PrintLines</code> or <code class="prettyprint">HtmlLines</code> to be flushed out to the console or in an html file</p></li>
-</ol><a name="Specification+reporting"></a><h3>Specification reporting</h3><p>All the reporters start of with a sequence of <code class="prettyprint">ExecutedFragments</code>. A list of <code class="prettyprint">Reducers</code> is used to collect relevant information:</p>
+</ol><a name="Specification+reporting"><h3>Specification reporting</h3></a><p>All the reporters start of with a sequence of <code class="prettyprint">ExecutedFragments</code>. A list of <code class="prettyprint">Reducers</code> is used to collect relevant information:</p>
 <ul>
   <li>The text and results to display</li>
   <li>The &quot;level&quot; of the text i.e. its indentation. The rules for this are given in the <code class="prettyprint">org.specs2.guide.SpecStructure#The Rules</code></li>
@@ -118,7 +118,7 @@
   <li>for a console output, <code class="prettyprint">PrintLines</code>: <code class="prettyprint">PrintSpecStart</code>, <code class="prettyprint">PrintText</code>, <code class="prettyprint">PrintResult</code>,...</li>
   <li>for a Html output, <code class="prettyprint">HtmlLines</code>: <code class="prettyprint">HtmlSpecStart</code>, <code class="prettyprint">HtmlText</code>, <code class="prettyprint">HtmlResult</code>,...</li>
   <li>for a JUnit output, a tree of JUnit <code class="prettyprint">Description</code> objects with the corresponding code to execute (in JUnit the Descriptions<br />are built first, then the examples are executed)</li>
-</ul><a name="Packages+dependencies"></a><h3>Packages dependencies</h3><p>The following dependencies should be always verified, from low-level packages to high-level ones, where no package on a<br />low layer can depend on a package on a higher layer:</p>
+</ul><a name="Packages+dependencies"><h3>Packages dependencies</h3></a><p>The following dependencies should be always verified, from low-level packages to high-level ones, where no package on a<br />low layer can depend on a package on a higher layer:</p>
 <pre><code class="prettyprint">  + runner
   + reporter
   + mutable    specification
@@ -128,372 +128,8 @@
   + analysis reflect  xml html  time json
   + collection control  io  text  main data
 </code></pre></div></status></div><div id="tree">
-      <ul><li id="508898706"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-          <ul><li id="1080140469"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
-          <ul><li><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.QuickStart.html#Execution">Execution</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
-          <ul></ul>
-        </li></ul>
-        </li><li id="598714522"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Structure+of+a+Specification">Structure of a Specification</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Acceptance+specification">Acceptance specification</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Unit+specification">Unit specification</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Results">Results</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Standard+results">Standard results</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Matcher+results">Matcher results</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Functional+expectations">Functional expectations</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Thrown+Expectations">Thrown Expectations</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Set+an+example+as+%22Pending+until+fixed%22">Set an example as &quot;Pending until fixed&quot;</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Auto-Examples">Auto-Examples</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Using+the+Example+description">Using the Example description</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Given+%2F+When+%2F+Then">Given / When / Then</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Multiple+steps">Multiple steps</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Extract+methods">Extract methods</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#User+regexps">User regexps</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Several+G%2FW%2FT+blocks">Several G/W/T blocks</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#ScalaCheck+values">ScalaCheck values</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Single+step">Single step</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Conversions">Conversions</a>
-          <ul></ul>
-        </li></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Shared+examples">Shared examples</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Declare+arguments">Declare arguments</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Layout">Layout</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#The+rules">The rules</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#The+formatting+fragments">The formatting fragments</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Separating+groups+of+examples">Separating groups of examples</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Reset+the+levels">Reset the levels</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Changing+the+indentation+level">Changing the indentation level</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
-          <ul></ul>
-        </li></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Include+or+link+specifications">Include or link specifications</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Include+specifications">Include specifications</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Link+specifications">Link specifications</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Specification+title">Specification title</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Index+page">Index page</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Variables+isolation">Variables isolation</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Scope">Scope</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#With+acceptance+specifications">With acceptance specifications</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Contexts+inheritance">Contexts inheritance</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Before%2FAfter+code">Before/After code</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#In+a+mutable+specification">In a mutable specification</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#In+an+acceptance+specification">In an acceptance specification</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Around+actions">Around actions</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Outside+actions">Outside actions</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#AroundOutside+actions">AroundOutside actions</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Without+creating+a+context+object%3A+BeforeExample">Without creating a context object: BeforeExample</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Implicit+context">Implicit context</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Composing+contexts">Composing contexts</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Composition">Composition</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Steps+and+Actions">Steps and Actions</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#Steps">Steps</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Actions">Actions</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Generic+specification+with+setup+and+teardown+steps">Generic specification with setup and teardown steps</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Other+unit+specification+methods">Other unit specification methods</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Tags">Tags</a>
-          <ul><li><a href="org.specs2.guide.SpecStructure.html#In+a+unit+specification">In a unit specification</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Adding+debug+statements">Adding debug statements</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
-          <ul></ul>
-        </li></ul>
-        </li><li id="971399760"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Out-of-the-box+matchers">Out-of-the-box matchers</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Adapting+Iterable+matchers">Adapting Iterable matchers</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Optional+matchers">Optional matchers</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Layers+definition">Layers definition</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Inclusion%2FExclusion">Inclusion/Exclusion</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Layers+as+an+Example">Layers as an Example</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Alternative+implementation">Alternative implementation</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Mocks+creation+and+settings">Mocks creation and settings</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Mocking+and+Stubbing+at+the+same+time">Mocking and Stubbing at the same time</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Ignoring+stubs">Ignoring stubs</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Functions+and+partial+functions">Functions and partial functions</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-          <ul><li id="1928199401"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Properties">Properties</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Styles">Styles</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
-          <ul><li><a href="org.specs2.guide.Forms.html#Subset">Subset</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Set">Set</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Sequence">Sequence</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
-          <ul><li><a href="org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
-          <ul></ul>
-        </li></ul>
-        </li></ul>
-        </li><li id="1273757229"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#In+a+Specification">In a Specification</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Shortcuts">Shortcuts</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Output+directory">Output directory</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Storing+previous+results">Storing previous results</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Status+flags">Status flags</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Diffs">Diffs</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#StackTraceFilter">StackTraceFilter</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#On+the+command+line">On the command line</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#From+system+properties">From system properties</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Html+output">Html output</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#JUnit+XML+output">JUnit XML output</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Simple+build+tool">Simple build tool</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#with+sbt+0.7.x">with sbt 0.7.x</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x">with sbt &gt; 0.9.x</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#Test-only+arguments">Test-only arguments</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Output+formats">Output formats</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Files+runner">Files runner</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Colors">Colors</a>
-          <ul></ul>
-        </li></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#JUnit">JUnit</a>
-          <ul><li><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#IntelliJ">IntelliJ</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
-          <ul></ul>
-        </li></ul>
-        </li><li id="1601519719"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
-          <ul><li><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
-          <ul><li><a href="org.specs2.guide.Philosophy.html#Conciseness">Conciseness</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Readability">Readability</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Extensibility">Extensibility</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Configuration">Configuration</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Clear+implementation">Clear implementation</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#User+support">User support</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#A+new+compromise">A new compromise</a>
-          <ul><li><a href="org.specs2.guide.Philosophy.html#Functional+%2F+immutable">Functional / immutable</a>
-          <ul><li><a href="org.specs2.guide.Philosophy.html#Chaining+everything">Chaining everything</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Arguments+have+to+be+supplied">Arguments have to be supplied</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Concurrency+is+a+breeze">Concurrency is a breeze</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#A+simple+structure">A simple structure</a>
-          <ul><li><a href="org.specs2.guide.Philosophy.html#Contexts">Contexts</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Indentation">Indentation</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Operators">Operators</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Forms">Forms</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#But+if+you+STILL+want+mutable+specifications">But if you STILL want mutable specifications</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Dependencies+control">Dependencies control</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Philosophy.html#Implicit+definitions+control">Implicit definitions control</a>
-          <ul></ul>
-        </li></ul>
-        </li></ul>
-        </li><li id="1939020522"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
-          <ul><li><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Design.html#Specification+creation">Specification creation</a>
-          <ul><li><a href="org.specs2.guide.Design.html#Creating+Fragments">Creating Fragments</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Design.html#Mutable+Specification">Mutable Specification</a>
-          <ul></ul>
-        </li></ul>
-        </li><li><a href="org.specs2.guide.Design.html#Specification+execution">Specification execution</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Design.html#Specification+reporting">Specification reporting</a>
-          <ul></ul>
-        </li><li><a href="org.specs2.guide.Design.html#Packages+dependencies">Packages dependencies</a>
-          <ul></ul>
-        </li></ul>
-        </li></ul>
-        </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['508898706','1939020522'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <ul><li specId="1669530070"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul></ul>
+          </li></ul>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1669530070','1532001279'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
