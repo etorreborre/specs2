@@ -13,7 +13,8 @@ import org.specs2.internal.scalaz.Scalaz._
 import Stats._
 import main.{Report, Arguments}
 import control.Identityx._
-import html.TableOfContents._
+import html._
+import TableOfContents._
 
 /**
 * The HtmlFile class groups a list of HtmlLine objects to print to an output file for a given specification (identified by specName)
@@ -36,8 +37,8 @@ case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLin
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty
 
-  /** a unique identifier for this file */
-  def id = specName.id
+  /** a unique identifier for the specification */
+  def specId: SpecId = html.specId(specName.id.toString)
 
   override def toString = (link +: lines).mkString("\n")
 }

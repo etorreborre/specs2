@@ -58,7 +58,7 @@ trait HtmlPrinter {
    * - an output object responsible for printing each HtmlLine as xhtml
    */
   def printHtml(toc: TreeToc, output: =>HtmlReportOutput): HtmlLinesFile => HtmlFile = (file: HtmlLinesFile) => {
-    HtmlFile(file.link.url, printHtml(output, file, toc.toTree(file.id)))
+    HtmlFile(file.link.url, printHtml(output, file, toc.toTree(file.specId)))
   }
 
   /** @return a new HtmlReportOutput object creating html elements */
@@ -72,10 +72,10 @@ trait HtmlPrinter {
       val root = tree.rootLabel
       tocItemList(body    = root.printLines(output).xml,
                   url     = root.link.url,
-                  id      = root.id.toString,
-                  subTocs = Map(tree.subForest.map(subSpec => (subSpec.rootLabel.id.toString, tocItems(subSpec))):_*))
+                  id      = root.specId,
+                  subTocs = Map(tree.subForest.map(subSpec => (subSpec.rootLabel.specId, tocItems(subSpec))):_*))
     }
-    TreeToc(htmlFiles.rootLabel.id, tocItems(htmlFiles))
+    TreeToc(htmlFiles.rootLabel.specId, tocItems(htmlFiles))
   }
 
   /**
@@ -149,9 +149,9 @@ case class HtmlFile(url: String, xml: NodeSeq) {
 /**
  * Table of contents, represented as a NodeSeq
  */
-case class TreeToc(rootCode: Int, toc: NodeSeq) {
+case class TreeToc(rootCode: SpecId, toc: NodeSeq) {
   /** @return a "tree" div to be used with jstree, focusing on the current section */
-  def toTree = (currentCode: Int) =>
+  def toTree = (currentCode: String) =>
     <div id="tree">
       <ul>{toc}</ul>
       <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+rootCode+"','"+currentCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>

@@ -6,6 +6,7 @@ import transform.{RuleTransformer, RewriteRule}
 import org.specs2.internal.scalaz.{ TreeLoc, Scalaz, Show }
 import Scalaz._
 import xml.Nodex._
+import specification.SpecName
 
 /**
  * This trait provide additional methods on a NodeSeq or a Node representing an html document
@@ -79,6 +80,14 @@ trait Htmlx { outer =>
       case _                        => headers
     }
   }
+  /** @return the header number if any. By convention -1 means "no header" */
+  private def headerNumber(e: Node) = {
+    e.label match {
+      case HeaderTag(i) => Integer.valueOf(i).intValue
+      case _            => -1
+    }
+  }
+
 
   implicit def href(s: String) = HRef(s)
   case class HRef(s: String) {
@@ -96,7 +105,7 @@ trait Htmlx { outer =>
     def isRoot = name.isEmpty && !isSubtoc
     def isSubtoc = outer.isSubtoc(node)
 
-    def id: String = node.attributes.get("id").map(_.toString).getOrElse("")
+    def specId: SpecId = html.specId(node.attributes.get("specId").map(_.toString).getOrElse(""))
     def anchorName: String = name.anchorName
     def anchorName(baseUrl: String): String = baseUrl + anchorName
   }
@@ -115,13 +124,6 @@ trait Htmlx { outer =>
   def isHeader(e: Node) = e.label.matches(HeaderTag.toString)
   /** @return true if the element is a subtoc element */
   def isSubtoc(e: Node) = e.label.matches(SubtocTag.toString)
-  /** @return the header number if any. By convention -1 means "no header" */
-  def headerNumber(e: Node) = {
-    e.label match {
-      case HeaderTag(i) => Integer.valueOf(i).intValue
-      case _            => -1
-    }
-  }
 
   /** This rule can be used to add anchors to header elements */
   object headersAnchors extends RewriteRule {

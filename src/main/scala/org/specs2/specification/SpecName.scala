@@ -24,8 +24,9 @@ sealed trait SpecName {
 
   override def toString = title
   def is(s: SpecName) = s.id == this.id
+
   def id = System.identityHashCode(this)
-  
+
   override def equals(o: Any) = o match {
     case s: SpecName => s.name == this.name
     case other       => false
@@ -42,7 +43,6 @@ object SpecName {
     def append(a1: SpecName, a2: =>SpecName) = if (a2.name.isEmpty) a1 else a2
     val zero = SpecName("")
   }
-
 }
 
 private[specs2]

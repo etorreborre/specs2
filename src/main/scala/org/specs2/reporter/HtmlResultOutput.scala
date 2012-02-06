@@ -65,7 +65,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
       else
         <h2>{name.title}</h2>
 
-      header.updateHeadAttribute("id", name.id)
+      header.updateHeadAttribute("specId", name.id)
     }
   }
 
