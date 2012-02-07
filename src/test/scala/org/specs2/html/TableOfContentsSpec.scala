@@ -11,7 +11,8 @@ class TableOfContentsSpec extends Specification with HtmlDocuments { def is =
       "each <li/> element has"                                                                    ^
         "the header text as text"                                                                 ! e2^
         "an url+anchor referencing the header name"                                               ! e3^
-    "injects sub-table of contents where there are <subtoc/> tags in the original document"       ! e4^
+        "an id attribute with the spec id. the id attribute is expected by jstree"                ! e4^
+    "injects sub-table of contents where there are <subtoc/> tags in the original document"       ! e5^
                                                                                                   end
 
   def e1 = addToc(aBodyWithHeaders) must \\("li") \\ ("ul") \ ("li")
@@ -21,7 +22,8 @@ class TableOfContentsSpec extends Specification with HtmlDocuments { def is =
 //    </li>
   def e2 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a") \> "title"
   def e3 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "http://specs2.org/#title")
-  def e4 = {
+  def e4 = addToc(aBodyWithHeaders) must \\ ("li", "id")
+  def e5 = {
     val subtoc = <a href="http://specs2.org/#other" />
     addToc(aBodyWithHeadersAndASubtoc, Map(specId("123") -> subtoc)) must \\ ("li") \\ ("a", "href" -> "http://specs2.org/#other")
   }
