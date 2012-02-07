@@ -151,7 +151,7 @@ case class HtmlFile(url: String, xml: NodeSeq) {
  */
 case class TreeToc(rootCode: SpecId, toc: NodeSeq) {
   /** @return a "tree" div to be used with jstree, focusing on the current section */
-  def toTree = (currentCode: String) =>
+  def toTree = (currentCode: SpecId) =>
     <div id="tree">
       <ul>{toc}</ul>
       <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+rootCode+"','"+currentCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>

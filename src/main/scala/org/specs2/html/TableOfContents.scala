@@ -36,11 +36,11 @@ trait TableOfContents { outer =>
       bottomUp { (h: Header, s: Stream[NodeSeq]) =>
         if (h.isRoot)
 		  // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
-          s.reduceNodes.updateHeadAttribute("id", id)
+          s.reduceNodes.updateHeadAttribute("id", id.toString)
         else if (h.isSubtoc)
           subTocs.get(h.specId).getOrElse(Empty) ++ s.reduceNodes
         else
-          <li id={h.specId}><a href={h.anchorName(url)}>{h.name}</a>
+          <li id={h.specId.toString}><a href={h.anchorName(url)}>{h.name}</a>
             { <ul>{s.toSeq}</ul> unless (s.toSeq.isEmpty) }
           </li>
     }.rootLabel

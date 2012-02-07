@@ -25,10 +25,10 @@ class TableOfContentsSpec extends Specification with HtmlDocuments { def is =
   def e4 = addToc(aBodyWithHeaders) must \\ ("li", "id")
   def e5 = {
     val subtoc = <a href="http://specs2.org/#other" />
-    addToc(aBodyWithHeadersAndASubtoc, Map(specId("123") -> subtoc)) must \\ ("li") \\ ("a", "href" -> "http://specs2.org/#other")
+    addToc(aBodyWithHeadersAndASubtoc, Map(SpecId("123") -> subtoc)) must \\ ("li") \\ ("a", "href" -> "http://specs2.org/#other")
   }
 
   def addToc(body: NodeSeq, subtocs: Map[SpecId, NodeSeq] = Map()) =
-    tocItemList(body, "http://specs2.org/", specId("specName"), subtocs)
+    tocItemList(body, "http://specs2.org/", SpecId("specName"), subtocs)
 
 }
