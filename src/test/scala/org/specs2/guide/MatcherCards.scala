@@ -290,8 +290,8 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
  `<a><b n="v" n2="v2" n3="v3"></b></a> must \("b", "n"->"v", "n2"->"v2")`
 
  * Or the content of a `Text` node
- `<a>hello</a> must \("a") \> "hello"`
- `<a>hello</a> must \("a") \>~ "h.*"`
+ `<a>hello</a> must \("a") \> "hello"` (alias `textIs`)
+ `<a>hello</a> must \("a") \>~ "h.*"`  (alias `textMatches`)
 
  * The equivalent of `\` for a "deep" match is simply `\\`
  `<a><s><c></c></s></a> must \\("c")`
