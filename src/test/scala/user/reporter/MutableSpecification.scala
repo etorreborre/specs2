@@ -8,3 +8,13 @@ class MutableSpecification extends Specification {
     success
   }
 }
+
+class OkSpecification extends Specification {
+  "This example is ok" in ok
+}
+class KoSpecification extends Specification {
+  "This example is ko" in ko
+}
+class ErrorSpecification extends Specification {
+  "This example has an error" in { throw new Exception("bang"); ok }
+}

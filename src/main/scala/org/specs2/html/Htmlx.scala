@@ -105,7 +105,7 @@ trait Htmlx { outer =>
     def isRoot = name.isEmpty && !isSubtoc
     def isSubtoc = outer.isSubtoc(node)
 
-    def specId: SpecId = html.specId(node.attributes.get("specId").map(_.toString).getOrElse(""))
+    def specId: SpecId = SpecId(node.attributes.get("specId").map(_.toString).getOrElse(""))
     def anchorName: String = name.anchorName
     def anchorName(baseUrl: String): String = baseUrl + anchorName
   }

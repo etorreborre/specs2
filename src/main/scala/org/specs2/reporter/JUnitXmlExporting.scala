@@ -11,10 +11,11 @@ import org.junit.runner.Description
 * Trait for exporting the specification as JUnit xml files
 */
 trait JUnitXmlExporting extends Exporting with JUnitXmlPrinter {
-  type ExportType = Unit
 
-  def export(implicit args: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => {
-    print(spec.execute.name, spec.execute.fragments)
+  def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
+    val executed = spec.execute
+    print(executed.name, executed.fragments)
+    executed
   }
 
   /** the file system is used to open the file to write */

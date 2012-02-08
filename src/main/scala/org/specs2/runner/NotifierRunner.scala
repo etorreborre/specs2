@@ -8,10 +8,10 @@ import reporter._
  */
 case class NotifierRunner(notifier: Notifier) { outer =>
 
-  def main(arguments: Array[String]): Either[Reporter, Unit] = new ClassRunner {
+  def main(arguments: Array[String]) = new ClassRunner {
     override lazy val reporter: Reporter = new NotifierReporter {
       val notifier = outer.notifier
     }
-  }.start(arguments:_*)
+  }.main(Array(arguments:_*))
 
 }

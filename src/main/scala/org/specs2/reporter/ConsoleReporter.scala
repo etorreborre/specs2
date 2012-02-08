@@ -5,7 +5,8 @@ import io._
 import main.Arguments
 import org.specs2.internal.scalaz._
 import Scalaz._
-import specification.{ExecutingSpecification, SpecificationStructure}
+import specification.{ExecutedSpecification, ExecutingSpecification, SpecificationStructure}
+
 /**
 * The console reporter executes a Specification and exports the results to the Console
 * Output:
@@ -18,13 +19,14 @@ import specification.{ExecutingSpecification, SpecificationStructure}
 trait ConsoleReporter extends DefaultReporter 
     with TextExporting {
 
-  override def report(spec: SpecificationStructure)(implicit arguments: Arguments): this.type = {
+  override def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification = {
     // store the statistics and export the specification results in parallel to avoid
     // evaluating the whole execution sequence in the Storing trait before doing the printing
     // this allows to print the results as soon as executed
-    val storeAndExport = (spec: ExecutingSpecification) => Seq(store, export).par.map(_(spec))
-    spec |> select |> sequence |> execute |> storeAndExport
-    this
+    val storeAndExport = (spec: ExecutingSpecification) => Seq(store, export).par.map(_(spec)).seq.last
+    val toExecute = spec |> select |> sequence |> execute
+    toExecute |> storeAndExport
+    toExecute.executed
   }
 
 }

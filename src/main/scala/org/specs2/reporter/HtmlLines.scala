@@ -38,7 +38,7 @@ case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLin
   def isEmpty = lines.isEmpty
 
   /** a unique identifier for the specification */
-  def specId: SpecId = html.specId(specName.id.toString)
+  def specId: SpecId = SpecId(specName.id.toString)
 
   override def toString = (link +: lines).mkString("\n")
 }

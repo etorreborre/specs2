@@ -80,8 +80,9 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   }
 
   protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {
-    override def export(implicit arguments: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => {
+    override def export(implicit arguments: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
       exporters(args, handler).foreach(_.export(arguments)(spec))
+      spec.execute
     }
   }
 
@@ -108,8 +109,10 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
  */
 case class FinalResultsReporter(override val handler: EventHandler,
                                 override val loggers: Array[Logger]) extends TestInterfaceReporter(handler, loggers) {
-  override def export(implicit args: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => {
-    spec.execute.fragments foreach handleFragment(args)
+  override def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
+    val executed = spec.execute
+    executed.fragments foreach handleFragment(args)
+    executed
   }
 }
 

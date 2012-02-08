@@ -4,8 +4,8 @@ package org.specs2
  */
 package object html extends data.TaggedTypes {
 
-  trait SpecIdentifier
-  type SpecId = String @@ SpecIdentifier
+  type SpecId = Newtype[String, SpecIdOps]
+  case class SpecIdOps(s: String)
 
-  def specId(id: String): SpecId = tag(id)
+  def SpecId(id: String): SpecId = newtype(id)
 }
