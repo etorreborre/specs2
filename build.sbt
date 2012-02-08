@@ -51,7 +51,7 @@ logBuffered := false
 cancelable := true
 
 testOptions := Seq(Tests.Filter(s =>
-  Seq("Spec", "Suite", "Unit", "all").exists(s.endsWith(_)) &&
+  Seq("Spec", "Suite", "Unit").exists(s.endsWith(_)) &&
     !s.endsWith("FeaturesSpec") ||
     s.contains("UserGuide") || 
   	s.contains("index") ||
