@@ -13,6 +13,9 @@ case class ExecutingSpecification(name: SpecName, fs: Seq[ExecutingFragment], ex
   /** @return the executed fragments, but as a lazy list */
   lazy val execute = ExecutedSpecification(name, foreach { (n, fs) => fs.view.map(_.get) })
 
+  /** @return the executed fragments */
+  def executed = execute
+
   /** @return a lazy list where each fragment will be executed on access */
   def foreach[T](f: (SpecName, Seq[ExecutedFragment]) => T) =
     try { f(name, fs.view.map(_.get)) } finally { terminate }

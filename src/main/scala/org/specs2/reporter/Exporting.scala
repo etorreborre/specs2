@@ -10,9 +10,7 @@ import specification._
 private[specs2]
 trait Exporting {
 
-  type ExportType
-
   /** @return a function exporting an ExecutingSpecification */
-  def export(implicit args: Arguments): ExecutingSpecification => ExportType
+  def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification
 }
 

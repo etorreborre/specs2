@@ -69,6 +69,9 @@ case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, l
   def hasDescription = s match { case EmptyMarkup() => false; case _ => true }
   def stats = statistics.copy(timer = outer.timer)
   def isSuccess = stats.isSuccess
+  def isError   = stats.hasErrors
+  def isFailure = stats.hasFailures
+  def isIssue   = stats.hasIssues
 }
 private[specs2]
 object ExecutedResult {

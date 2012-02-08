@@ -17,19 +17,22 @@ import reporter._
  * @see org.specs2.main.Arguments for the regular expression defining the specification names
  * to extract and other options
  */
-trait FilesRunner extends SpecificationsFinder {
+trait FilesRunner extends SpecificationsFinder with SystemExit {
 
   def main(arguments: Array[String]) {
     implicit val args = createArguments(arguments)
     beforeExecution
 
     val specs = specifications
-    reporters foreach  { r =>
-        specs.foreach(execute(_, r))
-        afterExecution(specs)
-    }
     if (reporters.isEmpty)
       println("No file to run because the arguments don't contain 'console' or 'html'\n")
+
+    val executedSpecs = reporters flatMap  { r =>
+      val executed = specs.map(execute(_, r))
+      afterExecution(specs)
+      executed
+    }
+    exitSystem(executedSpecs)
   }
 
   /** print a message before the execution */

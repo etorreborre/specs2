@@ -41,3 +41,4 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
     println((" "*args.offset) + message)
   
 }
+

@@ -40,9 +40,8 @@ trait Reporter extends
    *   
    * @return the reporter
    */
-  def report(spec: SpecificationStructure)(implicit arguments: Arguments): this.type = {
+  def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification = {
     spec |> select |> sequence |> execute |> store |> export
-    this
   }
 }
 

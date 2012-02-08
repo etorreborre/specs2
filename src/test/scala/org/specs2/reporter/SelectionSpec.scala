@@ -123,9 +123,7 @@ Before executing and reporting a specification, the fragments must be selected a
     def step(message: String) = Step({selection.println(message); reporter.println(message)})
     def example(message: String) = message ! { selection.println(message); reporter.println(message); success }
     val reporter = new DefaultReporter with Exporting with MockOutput {
-      type ExportType = Unit
-
-      def export(implicit args: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => ()
+      def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => spec.executed
     }
   }
 

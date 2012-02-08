@@ -20,9 +20,11 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 
   override def textOutput = new TestInterfaceResultOutput(loggers)
 
-  override def export(implicit args: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => {
+  override def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
     super.export(args)(spec)
-    spec.execute.fragments foreach handleFragment(args)
+    val executed = spec.execute
+    executed.fragments foreach handleFragment(args)
+    executed
   }
 
   protected def handleFragment(implicit args: Arguments): ExecutedFragment => ExecutedFragment = (f: ExecutedFragment) => {

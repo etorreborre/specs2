@@ -18,14 +18,16 @@ trait NotifierReporter extends DefaultReporter
     with NotifierExporting
 
 trait NotifierExporting extends Exporting {
-  type ExportType = Unit
+
   val notifier: Notifier
   /** @return a function exporting ExecutedFragments */
-  def export(implicit args: Arguments): ExecutingSpecification => ExportType = (spec: ExecutingSpecification) => {
-    notifyExport(spec.execute.fragments)
+  def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
+    val executed = spec.execute
+    notifyExport(executed.fragments)
     if (args.contains("console")) new TextExporting {}.export(args)(spec)
     if (args.contains("html")) new HtmlExporting {}.export(args)(spec)
     if (args.contains("junitxml")) new JUnitXmlExporting {}.export(args)(spec)
+    executed
   }
 
   private def notifyExport(fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
