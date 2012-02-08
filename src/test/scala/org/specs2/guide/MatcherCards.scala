@@ -73,10 +73,11 @@ For some other types of equality:
 
  Matcher                    |  Comment
  -------------------------- | --------------------------
- `be_===                   `| checks if `a == b` where a and b are expected to have the same type by the compiler
+ `be_===                   `| same as `be_==` but can be used with some combinators like `^^^` or `toSeq` because the parameter type is kept
  `be_==~                   `| checks if `(a:A) == (b:A)` when there is an implicit conversion from B (the type of b) to A (the type of a)
  `beTheSameAs              `| checks if `a eq b` (`a must be(b)` also works)
  `beTrue, beFalse          `| shortcuts for Boolean equality
+ `a ==== b                 `| similar to `a === b` but will not typecheck if `a` and `b` don't have the same type
 
 
 Note: the `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`, for `Arrays`. So the `beEqualTo` matcher has been adapted to transform `Arrays` to `Seqs` before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
