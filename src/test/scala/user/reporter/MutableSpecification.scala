@@ -9,6 +9,25 @@ class MutableSpecification extends Specification {
   }
 }
 
+class MutableScalaCheckSpecification extends Specification with org.specs2.ScalaCheck {
+  "test" >> check { i: Int =>
+    i === (i+1)
+  }
+}
+
+class MutableMockitoSpecification extends Specification with org.specs2.mock.Mockito {
+  "test" >> {
+    there was one(mock[java.util.List[Int]]).get(0)
+  }
+}
+
+class MutableScalaCheckSpec extends org.specs2.mutable.Specification with org.specs2.ScalaCheck {
+  "test" >> check { i: Int =>
+    i === (i+1)
+  }
+}
+
+
 class OkSpecification extends Specification {
   "This example is ok" in ok
 }

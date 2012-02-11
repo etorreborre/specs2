@@ -46,8 +46,11 @@ class TextPrinterSpec extends Specification with DataTables { def is =
     "if showOnly = 1"                                                                                                   ^
        "statistics are shown"                                                                                           ! statsonlyargs().e1^
                                                                                                                         p^
-    "if failtrace = false, only the location of a failure is shown"                                                     ! failtrace().e1^
-    "if failtrace = false, only the location of a failure is shown - mutable spec"                                      ! failtrace().e2^
+    "if failtrace = false, only the location of a failure is shown"                                                     ^
+      "with an acceptance spec"                                                                                         ! failtrace().e1^
+      "with a mutable spec"                                                                                             ! failtrace().e2_1^
+      "with a ScalaCheck mutable spec"                                                                                  ! failtrace().e2_2^
+      "with a Mockito mutable spec"                                                                                     ! failtrace().e2_3^
     "if failtrace = true, failures stacktraces are shown"                                                               ! failtrace().e3^
     "if fullStacktrace = true, all error stacktraces are shown"                                                         ! traces().e1^
     "if plan = true, nothing is executed"                                                                               ! planargs().e1^
@@ -201,8 +204,10 @@ class TextPrinterSpec extends Specification with DataTables { def is =
 
   case class failtrace() {
     val failtrace: Arguments = args.report(failtrace = true)
-    def e1 = print((new user.reporter.MutableSpecification).content) must containMatch("MutableSpecification.scala:7")
-    def e2 = print((new user.reporter.AcceptanceSpecification).content) must containMatch("AcceptanceSpecification.scala:11")
+    def e1   = print((new user.reporter.AcceptanceSpecification).content) must containMatch("AcceptanceSpecification.scala:11")
+    def e2_1 = print((new user.reporter.MutableSpecification).content) must containMatch("MutableSpecification.scala:7")
+    def e2_2 = print((new user.reporter.MutableScalaCheckSpecification).content) must containMatch("MutableSpecification.scala:14")
+    def e2_3 = print((new user.reporter.MutableMockitoSpecification).content) must containMatch("MutableSpecification.scala:20")
     def e3 = print(fullStackTrace <| failtrace ^ t1 ^ ex1 ^ fail3) must containMatch("org.specs2")
   }
 

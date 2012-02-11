@@ -110,22 +110,22 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       "A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels)
 
     results match {
-      case Result(Proved(as), succeeded, discarded, fq, _) => 
+      case Result(Proved(as), succeeded, discarded, fq, _) =>
         execute.Success(noCounterExample(succeeded) + frequencies(fq), succeeded)
-      case Result(Passed, succeeded, discarded, fq, _)     => 
+      case Result(Passed, succeeded, discarded, fq, _)     =>
         execute.Success(noCounterExample(succeeded) + frequencies(fq), succeeded)
       case r @ Result(GenException(execute.FailureException(f)), n, _, fq, _) => f
-      case r @ Result(GenException(e), n, _, fq, _)        => 
+      case r @ Result(GenException(e), n, _, fq, _)        =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage(), e.getStackTrace().toList)
-      case r @ Result(Exhausted, n, _, fq, _)              => 
+      case r @ Result(Exhausted, n, _, fq, _)              =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq))
-      case Result(Failed(args, labels), n, _, fq, _) => 
+      case Result(Failed(args, labels), n, _, fq, _) =>
         execute.Failure(counterExampleMessage(args, n, labels) + frequencies(fq))
       case Result(PropException(args, ex, labels), n, _, fq, _) =>
         ex match {
-          case execute.FailureException(f) => 
+          case execute.FailureException(f) =>
             execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq))
-          case e: java.lang.Exception      => 
+          case e: java.lang.Exception      =>
             execute.Error("A counter-example is "+counterExample(args)+": " + ex + getCause(e) +
                                                 " ("+afterNTries(n)+")"+ failedLabels(labels) + frequencies(fq), e)
           case throwable    => throw ex
@@ -214,11 +214,18 @@ trait ResultPropertyImplicits {
   implicit def booleanToProp(b: =>Boolean): Prop = resultProp(if (b) execute.Success() else execute.Failure())
   implicit def callByNameMatchResultToProp[T](m: =>MatchResult[T]): Prop = resultProp(m.toResult)
   implicit def matchResultToProp[T](m: MatchResult[T]): Prop = resultProp(m.toResult)
+
   private def resultProp(r: =>execute.Result): Prop = {
     new Prop {
       def apply(params: Prop.Params) = {
         lazy val result = execute.ResultExecution.execute(r)
         val prop = if (result.isSuccess) Prop.passed else Prop.falsified :| result.message
+
+        result match {
+          case f : execute.Failure => throw new execute.FailureException(f)
+          case s : execute.Skipped => throw new execute.SkipException(s)
+          case other               => ()
+        }
         prop.apply(params)
       }
     }
