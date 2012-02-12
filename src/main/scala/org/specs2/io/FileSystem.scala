@@ -17,7 +17,7 @@ private[specs2]
 trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter {
   /**
    * @param path glob expression, for example: <code>./dir/**/*.xml</code>
-   * @return the list of paths represented by the "glob" definition <code>path</path>  
+   * @return the list of paths represented by the "glob" definition <code>path</code>
    */
   def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean = false): Seq[String] = {
     val found = recurse(new File(basePath))
