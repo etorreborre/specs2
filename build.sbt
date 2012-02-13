@@ -5,7 +5,7 @@ import ReleaseKeys._
 /** Project */
 name := "specs2"
 
-version := "1.8"
+version := "1.9-SNAPSHOT"
 
 organization := "org.specs2"
 
