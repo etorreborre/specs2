@@ -1,7 +1,7 @@
 This version adds new features on top of 1.7.1:
 
+ * added an `Analysis` trait to specify dependencies between packages (using the classycle project)
  * added traits to selectively remove implicits: `NoMustExpectations`, `NoShouldExpectations`, `NoBooleanAutoExamples`, `NoArgProperties`, `NoDebug`, `NoPendingUntilFixed`, `NoContexts`  
- * added an `Analysis` to specify dependencies between packages (using the classycle project)
  * DataTables can now be used as an example without giving a description. The DataTable itself will be used as the example description
  * `contain` matchers can now be adapted to allow a more flexible definition of "containment"
  * reworked the Matchers guide with tabs to get an easier access to all the matchers documentation
@@ -15,5 +15,6 @@ And some fixes:
  * fixed issue 51: specify a partial match for `ParserMatchers`
  * fixed issue 52: added a `there was no(mock).interaction` expression (corresponding to Mockito's `verifyZeroInteractions`)
  * fixed issue 54: reporting the data frequencies when using ScalaCheck
+ * fixed issue 57: correct location on ScalaCheck failures
  
  ==========================
