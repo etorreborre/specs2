@@ -57,21 +57,7 @@
 
         
 
-        <div class="types members" id="types">
-              <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.reporter.NotifierExporting#ExportType" data-isabs="false">
-      <a id="ExportType:ExportType"></a>
-      <h4 class="signature">
-      <span class="kind">type</span>
-      <span class="symbol"> 
-        <span class="name">ExportType</span>
         
-        <span class="result"> = <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.NotifierExporting" class="extype" href="NotifierExporting.html">NotifierExporting</a> → Exporting</dd></dl></div>
-    </li></ol>
-            </div>
         
         <div class="values members" id="values">
               <h3>Abstract Value Members</h3>
@@ -267,13 +253,13 @@ Example
       <p class="shortcomment cmt">execute a Fragment.</p><div class="fullcomment"><div class="comment cmt"><p>execute a Fragment.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.FragmentExecution" class="extype" href="../specification/FragmentExecution.html">FragmentExecution</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.NotifierExporting#export" data-isabs="false">
-      <a id="export(Arguments):(ExecutingSpecification) ⇒ ExportType"></a>
+      <a id="export(Arguments):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">export</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ ExportType</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting ExecutedFragments</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.NotifierExporting" class="extype" href="NotifierExporting.html">NotifierExporting</a> → Exporting</dd></dl></div>
@@ -442,13 +428,13 @@ keeping only the ones matching the ex attribute of the arguments object
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.Reporter#report" data-isabs="false">
-      <a id="report(SpecificationStructure)(Arguments):NotifierReporter.this.type"></a>
+      <a id="report(SpecificationStructure)(Arguments):ExecutedSpecification"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">report</span>
         
-        <span class="params">(<span name="spec">spec: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: NotifierReporter.this.type</span>
+        <span class="params">(<span name="spec">spec: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">report Fragments by:</p><div class="fullcomment"><div class="comment cmt"><p>report Fragments by:</p><ul><li>extracting arguments from the Fragments</li><li>selecting them</li><li>sequencing fragments in groups</li><li>executing fragments</li><li>exporting the results to the output format

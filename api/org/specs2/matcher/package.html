@@ -58,6 +58,17 @@
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.matcher.AbstractContainMatcher" data-isabs="true">
+      <a id="AbstractContainMatcher:AbstractContainMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="AbstractContainMatcher.html"><span class="name">AbstractContainMatcher</span></a>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="result"> extends Matcher[GenTraversable[T]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.AdaptableMatcher" data-isabs="true">
       <a id="AdaptableMatcher:AdaptableMatcher[T]"></a>
       <h4 class="signature">
@@ -69,6 +80,18 @@
       </span>
       </h4>
       <p class="comment cmt">Inherit this trait to provide a Matcher where both the actual and the expected values can be adapted with a function.</p>
+    </li><li visbl="pub" name="org.specs2.matcher.AlwaysMatcher" data-isabs="false">
+      <a id="AlwaysMatcher:AlwaysMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="AlwaysMatcher.html"><span class="name">AlwaysMatcher</span></a>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">()</span><span class="result"> extends Matcher[T] with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This matcher always matches any value of type T
+</p>
     </li><li visbl="pub" name="org.specs2.matcher.AndMatch" data-isabs="false">
       <a id="AndMatch:AndMatch[T]"></a>
       <h4 class="signature">
@@ -228,6 +251,18 @@
       </h4>
       <p class="comment cmt">Typed equality Matcher
 </p>
+    </li><li visbl="pub" name="org.specs2.matcher.CanBeEqual" data-isabs="true">
+      <a id="CanBeEqual:CanBeEqual"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="CanBeEqual.html"><span class="name">CanBeEqual</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait adds some implicits to create expectations with the <code>===</code> sign
+</p>
     </li><li visbl="pub" name="org.specs2.matcher.ContainAnyOfMatcher" data-isabs="false">
       <a id="ContainAnyOfMatcher:ContainAnyOfMatcher[T]"></a>
       <h4 class="signature">
@@ -235,7 +270,7 @@
       <span class="symbol"> 
         <a href="ContainAnyOfMatcher.html"><span class="name">ContainAnyOfMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[GenTraversable[T]]</span>
+        <span class="result"> extends AbstractContainMatcher[T]</span>
       </span>
       </h4>
       
@@ -246,7 +281,7 @@
       <span class="symbol"> 
         <a href="ContainExactlyOnceMatcher.html"><span class="name">ContainExactlyOnceMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[GenTraversable[T]]</span>
+        <span class="result"> extends AbstractContainMatcher[T]</span>
       </span>
       </h4>
       
@@ -268,7 +303,7 @@
       <span class="symbol"> 
         <a href="ContainInOrderMatcher.html"><span class="name">ContainInOrderMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[GenTraversable[T]]</span>
+        <span class="result"> extends AbstractContainMatcher[T]</span>
       </span>
       </h4>
       
@@ -312,7 +347,7 @@
       <span class="symbol"> 
         <a href="ContainMatcher.html"><span class="name">ContainMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[GenTraversable[T]]</span>
+        <span class="result"> extends AbstractContainMatcher[T]</span>
       </span>
       </h4>
       
@@ -345,7 +380,7 @@
       <span class="symbol"> 
         <a href="ContainOnlyMatcher.html"><span class="name">ContainOnlyMatcher</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[GenTraversable[T]]</span>
+        <span class="result"> extends AbstractContainMatcher[T]</span>
       </span>
       </h4>
       
@@ -482,7 +517,7 @@ and then to check that there's no unwanted dependency in the code.</p>
       <span class="symbol"> 
         <a href="Expectations.html"><span class="name">Expectations</span></a>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends CanBeEqual</span>
       </span>
       </h4>
       <p class="comment cmt">This trait provides implicit definitions to transform any value into an Expectable
@@ -530,10 +565,11 @@ to properties by appending forAll
       <span class="symbol"> 
         <a href="HaveTheSameElementsAs.html"><span class="name">HaveTheSameElementsAs</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends Matcher[GenTraversable[T]]</span>
+        <span class="result"> extends AbstractContainMatcher[T]</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">This matcher checks if a traversable has the same elements as another one (that is, recursively, in any order)
+</p>
     </li><li visbl="pub" name="org.specs2.matcher.JUnitExpectations" data-isabs="true">
       <a id="JUnitExpectations:JUnitExpectations"></a>
       <h4 class="signature">
@@ -775,6 +811,54 @@ a match fails
       </h4>
       <p class="comment cmt">This special matcher always return a NeutralMatch MatchResult (an implicit Success)
 </p>
+    </li><li visbl="pub" name="org.specs2.matcher.NeverMatcher" data-isabs="false">
+      <a id="NeverMatcher:NeverMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="NeverMatcher.html"><span class="name">NeverMatcher</span></a>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">()</span><span class="result"> extends Matcher[T] with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This matcher never matches any value of type T
+</p>
+    </li><li visbl="pub" name="org.specs2.matcher.NoCanBeEqual" data-isabs="true">
+      <a id="NoCanBeEqual:NoCanBeEqual"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="NoCanBeEqual.html"><span class="name">NoCanBeEqual</span></a>
+        
+        <span class="result"> extends CanBeEqual</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used to suppress the CanBeEqual implicits
+</p>
+    </li><li visbl="pub" name="org.specs2.matcher.NoMustExpectations" data-isabs="true">
+      <a id="NoMustExpectations:NoMustExpectations"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="NoMustExpectations.html"><span class="name">NoMustExpectations</span></a>
+        
+        <span class="result"> extends MustExpectations</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used to remove aka and must methods on any value
+</p>
+    </li><li visbl="pub" name="org.specs2.matcher.NoShouldExpectations" data-isabs="true">
+      <a id="NoShouldExpectations:NoShouldExpectations"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="NoShouldExpectations.html"><span class="name">NoShouldExpectations</span></a>
+        
+        <span class="result"> extends ShouldExpectations</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used to remove aka and should methods on any value
+</p>
     </li><li visbl="pub" name="org.specs2.matcher.NotMatch" data-isabs="false">
       <a id="NotMatch:NotMatch[T]"></a>
       <h4 class="signature">
@@ -891,11 +975,11 @@ a match fails
     </li><li visbl="pub" name="org.specs2.matcher.PathFunction" data-isabs="false">
       <a id="PathFunction:PathFunction"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="PathFunction.html"><span class="name">PathFunction</span></a>
         
-        <span class="result"> extends (Seq[Node]) ⇒ Seq[Node] with XPathFunctions</span>
+        <span class="params">(<span name="node">node: Node</span>, <span name="function">function: XPathFunction</span>, <span name="attributes">attributes: List[String]</span>, <span name="attributeValues">attributeValues: Map[String, String]</span>, <span name="exactMatch">exactMatch: Boolean</span>, <span name="textMessage">textMessage: Option[String]</span>, <span name="textMatcher">textMatcher: Matcher[String]</span>)</span><span class="result"> extends (Seq[Node]) ⇒ Seq[Node] with XPathFunctions with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">The PathFunction object encapsulate a search for a node and/or attributes or attributeValues with an XPath function
@@ -1162,7 +1246,7 @@ a match fails
       <span class="symbol"> 
         <a href="XmlMatcher.html"><span class="name">XmlMatcher</span></a>
         
-        <span class="params">(<span name="functions">functions: List[PathFunction]</span>)</span><span class="result"> extends Matcher[Seq[Node]] with Product with Serializable</span>
+        <span class="params">(<span name="functions">functions: Seq[PathFunction]</span>)</span><span class="result"> extends Matcher[Seq[Node]] with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">The XmlMatcher class matches an xml Node, or a list of Nodes against a list of search functions, which can either search for:</p>

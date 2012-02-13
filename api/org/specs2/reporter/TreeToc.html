@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">TreeToc</span>
         
-        <span class="params">(<span name="rootCode">rootCode: <span name="scala.Int" class="extype">Int</span></span>, <span name="toc">toc: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="rootCode">rootCode: SpecId</span>, <span name="toc">toc: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -64,7 +64,7 @@
       <span class="symbol"> 
         <span class="name">TreeToc</span>
         
-        <span class="params">(<span name="rootCode">rootCode: <span name="scala.Int" class="extype">Int</span></span>, <span name="toc">toc: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>)</span>
+        <span class="params">(<span name="rootCode">rootCode: SpecId</span>, <span name="toc">toc: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>)</span>
       </span>
       </h4>
       
@@ -315,13 +315,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TreeToc" class="extype" href="">TreeToc</a> → Product</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.TreeToc#rootCode" data-isabs="false">
-      <a id="rootCode:Int"></a>
+      <a id="rootCode:SpecId"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">rootCode</span>
         
-        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+        <span class="result">: SpecId</span>
       </span>
       </h4>
       
@@ -348,16 +348,16 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.TreeToc" class="extype" href="">TreeToc</a> → AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.TreeToc#toTree" data-isabs="false">
-      <a id="toTree:(Int) ⇒ Elem"></a>
+      <a id="toTree:(SpecId) ⇒ Elem"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">toTree</span>
         
-        <span class="result">: (<span name="scala.Int" class="extype">Int</span>) ⇒ <span name="scala.xml.Elem" class="extype">Elem</span></span>
+        <span class="result">: (SpecId) ⇒ <span name="scala.xml.Elem" class="extype">Elem</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function global toc to be displayed with jstree, focusing on the current section</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a &quot;tree&quot; div to be used with jstree, focusing on the current section</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.TreeToc#toc" data-isabs="false">
       <a id="toc:NodeSeq"></a>
       <h4 class="signature">

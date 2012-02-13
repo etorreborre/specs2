@@ -31,7 +31,7 @@
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides integrated analysis method for a scala project
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.specification.Analysis" class="extype" href="">Analysis</a> with <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span> with <a name="org.specs2.matcher.Expectations" class="extype" href="../matcher/Expectations.html">Expectations</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.DependencyMatchers" class="extype" href="../matcher/DependencyMatchers.html">DependencyMatchers</a>, <a name="org.specs2.matcher.DependencyBeHaveMatchers" class="extype" href="../matcher/DependencyBeHaveMatchers.html">DependencyBeHaveMatchers</a>, <span name="org.specs2.matcher.DependencyBaseMatchers" class="extype">DependencyBaseMatchers</span>, <a name="org.specs2.analysis.LayersAnalysis" class="extype" href="../analysis/LayersAnalysis.html">LayersAnalysis</a>, <a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.DependencyMatchers" class="extype" href="../matcher/DependencyMatchers.html">DependencyMatchers</a>, <a name="org.specs2.matcher.DependencyBeHaveMatchers" class="extype" href="../matcher/DependencyBeHaveMatchers.html">DependencyBeHaveMatchers</a>, <span name="org.specs2.matcher.DependencyBaseMatchers" class="extype">DependencyBaseMatchers</span>, <a name="org.specs2.analysis.LayersAnalysis" class="extype" href="../analysis/LayersAnalysis.html">LayersAnalysis</a>, <a name="org.specs2.analysis.ClassycleDependencyFinder" class="extype" href="../analysis/ClassycleDependencyFinder.html">ClassycleDependencyFinder</a>, <a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -47,7 +47,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.specification.Analysis" class="in"><span>Analysis</span></li><li name="org.specs2.matcher.DependencyMatchers" class="in"><span>DependencyMatchers</span></li><li name="org.specs2.matcher.DependencyBeHaveMatchers" class="in"><span>DependencyBeHaveMatchers</span></li><li name="org.specs2.matcher.DependencyBaseMatchers" class="in"><span>DependencyBaseMatchers</span></li><li name="org.specs2.analysis.LayersAnalysis" class="in"><span>LayersAnalysis</span></li><li name="org.specs2.analysis.DependencyFinder" class="in"><span>DependencyFinder</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.specification.Analysis" class="in"><span>Analysis</span></li><li name="org.specs2.matcher.DependencyMatchers" class="in"><span>DependencyMatchers</span></li><li name="org.specs2.matcher.DependencyBeHaveMatchers" class="in"><span>DependencyBeHaveMatchers</span></li><li name="org.specs2.matcher.DependencyBaseMatchers" class="in"><span>DependencyBaseMatchers</span></li><li name="org.specs2.analysis.LayersAnalysis" class="in"><span>LayersAnalysis</span></li><li name="org.specs2.analysis.ClassycleDependencyFinder" class="in"><span>ClassycleDependencyFinder</span></li><li name="org.specs2.analysis.DependencyFinder" class="in"><span>DependencyFinder</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -66,7 +66,7 @@
       <span class="symbol"> 
         <a href="../analysis/LayersAnalysis$Layer.html"><span class="name">Layer</span></a>
         
-        <span class="params">(<span name="names">names: Set[String]</span>, <span name="prefix">prefix: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="included">included: Seq[String]</span>, <span name="excluded">excluded: Seq[String]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="names">names: Set[String]</span>, <span name="prefix">prefix: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="targetDir">targetDir: String</span>, <span name="included">included: Seq[String]</span>, <span name="excluded">excluded: Seq[String]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">The Layer class represent a list of packages.</p>
@@ -264,18 +264,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.analysis.DependencyFinder#getPackageDependents" data-isabs="false">
-      <a id="getPackageDependents(String,String):Seq[Dependency]"></a>
+    </li><li visbl="pub" name="org.specs2.analysis.ClassycleDependencyFinder#getPackageDependents" data-isabs="false">
+      <a id="getPackageDependents(String,String,String):Seq[Dependency]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">getPackageDependents</span>
         
-        <span class="params">(<span name="packageName">packageName: String</span>, <span name="sourceDir">sourceDir: String</span>)</span><span class="result">: Seq[<a name="org.specs2.analysis.Dependency" class="extype" href="../analysis/Dependency.html">Dependency</a>]</span>
+        <span class="params">(<span name="packageName">packageName: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="targetDir">targetDir: String</span>)</span><span class="result">: Seq[<a name="org.specs2.analysis.Dependency" class="extype" href="../analysis/Dependency.html">Dependency</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the class depending on the classes of a given package
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.ClassycleDependencyFinder" class="extype" href="../analysis/ClassycleDependencyFinder.html">ClassycleDependencyFinder</a> → <a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -366,18 +366,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.DependencyBeHaveMatchers" class="extype" href="../matcher/DependencyBeHaveMatchers.html">DependencyBeHaveMatchers</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.analysis.DependencyFinder#selectFiles" data-isabs="false">
-      <a id="selectFiles(String):Seq[String]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">selectFiles</span>
-        
-        <span class="params">(<span name="sourceDir">sourceDir: String</span>)</span><span class="result">: Seq[String]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a seq of all scala files in the source directory
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -477,6 +465,8 @@
               <h3>Inherited from <span name="org.specs2.matcher.DependencyBaseMatchers" class="extype">DependencyBaseMatchers</span></h3>
             </div><div name="org.specs2.analysis.LayersAnalysis" class="parent">
               <h3>Inherited from <a name="org.specs2.analysis.LayersAnalysis" class="extype" href="../analysis/LayersAnalysis.html">LayersAnalysis</a></h3>
+            </div><div name="org.specs2.analysis.ClassycleDependencyFinder" class="parent">
+              <h3>Inherited from <a name="org.specs2.analysis.ClassycleDependencyFinder" class="extype" href="../analysis/ClassycleDependencyFinder.html">ClassycleDependencyFinder</a></h3>
             </div><div name="org.specs2.analysis.DependencyFinder" class="parent">
               <h3>Inherited from <a name="org.specs2.analysis.DependencyFinder" class="extype" href="../analysis/DependencyFinder.html">DependencyFinder</a></h3>
             </div><div name="scala.AnyRef" class="parent">

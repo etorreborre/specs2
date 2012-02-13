@@ -54,7 +54,7 @@
       <span class="symbol"> 
         <a href="ClassRunner.html"><span class="name">ClassRunner</span></a>
         
-        <span class="result"> extends Classes with ConsoleOutput</span>
+        <span class="result"> extends Classes with ConsoleOutput with SystemExit</span>
       </span>
       </h4>
       <p class="comment cmt">This class can be used to executed a Specification in the Console
@@ -67,7 +67,7 @@ by specifying its name as the first argument on the command line
       <span class="symbol"> 
         <a href="FilesRunner.html"><span class="name">FilesRunner</span></a>
         
-        <span class="result"> extends SpecificationsFinder</span>
+        <span class="result"> extends SpecificationsFinder with SystemExit</span>
       </span>
       </h4>
       <p class="comment cmt">This trait finds specifications in the source directory, instantiate them as one big
@@ -84,6 +84,17 @@ specification and report them using the ConsoleReporter or the HtmlReporter depe
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.runner.FinalResultsReporter" data-isabs="false">
+      <a id="FinalResultsReporter:FinalResultsReporter"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="FinalResultsReporter.html"><span class="name">FinalResultsReporter</span></a>
+        
+        <span class="params">(<span name="handler">handler: EventHandler</span>, <span name="loggers">loggers: Array[Logger]</span>)</span><span class="result"> extends TestInterfaceReporter with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This reporter will just notify the test interface about test results for the end statistics</p>
     </li><li visbl="pub" name="org.specs2.runner.HtmlRunner" data-isabs="false">
       <a id="HtmlRunner:HtmlRunner"></a>
       <h4 class="signature">
@@ -191,6 +202,18 @@ on a regular expression representing the Specification name, usually .</p>
       </span>
       </h4>
       <p class="comment cmt">Implementation of the Framework interface for the sbt tool.</p>
+    </li><li visbl="pub" name="org.specs2.runner.SystemExit" data-isabs="true">
+      <a id="SystemExit:SystemExit"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="SystemExit.html"><span class="name">SystemExit</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait is responsible for exiting the system after a run, depending on the success of the execution
+</p>
     </li><li visbl="pub" name="org.specs2.runner.TestInterfaceRunner" data-isabs="false">
       <a id="TestInterfaceRunner:TestInterfaceRunner"></a>
       <h4 class="signature">

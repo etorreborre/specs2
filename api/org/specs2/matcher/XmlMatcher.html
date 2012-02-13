@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">XmlMatcher</span>
         
-        <span class="params">(<span name="functions">functions: List[<a name="org.specs2.matcher.PathFunction" class="extype" href="PathFunction.html">PathFunction</a>]</span>)</span><span class="result"> extends <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Seq[<span name="scala.xml.Node" class="extype">Node</span>]] with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="functions">functions: Seq[<a name="org.specs2.matcher.PathFunction" class="extype" href="PathFunction.html">PathFunction</a>]</span>)</span><span class="result"> extends <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Seq[<span name="scala.xml.Node" class="extype">Node</span>]] with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -68,7 +68,7 @@ search function which tries to match the result of the preceding function. For e
       <span class="symbol"> 
         <span class="name">XmlMatcher</span>
         
-        <span class="params">(<span name="functions">functions: List[<a name="org.specs2.matcher.PathFunction" class="extype" href="PathFunction.html">PathFunction</a>]</span>)</span>
+        <span class="params">(<span name="functions">functions: Seq[<a name="org.specs2.matcher.PathFunction" class="extype" href="PathFunction.html">PathFunction</a>]</span>)</span>
       </span>
       </h4>
       
@@ -180,6 +180,28 @@ search function which tries to match the result of the preceding function. For e
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.matcher.XmlMatcher#\&gt;" data-isabs="false">
+      <a id="\&gt;(String):XmlMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">\&gt;</span>
+        
+        <span class="params">(<span name="t">t: String</span>)</span><span class="result">: <a name="org.specs2.matcher.XmlMatcher" class="extype" href="">XmlMatcher</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for textIs</p>
+    </li><li visbl="pub" name="org.specs2.matcher.XmlMatcher#\&gt;~" data-isabs="false">
+      <a id="\&gt;~(String):XmlMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">\&gt;~</span>
+        
+        <span class="params">(<span name="t">t: String</span>)</span><span class="result">: <a name="org.specs2.matcher.XmlMatcher" class="extype" href="">XmlMatcher</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for textMatches</p>
     </li><li visbl="pub" name="org.specs2.matcher.XmlMatcher#\\" data-isabs="false">
       <a id="\\(String,(String, String),(String, String)*):XmlMatcher"></a>
       <h4 class="signature">
@@ -308,13 +330,13 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)</code> can be applied to 
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.XmlMatcher" class="extype" href="">XmlMatcher</a> → Equals</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.XmlMatcher#checkFunctions" data-isabs="false">
-      <a id="checkFunctions(List[PathFunction],Seq[Node],(Boolean, String, String)):(Boolean, String, String)"></a>
+      <a id="checkFunctions(Seq[PathFunction],Seq[Node],(Boolean, String, String)):(Boolean, String, String)"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">checkFunctions</span>
         
-        <span class="params">(<span name="pathFunctions">pathFunctions: List[<a name="org.specs2.matcher.PathFunction" class="extype" href="PathFunction.html">PathFunction</a>]</span>, <span name="nodes">nodes: Seq[<span name="scala.xml.Node" class="extype">Node</span>]</span>, <span name="messages">messages: (<span name="scala.Boolean" class="extype">Boolean</span>, String, String)</span>)</span><span class="result">: (<span name="scala.Boolean" class="extype">Boolean</span>, String, String)</span>
+        <span class="params">(<span name="pathFunctions">pathFunctions: Seq[<a name="org.specs2.matcher.PathFunction" class="extype" href="PathFunction.html">PathFunction</a>]</span>, <span name="nodes">nodes: Seq[<span name="scala.xml.Node" class="extype">Node</span>]</span>, <span name="messages">messages: (<span name="scala.Boolean" class="extype">Boolean</span>, String, String)</span>)</span><span class="result">: (<span name="scala.Boolean" class="extype">Boolean</span>, String, String)</span>
       </span>
       </h4>
       <p class="shortcomment cmt">checks that the <code>nodes</code> satisfy the <code>functions</code></p><div class="fullcomment"><div class="comment cmt"><p>checks that the <code>nodes</code> satisfy the <code>functions</code></p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a MatcherResult
@@ -432,13 +454,13 @@ failure
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Matcher matching all the elements of a sequence against the current matcher, cumulating all failures
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.XmlMatcher#functions" data-isabs="false">
-      <a id="functions:List[PathFunction]"></a>
+      <a id="functions:Seq[PathFunction]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">functions</span>
         
-        <span class="result">: List[<a name="org.specs2.matcher.PathFunction" class="extype" href="PathFunction.html">PathFunction</a>]</span>
+        <span class="result">: Seq[<a name="org.specs2.matcher.PathFunction" class="extype" href="PathFunction.html">PathFunction</a>]</span>
       </span>
       </h4>
       
@@ -697,6 +719,42 @@ If the skip message is empty, only the failure message is printed
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Matcher#test" data-isabs="false">
+      <a id="test:(Seq[Node]) ⇒ Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">test</span>
+        
+        <span class="result">: (Seq[<span name="scala.xml.Node" class="extype">Node</span>]) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a test function corresponding to this matcher
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.XmlMatcher#textIs" data-isabs="false">
+      <a id="textIs(String):XmlMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">textIs</span>
+        
+        <span class="params">(<span name="t">t: String</span>)</span><span class="result">: <a name="org.specs2.matcher.XmlMatcher" class="extype" href="">XmlMatcher</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">specify the value of the node text
+</p>
+    </li><li visbl="pub" name="org.specs2.matcher.XmlMatcher#textMatches" data-isabs="false">
+      <a id="textMatches(String):XmlMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">textMatches</span>
+        
+        <span class="params">(<span name="regexp">regexp: String</span>)</span><span class="result">: <a name="org.specs2.matcher.XmlMatcher" class="extype" href="">XmlMatcher</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">specify the value of the node text
+</p>
     </li><li visbl="pub" name="org.specs2.matcher.XmlMatcher#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">

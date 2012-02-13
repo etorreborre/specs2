@@ -106,6 +106,18 @@ got { two(mockedList).get(0) }
       <p class="comment cmt">Syntactic sugar on top of the ArgumentCaptor API
 to avoid using classOf and an explicit call to capture()
 </p>
+    </li><li visbl="pub" name="org.specs2.mock.mockito.IgnoreStubs" data-isabs="false">
+      <a id="IgnoreStubs:IgnoreStubs"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="IgnoreStubs.html"><span class="name">IgnoreStubs</span></a>
+        
+        <span class="params">(<span name="mocks">mocks: Seq[AnyRef]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class encapsulate mocks which must have their stubbed methods ignored in verification methods
+</p>
     </li><li visbl="pub" name="org.specs2.mock.mockito.MockitoFunctions" data-isabs="true">
       <a id="MockitoFunctions:MockitoFunctions"></a>
       <h4 class="signature">
@@ -136,10 +148,21 @@ to avoid using classOf and an explicit call to capture()
       <span class="symbol"> 
         <a href="MockitoStubs.html"><span class="name">MockitoStubs</span></a>
         
-        <span class="result"> extends MocksCreation</span>
+        <span class="result"> extends MocksCreation with MockitoStubsLowerImplicits</span>
       </span>
       </h4>
       <p class="comment cmt">This trait provides functionalities to declare stub values on method calls.</p>
+    </li><li visbl="pub" name="org.specs2.mock.mockito.MockitoStubsLowerImplicits" data-isabs="true">
+      <a id="MockitoStubsLowerImplicits:MockitoStubsLowerImplicits"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="MockitoStubsLowerImplicits.html"><span class="name">MockitoStubsLowerImplicits</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation" data-isabs="true">
       <a id="MocksCreation:MocksCreation"></a>
       <h4 class="signature">

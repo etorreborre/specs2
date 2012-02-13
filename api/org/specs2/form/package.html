@@ -47,7 +47,30 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.form.Cell" data-isabs="true">
+              <ol><li visbl="pub" name="org.specs2.form.Card" data-isabs="true">
+      <a id="Card:Card"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="Card.html"><span class="name">Card</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait defines a simple tab with a title and some text.</p>
+    </li><li visbl="pub" name="org.specs2.form.Cards" data-isabs="true">
+      <a id="Cards:Cards"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="Cards.html"><span class="name">Cards</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A set of tabs with a title, where each tab simply contains some text
+</p>
+    </li><li visbl="pub" name="org.specs2.form.Cell" data-isabs="true">
       <a id="Cell:Cell"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
@@ -294,7 +317,7 @@
       <span class="symbol"> 
         <a href="TextCell.html"><span class="name">TextCell</span></a>
         
-        <span class="params">(<span name="s">s: String</span>, <span name="result">result: Result</span>)</span><span class="result"> extends Cell with Product with Serializable</span>
+        <span class="params">(<span name="s">s: String</span>, <span name="result">result: Option[Result]</span>, <span name="decorator">decorator: Decorator</span>)</span><span class="result"> extends Cell with DecoratedProperty[TextCell] with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Simple Cell embedding an arbitrary String
@@ -419,6 +442,17 @@
       </h4>
       <p class="comment cmt">Companion object of a Row to create a Row with at least one cell
 </p>
+    </li><li visbl="pub" name="org.specs2.form.TextCell" data-isabs="false">
+      <a id="TextCell:TextCell"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="TextCell$.html"><span class="name">TextCell</span></a>
+        
+        <span class="result"> extends Serializable</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.form.Xml" data-isabs="false">
       <a id="Xml:Xml"></a>
       <h4 class="signature">

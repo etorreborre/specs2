@@ -20,11 +20,11 @@
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol"> 
         <span class="name">PathFunction</span>
         
-        <span class="result"> extends (Seq[<span name="scala.xml.Node" class="extype">Node</span>]) ⇒ Seq[<span name="scala.xml.Node" class="extype">Node</span>] with <a name="org.specs2.matcher.XPathFunctions" class="extype" href="XPathFunctions.html">XPathFunctions</a></span>
+        <span class="params">(<span name="node">node: <span name="scala.xml.Node" class="extype">Node</span></span>, <span name="function">function: XPathFunction</span>, <span name="attributes">attributes: List[String]</span>, <span name="attributeValues">attributeValues: Map[String, String]</span>, <span name="exactMatch">exactMatch: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="textMessage">textMessage: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="textMatcher">textMatcher: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String]</span>)</span><span class="result"> extends (Seq[<span name="scala.xml.Node" class="extype">Node</span>]) ⇒ Seq[<span name="scala.xml.Node" class="extype">Node</span>] with <a name="org.specs2.matcher.XPathFunctions" class="extype" href="XPathFunctions.html">XPathFunctions</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -32,7 +32,7 @@
 If <code>node</code> has some children, then they are searched using equality
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.XPathFunctions" class="extype" href="XPathFunctions.html">XPathFunctions</a>, (Seq[<span name="scala.xml.Node" class="extype">Node</span>]) ⇒ Seq[<span name="scala.xml.Node" class="extype">Node</span>], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.matcher.XPathFunctions" class="extype" href="XPathFunctions.html">XPathFunctions</a>, (Seq[<span name="scala.xml.Node" class="extype">Node</span>]) ⇒ Seq[<span name="scala.xml.Node" class="extype">Node</span>], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -48,7 +48,7 @@ If <code>node</code> has some children, then they are searched using equality
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.matcher.PathFunction" class="in"><span>PathFunction</span></li><li name="org.specs2.matcher.XPathFunctions" class="in"><span>XPathFunctions</span></li><li name="scala.Function1" class="in"><span>Function1</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.matcher.PathFunction" class="in"><span>PathFunction</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.specs2.matcher.XPathFunctions" class="in"><span>XPathFunctions</span></li><li name="scala.Function1" class="in"><span>Function1</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -65,7 +65,7 @@ If <code>node</code> has some children, then they are searched using equality
       <span class="symbol"> 
         <span class="name">PathFunction</span>
         
-        <span class="params">(<span name="node">node: <span name="scala.xml.Node" class="extype">Node</span></span>, <span name="function">function: XPathFunction</span>, <span name="attributes">attributes: List[String]</span>, <span name="attributeValues">attributeValues: Map[String, String]</span>, <span name="exactMatch">exactMatch: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
+        <span class="params">(<span name="node">node: <span name="scala.xml.Node" class="extype">Node</span></span>, <span name="function">function: XPathFunction</span>, <span name="attributes">attributes: List[String]</span>, <span name="attributeValues">attributeValues: Map[String, String]</span>, <span name="exactMatch">exactMatch: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="textMessage">textMessage: <span name="scala.Option" class="extype">Option</span>[String]</span>, <span name="textMatcher">textMatcher: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String]</span>)</span>
       </span>
       </h4>
       
@@ -203,6 +203,17 @@ If <code>node</code> has some children, then they are searched using equality
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#canEqual" data-isabs="false">
+      <a id="canEqual(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">canEqual</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.PathFunction" class="extype" href="">PathFunction</a> → Equals</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -251,7 +262,7 @@ If <code>node</code> has some children, then they are searched using equality
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -261,7 +272,18 @@ If <code>node</code> has some children, then they are searched using equality
         <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.PathFunction" class="extype" href="">PathFunction</a> → Equals → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#exactMatch" data-isabs="false">
+      <a id="exactMatch:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">exactMatch</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.matcher.PathFunction#exactly" data-isabs="false">
       <a id="exactly:PathFunction"></a>
       <h4 class="signature">
@@ -321,7 +343,7 @@ If <code>node</code> has some children, then they are searched using equality
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -331,7 +353,7 @@ If <code>node</code> has some children, then they are searched using equality
         <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.PathFunction" class="extype" href="">PathFunction</a> → AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -399,6 +421,50 @@ If <code>node</code> has some children, then they are searched using equality
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#productArity" data-isabs="false">
+      <a id="productArity:Int"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">productArity</span>
+        
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.PathFunction" class="extype" href="">PathFunction</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#productElement" data-isabs="false">
+      <a id="productElement(Int):Any"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">productElement</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Any" class="extype">Any</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.PathFunction" class="extype" href="">PathFunction</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="scala.Product#productIterator" data-isabs="false">
+      <a id="productIterator:Iterator[Any]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">productIterator</span>
+        
+        <span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#productPrefix" data-isabs="false">
+      <a id="productPrefix:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">productPrefix</span>
+        
+        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.PathFunction" class="extype" href="">PathFunction</a> → Product</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.PathFunction#searchedAttributes" data-isabs="false">
       <a id="searchedAttributes:String"></a>
       <h4 class="signature">
@@ -418,7 +484,7 @@ If <code>node</code> has some children, then they are searched using equality
       <span class="symbol"> 
         <span class="name">searchedElements</span>
         
-        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+        <span class="result">: String</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a string representing the searched nodes, attributes, attribute values
@@ -434,6 +500,50 @@ If <code>node</code> has some children, then they are searched using equality
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#textIs" data-isabs="false">
+      <a id="textIs(String):PathFunction"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">textIs</span>
+        
+        <span class="params">(<span name="t">t: String</span>)</span><span class="result">: <a name="org.specs2.matcher.PathFunction" class="extype" href="">PathFunction</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">add a matcher for the node text</p>
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#textMatcher" data-isabs="false">
+      <a id="textMatcher:Matcher[String]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">textMatcher</span>
+        
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#textMatches" data-isabs="false">
+      <a id="textMatches(String):PathFunction"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">textMatches</span>
+        
+        <span class="params">(<span name="regexp">regexp: String</span>)</span><span class="result">: <a name="org.specs2.matcher.PathFunction" class="extype" href="">PathFunction</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">add a matcher for the node text with a regular exp</p>
+    </li><li visbl="pub" name="org.specs2.matcher.PathFunction#textMessage" data-isabs="false">
+      <a id="textMessage:Option[String]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">textMessage</span>
+        
+        <span class="result">: <span name="scala.Option" class="extype">Option</span>[String]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Function1#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -490,9 +600,34 @@ If <code>node</code> has some children, then they are searched using equality
     </li></ol>
             </div>
 
+        <div class="values members" id="values">
+              <h3>Deprecated Value Members</h3>
+              <ol><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
+      <a id="productElements:Iterator[Any]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name deprecated">productElements</span>
         
+        <span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p>use productIterator instead</p></dd></dl></div>
+    </li></ol>
+            </div>
 
-        <div name="org.specs2.matcher.XPathFunctions" class="parent">
+        <div name="scala.Serializable" class="parent">
+              <h3>Inherited from <span name="scala.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="java.io.Serializable" class="parent">
+              <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="scala.Product" class="parent">
+              <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
+            </div><div name="scala.Equals" class="parent">
+              <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
+            </div><div name="org.specs2.matcher.XPathFunctions" class="parent">
               <h3>Inherited from <a name="org.specs2.matcher.XPathFunctions" class="extype" href="XPathFunctions.html">XPathFunctions</a></h3>
             </div><div name="scala.Function1" class="parent">
               <h3>Inherited from (Seq[<span name="scala.xml.Node" class="extype">Node</span>]) ⇒ Seq[<span name="scala.xml.Node" class="extype">Node</span>]</h3>

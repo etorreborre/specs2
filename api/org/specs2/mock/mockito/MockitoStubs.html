@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">MockitoStubs</span>
         
-        <span class="result"> extends <a name="org.specs2.mock.mockito.MocksCreation" class="extype" href="MocksCreation.html">MocksCreation</a></span>
+        <span class="result"> extends <a name="org.specs2.mock.mockito.MocksCreation" class="extype" href="MocksCreation.html">MocksCreation</a> with <a name="org.specs2.mock.mockito.MockitoStubsLowerImplicits" class="extype" href="MockitoStubsLowerImplicits.html">MockitoStubsLowerImplicits</a></span>
       </span>
       </h4>
       
@@ -42,7 +42,7 @@ mockedList.get(0) returns "one" thenThrows new Exception("unexpected now")
 </code>
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.mock.mockito.MocksCreation" class="extype" href="MocksCreation.html">MocksCreation</a>, <a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a>, <a name="org.specs2.mock.mockito.TheMockitoMocker" class="extype" href="TheMockitoMocker.html">TheMockitoMocker</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.mock.mockito.MockitoStubsLowerImplicits" class="extype" href="MockitoStubsLowerImplicits.html">MockitoStubsLowerImplicits</a>, <a name="org.specs2.mock.mockito.MocksCreation" class="extype" href="MocksCreation.html">MocksCreation</a>, <a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a>, <a name="org.specs2.mock.mockito.TheMockitoMocker" class="extype" href="TheMockitoMocker.html">TheMockitoMocker</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a name="org.specs2.mock.Mockito" class="extype" href="../Mockito.html">Mockito</a></div>
@@ -61,7 +61,7 @@ mockedList.get(0) returns "one" thenThrows new Exception("unexpected now")
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.mock.mockito.MockitoStubs" class="in"><span>MockitoStubs</span></li><li name="org.specs2.mock.mockito.MocksCreation" class="in"><span>MocksCreation</span></li><li name="org.specs2.reflect.ClassesOf" class="in"><span>ClassesOf</span></li><li name="org.specs2.mock.mockito.TheMockitoMocker" class="in"><span>TheMockitoMocker</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.mock.mockito.MockitoStubs" class="in"><span>MockitoStubs</span></li><li name="org.specs2.mock.mockito.MockitoStubsLowerImplicits" class="in"><span>MockitoStubsLowerImplicits</span></li><li name="org.specs2.mock.mockito.MocksCreation" class="in"><span>MocksCreation</span></li><li name="org.specs2.reflect.ClassesOf" class="in"><span>ClassesOf</span></li><li name="org.specs2.mock.mockito.TheMockitoMocker" class="in"><span>TheMockitoMocker</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -385,6 +385,19 @@ mockedList.get(0) returns "one" thenThrows new Exception("unexpected now")
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation#ignoreStubs" data-isabs="false">
+      <a id="ignoreStubs(AnyRef*):IgnoreStubs"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">ignoreStubs</span>
+        
+        <span class="params">(<span name="mocks">mocks: AnyRef*</span>)</span><span class="result">: <a name="org.specs2.mock.mockito.IgnoreStubs" class="extype" href="IgnoreStubs.html">IgnoreStubs</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">ignore stubbed methods when verifying that a mock has no more interactions
+</p><div class="fullcomment"><div class="comment cmt"><p>ignore stubbed methods when verifying that a mock has no more interactions
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.mock.mockito.MocksCreation" class="extype" href="MocksCreation.html">MocksCreation</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -480,6 +493,17 @@ mockedList.get(0) returns "one" thenThrows new Exception("unexpected now")
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.mock.mockito.MockitoStubsLowerImplicits#ongoingStubbing" data-isabs="false">
+      <a id="ongoingStubbing[M](⇒ org.mockito.stubbing.OngoingStubbing[_]):M"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">ongoingStubbing</span>
+        <span class="tparams">[<span name="M">M</span>]</span>
+        <span class="params">(<span name="stubbing">stubbing: ⇒ org.mockito.stubbing.OngoingStubbing[_]</span>)</span><span class="result">: M</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.mock.mockito.MockitoStubsLowerImplicits" class="extype" href="MockitoStubsLowerImplicits.html">MockitoStubsLowerImplicits</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.mock.mockito.MocksCreation#smartMock" data-isabs="false">
       <a id="smartMock[T](ClassManifest[T]):T"></a>
       <h4 class="signature">
@@ -590,7 +614,9 @@ doReturn("one").when(s).get(0) // instead of s.get(0) returns "one" which would 
 
         
 
-        <div name="org.specs2.mock.mockito.MocksCreation" class="parent">
+        <div name="org.specs2.mock.mockito.MockitoStubsLowerImplicits" class="parent">
+              <h3>Inherited from <a name="org.specs2.mock.mockito.MockitoStubsLowerImplicits" class="extype" href="MockitoStubsLowerImplicits.html">MockitoStubsLowerImplicits</a></h3>
+            </div><div name="org.specs2.mock.mockito.MocksCreation" class="parent">
               <h3>Inherited from <a name="org.specs2.mock.mockito.MocksCreation" class="extype" href="MocksCreation.html">MocksCreation</a></h3>
             </div><div name="org.specs2.reflect.ClassesOf" class="parent">
               <h3>Inherited from <a name="org.specs2.reflect.ClassesOf" class="extype" href="../../reflect/ClassesOf.html">ClassesOf</a></h3>

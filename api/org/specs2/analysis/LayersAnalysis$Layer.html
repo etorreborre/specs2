@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">Layer</span>
         
-        <span class="params">(<span name="names">names: Set[String]</span>, <span name="prefix">prefix: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="included">included: Seq[String]</span>, <span name="excluded">excluded: Seq[String]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="names">names: Set[String]</span>, <span name="prefix">prefix: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="targetDir">targetDir: String</span>, <span name="included">included: Seq[String]</span>, <span name="excluded">excluded: Seq[String]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -64,7 +64,7 @@
       <span class="symbol"> 
         <span class="name">Layer</span>
         
-        <span class="params">(<span name="names">names: Set[String]</span>, <span name="prefix">prefix: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="included">included: Seq[String]</span>, <span name="excluded">excluded: Seq[String]</span>)</span>
+        <span class="params">(<span name="names">names: Set[String]</span>, <span name="prefix">prefix: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="targetDir">targetDir: String</span>, <span name="included">included: Seq[String]</span>, <span name="excluded">excluded: Seq[String]</span>)</span>
       </span>
       </h4>
       
@@ -283,6 +283,17 @@ meaning thisLayer -- depends on --&gt; otherLayer
       </span>
       </h4>
       <p class="shortcomment cmt">specify a source directory for this layer packages</p>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#inTargetDir" data-isabs="false">
+      <a id="inTargetDir(String):Layer"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">inTargetDir</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.analysis.LayersAnalysis.Layer" class="extype" href="">Layer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">specify a target directory for this layer packages</p>
     </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#inThisLayer" data-isabs="false">
       <a id="inThisLayer(Dependency):Boolean"></a>
       <h4 class="signature">
@@ -459,6 +470,17 @@ meaning thisLayer -- depends on --&gt; otherLayer
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#targetDir" data-isabs="false">
+      <a id="targetDir:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">targetDir</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.analysis.LayersAnalysis.Layer#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">

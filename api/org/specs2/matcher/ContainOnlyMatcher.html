@@ -24,13 +24,13 @@
       <span class="symbol"> 
         <span class="name">ContainOnlyMatcher</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</span>
+        <span class="result"> extends <a name="org.specs2.matcher.AbstractContainMatcher" class="extype" href="AbstractContainMatcher.html">AbstractContainMatcher</a>[T]</span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.AbstractContainMatcher" class="extype" href="AbstractContainMatcher.html">AbstractContainMatcher</a>[T], <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -46,7 +46,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.matcher.ContainOnlyMatcher" class="in"><span>ContainOnlyMatcher</span></li><li name="org.specs2.matcher.Matcher" class="in"><span>Matcher</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.matcher.ContainOnlyMatcher" class="in"><span>ContainOnlyMatcher</span></li><li name="org.specs2.matcher.AbstractContainMatcher" class="in"><span>AbstractContainMatcher</span></li><li name="org.specs2.matcher.Matcher" class="in"><span>Matcher</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -63,14 +63,28 @@
       <span class="symbol"> 
         <span class="name">ContainOnlyMatcher</span>
         
-        <span class="params">(<span name="t">t: <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[T]*</span>)</span>
+        <span class="params">(<span name="expected">expected: Seq[T]</span>, <span name="equality">equality: (T, T) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
       
     </li></ol>
             </div>
 
-        
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.specs2.matcher.ContainOnlyMatcher#M" data-isabs="false">
+      <a id="M:M[T]"></a>
+      <h4 class="signature">
+      <span class="kind">type</span>
+      <span class="symbol"> 
+        <span class="name">M</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="result"> = <a name="org.specs2.matcher.ContainOnlyMatcher" class="extype" href="">ContainOnlyMatcher</a>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ContainOnlyMatcher" class="extype" href="">ContainOnlyMatcher</a> → <a name="org.specs2.matcher.AbstractContainMatcher" class="extype" href="AbstractContainMatcher.html">AbstractContainMatcher</a></dd></dl></div>
+    </li></ol>
+            </div>
         
         
 
@@ -131,6 +145,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.AbstractContainMatcher#^^" data-isabs="false">
+      <a id="^^[S]((T) ⇒ Matcher[T]):M[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">^^</span>
+        <span class="tparams">[<span name="S">S</span>]</span>
+        <span class="params">(<span name="m">m: (T) ⇒ <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>)</span><span class="result">: M[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">use a matcher function to define if 2 values are equal.</p><div class="fullcomment"><div class="comment cmt"><p>use a matcher function to define if 2 values are equal. The first value defines a matcher to use with the second one</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.AbstractContainMatcher" class="extype" href="AbstractContainMatcher.html">AbstractContainMatcher</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.AbstractContainMatcher#^^" data-isabs="false">
+      <a id="^^[S]((T, T) ⇒ Boolean):M[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">^^</span>
+        <span class="tparams">[<span name="S">S</span>]</span>
+        <span class="params">(<span name="equality">equality: (T, T) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: M[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">use a specific equality function</p><div class="fullcomment"><div class="comment cmt"><p>use a specific equality function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.AbstractContainMatcher" class="extype" href="AbstractContainMatcher.html">AbstractContainMatcher</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#^^" data-isabs="false">
       <a id="^^[S]((S) ⇒ Expectable[GenTraversable[T]],Int):Matcher[S]"></a>
       <h4 class="signature">
@@ -157,6 +193,17 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage aka &quot;trimmed&quot;)</
       <p class="shortcomment cmt">Adapt a matcher to another.</p><div class="fullcomment"><div class="comment cmt"><p>Adapt a matcher to another.
 ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)</code> can be applied to an exception
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.AbstractContainMatcher#^^^" data-isabs="false">
+      <a id="^^^[S]((T) ⇒ S):M[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">^^^</span>
+        <span class="tparams">[<span name="S">S</span>]</span>
+        <span class="params">(<span name="adaptator">adaptator: (T) ⇒ S</span>)</span><span class="result">: M[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">use a specific adaption function before checking for equality</p><div class="fullcomment"><div class="comment cmt"><p>use a specific adaption function before checking for equality</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.AbstractContainMatcher" class="extype" href="AbstractContainMatcher.html">AbstractContainMatcher</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#and" data-isabs="false">
       <a id="and[S&lt;:GenTraversable[T]](⇒ Matcher[S]):Matcher[S]"></a>
       <h4 class="signature">
@@ -218,6 +265,17 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)</code> can be applied to 
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ContainOnlyMatcher#create" data-isabs="false">
+      <a id="create(⇒ Seq[T],(T, T) ⇒ Boolean):ContainOnlyMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">create</span>
+        
+        <span class="params">(<span name="seq">seq: ⇒ Seq[T]</span>, <span name="eq">eq: (T, T) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.specs2.matcher.ContainOnlyMatcher" class="extype" href="">ContainOnlyMatcher</a>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ContainOnlyMatcher" class="extype" href="">ContainOnlyMatcher</a> → <a name="org.specs2.matcher.AbstractContainMatcher" class="extype" href="AbstractContainMatcher.html">AbstractContainMatcher</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -527,6 +585,18 @@ If the skip message is empty, only the failure message is printed
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Matcher#test" data-isabs="false">
+      <a id="test:(GenTraversable[T]) ⇒ Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">test</span>
+        
+        <span class="result">: (<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a test function corresponding to this matcher
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -607,7 +677,9 @@ If the skip message is empty, only the failure message is printed
 
         
 
-        <div name="org.specs2.matcher.Matcher" class="parent">
+        <div name="org.specs2.matcher.AbstractContainMatcher" class="parent">
+              <h3>Inherited from <a name="org.specs2.matcher.AbstractContainMatcher" class="extype" href="AbstractContainMatcher.html">AbstractContainMatcher</a>[T]</h3>
+            </div><div name="org.specs2.matcher.Matcher" class="parent">
               <h3>Inherited from <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[<span name="scala.collection.GenTraversable" class="extype">GenTraversable</span>[T]]</h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>

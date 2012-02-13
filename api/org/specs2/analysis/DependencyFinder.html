@@ -34,7 +34,7 @@
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.specification.Analysis" class="extype" href="../specification/Analysis.html">Analysis</a>, <a name="org.specs2.matcher.DependencyMatchers" class="extype" href="../matcher/DependencyMatchers.html">DependencyMatchers</a>, <a name="org.specs2.analysis.LayersAnalysis" class="extype" href="LayersAnalysis.html">LayersAnalysis</a></div>
+          <div class="subClasses hiddenContent"><a name="org.specs2.specification.Analysis" class="extype" href="../specification/Analysis.html">Analysis</a>, <a name="org.specs2.analysis.ClassycleDependencyFinder" class="extype" href="ClassycleDependencyFinder.html">ClassycleDependencyFinder</a>, <a name="org.specs2.analysis.CompilerDependencyFinder" class="extype" href="CompilerDependencyFinder.html">CompilerDependencyFinder</a>, <a name="org.specs2.matcher.DependencyMatchers" class="extype" href="../matcher/DependencyMatchers.html">DependencyMatchers</a>, <a name="org.specs2.analysis.LayersAnalysis" class="extype" href="LayersAnalysis.html">LayersAnalysis</a></div>
         </div></div>
         
 
@@ -62,10 +62,25 @@
 
         
         
+        <div class="values members" id="values">
+              <h3>Abstract Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.analysis.DependencyFinder#getPackageDependents" data-isabs="true">
+      <a id="getPackageDependents(String,String,String):Seq[Dependency]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getPackageDependents</span>
         
+        <span class="params">(<span name="packageName">packageName: String</span>, <span name="sourceDir">sourceDir: String</span>, <span name="targetDir">targetDir: String</span>)</span><span class="result">: Seq[<a name="org.specs2.analysis.Dependency" class="extype" href="Dependency.html">Dependency</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the class depending on the classes of a given package
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li></ol>
+            </div>
 
         <div class="values members" id="values">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -193,18 +208,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.analysis.DependencyFinder#getPackageDependents" data-isabs="false">
-      <a id="getPackageDependents(String,String):Seq[Dependency]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getPackageDependents</span>
-        
-        <span class="params">(<span name="packageName">packageName: String</span>, <span name="sourceDir">sourceDir: String</span>)</span><span class="result">: Seq[<a name="org.specs2.analysis.Dependency" class="extype" href="Dependency.html">Dependency</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the class depending on the classes of a given package
-</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -260,18 +263,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.analysis.DependencyFinder#selectFiles" data-isabs="false">
-      <a id="selectFiles(String):Seq[String]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">selectFiles</span>
-        
-        <span class="params">(<span name="sourceDir">sourceDir: String</span>)</span><span class="result">: Seq[String]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a seq of all scala files in the source directory
-</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">

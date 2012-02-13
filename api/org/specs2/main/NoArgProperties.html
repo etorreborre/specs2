@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.matcher.Expectations.CanBeEqual</title>
+          <title>org.specs2.main.NoArgProperties</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -14,23 +14,24 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../lib/class_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.matcher" class="extype" href="package.html">matcher</a>.<a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></p>
-        <h1>CanBeEqual</h1>
+        <img src="../../../lib/trait_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.main" class="extype" href="package.html">main</a></p>
+        <h1>NoArgProperties</h1>
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">class</span>
+      <span class="kind">trait</span>
       <span class="symbol"> 
-        <span class="name">CanBeEqual</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="result"> extends AnyRef</span>
+        <span class="name">NoArgProperties</span>
+        
+        <span class="result"> extends <a name="org.specs2.main.ArgProperties" class="extype" href="ArgProperties.html">ArgProperties</a></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait can be used to deactivate the conversion of any value to an ArgsProperty
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.main.ArgProperties" class="extype" href="ArgProperties.html">ArgProperties</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -46,7 +47,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.matcher.Expectations.CanBeEqual" class="in"><span>CanBeEqual</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.main.NoArgProperties" class="in"><span>NoArgProperties</span></li><li name="org.specs2.main.ArgProperties" class="in"><span>ArgProperties</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -54,21 +55,7 @@
             </div>
         </div>
 
-        <div class="members" id="constructors">
-              <h3>Instance Constructors</h3>
-              <ol><li visbl="pub" name="org.specs2.matcher.Expectations.CanBeEqual#this" data-isabs="false">
-      <a id="this:CanBeEqual[T]"></a>
-      <h4 class="signature">
-      <span class="kind">new</span>
-      <span class="symbol"> 
-        <span class="name">CanBeEqual</span>
         
-        <span class="params">(<span name="t">t: ⇒ T</span>)</span>
-      </span>
-      </h4>
-      
-    </li></ol>
-            </div>
 
         
         
@@ -98,28 +85,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.matcher.Expectations.CanBeEqual#!==" data-isabs="false">
-      <a id="!==[S&gt;:T](⇒ S):MatchResult[Any]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!==</span>
-        <span class="tparams">[<span name="S">S &gt;: T</span>]</span>
-        <span class="params">(<span name="other">other: ⇒ S</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scala.Any" class="extype">Any</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">! equality matcher on Expectables</p>
-    </li><li visbl="pub" name="org.specs2.matcher.Expectations.CanBeEqual#!===" data-isabs="false">
-      <a id="!===(⇒ T):MatchResult[T]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!===</span>
-        
-        <span class="params">(<span name="other">other: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">! typed equality matcher on Expectables</p>
     </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
       <a id="##():Int"></a>
       <h4 class="signature">
@@ -153,28 +118,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.matcher.Expectations.CanBeEqual#===" data-isabs="false">
-      <a id="===[S&gt;:T](⇒ S):MatchResult[Any]"></a>
+    </li><li visbl="pub" name="org.specs2.main.NoArgProperties#anyToArgProperty" data-isabs="false">
+      <a id="anyToArgProperty[T](⇒ T):ArgProperty[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">===</span>
-        <span class="tparams">[<span name="S">S &gt;: T</span>]</span>
-        <span class="params">(<span name="other">other: ⇒ S</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scala.Any" class="extype">Any</span>]</span>
+        <span class="name">anyToArgProperty</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.main.ArgProperty" class="extype" href="ArgProperty.html">ArgProperty</a>[T]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">equality matcher on Expectables</p>
-    </li><li visbl="pub" name="org.specs2.matcher.Expectations.CanBeEqual#====" data-isabs="false">
-      <a id="====(⇒ T):MatchResult[T]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">====</span>
-        
-        <span class="params">(<span name="other">other: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">typed equality matcher on Expectables</p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.main.NoArgProperties" class="extype" href="">NoArgProperties</a> → <a name="org.specs2.main.ArgProperties" class="extype" href="ArgProperties.html">ArgProperties</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -371,7 +325,9 @@
 
         
 
-        <div name="scala.AnyRef" class="parent">
+        <div name="org.specs2.main.ArgProperties" class="parent">
+              <h3>Inherited from <a name="org.specs2.main.ArgProperties" class="extype" href="ArgProperties.html">ArgProperties</a></h3>
+            </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

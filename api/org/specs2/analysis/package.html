@@ -47,7 +47,30 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.analysis.Dependencies" data-isabs="false">
+              <ol><li visbl="pub" name="org.specs2.analysis.ClassycleDependencyFinder" data-isabs="true">
+      <a id="ClassycleDependencyFinder:ClassycleDependencyFinder"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ClassycleDependencyFinder.html"><span class="name">ClassycleDependencyFinder</span></a>
+        
+        <span class="result"> extends DependencyFinder</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implementation of the dependency finder using the classycle library.</p>
+    </li><li visbl="pub" name="org.specs2.analysis.CompilerDependencyFinder" data-isabs="true">
+      <a id="CompilerDependencyFinder:CompilerDependencyFinder"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="CompilerDependencyFinder.html"><span class="name">CompilerDependencyFinder</span></a>
+        
+        <span class="result"> extends DependencyFinder</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implementation of the DependencyFinder trait using the compiler dependency analysis
+</p>
+    </li><li visbl="pub" name="org.specs2.analysis.Dependencies" data-isabs="false">
       <a id="Dependencies:Dependencies"></a>
       <h4 class="signature">
       <span class="kind">case class</span>
@@ -89,7 +112,7 @@
       <span class="symbol"> 
         <a href="LayersAnalysis.html"><span class="name">LayersAnalysis</span></a>
         
-        <span class="result"> extends DependencyFinder</span>
+        <span class="result"> extends ClassycleDependencyFinder</span>
       </span>
       </h4>
       <p class="comment cmt">This trait allows to define expected dependencies between packages layers

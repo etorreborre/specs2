@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">ClassRunner</span>
         
-        <span class="result"> extends <span name="org.specs2.reflect.Classes" class="extype">Classes</span> with <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span></span>
+        <span class="result"> extends <span name="org.specs2.reflect.Classes" class="extype">Classes</span> with <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span> with <a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a></span>
       </span>
       </h4>
       
@@ -33,7 +33,7 @@ by specifying its name as the first argument on the command line
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>org.specs2.main.Arguments for other command line options
 </p></span>, <span class="cmt"><p>specs2.run</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <span name="org.specs2.reflect.Classes" class="extype">Classes</span>, <span name="org.specs2.io.Output" class="extype">Output</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a>, <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <span name="org.specs2.reflect.Classes" class="extype">Classes</span>, <span name="org.specs2.io.Output" class="extype">Output</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a name="org.specs2.runner.HtmlRunner" class="extype" href="HtmlRunner.html">HtmlRunner</a>, <a name="org.specs2.runner.JUnitXmlRunner" class="extype" href="JUnitXmlRunner.html">JUnitXmlRunner</a>, <a name="specs2.html" class="extype" href="../../../specs2/html$.html">html</a>, <a name="specs2.junitxml" class="extype" href="../../../specs2/junitxml$.html">junitxml</a>, <a name="specs2.run" class="extype" href="../../../specs2/run$.html">run</a></div>
@@ -52,7 +52,7 @@ by specifying its name as the first argument on the command line
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.runner.ClassRunner" class="in"><span>ClassRunner</span></li><li name="org.specs2.io.ConsoleOutput" class="in"><span>ConsoleOutput</span></li><li name="org.specs2.reflect.Classes" class="in"><span>Classes</span></li><li name="org.specs2.io.Output" class="in"><span>Output</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.runner.ClassRunner" class="in"><span>ClassRunner</span></li><li name="org.specs2.runner.SystemExit" class="in"><span>SystemExit</span></li><li name="org.specs2.io.ConsoleOutput" class="in"><span>ConsoleOutput</span></li><li name="org.specs2.reflect.Classes" class="in"><span>Classes</span></li><li name="org.specs2.io.Output" class="in"><span>Output</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -138,13 +138,13 @@ by specifying its name as the first argument on the command line
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.runner.ClassRunner#apply" data-isabs="false">
-      <a id="apply(SpecificationStructure*)(Arguments):Either[Reporter, Unit]"></a>
+      <a id="apply(SpecificationStructure*)(Arguments):Seq[ExecutedSpecification]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">apply</span>
         
-        <span class="params">(<span name="specifications">specifications: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[<a name="org.specs2.reporter.Reporter" class="extype" href="../reporter/Reporter.html">Reporter</a>, <span name="scala.Unit" class="extype">Unit</span>]</span>
+        <span class="params">(<span name="specifications">specifications: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: Seq[<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">This method can be called directly from the console with the specs2.</p><div class="fullcomment"><div class="comment cmt"><p>This method can be called directly from the console with the specs2.run object:</p><p>    &gt; specs2.run(spec1, spec2)
@@ -272,6 +272,58 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.runner.SystemExit#exitSystem" data-isabs="false">
+      <a id="exitSystem(Seq[ExecutedSpecification]):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exitSystem</span>
+        
+        <span class="params">(<span name="executed">executed: Seq[<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">exit the system with a specific code:</p><div class="fullcomment"><div class="comment cmt"><p>exit the system with a specific code:</p><p>- 0 if all the specifications are successful
+- 1 if there are only failures
+- 100 if there is any error
+- 101 if one of them could not even be executed (this is represented by None)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.runner.SystemExit#exitSystem" data-isabs="false">
+      <a id="exitSystem(Option[ExecutedSpecification]):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exitSystem</span>
+        
+        <span class="params">(<span name="executed">executed: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">exit the system for one executed specification (None means that the specification could not be executed)
+</p><div class="fullcomment"><div class="comment cmt"><p>exit the system for one executed specification (None means that the specification could not be executed)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a></dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.runner.SystemExit#exitTheSystem" data-isabs="false">
+      <a id="exitTheSystem(Seq[Option[ExecutedSpecification]]):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exitTheSystem</span>
+        
+        <span class="params">(<span name="executed">executed: Seq[<span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>]]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a></dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.runner.SystemExit#exitWith" data-isabs="false">
+      <a id="exitWith(Int):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exitWith</span>
+        
+        <span class="params">(<span name="status">status: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this method can be overriden for testing
+</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overriden for testing
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -439,13 +491,13 @@ so that the exception message and stacktrace are printed when the object can't b
       </h4>
       
     </li><li visbl="pub" name="org.specs2.runner.ClassRunner#start" data-isabs="false">
-      <a id="start(String*):Either[Reporter, Unit]"></a>
+      <a id="start(String*):Option[ExecutedSpecification]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">start</span>
         
-        <span class="params">(<span name="arguments">arguments: String*</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[<a name="org.specs2.reporter.Reporter" class="extype" href="../reporter/Reporter.html">Reporter</a>, <span name="scala.Unit" class="extype">Unit</span>]</span>
+        <span class="params">(<span name="arguments">arguments: String*</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a>]</span>
       </span>
       </h4>
       
@@ -532,7 +584,9 @@ and trying to instantiate the first parameter recursively if there is a paramete
 
         
 
-        <div name="org.specs2.io.ConsoleOutput" class="parent">
+        <div name="org.specs2.runner.SystemExit" class="parent">
+              <h3>Inherited from <a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a></h3>
+            </div><div name="org.specs2.io.ConsoleOutput" class="parent">
               <h3>Inherited from <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span></h3>
             </div><div name="org.specs2.reflect.Classes" class="parent">
               <h3>Inherited from <span name="org.specs2.reflect.Classes" class="extype">Classes</span></h3>
