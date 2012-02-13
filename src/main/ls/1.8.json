@@ -2,7 +2,7 @@
 {
  "organization":"org.specs2",
  "name":"specs2",
- "version":"1.8-SNAPSHOT",
+ "version":"1.8",
  "description":"specs2",
  "site":"",
  "tags":[],
@@ -28,7 +28,7 @@
   },{
    "organization":"org.mockito",
    "name": "mockito-all",
-   "version": "1.8.5"
+   "version": "1.9.0"
   },{
    "organization":"junit",
    "name": "junit",
@@ -38,9 +38,9 @@
    "name": "pegdown",
    "version": "1.0.2"
   },{
-   "organization":"classycle",
+   "organization":"org.specs2",
    "name": "classycle",
-   "version": "1.4"
+   "version": "1.4.1"
   }],
  "scalas": ["2.9.0","2.9.0-1"],
  "sbt": false
