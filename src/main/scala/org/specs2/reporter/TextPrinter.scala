@@ -9,6 +9,7 @@ import collection.Seqx._
 import data.Tuples._
 import time._
 import text._
+import Trim._
 import Plural._
 import AnsiColors._
 import NotNullStrings._
@@ -136,10 +137,13 @@ trait TextPrinter {
       val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
       out.printFailure(description)
       out.printFailure((if (isDataTable) "" else desc.takeWhile(_ == ' ')+" ") +
-                       f.message + " ("+f.location+")")
+                       f.message + location(f))
       if (args.failtrace)
         args.traceFilter(f.stackTrace).foreach(t => out.printFailure(t.toString))
     }
+
+    def location(r: ResultStackTrace) = " ("+r.location+")" unless r.location.isEmpty
+
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {
         case FailureDetails(expected, actual) if (args.diffs.show(expected, actual)) => {
@@ -161,7 +165,7 @@ trait TextPrinter {
       out.printError(description)
       val exceptionName = f.exception.getClass.getSimpleName
       out.printError((if (isDataTable) "" else desc.takeWhile(_ == ' ')+"  "+exceptionName+": ") +
-                     f.message + " ("+f.location+")")
+                     f.message + location(f))
     }
     /**
      * add the status to the description

@@ -120,11 +120,16 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
       case r @ Result(Exhausted, n, _, fq, _)              =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq))
       case Result(Failed(args, labels), n, _, fq, _) =>
-        execute.Failure(counterExampleMessage(args, n, labels) + frequencies(fq))
+        new execute.Failure(counterExampleMessage(args, n, labels) + frequencies(fq)) {
+          // the location is already included in the failure message
+          override def location = ""
+        }
       case Result(PropException(args, ex, labels), n, _, fq, _) =>
         ex match {
           case execute.FailureException(f) =>
-            execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq))
+            new execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq)) {
+              override def location = f.location
+            }
           case e: java.lang.Exception      =>
             execute.Error("A counter-example is "+counterExample(args)+": " + ex + getCause(e) +
                                                 " ("+afterNTries(n)+")"+ failedLabels(labels) + frequencies(fq), e)
@@ -219,12 +224,12 @@ trait ResultPropertyImplicits {
     new Prop {
       def apply(params: Prop.Params) = {
         lazy val result = execute.ResultExecution.execute(r)
-        val prop = if (result.isSuccess) Prop.passed else Prop.falsified :| result.message
-
+        val prop = 
         result match {
-          case f : execute.Failure => throw new execute.FailureException(f)
-          case s : execute.Skipped => throw new execute.SkipException(s)
-          case other               => ()
+          case f : execute.Failure => Prop.falsified :| (f.message+" ("+f.location+")")
+          case e : execute.Error   => Prop.falsified :| (e.message+" ("+e.location+")")
+          case s : execute.Skipped => Prop.undecided :| s.message
+          case other               => Prop.passed
         }
         prop.apply(params)
       }
