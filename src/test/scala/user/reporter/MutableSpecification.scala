@@ -21,13 +21,6 @@ class MutableMockitoSpecification extends Specification with org.specs2.mock.Moc
   }
 }
 
-class MutableScalaCheckSpec extends org.specs2.mutable.Specification with org.specs2.ScalaCheck {
-  "test" >> check { i: Int =>
-    i === (i+1)
-  }
-}
-
-
 class OkSpecification extends Specification {
   "This example is ok" in ok
 }
