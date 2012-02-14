@@ -18,15 +18,17 @@ trait Sequence {
 /**
  * this case class transports the fragments to execute, grouped in sequences of examples which can be executed concurrently
  */
-case class ExecutableSpecification(name: SpecName, arguments: Arguments, fs: Seq[FragmentSeq])
+case class ExecutableSpecification(name: SpecName, arguments: Arguments, fs: Seq[FragmentSeq]) {
+  def map(f: Fragment => Fragment) = copy(fs = fs.map(seq => seq map f))
+}
 
 /**
  * The DefaultSequence trait sorts the Fragments by making sure Steps will be executed before Examples
  */
 trait DefaultSequence {
   /** sequence function returning an ordered seq of seq of Fragments */
-  def sequence(implicit arguments: Arguments): SpecificationStructure => ExecutableSpecification =
-    (spec: SpecificationStructure) => ExecutableSpecification(spec.content.specName, spec.content.arguments, sequence(spec.content.fragments)(arguments))
+  def sequence(implicit arguments: Arguments): SpecificationStructure => ExecutableSpecification = (spec: SpecificationStructure) =>
+    ExecutableSpecification(spec.content.specName, spec.content.arguments, sequence(spec.content.fragments)(arguments))
 
   /**
    * the sequence method returns sequences of fragments which can be executed concurrently.
@@ -37,9 +39,30 @@ trait DefaultSequence {
    */
   def sequence(fragments: Seq[Fragment])(implicit arguments: Arguments = Arguments()): Seq[FragmentSeq] = {
     if (arguments.sequential) fragments.map(f => FragmentSeq.create(f))
-    else isolateSteps(fragments)(arguments).reverse
-  }
-  
+    else                      isolateSteps(fragments)(arguments).reverse
+  }//  val isolated = spec.map(isolate(spec.name))
+  //  def isolate(name: SpecName)(implicit arguments: Arguments) = {
+  //    if (arguments.execute.isolate) {
+  //      (f: Fragment) => {
+  //        f match {
+  //          case e @ Example(_,_) => e.copy(body = () => copyBody(name, e))
+  //          case other     => other
+  //        }
+  //      }
+  //    } else (f: Fragment) => f
+  //  }
+  //
+  //  def copyBody(name: SpecName, e: Example) = {
+  //    val fragmentsCopy = SpecificationStructure.createSpecification(name.javaClassName).is
+  //    fragmentsCopy.fragments.find(_ == e) match {
+  //      case Some(Example(_, body)) => body()
+  //      case other                  => e.body()
+  //    }
+  //  }
+
+
+
+
   protected def isolateSteps(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[FragmentSeq] = {
     fragments.foldLeft(Vector(): Seq[FragmentSeq]) { (res, f) =>
       res.toList match {
@@ -55,6 +78,8 @@ trait DefaultSequence {
 }
 case class FragmentSeq(fragments: Seq[Fragment]) {
   def arguments = Fragments.create(fragments:_*).arguments
+
+  def map(f: Fragment => Fragment) = copy(fragments = fragments map f)
 }
 case object FragmentSeq {
   def create(f: Fragment) = FragmentSeq(Seq(f))

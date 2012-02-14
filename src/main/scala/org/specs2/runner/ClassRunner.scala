@@ -60,11 +60,7 @@ class ClassRunner extends Classes with ConsoleOutput with SystemExit {
     }
   }
 
-  protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): SpecificationStructure = {
-    tryToCreateObject[SpecificationStructure](className, loader = classLoader) match {
-      case Some(s) => s
-      case None    => error("can not create specification: "+className)
-    }
-  }
+  protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader) =
+    SpecificationStructure.createSpecification(className, classLoader)
 }
 

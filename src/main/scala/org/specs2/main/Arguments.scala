@@ -204,6 +204,8 @@ case class Execute(
     )
   }
 
+  def isolate = true
+
   override def toString =
     List(
     "plan"           -> _plan         ,

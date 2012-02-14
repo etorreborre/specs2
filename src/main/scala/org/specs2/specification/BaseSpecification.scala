@@ -4,6 +4,8 @@ import org.specs2.internal.scalaz._
 import Scalaz._
 import main.Arguments
 import Fragments._
+import reflect.Classes._
+
 /**
  * A Base specification contains the minimum elements for a Specification
  * 
@@ -53,4 +55,14 @@ object SpecificationStructure {
     }
   }
   def apply(fs: Seq[Fragment]): SpecificationStructure = apply(Fragments.create(fs:_*))
+
+  /**
+   * create a SpecificationStructure from a className
+   */
+  def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): SpecificationStructure = {
+    tryToCreateObject[SpecificationStructure](className, loader = classLoader) match {
+      case Some(s) => s
+      case None    => sys.error("can not create specification: "+className)
+    }
+  }
 }
