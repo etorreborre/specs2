@@ -10,7 +10,8 @@ class AnsiColorsSpec extends Specification { def is =
 	  "if end with newline"                                                                                                 ! e4^
 	  "if no newline"                                                                                                       ! e5^
 	  "if empty"                                                                                                            ! e6^
-                                                                                                                          end
+    "if multiline"                                                                                                        ! e7^
+                                                                                                                           end
 
   
 	import AnsiColors._
@@ -22,5 +23,6 @@ class AnsiColorsSpec extends Specification { def is =
 	def e4 = color("hello\n", "*") must_== "*hello"+reset+"\n"
 	def e5 = color("hello", "*") must_== "*hello"+reset
 	def e6 = color("", "*") must_== ""
-	
+  def e7 = color("\nhello\nworld\n", "*") must_== "\n*hello"+reset+"\n*world"+reset+"\n"
+
 }
