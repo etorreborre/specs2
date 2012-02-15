@@ -114,7 +114,7 @@ Before executing and reporting a specification, the fragments must be selected a
     val selection = new DefaultSelection with DefaultSequence with MockOutput
 
     def selectSequence(fs: Fragments): Seq[FragmentSeq] = {
-      selection.sequence(selection.select(fs.arguments)(SpecificationStructure(fs)).fragments.fragments)(fs.arguments).toList
+      selection.sequence(fs.specName, selection.select(fs.arguments)(SpecificationStructure(fs)).fragments.fragments)(fs.arguments).toList
     }
     def select(f: Fragments)(implicit args: Arguments = Arguments()) = {
       val fs = new Specification { def is = f }.content

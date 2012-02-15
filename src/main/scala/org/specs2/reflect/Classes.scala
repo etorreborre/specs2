@@ -67,7 +67,7 @@ trait Classes extends Output {
         try {
           val constructors = c.getDeclaredConstructors.toList
           if (constructors.isEmpty) {
-            if (canPrintMessage) println("Can't find a constructor for class"+c.getName)
+            if (canPrintMessage) println("Can't find a constructor for class "+c.getName)
             None
           }
           else if (constructors.toList(0).getParameterTypes.isEmpty)
@@ -77,7 +77,7 @@ trait Classes extends Output {
             tryToCreateObject[T](outerClassName, printMessage, printStackTrace).map(constructors(0).newInstance(_).asInstanceOf[T])
           }
           else {
-            if (canPrintMessage) println("Can't find a suitable constructor for class"+c.getName)
+            if (canPrintMessage) println("Can't find a suitable constructor for class "+c.getName)
             None
           }
         } catch {

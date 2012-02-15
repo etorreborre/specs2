@@ -28,7 +28,7 @@ case class ExecutableSpecification(name: SpecName, arguments: Arguments, fs: Seq
 trait DefaultSequence {
   /** sequence function returning an ordered seq of seq of Fragments */
   def sequence(implicit arguments: Arguments): SpecificationStructure => ExecutableSpecification = (spec: SpecificationStructure) =>
-    ExecutableSpecification(spec.content.specName, spec.content.arguments, sequence(spec.content.fragments)(arguments))
+    ExecutableSpecification(spec.content.specName, spec.content.arguments, sequence(spec.content.specName, spec.content.fragments)(arguments))
 
   /**
    * the sequence method returns sequences of fragments which can be executed concurrently.
@@ -37,28 +37,40 @@ trait DefaultSequence {
    *
    * If the arguments specify that the specification is sequential, then each fragment will be executed individually
    */
-  def sequence(fragments: Seq[Fragment])(implicit arguments: Arguments = Arguments()): Seq[FragmentSeq] = {
-    if (arguments.sequential) fragments.map(f => FragmentSeq.create(f))
-    else                      isolateSteps(fragments)(arguments).reverse
-  }//  val isolated = spec.map(isolate(spec.name))
-  //  def isolate(name: SpecName)(implicit arguments: Arguments) = {
-  //    if (arguments.execute.isolate) {
-  //      (f: Fragment) => {
-  //        f match {
-  //          case e @ Example(_,_) => e.copy(body = () => copyBody(name, e))
-  //          case other     => other
-  //        }
-  //      }
-  //    } else (f: Fragment) => f
-  //  }
-  //
-  //  def copyBody(name: SpecName, e: Example) = {
-  //    val fragmentsCopy = SpecificationStructure.createSpecification(name.javaClassName).is
-  //    fragmentsCopy.fragments.find(_ == e) match {
-  //      case Some(Example(_, body)) => body()
-  //      case other                  => e.body()
-  //    }
-  //  }
+  def sequence(specName: SpecName, fragments: Seq[Fragment])(implicit arguments: Arguments = Arguments()): Seq[FragmentSeq] = {
+    // isolate examples if necessary, using the arguments of the current specification in case of included specifications
+    val fs = SpecsArguments.foldAll(fragments).filter(isolateExamples)
+    if (arguments.sequential) fs.map(f => FragmentSeq.create(f))
+    else                      isolateSteps(fs)(arguments).reverse
+  }
+
+  /**
+   * This function "clones" the body of each example if the applicable arguments indicate that the specification should
+   * be isolated
+   */
+  protected def isolateExamples(implicit arguments: Arguments) = (fs: Seq[(Fragment, Arguments, SpecName)])=> {
+    fs.zipWithIndex.map { fani  =>
+      val ((fragment, args, name), index) = fani
+      if ((args <| arguments).isolated) {
+        fragment match {
+          case e @ Example(_,_) => e.copy(body = () => copyBody(name, e, index))
+          case other            => other
+        }
+      } else fragment
+    }
+  }
+
+  /**
+   * @return an Example which body comes from the execution of that example in a brand new instance of the Specification
+   */
+  protected def copyBody(name: SpecName, e: Example, index: Int) = {
+    SpecificationStructure.createSpecificationOption(name.javaClassName).map { specification =>
+      specification.is.fragments(index) match {
+        case Example(_, body) => body()
+        case other            => e.body()
+      }
+    }.getOrElse(e.body())
+  }
 
 
 

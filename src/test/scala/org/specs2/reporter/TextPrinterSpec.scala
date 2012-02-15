@@ -56,6 +56,8 @@ class TextPrinterSpec extends Specification with DataTables { def is =
     "if plan = true, nothing is executed"                                                                               ! planargs().e1^
     "if sequential = false examples are executed concurrently"                                                          ! seq().e1^
     "if sequential = true examples are executed sequentially"                                                           ! seq().e2^
+    "if isolated = false examples are sharing variables"                                                                ! isolate().e1^
+    "if isolated = true examples are not sharing variables"                                                             ! isolate().e2^
     "if stopOnFail = true everything is skipped after the first failure"                                                ! stopOnFailargs().e1^
     "if skipAll = true, everything is skipped"                                                                          ! skipAllargs().e1^
                                                                                                                         p^
@@ -244,6 +246,10 @@ class TextPrinterSpec extends Specification with DataTables { def is =
       messages.messages must contain("e1", "e2").inOrder
     }
   }
+  case class isolate() {
+    def e1 = print(new NonIsolatedSpecification) must contain("+ e1", "x e2")
+    def e2 = print(new IsolatedSpecification) must contain("+ e1", "+ e2")
+  }
   case class stopOnFailargs() {
     def e1 = {
       print(sequential ^ stopOnFail ^
@@ -281,11 +287,17 @@ class TextPrinterSpec extends Specification with DataTables { def is =
     def e1 = print("a title".title ^ ex1) must contain("a title")
   }
 
-  def print(fragments: Fragments, previousStats: Stats = Stats()): Seq[String] =
-    printWithColors(fragments, previousStats).map(removeColors(_))
+  def print(specification: SpecificationStructure): Seq[String] =
+    printWithColors(specification).map(removeColors(_))
 
-  def printWithColors(fs: Fragments, previousStats: Stats = Stats()): Seq[String] =
-    preReporter(previousStats).exec(fs).foreach((n, fs) => printer.print(fs))
+  def print(fragments: Fragments): Seq[String] =
+    printWithColors(fragments).map(removeColors(_))
+
+  def printWithColors(fs: Fragments): Seq[String] =
+    preReporter.exec(fs).foreach((n, fs) => printer.print(fs))
+
+  def printWithColors(specification: SpecificationStructure): Seq[String] =
+    preReporter.exec(specification).foreach((n, fs) => printer.print(fs))
 
   val outer = this
   def printer = new TextPrinter {
@@ -296,12 +308,29 @@ class TextPrinterSpec extends Specification with DataTables { def is =
     }
   }
 
-  def preReporter(previousStats: Stats = Stats()) = new ConsoleReporter {
+  def preReporter = new ConsoleReporter {
 
-    def exec(fs: Fragments): ExecutingSpecification = {
-      val args = fs.arguments
-      new Specification { def is = fs } |> select(args) |> sequence(args) |> execute(args)
+    def exec(fs: Fragments): ExecutingSpecification = exec(new Specification { def is = fs })
+
+    def exec(specification: SpecificationStructure): ExecutingSpecification = {
+      val args = specification.is.arguments
+      specification |> select(args) |> sequence(args) |> execute(args)
     }
   }
-
 }
+
+class IsolatedSpecification extends IsolableSpecification(true)
+class NonIsolatedSpecification extends IsolableSpecification(false)
+
+case class IsolableSpecification(isolate: Boolean) extends mutable.Specification {
+  sequential
+  if (isolate) isolated
+
+  "some examples" >> {
+    var i = 0
+    "e1" in { i = i+1; i must_== 1 }
+    "e2" in { i = i+1; i must_== 1 }
+  }
+}
+
+

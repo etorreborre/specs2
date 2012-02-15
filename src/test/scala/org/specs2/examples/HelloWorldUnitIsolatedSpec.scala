@@ -3,20 +3,20 @@ package org.specs2.examples
 import org.specs2._
 
 class HelloWorldUnitIsolatedSpec extends mutable.Specification {
+  isolated
 
-  "The 'Hello world' string" should {
-    var l = new scala.collection.mutable.ListBuffer[Int]
-    "contain 11 characters" in {
-      l = l :+ 1
-      l must have size (1)
+  "A variable with the 'Hello world' string" >> {
+    var l = "Hello world"
+    "can be modified" in {
+      l = "Hello you"
+      l must have size (9)
     }
-    "start with 'Hello'" in {
-      l = l :+ 1
-      l must have size (1)
+    "several times" in {
+      l = "Hiya"
+      l must have size (4)
     }
-    "end with 'world'" in {
-      l = l :+ 1
-      l must have size (1)
+    "or not" in {
+      l must have size (11)
     }
   }
 

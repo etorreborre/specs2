@@ -57,12 +57,18 @@ object SpecificationStructure {
   def apply(fs: Seq[Fragment]): SpecificationStructure = apply(Fragments.create(fs:_*))
 
   /**
-   * create a SpecificationStructure from a className
+   * create a SpecificationStructure from a className, throwing an Error if that's not possible
    */
   def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): SpecificationStructure = {
-    tryToCreateObject[SpecificationStructure](className, loader = classLoader) match {
+    createSpecificationOption(className, classLoader) match {
       case Some(s) => s
       case None    => sys.error("can not create specification: "+className)
     }
+  }
+  /**
+   * create a SpecificationStructure from a className, returning None if that's not possible
+   */
+  def createSpecificationOption(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[SpecificationStructure] = {
+    tryToCreateObject[SpecificationStructure](className, loader = classLoader)
   }
 }
