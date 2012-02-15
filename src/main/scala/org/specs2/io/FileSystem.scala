@@ -235,8 +235,8 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
    * @return a path that should be valid on all plateforms (@see issue 148 of the specs project)
    */
   private def getPath(url: URL) = {
-    val path = if (System.getProperty("file.separator") == "\\") url.getPath.replace("\\", "/").replace("file:/", "")
-	             else                                         		 url.getPath.replace("file:", "")
+    val path = if (sys.props("file.separator") == "\\") url.getPath.replace("\\", "/").replace("file:/", "")
+	             else                                     url.getPath.replace("file:", "")
 
     path.replace("%20", " ")
   }

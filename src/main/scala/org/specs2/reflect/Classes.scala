@@ -36,7 +36,7 @@ trait Classes extends Output {
   def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
                                (implicit m: ClassManifest[T]): Option[T] = {
     tryo(createInstanceOf[T](loadClass[T](className))) { (e: Exception) =>
-      val debugCreateObject = System.getProperty("debugCreateObject") != null
+      val debugCreateObject = sys.props("debugCreateObject") != null
       val shouldPrintStackTrace = printStackTrace || debugCreateObject
       val shouldPrintMessage = printMessage || debugCreateObject
       val msg = (shouldPrintMessage, shouldPrintStackTrace) match {
@@ -58,8 +58,8 @@ trait Classes extends Output {
                                      loader: ClassLoader = Thread.currentThread.getContextClassLoader)
                                     (implicit m: ClassManifest[T]): Option[T] = {
 
-    lazy val canPrintMessage    = printMessage    || System.getProperty("debugCreateObject") != null
-    lazy val canPrintStackTrace = printStackTrace || System.getProperty("debugCreateObject") != null
+    lazy val canPrintMessage    = printMessage    || sys.props("debugCreateObject") != null
+    lazy val canPrintStackTrace = printStackTrace || sys.props("debugCreateObject") != null
 
     loadClass(className) match {
       case None => None
@@ -118,7 +118,7 @@ trait Classes extends Output {
    */
   private[reflect] def loadClass[T <: AnyRef](className: String, loader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[Class[T]] = {
     tryo(Some(loadClassOf(className).asInstanceOf[Class[T]])) { (e: Throwable) =>
-      if (System.getProperty("debugLoadClass") != null) {
+      if (sys.props("debugLoadClass") != null) {
         println("Could not load class " + className + ": " + e.getMessage)
         e.getStackTrace() foreach (s => println(s.toString))
       }
