@@ -18,6 +18,10 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def sequential: Arguments = args(sequential = true)
   /**
+   * @return arguments for a specification where examples must be executed in their own specification
+   */
+  def isolated: Arguments = args(isolated = true)
+  /**
    * shortcut to show only the text without any execution
    */
   def plan: Arguments = args(plan = true)

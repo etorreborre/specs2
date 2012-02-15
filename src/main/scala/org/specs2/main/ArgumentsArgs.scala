@@ -22,6 +22,7 @@ trait ArgumentsArgs extends ArgProperties {
     skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -38,7 +39,8 @@ trait ArgumentsArgs extends ArgProperties {
               plan       = plan,
               skipAll    = skipAll,
               stopOnFail = stopOnFail,
-              sequential = sequential) <|
+              sequential = sequential,
+              isolated   = isolated) <|
      (new ArgumentsNamespace).report(
               xonly      = xonly,
               showOnly = showOnly,
@@ -69,12 +71,14 @@ trait ArgumentsArgs extends ArgProperties {
       skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
       stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:     ArgProperty[Int]               = ArgProperty[Int]()
     ) = new Arguments(
        execute = Execute(plan.toOption,
                skipAll.toOption,
                stopOnFail.toOption,
                sequential.toOption,
+               isolated.toOption,
                threadsNb.toOption))
 
     /** shorthand method to create an Arguments object */

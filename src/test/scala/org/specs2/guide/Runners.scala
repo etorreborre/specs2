@@ -53,6 +53,7 @@ From inside a specification, the available arguments are the following:
  *`skipAll`   *  | false                                    | skip all the examples
  *`stopOnFail`*  | false                                    | skip all examples after the first failure or error
  *`sequential`*  | false                                    | don't execute examples concurrently
+ *`isolated`*    | false                                    | execute each example in its own specification to get "fresh" local variables
  `threadsNb`     | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
  ***Storing***   |||
  `never`         | false                                    | never store statistics
@@ -90,14 +91,15 @@ There are some available shortcuts for some arguments
  `include(tags: String)`                                               | `args(include=tags)`                                                                  |                                                                                                  |
  `exclude(tags: String)`                                               | `args(exclude=tags)`                                                                  |                                                                                                  |
  `only(examples: String)`                                              | `args(ex=examples)`                                                                   |                                                                                                  |
- `wasIssue`                                                          | `args(wasIssue=true)`                                                                   |                                                                                                  |
- `was(status: String)`                                               | `args(was=status)`                                                                      |                                                                                                  |
+ `wasIssue`                                                            | `args(wasIssue=true)`                                                                   |                                                                                                  |
+ `was(status: String)`                                                 | `args(was=status)`                                                                      |                                                                                                  |
  `plan`                                                                | `args(plan=true)`                                                                     |                                                                                                  |
  `skipAll`                                                             | `args(skipAll=true)`                                                                  |                                                                                                  |
  `stopOnFail`                                                          | `args(stopOnFail=true)`                                                               |                                                                                                  |
  `sequential`                                                          | `args(sequential=true)`                                                               |                                                                                                  |
+ `isolated`                                                            | `args(isolated=true)`                                                               |                                                                                                  |
  `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
- `showOnly(status: String)`                                          | `args(showOnly=status)`                                                                 |                                                                                                  |
+ `showOnly(status: String)`                                            | `args(showOnly=status)`                                                                 |                                                                                                  |
  `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
  `literate`                                                            | `args(noindent=true, sequential=true)`                                                | for specifications where text must not be indented and examples be executed in order             |
  `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
@@ -204,6 +206,7 @@ On the command line you can pass the following arguments:
  `plan`           | boolean                 |                                                                         |
  `skipall`        | boolean                 |                                                                         |
  `sequential`     | boolean                 |                                                                         |
+ `isolated`       | boolean                 |                                                                         |
  `threadsnb`      | int                     |                                                                         |
  ***Storing***    |||
  `resetstore`     | boolean                 |                                                                         |

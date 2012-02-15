@@ -38,6 +38,7 @@ case class Arguments (
   def skipAll: Boolean              = execute.skipAll
   def stopOnFail: Boolean           = execute.stopOnFail
   def sequential: Boolean           = execute.sequential
+  def isolated: Boolean             = execute.isolated
   def threadsNb: Int                = execute.threadsNb
 
   def xonly: Boolean                = report.xonly
@@ -186,12 +187,14 @@ case class Execute(
   _skipAll:       Option[Boolean]          = None,
   _stopOnFail:    Option[Boolean]          = None,
   _sequential:    Option[Boolean]          = None,
+  _isolated:      Option[Boolean]          = None,
   _threadsNb:     Option[Int]              = None) extends ShowArgs {
 
   def plan: Boolean                 = _plan.getOrElse(false)
   def skipAll: Boolean              = _skipAll.getOrElse(false)
   def stopOnFail: Boolean           = _stopOnFail.getOrElse(false)
   def sequential: Boolean           = _sequential.getOrElse(false)
+  def isolated: Boolean             = _isolated.getOrElse(false)
   def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
 
   def overrideWith(other: Execute) = {
@@ -200,11 +203,10 @@ case class Execute(
       other._skipAll         .orElse(_skipAll),
       other._stopOnFail      .orElse(_stopOnFail),
       other._sequential      .orElse(_sequential),
+      other._isolated        .orElse(_isolated),
       other._threadsNb       .orElse(_threadsNb)
     )
   }
-
-  def isolate = true
 
   override def toString =
     List(
@@ -212,6 +214,7 @@ case class Execute(
     "skipAll"        -> _skipAll      ,
     "stopOnFail"     -> _stopOnFail   ,
     "sequential"     -> _sequential   ,
+    "isolated"       -> _isolated   ,
     "threadsNb"      -> _threadsNb    ).flatMap(showArg).mkString("Execute(", ", ", ")")
 
 }
@@ -223,6 +226,7 @@ object Execute extends Extract {
       _skipAll       = bool("skipall"),
       _stopOnFail    = bool("stoponfail"),
       _sequential    = bool("sequential"),
+      _isolated      = bool("isolated"),
       _threadsNb     = int("threadsnb")
     )
   }
