@@ -16,7 +16,7 @@ import reporter._
 import specification._
 import text.AnsiColors
 import control.{ExecutionOrigin, Throwablex}
-import DefaultSelection._
+
 /**
  * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
  * to execute a specification as a JUnit suite.
@@ -25,20 +25,19 @@ import DefaultSelection._
  * of Description objects and a Map relating each Description to a Fragment to execute. 
  *
  */
-class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
+class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with DefaultSelection with DefaultSequence {
 
   private val executor = new FragmentExecution {}
   
   /** specification to execute */
   protected lazy val specification = tryToCreateObject[SpecificationStructure](klass.getName).get
 
-  protected lazy val content = specification.content
   /** arguments for the specification */
-  implicit lazy val args: Arguments = content.arguments
+  implicit lazy val args: Arguments = specification.content.arguments
   /** fold object used to create descriptions */
   private val descriptions = new JUnitDescriptionsFragments(klass.getName)
   /** extract the root Description object and the examples to execute */
-  private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll(select(content.fragments))
+  private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll((select(args)(specification) |> sequence).fragments)
   /** the console exporter can be used to display results in the console */
   protected lazy val consoleExporter = new TextExporting {}
   /** the html exporter can be used to output html files */
@@ -127,8 +126,8 @@ object JUnitRunner {
   def apply[T <: SpecificationStructure](s: T)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
     override protected lazy val specification = s	  
   }
-  def apply[T <: SpecificationStructure](fragments: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
-    override protected lazy val content = fragments	  
+  def apply[T <: SpecificationStructure](fs: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
+    override protected lazy val specification = new Specification { def is = fs }
   }
   def apply[T <: SpecificationStructure](f: Fragments, props: SystemProperties, console: TextExporting, html: HtmlExporting)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
       override protected lazy val specification = new Specification { def is = f }

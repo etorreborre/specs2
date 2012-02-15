@@ -20,6 +20,7 @@ trait Sequence {
  */
 case class ExecutableSpecification(name: SpecName, arguments: Arguments, fs: Seq[FragmentSeq]) {
   def map(f: Fragment => Fragment) = copy(fs = fs.map(seq => seq map f))
+  def fragments = fs.flatMap(fseq => fseq.fragments)
 }
 
 /**
