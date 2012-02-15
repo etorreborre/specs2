@@ -51,7 +51,7 @@ trait DefaultSequence {
   protected def isolateExamples(implicit arguments: Arguments) = (fs: Seq[(Fragment, Arguments, SpecName)])=> {
     fs.zipWithIndex.map { fani  =>
       val ((fragment, args, name), index) = fani
-      if ((args <| arguments).isolated) {
+      if ((arguments <| args).isolated) {
         fragment match {
           case e @ Example(_,_) => e.copy(body = () => copyBody(name, e, index))
           case other            => other
