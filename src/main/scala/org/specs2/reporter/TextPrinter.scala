@@ -120,7 +120,7 @@ trait TextPrinter {
             case Success(_)    => out.printSuccess(decoratedDescription(desc))
             case Pending(_)    => out.printPending(decoratedDescription(desc) + " " + result.message)
             case Skipped(_, _) => {
-              out.printSkipped(decoratedDescription(desc))
+              out.printText(decoratedDescription(desc))
               if (!result.message.isEmpty)
                 out.printSkipped(result.message)
             }
