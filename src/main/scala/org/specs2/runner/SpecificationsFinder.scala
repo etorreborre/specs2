@@ -19,14 +19,21 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
-  def specifications(path: String = "**/*.scala", pattern: String = ".*Spec", filter: String => Boolean = { (name: String) => true }, basePath: String = FromSource.srcDir, verbose: Boolean = false): Seq[SpecificationStructure] =
+  def specifications(path: String = "**/*.scala",
+                     pattern: String = ".*Spec",
+                     filter: String => Boolean = { (name: String) => true },
+                     basePath: String = FromSource.srcDir,
+                     verbose: Boolean = false): Seq[SpecificationStructure] =
     specificationNames(path, pattern, basePath, verbose).view.filter(filter).flatMap(n => createSpecification(n))
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    * @return specification names by scanning files and trying to find specifications declarations
    */
-  def specificationNames(path: String = "**/*.scala", pattern: String = ".*Spec", basePath: String = FromSource.srcDir, verbose: Boolean = false) : Seq[String] = {
+  def specificationNames(path: String = "**/*.scala",
+                         pattern: String = ".*Spec",
+                         basePath: String = FromSource.srcDir,
+                         verbose: Boolean = false) : Seq[String] = {
     lazy val specClassPattern = {
       val p = specPattern("class", pattern)
       if (verbose) println("\nthe pattern used to match specification classes is: "+p+"\n")
