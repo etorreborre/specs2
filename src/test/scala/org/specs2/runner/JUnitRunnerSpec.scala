@@ -32,6 +32,9 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
   "If the console system property is specified"                                                                         ^
     "then the specification is also printed on the console"                                                             ! export().e1^
     "the commandline system property can be used to remove colors"                                                      ! export().e2^
+                                                                                                                        p^
+  "If the isolated argument is specified"                                                                               ^
+    "then the examples executions must be isolated"                                                                     ! isolate().e1^
                                                                                                                         end
 
   trait WithNotifier {
@@ -44,6 +47,7 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
 
     abstract class DummySpec extends Specification
     def run(f: Fragments) = JUnitRunner.apply[DummySpec](f, properties, console, html).run(notifier)
+    def run(spec: SpecificationStructure) = JUnitRunner.apply(spec).run(notifier)
   }
 
   case class notified() extends WithNotifier {
@@ -106,6 +110,13 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
 
       run(ex1)
       there was one(html).export(any[Arguments])
+    }
+  }
+  case class isolate() extends WithNotifier {
+
+    def e1 = {
+      run(new examples.HelloWorldUnitIsolatedSpec)
+      there was no(notifier).fireTestFailure(any[Failure])
     }
   }
 }
