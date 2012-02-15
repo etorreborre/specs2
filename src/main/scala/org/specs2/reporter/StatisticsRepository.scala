@@ -6,9 +6,7 @@ import scala.xml._
 import xml.Nodex._
 import specification.{Example, ExecutedResult, Stats, SpecName}
 import execute.{Result, Success}
-import io.{Location, FileSystem}
 
-private[specs2]
 trait StatisticsRepository {
   def getStatistics(specName: SpecName): Option[Stats]
   def storeStatistics(specName: SpecName, stats: Stats): this.type
@@ -30,7 +28,6 @@ trait StatisticsRepository {
  * This solution is preferred over having a single file for all specifications because of the possible
  * concurrent execution of specifications
  */
-private[specs2]
 trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
 
   /**
