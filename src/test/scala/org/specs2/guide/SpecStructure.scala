@@ -758,7 +758,7 @@ Let's see an example with a mutable specification:
 
        /** the `trees` context */
        trait trees extends Scope {
-         val tree = createATreeWith4Nodes
+         val tree = new Tree(1, 2, 3, 4)
        }
 
 Each example of that specification gets a new instance of the `trees` trait. So it will have a brand new `tree` variable and even if this data is mutated by an example, other examples will be isolated from these changes.
@@ -766,6 +766,36 @@ Each example of that specification gets a new instance of the `trees` trait. So 
 ##### `Scope`
 
 You might wonder why the `trees` trait is extending the `org.specs2.specification.Scope` trait? The reason is that the body of an Example only accepts objects which are convertible to a `Result`. By extending `Scope` we can take advantage of an implicit conversion provided by the `Specification` trait to convert our context object to a `Result`.
+
+Scopes are a way to create a "fresh" object and associated variables for each example being executed. The advantages are that:
+
+ - those classes can be reused and extended
+ - the execution behavior only relies on language constructs
+
+However, sometimes, we wish to go for a more concise way of getting fresh variables, without having to create a specific trait to encapsulate them. That's what the `isolated` argument is for.
+
+##### `isolated` variables
+
+The `isolated` argument changes the execution method so that each example is executed in a brand new instance of the Specification:
+
+       class IsolatedSpec extends mutable.Specification {
+         isolated
+
+         "Each example should be executed in isolation" >> {
+
+           val tree = new Tree(1, 2, 3, 4)
+           "the first example modifies the tree" >> {
+             tree.removeNodes(2, 3) must have size(2)
+           }
+           "the second example gets an unmodified version of the tree" >> {
+             tree.removeNodes(2, 3, 4) must have size(1)
+           }
+         }
+       }
+
+Since there is a new Specification for each example, then all the variables accessible to the example will be seen as new.
+
+_Note_: this technique will not work if the Specification is defined with a constructor having parameters because it won't be possible to create a new instance.
 
 ##### With acceptance specifications
 
