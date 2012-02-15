@@ -23,6 +23,7 @@ resolvers ++= Seq("snapshots-repo" at "http://oss.sonatype.org/content/repositor
 
 libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.specs2" %% "specs2-scalaz-core" % "6.0.1",
+  "net.rosien" %% "sniff" % "0.2" % "test",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional", 
   "org.scala-tools.testing" %% "scalacheck" % "1.9" % "optional", 
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional", 
