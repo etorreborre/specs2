@@ -52,7 +52,7 @@ cancelable := true
 
 testOptions := Seq(Tests.Filter(s =>
   Seq("Spec", "Suite", "Unit").exists(s.endsWith(_)) &&
-    !s.endsWith("FeaturesSpec") ||
+    !(s.endsWith("FeaturesSpec") || s.endsWith("SmellsSpec")) ||
     s.contains("UserGuide") || 
   	s.contains("index") ||
     s.matches("org.specs2.guide.*")))
