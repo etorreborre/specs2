@@ -40,7 +40,6 @@ class DefineContextsSpec extends Specification {
 
     var i = 0
     implicit val before: Context = new Before { def before = i = 0 }
-
   }
 
   /**
@@ -105,7 +104,8 @@ class DefineContextsSpec extends Specification {
 
   def println(s: String) = s // change this definition to see messages in the console
 
-  def is = new BeforeSpec ^
+  def is = sequential^
+           new BeforeSpec ^
            new BeforeWithImplicitContextSpec ^
            new OutsideWithImplicitContextSpec ^
            new BeforeMutableSpec ^
