@@ -46,12 +46,12 @@ trait FragmentExecution {
     case Example(FormMarkup(form), _)     => {
       val timer = new SimpleTimer().start
       val executed = if (arguments.plan) form else form.executeForm
-      lazy val result = executed.execute
+      val result = executed.execute
       ExecutedResult(FormMarkup(executed), result, timer.stop, f.location, Stats(result))
     }
 	  case e @ Example(s, _)     => {
       val timer = new SimpleTimer().start
-      lazy val result = executeBody(e.execute)
+      val result = executeBody(e.execute)
       ExecutedResult(s, result, timer.stop, f.location, Stats(result))
     }
 	  case Text(s)                       => ExecutedText(s, f.location)
