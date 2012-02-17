@@ -86,7 +86,7 @@ case class ExecutedEnd(location: Location = new Location) extends ExecutedStanda
 case class ExecutedTab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment
 case class ExecutedBacktab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment
 
-case class ExecutedSpecStart(start: SpecStart, location: Location = new Location, stats: Stats = Stats()) extends ExecutedFragment {
+case class ExecutedSpecStart(start: SpecStart, location: Location = new Location, stats: Stats = Stats().startTimer) extends ExecutedFragment {
   
   def isSeeOnlyLink = start.isSeeOnlyLink
   def isIncludeLink = start.isIncludeLink

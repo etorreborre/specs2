@@ -62,6 +62,8 @@ case class Stats(examples:     Int = 0,
   def hasErrors = result.isError
   /** @return the execution time */
   def time = timer.time
+  /** @return the same stats but with a started timer */
+  def startTimer = copy(timer = timer.start)
   /**
    * @return the xml representation of the statistics. Omit the attributes with 0 as a value for conciseness
    */
