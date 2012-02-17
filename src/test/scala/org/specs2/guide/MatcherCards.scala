@@ -280,21 +280,21 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
  * `beEqualToIgnoringSpace` can also do an ordered comparison
  `<a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered`
 
- * `\` is an XPath-like matcher matching if a node is a direct child of another
- `<a><b/></a> must \("b")`
+ * <code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another
+ <code class="prettyprint"><a><b/></a> must \("b")</code>
 
  * You can also check attribute names
- `<a><b name="value"></b></a> must \("b", "name")`
+ <code class="prettyprint"><a><b name="value"></b></a> must \("b", "name")</code>
 
  * And attribute names and values as well
- `<a><b n="v" n2="v2" n3="v3"></b></a> must \("b", "n"->"v", "n2"->"v2")`
+ <code class="prettyprint"><a><b n="v" n2="v2" n3="v3"></b></a> must \("b", "n"->"v", "n2"->"v2")</code>
 
  * Or the content of a `Text` node
- `<a>hello</a> must \("a") \> "hello"` (alias `textIs`)
- `<a>hello</a> must \("a") \>~ "h.*"`  (alias `textMatches`)
+ <code class="prettyprint"><a>hello</a> must \("a") \> "hello"</code> (alias `textIs`)
+ <code class="prettyprint"><a>hello</a> must \("a") \>~ "h.*"</code>  (alias `textMatches`)
 
- * The equivalent of `\` for a "deep" match is simply `\\`
- `<a><s><c></c></s></a> must \\("c")`
+ * The equivalent of `\` for a "deep" match is simply <code class="prettyprint">\\</code>
+ <code class="prettyprint"><a><s><c></c></s></a> must \\("c")</code>
 """
 }
 
