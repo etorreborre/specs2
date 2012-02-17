@@ -120,5 +120,5 @@ releaseProcess <<= thisProjectRef apply { ref =>
 
 seq(lsSettings :_*)
 
-(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8")
+(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8.1")
 
