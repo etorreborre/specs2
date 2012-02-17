@@ -66,8 +66,10 @@ trait DefaultSequence {
    */
   protected def copyBody(name: SpecName, e: Example, index: Int) = {
     SpecificationStructure.createSpecificationOption(name.javaClassName).map { specification =>
-      specification.is.fragments(index) match {
-        case Example(_, body) => body()
+      val fragments = specification.is.fragments
+      def executeStepsBefore(n: Int) = fragments.zipWithIndex.collect { case (s @ Step(_), i) if (i < n) => s.execute }
+      fragments(index) match {
+        case Example(_, body) => executeStepsBefore(index); body()
         case other            => e.body()
       }
     }.getOrElse(e.body())
