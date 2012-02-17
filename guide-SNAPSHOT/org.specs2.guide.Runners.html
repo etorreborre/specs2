@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Runners guide</title><a name="Runners+guide"><h2 specId="23228733">Runners guide</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
+    </head><body><div id="container"><title>Runners guide</title><a name="Runners+guide"><h2 specId="1223311608">Runners guide</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
 <ul>
   <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li>
   <li>on the command line, with a html output, and the <code class="prettyprint">specs2.html</code> runner</li>
@@ -68,7 +68,7 @@
   <li>using <a href="http://www.junit.org">JUnit</a></li>
   <li>using <a href="http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA">Intellij IDEA</a></li>
   <li>using your own reporting tool implementing the <code class="prettyprint">Notifier</code> interface</li>
-</ul><a name="Dependencies"><h3>Dependencies</h3></a><p><strong><em>specs2</em></strong> is available for Scala 2.9.0 onwards and uses the following libraries, as specified using the <a href="http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies">sbt dsl</a>:</p><p><table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; %% &quot;specs2-scalaz-core&quot; % &quot;6.0.1&quot;</code></td><td class="info">mandatory. This jar bundles the scalaz classes but renamed as <code class="prettyprint">org.specs2.internal.scalaz._</code>.</td></tr><tr><td class="info"> <code class="prettyprint">&quot;org.scala-tools.testing&quot; %% &quot;scalacheck&quot; % &quot;1.9&quot;</code></td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.mockito&quot; % &quot;mockito-all&quot; % &quot;1.9.0&quot;</code></td><td class="info">only if using Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.hamcrest&quot; % &quot;hamcrest-all&quot; % &quot;1.1&quot;</code></td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;junit&quot; % &quot;junit&quot; % &quot;4.7&quot;</code></td><td class="info">only if using JUnit</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-tools.testing&quot; % &quot;test-interface&quot; % &quot;0.5&quot;</code></td><td class="info">provided by sbt when using it</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.pegdown&quot; % &quot;pegdown&quot; % &quot;1.0.2&quot;</code></td><td class="info">only if using the html runner</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; % &quot;classycle_2.9.1&quot; % &quot;1.4&quot;</code></td><td class="info">only if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % &quot;2.9.1&quot;</code></td><td class="info">only if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait with the <code class="prettyprint">CompilerDependencyFinder</code> trait</td></tr></table></p><p><strong>Note</strong>: there are versions of specs2 available for Scala 2.8.1 but they <a href="org.specs2.guide.SpecStructure.html#In+a+mutable+specification">miss some &quot;context&quot; functionalities</a>.</p><a name="Arguments"><h3>Arguments</h3></a><p>You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the <code class="prettyprint">args(name=value)</code> syntax:</p>
+</ul><a name="Dependencies"><h3>Dependencies</h3></a><p><strong><em>specs2</em></strong> is available for Scala 2.9.0 onwards and uses the following libraries, as specified using the <a href="http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies">sbt dsl</a>:</p><p><table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; %% &quot;specs2-scalaz-core&quot; % &quot;6.0.1&quot;</code></td><td class="info">mandatory. This jar bundles the scalaz classes but renamed as <code class="prettyprint">org.specs2.internal.scalaz._</code>.</td></tr><tr><td class="info"> <code class="prettyprint">&quot;org.scala-tools.testing&quot; %% &quot;scalacheck&quot; % &quot;1.9&quot;</code></td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.mockito&quot; % &quot;mockito-all&quot; % &quot;1.9.0&quot;</code></td><td class="info">only if using Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.hamcrest&quot; % &quot;hamcrest-all&quot; % &quot;1.1&quot;</code></td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;junit&quot; % &quot;junit&quot; % &quot;4.7&quot;</code></td><td class="info">only if using JUnit</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-tools.testing&quot; % &quot;test-interface&quot; % &quot;0.5&quot;</code></td><td class="info">provided by sbt when using it</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.pegdown&quot; % &quot;pegdown&quot; % &quot;1.0.2&quot;</code></td><td class="info">only if using the html runner</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; % &quot;classycle&quot; % &quot;1.4.1&quot;</code></td><td class="info">only if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % &quot;2.9.1&quot;</code></td><td class="info">only if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait with the <code class="prettyprint">CompilerDependencyFinder</code> trait</td></tr></table></p><p><strong>Note</strong>: there are versions of specs2 available for Scala 2.8.1 but they <a href="org.specs2.guide.SpecStructure.html#In+a+mutable+specification">miss some &quot;context&quot; functionalities</a>.</p><a name="Arguments"><h3>Arguments</h3></a><p>You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the <code class="prettyprint">args(name=value)</code> syntax:</p>
 <pre><code class="prettyprint">  class MySpec extends Specification { def is = args(xonly=true)    ^
     &quot;Clever spec title&quot;                                             ^
     &quot;this will not be indented&quot;                                     ^
@@ -139,6 +139,11 @@
       <td><em><code class="prettyprint">sequential</code></em> </td>
       <td>false </td>
       <td>don't execute examples concurrently</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">isolated</code></em> </td>
+      <td>false </td>
+      <td>execute each example in its own specification to get &quot;fresh&quot; local variables</td>
     </tr>
     <tr>
       <td><code class="prettyprint">threadsNb</code> </td>
@@ -279,6 +284,11 @@
     <tr>
       <td><code class="prettyprint">sequential</code> </td>
       <td><code class="prettyprint">args(sequential=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">isolated</code> </td>
+      <td><code class="prettyprint">args(isolated=true)</code> </td>
       <td> </td>
     </tr>
     <tr>
@@ -462,6 +472,11 @@
     </tr>
     <tr>
       <td><code class="prettyprint">sequential</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">isolated</code> </td>
       <td>boolean </td>
       <td> </td>
     </tr>
@@ -765,8 +780,8 @@
   scala&gt; specs2.run(spec1)
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="13691750"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="3401981"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1757655732"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="811372905"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -776,7 +791,7 @@
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
             
           </li></ul>
-          </li><li id="31753516"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+          </li><li id="1747891131"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -818,6 +833,8 @@
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Conversions">Conversions</a>
             
           </li></ul>
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#DataTables">DataTables</a>
+            
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Shared+examples">Shared examples</a>
             
@@ -852,6 +869,8 @@
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Variables+isolation">Variables isolation</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Scope">Scope</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#isolated+variables">isolated variables</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#With+acceptance+specifications">With acceptance specifications</a>
             
@@ -900,7 +919,7 @@
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
             
           </li></ul>
-          </li><li id="9001090"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          </li><li id="1898122243"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -964,7 +983,7 @@
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="29963093"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="122666920"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1008,7 +1027,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="23228733"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          </li><li id="1223311608"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1068,7 +1087,7 @@
           </li><li id=""><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
             
           </li></ul>
-          </li><li id="9730579"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1059482072"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1112,7 +1131,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="4037747"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          </li><li id="343317966"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1132,5 +1151,5 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['13691750','23228733'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1757655732','1223311608'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

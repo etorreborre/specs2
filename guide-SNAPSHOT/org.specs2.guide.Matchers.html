@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Matchers guide</title><a name="Matchers+guide"><h2 specId="9001090">Matchers guide</h2></a><status class="ok"><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+    </head><body><div id="container"><title>Matchers guide</title><a name="Matchers+guide"><h2 specId="1898122243">Matchers guide</h2></a><status class="ok"><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -820,22 +820,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
        (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
     }
   }
-</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><p>DataTables are generally used to pack lots of expectations inside one example. In that case the table is only displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:</p>
-<pre><code class="prettyprint">  class DataTableSpec extends Specification with DataTables { def is =
-
-    &quot;adding integers should just work in scala&quot;  ^ {
-      &quot;a&quot;   | &quot;b&quot; | &quot;c&quot; |
-       2    !  2  !  4  |
-       1    !  1  !  2  |&gt; {
-       (a, b, c) =&gt;  a + b must_== c
-    }
-  }
-</code></pre><p>This specification will be rendered as:</p>
-<pre><code class="prettyprint">    adding integers should just work in scala
-    +  a | b | c |
-       2 | 2 | 4 |
-       1 | 1 | 2 |
-</code></pre><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="29963093"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Reusing+matchers+outside+of+specs2"><h3>Reusing matchers outside of specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="122666920"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Reusing+matchers+outside+of+specs2"><h3>Reusing matchers outside of specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -851,8 +836,8 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
   }
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="13691750"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="3401981"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1757655732"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="811372905"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -862,7 +847,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
             
           </li></ul>
-          </li><li id="31753516"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+          </li><li id="1747891131"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -904,6 +889,8 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Conversions">Conversions</a>
             
           </li></ul>
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#DataTables">DataTables</a>
+            
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Shared+examples">Shared examples</a>
             
@@ -938,6 +925,8 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Variables+isolation">Variables isolation</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Scope">Scope</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#isolated+variables">isolated variables</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#With+acceptance+specifications">With acceptance specifications</a>
             
@@ -986,7 +975,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
             
           </li></ul>
-          </li><li id="9001090"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          </li><li id="1898122243"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1050,7 +1039,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="29963093"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="122666920"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1094,7 +1083,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
             
           </li></ul>
           </li></ul>
-          </li><li id="23228733"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          </li><li id="1223311608"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1154,7 +1143,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
             
           </li></ul>
-          </li><li id="9730579"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1059482072"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1198,7 +1187,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
             
           </li></ul>
           </li></ul>
-          </li><li id="4037747"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          </li><li id="343317966"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1218,5 +1207,5 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['13691750','9001090'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1757655732','1898122243'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

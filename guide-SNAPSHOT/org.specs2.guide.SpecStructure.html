@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"><h2 specId="31753516">Specification structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this chapter you will learn how to:</p>
+    </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"><h2 specId="1747891131">Specification structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this chapter you will learn how to:</p>
 <ul>
   <li>declare examples</li>
   <li>share examples</li>
@@ -292,6 +292,21 @@
   }
   // thenX can be reused as a Then[Y] step because Y &lt;: X
   val thenY: Then[Y] = thenX
+</code></pre><a name="DataTables"><h4>DataTables</h4></a><p><a href="http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#DataTables">DataTables</a> are generally used to pack lots of expectations inside one example. A DataTable which is used as a <code class="prettyprint">Result</code> in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:</p>
+<pre><code class="prettyprint">  class DataTableSpec extends Specification with DataTables { def is =
+
+    &quot;adding integers should just work in scala&quot;  ^ {
+      &quot;a&quot;   | &quot;b&quot; | &quot;c&quot; |
+       2    !  2  !  4  |
+       1    !  1  !  2  |&gt; {
+       (a, b, c) =&gt;  a + b must_== c
+    }
+  }
+</code></pre><p>This specification will be rendered as:</p>
+<pre><code class="prettyprint">    adding integers should just work in scala
+    +  a | b | c |
+       2 | 2 | 4 |
+       1 | 1 | 2 |
 </code></pre><a name="Shared+examples"><h3>Shared examples</h3></a><p>In a given specification some examples may look similar enough that you would like to &quot;factor&quot; them out and share them between<br />different parts of your specification. The best example of this situation is a specification for a Stack of limited size:</p>
 <pre><code class="prettyprint">    class StackSpec extends Specification { def is =
       &quot;Specification for a Stack with a limited capacity&quot;.title                 ^
@@ -547,9 +562,28 @@ include(xonly, resetTextIndentation)         ^
 
    /** the `trees` context */
    trait trees extends Scope {
-     val tree = createATreeWith4Nodes
+     val tree = new Tree(1, 2, 3, 4)
    }
-</code></pre><p>Each example of that specification gets a new instance of the <code class="prettyprint">trees</code> trait. So it will have a brand new <code class="prettyprint">tree</code> variable and even if this data is mutated by an example, other examples will be isolated from these changes.</p><a name="Scope"><h5><code class="prettyprint">Scope</code></h5></a><p>You might wonder why the <code class="prettyprint">trees</code> trait is extending the <code class="prettyprint">org.specs2.specification.Scope</code> trait? The reason is that the body of an Example only accepts objects which are convertible to a <code class="prettyprint">Result</code>. By extending <code class="prettyprint">Scope</code> we can take advantage of an implicit conversion provided by the <code class="prettyprint">Specification</code> trait to convert our context object to a <code class="prettyprint">Result</code>.</p><a name="With+acceptance+specifications"><h5>With acceptance specifications</h5></a><p>The same kind of variable isolation can be achieved in acceptance specifications by using case classes:</p>
+</code></pre><p>Each example of that specification gets a new instance of the <code class="prettyprint">trees</code> trait. So it will have a brand new <code class="prettyprint">tree</code> variable and even if this data is mutated by an example, other examples will be isolated from these changes.</p><a name="Scope"><h5><code class="prettyprint">Scope</code></h5></a><p>You might wonder why the <code class="prettyprint">trees</code> trait is extending the <code class="prettyprint">org.specs2.specification.Scope</code> trait? The reason is that the body of an Example only accepts objects which are convertible to a <code class="prettyprint">Result</code>. By extending <code class="prettyprint">Scope</code> we can take advantage of an implicit conversion provided by the <code class="prettyprint">Specification</code> trait to convert our context object to a <code class="prettyprint">Result</code>.</p><p>Scopes are a way to create a &quot;fresh&quot; object and associated variables for each example being executed. The advantages are that:</p>
+<ul>
+  <li>those classes can be reused and extended</li>
+  <li>the execution behavior only relies on language constructs</li>
+</ul><p>However, sometimes, we wish to go for a more concise way of getting fresh variables, without having to create a specific trait to encapsulate them. That's what the <code class="prettyprint">isolated</code> argument is for.</p><a name="isolated+variables"><h5><code class="prettyprint">isolated</code> variables</h5></a><p>The <code class="prettyprint">isolated</code> argument changes the execution method so that each example is executed in a brand new instance of the Specification:</p>
+<pre><code class="prettyprint">   class IsolatedSpec extends mutable.Specification {
+     isolated
+
+     &quot;Each example should be executed in isolation&quot; &gt;&gt; {
+
+       val tree = new Tree(1, 2, 3, 4)
+       &quot;the first example modifies the tree&quot; &gt;&gt; {
+         tree.removeNodes(2, 3) must have size(2)
+       }
+       &quot;the second example gets an unmodified version of the tree&quot; &gt;&gt; {
+         tree.removeNodes(2, 3, 4) must have size(1)
+       }
+     }
+   }
+</code></pre><p>Since there is a new Specification for each example, then all the variables accessible to the example will be seen as new.</p><p><em>Note</em>: this technique will not work if the Specification is defined with a constructor having parameters because it won't be possible to create a new instance.</p><a name="With+acceptance+specifications"><h5>With acceptance specifications</h5></a><p>The same kind of variable isolation can be achieved in acceptance specifications by using case classes:</p>
 <pre><code class="prettyprint">   class ContextSpec extends Specification { def is =
      &quot;this is the first example&quot; ! trees().e1 ^
      &quot;this is the first example&quot; ! trees().e2
@@ -582,7 +616,7 @@ include(xonly, resetTextIndentation)         ^
      }
    }
 
-   trait trees {
+   trait trees extends Scope {
      setupDB
      lazy val tree = getATreeWith4NodesFromTheDatabase
    }
@@ -922,8 +956,8 @@ val init = withFile() compose withDatabase()
   <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt; &gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
 </ul>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="13691750"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="3401981"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1757655732"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="811372905"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -933,7 +967,7 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
             
           </li></ul>
-          </li><li id="31753516"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+          </li><li id="1747891131"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -975,6 +1009,8 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Conversions">Conversions</a>
             
           </li></ul>
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#DataTables">DataTables</a>
+            
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Shared+examples">Shared examples</a>
             
@@ -1009,6 +1045,8 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Variables+isolation">Variables isolation</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Scope">Scope</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#isolated+variables">isolated variables</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#With+acceptance+specifications">With acceptance specifications</a>
             
@@ -1057,7 +1095,7 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
             
           </li></ul>
-          </li><li id="9001090"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          </li><li id="1898122243"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1121,7 +1159,7 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="29963093"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="122666920"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1165,7 +1203,7 @@ val init = withFile() compose withDatabase()
             
           </li></ul>
           </li></ul>
-          </li><li id="23228733"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          </li><li id="1223311608"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1225,7 +1263,7 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
             
           </li></ul>
-          </li><li id="9730579"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1059482072"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1269,7 +1307,7 @@ val init = withFile() compose withDatabase()
             
           </li></ul>
           </li></ul>
-          </li><li id="4037747"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          </li><li id="343317966"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1289,5 +1327,5 @@ val init = withFile() compose withDatabase()
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['13691750','31753516'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1757655732','1747891131'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
