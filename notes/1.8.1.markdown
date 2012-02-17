@@ -1,0 +1,6 @@
+This version fixes 2 issues on top of 1.8:
+
+ * fixed issue 60: contention when examples are executed concurrently. This should speed-up the specification execution significantly.
+ * coloring of text with skipped examples having a multi-line description
+ 
+ ==========================
