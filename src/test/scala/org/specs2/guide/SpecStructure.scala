@@ -395,6 +395,27 @@ Given / When / Then steps are invariant in their type parameters. This might be 
       // thenX can be reused as a Then[Y] step because Y <: X
       val thenY: Then[Y] = thenX
 
+#### DataTables
+
+[DataTables](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#DataTables) are generally used to pack lots of expectations inside one example. A DataTable which is used as a `Result` in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:
+
+      class DataTableSpec extends Specification with DataTables { def is =
+
+        "adding integers should just work in scala"  ^ {
+          "a"   | "b" | "c" |
+           2    !  2  !  4  |
+           1    !  1  !  2  |> {
+           (a, b, c) =>  a + b must_== c
+        }
+      }
+
+This specification will be rendered as:
+
+        adding integers should just work in scala
+        +  a | b | c |
+           2 | 2 | 4 |
+           1 | 1 | 2 |
+
 ### Shared examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
