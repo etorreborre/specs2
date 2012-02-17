@@ -2,12 +2,15 @@ package org.specs2
 package matcher
 import execute._
 import specification._
+import java.util.regex.Pattern
 
 class StringMatchersSpec extends Specification {  def is =
   
   "A string can be matched against a pattern using"                                                                     ^
     "beMatching"                                                                                                        ^
     { "eric" must beMatching("e.*") }                                                                                   ^
+    { "eric" must beMatching(Pattern.compile("e.*")) }                                                                  ^
+    { "eric" must beMatching("e.*".r) }                                                                                 ^
                                                                                                                         p^
     "or 'be matching'"                                                                                                  ^
     { "eric" aka "ETO" must be matching("e.*") }                                                                        ^
@@ -16,6 +19,7 @@ class StringMatchersSpec extends Specification {  def is =
     "find ... withGroups, to check for groups"                                                                          ^
     { "erirec" must find("(e|i).").withGroups("e", "i", "e") }                                                          ^
     { "abcd" must find("(a.)(c.)").withGroups("ab", "cd") }                                                             ^
+    { "abcd" must find("(a.)(c.)".r).withGroups("ab", "cd") }                                                           ^
                                                                                                                         endp^
   "The length of a string can be checked"                                                                               ^
     "with have length"                                                                                                  ^
