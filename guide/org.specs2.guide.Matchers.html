@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Matchers guide</title><a name="Matchers+guide"><h2 specId="1517350369">Matchers guide</h2></a><status class="ok"><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+    </head><body><div id="container"><title>Matchers guide</title><a name="Matchers+guide"><h2 specId="2036806253">Matchers guide</h2></a><status class="ok"><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -307,9 +307,9 @@
 <ul>
   <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> compares 2 Nodes, without considering spaces<br /> <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code><br /> <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code></p></li>
   <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> can also do an ordered comparison<br /> <code class="prettyprint">&lt;a&gt;&lt;c/&gt; &lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;c/&gt;&lt;b/&gt;&lt;/a&gt;).ordered</code></p></li>
-  <li><p><code class="prettyprint">\\</code> is an XPath-like matcher matching if a node is a direct child of another<br /> <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must \\(&quot;b&quot;)</code></p></li>
-  <li><p>You can also check attribute names<br /> <code class="prettyprint">&lt;a&gt;&lt;b name=&quot;value&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \\(&quot;b&quot;, &quot;name&quot;)</code></p></li>
-  <li><p>And attribute names and values as well<br /> <code class="prettyprint">&lt;a&gt;&lt;b n=&quot;v&quot; n2=&quot;v2&quot; n3=&quot;v3&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \\(&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v2&quot;)</code></p></li>
+  <li><p><code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another<br /> <code class="prettyprint"><a><b></b></a> must \(&quot;b&quot;)</code></p></li>
+  <li><p>You can also check attribute names<br /> <code class="prettyprint"><a><b name="value"></b></a> must \(&quot;b&quot;, &quot;name&quot;)</code></p></li>
+  <li><p>And attribute names and values as well<br /> <code class="prettyprint"><a><b n3="v3" n2="v2" n="v"></b></a> must \(&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v2&quot;)</code></p></li>
   <li><p>Or the content of a <code class="prettyprint">Text</code> node<br /> <code class="prettyprint"><a>hello</a> must \(&quot;a&quot;) \&gt; &quot;hello&quot;</code> (alias <code class="prettyprint">textIs</code>)<br /> <code class="prettyprint"><a>hello</a> must \(&quot;a&quot;) \&gt;~ &quot;h.*&quot;</code> (alias <code class="prettyprint">textMatches</code>)</p></li>
   <li><p>The equivalent of <code class="prettyprint">\\</code> for a &quot;deep&quot; match is simply <code class="prettyprint">\\</code><br /> <code class="prettyprint"><a><s><c></c></s></a> must \\(&quot;c&quot;)</code></p></li>
 </ul></td></tr>
@@ -835,7 +835,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
     +  a | b | c |
        2 | 2 | 4 |
        1 | 1 | 2 |
-</code></pre><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1294592891"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Reusing+matchers+outside+of+specs2"><h3>Reusing matchers outside of specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</code></pre><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1561345611"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Reusing+matchers+outside+of+specs2"><h3>Reusing matchers outside of specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -851,8 +851,8 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
   }
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="663270470"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1941423252"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="627727968"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1972600863"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -862,7 +862,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
             
           </li></ul>
-          </li><li id="620783299"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+          </li><li id="427553241"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -986,7 +986,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
             
           </li></ul>
-          </li><li id="1517350369"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          </li><li id="2036806253"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1050,7 +1050,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1294592891"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1561345611"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1094,7 +1094,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
             
           </li></ul>
           </li></ul>
-          </li><li id="708416369"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          </li><li id="1404967249"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1154,7 +1154,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li><li id=""><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
             
           </li></ul>
-          </li><li id="1853218270"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="229828143"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1198,7 +1198,7 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
             
           </li></ul>
           </li></ul>
-          </li><li id="1872312224"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          </li><li id="1477209750"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1218,5 +1218,5 @@ val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['663270470','1517350369'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['627727968','2036806253'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
