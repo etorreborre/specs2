@@ -843,7 +843,7 @@ If you want to run some code before or after each example, the `Before` and `Aft
          }
        }
 
-       trait trees {
+       trait trees extends Scope {
          setupDB
          lazy val tree = getATreeWith4NodesFromTheDatabase
        }
