@@ -757,7 +757,7 @@ val init = withFile() compose withDatabase()
 </code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="Other+unit+specification+methods"><h3>Other unit specification methods</h3></a><p>Other methods can be used to create fragments in a unit specification:</p>
 <ul>
   <li><code class="prettyprint">can</code> to create a group of Examples, with the preceding Text fragment appended with <code class="prettyprint">can</code></li>
-  <li><code class="prettyprint">&gt; &gt;</code> to create an Example or a group of Examples (with no appended text)</li>
+  <li><code class="prettyprint">&gt;&gt;</code> to create an Example or a group of Examples (with no appended text)</li>
   <li><code class="prettyprint">&quot;My spec title&quot;.title</code> to give a title to the Specification</li>
   <li><code class="prettyprint">args(...)</code> to create arguments for the specification</li>
   <li><code class="prettyprint">textFragment(s)</code> to create a <code class="prettyprint">Text</code> fragment</li>
@@ -919,7 +919,7 @@ val init = withFile() compose withDatabase()
   <li><code class="prettyprint">org.specs2.matcher.NoShouldExpectations</code>: deactivate the <code class="prettyprint">should</code>, <code class="prettyprint">should_==</code>,... methods on any value of type <code class="prettyprint">T</code></li>
   <li><code class="prettyprint">org.specs2.specification.NoBooleanAutoExamples</code>: deactivate the conversions from <code class="prettyprint">Boolean</code> to <code class="prettyprint">Fragment</code> or <code class="prettyprint">Example</code>, which allows to use the <code class="prettyprint">^</code> method on booleans for example</li>
   <li><code class="prettyprint">org.specs2.specification.NoFragmentsBuilder</code>: deactivate the implicit conversions from <code class="prettyprint">String</code> to <code class="prettyprint">Fragment</code>s</li>
-  <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt; &gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
+  <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt;&gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
 </ul>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
       <ul><li id="627727968"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
