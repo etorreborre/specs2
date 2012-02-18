@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import util.parsing.combinator.RegexParsers
-import ParsersUnderTest.{ number, error }
+import ParsersUnderTest.{ number, anyNumber, error }
 
 class ParserMatcherSpec extends Specification with ParserMatchers { def is =
                                                                                                                                   """
@@ -14,6 +14,7 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   { number("i") must not be aSuccess }                                                                                            ^
   { number must succeedOn("12ab").partially }                                                                                     ^
   { number must succeedOn("12").withResult(12) }                                                                                  ^
+  { anyNumber must succeedOn("12").withResult(12) }                                                                               ^
   { number must succeedOn("12ab").partially.withResult(12) }                                                                      ^
   { number must succeedOn("12").withResult(equalTo(12)) }                                                                         ^
   { number must not succeedOn("abc") }                                                                                            ^
@@ -59,6 +60,9 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
 object ParsersUnderTest extends RegexParsers {
   /** parse a number with any number of digits */
   val number: Parser[Int] = """\d+""".r ^^ {_.toInt}
+
+  /** parse a number as Any - see issue 63 */
+  val anyNumber: Parser[Any] = """\d+""".r ^^ {_.toInt}
 
   /** this parser returns an error */
   val error: Parser[String] = err("Error")

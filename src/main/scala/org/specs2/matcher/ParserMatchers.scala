@@ -88,7 +88,7 @@ trait ParserBaseMatchers {
         val pResult = parseResult(s.value)
         lazy val resultMatcherResult: MatchResult[ParseResult[T]] = pResult match {
           case PSuccess(result, _) => resultMatcher(Expectable(result)).map(_ => pResult)
-          case _ => MatchFailure("Parse succeeded", "Parse didn't succeed", s.map(pResult))
+          case _                   => MatchFailure("Parse succeeded", "Parse didn't succeed", s.map(pResult))
         }
 
         (apply0(Expectable(pResult)) and resultMatcherResult).map(_ => s.value)
@@ -184,7 +184,7 @@ trait ParserBeHaveMatchers { outer: ParserBaseMatchers =>
 
 }
 /** This class is only used as a transient holder for the expected parsed value, to overcome overloaded method issues */
-case class ExpectedParsedResult[T](t: T) {
+case class ExpectedParsedResult[+T](t: T) {
   override def toString = t.toString
 }
 object ExpectedParsedResult {
