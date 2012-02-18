@@ -3,6 +3,10 @@ package examples
 import _root_.examples.SizedStack
 import specification._
 
+/**
+ * This is another way to write the StackSpec, this time using auto-examples and
+ * the "isolated" argument in order to be able to use local variables safely for a group of examples
+ */
 class Stack2Spec extends Specification { def is =                            isolated ^
                                                                              p^
     "A Stack with limited capacity can either be:"                           ^ endp^
