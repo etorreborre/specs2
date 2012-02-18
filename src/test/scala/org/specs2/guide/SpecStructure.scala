@@ -1144,7 +1144,7 @@ The `DatabaseSpec` above will insert, in each inherited specification, one `Step
 Other methods can be used to create fragments in a unit specification:
 
  * `can` to create a group of Examples, with the preceding Text fragment appended with `can`
- * <code>>></code> to create an Example or a group of Examples (with no appended text)
+ * <code class="prettyprint">>></code> to create an Example or a group of Examples (with no appended text)
  * `"My spec title".title` to give a title to the Specification
  * `args(...)` to create arguments for the specification
  * `textFragment(s)` to create a `Text` fragment
@@ -1334,7 +1334,7 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
  * `org.specs2.matcher.NoShouldExpectations`: deactivate the `should`, `should_==`,... methods on any value of type `T`
  * `org.specs2.specification.NoBooleanAutoExamples`: deactivate the conversions from `Boolean` to `Fragment` or `Example`, which allows to use the `^` method on booleans for example
  * `org.specs2.specification.NoFragmentsBuilder`: deactivate the implicit conversions from `String` to `Fragment`s
- * `org.specs2.specification.mutable.NoFragmentsBuilder`: deactivate the implicit conversions from to remove `in`, `>>`, `should` and `can` methods from `String`s
+ * `org.specs2.specification.mutable.NoFragmentsBuilder`: deactivate the implicit conversions from to remove `in`, <code class="prettyprint">>></code>, `should` and `can` methods from `String`s
 
   - - -
                                                                                                                         """^
