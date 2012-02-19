@@ -363,9 +363,15 @@ trait Extract {
   def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
     args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue).orElse(boolSystemProperty(name))
   }
-  def boolSystemProperty(name: String)(implicit sp: SystemProperties): Option[Boolean] = {
+
+  /**
+   * memoize the boolean properties to improve performances
+   */
+  private val booleanProperties = weakHashMapMemo[(String, SystemProperties), Option[Boolean]] { case (name, sp) =>
     sp.getPropertyAs[Boolean](name) orElse sp.getProperty(name).map(v => true)
   }
+  def boolSystemProperty(name: String)(implicit sp: SystemProperties): Option[Boolean] = booleanProperties(name, sp)
+
   def bool(name: String, negatedName: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
     bool(negatedName, false) orElse bool(name)
   }
@@ -377,7 +383,7 @@ trait Extract {
   }
   def value[T](name: String)(implicit args: Seq[String], sp: SystemProperties): Option[String] = value(name, identity _)
   def int(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Int] = {
-    tryo(value(name)(args, sp).map(_.toInt).get)
+    tryo(value(name)(args, sp).map(_.toInt)).getOrElse(None)
   }
 
 }
