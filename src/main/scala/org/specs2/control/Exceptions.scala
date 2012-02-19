@@ -63,9 +63,13 @@ trait Exceptions {
    * try to evaluate an expression and return it if nothing fails.
    * return ko otherwise
    */
-  def tryOrElse[T](a: =>T)(ko: T): T = {
-    tryo(a).map(identity).getOrElse(ko)
-  }
+  def tryOrElse[T](a: =>T)(ko: T): T = tryo(a).map(identity).getOrElse(ko)
+  /**
+   * try to evaluate an expression and return it in an Option if nothing fails.
+   * return None otherwise
+   */
+  def tryOrNone[T](a: =>T): Option[T] = tryo(a).orElse(None)
+
   /**
    * try to evaluate an expression and return ok if nothing fails.
    * return ko otherwise
