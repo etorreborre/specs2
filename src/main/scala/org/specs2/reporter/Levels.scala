@@ -29,21 +29,21 @@ import StandardFragments._
 private[specs2]
 case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
   /** @return the first block */
-  private def headOption = blocks.map(_._1).headOption
+  private lazy val headOption = blocks.map(_._1).headOption
   /** @return the last block */
-  private def lastOption = blocks.map(_._1).lastOption
+  private lazy val lastOption = blocks.map(_._1).lastOption
   /** @return the first level or zero */
-  private def firstLevel = blocks.map(_._2).headOption.getOrElse(0)
+  private lazy val firstLevel = blocks.map(_._2).headOption.getOrElse(0)
   /** @return the last level or zero */
-  private def lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
+  private lazy val lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
   /** @return the last level block in a Levels object */
   private def lastAsLevel = Levels(blocks.lastOption.toSeq)
   /** @return true if there are no blocks */
-  def isEmpty = blocks.isEmpty
+  lazy val isEmpty = blocks.isEmpty
   /** @return alias for the last level */
-  def level = levels.lastOption.getOrElse(0)
+  lazy val level = levels.lastOption.getOrElse(0)
   /** @return all the levels, post-processing them so that there is no negative value */
-  def allLevels = {
+  lazy val allLevels = {
     import NestedBlocks._
     def toNestedBlock(bl: (Block[T], Int)) = bl match {
       case (b @ Block(SpecStart(_,_,_,_)), l)       => BlockStart(Levels(Vector(bl)))
@@ -58,7 +58,7 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
     val all = summed.foldLeft(m.zero)(m append (_, _)).blocks
     all map { case (b, l) => if (l < 0) (b, 0) else (b, l) }
   }
-  def levels = allLevels.map(_._2)
+  lazy val levels = allLevels.map(_._2)
 
   /** @return the concatenation of 2 levels */
   def add(other: Levels[T]) = Levels(this.blocks ++ other.blocks)
@@ -73,7 +73,7 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
     Levels(breakAtFirstReset._2)
   }
 
-  /** =
+  /**
    * @return reset all the levels of all blocks by incrementing or decrementing the level 
    *         value
    */
@@ -82,7 +82,7 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
   /**
    * @return a Tree[T] based on the level of each block
    */
-  def toTree: Tree[T] = toTreeLoc.toTree
+  lazy val toTree: Tree[T] = toTreeLoc.toTree
 
   /**
    * map each node to another type given: the current type, the path from root (without the current node), the node number
@@ -105,7 +105,7 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
   /**
    * @return a TreeLoc[T] based on the level of each block
    */
-  def toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, parentsPath: Seq[T], i: Int) => Some(t))
+  lazy val toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, parentsPath: Seq[T], i: Int) => Some(t))
   /**
    * WARNING this method assumes that the Levels are not empty!!
    * 
