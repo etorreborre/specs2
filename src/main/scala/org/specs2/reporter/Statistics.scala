@@ -11,6 +11,7 @@ import time._
 import specification._
 import control.Exceptions._
 import scala.xml.NodeSeq
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * This trait computes the statistics of a Specification by mapping each ExecutedFragment
@@ -45,11 +46,11 @@ trait Statistics {
    * a list of 'current' stats for each fragment execution and the total statistics 
    * for the whole specification
    */
-  case class SpecsStatistics(fragments: Seq[ExecutedFragment] = Vector()) {
+  case class SpecsStatistics(fragments: Seq[ExecutedFragment] = ArrayBuffer()) {
     private implicit val statsMonoid = Stats.StatsMonoid
     
     /** @return the list of all current stats, with the total on each line */
-    def totals: Seq[Stats] = {
+    lazy val totals: Seq[Stats] = {
       import NestedBlocks._
 
       def toBlock(f: ExecutedFragment) = f match {
@@ -59,16 +60,16 @@ trait Statistics {
       }
       totalContext(fragments.map(toBlock))
     }
-    def total = totals.lastOption.getOrElse(Stats())
+    lazy val total = totals.lastOption.getOrElse(Stats())
   }
   case object SpecsStatistics {
-    def apply(current: ExecutedFragment) = new SpecsStatistics(Vector(current))
+    def apply(current: ExecutedFragment) = new SpecsStatistics(ArrayBuffer(current))
   }
 
   /**
    * The SpecsStats class just stores a list of stats, each one corresponding to a Fragment
    */
-  case class SpecStats(stats: Seq[Stats] = Vector()) {
+  case class SpecStats(stats: Seq[Stats] = ArrayBuffer()) {
     def last = stats.lastOption.getOrElse(Stats())
   }
   implicit def SpecStatsMonoid  = new Monoid[SpecStats] {
@@ -79,7 +80,7 @@ trait Statistics {
   }
 
   object StatsReducer extends Reducer[ExecutedFragment, SpecStats] {
-    override def unit(f: ExecutedFragment): SpecStats = SpecStats(Vector(f.stats))
+    override def unit(f: ExecutedFragment): SpecStats = SpecStats(ArrayBuffer(f.stats))
   }
 
 }
