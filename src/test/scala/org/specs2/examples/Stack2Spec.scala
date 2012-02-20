@@ -11,41 +11,31 @@ class Stack2Spec extends Specification { def is =                            iso
                                                                              p^
     "A Stack with limited capacity can either be:"                           ^ endp^
     "1. Empty"                                                               ^
-      "when the stack is empty"                                              ^
-      stackIsEmpty                                                           ^
-      { stack.size must_== 0 }                                               ^
+      "when the stack is empty"                                              ^ stackIsEmpty^
+      { stack must be empty }                                                ^
       { stack.top must throwA[NoSuchElementException] }                      ^
       { stack.pop must throwA[NoSuchElementException] }                      ^
                                                                              endp^
-    "2. Normal"                                                              ^
-      "when the stack is not empty and not full"                             ^
-      stackIsNormal                                                          ^
-      { stack.size must be_>(0) }                                            ^
-      { stack.top must_== stack.size }                                       ^
-      { stack.top; stack.top must_== stack.size }                            ^
-      { val top = stack.size; stack.pop must_== top }                        ^
-      { stack.pop; stack.top must_== stack.size  }                           ^
-      { stack.push(stack.size + 1);  stack.top must_== stack.size }          ^
+    "2. Non-empty and not full"                                              ^
+      "when the stack is not empty and not full"                             ^ stackIsNormal^
+      { stack must not be empty }                                            ^
+      { stack.top === normalStack.top; stack === normalStack }               ^
+      { stack.pop === normalStack.top; stack !== normalStack }               ^
+      { stack push 1; stack.top === 1; stack !== normalStack }               ^
                                                                              endp^
     "3. Full"                                                                ^
-      "when the stack is full"                                               ^
-      stackIsFull                                                            ^
-      { stack.size must be_>(0) }                                            ^
-      { stack.top must_== stack.size }                                       ^
-      { stack.top; stack.top must_== stack.size }                            ^
-      { val top = stack.size; stack.pop must_== top }                        ^
-      { stack.pop; stack.top must_== stack.size  }                           ^
-      { stack push (stack.size + 1) must throwAn[Error] }                    ^
+      "when the stack is full"                                               ^ stackIsFull^
+      { (stack push 1) must throwAn[Error] }                                 ^
                                                                              end
 
   /** stacks creation */
-  def stackIsEmpty  = Step(stack = empty)
-  def stackIsNormal = Step(stack = normal)
-  def stackIsFull   = Step(stack = full)
+  def stackIsEmpty  = Step(stack = emptyStack)
+  def stackIsNormal = Step(stack = normalStack)
+  def stackIsFull   = Step(stack = fullStack)
 
-  def empty  = SizedStack(maxCapacity = 10, size = 0)
-  def normal = SizedStack(maxCapacity = 10, size = 2)
-  def full   = SizedStack(maxCapacity = 10, size = 10)
+  def emptyStack  = SizedStack(maxCapacity = 10, size = 0)
+  def normalStack = SizedStack(maxCapacity = 10, size = 2)
+  def fullStack   = SizedStack(maxCapacity = 10, size = 10)
 
-  var stack: SizedStack = empty
+  var stack: SizedStack = emptyStack
 }
