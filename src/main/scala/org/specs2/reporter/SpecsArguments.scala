@@ -12,7 +12,7 @@ private[specs2]
 case class SpecsArguments[T](argumentsFragments: Seq[ApplicableArguments[T]] = Vector()) {
   def append(s2: SpecsArguments[T]) = SpecsArguments(argumentsFragments ++ s2.argumentsFragments)
 
-  def nestedArguments: Seq[Arguments] = {
+  lazy val nestedArguments: Seq[Arguments] = {
     import NestedBlocks._
     def toBlock(a: ApplicableArguments[T]) = a match {
       case StartOfArguments(_, _, args) => BlockStart(args)
@@ -23,11 +23,11 @@ case class SpecsArguments[T](argumentsFragments: Seq[ApplicableArguments[T]] = V
     overrideContext(argumentsFragments.map(toBlock _)).toSeq
   }
 
-  def last = nestedArguments.lastOption.getOrElse(Arguments())
+  lazy val last = nestedArguments.lastOption.getOrElse(Arguments())
   /**
    * @return the list of all applicable spec names
   */
-  def nestedSpecNames: Seq[SpecName] = {
+  lazy val nestedSpecNames: Seq[SpecName] = {
     import NestedBlocks._
     def toBlock(a: ApplicableArguments[T]) = a match {
       case StartOfArguments(_, name, _) => BlockStart(name)
@@ -47,22 +47,22 @@ case class SpecsArguments[T](argumentsFragments: Seq[ApplicableArguments[T]] = V
   /**
    * @return a list of pairs (fragment, argument) where argument is the applicable arguments for the current fragment)
    */
-  def fragmentAndApplicableArguments: Seq[(T, Arguments)] =
+  lazy val fragmentAndApplicableArguments: Seq[(T, Arguments)] =
     argumentsFragments.view.zip(nestedArguments).collect { case (ApplicableArguments(value), args) => (value, args) }
   /**
    * @return a list of pairs (fragment, specName) where specName is the parent specification
    */
-  def fragmentAndSpecNames: Seq[(T, SpecName)] = argumentsFragments.view.zip(nestedSpecNames).collect { case (ApplicableArguments(value), name) => (value, name) }
+  lazy val fragmentAndSpecNames: Seq[(T, SpecName)] = argumentsFragments.view.zip(nestedSpecNames).collect { case (ApplicableArguments(value), name) => (value, name) }
   /**
    * @return a list of triplets (fragment, argument, specName) where
    * argument is the applicable arguments for the current fragment and specName is the parent specification
    */
-  def fragmentAndApplicableArgumentsAndSpecNames: Seq[(T, Arguments, SpecName)] =
+  lazy val fragmentAndApplicableArgumentsAndSpecNames: Seq[(T, Arguments, SpecName)] =
     argumentsFragments.view.zip(nestedArguments).zip(nestedSpecNames).collect { case ((ApplicableArguments(value), args), name) => (value, args, name) }
   /**
    * @return a list of fragments without their corresponding arguments
    */
-  def fragments: Seq[T] = argumentsFragments.collect { case (ApplicableArguments(value)) => value }
+  lazy val fragments: Seq[T] = argumentsFragments.collect { case (ApplicableArguments(value)) => value }
 }
 
 private[specs2]

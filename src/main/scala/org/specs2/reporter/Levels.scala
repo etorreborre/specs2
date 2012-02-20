@@ -8,6 +8,7 @@ import main.Arguments
 import specification._
 import data.Trees._
 import StandardFragments._
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * This class computes the 'level' of a given fragment. It is used to indent Fragments in
@@ -27,17 +28,17 @@ import StandardFragments._
  * 
  */
 private[specs2]
-case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
+case class Levels[T](blocks: ArrayBuffer[(Block[T], Int)] = new ArrayBuffer[(Block[T], Int)]()) {
   /** @return the first block */
-  private lazy val headOption = blocks.map(_._1).headOption
+  private lazy val headOption = blocks.headOption.map(_._1)
   /** @return the last block */
-  private lazy val lastOption = blocks.map(_._1).lastOption
+  private lazy val lastOption = blocks.lastOption.map(_._1)
   /** @return the first level or zero */
-  private lazy val firstLevel = blocks.map(_._2).headOption.getOrElse(0)
+  private lazy val firstLevel = blocks.headOption.map(_._2).getOrElse(0)
   /** @return the last level or zero */
-  private lazy val lastLevel = blocks.map(_._2).lastOption.getOrElse(0)
+  private lazy val lastLevel = blocks.lastOption.map(_._2).getOrElse(0)
   /** @return the last level block in a Levels object */
-  private def lastAsLevel = Levels(blocks.lastOption.toSeq)
+  private lazy val lastAsLevel = new Levels(blocks.lastOption.map(o => ArrayBuffer(o)).getOrElse(ArrayBuffer()))
   /** @return true if there are no blocks */
   lazy val isEmpty = blocks.isEmpty
   /** @return alias for the last level */
@@ -46,11 +47,11 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
   lazy val allLevels = {
     import NestedBlocks._
     def toNestedBlock(bl: (Block[T], Int)) = bl match {
-      case (b @ Block(SpecStart(_,_,_,_)), l)       => BlockStart(Levels(Vector(bl)))
-      case (b @ Block(ExecutedSpecStart(_,_,_)), l) => BlockStart(Levels(Vector(bl)))
-      case (b @ Block(SpecEnd(_)), l)               => BlockEnd(Levels(Vector(bl)))
-      case (b @ Block(ExecutedSpecEnd(_,_,_)), l)   => BlockEnd(Levels(Vector(bl)))
-      case (b, l)                                   => BlockBit(Levels(Vector(bl)))
+      case (b @ Block(SpecStart(_,_,_,_)), l)       => BlockStart(Levels(ArrayBuffer(bl)))
+      case (b @ Block(ExecutedSpecStart(_,_,_)), l) => BlockStart(Levels(ArrayBuffer(bl)))
+      case (b @ Block(SpecEnd(_)), l)               => BlockEnd(Levels(ArrayBuffer(bl)))
+      case (b @ Block(ExecutedSpecEnd(_,_,_)), l)   => BlockEnd(Levels(ArrayBuffer(bl)))
+      case (b, l)                                   => BlockBit(Levels(ArrayBuffer(bl)))
     }
     import Levels._
     val summed = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T])
@@ -67,10 +68,14 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
    *         value, until a Reset block is met
    */
   def resetLevel(f: Int => Int) = {
-    val setLevel = (b: Block[T], l: Int) => (b, f(l))
-    val breakAtFirstReset = blocks.span(b => !isReset(b))
-    Levels(breakAtFirstReset._1).mapLevel(setLevel) add
-    Levels(breakAtFirstReset._2)
+
+    val resettedBlocks = blocks.foldLeft((true, new ArrayBuffer[(Block[T], Int)]())) { (res, cur) =>
+      val (beforeResetBlock, result) = res
+      val (block, level) = cur
+      if (beforeResetBlock && !isReset(block)) (true, result :+ (block,  f(level)))
+      else                                     (false, result :+ cur)
+    }._2
+    Levels(resettedBlocks)
   }
 
   /**
@@ -125,7 +130,7 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
       }
     }
   } 
-  private val isReset = (b: (Block[T], Int)) => b._1 match {
+  private val isReset = (b: Block[T]) => b match {
     case BlockReset(t) => true
     case other         => false
   }
@@ -149,7 +154,7 @@ case class Levels[T](blocks: Seq[(Block[T], Int)] = Vector()) {
 private[specs2]
 case object Levels {
   /** @return a new Levels object for one Block */
-  def apply[T](b: Block[T]) = new Levels(Vector((b, 0)))
+  def apply[T](b: Block[T]) = new Levels(ArrayBuffer((b, 0)))
   /** monoid for Levels */
   def LevelsMonoid[T] = new Monoid[Levels[T]] {
     def append(b1: Levels[T], b2: =>Levels[T]) =
