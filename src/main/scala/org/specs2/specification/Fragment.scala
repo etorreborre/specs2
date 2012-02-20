@@ -83,7 +83,9 @@ case class Text(t: String) extends Fragment {
  * - a description: some text, with possibly some markup annotations for rendering code fragments (used in AutoExamples)
  * - a body: some executable code returning a Result
  */
-case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable {
+case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable with Isolable {
+  val isolable = true
+
   def execute = body()
   override def matches(s: String) = desc.toString.removeAll("\n").removeAll("\r").matches(s)
   override def toString = "Example("+desc+")"
@@ -95,6 +97,9 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
       case _          => false
     }
   }
+
+  /** this fragment can not be executed in a separate specification */
+  def global = new Example(desc, body) { override val isolable = false }
 }
 
 case object Example {
@@ -114,11 +119,16 @@ case object Example {
  * @see the ContextSpec specification
  *
  */
-case class Step (step: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable {
+case class Step (step: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable with Isolable {
+  val isolable = true
+
   def execute = step.value
   override def toString = "Step"
 
   override def map(f: Result => Result) = Step(step map f)
+
+  /** this fragment can not be executed in a separate specification */
+  def global = new Step(step) { override val isolable = false }
 }
 case object Step {
   /** create a Step object from either a previous result, or a value to evaluate */
@@ -140,11 +150,16 @@ case object Step {
  *
  * It is only reported in case of a failure
  */
-case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable {
+case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable with Isolable {
+  val isolable = true
+
   def execute = action.value
   override def toString = "Action"
 
   override def map(f: Result => Result) = Action(action map f)
+
+  /** this fragment can not be executed in a separate specification */
+  def global = new Action(action) { override val isolable = false }
 }
 case object Action {
   /** create an Action object from any value */

@@ -6,6 +6,7 @@ import control.LazyParameters._
 import specification._
 import Fragments._
 import SpecsArguments._
+import execute.Result
 
 /**
  * The Sequence trait implements the logic for the fragments to execute according to their dependencies
@@ -54,8 +55,9 @@ trait DefaultSequence {
       val ((fragment, args, name), index) = fani
       if ((arguments <| args).isolated) {
         fragment match {
-          case e @ Example(_,_) => e.copy(body = () => copyBody(name, e, index))
-          case other            => other
+          case e @ Example(_,_) if e.isolable => e.copy(body = () => copyBody(name, e.body(), index))
+          case a @ Action(_) if a.isolable    => a.copy(action = lazyfy(copyBody(name, a.execute, index)))
+          case other                          => other
         }
       } else fragment
     }
@@ -64,15 +66,16 @@ trait DefaultSequence {
   /**
    * @return an Example which body comes from the execution of that example in a brand new instance of the Specification
    */
-  protected def copyBody(name: SpecName, e: Example, index: Int) = {
+  protected def copyBody(name: SpecName, body: =>Result, index: Int) = {
     SpecificationStructure.createSpecificationOption(name.javaClassName).map { specification =>
       val fragments = specification.is.fragments
-      def executeStepsBefore(n: Int) = fragments.zipWithIndex.collect { case (s @ Step(_), i) if (i < n) => s.execute }
+      def executeStepsBefore(n: Int) = fragments.zipWithIndex.collect { case (s @ Step(_), i) if i < n && s.isolable => s.execute }
       fragments(index) match {
-        case Example(_, body) => executeStepsBefore(index); body()
-        case other            => e.body()
+        case e @ Example(_, _) => executeStepsBefore(index); e.execute
+        case a @ Action(_)     => executeStepsBefore(index); a.execute
+        case other             => body
       }
-    }.getOrElse(e.body())
+    }.getOrElse(body)
   }
 
 
