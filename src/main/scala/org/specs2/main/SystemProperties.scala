@@ -3,6 +3,7 @@ package main
 import scala.collection.JavaConversions._
 import text.NotNullStrings._
 import text.FromString
+import java.util.regex.Pattern
 
 /**
  * Utility methods to get systems properties prefixed with specs2
@@ -33,10 +34,12 @@ trait SystemProperties {
 
   /** @return true if a property is defined */
   def isDefined(p: String) = getProperty(p).isDefined
+
   /** @return true if there is a property matching the regular expression */
-  def areDefined(pattern: String) = properties.keys.exists { p =>
-    (p matches pattern) ||
-    (p matches (specs2Prefix + pattern))
+  def areDefined(pattern: String) = {
+    val shortPattern  = Pattern.compile(pattern)
+    val specs2Pattern = Pattern.compile(specs2Prefix + pattern)
+    properties.keys.exists { prop => shortPattern.matcher(prop).matches || specs2Pattern.matcher(prop).matches }
   }
 }
 
