@@ -1,0 +1,5 @@
+This version adds some performance improvements on top of 1.8.1:
+
+ * if your specification has lots of examples, [it should now run really faster](http://bit.ly/yKJu3x).
+ 
+ ==========================

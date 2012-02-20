@@ -5,7 +5,7 @@ import ReleaseKeys._
 /** Project */
 name := "specs2"
 
-version := "1.8.1"
+version := "1.8.2"
 
 organization := "org.specs2"
 
@@ -120,5 +120,5 @@ releaseProcess <<= thisProjectRef apply { ref =>
 
 seq(lsSettings :_*)
 
-(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8.1")
+(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8.2")
 
