@@ -2,7 +2,7 @@ package org.specs2
 package examples
 import specification._
 
-class SlowFragsSpec extends Specification {
+class SlowFragsSpecification extends Specification {
 
   def is = "concatenating fragments is slow" ^ Fragments.createList(frags: _*)
 
