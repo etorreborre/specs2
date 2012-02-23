@@ -6,7 +6,6 @@ import Scalaz._
 import specification._
 import data.Trees._
 import StandardFragments._
-import scala.collection.mutable.ArrayBuffer
 
 /**
  * This class computes the 'level' of a given fragment. It is used to indent Fragments in
@@ -22,7 +21,7 @@ import scala.collection.mutable.ArrayBuffer
  *
  */
 private[specs2]
-case class Levels[T](private val levelsSeq: ArrayBuffer[Level[T]] = new ArrayBuffer[Level[T]]()) {
+case class Levels[T](private val levelsSeq: Vector[Level[T]] = Vector[Level[T]]()) {
   /** @return true if there are no levels */
   lazy val isEmpty = levelsSeq.isEmpty
   /** @return alias for the last level */
@@ -73,9 +72,9 @@ case class Levels[T](private val levelsSeq: ArrayBuffer[Level[T]] = new ArrayBuf
   lazy val toTreeLoc: TreeLoc[T] = toTreeLoc((t:T, parentsPath: Seq[T], i: Int) => Some(t))
   /**
    * WARNING this method assumes that the Levels are not empty!!
-   * 
+   *
    * @return a Tree[S] based on the level of each block, mapping each node to value of type
-   *         S and possibly skipping nodes, passing the numeric label of the current node. 
+   *         S and possibly skipping nodes, passing the numeric label of the current node.
    * @see JUnitDescriptions
    */
   def toTreeLoc[S](m: (T, Seq[S], Int) => Option[S]): TreeLoc[S] = {
@@ -88,7 +87,7 @@ case class Levels[T](private val levelsSeq: ArrayBuffer[Level[T]] = new ArrayBuf
         case None    => treeLoc
       }
     }
-  } 
+  }
 
   override def equals(a: Any) = {
     a match {
@@ -100,7 +99,7 @@ case class Levels[T](private val levelsSeq: ArrayBuffer[Level[T]] = new ArrayBuf
 private[specs2]
 case object Levels {
   /** @return a new Levels object for one Block */
-  def apply[T](b: Level[T]) = new Levels(ArrayBuffer(b))
+  def apply[T](b: Level[T]) = new Levels(Vector(b))
   /** Semigroup for Level[T] */
   implicit def LevelMonoid[T]: Monoid[Level[T]] = new Monoid[Level[T]] {
     def append(l1: Level[T], l2: =>Level[T]) = {
