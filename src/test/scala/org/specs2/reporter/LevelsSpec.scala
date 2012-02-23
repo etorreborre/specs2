@@ -54,6 +54,7 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
                                                                                                                         p^
   "The LevelBlocks monoid must respect the Monoid laws"                                                                 !
     LevelsMonoid.isMonoid                                                                                               ^
+    LevelMonoid.isMonoid                                                                                                ^
                                                                                                                         p^
   "A tree of fragments can be created from the leveled blocks"                                                          ^
     "for start ^ t1 ^ ex1 ^ ex2"                                                                                        ! tree().e1^
@@ -143,11 +144,15 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
 
   implicit def params = set(maxSize -> 5, minTestsOk -> 1000)
 
-  import Arbitrary._                                                                                       
+  import Arbitrary._
+
   implicit val arbitraryBlock: Arbitrary[Block[Fragment]] = Arbitrary {
-     for (f <- arbitrary[Fragment]) yield f
+    for (f <- arbitrary[Fragment]) yield f
   }
-  implicit val arbitraryBlocks: Arbitrary[Levels[Fragment]] = Arbitrary {
+  implicit val arbitraryOptionLevel: Arbitrary[Option[Level[Fragment]]] =
+    Arbitrary(arbitraryLevels.arbitrary.map(ls => ls.blocks.headOption))
+
+  implicit val arbitraryLevels: Arbitrary[Levels[Fragment]] = Arbitrary {
     
     def genBlockLevels(sz: Int) = for {
       l <- Gen.listOfN(sz, arbitrary[Block[Fragment]])

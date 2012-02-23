@@ -28,7 +28,7 @@ import scala.collection.mutable.ArrayBuffer
  * 
  */
 private[specs2]
-case class Levels[T](blocks: ArrayBuffer[(Block[T], Int)] = new ArrayBuffer[(Block[T], Int)]()) {
+case class Levels[T](blocks: ArrayBuffer[Level[T]] = new ArrayBuffer[Level[T]]()) {
   /** @return the first block */
   private lazy val headOption = blocks.headOption.map(_._1)
   /** @return the last block */
@@ -37,27 +37,27 @@ case class Levels[T](blocks: ArrayBuffer[(Block[T], Int)] = new ArrayBuffer[(Blo
   private lazy val firstLevel = blocks.headOption.map(_._2).getOrElse(0)
   /** @return the last level or zero */
   private lazy val lastLevel = blocks.lastOption.map(_._2).getOrElse(0)
-  /** @return the last level block in a Levels object */
-  private lazy val lastAsLevel = new Levels(blocks.lastOption.map(o => ArrayBuffer(o)).getOrElse(ArrayBuffer()))
   /** @return true if there are no blocks */
   lazy val isEmpty = blocks.isEmpty
   /** @return alias for the last level */
   lazy val level = levels.lastOption.getOrElse(0)
+
   /** @return all the levels, post-processing them so that there is no negative value */
   lazy val allLevels = {
     import NestedBlocks._
-    def toNestedBlock(bl: (Block[T], Int)) = bl match {
-      case (b @ Block(SpecStart(_,_,_,_)), l)       => BlockStart(Levels(ArrayBuffer(bl)))
-      case (b @ Block(ExecutedSpecStart(_,_,_)), l) => BlockStart(Levels(ArrayBuffer(bl)))
-      case (b @ Block(SpecEnd(_)), l)               => BlockEnd(Levels(ArrayBuffer(bl)))
-      case (b @ Block(ExecutedSpecEnd(_,_,_)), l)   => BlockEnd(Levels(ArrayBuffer(bl)))
-      case (b, l)                                   => BlockBit(Levels(ArrayBuffer(bl)))
+    def toNestedBlock(bl: Level[T]): SpecBlock[Option[Level[T]]] = bl match {
+      case (b @ Block(SpecStart(_,_,_,_)), l)       => BlockStart(Some(bl))
+      case (b @ Block(ExecutedSpecStart(_,_,_)), l) => BlockStart(Some(bl))
+      case (b @ Block(SpecEnd(_)), l)               => BlockEnd(Some(bl))
+      case (b @ Block(ExecutedSpecEnd(_,_,_)), l)   => BlockEnd(Some(bl))
+      case (b, l)                                   => BlockBit(Some(bl))
     }
     import Levels._
-    val summed = sumContext(blocks.map(toNestedBlock), (l: Levels[T]) => l.lastAsLevel)(LevelsMonoid[T])
-    implicit val m = LevelsConcatMonoid[T]
-    val all = summed.foldLeft(m.zero)(m append (_, _)).blocks
-    all map { case (b, l) => if (l < 0) (b, 0) else (b, l) }
+    val normalize = (block: Option[Level[T]]) => block match {
+      case Some((b, l)) => Some(if (l < 0) (b, 0) else (b, l))
+      case None         => None
+    }
+    sumContext(blocks.map(toNestedBlock), normalize)(LevelMonoid[T])
   }
   lazy val levels = allLevels.map(_._2)
 
@@ -69,7 +69,7 @@ case class Levels[T](blocks: ArrayBuffer[(Block[T], Int)] = new ArrayBuffer[(Blo
    */
   def resetLevel(f: Int => Int) = {
 
-    val resettedBlocks = blocks.foldLeft((true, new ArrayBuffer[(Block[T], Int)]())) { (res, cur) =>
+    val resettedBlocks = blocks.foldLeft((true, new ArrayBuffer[Level[T]]())) { (res, cur) =>
       val (beforeResetBlock, result) = res
       val (block, level) = cur
       if (beforeResetBlock && !isReset(block)) (true, result :+ (block,  f(level)))
@@ -166,7 +166,14 @@ case object Levels {
         case (Some(BlockUnindent(t, n)), _)   => b1 add b2.resetLevel(b1.lastLevel + _ - n)
         case _                                => b1 add b2.resetLevel(b1.lastLevel + _)
       }
+
     val zero = new Levels[T]()
+  }
+  /** monoid for Level[T] */
+  def LevelMonoid[T] = new Monoid[Option[Level[T]]] {
+    def append(b1: Option[Level[T]], b2: =>Option[Level[T]]) = LevelsMonoid.append(Levels(ArrayBuffer(b1.toSeq:_*)),
+                                                                                   Levels(ArrayBuffer(b2.toSeq:_*))).blocks.lastOption
+    val zero: Option[Level[T]] = None
   }
   /** monoid for Levels, doing a simple aggregation */
   implicit def LevelsConcatMonoid[T] = new Monoid[Levels[T]] {

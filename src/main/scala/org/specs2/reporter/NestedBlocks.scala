@@ -59,8 +59,8 @@ trait NestedBlocks {
     blocks.foldLeft((Vector(): Seq[S], Vector(): Seq[T])) { (res, cur) =>
       val (result, stack) = res
       cur match {
-        case BlockStart(value)       => (result :+ f(value), value +: stack)
-        case BlockBit(value)         => (result :+ f(value), addToTop(stack, value))
+        case BlockStart(value)       => (result :+ f(value),      value +: stack)
+        case BlockBit(value)         => (result :+ f(value),      addToTop(stack, value))
         case BlockEnd(value)         => (result :+ f(top(stack)), addToTop(pop(stack), top(stack)))
       }
     }._1
@@ -71,14 +71,15 @@ trait NestedBlocks {
    * This is used for Level management where an included specification must go on with indenting text, then reset
    * to the previous indentation level when finished.
    */
-  def sumContext[T : Monoid](blocks: Seq[SpecBlock[T]]): Seq[T] = sumContext(blocks, identity[T])
-  def sumContext[T : Monoid, S](blocks: Seq[SpecBlock[T]], f: T => S): Seq[S] = {
+  def sumContext[T : Monoid](blocks: Seq[SpecBlock[T]]): Seq[T] = sumContext(blocks, (t: T) => Some(t))
+  def sumContext[T : Monoid, S](blocks: Seq[SpecBlock[T]], f: T => Option[S]): Seq[S] = {
     blocks.foldLeft((Vector(): Seq[S], Vector(): Seq[T])) { (res, cur) =>
       val (result, stack) = res
+      def addToResult(v: Option[S]) = v.map(result :+ _).getOrElse(result)
       cur match {
-        case BlockStart(value)       => (result :+ f(value), value +: stack)
-        case BlockBit(value)         => (result :+ f(top(addToTop(stack, value))), addToTop(stack, value))
-        case BlockEnd(value)         => (result :+ f(top(addToTop(stack, value))), pop(stack))
+        case BlockStart(value)       => (addToResult(f(value)),                       value +: stack)
+        case BlockBit(value)         => (addToResult(f(top(addToTop(stack, value)))), addToTop(stack, value))
+        case BlockEnd(value)         => (addToResult(f(top(addToTop(stack, value)))), pop(stack))
       }
     }._1
   }
