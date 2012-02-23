@@ -19,7 +19,7 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
   { level(t1) must_== List(0) }                                                                                         ^
                                                                                                                         p^
   "A new piece of text must be indented by 1"                                                                           ^
-  { level(t1 ^ t2) must_== List(0, 1) }                                                                                 ^
+  { level(t1 ^ t2) must_== List(0, 1) }                                                                                 ^ tag("here")^
                                                                                                                         p^
   "Examples or text following text must be indented by 1"                                                               ^
   { level(t1 ^ ex1 ^ t2 ^ t3) must_== List(0, 1, 1, 2) }                                                                ^
@@ -54,7 +54,7 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
                                                                                                                         p^
   "The LevelBlocks monoid must respect the Monoid laws"                                                                 !
     LevelsMonoid.isMonoid                                                                                               ^
-    LevelMonoid.isMonoid                                                                                                ^
+    semigroupProperty[Level[Fragment]](LevelSemigroup[Fragment]).isSemigroup ^
                                                                                                                         p^
   "A tree of fragments can be created from the leveled blocks"                                                          ^
     "for start ^ t1 ^ ex1 ^ ex2"                                                                                        ! tree().e1^
@@ -63,14 +63,6 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
     "for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2"                                                                   ! tree().e4^
                                                                                                                         end
   
-
-  def tryAppend = {
-    implicit val l = Levels.LevelsMonoid[String]
-    val (a, b, c) = (Levels(BlockIndent("t")), Levels(BlockTerminal("")), Levels(BlockIndent("t2")))
-    val r = l.append(a, l.append(b, c))
-    val r2 = l.append(l.append(a, b), c)
-    success
-  }
 
   case class tree() {
     def e1 = tree(t1 ^ ex1 ^ ex2) must beDrawnAs(
@@ -142,31 +134,36 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
     }
   }
 
+  implicit def dummyFragmentsMonoid = new Monoid[Fragment] {
+    def append(f1: Fragment, f2: => Fragment) = f1
+    val zero = Text("")
+  }
+
   implicit def params = set(maxSize -> 5, minTestsOk -> 1000)
 
   import Arbitrary._
 
-  implicit val arbitraryBlock: Arbitrary[Block[Fragment]] = Arbitrary {
-    for (f <- arbitrary[Fragment]) yield f
+  implicit val arbitraryLevel: Arbitrary[Level[Fragment]] = Arbitrary {
+    for (f <- arbitrary[Fragment]) yield FragmentLevelsReducer.toLevel(f)
   }
   implicit val arbitraryOptionLevel: Arbitrary[Option[Level[Fragment]]] =
-    Arbitrary(arbitraryLevels.arbitrary.map(ls => ls.blocks.headOption))
+    Arbitrary(arbitraryLevel.arbitrary.map(l => Some(l)))
 
   implicit val arbitraryLevels: Arbitrary[Levels[Fragment]] = Arbitrary {
     
-    def genBlockLevels(sz: Int) = for {
-      l <- Gen.listOfN(sz, arbitrary[Block[Fragment]])
+    def genLevels(sz: Int) = for {
+      l <- Gen.listOfN(sz, arbitrary[Level[Fragment]])
     } yield l.foldMap(Levels[Fragment](_))
     
     def sizedList(sz: Int): Gen[Levels[Fragment]] = {
-      if (sz <= 0) genBlockLevels(1)
-      else genBlockLevels(sz)
+      if (sz <= 0) genLevels(1)
+      else genLevels(sz)
     }
     Gen.sized(sz => sizedList(sz))
   }
 
   def fold(fs: Seq[Fragment]) = fs.reduceWith(FragmentLevelsReducer)
-  def level(fs: Fragments) = fold(fs.middle).levels
+  def level(fs: Fragments) = fold(fs.middle).levels.map(l => l.level)
   def tree(fs: Fragments) = fold(spec(fs).fragments).toTree
   def spec(fs: Fragments) = new Specification { def is = "start".title ^ fs }.content
 

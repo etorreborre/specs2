@@ -22,4 +22,9 @@ trait Reducerx {
   }
 }
 
-object Reducerx extends Reducerx
+object Reducerx extends Reducerx {
+  implicit def semigroupIsOptionMonoid[T : Semigroup]: Monoid[Option[T]] = new Monoid[Option[T]] {
+    def append(t1: Option[T], t2: =>Option[T]) = (t1 <**> t2)(implicitly[Semigroup[T]].append(_,_))
+    val zero: Option[T] = None
+  }
+}

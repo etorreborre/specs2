@@ -28,61 +28,50 @@ import scala.collection.mutable.ArrayBuffer
  * 
  */
 private[specs2]
-case class Levels[T](blocks: ArrayBuffer[Level[T]] = new ArrayBuffer[Level[T]]()) {
+case class Levels[T](levels: ArrayBuffer[Level[T]] = new ArrayBuffer[Level[T]]()) {
   /** @return the first block */
-  private lazy val headOption = blocks.headOption.map(_._1)
+  private lazy val headOption = levels.headOption.map(_.t)
   /** @return the last block */
-  private lazy val lastOption = blocks.lastOption.map(_._1)
+  private lazy val lastOption = levels.lastOption.map(_.t)
   /** @return the first level or zero */
-  private lazy val firstLevel = blocks.headOption.map(_._2).getOrElse(0)
+  private lazy val firstLevel = levels.headOption.map(_.level).getOrElse(0)
   /** @return the last level or zero */
-  private lazy val lastLevel = blocks.lastOption.map(_._2).getOrElse(0)
-  /** @return true if there are no blocks */
-  lazy val isEmpty = blocks.isEmpty
+  private lazy val lastLevel = levels.lastOption.map(_.level).getOrElse(0)
+  /** @return true if there are no levels */
+  lazy val isEmpty = levels.isEmpty
   /** @return alias for the last level */
-  lazy val level = levels.lastOption.getOrElse(0)
+  lazy val level = levels.lastOption.map(_.level).getOrElse(0)
 
   /** @return all the levels, post-processing them so that there is no negative value */
   lazy val allLevels = {
     import NestedBlocks._
-    def toNestedBlock(bl: Level[T]): SpecBlock[Option[Level[T]]] = bl match {
-      case (b @ Block(SpecStart(_,_,_,_)), l)       => BlockStart(Some(bl))
-      case (b @ Block(ExecutedSpecStart(_,_,_)), l) => BlockStart(Some(bl))
-      case (b @ Block(SpecEnd(_)), l)               => BlockEnd(Some(bl))
-      case (b @ Block(ExecutedSpecEnd(_,_,_)), l)   => BlockEnd(Some(bl))
-      case (b, l)                                   => BlockBit(Some(bl))
+    def toNestedBlock(bl: Level[T]): SpecBlock[Level[T]] = bl match {
+      case b @ Level(SpecStart(_,_,_,_), l)       => BlockStart(bl)
+      case b @ Level(ExecutedSpecStart(_,_,_), l) => BlockStart(bl)
+      case b @ Level(SpecEnd(_), l)               => BlockEnd(bl)
+      case b @ Level(ExecutedSpecEnd(_,_,_), l)   => BlockEnd(bl)
+      case b                                      => BlockBit(bl)
     }
     import Levels._
-    val normalize = (block: Option[Level[T]]) => block match {
-      case Some((b, l)) => Some(if (l < 0) (b, 0) else (b, l))
-      case None         => None
-    }
-    sumContext(blocks.map(toNestedBlock), normalize)(LevelMonoid[T])
+    sumContext(levels.map(toNestedBlock))(LevelSemigroup[T])
   }
-  lazy val levels = allLevels.map(_._2)
 
   /** @return the concatenation of 2 levels */
-  def add(other: Levels[T]) = Levels(this.blocks ++ other.blocks)
+  def add(other: Levels[T]) = Levels(this.levels ++ other.levels)
   /** 
-   * @return reset the levels of all blocks by incrementing or decrementing the level 
+   * @return reset the levels of all levels by incrementing or decrementing the level 
    *         value, until a Reset block is met
    */
   def resetLevel(f: Int => Int) = {
 
-    val resettedBlocks = blocks.foldLeft((true, new ArrayBuffer[Level[T]]())) { (res, cur) =>
+    val resettedBlocks = levels.foldLeft((true, new ArrayBuffer[Level[T]]())) { (res, cur) =>
       val (beforeResetBlock, result) = res
-      val (block, level) = cur
-      if (beforeResetBlock && !isReset(block)) (true, result :+ (block,  f(level)))
-      else                                     (false, result :+ cur)
+      val Level(t, lv) = cur
+      if (beforeResetBlock && !isReset(cur)) (true, result :+ cur.setLevel(f(lv)))
+      else                                   (false, result :+ cur)
     }._2
     Levels(resettedBlocks)
   }
-
-  /**
-   * @return reset all the levels of all blocks by incrementing or decrementing the level 
-   *         value
-   */
-  private def mapLevel(f: (Block[T], Int) => (Block[T], Int)) = Levels(blocks.map(f.tupled))
 
   /**
    * @return a Tree[T] based on the level of each block
@@ -120,60 +109,71 @@ case class Levels[T](blocks: ArrayBuffer[Level[T]] = new ArrayBuffer[Level[T]]()
    */
   def toTreeLoc[S](m: (T, Seq[S], Int) => Option[S]): TreeLoc[S] = {
     val all = allLevels
-    val initial = m(all.head._1.t, Seq(), 0).get
+    val initial = m(all.head.t, Seq(), 0).get
     all.drop(1).foldLeft(leaf(initial).loc) { (treeLoc, cur) =>
-      val (block, level) = cur
+      val Level(block, level) = cur
       val parent = treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc)
-      m(block.t, parent.path.reverse.toSeq, treeLoc.size) match {
+      m(block, parent.path.reverse.toSeq, treeLoc.size) match {
         case Some(s) => parent.insertDownLast(leaf(s))
         case None    => treeLoc
       }
     }
   } 
-  private val isReset = (b: Block[T]) => b match {
-    case BlockReset(t) => true
-    case other         => false
+  private val isReset = (b: Level[T]) => b match {
+    case Reset(_) => true
+    case other    => false
   }
 
   override def equals(a: Any) = {
     a match {
-      case l: Levels[_] => normalizeResets.blocks.equals(l.normalizeResets.blocks)
+      case l: Levels[_] => levels.map(_.t).equals(l.levels.map(_.t))
       case _ => false
     }
-  }
-  /**
-   * normalize resets so that BlockReset levels will not be compared
-   */
-  private def normalizeResets = {
-    new Levels(blocks.map {
-      case (BlockReset(t), _)      => (BlockReset(t), 0)
-      case other                   => other
-    })
   }
 }
 private[specs2]
 case object Levels {
   /** @return a new Levels object for one Block */
-  def apply[T](b: Block[T]) = new Levels(ArrayBuffer((b, 0)))
+  def apply[T](b: Level[T]) = new Levels(ArrayBuffer(b))
   /** monoid for Levels */
   def LevelsMonoid[T] = new Monoid[Levels[T]] {
     def append(b1: Levels[T], b2: =>Levels[T]) =
       (b1.lastOption, b2.headOption) match {
-        case (None, _)                        => b2
-        case (Some(BlockReset(t)), _)         => b1 add b2.resetLevel(_ - b2.firstLevel)
-        case (_, Some(BlockReset(t)))         => b1 add b2.resetLevel(_ - b2.firstLevel)
-        case (Some(BlockIndent(t, n)), _)     => b1 add b2.resetLevel(b1.lastLevel + _ + n)
-        case (Some(BlockUnindent(t, n)), _)   => b1 add b2.resetLevel(b1.lastLevel + _ - n)
-        case _                                => b1 add b2.resetLevel(b1.lastLevel + _)
+        case (None, _)                   => b2
+        case (Some(Reset(t)), _)         => b1 add b2.resetLevel(_ - b2.firstLevel)
+        case (_, Some(Reset(t)))         => b1 add b2.resetLevel(_ - b2.firstLevel)
+        case (Some(Indent(t, n)), _)     => b1 add b2.resetLevel(b1.lastLevel + _ + n)
+        case (Some(Unindent(t, n)), _)   => b1 add b2.resetLevel(b1.lastLevel + _ - n)
+        case _                           => b1 add b2.resetLevel(b1.lastLevel + _)
       }
 
     val zero = new Levels[T]()
   }
-  /** monoid for Level[T] */
-  def LevelMonoid[T] = new Monoid[Option[Level[T]]] {
+  /** monoid for Option[Level[T]] */
+  def LevelOptionMonoid[T] = new Monoid[Option[Level[T]]] {
     def append(b1: Option[Level[T]], b2: =>Option[Level[T]]) = LevelsMonoid.append(Levels(ArrayBuffer(b1.toSeq:_*)),
-                                                                                   Levels(ArrayBuffer(b2.toSeq:_*))).blocks.lastOption
+                                                                                   Levels(ArrayBuffer(b2.toSeq:_*))).levels.lastOption
     val zero: Option[Level[T]] = None
+  }
+  /** Semigroup for Level[T] */
+  def LevelSemigroup[T]: Semigroup[Level[T]] = new Semigroup[Level[T]] {
+    def append(l1: Level[T], l2: =>Level[T]) =
+      (l1, l2) match {
+        case (Reset(t),       _) => l2
+        case (Indent(t, n),   Indent(t2, n2)) => l2.addLevel(l1.lv + n + n2)
+        case (Indent(t, n),   Unindent(t2, n2)) => l2.addLevel(l1.lv + n - n2)
+        case (Indent(t, n),   _) => l2.addLevel(l1.lv + n)
+        case (Unindent(t, n), Unindent(t2, n2)) => l2.addLevel(l1.lv - n - n2)
+        case (Unindent(t, n), Indent(t2, n2)) => l2.addLevel(l1.lv - n + n2)
+        case (Unindent(t, n), _) => l2.addLevel(l1.lv - n)
+        case (Terminal(t),  Terminal(t2)) => l2.addLevel(l1.lv + 2)
+        case (Terminal(t),    _) => l2.addLevel(l1.lv + 1)
+        case (_,              _) => l2.addLevel(l1.lv)
+      }
+  }
+  implicit def LevelMonoid[T]: Monoid[Level[T]] = new Monoid[Level[T]] {
+    def append(l1: Level[T], l2: =>Level[T]) = LevelSemigroup[T].append(l1, l2)
+    val zero: Level[T] = LevelZero[T]()
   }
   /** monoid for Levels, doing a simple aggregation */
   implicit def LevelsConcatMonoid[T] = new Monoid[Levels[T]] {
@@ -184,45 +184,81 @@ case object Levels {
   def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, Levels[T]]) = {
     fs.foldMap(reducer.unit)
   }
+
   implicit object LevelsReducer extends Reducer[ExecutedFragment, Levels[ExecutedFragment]] {
-    implicit def toBlock: ExecutedFragment => Block[ExecutedFragment] = (f: ExecutedFragment) => f match {
-      case t @ ExecutedResult(_,_,_,_,_)     => BlockTerminal(t)
-      case t @ ExecutedText(_, _)            => BlockIndent(t)
-      case t @ ExecutedTab(n, _)             => BlockIndent(t, n)
-      case t @ ExecutedBacktab(n, _)         => BlockUnindent(t, n)
-      case t @ ExecutedSpecStart(_,_,_)      => BlockNeutral(t)
-      case t @ ExecutedSpecEnd(_,_,_)        => BlockNeutral(t)
-      case t @ ExecutedEnd( _)               => BlockReset(t)
-      case t                                 => BlockNeutral(t)
+    implicit override def unit(f: ExecutedFragment): Levels[ExecutedFragment] = Levels(ArrayBuffer(LevelReducer.toLevel(f)))
+  }
+  implicit object LevelReducer extends Reducer[ExecutedFragment, Level[ExecutedFragment]] {
+    implicit def toLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
+      case t @ ExecutedResult(_,_,_,_,_)     => Terminal(t)
+      case t @ ExecutedText(_, _)            => Indent(t)
+      case t @ ExecutedTab(n, _)             => Indent(t, n)
+      case t @ ExecutedBacktab(n, _)         => Unindent(t, n)
+      case t @ ExecutedSpecStart(_,_,_)      => Neutral(t)
+      case t @ ExecutedSpecEnd(_,_,_)        => Neutral(t)
+      case t @ ExecutedEnd( _)               => Reset(t)
+      case t                                 => Neutral(t)
     } 
-    implicit override def unit(f: ExecutedFragment): Levels[ExecutedFragment] = Levels[ExecutedFragment](toBlock(f))
+    implicit override def unit(f: ExecutedFragment): Level[ExecutedFragment] = toLevel(f)
     
   }
   implicit object FragmentLevelsReducer extends Reducer[Fragment, Levels[Fragment]] {
-    implicit def toBlock(f: Fragment): Block[Fragment] = f match {
-      case t @ Example(_, _)         => BlockTerminal(t)     
-      case t @ Tab(n)                => BlockIndent(t, n)
-      case t @ Backtab(n)            => BlockUnindent(t, n)   
-      case t @ Text(_)               => BlockIndent(t)       
-      case t @ SpecStart(_,_,_,_)    => BlockNeutral(t)
-      case t @ SpecEnd(_)            => BlockNeutral(t)
-      case t @ End()                 => BlockReset(t)        
-      case t                         => BlockNeutral(t)        
+    implicit def toLevel(f: Fragment): Level[Fragment] = f match {
+      case t @ Example(_, _)         => Terminal(t)     
+      case t @ Tab(n)                => Indent(t, n)
+      case t @ Backtab(n)            => Unindent(t, n)   
+      case t @ Text(_)               => Indent(t)       
+      case t @ SpecStart(_,_,_,_)    => Neutral(t)
+      case t @ SpecEnd(_)            => Neutral(t)
+      case t @ End()                 => Reset(t)        
+      case t                         => Neutral(t)        
     }
-    implicit override def unit(f: Fragment): Levels[Fragment] = Levels(toBlock(f))
+    implicit override def unit(f: Fragment): Levels[Fragment] = Levels(toLevel(f))
   }
 }
-/** this represent a fragment of a specification that needs to be indented as a block */
+
 private[specs2]
-sealed trait Block[T] {
-  val t: T
+abstract class Level[+T](val t: T) {
+  val lv: Int = 0
+  type L <: Level[T]
+  def level = math.max(lv, 0)
+  def setLevel(lv: Int): L
+  def reset: L = setLevel(0)
+  def addLevel(n: Int): L = setLevel(lv + n)
+}
+
+private[specs2]
+object Level {
+  def unapply[T](l: Level[T]): Option[(T, Int)] = Some((l.t, l.lv))
 }
 private[specs2]
-object Block {
-  def unapply[T](b: Block[T]) = Some(b.t)
+case class Terminal[T](value: T) extends Level(value) {
+  type L = Terminal[T]
+  def setLevel(n: Int) = new Terminal(value) { override val lv = n }
 }
-private[specs2] case class BlockTerminal[T](t: T = null) extends Block[T]
-private[specs2] case class BlockIndent[T](t: T = null, n: Int = 1)  extends Block[T]
-private[specs2] case class BlockUnindent[T](t: T = null, n: Int = 1) extends Block[T]
-private[specs2] case class BlockReset[T](t: T = null)    extends Block[T]
-private[specs2] case class BlockNeutral[T](t: T = null)  extends Block[T]
+private[specs2]
+case class Indent[T](value: T, n: Int = 1) extends Level(value) {
+  type L = Indent[T]
+  def setLevel(n: Int) = new Indent(value, n) { override val lv = n }
+}
+private[specs2]
+case class Unindent[T](value: T, n: Int = 1) extends Level(value) {
+  type L = Unindent[T]
+  def setLevel(n: Int) = new Unindent(value, n) { override val lv = n }
+}
+private[specs2]
+case class Reset[T](value: T) extends Level(value) {
+  type L = Reset[T]
+  def setLevel(n: Int) = new Reset(value) { override val lv = n }
+}
+private[specs2]
+case class Neutral[T](value: T) extends Level(value) {
+  type L = Neutral[T]
+  def setLevel(n: Int) = new Neutral(value) { override val lv = n }
+}
+private[specs2]
+case class LevelZero[T]() extends Level[T](null) {
+  type L = LevelZero[T]
+  def setLevel(n: Int) = new LevelZero[T]() { override val lv = n }
+}
+

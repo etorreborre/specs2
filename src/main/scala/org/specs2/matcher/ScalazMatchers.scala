@@ -9,16 +9,17 @@ import scalaz._, Scalaz._
  */
 trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMatchers =>
 
-  implicit def toSemigroupProperty[T](implicit s: Semigroup[T]): SemigroupProperty[T] = new SemigroupProperty[T]()(s)
+  implicit def semigroupProperty[T](implicit s: Semigroup[T]): SemigroupProperty[T] = new SemigroupProperty[T]()(s)
   class SemigroupProperty[T]()(implicit sg: Semigroup[T]) {
     def isAssociative(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isAssociative
+    def isSemigroup(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isAssociative
   }
 
   def isAssociative[T](implicit sg: Semigroup[T], a: Arbitrary[T], s: Shrink[T]): Prop = {
     check { (b1: T, b2: T, b3: T) => be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3)) }
   }
 
-  implicit def toMonoidProperty[T](m: Monoid[T]): MonoidProperty[T] = new MonoidProperty[T]()(m)
+  implicit def monoidProperty[T](m: Monoid[T]): MonoidProperty[T] = new MonoidProperty[T]()(m)
   class MonoidProperty[T]()(implicit m: Monoid[T]) extends SemigroupProperty()(m) {
     def isMonoid(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isMonoid
     def hasNeutralElement(implicit a: Arbitrary[T], s: Shrink[T]) = outer.hasNeutralElement

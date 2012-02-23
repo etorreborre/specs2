@@ -117,7 +117,7 @@ trait HtmlPrinter {
   private def flatten(results: (((Seq[HtmlLine], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): Seq[HtmlLine] = {
     val (prints, stats, levels, args) = results.flatten
     (prints zip stats.stats zip levels.levels zip args.nestedArguments) map {
-      case (((t, s), l), a) => t.set(s, l, a)
+      case (((t, s), l), a) => t.set(s, l.level, a)
     }
   }  
   

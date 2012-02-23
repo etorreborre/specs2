@@ -4,6 +4,7 @@ package reporter
 import org.specs2.internal.scalaz._
 import  Scalaz._
 import data.Trees._
+import data.Reducerx._
 import specification.{SpecEnd, SpecStart, Fragment, ExecutedSpecEnd, ExecutedSpecStart, ExecutedFragment}
 
 /**
@@ -17,16 +18,16 @@ private[specs2]
 trait NestedBlocks {
   sealed trait SpecBlock[T] {
     def value: T
-    def update(value: T): SpecBlock[T]
+    def update[S](value: S): SpecBlock[S]
   }
   case class BlockStart[T](value: T) extends SpecBlock[T] {
-    def update(value: T) = BlockStart(value)
+    def update[S](value: S): SpecBlock[S] = BlockStart(value)
   }
   case class BlockEnd[T](value: T) extends SpecBlock[T]  {
-    def update(value: T) = BlockEnd(value)
+    def update[S](value: S): SpecBlock[S] = BlockEnd(value)
   }
   case class BlockBit[T](value: T) extends SpecBlock[T] {
-    def update(value: T) = BlockBit(value)
+    def update[S](value: S): SpecBlock[S] = BlockBit(value)
   }
   def isBlockStart[T](b: SpecBlock[T]) = b match { case BlockStart(_) => true; case _ => false }
   def isBlockEnd[T](b: SpecBlock[T])   = b match { case BlockEnd(_)   => true; case _ => false }
@@ -71,15 +72,16 @@ trait NestedBlocks {
    * This is used for Level management where an included specification must go on with indenting text, then reset
    * to the previous indentation level when finished.
    */
-  def sumContext[T : Monoid](blocks: Seq[SpecBlock[T]]): Seq[T] = sumContext(blocks, (t: T) => Some(t))
-  def sumContext[T : Monoid, S](blocks: Seq[SpecBlock[T]], f: T => Option[S]): Seq[S] = {
-    blocks.foldLeft((Vector(): Seq[S], Vector(): Seq[T])) { (res, cur) =>
+  def sumContext[T : Semigroup](blocks: Seq[SpecBlock[T]]): Seq[T] =
+    sumContext2(blocks.view.map(b => b.update(Some(b.value): Option[T])))(semigroupIsOptionMonoid[T]).sequence.get
+  def sumContext2[T : Monoid](blocks: Seq[SpecBlock[T]]): Seq[T] = {
+
+    blocks.foldLeft((Vector(): Seq[T], Vector(): Seq[T])) { (res, cur) =>
       val (result, stack) = res
-      def addToResult(v: Option[S]) = v.map(result :+ _).getOrElse(result)
       cur match {
-        case BlockStart(value)       => (addToResult(f(value)),                       value +: stack)
-        case BlockBit(value)         => (addToResult(f(top(addToTop(stack, value)))), addToTop(stack, value))
-        case BlockEnd(value)         => (addToResult(f(top(addToTop(stack, value)))), pop(stack))
+        case BlockStart(value)       => (result :+ value,                       value +: stack)
+        case BlockBit(value)         => (result :+ top(addToTop(stack, value)), addToTop(stack, value))
+        case BlockEnd(value)         => (result :+ top(addToTop(stack, value)), pop(stack))
       }
     }._1
   }
