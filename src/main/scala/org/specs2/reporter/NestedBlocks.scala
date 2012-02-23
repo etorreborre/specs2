@@ -72,10 +72,7 @@ trait NestedBlocks {
    * This is used for Level management where an included specification must go on with indenting text, then reset
    * to the previous indentation level when finished.
    */
-  def sumContext[T : Semigroup](blocks: Seq[SpecBlock[T]]): Seq[T] =
-    sumContext2(blocks.view.map(b => b.update(Some(b.value): Option[T])))(semigroupIsOptionMonoid[T]).sequence.get
-  def sumContext2[T : Monoid](blocks: Seq[SpecBlock[T]]): Seq[T] = {
-
+  def sumContext[T : Monoid](blocks: Seq[SpecBlock[T]]): Seq[T] = {
     blocks.foldLeft((Vector(): Seq[T], Vector(): Seq[T])) { (res, cur) =>
       val (result, stack) = res
       cur match {
