@@ -20,10 +20,11 @@ Statistics can be accumulated on each executed specification in order to be disp
     "the number of errors"                                                                                              ! e5^
     "the number of pending"                                                                                             ! e6^
     "the number of skipped"                                                                                             ! e7^
+    "the execution time must be the SpecEnd time - SpecStart time"                                                      ! e8^
                                                                                                                         p^
   "If there are included specifications"                                                                                ^
-    "the total of an inner spec must be ok"                                                                             ! e8^
-    "the total of the outer spec must be ok"                                                                            ! e9^
+    "the total of an inner spec must be ok"                                                                             ! e9^
+    "the total of the outer spec must be ok"                                                                            ! e10^
                                                                                                                         end
                                                                                           
   val spec1 = new Specification { def is =
@@ -48,6 +49,8 @@ Statistics can be accumulated on each executed specification in order to be disp
   def e5 = total(spec1).errors must_== 1
   def e6 = total(spec1).pending must_== 1
   def e7 = total(spec1).skipped must_== 1
+
+  def e8 = total(spec1).time must_== "1 ms"
   
   val spec2 = new Specification { def is =
     "spec2".title                 ^
@@ -57,10 +60,10 @@ Statistics can be accumulated on each executed specification in order to be disp
                                   end
   }
   
-  def e8 = {
+  def e9 = {
     val endOfSpecStats = totals(spec2).apply(11) // the end stat for the inner specification
     (endOfSpecStats.examples must_== 5) and (endOfSpecStats.successes must_== 1)
   }
 
-  def e9 = (total(spec2).successes must_== 2) and (total(spec2).examples must_== 7)
+  def e10 = (total(spec2).successes must_== 2) and (total(spec2).examples must_== 7)
 }
