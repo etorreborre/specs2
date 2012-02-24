@@ -77,7 +77,7 @@ case class Stats(examples:     Int = 0,
                      "errors"       -> errors.toString,
                      "pending"      -> pending.toString,
                      "skipped"      -> skipped.toString,
-                     "time"         -> timer.elapsed.toString)
+                     "time"         -> timer.totalMillis.toString)
     (stats /: attributes) { (res, cur) =>
       if (cur._2 == "0") res
       else            res % new UnprefixedAttribute(cur._1, cur._2, Null)
@@ -85,14 +85,14 @@ case class Stats(examples:     Int = 0,
   }
 
   override def toString =
-    "Stats(examples = "     + examples     +", "+
-           "successes = "   + successes    +", "+
-           "expectations = "+ expectations +", "+
-           "failures = "    + failures     +", "+
-           "errors = "      + errors       +", "+
-           "pending = "     + pending      +", "+
-           "skipped = "     + skipped      +", "+
-           "time = "        + timer.elapsed+")"
+    "Stats(examples = "     + examples         +", "+
+           "successes = "   + successes        +", "+
+           "expectations = "+ expectations     +", "+
+           "failures = "    + failures         +", "+
+           "errors = "      + errors           +", "+
+           "pending = "     + pending          +", "+
+           "skipped = "     + skipped          +", "+
+           "time = "        + timer.totalMillis+")"
 
   /**
    * @return the "opposite" of this Stats object to be able to do subtractions

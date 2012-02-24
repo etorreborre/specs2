@@ -47,12 +47,12 @@ trait FragmentExecution {
       val timer = new SimpleTimer().start
       val executed = if (arguments.plan) form else form.executeForm
       val result = executed.execute
-      ExecutedResult(FormMarkup(executed), result, timer.stop, f.location, Stats(result))
+      ExecutedResult(FormMarkup(executed), result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
     }
 	  case e @ Example(s, _)     => {
       val timer = new SimpleTimer().start
       val result = executeBody(e.execute)
-      ExecutedResult(s, result, timer.stop, f.location, Stats(result))
+      ExecutedResult(s, result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
     }
 	  case Text(s)                       => ExecutedText(s, f.location)
 	  case Br()                          => ExecutedBr(f.location)
@@ -60,7 +60,7 @@ trait FragmentExecution {
     case Backtab(n)                    => ExecutedBacktab(n, f.location)
 	  case End()                         => ExecutedEnd(f.location)
 	  case s @ SpecStart(_, a, l, so)    => ExecutedSpecStart(s.withArgs(arguments.overrideWith(a)), f.location, Stats().startTimer)
-	  case e @ SpecEnd(s)                => ExecutedSpecEnd(e, f.location)
+	  case e @ SpecEnd(s)                => ExecutedSpecEnd(e, f.location, Stats().startTimer)
     case s @ Step(_)                   => executeStep("step", s, f.location)
     case s @ Action(_)                 => executeStep("action", s, f.location)
     case _                             => ExecutedNoText(isAction = true, new SimpleTimer, f.location)

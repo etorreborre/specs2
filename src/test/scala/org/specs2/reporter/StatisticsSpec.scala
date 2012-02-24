@@ -20,11 +20,10 @@ Statistics can be accumulated on each executed specification in order to be disp
     "the number of errors"                                                                                              ! e5^
     "the number of pending"                                                                                             ! e6^
     "the number of skipped"                                                                                             ! e7^
-    "the execution time must be the SpecEnd time - SpecStart time"                                                      ! e8^
                                                                                                                         p^
   "If there are included specifications"                                                                                ^
-    "the total of an inner spec must be ok"                                                                             ! e9^
-    "the total of the outer spec must be ok"                                                                            ! e10^
+    "the total of an inner spec must be ok"                                                                             ! e8^
+    "the total of the outer spec must be ok"                                                                            ! e9^
                                                                                                                         end
                                                                                           
   val spec1 = new Specification { def is =
@@ -40,7 +39,7 @@ Statistics can be accumulated on each executed specification in order to be disp
   def last(ss: Seq[Stats]) = ss.lastOption.getOrElse(Stats())
   def total(s: SpecificationStructure) = last(statistics(s).totals)
   def totals(s: SpecificationStructure) = statistics(s).totals
-  def execute(f: Fragment) = new FragmentExecution {}.executeFragment(Arguments())(f)
+  def execute(f: Fragment) = FragmentExecution.executeFragment(Arguments())(f)
     
   def e1 = total(spec1).examples must_== 5
   def e2 = total(spec1).expectations must_== 6
@@ -50,8 +49,6 @@ Statistics can be accumulated on each executed specification in order to be disp
   def e6 = total(spec1).pending must_== 1
   def e7 = total(spec1).skipped must_== 1
 
-  def e8 = total(spec1).time must_== "1 ms"
-  
   val spec2 = new Specification { def is =
     "spec2".title                 ^
     "e1" ! Success("ok", 2)       ^
@@ -60,10 +57,10 @@ Statistics can be accumulated on each executed specification in order to be disp
                                   end
   }
   
-  def e9 = {
+  def e8 = {
     val endOfSpecStats = totals(spec2).apply(11) // the end stat for the inner specification
     (endOfSpecStats.examples must_== 5) and (endOfSpecStats.successes must_== 1)
   }
 
-  def e10 = (total(spec2).successes must_== 2) and (total(spec2).examples must_== 7)
+  def e9 = (total(spec2).successes must_== 2) and (total(spec2).examples must_== 7)
 }

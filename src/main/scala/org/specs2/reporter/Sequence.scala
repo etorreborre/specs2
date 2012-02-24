@@ -78,16 +78,15 @@ trait DefaultSequence {
     }.getOrElse(body)
   }
 
-
-
-
   protected def isolateSteps(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[FragmentSeq] = {
     fragments.foldLeft(Vector(): Seq[FragmentSeq]) { (res, f) =>
       res.toList match {
         case Nil => Vector(FragmentSeq.create(f))
         case last :: rest => f match {
-          case Step(_) if last.fragments.exists(isExampleOrStep)  => FragmentSeq.create(f) +: last +: rest.toSeq
-          case Example(_, _) if last.fragments.exists(isStep)     => FragmentSeq.create(f) +: last +: rest.toSeq
+          case SpecStart(_,_,_,_) | SpecEnd(_)                    => FragmentSeq.create(f) +: res
+          case Step(_) if last.fragments.exists(isExampleOrStep)  => FragmentSeq.create(f) +: res
+          case Example(_, _) if last.fragments.exists(isStep)     => FragmentSeq.create(f) +: res
+          case any if last.fragments.exists(isSpecStartOrEnd)     => FragmentSeq.create(f) +: res
           case _                                                  => FragmentSeq(last.fragments :+ f) +: rest.toSeq
         }
       }

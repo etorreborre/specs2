@@ -62,7 +62,7 @@ trait NestedBlocks {
       cur match {
         case BlockStart(value)       => (result :+ f(value),      value +: stack)
         case BlockBit(value)         => (result :+ f(value),      addToTop(stack, value))
-        case BlockEnd(value)         => (result :+ f(top(stack)), addToTop(pop(stack), top(stack)))
+        case BlockEnd(value)         => (result :+ f(top(addToTop(stack, value))), addToTop(pop(stack), top(stack)))
       }
     }._1
   }

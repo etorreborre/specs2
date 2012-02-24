@@ -35,7 +35,7 @@ trait JUnitXmlPrinter {
       case Some(s @ ExecutedSpecStart(_,_,_)) => s.stats
       case _                                  => Stats()
     }
-    lazy val start = TestSuite(desc, name.javaClassName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.elapsed)
+    lazy val start = TestSuite(desc, name.javaClassName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.totalMillis)
 
     executions.foldLeft(start) { (suite, de) =>
       val (d, f) = de
@@ -97,7 +97,7 @@ trait JUnitXmlPrinter {
       </testcase>
 
     def time = fragment match {
-      case ExecutedResult(_,_,t,_,_) => t.elapsed
+      case ExecutedResult(_,_,t,_,_) => t.totalMillis
       case other                     => 0
     }
 

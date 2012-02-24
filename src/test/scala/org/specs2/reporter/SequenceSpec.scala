@@ -59,11 +59,13 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
     def e5 = {
       val fragments: Fragments = "intro" ^ step("1") ^ ex1 ^ ex2 ^ step("2") ^ step("3") ^ ex1 ^ ex2
       selectSequence(fragments).map((s: FragmentSeq) => s.fragments.toString) must contain(
-        "List(SpecStart(), Text(intro), Step)",
+        "List(SpecStart())",
+        "List(Text(intro), Step)",
         "List(Example(ex1), Example(ex2))",
         "List(Step)",
         "List(Step)",
-        "List(Example(ex1), Example(ex2), SpecEnd())").inOrder
+        "List(Example(ex1), Example(ex2))",
+        "List(SpecEnd())").inOrder
     }
   }
 
