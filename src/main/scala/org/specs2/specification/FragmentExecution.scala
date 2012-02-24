@@ -59,7 +59,7 @@ trait FragmentExecution {
     case Tab(n)                        => ExecutedTab(n, f.location)
     case Backtab(n)                    => ExecutedBacktab(n, f.location)
 	  case End()                         => ExecutedEnd(f.location)
-	  case s @ SpecStart(_, a, l, so)    => ExecutedSpecStart(s.withArgs(arguments.overrideWith(a)), f.location)
+	  case s @ SpecStart(_, a, l, so)    => ExecutedSpecStart(s.withArgs(arguments.overrideWith(a)), f.location, Stats().startTimer)
 	  case e @ SpecEnd(s)                => ExecutedSpecEnd(e, f.location)
     case s @ Step(_)                   => executeStep("step", s, f.location)
     case s @ Action(_)                 => executeStep("action", s, f.location)
