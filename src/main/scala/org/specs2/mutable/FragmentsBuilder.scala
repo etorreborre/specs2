@@ -93,6 +93,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     fs
     addFragments(p)
   }
+  protected def >>(fs: Fragments) = addFragments(fs)
   protected def addFragments(fs: Fragments): Fragments = {
     specFragments = new FragmentsFragment(specFragments) ^ fs
     fs
