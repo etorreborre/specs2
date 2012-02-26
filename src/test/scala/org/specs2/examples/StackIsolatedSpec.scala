@@ -1,6 +1,5 @@
-package org.specs2
 package examples
-import _root_.examples.SizedStack
+import org.specs2._
 import specification._
 
 /**
