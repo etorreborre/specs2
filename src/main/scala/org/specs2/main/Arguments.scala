@@ -284,7 +284,8 @@ case class Report(
   _streaming:     Option[Boolean]          = None,
   _diffs:         Option[Diffs]            = None,
   _fromSource:    Option[Boolean]          = None,
-  _traceFilter:   Option[StackTraceFilter] = None) extends ShowArgs {
+  _traceFilter:   Option[StackTraceFilter] = None,
+  _notifier:      Option[String]           = None) extends ShowArgs {
 
   import Arguments._
   
@@ -302,6 +303,7 @@ case class Report(
   def diffs: Diffs                  = _diffs.getOrElse(SmartDiffs())
   def fromSource: Boolean           = _fromSource.getOrElse(true)
   def traceFilter: StackTraceFilter = _traceFilter.getOrElse(DefaultStackTraceFilter)
+  def notifier: String              = _notifier.getOrElse("")
 
   def overrideWith(other: Report) = {
     new Report(
@@ -317,7 +319,8 @@ case class Report(
       other._streaming       .orElse(_streaming),
       other._diffs           .orElse(_diffs),
       other._fromSource      .orElse(_fromSource),
-      other._traceFilter     .orElse(_traceFilter)
+      other._traceFilter     .orElse(_traceFilter),
+      other._notifier        .orElse(_notifier)
     )
   }
 
@@ -334,7 +337,8 @@ case class Report(
     "streaming"      -> _streaming,
     "diffs"          -> _diffs,
     "fromSource"     -> _fromSource,
-    "traceFilter"    -> _traceFilter).flatMap(showArg).mkString("Report(", ", ", ")")
+    "traceFilter"    -> _traceFilter,
+    "notifier"       -> _notifier).flatMap(showArg).mkString("Report(", ", ", ")")
 
 }
 private[specs2]
@@ -353,7 +357,8 @@ object Report extends Extract {
       _streaming     = bool("streaming"),
       _fromSource    = bool("fromsource"),
       _traceFilter   = bool("fullstacktrace").map(t=>NoStackTraceFilter).
-                       orElse(value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_)))
+                       orElse(value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_))),
+      _notifier      = value("notifier")
     )
   }
 }

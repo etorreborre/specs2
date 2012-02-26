@@ -7,12 +7,7 @@ import control.Throwablex._
 import reporter._
 import specification._
 import Fingerprints._
-import scala.Array._
-import text.MarkupString
-import time.SimpleTimer
-import execute.Failure._
-import execute.Skipped._
-import execute.Pending._
+import reflect.Classes
 
 /**
  * Implementation of the Framework interface for the sbt tool.
@@ -89,16 +84,23 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   protected def finalExporter(handler: EventHandler) = FinalResultsReporter(handler, loggers)
 
   def exporters(args: Array[String], handler: EventHandler): Seq[Exporting] = {
+
+    def notifierExporting: Option[NotifierExporting] = if (args.contains("notifier")) {
+      Classes.createObject[Notifier](Arguments(args:_*).report.notifier).map(n => new NotifierExporting { val notifier = n })
+    } else None
+
     def reportIs(reportTypes: String*) = reportTypes.exists(args.contains)
 
+    def optionalExporter(condition: Boolean)(e: Option[Exporting]) = if (condition) e else None
     def exporter(condition: Boolean)(e: =>Exporting) = if (condition) Some(e) else None
     def exportHtml     = exporter(reportIs("html"))(HtmlExporting)
 
     def exportJunitxml   = exporter(reportIs("junitxml"))(JUnitXmlExporting)
+    def exportCustom     = optionalExporter(reportIs("notifier"))(notifierExporting)
     def exportFinalStats = exporter(reportIs("html", "junitxml") && !reportIs("console"))(finalExporter(handler))
     def console          = exporter(!reportIs("html", "junitxml") || reportIs("console"))(new TestInterfaceReporter(handler, loggers))
 
-    Seq(console, exportHtml, exportJunitxml, exportFinalStats).flatten
+    Seq(console, exportHtml, exportJunitxml, exportCustom, exportFinalStats).flatten
   }
 }
 

@@ -4,18 +4,15 @@ package reporter
 import execute._
 import specification._
 import Levels._
-import specification.SpecificationStructure
 import org.specs2.internal.scalaz.{Tree, Scalaz}
 import Scalaz._
 import data.Trees._
 import main.Arguments
-import io.Location
 
 /**
  * Report a Specification by notifying execution events to a Notifier
  */
-trait NotifierReporter extends DefaultReporter
-    with NotifierExporting
+trait NotifierReporter extends DefaultReporter with NotifierExporting
 
 trait NotifierExporting extends Exporting {
 

@@ -16,8 +16,7 @@ import specification.{ExecutedSpecification, ExecutingSpecification, Specificati
 * - TextExporting prints the results in a Tree manner (using a TextOutput)
 *
 */
-trait ConsoleReporter extends DefaultReporter 
-    with TextExporting {
+trait ConsoleReporter extends DefaultReporter with TextExporting {
 
   override def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification = {
     // store the statistics and export the specification results in parallel to avoid

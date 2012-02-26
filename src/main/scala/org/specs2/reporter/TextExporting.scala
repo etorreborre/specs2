@@ -15,4 +15,5 @@ trait TextExporting extends TextPrinter with Exporting { outer =>
     spec.foreach { (name, fragments) => print(name, fragments) }
     spec.executed
   }
+
 } 
