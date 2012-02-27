@@ -71,6 +71,8 @@ From inside a specification, the available arguments are the following:
  `diffs`         | `SmartDiffs`                             | use a specific algorithm to display differences
  `fromSource`    | true                                     | true takes an AutoExample description from the file, false from the expectation ok message
  `traceFilter`   | `DefaultStackTraceFilter`                | use a StackTraceFilter instance for filtering the reported stacktrace elements
+ `notifier`      | String                                   | name of a class extending the `org.specs2.reporter.Notifier` trait
+ `exporter`      | String                                   | name of a class extending the `org.specs2.reporter.Exporter` trait
 
 ##### Most/Least frequently used arguments
 
@@ -225,7 +227,7 @@ On the command line you can pass the following arguments:
  `fullstacktrace` | boolean                 |                                                                         |
  `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
  `notifier`       | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
- `exporter`       | String                  | name of a class extending the `org.specs2.reporter.Exporter` trait     |
+ `exporter`       | String                  | name of a class extending the `org.specs2.reporter.Exporter` trait      |
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 

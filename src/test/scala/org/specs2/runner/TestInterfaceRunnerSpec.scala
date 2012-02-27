@@ -56,7 +56,8 @@ case class reporting() extends Mockito with matcher.MustMatchers with MockLogger
   val outer = this
   val reporter = mock[Reporter]
   val handler = mock[EventHandler]
-
+  implicit val args = Arguments()
+  
   val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger)) {
     override def reporter(handler: EventHandler)(args: Array[String]): Reporter = outer.reporter
   }

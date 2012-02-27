@@ -26,7 +26,7 @@ import reflect.Classes
  * of Description objects and a Map relating each Description to a Fragment to execute. 
  *
  */
-class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with DefaultSelection with DefaultSequence {
+class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with DefaultSelection with DefaultSequence with Exporters {
 
   private val executor = new FragmentExecution {}
   
@@ -39,10 +39,6 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
   private val descriptions = new JUnitDescriptionsFragments(klass.getName)
   /** extract the root Description object and the examples to execute */
   private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll((select(args)(specification) |> sequence).fragments)
-  /** the console exporter can be used to display results in the console */
-  protected lazy val consoleExporter = new TextExporting {}
-  /** the html exporter can be used to output html files */
-  protected lazy val htmlExporter = new HtmlExporting {}
   /** system properties */
   protected lazy val properties: SystemProperties = SystemProperties
   /** @return a Description for the TestSuite */
@@ -70,29 +66,12 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
 
   private def export = (executed: Seq[(Description, ExecutedFragment)]) => {
     val commandLineArgs = properties.getProperty("commandline").getOrElse("").split("\\s")
-    val arguments = Arguments(commandLineArgs:_*) <| args
-    def exportTo(name: String) = properties.isDefined(name) || commandLineArgs.contains(name)
+    def exportTo = (name: String) => properties.isDefined(name) || commandLineArgs.contains(name)
 
-    lazy val executedSpecification = ExecutingSpecification.create(specification.content.specName, executed.map(_._2))
-    lazy val commandLineArguments = arguments.commandLineFilterNot("html", "junitxml", "console")
-
-    if (exportTo("console"))  consoleExporter.export(commandLineArguments)(executedSpecification)
-    if (exportTo("html"))     htmlExporter.export(commandLineArguments)(executedSpecification)
-    if (exportTo("notifier")) notifierExporter(arguments).map(n => n.export(commandLineArguments)(executedSpecification))
-    if (exportTo("exporter")) customExporter(arguments).map(n => n.export(commandLineArguments)(executedSpecification))
-
+    val executedSpecification = ExecutingSpecification.create(specification.content.specName, executed.map(_._2))
+    exportToOthers(Arguments(commandLineArgs:_*) <| args, exportTo)(executedSpecification)
     executed
   }
-
-  private def notifierExporter(arguments: Arguments): Option[Exporting] =
-    if (args.contains("notifier")) {
-      Classes.createObject[Notifier](arguments.report.notifier, true).map(n => new NotifierExporting { val notifier = n })
-    } else None
-
-  private def customExporter(arguments: Arguments): Option[Exporting] =
-    if (args.contains("exporter")) {
-      Classes.createObject[Exporting](arguments.report.exporter, true)
-    } else None
 
   private def notifyJUnit(notifier: RunNotifier) = (executed: Seq[(Description, ExecutedFragment)]) => {
     executed foreach {
@@ -146,8 +125,7 @@ object JUnitRunner {
   def apply[T <: SpecificationStructure](f: Fragments, props: SystemProperties, console: TextExporting, html: HtmlExporting)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
       override protected lazy val specification = new Specification { def is = f }
       override protected lazy val properties = props
-      override protected lazy val consoleExporter = console
-      override protected lazy val htmlExporter = html
+      override def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] = Seq(console, html)
   }
 }
 /**

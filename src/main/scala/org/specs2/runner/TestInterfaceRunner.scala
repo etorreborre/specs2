@@ -40,13 +40,13 @@ trait FilesRunnerFingerprint extends TestFingerprint {
  * Then it uses a NotifierRunner to notify the EventHandler of the test events.
  */
 class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) extends _root_.org.scalatools.testing.Runner 
-  with HandlerEvents with TestLoggers {
+  with HandlerEvents with TestLoggers with Exporters {
   import reflect.Classes._
 
-  def run(classname: String, fingerprint: TestFingerprint, handler: EventHandler, args: Array[String]) =
+  def run(className: String, fingerprint: TestFingerprint, handler: EventHandler, args: Array[String]) =
     fingerprint match {
-      case f if f.superClassName == fp3.superClassName => runFilesRunner(classname, handler, args)
-      case other                                       => runSpecification(classname, handler, args)
+      case f if f.superClassName == fp3.superClassName => runFilesRunner(className, handler, args)
+      case other                                       => runSpecification(className, handler, args)
     }
 
   def runSpecification(classname: String, handler: EventHandler, args: Array[String]): Any = {
@@ -76,40 +76,21 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
 
   protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {
     override def export(implicit arguments: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
-      val commandLineArguments = arguments.commandLineFilterNot("html", "junitxml", "console")
-      exporters(args, handler).foreach(_.export(commandLineArguments)(spec))
-      spec.execute
+      exportToOthers(exporters(args, handler))(arguments)(spec)
+      spec.executed
     }
   }
 
   protected def finalExporter(handler: EventHandler) = FinalResultsReporter(handler, loggers)
 
-  def exporters(args: Array[String], handler: EventHandler): Seq[Exporting] = {
+  def exporters(args: Array[String], handler: EventHandler)(implicit arguments: Arguments): Seq[Exporting] = {
+    val isConsole = !Seq("html", "junitxml").exists(args.contains) || args.contains("console")
 
-    def notifierExporting: Option[Exporting] = if (args.contains("notifier")) {
-      Classes.createObject[Notifier](Arguments(args:_*).report.notifier, true).map(n => new NotifierExporting { val notifier = n })
-    } else None
-
-    def customExporting: Option[Exporting] = if (args.contains("exporter")) {
-      Classes.createObject[Exporting](Arguments(args:_*).report.exporter, true)
-    } else None
-
-    def reportIs(reportTypes: String*) = reportTypes.exists(args.contains)
-
-    def optionalExporter(condition: Boolean)(e: Option[Exporting]) = if (condition) e else None
-    def exporter(condition: Boolean)(e: =>Exporting) = if (condition) Some(e) else None
-    def exportHtml     = exporter(reportIs("html"))(HtmlExporting)
-
-    def exportJunitxml   = exporter(reportIs("junitxml"))(JUnitXmlExporting)
-    def exportNotifier   = optionalExporter(reportIs("notifier"))(notifierExporting)
-    def exportCustom     = optionalExporter(reportIs("exporter"))(customExporting)
-    def exportFinalStats = exporter(reportIs("html", "junitxml") && !reportIs("console"))(finalExporter(handler))
-    def console          = exporter(!reportIs("html", "junitxml") || reportIs("console"))(new TestInterfaceReporter(handler, loggers))
-
-    Seq(console, exportHtml, exportJunitxml, exportNotifier, exportCustom, exportFinalStats).flatten
+    def console          = exporter(isConsole)(new TestInterfaceReporter(handler, loggers))
+    def exportFinalStats = exporter(!isConsole)(finalExporter(handler))
+    super.exporters((args.filterNot(_ =="console")).contains) ++ Seq(console, exportFinalStats).flatten
   }
 }
-
 /**
  * This reporter will just notify the test interface about test results for the end statistics
  *
