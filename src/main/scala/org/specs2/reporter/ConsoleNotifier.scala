@@ -3,7 +3,7 @@ package reporter
 
 import execute.Details
 
-object ConsoleNotifier extends Notifier {
+trait ConsoleNotifier extends Notifier {
   def specStart(title: String, location: String)                                                                      = Console.println(Seq("specStart"     ,title  ,location)                       .mkString("; "))
   def specEnd(title: String, location: String)                                                                        = Console.println(Seq("specEnd"       ,title  ,location)                       .mkString("; "))
   def contextStart(text: String, location: String)                                                                    = Console.println(Seq("contextStart"  ,text   ,location)                       .mkString("; "))
@@ -16,3 +16,4 @@ object ConsoleNotifier extends Notifier {
   def exampleSkipped(name: String, message: String, duration: Long)                                                   = Console.println(Seq("exampleSkipped",name   , message,duration)                       .mkString("; "))
   def examplePending(name: String, message: String, duration: Long)                                                   = Console.println(Seq("examplePending",name   , message,duration)                       .mkString("; "))
 }
+object ConsoleNotifier extends ConsoleNotifier

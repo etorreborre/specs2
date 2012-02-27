@@ -46,6 +46,10 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
   "Arguments can decide if a result must be shown or not, depending on its status"                                      ^
     "xonly => canShow(x)"                                                                                               ! e17^
     "xonly => canShow(result.status)"                                                                                   ! e18^
+                                                                                                                        p^
+  "Some values can be filtered from the command line"                                                                   ^
+    "to include only some arguments"                                                                                    ! e19^
+    "to exclude some arguments"                                                                                         ! e20^
                                                                                                                         end
 
 
@@ -114,4 +118,6 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
              { (a, s, r) =>  a.canShow(s.status) must_== r }
 
 
+  def e19 = Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine === Seq("this", "cool")
+  def e20 = Arguments("this", "is", "cool").commandLineFilterNot("this", "cool").commandLine === Seq("is")
 }

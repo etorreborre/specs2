@@ -86,6 +86,15 @@ case class Arguments (
   def statsColor  (s: String) = colors.stats  (s, color)
   def removeColors(s: String) = colors.removeColors(s)
 
+  /**
+   * @return a new Arguments object with only some arguments on the command line
+   */
+  def commandLineFilter(included: String*) = copy(commandLine = commandLine.filter(included.toSet.contains))
+  /**
+   * @return a new Arguments object with some arguments removed from the command line
+   */
+  def commandLineFilterNot(excluded: String*) = copy(commandLine = commandLine.filterNot(excluded.toSet.contains))
+
   override def toString =
     (List(select.toString,
          execute.toString,

@@ -76,7 +76,8 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
 
   protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {
     override def export(implicit arguments: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
-      exporters(args, handler).foreach(_.export(arguments)(spec))
+      val commandLineArguments = arguments.commandLineFilterNot("html", "junitxml", "console")
+      exporters(args, handler).foreach(_.export(commandLineArguments)(spec))
       spec.execute
     }
   }
@@ -86,7 +87,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   def exporters(args: Array[String], handler: EventHandler): Seq[Exporting] = {
 
     def notifierExporting: Option[NotifierExporting] = if (args.contains("notifier")) {
-      Classes.createObject[Notifier](Arguments(args:_*).report.notifier).map(n => new NotifierExporting { val notifier = n })
+      Classes.createObject[Notifier](Arguments(args:_*).report.notifier, true).map(n => new NotifierExporting { val notifier = n })
     } else None
 
     def reportIs(reportTypes: String*) = reportTypes.exists(args.contains)
@@ -96,11 +97,11 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     def exportHtml     = exporter(reportIs("html"))(HtmlExporting)
 
     def exportJunitxml   = exporter(reportIs("junitxml"))(JUnitXmlExporting)
-    def exportCustom     = optionalExporter(reportIs("notifier"))(notifierExporting)
+    def exportNotifier   = optionalExporter(reportIs("notifier"))(notifierExporting)
     def exportFinalStats = exporter(reportIs("html", "junitxml") && !reportIs("console"))(finalExporter(handler))
     def console          = exporter(!reportIs("html", "junitxml") || reportIs("console"))(new TestInterfaceReporter(handler, loggers))
 
-    Seq(console, exportHtml, exportJunitxml, exportCustom, exportFinalStats).flatten
+    Seq(console, exportHtml, exportJunitxml, exportNotifier, exportFinalStats).flatten
   }
 }
 

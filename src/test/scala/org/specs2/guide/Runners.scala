@@ -224,6 +224,7 @@ On the command line you can pass the following arguments:
  `fromsource`     | boolean                 |                                                                         |
  `fullstacktrace` | boolean                 |                                                                         |
  `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
+ `notifier`       | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 
@@ -458,7 +459,7 @@ But also:
 
 ### Notifier runner
 
-A `NotifierRunner` accepts a `Notifier` to execute a specification and report execution events. The `Notifier` trait notifies of the following:
+A `NotifierRunner` accepts a `Notifier` to execute a specification and report execution events. The `org.specs2.reporter.Notifier` trait notifies of the following:
 
  * specification start: the beginning of a specification, with its name
  * specification end: the end of a specification, with its name
@@ -469,6 +470,12 @@ A `NotifierRunner` accepts a `Notifier` to execute a specification and report ex
  * example result: success / failure / error / skipped / pending
 
 All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples only).
+
+#### Inside sbt
+
+You can also use a `Notifier` from inside sbt by passing the `notifier` argument with a `Notifier` implementation class name:
+
+      sbt>test-only *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
 
 ### From the console
 

@@ -16,6 +16,7 @@ import reporter._
 import specification._
 import text.AnsiColors
 import control.{ExecutionOrigin, Throwablex}
+import reflect.Classes
 
 /**
  * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
@@ -71,14 +72,20 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
     val commandLineArgs = properties.getProperty("commandline").getOrElse("").split("\\s")
     val arguments = Arguments(commandLineArgs:_*) <| args
     def exportTo(name: String) = properties.isDefined(name) || commandLineArgs.contains(name)
-    
-    if (exportTo("console")) 
-      consoleExporter.export(arguments)(ExecutingSpecification.create(specification.content.specName, executed.map(_._2)))
-    if (exportTo("html")) 
-      htmlExporter.export(arguments)(ExecutingSpecification.create(specification.content.specName, executed.map(_._2)))
+
+    lazy val executedSpecification = ExecutingSpecification.create(specification.content.specName, executed.map(_._2))
+
+    if (exportTo("console"))  consoleExporter.export(arguments)(executedSpecification)
+    if (exportTo("html"))     htmlExporter.export(arguments)(executedSpecification)
+    if (exportTo("notifier")) notifierExporter(arguments).map(n => n.export(arguments.commandLineFilterNot("html", "console", "junitxml"))(executedSpecification))
 
     executed
   }
+
+  private def notifierExporter(arguments: Arguments): Option[NotifierExporting] =
+    if (args.contains("notifier")) {
+      Classes.createObject[Notifier](arguments.report.notifier, true).map(n => new NotifierExporting { val notifier = n })
+    } else None
 
   private def notifyJUnit(notifier: RunNotifier) = (executed: Seq[(Description, ExecutedFragment)]) => {
     executed foreach {
