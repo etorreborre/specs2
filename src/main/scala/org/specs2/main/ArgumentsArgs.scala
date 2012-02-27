@@ -104,7 +104,9 @@ trait ArgumentsArgs extends ArgProperties {
       streaming:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter]()) = new Arguments(
+      traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
+      notifier:      ArgProperty[String]            = ArgProperty[String](),
+      exporter:      ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
        report = Report(xonly.toOption.map(v => if (v) "x!" else "x!+-o*").orElse(showOnly.toOption),
                        failtrace.toOption,
                        color.toOption,
@@ -117,7 +119,9 @@ trait ArgumentsArgs extends ArgProperties {
                        streaming.toOption,
                        diffs.toOption,
                        fromSource.toOption,
-                       traceFilter.toOption))
+                       traceFilter.toOption,
+                       notifier.toOption,
+                       exporter.toOption))
 
   }
 

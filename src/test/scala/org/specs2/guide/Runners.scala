@@ -14,7 +14,7 @@ There are many ways to execute ***specs2*** specifications:
  * using [sbt](http://code.google.com/p/simple-build-tool)
  * using [JUnit](http://www.junit.org)
  * using [Intellij IDEA](http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA)
- * using your own reporting tool implementing the `Notifier` interface
+ * using your own reporting tool implementing the `Notifier` interface (simple) or the `Exporting` interface (with a full access to the executed specification)
 
 
 ### Dependencies
@@ -225,6 +225,7 @@ On the command line you can pass the following arguments:
  `fullstacktrace` | boolean                 |                                                                         |
  `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
  `notifier`       | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
+ `exporter`       | String                  | name of a class extending the `org.specs2.reporter.Exporter` trait     |
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 

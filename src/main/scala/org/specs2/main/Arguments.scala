@@ -18,7 +18,6 @@ import text._
  * - report:  for the reporting of results
  *
  */
-private[specs2]  
 case class Arguments (
   select:        Select           = Select(),
   execute:       Execute          = Execute(),
@@ -294,7 +293,8 @@ case class Report(
   _diffs:         Option[Diffs]            = None,
   _fromSource:    Option[Boolean]          = None,
   _traceFilter:   Option[StackTraceFilter] = None,
-  _notifier:      Option[String]           = None) extends ShowArgs {
+  _notifier:      Option[String]           = None,
+  _exporter:      Option[String]           = None) extends ShowArgs {
 
   import Arguments._
   
@@ -313,6 +313,7 @@ case class Report(
   def fromSource: Boolean           = _fromSource.getOrElse(true)
   def traceFilter: StackTraceFilter = _traceFilter.getOrElse(DefaultStackTraceFilter)
   def notifier: String              = _notifier.getOrElse("")
+  def exporter: String              = _exporter.getOrElse("")
 
   def overrideWith(other: Report) = {
     new Report(
@@ -329,7 +330,8 @@ case class Report(
       other._diffs           .orElse(_diffs),
       other._fromSource      .orElse(_fromSource),
       other._traceFilter     .orElse(_traceFilter),
-      other._notifier        .orElse(_notifier)
+      other._notifier        .orElse(_notifier),
+      other._exporter        .orElse(_exporter)
     )
   }
 
@@ -347,7 +349,8 @@ case class Report(
     "diffs"          -> _diffs,
     "fromSource"     -> _fromSource,
     "traceFilter"    -> _traceFilter,
-    "notifier"       -> _notifier).flatMap(showArg).mkString("Report(", ", ", ")")
+    "notifier"       -> _notifier,
+    "exporter"       -> _exporter).flatMap(showArg).mkString("Report(", ", ", ")")
 
 }
 private[specs2]
@@ -367,7 +370,8 @@ object Report extends Extract {
       _fromSource    = bool("fromsource"),
       _traceFilter   = bool("fullstacktrace").map(t=>NoStackTraceFilter).
                        orElse(value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_))),
-      _notifier      = value("notifier")
+      _notifier      = value("notifier"),
+      _exporter      = value("exporter")
     )
   }
 }

@@ -104,7 +104,9 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       streaming:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter]()) = addArguments(super.report(
+      traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
+      notifier:      ArgProperty[String]            = ArgProperty[String](),
+      exporter:      ArgProperty[String]            = ArgProperty[String]()) = addArguments(super.report(
         xonly,
         showOnly,
         failtrace,
@@ -118,7 +120,9 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
         streaming,
         diffs,
         fromSource,
-        traceFilter))
+        traceFilter,
+        notifier,
+        exporter))
   }
 
 }

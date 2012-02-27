@@ -3,7 +3,7 @@ package runner
 import main.Arguments
 import io._
 import mock.Mockito
-import specification.SpecificationStructure
+import specification._
 import matcher.DataTables
 import reporter._
 import org.scalatools.testing._
@@ -26,6 +26,7 @@ class TestInterfaceRunnerSpec extends Specification { def is =
   "if the specification instance can be created it must be passed to TestInterfaceReporter"                             ! reporting().e1^
   "Additional report types can be passed on the command line"                                                           ! reporting().e2^
   "A custom notifier can be specified on the command line with 'notifier <class name>'"                                 ! reporting().e3^
+  "A custom exporter can be specified on the command line with 'exporter <class name>'"                                 ! reporting().e4^
                                                                                                                         end
 
   case class missing() {
@@ -83,13 +84,15 @@ case class reporting() extends Mockito with matcher.MustMatchers with MockLogger
 
   }
 
-  def e3 = atLeastOnce(runner.exporters(Array("notifier", "org.specs2.runner.TestNotifier"), handler)) { e =>
+  def e3 = atLeastOnce(runner.exporters(Array("notifier", "user.reporter.CustomNotifier"), handler)) { e =>
              e must haveInterface[NotifierExporting]
            }
 
+  def e4 = atLeastOnce(runner.exporters(Array("exporter", "user.reporter.CustomExporter"), handler)) { e =>
+    e must haveInterface[Exporter]
+  }
 }
 
-class TestNotifier extends ConsoleNotifier
 
 trait MockLogger extends matcher.MustExpectations with Mockito {
   val logger = new Logger with MockOutput {

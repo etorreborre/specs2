@@ -74,17 +74,24 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
     def exportTo(name: String) = properties.isDefined(name) || commandLineArgs.contains(name)
 
     lazy val executedSpecification = ExecutingSpecification.create(specification.content.specName, executed.map(_._2))
+    lazy val commandLineArguments = arguments.commandLineFilterNot("html", "junitxml", "console")
 
-    if (exportTo("console"))  consoleExporter.export(arguments)(executedSpecification)
-    if (exportTo("html"))     htmlExporter.export(arguments)(executedSpecification)
-    if (exportTo("notifier")) notifierExporter(arguments).map(n => n.export(arguments.commandLineFilterNot("html", "console", "junitxml"))(executedSpecification))
+    if (exportTo("console"))  consoleExporter.export(commandLineArguments)(executedSpecification)
+    if (exportTo("html"))     htmlExporter.export(commandLineArguments)(executedSpecification)
+    if (exportTo("notifier")) notifierExporter(arguments).map(n => n.export(commandLineArguments)(executedSpecification))
+    if (exportTo("exporter")) customExporter(arguments).map(n => n.export(commandLineArguments)(executedSpecification))
 
     executed
   }
 
-  private def notifierExporter(arguments: Arguments): Option[NotifierExporting] =
+  private def notifierExporter(arguments: Arguments): Option[Exporting] =
     if (args.contains("notifier")) {
       Classes.createObject[Notifier](arguments.report.notifier, true).map(n => new NotifierExporting { val notifier = n })
+    } else None
+
+  private def customExporter(arguments: Arguments): Option[Exporting] =
+    if (args.contains("exporter")) {
+      Classes.createObject[Exporting](arguments.report.exporter, true)
     } else None
 
   private def notifyJUnit(notifier: RunNotifier) = (executed: Seq[(Description, ExecutedFragment)]) => {

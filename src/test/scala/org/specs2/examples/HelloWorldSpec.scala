@@ -3,7 +3,7 @@ package examples
 import org.specs2._
 
 class HelloWorldSpec extends Specification { def is =
-
+  args.report(notifier = "user.reporter.CustomNotifier")^
   "This is a specification to check the 'Hello world' string"                 ^
                                                                               p^
   "The 'Hello world' string should"                                           ^
