@@ -31,6 +31,6 @@ trait StoredResultsContext extends Context { this: { def storedResults: Seq[Resu
   def apply[T <% Result](r: =>T): Result = {
     // evaluate r, triggering side effects
     r
-    issues(storedResults, "\n ")
+    issues(storedResults, "\n")
   }
 }

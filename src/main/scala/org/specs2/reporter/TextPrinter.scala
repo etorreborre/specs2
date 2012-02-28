@@ -136,8 +136,9 @@ trait TextPrinter {
                      timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
       val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
       out.printFailure(description)
-      out.printFailure((if (isDataTable) "" else desc.takeWhile(_ == ' ')+" ") +
-                       f.message + location(f))
+      val margin = desc.takeWhile(_ == ' ')+" "
+      out.printFailure((if (isDataTable) f.message else
+                                         f.message.split("\n").mkString(margin, "\n"+margin, "")) + location(f))
       if (args.failtrace)
         args.traceFilter(f.stackTrace).foreach(t => out.printFailure(t.toString))
     }
