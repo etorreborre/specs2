@@ -38,9 +38,11 @@ trait Exporters {
 
   def exportHtml(accept: String => Boolean)    (implicit arguments: Arguments) = exporter(accept("html"))(HtmlExporting)
   def exportJUnitxml(accept: String => Boolean)(implicit arguments: Arguments) = exporter(accept("junitxml"))(JUnitXmlExporting)
-  def exportNotifier(accept: String => Boolean)(implicit arguments: Arguments) = optionalExporter(accept("notifier"))(notifierExporter(arguments))
-  def exportCustom(accept: String => Boolean)  (implicit arguments: Arguments) = optionalExporter(accept("exporter"))(customExporter(arguments))
   def exportConsole(accept: String => Boolean) (implicit arguments: Arguments) = exporter(accept("console"))(TextExporting)
 
+  def exportNotifier(accept: String => Boolean)(implicit arguments: Arguments) =
+    optionalExporter(accept("notifier") || !arguments.report.notifier.isEmpty)(notifierExporter(arguments))
+  def exportCustom(accept: String => Boolean)  (implicit arguments: Arguments) =
+    optionalExporter(accept("exporter") || !arguments.report.notifier.isEmpty)(customExporter(arguments))
 
 }
