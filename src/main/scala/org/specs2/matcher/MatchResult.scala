@@ -80,6 +80,7 @@ trait MatchResult[+T] extends ResultLike {
   def isSuccess = toResult.isSuccess
   def message = toResult.message
   def orThrow = this
+  def orSkip = this
   /**
    * @return the MatchResult with no messages
    */
@@ -102,6 +103,7 @@ case class MatchFailure[T] private[specs2](okMessage: String, koMessage: String,
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def mute = MatchFailure("", "", expectable, details)
   override def orThrow = { throw new FailureException(toResult); this }
+  override def orSkip  = { throw new SkipException(toResult); this }
 }
 case class MatchSkip[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
   def not: MatchResult[T] = this

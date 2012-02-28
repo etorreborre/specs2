@@ -8,4 +8,7 @@ case class FailureException(f: Failure) extends Exception {
   override def getStackTrace = f.exception.getStackTrace
 }
 /** this class allows to throw a failure in a Exception */
-case class SkipException(f: Skipped) extends Exception
+case class SkipException(f: Skipped) extends Exception {
+  /** create a SkipException from a Failure */
+  def this(f: Failure) = this(f.skip)
+}
