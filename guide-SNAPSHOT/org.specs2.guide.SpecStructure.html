@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"><h2 specId="437391844">Specification structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this chapter you will learn how to:</p>
+    </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"><h2 specId="1433648872">Specification structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this chapter you will learn how to:</p>
 <ul>
   <li>declare examples</li>
   <li>share examples</li>
@@ -151,7 +151,29 @@
 
   def e1 = &quot;hello&quot; must have size(10000) and
                         startWith(&quot;hell&quot;)
-</code></pre><a name="Thrown+Expectations"><h5>Thrown Expectations</h5></a><p>The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice<br />by some. However you might see it as an annoying restriction. You can avoid it by extending the <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code><br />trait. With that trait, any failing expectation will throw a <code class="prettyprint">FailureException</code> and the rest of the example will not be executed.</p><p>There is also an additional method <code class="prettyprint">failure(message)</code> to throw a <code class="prettyprint">FailureException</code> at will.</p><p>[Note that the <code class="prettyprint">ThrownMatchers</code> traits are mixed in the <code class="prettyprint">mutable.Specification</code> trait used for <em>unit</em> specifications].</p><a name="Set+an+example+as+%22Pending+until+fixed%22"><h4>Set an example as &quot;Pending until fixed&quot;</h4></a><p>Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.<br />Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append <code class="prettyprint">pendingUntilFixed</code><br />to the Example body:</p>
+</code></pre><a name="Thrown+Expectations"><h5>Thrown Expectations</h5></a><p>The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice<br />by some. However you might see it as an annoying restriction. You can avoid it by extending the <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code><br />trait. With that trait, any failing expectation will throw a <code class="prettyprint">FailureException</code> and the rest of the example will not be executed.</p><p>There is also an additional method <code class="prettyprint">failure(message)</code> to throw a <code class="prettyprint">FailureException</code> at will.</p><p>[Note that the <code class="prettyprint">ThrownMatchers</code> traits are mixed in the <code class="prettyprint">mutable.Specification</code> trait used for <em>unit</em> specifications].</p><a name="All+Expectations"><h5>All Expectations</h5></a><p>The <code class="prettyprint">org.specs2.specification.AllExpectations</code> trait goes further and gives you the possibility to have all the failures of an Example to be reported without stopping at the first one. This enables a type of specification where it is possible to define lots of expectations inside the body of an example and get a maximum of information on what fails and what passes:</p>
+<pre><code class="prettyprint">  import org.specs2._
+  import specification._
+
+  class AllExpectationsSpec extends mutable.Specification with AllExpectations {
+    &quot;In this example all the expectations are evaluated&quot; &gt;&gt; {
+      1 === 2  // this fails
+      1 === 3  // this also fails
+      1 === 1
+    }
+    &quot;There is no collision with this example&quot; &gt;&gt; {
+      10 === 11 // this fails
+      12 === 12
+      13 === 31 // this also fails
+    }
+  }
+</code></pre><p>The second example above hints at a restriction for this kind of Specification. The failures are accumulated for each example by mutating a shared variable. &quot;Mutable&quot; means that the concurrent execution of examples will be an issue if done blindly. To avoid this the <code class="prettyprint">AllExpectations</code> trait overrides the specification arguments so that it becomes <a href="org.specs2.guide.SpecStructure.html#isolated+variables"><code class="prettyprint">isolated</code></a> unless it is already <code class="prettyprint">isolated</code> or <code class="prettyprint">sequential</code>.</p><a name="Short-circuit+the+execution"><h6>Short-circuit the execution</h6></a><p>Ultimately, you may want to stop the execution of an example if one expectation is not verified. This is possible with <code class="prettyprint">orThrow</code>:</p>
+<pre><code class="prettyprint">    &quot;In this example all the expectations are evaluated&quot; &gt;&gt; {
+      1 === 1           // this is ok
+     (1 === 3).orThrow  // this fails but is never executed
+      1 === 4
+    }
+</code></pre><p>Alternatively, <code class="prettyprint">orSkip</code> will skip the rest of the example in case of a failure.</p><a name="Set+an+example+as+%22Pending+until+fixed%22"><h4>Set an example as &quot;Pending until fixed&quot;</h4></a><p>Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.<br />Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append <code class="prettyprint">pendingUntilFixed</code><br />to the Example body:</p>
 <pre><code class="prettyprint">  &quot;this example fails for now&quot; ! {
     1 must_== 2
   }.pendingUntilFixed
@@ -970,8 +992,8 @@ val init = withFile() compose withDatabase()
   <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt;</code><code class="prettyprint">&gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
 </ul>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="1140808434"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="123738578"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="646960389"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="66829463"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -981,7 +1003,7 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
             
           </li></ul>
-          </li><li id="437391844"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+          </li><li id="1433648872"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -1000,6 +1022,10 @@ val init = withFile() compose withDatabase()
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Thrown+Expectations">Thrown Expectations</a>
             
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#All+Expectations">All Expectations</a>
+            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Short-circuit+the+execution">Short-circuit the execution</a>
+            
+          </li></ul>
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Set+an+example+as+%22Pending+until+fixed%22">Set an example as &quot;Pending until fixed&quot;</a>
             
@@ -1109,7 +1135,7 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
             
           </li></ul>
-          </li><li id="917303005"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          </li><li id="1049986194"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1173,7 +1199,7 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1304831253"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1462048607"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1217,7 +1243,7 @@ val init = withFile() compose withDatabase()
             
           </li></ul>
           </li></ul>
-          </li><li id="1740671990"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          </li><li id="171460796"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1273,11 +1299,13 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.Runners.html#IntelliJ">IntelliJ</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#Inside+sbt">Inside sbt</a>
             
+          </li></ul>
           </li><li id=""><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
             
           </li></ul>
-          </li><li id="686556537"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="275697379"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1321,7 +1349,7 @@ val init = withFile() compose withDatabase()
             
           </li></ul>
           </li></ul>
-          </li><li id="1494229589"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          </li><li id="375249779"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1341,5 +1369,5 @@ val init = withFile() compose withDatabase()
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1140808434','437391844'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['646960389','1433648872'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

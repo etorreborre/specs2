@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Runners guide</title><a name="Runners+guide"><h2 specId="1740671990">Runners guide</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
+    </head><body><div id="container"><title>Runners guide</title><a name="Runners+guide"><h2 specId="171460796">Runners guide</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
 <ul>
   <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li>
   <li>on the command line, with a html output, and the <code class="prettyprint">specs2.html</code> runner</li>
@@ -67,7 +67,7 @@
   <li>using <a href="http://code.google.com/p/simple-build-tool">sbt</a></li>
   <li>using <a href="http://www.junit.org">JUnit</a></li>
   <li>using <a href="http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA">Intellij IDEA</a></li>
-  <li>using your own reporting tool implementing the <code class="prettyprint">Notifier</code> interface</li>
+  <li>using your own reporting tool implementing the <code class="prettyprint">Notifier</code> interface (simple) or the <code class="prettyprint">Exporting</code> interface (with a full access to the executed specification)</li>
 </ul><a name="Dependencies"><h3>Dependencies</h3></a><p><strong><em>specs2</em></strong> is available for Scala 2.9.0 onwards and uses the following libraries, as specified using the <a href="http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies">sbt dsl</a>:</p><p><table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; %% &quot;specs2-scalaz-core&quot; % &quot;6.0.1&quot;</code></td><td class="info">mandatory. This jar bundles the scalaz classes but renamed as <code class="prettyprint">org.specs2.internal.scalaz._</code>.</td></tr><tr><td class="info"> <code class="prettyprint">&quot;org.scala-tools.testing&quot; %% &quot;scalacheck&quot; % &quot;1.9&quot;</code></td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.mockito&quot; % &quot;mockito-all&quot; % &quot;1.9.0&quot;</code></td><td class="info">only if using Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.hamcrest&quot; % &quot;hamcrest-all&quot; % &quot;1.1&quot;</code></td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;junit&quot; % &quot;junit&quot; % &quot;4.7&quot;</code></td><td class="info">only if using JUnit</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-tools.testing&quot; % &quot;test-interface&quot; % &quot;0.5&quot;</code></td><td class="info">provided by sbt when using it</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.pegdown&quot; % &quot;pegdown&quot; % &quot;1.0.2&quot;</code></td><td class="info">only if using the html runner</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; % &quot;classycle&quot; % &quot;1.4.1&quot;</code></td><td class="info">only if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % &quot;2.9.1&quot;</code></td><td class="info">only if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait with the <code class="prettyprint">CompilerDependencyFinder</code> trait</td></tr></table></p><p><strong>Note</strong>: there are versions of specs2 available for Scala 2.8.1 but they <a href="org.specs2.guide.SpecStructure.html#In+a+mutable+specification">miss some &quot;context&quot; functionalities</a>.</p><a name="Arguments"><h3>Arguments</h3></a><p>You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the <code class="prettyprint">args(name=value)</code> syntax:</p>
 <pre><code class="prettyprint">  class MySpec extends Specification { def is = args(xonly=true)    ^
     &quot;Clever spec title&quot;                                             ^
@@ -225,6 +225,16 @@
       <td><code class="prettyprint">traceFilter</code> </td>
       <td><code class="prettyprint">DefaultStackTraceFilter</code> </td>
       <td>use a StackTraceFilter instance for filtering the reported stacktrace elements</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">notifier</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Notifier</code> trait</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">exporter</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Exporter</code> trait</td>
     </tr>
   </tbody>
 </table><a name="Most%2FLeast+frequently+used+arguments"><h5>Most/Least frequently used arguments</h5></a><p>Most of the arguments above can be set in a specification with <code class="prettyprint">args(name=value)</code>. However Scala would not allow the <code class="prettyprint">args</code> method to accept <em>all</em> the possible<br />arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called <code class="prettyprint">args</code>, having separate methods for setting all the parameters, by &quot;category&quot;. For example:</p>
@@ -561,6 +571,16 @@
       <td>regexp-csv/regexp-csv </td>
       <td>comma-separated include patterns separated by <code class="prettyprint">/</code> with exclude patterns </td>
     </tr>
+    <tr>
+      <td><code class="prettyprint">notifier</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Notifier</code> trait </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">exporter</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Exporter</code> trait </td>
+    </tr>
   </tbody>
 </table><p><em>[<code class="prettyprint">regexp</code> is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]</em></p><a name="From+system+properties"><h4>From system properties</h4></a><p>You can pass any argument to <strong><em>specs2</em></strong> from system properties:</p>
 <ul>
@@ -755,7 +775,7 @@
 <ul>
   <li>Provide command-line arguments in the &quot;Test options&quot;</li>
   <li>&quot;Jump to Test&quot; and &quot;Jump to Source&quot;</li>
-</ul><a name="Notifier+runner"><h3>Notifier runner</h3></a><p>A <code class="prettyprint">NotifierRunner</code> accepts a <code class="prettyprint">Notifier</code> to execute a specification and report execution events. The <code class="prettyprint">Notifier</code> trait notifies of the following:</p>
+</ul><a name="Notifier+runner"><h3>Notifier runner</h3></a><p>A <code class="prettyprint">NotifierRunner</code> accepts a <code class="prettyprint">Notifier</code> to execute a specification and report execution events. The <code class="prettyprint">org.specs2.reporter.Notifier</code> trait notifies of the following:</p>
 <ul>
   <li>specification start: the beginning of a specification, with its name</li>
   <li>specification end: the end of a specification, with its name</li>
@@ -764,7 +784,9 @@
   <li>text: any Text fragment that needs to be displayed</li>
   <li>example start</li>
   <li>example result: success / failure / error / skipped / pending</li>
-</ul><p>All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples only).</p><a name="From+the+console"><h3>From the console</h3></a><p>The <code class="prettyprint">specs2.run</code> object has an <code class="prettyprint">apply</code> method to execute specifications from the Scala console:</p>
+</ul><p>All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples only).</p><a name="Inside+sbt"><h4>Inside sbt</h4></a><p>You can also use a <code class="prettyprint">Notifier</code> from inside sbt by passing the <code class="prettyprint">notifier</code> argument with a <code class="prettyprint">Notifier</code> implementation class name:</p>
+<pre><code class="prettyprint">  sbt&gt;test-only *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
+</code></pre><a name="From+the+console"><h3>From the console</h3></a><p>The <code class="prettyprint">specs2.run</code> object has an <code class="prettyprint">apply</code> method to execute specifications from the Scala console:</p>
 <pre><code class="prettyprint">  scala&gt; specs2.run(spec1, spec2)
 
   scala&gt; import specs2._  // same thing, importing the run object
@@ -780,8 +802,8 @@
   scala&gt; specs2.run(spec1)
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="1140808434"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="123738578"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="646960389"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="66829463"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -791,7 +813,7 @@
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
             
           </li></ul>
-          </li><li id="437391844"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+          </li><li id="1433648872"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -810,6 +832,10 @@
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Thrown+Expectations">Thrown Expectations</a>
             
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#All+Expectations">All Expectations</a>
+            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Short-circuit+the+execution">Short-circuit the execution</a>
+            
+          </li></ul>
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Set+an+example+as+%22Pending+until+fixed%22">Set an example as &quot;Pending until fixed&quot;</a>
             
@@ -919,7 +945,7 @@
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
             
           </li></ul>
-          </li><li id="917303005"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          </li><li id="1049986194"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -983,7 +1009,7 @@
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1304831253"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1462048607"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1027,7 +1053,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1740671990"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          </li><li id="171460796"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1083,11 +1109,13 @@
           </li><li id=""><a href="org.specs2.guide.Runners.html#IntelliJ">IntelliJ</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#Inside+sbt">Inside sbt</a>
             
+          </li></ul>
           </li><li id=""><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
             
           </li></ul>
-          </li><li id="686556537"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="275697379"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1131,7 +1159,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1494229589"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          </li><li id="375249779"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1151,5 +1179,5 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1140808434','1740671990'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['646960389','171460796'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
