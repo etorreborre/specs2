@@ -198,11 +198,12 @@ case class Success(m: String = "")  extends Result(m, m) {
   override def and(res: =>Result): Result = {
     val r = res
     r match {
-      case Success(m)          => if (message == m || message.isEmpty) Success(m, expectationsNb + r.expectationsNb)
-                                  else                                 Success(message+" and "+m, expectationsNb + r.expectationsNb)
-      case e @ Error(_, _)     => r.addExpectationsNb(expectationsNb)
-      case Failure(_, _, _, _) => r.addExpectationsNb(expectationsNb)
-      case _                   => super.and(r)
+      case Success(m)             => if (message == m || message.isEmpty) Success(m, expectationsNb + r.expectationsNb)
+                                     else                                 Success(message+" and "+m, expectationsNb + r.expectationsNb)
+      case e @ Error(_, _)        => r.addExpectationsNb(expectationsNb)
+      case Failure(_, _, _, _)    => r.addExpectationsNb(expectationsNb)
+      case DecoratedResult(d, r1) => DecoratedResult(d, and(r1))
+      case _                      => super.and(r)
     }
   }
   override def isSuccess = true
@@ -236,9 +237,11 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   override def or(res: =>Result): Result = {
     val r = res
     r match {
-      case s @ Success(m)       => if (message == m) r.addExpectationsNb(expectationsNb) else Success(message+" and "+m, expectationsNb + s.expectationsNb)
-      case Failure(m, e, st, d) => Failure(message+" and "+m, e, stackTrace ::: st, d).addExpectationsNb(expectationsNb)
-      case _                    => super.or(r)
+      case s @ Success(m)         => if (message == m) r.addExpectationsNb(expectationsNb)
+                                     else Success(message+" and "+m, expectationsNb + s.expectationsNb)
+      case Failure(m, e, st, d)   => Failure(message+" and "+m, e, stackTrace ::: st, d).addExpectationsNb(expectationsNb)
+      case DecoratedResult(d, r1) => DecoratedResult(d, or(r1))
+      case _                      => super.or(r)
     }
   }
 
@@ -342,8 +345,19 @@ case class DecoratedResult[T](decorator: T, result: Result) extends Result(resul
     override val expectationsNb = n
   }
     
-  override def and(r: =>Result): Result = DecoratedResult(decorator, result and r)
-  override def or(r2: =>Result): Result = DecoratedResult(decorator, result or r2)
+  override def and(r: =>Result): Result = {
+    r match {
+      case DecoratedResult(d2, r2) => DecoratedResult(Seq(decorator, d2), result and r2)
+      case other                   => DecoratedResult(decorator, result and r)
+    }
+  }
+
+  override def or(r: =>Result): Result = {
+    r match {
+      case DecoratedResult(d2, r2) => DecoratedResult(Seq(decorator, d2), result or r2)
+      case other                   => DecoratedResult(decorator, result or r)
+    }
+  }
   override def isSuccess: Boolean       = result.isSuccess
   override def isError: Boolean         = result.isError
   override def isSkipped: Boolean       = result.isSkipped
