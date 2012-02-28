@@ -68,6 +68,7 @@ case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, l
   }
   def hasDescription = s match { case EmptyMarkup() => false; case _ => true }
   def stats = statistics.copy(timer = outer.timer)
+  def message = result.message
   def isSuccess = stats.isSuccess
   def isError   = stats.hasErrors
   def isFailure = stats.hasFailures

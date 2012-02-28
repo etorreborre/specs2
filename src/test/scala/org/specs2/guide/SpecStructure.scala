@@ -164,6 +164,28 @@ There is also an additional method `failure(message)` to throw a `FailureExcepti
 
 [Note that the `ThrownMatchers` traits are mixed in the `mutable.Specification` trait used for _unit_ specifications].
 
+##### All Expectations
+
+The `org.specs2.specification.AllExpectations` trait goes further and gives you the possibility to have all the expectations of an Example to be reported without stopping at the first one. This enables a type of specification where it is possible to define lots of expectations inside the body of an example and get a maximum of information on what fails and what passes:
+
+      import org.specs2._
+      import specification._
+
+      class AllExpectationsSpec extends mutable.Specification with AllExpectations {
+        "In this example all the expectations are evaluated" >> {
+          1 === 2  // this fails
+          1 === 3  // this also fails
+          1 === 1
+        }
+        "There is no collision with this example" >> {
+          10 === 11 // this fails
+          12 === 12
+          13 === 31 // this also fails
+        }
+      }
+
+The second example above hints at a restriction for this kind of Specification. The failures are accumulated for each example by mutating a shared variable. However there is no conflict because the `AllExpectations` trait overrides the specification arguments so that it becomes isolated unless it is already isolated or sequential.
+
 #### Set an example as "Pending until fixed"
 
 Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.
