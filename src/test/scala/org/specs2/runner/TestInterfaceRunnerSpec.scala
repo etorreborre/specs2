@@ -56,8 +56,7 @@ case class reporting() extends Mockito with matcher.MustMatchers with MockLogger
   val outer = this
   val reporter = mock[Reporter]
   val handler = mock[EventHandler]
-  implicit val args = Arguments()
-  
+
   val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger)) {
     override def reporter(handler: EventHandler)(args: Array[String]): Reporter = outer.reporter
   }
@@ -71,6 +70,8 @@ case class reporting() extends Mockito with matcher.MustMatchers with MockLogger
   }
 
   def e2 = {
+    implicit val args = Arguments()
+
     def export(condition: Boolean, e: String) = if (condition) Some(e) else None
     def selectedExporters(c: Boolean, h: Boolean, j: Boolean) =
       Seq(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(j, "JUnitXmlExporting$")).flatten
@@ -85,12 +86,18 @@ case class reporting() extends Mockito with matcher.MustMatchers with MockLogger
 
   }
 
-  def e3 = atLeastOnce(runner.exporters(Array("notifier", "user.reporter.CustomNotifier"), handler)) { e =>
-             e must haveInterface[NotifierExporting]
-           }
+  def e3 = {
+    val args = Array("notifier", "user.reporter.CustomNotifier")
+    atLeastOnce(runner.exporters(args, handler)(Arguments(args:_*))) { e =>
+      e must haveInterface[NotifierExporting]
+    }
+  }
 
-  def e4 = atLeastOnce(runner.exporters(Array("exporter", "user.reporter.CustomExporter"), handler)) { e =>
-    e must haveInterface[Exporter]
+  def e4 = {
+    val args = Array("exporter", "user.reporter.CustomExporter")
+    atLeastOnce(runner.exporters(args, handler)(Arguments(args:_*))) { e =>
+      e must haveInterface[Exporter]
+    }
   }
 }
 

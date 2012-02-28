@@ -44,6 +44,8 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     lazy val properties = mock[SystemProperties]
 
     properties.getProperty("commandline") returns None
+    val executeSpec = (s: ExecutingSpecification) => s.execute
+    Seq(console, html).foreach(e => e.export(any[Arguments]) returns executeSpec)
 
     abstract class DummySpec extends Specification
     def run(f: Fragments) = JUnitRunner.apply[DummySpec](f, properties, console, html).run(notifier)

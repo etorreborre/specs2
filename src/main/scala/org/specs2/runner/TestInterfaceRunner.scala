@@ -88,7 +88,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
 
     def console          = exporter(isConsole)(new TestInterfaceReporter(handler, loggers))
     def exportFinalStats = exporter(!isConsole)(finalExporter(handler))
-    super.exporters((args.filterNot(_ =="console")).contains) ++ Seq(console, exportFinalStats).flatten
+    super.exporters((args.filterNot(_ == "console")).contains) ++ Seq(console, exportFinalStats).flatten
   }
 }
 /**
