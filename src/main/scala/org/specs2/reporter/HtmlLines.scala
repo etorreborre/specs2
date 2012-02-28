@@ -109,14 +109,14 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
     val outDesc = printDesc(desc, result)(out)
     implicit val doIt = !args.xonly
     result match {
-      case f: Failure                                => printFailureDetails(f)(outDesc)
-      case e: Error                                  => printErrorDetails(e)(outDesc).printStack(e, indent + 1, args.traceFilter)
-      case Success(_)                                => outDesc
-      case Skipped(_, _)                             => outDesc ?> (_.printSkipped(NoMarkup(result.message), indent))
-      case Pending(_)                                => outDesc ?> (_.printPending(NoMarkup(result.message), indent))
-      case DecoratedResult(table: DataTable, r)      => printDataTable(table)(outDesc)
-      case DecoratedResult(table: Seq[DataTable], r) => printDataTable(table)(outDesc)
-      case DecoratedResult(other, r)                 => outDesc
+      case f: Failure                                 => printFailureDetails(f)(outDesc)
+      case e: Error                                   => printErrorDetails(e)(outDesc).printStack(e, indent + 1, args.traceFilter)
+      case Success(_)                                 => outDesc
+      case Skipped(_, _)                              => outDesc ?> (_.printSkipped(NoMarkup(result.message), indent))
+      case Pending(_)                                 => outDesc ?> (_.printPending(NoMarkup(result.message), indent))
+      case DecoratedResult(table: DataTable, r)       => printDataTable(table)(outDesc)
+      case DecoratedResult(tables: Seq[DataTable], r) => tables.foldLeft(outDesc) { (res, table) => printDataTable(table)(res) }
+      case DecoratedResult(other, r)                  => outDesc
     }
   }
 
