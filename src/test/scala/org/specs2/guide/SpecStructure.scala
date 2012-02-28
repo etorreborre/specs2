@@ -166,7 +166,7 @@ There is also an additional method `failure(message)` to throw a `FailureExcepti
 
 ##### All Expectations
 
-The `org.specs2.specification.AllExpectations` trait goes further and gives you the possibility to have all the expectations of an Example to be reported without stopping at the first one. This enables a type of specification where it is possible to define lots of expectations inside the body of an example and get a maximum of information on what fails and what passes:
+The `org.specs2.specification.AllExpectations` trait goes further and gives you the possibility to have all the failures of an Example to be reported without stopping at the first one. This enables a type of specification where it is possible to define lots of expectations inside the body of an example and get a maximum of information on what fails and what passes:
 
       import org.specs2._
       import specification._
@@ -184,7 +184,19 @@ The `org.specs2.specification.AllExpectations` trait goes further and gives you 
         }
       }
 
-The second example above hints at a restriction for this kind of Specification. The failures are accumulated for each example by mutating a shared variable. However there is no conflict because the `AllExpectations` trait overrides the specification arguments so that it becomes isolated unless it is already isolated or sequential.
+The second example above hints at a restriction for this kind of Specification. The failures are accumulated for each example by mutating a shared variable. "Mutable" means that the concurrent execution of examples will be an issue if done blindly. To avoid this the `AllExpectations` trait overrides the specification arguments so that it becomes [`isolated`](org.specs2.guide.SpecStructure.html#isolated+variables) unless it is already `isolated` or `sequential`.
+
+###### Short-circuit the execution
+
+Ultimately, you may want to stop the execution of an example if one expectation is not verified. This is possible with `orThrow`:
+
+        "In this example all the expectations are evaluated" >> {
+          1 === 1           // this is ok
+         (1 === 3).orThrow  // this fails but is never executed
+          1 === 4
+        }
+
+Alternatively, `orSkip` will skip the rest of the example in case of a failure.
 
 #### Set an example as "Pending until fixed"
 
