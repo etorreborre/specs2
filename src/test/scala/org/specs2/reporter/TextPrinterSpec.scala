@@ -102,7 +102,8 @@ class TextPrinterSpec extends Specification with DataTables { def is =
     "be properly aligned"                                                                                               ^
       "when successful"                                                                                                 ! status().e11^
       "when failing"                                                                                                    ! status().e12^
-      "when in error"                                                                                                   ! status().e13^
+      "when in error"                                                                                                   ! status().e13^bt^
+    "be correctly displayed when it is the result of 2 tables and-ed together"                                          ! status().e14^
                                                                                                                         endp^
                                                                                                                         """
   Title
@@ -123,9 +124,12 @@ class TextPrinterSpec extends Specification with DataTables { def is =
   val bigString2 = "abcdefghijklnmopqrstuvwxyz"
   val bigFail    = "with diffs" ! { bigString1 must_== bigString2 }
 
-  val tableOk: Example    = "a" | "b" |> 1 ! 1 | { (a, b) => a must_== b }
-  val tableKo: Example    = "a" | "b" |> 1 ! 2 | { (a, b) => a must_== b }
-  val tableError: Example = "a" | "b" |> 1 ! 2 | { (a, b) => throw new Exception("boom"); a must_== b }
+  val tOk    = "a" | "b" |> 1 ! 1 | { (a, b) => a must_== b }
+  val tKo    = "a" | "b" |> 1 ! 2 | { (a, b) => a must_== b }
+  val tError = "a" | "b" |> 1 ! 2 | { (a, b) => throw new Exception("boom"); a must_== b }
+  val tableOk: Example    = tOk
+  val tableKo: Example    = tKo
+  val tableError: Example = tError
 
   case class prez() {
     val noindent = args(noindent = true)
@@ -281,6 +285,12 @@ class TextPrinterSpec extends Specification with DataTables { def is =
     def e13 = print(t1 ^ tableError) must contain("! ",
                                                   "  | a | b |",
                                                   "! | 1 | 2 | boom") ^^ ((s1: String, s2: String) => s1.startsWith(s2))
+    def e14 = print(t1 ^ (tOk and tKo)) must contain("x ",
+                                                     "  | a | b |",
+                                                     "  | 1 | 1 |",
+                                                     "",
+                                                     "  | a | b |",
+                                                     "x | 1 | 2 | '1' is not equal to '2'") ^^ ((s1: String, s2: String) => s1.startsWith(s2))
   }
 
   case class specTitle() {

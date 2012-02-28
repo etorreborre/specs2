@@ -124,9 +124,12 @@ trait TextPrinter {
               if (!result.message.isEmpty)
                 out.printSkipped(result.message)
             }
-            case DecoratedResult(dt: DataTable, r) if !hasDescription && r.isSuccess  => print(r, dt.show, isDataTable = true)
-            case DecoratedResult(dt: DataTable, r) if !hasDescription && !r.isSuccess => print(r, "", isDataTable = true)
-            case DecoratedResult(dt, r)                                               => print(r, desc, isDataTable = true)
+            case DecoratedResult(dt: DataTable, r) if !hasDescription && r.isSuccess       => print(r, dt.show, isDataTable = true)
+            case DecoratedResult(dt: Seq[DataTable], r) if !hasDescription && r.isSuccess  => print(r, dt.map(_.show).mkString("\n"),
+                                                                                                       isDataTable = true)
+            case DecoratedResult(dt: DataTable, r) if !hasDescription && !r.isSuccess      => print(r, "", isDataTable = true)
+            case DecoratedResult(dt: Seq[DataTable], r) if !hasDescription && !r.isSuccess => print(r, "", isDataTable = true)
+            case DecoratedResult(dt, r)                                                    => print(r, desc, isDataTable = true)
           }
         }
       }
