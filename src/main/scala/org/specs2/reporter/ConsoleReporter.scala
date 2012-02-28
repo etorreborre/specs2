@@ -29,3 +29,8 @@ trait ConsoleReporter extends DefaultReporter with TextExporting {
   }
 
 }
+
+private [specs2]
+trait SilentConsoleReporter extends DefaultReporter with NoExporting
+private [specs2]
+object SilentConsoleReporter extends SilentConsoleReporter

@@ -21,5 +21,8 @@ case class ExecutedSpecification(name: SpecName, fs: Seq[ExecutedFragment]) {
 
   /** @return true if there are issues  */
   def hasIssues = fs.exists { case r: ExecutedResult if r.isIssue => true; case _ => false }
+
+  /** @return the end statistics */
+  def stats = fs.filter(isExecutedSpecEnd).lastOption.collect { case ExecutedSpecEnd(_,_,s) => s }.getOrElse(Stats())
 }
 

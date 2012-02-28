@@ -37,9 +37,11 @@ trait Expectations extends CanBeEqual {
 
   /** this method can be overriden to throw exceptions when checking the match result */
   protected def checkFailure[T](m: MatchResult[T]) = {
-    checkResultFailure(m.toResult)
+    checkResultFailure(matchResultToResult(m))
     m
   }
+  /** this method can be overriden to intercept the transformation of a MatchResult to a Result */
+  protected def matchResultToResult[T](m: MatchResult[T]): Result = m.toResult
   /** this method can be overriden to throw exceptions when checking the result */
   protected def checkResultFailure(r: Result): Result = r
 }

@@ -5,7 +5,8 @@ import control.Throwablex._
 import text.AnsiColors._
 import text.NotNullStrings._
 import main.Arguments
-import org.specs2.internal.scalaz.Monoid
+import org.specs2.internal.scalaz.Scalaz._
+import internal.scalaz.{Foldable, Monoid}
 
 /**
  * The result of an execution, either:
@@ -78,7 +79,11 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   /**
    * increment the number of expectations
    */
-  def addExpectationsNb(n: Int): Result
+  def addExpectationsNb(n: Int): Result = setExpectationsNb(expectationsNb + n)
+  /**
+   * set the number of expectations
+   */
+  def setExpectationsNb(n: Int): Result
   /**
    * @return the logical and combination of 2 results
    */
@@ -119,63 +124,74 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   def not: Result = this
 }
 object Result {
+
+  /**
+   * @return the accumulation of all results, without success messages
+   */
+  def issues(results: Seq[Result], separator: String = "; ") =
+    results.foldMap(identity)(implicitly[Foldable[Seq]], ResultFailuresMonoid(separator)).addExpectationsNb(-1)
+
   implicit val ResultMonoid: Monoid[Result] = new Monoid[Result] {
     val zero = Success()
-    def append(m1: Result, m2: =>Result) = (m1, m2) match {
-      case (Success(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
-      case (Success(msg1),               Skipped(msg2, e2))          => Success(msg1+"; "+msg2)
-      case (Skipped(msg1, e2),           Success(msg2))              => Success(msg1+"; "+msg2)
-      case (Pending(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
-      case (Success(msg1),               Pending(msg2))              => Success(msg1+"; "+msg2)
+    def append(m1: Result, m2: =>Result) = {
+      (m1, m2) match {
+        case (Success(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
+        case (Success(msg1),               Skipped(msg2, e2))          => Success(msg1+"; "+msg2)
+        case (Skipped(msg1, e2),           Success(msg2))              => Success(msg1+"; "+msg2)
+        case (Pending(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
+        case (Success(msg1),               Pending(msg2))              => Success(msg1+"; "+msg2)
 
-      case (Success(msg1),               Failure(msg2, e2, st1, d2)) => m2.updateMessage(msg1+"; "+msg2)
-      case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2, e1+"; "+e2, st1, NoDetails())
+        case (Success(msg1),               Failure(msg2, e2, st1, d2)) => m2.updateMessage(msg1+"; "+msg2)
+        case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2, e1+"; "+e2, st1, NoDetails())
 
-      case (Success(msg1),               Error(msg2, st1))           => m2.updateMessage(msg1+"; "+msg2)
-      case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+"; "+msg2, st1)
-      case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+"; "+msg2, st1)
+        case (Success(msg1),               Error(msg2, st1))           => m2.updateMessage(msg1+"; "+msg2)
+        case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+"; "+msg2, st1)
+        case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+"; "+msg2, st1)
 
-      case (Skipped(msg1, e1),           Skipped(msg2, e2))          => Skipped(msg1+"; "+msg2, e1+"; "+e2)
-      case (Skipped(msg1, e1),           Pending(msg2))              => Pending(msg1+"; "+msg2)
-      case (Pending(msg1),               Skipped(msg2, e2))          => Pending(msg1+"; "+msg2)
-      case (Pending(msg1),               Pending(msg2))              => Pending(msg1+"; "+msg2)
+        case (Skipped(msg1, e1),           Skipped(msg2, e2))          => Skipped(msg1+"; "+msg2, e1+"; "+e2)
+        case (Skipped(msg1, e1),           Pending(msg2))              => Pending(msg1+"; "+msg2)
+        case (Pending(msg1),               Skipped(msg2, e2))          => Pending(msg1+"; "+msg2)
+        case (Pending(msg1),               Pending(msg2))              => Pending(msg1+"; "+msg2)
 
-      case (DecoratedResult(t, r),       other)                      => DecoratedResult(t, append(r, other))
-      case (other,                       DecoratedResult(t, r))      => DecoratedResult(t, append(other, r))
+        case (DecoratedResult(t, r),       other)                      => DecoratedResult(t, append(r, other))
+        case (other,                       DecoratedResult(t, r))      => DecoratedResult(t, append(other, r))
 
-      case (Failure(msg1, e1, st, d),    _)                          => m1
-      case (Error(msg1, st),          _)                             => m1
-      case (_,                           Failure(msg1, e1, st, d))   => m2
-      case (_,                           Error(msg1, st))            => m2
-
-    }
+        case (Failure(msg1, e1, st, d),    _)                          => m1
+        case (Error(msg1, st),          _)                             => m1
+        case (_,                           Failure(msg1, e1, st, d))   => m2
+        case (_,                           Error(msg1, st))            => m2
+      }
+    }.setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
   }
   /**
    * This monoids "absorbs" success messages if the result of the |+| is not a success
    */
-  implicit val ResultFailureMonoid: Monoid[Result] = new Monoid[Result] {
-    val zero = Success()
-    def append(m1: Result, m2: =>Result) = (m1, m2) match {
-      case (Success(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
-      case (Success(msg1),               other)                      => other
-      case (other,                       Success(msg2))              => other
-      case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2, e1+"; "+e2, st1, NoDetails())
-      case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+"; "+msg2, st1)
-      case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+"; "+msg2, st1)
-      case (Skipped(msg1, e1),           Skipped(msg2, e2))          => Skipped(msg1+"; "+msg2, e1+"; "+e2)
-      case (Skipped(msg1, e1),           Pending(msg2))              => Pending(msg1+"; "+msg2)
-      case (Pending(msg1),               Skipped(msg2, e2))          => Pending(msg1+"; "+msg2)
-      case (Pending(msg1),               Pending(msg2))              => Pending(msg1+"; "+msg2)
-      case (DecoratedResult(t, r),       other)                      => DecoratedResult(t, append(r, other))
-      case (other,                       DecoratedResult(t, r))      => DecoratedResult(t, append(other, r))
-      case (Failure(msg1, e1, st, d),    _)                          => m1
-      case (Error(msg1, st),             _)                          => m1
-      case (_,                           Failure(msg1, e1, st, d))   => m2
-      case (_,                           Error(msg1, st))            => m2
-    }
+  implicit val ResultFailureMonoid: Monoid[Result] = ResultFailuresMonoid("; ")
+  implicit def ResultFailuresMonoid(separator: String): Monoid[Result] = new Monoid[Result] {
+      val zero = Success()
+    def append(m1: Result, m2: =>Result) = {
+      (m1, m2) match {
+        case (Success(msg1),               Success(msg2))              => Success(msg1+separator+msg2)
+        case (Success(msg1),               other)                      => other
+        case (other,                       Success(msg2))              => other
+        case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+separator+msg2, e1+separator+e2, st1, NoDetails())
+        case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+separator+msg2, st1)
+        case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+separator+msg2, st1)
+        case (Skipped(msg1, e1),           Skipped(msg2, e2))          => Skipped(msg1+separator+msg2, e1+separator+e2)
+        case (Skipped(msg1, e1),           Pending(msg2))              => Pending(msg1+separator+msg2)
+        case (Pending(msg1),               Skipped(msg2, e2))          => Pending(msg1+separator+msg2)
+        case (Pending(msg1),               Pending(msg2))              => Pending(msg1+separator+msg2)
+        case (DecoratedResult(t, r),       other)                      => DecoratedResult(t, append(r, other))
+        case (other,                       DecoratedResult(t, r))      => DecoratedResult(t, append(other, r))
+        case (Failure(msg1, e1, st, d),    _)                          => m1
+        case (Error(msg1, st),             _)                          => m1
+        case (_,                           Failure(msg1, e1, st, d))   => m2
+        case (_,                           Error(msg1, st))            => m2
+      }
+    }.setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
   }
 }
-/** 
+/**
  * This class represents the success of an execution
  */
 case class Success(m: String = "")  extends Result(m, m) {
@@ -191,7 +207,7 @@ case class Success(m: String = "")  extends Result(m, m) {
   }
   override def isSuccess = true
 
-  def addExpectationsNb(n: Int): Result = Success(m, expectationsNb + n)
+  def setExpectationsNb(n: Int): Result = Success(m, n)
 
   def mute = Success()
 
@@ -226,8 +242,8 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
     }
   }
 
-  def addExpectationsNb(n: Int): Result = new Failure(m, e, stackTrace, details) {
-    override val expectationsNb = outer.expectationsNb + n
+  def setExpectationsNb(n: Int): Result = new Failure(m, e, stackTrace, details) {
+    override val expectationsNb = n
   }
   def mute = copy(m = "",  e = "")
 
@@ -267,8 +283,8 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
     }
   }
 
-  def addExpectationsNb(n: Int): Result = new Error(m, e) {
-    override val expectationsNb = outer.expectationsNb + n
+  def setExpectationsNb(n: Int): Result = new Error(m, e) {
+    override val expectationsNb = n
   }
   def mute = copy(m = "")
 
@@ -291,8 +307,8 @@ case object Error {
 case class Pending(m: String = "")  extends Result(m) { outer =>
 
   def mute = Pending()
-  def addExpectationsNb(n: Int): Result = new Pending(m) {
-    override val expectationsNb = outer.expectationsNb + n
+  def setExpectationsNb(n: Int): Result = new Pending(m) {
+    override val expectationsNb = n
   }
 
   override def isPending: Boolean = true
@@ -304,8 +320,8 @@ case class Pending(m: String = "")  extends Result(m) { outer =>
 case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer =>
 
   def mute = Skipped()
-  def addExpectationsNb(n: Int): Result = new Skipped(m) {
-    override val expectationsNb = outer.expectationsNb + n
+  def setExpectationsNb(n: Int): Result = new Skipped(m) {
+    override val expectationsNb = n
   }
 
   override def isSkipped: Boolean = true
@@ -318,8 +334,8 @@ case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer
  */
 case class DecoratedResult[T](decorator: T, result: Result) extends Result(result.message, result.expected) { outer =>
   def mute = DecoratedResult(decorator, result.mute)
-  def addExpectationsNb(n: Int): Result = new DecoratedResult(decorator, result) {
-    override val expectationsNb = outer.expectationsNb + n
+  def setExpectationsNb(n: Int): Result = new DecoratedResult(decorator, result) {
+    override val expectationsNb = n
   }
     
   override def and(r: =>Result): Result = DecoratedResult(decorator, result and r)

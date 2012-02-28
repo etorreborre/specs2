@@ -2,11 +2,8 @@ package org.specs2
 package specification
 
 import control.Exceptions._
-import execute.FailureException._
-import execute.SkipException._
-import execute.Error._
 import matcher.MatchResult
-import execute.{FailureException, SkipException, Error, Result}
+import execute.Result
 
 /**
  * This trait is only used when we wish to write after actions in unit specifications like this
