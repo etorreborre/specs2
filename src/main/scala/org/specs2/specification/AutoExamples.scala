@@ -34,8 +34,8 @@ import matcher._
 private[specs2]
 trait AutoExamples extends AutoExamplesLowImplicits {
   /** specific implicits for datatables */
-  implicit def dataTableFragments(result: =>DecoratedResult[DataTable]): Fragments = Fragments.create(dataTableExample(result))
-  implicit def dataTableExample(result: =>execute.DecoratedResult[DataTable]) = Example(EmptyMarkup(), result)
+  implicit def dataTableFragments[T](result: =>DecoratedResult[T]): Fragments = Fragments.create(dataTableExample(result))
+  implicit def dataTableExample[T](result: =>execute.DecoratedResult[T]) = Example(EmptyMarkup(), result)
 
 }
 

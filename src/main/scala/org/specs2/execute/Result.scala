@@ -339,7 +339,7 @@ case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer
  *
  * Is is used to provide a way to display properly the data tables in the HtmlExporter
  */
-case class DecoratedResult[T](decorator: T, result: Result) extends Result(result.message, result.expected) { outer =>
+case class DecoratedResult[+T](decorator: T, result: Result) extends Result(result.message, result.expected) { outer =>
   def mute = DecoratedResult(decorator, result.mute)
   def setExpectationsNb(n: Int): Result = new DecoratedResult(decorator, result) {
     override val expectationsNb = n
@@ -347,14 +347,22 @@ case class DecoratedResult[T](decorator: T, result: Result) extends Result(resul
     
   override def and(r: =>Result): Result = {
     r match {
-      case DecoratedResult(d2, r2) => DecoratedResult(Seq(decorator, d2), result and r2)
+      case DecoratedResult(d2, r2) => {
+        val andResult = (result and r2)
+        if (andResult.isSuccess) DecoratedResult(decorator, andResult)
+        else                     DecoratedResult(d2, andResult)
+      }
       case other                   => DecoratedResult(decorator, result and r)
     }
   }
 
   override def or(r: =>Result): Result = {
     r match {
-      case DecoratedResult(d2, r2) => DecoratedResult(Seq(decorator, d2), result or r2)
+      case DecoratedResult(d2, r2) => {
+        val orResult = (result or r2)
+        if (result.isSuccess)  DecoratedResult(d2, orResult)
+        else                   DecoratedResult(decorator, orResult)
+      }
       case other                   => DecoratedResult(decorator, result or r)
     }
   }
