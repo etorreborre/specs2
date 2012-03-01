@@ -14,6 +14,10 @@ trait StoredExpectations extends Expectations {
     r
   }
 
-  def storedResults: Seq[Result] = results.toSeq
+  def storedResults: Seq[Result] = {
+    val rs = results.toSeq
+    results.clear()
+    rs
+  }
 }
 

@@ -66,9 +66,9 @@ trait DefaultSequence {
   /**
    * @return an Example which body comes from the execution of that example in a brand new instance of the Specification
    */
-  protected def copyBody(name: SpecName, body: =>Result, index: Int) = {
+  protected def copyBody(name: SpecName, body: =>Result, index: Int)(implicit args: Arguments) = {
     SpecificationStructure.createSpecificationOption(name.javaClassName).map { specification =>
-      val fragments = specification.is.fragments
+      val fragments = DefaultSelection.select(args)(specification).is.fragments.view
       def executeStepsBefore(n: Int) = fragments.zipWithIndex.collect { case (s @ Step(_), i) if i < n && s.isolable => s.execute }
       fragments(index) match {
         case e @ Example(_, _) => executeStepsBefore(index); e.execute

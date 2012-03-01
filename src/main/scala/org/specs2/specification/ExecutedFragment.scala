@@ -73,6 +73,7 @@ case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, l
   def isError   = stats.hasErrors
   def isFailure = stats.hasFailures
   def isIssue   = stats.hasIssues
+  def isSuspended = stats.hasSuspended
 }
 private[specs2]
 object ExecutedResult {

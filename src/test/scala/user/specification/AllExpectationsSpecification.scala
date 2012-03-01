@@ -19,4 +19,9 @@ class AllExpectationsSpecification extends mutable.Specification with AllExpecta
    (51 === 52).orThrow
     13 === 14
   }
+  "It is possible to short-circuit the rest of the evaluation with 'orSkip'" >> {
+    10 === 10
+    (51 === 52).orSkip
+    15 === 16
+  }
 }

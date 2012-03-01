@@ -56,6 +56,8 @@ case class Stats(examples:     Int = 0,
   def isSuccess = result.isSuccess
   /** @return true if there are failures or errors */
   def hasIssues = result.isFailure || result.isError
+  /** @return true if there are skipped or pending */
+  def hasSuspended = result.isSkipped || result.isPending
   /** @return true if there are failures */
   def hasFailures = result.isFailure
   /** @return true if there are errors */
