@@ -4,13 +4,15 @@ package reporter
 import org.specs2.internal.scalaz._
 import Scalaz._
 import collection.Iterablex._
-import main.Arguments
 import control.LazyParameters._
 import specification._
 import Fragments._
 import SpecsArguments._
 import Foldable._
 import TagsFragments._
+import execute.Result
+import main.{ArgumentsArgs, ArgumentsShortcuts, Arguments}
+
 /**
  * The Selection trait implements the logic for filtering the fragments to execute
  */
@@ -28,8 +30,11 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
 
 
   /** select function returning a filtered seq of Fragments */
-  def select(implicit arguments: Arguments): SpecificationStructure => SpecificationStructure = (spec: SpecificationStructure) =>
-    SpecificationStructure(select(spec.content.fragments)(arguments))
+  def select(implicit arguments: Arguments): SpecificationStructure => SpecificationStructure = (spec: SpecificationStructure) => {
+    // isolate examples if necessary, using the arguments of the current specification in case of included specifications
+    val fs = SpecsArguments.foldAll(spec.content.fragments).filter(isolateExamples)
+    SpecificationStructure(select(fs)(arguments))
+  }
 
   /** select function returning a filtered seq of Fragments */
   def select(fragments: Seq[Fragment])(implicit commandLineArgs: Arguments = Arguments()): Seq[Fragment] = {
@@ -121,5 +126,40 @@ trait DefaultSelection extends WithDefaultStatisticsRepository {
       case (f, args, n)                 => true
     } collect { case (f, a, n) => f }
   }
+
+  /**
+   * This function "clones" the body of each example if the applicable arguments indicate that the specification should
+   * be isolated
+   */
+  protected def isolateExamples(implicit arguments: Arguments) = (fs: Seq[(Fragment, Arguments, SpecName)])=> {
+    fs.zipWithIndex.map { fani  =>
+      val ((fragment, args, name), index) = fani
+      if ((arguments <| args).isolated) {
+        fragment match {
+          case e @ Example(_,_) if e.isolable => e.copy(body = () => copyBody(name, e.body(), index))
+          case a @ Action(_) if a.isolable    => a.copy(action = lazyfy(copyBody(name, a.execute, index)))
+          case other                          => other
+        }
+      } else fragment
+    }
+  }
+
+  /**
+   * @return an Example which body comes from the execution of that example in a brand new instance of the Specification
+   */
+  protected def copyBody(name: SpecName, body: =>Result, index: Int)(implicit arguments: Arguments) = {
+    SpecificationStructure.createSpecificationOption(name.javaClassName).map { specification =>
+      val fragments = select(specification.content.fragments)
+      def executeStepsBefore(n: Int) =
+        fragments.zipWithIndex.view.force.collect { case (s @ Step(_), i) if i < n && s.isolable => s.execute }
+
+      fragments(index) match {
+        case e @ Example(_, _) => executeStepsBefore(index); e.execute
+        case a @ Action(_)     => executeStepsBefore(index); a.execute
+        case other             => body
+      }
+    }.getOrElse(body)
+  }
+
 }
 object DefaultSelection extends DefaultSelection

@@ -56,6 +56,8 @@ object SpecificationStructure {
   }
   def apply(fs: Seq[Fragment]): SpecificationStructure = apply(Fragments.create(fs:_*))
 
+  def apply(spec: SpecificationStructure, arguments: Arguments): SpecificationStructure = apply(spec.content add arguments)
+
   /**
    * create a SpecificationStructure from a className, throwing an Error if that's not possible
    */

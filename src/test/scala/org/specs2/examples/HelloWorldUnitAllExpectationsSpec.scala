@@ -5,7 +5,7 @@ import specification.AllExpectations
 
 class HelloWorldUnitAllExpectationsSpec extends mutable.Specification with AllExpectations {
 
-  "In the following examples, all the expectations must be checked"+
+  "In the following examples, all the expectations must be checked\n"+
   "change some of them to see all the failures being reported"       >> {
 
     "Hello world" >> {

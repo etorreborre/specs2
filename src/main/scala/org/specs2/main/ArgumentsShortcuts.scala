@@ -108,3 +108,5 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def fullStackTrace = args.report(traceFilter = NoStackTraceFilter)
 }
+
+object ArgumentsShortcuts extends ArgumentsShortcuts with ArgumentsArgs

@@ -23,14 +23,6 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
   "if a specification contains the 'sequential' argument"                                                               ^
     "all examples must be executed in a sequence"                                                                       ! seq().e1^
     "with a Reporter"                                                                                                   ! seq().e2^
-                                                                                                                        p^
-  "if a specification contains the 'isolated' argument"                                                                 ^
-    "examples bodies must be copied"                                                                                    ! isolate().e1^
-      "along with all the previous steps"                                                                               ! isolate().e2^bt^
-    "steps bodies must not be copied"                                                                                   ! isolate().e3^
-    "actions bodies must be copied"                                                                                     ! isolate().e4^
-    "if the examples, steps or actions are marked as global, they are never copied"                                     ! isolate().e5^
-      "with a global step before an example"                                                                            ! isolate().e6^
                                                                                                                         end
 
   case class steps() extends ScalaCheck with WithSelection {
@@ -81,26 +73,6 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
     }
   }
 
-  case class isolate() extends WithSelection {
-    implicit val arguments = main.Arguments()
-
-    def isIsolated(spec: SpecificationWithLocalVariable, expectedLocalValue: Int) = {
-      reporter.report(spec)
-      spec.i === expectedLocalValue
-    }
-
-    def e1 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ "e1" ! { i = 1; ok } }, expectedLocalValue = 0)
-    def e2 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ Step(i = 1) ^ "e1" ! ok ^ Step(i = 2) }, expectedLocalValue = 2)
-    def e3 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ Step(i = 1) }, expectedLocalValue = 1)
-    def e4 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ Action(i = 1) }, expectedLocalValue = 0)
-
-    def e5 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ ("e1" ! { i = 1; ok }).global }, expectedLocalValue = 1)
-    def e6 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ Step(i = 1).global ^ "e1" ! { i = 2; ok } }, expectedLocalValue = 1)
-  }
-
-  trait SpecificationWithLocalVariable extends Specification {
-    var i = 0
-  }
   val ex1 = "ex1" ! success
   val ex2 = "ex2" ! success
 
