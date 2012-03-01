@@ -1,0 +1,15 @@
+This version adds new features on top of 1.8.2:
+
+ * `isolated` specifications where each example is executed in its own copy of the specification so that all local variables are re-initialized (an example [here](https://github.com/etorreborre/specs2/blob/1.9/src/test/scala/examples/StackIsolatedSpec.scala))
+ * improved the documentation showing that `DataTables` can be displayed as examples
+ * improved the performance of the `beMatching` matchers
+ * `AllExpectations` trait to collect [all the expectations](http://etorreborre.github.com/specs2/guide/org.specs2.guide.SpecStructure.html#All+Expectations) of an example 
+ 
+And some fixes:
+
+ * fixed issue 61: proper timing of specifications when examples are executed concurrently
+ * fixed issue 63: improper inference for `ParserMatchers`
+ * fixed issue 64: display of the `>>` operator in the User Guide
+ * fixed issue 65: result of and-ed `DataTables`
+ 
+ ==========================
