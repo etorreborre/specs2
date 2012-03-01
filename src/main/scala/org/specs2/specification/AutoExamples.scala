@@ -2,7 +2,6 @@ package org.specs2
 package specification
 
 import io.FromSource._
-import control.LazyParameters._
 import text.Trim._
 import text._
 import execute._

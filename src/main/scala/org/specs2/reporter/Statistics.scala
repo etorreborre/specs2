@@ -3,14 +3,7 @@ package reporter
 
 import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
 import Scalaz._
-import collection.Iterablex._
-import main.Arguments
-import execute._
-import org.specs2.execute.StandardResults
-import time._
 import specification._
-import control.Exceptions._
-import scala.xml.NodeSeq
 import scala.collection.mutable.ArrayBuffer
 
 /**

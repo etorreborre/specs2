@@ -1,8 +1,6 @@
 package org.specs2
 package specification
 
-import control.Exceptions._
-import matcher.MatchResult
 import execute.Result
 
 /**

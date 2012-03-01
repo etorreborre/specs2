@@ -3,7 +3,6 @@ package matcher
 
 import scala.xml._
 import scala.xml.NodeSeq._
-import internal.scalaz.Zero._
 import control.Identityx._
 import XPathFunctions._
 import xml.Nodex._

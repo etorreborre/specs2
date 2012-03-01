@@ -7,7 +7,6 @@ import main.Arguments
 import control.Exceptions._
 import specification._
 import reporter._
-import sys._
 
 /**
  * This class can be used to executed a Specification in the Console

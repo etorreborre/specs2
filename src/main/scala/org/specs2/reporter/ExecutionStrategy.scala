@@ -2,7 +2,6 @@ package org.specs2
 package reporter
 
 import java.util.concurrent.Executors
-import execute.{ Error, Failure }
 import org.specs2.internal.scalaz._
 import Scalaz._
 import concurrent._
@@ -10,8 +9,6 @@ import Strategy._
 import specification._
 import control.NamedThreadFactory
 import main.{ArgumentsArgs, Arguments}
-import scala.collection.immutable.List._
-import main.Arguments._
 import ExecutedFragment._
 
 /**

@@ -3,7 +3,6 @@ package mock
 package mockito
 
 import control.Throwablex._
-import org.mockito.InOrder
 import org.mockito.verification.{ VerificationMode }
 import control.Exceptions._
 import matcher._

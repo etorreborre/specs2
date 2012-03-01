@@ -9,8 +9,6 @@ import org.specs2.internal.scalaz.Traverse._
 import main.Arguments
 import specification._
 import control.{ExecutionOrigin, Stacktraces}
-import text.Trim.Trimmed._
-import java.util.regex.Matcher
 
 /**
  * The JUnit descriptions class transforms a list of fragments

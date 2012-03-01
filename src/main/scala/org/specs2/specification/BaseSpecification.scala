@@ -1,5 +1,6 @@
 package org.specs2
 package specification
+
 import org.specs2.internal.scalaz._
 import Scalaz._
 import main.Arguments

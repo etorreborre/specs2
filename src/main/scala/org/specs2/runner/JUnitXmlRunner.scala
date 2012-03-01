@@ -1,5 +1,6 @@
 package org.specs2
 package runner
+
 import reporter._
 
 /**

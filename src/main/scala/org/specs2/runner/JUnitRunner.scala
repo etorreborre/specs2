@@ -2,21 +2,18 @@ package org.specs2
 package runner
 
 import _root_.org.junit.runner.notification.RunNotifier
-import _root_.org.junit.runners._
 import _root_.org.junit._
 import _root_.org.junit.runner._
 import junit.framework.AssertionFailedError
 import org.specs2.internal.scalaz.Scalaz
 import Scalaz._
 import main.{ Arguments, SystemProperties }
-import io._
 import reflect.Classes._
 import execute._
 import reporter._
 import specification._
 import text.AnsiColors
 import control.{ExecutionOrigin, Throwablex}
-import reflect.Classes
 
 /**
  * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation

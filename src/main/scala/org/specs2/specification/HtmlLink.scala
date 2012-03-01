@@ -1,8 +1,6 @@
 package org.specs2
 package specification
 
-import execute._
-
 /**
  * The HtmlLink class represents a link in a specification with an identifier (either a spec name, or a string) and
  * link elements.

@@ -1,4 +1,5 @@
-package org.specs2.text
+package org.specs2
+package text
 
 private[specs2]
 trait Split {

@@ -2,7 +2,6 @@ package org.specs2
 package execute
 
 import control.Exceptions._
-import execute.Error._
 import control.Property
 import reflect.ClassName._
 /**

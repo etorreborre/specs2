@@ -1,9 +1,7 @@
 package org.specs2
 package specification
 
-import control.Exceptions._
 import execute._
-import matcher._
 
 /**
  * generic trait for Before, After, Around

@@ -2,11 +2,8 @@ package org.specs2
 package io
 
 import java.io._
-import java.util.regex._
 import java.net.URL
 import java.util.zip._
-import scala.collection.JavaConversions._
-import java.lang.String._
 
 /**
  * The FileSystem trait abstracts file system operations to allow easier mocking of file system related functionalities.

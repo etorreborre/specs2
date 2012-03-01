@@ -1,18 +1,15 @@
 package org.specs2
 package reporter
-import java.io.Writer
+
 import scala.xml._
 import control._
-import Exceptions._
 import main.{ Arguments, Diffs }
 import text.Markdown._
 import text._
-import EditDistance._
 import NotNullStrings._
 import text.Trim._
 import execute._
 import xml.Nodex._
-import matcher.DataTable
 import specification._
 import html.Htmlx._
 

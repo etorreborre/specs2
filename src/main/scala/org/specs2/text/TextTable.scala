@@ -1,5 +1,6 @@
 package org.specs2
 package text
+
 import collection.Seqx._
 
 /**

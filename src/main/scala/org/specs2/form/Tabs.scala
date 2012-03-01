@@ -1,7 +1,6 @@
 package org.specs2
 package form
 
-import scala.xml._
 import xml.Nodex._
 import main._
 import execute._

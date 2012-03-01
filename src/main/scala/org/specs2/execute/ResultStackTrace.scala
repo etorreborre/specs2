@@ -2,7 +2,6 @@ package org.specs2
 package execute
 
 import control._
-import main.SystemProperties
 import Throwablex._
 
 /**

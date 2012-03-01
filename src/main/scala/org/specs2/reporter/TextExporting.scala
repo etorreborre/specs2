@@ -1,7 +1,6 @@
 package org.specs2
 package reporter
 
-import io.Output
 import main.Arguments
 import specification._
 

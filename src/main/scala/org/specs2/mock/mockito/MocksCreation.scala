@@ -1,9 +1,9 @@
 package org.specs2
 package mock
 package mockito
+
 import control.Property
 import reflect.ClassesOf
-import org.mockito.stubbing._
 import org.mockito.invocation._
 /**
  * This trait provides methods to create mocks and spies.

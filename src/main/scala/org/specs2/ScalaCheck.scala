@@ -1,6 +1,6 @@
 package org.specs2
 
-import matcher.{Parameters, MatchResult}
+import matcher.Parameters
 import specification._
 import text.CodeMarkup
 import org.scalacheck.Prop

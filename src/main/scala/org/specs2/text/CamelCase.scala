@@ -1,5 +1,6 @@
 package org.specs2
 package text
+
 import java.lang.StringBuilder
 /**
  * This trait does CamelCase transformations on names

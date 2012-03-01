@@ -7,7 +7,6 @@ import control.Throwablex._
 import reporter._
 import specification._
 import Fingerprints._
-import reflect.Classes
 
 /**
  * Implementation of the Framework interface for the sbt tool.

@@ -3,13 +3,9 @@ package html
 
 import scala.xml._
 import NodeSeq._
-import transform.{RewriteRule, RuleTransformer}
 import xml.Nodex._
 import Htmlx._
 import data.Trees._
-import org.specs2.internal.scalaz.Scalaz
-import Scalaz._
-import specification.SpecName
 
 /**
  * This trait checks for the presence of a <toc/> tag at the beginning of a xml document and replaces it

@@ -4,8 +4,6 @@ package specification
 import control.Exceptions._
 import execute._
 import util.matching.Regex
-import execute.Error._
-import text.Trim
 
 /**
  * A Regular expression step which takes a text and extracts meaningful values according to

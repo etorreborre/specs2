@@ -1,7 +1,6 @@
 package org.specs2
 package specification
 
-import main.Arguments
 import text._
 import time.SimpleTimer
 import execute._

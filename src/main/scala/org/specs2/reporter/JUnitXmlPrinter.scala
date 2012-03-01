@@ -8,7 +8,7 @@ import org.junit.runner.Description
 import scala.collection.JavaConversions._
 import xml.Nodex._
 import execute._
-import main.{Arguments, SystemProperties}
+import main.Arguments
 import io.Location
 import specification._
 

@@ -2,7 +2,6 @@ package org.specs2
 package execute
 import control.Throwablex
 import control.Throwablex._
-import text.AnsiColors._
 import text.NotNullStrings._
 import main.Arguments
 import org.specs2.internal.scalaz.Scalaz._

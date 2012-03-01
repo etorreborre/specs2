@@ -3,8 +3,6 @@ package reporter
 
 import io.ConsoleOutput
 import main.Arguments
-import text.Plural._
-import text.AnsiColors._
 import execute.Result
 import specification.Stats
 

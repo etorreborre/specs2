@@ -1,5 +1,6 @@
 package org.specs2
 package specification
+
 import collection.Iterablex._
 import java.util.concurrent.{Executors, ExecutorService}
 import control.NamedThreadFactory

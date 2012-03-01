@@ -2,8 +2,6 @@ package org.specs2
 package xml
 
 import scala.xml._
-import collection.Iterablex._
-import matcher._
 
 /**
  * Extension methods for NodeSeqs and Nodes

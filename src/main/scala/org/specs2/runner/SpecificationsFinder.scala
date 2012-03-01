@@ -2,7 +2,6 @@ package org.specs2
 package runner
 
 import java.util.regex._
-import scala.collection.mutable.Queue
 import io._
 import reflect.Classes
 import specification.SpecificationStructure

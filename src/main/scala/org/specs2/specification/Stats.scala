@@ -1,18 +1,13 @@
 package org.specs2
 package specification
 
-import collection.Iterablex._
 import main.Arguments
 import execute._
-import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
+import org.specs2.internal.scalaz.{ Scalaz, Monoid }
 import Scalaz._
 import org.specs2.execute.StandardResults
 import text._
 import Plural._
-import xml.Nodex._
-import time._
-import specification._
-import control.Exceptions._
 import org.specs2.control.Exceptions._
 import org.specs2.time.SimpleTimer
 import scala.xml._

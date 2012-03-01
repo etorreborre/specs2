@@ -1,5 +1,6 @@
 package org.specs2
 package text
+
 import scala.util.matching.Regex
 import Regex.Match
 import java.io.StringWriter

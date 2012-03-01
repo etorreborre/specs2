@@ -1,5 +1,6 @@
 package org.specs2
 package mutable
+
 import execute._
 /**
  * This trait adds the possibility to execute the around behavior around the body of the context.

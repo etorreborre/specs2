@@ -1,10 +1,8 @@
 package org.specs2
 package matcher
 
-import java.io.File
 import text.Quote._
-import io.{ FileSystem, ConsoleOutput }
-import execute.Result
+import io.FileSystem
 
 /**
  * The PathMatchers trait provides matchers which are applicable to strings representing paths

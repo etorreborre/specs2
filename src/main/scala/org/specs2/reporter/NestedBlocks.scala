@@ -4,7 +4,6 @@ package reporter
 import org.specs2.internal.scalaz._
 import  Scalaz._
 import data.Trees._
-import data.Reducerx._
 import specification.{SpecEnd, SpecStart, Fragment, ExecutedSpecEnd, ExecutedSpecStart, ExecutedFragment}
 
 /**

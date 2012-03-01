@@ -1,4 +1,5 @@
 package org.specs2.text
+
 import NotNullStrings._
 /**
  * Quote and unquote strings

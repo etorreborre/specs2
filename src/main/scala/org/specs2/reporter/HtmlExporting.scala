@@ -1,5 +1,6 @@
 package org.specs2
 package reporter
+
 import main.Arguments
 import specification._
 import internal.scalaz.Scalaz._

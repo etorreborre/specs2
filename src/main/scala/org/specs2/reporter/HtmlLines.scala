@@ -2,19 +2,14 @@ package org.specs2
 package reporter
 
 import scala.xml._
-import text.Plural._
 import text._
 import form._
-import Form._
 import execute._
 import matcher.DataTable
 import specification._
-import org.specs2.internal.scalaz.Scalaz._
-import Stats._
-import main.{Report, Arguments}
+import main.Arguments
 import control.Identityx._
 import html._
-import TableOfContents._
 
 /**
 * The HtmlFile class groups a list of HtmlLine objects to print to an output file for a given specification (identified by specName)

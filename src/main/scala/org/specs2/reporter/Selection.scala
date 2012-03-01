@@ -6,12 +6,11 @@ import Scalaz._
 import collection.Iterablex._
 import control.LazyParameters._
 import specification._
-import Fragments._
 import SpecsArguments._
 import Foldable._
 import TagsFragments._
 import execute.Result
-import main.{ArgumentsArgs, ArgumentsShortcuts, Arguments}
+import main.Arguments
 
 /**
  * The Selection trait implements the logic for filtering the fragments to execute

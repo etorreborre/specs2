@@ -1,5 +1,6 @@
 package org.specs2
 package text
+
 import org.pegdown.{ PegDownProcessor, Extensions }
 import scala.io.Source
 import scala.xml._

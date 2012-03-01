@@ -1,24 +1,19 @@
 package org.specs2
 package reporter
 
-import org.specs2.internal.scalaz.{Tree, TreeLoc, Reducer, Scalaz, Show}
+import org.specs2.internal.scalaz.{Tree, Reducer, Scalaz}
 import  Scalaz._
 import collection.Iterablex._
-import control.Exceptions._
 import html._
 import data.Trees._
 import data.Tuples._
-import xml.Nodex._
 import TableOfContents._
-import io._
-import io.Paths._
-import main.{ Arguments, SystemProperties }
+import main.Arguments
 import specification._
 import Statistics._
 import Levels._
 import SpecsArguments._
-import scala.xml.{Xhtml, NodeSeq}
-import java.io.Writer
+import scala.xml.NodeSeq
 
 /**
  * The Html printer is used to create an Html report of an executed specification.

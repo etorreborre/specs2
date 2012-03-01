@@ -2,8 +2,6 @@ package org.specs2
 package matcher
 
 import execute._
-import AnyMatchers._
-import junit.framework.{ ComparisonFailure, AssertionFailedError }
 
 /**
  * This trait provides implicit definitions to transform any value into an Expectable

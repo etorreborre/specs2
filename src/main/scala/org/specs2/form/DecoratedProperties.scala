@@ -1,8 +1,6 @@
 package org.specs2
 package form
 
-import scala.xml._
-
 /**
  * This trait defines functions that are applicable to any DecoratedProperty, i.e. something having a Decorator
  */

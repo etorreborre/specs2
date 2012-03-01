@@ -2,11 +2,8 @@ package org.specs2
 package reporter
 
 import main.Arguments
-import control.LazyParameters._
 import specification._
 import Fragments._
-import SpecsArguments._
-import execute.Result
 
 /**
  * The Sequence trait implements the logic for the fragments to execute according to their dependencies

@@ -2,10 +2,8 @@ package org.specs2
 package form
 
 import control.{ Property }
-import control.Exceptions._
 import execute._
 import matcher._
-import MatchersImplicits._
 import text.NotNullStrings._
 
 /**

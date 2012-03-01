@@ -1,12 +1,10 @@
 package org.specs2
 package runner
 
-import reflect._
 import io.FromSource
 import main._
 import ArgProperties._
 import specification._
-import StandardFragments._
 import reporter._
 
 /**

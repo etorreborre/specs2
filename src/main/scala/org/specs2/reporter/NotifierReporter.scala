@@ -5,7 +5,6 @@ import execute._
 import specification._
 import Levels._
 import org.specs2.internal.scalaz.{Tree, Scalaz}
-import Scalaz._
 import data.Trees._
 import main.Arguments
 

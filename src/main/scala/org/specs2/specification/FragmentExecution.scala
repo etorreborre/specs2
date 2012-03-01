@@ -6,9 +6,6 @@ import text._
 import main.Arguments
 import time.SimpleTimer
 import StandardFragments._
-import junit.framework.AssertionFailedError
-import form.Form
-import scala.Either
 import execute._
 import io.Location
 

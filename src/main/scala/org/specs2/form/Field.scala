@@ -1,7 +1,6 @@
 package org.specs2
 package form
 
-import control.Exceptions._
 import control.Property
 import execute._
 import DecoratedProperties._

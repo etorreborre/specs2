@@ -2,7 +2,6 @@ package org.specs2
 package specification
 
 import ExecutedFragment._
-import execute.Error
 
 
 /**

@@ -1,6 +1,6 @@
 package org.specs2
 package data
-import org.specs2.internal.scalaz.{NonEmptyList, Tree, TreeLoc, Scalaz}
+import org.specs2.internal.scalaz.{Tree, TreeLoc, Scalaz}
 import Scalaz._
 
 /**

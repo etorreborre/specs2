@@ -3,7 +3,6 @@ package xml
 
 import scala.xml._
 import NodeSeq._
-import collection.Listx._
 import collection.Iterablex._
 
 /**

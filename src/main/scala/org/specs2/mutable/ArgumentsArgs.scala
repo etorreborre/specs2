@@ -3,8 +3,7 @@ package mutable
 
 import main._
 import text._
-import specification.Fragments
-import control.{StackTraceFilter, Property}
+import control.StackTraceFilter
 
 /**
  * This trait provides shortcuts to create Arguments instances and adding them to the SpecificationStructure by mutating its

@@ -1,8 +1,6 @@
 package org.specs2
 package specification
 
-import control.LazyParameters._
-
 /**
  * Set of fragments which can be used for formatting
  */

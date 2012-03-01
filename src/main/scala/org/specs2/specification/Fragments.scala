@@ -3,10 +3,7 @@ package specification
 
 import collection.Iterablex._
 import execute.Executable
-import control.LazyParameters._
-import control.LazyParameter
 import main.Arguments
-import StandardFragments._
 import org.specs2.internal.scalaz.Monoid
 import Fragments._
 /**
