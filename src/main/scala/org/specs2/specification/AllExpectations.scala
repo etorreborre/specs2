@@ -23,10 +23,10 @@ trait AllExpectations extends StoredExpectations with ExamplesFactory with Speci
    * @return a Result having its location as part of its message
    */
   override protected def matchResultToResult[T](m: MatchResult[T]): Result = {
-    m.toResult match  {
-      case f @ Failure(_,_,_,_) => f.copy(m = f.message+" ["+f.location+"]")
-      case e @ Error(_,_)       => e.copy(m = e.message+" ["+e.location+"]")
-      case other                => other
+    m.toResult match {
+      case f@Failure(_, _, _, _) => f.copy(m = f.message + " [" + f.location + "]")
+      case e@Error(_, _) => e.copy(m = e.message + " [" + e.location + "]")
+      case other => other
     }
   }
 
@@ -40,7 +40,7 @@ trait AllExpectations extends StoredExpectations with ExamplesFactory with Speci
    *
    * This method could be overriden to filter the captured results and remove the skipped results for example
    */
-  def resultsContext(results: =>Seq[Result]): Context = new ResultsContext(results)
+  def resultsContext(results: => Seq[Result]): Context = new ResultsContext(results)
 
   /**
    * we force the specification to be isolated if it's not sequential or already isolated.
@@ -50,7 +50,7 @@ trait AllExpectations extends StoredExpectations with ExamplesFactory with Speci
     val fragments = super.is
     val arguments = fragments.arguments
     if (arguments.isolated || arguments.sequential) fragments
-    else                                            fragments.add(args(isolated = true))
+    else fragments.add(args(isolated = true))
   }
 }
 
