@@ -1,0 +1,5 @@
+package examples
+
+class DataTablesSpec {
+
+}
