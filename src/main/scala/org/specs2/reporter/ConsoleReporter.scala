@@ -22,7 +22,7 @@ trait ConsoleReporter extends DefaultReporter with TextExporting {
     // store the statistics and export the specification results in parallel to avoid
     // evaluating the whole execution sequence in the Storing trait before doing the printing
     // this allows to print the results as soon as executed
-    val storeAndExport = (spec: ExecutingSpecification) => Seq(store, export).par.map(_(spec)).seq.last
+    val storeAndExport = (spec: ExecutingSpecification) => Seq(store, export).par.map(_(spec))
     val toExecute = spec |> select |> sequence |> execute
     toExecute |> storeAndExport
     toExecute.executed
