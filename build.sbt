@@ -11,7 +11,7 @@ organization := "org.specs2"
 
 scalaVersion := "2.9.1"
 
-crossScalaVersions := Seq("2.9.0", "2.9.0-1")
+crossScalaVersions := Seq("2.9.1-1")
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -19,11 +19,12 @@ shellPrompt := { state => System.getProperty("user.name") + "> " }
 shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " }
 
 /** Dependencies */
-resolvers ++= Seq("snapshots-repo" at "http://oss.sonatype.org/content/repositories/snapshots")
+resolvers ++= Seq("releases" at "http://oss.sonatype.org/content/repositories/releases",
+                  "snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
 
 libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.specs2" %% "specs2-scalaz-core" % "6.0.1",
-  "net.rosien" %% "sniff" % "0.2" % "test",
+  "net.rosien" %% "sniff" % "0.3" % "test",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional", 
   "org.scala-tools.testing" %% "scalacheck" % "1.9" % "optional", 
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional", 
