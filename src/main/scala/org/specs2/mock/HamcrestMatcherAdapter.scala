@@ -12,7 +12,8 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends TypeSafeMatcher[T] {
   private var message = ""
     
   def matchesSafely(item: T): Boolean = {
-    m.apply(Expectable(item)) match {
+    val i = if (item.isInstanceOf[Function0[_]]) item.asInstanceOf[Function0[_]].apply().asInstanceOf[T] else item
+    m.apply(Expectable(i)) match {
       case MatchFailure(_, m, _, _) => message = m; false
       case _ => true
     }
@@ -22,4 +23,6 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends TypeSafeMatcher[T] {
     description.appendText(message)
   }
 }
+
+
 
