@@ -30,7 +30,8 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "it is possible to verify that a method has been called" 					                                                  ! aMock().verify1^
     "if one method has not been called on a mock there will be a failure" 		                                          ! aMock().verify2^
     "it is possible to check that no calls have been made" 		                                                          ! aMock().verify3^
-                                                                                                                        p^
+    "it is possible to check byname parameters"          		                                                            ! aMock().verify4^
+                                                                                                                          p^
   "It is also possible to return a specific value from a mocked method"                                                 ^
     "then when the mocked method is called, the same values will be returned" 	                                        ! aMock().return1^
     "different successive values can even be returned" 						                                                      ! aMock().return2^
@@ -97,6 +98,8 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
 	case class aMock() {
     val list = mock[java.util.List[String]]
     val queue = mock[scala.collection.immutable.Queue[String]]
+    trait ByName { def call(i: =>Int) = i }
+    val byname = mock[ByName]
 
     def call1 = { list.add("one"); success }
     def verify1 = {
@@ -110,6 +113,10 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     def verify4 = {
       queue.enqueue("msg")
       there was one(queue).enqueue("msg2") must beError("NullPointerException")
+    }
+    def verify5 = {
+      byname.call(10)
+      there was one(byname).call(be_>(5))
     }
 
     def return1 = {
