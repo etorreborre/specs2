@@ -486,13 +486,35 @@ As advised in the Mockito documentation, doReturn must be used in that case:
 
      doReturn("one").when(spiedList).get(0)
 
-##### Functions and partial functions
+##### Function/PartialFunction parameters
 
-Mocking with Scala functions or partial functions can be a bit tricky. You should especially watch out for:
+It is possible to verify method calls where parameters are functions by specifying how the passed function will react to a given set of arguments.
+Given the following mock:
 
- * functions as parameters. In that case you can try to create a ["function matcher"](https://groups.google.com/d/msg/specs2-users/R3DS_ZPe29w/WvmkfJqcq8IJ) or use [Borachio](http://borachio.com)
+      trait Amount {
+        // a method showing an amount precision
+        def show(display: Function2[Double, Int, String, String]) = ...
+      }
+      val amount = mock[Amount]
 
- * mocking partial functions. Auto-boxing might interfere, please have a look at [this discussion](https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion)
+If the mock is called with this function:
+
+      amount.show((amount: Double, precision: Int) => "%2."+precision+"f" format amount)
+
+Then it is possible to verify how the mock was called:
+
+      // with sample arguments for the function and the expected result
+      there was one(amount).show((32.4456, 2) -> "32.45")
+
+      // with a matcher for the result
+      there was one(amount).show((32.4456, 2) -> endWith("45"))
+
+      // with any Function2[A, B, R]
+      there was one(amount).show(anyFunction2)
+
+##### Partial functions and auto-boxing
+
+Auto-boxing might interfere with the mocking of PartialFunctions. Please have a look at [this](https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion) for a discussion.
 
 ### DataTables
 

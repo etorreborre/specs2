@@ -2,11 +2,10 @@ package org.specs2
 package mock
 package mockito
 
-import matcher.{BeEqualTo, Matcher}
-import org.hamcrest.core.IsAnything
-import scala.io.Source
 import io.FileWriter
-
+import text.NotNullStrings._
+import matcher._
+import MatchersImplicits._
 
 /**
  * This trait allows to specify functions as arguments in mocked methods.
@@ -19,8 +18,25 @@ import io.FileWriter
  * anyFunctionN will just match any function with n arguments
  *
  */
-trait FunctionArguments extends ArgThat {
+trait FunctionArgumentsLowImplicits extends ArgThat with Expectations {
 
+  def partialCallMatching[A, R](a: A, m: Matcher[R]): PartialFunction[A, R] = {
+    val partialMatcher: Matcher[PartialFunction[A, R]] = (f: PartialFunction[A,R]) => {
+      try { (m ^^ ((pf: PartialFunction[A,R]) => pf(a))).apply(createExpectable(f)) }
+      catch {
+        case e: MatchError => MatchFailure("ok", "a PartialFunction defined for " + a.notNull, createExpectable(f))
+      }
+    }
+    argThat(partialMatcher)
+  }
+
+  def partialFunctionCall[A, R](a: A, r: R): PartialFunction[A, R] = partialCallMatching(a, new BeEqualTo(r))
+  implicit def toPartialFunctionCall[A, R](values: (A, R)): PartialFunction[A, R] = partialFunctionCall(values._1, values._2)
+  implicit def matcherToPartialFunctionCall[A, R](values: (A, Matcher[R])): PartialFunction[A, R] = partialCallMatching(values._1, values._2)
+
+}
+
+trait FunctionArguments extends FunctionArgumentsLowImplicits {
   def callMatching[A, R](a: A, m: Matcher[R]): A => R = argThat(m ^^ { (f: A => R) => f(a) })
   def functionCall[A, R](a: A, r: R): A => R = callMatching(a, new BeEqualTo(r))
   implicit def toFunctionCall[A, R](values: (A, R)): A => R = functionCall(values._1, values._2)
@@ -129,6 +145,7 @@ trait FunctionArguments extends ArgThat {
   def functionCall22[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,R](t1:T1,t2:T2,t3:T3,t4:T4,t5:T5,t6:T6,t7:T7,t8:T8,t9:T9,t10:T10,t11:T11,t12:T12,t13:T13,t14:T14,t15:T15,t16:T16,t17:T17,t18:T18,t19:T19,t20:T20,t21:T21,t22:T22,r:R): Function22[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,R] = callMatching22(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22, new BeEqualTo(r))
   implicit def toFunctionCall22[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,R](values: ((T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22),R)): Function22[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,R] = functionCall22(values._1._1,values._1._2,values._1._3,values._1._4,values._1._5,values._1._6,values._1._7,values._1._8,values._1._9,values._1._10,values._1._11,values._1._12,values._1._13,values._1._14,values._1._15,values._1._16,values._1._17,values._1._18,values._1._19,values._1._20,values._1._21,values._1._22, values._2)
   implicit def matcherToFunctionCall22[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,R](values: ((T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22),Matcher[R])): Function22[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,R] = callMatching22(values._1._1,values._1._2,values._1._3,values._1._4,values._1._5,values._1._6,values._1._7,values._1._8,values._1._9,values._1._10,values._1._11,values._1._12,values._1._13,values._1._14,values._1._15,values._1._16,values._1._17,values._1._18,values._1._19,values._1._20,values._1._21,values._1._22, values._2)
+
 }
 
 import reflect.Generation._

@@ -38,7 +38,13 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       "with n arguments"                                                                                                ! aMock().verify8^
       "with n arguments and a matcher for the return value"                                                             ! aMock().verify9^
       "as being anything"                                                                                               ! aMock().verify10^
-                                                                                                                          endp^
+                                                                                                                        p^
+    "it is possible to check a partial function parameter"          		                                                ^
+      "with n arguments"                                                                                                ! aMock().verify11^
+      "with n arguments and a matcher for the return value"                                                             ! aMock().verify12^
+      "as being anything"                                                                                               ! aMock().verify13^
+      "when the argument is not defined"                                                                                ! aMock().verify14^
+                                                                                                                        endp^
   "It is also possible to return a specific value from a mocked method"                                                 ^
     "then when the mocked method is called, the same values will be returned" 	                                        ! aMock().return1^
     "different successive values can even be returned" 						                                                      ! aMock().return2^
@@ -115,6 +121,9 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     trait WithFunction2 { def call(f: Function2[Int, Double, String]) = f(1, 2.0) }
     val function2 = mock[WithFunction2]
 
+    trait WithPartialFunction { def call(f: PartialFunction[(Int, Double), String]) = f.apply((1, 2.0)) }
+    val partial = mock[WithPartialFunction]
+
     def call1 = { list.add("one"); success }
 
     def verify1 = {
@@ -153,6 +162,22 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     def verify10 = {
       function2.call((i:Int, d: Double) => (i + d).toString)
       there was one(function2).call(anyFunction2)
+    }
+    def verify11 = {
+      partial.call { case (i:Int, d: Double) => (i + d).toString }
+      there was one(partial).call((1, 3.0) -> "4.0")
+    }
+    def verify12 = {
+      partial.call { case (i:Int, d: Double) => (i + d).toString }
+      there was one(partial).call((1, 3.0) -> haveSize[String](3))
+    }
+    def verify13 = {
+      partial.call { case (i:Int, d: Double) => (i + d).toString }
+      there was one(partial).call(anyPartialFunction)
+    }
+    def verify14 = {
+      partial.call { case (i:Int, d: Double) if i > 10 => (i + d).toString }
+      there was one(partial).call((1, 3.0) -> "4.0") returns "a PartialFunction defined for (1,3.0)"
     }
 
     def return1 = {

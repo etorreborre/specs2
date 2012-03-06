@@ -22,6 +22,8 @@ trait MockitoMatchers extends ArgThat {
 
   def any[T : Manifest]: T = org.mockito.Matchers.any(implicitly[Manifest[T]].erasure).asInstanceOf[T]
 
+  def anyPartialFunction[T,R] = anArgThat(new IsAnything[PartialFunction[T,R]])
+
   def anyFunction1[T1,R] = anArgThat(new IsAnything[Function1[T1,R]])
   def anyFunction2[T1,T2,R] = anArgThat(new IsAnything[Function2[T1,T2,R]])
   def anyFunction3[T1,T2,T3,R] = anArgThat(new IsAnything[Function3[T1,T2,T3,R]])
