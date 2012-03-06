@@ -32,7 +32,13 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "it is possible to check that no calls have been made" 		                                                          ! aMock().verify3^
     "it is possible to pass byname parameters"          		                                                            ! aMock().verify4^
     "it is possible to check byname parameters"          		                                                            ! aMock().verify5^
-                                                                                                                        p^
+    "it is possible to check a function parameter"          		                                                        ^
+      "with one argument"                                                                                               ! aMock().verify6^
+      "with one argument and a matcher for the return value"                                                            ! aMock().verify7^
+      "with n arguments"                                                                                                ! aMock().verify8^
+      "with n arguments and a matcher for the return value"                                                             ! aMock().verify9^
+      "as being anything"                                                                                               ! aMock().verify10^
+                                                                                                                          endp^
   "It is also possible to return a specific value from a mocked method"                                                 ^
     "then when the mocked method is called, the same values will be returned" 	                                        ! aMock().return1^
     "different successive values can even be returned" 						                                                      ! aMock().return2^
@@ -99,11 +105,18 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
 	case class aMock() {
     val list = mock[java.util.List[String]]
     val queue = mock[scala.collection.immutable.Queue[String]]
+
     trait ByName { def call(i: =>Int) = i }
     val byname = mock[ByName]
 
+    trait WithFunction1 { def call(f: Int => String) = f(0) }
+    val function1 = mock[WithFunction1]
+
+    trait WithFunction2 { def call(f: Function2[Int, Double, String]) = f(1, 2.0) }
+    val function2 = mock[WithFunction2]
 
     def call1 = { list.add("one"); success }
+
     def verify1 = {
       list.add("one")
       there was one(list).add("one")
@@ -119,6 +132,27 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     def verify5 = {
       byname.call(10)
       there was one(byname).call(be_>(5))
+    }
+
+    def verify6 = {
+      function1.call((_:Int).toString)
+      there was one(function1).call(1 -> "1")
+    }
+    def verify7 = {
+      function1.call((_:Int).toString)
+      there was one(function1).call(1 -> startWith("1"))
+    }
+    def verify8 = {
+      function2.call((i:Int, d: Double) => (i + d).toString)
+      there was one(function2).call((1, 3.0) -> "4.0")
+    }
+    def verify9 = {
+      function2.call((i:Int, d: Double) => (i + d).toString)
+      there was one(function2).call((1, 3.0) -> haveSize[String](3))
+    }
+    def verify10 = {
+      function2.call((i:Int, d: Double) => (i + d).toString)
+      there was one(function2).call(anyFunction2)
     }
 
     def return1 = {

@@ -62,10 +62,6 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
     def thenReturns(t: T) = stub.thenReturn(t)
     def thenThrows[E <: Throwable](e: E) = stub.thenThrow(e)
   }
-  /** allows to use a specs matcher to match parameters by encapsulating it as a Hamcrest matcher. */
-  implicit def argThat[T, U <: T](m: org.specs2.matcher.Matcher[U]): T = org.mockito.Matchers.argThat(new org.specs2.mock.HamcrestMatcherAdapter(m))
-  /** allows to use a hamcrest matchers to match parameters. */
-  def anArgThat[T, U <: T](m: org.hamcrest.Matcher[U]): T = org.mockito.Matchers.argThat(m)
 
   /** 
    * This class is an implementation of the Answer interface allowing to pass functions as an answer.

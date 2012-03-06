@@ -98,6 +98,9 @@ trait FileWriter {
 }
 
 private[specs2]
+object FileWriter extends FileWriter
+
+private[specs2]
 trait MockFileWriter extends FileWriter {
   override def createFile(path: String) = {}
   override def delete(path: String) = true
