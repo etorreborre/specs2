@@ -58,8 +58,6 @@ testOptions := Seq(Tests.Filter(s =>
   	s.contains("index") ||
     s.matches("org.specs2.guide.*")))
 
-testOptions in Test += Tests.Argument("neverstore", "html", "junitxml") 
-
 /** Console */
 initialCommands in console := "import org.specs2._"
 
