@@ -35,7 +35,7 @@ import execute.Result
  * 
  * </code>
  */
-trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectations {
+trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockitoMocker with Expectations {
   /** this matcher evaluates an expression containing mockito calls verification */
   private class CallsMatcher extends Matcher[Any] {
     def apply[S <: Any](calls: Expectable[S]) = checkCalls[S](calls)
@@ -141,3 +141,4 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
     }
   }
 }
+
