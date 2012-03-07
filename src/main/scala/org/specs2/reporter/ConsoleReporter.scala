@@ -1,7 +1,6 @@
 package org.specs2
 package reporter
 
-import io._
 import main.Arguments
 import org.specs2.internal.scalaz._
 import Scalaz._
@@ -32,5 +31,6 @@ trait ConsoleReporter extends DefaultReporter with TextExporting {
 
 private [specs2]
 trait SilentConsoleReporter extends DefaultReporter with NoExporting
+
 private [specs2]
 object SilentConsoleReporter extends SilentConsoleReporter
