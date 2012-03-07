@@ -4,7 +4,7 @@ This version adds new features on top of 1.8.2:
  * improved the documentation showing that `DataTables` can be displayed as examples
  * improved the performance of the `beMatching` matchers
  * `AllExpectations` trait to collect [all the expectations](http://etorreborre.github.com/specs2/guide/org.specs2.guide.SpecStructure.html#All+Expectations) of an example 
- * Mockito can now be used with functions having by-name arguments
+ * Mockito can now be used with functions having by-name arguments or implicitly converted arguments
  * added some helper functions and conversions to verify function/partial function parameters with Mockito
  * a custom `Notifier`/`Exporter` can now be specified as a command-line argument to report the specification
  

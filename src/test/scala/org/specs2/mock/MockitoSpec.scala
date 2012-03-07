@@ -44,6 +44,10 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       "with n arguments and a matcher for the return value"                                                             ! aMock().verify12^
       "as being anything"                                                                                               ! aMock().verify13^
       "when the argument is not defined"                                                                                ! aMock().verify14^
+                                                                                                                        p^
+    "it is possible to verify a function with implicit conversions"          		                                        ^
+      "with a single converted parameter"                                                                               ! aMock().verify15^
+      "with a single converted parameter, using a matcher"                                                              ! aMock().verify16^
                                                                                                                         endp^
   "It is also possible to return a specific value from a mocked method"                                                 ^
     "then when the mocked method is called, the same values will be returned" 	                                        ! aMock().return1^
@@ -118,11 +122,16 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     trait WithFunction1 { def call(f: Int => String) = f(0) }
     val function1 = mock[WithFunction1]
 
-    trait WithFunction2 { def call(f: Function2[Int, Double, String]) = f(1, 2.0) }
+    trait WithFunction2 { def call(f: (Int, Double) => String) = f(1, 2.0) }
     val function2 = mock[WithFunction2]
 
     trait WithPartialFunction { def call(f: PartialFunction[(Int, Double), String]) = f.apply((1, 2.0)) }
     val partial = mock[WithPartialFunction]
+
+    case class WrappedString(s: String)
+    implicit def wrap(s: String): WrappedString = WrappedString(s)
+    trait WithImplicitConversion { def call[T <% WrappedString](s: T) = s.toString }
+    val converted = mock[WithImplicitConversion]
 
     def call1 = { list.add("one"); success }
 
@@ -149,7 +158,8 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     }
     def verify7 = {
       function1.call((_:Int).toString)
-      there was one(function1).call(1 -> startWith("1"))
+      (there was one(function1).call(1 -> startWith("1"))) and
+      ((there was one(function1).call(1 -> startWith("2"))) returns "'1' doesn't start with '2'")
     }
     def verify8 = {
       function2.call((i:Int, d: Double) => (i + d).toString)
@@ -178,6 +188,14 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     def verify14 = {
       partial.call { case (i:Int, d: Double) if i > 10 => (i + d).toString }
       there was one(partial).call((1, 3.0) -> "4.0") returns "a PartialFunction defined for (1,3.0)"
+    }
+    def verify15 = {
+      converted.call("test")
+      there was one(converted).call("test")
+    }
+    def verify16 = {
+      converted.call("test")
+      there was one(converted).call(startWith("t"))
     }
 
     def return1 = {

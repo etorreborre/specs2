@@ -24,7 +24,7 @@ import java.util.List
 import org.mockito.internal.progress.ThreadSafeMockingProgress2
 
 import Invocation.{expandVarArgs, MAX_LINE_LENGTH}
-import org.mockito.internal.matchers.{EqualsFunction0, ArrayEquals, Equals, MatchersPrinter}
+import org.mockito.internal.matchers.{EqualsFunction0, EqualsFunction1, ArrayEquals, Equals, MatchersPrinter}
 
 /**
  * This class redefines Mockito Invocation behavior class when evaluating byname arguments.
@@ -56,6 +56,12 @@ class Invocation extends PrintableInvocation with InvocationOnMock with Printing
         // if there are no matchers, use the value directly with an equals matcher
         if (argumentsMatchers.isEmpty) matchers.add(new EqualsFunction0(value))
         else                           matchers.addAll(argumentsMatchers)
+      }
+      else if (arg.isInstanceOf[org.specs2.matcher.Matcher[_]]) {
+        matchers.add(new org.specs2.mock.HamcrestMatcherAdapter(arg.asInstanceOf[org.specs2.matcher.Matcher[_]]))
+      }
+      else if (arg.isInstanceOf[Function1[_,_]]) {
+        matchers.add(new EqualsFunction1(arg))
       }
       else matchers.add(new Equals(arg))
     }
