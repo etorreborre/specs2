@@ -11,7 +11,7 @@ trait StackTraceFilter {
   /** @return the filtered stacktrace */
   def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement]
   /** @return an exception with a filtered stacktrace */
-  def apply(e: Exception): Exception = exception(e.getMessage, apply(e.getFullStackTrace))
+  def apply(e: Exception): Exception = exception(e.getMessage, apply(e.getFullStackTrace), e.getCause)
 }
 
 /**

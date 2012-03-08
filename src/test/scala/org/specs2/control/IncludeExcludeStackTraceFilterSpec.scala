@@ -19,6 +19,9 @@ class IncludeExcludeStackTraceFilterSpec extends Specification { def is =
   "From an existing IncludedExcludedStackTraceFilter"                                                                   ^
     "we can add more include patterns, using the includeAlso method"                                                    ! e6^
     "we can add more exclude patterns, using the excludeAlso method"                                                    ! e7^
+                                                                                                                        p^
+  "A StackTraceFilter, when filtering an exception should"                                                              ^
+    "retain the exception cause"                                                                                        ! e8^
                                                                                                                         end
 
   def stacktrace(st: String*) =  st.map(stackTraceElement(_))
@@ -34,4 +37,9 @@ class IncludeExcludeStackTraceFilterSpec extends Specification { def is =
   def e6 = DefaultStackTraceFilter.includeAlso("t1", "t2").apply(stacktrace("org.specs2", "t1")).map(_.toString) must not containMatch("specs2")
   def e7 = DefaultStackTraceFilter.excludeAlso("t1").apply(stacktrace("org.specs2", "t1")).map(_.toString) must not containMatch("t1")
 
+  def e8 = {
+    val cause = new Exception("bang")
+    val e = new Exception("boom", cause)
+    DefaultStackTraceFilter.apply(e).getCause must_== cause
+  }
 }

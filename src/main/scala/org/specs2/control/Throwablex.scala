@@ -78,8 +78,8 @@ trait Throwablex {
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 
 	   new StackTraceElement(m, className, fileName, lineNumber)
   /** @return an exception with the given message and stacktrace */
-  def exception(m: String, st: Seq[StackTraceElement]): Exception = {
-	  val exception = new Exception(m)
+  def exception(m: String, st: Seq[StackTraceElement], cause: Throwable = null): Exception = {
+	  val exception = new Exception(m, cause)
 	  exception.setStackTrace(st.toArray)
 	  exception
   }
