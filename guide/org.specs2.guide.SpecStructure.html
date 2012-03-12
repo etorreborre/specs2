@@ -553,13 +553,13 @@ include(xonly, resetTextIndentation)         ^
 <pre><code class="prettyprint">   class ContextSpec extends Specification { def is =
      &quot;this is the first example&quot; ! trees().e1 ^
      &quot;this is the first example&quot; ! trees().e2
-   }
 
-   case class trees() {
-     val tree = createATreeWith4Nodes
+     case class trees() {
+       val tree = createATreeWith4Nodes
 
-     def e1 = tree.removeNodes(2, 3) must have size(2)
-     def e2 = tree.removeNodes(2, 3, 4) must have size(1)
+       def e1 = tree.removeNodes(2, 3) must have size(2)
+       def e2 = tree.removeNodes(2, 3, 4) must have size(1)
+     }
    }
 </code></pre><p>In this case we don't need to extend the <code class="prettyprint">Scope</code> trait because the examples <code class="prettyprint">e1</code> and <code class="prettyprint">e2</code> already return <code class="prettyprint">Result</code>s.</p><a name="Contexts+inheritance"><h5>Contexts inheritance</h5></a><p>One very cool property of using traits to define context variables is that we can use inheritance to describe more and more specific contexts:</p>
 <pre><code class="prettyprint">  trait LoggedIn extends Scope {
