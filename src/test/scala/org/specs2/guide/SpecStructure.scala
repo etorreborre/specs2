@@ -948,15 +948,15 @@ In that case you would extend the `specification.After` trait and use the `apply
        class ContextSpec extends Specification { def is =
          "this is the first example" ! trees().e1 ^
          "this is the first example" ! trees().e2
-       }
 
-       case class trees() extends specification.After {
-         lazy val tree = getATreeWith4NodesFromTheDatabase
-         def after = cleanupDB
+         case class trees() extends specification.After {
+           lazy val tree = getATreeWith4NodesFromTheDatabase
+           def after = cleanupDB
 
-         // this is equivalent to: def e1 = this.apply { ... }
-         def e1 = this { tree.removeNodes(2, 3) must have size(2) }
-         def e2 = this { tree.removeNodes(2, 3, 4) must have size(1) }
+           // this is equivalent to: def e1 = this.apply { ... }
+           def e1 = this { tree.removeNodes(2, 3) must have size(2) }
+           def e2 = this { tree.removeNodes(2, 3, 4) must have size(1) }
+         }
        }
 
 Now we have both variable isolation and non-duplication of set-up code!
