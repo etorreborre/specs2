@@ -44,6 +44,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
       "showing the cause"                                                                                               ! prop4_2^
     "a Property can be used with check"                                                                                 ! prop5^
     "a FailureException can be thrown from a Prop"                                                                      ! prop6^
+    "in the Context of a mutable specification"                                                                         ! prop7^
                                                                                                                         end^
   "It can also be used at the beginning of a specification"                                                             ! fragment1^
                                                                                                                         p^
@@ -90,6 +91,8 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
 
   def prop5 = execute(check(proved)) must beSuccessful
   def prop6 = execute(failureExceptionProp).toString must startWith("A counter-example is")
+
+  def prop7 = FragmentExecution.executeSpecificationResult(new MutableSpecWithContextAndScalaCheck).isFailure
 
   def fragment1 = {
     val spec = new Specification { def is = check((i: Int) => i == i) ^ end }
@@ -167,4 +170,17 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
   def exceptionProp(msg: String = "boom") = forAll((b: Boolean) => {throw exceptionWithCause(msg); true})
 
   def failureExceptionProp = forAll((b: Boolean) => {throw new execute.FailureException(failure); true})
+}
+
+class MutableSpecWithContextAndScalaCheck extends mutable.Specification with ScalaCheck {
+  "check something with before code" ! new SC {
+    check { (s: String) =>
+      s.reverse must_== aString
+    }.set(minTestsOk -> 200)
+  }
+
+  trait SC extends mutable.Before {
+    val aString = "xxx"
+    def before { println("before") }
+  }
 }

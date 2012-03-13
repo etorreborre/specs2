@@ -18,7 +18,8 @@ import org.scalacheck._
 trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters
    with FunctionPropertyImplicits
    with ResultPropertyImplicits
-   with ApplicableArbitraries { outer =>
+   with ApplicableArbitraries
+   with Expectations { outer =>
 
   /**
    * transform a Function returning a MatchResult (or anything which can be converted to a Prop) as a ScalaCheck property
@@ -61,7 +62,10 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
 
   /** execute a ScalaCheck property */
   def check(prop: Prop)(implicit p: Parameters): execute.Result = checkProp(prop)(p)
-  implicit def checkProp(prop: Prop)(implicit p: Parameters): execute.Result = checkProperty(prop)(p)
+
+  /** execute a ScalaCheck property */
+  implicit def checkProp(prop: Prop)(implicit p: Parameters): execute.Result =
+    checkResultFailure(checkProperty(prop)(p))
 
   /** set specific execution parameters on a Property */
   implicit def setProperty(p: Prop) = new SetProperty(p)
