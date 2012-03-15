@@ -22,6 +22,7 @@ class IncludeExcludeStackTraceFilterSpec extends Specification { def is =
                                                                                                                         p^
   "A StackTraceFilter, when filtering an exception should"                                                              ^
     "retain the exception cause"                                                                                        ! e8^
+    "retain the exception type"                                                                                         ! e9^
                                                                                                                         end
 
   def stacktrace(st: String*) =  st.map(stackTraceElement(_))
@@ -42,4 +43,8 @@ class IncludeExcludeStackTraceFilterSpec extends Specification { def is =
     val e = new Exception("boom", cause)
     DefaultStackTraceFilter.apply(e).getCause must_== cause
   }
+
+  def e9 = DefaultStackTraceFilter.apply(new IllegalArgumentException("ohnoes")).getClass.getName ===
+           "java.lang.IllegalArgumentException"
+
 }

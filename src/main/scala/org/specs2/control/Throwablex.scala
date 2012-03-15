@@ -33,6 +33,15 @@ trait Throwablex {
     def filter(pattern: String) = {
       setStackTrace(t.getStackTrace.toList.filter(patternMatches(pattern)))
     }
+    /**
+     * Select all traces of this exception according to filtering function
+     * WARNING: this mutates the exception to be able to retain its type!
+     */
+    def filter(f: Seq[StackTraceElement] => Seq[StackTraceElement]): T = {
+      chainedExceptions.foreach(_.filter(f))
+      setStackTrace(f(t.getStackTrace.toList))
+    }
+
     /** match a stacktrace element with a pattern */
     private def patternMatches(p: String) = (_:StackTraceElement).toString matches (".*"+p+".*")
     /**
