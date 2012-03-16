@@ -48,6 +48,8 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "it is possible to verify a function with implicit conversions"          		                                        ^
       "with a single converted parameter"                                                                               ! aMock().verify15^
       "with a single converted parameter, using a matcher"                                                              ! aMock().verify16^
+                                                                                                                        p^
+    "it is possible to verify a function with repeated parameters"          		                                        ! aMock().verify17^
                                                                                                                         endp^
   "It is also possible to return a specific value from a mocked method"                                                 ^
     "then when the mocked method is called, the same values will be returned" 	                                        ! aMock().return1^
@@ -133,6 +135,9 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     trait WithImplicitConversion { def call[T <% WrappedString](s: T) = s.toString }
     val converted = mock[WithImplicitConversion]
 
+    trait WithRepeatedParams { def call[T](params: T*) = params.toString }
+    val repeated = mock[WithRepeatedParams]
+
     def call1 = { list.add("one"); success }
 
     def verify1 = {
@@ -196,6 +201,11 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     def verify16 = {
       converted.call("test")
       there was one(converted).call(startWith("t"))
+    }
+    def verify17 = {
+      repeated.call(1, 2, 3)
+      (there was one(repeated).call(1, 2, 3)) and
+      ((there was one(repeated).call(1, 2)) returns "WrappedArray(1, 2)")
     }
 
     def return1 = {

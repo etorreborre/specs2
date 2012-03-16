@@ -25,6 +25,7 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress2
 
 import Invocation.{expandVarArgs, MAX_LINE_LENGTH}
 import org.mockito.internal.matchers.{EqualsFunction0, EqualsFunction1, ArrayEquals, Equals, MatchersPrinter}
+import collection.mutable.WrappedArray
 
 /**
  * This class redefines Mockito Invocation behavior class when evaluating byname arguments.
@@ -49,6 +50,7 @@ class Invocation extends PrintableInvocation with InvocationOnMock with Printing
     var matchers: List[Matcher[_]] = new ArrayList[Matcher[_]](arguments.length)
     for (arg <- arguments) {
       if (arg != null && arg.getClass.isArray) matchers.add(new ArrayEquals(arg))
+      else if (arg != null && arg.getClass.getName.startsWith("scala.collection.mutable.WrappedArray")) matchers.add(new Equals(arg))
       else if (arg.isInstanceOf[Function0[_]]) {
         // evaluate the byname parameter to collect the argument matchers
         val value = arg.asInstanceOf[Function0[_]].apply();
