@@ -2,8 +2,7 @@ package org.specs2
 package mutable
 import execute._
 import main._
-import specification.{Action, Step, SpecificationStructure, FormattingFragments, Fragments, FragmentsFragment, Example, GivenThen}
-import FormattingFragments._
+import specification.{Action, Step, SpecificationStructure, FormattingFragments => FF, Fragments, FragmentsFragment, Example, GivenThen}
 
 /**
  * Adding new implicits to support specs-like naming: "the system" should "do this" in { ... }
@@ -58,13 +57,13 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def in(e: =>Example)       : Example = {
       addFragments(s)
       val ex = e
-      addFragments(p)
+      addFragments(FF.p)
       ex
     }
     def in(block: =>Unit)       : Unit = {
       addFragments(s)
       val b = block
-      addFragments(p)
+      addFragments(FF.p)
       b
     }
     def in(fs: =>Fragments): Fragments = fs
@@ -97,7 +96,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(s + " " + word)
     fs
-    addFragments(p)
+    addFragments(FF.p)
   }
   protected def >>(fs: Fragments) = addFragments(fs)
   protected def addFragments(fs: Fragments): Fragments = {
@@ -124,5 +123,5 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
   override def described(s: String): Described = super.described(s)
   override def inExample(s: String): InExample = super.inExample(s)
   override def title(s: String)                = super.title(s)
-  override def text(s: String)                  = super.text(s)
+  override def text(s: String)                 = super.text(s)
 }
