@@ -58,8 +58,8 @@ trait FromSource {
    */
   def location(stackFilter: Seq[StackTraceElement] => Seq[StackTraceElement]): TraceLocation = {
     val stackTrace = new Exception().getStackTrace().toList
-    val trace = stackFilter(stackTrace).headOption
-    new TraceLocation(trace.getOrElse(stackTrace(0)))
+    val filtered = stackFilter(stackTrace)
+    new TraceLocation(filtered.headOption.getOrElse(stackTrace(0)))
   }
 
   private def getCodeFromToWithLocation(startLine: Int, endLine: Int = 9, location: TraceLocation): Either[String, String] = {

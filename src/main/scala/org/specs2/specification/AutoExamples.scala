@@ -36,6 +36,12 @@ trait AutoExamples extends AutoExamplesLowImplicits { this: FragmentsBuilder =>
   implicit def dataTableFragments[T](result: =>DecoratedResult[T]): Fragments = Fragments.create(dataTableExample(result))
   implicit def dataTableExample[T](result: =>execute.DecoratedResult[T]) = exampleFactory.newExample(EmptyMarkup(), result)
 
+  /** this syntax allows to declare auto examples with { ... }.eg in mutable specifications */
+  implicit def eg[T](expression: =>execute.DecoratedResult[T]): ToDataTableExample[T] = new ToDataTableExample(expression)
+  class ToDataTableExample[T](expression: =>DecoratedResult[T]) {
+    def eg = dataTableExample(expression)
+  }
+
 }
 
 private[specs2]
@@ -43,40 +49,42 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragmentsFragment(expression: =>MatchResult[_]): MatchResultFragment = {
-    new MatchResultFragment(matchFragments(expression))
+    new MatchResultFragment(() => matchFragments(expression))
   }
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragmentsFragment(expression: =>Boolean): BooleanResultFragment =
-    new BooleanResultFragment(booleanFragments(expression))
+    new BooleanResultFragment(() => booleanFragments(expression))
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   def resultFragmentsFragment(expression: =>Result): ResultFragment =
-    new ResultFragment(resultFragments(expression))
+    new ResultFragment(() => resultFragments(expression))
 
   /**
    * this implicit def is necessary when the expression is at the start of the spec
    * The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
    */
-  implicit def matchFragments(expression: =>MatchResult[_]) = {
-    val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-    Fragments.create(exampleFactory.newExample(CodeMarkup(desc), expression.toResult))
-  }
-  /** this implicit def is necessary when the expression is at the start of the spec */
-  implicit def booleanFragments(expression: =>Boolean) = {
-    val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-    Fragments.create(exampleFactory.newExample(CodeMarkup(desc), toResult(expression)))
-  }
-  /** this implicit def is necessary when the expression is at the start of the spec */
-  implicit def resultFragments(result: =>Result): Fragments = {
-    Fragments.create(exampleFactory.newExample(CodeMarkup(getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)), result))
-  }
+  implicit def matchFragments(expression: =>MatchResult[_]): Fragments = createExampleFragment(expression.toResult)
 
-  implicit def matchExample(expression: =>MatchResult[_])  = exampleFactory.newExample(CodeMarkup(getSourceCode()), expression.toResult)
-  implicit def booleanExample(expression: =>Boolean)       = exampleFactory.newExample(CodeMarkup(getSourceCode()), toResult(expression))
-  implicit def resultExample(expression: =>execute.Result) = exampleFactory.newExample(CodeMarkup(getSourceCode()), expression)
+  /** this implicit def is necessary when the expression is at the start of the spec */
+  implicit def booleanFragments(expression: =>Boolean): Fragments = createExampleFragment(toResult(expression))
 
-  /** this syntax allows to declare auto examples with { ... }.ex in mutable specifications */
+  /** this implicit def is necessary when the expression is at the start of the spec */
+  implicit def resultFragments(result: =>Result): Fragments = createExampleFragment(result)
+
+  private def createExampleFragment(result: =>Result) =
+    Fragments.create(exampleFactory.newExample(CodeMarkup(getDescription(depth = 9)), result))
+
+  /** get the description from the source file */
+  protected def getDescription(depth: Int = 9) = getSourceCode(startDepth = depth, endDepth= depth + 3, startLineOffset = -1, endLineOffset = -1)
+
+  implicit def matchExample(expression: =>MatchResult[_]) : Example = createExample(expression.toResult)
+  implicit def booleanExample(expression: =>Boolean)      : Example = createExample(toResult(expression))
+  implicit def resultExample(expression: =>execute.Result): Example = createExample(expression)
+
+  private def createExample(expression: =>execute.Result): Example = exampleFactory.newExample(CodeMarkup(getDescription()), expression)
+
+  /** this syntax allows to declare auto examples with { ... }.eg in mutable specifications */
   implicit def eg(expression: =>MatchResult[_]): ToMatchResultExample = new ToMatchResultExample(expression)
   class ToMatchResultExample(expression: =>MatchResult[_]) {
     def eg = matchExample(expression)
@@ -90,7 +98,7 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
     def eg = resultExample(expression)
   }
 
-  private[specs2] def getSourceCode(startDepth: Int = 6, endDepth: Int = 9, startLineOffset: Int = -1, endLineOffset: Int = -1): String = {
+  private[specs2] def getSourceCode(startDepth: Int = 9, endDepth: Int = 12, startLineOffset: Int = -1, endLineOffset: Int = -1): String = {
     val firstTry = getCodeFromTo(startDepth, endDepth, startLineOffset, endLineOffset)
     val code = firstTry match {
       case Right(c) => c
@@ -110,36 +118,26 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
    * This class is especially created when the first fragment of a specification is a match result (no text before)
    * The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
    */
-  class MatchResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
-    def ^[T](result: =>T)(implicit toResult: T => Result) = {
-      val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-      new FragmentsFragment(fs.add(exampleFactory.newExample(CodeMarkup(desc), toResult(result))))
-    }
-  }
+  class MatchResultFragment(val fs: () => Fragments) extends FragmentsFragment(fs()) with ExampleFragment
 
   /**
    * This class is especially created when the first fragment of a specification is a boolean result (no text before)
    * The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
    */
-  class BooleanResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
-    def ^[T](result: =>T)(implicit toResult: T => Result) = {
-      val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-      new FragmentsFragment(fs.add(exampleFactory.newExample(CodeMarkup(desc), toResult(result))))
-    }
-  }
+  class BooleanResultFragment(val fs: () => Fragments) extends FragmentsFragment(fs()) with ExampleFragment
 
   /**
    * This class is especially created when the first fragment of a specification is a Result (no text before)
    * The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
    */
-  class ResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
+  class ResultFragment(val fs: () => Fragments) extends FragmentsFragment(fs()) with ExampleFragment
+
+  trait ExampleFragment {
+    def fs: () => Fragments
     def ^[T](result: =>T)(implicit toResult: T => Result) = {
-      val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-      new FragmentsFragment(fs.add(exampleFactory.newExample(CodeMarkup(desc), toResult(result))))
+      new FragmentsFragment(fs().add(exampleFactory.newExample(CodeMarkup(getDescription(depth = 7)), toResult(result))))
     }
   }
-
-
 }
 
 /**
@@ -149,4 +147,35 @@ trait NoBooleanAutoExamples extends AutoExamples { this: FragmentsBuilder =>
   override def booleanFragmentsFragment(expression: =>Boolean): BooleanResultFragment = super.booleanFragmentsFragment(expression)
   override def booleanFragments(expression: =>Boolean) = super.booleanFragments(expression)
   override def booleanExample(expression: =>Boolean) = super.booleanExample(expression)
+  override def eg(expression: =>Boolean) = super.eg(expression)
 }
+
+/**
+ * This trait can be used to deactivate the Result conversions to fragments and examples
+ */
+trait NoResultAutoExamples extends AutoExamples { this: FragmentsBuilder =>
+  override def resultFragmentsFragment(expression: =>execute.Result) = super.resultFragmentsFragment(expression)
+  override def resultFragments(expression:         =>execute.Result) = super.resultFragments(expression)
+  override def resultExample(expression:           =>execute.Result) = super.resultExample(expression)
+  override def eg(expression:                      =>execute.Result) = super.eg(expression)
+}
+
+/**
+ * This trait can be used to deactivate the MatchResult conversions to fragments and examples
+ */
+trait NoMatchResultAutoExamples extends AutoExamples { this: FragmentsBuilder =>
+  override def matchFragmentsFragment(expression: =>MatchResult[_]) = super.matchFragmentsFragment(expression)
+  override def matchFragments(expression:         =>MatchResult[_]) = super.matchFragments(expression)
+  override def matchExample(expression:           =>MatchResult[_]) = super.matchExample(expression)
+  override def eg(expression:                     =>MatchResult[_]) = super.eg(expression)
+}
+
+/**
+ * This trait can be used to deactivate the DataTable conversions to fragments and examples
+ */
+trait NoDataTableExamples extends AutoExamples { this: FragmentsBuilder =>
+  override def dataTableFragments[T](result: =>DecoratedResult[T])       = super.dataTableFragments(result)
+  override def dataTableExample[T](result: =>execute.DecoratedResult[T]) = super.dataTableExample(result)
+  override def eg[T](expression: =>execute.DecoratedResult[T])           = super.eg(expression)
+}
+

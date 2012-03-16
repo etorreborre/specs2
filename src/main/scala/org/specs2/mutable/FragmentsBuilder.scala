@@ -23,6 +23,12 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     t
   }
 
+  implicit def text(s: String): MutableSpecText = new MutableSpecText(s)
+  class MutableSpecText(s: String) {
+    /** md stands for Markdown */
+    def md = textFragment(s)
+  }
+
   override implicit def title(s: String): MutableSpecTitle = new MutableSpecTitle(s)
   class MutableSpecTitle(s: String) extends SpecTitle(s) {
     override def title = addFragments(super.title)
@@ -117,4 +123,6 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 trait NoFragmentsBuilder extends FragmentsBuilder {
   override def described(s: String): Described = super.described(s)
   override def inExample(s: String): InExample = super.inExample(s)
+  override def title(s: String)                = super.title(s)
+  override def text(s: String)                  = super.text(s)
 }
