@@ -1,13 +1,9 @@
 package org.specs2
 package specification
 
-import AutoExamples._
-import execute.DecoratedResult
-import matcher.{DataTable, DataTables}
+import matcher._
 
-class AutoExamplesSpec extends Specification with DataTables {
-
-  def is =
+class AutoExamplesSpec extends Specification with DataTables { def is =
 
   "The trimCode function should"                                                                ^
     "remove formatting fragments"                                                               ! e1^
@@ -18,6 +14,8 @@ class AutoExamplesSpec extends Specification with DataTables {
                                                                                                 endp^
   "DataTables can be used as examples directly"                                                 ^
     "their description must be left empty, since the result contains the full description"      ! dt1^
+                                                                                                p^
+  "Autoexamples can also be used in mutable specifications"                                     ! m1^
                                                                                                 end
 
   def e1 = "code"                     || "result"                  |>
@@ -33,6 +31,19 @@ class AutoExamplesSpec extends Specification with DataTables {
   def e4 = trimCode("`method`(p1, p2)") must_== "method"
 
   def dt1 = firstExampleDescription("text" ^ datatableOk) must be empty
+
+  def m1 = {
+    val spec = new mutable.Specification with DataTables {
+      { 1 must_== 1 }.eg
+
+      { true }.eg
+
+      { success }.eg
+
+      { datatableOk }.eg
+    }
+    spec.content.examples must have size(4)
+  }
 
   def firstExampleDescription(fs: Fragments) =
     fs.fragments.collect { case e: Example => e }.head.desc.toString

@@ -126,7 +126,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
   def matcher3 = execute(check(stringToBooleanMatcher)) must_== success100tries
   def result1 =  execute(check(trueFunction)).expectationsNb must_== 100
 
-  case class config() extends Before with ScalaCheck with MockOutput {
+  case class config() extends Before with ScalaCheckMatchers with MockOutput {
     def before = clear()
     def executionMessages(prop: Prop) = { execute(prop); messages.mkString }
 

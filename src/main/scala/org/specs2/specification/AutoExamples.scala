@@ -31,10 +31,10 @@ import matcher._
  * 
  */
 private[specs2]
-trait AutoExamples extends AutoExamplesLowImplicits {
+trait AutoExamples extends AutoExamplesLowImplicits { this: FragmentsBuilder =>
   /** specific implicits for datatables */
   implicit def dataTableFragments[T](result: =>DecoratedResult[T]): Fragments = Fragments.create(dataTableExample(result))
-  implicit def dataTableExample[T](result: =>execute.DecoratedResult[T]) = Example(EmptyMarkup(), result)
+  implicit def dataTableExample[T](result: =>execute.DecoratedResult[T]) = exampleFactory.newExample(EmptyMarkup(), result)
 
 }
 
@@ -60,23 +60,35 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
    */
   implicit def matchFragments(expression: =>MatchResult[_]) = {
     val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-    Fragments.create(Example(CodeMarkup(desc), expression.toResult))
+    Fragments.create(exampleFactory.newExample(CodeMarkup(desc), expression.toResult))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragments(expression: =>Boolean) = {
     val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-    Fragments.create(Example(CodeMarkup(desc), toResult(expression)))
+    Fragments.create(exampleFactory.newExample(CodeMarkup(desc), toResult(expression)))
   }
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def resultFragments(result: =>Result): Fragments = {
-    Fragments.create(Example(CodeMarkup(getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)), result))
+    Fragments.create(exampleFactory.newExample(CodeMarkup(getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)), result))
   }
 
-  implicit def matchExample(expression: =>MatchResult[_]) = exampleFactory.newExample(CodeMarkup(getSourceCode()), expression.toResult)
-
-  implicit def booleanExample(expression: =>Boolean) = exampleFactory.newExample(CodeMarkup(getSourceCode()), toResult(expression))
-
+  implicit def matchExample(expression: =>MatchResult[_])  = exampleFactory.newExample(CodeMarkup(getSourceCode()), expression.toResult)
+  implicit def booleanExample(expression: =>Boolean)       = exampleFactory.newExample(CodeMarkup(getSourceCode()), toResult(expression))
   implicit def resultExample(expression: =>execute.Result) = exampleFactory.newExample(CodeMarkup(getSourceCode()), expression)
+
+  /** this syntax allows to declare auto examples with { ... }.ex in mutable specifications */
+  implicit def eg(expression: =>MatchResult[_]): ToMatchResultExample = new ToMatchResultExample(expression)
+  class ToMatchResultExample(expression: =>MatchResult[_]) {
+    def eg = matchExample(expression)
+  }
+  implicit def eg(expression: =>Boolean): ToBooleanExample = new ToBooleanExample(expression)
+  class ToBooleanExample(expression: =>Boolean) {
+    def eg = booleanExample(expression)
+  }
+  implicit def eg(expression: =>execute.Result): ToResultExample = new ToResultExample(expression)
+  class ToResultExample(expression: =>execute.Result) {
+    def eg = resultExample(expression)
+  }
 
   private[specs2] def getSourceCode(startDepth: Int = 6, endDepth: Int = 9, startLineOffset: Int = -1, endLineOffset: Int = -1): String = {
     val firstTry = getCodeFromTo(startDepth, endDepth, startLineOffset, endLineOffset)
@@ -133,11 +145,8 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
 /**
  * This trait can be used to deactivate the Boolean conversions to fragments and examples
  */
-trait NoBooleanAutoExamples extends AutoExamples {
+trait NoBooleanAutoExamples extends AutoExamples { this: FragmentsBuilder =>
   override def booleanFragmentsFragment(expression: =>Boolean): BooleanResultFragment = super.booleanFragmentsFragment(expression)
   override def booleanFragments(expression: =>Boolean) = super.booleanFragments(expression)
   override def booleanExample(expression: =>Boolean) = super.booleanExample(expression)
 }
-
-private[specs2]
-object AutoExamples extends AutoExamples

@@ -4,6 +4,7 @@ import mutable.Specification
 import Listx._
 import org.scalacheck.Prop
 import Iterablex._
+import matcher.ScalaCheckMatchers
 
 class IterablexSpec extends Specification with IterableData {
 
@@ -56,7 +57,7 @@ class IterablexSpec extends Specification with IterableData {
 }
 import org.scalacheck.{ Arbitrary, Gen }
 import org.scalacheck.Gen._
-trait IterableData extends ScalaCheck {
+trait IterableData extends ScalaCheckMatchers {
   val sameIterables: Arbitrary[(Iterable[Any], Iterable[Any])] = Arbitrary {
     for {
       i0 <- listOf(oneOf(1, 2, 3))

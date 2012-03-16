@@ -3,6 +3,7 @@ package specification
 
 import execute.Result
 import matcher.MatchResult
+import text.MarkupString
 
 /**
  * this trait defines methods for creating Examples
@@ -17,6 +18,8 @@ trait ExampleFactory {
 	def newExample[T <% Result](s: String, t: =>T): Example = newExample(Example(s, t))
   /** @return an Example, using a function taking the example description as an input */
   def newExample(s: String, gt: GivenThen): Example = newExample(RegexStep.strip(s), gt.extract(s))
+  /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
+  def newExample[T <% Result](s: MarkupString, t: =>T): Example = newExample(Example(s, t))
   /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
 	def newExample(e: Example): Example
 }

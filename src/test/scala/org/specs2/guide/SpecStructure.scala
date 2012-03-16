@@ -231,6 +231,13 @@ In that case, the text of the example will be extracted from the source file and
        + None must beNone
        + Some(1) must not be none
 
+Auto-Examples can also be used in mutable specifications but the need to be declared by using the `eg` ("exempli gratia", the latin abbreviation for "for example"):
+
+     class SomeExamples extends mutable.Specification {
+       { None must beNone }.eg
+       { Some(1) must not be none }.eg
+     }
+
 A few things to remember about this feature:
 
  * the source file is expected to be found in the `src/test/scala` directory.

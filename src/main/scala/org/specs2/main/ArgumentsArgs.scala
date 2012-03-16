@@ -140,9 +140,7 @@ trait NoArgProperties extends ArgProperties {
   override def anyToArgProperty[T](t: =>T): ArgProperty[T] = super.anyToArgProperty(t)
 }
 
-
 object ArgProperties extends ArgProperties
-
 
 case class ArgProperty[T](p: Property[T] = Property[T]()) {
   def toOption: Option[T] = p.toOption
