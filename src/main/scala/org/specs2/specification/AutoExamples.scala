@@ -49,16 +49,16 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragmentsFragment(expression: =>MatchResult[_]): MatchResultFragment = {
-    new MatchResultFragment(() => createExampleFragment(expression.toResult)(14, -2, -2))
+    new MatchResultFragment(() => createExampleFragment(expression.toResult)(13, -2, -2))
   }
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragmentsFragment(expression: =>Boolean): BooleanResultFragment =
-    new BooleanResultFragment(() => createExampleFragment(toResult(expression))(14, -2, -2))
+    new BooleanResultFragment(() => createExampleFragment(toResult(expression))(13, -2, -2))
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   def resultFragmentsFragment(expression: =>Result): ResultFragment =
-    new ResultFragment(() => createExampleFragment(expression)(14, -2, -2))
+    new ResultFragment(() => createExampleFragment(expression)(13, -2, -2))
 
   /**
    * this implicit def is necessary when the expression is at the start of the spec
