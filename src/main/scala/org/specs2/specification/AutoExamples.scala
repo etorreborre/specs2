@@ -39,7 +39,7 @@ trait AutoExamples extends AutoExamplesLowImplicits {
 }
 
 private[specs2]
-trait AutoExamplesLowImplicits {
+trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragmentsFragment(expression: =>MatchResult[_]): MatchResultFragment = {
@@ -72,11 +72,11 @@ trait AutoExamplesLowImplicits {
     Fragments.create(Example(CodeMarkup(getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)), result))
   }
 
-  implicit def matchExample(expression: =>MatchResult[_]) = Example(CodeMarkup(getSourceCode()), expression.toResult)
+  implicit def matchExample(expression: =>MatchResult[_]) = exampleFactory.newExample(CodeMarkup(getSourceCode()), expression.toResult)
 
-  implicit def booleanExample(expression: =>Boolean) = Example(CodeMarkup(getSourceCode()), toResult(expression))
+  implicit def booleanExample(expression: =>Boolean) = exampleFactory.newExample(CodeMarkup(getSourceCode()), toResult(expression))
 
-  implicit def resultExample(expression: =>execute.Result) = Example(CodeMarkup(getSourceCode()), expression)
+  implicit def resultExample(expression: =>execute.Result) = exampleFactory.newExample(CodeMarkup(getSourceCode()), expression)
 
   private[specs2] def getSourceCode(startDepth: Int = 6, endDepth: Int = 9, startLineOffset: Int = -1, endLineOffset: Int = -1): String = {
     val firstTry = getCodeFromTo(startDepth, endDepth, startLineOffset, endLineOffset)
@@ -101,7 +101,7 @@ trait AutoExamplesLowImplicits {
   class MatchResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
     def ^[T](result: =>T)(implicit toResult: T => Result) = {
       val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-      new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
+      new FragmentsFragment(fs.add(exampleFactory.newExample(CodeMarkup(desc), toResult(result))))
     }
   }
 
@@ -112,7 +112,7 @@ trait AutoExamplesLowImplicits {
   class BooleanResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
     def ^[T](result: =>T)(implicit toResult: T => Result) = {
       val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-      new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
+      new FragmentsFragment(fs.add(exampleFactory.newExample(CodeMarkup(desc), toResult(result))))
     }
   }
 
@@ -123,7 +123,7 @@ trait AutoExamplesLowImplicits {
   class ResultFragment(fs: =>Fragments) extends FragmentsFragment(fs) {
     def ^[T](result: =>T)(implicit toResult: T => Result) = {
       val desc = getSourceCode(startDepth = 5, startLineOffset = 0, endLineOffset = 0)
-      new FragmentsFragment(fs.add(Example(CodeMarkup(desc), toResult(result))))
+      new FragmentsFragment(fs.add(exampleFactory.newExample(CodeMarkup(desc), toResult(result))))
     }
   }
 
