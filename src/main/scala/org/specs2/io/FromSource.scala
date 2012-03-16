@@ -57,7 +57,7 @@ trait FromSource {
    * @return the location of the current stacktrace, possibly filtered with a function
    */
   def location(stackFilter: Seq[StackTraceElement] => Seq[StackTraceElement]): TraceLocation = {
-    val stackTrace = new Exception().getStackTrace().toList
+    val stackTrace = new Exception().getStackTrace().toSeq
     val filtered = stackFilter(stackTrace)
     new TraceLocation(filtered.headOption.getOrElse(stackTrace(0)))
   }
