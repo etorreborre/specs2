@@ -49,30 +49,30 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragmentsFragment(expression: =>MatchResult[_]): MatchResultFragment = {
-    new MatchResultFragment(() => createExampleFragment(expression.toResult)(13, -2, -2))
+    new MatchResultFragment(() => createExampleFragment(expression.toResult, 13, -2, -2))
   }
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragmentsFragment(expression: =>Boolean): BooleanResultFragment =
-    new BooleanResultFragment(() => createExampleFragment(toResult(expression))(13, -2, -2))
+    new BooleanResultFragment(() => createExampleFragment(toResult(expression), 13, -2, -2))
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   def resultFragmentsFragment(expression: =>Result): ResultFragment =
-    new ResultFragment(() => createExampleFragment(expression)(13, -2, -2))
+    new ResultFragment(() => createExampleFragment(expression, 13, -2, -2))
 
   /**
    * this implicit def is necessary when the expression is at the start of the spec
    * The startDepth and offsets are special tweakings to make sure we get the right line in that specific case
    */
-  implicit def matchFragments(expression: =>MatchResult[_]): Fragments = createExampleFragment(expression.toResult)(9, -1, -1)
+  implicit def matchFragments(expression: =>MatchResult[_]): Fragments = createExampleFragment(expression.toResult)
 
   /** this implicit def is necessary when the expression is at the start of the spec */
-  implicit def booleanFragments(expression: =>Boolean): Fragments = createExampleFragment(toResult(expression))(9, -1, -1)
+  implicit def booleanFragments(expression: =>Boolean): Fragments = createExampleFragment(toResult(expression))
 
   /** this implicit def is necessary when the expression is at the start of the spec */
-  implicit def resultFragments(result: =>Result): Fragments = createExampleFragment(result)(9, -1, -1)
+  implicit def resultFragments(result: =>Result): Fragments = createExampleFragment(result)
 
-  private def createExampleFragment(result: =>Result) = (d: Int, offset1: Int,  offset2: Int) =>
+  private[specs2] def createExampleFragment(result: =>Result, d: Int = 9, offset1: Int = -1,  offset2: Int = -1) =
     Fragments.create(exampleFactory.newExample(CodeMarkup(getDescription(depth = d, startOffset = offset1, endOffset = offset2)), result))
 
   /** get the description from the source file */
