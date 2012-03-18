@@ -174,9 +174,15 @@ trait NoMatchResultAutoExamples extends AutoExamples { this: FragmentsBuilder =>
 /**
  * This trait can be used to deactivate the DataTable conversions to fragments and examples
  */
-trait NoDataTableExamples extends AutoExamples { this: FragmentsBuilder =>
+trait NoDataTableAutoExamples extends AutoExamples { this: FragmentsBuilder =>
   override def dataTableFragments[T](result: =>DecoratedResult[T])       = super.dataTableFragments(result)
   override def dataTableExample[T](result: =>execute.DecoratedResult[T]) = super.dataTableExample(result)
   override def eg[T](expression: =>execute.DecoratedResult[T])           = super.eg(expression)
 }
 
+/**
+ * This trait ca be used to deactivate all automatic conversions to examples
+ */
+trait NoAutoExamples extends NoBooleanAutoExamples with NoResultAutoExamples with NoMatchResultAutoExamples with NoDataTableAutoExamples {
+  this: FragmentsBuilder =>
+}
