@@ -19,8 +19,9 @@ In this chapter you will learn how to:
  * include or link specifications
  * give a title to your specification
  * define contexts and actions to execute before/after examples
+ * specify the execution mode
  * tag examples or sections of the Specification
- * adding debug statements
+ * add debug statements
  * remove some implicit definitions conflicting with your code
 
 ### Declare examples
@@ -67,7 +68,7 @@ You can even push this idea further by writing:
 
 ##### _Unit_ specification
 
-A _unit_ specification uses `should/in` blocks which actually build the Fragments by adding them to a mutable variable:
+A _unit_ specification uses `should/in` blocks which build the Fragments by adding them to a mutable protected variable:
 
       "The 'Hello world' string" should {
         "contain 11 characters" in {
@@ -101,7 +102,7 @@ It is completely equivalent to writing this in an `org.specs2.Specification`:
           "Hello world" must endWith("world")
         }
 
-You can look at the bottom of this page for the other methods which are used to build unit specifications.
+The [Unit specifications](org.specs2.guide.SpecStructure.html#Unit+specifications) section shows all the methods which can be used to build unit specifications fragments.
 
 #### Results
 
@@ -457,249 +458,6 @@ This specification will be rendered as:
            2 | 2 | 4 |
            1 | 1 | 2 |
 
-### Shared examples
-
-In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
-different parts of your specification. The best example of this situation is a specification for a Stack of limited size:
-
-         class StackSpec extends Specification { def is =
-
-           "Specification for a Stack with a limited capacity".title                   ^
-                                                                                       p^
-           "A Stack with limited capacity can either be:"                              ^ endp^
-             "1. Empty"                                                                ^ anEmptyStack^
-             "2. Normal (i.e. not empty but not full)"                                 ^ aNormalStack^
-             "3. Full"                                                                 ^ aFullStack^end
-
-           def anEmptyStack =                                                          p^
-             "An empty stack should"                                                   ^
-               "have a size == 0"                                                      ! empty().e1^
-               "throw an exception when sent #top"                                     ! empty().e2^
-               "throw an exception when sent #pop"                                     ! empty().e3^endbr
-
-           def aNormalStack =                                                          p^
-             "A normal stack should"                                                   ^
-               "behave like a non-empty stack"                                         ^ nonEmptyStack(newNormalStack)^
-               "add to the top when sent #push"                                        ! nonFullStack().e1^endbr
-
-           def aFullStack =                                                            p^
-             "A full stack should"                                                     ^
-               "behave like a non-empty stack"                                         ^ nonEmptyStack(newFullStack)^
-               "throw an exception when sent #push"                                    ! fullStack().e1
-
-           def nonEmptyStack(stack: =>SizedStack) = {                                  t^
-             "have a size > 0"                                                         ! nonEmpty(stack).size^
-             "return the top item when sent #top"                                      ! nonEmpty(stack).top1^
-             "not remove the top item when sent #top"                                  ! nonEmpty(stack).top2^
-             "return the top item when sent #pop"                                      ! nonEmpty(stack).pop1^
-             "remove the top item when sent #pop"                                      ! nonEmpty(stack).pop2^bt
-           }
-
-           /** stacks creation */
-           def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
-           def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
-           def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
-
-           /** stacks examples */
-           case class empty() {
-             val stack = newEmptyStack
-
-             def e1 = stack.size must_== 0
-             def e2 = stack.top must throwA[NoSuchElementException]
-             def e3 = stack.pop must throwA[NoSuchElementException]
-           }
-
-           def nonEmpty(createStack: =>SizedStack) = new {
-             val stack = createStack
-
-             def size = stack.size > 0
-
-             def top1 = stack.top must_== stack.size
-             def top2 = {
-               stack.top
-               stack.top must_== stack.size
-             }
-
-             def pop1 = {
-               val topElement = stack.size
-               stack.pop must_== topElement
-             }
-
-             def pop2 = {
-               stack.pop
-               stack.top must_== stack.size
-             }
-           }
-
-           case class nonFullStack() {
-             val stack = newNormalStack
-
-             def e1 = {
-               stack push (stack.size + 1)
-               stack.top must_== stack.size
-             }
-           }
-           case class fullStack() {
-             val stack = newFullStack
-
-             def e1 = stack push (stack.size + 1) must throwAn[Error]
-           }
-         }
-
-### Declare arguments
-
-At the beginning of a specification you can declare arguments which configure the execution and reporting of the specification.
-For example, you can turn off the concurrent execution of examples with the `args` method:
-
-       class ExamplesOneByOne extends Specification { def is =
-
-         // there is a shortcut for this argument called 'sequential'
-         args(sequential=true)              ^
-         "first example"                    ! e1 ^
-         "the the second one"               ! e2 ^
-                                            end
-       }
-
-For the complete list of arguments and shortcut methods read the [Runners](org.specs2.guide.Runners.html) page.
-
-### Layout
-
-For an _acceptance_ specification you can tweak the layout of Texts and Examples.
-
-##### The rules
-
-The layout of text in ***specs2*** is mostly done automatically so that the text in the source code should look like the displayed text after execution.
-
-By default the layout of a specification will be computed automatically based on intuitive rules:
-
-  * when an example follows a text, it is indented
-  * 2 successive examples will be at the same indentation level
-  * when a text follows an example, this means that you want to describe a "subcontext", so the next examples will be indented with one more level
-
-Let's see a standard example of this. The following fragments:
-
-    "this is some presentation text"      ^
-      "and the first example"             ! success^
-      "and the second example"            ! success
-
-will be executed and displayed as:
-
-    this is some presentation text
-    + and the first example
-    + and the second example
-
-If you specify a "subcontext", you will get one more indentation level:
-
-    "this is some presentation text"      ^
-      "and the first example"             ! success^
-      "and the second example"            ! success^
-      "and in this specific context"      ^
-        "one more example"                ! success^
-
-will be executed and displayed as:
-
-    this is some presentation text
-    + and the first example
-    + and the second example
-      and in this specific context
-      + one more example
-
-##### The formatting fragments
-
-Given the rules above, you might need to use some *formatting fragments* to adjust the display
-
-###### Separating groups of examples
-
-The best way to separate blocks of examples is to add a blank line between them by using `p` (as in "paragraph"):
-
-    "this is some presentation text"      ^
-      "and the first example"             ! success^
-      "and the second example"            ! success^
-                                          p^
-    "And another block of examples"       ^
-      "with this example"                 ! success^
-      "and that example"                  ! success
-
-This will be displayed as:
-
-    this is some presentation text
-    + and the first example
-    + and the second example
-
-    And another block of examples
-    + with this example
-    + and that example
-
-That looks remarkably similar to the specification code, doesn't it? What `p` does is:
-
- * add a blank line (this can also be done with a simple `br`)
- * decrement the current indentation level by 1 (Otherwise the new Text would be seen as a subcontext)
-
-###### Reset the levels
-
-When you start having deep levels of indentation, you might need to start the next group of examples at level 0. For example, in this specification
-
-    "There are several options for displaying the text"      ^
-      "xonly displays nothing but failures"                  ! success^
-      "there is also a color option"                         ^
-        "rgb=value uses that value to color the text"        ! rgb^
-        "nocolor dont color anything"                        ! nocolor^
-                                                             p^
-    "There are different ways of hiding the text"            ^
-        "by tagging the text"                                ! hideTag
-
-Even with `p` the next group of examples will not start at level 0. What you need to do in that case is use `end`:
-
-    "There are several options for displaying the text"      ^
-      "xonly displays nothing but failures"                  ! success^
-      "there is also a color option"                         ^              // this text will be indented
-        "rgb=value uses that value to color the text"        ! rgb^         // and the following examples as well
-        "nocolor dont color anything"                        ! nocolor^
-                                                             end^
-    "There are different ways of hiding the text"            ^              // this text will be properly indented now
-      "by tagging the text"                                  ! hideTag^
-                                                             end
-
-This will be displayed as:
-
-    There are several options for displaying the text
-    + xonly displays nothing but failures
-      there is also a color option
-      + rgb=value uses that value to color the text
-      + nocolor dont color anything
-    There are different ways of hiding the text
-    + by tagging the text
-
-And if you want to reset the indentation level *and* add a blank line you can use `end ^ br` (or `endbr` as seen in "Combinations" below).
-
-###### Changing the indentation level
-
-If, for whatever reason, you wish to have more or less indentation, you can use the `t` and `bt` fragments (as in "tab" and "backtab"):
-
-    "this text"                                     ^ bt^
-    "doesn't actually have an indented example"     ! success
-
-    "this text"                                     ^ t^
-        "has a very indented example"               ! success
-
- The number of indentation levels (characterized as 2 spaces on screen) can also be specified by using `t(n)` or `bt(n)`.
-
-###### Combinations
-
-Some formatting elements can be combined:
-
- * `p` is actually `br ^ bt`
- * `endbr` is `end ^ br`
- * `endp` is `end ^ p`  (same effect as `endbr` but shorter :-))
-
-###### Turning-off the automatic layout
-
-You can turn off that automatic layout by adding the `noindent` argument at the beginning of your specification:
-
-      class MySpecWithNoIndent extends Specification {
-        def is = noindent ^ ....
-      }
-
 ### Include or link specifications
 
 ###### Include specifications
@@ -755,46 +513,6 @@ It is also desirable sometimes to create a page with links to other specificatio
      "text to highlight" ~/ (specification, "after text")
      "text to highlight" ~/ (specification, "after text", "tooltip")
      see(specification)
-
-### Specification title
-
-Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:
-
-     class MySpec extends Specification { def is =
-        "My beautiful specifications".title                           ^
-                                                                      p^
-        "The rest of the spec goes here"                              ^ end
-     }
-
-The title can be defined either:
-
- * at the beginning of the specification
- * just after the arguments of the specification
-
-### Index page
-
-Here's something you can do to automatically create an index page for your specifications:
-
-      import org.specs2._
-      import runner.SpecificationsFinder._
-
-      class index extends Specification { def is =
-
-        examplesLinks("Example specifications")
-        
-				// see the SpecificationsFinder trait for the parameters of the 'specifications' method
-        def examplesLinks(t: String) = specifications().foldLeft(t.title) { (res, cur) => res ^ see(cur) }
-        
-      }
-
-The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method
-creates specifications using the following parameters:
-
- * `path`: glob pattern to filter specification files. Default value is `**/*.scala`
- * `pattern`: pattern to use when trying to retrieve the specification names from the source files. Default value = `.*Spec`
- * `filter`: function to keep only some specifications depending on their name. Default value = `(name: String) => true`
- * `basePath`: the path where to start the search. Default value: the `specs2.srcTestDir` system value = `src/test/scala`
- * `verbose`: boolean indicating if information about finding files and specifications must be printed. Default value = `false`
 
 ### Contexts
 
@@ -1180,22 +898,195 @@ If that's the case you can define your own Specification trait doing the job:
 
 The `DatabaseSpec` above will insert, in each inherited specification, one `Step` executed before all the fragments, and one executed after all of them.
 
-### Other unit specification methods
+### Layout
 
-Other methods can be used to create fragments in a unit specification:
+For an _acceptance_ specification you can tweak the layout of Texts and Examples.
 
- * `can` to create a group of Examples, with the preceding Text fragment appended with `can`
- * <code class="prettyprint">></code><code class="prettyprint">></code> to create an Example or a group of Examples (with no appended text)
- * `"My spec title".title` to give a title to the Specification
- * `args(...)` to create arguments for the specification
- * `textFragment(s)` to create a `Text` fragment
- * `step(s)` to create a `Step`
- * `action(a)` to create an `Action`
- * `link("how" ~ ("to do hello world", new HelloWorldSpec))` to create a link to another specification
- * `see(new HelloWorldSpec)` to add a link to another specification without including its fragments for execution
- * `include(new HelloWorldSpec)` to include another specification
+##### The rules
 
-To make things more concrete here is a full example:
+The layout of text in ***specs2*** is mostly done automatically so that the text in the source code should look like the displayed text after execution.
+
+By default the layout of a specification will be computed automatically based on intuitive rules:
+
+  * when an example follows a text, it is indented
+  * 2 successive examples will be at the same indentation level
+  * when a text follows an example, this means that you want to describe a "subcontext", so the next examples will be indented with one more level
+
+Let's see a standard example of this. The following fragments:
+
+    "this is some presentation text"      ^
+      "and the first example"             ! success^
+      "and the second example"            ! success
+
+will be executed and displayed as:
+
+    this is some presentation text
+    + and the first example
+    + and the second example
+
+If you specify a "subcontext", you will get one more indentation level:
+
+    "this is some presentation text"      ^
+      "and the first example"             ! success^
+      "and the second example"            ! success^
+      "and in this specific context"      ^
+        "one more example"                ! success^
+
+will be executed and displayed as:
+
+    this is some presentation text
+    + and the first example
+    + and the second example
+      and in this specific context
+      + one more example
+
+##### The formatting fragments
+
+Given the rules above, you might need to use some *formatting fragments* to adjust the display
+
+###### Separating groups of examples
+
+The best way to separate blocks of examples is to add a blank line between them by using `p` (as in "paragraph"):
+
+    "this is some presentation text"      ^
+      "and the first example"             ! success^
+      "and the second example"            ! success^
+                                          p^
+    "And another block of examples"       ^
+      "with this example"                 ! success^
+      "and that example"                  ! success
+
+This will be displayed as:
+
+    this is some presentation text
+    + and the first example
+    + and the second example
+
+    And another block of examples
+    + with this example
+    + and that example
+
+That looks remarkably similar to the specification code, doesn't it? What `p` does is:
+
+ * add a blank line (this can also be done with a simple `br`)
+ * decrement the current indentation level by 1 (Otherwise the new Text would be seen as a subcontext)
+
+###### Reset the levels
+
+When you start having deep levels of indentation, you might need to start the next group of examples at level 0. For example, in this specification
+
+    "There are several options for displaying the text"      ^
+      "xonly displays nothing but failures"                  ! success^
+      "there is also a color option"                         ^
+        "rgb=value uses that value to color the text"        ! rgb^
+        "nocolor dont color anything"                        ! nocolor^
+                                                             p^
+    "There are different ways of hiding the text"            ^
+        "by tagging the text"                                ! hideTag
+
+Even with `p` the next group of examples will not start at level 0. What you need to do in that case is use `end`:
+
+    "There are several options for displaying the text"      ^
+      "xonly displays nothing but failures"                  ! success^
+      "there is also a color option"                         ^              // this text will be indented
+        "rgb=value uses that value to color the text"        ! rgb^         // and the following examples as well
+        "nocolor dont color anything"                        ! nocolor^
+                                                             end^
+    "There are different ways of hiding the text"            ^              // this text will be properly indented now
+      "by tagging the text"                                  ! hideTag^
+                                                             end
+
+This will be displayed as:
+
+    There are several options for displaying the text
+    + xonly displays nothing but failures
+      there is also a color option
+      + rgb=value uses that value to color the text
+      + nocolor dont color anything
+    There are different ways of hiding the text
+    + by tagging the text
+
+And if you want to reset the indentation level *and* add a blank line you can use `end ^ br` (or `endbr` as seen in "Combinations" below).
+
+###### Changing the indentation level
+
+If, for whatever reason, you wish to have more or less indentation, you can use the `t` and `bt` fragments (as in "tab" and "backtab"):
+
+    "this text"                                     ^ bt^
+    "doesn't actually have an indented example"     ! success
+
+    "this text"                                     ^ t^
+        "has a very indented example"               ! success
+
+ The number of indentation levels (characterized as 2 spaces on screen) can also be specified by using `t(n)` or `bt(n)`.
+
+###### Combinations
+
+Some formatting elements can be combined:
+
+ * `p` is actually `br ^ bt`
+ * `endbr` is `end ^ br`
+ * `endp` is `end ^ p`  (same effect as `endbr` but shorter :-))
+
+###### Turning-off the automatic layout
+
+You can turn off that automatic layout by adding the `noindent` argument at the beginning of your specification:
+
+      class MySpecWithNoIndent extends Specification {
+        def is = noindent ^ ....
+      }
+
+### Unit specifications
+
+Those are all the methods which you can use to create fragments in a unit specification:
+
+ * `can`: create a group of Examples, with the preceding Text fragment appended with `can`
+
+        "a configuration" can {
+          "have a name" in { ... }
+        }
+
+ * <code class="prettyprint">></code><code class="prettyprint">></code>: create an Example or a group of Examples (with no appended text)
+
+        "a configuration may" >> {
+          "have a name" in { ... }
+        }
+
+ * `title`: give a title to the Specification
+
+        `"My spec title".title`
+
+ * `args`: create arguments for the specification
+
+ * `.txt` or `textFragment`: create a `Text` fragment
+
+        "this is a text fragment".txt
+
+        textFragment("this is a text fragment")
+
+ * `step`: create a `Step`
+
+        step { initializeDatabase() }
+
+ * `action`: create an `Action`
+
+        action { justDoIt }
+
+ * `link`: create a link to another specification
+
+        link("how" ~ ("to do hello world", new HelloWorldSpec))
+
+ * `see`: add a link to another specification without including its fragments for execution
+
+        see(new HelloWorldSpec)
+
+  * `include` to include another specification
+
+        include(new HelloWorldSpec)
+
+  * `p, br, t, bt, end, endp`: add a formatting fragment
+
+ To make things more concrete here is a full example:
 
       import mutable._
       import specification._
@@ -1211,6 +1102,8 @@ To make things more concrete here is a full example:
         "MutableSpec".title
         // arguments are simply declared at the beginning of the specification if needed
         args(xonly=true)
+
+        "This is a unit specification showing the use of different methods".txt
 
         // a step to execute before the specification must be declared first
         step {
@@ -1278,7 +1171,154 @@ To make things more concrete here is a full example:
         }
       }
 
-### Tags
+### How to?
+
+#### Share examples
+
+In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
+different parts of your specification. The best example of this situation is a specification for a Stack of limited size:
+
+         class StackSpec extends Specification { def is =
+
+           "Specification for a Stack with a limited capacity".title                   ^
+                                                                                       p^
+           "A Stack with limited capacity can either be:"                              ^ endp^
+             "1. Empty"                                                                ^ anEmptyStack^
+             "2. Normal (i.e. not empty but not full)"                                 ^ aNormalStack^
+             "3. Full"                                                                 ^ aFullStack^end
+
+           def anEmptyStack =                                                          p^
+             "An empty stack should"                                                   ^
+               "have a size == 0"                                                      ! empty().e1^
+               "throw an exception when sent #top"                                     ! empty().e2^
+               "throw an exception when sent #pop"                                     ! empty().e3^endbr
+
+           def aNormalStack =                                                          p^
+             "A normal stack should"                                                   ^
+               "behave like a non-empty stack"                                         ^ nonEmptyStack(newNormalStack)^
+               "add to the top when sent #push"                                        ! nonFullStack().e1^endbr
+
+           def aFullStack =                                                            p^
+             "A full stack should"                                                     ^
+               "behave like a non-empty stack"                                         ^ nonEmptyStack(newFullStack)^
+               "throw an exception when sent #push"                                    ! fullStack().e1
+
+           def nonEmptyStack(stack: =>SizedStack) = {                                  t^
+             "have a size > 0"                                                         ! nonEmpty(stack).size^
+             "return the top item when sent #top"                                      ! nonEmpty(stack).top1^
+             "not remove the top item when sent #top"                                  ! nonEmpty(stack).top2^
+             "return the top item when sent #pop"                                      ! nonEmpty(stack).pop1^
+             "remove the top item when sent #pop"                                      ! nonEmpty(stack).pop2^bt
+           }
+
+           /** stacks creation */
+           def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
+           def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
+           def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
+
+           /** stacks examples */
+           case class empty() {
+             val stack = newEmptyStack
+
+             def e1 = stack.size must_== 0
+             def e2 = stack.top must throwA[NoSuchElementException]
+             def e3 = stack.pop must throwA[NoSuchElementException]
+           }
+
+           def nonEmpty(createStack: =>SizedStack) = new {
+             val stack = createStack
+
+             def size = stack.size > 0
+
+             def top1 = stack.top must_== stack.size
+             def top2 = {
+               stack.top
+               stack.top must_== stack.size
+             }
+
+             def pop1 = {
+               val topElement = stack.size
+               stack.pop must_== topElement
+             }
+
+             def pop2 = {
+               stack.pop
+               stack.top must_== stack.size
+             }
+           }
+
+           case class nonFullStack() {
+             val stack = newNormalStack
+
+             def e1 = {
+               stack push (stack.size + 1)
+               stack.top must_== stack.size
+             }
+           }
+           case class fullStack() {
+             val stack = newFullStack
+
+             def e1 = stack push (stack.size + 1) must throwAn[Error]
+           }
+         }
+
+#### Declare arguments
+
+Arguments are usually passed on the command line but you can also declare them at the beginning of the specification, to be applied only to that specification.
+For example, you can turn off the concurrent execution of examples with the `args(sequential=true)` call:
+
+       class ExamplesOneByOne extends Specification { def is =
+
+         // there is a shortcut for this argument called 'sequential'
+         args(sequential=true)              ^
+         "first example"                    ! e1 ^
+         "the the second one"               ! e2 ^
+                                            end
+       }
+
+For the complete list of arguments and shortcut methods read the [Runners](org.specs2.guide.Runners.html) page.
+
+#### Add a Specification title
+
+Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:
+
+     class MySpec extends Specification { def is =
+        "My beautiful specifications".title                           ^
+                                                                      p^
+        "The rest of the spec goes here"                              ^ end
+     }
+
+The title can be defined either:
+
+ * at the beginning of the specification
+ * just after the arguments of the specification
+
+#### Create an index page
+
+Here's something you can do to automatically create an index page for your specifications:
+
+      import org.specs2._
+      import runner.SpecificationsFinder._
+
+      class index extends Specification { def is =
+
+        examplesLinks("Example specifications")
+
+				// see the SpecificationsFinder trait for the parameters of the 'specifications' method
+        def examplesLinks(t: String) = specifications().foldLeft(t.title) { (res, cur) => res ^ see(cur) }
+
+      }
+
+The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method
+creates specifications using the following parameters:
+
+ * `path`: glob pattern to filter specification files. Default value is `**/*.scala`
+ * `pattern`: pattern to use when trying to retrieve the specification names from the source files. Default value = `.*Spec`
+ * `filter`: function to keep only some specifications depending on their name. Default value = `(name: String) => true`
+ * `basePath`: the path where to start the search. Default value: the `specs2.srcTestDir` system value = `src/test/scala`
+ * `verbose`: boolean indicating if information about finding files and specifications must be printed. Default value = `false`
+
+#### Tag examples
 
 Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution. Let's have a look at one example:
 
@@ -1308,7 +1348,7 @@ Armed with this, it is now easy to include or exclude portions of the specificat
  * `args(exclude="integration")` will include everything except `example 2`
  * `args(include="checkin,unit")` will include `example 1` and the second group of examples (`example 3` and `example 4`)
 
-#### In a unit specification
+##### In a unit specification
 
 A _unit_ specification will accept the same `tag` and `section` methods but the behavior will be slightly different:
 
@@ -1353,7 +1393,7 @@ For that specification above:
  * when the `section` call is appended to a block of Fragments on the same line, all the fragments of that block are part of
    the section: `example 5` and `example 6` are tagged with `slow`
 
-### Adding debug statements
+#### Add debug statements
 
 When quick and hacky `println` statements are what you want, the `Debug` trait, mixed in every `Specification`, provides useful methods:
 
@@ -1361,7 +1401,7 @@ When quick and hacky `println` statements are what you want, the `Debug` trait, 
  * `pp(condition)` prints a value if a condition holds
  * `pp(f: T => Boolean)` prints a value if a condition on that value holds
 
-### Removing implicit definitions
+#### Remove implicit definitions
 
 By default, the `Specification` trait imports quite a few implicit definitions (following a "batteries included" approach). However there might be some conflicts with implicits existing in your own user code. Among the usual examples of conflicts are conflicts with the `===` sign in Scalaz and the `Duration` methods in Akka.
 

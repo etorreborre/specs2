@@ -24,8 +24,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 
   implicit def text(s: String): MutableSpecText = new MutableSpecText(s)
   class MutableSpecText(s: String) {
-    /** md stands for Markdown */
-    def md = textFragment(s)
+    def txt = textFragment(s)
   }
 
   override implicit def title(s: String): MutableSpecTitle = new MutableSpecTitle(s)
