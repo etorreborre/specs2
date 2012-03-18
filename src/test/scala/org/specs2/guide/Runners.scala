@@ -25,7 +25,7 @@ There are many ways to execute ***specs2*** specifications:
 
 **Note**: there are versions of specs2 available for Scala 2.8.1 but they [miss some "context" functionalities](org.specs2.guide.SpecStructure.html#In+a+mutable+specification).
 
-### Arguments
+### Specify arguments
 
 You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the `args(name=value)` syntax:
 
@@ -241,26 +241,28 @@ You can pass any argument to ***specs2*** from system properties:
 
 While the format `-Dname=value` can be convenient, `-Dspecs2.name=value` is recommended to avoid conflicts with other libraries.
 
-### Console output
+### Executing a Specification from the command line
+
+#### Console output
 
 Executing a specification `com.company.SpecName` in the console is very easy:
 
 `scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]`
 
-### Html output
+#### Html output
 
 If you want html pages to be produced for your specification you'll need to execute:
 
 `scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]`
 
-### JUnit XML output
+#### JUnit XML output
 
 Many Continuous Integration systems rely on JUnit XML reports to display build and test results. It is possible to produce
 those result by using the `specs2.junitxml` object:
 
 `scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]`
 
-### Files Runner
+#### Files Runner
 
 The `specs2.files` object will, by default, select and execute Specifications found in the test source directory:
 
@@ -272,7 +274,7 @@ The `specs2.files` object will, by default, select and execute Specifications fo
 You can also extend the `org.specs2.runner.FilesRunner` trait and override its behavior to implement something more appropriate
 to your environment if necessary.
 
-### Simple build tool
+### Executing a Specification from SBT (Simple Build Tool)
 
 #### with sbt 0.7.x
 
@@ -420,7 +422,7 @@ Note also that the the color support for sbt on Windows is a bit tricky. You nee
 
         -Djline.terminal=jline.UnsupportedTerminal
 
-### JUnit
+### Executing a Specification as a JUnit TestCase
 
 It is possible to have ***specs2*** specifications executed as JUnit tests. This enables the integration of ***specs2*** with Maven and the JUnit runners of your IDE of choice.
 
@@ -446,7 +448,7 @@ You can use the second one if your IDE doesn't work with the first one:
 
 You can pass arguments to the `JUnitRunner` for generating the html files for the specifications or for displaying the console output. To do that, you can use the `-Dspecs2.commandline` property and pass it the `html` or `console` values.
 
-### IntelliJ
+### Executing a Specification with IntelliJ IDEA
 
 IntelliJ offers a nice integration with ***specs2***. You can:
 
@@ -460,27 +462,7 @@ But also:
  * Provide command-line arguments in the "Test options"
  * "Jump to Test" and "Jump to Source"
 
-### Notifier runner
-
-A `NotifierRunner` accepts a `Notifier` to execute a specification and report execution events. The `org.specs2.reporter.Notifier` trait notifies of the following:
-
- * specification start: the beginning of a specification, with its name
- * specification end: the end of a specification, with its name
- * context start: the beginning of a sub-level when the specification is seen as a tree or Fragments
- * context end: the end of a sub-level when the specification is seen as a tree or Fragments
- * text: any Text fragment that needs to be displayed
- * example start
- * example result: success / failure / error / skipped / pending
-
-All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples only).
-
-#### Inside sbt
-
-You can also use a `Notifier` from inside sbt by passing the `notifier` argument with a `Notifier` implementation class name:
-
-      sbt>test-only *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
-
-### From the console
+### Executing a Specification inside the Scala console
 
 The `specs2.run` object has an `apply` method to execute specifications from the Scala console:
 
@@ -501,6 +483,50 @@ Or you can set implicit arguments which will be used for any specification execu
       scala> implicit val myargs = nocolor
 
       scala> specs2.run(spec1)
+
+### Develop your own reporting
+
+#### Using the `Notifier` trait
+
+The `org.specs2.reporter.Notifier` trait can be used to report execution events. It notifies of the following:
+
+ * specification start: the beginning of a specification, with its name
+ * specification end: the end of a specification, with its name
+ * context start: the beginning of a sub-level when the specification is seen as a tree or Fragments
+ * context end: the end of a sub-level when the specification is seen as a tree or Fragments
+ * text: any Text fragment that needs to be displayed
+ * example start
+ * example result: success / failure / error / skipped / pending
+
+All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples and actions).
+
+#### Execution with a `NotifierRunner`
+
+The `NotifierRunner` class can be instantiated with a custom `Notifier` and used from the command line.
+
+#### Execution in sbt
+
+You can also use a custom `Notifier` from inside sbt by passing the `notifier` argument with a `Notifier` implementation class name:
+
+      sbt>test-only *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
+
+#### Using the `Exporter` trait
+
+The `org.specs2.reporter.Exporter` trait can be used to collect `ExecutedFragments` and report them as desired. The only method to implement is:
+
+      def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification
+
+ * `args` is an `Arguments` object created from command line options
+ * `ExecutingSpecification` is a list of fragments which might or might not have finished their execution
+ * `ExecutedSpecification` must be a list of executed fragments
+
+Please see the API of each class to see how to use them.
+
+#### Execution in sbt
+
+You can use a custom `Exporter` from inside sbt by passing the `exporter` argument with a `Exporter` implementation class name:
+
+      sbt>test-only *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
 
    - - -
 
