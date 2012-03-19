@@ -215,7 +215,7 @@ Iterables can be checked with several matchers:
  * to check if a sequence is sorted (works with any type `T` which has an `Ordering`)
  `Seq(1, 2, 3) must beSorted`
 
-###### Adapting Iterable matchers
+***Adapting Iterable matchers***
 
 The `contain` and `haveTheSameElementsAs` matchers can be "adapted" to use a different notion of equality than `==` when checking for the existence of elements in an iterable.
 
@@ -500,7 +500,7 @@ object DependencyMatchers extends Card {
   def text =  """
 It is highly desirable to have acyclic dependencies between the packages of a project. This often leads to describing the packages structure as "layered": each package on a layer can only depend on a package on a lower layer. ***specs2*** helps you enforce this design property with specific matchers.
 
-##### Layers definition
+***Layers definition***
 
 First you need to define the packages and their expected dependencies. Mix-in the `org.specs2.specification.Analysis` trait and define, (taking ***specs2*** as an example):
 
@@ -520,7 +520,7 @@ By default, the packages are supposed to correspond to directories in the `src/t
 
       layers(...).inTargetDir("out/classes")
 
-###### Inclusion/Exclusion
+**Inclusion/Exclusion**
 
 Every rule has exceptions :-). In some rare cases, it might be desirable to exclude a class from being checked on a given layer. To do this, you can use the `include/exclude` methods on the `Layer` class:
 
@@ -539,7 +539,7 @@ The `include/exclude` methods accept a list of regular expressions to:
 - exclude fully qualified class names (generally, only `exclude` will be necessary)
 - re-include fully qualified class names if the exclusion list is to big
 
-##### Verification
+***Verification***
 
 Now you've defined layers, you can use the `beRespected` matcher to check if all the dependencies are verified:
 
@@ -552,7 +552,7 @@ If some dependencies are not respected:
       org.specs2.main x-> org.specs2.io because org.specs2.io.FileSystem -> org.specs2.main.Arguments
       org.specs2.main x-> org.specs2.io because org.specs2.io.FileSystem -> org.specs2.main.ArgumentsArgs
 
-##### Layers as an `Example`
+***Layers as an `Example`***
 
 The `Analysis` trait allows to directly embed the layers definition in a `Specification` and turn it into an `Example`:
 
@@ -565,7 +565,7 @@ The `Analysis` trait allows to directly embed the layers definition in a `Specif
           )
       }
 
-##### Alternative implementation
+***Alternative implementation***
 
 Another implementation of the same functionality is available through the `org.specs2.analysis.CompilerDependencyFinder` trait. This implementation uses the compiler dependency analysis functionality but needs more time, since it recompiles the sources.
 

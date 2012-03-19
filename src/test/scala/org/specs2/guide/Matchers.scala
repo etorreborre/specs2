@@ -21,11 +21,11 @@ This is the simplest kind of result you can define for an expectation but also t
 
 Here's an example:
 
-    "This is hopefully true"         ! (1 != 2)
+      "This is hopefully true"         ! (1 != 2)
 
 This can be useful for simple expectations but a failure will give few information on what went wrong:
 
-    "This is hopefully true"         ! (2 != 2) // fails with 'the value is false',...
+      "This is hopefully true"         ! (2 != 2) // fails with 'the value is false',...
 
 ### Standard results
 
@@ -47,7 +47,7 @@ Two additional results are also available to track the progress of features:
 
 This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.
 
-#### Out-of-the-box
+#### Out of the box
 
 The most common matchers are automatically available when extending the `Specification` trait:
 """^
@@ -66,26 +66,6 @@ These other matchers need to be selectively added to the specification by adding
 """^
   OptionalMatcherCards.toTabs^p^
 """
-
-#### Enhanced description
-
-Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a "ticket list":
-
-      // will fail with "List(ticket1, ticket2) doesn't have size 3" for example
-      machine.tickets must have size(3) // machine is a user-defined object
-
-If you wish to get a more precise failure message you can set an alias with the `aka` method (*also known as*):
-
-      // will fail with "the created tickets 'List(ticket1, ticket2)' doesn't have size 3"
-      machine.tickets aka "the created tickets" must haveSize(3)
-
-There is also a shortcut for `value aka value.toString` which is simply `value.aka`.
-
-And when you want to other ways to customize the description, you can use:
-
- * `post`: `"a" post "is the first letter"` prints `a is the first letter`
- * `as`: `"b" as ((s:String) => "a"+s+"c")` prints `abc`
-
 
 #### Custom
 
@@ -220,35 +200,35 @@ Note that if you pass functions using MatchResults you will get better failure m
 
 By default ScalaCheck uses `Arbitrary` instances taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you can create an `Arbitrary` instance and make sure it is in the scope of the function you're testing:
 
-        // this arbitrary will be used for all the examples
-        implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+      // this arbitrary will be used for all the examples
+      implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
 
-        "a simple property" ! ex1
+      "a simple property" ! ex1
 
-         def ex1 = check((s: String) => s must contain("a") or contain("b"))
+      def ex1 = check((s: String) => s must contain("a") or contain("b"))
 
 You can also be very specific if you want to use an `Arbitrary` instance only on one example. In that case, just replace the `check` method with the name of your `Arbitrary` instance:
 
-        "a simple property"       ! ex1
-        "a more complex property" ! ex2
+      "a simple property"       ! ex1
+      "a more complex property" ! ex2
 
-        implicit def abStrings = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
-        def ex1 = abStrings((s: String) => s must contain("a") or contain("b"))
+      implicit def abStrings = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+      def ex1 = abStrings((s: String) => s must contain("a") or contain("b"))
 
-        // use a tuple if there are several parameters to your function
-        def ex2 = (abStrings, abStrings)((s1: String, s2: String) => s must contain("a") or contain("b"))
+      // use a tuple if there are several parameters to your function
+      def ex2 = (abStrings, abStrings)((s1: String, s2: String) => s must contain("a") or contain("b"))
 
 #### With Generators
 
 ScalaCheck also allows to create `Prop`s directly with the `Prop.forAll` method accepting `Gen` instances:
 
-        "a simple property"       ! ex1
-        "a more complex property" ! ex2
+      "a simple property"       ! ex1
+      "a more complex property" ! ex2
 
-        def abStrings = for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b
+      def abStrings = for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b
 
-        def ex1 = forAll(abStrings) { (s: String) => s must contain("a") or contain("b") }
-        def ex2 = forAll(abStrings, abStrings) { (s1: String, s2: String) => s must contain("a") or contain("b") }
+      def ex1 = forAll(abStrings) { (s: String) => s must contain("a") or contain("b") }
+      def ex2 = forAll(abStrings, abStrings) { (s1: String, s2: String) => s must contain("a") or contain("b") }
 
 
 #### Test properties
@@ -280,25 +260,25 @@ Mockito allows to specify stubbed values and to verify that some calls are expec
       import org.specs2.mock._
       class MockitoSpec extends Specification { def is =
 
-         "A java list can be mocked"                                                    ^
-           "You can make it return a stubbed value"                                     ! c().stub^
-           "You can verify that a method was called"                                    ! c().verify^
-           "You can verify that a method was not called"                                ! c().verify2^
-                                                                                        end
-         case class c() extends Mockito {
-           val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
-           def stub = {
-             m.get(0) returns "one"             // stub a method call with a return value
-             m.get(0) must_== "one"             // call the method
-           }
-           def verify = {
-             m.get(0) returns "one"             // stub a method call with a return value
-             m.get(0)                           // call the method
-             there was one(m).get(0)            // verify that the call happened
-           }
-           def verify2 = there was no(m).get(0) // verify that the call never happened
-         }
-       }
+        "A java list can be mocked"                                                    ^
+          "You can make it return a stubbed value"                                     ! c().stub^
+          "You can verify that a method was called"                                    ! c().verify^
+          "You can verify that a method was not called"                                ! c().verify2^
+                                                                                       end
+        case class c() extends Mockito {
+          val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
+          def stub = {
+            m.get(0) returns "one"             // stub a method call with a return value
+            m.get(0) must_== "one"             // call the method
+          }
+          def verify = {
+            m.get(0) returns "one"             // stub a method call with a return value
+            m.get(0)                           // call the method
+            there was one(m).get(0)            // verify that the call happened
+          }
+          def verify2 = there was no(m).get(0) // verify that the call never happened
+        }
+      }
 
 ##### Creation and settings
 
@@ -306,27 +286,26 @@ Mockito offers the possibility to provide specific settings for the mock being c
 
  * its name
 
-        val m = mock[List[String]].as("list1")
+      val m = mock[List[String]].as("list1")
 
  * "smart" return values
 
-        val m = mock[List[String]].smart
+      val m = mock[List[String]].smart
 
  * specific return values
 
-        val m = mock[List[String]].defaultReturn(10)
+      val m = mock[List[String]].defaultReturn(10)
 
  * specific answers
 
-        // a function InvocationOnMock => V is used in place of the org.mockito.stubbing.Answer type
-    // for better conciseness
-        val helloObject = (p1: InvocationOnMock) => "hello "+p1.toString
-        val m = mock[List[String]].defaultAnswer(helloObject)
+      // a function InvocationOnMock => V is used in place of the org.mockito.stubbing.Answer type for better conciseness
+      val helloObject = (p1: InvocationOnMock) => "hello "+p1.toString
+      val m = mock[List[String]].defaultAnswer(helloObject)
 
  * extra interfaces
 
-        val m = mock[List[String]].extraInterface[Cloneable]
-        val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
+      val m = mock[List[String]].extraInterface[Cloneable]
+      val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
 
 Now, if you want to combine several of those settings together you need to call the `settings` method:
 
@@ -380,8 +359,8 @@ In some rare cases, it is necessary to have the return value depend on the param
 
 The function passed to answers will be called with each parameter passed to the stubbed method:
 
-     m.get(0)           // returns "The parameter is 0"
-     m.get(1)           // the second call returns a different value: "The parameter is 1"
+      m.get(0)           // returns "The parameter is 0"
+      m.get(1)           // the second call returns a different value: "The parameter is 1"
 
 ###### Parameters for the answers function
 

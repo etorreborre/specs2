@@ -11,9 +11,9 @@ There are many ways to execute ***specs2*** specifications:
  * on the command line, with a html output, and the `specs2.html` runner
  * on the command line, with a console or a html output, and the `specs2.files` runner
  * using [Intellij IDEA](http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA)
- * using [sbt](http://code.google.com/p/simple-build-tool)
+ * using [sbt](http://github.com/harrah/xsbt/wiki/Getting-Started-Welcome)
  * using [JUnit](http://www.junit.org)
- * using your own reporting tool implementing the `Notifier` interface (simple) or the `Exporting` interface (with a full access to the executed specification)
+ * using your own reporting tool implementing the `Notifier` interface (simple) or the `Exporter` interface (with a full access to the executed specification)
 
 ### Dependencies
 
@@ -484,11 +484,11 @@ You can pass arguments to the `JUnitRunner` for generating the html files for th
 
 ### Via Eclipse
 
-There is unfortunately no specific Eclipse plugin at the moment and specifications have to be executed as [JUnit test cases](/Via JUnit/).
+There is unfortunately no specific Eclipse plugin at the moment and specifications have to be executed as [JUnit test cases](#Via JUnit).
 
 ### Via Maven
 
-There is unfortunately no specific Maven plugin at the moment and specifications have to be executed as [JUnit test cases](/Via JUnit/).
+There is unfortunately no specific Maven plugin at the moment and specifications have to be executed as [JUnit test cases](#Via JUnit).
 
 ### With your own
 

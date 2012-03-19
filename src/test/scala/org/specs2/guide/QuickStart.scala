@@ -56,9 +56,9 @@ Acceptance specifications extend the `org.specs2.Specification` trait and must d
       }
 
 
-The `is` method lists *specification fragments* which can be:
+The `is` method lists [*specification fragments*](org.specs2.guide.Structure.html#Declare+examples) which can be:
 
-* simple text, to describe the system you're specifying
+* some text, to describe the system you're specifying
 * an example: a description and some executable code returning a result
 * formatting fragments: `p` adds a blank line and starts a new block of examples
 
@@ -66,7 +66,7 @@ Fragments are separated by the `^` character in order to build a list of them.
 
 #### Execution
 
-And this is it! Now to execute your specification, you use a *runner* which will display the results:
+And this is it! Now to execute your specification, you use a [*runner*](org.specs2.guide.Runners.html#Presentation) which will display the results:
 
       > scala -cp ... specs2.run HelloWorldSpec
 
@@ -80,10 +80,10 @@ And this is it! Now to execute your specification, you use a *runner* which will
       + end with 'world'
 
       Total for specification HelloWorldSpec
-      Finished in 0 second, 78 ms
+      Finished in 0 second, 58 ms
       3 examples, 0 failure, 0 error
 
-#### What else?
+#### And much more!
 
 You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide") to learn how to:
 
