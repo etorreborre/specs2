@@ -488,7 +488,10 @@ There is unfortunately no specific Eclipse plugin at the moment and specificatio
 
 ### Via Maven
 
-There is unfortunately no specific Maven plugin at the moment and specifications have to be executed as [JUnit test cases](#Via JUnit).
+You can either:
+
+ - execute specifications as [JUnit test cases](#Via JUnit).
+ - use the [Maven specs2 plugin](https://github.com/mmakowski/maven-specs2-plugin) to generate JUnit XML reports and HTML reports
 
 ### With your own
 
