@@ -2,7 +2,6 @@ package org.specs2
 package guide
 
 class Runners extends Specification { def is = noindent ^
-  "Runners guide".title ^
                                                                                                                         """
 ### Presentation
 
@@ -11,11 +10,10 @@ There are many ways to execute ***specs2*** specifications:
  * on the command line, with a console output, and the `specs2.run` runner
  * on the command line, with a html output, and the `specs2.html` runner
  * on the command line, with a console or a html output, and the `specs2.files` runner
+ * using [Intellij IDEA](http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA)
  * using [sbt](http://code.google.com/p/simple-build-tool)
  * using [JUnit](http://www.junit.org)
- * using [Intellij IDEA](http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA)
  * using your own reporting tool implementing the `Notifier` interface (simple) or the `Exporting` interface (with a full access to the executed specification)
-
 
 ### Dependencies
 
@@ -23,9 +21,9 @@ There are many ways to execute ***specs2*** specifications:
 
  <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.specs2" %% "specs2-scalaz-core" % "6.0.1"`</td><td class="info">mandatory. This jar bundles the scalaz classes but renamed as `org.specs2.internal.scalaz._`.</td></tr><tr><td class="info"> `"org.scala-tools.testing" %% "scalacheck" % "1.9"`</td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.9.0"`</td><td class="info">only if using Mockito</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">only if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.0.2"`</td><td class="info">only if using the html runner</td></tr><tr><td class="info">`"org.specs2" % "classycle" % "1.4.1"`</td><td class="info">only if using the `org.specs2.specification.Analysis` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-compiler" % "2.9.1"`</td><td class="info">only if using the `org.specs2.specification.Analysis` trait with the `CompilerDependencyFinder` trait</td></tr></table>
 
-**Note**: there are versions of specs2 available for Scala 2.8.1 but they [miss some "context" functionalities](org.specs2.guide.SpecStructure.html#In+a+mutable+specification).
+**Note**: there are versions of specs2 available for Scala 2.8.1 but they [miss some "context" functionalities](org.specs2.guide.Structure.html#In+a+mutable+specification).
 
-### Specify arguments
+### Arguments
 
 You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the `args(name=value)` syntax:
 
@@ -35,7 +33,7 @@ You can specify arguments which will control the execution and reporting. They c
         "brilliant expectation"                                         ! success
       }
 
-#### In a Specification
+#### API
 
 From inside a specification, the available arguments are the following:
 
@@ -191,7 +189,7 @@ If this is not what you want, you can either:
  * use the `org.specs2.control.IncludeExcludeStackTraceFilter` class to define both include and exclude patterns
  * define your own logic by extending the `org.specs2.control.StackTraceFilter`
 
-#### On the command line
+#### Command line
 
 On the command line you can pass the following arguments:
 
@@ -232,16 +230,16 @@ On the command line you can pass the following arguments:
 _[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 
 
-#### From system properties
+#### System properties
 
-You can pass any argument to ***specs2*** from system properties:
+You can pass any argument to ***specs2*** from system properties. This is particularly useful for passing arguments to JUnit runners:
 
  * for a boolean argument, you need to pass `-Dspecs2.name` or `-Dname`
  * for a string argument, you need to pass `-Dspecs2.name=value` or `-Dname=value`
 
 While the format `-Dname=value` can be convenient, `-Dspecs2.name=value` is recommended to avoid conflicts with other libraries.
 
-### Executing a Specification from the command line
+### In the shell
 
 #### Console output
 
@@ -274,7 +272,29 @@ The `specs2.files` object will, by default, select and execute Specifications fo
 You can also extend the `org.specs2.runner.FilesRunner` trait and override its behavior to implement something more appropriate
 to your environment if necessary.
 
-### Executing a Specification from SBT (Simple Build Tool)
+### In the console
+
+The `specs2.run` object has an `apply` method to execute specifications from the Scala console:
+
+      scala> specs2.run(spec1, spec2)
+
+      scala> import specs2._  // same thing, importing the run object
+      scala> run(spec1, spec2)
+
+If you want to pass specific arguments you can import the `specs2.arguments` object member functions:
+
+      scala> import specs2.arguments._
+
+      scala> specs2.run(spec1)(nocolor)
+
+Or you can set implicit arguments which will be used for any specification execution:
+
+      scala> import specs2.arguments._
+      scala> implicit val myargs = nocolor
+
+      scala> specs2.run(spec1)
+
+### Via SBT
 
 #### with sbt 0.7.x
 
@@ -422,7 +442,21 @@ Note also that the the color support for sbt on Windows is a bit tricky. You nee
 
         -Djline.terminal=jline.UnsupportedTerminal
 
-### Executing a Specification as a JUnit TestCase
+### Via IDEA
+
+IntelliJ offers a nice integration with ***specs2***. You can:
+
+ * Execute a specification by selecting its name and pressing CTRL+SHIFT+F10
+ * Execute a single example by selecting its description and pressing CTRL+SHIFT+F10
+
+ ![specs2 in Intellij](images/intellij.png)
+
+But also:
+
+ * Provide command-line arguments in the "Test options"
+ * "Jump to Test" and "Jump to Source"
+
+### Via JUnit
 
 It is possible to have ***specs2*** specifications executed as JUnit tests. This enables the integration of ***specs2*** with Maven and the JUnit runners of your IDE of choice.
 
@@ -448,45 +482,17 @@ You can use the second one if your IDE doesn't work with the first one:
 
 You can pass arguments to the `JUnitRunner` for generating the html files for the specifications or for displaying the console output. To do that, you can use the `-Dspecs2.commandline` property and pass it the `html` or `console` values.
 
-### Executing a Specification with IntelliJ IDEA
+### Via Eclipse
 
-IntelliJ offers a nice integration with ***specs2***. You can:
+There is unfortunately no specific Eclipse plugin at the moment and specifications have to be executed as [JUnit test cases](/Via JUnit/).
 
- * Execute a specification by selecting its name and pressing CTRL+SHIFT+F10
- * Execute a single example by selecting its description and pressing CTRL+SHIFT+F10
+### Via Maven
 
- ![specs2 in Intellij](images/intellij.png)
+There is unfortunately no specific Maven plugin at the moment and specifications have to be executed as [JUnit test cases](/Via JUnit/).
 
-But also:
+### With your own
 
- * Provide command-line arguments in the "Test options"
- * "Jump to Test" and "Jump to Source"
-
-### Executing a Specification inside the Scala console
-
-The `specs2.run` object has an `apply` method to execute specifications from the Scala console:
-
-      scala> specs2.run(spec1, spec2)
-
-      scala> import specs2._  // same thing, importing the run object
-      scala> run(spec1, spec2)
-
-If you want to pass specific arguments you can import the `specs2.arguments` object member functions:
-
-      scala> import specs2.arguments._
-
-      scala> specs2.run(spec1)(nocolor)
-
-Or you can set implicit arguments which will be used for any specification execution:
-
-      scala> import specs2.arguments._
-      scala> implicit val myargs = nocolor
-
-      scala> specs2.run(spec1)
-
-### Develop your own reporting
-
-#### Using the `Notifier` trait
+#### Notifier
 
 The `org.specs2.reporter.Notifier` trait can be used to report execution events. It notifies of the following:
 
@@ -500,17 +506,17 @@ The `org.specs2.reporter.Notifier` trait can be used to report execution events.
 
 All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples and actions).
 
-#### Execution with a `NotifierRunner`
+##### NotifierRunner
 
 The `NotifierRunner` class can be instantiated with a custom `Notifier` and used from the command line.
 
-#### Execution in sbt
+##### In sbt
 
 You can also use a custom `Notifier` from inside sbt by passing the `notifier` argument with a `Notifier` implementation class name:
 
       sbt>test-only *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
 
-#### Using the `Exporter` trait
+#### Exporter
 
 The `org.specs2.reporter.Exporter` trait can be used to collect `ExecutedFragments` and report them as desired. The only method to implement is:
 
@@ -522,7 +528,7 @@ The `org.specs2.reporter.Exporter` trait can be used to collect `ExecutedFragmen
 
 Please see the API of each class to see how to use them.
 
-#### Execution in sbt
+##### In sbt
 
 You can use a custom `Exporter` from inside sbt by passing the `exporter` argument with a `Exporter` implementation class name:
 

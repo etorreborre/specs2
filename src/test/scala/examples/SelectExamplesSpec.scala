@@ -10,7 +10,7 @@ import specification.Tags
  *  - by using tags
  *  - by using sections
  *
- * For more details @see org.specs2.guide.SpecStructure
+ * For more details @see org.specs2.guide.Structure
  */
 class SelectExamplesSpec extends Specification {
   /**

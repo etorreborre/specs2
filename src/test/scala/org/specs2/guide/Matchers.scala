@@ -3,7 +3,7 @@ package guide
 
 import specification.Forms._
 
-class Matchers extends Specification { def is = literate ^ "Matchers guide".title ^
+class Matchers extends Specification { def is = literate ^
 """
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 
@@ -47,7 +47,7 @@ Two additional results are also available to track the progress of features:
 
 This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.
 
-#### Out-of-the-box matchers
+#### Out-of-the-box
 
 The most common matchers are automatically available when extending the `Specification` trait:
 """^
@@ -60,14 +60,14 @@ The examples above show how to use matchers:
  * for most matchers you can use a form where the ` be` word (or the `have` word) is detached
  * you can as well negate a matcher by adding `not` before it (or after it, as a method call)
 
-#### Optional matchers
+#### Optional
 
 These other matchers need to be selectively added to the specification by adding a new trait:
 """^
   OptionalMatcherCards.toTabs^p^
 """
 
-#### With a better description
+#### Enhanced description
 
 Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a "ticket list":
 
@@ -87,7 +87,7 @@ And when you want to other ways to customize the description, you can use:
  * `as`: `"b" as ((s:String) => "a"+s+"c")` prints `abc`
 
 
-#### Matchers creation
+#### Custom
 
 There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:
 
@@ -173,7 +173,7 @@ In the code above you have to:
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
    the optional description you setup using the `aka` method
 
-#### Matching with a sequence of values
+#### With sequences
 
 If you have the same "MatchResult" expression that you'd like to verify for different values you can write one of the following:
 
@@ -195,7 +195,7 @@ If you have the same "MatchResult" expression that you'd like to verify for diff
         // check only the elements defined for the partial function
         atLeastOnceWhen(Seq(3, 4, 10)) { case a if a > 3 => a must be_>(5) }
 
-### ScalaCheck properties
+### ScalaCheck
 
 A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
 
@@ -251,7 +251,7 @@ ScalaCheck also allows to create `Prop`s directly with the `Prop.forAll` method 
         def ex2 = forAll(abStrings, abStrings) { (s1: String, s2: String) => s must contain("a") or contain("b") }
 
 
-#### Setting the ScalaCheck properties
+#### Test properties
 
 ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use implicit values:
 
@@ -300,7 +300,7 @@ Mockito allows to specify stubbed values and to verify that some calls are expec
          }
        }
 
-##### Mocks creation and settings
+##### Creation and settings
 
 Mockito offers the possibility to provide specific settings for the mock being created:
 
@@ -361,7 +361,7 @@ It is also possible to create a mock while stubbing one of its methods, provided
       val mocked: java.util.List[String] = mock[java.util.List[String]].contains("o") returns true
       mocked.contains("o") must beTrue
 
-##### Argument matchers
+##### With matchers
 
 The built-in Mockito argument matchers can be used to specify the method arguments for stubbing:
 
@@ -486,7 +486,7 @@ As advised in the Mockito documentation, doReturn must be used in that case:
 
      doReturn("one").when(spiedList).get(0)
 
-##### Function/PartialFunction parameters
+###### Functions/PartialFunctions
 
 It is possible to verify method calls where parameters are functions by specifying how the passed function will react to a given set of arguments.
 Given the following mock:
@@ -512,7 +512,7 @@ Then it is possible to verify how the mock was called:
       // with any Function2[A, B, R]
       there was one(amount).show(anyFunction2)
 
-##### Partial functions and auto-boxing
+###### Auto-boxing
 
 Auto-boxing might interfere with the mocking of PartialFunctions. Please have a look at [this](https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion) for a discussion.
 
@@ -543,7 +543,7 @@ Forms can be designed as reusable pieces of specification where complex forms ca
   "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms) ^
 """
 
-### Reusing matchers outside of specs2
+### Outside specs2
 
 The ***specs2*** matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:
 

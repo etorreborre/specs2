@@ -11,11 +11,10 @@ class UserGuide extends Specification { def is =
   * specifications for simple classes (*unit* specifications)
   * specifications for full features (*acceptance* specifications)
 
-  In the following user guide, you will find:
-                                                                                                 """^
+  In this user guide, you will find:                                                             """^
                                                                                                  p^
   "a " ~ ("quick start guide", new QuickStart)                                                   ^
-  "how to " ~ ("structure your specification", new SpecStructure)                                ^
+  "how to " ~ ("structure your specification", new Structure)                                ^
   "how to use " ~ ("matchers", new Matchers)                                                     ^
   "how to " ~ ("execute a specification", new Runners)                                           ^
   "the ***specs2*** " ~ ("philosophy", new Philosophy)                                           ^

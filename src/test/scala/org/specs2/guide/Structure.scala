@@ -3,10 +3,8 @@ package guide
 
 import _root_.examples._
 import specification._
-import execute.Result
 
-class SpecStructure extends Specification { def is =
-  "Specification structure".title                                                                                       ^
+class Structure extends Specification { def is =
                                                                                                                         """
 ### Presentation
 
@@ -26,7 +24,7 @@ In this chapter you will learn how to:
 
 ### Declare examples
 
-#### Structure of a Specification
+#### Styles
 
 The [Quick Start](org.specs2.guide.QuickStart.html) guide describes 2 styles of specifications, the _unit_ style and the _acceptance_ style.
 Both styles actually build a specification as a list of *fragments*.
@@ -102,7 +100,7 @@ It is completely equivalent to writing this in an `org.specs2.Specification`:
           "Hello world" must endWith("world")
         }
 
-The [Unit specifications](org.specs2.guide.SpecStructure.html#Unit+specifications) section shows all the methods which can be used to build unit specifications fragments.
+The [Unit specifications](/Unit+specifications/) section shows all the methods which can be used to build unit specifications fragments.
 
 #### Results
 
@@ -112,7 +110,7 @@ An Example is created by following a piece of text with `!` and providing anythi
  * a Matcher result
  * a boolean value
 
-##### Standard results
+##### Standard
 
 The simplest `Result` values are provided by the `StandardResults` trait (mixed-in with `Specification`), and match the 5
 types of results provided by ***specs2***:
@@ -128,7 +126,7 @@ Two additional results are also available to track the progress of features:
   * done: a Success with the message "DONE"
   * todo: a Pending with the message "TODO"
 
-##### Matcher results
+##### Matcher
 
 Usually the body of an example is made of *expectations* using matchers:
 
@@ -136,7 +134,7 @@ Usually the body of an example is made of *expectations* using matchers:
 
 You can refer to the [Matchers](org.specs2.guide.Matchers.html)  guide to learn all about matchers and how to create expectations.
 
-##### Functional expectations
+##### Functional
 
 The default `Specification` trait in ***specs2*** is functional: the Result of an example is always given by the last statement
 of its body. This example will never fail because the first expectation is "lost":
@@ -155,7 +153,7 @@ So the correct way of writing the example is:
       def e1 = "hello" must have size(10000) and
                             startWith("hell")
 
-##### Thrown Expectations
+##### Thrown
 
 The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice
 by some. However you might see it as an annoying restriction. You can avoid it by extending the `org.specs2.matcher.MustThrownMatchers`
@@ -165,7 +163,7 @@ There is also an additional method `failure(message)` to throw a `FailureExcepti
 
 [Note that the `ThrownMatchers` traits are mixed in the `mutable.Specification` trait used for _unit_ specifications].
 
-##### All Expectations
+##### All
 
 The `org.specs2.specification.AllExpectations` trait goes further and gives you the possibility to have all the failures of an Example to be reported without stopping at the first one. This enables a type of specification where it is possible to define lots of expectations inside the body of an example and get a maximum of information on what fails and what passes:
 
@@ -185,7 +183,7 @@ The `org.specs2.specification.AllExpectations` trait goes further and gives you 
         }
       }
 
-The second example above hints at a restriction for this kind of Specification. The failures are accumulated for each example by mutating a shared variable. "Mutable" means that the concurrent execution of examples will be an issue if done blindly. To avoid this the `AllExpectations` trait overrides the specification arguments so that it becomes [`isolated`](org.specs2.guide.SpecStructure.html#isolated+variables) unless it is already `isolated` or `sequential`.
+The second example above hints at a restriction for this kind of Specification. The failures are accumulated for each example by mutating a shared variable. "Mutable" means that the concurrent execution of examples will be an issue if done blindly. To avoid this the `AllExpectations` trait overrides the specification arguments so that it becomes [`isolated`](/isolated+variables/) unless it is already `isolated` or `sequential`.
 
 ###### Short-circuit the execution
 
@@ -199,7 +197,7 @@ Ultimately, you may want to stop the execution of an example if one expectation 
 
 Alternatively, `orSkip` will skip the rest of the example in case of a failure.
 
-#### Set an example as "Pending until fixed"
+#### Pending until fixed
 
 Some examples may be temporarily failing but you don't want the entire test suite to fail just for those examples.
 Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed`
@@ -262,13 +260,13 @@ A few things to remember about this feature:
          descFromExpectations ^
          { List(1, 2) must contain(1) }
 
-#### Using the Example description
+#### Use the description
 
 The Example description can be used to create an expectation in the Example body:
 
       "This is a long, long, long description" ! ((s: String) => s.size must be_>(10))
 
-#### Given / When / Then
+#### G/W/T
 
 More sophisticated is the Given/When/Then style of writing specifications. This style is supported by interspersing Text fragments,
 with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example specification for a simple
@@ -458,11 +456,16 @@ This specification will be rendered as:
            2 | 2 | 4 |
            1 | 1 | 2 |
 
-### Include or link specifications
+### Links
 
-###### Include specifications
+There are 2 ways to "link" specifications:
 
-There is a simple mechanism for including "children" specification in a given specification. You can simply add the child specification as if it was a simple fragment:
+ * by including another specification, to create a parent-child relationship
+ * by creating a reference to another specification, to create a peer relationship
+
+#### Inclusion
+
+There is a simple mechanism for including a "children" specification in a given specification. You can simply add the child specification as if it was a simple fragment:
 
     "This is an included specification"     ^
       childSpec
@@ -479,18 +482,23 @@ The effect of doing so is that all the fragments of the children specification w
     include(xonly, exampleTextIndentation)       ^
     include(xonly, resetTextIndentation)         ^
 
-In this case I give specific arguments to the included specification so that it is only displayed when there are failures.
+In the code above there are specific arguments to the included specifications so that they are only displayed when there are failures.
 
-###### Link specifications
+##### Html link
 
-In order to create a User Guide such as this one, you might want to have the "included" specification being written to another html file. The syntax to do this is the following:
+In order to create a User Guide such as this one, you might want the included specification to be written to another html file. In this case, you need a "Link":
 
-    "a " ~ ("quick start guide", new QuickStart)                                            ^
-    "how to " ~ ("structure your specification", new SpecStructure)                         ^
-    "how to use " ~ ("matchers", new Matchers)                                              ^
-    "how to use " ~ ("mock objects", new Mocks)                                             ^
+     link(new QuickStart)
 
-In this case the `~` operator is used to create a `HtmlLink` where:
+This declaration will include the child specification so it is executed when the parent specification is executed. However during the reporting, only a Html link will be created in the parent file, referencing a separate file for the children specification.
+
+###### Html Link
+
+It is possible to customize the generated Html link with the following syntax:
+
+    "a " ~ ("quick start guide", new QuickStart)
+
+The `~` operator is used to create a `HtmlLink` where:
 
  * "a" is the beginning of the text
  * "quick start guide" is the text that will be highlighted as a url link
@@ -503,16 +511,20 @@ Several variations are possible on this pattern, depending which part of the lin
      "text to highlight" ~ specification
      "text to highlight" ~ (specification, "after text")
      "text to highlight" ~ (specification, "after text", "tooltip")
-     link(specification)
 
-It is also desirable sometimes to create a page with links to other specifications where the linked specifications will not give raise to the creation of subsequent pages. There will be just html links:
+#### Reference
+
+Sometimes you just want to reference another specification without triggering its execution. For example when [creating an index page](/Create+an+index+page/):
+
+     see(new MailSenderSpec)
+
+This will generate a html link in the main specification based on the referenced specification name. If you want to customize that link you can use the following syntax:
 
      "before text" ~/ ("text to highlight", specification, "after text")
      "before text" ~/ ("text to highlight", specification, "after text", "tooltip")
      "text to highlight" ~/ specification
      "text to highlight" ~/ (specification, "after text")
      "text to highlight" ~/ (specification, "after text", "tooltip")
-     see(specification)
 
 ### Contexts
 
@@ -535,11 +547,16 @@ How does a library like [JUnit](http://junit.org/) solves this?
 
 Now let's see how this can be achieved with ***specs2***.
 
-#### Variables isolation
+#### Isolation
 
-***specs2*** solves this issue simply by relying on Scala features: creating a new Trait or a case class opens a new scope with fresh variables!
+***specs2*** solves this issue in 2 ways:
 
-Let's see an example with a mutable specification:
+ * simply by relying on Scala features, by creating a new trait or a case class to open a new `Scope` with fresh variables
+ * by cloning the specification on each example execution when the `isolated` argument is provided
+
+##### Scope
+
+Let's see an example of using a `Scope` with a mutable specification:
 
        class ContextSpec extends mutable.Specification {
          "this is the first example" in new trees {
@@ -556,10 +573,7 @@ Let's see an example with a mutable specification:
        }
 
 Each example of that specification gets a new instance of the `trees` trait. So it will have a brand new `tree` variable and even if this data is mutated by an example, other examples will be isolated from these changes.
-
-##### `Scope`
-
-You might wonder why the `trees` trait is extending the `org.specs2.specification.Scope` trait? The reason is that the body of an Example only accepts objects which are convertible to a `Result`. By extending `Scope` we can take advantage of an implicit conversion provided by the `Specification` trait to convert our context object to a `Result`.
+Now you might wonder why the `trees` trait is extending the `org.specs2.specification.Scope` trait? The reason is that the body of an Example only accepts objects which are convertible to a `Result`. By extending `Scope` we can take advantage of an implicit conversion provided by the `Specification` trait to convert our context object to a `Result`.
 
 Scopes are a way to create a "fresh" object and associated variables for each example being executed. The advantages are that:
 
@@ -568,7 +582,7 @@ Scopes are a way to create a "fresh" object and associated variables for each ex
 
 However, sometimes, we wish to go for a more concise way of getting fresh variables, without having to create a specific trait to encapsulate them. That's what the `isolated` argument is for.
 
-##### `isolated` variables
+##### Isolated variables
 
 The `isolated` argument changes the execution method so that each example is executed in a brand new instance of the Specification:
 
@@ -591,7 +605,7 @@ Since there is a new Specification for each example, then all the variables acce
 
 _Note_: this technique will not work if the Specification is defined with a constructor having parameters because it won't be possible to create a new instance.
 
-##### With acceptance specifications
+##### Case classes
 
 The same kind of variable isolation can be achieved in acceptance specifications by using case classes:
 
@@ -624,7 +638,7 @@ One very cool property of using traits to define context variables is that we ca
         // now do something with the user and his order
       }
 
-#### Before/After code
+#### Before/After
 
 If you want to run some code before or after each example, the `Before` and `After` traits are there to help you (they both extend the `Scope` trait). In the following examples we'll only show the use of `After` because `Before` most of the time unnecessary:
 
@@ -694,7 +708,7 @@ But there is more to it. The next paragraphs will show how to:
  1. use an implicit context to avoid duplication
  1. create a new context object by combining existing ones
 
-#### `Around` actions
+#### Around
 
 Some examples need to be executed in a given context. For example you're testing a web application and your specification code needs to have your example executed inside an Http session.
 
@@ -711,7 +725,7 @@ In that case you can extend the `Around` trait and specify the `around` method:
 
 Note that the context here is an object instead of a trait or case class instance because in this specification we don't need any variable isolation. We also take the advantage that objects extending `Context` traits (like `Before` / `After` / `Around`,...) have an `apply` method so we can directly write `http(e1)` meaning `http.apply(e1)`.
 
-#### `Outside` actions
+#### Outside
 
 `Outside` is bit like `Around` except that you can get access to the application state that you're setting in your Context object. Let's see that with an example (with a mutable Specification for a change):
 
@@ -728,7 +742,7 @@ Note that the context here is an object instead of a trait or case class instanc
         success
       }
 
-##### `AroundOutside` actions
+##### AroundOutside
 
 We can also combine both the `Around` and the `Outside` behaviors with the `AroundOutside` trait:
 
@@ -746,7 +760,7 @@ We can also combine both the `Around` and the `Outside` behaviors with the `Arou
       "this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
       "and another one"                                                     ! http((request: HttpReq) => success)
 
-#### Without creating a context object: `BeforeExample`
+#### BeforeExample
 
 When you just need to have set-up code executed before each example and if you don't need to have variable isolation, you can simply use the `BeforeExample` trait.
 
@@ -798,9 +812,9 @@ There is just one gotcha that you need to be aware of. If your implicit context 
           }
         }
 
-Indeed in both examples above the `s` string that will be passed is the Example description as specified [here](http://etorreborre.github.com/specs2/guide/org.specs2.guide.SpecStructure.html#Using+the+Example+description).
+Indeed in both examples above the `s` string that will be passed is the Example description as specified [here](/Using+the+Example+description/).
 
-#### Composing contexts
+#### Composition
 
 ##### Combinations
 
@@ -834,7 +848,7 @@ Contexts can be also be _composed_ but only if they are of the same type, `Befor
 
     "Do something on the full system" ! init(success)
 
-#### Steps and Actions
+#### Steps/Actions
 
 ##### Steps
 
@@ -882,11 +896,11 @@ Of course, `Step`s and `Action`s are not the privilege of acceptance specificati
     }
 
 
-#### Generic specification with setup and teardown steps
+#### Template
 
 There may still be some duplication of code if you have to use the same kind of set-up procedure for several specifications.
 
-If that's the case you can define your own Specification trait doing the job:
+If that's the case you can define your own `Specification` trait doing the job:
 
         import org.specs2._
         import specification._
@@ -898,11 +912,22 @@ If that's the case you can define your own Specification trait doing the job:
 
 The `DatabaseSpec` above will insert, in each inherited specification, one `Step` executed before all the fragments, and one executed after all of them.
 
+### Execution
+
+This section summarizes the execution algorithm of a specification based on its fragments:
+
+ 1. all the fragments are divided into groups delimited by `Steps`
+ 2. if the `sequential` argument is present, each fragment goes to its own group
+ 3. groups are executed sequentially and all the fragments of a given group are executed concurrently
+ 4. if the `isolated` argument is present, each example is executed in its own version of the Specification
+ 5. if the `isolated` argument is present, all the `Steps` preceding an example are executed before that example
+ 6. if the Specification inherits from the `AllExpectations` trait, then it is executed as an `isolated` Specification unless it is already set as `sequential`
+
 ### Layout
 
 For an _acceptance_ specification you can tweak the layout of Texts and Examples.
 
-##### The rules
+##### Rules
 
 The layout of text in ***specs2*** is mostly done automatically so that the text in the source code should look like the displayed text after execution.
 
@@ -940,7 +965,7 @@ will be executed and displayed as:
       and in this specific context
       + one more example
 
-##### The formatting fragments
+##### Formatting fragments
 
 Given the rules above, you might need to use some *formatting fragments* to adjust the display
 
@@ -1054,7 +1079,7 @@ Those are all the methods which you can use to create fragments in a unit specif
 
  * `title`: give a title to the Specification
 
-        `"My spec title".title`
+        "My spec title".title
 
  * `args`: create arguments for the specification
 
@@ -1278,7 +1303,7 @@ For example, you can turn off the concurrent execution of examples with the `arg
 
 For the complete list of arguments and shortcut methods read the [Runners](org.specs2.guide.Runners.html) page.
 
-#### Add a Specification title
+#### Add a title
 
 Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:
 
@@ -1393,7 +1418,7 @@ For that specification above:
  * when the `section` call is appended to a block of Fragments on the same line, all the fragments of that block are part of
    the section: `example 5` and `example 6` are tagged with `slow`
 
-#### Add debug statements
+#### Debug statements
 
 When quick and hacky `println` statements are what you want, the `Debug` trait, mixed in every `Specification`, provides useful methods:
 
@@ -1401,7 +1426,7 @@ When quick and hacky `println` statements are what you want, the `Debug` trait, 
  * `pp(condition)` prints a value if a condition holds
  * `pp(f: T => Boolean)` prints a value if a condition on that value holds
 
-#### Remove implicit definitions
+#### Remove implicits
 
 By default, the `Specification` trait imports quite a few implicit definitions (following a "batteries included" approach). However there might be some conflicts with implicits existing in your own user code. Among the usual examples of conflicts are conflicts with the `===` sign in Scalaz and the `Duration` methods in Akka.
 

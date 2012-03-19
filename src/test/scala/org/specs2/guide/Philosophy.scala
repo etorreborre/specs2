@@ -2,9 +2,7 @@ package org.specs2
 package guide
 
 class Philosophy extends Specification { def is = noindent                                                              ^
-  "Philosophy".title ^
                                                                                                                         """
-
 ### The origins
 
 ***specs2*** has been created as an evolution of the [***specs***](http://code.google.com/p/specs) project.
@@ -62,19 +60,17 @@ The "sensible" defaults have been debated and some "opinionated" decisions have 
 
 This objective was certainly *not* achieved. There are several reasons for this. The design of the examples execution is certainly the main one.
 
-In ***specs*** the examples are executed "on-demand" when a runner "asks" the specification for its successes and failures. The specification then asks each example for its status and an example knows that by executing himself. The trouble is, the example doesn't really have enough information to know it's full execution context: is there some code to execute beforehand
-for data setup? Or after all other examples, because it's the last example of the specification and a database disconnection is required then?
+In ***specs*** the examples are executed "on-demand" when a runner "asks" the specification for its successes and failures. The specification then asks each example for its status and an example knows that by executing himself. The trouble is, the example doesn't really have enough information to know it's full execution context: is there some code to execute beforehand for data setup? Or after all other examples, because it's the last example of the specification and a database disconnection is required then?
 
 This design is aggravated by a "magic" feature provided by ***specs***: [the automatic reset of local variables](http://code.google.com/p/specs/wiki/DeclareSpecifications#Execution_model).
-This feature is _very_ convenient for the user but the implementation is a nightmare! In order to make as if each example was executed in isolation, as if other examples did not modify surrounding variables, a new specification is created and just one example is executed inside that specification. This works, but at the expense of carefully copying a lot of state
-from the cloned specification to the original one. More than *20* issues were created because of that only feature!
+This feature is _very_ convenient for the user but the implementation is a nightmare! In order to make as if each example was executed in isolation, as if other examples did not modify surrounding variables, a new specification is created and just one example is executed inside that specification. This works, but at the expense of carefully copying a lot of state from the cloned specification to the original one. More than *20* issues were created because of that only feature!
 
 ###### User support
 
 The user support has always been responsive, in terms of bug fixes and enhancements. However the object-oriented nature of ***specs*** with lots of variables and side-effects around made some bugs difficult to diagnose and made some enhancements downright impossible. The best example of an "impossible" feature to implement is the concurrent execution of examples.
 With shared variables all around the place, there's little chance to ever get it right.
 
-### A new compromise
+### A new hope
 
 The redesign of ***specs2*** was precisely started to fight the complexities and issues of ***specs***. In order to do that while remaining true to the original vision for ***specs***, a new design compromise was necessary with new design principles:
 
@@ -299,8 +295,12 @@ So the compromise is the following:
      . use matchers (with both `must` and `should`)
      . use predefined fragments and results (like `p`, `br`, `success`, `pending`,...)
      . and more
+ + Specific traits are available to selectively deactivate features. For instance `NoAutoExamples` deactivates the creation of examples from simple expectations.
 
-This way, if there is any conflict with the `Specification` trait inherited definitions it should be possible to downgrade to the `BaseSpecification` and add the non-conflicting traits.
+This way, if there is any conflict when inheriting from the `Specification` trait, it should be possible to either:
+
+ + downgrade to the `BaseSpecification` and add the non-conflicting traits
+ + mix-in specific traits to remove the problematic implicit definitions
 
  - - -
 

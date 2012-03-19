@@ -6,7 +6,7 @@ import specification.{Before, BeforeExample, Context, Outside}
 /**
  * This specification shows various ways to setup contexts for examples.
  *
- * For more details @see org.specs2.guide.SpecStructure
+ * For more details @see org.specs2.guide.Structure
  */
 class DefineContextsSpec extends Specification {
 

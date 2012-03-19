@@ -14,7 +14,7 @@ There are 2 major styles of specifications with ***specs2***:
  * _acceptance_ specifications where all the specification text stands as one and the implementation code is elsewhere.
    It is generally used for acceptance or integration scenarios
 
-#### Unit specification
+#### Unit
 
 Unit specifications extend the `org.specs2.mutable.Specification` trait and are using the `should/in` format:
 
@@ -35,7 +35,7 @@ Unit specifications extend the `org.specs2.mutable.Specification` trait and are 
         }
       }
 
-#### Acceptance specification
+#### Acceptance
 
 Acceptance specifications extend the `org.specs2.Specification` trait and must define a method called `is`:
 
@@ -83,7 +83,7 @@ And this is it! Now to execute your specification, you use a *runner* which will
       Finished in 0 second, 78 ms
       3 examples, 0 failure, 0 error
 
-#### Where to go from here
+#### What else?
 
 You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide") to learn how to:
 
