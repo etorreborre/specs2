@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Philosophy</title><a name="Philosophy"><h2 specId="1019044093">Philosophy</h2></a><status class="ok"><div class="level0"><a name="The+origins"><h3>The origins</h3></a><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />Among the very first objectives of specs were:</p>
+    </head><body><div id="container"><title>Philosophy</title><a name="Philosophy"><h2 specId="2120174701">Philosophy</h2></a><status class="ok"><div class="level0"><a name="The+origins"><h3>The origins</h3></a><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />Among the very first objectives of specs were:</p>
 <ul>
   <li><p><strong>conciseness</strong>: it should be possible to express a software specification with the least amount of ceremony</p></li>
   <li><p><strong>readability</strong>: an <em>executable</em> specification should read like a purely textual one, by a non-programmer</p></li>
@@ -72,7 +72,7 @@
   <li><p><strong><em>specs</em></strong> provides implicits by inheriting methods from the <code class="prettyprint">Specification</code> class. While this is very convenient this is also considerably polluting the namespace of the user code <em>inside</em> the specification. This pollution leads to possible bugs (an implicit conversion being applied when you don't expect it) and possible namespace conflicts</p></li>
   <li><p>some &quot;reserved&quot; words like <code class="prettyprint">should</code>, <code class="prettyprint">can</code>, <code class="prettyprint">in</code> come from previous BDD libraries like rspec. But they are not always convenient and sometimes one wants to write <code class="prettyprint">&quot;my example should provide&quot;</code> just to avoid having every example under &quot;<code class="prettyprint">&quot;my example&quot; should</code>&quot; start with <code class="prettyprint">&quot;provide...&quot;</code>. There is a way to do this in <strong><em>specs</em></strong> but this requires the creation of an ad-hoc method</p></li>
   <li><p>some people like to structure their specifications with other keywords like Given-When-Then which require additional methods in the library for no more added value than just displaying those words</p></li>
-</ul><a name="Readability"><h6>Readability</h6></a><p>The readability of a specification written with <strong><em>specs</em></strong> largely depends on the writer of the specification. Since a specification is created by interleaving text and code, if the amount of code is too large then the textual content of the specification is largely lost and the developer cannot read it with just one glance.</p><p>Something was prototyped in <strong><em>specs</em></strong> to alleviate this issue: <a href="http://code.google.com/p/specs/wiki/LiterateSpecifications#A_short_example">LiterateSpecifications</a>. The idea was to use Scala support for XML literal to allow the writer to write pure text and insert, at the right places, some executable examples. It turns out that the implementation of this approach is fairly different from what was done for &quot;regular&quot; examples and cluttered the overall design.</p><a name="Extensibility"><h6>Extensibility</h6></a><p>Since its first release, <strong><em>specs</em></strong> has been extended in different ways. Many users have created their own matchers (<a href="http://code.google.com/p/specs/wiki/MatchersGuide#Eventually_matchers">some of them</a> have been integrated to the main library).</p><p>On the other hand, the additional runners which were developed for TeamCity or sbt were written by me, as well as other more fundamental enhancements, like <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Specification_context">SpecificationContexts</a>.</p><p>The conclusion we can draw on this subject is that it's difficult to design something that's truly extensible without any idea of the future requirements!</p><a name="Configuration"><h6>Configuration</h6></a><p>The &quot;sensible&quot; defaults have been debated and some &quot;opinionated&quot; decisions have been taken, like the decision to mark any example without expectation as &quot;Pending&quot; for example. Unfortunately the configuration mechanism offered in exchange (to change the defaults) was not really appealing (a mix of properties-file-reflection-system-properties) and there is few evidence that anyone actually used it.</p><a name="Clear+implementation"><h6>Clear implementation</h6></a><p>This objective was certainly <em>not</em> achieved. There are several reasons for this. The design of the examples execution is certainly the main one.</p><p>In <strong><em>specs</em></strong> the examples are executed &quot;on-demand&quot; when a runner &quot;asks&quot; the specification for its successes and failures. The specification then asks each example for its status and an example knows that by executing himself. The trouble is, the example doesn't really have enough information to know it's full execution context: is there some code to execute beforehand<br />for data setup? Or after all other examples, because it's the last example of the specification and a database disconnection is required then?</p><p>This design is aggravated by a &quot;magic&quot; feature provided by <strong><em>specs</em></strong>: <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Execution_model">the automatic reset of local variables</a>.<br />This feature is <em>very</em> convenient for the user but the implementation is a nightmare! In order to make as if each example was executed in isolation, as if other examples did not modify surrounding variables, a new specification is created and just one example is executed inside that specification. This works, but at the expense of carefully copying a lot of state<br />from the cloned specification to the original one. More than <em>20</em> issues were created because of that only feature!</p><a name="User+support"><h6>User support</h6></a><p>The user support has always been responsive, in terms of bug fixes and enhancements. However the object-oriented nature of <strong><em>specs</em></strong> with lots of variables and side-effects around made some bugs difficult to diagnose and made some enhancements downright impossible. The best example of an &quot;impossible&quot; feature to implement is the concurrent execution of examples.<br />With shared variables all around the place, there's little chance to ever get it right.</p><a name="A+new+compromise"><h3>A new compromise</h3></a><p>The redesign of <em><strong>specs2</strong></em> was precisely started to fight the complexities and issues of <em><strong>specs</strong></em>. In order to do that while remaining true to the original vision for <strong><em>specs</em></strong>, a new design compromise was necessary with new design principles:</p>
+</ul><a name="Readability"><h6>Readability</h6></a><p>The readability of a specification written with <strong><em>specs</em></strong> largely depends on the writer of the specification. Since a specification is created by interleaving text and code, if the amount of code is too large then the textual content of the specification is largely lost and the developer cannot read it with just one glance.</p><p>Something was prototyped in <strong><em>specs</em></strong> to alleviate this issue: <a href="http://code.google.com/p/specs/wiki/LiterateSpecifications#A_short_example">LiterateSpecifications</a>. The idea was to use Scala support for XML literal to allow the writer to write pure text and insert, at the right places, some executable examples. It turns out that the implementation of this approach is fairly different from what was done for &quot;regular&quot; examples and cluttered the overall design.</p><a name="Extensibility"><h6>Extensibility</h6></a><p>Since its first release, <strong><em>specs</em></strong> has been extended in different ways. Many users have created their own matchers (<a href="http://code.google.com/p/specs/wiki/MatchersGuide#Eventually_matchers">some of them</a> have been integrated to the main library).</p><p>On the other hand, the additional runners which were developed for TeamCity or sbt were written by me, as well as other more fundamental enhancements, like <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Specification_context">SpecificationContexts</a>.</p><p>The conclusion we can draw on this subject is that it's difficult to design something that's truly extensible without any idea of the future requirements!</p><a name="Configuration"><h6>Configuration</h6></a><p>The &quot;sensible&quot; defaults have been debated and some &quot;opinionated&quot; decisions have been taken, like the decision to mark any example without expectation as &quot;Pending&quot; for example. Unfortunately the configuration mechanism offered in exchange (to change the defaults) was not really appealing (a mix of properties-file-reflection-system-properties) and there is few evidence that anyone actually used it.</p><a name="Clear+implementation"><h6>Clear implementation</h6></a><p>This objective was certainly <em>not</em> achieved. There are several reasons for this. The design of the examples execution is certainly the main one.</p><p>In <strong><em>specs</em></strong> the examples are executed &quot;on-demand&quot; when a runner &quot;asks&quot; the specification for its successes and failures. The specification then asks each example for its status and an example knows that by executing himself. The trouble is, the example doesn't really have enough information to know it's full execution context: is there some code to execute beforehand for data setup? Or after all other examples, because it's the last example of the specification and a database disconnection is required then?</p><p>This design is aggravated by a &quot;magic&quot; feature provided by <strong><em>specs</em></strong>: <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Execution_model">the automatic reset of local variables</a>.<br />This feature is <em>very</em> convenient for the user but the implementation is a nightmare! In order to make as if each example was executed in isolation, as if other examples did not modify surrounding variables, a new specification is created and just one example is executed inside that specification. This works, but at the expense of carefully copying a lot of state from the cloned specification to the original one. More than <em>20</em> issues were created because of that only feature!</p><a name="User+support"><h6>User support</h6></a><p>The user support has always been responsive, in terms of bug fixes and enhancements. However the object-oriented nature of <strong><em>specs</em></strong> with lots of variables and side-effects around made some bugs difficult to diagnose and made some enhancements downright impossible. The best example of an &quot;impossible&quot; feature to implement is the concurrent execution of examples.<br />With shared variables all around the place, there's little chance to ever get it right.</p><a name="A+new+hope"><h3>A new hope</h3></a><p>The redesign of <em><strong>specs2</strong></em> was precisely started to fight the complexities and issues of <em><strong>specs</strong></em>. In order to do that while remaining true to the original vision for <strong><em>specs</em></strong>, a new design compromise was necessary with new design principles:</p>
 <ol>
   <li>Do not use mutable variables!</li>
   <li>Use a simple structure</li>
@@ -190,196 +190,199 @@
 <ul>
   <li>The <code class="prettyprint">BaseSpecification</code> trait only allows to build Text fragments and Examples, without even any Matchers</li>
   <li>On top of it, the <code class="prettyprint">Specification</code> trait stacks lots of convenient functionalities to<br /> . use a concise notation for arguments<br /> . use matchers (with both <code class="prettyprint">must</code> and <code class="prettyprint">should</code>)<br /> . use predefined fragments and results (like <code class="prettyprint">p</code>, <code class="prettyprint">br</code>, <code class="prettyprint">success</code>, <code class="prettyprint">pending</code>,...)<br /> . and more</li>
-</ul><p>This way, if there is any conflict with the <code class="prettyprint">Specification</code> trait inherited definitions it should be possible to downgrade to the <code class="prettyprint">BaseSpecification</code> and add the non-conflicting traits.</p>
+  <li>Specific traits are available to selectively deactivate features. For instance <code class="prettyprint">NoAutoExamples</code> deactivates the creation of examples from simple expectations.</li>
+</ul><p>This way, if there is any conflict when inheriting from the <code class="prettyprint">Specification</code> trait, it should be possible to either:</p>
+<ul>
+  <li>downgrade to the <code class="prettyprint">BaseSpecification</code> and add the non-conflicting traits</li>
+  <li>mix-in specific traits to remove the problematic implicit definitions</li>
+</ul>
 <hr /><p><br /></p></div></status></div><div id="tree">
-      <ul><li id="1312280696"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1836204276"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
-            <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
+      <ul><li id="1320109239"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1974076266"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+            <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
-          </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
+          </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Execution">Execution</a>
             
-          </li><li id=""><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
+          </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1291118377"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
+          </li><li id="319511059"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Structure+of+a+Specification">Structure of a Specification</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Acceptance+specification">Acceptance specification</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Styles">Styles</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Acceptance+specification">Acceptance specification</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Unit+specification">Unit specification</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Results">Results</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Standard+results">Standard results</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Matcher+results">Matcher results</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Functional+expectations">Functional expectations</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Thrown+Expectations">Thrown Expectations</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#All+Expectations">All Expectations</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Short-circuit+the+execution">Short-circuit the execution</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Set+an+example+as+%22Pending+until+fixed%22">Set an example as &quot;Pending until fixed&quot;</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Results">Results</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Standard">Standard</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Auto-Examples">Auto-Examples</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Using+the+Example+description">Using the Example description</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Given+%2F+When+%2F+Then">Given / When / Then</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Multiple+steps">Multiple steps</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Extract+methods">Extract methods</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#User+regexps">User regexps</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Several+G%2FW%2FT+blocks">Several G/W/T blocks</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#ScalaCheck+values">ScalaCheck values</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Single+step">Single step</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Conversions">Conversions</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Matchers">Matchers</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#DataTables">DataTables</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Expectations">Expectations</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Functional">Functional</a>
             
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Shared+examples">Shared examples</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Thrown">Thrown</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+arguments">Declare arguments</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Layout">Layout</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#The+rules">The rules</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#The+formatting+fragments">The formatting fragments</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Separating+groups+of+examples">Separating groups of examples</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Reset+the+levels">Reset the levels</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Changing+the+indentation+level">Changing the indentation level</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#All">All</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Short-circuit">Short-circuit</a>
             
           </li></ul>
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Include+or+link+specifications">Include or link specifications</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Include+specifications">Include specifications</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Pending+until+fixed">Pending until fixed</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Link+specifications">Link specifications</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Auto-Examples">Auto-Examples</a>
             
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Specification+title">Specification title</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#G%2FW%2FT">G/W/T</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Multiple+steps">Multiple steps</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Index+page">Index page</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Extract+methods">Extract methods</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Variables+isolation">Variables isolation</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Scope">Scope</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#User+regexps">User regexps</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#isolated+variables">isolated variables</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#G%2FW%2FT+sequences">G/W/T sequences</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#With+acceptance+specifications">With acceptance specifications</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#ScalaCheck">ScalaCheck</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Contexts+inheritance">Contexts inheritance</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Single+step">Single step</a>
             
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Before%2FAfter+code">Before/After code</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#In+a+mutable+specification">In a mutable specification</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#In+an+acceptance+specification">In an acceptance specification</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Conversions">Conversions</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Around+actions">Around actions</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Outside+actions">Outside actions</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#AroundOutside+actions">AroundOutside actions</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#DataTables">DataTables</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Without+creating+a+context+object%3A+BeforeExample">Without creating a context object: BeforeExample</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Implicit+context">Implicit context</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Composing+contexts">Composing contexts</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Composition">Composition</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Links">Links</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Html+link">Html link</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Html+Link">Html Link</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Steps+and+Actions">Steps and Actions</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Steps">Steps</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Actions">Actions</a>
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Reference">Reference</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Generic+specification+with+setup+and+teardown+steps">Generic specification with setup and teardown steps</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Contexts">Contexts</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Scope">Scope</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Isolated+variables">Isolated variables</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Case+classes">Case classes</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Contexts+inheritance">Contexts inheritance</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Other+unit+specification+methods">Other unit specification methods</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Before%2FAfter">Before/After</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#In+a+mutable+specification">In a mutable specification</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Tags">Tags</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#In+a+unit+specification">In a unit specification</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Adding+debug+statements">Adding debug statements</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#In+an+acceptance+specification">In an acceptance specification</a>
             
           </li></ul>
-          </li><li id="856303415"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Around">Around</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Outside">Outside</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
+            
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#BeforeExample">BeforeExample</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Implicit+context">Implicit context</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Composition">Composition</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Combinations">Combinations</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Composition">Composition</a>
+            
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Steps%2FActions">Steps/Actions</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Steps">Steps</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Actions">Actions</a>
+            
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Template">Template</a>
+            
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Layout">Layout</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Rules">Rules</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Formatting+fragments">Formatting fragments</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Separating+groups+of+examples">Separating groups of examples</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Reset+the+levels">Reset the levels</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Changing+the+indentation+level">Changing the indentation level</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Combinations">Combinations</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Unit+specifications">Unit specifications</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#How+to%3F">How to?</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Declare+arguments">Declare arguments</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Add+a+title">Add a title</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Use+descriptions">Use descriptions</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Enhance+failures">Enhance failures</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Share+examples">Share examples</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Create+an+index">Create an index</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Tag+examples">Tag examples</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#In+a+unit+specification">In a unit specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Debug+statements">Debug statements</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Remove+implicits">Remove implicits</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="672057418"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Out-of-the-box+matchers">Out-of-the-box matchers</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Adapting+Iterable+matchers">Adapting Iterable matchers</a>
+            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Optional">Optional</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Custom">Custom</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#With+sequences">With sequences</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Optional+matchers">Optional matchers</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Layers+definition">Layers definition</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Inclusion%2FExclusion">Inclusion/Exclusion</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
-            
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Layers+as+an+Example">Layers as an Example</a>
-            
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Alternative+implementation">Alternative implementation</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-            
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-            
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#ScalaCheck">ScalaCheck</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
             
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Test+properties">Test properties</a>
             
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Mocks+creation+and+settings">Mocks creation and settings</a>
+            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Creation+and+settings">Creation and settings</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Mocking+and+Stubbing+at+the+same+time">Mocking and Stubbing at the same time</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#With+matchers">With matchers</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
@@ -392,16 +395,16 @@
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
             
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Functions%2FPartialFunctions">Functions/PartialFunctions</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Auto-boxing">Auto-boxing</a>
+            
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Function%2FPartialFunction+parameters">Function/PartialFunction parameters</a>
-            
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Partial+functions+and+auto-boxing">Partial functions and auto-boxing</a>
-            
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="306020330"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1045048012"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -440,18 +443,18 @@
           </li><li id=""><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Outside+specs2">Outside specs2</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
             
           </li></ul>
           </li></ul>
-          </li><li id="1488751598"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          </li><li id="978642143"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
-            <ul><li id=""><a href="org.specs2.guide.Runners.html#In+a+Specification">In a Specification</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#API">API</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Shortcuts">Shortcuts</a>
@@ -467,12 +470,13 @@
           </li><li id=""><a href="org.specs2.guide.Runners.html#StackTraceFilter">StackTraceFilter</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#On+the+command+line">On the command line</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Command+line">Command line</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#From+system+properties">From system properties</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#System+properties">System properties</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#In+the+shell">In the shell</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Html+output">Html output</a>
             
@@ -480,7 +484,10 @@
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Simple+build+tool">Simple build tool</a>
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#In+the+console">In the console</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+SBT">Via SBT</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#with+sbt+0.7.x">with sbt 0.7.x</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x">with sbt &gt; 0.9.x</a>
@@ -494,20 +501,30 @@
             
           </li></ul>
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#JUnit">JUnit</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+IDEA">Via IDEA</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+JUnit">Via JUnit</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#IntelliJ">IntelliJ</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+Eclipse">Via Eclipse</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
-            <ul><li id=""><a href="org.specs2.guide.Runners.html#Inside+sbt">Inside sbt</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+Maven">Via Maven</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#With+your+own">With your own</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#Notifier">Notifier</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#NotifierRunner">NotifierRunner</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#In+sbt">In sbt</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Exporter">Exporter</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#In+sbt">In sbt</a>
             
           </li></ul>
-          </li><li id="1019044093"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li></ul>
+          </li></ul>
+          </li><li id="2120174701"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -524,7 +541,7 @@
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#User+support">User support</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Philosophy.html#A+new+compromise">A new compromise</a>
+          </li><li id=""><a href="org.specs2.guide.Philosophy.html#A+new+hope">A new hope</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#Functional+%2F+immutable">Functional / immutable</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#Chaining+everything">Chaining everything</a>
             
@@ -551,25 +568,25 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1266823424"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          </li><li id="889978978"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
-          </li><li id=""><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
             
-          </li><li id=""><a href="org.specs2.guide.Design.html#Specification+creation">Specification creation</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Creation">Creation</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Creating+Fragments">Creating Fragments</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Mutable+Specification">Mutable Specification</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Design.html#Specification+execution">Specification execution</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Execution">Execution</a>
             
-          </li><li id=""><a href="org.specs2.guide.Design.html#Specification+reporting">Specification reporting</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Reporting">Reporting</a>
             
-          </li><li id=""><a href="org.specs2.guide.Design.html#Packages+dependencies">Packages dependencies</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Dependencies">Dependencies</a>
             
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1312280696','1019044093'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1320109239','2120174701'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

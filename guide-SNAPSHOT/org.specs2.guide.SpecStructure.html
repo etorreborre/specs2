@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"><h2 specId="1291118377">Specification structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this chapter you will learn how to:</p>
+    </head><body><div id="container"><title>Specification structure</title><a name="Specification+structure"><h2 specId="1177640858">Specification structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this chapter you will learn how to:</p>
 <ul>
   <li>declare examples</li>
   <li>share examples</li>
@@ -68,8 +68,9 @@
   <li>include or link specifications</li>
   <li>give a title to your specification</li>
   <li>define contexts and actions to execute before/after examples</li>
+  <li>specify the execution mode</li>
   <li>tag examples or sections of the Specification</li>
-  <li>adding debug statements</li>
+  <li>add debug statements</li>
   <li>remove some implicit definitions conflicting with your code</li>
 </ul><a name="Declare+examples"><h3>Declare examples</h3></a><a name="Structure+of+a+Specification"><h4>Structure of a Specification</h4></a><p>The <a href="org.specs2.guide.QuickStart.html">Quick Start</a> guide describes 2 styles of specifications, the <em>unit</em> style and the <em>acceptance</em> style.<br />Both styles actually build a specification as a list of <em>fragments</em>.</p><a name="Acceptance+specification"><h5><em>Acceptance</em> specification</h5></a><p>In an <em>acceptance</em> specification you build a list of <em>fragments</em> with the <code class="prettyprint">^</code> operator:</p>
 <pre><code class="prettyprint">  &quot;this is my specification&quot;                          ^
@@ -92,7 +93,7 @@
 
   def `and example 1` = success
   def `and example 2` = success
-</code></pre><p><em>(an IDE with good refactoring capabilities is a must-have in that case,...)</em></p><a name="Unit+specification"><h5><em>Unit</em> specification</h5></a><p>A <em>unit</em> specification uses <code class="prettyprint">should/in</code> blocks which actually build the Fragments by adding them to a mutable variable:</p>
+</code></pre><p><em>(an IDE with good refactoring capabilities is a must-have in that case,...)</em></p><a name="Unit+specification"><h5><em>Unit</em> specification</h5></a><p>A <em>unit</em> specification uses <code class="prettyprint">should/in</code> blocks which build the Fragments by adding them to a mutable protected variable:</p>
 <pre><code class="prettyprint">  &quot;The 'Hello world' string&quot; should {
     &quot;contain 11 characters&quot; in {
       &quot;Hello world&quot; must have size(11)
@@ -121,7 +122,7 @@
     &quot;end with 'world'&quot; ! {
       &quot;Hello world&quot; must endWith(&quot;world&quot;)
     }
-</code></pre><p>You can look at the bottom of this page for the other methods which are used to build unit specifications.</p><a name="Results"><h4>Results</h4></a><p>An Example is created by following a piece of text with <code class="prettyprint">!</code> and providing anything convertible to an <code class="prettyprint">org.specs2.execute.Result</code>:</p>
+</code></pre><p>The <a href="org.specs2.guide.SpecStructure.html#Unit+specifications">Unit specifications</a> section shows all the methods which can be used to build unit specifications fragments.</p><a name="Results"><h4>Results</h4></a><p>An Example is created by following a piece of text with <code class="prettyprint">!</code> and providing anything convertible to an <code class="prettyprint">org.specs2.execute.Result</code>:</p>
 <ul>
   <li>a standard result</li>
   <li>a Matcher result</li>
@@ -190,6 +191,11 @@
 <pre><code class="prettyprint"> beNone checks if an element is None
    + None must beNone
    + Some(1) must not be none
+</code></pre><p>Auto-Examples can also be used in mutable specifications but the need to be declared by using the <code class="prettyprint">eg</code> (&quot;exempli gratia&quot;, the latin abbreviation for &quot;for example&quot;):</p>
+<pre><code class="prettyprint"> class SomeExamples extends mutable.Specification {
+   { None must beNone }.eg
+   { Some(1) must not be none }.eg
+ }
 </code></pre><p>A few things to remember about this feature:</p>
 <ul>
   <li><p>the source file is expected to be found in the <code class="prettyprint">src/test/scala</code> directory.<br /> This can be overriden by specifying the <code class="prettyprint">specs2.srcTestDir</code> system property</p></li>
@@ -329,186 +335,6 @@
     +  a | b | c |
        2 | 2 | 4 |
        1 | 1 | 2 |
-</code></pre><a name="Shared+examples"><h3>Shared examples</h3></a><p>In a given specification some examples may look similar enough that you would like to &quot;factor&quot; them out and share them between<br />different parts of your specification. The best example of this situation is a specification for a Stack of limited size:</p>
-<pre><code class="prettyprint">     class StackSpec extends Specification { def is =
-
-       &quot;Specification for a Stack with a limited capacity&quot;.title                   ^
-                                                                                   p^
-       &quot;A Stack with limited capacity can either be:&quot;                              ^ endp^
-         &quot;1. Empty&quot;                                                                ^ anEmptyStack^
-         &quot;2. Normal (i.e. not empty but not full)&quot;                                 ^ aNormalStack^
-         &quot;3. Full&quot;                                                                 ^ aFullStack^end
-
-       def anEmptyStack =                                                          p^
-         &quot;An empty stack should&quot;                                                   ^
-           &quot;have a size == 0&quot;                                                      ! empty().e1^
-           &quot;throw an exception when sent #top&quot;                                     ! empty().e2^
-           &quot;throw an exception when sent #pop&quot;                                     ! empty().e3^endbr
-
-       def aNormalStack =                                                          p^
-         &quot;A normal stack should&quot;                                                   ^
-           &quot;behave like a non-empty stack&quot;                                         ^ nonEmptyStack(newNormalStack)^
-           &quot;add to the top when sent #push&quot;                                        ! nonFullStack().e1^endbr
-
-       def aFullStack =                                                            p^
-         &quot;A full stack should&quot;                                                     ^
-           &quot;behave like a non-empty stack&quot;                                         ^ nonEmptyStack(newFullStack)^
-           &quot;throw an exception when sent #push&quot;                                    ! fullStack().e1
-
-       def nonEmptyStack(stack: =&gt;SizedStack) = {                                  t^
-         &quot;have a size &gt; 0&quot;                                                         ! nonEmpty(stack).size^
-         &quot;return the top item when sent #top&quot;                                      ! nonEmpty(stack).top1^
-         &quot;not remove the top item when sent #top&quot;                                  ! nonEmpty(stack).top2^
-         &quot;return the top item when sent #pop&quot;                                      ! nonEmpty(stack).pop1^
-         &quot;remove the top item when sent #pop&quot;                                      ! nonEmpty(stack).pop2^bt
-       }
-
-       /** stacks creation */
-       def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
-       def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
-       def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
-
-       /** stacks examples */
-       case class empty() {
-         val stack = newEmptyStack
-
-         def e1 = stack.size must_== 0
-         def e2 = stack.top must throwA[NoSuchElementException]
-         def e3 = stack.pop must throwA[NoSuchElementException]
-       }
-
-       def nonEmpty(createStack: =&gt;SizedStack) = new {
-         val stack = createStack
-
-         def size = stack.size &gt; 0
-
-         def top1 = stack.top must_== stack.size
-         def top2 = {
-           stack.top
-           stack.top must_== stack.size
-         }
-
-         def pop1 = {
-           val topElement = stack.size
-           stack.pop must_== topElement
-         }
-
-         def pop2 = {
-           stack.pop
-           stack.top must_== stack.size
-         }
-       }
-
-       case class nonFullStack() {
-         val stack = newNormalStack
-
-         def e1 = {
-           stack push (stack.size + 1)
-           stack.top must_== stack.size
-         }
-       }
-       case class fullStack() {
-         val stack = newFullStack
-
-         def e1 = stack push (stack.size + 1) must throwAn[Error]
-       }
-     }
-</code></pre><a name="Declare+arguments"><h3>Declare arguments</h3></a><p>At the beginning of a specification you can declare arguments which configure the execution and reporting of the specification.<br />For example, you can turn off the concurrent execution of examples with the <code class="prettyprint">args</code> method:</p>
-<pre><code class="prettyprint">   class ExamplesOneByOne extends Specification { def is =
-
-     // there is a shortcut for this argument called 'sequential'
-     args(sequential=true)              ^
-     &quot;first example&quot;                    ! e1 ^
-     &quot;the the second one&quot;               ! e2 ^
-                                        end
-   }
-</code></pre><p>For the complete list of arguments and shortcut methods read the <a href="org.specs2.guide.Runners.html">Runners</a> page.</p><a name="Layout"><h3>Layout</h3></a><p>For an <em>acceptance</em> specification you can tweak the layout of Texts and Examples.</p><a name="The+rules"><h5>The rules</h5></a><p>The layout of text in <strong><em>specs2</em></strong> is mostly done automatically so that the text in the source code should look like the displayed text after execution.</p><p>By default the layout of a specification will be computed automatically based on intuitive rules:</p>
-<ul>
-  <li>when an example follows a text, it is indented</li>
-  <li>2 successive examples will be at the same indentation level</li>
-  <li>when a text follows an example, this means that you want to describe a &quot;subcontext&quot;, so the next examples will be indented with one more level</li>
-</ul><p>Let's see a standard example of this. The following fragments:</p>
-<pre><code class="prettyprint">&quot;this is some presentation text&quot;      ^
-  &quot;and the first example&quot;             ! success^
-  &quot;and the second example&quot;            ! success
-</code></pre><p>will be executed and displayed as:</p>
-<pre><code class="prettyprint">this is some presentation text
-+ and the first example
-+ and the second example
-</code></pre><p>If you specify a &quot;subcontext&quot;, you will get one more indentation level:</p>
-<pre><code class="prettyprint">&quot;this is some presentation text&quot;      ^
-  &quot;and the first example&quot;             ! success^
-  &quot;and the second example&quot;            ! success^
-  &quot;and in this specific context&quot;      ^
-    &quot;one more example&quot;                ! success^
-</code></pre><p>will be executed and displayed as:</p>
-<pre><code class="prettyprint">this is some presentation text
-+ and the first example
-+ and the second example
-  and in this specific context
-  + one more example
-</code></pre><a name="The+formatting+fragments"><h5>The formatting fragments</h5></a><p>Given the rules above, you might need to use some <em>formatting fragments</em> to adjust the display</p><a name="Separating+groups+of+examples"><h6>Separating groups of examples</h6></a><p>The best way to separate blocks of examples is to add a blank line between them by using <code class="prettyprint">p</code> (as in &quot;paragraph&quot;):</p>
-<pre><code class="prettyprint">&quot;this is some presentation text&quot;      ^
-  &quot;and the first example&quot;             ! success^
-  &quot;and the second example&quot;            ! success^
-                                      p^
-&quot;And another block of examples&quot;       ^
-  &quot;with this example&quot;                 ! success^
-  &quot;and that example&quot;                  ! success
-</code></pre><p>This will be displayed as:</p>
-<pre><code class="prettyprint">this is some presentation text
-+ and the first example
-+ and the second example
-
-And another block of examples
-+ with this example
-+ and that example
-</code></pre><p>That looks remarkably similar to the specification code, doesn't it? What <code class="prettyprint">p</code> does is:</p>
-<ul>
-  <li>add a blank line (this can also be done with a simple <code class="prettyprint">br</code>)</li>
-  <li>decrement the current indentation level by 1 (Otherwise the new Text would be seen as a subcontext)</li>
-</ul><a name="Reset+the+levels"><h6>Reset the levels</h6></a><p>When you start having deep levels of indentation, you might need to start the next group of examples at level 0. For example, in this specification</p>
-<pre><code class="prettyprint">&quot;There are several options for displaying the text&quot;      ^
-  &quot;xonly displays nothing but failures&quot;                  ! success^
-  &quot;there is also a color option&quot;                         ^
-    &quot;rgb=value uses that value to color the text&quot;        ! rgb^
-    &quot;nocolor dont color anything&quot;                        ! nocolor^
-                                                         p^
-&quot;There are different ways of hiding the text&quot;            ^
-    &quot;by tagging the text&quot;                                ! hideTag
-</code></pre><p>Even with <code class="prettyprint">p</code> the next group of examples will not start at level 0. What you need to do in that case is use <code class="prettyprint">end</code>:</p>
-<pre><code class="prettyprint">&quot;There are several options for displaying the text&quot;      ^
-  &quot;xonly displays nothing but failures&quot;                  ! success^
-  &quot;there is also a color option&quot;                         ^              // this text will be indented
-    &quot;rgb=value uses that value to color the text&quot;        ! rgb^         // and the following examples as well
-    &quot;nocolor dont color anything&quot;                        ! nocolor^
-                                                         end^
-&quot;There are different ways of hiding the text&quot;            ^              // this text will be properly indented now
-  &quot;by tagging the text&quot;                                  ! hideTag^
-                                                         end
-</code></pre><p>This will be displayed as:</p>
-<pre><code class="prettyprint">There are several options for displaying the text
-+ xonly displays nothing but failures
-  there is also a color option
-  + rgb=value uses that value to color the text
-  + nocolor dont color anything
-There are different ways of hiding the text
-+ by tagging the text
-</code></pre><p>And if you want to reset the indentation level <em>and</em> add a blank line you can use <code class="prettyprint">end ^ br</code> (or <code class="prettyprint">endbr</code> as seen in &quot;Combinations&quot; below).</p><a name="Changing+the+indentation+level"><h6>Changing the indentation level</h6></a><p>If, for whatever reason, you wish to have more or less indentation, you can use the <code class="prettyprint">t</code> and <code class="prettyprint">bt</code> fragments (as in &quot;tab&quot; and &quot;backtab&quot;):</p>
-<pre><code class="prettyprint">&quot;this text&quot;                                     ^ bt^
-&quot;doesn't actually have an indented example&quot;     ! success
-
-&quot;this text&quot;                                     ^ t^
-    &quot;has a very indented example&quot;               ! success
-</code></pre><p>The number of indentation levels (characterized as 2 spaces on screen) can also be specified by using <code class="prettyprint">t(n)</code> or <code class="prettyprint">bt(n)</code>.</p><a name="Combinations"><h6>Combinations</h6></a><p>Some formatting elements can be combined:</p>
-<ul>
-  <li><code class="prettyprint">p</code> is actually <code class="prettyprint">br ^ bt</code></li>
-  <li><code class="prettyprint">endbr</code> is <code class="prettyprint">end ^ br</code></li>
-  <li><code class="prettyprint">endp</code> is <code class="prettyprint">end ^ p</code> (same effect as <code class="prettyprint">endbr</code> but shorter :-))</li>
-</ul><a name="Turning-off+the+automatic+layout"><h6>Turning-off the automatic layout</h6></a><p>You can turn off that automatic layout by adding the <code class="prettyprint">noindent</code> argument at the beginning of your specification:</p>
-<pre><code class="prettyprint">  class MySpecWithNoIndent extends Specification {
-    def is = noindent ^ ....
-  }
 </code></pre><a name="Include+or+link+specifications"><h3>Include or link specifications</h3></a><a name="Include+specifications"><h6>Include specifications</h6></a><p>There is a simple mechanism for including &quot;children&quot; specification in a given specification. You can simply add the child specification as if it was a simple fragment:</p>
 <pre><code class="prettyprint">&quot;This is an included specification&quot;     ^
   childSpec
@@ -543,36 +369,7 @@ include(xonly, resetTextIndentation)         ^
  &quot;text to highlight&quot; ~/ (specification, &quot;after text&quot;)
  &quot;text to highlight&quot; ~/ (specification, &quot;after text&quot;, &quot;tooltip&quot;)
  see(specification)
-</code></pre><a name="Specification+title"><h3>Specification title</h3></a><p>Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:</p>
-<pre><code class="prettyprint"> class MySpec extends Specification { def is =
-    &quot;My beautiful specifications&quot;.title                           ^
-                                                                  p^
-    &quot;The rest of the spec goes here&quot;                              ^ end
- }
-</code></pre><p>The title can be defined either:</p>
-<ul>
-  <li>at the beginning of the specification</li>
-  <li>just after the arguments of the specification</li>
-</ul><a name="Index+page"><h3>Index page</h3></a><p>Here's something you can do to automatically create an index page for your specifications:</p>
-<pre><code class="prettyprint">  import org.specs2._
-  import runner.SpecificationsFinder._
-
-  class index extends Specification { def is =
-
-    examplesLinks(&quot;Example specifications&quot;)
-
-         // see the SpecificationsFinder trait for the parameters of the 'specifications' method
-    def examplesLinks(t: String) = specifications().foldLeft(t.title) { (res, cur) =&gt; res ^ see(cur) }
-
-  }
-</code></pre><p>The specification above creates an index.html file in the <code class="prettyprint">target/specs2-reports</code> directory. The specifications method<br />creates specifications using the following parameters:</p>
-<ul>
-  <li><code class="prettyprint">path</code>: glob pattern to filter specification files. Default value is <code class="prettyprint">**/*.scala</code></li>
-  <li><code class="prettyprint">pattern</code>: pattern to use when trying to retrieve the specification names from the source files. Default value = <code class="prettyprint">.*Spec</code></li>
-  <li><code class="prettyprint">filter</code>: function to keep only some specifications depending on their name. Default value = <code class="prettyprint">(name: String) =&gt; true</code></li>
-  <li><code class="prettyprint">basePath</code>: the path where to start the search. Default value: the <code class="prettyprint">specs2.srcTestDir</code> system value = <code class="prettyprint">src/test/scala</code></li>
-  <li><code class="prettyprint">verbose</code>: boolean indicating if information about finding files and specifications must be printed. Default value = <code class="prettyprint">false</code></li>
-</ul><a name="Contexts"><h3>Contexts</h3></a><p>In a specification some examples are very simple and just check that a function is behaving as expected. However other examples can be more complex and require a more elaborate set-up of data to:</p>
+</code></pre><a name="Contexts"><h3>Contexts</h3></a><p>In a specification some examples are very simple and just check that a function is behaving as expected. However other examples can be more complex and require a more elaborate set-up of data to:</p>
 <ul>
   <li>to create inter-related domain objects</li>
   <li>to put the environment (database, filesystem, external system) in the appropriate state</li>
@@ -674,15 +471,15 @@ include(xonly, resetTextIndentation)         ^
 <pre><code class="prettyprint">   class ContextSpec extends Specification { def is =
      &quot;this is the first example&quot; ! trees().e1 ^
      &quot;this is the first example&quot; ! trees().e2
-   }
 
-   case class trees() extends specification.After {
-     lazy val tree = getATreeWith4NodesFromTheDatabase
-     def after = cleanupDB
+     case class trees() extends specification.After {
+       lazy val tree = getATreeWith4NodesFromTheDatabase
+       def after = cleanupDB
 
-     // this is equivalent to: def e1 = this.apply { ... }
-     def e1 = this { tree.removeNodes(2, 3) must have size(2) }
-     def e2 = this { tree.removeNodes(2, 3, 4) must have size(1) }
+       // this is equivalent to: def e1 = this.apply { ... }
+       def e1 = this { tree.removeNodes(2, 3) must have size(2) }
+       def e2 = this { tree.removeNodes(2, 3, 4) must have size(1) }
+     }
    }
 </code></pre><p>Now we have both variable isolation and non-duplication of set-up code!</p><p>But there is more to it. The next paragraphs will show how to:</p>
 <ol>
@@ -824,18 +621,130 @@ val init = withFile() compose withDatabase()
       /** the map method allows to &quot;post-process&quot; the fragments after their creation */
       override def map(fs: =&gt;Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
     }
-</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="Other+unit+specification+methods"><h3>Other unit specification methods</h3></a><p>Other methods can be used to create fragments in a unit specification:</p>
+</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="Layout"><h3>Layout</h3></a><p>For an <em>acceptance</em> specification you can tweak the layout of Texts and Examples.</p><a name="The+rules"><h5>The rules</h5></a><p>The layout of text in <strong><em>specs2</em></strong> is mostly done automatically so that the text in the source code should look like the displayed text after execution.</p><p>By default the layout of a specification will be computed automatically based on intuitive rules:</p>
 <ul>
-  <li><code class="prettyprint">can</code> to create a group of Examples, with the preceding Text fragment appended with <code class="prettyprint">can</code></li>
-  <li><code class="prettyprint">&gt;</code><code class="prettyprint">&gt;</code> to create an Example or a group of Examples (with no appended text)</li>
-  <li><code class="prettyprint">&quot;My spec title&quot;.title</code> to give a title to the Specification</li>
-  <li><code class="prettyprint">args(...)</code> to create arguments for the specification</li>
-  <li><code class="prettyprint">textFragment(s)</code> to create a <code class="prettyprint">Text</code> fragment</li>
-  <li><code class="prettyprint">step(s)</code> to create a <code class="prettyprint">Step</code></li>
-  <li><code class="prettyprint">action(a)</code> to create an <code class="prettyprint">Action</code></li>
-  <li><code class="prettyprint">link(&quot;how&quot; ~ (&quot;to do hello world&quot;, new HelloWorldSpec))</code> to create a link to another specification</li>
-  <li><code class="prettyprint">see(new HelloWorldSpec)</code> to add a link to another specification without including its fragments for execution</li>
-  <li><code class="prettyprint">include(new HelloWorldSpec)</code> to include another specification</li>
+  <li>when an example follows a text, it is indented</li>
+  <li>2 successive examples will be at the same indentation level</li>
+  <li>when a text follows an example, this means that you want to describe a &quot;subcontext&quot;, so the next examples will be indented with one more level</li>
+</ul><p>Let's see a standard example of this. The following fragments:</p>
+<pre><code class="prettyprint">&quot;this is some presentation text&quot;      ^
+  &quot;and the first example&quot;             ! success^
+  &quot;and the second example&quot;            ! success
+</code></pre><p>will be executed and displayed as:</p>
+<pre><code class="prettyprint">this is some presentation text
++ and the first example
++ and the second example
+</code></pre><p>If you specify a &quot;subcontext&quot;, you will get one more indentation level:</p>
+<pre><code class="prettyprint">&quot;this is some presentation text&quot;      ^
+  &quot;and the first example&quot;             ! success^
+  &quot;and the second example&quot;            ! success^
+  &quot;and in this specific context&quot;      ^
+    &quot;one more example&quot;                ! success^
+</code></pre><p>will be executed and displayed as:</p>
+<pre><code class="prettyprint">this is some presentation text
++ and the first example
++ and the second example
+  and in this specific context
+  + one more example
+</code></pre><a name="The+formatting+fragments"><h5>The formatting fragments</h5></a><p>Given the rules above, you might need to use some <em>formatting fragments</em> to adjust the display</p><a name="Separating+groups+of+examples"><h6>Separating groups of examples</h6></a><p>The best way to separate blocks of examples is to add a blank line between them by using <code class="prettyprint">p</code> (as in &quot;paragraph&quot;):</p>
+<pre><code class="prettyprint">&quot;this is some presentation text&quot;      ^
+  &quot;and the first example&quot;             ! success^
+  &quot;and the second example&quot;            ! success^
+                                      p^
+&quot;And another block of examples&quot;       ^
+  &quot;with this example&quot;                 ! success^
+  &quot;and that example&quot;                  ! success
+</code></pre><p>This will be displayed as:</p>
+<pre><code class="prettyprint">this is some presentation text
++ and the first example
++ and the second example
+
+And another block of examples
++ with this example
++ and that example
+</code></pre><p>That looks remarkably similar to the specification code, doesn't it? What <code class="prettyprint">p</code> does is:</p>
+<ul>
+  <li>add a blank line (this can also be done with a simple <code class="prettyprint">br</code>)</li>
+  <li>decrement the current indentation level by 1 (Otherwise the new Text would be seen as a subcontext)</li>
+</ul><a name="Reset+the+levels"><h6>Reset the levels</h6></a><p>When you start having deep levels of indentation, you might need to start the next group of examples at level 0. For example, in this specification</p>
+<pre><code class="prettyprint">&quot;There are several options for displaying the text&quot;      ^
+  &quot;xonly displays nothing but failures&quot;                  ! success^
+  &quot;there is also a color option&quot;                         ^
+    &quot;rgb=value uses that value to color the text&quot;        ! rgb^
+    &quot;nocolor dont color anything&quot;                        ! nocolor^
+                                                         p^
+&quot;There are different ways of hiding the text&quot;            ^
+    &quot;by tagging the text&quot;                                ! hideTag
+</code></pre><p>Even with <code class="prettyprint">p</code> the next group of examples will not start at level 0. What you need to do in that case is use <code class="prettyprint">end</code>:</p>
+<pre><code class="prettyprint">&quot;There are several options for displaying the text&quot;      ^
+  &quot;xonly displays nothing but failures&quot;                  ! success^
+  &quot;there is also a color option&quot;                         ^              // this text will be indented
+    &quot;rgb=value uses that value to color the text&quot;        ! rgb^         // and the following examples as well
+    &quot;nocolor dont color anything&quot;                        ! nocolor^
+                                                         end^
+&quot;There are different ways of hiding the text&quot;            ^              // this text will be properly indented now
+  &quot;by tagging the text&quot;                                  ! hideTag^
+                                                         end
+</code></pre><p>This will be displayed as:</p>
+<pre><code class="prettyprint">There are several options for displaying the text
++ xonly displays nothing but failures
+  there is also a color option
+  + rgb=value uses that value to color the text
+  + nocolor dont color anything
+There are different ways of hiding the text
++ by tagging the text
+</code></pre><p>And if you want to reset the indentation level <em>and</em> add a blank line you can use <code class="prettyprint">end ^ br</code> (or <code class="prettyprint">endbr</code> as seen in &quot;Combinations&quot; below).</p><a name="Changing+the+indentation+level"><h6>Changing the indentation level</h6></a><p>If, for whatever reason, you wish to have more or less indentation, you can use the <code class="prettyprint">t</code> and <code class="prettyprint">bt</code> fragments (as in &quot;tab&quot; and &quot;backtab&quot;):</p>
+<pre><code class="prettyprint">&quot;this text&quot;                                     ^ bt^
+&quot;doesn't actually have an indented example&quot;     ! success
+
+&quot;this text&quot;                                     ^ t^
+    &quot;has a very indented example&quot;               ! success
+</code></pre><p>The number of indentation levels (characterized as 2 spaces on screen) can also be specified by using <code class="prettyprint">t(n)</code> or <code class="prettyprint">bt(n)</code>.</p><a name="Combinations"><h6>Combinations</h6></a><p>Some formatting elements can be combined:</p>
+<ul>
+  <li><code class="prettyprint">p</code> is actually <code class="prettyprint">br ^ bt</code></li>
+  <li><code class="prettyprint">endbr</code> is <code class="prettyprint">end ^ br</code></li>
+  <li><code class="prettyprint">endp</code> is <code class="prettyprint">end ^ p</code> (same effect as <code class="prettyprint">endbr</code> but shorter :-))</li>
+</ul><a name="Turning-off+the+automatic+layout"><h6>Turning-off the automatic layout</h6></a><p>You can turn off that automatic layout by adding the <code class="prettyprint">noindent</code> argument at the beginning of your specification:</p>
+<pre><code class="prettyprint">  class MySpecWithNoIndent extends Specification {
+    def is = noindent ^ ....
+  }
+</code></pre><a name="Unit+specifications"><h3>Unit specifications</h3></a><p>Those are all the methods which you can use to create fragments in a unit specification:</p>
+<ul>
+  <li><p><code class="prettyprint">can</code>: create a group of Examples, with the preceding Text fragment appended with <code class="prettyprint">can</code></p>
+  <pre><code class="prettyprint">&quot;a configuration&quot; can {
+  &quot;have a name&quot; in { ... }
+}
+</code></pre></li>
+  <li><p><code class="prettyprint">&gt;</code><code class="prettyprint">&gt;</code>: create an Example or a group of Examples (with no appended text)</p>
+  <pre><code class="prettyprint">&quot;a configuration may&quot; &gt;&gt; {
+  &quot;have a name&quot; in { ... }
+}
+</code></pre></li>
+  <li><p><code class="prettyprint">title</code>: give a title to the Specification</p>
+  <pre><code class="prettyprint">`&quot;My spec title&quot;.title`
+</code></pre></li>
+  <li><p><code class="prettyprint">args</code>: create arguments for the specification</p></li>
+  <li><p><code class="prettyprint">.txt</code> or <code class="prettyprint">textFragment</code>: create a <code class="prettyprint">Text</code> fragment</p>
+  <pre><code class="prettyprint">&quot;this is a text fragment&quot;.txt
+
+textFragment(&quot;this is a text fragment&quot;)
+</code></pre></li>
+  <li><p><code class="prettyprint">step</code>: create a <code class="prettyprint">Step</code></p>
+  <pre><code class="prettyprint">step { initializeDatabase() }
+</code></pre></li>
+  <li><p><code class="prettyprint">action</code>: create an <code class="prettyprint">Action</code></p>
+  <pre><code class="prettyprint">action { justDoIt }
+</code></pre></li>
+  <li><p><code class="prettyprint">link</code>: create a link to another specification</p>
+  <pre><code class="prettyprint">link(&quot;how&quot; ~ (&quot;to do hello world&quot;, new HelloWorldSpec))
+</code></pre></li>
+  <li><p><code class="prettyprint">see</code>: add a link to another specification without including its fragments for execution</p>
+  <pre><code class="prettyprint">see(new HelloWorldSpec)
+</code></pre></li>
+  <li><p><code class="prettyprint">include</code> to include another specification</p>
+  <pre><code class="prettyprint">include(new HelloWorldSpec)
+</code></pre></li>
+  <li><p><code class="prettyprint">p, br, t, bt, end, endp</code>: add a formatting fragment</p></li>
 </ul><p>To make things more concrete here is a full example:</p>
 <pre><code class="prettyprint">  import mutable._
   import specification._
@@ -851,6 +760,8 @@ val init = withFile() compose withDatabase()
     &quot;MutableSpec&quot;.title
     // arguments are simply declared at the beginning of the specification if needed
     args(xonly=true)
+
+    &quot;This is a unit specification showing the use of different methods&quot;.txt
 
     // a step to execute before the specification must be declared first
     step {
@@ -917,7 +828,129 @@ val init = withFile() compose withDatabase()
       def e1 = string must have size(7)
     }
   }
-</code></pre><a name="Tags"><h3>Tags</h3></a><p>Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution. Let's have a look at one example:</p>
+</code></pre><a name="How+to%3F"><h3>How to?</h3></a><a name="Share+examples"><h4>Share examples</h4></a><p>In a given specification some examples may look similar enough that you would like to &quot;factor&quot; them out and share them between<br />different parts of your specification. The best example of this situation is a specification for a Stack of limited size:</p>
+<pre><code class="prettyprint">     class StackSpec extends Specification { def is =
+
+       &quot;Specification for a Stack with a limited capacity&quot;.title                   ^
+                                                                                   p^
+       &quot;A Stack with limited capacity can either be:&quot;                              ^ endp^
+         &quot;1. Empty&quot;                                                                ^ anEmptyStack^
+         &quot;2. Normal (i.e. not empty but not full)&quot;                                 ^ aNormalStack^
+         &quot;3. Full&quot;                                                                 ^ aFullStack^end
+
+       def anEmptyStack =                                                          p^
+         &quot;An empty stack should&quot;                                                   ^
+           &quot;have a size == 0&quot;                                                      ! empty().e1^
+           &quot;throw an exception when sent #top&quot;                                     ! empty().e2^
+           &quot;throw an exception when sent #pop&quot;                                     ! empty().e3^endbr
+
+       def aNormalStack =                                                          p^
+         &quot;A normal stack should&quot;                                                   ^
+           &quot;behave like a non-empty stack&quot;                                         ^ nonEmptyStack(newNormalStack)^
+           &quot;add to the top when sent #push&quot;                                        ! nonFullStack().e1^endbr
+
+       def aFullStack =                                                            p^
+         &quot;A full stack should&quot;                                                     ^
+           &quot;behave like a non-empty stack&quot;                                         ^ nonEmptyStack(newFullStack)^
+           &quot;throw an exception when sent #push&quot;                                    ! fullStack().e1
+
+       def nonEmptyStack(stack: =&gt;SizedStack) = {                                  t^
+         &quot;have a size &gt; 0&quot;                                                         ! nonEmpty(stack).size^
+         &quot;return the top item when sent #top&quot;                                      ! nonEmpty(stack).top1^
+         &quot;not remove the top item when sent #top&quot;                                  ! nonEmpty(stack).top2^
+         &quot;return the top item when sent #pop&quot;                                      ! nonEmpty(stack).pop1^
+         &quot;remove the top item when sent #pop&quot;                                      ! nonEmpty(stack).pop2^bt
+       }
+
+       /** stacks creation */
+       def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
+       def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
+       def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
+
+       /** stacks examples */
+       case class empty() {
+         val stack = newEmptyStack
+
+         def e1 = stack.size must_== 0
+         def e2 = stack.top must throwA[NoSuchElementException]
+         def e3 = stack.pop must throwA[NoSuchElementException]
+       }
+
+       def nonEmpty(createStack: =&gt;SizedStack) = new {
+         val stack = createStack
+
+         def size = stack.size &gt; 0
+
+         def top1 = stack.top must_== stack.size
+         def top2 = {
+           stack.top
+           stack.top must_== stack.size
+         }
+
+         def pop1 = {
+           val topElement = stack.size
+           stack.pop must_== topElement
+         }
+
+         def pop2 = {
+           stack.pop
+           stack.top must_== stack.size
+         }
+       }
+
+       case class nonFullStack() {
+         val stack = newNormalStack
+
+         def e1 = {
+           stack push (stack.size + 1)
+           stack.top must_== stack.size
+         }
+       }
+       case class fullStack() {
+         val stack = newFullStack
+
+         def e1 = stack push (stack.size + 1) must throwAn[Error]
+       }
+     }
+</code></pre><a name="Declare+arguments"><h4>Declare arguments</h4></a><p>Arguments are usually passed on the command line but you can also declare them at the beginning of the specification, to be applied only to that specification.<br />For example, you can turn off the concurrent execution of examples with the <code class="prettyprint">args(sequential=true)</code> call:</p>
+<pre><code class="prettyprint">   class ExamplesOneByOne extends Specification { def is =
+
+     // there is a shortcut for this argument called 'sequential'
+     args(sequential=true)              ^
+     &quot;first example&quot;                    ! e1 ^
+     &quot;the the second one&quot;               ! e2 ^
+                                        end
+   }
+</code></pre><p>For the complete list of arguments and shortcut methods read the <a href="org.specs2.guide.Runners.html">Runners</a> page.</p><a name="Add+a+Specification+title"><h4>Add a Specification title</h4></a><p>Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:</p>
+<pre><code class="prettyprint"> class MySpec extends Specification { def is =
+    &quot;My beautiful specifications&quot;.title                           ^
+                                                                  p^
+    &quot;The rest of the spec goes here&quot;                              ^ end
+ }
+</code></pre><p>The title can be defined either:</p>
+<ul>
+  <li>at the beginning of the specification</li>
+  <li>just after the arguments of the specification</li>
+</ul><a name="Create+an+index+page"><h4>Create an index page</h4></a><p>Here's something you can do to automatically create an index page for your specifications:</p>
+<pre><code class="prettyprint">  import org.specs2._
+  import runner.SpecificationsFinder._
+
+  class index extends Specification { def is =
+
+    examplesLinks(&quot;Example specifications&quot;)
+
+         // see the SpecificationsFinder trait for the parameters of the 'specifications' method
+    def examplesLinks(t: String) = specifications().foldLeft(t.title) { (res, cur) =&gt; res ^ see(cur) }
+
+  }
+</code></pre><p>The specification above creates an index.html file in the <code class="prettyprint">target/specs2-reports</code> directory. The specifications method<br />creates specifications using the following parameters:</p>
+<ul>
+  <li><code class="prettyprint">path</code>: glob pattern to filter specification files. Default value is <code class="prettyprint">**/*.scala</code></li>
+  <li><code class="prettyprint">pattern</code>: pattern to use when trying to retrieve the specification names from the source files. Default value = <code class="prettyprint">.*Spec</code></li>
+  <li><code class="prettyprint">filter</code>: function to keep only some specifications depending on their name. Default value = <code class="prettyprint">(name: String) =&gt; true</code></li>
+  <li><code class="prettyprint">basePath</code>: the path where to start the search. Default value: the <code class="prettyprint">specs2.srcTestDir</code> system value = <code class="prettyprint">src/test/scala</code></li>
+  <li><code class="prettyprint">verbose</code>: boolean indicating if information about finding files and specifications must be printed. Default value = <code class="prettyprint">false</code></li>
+</ul><a name="Tag+examples"><h4>Tag examples</h4></a><p>Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution. Let's have a look at one example:</p>
 <pre><code class="prettyprint">    /**
      * use the org.specs2.specification.Tags trait to define tags and sections
      */
@@ -941,7 +974,7 @@ val init = withFile() compose withDatabase()
   <li><code class="prettyprint">args(include=&quot;feature 1&quot;)</code> will only include <code class="prettyprint">example 1</code></li>
   <li><code class="prettyprint">args(exclude=&quot;integration&quot;)</code> will include everything except <code class="prettyprint">example 2</code></li>
   <li><code class="prettyprint">args(include=&quot;checkin,unit&quot;)</code> will include <code class="prettyprint">example 1</code> and the second group of examples (<code class="prettyprint">example 3</code> and <code class="prettyprint">example 4</code>)</li>
-</ul><a name="In+a+unit+specification"><h4>In a unit specification</h4></a><p>A <em>unit</em> specification will accept the same <code class="prettyprint">tag</code> and <code class="prettyprint">section</code> methods but the behavior will be slightly different:</p>
+</ul><a name="In+a+unit+specification"><h5>In a unit specification</h5></a><p>A <em>unit</em> specification will accept the same <code class="prettyprint">tag</code> and <code class="prettyprint">section</code> methods but the behavior will be slightly different:</p>
 <pre><code class="prettyprint">    import org.specs2.mutable._
 
     /**
@@ -974,12 +1007,12 @@ val init = withFile() compose withDatabase()
   <li><p>when the <code class="prettyprint">tag</code> is appended to an example, it applies to that example: <code class="prettyprint">example 2</code> is tagged with <code class="prettyprint">integration</code></p></li>
   <li><p>when the <code class="prettyprint">section</code> call is inserted on a new line, this opens a section for all the following fragments. This should<br /> be closed by a corresponding <code class="prettyprint">section</code> call on a new line. For example, <code class="prettyprint">example 3</code> and <code class="prettyprint">example 4</code> are part of the<br /> &quot;checkin&quot; section</p></li>
   <li><p>when the <code class="prettyprint">section</code> call is appended to a block of Fragments on the same line, all the fragments of that block are part of<br /> the section: <code class="prettyprint">example 5</code> and <code class="prettyprint">example 6</code> are tagged with <code class="prettyprint">slow</code></p></li>
-</ul><a name="Adding+debug+statements"><h3>Adding debug statements</h3></a><p>When quick and hacky <code class="prettyprint">println</code> statements are what you want, the <code class="prettyprint">Debug</code> trait, mixed in every <code class="prettyprint">Specification</code>, provides useful methods:</p>
+</ul><a name="Add+debug+statements"><h4>Add debug statements</h4></a><p>When quick and hacky <code class="prettyprint">println</code> statements are what you want, the <code class="prettyprint">Debug</code> trait, mixed in every <code class="prettyprint">Specification</code>, provides useful methods:</p>
 <ul>
   <li><code class="prettyprint">pp</code> or &quot;print and pass&quot;, prints a value to the console, then return it to be used in the rest of the expression: &quot;graph.pp must haveSize(3)&quot;</li>
   <li><code class="prettyprint">pp(condition)</code> prints a value if a condition holds</li>
   <li><code class="prettyprint">pp(f: T =&gt; Boolean)</code> prints a value if a condition on that value holds</li>
-</ul><a name="Removing+implicit+definitions"><h3>Removing implicit definitions</h3></a><p>By default, the <code class="prettyprint">Specification</code> trait imports quite a few implicit definitions (following a &quot;batteries included&quot; approach). However there might be some conflicts with implicits existing in your own user code. Among the usual examples of conflicts are conflicts with the <code class="prettyprint">===</code> sign in Scalaz and the <code class="prettyprint">Duration</code> methods in Akka.</p><p>An easy way to avoid this situation is to &quot;deactivate&quot; the specs2 implicits by mixing-in the relevant trait from this list:</p>
+</ul><a name="Remove+implicit+definitions"><h4>Remove implicit definitions</h4></a><p>By default, the <code class="prettyprint">Specification</code> trait imports quite a few implicit definitions (following a &quot;batteries included&quot; approach). However there might be some conflicts with implicits existing in your own user code. Among the usual examples of conflicts are conflicts with the <code class="prettyprint">===</code> sign in Scalaz and the <code class="prettyprint">Duration</code> methods in Akka.</p><p>An easy way to avoid this situation is to &quot;deactivate&quot; the specs2 implicits by mixing-in the relevant trait from this list:</p>
 <ul>
   <li><code class="prettyprint">org.specs2.control.NoDebug</code>: deactivate the <code class="prettyprint">pp</code> method on objects</li>
   <li><code class="prettyprint">org.specs2.time.NoTimeConversions</code>: deactivate the <code class="prettyprint">millis</code>, <code class="prettyprint">seconds</code>,... methods on <code class="prettyprint">Int</code>s and <code class="prettyprint">Long</code>s</li>
@@ -987,13 +1020,13 @@ val init = withFile() compose withDatabase()
   <li><code class="prettyprint">org.specs2.matcher.NoCanBeEqual</code>: deactivate the <code class="prettyprint">===</code> method on any type <code class="prettyprint">T</code></li>
   <li><code class="prettyprint">org.specs2.matcher.NoMustExpectations</code>: deactivate the <code class="prettyprint">must</code>, <code class="prettyprint">must_==</code>,... methods on any value of type <code class="prettyprint">T</code></li>
   <li><code class="prettyprint">org.specs2.matcher.NoShouldExpectations</code>: deactivate the <code class="prettyprint">should</code>, <code class="prettyprint">should_==</code>,... methods on any value of type <code class="prettyprint">T</code></li>
-  <li><code class="prettyprint">org.specs2.specification.NoBooleanAutoExamples</code>: deactivate the conversions from <code class="prettyprint">Boolean</code> to <code class="prettyprint">Fragment</code> or <code class="prettyprint">Example</code>, which allows to use the <code class="prettyprint">^</code> method on booleans for example</li>
+  <li><code class="prettyprint">org.specs2.specification.NoAutoExamples</code>: deactivate the conversions from <code class="prettyprint">Boolean/Result/MatchResult/DataTable</code> to <code class="prettyprint">Fragment</code> or <code class="prettyprint">Example</code>. Specific versions of this trait can be selectively used, on either <code class="prettyprint">Boolean</code> or <code class="prettyprint">Result</code> or <code class="prettyprint">MatchResult</code> or <code class="prettyprint">DataTable</code>. For example: <code class="prettyprint">org.specs2.specification.NoBooleanAutoExamples</code> can be used to avoid the <code class="prettyprint">^</code> method being used on booleans</li>
   <li><code class="prettyprint">org.specs2.specification.NoFragmentsBuilder</code>: deactivate the implicit conversions from <code class="prettyprint">String</code> to <code class="prettyprint">Fragment</code>s</li>
   <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt;</code><code class="prettyprint">&gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
 </ul>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="1312280696"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1836204276"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1179856986"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="97061755"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
@@ -1003,7 +1036,7 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
             
           </li></ul>
-          </li><li id="1291118377"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
+          </li><li id="1177640858"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
@@ -1052,36 +1085,12 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#DataTables">DataTables</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Shared+examples">Shared examples</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+arguments">Declare arguments</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Layout">Layout</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#The+rules">The rules</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#The+formatting+fragments">The formatting fragments</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Separating+groups+of+examples">Separating groups of examples</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Reset+the+levels">Reset the levels</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Changing+the+indentation+level">Changing the indentation level</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
-            
-          </li></ul>
-          </li></ul>
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Include+or+link+specifications">Include or link specifications</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Include+specifications">Include specifications</a>
             
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Link+specifications">Link specifications</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Specification+title">Specification title</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Index+page">Index page</a>
-            
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Variables+isolation">Variables isolation</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Scope">Scope</a>
@@ -1124,18 +1133,44 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Generic+specification+with+setup+and+teardown+steps">Generic specification with setup and teardown steps</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Other+unit+specification+methods">Other unit specification methods</a>
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Layout">Layout</a>
+            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#The+rules">The rules</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Tags">Tags</a>
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#The+formatting+fragments">The formatting fragments</a>
+            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Separating+groups+of+examples">Separating groups of examples</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Reset+the+levels">Reset the levels</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Changing+the+indentation+level">Changing the indentation level</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Unit+specifications">Unit specifications</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#How+to%3F">How to?</a>
+            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Share+examples">Share examples</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+arguments">Declare arguments</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Add+a+Specification+title">Add a Specification title</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Create+an+index+page">Create an index page</a>
+            
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Tag+examples">Tag examples</a>
             <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#In+a+unit+specification">In a unit specification</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Adding+debug+statements">Adding debug statements</a>
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Add+debug+statements">Add debug statements</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
+          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Remove+implicit+definitions">Remove implicit definitions</a>
             
           </li></ul>
-          </li><li id="856303415"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          </li></ul>
+          </li><li id="599516835"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1201,7 +1236,7 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="306020330"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="103378875"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1245,12 +1280,12 @@ val init = withFile() compose withDatabase()
             
           </li></ul>
           </li></ul>
-          </li><li id="1488751598"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          </li><li id="233996254"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Specify+arguments">Specify arguments</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#In+a+Specification">In a Specification</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
             
@@ -1272,7 +1307,8 @@ val init = withFile() compose withDatabase()
           </li><li id=""><a href="org.specs2.guide.Runners.html#From+system+properties">From system properties</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Executing+a+Specification+from+the+command+line">Executing a Specification from the command line</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Html+output">Html output</a>
             
@@ -1280,7 +1316,8 @@ val init = withFile() compose withDatabase()
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Simple+build+tool">Simple build tool</a>
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Executing+a+Specification+from+SBT+%28Simple+Build+Tool%29">Executing a Specification from SBT (Simple Build Tool)</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#with+sbt+0.7.x">with sbt 0.7.x</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x">with sbt &gt; 0.9.x</a>
@@ -1294,20 +1331,28 @@ val init = withFile() compose withDatabase()
             
           </li></ul>
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#JUnit">JUnit</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Executing+a+Specification+as+a+JUnit+TestCase">Executing a Specification as a JUnit TestCase</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#IntelliJ">IntelliJ</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Executing+a+Specification+with+IntelliJ+IDEA">Executing a Specification with IntelliJ IDEA</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
-            <ul><li id=""><a href="org.specs2.guide.Runners.html#Inside+sbt">Inside sbt</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Executing+a+Specification+inside+the+Scala+console">Executing a Specification inside the Scala console</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Develop+your+own+reporting">Develop your own reporting</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#Using+the+Notifier+trait">Using the Notifier trait</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Execution+with+a+NotifierRunner">Execution with a NotifierRunner</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Execution+in+sbt">Execution in sbt</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Using+the+Exporter+trait">Using the Exporter trait</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Execution+in+sbt">Execution in sbt</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
-            
           </li></ul>
-          </li><li id="1019044093"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="889609772"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1351,7 +1396,7 @@ val init = withFile() compose withDatabase()
             
           </li></ul>
           </li></ul>
-          </li><li id="1266823424"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          </li><li id="2118244212"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
@@ -1371,5 +1416,5 @@ val init = withFile() compose withDatabase()
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1312280696','1291118377'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1179856986','1177640858'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
