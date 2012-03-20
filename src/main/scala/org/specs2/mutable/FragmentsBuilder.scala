@@ -3,6 +3,7 @@ package mutable
 import execute._
 import main._
 import specification.{Action, Step, SpecificationStructure, FormattingFragments => FF, Fragments, FragmentsFragment, Example, GivenThen}
+import specification.RegexStep._
 
 /**
  * Adding new implicits to support specs-like naming: "the system" should "do this" in { ... }
@@ -91,6 +92,43 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   def link(f: Fragments) = addFragments(f)
   override def link(s: SpecificationStructure) = addFragments(super.link(s))
   override def see(s: SpecificationStructure) = addFragments(super.see(s))
+
+  /**
+   * Create GWT fragments with the << syntax for a mutable specification
+   */
+  implicit def gwtToFragment(s: String): GWTToFragment = new GWTToFragment(s)
+  class GWTToFragment(s: String) {
+    def <<(f: Function[String, Unit]): Fragments = createStep(s, f(extract1(s)))
+    def <<(f: Function2[String, String, Unit]): Fragments = createStep(s, f.tupled(extract2(s)))
+    def <<(f: Function3[String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract3(s)))
+    def <<(f: Function4[String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract4(s)))
+    def <<(f: Function5[String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract5(s)))
+    def <<(f: Function6[String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract6(s)))
+    def <<(f: Function7[String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract7(s)))
+    def <<(f: Function8[String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract8(s)))
+    def <<(f: Function9[String, String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract9(s)))
+    def <<(f: Function10[String, String, String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract10(s)))
+    
+    def <<[R <% Result](f: Function[String, R]): Fragments = createExample(s, f(extract1(s)))
+    def <<[R <% Result](f: Function2[String, String, R]): Fragments = createExample(s, f.tupled(extract2(s)))
+    def <<[R <% Result](f: Function3[String, String, String, R]): Fragments = createExample(s, f.tupled(extract3(s)))
+    def <<[R <% Result](f: Function4[String, String, String, String, R]): Fragments = createExample(s, f.tupled(extract4(s)))
+    def <<[R <% Result](f: Function5[String, String, String, String, String, R]): Fragments = createExample(s, f.tupled(extract5(s)))
+    def <<[R <% Result](f: Function6[String, String, String, String, String, String, R]): Fragments = createExample(s, f.tupled(extract6(s)))
+    def <<[R <% Result](f: Function7[String, String, String, String, String, String, String, R]): Fragments = createExample(s, f.tupled(extract7(s)))
+    def <<[R <% Result](f: Function8[String, String, String, String, String, String, String, String, R]): Fragments = createExample(s, f.tupled(extract8(s)))
+    def <<[R <% Result](f: Function9[String, String, String, String, String, String, String, String, String, R]): Fragments = createExample(s, f.tupled(extract9(s)))
+    def <<[R <% Result](f: Function10[String, String, String, String, String, String, String, String, String, String, R]): Fragments = createExample(s, f.tupled(extract10(s)))
+
+    private def createStep(s: String, u: =>Unit) = {
+      strip(s).txt
+      step(u)
+    }
+    private def createExample[R <% Result](s: String, r: =>R) = {
+      forExample(strip(s)) ! r
+    }
+  }
+
 
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(s + " " + word)
