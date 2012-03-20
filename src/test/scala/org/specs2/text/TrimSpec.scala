@@ -28,6 +28,11 @@ class TrimSpec extends Specification { def is =
   "Remove empty lines"                                                                                                  ^
   { "hello\n    \nworld".removeEmptyLines === "hello\nworld" }                                                          ^
                                                                                                                         p^
+  "Remove the first match"                                                                                              ^
+  { "hello world".removeFirst("(l)*o") === "he world" }                                                                   ^
+  "Remove the last match"                                                                                              ^
+  { "hello world".removeLast("o.ld") === "hello w" }                                                                    ^
+                                                                                                                        p^
   "Remove new lines"                                                                                                    ^
   { "hello\n\r world".removeNewLines === "hello world" }                                                                ^
                                                                                                                         p^

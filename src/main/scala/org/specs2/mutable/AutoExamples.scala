@@ -6,8 +6,12 @@ import text.Trim._
 private [specs2]
 trait AutoExamples extends org.specs2.specification.AutoExamples { this: specification.FragmentsBuilder =>
 
+  override protected def getDescription(depth: Int = 12, startOffset: Int = -1, endOffset: Int = -1) =
+    super.getDescription(depth, startOffset, endOffset)
+
   override private[specs2] def trimCode(code: String) = {
-    List(";", ".eg").foldLeft(code)(_.trim trimEnd _).
+    List(";", "bt", "t", "endp", "br", "end", "p", ".", "eg", ".").foldLeft(code.removeLast("\\(.*\\)"))(_.trim trimEnd _).
+      removeLast("\\(.*\\)").
       trimEnclosing("{", "}").
       trimEnclosing("`", "`").
       removeFirst("`\\(.*\\)").trimFirst("`")

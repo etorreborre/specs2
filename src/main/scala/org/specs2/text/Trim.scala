@@ -1,10 +1,11 @@
 package org.specs2
 package text
 
-import scala.util.matching.Regex
-import Regex.Match
+import collection._
 import java.io.StringWriter
 import java.util.regex.Pattern
+import util.matching.Regex
+import util.matching.Regex.Match
 
 /**
  * Utility methods for trimming text
@@ -63,6 +64,13 @@ trait Trim extends control.Debug {
     def trimFirst(exp: String) = new Regex(exp).replaceFirstIn(s.trim, "")
 
     def removeFirst(exp: String) = new Regex(exp).replaceFirstIn(s, "")
+
+    def removeLast(exp: String) = {
+      exp.r.findAllIn(s).toSeq match {
+        case something :+ last => s.removeEnd(last)
+        case _                 => s
+      }
+    }
 
     def trimReplace(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)

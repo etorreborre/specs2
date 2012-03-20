@@ -35,4 +35,22 @@ class SpecificationWithNoStartingTextAndNoEnd extends org.specs2.Specification {
   { 3 must_== 3 }
 }
 
+class MutableSpecificationAutoExamples extends org.specs2.mutable.Specification {
+
+  { 1 === 1 }.eg
+
+  { 2 === 2 }.eg;
+  { 3 === 3 }.eg
+
+  `an example`.eg
+
+  // this code can't be found at the moment
+  eg {
+    val i = 1
+    i === 1
+  }
+
+  def `an example` = 4 === 4
+
+}
 

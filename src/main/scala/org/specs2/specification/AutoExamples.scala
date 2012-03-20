@@ -37,10 +37,12 @@ trait AutoExamples extends AutoExamplesLowImplicits { this: FragmentsBuilder =>
   implicit def dataTableExample[T](result: =>execute.DecoratedResult[T]) = exampleFactory.newExample(EmptyMarkup(), result)
 
   /** this syntax allows to declare auto examples with { ... }.eg in mutable specifications */
-  implicit def eg[T](expression: =>execute.DecoratedResult[T]): ToDataTableExample[T] = new ToDataTableExample(expression)
+  implicit def aDataTableExample[T](expression: =>execute.DecoratedResult[T]): ToDataTableExample[T] = new ToDataTableExample(expression)
   class ToDataTableExample[T](expression: =>DecoratedResult[T]) {
     def eg = dataTableExample(expression)
   }
+  /** explicit call */
+  def eg[T](expression: =>execute.DecoratedResult[T]): ToDataTableExample[T] = aDataTableExample(expression)
 
 }
 
@@ -85,19 +87,33 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
 
   private def createExample(expression: =>execute.Result): Example = exampleFactory.newExample(CodeMarkup(getDescription()), expression)
 
+  implicit def aMatchResultExample(expression: =>MatchResult[_]): ToMatchResultExample = new ToMatchResultExample(expression)
   /** this syntax allows to declare auto examples with { ... }.eg in mutable specifications */
-  implicit def eg(expression: =>MatchResult[_]): ToMatchResultExample = new ToMatchResultExample(expression)
   class ToMatchResultExample(expression: =>MatchResult[_]) {
     def eg = matchExample(expression)
   }
-  implicit def eg(expression: =>Boolean): ToBooleanExample = new ToBooleanExample(expression)
+  /** explicit call */
+  def eg(expression: =>MatchResult[_]): Example = aMatchResultExample(expression).eg
+
+  implicit def aBooleanExample(expression: =>Boolean): ToBooleanExample = new ToBooleanExample(expression)
   class ToBooleanExample(expression: =>Boolean) {
     def eg = booleanExample(expression)
   }
-  implicit def eg(expression: =>execute.Result): ToResultExample = new ToResultExample(expression)
+  /**
+   * explicit call.
+   * The result type is different from the eg method to create examples in order to avoid an overloading error
+   */
+  def eg(expression: =>Boolean): Fragments = aBooleanExample(expression).eg
+
+  implicit def aResultExample(expression: =>execute.Result): ToResultExample = new ToResultExample(expression)
   class ToResultExample(expression: =>execute.Result) {
     def eg = resultExample(expression)
   }
+  /**
+   * explicit call
+   * The result type is different from the eg method to create examples in order to avoid an overloading error
+   */
+  def eg(expression: =>execute.Result): Fragment = aResultExample(expression).eg
 
   private[specs2] def getSourceCode(startDepth: Int = 9, endDepth: Int = 12, startLineOffset: Int = -1, endLineOffset: Int = -1): String = {
     val firstTry = getCodeFromTo(startDepth, endDepth, startLineOffset, endLineOffset)
@@ -148,7 +164,7 @@ trait NoBooleanAutoExamples extends AutoExamples { this: FragmentsBuilder =>
   override def booleanFragmentsFragment(expression: =>Boolean): BooleanResultFragment = super.booleanFragmentsFragment(expression)
   override def booleanFragments(expression: =>Boolean) = super.booleanFragments(expression)
   override def booleanExample(expression: =>Boolean) = super.booleanExample(expression)
-  override def eg(expression: =>Boolean) = super.eg(expression)
+  override def aBooleanExample(expression: =>Boolean) = super.aBooleanExample(expression)
 }
 
 /**
@@ -158,7 +174,7 @@ trait NoResultAutoExamples extends AutoExamples { this: FragmentsBuilder =>
   override def resultFragmentsFragment(expression: =>execute.Result) = super.resultFragmentsFragment(expression)
   override def resultFragments(expression:         =>execute.Result) = super.resultFragments(expression)
   override def resultExample(expression:           =>execute.Result) = super.resultExample(expression)
-  override def eg(expression:                      =>execute.Result) = super.eg(expression)
+  override def aResultExample(expression:          =>execute.Result) = super.aResultExample(expression)
 }
 
 /**
@@ -168,16 +184,16 @@ trait NoMatchResultAutoExamples extends AutoExamples { this: FragmentsBuilder =>
   override def matchFragmentsFragment(expression: =>MatchResult[_]) = super.matchFragmentsFragment(expression)
   override def matchFragments(expression:         =>MatchResult[_]) = super.matchFragments(expression)
   override def matchExample(expression:           =>MatchResult[_]) = super.matchExample(expression)
-  override def eg(expression:                     =>MatchResult[_]) = super.eg(expression)
+  override def aMatchResultExample(expression:    =>MatchResult[_]) = super.aMatchResultExample(expression)
 }
 
 /**
  * This trait can be used to deactivate the DataTable conversions to fragments and examples
  */
 trait NoDataTableAutoExamples extends AutoExamples { this: FragmentsBuilder =>
-  override def dataTableFragments[T](result: =>DecoratedResult[T])       = super.dataTableFragments(result)
-  override def dataTableExample[T](result: =>execute.DecoratedResult[T]) = super.dataTableExample(result)
-  override def eg[T](expression: =>execute.DecoratedResult[T])           = super.eg(expression)
+  override def dataTableFragments[T](result: =>DecoratedResult[T])            = super.dataTableFragments(result)
+  override def dataTableExample[T](result: =>execute.DecoratedResult[T])      = super.dataTableExample(result)
+  override def aDataTableExample[T](expression: =>execute.DecoratedResult[T]) = super.aDataTableExample(expression)
 }
 
 /**
