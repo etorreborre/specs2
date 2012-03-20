@@ -398,6 +398,54 @@ Given / When / Then steps are invariant in their type parameters. This might be 
       // thenX can be reused as a Then[Y] step because Y <: X
       val thenY: Then[Y] = thenX
 
+##### Unit specification
+
+Given / When / Step can also be used in a unit specification by using the `<<` operator and local variables:
+
+        "A given-when-then example for a calculator".txt.br
+
+          "Given the following number: ${1}" << { s: String =>
+            a = s.toInt
+          }
+          "And a second number: ${2}" << { s: String =>
+            b = s.toInt
+          }
+          "When I use this operator: ${+}" << { s: String =>
+            result = Operation(a, b, s).calculate
+          }
+          "Then I should get: ${3}" << { s: String =>
+            result === s.toInt
+          }
+          "And it should be > ${0}" << { s: String =>
+            result must be_>(s.toInt)
+          }
+
+        var a, b, result: Int = 0
+
+        case class Operation(n1: Int, n2: Int, operator: String) {
+          def calculate: Int = if (operator == "+") n1 + n2 else n1 * n2
+        }
+
+Similarly, ScalaCheck generator and properties are supported:
+
+        "Given a first number n1" << {
+          n1 = choose(-10, 10)
+        }
+        "And a second number n2" << {
+          n2 = choose(-10, 10)
+        }
+        "When I add them" << {
+          operation = Arbitrary {
+            for (a1 <- n1; a2 <- n2) yield Addition(a1, a2)
+          }
+        }
+        "Then I should get n1 + n2" << check { (op: Addition) =>
+            op.calculate must_== op.n1 + op.n2
+        }
+
+        var n1, n2: Gen[Int] = null
+        implicit var operation: Arbitrary[Addition] = null
+
 #### DataTables
 
 [DataTables](/org.specs2.guide.Matchers.html#DataTables) are generally used to pack lots of expectations inside one example. A DataTable which is used as a `Result` in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:
@@ -1023,6 +1071,21 @@ You can turn off that automatic layout by adding the `noindent` argument at the 
       class MySpecWithNoIndent extends Specification {
         def is = noindent ^ ....
       }
+
+###### Unit specification
+
+Formatting fragments can be used in a unit specification as well. 2 forms are supported, either as a single declaration:
+
+      "this is an example" >> { 1 === 1 }
+      p // add a paragraph
+      "this is another example" >> { 2 === 2 }
+
+Or as a postfix operator on fragments:
+
+      "this is some text and a paragraph".p
+      "this is an example and a paragraph" >> {
+        1 must_== 1
+      } p
 
 ### Unit specifications
 

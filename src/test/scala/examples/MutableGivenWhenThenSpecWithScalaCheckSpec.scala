@@ -20,10 +20,9 @@ class MutableGivenWhenThenSpecWithScalaCheckSpec extends Specification with Scal
       for (a1 <- n1; a2 <- n2) yield Addition(a1, a2)
     }
   }
-  "Then I should get n1 + n2" << check {
-    (op: Addition) =>
+  "Then I should get n1 + n2" << check { (op: Addition) =>
       op.calculate must_== op.n1 + op.n2
-  }.set(minTestsOk -> 100)
+  }
 
   var n1, n2: Gen[Int] = null
   implicit var operation: Arbitrary[Addition] = null
