@@ -46,6 +46,6 @@ trait Exporters {
     optionalExporter(accept("notifier") || !arguments.report.notifier.isEmpty)(notifierExporter(arguments))
 
   def exportCustom(accept: String => Boolean)  (implicit arguments: Arguments) =
-    optionalExporter(accept("exporter") || !arguments.report.notifier.isEmpty)(customExporter(arguments))
+    optionalExporter(accept("exporter") || !arguments.report.exporter.isEmpty)(customExporter(arguments))
 
 }
