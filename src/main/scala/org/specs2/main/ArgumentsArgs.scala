@@ -142,6 +142,6 @@ trait NoArgProperties extends ArgProperties {
 
 object ArgProperties extends ArgProperties
 
-case class ArgProperty[T](p: Property[T] = Property[T]()) {
-  def toOption: Option[T] = p.toOption
+case class ArgProperty[T](private val aProperty: Property[T] = Property[T]()) {
+  def toOption: Option[T] = aProperty.toOption
 }
