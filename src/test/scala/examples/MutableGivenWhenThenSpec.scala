@@ -6,8 +6,8 @@ import org.specs2.mutable.Specification
 * This specification shows how to use the Given/When/Then style for a unit specifications.
 */
 class MutableGivenWhenThenSpec extends Specification { noindent
-
-  "A given-when-then example for a calculator".txt.br
+  args.report(exporter="user.reporter.CustomExporter")
+  "A given-when-then example for a calculator".br
 
     "Given the following number: ${1}" << { s: String =>
       a = s.toInt

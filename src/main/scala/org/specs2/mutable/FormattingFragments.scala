@@ -62,5 +62,20 @@ trait FormattingFragments extends specification.FormattingFragments { outer: Fra
     def endbr      = outer.endbr
   }
 
+  /**
+   * This implicit allows to follow a string object by a Formatting fragment
+   */
+  implicit def textAndFormattingFragment(s: String) = new FragmentsFragmentAndFormattingFragment(s)
+  class TextAndFormattingFragment(private val s: String) {
+    def p          = { s.txt; outer.p     }
+    def br         = { s.txt; outer.br    }
+    def end        = { s.txt; outer.end   }
+    def t          = { s.txt; outer.t     }
+    def t(n: Int)  = { s.txt; outer.t(n)  }
+    def bt         = { s.txt; outer.bt    }
+    def bt(n: Int) = { s.txt; outer.bt(n) }
+    def endp       = { s.txt; outer.endp  }
+    def endbr      = { s.txt; outer.endbr }
+  }
 
 }

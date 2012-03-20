@@ -7,7 +7,7 @@ import Gen._
 
 class MutableGivenWhenThenSpecWithScalaCheckSpec extends Specification with ScalaCheck { noindent
 
-  "A given-when-then example for a calculator".txt.br
+  "A given-when-then example for a calculator".br
 
   "Given a first number n1" << {
     n1 = choose(-10, 10)
