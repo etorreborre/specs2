@@ -5,7 +5,7 @@ import org.specs2.ScalaCheck
 import org.scalacheck._
 import Gen._
 
-class MutableGivenWhenThenSpecWithScalaCheckSpec extends Specification with ScalaCheck { noindent
+class MutableGivenWhenThenWithScalaCheckSpec extends Specification with ScalaCheck { noindent
 
   "A given-when-then example for a calculator".br
 
