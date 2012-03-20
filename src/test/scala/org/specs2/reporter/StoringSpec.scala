@@ -32,7 +32,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
     }
     implicit def arguments = Arguments()
     def store(fs: Fragments)(implicit args: Arguments) =
-      storing.store(args <| fs.arguments)(ExecutingSpecification.create(fs.fragments.map(executeFragment))).execute.fragments.toList
+      storing.store(args <| fs.arguments)(ExecutingSpecification.create(fs.fragments.map(executeFragment), fs.arguments)).execute.fragments.toList
 
     repository.getStatistics(any[SpecName]) returns None
 

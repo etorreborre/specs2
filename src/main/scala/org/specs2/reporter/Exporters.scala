@@ -31,7 +31,7 @@ trait Exporters {
   def notifierExporter(arguments: Arguments): Option[Exporting] =
     Classes.createObject[Notifier](arguments.report.notifier, true).map(n => new NotifierExporting { val notifier = n })
 
-  def customExporter(arguments: Arguments): Option[Exporting] = Classes.createObject[Exporting](arguments.report.exporter, true)
+  def customExporter(arguments: Arguments): Option[Exporting] = Classes.createObject[Exporter](arguments.report.exporter, true)
 
   protected def exporter(condition: Boolean)(e: =>Exporting) = if (condition) Some(e) else None
   protected def optionalExporter(condition: Boolean)(e: Option[Exporting]) = if (condition) e else None

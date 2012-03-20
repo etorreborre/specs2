@@ -75,7 +75,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
 
   protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {
     override def export(implicit arguments: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
-      exportToOthers(exporters(args, handler))(arguments)(spec)
+      exportToOthers(exporters(args, handler))(arguments <| spec.arguments)(spec)
       spec.executed
     }
   }

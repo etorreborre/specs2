@@ -1,12 +1,11 @@
 package org.specs2
 package runner
-import main.Arguments
 import io._
 import mock.Mockito
-import specification._
 import matcher.DataTables
 import reporter._
 import org.scalatools.testing._
+import main.{ArgumentsArgs, Arguments}
 
 class TestInterfaceRunnerSpec extends Specification { def is =
                                                                                                                         """
@@ -27,6 +26,8 @@ class TestInterfaceRunnerSpec extends Specification { def is =
   "Additional report types can be passed on the command line"                                                           ! reporting().e2^
   "A custom notifier can be specified on the command line with 'notifier <class name>'"                                 ! reporting().e3^
   "A custom exporter can be specified on the command line with 'exporter <class name>'"                                 ! reporting().e4^
+  "A custom notifier can be specified in the specification with 'args.report(exporter=<class name>)'"                   ! reporting().e5^
+  "A custom exporter can be specified in the specification with 'args.report(exporter=<class name>)'"                   ! reporting().e6^
                                                                                                                         end
 
   case class missing() {
@@ -52,7 +53,7 @@ class TestInterfaceRunnerSpec extends Specification { def is =
   }
 
 }
-case class reporting() extends Mockito with matcher.MustMatchers with MockLogger with DataTables {
+case class reporting() extends Mockito with MockLogger with DataTables with matcher.MustMatchers with ArgumentsArgs {
   val outer = this
   val reporter = mock[Reporter]
   val handler = mock[EventHandler]
@@ -96,6 +97,18 @@ case class reporting() extends Mockito with matcher.MustMatchers with MockLogger
   def e4 = {
     val args = Array("exporter", "user.reporter.CustomExporter")
     atLeastOnce(runner.exporters(args, handler)(Arguments(args:_*))) { e =>
+      e must haveInterface[Exporter]
+    }
+  }
+
+  def e5 = {
+    atLeastOnce(runner.exporters(Array[String](), handler)(args.report(notifier="user.reporter.CustomNotifier"))) { e =>
+      e must haveInterface[NotifierExporting]
+    }
+  }
+
+  def e6 = {
+    atLeastOnce(runner.exporters(Array[String](), handler)(args.report(exporter="user.reporter.CustomExporter"))) { e =>
       e must haveInterface[Exporter]
     }
   }

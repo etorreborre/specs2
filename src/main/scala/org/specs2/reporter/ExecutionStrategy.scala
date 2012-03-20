@@ -42,7 +42,7 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
         val executing = executeSequence(fs, res.barrier())(executionArgs(fsArgs, res.executionOk), Executor(executor))
         res.addExecutingFragments(executing, fsArgs)
       }
-      ExecutingSpecification(spec.name, executing.fragments, executor)
+      ExecutingSpecification(spec.name, spec.arguments, executing.fragments, executor)
     } catch {
       // just in case something bad happens, or if there's an InterruptedException, shutdown the executor
       case e => executor.shutdown; throw e

@@ -11,6 +11,7 @@ import Scalaz._
 import concurrent._
 import Strategy._
 import control.NamedThreadFactory
+import main.Arguments
 
 trait ExecutingSpecificationData extends Data[ExecutingSpecification] {
 
@@ -23,7 +24,7 @@ trait ExecutingSpecificationData extends Data[ExecutingSpecification] {
         fragments     <- Gen.listOfN(size, genExecutingFragment(maxTime))
         name          <- arbAsciiString.arbitrary
       }
-      yield ExecutingSpecification(FinishedExecutingFragment(start(name)) +: fragments.toSeq :+ FinishedExecutingFragment(end(name)))
+      yield ExecutingSpecification(FinishedExecutingFragment(start(name)) +: fragments.toSeq :+ FinishedExecutingFragment(end(name)), Arguments())
     }
 
     sizeOf1(genExecutingSpecification)
