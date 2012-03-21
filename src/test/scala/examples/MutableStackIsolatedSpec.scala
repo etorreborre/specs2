@@ -40,3 +40,36 @@ class MutableStackIsolatedSpec extends Specification { isolated; noindent
 
   var stack: SizedStack = emptyStack
 }
+
+/**
+ * The StackSpec with a mutable specification, isolated variables, autoexamples but no postfix operations
+ */
+class MutableStackIsolated2Spec extends Specification { isolated; noindent
+  "A Stack with limited capacity can either be:".br
+
+  "1. Empty".br
+  "when the stack is empty"
+  step { stack = emptyStack }
+  eg { stack must beEmpty }
+  eg { stack.top must throwA[NoSuchElementException] }
+  eg { stack.pop must throwA[NoSuchElementException] }; br
+
+  "2. Non-empty and not full".br
+  "when the stack is not empty and not full"
+  step { stack = normalStack }
+  eg { stack must not be empty }
+  eg { stack.top === normalStack.top; stack === normalStack }
+  eg { stack.pop === normalStack.top; stack !== normalStack }
+  eg { stack push 1; stack.top === 1; stack !== normalStack }; br
+
+  "3. Full".br
+  "when the stack is full"
+  step { stack = fullStack }
+  eg { (stack push 1) must throwAn[Error] }
+
+  def emptyStack  = SizedStack(maxCapacity = 10, size = 0)
+  def normalStack = SizedStack(maxCapacity = 10, size = 2)
+  def fullStack   = SizedStack(maxCapacity = 10, size = 10)
+
+  var stack: SizedStack = emptyStack
+}

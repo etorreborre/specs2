@@ -14,10 +14,13 @@ trait ScalaCheck extends matcher.ScalaCheckMatchers with AutoExamples { this: Fr
 
   implicit def propExample(expression: =>Prop)(implicit p: Parameters) = resultExample(checkProperty(expression)(p))
 
+  private[specs2] override def createExample(expression: =>execute.Result, depth: Int = 16): Example =
+    super.createExample(expression, depth)
+
   private[specs2] override def createExampleFragment(result: =>execute.Result, d: Int = 13, offset1: Int = -1,  offset2: Int = -1) =
     super.createExampleFragment(result, d+1, offset1-1, offset2-1)
 
-  override protected def getDescription(depth: Int = 13, startOffset: Int = -1, endOffset: Int = -1) =
+  override protected def getDescription(depth: Int = 14, startOffset: Int = -1, endOffset: Int = -1) =
     super.getDescription(depth, startOffset, endOffset)
 
 }

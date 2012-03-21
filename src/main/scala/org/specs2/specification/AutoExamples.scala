@@ -85,35 +85,36 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
   implicit def booleanExample(expression: =>Boolean)      : Example = createExample(toResult(expression))
   implicit def resultExample(expression: =>execute.Result): Example = createExample(expression)
 
-  private def createExample(expression: =>execute.Result): Example = exampleFactory.newExample(CodeMarkup(getDescription()), expression)
+  private[specs2] def createExample(expression: =>execute.Result, depth: Int = 10): Example =
+    exampleFactory.newExample(CodeMarkup(getDescription(depth)), expression)
 
   implicit def aMatchResultExample(expression: =>MatchResult[_]): ToMatchResultExample = new ToMatchResultExample(expression)
   /** this syntax allows to declare auto examples with { ... }.eg in mutable specifications */
   class ToMatchResultExample(expression: =>MatchResult[_]) {
-    def eg = matchExample(expression)
+    def eg = createExample(expression.toResult, 11)
   }
   /** explicit call */
-  def eg(expression: =>MatchResult[_]): Example = aMatchResultExample(expression).eg
+  def eg(expression: =>MatchResult[_]): Example = createExample(expression.toResult, 12)
 
   implicit def aBooleanExample(expression: =>Boolean): ToBooleanExample = new ToBooleanExample(expression)
   class ToBooleanExample(expression: =>Boolean) {
-    def eg = booleanExample(expression)
+    def eg = createExample(toResult(expression), 11)
   }
   /**
    * explicit call.
    * The result type is different from the eg method to create examples in order to avoid an overloading error
    */
-  def eg(expression: =>Boolean): Fragments = aBooleanExample(expression).eg
+  def eg(expression: =>Boolean): Fragments = createExample(toResult(expression), 12)
 
   implicit def aResultExample(expression: =>execute.Result): ToResultExample = new ToResultExample(expression)
   class ToResultExample(expression: =>execute.Result) {
-    def eg = resultExample(expression)
+    def eg = createExample(expression, 11)
   }
   /**
    * explicit call
    * The result type is different from the eg method to create examples in order to avoid an overloading error
    */
-  def eg(expression: =>execute.Result): Fragment = aResultExample(expression).eg
+  def eg(expression: =>execute.Result): Fragment = createExample(expression, 12)
 
   private[specs2] def getSourceCode(startDepth: Int = 9, endDepth: Int = 12, startLineOffset: Int = -1, endLineOffset: Int = -1): String = {
     val firstTry = getCodeFromTo(startDepth, endDepth, startLineOffset, endLineOffset)
