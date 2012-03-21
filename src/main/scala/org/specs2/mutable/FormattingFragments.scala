@@ -21,6 +21,7 @@ trait FormattingFragments extends specification.FormattingFragments { outer: Fra
   implicit def fragmentAndFormattingFragment[T <: Fragment](f: T) = new FragmentAndFormattingFragment(() => f)
   class FragmentAndFormattingFragment[T <: Fragment](private val f: () => T) {
     def newp       = { outer.endp; f(); outer.p }
+    def newbr      = { outer.endp; f(); outer.br }
     def p          = { f(); outer.p     }
     def br         = { f(); outer.br    }
     def end        = { f(); outer.end   }
@@ -37,6 +38,7 @@ trait FormattingFragments extends specification.FormattingFragments { outer: Fra
   implicit def fragmentsAndFormattingFragment(f: Fragments) = new FragmentsAndFormattingFragment(() => f)
   class FragmentsAndFormattingFragment(private val f: () => Fragments) {
     def newp       = { outer.endp; f(); outer.p }
+    def newbr      = { outer.endp; f(); outer.br }
     def p          = { f(); outer.p             }
     def br         = { f(); outer.br            }
     def end        = { f(); outer.end           }
@@ -54,6 +56,7 @@ trait FormattingFragments extends specification.FormattingFragments { outer: Fra
   implicit def fragmentsFragmentAndFormattingFragment(f: FragmentsFragment) = new FragmentsFragmentAndFormattingFragment(() => f)
   class FragmentsFragmentAndFormattingFragment(private val f: () => FragmentsFragment) {
     def newp       = { outer.endp; f(); p }
+    def newbr      = { outer.endp; f(); outer.br }
     def p          = { f(); outer.p       }
     def br         = { f(); outer.br      }
     def end        = { f(); outer.end     }
@@ -71,6 +74,7 @@ trait FormattingFragments extends specification.FormattingFragments { outer: Fra
   implicit def textAndFormattingFragment(s: String) = new TextAndFormattingFragment(() => s)
   class TextAndFormattingFragment(private val s: () => String) {
     def newp       = { outer.endp; s().txt; outer.p }
+    def newbr      = { outer.endp; s().txt; outer.br }
     def p          = { s().txt; outer.p     }
     def br         = { s().txt; outer.br    }
     def end        = { s().txt; outer.end   }
