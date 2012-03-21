@@ -1,7 +1,7 @@
 package org.specs2
 package reflect
 
-import scala.reflect.ClassManifest
+import scala.reflect.Manifest
 import ClassName._
 import control.Exceptions._
 import control.Throwablex._
@@ -15,16 +15,16 @@ trait Classes extends Output {
 
   /** @return an instance of a given class, returning either the instance, or an exception */
   def create[T <: AnyRef](className: String = "", classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
-                         (implicit m: ClassManifest[T]): Either[Throwable, T] =
+                         (implicit m: Manifest[T]): Either[Throwable, T] =
     trye(createInstanceFor(loadClassOf[T](className, loader = classLoader)))
 
   /** @return an instance of a given class */
-  def createObject[T <: AnyRef](className: String)(implicit m: ClassManifest[T]): Option[T] =
+  def createObject[T <: AnyRef](className: String)(implicit m: Manifest[T]): Option[T] =
     createObject[T](className, false)(m)
   
   /** @return an instance of a given class and optionally print message if the class can't be loaded */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean)
-                               (implicit m: ClassManifest[T]): Option[T] =
+                               (implicit m: Manifest[T]): Option[T] =
     createObject(className, printMessage, false)(m)
 
   /**
@@ -34,8 +34,8 @@ trait Classes extends Output {
    * @return an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
    */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
-                               (implicit m: ClassManifest[T]): Option[T] = {
-    tryo(createInstanceOf[T](loadClass[T](className))) { (e: Exception) =>
+                               (implicit m: Manifest[T]): Option[T] = {
+    tryo(createInstanceOf[T](loadClass[T](className, m.erasure.getClassLoader))) { (e: Exception) =>
       val debugCreateObject = sys.props("debugCreateObject") != null
       val shouldPrintStackTrace = printStackTrace || debugCreateObject
       val shouldPrintMessage = printMessage || debugCreateObject
@@ -56,12 +56,12 @@ trait Classes extends Output {
    */
   def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean= true, printStackTrace: Boolean = true,
                                      loader: ClassLoader = Thread.currentThread.getContextClassLoader)
-                                    (implicit m: ClassManifest[T]): Option[T] = {
+                                    (implicit m: Manifest[T]): Option[T] = {
 
     lazy val canPrintMessage    = printMessage    || sys.props("debugCreateObject") != null
     lazy val canPrintStackTrace = printStackTrace || sys.props("debugCreateObject") != null
 
-    loadClass(className) match {
+    loadClass(className, loader) match {
       case None => None
       case Some(c: Class[_]) => {
         try {
@@ -93,19 +93,20 @@ trait Classes extends Output {
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
    */
-  private[reflect] def createInstanceOf[T <: AnyRef](c: Option[Class[T]])(implicit m: ClassManifest[T]): Option[T] = {
+  private[reflect] def createInstanceOf[T <: AnyRef](c: Option[Class[T]])(implicit m: Manifest[T]): Option[T] = {
     c.map(createInstanceFor(_))
   }
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
    */
-  private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassManifest[T]) = {
+  private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: Manifest[T]): T = {
     val constructor = klass.getDeclaredConstructors()(0)
     constructor.setAccessible(true)
   	try {
-      val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
-      if (!m.erasure.isInstance(instance))
+      var instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
+      if (!m.erasure.isInstance(instance)) {
         error(instance + " is not an instance of " + m.erasure.getName)
+      }
       instance.asInstanceOf[T]
   	} catch {
   	  case e: java.lang.reflect.InvocationTargetException => throw e.getTargetException
@@ -117,7 +118,7 @@ trait Classes extends Output {
    * If the 'debugLoadClass' property is set, then an error message is printed out to the Console
    */
   private[reflect] def loadClass[T <: AnyRef](className: String, loader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[Class[T]] = {
-    tryo(Some(loadClassOf(className).asInstanceOf[Class[T]])) { (e: Throwable) =>
+    tryo(Some(loadClassOf(className, loader).asInstanceOf[Class[T]])) { (e: Throwable) =>
       if (sys.props("debugLoadClass") != null) {
         println("Could not load class " + className + ": " + e.getMessage)
         e.getStackTrace() foreach (s => println(s.toString))

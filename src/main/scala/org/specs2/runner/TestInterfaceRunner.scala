@@ -57,7 +57,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   def runFilesRunner(classname: String, handler: EventHandler, args: Array[String]) =
     toRun[FilesRunner](classname, handler).right.toOption.map(_.main(args))
 
-  private def toRun[T <: AnyRef : ClassManifest](classname: String, handler: EventHandler): Either[Throwable, T] = {
+  private def toRun[T <: AnyRef : Manifest](classname: String, handler: EventHandler): Either[Throwable, T] = {
     val runner: Either[Throwable, T] = create[T](classname + "$", loader) match {
       case Right(s) => Right(s)
       case Left(e) => create[T](classname, loader)
