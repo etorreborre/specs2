@@ -1087,6 +1087,27 @@ Or as a postfix operator on fragments:
         1 must_== 1
       } p
 
+There are also 2 additional postfix operations which can be used to start new paragraphs. Instead of using `endp` to end a group of examples and starte a new one:
+
+      "This is a first block of examples".p
+      { 1 === 1 }.eg;
+      { 2 === 2 }.eg.endp
+
+      "And a second block".p
+      { 3 === 3 }.eg;
+      { 4 === 4 }.eg
+
+You can use `newp` (or `newbr`) to the same effect:
+
+      "This is a first block of examples".p
+      { 1 === 1 }.eg;
+      { 2 === 2 }.eg
+
+      "And a second block".newp
+      { 3 === 3 }.eg;
+      { 4 === 4 }.eg
+
+
 ### Unit specifications
 
 Those are all the methods which you can use to create fragments in a unit specification:
