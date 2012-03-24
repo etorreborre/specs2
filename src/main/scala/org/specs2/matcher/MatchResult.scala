@@ -112,6 +112,13 @@ case class MatchSkip[T] private[specs2](override val message: String, expectable
   override def mute = MatchSkip("", expectable)
   override def orThrow = { throw new SkipException(toResult); this }
 }
+case class MatchPending[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
+  def not: MatchResult[T] = this
+  def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
+  override def toResult = Pending(message)
+  override def mute = MatchPending("", expectable)
+  override def orThrow = { throw new PendingException(toResult); this }
+}
 case class NotMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
@@ -203,6 +210,7 @@ object MatchResult {
       case success: MatchSuccess[_] => success.map(f)
       case failure: MatchFailure[_] => failure.map(f)
       case skip: MatchSkip[_]       => skip.map(f)
+      case pending: MatchPending[_] => pending.map(f)
       case neg: NotMatch[_]         => neg.map(f)
       case neutral: NeutralMatch[_] => neutral.map(f)
       case and: AndMatch[_]         => and.map(f)
@@ -220,7 +228,10 @@ object MatchResult {
   } 
   implicit val MatchSkipFunctor: Functor[MatchSkip] = new Functor[MatchSkip] {
     def fmap[A, B](m: MatchSkip[A], f: A => B) = new MatchSkip(m.message, m.expectable.map(f))
-  } 
+  }
+  implicit val MatchPendingFunctor: Functor[MatchPending] = new Functor[MatchPending] {
+    def fmap[A, B](m: MatchPending[A], f: A => B) = new MatchPending(m.message, m.expectable.map(f))
+  }
   implicit val NotMatchFunctor: Functor[NotMatch] = new Functor[NotMatch] {
     def fmap[A, B](n: NotMatch[A], f: A => B) = new NotMatch(n.m.map(f))
   } 

@@ -270,7 +270,7 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   /**
    * @return a
    */
-  def skip: Skipped = Skipped(m, e)Skipped
+  def skip: Skipped = Skipped(m, e)
 }
 
 /**

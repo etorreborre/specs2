@@ -5,6 +5,7 @@ import control.Exceptions._
 import execute._
 import Expectable._
 import org.specs2.internal.scalaz._, Scalaz._
+import Foldable._
 import Generator._
 import text.Quote._
 import text.Plural._
@@ -203,59 +204,65 @@ trait MatchersImplicits extends Expectations {
   implicit def verifyFunction[U, T](t: U => MatchResult[T]) = new MatchResultFunctionVerification(t)
   class MatchResultFunctionVerification[U, T](function: U => MatchResult[T]) {
     def forall[S <: Traversable[U]](seq: S) = {
-      if (seq.isEmpty)
-        Matcher.result(true, "ok", "ko", createExpectable(seq))
-      else {
-        val (result, lastValueTried) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
-          if (res._1.isSuccess) executeFunctionAndReturnValue(cur)
-          else                  res
-        }
-        lazy val failingElementIndex = if (result.isSuccess) -1 else seq.toSeq.indexOf(lastValueTried)
-        lazy val failingElementMessage =
-          if (failingElementIndex >= 0)
-            "In the sequence "+q(seq.mkString(", "))+", the "+(failingElementIndex+1).th+" element is failing: "+result.message
-          else
-            result.message
+      val expectable = createExpectable(seq)
+      val result =
+        if (seq.isEmpty)
+          Matcher.result(true, "ok", "ko", expectable)
+        else {
+          val (r, lastValueTried) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
+            if (res._1.isSuccess) executeFunctionAndReturnValue(cur)
+            else                  res
+          }
+          lazy val failingElementIndex = if (r.isSuccess) -1 else seq.toSeq.indexOf(lastValueTried)
+          lazy val failingElementMessage =
+            if (failingElementIndex >= 0)
+              "In the sequence "+q(seq.mkString(", "))+", the "+(failingElementIndex+1).th+" element is failing: "+r.message
+            else
+              r.message
 
-        Matcher.result(result.isSuccess,
-                       "All elements of "+q(seq.mkString(", "))+" are matching ok",
-                       failingElementMessage,
-                       createExpectable(seq))
-      }
+          makeSeqResult(r, "All elements of "+q(seq.mkString(", "))+" are matching ok", failingElementMessage, expectable)
+        }
+      checkFailure(result)
     }
 
     def foreach[S <: Traversable[U]](seq: S) = {
-      if (seq.isEmpty)
-        Matcher.result(true, "ok", "ko", createExpectable(seq))
-      else {
-        val r = seq.drop(1).foldLeft(executeFunction(seq.head)) { (res, cur) =>
-          res |+| executeFunction(cur)
+      val expectable = createExpectable(seq)
+      val result =
+        if (seq.isEmpty)
+          Matcher.result(true, "ok", "ko", expectable)
+        else {
+          val r = seq.toSeq.foldMap(executeFunction(_))
+          makeSeqResult(r, "All elements of "+q(seq.mkString(", "))+" are successful", r.message, expectable)
         }
-        Matcher.result(r.isSuccess,
-                       "All elements of "+q(seq.mkString(", "))+" are successful",
-                       r.message,
-                       createExpectable(seq))
-
-      }
+      checkFailure(result)
     }
 
     def atLeastOnce[S <: Traversable[U]](seq: S) = {
-      if (seq.isEmpty)
-        Matcher.result(false, "ok", "ko", createExpectable(seq))
-      else {
-        val (result, lastTriedValue) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
-          if (res._1.isSuccess) res
-          else                  executeFunctionAndReturnValue(cur)
+      val expectable = createExpectable(seq)
+      val result =
+        if (seq.isEmpty)
+          Matcher.result(false, "ok", "ko", expectable)
+        else {
+          val (r, lastTriedValue) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
+            if (res._1.isSuccess) res
+            else                  executeFunctionAndReturnValue(cur)
+          }
+          makeSeqResult(r, "In the sequence "+q(seq.mkString(", "))+
+                           ", the "+(seq.toSeq.indexOf(lastTriedValue)+1).th+" element is matching: "+r.message,
+                           "No element of "+q(seq.mkString(", "))+" is matching ok",
+                           expectable)
         }
-        Matcher.result(result.isSuccess,
-          "In the sequence "+q(seq.mkString(", "))+", the "+(seq.toSeq.indexOf(lastTriedValue)+1).th+" element is matching: "+result.message,
-          "No element of "+q(seq.mkString(", "))+" is matching ok",
-          createExpectable(seq))
-      }
+      checkFailure(result)
     }
 
     private def executeFunctionAndReturnValue(value: U): (Result, U) = (executeFunction(value), value)
     private def executeFunction(value: U): Result = ResultExecution.execute(function(value).toResult)
+
+    private def makeSeqResult[T](r: Result, okMessage: String, koMessage: String, expectable: Expectable[T]): MatchResult[T] =
+      if (r.isSkipped)      MatchSkip(r.message, expectable)
+      else if (r.isPending) MatchPending(r.message, expectable)
+      else                  Matcher.result(r.isSuccess, okMessage, koMessage, expectable)
+
   }
 }
 private[specs2]

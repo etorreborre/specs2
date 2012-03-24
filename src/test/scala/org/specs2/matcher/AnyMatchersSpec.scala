@@ -77,6 +77,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { foreachWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }                                       ^
   { ((_:Int) must be_>=(2)).foreach(Seq(2, 3, 4)) }                                                                     ^
   { (Seq(2, 3, 4) must be_<=(2).foreach) returns "3 is greater than 2; 4 is greater than 2" }                           ^
+  "if all expectactions throws are Skipped then the whole result must be skipped"                                       ! skipForeach^
                                                                                                                         p^
  "atLeastOnce allows to transform a single matcher to a matcher checking that one element of a Seq is matching"         ^
   { Seq(2, 3, 4) must be_>(2).atLeastOnce }                                                                             ^
@@ -160,6 +161,9 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   val type1 = new Type1 {
     override def toString = "type1"
   }
+
+  def skipForeach =
+    { foreach(Seq(0, 1, 2)) { case a => a must be_<(0).orSkip("todo") } } must beLike { case MatchSkip(_,_) => ok }
 
 }
 trait Type1

@@ -118,6 +118,11 @@ There are many ways to create matchers for your specific usage. The simplest way
         1 must be_==(2).orSkip
         1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
 
+ * using `orPending` to return a `Pending` result instead of a Failure if the condition is not met
+
+        1 must be_==(2).orPending
+        1 must be_==(2).orPending("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
+
  * using `mute` to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create
    properties showing no messages when they fail
 
@@ -541,7 +546,7 @@ The ***specs2*** matchers are a well-delimited piece of functionality that you s
 The [Testing](https://github.com/spray/spray/wiki/Testing) page of the ***spray*** project explains how you can define a testing trait in your library which can be used with specs2 or scalatest or any framework defining the following methods:
 
    * `fail(msg: String): Nothing`
-   * `failure(msg: String): Nothing`
+   * `skip(msg: String): Nothing`
 
 In specs2, those 2 methods are defined by the `org.specs2.matcher.ThrownMessages` trait
 
