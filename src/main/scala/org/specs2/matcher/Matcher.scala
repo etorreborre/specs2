@@ -140,6 +140,28 @@ trait Matcher[-T] { outer =>
       }
     }
   }
+  /**
+   * @return a Pending MatchResult if this matcher fails
+   */
+  def orPending: Matcher[T] = orPending("")
+  /**
+   * @return a Pending MatchResult if this matcher fails, prefixing the failure message with a pending message.
+   * If the pending message is empty, only the failure message is printed
+   */
+  def orPending(m: String): Matcher[T] = new Matcher[T] {
+    def apply[U <: T](a: Expectable[U]) = {
+      val result = tryOr(outer(a)) { (e: Exception) => e match {
+        case FailureException(r) => MatchFailure(r.message, r.message, a)
+        case PendingException(r) => MatchPending(r.message, a)
+        case _                   => throw e
+      }
+      }
+      result match {
+        case MatchFailure(_, ko, _, d) => MatchPending(m prefix(": ", ko), a)
+        case other => other
+      }
+    }
+  }
   /** only apply this matcher if the condition is true */
   def when(b: Boolean, m: String= ""): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = if (b) outer(a) else MatchSuccess(m, "ko", a)

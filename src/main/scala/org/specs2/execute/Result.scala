@@ -109,6 +109,10 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    */
   def isPending: Boolean = false
   /**
+   * @return true if the result is a Skipped or Pending
+   */
+  def isSuspended: Boolean = isSkipped || isPending
+  /**
    * @return true if the result is a Failure instance
    */
   def isFailure: Boolean = false
@@ -264,9 +268,9 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
    */
   override def not: Result = Success(m)
   /**
-   * @return a Skipped
+   * @return a
    */
-  def skip: Skipped = Skipped(m, e)
+  def skip: Skipped = Skipped(m, e)Skipped
 }
 
 /**

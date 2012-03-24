@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import execute.{FailureException, SkipException, Failure, Skipped, Result}
+import execute.{FailureException, SkipException, Pending, PendingException, Failure, Skipped, Result}
 
 /**
  * Thrown expectations will throw a FailureException if a match fails
@@ -31,6 +31,7 @@ trait ThrownExpectations extends Expectations {
     r match {
       case f @ Failure(_,_,_,_) => throw new FailureException(f)
       case s @ Skipped(_,_)     => throw new SkipException(s)
+      case s @ Pending(_)       => throw new PendingException(s)
       case _                    => ()
     }
     r
@@ -39,6 +40,8 @@ trait ThrownExpectations extends Expectations {
   protected def failure(f: Failure): Nothing = throw new FailureException(f)
   protected def skipped(m: String): Nothing = skipped(Skipped(m))
   protected def skipped(s: Skipped): Nothing = throw new SkipException(s)
+  protected def pending(m: String): Nothing = pending(Pending(m))
+  protected def pending(s: Pending): Nothing = throw new PendingException(s)
 }
 private [specs2]
 object ThrownExpectations extends ThrownExpectations

@@ -20,6 +20,7 @@ trait ResultExecution { outer =>
     } catch {
       case FailureException(f)                                               => f
       case SkipException(f)                                                  => f
+      case PendingException(f)                                               => f
       case e: Exception                                                      => Error(e)
       case e: AssertionError                                                 => Failure(e.getMessage, "", e.getStackTrace.toList)
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage, "", e.getStackTrace.toList)
@@ -46,6 +47,7 @@ trait ResultExecution { outer =>
     executed match {
       case Left(FailureException(f))                         => Left(f)
       case Left(SkipException(f))                            => Left(f)
+      case Left(PendingException(f))                         => Left(f)
       case Left(e)                                           => Left(Error(e))
       case Right(m: ResultLike)     if !m.toResult.isSuccess => Left(m.toResult)
       case Right(r: Result)         if !r.isSuccess          => Left(r)
