@@ -6,7 +6,7 @@ import text.NotNullStrings._
 import main.Arguments
 import org.specs2.internal.scalaz.Scalaz._
 import internal.scalaz.{Foldable, Monoid}
-import Result.concat
+import text.Message.concat
 
 /**
  * The result of an execution, either:
@@ -196,14 +196,6 @@ object Result {
       }
     }.setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
   }
-
-  /**
-   * concatenate 2 messages
-   */
-  def concat(m1: String, m2: String, separator: String = "; ") =
-    if (m1.isEmpty) m2
-    else if (m2.isEmpty) m1
-    else m1+separator+m2
 
 }
 /**
