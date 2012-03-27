@@ -1107,6 +1107,19 @@ You can use `newp` (or `newbr`) to the same effect:
       { 3 === 3 }.eg;
       { 4 === 4 }.eg
 
+A shortcut is also available to indent a 'subexample' locally:
+
+      "this is the first major example" >> { ok }
+          "this is minor and should be indented" >> { ok } lt;
+        "this is the second major example" >> { ok }
+      }
+
+This will output:
+
+      this is a group of examples
+      + this is the first major example
+        + this is minor and should be indented
+      + this is the second major example
 
 ### Unit specifications
 
