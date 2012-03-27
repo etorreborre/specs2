@@ -66,7 +66,7 @@ trait DataTables extends Expectations {
     }
     /** @return the status of the row + the values + the failure message if any */
 	  private def resultLine(line: Seq[String], result: Result): Seq[String] = {
-      val message = result match { case Success(_) => ""; case _  => result.message }
+      val message = if (result.isSuccess) "" else result.message
       result.status +: line :+ message
     }
   }

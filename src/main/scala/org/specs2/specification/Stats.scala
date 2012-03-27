@@ -197,7 +197,7 @@ case object Stats {
 
   def apply(result: Result): Stats = 
     result match {
-      case s @ Success(_)        => Stats(examples = 1, expectations = result.expectationsNb, successes = 1)
+      case s @ Success(_,_)      => Stats(examples = 1, expectations = result.expectationsNb, successes = 1)
       case f @ Failure(_,_,_,_)  => Stats(examples = 1, expectations = result.expectationsNb, failures = 1)
       case e @ Error(_,_)        => Stats(examples = 1, expectations = result.expectationsNb, errors = 1)
       case Pending(_)            => Stats(examples = 1, expectations = result.expectationsNb, pending = 1)

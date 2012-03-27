@@ -115,7 +115,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   def toProp(label: String) = {
     lazy val executed = executeForm
     lazy val executedResult = executed.execute match {
-      case s @ Success(_)   => s
+      case s @ Success(_,_) => s
       case Failure(_,_,_,_) => Failure("failed")
       case Error(_,_)       => Error("error")
       case other            => other

@@ -36,9 +36,9 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   /** @return "label: value" */
   override def toString = {
     val valueString = valueOrResult match {
-      case Left(Success(_)) => "_"
-      case Left(result)     => result.toString
-      case Right(v)         => v.notNull
+      case Left(Success(_,_)) => "_"
+      case Left(result)       => result.toString
+      case Right(v)           => v.notNull
     }
     (if (label.nonEmpty) label + ": " else "") + valueString
   }

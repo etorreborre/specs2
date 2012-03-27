@@ -115,9 +115,9 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
 
     results match {
       case Result(Proved(as), succeeded, discarded, fq, _) =>
-        execute.Success(noCounterExample(succeeded) + frequencies(fq), succeeded)
+        execute.Success(noCounterExample(succeeded), frequencies(fq), succeeded)
       case Result(Passed, succeeded, discarded, fq, _)     =>
-        execute.Success(noCounterExample(succeeded) + frequencies(fq), succeeded)
+        execute.Success(noCounterExample(succeeded), frequencies(fq), succeeded)
       case r @ Result(GenException(execute.FailureException(f)), n, _, fq, _) => f
       case r @ Result(GenException(e), n, _, fq, _)        =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage(), e.getStackTrace().toList)

@@ -154,7 +154,7 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell 
 
   private def statusName(r: Result) = r match {
     case Skipped(_, _) => "info"
-    case Success(_)    => "info"
+    case Success(_, _) => "info"
     case _             => r.statusName
   }
 

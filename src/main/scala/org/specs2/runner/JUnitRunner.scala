@@ -84,7 +84,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
             case DecoratedResult(_, e @ Error(m, st))         =>
               notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
             case Pending(_) | Skipped(_, _)                   => notifier.fireTestIgnored(desc)
-            case Success(_) | DecoratedResult(_, _)           => ()
+            case Success(_,_) | DecoratedResult(_, _)         => ()
           }
           notifier.fireTestFinished(desc)
         }

@@ -32,7 +32,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
       case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
           res match {
-            case Success(text)               => handler.handle(succeeded(text))
+            case Success(text,_)             => handler.handle(succeeded(text))
             case r @ Failure(text, e, st, d) => handler.handle(failure(text, args.traceFilter(r.exception)))
             case r @ Error(text, e)          => handler.handle(error(text, args.traceFilter(r.exception)))
             case Skipped(text, _)            => handler.handle(skipped(text))

@@ -33,7 +33,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
       args.pendingColor("*")
     else {
       this match {
-        case Success(_)            => args.successColor("+")
+        case Success(_,_)          => args.successColor("+")
         case Failure(_, _, _, _)   => args.failureColor("x")
         case Error(_, _)           => args.errorColor  ("!")
         case Pending(_)            => args.pendingColor("*")
@@ -55,7 +55,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
       "info"
     else {
       this match {
-        case Success(_)            => "success"
+        case Success(_,_)          => "success"
         case Failure(_, _, _, _)   => "failure"
         case Error(_, _)           => "error"
         case Pending(_)            => "pending"
@@ -67,7 +67,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   /** update the message of a result, keeping the subclass type */
   def updateMessage(msg: String): Result =
 	  this match {
-	    case Success(m)            => Success(msg)
+	    case Success(m, e)         => Success(msg,e)
 	    case Failure(m, e, st, d)  => Failure(msg, e, st, d)
 	    case Error(m, st)          => Error(msg, st)
 	    case Skipped(m, e)         => Skipped(msg, e)
@@ -138,16 +138,16 @@ object Result {
     val zero = Success()
     def append(m1: Result, m2: =>Result) = {
       (m1, m2) match {
-        case (Success(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
-        case (Success(msg1),               Skipped(msg2, e2))          => Success(msg1+"; "+msg2)
-        case (Skipped(msg1, e2),           Success(msg2))              => Success(msg1+"; "+msg2)
-        case (Pending(msg1),               Success(msg2))              => Success(msg1+"; "+msg2)
-        case (Success(msg1),               Pending(msg2))              => Success(msg1+"; "+msg2)
+        case (Success(msg1, e1),           Success(msg2, e2))          => Success(msg1+"; "+msg2, e1+"; "+e2)
+        case (Success(msg1, e1),           Skipped(msg2, e2))          => Success(msg1+"; "+msg2, e1)
+        case (Skipped(msg1,  _),           Success(msg2, e2))          => Success(msg1+"; "+msg2, e2)
+        case (Pending(msg1),               Success(msg2, e2))          => Success(msg1+"; "+msg2, e2)
+        case (Success(msg1,e1),            Pending(msg2))              => Success(msg1+"; "+msg2, e1)
 
-        case (Success(msg1),               Failure(msg2, e2, st1, d2)) => m2.updateMessage(msg1+"; "+msg2)
+        case (Success(msg1, e1),           Failure(msg2, e2, st1, d2)) => m2.updateMessage(msg1+"; "+msg2)
         case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2, e1+"; "+e2, st1, NoDetails())
 
-        case (Success(msg1),               Error(msg2, st1))           => m2.updateMessage(msg1+"; "+msg2)
+        case (Success(msg1, e1),           Error(msg2, st1))           => m2.updateMessage(msg1+"; "+msg2)
         case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+"; "+msg2, st1)
         case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+"; "+msg2, st1)
 
@@ -174,9 +174,9 @@ object Result {
       val zero = Success()
     def append(m1: Result, m2: =>Result) = {
       (m1, m2) match {
-        case (Success(msg1),               Success(msg2))              => Success(msg1+separator+msg2)
-        case (Success(msg1),               other)                      => other
-        case (other,                       Success(msg2))              => other
+        case (Success(msg1, e1),           Success(msg2, e2))          => Success(msg1+separator+msg2, e1+"; "+e2)
+        case (Success(msg1, e1),           other)                      => other
+        case (other,                       Success(msg2, e2))          => other
         case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+separator+msg2, e1+separator+e2, st1, NoDetails())
         case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+separator+msg2, st1)
         case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+separator+msg2, st1)
@@ -197,12 +197,14 @@ object Result {
 /**
  * This class represents the success of an execution
  */
-case class Success(m: String = "")  extends Result(m, m) {
+case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
   override def and(res: =>Result): Result = {
     val r = res
     r match {
-      case Success(m)             => if (message == m || message.isEmpty) Success(m, expectationsNb + r.expectationsNb)
-                                     else                                 Success(message+" and "+m, expectationsNb + r.expectationsNb)
+      case Success(m, e)          => if (message == m || message.isEmpty) Success(m, exp+"; "+e,
+                                                                                  expectationsNb + r.expectationsNb)
+                                     else                                 Success(message+" and "+m, exp+"; "+e,
+                                                                                  expectationsNb + r.expectationsNb)
       case e @ Error(_, _)        => r.addExpectationsNb(expectationsNb)
       case Failure(_, _, _, _)    => r.addExpectationsNb(expectationsNb)
       case DecoratedResult(d, r1) => DecoratedResult(d, and(r1))
@@ -225,6 +227,9 @@ case class Success(m: String = "")  extends Result(m, m) {
  * a method to set the expectations number
  */
 object Success {
+  def apply(m: String, exp: String, expNb: Int) = new Success(m, exp) {
+    override val expectationsNb = expNb
+  }
   def apply(m: String, expNb: Int) = new Success(m) {
 	  override val expectationsNb = expNb
   }
@@ -240,8 +245,8 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   override def or(res: =>Result): Result = {
     val r = res
     r match {
-      case s @ Success(m)         => if (message == m) r.addExpectationsNb(expectationsNb)
-                                     else Success(message+" and "+m, expectationsNb + s.expectationsNb)
+      case s @ Success(m, exp)    => if (message == m) r.addExpectationsNb(expectationsNb)
+                                     else Success(message+" and "+m, exp, expectationsNb + s.expectationsNb)
       case Failure(m, e, st, d)   => Failure(message+" and "+m, e, stackTrace ::: st, d).addExpectationsNb(expectationsNb)
       case DecoratedResult(d, r1) => DecoratedResult(d, or(r1))
       case _                      => super.or(r)

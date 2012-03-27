@@ -117,8 +117,8 @@ trait TextPrinter {
                 args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
               }
             }
-            case Success(_)    => out.printSuccess(decoratedDescription(desc))
-            case Pending(_)    => out.printPending(decoratedDescription(desc) + " " + result.message)
+            case s @ Success(_,_)  => out.printSuccess(decoratedDescription(desc) + (if(!s.exp.isEmpty) "\n"+s.exp else ""))
+            case Pending(_)        => out.printPending(decoratedDescription(desc) + " " + result.message)
             case Skipped(_, _) => {
               out.printText(decoratedDescription(desc))
               if (!result.message.isEmpty)
