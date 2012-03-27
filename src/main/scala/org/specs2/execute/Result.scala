@@ -6,6 +6,7 @@ import text.NotNullStrings._
 import main.Arguments
 import org.specs2.internal.scalaz.Scalaz._
 import internal.scalaz.{Foldable, Monoid}
+import Result.concat
 
 /**
  * The result of an execution, either:
@@ -125,6 +126,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return Success if it is a failure and vice-versa
    */
   def not: Result = this
+
 }
 object Result {
 
@@ -138,14 +140,15 @@ object Result {
     val zero = Success()
     def append(m1: Result, m2: =>Result) = {
       (m1, m2) match {
-        case (Success(msg1, e1),           Success(msg2, e2))          => Success(msg1+"; "+msg2, e1+"; "+e2)
+        case (Success(msg1, e1),           Success(msg2, e2))          => Success(msg1+"; "+msg2, concat(e1, e2))
         case (Success(msg1, e1),           Skipped(msg2, e2))          => Success(msg1+"; "+msg2, e1)
         case (Skipped(msg1,  _),           Success(msg2, e2))          => Success(msg1+"; "+msg2, e2)
         case (Pending(msg1),               Success(msg2, e2))          => Success(msg1+"; "+msg2, e2)
         case (Success(msg1,e1),            Pending(msg2))              => Success(msg1+"; "+msg2, e1)
 
         case (Success(msg1, e1),           Failure(msg2, e2, st1, d2)) => m2.updateMessage(msg1+"; "+msg2)
-        case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2, e1+"; "+e2, st1, NoDetails())
+        case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2,
+                                                                                  concat(e1, e2), st1, NoDetails())
 
         case (Success(msg1, e1),           Error(msg2, st1))           => m2.updateMessage(msg1+"; "+msg2)
         case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+"; "+msg2, st1)
@@ -174,7 +177,7 @@ object Result {
       val zero = Success()
     def append(m1: Result, m2: =>Result) = {
       (m1, m2) match {
-        case (Success(msg1, e1),           Success(msg2, e2))          => Success(msg1+separator+msg2, e1+"; "+e2)
+        case (Success(msg1, e1),           Success(msg2, e2))          => Success(msg1+separator+msg2, concat(e1, e2))
         case (Success(msg1, e1),           other)                      => other
         case (other,                       Success(msg2, e2))          => other
         case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+separator+msg2, e1+separator+e2, st1, NoDetails())
@@ -193,6 +196,15 @@ object Result {
       }
     }.setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
   }
+
+  /**
+   * concatenate 2 messages
+   */
+  def concat(m1: String, m2: String, separator: String = "; ") =
+    if (m1.isEmpty) m2
+    else if (m2.isEmpty) m1
+    else m1+separator+m2
+
 }
 /**
  * This class represents the success of an execution
@@ -201,9 +213,9 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
   override def and(res: =>Result): Result = {
     val r = res
     r match {
-      case Success(m, e)          => if (message == m || message.isEmpty) Success(m, exp+"; "+e,
+      case Success(m, e)          => if (message == m || message.isEmpty) Success(m, concat(exp, e),
                                                                                   expectationsNb + r.expectationsNb)
-                                     else                                 Success(message+" and "+m, exp+"; "+e,
+                                     else                                 Success(message+" and "+m, concat(exp, e),
                                                                                   expectationsNb + r.expectationsNb)
       case e @ Error(_, _)        => r.addExpectationsNb(expectationsNb)
       case Failure(_, _, _, _)    => r.addExpectationsNb(expectationsNb)
