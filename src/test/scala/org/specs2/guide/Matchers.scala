@@ -500,6 +500,10 @@ Then it is possible to verify how the mock was called:
 
 Auto-boxing might interfere with the mocking of PartialFunctions. Please have a look at [this](https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion) for a discussion.
 
+###### Byname
+
+Byname parameters can be verified but this will not work if the specs2 jar is not put first on the classpath, before the mockito jar. Indeed specs2 redefines a Mockito class for intercepting method calls so that byname parameters are properly handled.
+
 ### DataTables
 
 DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table:
