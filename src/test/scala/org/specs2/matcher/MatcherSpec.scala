@@ -7,6 +7,7 @@ class MatcherSpec extends Specification with ResultMatchers { def is =
                                                                                                                         """^
   "a matcher can be adapted with a function"                                                                            ! e1^
   "a matcher can be adapted with a function and a description function for the expectable"                              ! e1_1^
+  "if the matcher is for equality, it has to be the typed equality matcher be_==="                                      ! e1_2^
   "a matcher can be adapted with a function for both expected and actual values"                                        ! e2^
   "a matcher can be defined by a function with 1 message"                                                               ! e3^
   "a matcher can be defined by a function with 2 messages"                                                              ! e3_1^
@@ -26,6 +27,10 @@ class MatcherSpec extends Specification with ResultMatchers { def is =
   def e1_1 = {
     val result = new Exception("message")  must be_>(2) ^^ ((e:Exception) => e.getMessage.size aka "the message size")
     result.message must_== "the message size '7' is greater than 2"
+  }
+  def e1_2 = {
+    val result = new Exception("message")  must be_===(8) ^^ ((e:Exception) => e.getMessage.size aka "the message size")
+    result.message must_== "the message size '7' is not equal to '8'"
   }
 
   def e2 = {

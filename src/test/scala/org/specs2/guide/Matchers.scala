@@ -85,6 +85,10 @@ There are many ways to create matchers for your specific usage. The simplest way
         def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size }
         def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size aka "the string size" }
 
+        // !!! use a BeTypedEqualTo matcher when using aka and equality !!!
+        def beFive = be_===(5) ^^ { (t: Any) => t.toString.size aka "the string size" }
+
+
  * adapting the actual and expected values. This matcher compares 2 `Human` objects but set their `wealth` field to 0
    so that the equals method will not fail on that field:
 
