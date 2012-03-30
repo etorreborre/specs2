@@ -65,12 +65,13 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
       def addExecutingFragments(fs: Seq[ExecutingFragment], arguments: Arguments) =
         copy(fragments = fragments ++ fs,
           barrier = () => fs.map(_.get),
-          executionOk = !arguments.stopOnFail || (executionOk && fs.forall(f => isOk(f.get))))
+          executionOk = (!arguments.stopOnFail || (executionOk && fs.forall(f => isOk(f.get)))) &&
+                        (!arguments.stopOnSkip || (executionOk && fs.forall(f => !isSkipped(f.get)))))
     }
 
   private def executionArgs(arguments: Arguments, previousExecutionOk: Boolean) =
-    if (!arguments.stopOnFail || previousExecutionOk) arguments
-    else                                              arguments <| args(skipAll=true)
+    if (!arguments.stopOnFail && !arguments.stopOnSkip || previousExecutionOk) arguments
+    else                                                                       arguments <| args(skipAll=true)
 
   private def executeSequence(fs: FragmentSeq, barrier: =>Any)(implicit args: Arguments, strategy: Strategy): Seq[ExecutingFragment] = {
     if (!args.sequential) executeConcurrently(fs, barrier, args)(strategy)

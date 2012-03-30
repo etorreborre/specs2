@@ -22,6 +22,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
     skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -39,6 +40,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       plan,
       skipAll,
       stopOnFail,
+      stopOnSkip,
       sequential,
       isolated,
       xonly,
@@ -69,6 +71,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
       skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
       stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:     ArgProperty[Int]               = ArgProperty[Int]()
@@ -76,6 +79,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
         plan,
         skipAll,
         stopOnFail,
+        stopOnSkip,
         sequential,
         isolated,
         threadsNb))

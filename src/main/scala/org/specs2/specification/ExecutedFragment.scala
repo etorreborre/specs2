@@ -54,6 +54,11 @@ object ExecutedFragment {
     case ExecutedResult(_,r,_,_,_) if r.isFailure || r.isError => false
     case other                                                 => true
   }
+  /** @return true if the executed fragment is skipped */
+  def isSkipped = (e: ExecutedFragment) => e match {
+    case ExecutedResult(_,r,_,_,_) if r.isSkipped => true
+    case other                                    => false
+  }
 
 }
 

@@ -36,6 +36,7 @@ case class Arguments (
   def plan: Boolean                 = execute.plan
   def skipAll: Boolean              = execute.skipAll
   def stopOnFail: Boolean           = execute.stopOnFail
+  def stopOnSkip: Boolean           = execute.stopOnSkip
   def sequential: Boolean           = execute.sequential
   def isolated: Boolean             = execute.isolated
   def threadsNb: Int                = execute.threadsNb
@@ -194,6 +195,7 @@ case class Execute(
   _plan:          Option[Boolean]          = None,
   _skipAll:       Option[Boolean]          = None,
   _stopOnFail:    Option[Boolean]          = None,
+  _stopOnSkip:    Option[Boolean]          = None,
   _sequential:    Option[Boolean]          = None,
   _isolated:      Option[Boolean]          = None,
   _threadsNb:     Option[Int]              = None) extends ShowArgs {
@@ -201,6 +203,7 @@ case class Execute(
   def plan: Boolean                 = _plan.getOrElse(false)
   def skipAll: Boolean              = _skipAll.getOrElse(false)
   def stopOnFail: Boolean           = _stopOnFail.getOrElse(false)
+  def stopOnSkip: Boolean           = _stopOnSkip.getOrElse(false)
   def sequential: Boolean           = _sequential.getOrElse(false)
   def isolated: Boolean             = _isolated.getOrElse(false)
   def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
@@ -210,6 +213,7 @@ case class Execute(
       other._plan            .orElse(_plan),
       other._skipAll         .orElse(_skipAll),
       other._stopOnFail      .orElse(_stopOnFail),
+      other._stopOnSkip      .orElse(_stopOnSkip),
       other._sequential      .orElse(_sequential),
       other._isolated        .orElse(_isolated),
       other._threadsNb       .orElse(_threadsNb)
@@ -221,6 +225,7 @@ case class Execute(
     "plan"           -> _plan         ,
     "skipAll"        -> _skipAll      ,
     "stopOnFail"     -> _stopOnFail   ,
+    "stopOnSkip"     -> _stopOnSkip   ,
     "sequential"     -> _sequential   ,
     "isolated"       -> _isolated   ,
     "threadsNb"      -> _threadsNb    ).flatMap(showArg).mkString("Execute(", ", ", ")")
@@ -233,6 +238,7 @@ object Execute extends Extract {
       _plan          = bool("plan"),
       _skipAll       = bool("skipall"),
       _stopOnFail    = bool("stoponfail"),
+      _stopOnSkip    = bool("stoponskip"),
       _sequential    = bool("sequential"),
       _isolated      = bool("isolated"),
       _threadsNb     = int("threadsnb")

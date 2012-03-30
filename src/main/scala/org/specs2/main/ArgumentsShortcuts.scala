@@ -34,6 +34,10 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def stopOnFail: Arguments = args(stopOnFail = true)
   /**
+   * shortcut to stop after the first skipped result
+   */
+  def stopOnSkip: Arguments = args(stopOnSkip = true)
+  /**
    * shortcut to avoid automatic indentation
    */
   def noindent: Arguments = args(noindent = true)

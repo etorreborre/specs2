@@ -21,6 +21,7 @@ trait ArgumentsArgs extends ArgProperties {
     plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
     skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -35,10 +36,11 @@ trait ArgumentsArgs extends ArgProperties {
             exclude    = exclude,
             wasIssue   = wasIssue,
             was        = was)       <|
-      (new ArgumentsNamespace).execute(
+     (new ArgumentsNamespace).execute(
               plan       = plan,
               skipAll    = skipAll,
               stopOnFail = stopOnFail,
+              stopOnSkip = stopOnSkip,
               sequential = sequential,
               isolated   = isolated) <|
      (new ArgumentsNamespace).report(
@@ -70,6 +72,7 @@ trait ArgumentsArgs extends ArgProperties {
       plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
       skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
       stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:     ArgProperty[Int]               = ArgProperty[Int]()
@@ -77,6 +80,7 @@ trait ArgumentsArgs extends ArgProperties {
        execute = Execute(plan.toOption,
                skipAll.toOption,
                stopOnFail.toOption,
+               stopOnSkip.toOption,
                sequential.toOption,
                isolated.toOption,
                threadsNb.toOption))

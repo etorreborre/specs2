@@ -50,6 +50,7 @@ From inside a specification, the available arguments are the following:
  *`plan`      *  | false                                    | only report the text of the specification without executing anything
  *`skipAll`   *  | false                                    | skip all the examples
  *`stopOnFail`*  | false                                    | skip all examples after the first failure or error
+ *`stopOnSkip`*  | false                                    | skip all examples after the first skipped result
  *`sequential`*  | false                                    | don't execute examples concurrently
  *`isolated`*    | false                                    | execute each example in its own specification to get "fresh" local variables
  `threadsNb`     | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
@@ -96,6 +97,7 @@ There are some available shortcuts for some arguments
  `plan`                                                                | `args(plan=true)`                                                                     |                                                                                                  |
  `skipAll`                                                             | `args(skipAll=true)`                                                                  |                                                                                                  |
  `stopOnFail`                                                          | `args(stopOnFail=true)`                                                               |                                                                                                  |
+ `stopOnSkip`                                                          | `args(stopOnSkip=true)`                                                               |                                                                                                  |
  `sequential`                                                          | `args(sequential=true)`                                                               |                                                                                                  |
  `isolated`                                                            | `args(isolated=true)`                                                               |                                                                                                  |
  `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
