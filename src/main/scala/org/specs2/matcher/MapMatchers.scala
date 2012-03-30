@@ -3,7 +3,9 @@ package matcher
 
 import text.Quote._
 import text.Plural._
-
+import MatchResult._
+import internal.scalaz._
+import Scalaz._
 /**
  * Matchers for Maps
  */
@@ -22,6 +24,14 @@ trait MapBaseMatchers {
              map)
     }
   }
+
+  /** matches if map.contains(k) forall key k */
+  def haveKeys[K](keys: K*) = new Matcher[Iterable[(K, Any)]] {
+    def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
+      MatchersImplicits.forall(keys)(k => haveKey(k).apply(map)).map(m => map.value)
+    }
+  }
+
   /** matches if map contains a pair (key, value) with value == v */   
   def haveValue[V](v: V) = new Matcher[Iterable[(Any, V)]] { 
     def apply[S <: Iterable[(Any, V)]](map: Expectable[S]) = {
@@ -30,6 +40,13 @@ trait MapBaseMatchers {
              map.description + " doesn't have the value " + q(v),
              map)
     } 
+  }
+
+  /** matches if map contains a pair (key, value) with value == v  for all value v*/
+  def haveValues[V](values: V*) = new Matcher[Iterable[(Any, V)]] {
+    def apply[S <: Iterable[(Any, V)]](map: Expectable[S]) = {
+      MatchersImplicits.forall(values)(v => haveValue(v).apply(map)).map(m => map.value)
+    }
   }
 
   /** matches if map contains a pair (key, value) == (k, v) */   
@@ -57,9 +74,11 @@ trait MapBaseMatchers {
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v)))
       val undefined = isDefined.filter(!_._2).map(_._1)
       result(isDefined.map(_._2).forall(_ == true), 
-             f.optionalDescription.getOrElse("the function") + " is defined for the value".plural(values.size) + " " + q(values.mkString(", ")), 
-             f.optionalDescription.getOrElse("the function") + " is not defined for the value".plural(undefined.size) + " " + q(undefined.mkString(", ")), 
-             f)
+             f.optionalDescription.getOrElse("the function") + noun(" is defined for the value").plural(values.size) +
+                                             " " + q(values.mkString(", ")),
+             f.optionalDescription.getOrElse("the function") +
+                                             noun(" is not defined for the value").plural(undefined.size) + " " +
+                                             q(undefined.mkString(", ")), f)
     }
   }
   
@@ -69,8 +88,8 @@ trait MapBaseMatchers {
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v._1) && f.value(v._1) == v._2))
       val undefined = isDefined.filter(!_._2).map(_._1)
       result(isDefined.map(_._2).forall(_ == true), 
-             f.optionalDescription.getOrElse("the function") + " is defined by the value".plural(values.size) + " " + q(values.mkString(", ")), 
-             f.optionalDescription.getOrElse("the function") + " is not defined by the value".plural(undefined.size) + " " + q(undefined.mkString(", ")),
+             f.optionalDescription.getOrElse("the function") + noun(" is defined by the value").plural(values.size) + " " + q(values.mkString(", ")),
+             f.optionalDescription.getOrElse("the function") + noun(" is not defined by the value").plural(undefined.size) + " " + q(undefined.mkString(", ")),
              f)
     }
   }

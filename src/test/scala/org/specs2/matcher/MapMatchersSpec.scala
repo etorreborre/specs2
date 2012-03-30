@@ -10,15 +10,23 @@ class MapMatchersSpec extends Specification { def is =
   { Map(1 -> "1") must not have key(2) }                                                                                ^
   { Map(1 -> "1") must not haveKey(2) }                                                                                 ^
                                                                                                                         p^
+  "haveKeys checks if a Map has several keys"                                                                           ^
+  { Map(1 -> "1", 2 -> "2") must haveKeys(1, 2) }                                                                       ^
+  { (Map(1 -> "1", 2 -> "2") must haveKeys(1, 3)) returns "doesn't have the key '3'" }                                  ^
+                                                                                                                        p^
   "haveValue checks if a Map has a given value"                                                                         ^
   { Map(1 -> "1") must haveValue("1") }                                                                                 ^
   { Map(1 -> "1") must not have value("2") }                                                                            ^
   { Map(1 -> "1") must not haveValue("2") }                                                                             ^
                                                                                                                         p^
+  "haveValues checks if a Map has several values"                                                                       ^
+  { Map(1 -> "1", 2 -> "2") must haveValues("1", "2") }                                                                 ^
+  { (Map(1 -> "1", 2 -> "2") must haveValues("1", "3")) returns "doesn't have the value '3'" }                          ^
+                                                                                                                        p^
   "havePair checks if a Map has a given pair of values"                                                                 ^
   { Map(1 -> "1") must havePair(1 -> "1") }                                                                             ^
   { Map(1 -> "1") must not have pair(1 -> "2") }                                                                        ^
-  { Map(1 -> "1") must not havePair(1 -> "2") }                                                                        ^
+  { Map(1 -> "1") must not havePair(1 -> "2") }                                                                         ^
                                                                                                                         p^
   "havePairs checks if a Map has some pairs of values"                                                                  ^
   { Map(1->"1", 2->"2", 3->"3") must havePairs(1->"1", 2->"2") }                                                        ^
