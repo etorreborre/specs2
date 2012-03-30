@@ -24,6 +24,9 @@ class JsonSpec extends Specification with ScalaCheck {
   "The findDeep method returns Some(value) if a key is present somewhere in a document and points to a JSON object" ! check { (json: JSONType) =>
     Json.findDeep("a", json) must beSome.iff(json.toString.contains(""""a" : """))
   }
+  "The parser must be threadsafe" >> check { i: Int =>
+    (1 to 100).par.map(j => Json.parse("hello world")) must not(throwAn[Exception])
+  }
 
   implicit val jsonParams: Parameters = set(maxSize -> 3)
 

@@ -38,8 +38,8 @@ class JsonMatchersSpec extends Specification { def is =
  "The */ matcher can be chained with */"                                                                                ^
  { """{ "person": { "address": { "street": "here" } } }""" must */("person") */("address") /("street", "here") }        ^
                                                                                                                         p^
-  "The / matcher can be chained with */"                                                                                ^
-  { """{ "person": { "address": { "street": "here" } } }""" must /("person") */("street") /("here") }                   ^
+ "The / matcher can be chained with */"                                                                                 ^
+ { """{ "person": { "address": { "street": "here" } } }""" must /("person") */("street") /("here") }                    ^
                                                                                                                         end
 
   // this example is taken from the liftweb project
