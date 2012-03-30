@@ -307,7 +307,7 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
 object JsonMatchers extends Card {
   def title = "Json"
   def text =  """
-[Json](www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:
+ [Json](http://www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:
 
  * `/(value)` checks if a value is present at the root of the document. This can only be the case if that document is an Array
 
