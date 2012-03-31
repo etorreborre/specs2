@@ -16,9 +16,16 @@ private[specs2]
 trait MapBaseMatchers {
   
   /** matches if map.contains(k) */   
-  def haveKey[K](k: K) = KeyMatcher(k)
+  def haveKey[K](k: K) = new Matcher[Iterable[(K, Any)]] {
+    def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
+      result(map.value.exists(_._1 == key),
+             map.description + " has the key " + q(key),
+             map.description + " doesn't have the key " + q(key),
+             map)
+    }
 
-  /** matches if map.contains(k) forall key k */
+
+    /** matches if map.contains(k) forall key k */
   def haveKeys[K](keys: K*) = new Matcher[Iterable[(K, Any)]] {
     def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
       MatchersImplicits.forall(keys)(k => haveKey(k).apply(map)).map(m => map.value)
@@ -122,17 +129,3 @@ trait MapBeHaveMatchers { outer: MapBaseMatchers =>
   def definedBy[K, V](values: (K, V)*) = beDefinedBy(values:_*)
 }
 
-/**
- * A matcher for a specific key
- */
-case class KeyMatcher[K](key: K, shrinker: K => Boolean =  (k:K) => true) extends Matcher[Iterable[(K, Any)]] {
-  def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
-    val shrinked = map.map((m:S) => m.filter { case (k, v) => shrinker(k) })
-    result(map.value.exists(_._1 == key),
-           shrinked.description + " has the key " + q(key),
-           shrinked.description + " doesn't have the key " + q(key),
-           map)
-  }
-
-  def shrink(aFilter: K => Boolean) = copy(shrinker = aFilter)
-}
