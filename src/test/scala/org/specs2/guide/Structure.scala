@@ -1309,10 +1309,11 @@ If you wish to get a more precise failure message you can set an alias with the 
 
 There is also a shortcut for `value aka value.toString` which is simply `value.aka`.
 
-And when you want to other ways to customize the description, you can use:
+And when you want other ways to customize the description, you can use:
 
  * `post`: `"a" post "is the first letter"` prints `a is the first letter`
  * `as`: `"b" as ((s:String) => "a"+s+"c")` prints `abc`
+ * `showAs`: `Seq(1, 2, 3, 4).showAs((_:Seq[Int]).filter(isEven).mkString("|"))` prints `2|4`. This one is especially useful to filter out big data structures (lists, maps, xml...) before the failure display
 
 #### Share examples
 

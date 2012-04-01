@@ -22,6 +22,8 @@ trait Expectations extends CanBeEqual {
     def post(alias: String): Expectable[T] = as((_:String)+" "+alias)
     /** @return an expectable with an alias description, after the value string */
     def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
+    /** @return an expectable with a function to show the element T */
+    def showAs(implicit a:T => String): Expectable[T] = createExpectableWithShowAs(value, a)
   }
 
   /** @return an Expectable */
@@ -32,6 +34,8 @@ trait Expectations extends CanBeEqual {
   def createExpectable[T](t: =>T, alias: String => String): Expectable[T] = createExpectable(t, Some(alias))
   /** @return an Expectable with a description function */
   def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] = Expectable(t, alias)
+  /** @return an Expectable with a function to show the element T */
+  def createExpectableWithShowAs[T](t: =>T, a: T => String): Expectable[T] = Expectable.createWithShowAs(t, Some(a))
 
   /** this method can be overriden to throw exceptions when checking the match result */
   protected def checkFailure[T](m: MatchResult[T]) = {

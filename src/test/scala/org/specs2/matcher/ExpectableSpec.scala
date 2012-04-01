@@ -20,6 +20,9 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
   "An expectable can be described with a function taking its toString value" in {
     ("b" as ((s:String) => "a"+s+"c")).description must_== "abc"
   }
+  "An expectable can be described with a function describing its value" in {
+    Seq(1, 2).showAs((_:Seq[Int]).mkString("|")).description must_== "1|2"
+  }
   "An expectable can be mapped to another value, keeping its ability to throw exceptions when not matching" in {
     val factory = new ThrownExpectations () {}
     (factory.createExpectable("a").map(1) must_== 2) must throwA[FailureException]

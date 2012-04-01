@@ -16,7 +16,7 @@ import Expectable._
  * and an additional description.
  *
  */
-class Expectable[+T] private[specs2] (t: () => T) { outer =>
+class Expectable[+T] private[specs2] (t: () => T, showAs: Option[T => String] = None) { outer =>
   /** the value is only evaluated if necessary */
   lazy val value = t()
   
@@ -24,8 +24,11 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
    * optional additional description: it is a function which takes value.toString and returns a String
    */
   private[specs2] val desc: Option[String => String] = None
-  /** @return a description of the value */
-  def description = d(value)
+  /**
+   * @return a description of the value, using either a user-defined function or
+   *         a combination of the value and an optional description
+   */
+  def description = showAs.map(_(value)).getOrElse(d(value, desc))
   /** @return the optional description function */
   def optionalDescription: Option[String => String] = desc
 
@@ -39,24 +42,6 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
 
   /** evaluate the value once and return the same expectable */
   def evaluate = Expectable(t(), desc)
-
-  /** @return the description of the matched value, quoted. */
-  protected def d[T](value: =>T) = {
-    val valueAsString = value.notNull
-    desc match {
-      case None => value match {
-        case b: Boolean   => "the value"
-        case _            => q(valueAsString)
-      }
-      case Some(de) => de(valueAsString)
-    }
-  }
-  /** @return the description of the matched value, unquoted. */
-  protected def dUnquoted[T](value: T) = desc match {
-    case None => unq(value)
-    case Some(de) => de(unq(value))
-  }
-
   /**
    * apply a function to the expectable value
    */
@@ -92,10 +77,31 @@ object Expectable {
   private[specs2] def apply[T](t: =>T, d1: Option[String => String]) = new Expectable(() => t) {
     override val desc: Option[String => String] = d1
   }
-  
+  /** @return an Expectable with t as a value, and a function to show the element t */
+  private[specs2] def createWithShowAs[T](t: =>T, a: Option[T => String]) = new Expectable(() => t, a)
+
   /** Expectable is a Functor and can use the fmap function to modify its value */
   implicit val ExpectableFunctor: Functor[Expectable] = new Functor[Expectable] {
     def fmap[A, B](r: Expectable[A], f: A => B) = r.map(f)
   }
+
+  /** @return the description of the matched value, quoted. */
+  private[specs2] def d[T](value: =>T, desc: Option[String => String]) = {
+    val valueAsString = value.notNull
+    desc match {
+      case None => value match {
+        case b: Boolean   => "the value"
+        case _            => q(valueAsString)
+      }
+      case Some(de)       => de(valueAsString)
+    }
+  }
+
+  /** @return the description of the matched value, unquoted. */
+  private[specs2] def dUnquoted[T](value: T, desc: Option[String => String]) = desc match {
+    case None     => unq(value)
+    case Some(de) => de(unq(value))
+  }
+
 
 }
