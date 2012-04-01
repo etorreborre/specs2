@@ -18,12 +18,12 @@ trait MapBaseMatchers {
   /** matches if map.contains(k) */   
   def haveKey[K](k: K) = new Matcher[Iterable[(K, Any)]] {
     def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
-      result(map.value.exists(_._1 == key),
-             map.description + " has the key " + q(key),
-             map.description + " doesn't have the key " + q(key),
+      result(map.value.exists(_._1 == k),
+             map.description + " has the key " + q(k),
+             map.description + " doesn't have the key " + q(k),
              map)
     }
-
+  }
 
     /** matches if map.contains(k) forall key k */
   def haveKeys[K](keys: K*) = new Matcher[Iterable[(K, Any)]] {
