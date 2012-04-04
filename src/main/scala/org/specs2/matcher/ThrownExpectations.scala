@@ -27,6 +27,16 @@ trait ThrownExpectations extends Expectations {
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
       override def evaluate = createExpectable(value, desc)
     }
+
+  override def createExpectableWithShowAs[T](t: =>T, show: =>String): Expectable[T] =
+    new Expectable(() => t) {
+      override val showValueAs = Some(() => show)
+      override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
+      override def map[S](f: T => S): Expectable[S] = createExpectableWithShowAs(f(value), show)
+      override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
+      override def evaluate = createExpectableWithShowAs(value, show)
+    }
+
   override protected def checkResultFailure(r: Result) = {
     r match {
       case f @ Failure(_,_,_,_) => throw new FailureException(f)

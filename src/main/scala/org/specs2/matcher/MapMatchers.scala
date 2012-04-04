@@ -100,12 +100,16 @@ trait MapBeHaveMatchers { outer: MapBaseMatchers =>
   implicit def toMapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) = new MapKeyResultMatcher(result)
   class MapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) {
     def key(k: K) = result(outer.haveKey(k))
+    def keys(ks: K*) = result(outer.haveKeys(ks:_*))
     def haveKey(k: K) = result(outer.haveKey(k))
+    def haveKeys(ks: K*) = result(outer.haveKeys(ks:_*))
   }
   implicit def toMapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) = new MapValueResultMatcher(result)
   class MapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) {
     def value(v: V) = result(outer.haveValue(v))
+    def values(vs: V*) = result(outer.haveValues(vs:_*))
     def haveValue(v: V) = result(outer.haveValue(v))
+    def haveValues(vs: V*) = result(outer.haveValues(vs:_*))
   }
   implicit def toMapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) = new MapResultMatcher(result)
   class MapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) {
@@ -121,8 +125,10 @@ trait MapBeHaveMatchers { outer: MapBaseMatchers =>
     def definedBy(values: (K, V)*) = result(outer.beDefinedBy(values:_*))
     def beDefinedBy(values: (K, V)*) = result(outer.beDefinedBy(values:_*))
   }
-  def key[K](k: K) = haveKey(k)   
-  def value[V](v: V) = haveValue(v) 
+  def key[K](k: K) = haveKey(k)
+  def keys[K](ks: K*) = haveKeys(ks:_*)
+  def value[V](v: V) = haveValue(v)
+  def values[V](vs: V*) = haveValues(vs:_*)
   def pair[K, V](p: (K, V)) = havePair(p)
   def pairs[K, V](pairs: (K, V)*) = havePairs(pairs:_*)
   def definedAt[K](values: K*) = beDefinedAt(values:_*)

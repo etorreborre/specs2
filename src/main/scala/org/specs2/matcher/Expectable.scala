@@ -16,7 +16,7 @@ import Expectable._
  * and an additional description.
  *
  */
-class Expectable[+T] private[specs2] (t: () => T, showAs: Option[T => String] = None) { outer =>
+class Expectable[+T] private[specs2] (t: () => T) { outer =>
   /** the value is only evaluated if necessary */
   lazy val value = t()
   
@@ -25,10 +25,14 @@ class Expectable[+T] private[specs2] (t: () => T, showAs: Option[T => String] = 
    */
   private[specs2] val desc: Option[String => String] = None
   /**
-   * @return a description of the value, using either a user-defined function or
-   *         a combination of the value and an optional description
+   * optional user description for the value
    */
-  def description = showAs.map(_(value)).getOrElse(d(value, desc))
+  private[specs2] val showValueAs: Option[() => String] = None
+  /**
+   * @return a description of the value provided by the user
+   *         a combination of the value show by specs2 and an optional description
+   */
+  def description = showValueAs.map(_()).getOrElse(d(value, desc))
   /** @return the optional description function */
   def optionalDescription: Option[String => String] = desc
 
@@ -41,7 +45,7 @@ class Expectable[+T] private[specs2] (t: () => T, showAs: Option[T => String] = 
   }
 
   /** evaluate the value once and return the same expectable */
-  def evaluate = Expectable(t(), desc)
+  def evaluate = Expectable(t(), desc, showValueAs)
   /**
    * apply a function to the expectable value
    */
@@ -77,8 +81,15 @@ object Expectable {
   private[specs2] def apply[T](t: =>T, d1: Option[String => String]) = new Expectable(() => t) {
     override val desc: Option[String => String] = d1
   }
-  /** @return an Expectable with t as a value, and a function to show the element t */
-  private[specs2] def createWithShowAs[T](t: =>T, a: Option[T => String]) = new Expectable(() => t, a)
+  /** @return an Expectable with t as a value, and a description function */
+  private[specs2] def apply[T](t: =>T, d1: Option[String => String], show: Option[() => String]) = new Expectable(() => t) {
+    override val desc: Option[String => String] = d1
+    override val showValueAs: Option[() => String] = show
+  }
+  /** @return an Expectable with t as a value, and string showing the element t */
+  private[specs2] def createWithShowAs[T](t: =>T, show: =>String) = new Expectable(() => t) {
+    override val showValueAs: Option[() => String] = Some(() => show)
+  }
 
   /** Expectable is a Functor and can use the fmap function to modify its value */
   implicit val ExpectableFunctor: Functor[Expectable] = new Functor[Expectable] {

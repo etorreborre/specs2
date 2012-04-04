@@ -1,7 +1,3 @@
-import sbtrelease._
-import Release._
-import ReleaseKeys._
- 
 /** Project */
 name := "specs2"
 
@@ -11,7 +7,7 @@ organization := "org.specs2"
 
 scalaVersion := "2.9.1"
 
-crossScalaVersions := Seq("2.9.1-1")
+crossScalaVersions := Seq("2.9.1-1", "2.9.2-RC2", "2.10.0-M2")
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -61,15 +57,13 @@ testOptions := Seq(Tests.Filter(s =>
 /** Console */
 initialCommands in console := "import org.specs2._"
 
-
-
 /** Publishing */
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
 publishTo <<= version { v: String =>
   val nexus = "https://oss.sonatype.org/"
   if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
-  else                             Some("releases" at nexus + "service/local/staging/deploy/maven2")
+  else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
 }
 
 publishMavenStyle := true
@@ -99,28 +93,3 @@ pomExtra := (
       </developer>
     </developers>
 )
- 
-seq(releaseSettings: _*)
-
-releaseProcess <<= thisProjectRef apply { ref =>
-  import ReleaseStateTransformations._
-  Seq[ReleasePart](
-    initialGitChecks,                     
-    checkSnapshotDependencies,    
-    releaseTask(check in Posterous in ref),  
-    inquireVersions,                        
-    setReleaseVersion,                      
-    runTest,                                
-    commitReleaseVersion,                   
-    tagRelease,                             
-    releaseTask(publish in Global in ref),
-    releaseTask(publish in Posterous in ref),    
-    setNextVersion,                         
-    commitNextVersion                       
-  )
-}
-
-seq(lsSettings :_*)
-
-(LsKeys.ghBranch in LsKeys.lsync) := Some("1.8")
-
