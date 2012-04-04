@@ -134,6 +134,8 @@ trait Htmlx { outer =>
     def addTo(n: Node) = new RuleTransformer(this).apply(n)
   }
 
+  /** @return the href urls in <a/> elements */
+  def urls(ns: NodeSeq): Seq[String] = (ns \\ "a").flatMap(a => a.attribute("href").map(_.mkString))
 
 }
 
