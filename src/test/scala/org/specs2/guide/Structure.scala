@@ -525,7 +525,7 @@ Several variations are possible on this pattern, depending which part of the lin
 
 #### Reference
 
-Sometimes you just want to reference another specification without triggering its execution. For example when [creating an index page](#Create+an+index+page):
+Sometimes you just want to reference another specification without triggering its execution. For example when [creating an index page](#Create+an+index):
 
       see(new MailSenderSpec)
 
