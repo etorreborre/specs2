@@ -25,36 +25,37 @@ case class Arguments (
   report:        Report           = Report(),
   commandLine:   Seq[String]      = Seq()
  ) extends ShowArgs {
-  def ex: String                    = select.ex
-  def include: String               = select.include
-  def exclude: String               = select.exclude
-  def wasIssue: Boolean             = select.wasIssue
-  def was(s: String): Boolean       = select.was(s)
-  def wasIsDefined: Boolean         = select.wasIsDefined
-  def specName: String              = select.specName
+  def ex: String                      = select.ex
+  def include: String                 = select.include
+  def exclude: String                 = select.exclude
+  def wasIssue: Boolean               = select.wasIssue
+  def was(s: String): Boolean         = select.was(s)
+  def wasIsDefined: Boolean           = select.wasIsDefined
+  def specName: String                = select.specName
 
-  def plan: Boolean                 = execute.plan
-  def skipAll: Boolean              = execute.skipAll
-  def stopOnFail: Boolean           = execute.stopOnFail
-  def stopOnSkip: Boolean           = execute.stopOnSkip
-  def sequential: Boolean           = execute.sequential
-  def isolated: Boolean             = execute.isolated
-  def threadsNb: Int                = execute.threadsNb
+  def plan: Boolean                   = execute.plan
+  def skipAll: Boolean                = execute.skipAll
 
-  def xonly: Boolean                = report.xonly
-  def canShow(s: String)            = report.canShow(s)
+  def stopOnFail: Boolean             = execute.stopOnFail
+  def stopOnSkip: Boolean             = execute.stopOnSkip
+  def sequential: Boolean             = execute.sequential
+  def isolated: Boolean               = execute.isolated
+  def threadsNb: Int                  = execute.threadsNb
 
-  def failtrace: Boolean            = report.failtrace
-  def color: Boolean                = report.color
-  def colors: Colors                = report.colors
-  def noindent: Boolean             = report.noindent
-  def showtimes: Boolean            = report.showtimes
-  def offset: Int                   = report.offset
-  def markdown: Boolean             = report.markdown
-  def debugMarkdown: Boolean        = report.debugMarkdown
-  def diffs: Diffs                  = report.diffs
-  def fromSource: Boolean           = report.fromSource
-  def traceFilter: StackTraceFilter = report.traceFilter
+  def xonly: Boolean                  = report.xonly
+  def canShow(s: String)              = report.canShow(s)
+
+  def failtrace: Boolean              = report.failtrace
+  def color: Boolean                  = report.color
+  def colors: Colors                  = report.colors
+  def noindent: Boolean               = report.noindent
+  def showtimes: Boolean              = report.showtimes
+  def offset: Int                     = report.offset
+  def markdown: Boolean               = report.markdown
+  def debugMarkdown: Boolean          = report.debugMarkdown
+  def diffs: Diffs                    = report.diffs
+  def fromSource: Boolean             = report.fromSource
+  def traceFilter: StackTraceFilter   = report.traceFilter
 
   /** @return true if the command line contains a given string */
   def contains(a: String) = commandLine contains a

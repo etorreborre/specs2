@@ -1,7 +1,8 @@
 package org.specs2
 package main
 
-import control.{NoStackTraceFilter, IncludeExcludeStackTraceFilter, DefaultStackTraceFilter}
+import control.{NoStackTraceFilter, IncludeExcludeStackTraceFilter, DefaultStackTraceFilter, Exceptions}
+import Exceptions._
 import text._
 
 /**
@@ -29,6 +30,12 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    * shortcut to skip all examples
    */
   def skipAll: Arguments = args(skipAll = true)
+  /**
+   * shortcut to skip all examples when a condition is true.
+   * if the condition throws an exception, its stacktrace is *not* printed and
+   * all the examples are skipped
+   */
+  def skipAllIf(condition: =>Boolean): Arguments = args(skipAll = tryo(condition).getOrElse(true): Boolean)
   /**
    * shortcut to stop after the first failure or error
    */
