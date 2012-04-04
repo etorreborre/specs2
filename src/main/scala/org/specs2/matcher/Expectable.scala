@@ -45,7 +45,7 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
   }
 
   /** evaluate the value once and return the same expectable */
-  def evaluate = Expectable(t(), desc, showValueAs)
+  def evaluate = { value; this }
   /**
    * apply a function to the expectable value
    */
