@@ -25,9 +25,9 @@ trait ThrownExpectations extends Expectations {
       override val desc = alias
       override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
-      override def evaluate = {
+      override def evaluateOnce = {
         val v = t
-        createExpectable(v, desc)
+        createExpectable(t, desc)
       }
     }
 
@@ -37,7 +37,7 @@ trait ThrownExpectations extends Expectations {
       override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
       override def map[S](f: T => S): Expectable[S] = createExpectableWithShowAs(f(value), show)
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
-      override def evaluate = {
+      override def evaluateOnce = {
         val (v, s) = (value, show)
         createExpectableWithShowAs(v, s)
       }

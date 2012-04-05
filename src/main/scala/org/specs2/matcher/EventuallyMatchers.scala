@@ -18,7 +18,7 @@ trait EventuallyMatchers {
     def apply[S <: T](a: Expectable[S]) = retry(retries, sleep, a)
 
     def retry[S <: T](retries: Int, sleep: Duration, a: Expectable[S]): MatchResult[S] = {
-      val result = nested(a.evaluate)
+      val result = nested(a.evaluateOnce)
       if (result.isSuccess || retries == 1)
         result
       else {
@@ -28,7 +28,7 @@ trait EventuallyMatchers {
     }
   }
 
-  /** @return a matcher that will retry the nested matcher a given 40 times  */
+  /** @return a matcher that will retry the nested matcher 40 times  */
   def eventually[T](nested: =>Matcher[T]): Matcher[T] = eventually(40, 100.milliseconds)(nested)
 }
 object EventuallyMatchers extends EventuallyMatchers 
