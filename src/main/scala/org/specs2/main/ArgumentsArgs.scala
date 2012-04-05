@@ -96,7 +96,7 @@ trait ArgumentsArgs extends ArgProperties {
     /** shorthand method to create an Arguments object */
     def report(
       xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      showOnly:    ArgProperty[String]            = ArgProperty[String](),
+      showOnly:      ArgProperty[String]            = ArgProperty[String](),
       failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       colors:        ArgProperty[Colors]            = ArgProperty[Colors](),
@@ -109,6 +109,7 @@ trait ArgumentsArgs extends ArgProperties {
       diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
+      checkUrls:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notifier:      ArgProperty[String]            = ArgProperty[String](),
       exporter:      ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
        report = Report(xonly.toOption.map(v => if (v) "x!" else "x!+-o*").orElse(showOnly.toOption),
@@ -124,6 +125,7 @@ trait ArgumentsArgs extends ArgProperties {
                        diffs.toOption,
                        fromSource.toOption,
                        traceFilter.toOption,
+                       checkUrls.toOption,
                        notifier.toOption,
                        exporter.toOption))
 

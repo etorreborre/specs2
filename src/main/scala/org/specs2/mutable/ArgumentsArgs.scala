@@ -108,6 +108,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       diffs:         ArgProperty[Diffs]             = ArgProperty[Diffs](),
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
+      checkUrls:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notifier:      ArgProperty[String]            = ArgProperty[String](),
       exporter:      ArgProperty[String]            = ArgProperty[String]()) = addArguments(super.report(
         xonly,
@@ -124,6 +125,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
         diffs,
         fromSource,
         traceFilter,
+        checkUrls,
         notifier,
         exporter))
   }

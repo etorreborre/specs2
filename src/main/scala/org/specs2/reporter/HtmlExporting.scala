@@ -12,7 +12,7 @@ trait HtmlExporting extends Exporting with HtmlPrinter with HtmlFileWriter {
 
   def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
     val executed = spec.execute
-    print(executed) |> writeFiles
+    print(executed) |> writeFiles(args <| executed.arguments)
     executed
   }
 }

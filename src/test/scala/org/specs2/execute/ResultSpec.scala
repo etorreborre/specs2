@@ -50,7 +50,10 @@ more precisely:
    { (failure1 or failure2).expectationsNb must_== 2 }                                                                  ^
    { (failure1 or error1)  .expectationsNb must_== 2 }                                                                  ^
   "results have methods to know their status: isSuccess, isPending, ..."                                                ! statuses^
-                                                                                                                          end
+  "A result message can be updated or mapped"                                                                           ^
+  { success1.updateMessage("ok").message must_== "ok" }                                                                 ^
+  { success1.mapMessage(_.capitalize).message must_== "S1" }                                                            ^
+                                                                                                                        end
 
   def statuses =
   "result" | "isSuccess" | "isFailure" | "isError" | "isSkipped" | "isPending" |>

@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import ExecutedFragment._
+import main.Arguments
 
 
 /**
@@ -29,5 +30,12 @@ case class ExecutedSpecification(name: SpecName, fs: Seq[ExecutedFragment]) {
 
   /** @return the end statistics */
   def stats = fs.filter(isExecutedSpecEnd).lastOption.collect { case ExecutedSpecEnd(_,_,s) => s }.getOrElse(Stats())
+
+  /** @return the specification start */
+  def start: ExecutedSpecStart = fs.view.collect(isSomeExecutedSpecStart).headOption.getOrElse(ExecutedSpecStart(SpecStart(name)))
+
+  /** @return the specification arguments */
+  def arguments: Arguments = start.args
+
 }
 

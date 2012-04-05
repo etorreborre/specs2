@@ -76,6 +76,8 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
       case DecoratedResult(t, r) => DecoratedResult(t, r.updateMessage(msg))
 	  }
 
+  /** change this result's message */
+  def mapMessage(f: String => String): Result = updateMessage(f(message))
   /**
    * increment the number of expectations
    */
@@ -177,16 +179,16 @@ object Result {
       val zero = Success()
     def append(m1: Result, m2: =>Result) = {
       (m1, m2) match {
-        case (Success(msg1, e1),           Success(msg2, e2))          => Success(msg1+separator+msg2, concat(e1, e2))
+        case (Success(msg1, e1),           Success(msg2, e2))          => Success("", concat(e1, e2))
         case (Success(msg1, e1),           other)                      => other
         case (other,                       Success(msg2, e2))          => other
-        case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+separator+msg2, e1+separator+e2, st1, NoDetails())
-        case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+separator+msg2, st1)
-        case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(msg1+separator+msg2, st1)
-        case (Skipped(msg1, e1),           Skipped(msg2, e2))          => Skipped(msg1+separator+msg2, e1+separator+e2)
-        case (Skipped(msg1, e1),           Pending(msg2))              => Pending(msg1+separator+msg2)
-        case (Pending(msg1),               Skipped(msg2, e2))          => Pending(msg1+separator+msg2)
-        case (Pending(msg1),               Pending(msg2))              => Pending(msg1+separator+msg2)
+        case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(concat(msg1, msg2, separator), e1+separator+e2, st1, NoDetails())
+        case (Error(msg1, st1),            Error(msg2, st2))           => Error(concat(msg1, msg2, separator), st1)
+        case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(concat(msg1, msg2, separator), st1)
+        case (Skipped(msg1, e1),           Skipped(msg2, e2))          => Skipped(concat(msg1, msg2, separator), e1+separator+e2)
+        case (Skipped(msg1, e1),           Pending(msg2))              => Pending(concat(msg1, msg2, separator))
+        case (Pending(msg1),               Skipped(msg2, e2))          => Pending(concat(msg1, msg2, separator))
+        case (Pending(msg1),               Pending(msg2))              => Pending(concat(msg1, msg2, separator))
         case (DecoratedResult(t, r),       other)                      => DecoratedResult(t, append(r, other))
         case (other,                       DecoratedResult(t, r))      => DecoratedResult(t, append(other, r))
         case (Failure(msg1, e1, st, d),    _)                          => m1

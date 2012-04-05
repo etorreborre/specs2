@@ -448,7 +448,7 @@ Similarly, ScalaCheck generator and properties are supported:
 
 #### DataTables
 
-[DataTables](/org.specs2.guide.Matchers.html#DataTables) are generally used to pack lots of expectations inside one example. A DataTable which is used as a `Result` in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:
+[DataTables](org.specs2.guide.Matchers.html#DataTables) are generally used to pack lots of expectations inside one example. A DataTable which is used as a `Result` in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:
 
       class DataTableSpec extends Specification with DataTables { def is =
 
@@ -823,7 +823,7 @@ There is just one gotcha that you need to be aware of. If your implicit context 
         }
       }
 
-Indeed in both examples above the `s` string that will be passed is the Example description as specified [here](#Using+the+Example+description).
+Indeed in both examples above the `s` string that will be passed is the Example description as specified [here](#Use+descriptions).
 
 #### Composition
 

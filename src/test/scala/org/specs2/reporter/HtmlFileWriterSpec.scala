@@ -1,9 +1,9 @@
 package org.specs2
 package reporter
+
 import io._
 import mock._
 import specification._
-import matcher.DataTables
 
 class HtmlFileWriterSpec extends Specification with Mockito { outer => def is =
                                                                                                                         """
@@ -15,10 +15,10 @@ The HtmlFileWriter class is responsible for writing a html reports to disk.
     "there must be a directory for the js tree theme files"                                                             ! resources().jstheme^
                                                                                                                         end
                                                                                           
-  implicit val argument = args()
+  implicit val arguments = args()
 
   case class resources() extends MockHtmlFileWriter {
-    writer.writeFiles(Seq())
+    writer.writeFiles(arguments)(Seq())
     
     def css = there was one(fs).copySpecResourcesDir(===("css"), anyString)
     def images = there was one(fs).copySpecResourcesDir(===("images"), anyString)

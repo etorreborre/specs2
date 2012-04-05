@@ -1,7 +1,11 @@
 package org.specs2
 package io
 import scala.collection.mutable. { ListBuffer, Queue, HashMap }
-
+import control.Exceptions._
+import scala.xml.NodeSeq
+import scala.io.Source._
+import scala.xml.parsing.XhtmlParser
+import xml.Nodex._
 /**
  * The MockFileSystem trait mocks the FileSystem by storing a Map[path, content] representing the content of the FileSystem
  */
@@ -117,4 +121,12 @@ trait MockFileSystem extends FileSystem {
     val reader = new java.io.StringReader(readFile(filePath))
     def read() = reader.read()
   }
+
+  override def loadXmlFile(filePath: String)(report: Exception => Unit = (e:Exception) => e.printStackTrace) = {
+    tryo {
+      val xhtml = fromString("<e>"+readFile(filePath)+"</e>")
+      (XhtmlParser(xhtml)\\"e")(0).child.reduceNodes
+    }.getOrElse(NodeSeq.Empty)
+  }
+
 }

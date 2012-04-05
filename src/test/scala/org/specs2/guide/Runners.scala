@@ -11,7 +11,7 @@ There are many ways to execute ***specs2*** specifications:
  * on the command line, with a html output, and the `specs2.html` runner
  * on the command line, with a console or a html output, and the `specs2.files` runner
  * using [Intellij IDEA](http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA)
- * using [sbt](http://github.com/harrah/xsbt/wiki/Getting-Started-Welcome)
+ * using [sbt](http://www.scala-sbt.org)
  * using [JUnit](http://www.junit.org)
  * using your own reporting tool implementing the `Notifier` interface (simple) or the `Exporter` interface (with a full access to the executed specification)
 
@@ -70,6 +70,7 @@ From inside a specification, the available arguments are the following:
  `diffs`         | `SmartDiffs`                             | use a specific algorithm to display differences
  `fromSource`    | true                                     | true takes an AutoExample description from the file, false from the expectation ok message
  `traceFilter`   | `DefaultStackTraceFilter`                | use a StackTraceFilter instance for filtering the reported stacktrace elements
+ `checkUrl`      | false                                    | if true, will parse the html files and check that local or http hrefs can be accessed
  `notifier`      | String                                   | name of a class extending the `org.specs2.reporter.Notifier` trait
  `exporter`      | String                                   | name of a class extending the `org.specs2.reporter.Exporter` trait
 
@@ -225,6 +226,7 @@ On the command line you can pass the following arguments:
  `debugmarkdown`  | boolean                 |                                                                         |
  `fromsource`     | boolean                 |                                                                         |
  `fullstacktrace` | boolean                 |                                                                         |
+ `checkurl`       | boolean                 |                                                                         |
  `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
  `notifier`       | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
  `exporter`       | String                  | name of a class extending the `org.specs2.reporter.Exporter` trait      |

@@ -71,6 +71,15 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   }
 
   /**
+   * adding a conflicting implicit to warn the user when a `>>` was forgotten
+   */
+  implicit def `***If you see this message this means that you've forgotten an operator after the description string: you should write "example" >> result ***`(s: String): WarningForgottenOperator = new WarningForgottenOperator(s)
+  class WarningForgottenOperator(s: String) {
+    def apply[T <% Result](r: =>T): Example = sys.error("there should be a compilation error!")
+  }
+
+
+    /**
    *  add a new action to the Fragments
    */
   def action(a: =>Any) = {

@@ -46,19 +46,23 @@ trait FileReader {
   /**
    * @return the xml content of a file, using the XML parser
    */
-  def loadXmlFile(filePath: String) = tryo(scala.xml.XML.load(filePath))(e => e.printStackTrace).getOrElse(NodeSeq.Empty)
+  def loadXmlFile(filePath: String)(report: Exception => Unit = (e:Exception) => e.printStackTrace) =
+    tryo(scala.xml.XML.load(filePath))(report).getOrElse(NodeSeq.Empty)
 
   /**
    * @return the xml content of a file using the Xhtml parser
    *
    * if the file contains several nodes, it wraps them up in a single artificial node
    */
-  def loadXhtmlFile(filePath: String) = tryo {
+  def loadXhtmlFile(filePath: String, report: (Exception, String) => Unit = defaultLoadXhtmlFileReport) = tryo {
     val fileContent = readFile(filePath)
     val xhtml = fromString("<e>"+fileContent+"</e>")
     val result = (XhtmlParser(xhtml)\\"e")(0).child.reduceNodes
     result
-  }(e => { scala.Console.println("trying to load: "+filePath+"\n"); e.printStackTrace }).getOrElse(NodeSeq.Empty)
+  }(e => report(e, filePath)).getOrElse(NodeSeq.Empty)
+
+  private def defaultLoadXhtmlFileReport = (e: Exception, filePath: String) => { scala.Console.println("trying to load: "+filePath+"\n"); e.printStackTrace }
+
 }
 private[specs2]
 object FileReader extends FileReader

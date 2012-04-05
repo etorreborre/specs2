@@ -43,6 +43,8 @@ object ExecutedFragment {
   def isExecutedResult: Function[ExecutedFragment, Boolean] = { case ExecutedResult(_,_,_,_,_) => true; case _ => false }
   /** @return true if the ExecutedFragment is a Start */
   def isExecutedSpecStart: Function[ExecutedFragment, Boolean] = { case ExecutedSpecStart(_,_,_) => true; case _ => false }
+  /** @return true if the ExecutedFragment is a Start */
+  def isSomeExecutedSpecStart: PartialFunction[ExecutedFragment, ExecutedSpecStart] = { case s @ ExecutedSpecStart(_,_,_) => s }
   /** @return true if the ExecutedFragment is an End */
   def isExecutedSpecEnd: Function[ExecutedFragment, Boolean] = { case ExecutedSpecEnd(_,_,_) => true; case _ => false }
   /** @return true if the ExecutedFragment is a start with a link */
