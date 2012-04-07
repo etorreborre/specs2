@@ -799,25 +799,25 @@ write("./dir/hello.txt") { out =>
       </h4>
       <p class="shortcomment cmt">matches if new File(path).</p><div class="fullcomment"><div class="comment cmt"><p>matches if new File(path).list == list(files)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>PathBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.FileReader#loadXhtmlFile" data-isabs="false">
-      <a id="loadXhtmlFile(String):NodeSeq"></a>
+      <a id="loadXhtmlFile(String,(Exception, String) ⇒ Unit):NodeSeq"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">loadXhtmlFile</span>
         
-        <span class="params">(<span name="filePath">filePath: String</span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
+        <span class="params">(<span name="filePath">filePath: String</span>, <span name="report">report: (Exception, String) ⇒ <span name="scala.Unit" class="extype">Unit</span> = <span class="symbol">defaultLoadXhtmlFileReport</span></span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file using the Xhtml parser</p><p>if the file contains several nodes, it wraps them up in a single artificial node
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.FileReader#loadXmlFile" data-isabs="false">
-      <a id="loadXmlFile(String):NodeSeq"></a>
+      <a id="loadXmlFile(String)((Exception) ⇒ Unit):NodeSeq"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">loadXmlFile</span>
         
-        <span class="params">(<span name="filePath">filePath: String</span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
+        <span class="params">(<span name="filePath">filePath: String</span>)</span><span class="params">(<span name="report">report: (Exception) ⇒ <span name="scala.Unit" class="extype">Unit</span> = <span class="symbol">(e:Exception) =&gt; e.printStackTrace</span></span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file, using the XML parser

@@ -59,22 +59,22 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Runners guide</title><a name="Runners+guide"><h2 specId="1404967249">Runners guide</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
+    </head><body><div id="container"><title>Runners</title><a name="Runners"><h2 specId="18150653">Runners</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
 <ul>
   <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li>
   <li>on the command line, with a html output, and the <code class="prettyprint">specs2.html</code> runner</li>
   <li>on the command line, with a console or a html output, and the <code class="prettyprint">specs2.files</code> runner</li>
-  <li>using <a href="http://code.google.com/p/simple-build-tool">sbt</a></li>
-  <li>using <a href="http://www.junit.org">JUnit</a></li>
   <li>using <a href="http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA">Intellij IDEA</a></li>
-  <li>using your own reporting tool implementing the <code class="prettyprint">Notifier</code> interface</li>
-</ul><a name="Dependencies"><h3>Dependencies</h3></a><p><strong><em>specs2</em></strong> is available for Scala 2.9.0 onwards and uses the following libraries, as specified using the <a href="http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies">sbt dsl</a>:</p><p><table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; %% &quot;specs2-scalaz-core&quot; % &quot;6.0.1&quot;</code></td><td class="info">mandatory. This jar bundles the scalaz classes but renamed as <code class="prettyprint">org.specs2.internal.scalaz._</code>.</td></tr><tr><td class="info"> <code class="prettyprint">&quot;org.scala-tools.testing&quot; %% &quot;scalacheck&quot; % &quot;1.9&quot;</code></td><td class="info">only if using ScalaCheck</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.mockito&quot; % &quot;mockito-all&quot; % &quot;1.9.0&quot;</code></td><td class="info">only if using Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.hamcrest&quot; % &quot;hamcrest-all&quot; % &quot;1.1&quot;</code></td><td class="info">only if using Hamcrest matchers with Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;junit&quot; % &quot;junit&quot; % &quot;4.7&quot;</code></td><td class="info">only if using JUnit</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-tools.testing&quot; % &quot;test-interface&quot; % &quot;0.5&quot;</code></td><td class="info">provided by sbt when using it</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.pegdown&quot; % &quot;pegdown&quot; % &quot;1.0.2&quot;</code></td><td class="info">only if using the html runner</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; % &quot;classycle&quot; % &quot;1.4.1&quot;</code></td><td class="info">only if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % &quot;2.9.1&quot;</code></td><td class="info">only if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait with the <code class="prettyprint">CompilerDependencyFinder</code> trait</td></tr></table></p><p><strong>Note</strong>: there are versions of specs2 available for Scala 2.8.1 but they <a href="org.specs2.guide.SpecStructure.html#In+a+mutable+specification">miss some &quot;context&quot; functionalities</a>.</p><a name="Arguments"><h3>Arguments</h3></a><p>You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the <code class="prettyprint">args(name=value)</code> syntax:</p>
+  <li>using <a href="http://www.scala-sbt.org">sbt</a></li>
+  <li>using <a href="http://www.junit.org">JUnit</a></li>
+  <li>using your own reporting tool implementing the <code class="prettyprint">Notifier</code> interface (simple) or the <code class="prettyprint">Exporter</code> interface (with a full access to the executed specification)</li>
+</ul><a name="Dependencies"><h3>Dependencies</h3></a><p><strong><em>specs2</em></strong> is available for Scala 2.9.0 onwards and uses the following libraries, as specified using the <a href="http://code.google.com/p/simple-build-tool/wiki/LibraryManagement#Basic_Dependencies">sbt dsl</a>:</p><p><strong>Note</strong>: there are versions of specs2 available for Scala 2.8.1 but they <a href="org.specs2.guide.Structure.html#In+a+mutable+specification">miss some &quot;context&quot; functionalities</a>.</p><p><table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; %% &quot;specs2-scalaz-core&quot; % &quot;6.0.1&quot;</code></td><td class="info">mandatory. This jar bundles the scalaz classes but renamed as <code class="prettyprint">org.specs2.internal.scalaz._</code>.</td></tr><tr><td class="info"> <code class="prettyprint">&quot;org.scala-tools.testing&quot; %% &quot;scalacheck&quot; % &quot;1.9&quot;</code></td><td class="info">if using ScalaCheck</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.mockito&quot; % &quot;mockito-all&quot; % &quot;1.9.0&quot;</code></td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.hamcrest&quot; % &quot;hamcrest-all&quot; % &quot;1.1&quot;</code></td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;junit&quot; % &quot;junit&quot; % &quot;4.7&quot;</code></td><td class="info">if using JUnit</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-tools.testing&quot; % &quot;test-interface&quot; % &quot;0.5&quot;</code></td><td class="info">provided by sbt when using it</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.pegdown&quot; % &quot;pegdown&quot; % &quot;1.0.2&quot;</code></td><td class="info">if using the html runner</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; % &quot;classycle&quot; % &quot;1.4.1&quot;</code></td><td class="info">if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % &quot;2.9.1&quot;</code></td><td class="info">if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait with the <code class="prettyprint">CompilerDependencyFinder</code> trait</td></tr></table></p><a name="Arguments"><h3>Arguments</h3></a><p>You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the <code class="prettyprint">args(name=value)</code> syntax:</p>
 <pre><code class="prettyprint">  class MySpec extends Specification { def is = args(xonly=true)    ^
     &quot;Clever spec title&quot;                                             ^
     &quot;this will not be indented&quot;                                     ^
     &quot;brilliant expectation&quot;                                         ! success
   }
-</code></pre><a name="In+a+Specification"><h4>In a Specification</h4></a><p>From inside a specification, the available arguments are the following:</p>
+</code></pre><a name="API"><h4>API</h4></a><p>From inside a specification, the available arguments are the following:</p>
 <table>
   <thead>
     <tr>
@@ -136,9 +136,19 @@
       <td>skip all examples after the first failure or error</td>
     </tr>
     <tr>
+      <td><em><code class="prettyprint">stopOnSkip</code></em> </td>
+      <td>false </td>
+      <td>skip all examples after the first skipped result</td>
+    </tr>
+    <tr>
       <td><em><code class="prettyprint">sequential</code></em> </td>
       <td>false </td>
       <td>don't execute examples concurrently</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">isolated</code></em> </td>
+      <td>false </td>
+      <td>execute each example in its own specification to get &quot;fresh&quot; local variables</td>
     </tr>
     <tr>
       <td><code class="prettyprint">threadsNb</code> </td>
@@ -221,6 +231,21 @@
       <td><code class="prettyprint">DefaultStackTraceFilter</code> </td>
       <td>use a StackTraceFilter instance for filtering the reported stacktrace elements</td>
     </tr>
+    <tr>
+      <td><code class="prettyprint">checkUrl</code> </td>
+      <td>false </td>
+      <td>if true, will parse the html files and check that local or http hrefs can be accessed</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">notifier</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Notifier</code> trait</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">exporter</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Exporter</code> trait</td>
+    </tr>
   </tbody>
 </table><a name="Most%2FLeast+frequently+used+arguments"><h5>Most/Least frequently used arguments</h5></a><p>Most of the arguments above can be set in a specification with <code class="prettyprint">args(name=value)</code>. However Scala would not allow the <code class="prettyprint">args</code> method to accept <em>all</em> the possible<br />arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called <code class="prettyprint">args</code>, having separate methods for setting all the parameters, by &quot;category&quot;. For example:</p>
 <pre><code class="prettyprint">  args.select(specName = &quot;.*Test&quot;, include=&quot;slow&quot;)
@@ -277,8 +302,18 @@
       <td> </td>
     </tr>
     <tr>
+      <td><code class="prettyprint">stopOnSkip</code> </td>
+      <td><code class="prettyprint">args(stopOnSkip=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
       <td><code class="prettyprint">sequential</code> </td>
       <td><code class="prettyprint">args(sequential=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">isolated</code> </td>
+      <td><code class="prettyprint">args(isolated=true)</code> </td>
       <td> </td>
     </tr>
     <tr>
@@ -404,7 +439,7 @@
   <li>use <code class="prettyprint">excludeAlsoTrace(patterns: String*)</code> to add new exclude patterns to the <code class="prettyprint">DefaultStackTraceFilter</code></li>
   <li>use the <code class="prettyprint">org.specs2.control.IncludeExcludeStackTraceFilter</code> class to define both include and exclude patterns</li>
   <li>define your own logic by extending the <code class="prettyprint">org.specs2.control.StackTraceFilter</code></li>
-</ul><a name="On+the+command+line"><h4>On the command line</h4></a><p>On the command line you can pass the following arguments:</p>
+</ul><a name="Command+line"><h4>Command line</h4></a><p>On the command line you can pass the following arguments:</p>
 <table>
   <thead>
     <tr>
@@ -462,6 +497,11 @@
     </tr>
     <tr>
       <td><code class="prettyprint">sequential</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">isolated</code> </td>
       <td>boolean </td>
       <td> </td>
     </tr>
@@ -542,21 +582,50 @@
       <td> </td>
     </tr>
     <tr>
+      <td><code class="prettyprint">checkurl</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
       <td><code class="prettyprint">tracefilter</code> </td>
       <td>regexp-csv/regexp-csv </td>
       <td>comma-separated include patterns separated by <code class="prettyprint">/</code> with exclude patterns </td>
     </tr>
+    <tr>
+      <td><code class="prettyprint">notifier</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Notifier</code> trait </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">exporter</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Exporter</code> trait </td>
+    </tr>
   </tbody>
-</table><p><em>[<code class="prettyprint">regexp</code> is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]</em></p><a name="From+system+properties"><h4>From system properties</h4></a><p>You can pass any argument to <strong><em>specs2</em></strong> from system properties:</p>
+</table><p><em>[<code class="prettyprint">regexp</code> is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]</em></p><a name="System+properties"><h4>System properties</h4></a><p>You can pass any argument to <strong><em>specs2</em></strong> from system properties. This is particularly useful for passing arguments to JUnit runners:</p>
 <ul>
   <li>for a boolean argument, you need to pass <code class="prettyprint">-Dspecs2.name</code> or <code class="prettyprint">-Dname</code></li>
   <li>for a string argument, you need to pass <code class="prettyprint">-Dspecs2.name=value</code> or <code class="prettyprint">-Dname=value</code></li>
-</ul><p>While the format <code class="prettyprint">-Dname=value</code> can be convenient, <code class="prettyprint">-Dspecs2.name=value</code> is recommended to avoid conflicts with other libraries.</p><a name="Console+output"><h3>Console output</h3></a><p>Executing a specification <code class="prettyprint">com.company.SpecName</code> in the console is very easy:</p><p><code class="prettyprint">scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]</code></p><a name="Html+output"><h3>Html output</h3></a><p>If you want html pages to be produced for your specification you'll need to execute:</p><p><code class="prettyprint">scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]</code></p><a name="JUnit+XML+output"><h3>JUnit XML output</h3></a><p>Many Continuous Integration systems rely on JUnit XML reports to display build and test results. It is possible to produce<br />those result by using the <code class="prettyprint">specs2.junitxml</code> object:</p><p><code class="prettyprint">scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]</code></p><a name="Files+Runner"><h3>Files Runner</h3></a><p>The <code class="prettyprint">specs2.files</code> object will, by default, select and execute Specifications found in the test source directory:</p>
+</ul><p>While the format <code class="prettyprint">-Dname=value</code> can be convenient, <code class="prettyprint">-Dspecs2.name=value</code> is recommended to avoid conflicts with other libraries.</p><a name="In+the+shell"><h3>In the shell</h3></a><a name="Console+output"><h4>Console output</h4></a><p>Executing a specification <code class="prettyprint">com.company.SpecName</code> in the console is very easy:</p><p><code class="prettyprint">scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]</code></p><a name="Html+output"><h4>Html output</h4></a><p>If you want html pages to be produced for your specification you'll need to execute:</p><p><code class="prettyprint">scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]</code></p><a name="JUnit+XML+output"><h4>JUnit XML output</h4></a><p>Many Continuous Integration systems rely on JUnit XML reports to display build and test results. It is possible to produce<br />those result by using the <code class="prettyprint">specs2.junitxml</code> object:</p><p><code class="prettyprint">scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]</code></p><a name="Files+Runner"><h4>Files Runner</h4></a><p>The <code class="prettyprint">specs2.files</code> object will, by default, select and execute Specifications found in the test source directory:</p>
 <ul>
   <li>the source directory is defined as <code class="prettyprint">src/test/scala</code> but can be changed by adjusting the system property <code class="prettyprint">specs2.srcTestDir</code></li>
   <li>the specifications files are selected as classes or object which names match <code class="prettyprint">.*Spec</code>. This value can be changed by<br /> passing a different <code class="prettyprint">specName</code> value as a command-line argument</li>
   <li><code class="prettyprint">console</code> or <code class="prettyprint">html</code> has to be passed on the command-line to specify which kind of output you want</li>
-</ul><p>You can also extend the <code class="prettyprint">org.specs2.runner.FilesRunner</code> trait and override its behavior to implement something more appropriate<br />to your environment if necessary.</p><a name="Simple+build+tool"><h3>Simple build tool</h3></a><a name="with+sbt+0.7.x"><h4>with sbt 0.7.x</h4></a><p>In order to use <strong><em>specs2</em></strong> with sbt 0.7.x you need first to add the following lines to your sbt project:</p>
+</ul><p>You can also extend the <code class="prettyprint">org.specs2.runner.FilesRunner</code> trait and override its behavior to implement something more appropriate<br />to your environment if necessary.</p><a name="In+the+console"><h3>In the console</h3></a><p>The <code class="prettyprint">specs2.run</code> object has an <code class="prettyprint">apply</code> method to execute specifications from the Scala console:</p>
+<pre><code class="prettyprint">  scala&gt; specs2.run(spec1, spec2)
+
+  scala&gt; import specs2._  // same thing, importing the run object
+  scala&gt; run(spec1, spec2)
+</code></pre><p>If you want to pass specific arguments you can import the <code class="prettyprint">specs2.arguments</code> object member functions:</p>
+<pre><code class="prettyprint">  scala&gt; import specs2.arguments._
+
+  scala&gt; specs2.run(spec1)(nocolor)
+</code></pre><p>Or you can set implicit arguments which will be used for any specification execution:</p>
+<pre><code class="prettyprint">  scala&gt; import specs2.arguments._
+  scala&gt; implicit val myargs = nocolor
+
+  scala&gt; specs2.run(spec1)
+</code></pre><a name="Via+SBT"><h3>Via SBT</h3></a><a name="with+sbt+0.7.x"><h4>with sbt 0.7.x</h4></a><p>In order to use <strong><em>specs2</em></strong> with sbt 0.7.x you need first to add the following lines to your sbt project:</p>
 <pre><code class="prettyprint">  def specs2Framework = new TestFramework(&quot;org.specs2.runner.SpecsFramework&quot;)
   override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
 </code></pre><p>Then, depending on the naming of your specification, you have to specify which classes you want to include for reporting:</p>
@@ -720,7 +789,15 @@
   }
 </code></pre><p>Note also that the the color support for sbt on Windows is a bit tricky. You need to follow the instructions <a href="http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows">here</a> then add to your script launching sbt:</p>
 <pre><code class="prettyprint">    -Djline.terminal=jline.UnsupportedTerminal
-</code></pre><a name="JUnit"><h3>JUnit</h3></a><p>It is possible to have <em><strong>specs2</strong></em> specifications executed as JUnit tests. This enables the integration of <strong><em>specs2</em></strong> with Maven and the JUnit runners of your IDE of choice.</p><p>There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend <code class="prettyprint">SpecificationWithJUnit</code>:</p>
+</code></pre><a name="Via+IDEA"><h3>Via IDEA</h3></a><p>IntelliJ offers a nice integration with <strong><em>specs2</em></strong>. You can:</p>
+<ul>
+  <li>Execute a specification by selecting its name and pressing CTRL+SHIFT+F10</li>
+  <li>Execute a single example by selecting its description and pressing CTRL+SHIFT+F10</li>
+</ul><p><img alt="specs2 in Intellij" src="images/intellij.png" /></p><p>But also:</p>
+<ul>
+  <li>Provide command-line arguments in the &quot;Test options&quot;</li>
+  <li>&quot;Jump to Test&quot; and &quot;Jump to Source&quot;</li>
+</ul><a name="Via+JUnit"><h3>Via JUnit</h3></a><p>It is possible to have <em><strong>specs2</strong></em> specifications executed as JUnit tests. This enables the integration of <strong><em>specs2</em></strong> with Maven and the JUnit runners of your IDE of choice.</p><p>There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend <code class="prettyprint">SpecificationWithJUnit</code>:</p>
 <pre><code class="prettyprint">   class MySpecification extends SpecificationWithJUnit {
      def is = // as usual....
    }
@@ -732,15 +809,11 @@
   class MySpecification extends Specification {
      def is = // as usual....
   }
-</code></pre><p>[<em>some <a href="http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse">tricks</a> described on the specs website can still be useful there</em>]</p><a name="Arguments"><h4>Arguments</h4></a><p>You can pass arguments to the <code class="prettyprint">JUnitRunner</code> for generating the html files for the specifications or for displaying the console output. To do that, you can use the <code class="prettyprint">-Dspecs2.commandline</code> property and pass it the <code class="prettyprint">html</code> or <code class="prettyprint">console</code> values.</p><a name="IntelliJ"><h3>IntelliJ</h3></a><p>IntelliJ offers a nice integration with <strong><em>specs2</em></strong>. You can:</p>
+</code></pre><p>[<em>some <a href="http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse">tricks</a> described on the specs website can still be useful there</em>]</p><a name="Arguments"><h4>Arguments</h4></a><p>You can pass arguments to the <code class="prettyprint">JUnitRunner</code> for generating the html files for the specifications or for displaying the console output. To do that, you can use the <code class="prettyprint">-Dspecs2.commandline</code> property and pass it the <code class="prettyprint">html</code> or <code class="prettyprint">console</code> values.</p><a name="Via+Eclipse"><h3>Via Eclipse</h3></a><p>There is unfortunately no specific Eclipse plugin at the moment and specifications have to be executed as [JUnit test cases](#Via JUnit).</p><a name="Via+Maven"><h3>Via Maven</h3></a><p>You can either:</p>
 <ul>
-  <li>Execute a specification by selecting its name and pressing CTRL+SHIFT+F10</li>
-  <li>Execute a single example by selecting its description and pressing CTRL+SHIFT+F10</li>
-</ul><p><img alt="specs2 in Intellij" src="images/intellij.png" /></p><p>But also:</p>
-<ul>
-  <li>Provide command-line arguments in the &quot;Test options&quot;</li>
-  <li>&quot;Jump to Test&quot; and &quot;Jump to Source&quot;</li>
-</ul><a name="Notifier+runner"><h3>Notifier runner</h3></a><p>A <code class="prettyprint">NotifierRunner</code> accepts a <code class="prettyprint">Notifier</code> to execute a specification and report execution events. The <code class="prettyprint">Notifier</code> trait notifies of the following:</p>
+  <li>execute specifications as [JUnit test cases](#Via JUnit).</li>
+  <li>use the <a href="https://github.com/mmakowski/maven-specs2-plugin">Maven specs2 plugin</a> to generate JUnit XML reports and HTML reports</li>
+</ul><a name="With+your+own"><h3>With your own</h3></a><a name="Notifier"><h4>Notifier</h4></a><p>The <code class="prettyprint">org.specs2.reporter.Notifier</code> trait can be used to report execution events. It notifies of the following:</p>
 <ul>
   <li>specification start: the beginning of a specification, with its name</li>
   <li>specification end: the end of a specification, with its name</li>
@@ -749,202 +822,209 @@
   <li>text: any Text fragment that needs to be displayed</li>
   <li>example start</li>
   <li>example result: success / failure / error / skipped / pending</li>
-</ul><p>All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples only).</p><a name="From+the+console"><h3>From the console</h3></a><p>The <code class="prettyprint">specs2.run</code> object has an <code class="prettyprint">apply</code> method to execute specifications from the Scala console:</p>
-<pre><code class="prettyprint">  scala&gt; specs2.run(spec1, spec2)
-
-  scala&gt; import specs2._  // same thing, importing the run object
-  scala&gt; run(spec1, spec2)
-</code></pre><p>If you want to pass specific arguments you can import the <code class="prettyprint">specs2.arguments</code> object member functions:</p>
-<pre><code class="prettyprint">  scala&gt; import specs2.arguments._
-
-  scala&gt; specs2.run(spec1)(nocolor)
-</code></pre><p>Or you can set implicit arguments which will be used for any specification execution:</p>
-<pre><code class="prettyprint">  scala&gt; import specs2.arguments._
-  scala&gt; implicit val myargs = nocolor
-
-  scala&gt; specs2.run(spec1)
+</ul><p>All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples and actions).</p><a name="NotifierRunner"><h5>NotifierRunner</h5></a><p>The <code class="prettyprint">NotifierRunner</code> class can be instantiated with a custom <code class="prettyprint">Notifier</code> and used from the command line.</p><a name="In+sbt"><h5>In sbt</h5></a><p>You can also use a custom <code class="prettyprint">Notifier</code> from inside sbt by passing the <code class="prettyprint">notifier</code> argument with a <code class="prettyprint">Notifier</code> implementation class name:</p>
+<pre><code class="prettyprint">  sbt&gt;test-only *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
+</code></pre><a name="Exporter"><h4>Exporter</h4></a><p>The <code class="prettyprint">org.specs2.reporter.Exporter</code> trait can be used to collect <code class="prettyprint">ExecutedFragments</code> and report them as desired. The only method to implement is:</p>
+<pre><code class="prettyprint">  def export(implicit args: Arguments): ExecutingSpecification =&gt; ExecutedSpecification
+</code></pre>
+<ul>
+  <li><code class="prettyprint">args</code> is an <code class="prettyprint">Arguments</code> object created from command line options</li>
+  <li><code class="prettyprint">ExecutingSpecification</code> is a list of fragments which might or might not have finished their execution</li>
+  <li><code class="prettyprint">ExecutedSpecification</code> must be a list of executed fragments</li>
+</ul><p>Please see the API of each class to see how to use them.</p><a name="In+sbt"><h5>In sbt</h5></a><p>You can use a custom <code class="prettyprint">Exporter</code> from inside sbt by passing the <code class="prettyprint">exporter</code> argument with a <code class="prettyprint">Exporter</code> implementation class name:</p>
+<pre><code class="prettyprint">  sbt&gt;test-only *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="627727968"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1972600863"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
-            <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit+specification">Unit specification</a>
+      <ul><li id="15785800"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="31884026"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+            <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
-          </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance+specification">Acceptance specification</a>
+          </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Execution">Execution</a>
             
-          </li><li id=""><a href="org.specs2.guide.QuickStart.html#Where+to+go+from+here">Where to go from here</a>
+          </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="427553241"><a href="org.specs2.guide.SpecStructure.html#Specification+structure">Specification structure</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Presentation">Presentation</a>
+          </li><li id="9097289"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+examples">Declare examples</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Structure+of+a+Specification">Structure of a Specification</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Acceptance+specification">Acceptance specification</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Styles">Styles</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Acceptance+specification">Acceptance specification</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Unit+specification">Unit specification</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Results">Results</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Standard+results">Standard results</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Matcher+results">Matcher results</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Functional+expectations">Functional expectations</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Thrown+Expectations">Thrown Expectations</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Set+an+example+as+%22Pending+until+fixed%22">Set an example as &quot;Pending until fixed&quot;</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Results">Results</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Standard">Standard</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Auto-Examples">Auto-Examples</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Matchers">Matchers</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Using+the+Example+description">Using the Example description</a>
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Expectations">Expectations</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Functional">Functional</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Given+%2F+When+%2F+Then">Given / When / Then</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Multiple+steps">Multiple steps</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Thrown">Thrown</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Extract+methods">Extract methods</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#User+regexps">User regexps</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Several+G%2FW%2FT+blocks">Several G/W/T blocks</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#ScalaCheck+values">ScalaCheck values</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Single+step">Single step</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Conversions">Conversions</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#All">All</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Short-circuit">Short-circuit</a>
             
           </li></ul>
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Shared+examples">Shared examples</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Pending+until+fixed">Pending until fixed</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Declare+arguments">Declare arguments</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Auto-Examples">Auto-Examples</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Layout">Layout</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#The+rules">The rules</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#G%2FW%2FT">G/W/T</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Multiple+steps">Multiple steps</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#The+formatting+fragments">The formatting fragments</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Separating+groups+of+examples">Separating groups of examples</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Extract+methods">Extract methods</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Reset+the+levels">Reset the levels</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#User+regexps">User regexps</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Changing+the+indentation+level">Changing the indentation level</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#G%2FW%2FT+sequences">G/W/T sequences</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#ScalaCheck">ScalaCheck</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Single+step">Single step</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Conversions">Conversions</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#DataTables">DataTables</a>
+            
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Links">Links</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Html+link">Html link</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Html+Link">Html Link</a>
             
           </li></ul>
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Include+or+link+specifications">Include or link specifications</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Include+specifications">Include specifications</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Link+specifications">Link specifications</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Reference">Reference</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Specification+title">Specification title</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Contexts">Contexts</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Scope">Scope</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Index+page">Index page</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Isolated+variables">Isolated variables</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Contexts">Contexts</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Variables+isolation">Variables isolation</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Scope">Scope</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Case+classes">Case classes</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#With+acceptance+specifications">With acceptance specifications</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Contexts+inheritance">Contexts inheritance</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Contexts+inheritance">Contexts inheritance</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Before%2FAfter+code">Before/After code</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#In+a+mutable+specification">In a mutable specification</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Before%2FAfter">Before/After</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#In+a+mutable+specification">In a mutable specification</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#In+an+acceptance+specification">In an acceptance specification</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Around+actions">Around actions</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Outside+actions">Outside actions</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#AroundOutside+actions">AroundOutside actions</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#In+an+acceptance+specification">In an acceptance specification</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Without+creating+a+context+object%3A+BeforeExample">Without creating a context object: BeforeExample</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Around">Around</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Implicit+context">Implicit context</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Composing+contexts">Composing contexts</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Combinations">Combinations</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Composition">Composition</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Outside">Outside</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Steps+and+Actions">Steps and Actions</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#Steps">Steps</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#BeforeExample">BeforeExample</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Actions">Actions</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Implicit+context">Implicit context</a>
             
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Generic+specification+with+setup+and+teardown+steps">Generic specification with setup and teardown steps</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Composition">Composition</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Combinations">Combinations</a>
             
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Other+unit+specification+methods">Other unit specification methods</a>
-            
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Tags">Tags</a>
-            <ul><li id=""><a href="org.specs2.guide.SpecStructure.html#In+a+unit+specification">In a unit specification</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Composition">Composition</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Adding+debug+statements">Adding debug statements</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Steps%2FActions">Steps/Actions</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Steps">Steps</a>
             
-          </li><li id=""><a href="org.specs2.guide.SpecStructure.html#Removing+implicit+definitions">Removing implicit definitions</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Actions">Actions</a>
             
           </li></ul>
-          </li><li id="2036806253"><a href="org.specs2.guide.Matchers.html#Matchers+guide">Matchers guide</a>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Template">Template</a>
+            
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Layout">Layout</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Rules">Rules</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Formatting+fragments">Formatting fragments</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Separating+groups+of+examples">Separating groups of examples</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Reset+the+levels">Reset the levels</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Changing+the+indentation+level">Changing the indentation level</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Combinations">Combinations</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Unit+specifications">Unit specifications</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#How+to%3F">How to?</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#Declare+arguments">Declare arguments</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Add+a+title">Add a title</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Use+descriptions">Use descriptions</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Enhance+failures">Enhance failures</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Share+examples">Share examples</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Create+an+index">Create an index</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Tag+examples">Tag examples</a>
+            <ul><li id=""><a href="org.specs2.guide.Structure.html#In+a+unit+specification">In a unit specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Debug+statements">Debug statements</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Remove+implicits">Remove implicits</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="32707528"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Out-of-the-box+matchers">Out-of-the-box matchers</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Adapting+Iterable+matchers">Adapting Iterable matchers</a>
+            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Optional">Optional</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Custom">Custom</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#With+sequences">With sequences</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Optional+matchers">Optional matchers</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Layers+definition">Layers definition</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Inclusion%2FExclusion">Inclusion/Exclusion</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Verification">Verification</a>
-            
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Layers+as+an+Example">Layers as an Example</a>
-            
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Alternative+implementation">Alternative implementation</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#With+a+better+description">With a better description</a>
-            
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Matchers+creation">Matchers creation</a>
-            
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Matching+with+a+sequence+of+values">Matching with a sequence of values</a>
-            
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#ScalaCheck+properties">ScalaCheck properties</a>
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#ScalaCheck">ScalaCheck</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
             
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Setting+the+ScalaCheck+properties">Setting the ScalaCheck properties</a>
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Test+properties">Test properties</a>
             
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
-            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Mocks+creation+and+settings">Mocks creation and settings</a>
+            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Creation+and+settings">Creation and settings</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Mocking+and+Stubbing+at+the+same+time">Mocking and Stubbing at the same time</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Argument+matchers">Argument matchers</a>
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#With+matchers">With matchers</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
@@ -957,14 +1037,18 @@
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Spies">Spies</a>
             
-          </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Functions+and+partial+functions">Functions and partial functions</a>
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Functions%2FPartialFunctions">Functions/PartialFunctions</a>
             
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Auto-boxing">Auto-boxing</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Byname">Byname</a>
+            
+          </li></ul>
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1561345611"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="86212"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1003,18 +1087,18 @@
           </li><li id=""><a href="org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Matchers.html#Reusing+matchers+outside+of+specs2">Reusing matchers outside of specs2</a>
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Outside+specs2">Outside specs2</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
             
           </li></ul>
           </li></ul>
-          </li><li id="1404967249"><a href="org.specs2.guide.Runners.html#Runners+guide">Runners guide</a>
+          </li><li id="18150653"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
-            <ul><li id=""><a href="org.specs2.guide.Runners.html#In+a+Specification">In a Specification</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#API">API</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Shortcuts">Shortcuts</a>
@@ -1030,12 +1114,13 @@
           </li><li id=""><a href="org.specs2.guide.Runners.html#StackTraceFilter">StackTraceFilter</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#On+the+command+line">On the command line</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Command+line">Command line</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#From+system+properties">From system properties</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#System+properties">System properties</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#In+the+shell">In the shell</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#Console+output">Console output</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Html+output">Html output</a>
             
@@ -1043,7 +1128,10 @@
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Simple+build+tool">Simple build tool</a>
+          </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#In+the+console">In the console</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+SBT">Via SBT</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#with+sbt+0.7.x">with sbt 0.7.x</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x">with sbt &gt; 0.9.x</a>
@@ -1057,18 +1145,30 @@
             
           </li></ul>
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#JUnit">JUnit</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+IDEA">Via IDEA</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+JUnit">Via JUnit</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Arguments">Arguments</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Runners.html#IntelliJ">IntelliJ</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+Eclipse">Via Eclipse</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#Notifier+runner">Notifier runner</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Via+Maven">Via Maven</a>
             
-          </li><li id=""><a href="org.specs2.guide.Runners.html#From+the+console">From the console</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#With+your+own">With your own</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#Notifier">Notifier</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#NotifierRunner">NotifierRunner</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Runners.html#In+sbt">In sbt</a>
             
           </li></ul>
-          </li><li id="229828143"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id=""><a href="org.specs2.guide.Runners.html#Exporter">Exporter</a>
+            <ul><li id=""><a href="org.specs2.guide.Runners.html#In+sbt">In sbt</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="13103443"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1085,7 +1185,7 @@
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#User+support">User support</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Philosophy.html#A+new+compromise">A new compromise</a>
+          </li><li id=""><a href="org.specs2.guide.Philosophy.html#A+new+hope">A new hope</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#Functional+%2F+immutable">Functional / immutable</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#Chaining+everything">Chaining everything</a>
             
@@ -1112,25 +1212,25 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1477209750"><a href="org.specs2.guide.Design.html#specs2+design">specs2 design</a>
+          </li><li id="14602049"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
-          </li><li id=""><a href="org.specs2.guide.Design.html#Specification+structure">Specification structure</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
             
-          </li><li id=""><a href="org.specs2.guide.Design.html#Specification+creation">Specification creation</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Creation">Creation</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Creating+Fragments">Creating Fragments</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Mutable+Specification">Mutable Specification</a>
             
           </li></ul>
-          </li><li id=""><a href="org.specs2.guide.Design.html#Specification+execution">Specification execution</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Execution">Execution</a>
             
-          </li><li id=""><a href="org.specs2.guide.Design.html#Specification+reporting">Specification reporting</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Reporting">Reporting</a>
             
-          </li><li id=""><a href="org.specs2.guide.Design.html#Packages+dependencies">Packages dependencies</a>
+          </li><li id=""><a href="org.specs2.guide.Design.html#Dependencies">Dependencies</a>
             
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['627727968','1404967249'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['15785800','18150653'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

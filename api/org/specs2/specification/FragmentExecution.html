@@ -176,7 +176,7 @@ and returns executed fragments
       <span class="symbol"> 
         <span class="name">execute</span>
         
-        <span class="params">(<span name="f">f: <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span> with <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></span>
+        <span class="params">(<span name="f">f: <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span> with <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">execute a Fragment.</p><div class="fullcomment"><div class="comment cmt"><p>execute a Fragment.</p><p>A Form is executed separately by executing each row and cell, setting the results on each cell
@@ -188,7 +188,7 @@ and returns executed fragments
       <span class="symbol"> 
         <span class="name">executeBody</span>
         
-        <span class="params">(<span name="body">body: ⇒ <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>
+        <span class="params">(<span name="body">body: ⇒ <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">This method could be overriden to provide alternate behavior when executing an
@@ -201,7 +201,7 @@ Example
       <span class="symbol"> 
         <span class="name">executeFragment</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: Function[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: Function[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">execute a Fragment.</p>

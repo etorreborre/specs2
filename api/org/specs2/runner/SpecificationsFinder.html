@@ -293,13 +293,13 @@ This may be later extended to support other arbitrary patterns
 </p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>name of the resource directory to copy</p></dd><dt class="param">outputDir</dt><dd class="cmt"><p>output directory where to copy the files to
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileSystem</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#create" data-isabs="false">
-      <a id="create[T&lt;:AnyRef](String,ClassLoader)(ClassManifest[T]):Either[Throwable, T]"></a>
+      <a id="create[T&lt;:AnyRef](String,ClassLoader)(Manifest[T]):Either[Throwable, T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">create</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String = <span class="symbol">&quot;&quot;</span></span>, <span name="classLoader">classLoader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../../../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[Throwable, T]</span>
+        <span class="params">(<span name="className">className: String = <span class="symbol">&quot;&quot;</span></span>, <span name="classLoader">classLoader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../../../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[Throwable, T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class, returning either the instance, or an exception</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
@@ -329,13 +329,13 @@ This may be later extended to support other arbitrary patterns
       <p class="shortcomment cmt">creates a file for a given path.</p><div class="fullcomment"><div class="comment cmt"><p>creates a file for a given path. Create the parent directory if necessary.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileWriter</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#createObject" data-isabs="false">
-      <a id="createObject[T&lt;:AnyRef](String,Boolean,Boolean)(ClassManifest[T]):Option[T]"></a>
+      <a id="createObject[T&lt;:AnyRef](String,Boolean,Boolean)(Manifest[T]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">createObject</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">A system property 'debugCreateObject' can be set to override the printMessage and printStackTrace parameters
@@ -345,24 +345,24 @@ so that the exception message and stacktrace are printed when the object can't b
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#createObject" data-isabs="false">
-      <a id="createObject[T&lt;:AnyRef](String,Boolean)(ClassManifest[T]):Option[T]"></a>
+      <a id="createObject[T&lt;:AnyRef](String,Boolean)(Manifest[T]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">createObject</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class and optionally print message if the class can't be loaded</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#createObject" data-isabs="false">
-      <a id="createObject[T&lt;:AnyRef](String)(ClassManifest[T]):Option[T]"></a>
+      <a id="createObject[T&lt;:AnyRef](String)(Manifest[T]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">createObject</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="params">(<span name="className">className: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
@@ -658,25 +658,25 @@ Tries to load the class name and cast it to a specification
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the files of that directory</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileSystem</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.FileReader#loadXhtmlFile" data-isabs="false">
-      <a id="loadXhtmlFile(String):NodeSeq"></a>
+      <a id="loadXhtmlFile(String,(Exception, String) ⇒ Unit):NodeSeq"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">loadXhtmlFile</span>
         
-        <span class="params">(<span name="filePath">filePath: String</span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
+        <span class="params">(<span name="filePath">filePath: String</span>, <span name="report">report: (Exception, String) ⇒ <span name="scala.Unit" class="extype">Unit</span> = <span class="symbol">defaultLoadXhtmlFileReport</span></span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file using the Xhtml parser</p><p>if the file contains several nodes, it wraps them up in a single artificial node
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.FileReader#loadXmlFile" data-isabs="false">
-      <a id="loadXmlFile(String):NodeSeq"></a>
+      <a id="loadXmlFile(String)((Exception) ⇒ Unit):NodeSeq"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">loadXmlFile</span>
         
-        <span class="params">(<span name="filePath">filePath: String</span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
+        <span class="params">(<span name="filePath">filePath: String</span>)</span><span class="params">(<span name="report">report: (Exception) ⇒ <span name="scala.Unit" class="extype">Unit</span> = <span class="symbol">(e:Exception) =&gt; e.printStackTrace</span></span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file, using the XML parser
@@ -882,13 +882,13 @@ Tries to load the class name and cast it to a specification
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#tryToCreateObject" data-isabs="false">
-      <a id="tryToCreateObject[T&lt;:AnyRef](String,Boolean,Boolean,ClassLoader)(ClassManifest[T]):Option[T]"></a>
+      <a id="tryToCreateObject[T&lt;:AnyRef](String,Boolean,Boolean,ClassLoader)(Manifest[T]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">tryToCreateObject</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="loader">loader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../../../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="loader">loader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../../../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Try to create an instance of a given class by using whatever constructor is available

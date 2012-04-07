@@ -79,20 +79,7 @@
         
         <div class="values members" id="values">
               <h3>Abstract Value Members</h3>
-              <ol><li visbl="pub" name="org.specs2.execute.Result#addExpectationsNb" data-isabs="true">
-      <a id="addExpectationsNb(Int):Result"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">addExpectationsNb</span>
-        
-        <span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="">Result</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">increment the number of expectations
-</p><div class="fullcomment"><div class="comment cmt"><p>increment the number of expectations
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.execute.Result#mute" data-isabs="true">
+              <ol><li visbl="pub" name="org.specs2.execute.Result#mute" data-isabs="true">
       <a id="mute:Result"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -104,6 +91,19 @@
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the result with no message
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.execute.Result#setExpectationsNb" data-isabs="true">
+      <a id="setExpectationsNb(Int):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">setExpectationsNb</span>
+        
+        <span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="">Result</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">set the number of expectations
+</p><div class="fullcomment"><div class="comment cmt"><p>set the number of expectations
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
     </li></ol>
             </div>
 
@@ -164,6 +164,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.execute.Result#addExpectationsNb" data-isabs="false">
+      <a id="addExpectationsNb(Int):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">addExpectationsNb</span>
+        
+        <span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="">Result</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">increment the number of expectations
+</p>
     </li><li visbl="pub" name="org.specs2.execute.Result#and" data-isabs="false">
       <a id="and(⇒ Result):Result"></a>
       <h4 class="signature">
@@ -208,7 +220,7 @@
       <span class="symbol"> 
         <span class="name">coloredStatus</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: String</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: String</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the colored textual status of the result
@@ -364,6 +376,29 @@
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the result is a Success instance
 </p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.execute.Result#isSuspended" data-isabs="false">
+      <a id="isSuspended:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isSuspended</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the result is a Skipped or Pending
+</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.execute.Result#mapMessage" data-isabs="false">
+      <a id="mapMessage((String) ⇒ String):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">mapMessage</span>
+        
+        <span class="params">(<span name="f">f: (String) ⇒ String</span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="">Result</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">change this result's message</p>
     </li><li visbl="pub" name="org.specs2.execute.Result#message" data-isabs="false">
       <a id="message:String"></a>
       <h4 class="signature">
@@ -451,7 +486,7 @@
       <span class="symbol"> 
         <span class="name">statusName</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: String</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: String</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the textual status of the result</p></dd></dl></div>

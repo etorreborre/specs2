@@ -494,6 +494,28 @@
       </h4>
       <p class="shortcomment cmt">matches if a == b after an implicit conversion</p><div class="fullcomment"><div class="comment cmt"><p>matches if a == b after an implicit conversion</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#=~" data-isabs="false">
+      <a id="=~(Regex):BeMatchingRegex"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">=~</span>
+        
+        <span class="params">(<span name="r">r: <span name="scala.util.matching.Regex" class="extype">Regex</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingRegex" class="extype" href="matcher/BeMatchingRegex.html">BeMatchingRegex</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for beMatching but matching just a fragment of the string</p><div class="fullcomment"><div class="comment cmt"><p>alias for beMatching but matching just a fragment of the string</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#=~" data-isabs="false">
+      <a id="=~(Pattern):BeMatchingPattern"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">=~</span>
+        
+        <span class="params">(<span name="p">p: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingPattern" class="extype" href="matcher/BeMatchingPattern.html">BeMatchingPattern</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for beMatching but matching just a fragment of the string</p><div class="fullcomment"><div class="comment cmt"><p>alias for beMatching but matching just a fragment of the string</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#=~" data-isabs="false">
       <a id="=~(⇒ String):BeMatching"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -674,6 +696,28 @@ an exact match on is required on attributes
 </p><div class="fullcomment"><div class="comment cmt"><p>match if <code>node</code> is contained anywhere inside the tested node
 an exact match on is required on attributes
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>XmlBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#aBooleanExample" data-isabs="false">
+      <a id="aBooleanExample(⇒ Boolean):ToBooleanExample"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">aBooleanExample</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamplesLowImplicits.ToBooleanExample" class="extype">ToBooleanExample</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamples#aDataTableExample" data-isabs="false">
+      <a id="aDataTableExample[T](⇒ DecoratedResult[T]):ToDataTableExample[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">aDataTableExample</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="execute/DecoratedResult.html">DecoratedResult</a>[T]</span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamples.ToDataTableExample" class="extype">ToDataTableExample</span>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this syntax allows to declare auto examples with { .</p><div class="fullcomment"><div class="comment cmt"><p>this syntax allows to declare auto examples with { ... }.eg in mutable specifications</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.FileBeHaveMatchers#aDirectory" data-isabs="false">
       <a id="aDirectory[T&lt;:AnyRef { def getPath(): String }]:Matcher[AnyRef { def getPath(): String }]"></a>
       <h4 class="signature">
@@ -729,6 +773,17 @@ an exact match on is required on attributes
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PathBeHaveMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#aMatchResultExample" data-isabs="false">
+      <a id="aMatchResultExample(⇒ org.specs2.matcher.MatchResult[_]):ToMatchResultExample"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">aMatchResultExample</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamplesLowImplicits.ToMatchResultExample" class="extype">ToMatchResultExample</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.PathBeHaveMatchers#aReadablePath" data-isabs="false">
       <a id="aReadablePath:PathMatcher"></a>
       <h4 class="signature">
@@ -740,6 +795,17 @@ an exact match on is required on attributes
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PathBeHaveMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#aResultExample" data-isabs="false">
+      <a id="aResultExample(⇒ Result):ToResultExample"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">aResultExample</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.Result" class="extype" href="execute/Result.html">Result</a></span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamplesLowImplicits.ToResultExample" class="extype">ToResultExample</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.PathBeHaveMatchers#aWritablePath" data-isabs="false">
       <a id="aWritablePath:PathMatcher"></a>
       <h4 class="signature">
@@ -913,13 +979,13 @@ write("./dir/hello.txt") { out =>
       <p class="shortcomment cmt">writes some xml content to a file.</p><div class="fullcomment"><div class="comment cmt"><p>writes some xml content to a file.</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>path of the file to read</p></dd><dt class="param">content</dt><dd class="cmt"><p>content of the file to write
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileWriter</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs#args" data-isabs="false">
-      <a id="args(ArgProperty[String],ArgProperty[String],ArgProperty[String],ArgProperty[Boolean],ArgProperty[String],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[String],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean]):Arguments"></a>
+      <a id="args(ArgProperty[String],ArgProperty[String],ArgProperty[String],ArgProperty[Boolean],ArgProperty[String],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[String],ArgProperty[Boolean],ArgProperty[Boolean],ArgProperty[Boolean]):Arguments"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">args</span>
         
-        <span class="params">(<span name="ex">ex: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="include">include: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="exclude">exclude: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="wasIssue">wasIssue: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="was">was: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="plan">plan: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="skipAll">skipAll: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="stopOnFail">stopOnFail: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="sequential">sequential: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="xonly">xonly: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="showOnly">showOnly: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="color">color: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="noindent">noindent: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="markdown">markdown: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="params">(<span name="ex">ex: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="include">include: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="exclude">exclude: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="wasIssue">wasIssue: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="was">was: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="plan">plan: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="skipAll">skipAll: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="stopOnFail">stopOnFail: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="stopOnSkip">stopOnSkip: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="sequential">sequential: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="isolated">isolated: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="xonly">xonly: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="showOnly">showOnly: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[String] = <span class="symbol">ArgProperty[String]()</span></span>, <span name="color">color: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="noindent">noindent: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>, <span name="markdown">markdown: <a name="org.specs2.main.ArgProperty" class="extype" href="main/ArgProperty.html">ArgProperty</a>[<span name="scala.Boolean" class="extype">Boolean</span>] = <span class="symbol">ArgProperty[Boolean]()</span></span>)</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shorthand method to create an Arguments object</p><div class="fullcomment"><div class="comment cmt"><p>shorthand method to create an Arguments object</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.main.ArgumentsArgs" class="extype" href="main/ArgumentsArgs.html">ArgumentsArgs</a></dd></dl></div>
@@ -941,7 +1007,7 @@ write("./dir/hello.txt") { out =>
       <span class="symbol"> 
         <span class="name">argumentsFragment</span>
         
-        <span class="params">(<span name="a">a: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="params">(<span name="a">a: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Arguments creation</p><div class="fullcomment"><div class="comment cmt"><p>Arguments creation</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object which can be chained with other fragments
@@ -1422,13 +1488,35 @@ write("./dir/hello.txt") { out =>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.AnyBeHaveMatchers" class="extype" href="matcher/AnyBeHaveMatchers.html">AnyBeHaveMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#beMatching" data-isabs="false">
+      <a id="beMatching(Regex):BeMatchingRegex"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">beMatching</span>
+        
+        <span class="params">(<span name="a">a: <span name="scala.util.matching.Regex" class="extype">Regex</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingRegex" class="extype" href="matcher/BeMatchingRegex.html">BeMatchingRegex</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if b matches the regex a</p><div class="fullcomment"><div class="comment cmt"><p>matches if b matches the regex a</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#beMatching" data-isabs="false">
+      <a id="beMatching(Pattern):BeMatchingPattern"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">beMatching</span>
+        
+        <span class="params">(<span name="a">a: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingPattern" class="extype" href="matcher/BeMatchingPattern.html">BeMatchingPattern</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if b matches the pattern a</p><div class="fullcomment"><div class="comment cmt"><p>matches if b matches the pattern a</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#beMatching" data-isabs="false">
       <a id="beMatching(⇒ String):BeMatching"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">beMatching</span>
         
-        <span class="params">(<span name="t">t: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatching" class="extype" href="matcher/BeMatching.html">BeMatching</a></span>
+        <span class="params">(<span name="a">a: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatching" class="extype" href="matcher/BeMatching.html">BeMatching</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">matches if b matches the regular expression a</p><div class="fullcomment"><div class="comment cmt"><p>matches if b matches the regular expression a</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
@@ -1895,7 +1983,7 @@ It is equivalent to writing a must_== b
       <span class="symbol"> 
         <span class="name">colors</span>
         
-        <span class="params">(<span name="c">c: <a name="org.specs2.text.Colors" class="extype" href="text/Colors.html">Colors</a></span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="params">(<span name="c">c: <a name="org.specs2.text.Colors" class="extype" href="text/Colors.html">Colors</a></span>)</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to set new Colors
@@ -2136,6 +2224,17 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Expectable</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="matcher/Expectations.html">Expectations</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Expectations#createExpectableWithShowAs" data-isabs="false">
+      <a id="createExpectableWithShowAs[T](⇒ T,⇒ String):Expectable[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">createExpectableWithShowAs</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: ⇒ T</span>, <span name="showAs">showAs: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="matcher/Expectable.html">Expectable</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Expectable with a function to show the element T</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="matcher/Expectations.html">Expectations</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.FileWriter#createFile" data-isabs="false">
       <a id="createFile(String):AnyVal"></a>
       <h4 class="signature">
@@ -2171,24 +2270,24 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ShouldExpectations" class="extype" href="matcher/ShouldExpectations.html">ShouldExpectations</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.AutoExamples#dataTableExample" data-isabs="false">
-      <a id="dataTableExample(⇒ DecoratedResult[DataTable]):Example"></a>
+      <a id="dataTableExample[T](⇒ DecoratedResult[T]):Example"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">dataTableExample</span>
-        
-        <span class="params">(<span name="result">result: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="execute/DecoratedResult.html">DecoratedResult</a>[<a name="org.specs2.matcher.DataTable" class="extype" href="matcher/DataTable.html">DataTable</a>]</span>)</span><span class="result">: <a name="org.specs2.specification.Example" class="extype" href="specification/Example.html">Example</a></span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="result">result: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="execute/DecoratedResult.html">DecoratedResult</a>[T]</span>)</span><span class="result">: <a name="org.specs2.specification.Example" class="extype" href="specification/Example.html">Example</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.AutoExamples#dataTableFragments" data-isabs="false">
-      <a id="dataTableFragments(⇒ DecoratedResult[DataTable]):Fragments"></a>
+      <a id="dataTableFragments[T](⇒ DecoratedResult[T]):Fragments"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">dataTableFragments</span>
-        
-        <span class="params">(<span name="result">result: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="execute/DecoratedResult.html">DecoratedResult</a>[<a name="org.specs2.matcher.DataTable" class="extype" href="matcher/DataTable.html">DataTable</a>]</span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="result">result: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="execute/DecoratedResult.html">DecoratedResult</a>[T]</span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">specific implicits for datatables</p><div class="fullcomment"><div class="comment cmt"><p>specific implicits for datatables</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
@@ -2254,7 +2353,7 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       <span class="symbol"> 
         <span class="name">descFromExpectations</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to display the example descriptions from the expectations ok messages
@@ -2278,7 +2377,7 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       <span class="symbol"> 
         <span class="name">diffs</span>
         
-        <span class="params">(<span name="show">show: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="separators">separators: String = <span class="symbol">&quot;[]&quot;</span></span>, <span name="triggerSize">triggerSize: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">20</span></span>, <span name="diffRatio">diffRatio: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">30</span></span>, <span name="shortenSize">shortenSize: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">5</span></span>, <span name="full">full: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="params">(<span name="show">show: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="separators">separators: String = <span class="symbol">&quot;[]&quot;</span></span>, <span name="triggerSize">triggerSize: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">20</span></span>, <span name="diffRatio">diffRatio: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">30</span></span>, <span name="shortenSize">shortenSize: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">5</span></span>, <span name="full">full: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to display the differences with some specific parameters
@@ -2347,6 +2446,56 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       <p class="shortcomment cmt">implicit conversion to transform a Given[Y] to Given[X] when Y &lt;: X
 </p><div class="fullcomment"><div class="comment cmt"><p>implicit conversion to transform a Given[Y] to Given[X] when Y &lt;: X
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexSteps" class="extype" href="specification/RegexSteps.html">RegexSteps</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamples#eg" data-isabs="false">
+      <a id="eg[T](⇒ DecoratedResult[T]):ToDataTableExample[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">eg</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="execute/DecoratedResult.html">DecoratedResult</a>[T]</span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamples.ToDataTableExample" class="extype">ToDataTableExample</span>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">explicit call</p><div class="fullcomment"><div class="comment cmt"><p>explicit call</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#eg" data-isabs="false">
+      <a id="eg(⇒ Result):Fragment"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">eg</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.Result" class="extype" href="execute/Result.html">Result</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragment" class="extype" href="specification/Fragment.html">Fragment</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">explicit call
+The result type is different from the eg method to create examples in order to avoid an overloading error
+</p><div class="fullcomment"><div class="comment cmt"><p>explicit call
+The result type is different from the eg method to create examples in order to avoid an overloading error
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#eg" data-isabs="false">
+      <a id="eg(⇒ Boolean):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">eg</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">explicit call.</p><div class="fullcomment"><div class="comment cmt"><p>explicit call.
+The result type is different from the eg method to create examples in order to avoid an overloading error
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#eg" data-isabs="false">
+      <a id="eg(⇒ org.specs2.matcher.MatchResult[_]):Example"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">eg</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <a name="org.specs2.specification.Example" class="extype" href="specification/Example.html">Example</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">explicit call</p><div class="fullcomment"><div class="comment cmt"><p>explicit call</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.AnyBeHaveMatchers#empty" data-isabs="false">
       <a id="empty[T&lt;:Any { def isEmpty: Boolean }]:Matcher[T]"></a>
       <h4 class="signature">
@@ -2392,13 +2541,13 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.FormattingFragments" class="extype" href="specification/FormattingFragments.html">FormattingFragments</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#endingWith" data-isabs="false">
-      <a id="endingWith(String):Matcher[String]"></a>
+      <a id="endingWith(⇒ String):Matcher[String]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">endingWith</span>
         
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[String]</span>
+        <span class="params">(<span name="s">s: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[String]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBeHaveMatchers</dd></dl></div>
@@ -2489,7 +2638,7 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
         <span class="params">(<span name="nested">nested: ⇒ <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[T]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a matcher that will retry the nested matcher a given 40 times</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.EventuallyMatchers" class="extype" href="matcher/EventuallyMatchers.html">EventuallyMatchers</a></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a matcher that will retry the nested matcher 40 times</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.EventuallyMatchers" class="extype" href="matcher/EventuallyMatchers.html">EventuallyMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.EventuallyMatchers#eventually" data-isabs="false">
       <a id="eventually[T](Int,Duration)(⇒ Matcher[T]):Matcher[T]"></a>
       <h4 class="signature">
@@ -2520,7 +2669,7 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       <span class="symbol"> 
         <span class="name">exclude</span>
         
-        <span class="params">(<span name="tags">tags: String</span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="params">(<span name="tags">tags: String</span>)</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to exclude some tagged fragments
@@ -2612,13 +2761,35 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#find" data-isabs="false">
-      <a id="find(String):FindMatcher"></a>
+      <a id="find(Regex):FindMatcherRegex"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">find</span>
         
-        <span class="params">(<span name="a">a: String</span>)</span><span class="result">: <span name="org.specs2.matcher.StringBaseMatchers.FindMatcher" class="extype">FindMatcher</span></span>
+        <span class="params">(<span name="r">r: <span name="scala.util.matching.Regex" class="extype">Regex</span></span>)</span><span class="result">: <span name="org.specs2.matcher.StringBaseMatchers.FindMatcherRegex" class="extype">FindMatcherRegex</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if the regexp r is found inside b</p><div class="fullcomment"><div class="comment cmt"><p>matches if the regexp r is found inside b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#find" data-isabs="false">
+      <a id="find(Pattern):FindMatcherPattern"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">find</span>
+        
+        <span class="params">(<span name="p">p: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>)</span><span class="result">: <span name="org.specs2.matcher.StringBaseMatchers.FindMatcherPattern" class="extype">FindMatcherPattern</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if the pattern p is found inside b</p><div class="fullcomment"><div class="comment cmt"><p>matches if the pattern p is found inside b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#find" data-isabs="false">
+      <a id="find(⇒ String):FindMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">find</span>
+        
+        <span class="params">(<span name="a">a: ⇒ String</span>)</span><span class="result">: <span name="org.specs2.matcher.StringBaseMatchers.FindMatcher" class="extype">FindMatcher</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">matches if the regexp a is found inside b</p><div class="fullcomment"><div class="comment cmt"><p>matches if the regexp a is found inside b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
@@ -2729,7 +2900,7 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       <span class="symbol"> 
         <span class="name">freetext</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to not executing the text and avoid automatic indentation
@@ -2755,7 +2926,7 @@ It is true if the MatchResult is not an Error or a Failure
       <span class="symbol"> 
         <span class="name">fullStackTrace</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to filter nothing
@@ -2846,6 +3017,17 @@ It is true if the MatchResult is not an Error or a Failure
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.specification.AutoExamplesLowImplicits#getDescription" data-isabs="false">
+      <a id="getDescription(Int,Int,Int):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getDescription</span>
+        
+        <span class="params">(<span name="depth">depth: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">9</span></span>, <span name="startOffset">startOffset: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">1</span></span>, <span name="endOffset">endOffset: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">1</span></span>)</span><span class="result">: String</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">get the description from the source file</p><div class="fullcomment"><div class="comment cmt"><p>get the description from the source file</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.FileSystem#getName" data-isabs="false">
       <a id="getName(String):String"></a>
       <h4 class="signature">
@@ -3026,6 +3208,17 @@ It is true if the MatchResult is not an Error or a Failure
       </span>
       </h4>
       <p class="shortcomment cmt">matches if map.</p><div class="fullcomment"><div class="comment cmt"><p>matches if map.contains(k)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MapBaseMatchers#haveKeys" data-isabs="false">
+      <a id="haveKeys[K](K*):Matcher[Iterable[(K, Any)]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">haveKeys</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        <span class="params">(<span name="keys">keys: K*</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[Iterable[(K, <span name="scala.Any" class="extype">Any</span>)]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if map.</p><div class="fullcomment"><div class="comment cmt"><p>matches if map.contains(k) forall key k</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#haveLength" data-isabs="false">
       <a id="haveLength[T](Int)(Sized[T]):SizedMatcher[T]"></a>
       <h4 class="signature">
@@ -3160,6 +3353,17 @@ This verification does not consider the order of the elements but checks the tra
       </span>
       </h4>
       <p class="shortcomment cmt">matches if map contains a pair (key, value) with value == v</p><div class="fullcomment"><div class="comment cmt"><p>matches if map contains a pair (key, value) with value == v</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MapBaseMatchers#haveValues" data-isabs="false">
+      <a id="haveValues[V](V*):Matcher[Iterable[(Any, V)]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">haveValues</span>
+        <span class="tparams">[<span name="V">V</span>]</span>
+        <span class="params">(<span name="values">values: V*</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[Iterable[(<span name="scala.Any" class="extype">Any</span>, V)]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if map contains a pair (key, value) with value == v  for all value v</p><div class="fullcomment"><div class="comment cmt"><p>matches if map contains a pair (key, value) with value == v  for all value v</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.FileBeHaveMatchers#hidden" data-isabs="false">
       <a id="hidden[T&lt;:AnyRef { def getPath(): String }]:Matcher[AnyRef { def getPath(): String }]"></a>
       <h4 class="signature">
@@ -3189,7 +3393,7 @@ This verification does not consider the order of the elements but checks the tra
       <span class="symbol"> 
         <span class="name">include</span>
         
-        <span class="params">(<span name="tags">tags: String</span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="params">(<span name="tags">tags: String</span>)</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to include only some tagged fragments
@@ -3202,7 +3406,7 @@ This verification does not consider the order of the elements but checks the tra
       <span class="symbol"> 
         <span class="name">include</span>
         
-        <span class="params">(<span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecificationInclusion" class="extype" href="specification/SpecificationInclusion.html">SpecificationInclusion</a></dd></dl></div>
@@ -3366,6 +3570,18 @@ This verification does not consider the order of the elements but checks the tra
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts#isolated" data-isabs="false">
+      <a id="isolated:Arguments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isolated</span>
+        
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>arguments for a specification where examples must be executed in their own specification
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.main.ArgumentsShortcuts" class="extype" href="main/ArgumentsShortcuts.html">ArgumentsShortcuts</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#javaCollectionIsSized" data-isabs="false">
       <a id="javaCollectionIsSized[T&lt;:java.util.Collection[_]]:Sized[T]"></a>
       <h4 class="signature">
@@ -3385,6 +3601,17 @@ This verification does not consider the order of the elements but checks the tra
         <span class="name">key</span>
         <span class="tparams">[<span name="K">K</span>]</span>
         <span class="params">(<span name="k">k: K</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[Iterable[(K, <span name="scala.Any" class="extype">Any</span>)]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MapBeHaveMatchers#keys" data-isabs="false">
+      <a id="keys[K](K*):Matcher[Iterable[(K, Any)]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">keys</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        <span class="params">(<span name="ks">ks: K*</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[Iterable[(K, <span name="scala.Any" class="extype">Any</span>)]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
@@ -3560,32 +3787,32 @@ This verification does not consider the order of the elements but checks the tra
       <span class="symbol"> 
         <span class="name">literate</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>arguments for a literate specification: no auto indent and a sequential
         execution
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.main.ArgumentsShortcuts" class="extype" href="main/ArgumentsShortcuts.html">ArgumentsShortcuts</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.FileReader#loadXhtmlFile" data-isabs="false">
-      <a id="loadXhtmlFile(String):NodeSeq"></a>
+      <a id="loadXhtmlFile(String,(Exception, String) ⇒ Unit):NodeSeq"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">loadXhtmlFile</span>
         
-        <span class="params">(<span name="filePath">filePath: String</span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
+        <span class="params">(<span name="filePath">filePath: String</span>, <span name="report">report: (Exception, String) ⇒ <span name="scala.Unit" class="extype">Unit</span> = <span class="symbol">defaultLoadXhtmlFileReport</span></span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file using the Xhtml parser</p><p>if the file contains several nodes, it wraps them up in a single artificial node
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.FileReader#loadXmlFile" data-isabs="false">
-      <a id="loadXmlFile(String):NodeSeq"></a>
+      <a id="loadXmlFile(String)((Exception) ⇒ Unit):NodeSeq"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">loadXmlFile</span>
         
-        <span class="params">(<span name="filePath">filePath: String</span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
+        <span class="params">(<span name="filePath">filePath: String</span>)</span><span class="params">(<span name="report">report: (Exception) ⇒ <span name="scala.Unit" class="extype">Unit</span> = <span class="symbol">(e:Exception) =&gt; e.printStackTrace</span></span>)</span><span class="result">: <span name="scala.xml.NodeSeq" class="extype">NodeSeq</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file, using the XML parser
@@ -3662,6 +3889,17 @@ The startDepth and offsets are special tweakings to make sure we get the right l
       <p class="shortcomment cmt">This method transform a function returning a MatchResult to a Matcher
 </p><div class="fullcomment"><div class="comment cmt"><p>This method transform a function returning a MatchResult to a Matcher
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="matcher/MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.matcher.Expectations#matchResultToResult" data-isabs="false">
+      <a id="matchResultToResult[T](MatchResult[T]):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">matchResultToResult</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="m">m: <a name="org.specs2.matcher.MatchResult" class="extype" href="matcher/MatchResult.html">MatchResult</a>[T]</span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="execute/Result.html">Result</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this method can be overriden to intercept the transformation of a MatchResult to a Result</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overriden to intercept the transformation of a MatchResult to a Result</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="matcher/Expectations.html">Expectations</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#matcherFunction" data-isabs="false">
       <a id="matcherFunction[S, T]((S) ⇒ Matcher[T]):MatcherFunction[S, T]"></a>
       <h4 class="signature">
@@ -3688,6 +3926,28 @@ returning actual matchers
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="matcher/MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#matching" data-isabs="false">
+      <a id="matching(Regex):BeMatchingRegex"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">matching</span>
+        
+        <span class="params">(<span name="r">r: <span name="scala.util.matching.Regex" class="extype">Regex</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingRegex" class="extype" href="matcher/BeMatchingRegex.html">BeMatchingRegex</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBeHaveMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#matching" data-isabs="false">
+      <a id="matching(Pattern):BeMatchingPattern"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">matching</span>
+        
+        <span class="params">(<span name="t">t: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingPattern" class="extype" href="matcher/BeMatchingPattern.html">BeMatchingPattern</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBeHaveMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#matching" data-isabs="false">
       <a id="matching(⇒ String):BeMatching"></a>
       <h4 class="signature">
@@ -3739,7 +3999,7 @@ returning actual matchers
       <span class="symbol"> 
         <span class="name">nocolor</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to avoid colored output
@@ -3752,7 +4012,7 @@ returning actual matchers
       <span class="symbol"> 
         <span class="name">noindent</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to avoid automatic indentation
@@ -3853,7 +4113,7 @@ returning actual matchers
       <span class="symbol"> 
         <span class="name">only</span>
         
-        <span class="params">(<span name="examples">examples: String</span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="params">(<span name="examples">examples: String</span>)</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to execute and print only some examples
@@ -3992,7 +4252,7 @@ returning actual matchers
       <span class="symbol"> 
         <span class="name">plan</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to show only the text without any execution
@@ -4164,7 +4424,7 @@ returning actual matchers
       <span class="symbol"> 
         <span class="name">sequential</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>arguments for a specification where examples must be executed sequentially
@@ -4176,7 +4436,7 @@ returning actual matchers
       <span class="symbol"> 
         <span class="name">showOnly</span>
         
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to print only some statuses
@@ -4211,11 +4471,25 @@ returning actual matchers
       <span class="symbol"> 
         <span class="name">skipAll</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to skip all examples
 </p><div class="fullcomment"><div class="comment cmt"><p>shortcut to skip all examples
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.main.ArgumentsShortcuts" class="extype" href="main/ArgumentsShortcuts.html">ArgumentsShortcuts</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts#skipAllIf" data-isabs="false">
+      <a id="skipAllIf(⇒ Boolean):Arguments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">skipAllIf</span>
+        
+        <span class="params">(<span name="condition">condition: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">shortcut to skip all examples when a condition is true.</p><div class="fullcomment"><div class="comment cmt"><p>shortcut to skip all examples when a condition is true.
+if the condition throws an exception, its stacktrace is *not* printed and
+all the examples are skipped
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.main.ArgumentsShortcuts" class="extype" href="main/ArgumentsShortcuts.html">ArgumentsShortcuts</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.execute.StandardResults#skipped" data-isabs="false">
       <a id="skipped:Skipped"></a>
@@ -4273,13 +4547,13 @@ returning actual matchers
       </h4>
       <p class="shortcomment cmt">matches if b.</p><div class="fullcomment"><div class="comment cmt"><p>matches if b.startsWith(a)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#startingWith" data-isabs="false">
-      <a id="startingWith(String):Matcher[String]"></a>
+      <a id="startingWith(⇒ String):Matcher[String]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">startingWith</span>
         
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[String]</span>
+        <span class="params">(<span name="s">s: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[String]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBeHaveMatchers</dd></dl></div>
@@ -4290,11 +4564,24 @@ returning actual matchers
       <span class="symbol"> 
         <span class="name">stopOnFail</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to stop after the first failure or error
 </p><div class="fullcomment"><div class="comment cmt"><p>shortcut to stop after the first failure or error
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.main.ArgumentsShortcuts" class="extype" href="main/ArgumentsShortcuts.html">ArgumentsShortcuts</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts#stopOnSkip" data-isabs="false">
+      <a id="stopOnSkip:Arguments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">stopOnSkip</span>
+        
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">shortcut to stop after the first skipped result
+</p><div class="fullcomment"><div class="comment cmt"><p>shortcut to stop after the first skipped result
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.main.ArgumentsShortcuts" class="extype" href="main/ArgumentsShortcuts.html">ArgumentsShortcuts</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#stringIsSized" data-isabs="false">
       <a id="stringIsSized:Sized[String]"></a>
@@ -4968,6 +5255,17 @@ Filters files which shouldn't be extracted with a regular expression.</p></div><
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MapBeHaveMatchers#values" data-isabs="false">
+      <a id="values[V](V*):Matcher[Iterable[(Any, V)]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">values</span>
+        <span class="tparams">[<span name="V">V</span>]</span>
+        <span class="params">(<span name="vs">vs: V*</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[Iterable[(<span name="scala.Any" class="extype">Any</span>, V)]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#verifyFunction" data-isabs="false">
       <a id="verifyFunction[U, T]((U) ⇒ MatchResult[T]):MatchResultFunctionVerification[U, T]"></a>
       <h4 class="signature">
@@ -5028,7 +5326,7 @@ Filters files which shouldn't be extracted with a regular expression.</p></div><
       <span class="symbol"> 
         <span class="name">was</span>
         
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to include only examples with some previous statuses
@@ -5041,7 +5339,7 @@ Filters files which shouldn't be extracted with a regular expression.</p></div><
       <span class="symbol"> 
         <span class="name">wasIssue</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to include only previousy failed/errors examples
@@ -5116,7 +5414,7 @@ write("./dir/hello.txt") { out =>
       <span class="symbol"> 
         <span class="name">xonly</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to print only failures and errors

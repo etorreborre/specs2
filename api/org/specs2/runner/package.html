@@ -126,7 +126,7 @@ specification and report them using the ConsoleReporter or the HtmlReporter depe
       <span class="symbol"> 
         <a href="JUnitRunner.html"><span class="name">JUnitRunner</span></a>
         
-        <span class="result"> extends Runner with ExecutionOrigin</span>
+        <span class="result"> extends Runner with ExecutionOrigin with DefaultSelection with DefaultSequence with Exporters</span>
       </span>
       </h4>
       <p class="comment cmt">The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
@@ -221,7 +221,7 @@ on a regular expression representing the Specification name, usually .</p>
       <span class="symbol"> 
         <a href="TestInterfaceRunner.html"><span class="name">TestInterfaceRunner</span></a>
         
-        <span class="result"> extends Runner with HandlerEvents with TestLoggers</span>
+        <span class="result"> extends Runner with HandlerEvents with TestLoggers with Exporters</span>
       </span>
       </h4>
       <p class="comment cmt">Runner for TestInterface.</p>

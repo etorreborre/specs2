@@ -125,7 +125,7 @@
       <span class="symbol"> 
         <span class="name">apply</span>
         
-        <span class="params">(<span name="specifications">specifications: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../org/specs2/specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span> = <span class="symbol"><span class="name"><a href="../org/specs2/main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: Seq[<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../org/specs2/specification/ExecutedSpecification.html">ExecutedSpecification</a>]</span>
+        <span class="params">(<span name="specifications">specifications: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../org/specs2/specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../org/specs2/main/Arguments.html">Arguments</a> = <span class="symbol"><span class="name"><a href="../org/specs2/main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: Seq[<a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../org/specs2/specification/ExecutedSpecification.html">ExecutedSpecification</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">This method can be called directly from the console with the specs2.</p><div class="fullcomment"><div class="comment cmt"><p>This method can be called directly from the console with the specs2.run object:</p><p>    &gt; specs2.run(spec1, spec2)
@@ -161,24 +161,24 @@ or  &gt; import specs2._
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#create" data-isabs="false">
-      <a id="create[T&lt;:AnyRef](String,ClassLoader)(ClassManifest[T]):Either[Throwable, T]"></a>
+      <a id="create[T&lt;:AnyRef](String,ClassLoader)(Manifest[T]):Either[Throwable, T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">create</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String = <span class="symbol">&quot;&quot;</span></span>, <span name="classLoader">classLoader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[Throwable, T]</span>
+        <span class="params">(<span name="className">className: String = <span class="symbol">&quot;&quot;</span></span>, <span name="classLoader">classLoader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Either" class="extype">Either</span>[Throwable, T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class, returning either the instance, or an exception</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#createObject" data-isabs="false">
-      <a id="createObject[T&lt;:AnyRef](String,Boolean,Boolean)(ClassManifest[T]):Option[T]"></a>
+      <a id="createObject[T&lt;:AnyRef](String,Boolean,Boolean)(Manifest[T]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">createObject</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">A system property 'debugCreateObject' can be set to override the printMessage and printStackTrace parameters
@@ -188,24 +188,24 @@ so that the exception message and stacktrace are printed when the object can't b
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#createObject" data-isabs="false">
-      <a id="createObject[T&lt;:AnyRef](String,Boolean)(ClassManifest[T]):Option[T]"></a>
+      <a id="createObject[T&lt;:AnyRef](String,Boolean)(Manifest[T]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">createObject</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class and optionally print message if the class can't be loaded</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#createObject" data-isabs="false">
-      <a id="createObject[T&lt;:AnyRef](String)(ClassManifest[T]):Option[T]"></a>
+      <a id="createObject[T&lt;:AnyRef](String)(Manifest[T]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">createObject</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="params">(<span name="className">className: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
@@ -505,13 +505,13 @@ so that the exception message and stacktrace are printed when the object can't b
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reflect.Classes#tryToCreateObject" data-isabs="false">
-      <a id="tryToCreateObject[T&lt;:AnyRef](String,Boolean,Boolean,ClassLoader)(ClassManifest[T]):Option[T]"></a>
+      <a id="tryToCreateObject[T&lt;:AnyRef](String,Boolean,Boolean,ClassLoader)(Manifest[T]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">tryToCreateObject</span>
         <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
-        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="loader">loader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.ClassManifest" class="extype">ClassManifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="params">(<span name="className">className: String</span>, <span name="printMessage">printMessage: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="printStackTrace">printStackTrace: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">true</span></span>, <span name="loader">loader: <span name="java.lang.ClassLoader" class="extype">ClassLoader</span> = <span name='<span class="name"><a href="../java/lang/package.html">Thread.currentThread.getContextClassLoader</a></span>' class="defval">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Try to create an instance of a given class by using whatever constructor is available

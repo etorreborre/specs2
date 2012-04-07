@@ -250,6 +250,17 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Expectable</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ThrownExpectations#createExpectableWithShowAs" data-isabs="false">
+      <a id="createExpectableWithShowAs[T](⇒ T,⇒ String):Expectable[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">createExpectableWithShowAs</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: ⇒ T</span>, <span name="show">show: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Expectable with a function to show the element T</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ThrownExpectations" class="extype" href="ThrownExpectations.html">ThrownExpectations</a> → <a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Expectations#describe" data-isabs="false">
       <a id="describe[T](⇒ T):Descriptible[T]"></a>
       <h4 class="signature">
@@ -352,6 +363,17 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.matcher.Expectations#matchResultToResult" data-isabs="false">
+      <a id="matchResultToResult[T](MatchResult[T]):Result"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">matchResultToResult</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="m">m: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this method can be overriden to intercept the transformation of a MatchResult to a Result</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overriden to intercept the transformation of a MatchResult to a Result</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -385,6 +407,28 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.matcher.ThrownExpectations#pending" data-isabs="false">
+      <a id="pending(Pending):Nothing"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">pending</span>
+        
+        <span class="params">(<span name="s">s: <a name="org.specs2.execute.Pending" class="extype" href="../execute/Pending.html">Pending</a></span>)</span><span class="result">: <span name="scala.Nothing" class="extype">Nothing</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ThrownExpectations" class="extype" href="ThrownExpectations.html">ThrownExpectations</a></dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.matcher.ThrownExpectations#pending" data-isabs="false">
+      <a id="pending(String):Nothing"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">pending</span>
+        
+        <span class="params">(<span name="m">m: String</span>)</span><span class="result">: <span name="scala.Nothing" class="extype">Nothing</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ThrownExpectations" class="extype" href="ThrownExpectations.html">ThrownExpectations</a></dd></dl></div>
     </li><li visbl="prt" name="org.specs2.matcher.ThrownExpectations#skipped" data-isabs="false">
       <a id="skipped(Skipped):Nothing"></a>
       <h4 class="signature">

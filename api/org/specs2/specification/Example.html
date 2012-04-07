@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">Example</span>
         
-        <span class="params">(<span name="desc">desc: <span name="org.specs2.text.MarkupString" class="extype">MarkupString</span></span>, <span name="body">body: () ⇒ <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>)</span><span class="result"> extends <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a> with <a name="org.specs2.execute.Executable" class="extype" href="../execute/Executable.html">Executable</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="desc">desc: <span name="org.specs2.text.MarkupString" class="extype">MarkupString</span></span>, <span name="body">body: () ⇒ <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>)</span><span class="result"> extends <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a> with <a name="org.specs2.execute.Executable" class="extype" href="../execute/Executable.html">Executable</a> with <a name="org.specs2.execute.Isolable" class="extype" href="../execute/Isolable.html">Isolable</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -32,7 +32,7 @@
 - a body: some executable code returning a Result
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.execute.Executable" class="extype" href="../execute/Executable.html">Executable</a>, <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.execute.Isolable" class="extype" href="../execute/Isolable.html">Isolable</a>, <a name="org.specs2.execute.Executable" class="extype" href="../execute/Executable.html">Executable</a>, <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -48,7 +48,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.specification.Example" class="in"><span>Example</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.specs2.execute.Executable" class="in"><span>Executable</span></li><li name="org.specs2.specification.Fragment" class="in"><span>Fragment</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.specification.Example" class="in"><span>Example</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.specs2.execute.Isolable" class="in"><span>Isolable</span></li><li name="org.specs2.execute.Executable" class="in"><span>Executable</span></li><li name="org.specs2.specification.Fragment" class="in"><span>Fragment</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -235,6 +235,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Example#global" data-isabs="false">
+      <a id="global:Example"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">global</span>
+        
+        <span class="result">: <a name="org.specs2.specification.Example" class="extype" href="">Example</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this fragment can not be executed in a separate specification</p>
     </li><li visbl="pub" name="org.specs2.specification.Example#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -257,6 +268,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Example#isolable" data-isabs="false">
+      <a id="isolable:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">isolable</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Example" class="extype" href="">Example</a> → <a name="org.specs2.execute.Isolable" class="extype" href="../execute/Isolable.html">Isolable</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.Fragment#linkedTo" data-isabs="false">
       <a id="linkedTo:Option[SpecificationStructure]"></a>
       <h4 class="signature">
@@ -472,6 +494,8 @@
               <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
             </div><div name="scala.Equals" class="parent">
               <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
+            </div><div name="org.specs2.execute.Isolable" class="parent">
+              <h3>Inherited from <a name="org.specs2.execute.Isolable" class="extype" href="../execute/Isolable.html">Isolable</a></h3>
             </div><div name="org.specs2.execute.Executable" class="parent">
               <h3>Inherited from <a name="org.specs2.execute.Executable" class="extype" href="../execute/Executable.html">Executable</a></h3>
             </div><div name="org.specs2.specification.Fragment" class="parent">

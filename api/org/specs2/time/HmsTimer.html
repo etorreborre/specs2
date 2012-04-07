@@ -65,13 +65,13 @@
         <div class="values members" id="values">
               <h3>Abstract Value Members</h3>
               <ol><li visbl="pub" name="org.specs2.time.HmsTimer#copy" data-isabs="true">
-      <a id="copy(Long,List[Long]):T"></a>
+      <a id="copy(List[Long],List[Long]):T"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">copy</span>
         
-        <span class="params">(<span name="time">time: <span name="scala.Long" class="extype">Long</span></span>, <span name="m">m: List[<span name="scala.Long" class="extype">Long</span>]</span>)</span><span class="result">: T</span>
+        <span class="params">(<span name="elapsed">elapsed: List[<span name="scala.Long" class="extype">Long</span>]</span>, <span name="started">started: List[<span name="scala.Long" class="extype">Long</span>]</span>)</span><span class="result">: T</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
@@ -135,6 +135,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.time.HmsTimer#add" data-isabs="false">
+      <a id="add(HmsTimer[T]):T"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">add</span>
+        
+        <span class="params">(<span name="t">t: <a name="org.specs2.time.HmsTimer" class="extype" href="">HmsTimer</a>[T]</span>)</span><span class="result">: T</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">add 2 timers together</p>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -160,17 +171,17 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.time.HmsTimer#elapsed" data-isabs="false">
-      <a id="elapsed:Long"></a>
+    </li><li visbl="prt" name="org.specs2.time.HmsTimer#elapsedTimes" data-isabs="false">
+      <a id="elapsedTimes:List[Long]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">elapsed</span>
+        <span class="name">elapsedTimes</span>
         
-        <span class="result">: <span name="scala.Long" class="extype">Long</span></span>
+        <span class="result">: List[<span name="scala.Long" class="extype">Long</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">elapsed time since the last stop</p>
+      <p class="shortcomment cmt">elapsed times since for each stop</p><div class="fullcomment"><div class="comment cmt"><p>elapsed times since for each stop</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -277,17 +288,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.time.HmsTimer#millis" data-isabs="false">
-      <a id="millis:List[Long]"></a>
+    </li><li visbl="pub" name="org.specs2.time.HmsTimer#isStarted" data-isabs="false">
+      <a id="isStarted:Boolean"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
+      <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">millis</span>
+        <span class="name">isStarted</span>
         
-        <span class="result">: List[<span name="scala.Long" class="extype">Long</span>]</span>
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">current number of millis when instantiating the object using this Trait</p>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if this timer has been started</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -299,6 +310,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.time.HmsTimer#neverStarted" data-isabs="false">
+      <a id="neverStarted:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">neverStarted</span>
+        
+        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if this timer has never been started</p></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
       <a id="notify():Unit"></a>
       <h4 class="signature">
@@ -345,6 +367,17 @@
       </h4>
       <p class="shortcomment cmt">starts the with new elapsed time
 </p>
+    </li><li visbl="pub" name="org.specs2.time.HmsTimer#startedTimestamps" data-isabs="false">
+      <a id="startedTimestamps:List[Long]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">startedTimestamps</span>
+        
+        <span class="result">: List[<span name="scala.Long" class="extype">Long</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">each time the timer is started we add the current time to this list of times number of millis when instantiating the object using this Trait</p>
     </li><li visbl="pub" name="org.specs2.time.HmsTimer#stop" data-isabs="false">
       <a id="stop:T"></a>
       <h4 class="signature">
@@ -391,6 +424,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.time.HmsTimer#totalMillis" data-isabs="false">
+      <a id="totalMillis:Long"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">totalMillis</span>
+        
+        <span class="result">: <span name="scala.Long" class="extype">Long</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">

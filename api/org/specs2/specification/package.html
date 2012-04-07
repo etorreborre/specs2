@@ -54,7 +54,7 @@
       <span class="symbol"> 
         <a href="Action.html"><span class="name">Action</span></a>
         
-        <span class="params">(<span name="action">action: LazyParameter[Result]</span>)</span><span class="result"> extends Fragment with Executable with Product with Serializable</span>
+        <span class="params">(<span name="action">action: LazyParameter[Result]</span>)</span><span class="result"> extends Fragment with Executable with Isolable with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">An Action is similar to a Step but can be executed concurrently with other examples.</p>
@@ -106,6 +106,18 @@ where an action must be executing after the main executable action
       </h4>
       <p class="comment cmt">For each created example use a given after method
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.AllExpectations" data-isabs="true">
+      <a id="AllExpectations:AllExpectations"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="AllExpectations.html"><span class="name">AllExpectations</span></a>
+        
+        <span class="result"> extends StoredExpectations with ExamplesFactory with SpecificationStructure with ArgumentsArgs</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be mixed-in a specification to allow examples to have all of their expectations being evaluated (unless
+the example body throws an exception of course).</p>
     </li><li visbl="pub" name="org.specs2.specification.Analysis" data-isabs="true">
       <a id="Analysis:Analysis"></a>
       <h4 class="signature">
@@ -372,7 +384,7 @@ to execute before and after an Example
       <span class="symbol"> 
         <a href="Example.html"><span class="name">Example</span></a>
         
-        <span class="params">(<span name="desc">desc: MarkupString</span>, <span name="body">body: () ⇒ Result</span>)</span><span class="result"> extends Fragment with Executable with Product with Serializable</span>
+        <span class="params">(<span name="desc">desc: MarkupString</span>, <span name="body">body: () ⇒ Result</span>)</span><span class="result"> extends Fragment with Executable with Isolable with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">A Example is:</p>
@@ -542,7 +554,7 @@ execution of an Action for example)
       <span class="symbol"> 
         <a href="ExecutingSpecification.html"><span class="name">ExecutingSpecification</span></a>
         
-        <span class="params">(<span name="name">name: SpecName</span>, <span name="fs">fs: Seq[ExecutingFragment]</span>, <span name="executor">executor: ExecutorService</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="name">name: SpecName</span>, <span name="arguments">arguments: Arguments</span>, <span name="fs">fs: Seq[ExecutingFragment]</span>, <span name="executor">executor: ExecutorService</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">a specification with a name and a sequence of fragments being executed
@@ -687,6 +699,18 @@ link elements.</p>
       </h4>
       <p class="comment cmt">embed an executing Fragment into a function to execute it on demand
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.NoAutoExamples" data-isabs="true">
+      <a id="NoAutoExamples:NoAutoExamples"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="NoAutoExamples.html"><span class="name">NoAutoExamples</span></a>
+        
+        <span class="result"> extends NoBooleanAutoExamples with NoResultAutoExamples with NoMatchResultAutoExamples with NoDataTableAutoExamples</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait ca be used to deactivate all automatic conversions to examples
+</p>
     </li><li visbl="pub" name="org.specs2.specification.NoBooleanAutoExamples" data-isabs="true">
       <a id="NoBooleanAutoExamples:NoBooleanAutoExamples"></a>
       <h4 class="signature">
@@ -711,6 +735,18 @@ link elements.</p>
       </h4>
       <p class="comment cmt">Use this trait to deactivate the Contexts implicits
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.NoDataTableAutoExamples" data-isabs="true">
+      <a id="NoDataTableAutoExamples:NoDataTableAutoExamples"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="NoDataTableAutoExamples.html"><span class="name">NoDataTableAutoExamples</span></a>
+        
+        <span class="result"> extends AutoExamples</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used to deactivate the DataTable conversions to fragments and examples
+</p>
     </li><li visbl="pub" name="org.specs2.specification.NoFragmentsBuilder" data-isabs="true">
       <a id="NoFragmentsBuilder:NoFragmentsBuilder"></a>
       <h4 class="signature">
@@ -722,6 +758,30 @@ link elements.</p>
       </span>
       </h4>
       <p class="comment cmt">This trait can be used to deactivate implicits for building fragments
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.NoMatchResultAutoExamples" data-isabs="true">
+      <a id="NoMatchResultAutoExamples:NoMatchResultAutoExamples"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="NoMatchResultAutoExamples.html"><span class="name">NoMatchResultAutoExamples</span></a>
+        
+        <span class="result"> extends AutoExamples</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used to deactivate the MatchResult conversions to fragments and examples
+</p>
+    </li><li visbl="pub" name="org.specs2.specification.NoResultAutoExamples" data-isabs="true">
+      <a id="NoResultAutoExamples:NoResultAutoExamples"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="NoResultAutoExamples.html"><span class="name">NoResultAutoExamples</span></a>
+        
+        <span class="result"> extends AutoExamples</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used to deactivate the Result conversions to fragments and examples
 </p>
     </li><li visbl="pub" name="org.specs2.specification.Outside" data-isabs="true">
       <a id="Outside:Outside[T]"></a>
@@ -770,6 +830,17 @@ a regular expression:</p>
       </span>
       </h4>
       <p class="comment cmt">This trait provides building blocks to create steps and examples from regular expression.</p>
+    </li><li visbl="pub" name="org.specs2.specification.ResultsContext" data-isabs="false">
+      <a id="ResultsContext:ResultsContext"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="ResultsContext.html"><span class="name">ResultsContext</span></a>
+        
+        <span class="result"> extends StoredResultsContext</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class is used to evaluate a Context as a sequence of results by side-effects.</p>
     </li><li visbl="pub" name="org.specs2.specification.Scope" data-isabs="true">
       <a id="Scope:Scope"></a>
       <h4 class="signature">
@@ -864,11 +935,34 @@ Specification
       <span class="symbol"> 
         <a href="Step.html"><span class="name">Step</span></a>
         
-        <span class="params">(<span name="step">step: LazyParameter[Result]</span>)</span><span class="result"> extends Fragment with Executable with Product with Serializable</span>
+        <span class="params">(<span name="step">step: LazyParameter[Result]</span>)</span><span class="result"> extends Fragment with Executable with Isolable with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">An Step creates a fragment that will either return an
 Error Result if there is an exception or a Success.</p>
+    </li><li visbl="pub" name="org.specs2.specification.StoredExpectationsContext" data-isabs="true">
+      <a id="StoredExpectationsContext:StoredExpectationsContext"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="StoredExpectationsContext.html"><span class="name">StoredExpectationsContext</span></a>
+        
+        <span class="result"> extends StoredExpectations with StoredResultsContext</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used when it is not desirable to use the AllExpectations trait, that is, when the specification
+examples must be executed concurrently and not isolated.</p>
+    </li><li visbl="pub" name="org.specs2.specification.StoredResultsContext" data-isabs="true">
+      <a id="StoredResultsContext:StoredResultsContext"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="StoredResultsContext.html"><span class="name">StoredResultsContext</span></a>
+        
+        <span class="result"> extends Context</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait is a context which will use the results provided by the class inheriting that trait.</p>
     </li><li visbl="pub" name="org.specs2.specification.Tags" data-isabs="true">
       <a id="Tags:Tags"></a>
       <h4 class="signature">

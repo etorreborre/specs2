@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">TestInterfaceRunner</span>
         
-        <span class="result"> extends <span name="org.scalatools.testing.Runner" class="extype">Runner</span> with <a name="org.specs2.reporter.HandlerEvents" class="extype" href="../reporter/HandlerEvents.html">HandlerEvents</a> with <a name="org.specs2.reporter.TestLoggers" class="extype" href="../reporter/TestLoggers.html">TestLoggers</a></span>
+        <span class="result"> extends <span name="org.scalatools.testing.Runner" class="extype">Runner</span> with <a name="org.specs2.reporter.HandlerEvents" class="extype" href="../reporter/HandlerEvents.html">HandlerEvents</a> with <a name="org.specs2.reporter.TestLoggers" class="extype" href="../reporter/TestLoggers.html">TestLoggers</a> with <span name="org.specs2.reporter.Exporters" class="extype">Exporters</span></span>
       </span>
       </h4>
       
@@ -32,7 +32,7 @@
 It creates a Specification class with the given classLoader the classes which can be executed by the specs2 library.</p><p>Then it uses a NotifierRunner to notify the EventHandler of the test events.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.reporter.TestLoggers" class="extype" href="../reporter/TestLoggers.html">TestLoggers</a>, <a name="org.specs2.reporter.HandlerEvents" class="extype" href="../reporter/HandlerEvents.html">HandlerEvents</a>, <span name="org.scalatools.testing.Runner" class="extype">Runner</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="org.specs2.reporter.Exporters" class="extype">Exporters</span>, <a name="org.specs2.reporter.TestLoggers" class="extype" href="../reporter/TestLoggers.html">TestLoggers</a>, <a name="org.specs2.reporter.HandlerEvents" class="extype" href="../reporter/HandlerEvents.html">HandlerEvents</a>, <span name="org.scalatools.testing.Runner" class="extype">Runner</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -48,7 +48,7 @@ It creates a Specification class with the given classLoader the classes which ca
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.specs2.runner.TestInterfaceRunner" class="in"><span>TestInterfaceRunner</span></li><li name="org.specs2.reporter.TestLoggers" class="in"><span>TestLoggers</span></li><li name="org.specs2.reporter.HandlerEvents" class="in"><span>HandlerEvents</span></li><li name="org.scalatools.testing.Runner" class="in"><span>Runner</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.specs2.runner.TestInterfaceRunner" class="in"><span>TestInterfaceRunner</span></li><li name="org.specs2.reporter.Exporters" class="in"><span>Exporters</span></li><li name="org.specs2.reporter.TestLoggers" class="in"><span>TestLoggers</span></li><li name="org.specs2.reporter.HandlerEvents" class="in"><span>HandlerEvents</span></li><li name="org.scalatools.testing.Runner" class="in"><span>Runner</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -74,7 +74,18 @@ It creates a Specification class with the given classLoader the classes which ca
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.reporter.HandlerEvents.NamedEvent" data-isabs="false">
+              <ol><li visbl="pub" name="org.specs2.reporter.Exporters#EE" data-isabs="false">
+      <a id="EE:EE"></a>
+      <h4 class="signature">
+      <span class="kind">type</span>
+      <span class="symbol"> 
+        <span class="name">EE</span>
+        
+        <span class="result"> = (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.HandlerEvents.NamedEvent" data-isabs="false">
       <a id="NamedEvent:NamedEvent"></a>
       <h4 class="signature">
       <span class="kind">class</span>
@@ -172,6 +183,17 @@ It creates a Specification class with the given classLoader the classes which ca
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#customExporter" data-isabs="false">
+      <a id="customExporter(Arguments):Option[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">customExporter</span>
+        
+        <span class="params">(<span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -205,17 +227,127 @@ It creates a Specification class with the given classLoader the classes which ca
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.HandlerEvents" class="extype" href="../reporter/HandlerEvents.html">HandlerEvents</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportConsole" data-isabs="false">
+      <a id="exportConsole((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exportConsole</span>
+        
+        <span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportCustom" data-isabs="false">
+      <a id="exportCustom((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exportCustom</span>
+        
+        <span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportHtml" data-isabs="false">
+      <a id="exportHtml((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exportHtml</span>
+        
+        <span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportJUnitxml" data-isabs="false">
+      <a id="exportJUnitxml((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exportJUnitxml</span>
+        
+        <span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportNotifier" data-isabs="false">
+      <a id="exportNotifier((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exportNotifier</span>
+        
+        <span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportToOthers" data-isabs="false">
+      <a id="exportToOthers(Seq[Exporting])(Arguments):EE"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exportToOthers</span>
+        
+        <span class="params">(<span name="exporters">exporters: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: EE</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportToOthers" data-isabs="false">
+      <a id="exportToOthers(Arguments,(String) ⇒ Boolean):EE"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exportToOthers</span>
+        
+        <span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>, <span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: EE</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportToOthers" data-isabs="false">
+      <a id="exportToOthers(Arguments):EE"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exportToOthers</span>
+        
+        <span class="params">(<span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: EE</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.reporter.Exporters#exporter" data-isabs="false">
+      <a id="exporter(Boolean)(⇒ Exporting):Option[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exporter</span>
+        
+        <span class="params">(<span name="condition">condition: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span name="e">e: ⇒ <span name="org.specs2.reporter.Exporting" class="extype">Exporting</span></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.runner.TestInterfaceRunner#exporters" data-isabs="false">
-      <a id="exporters(Array[String],EventHandler):Seq[Exporting]"></a>
+      <a id="exporters(Array[String],EventHandler)(Arguments):Seq[Exporting]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">exporters</span>
         
-        <span class="params">(<span name="args">args: <span name="scala.Array" class="extype">Array</span>[String]</span>, <span name="handler">handler: <span name="org.scalatools.testing.EventHandler" class="extype">EventHandler</span></span>)</span><span class="result">: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+        <span class="params">(<span name="args">args: <span name="scala.Array" class="extype">Array</span>[String]</span>, <span name="handler">handler: <span name="org.scalatools.testing.EventHandler" class="extype">EventHandler</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exporters" data-isabs="false">
+      <a id="exporters((String) ⇒ Boolean)(Arguments):Seq[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">exporters</span>
+        
+        <span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.HandlerEvents#failure" data-isabs="false">
       <a id="failure(String,Throwable):NamedEvent"></a>
       <h4 class="signature">
@@ -340,6 +472,17 @@ It creates a Specification class with the given classLoader the classes which ca
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#notifierExporter" data-isabs="false">
+      <a id="notifierExporter(Arguments):Option[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">notifierExporter</span>
+        
+        <span class="params">(<span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
       <a id="notify():Unit"></a>
       <h4 class="signature">
@@ -362,6 +505,17 @@ It creates a Specification class with the given classLoader the classes which ca
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.reporter.Exporters#optionalExporter" data-isabs="false">
+      <a id="optionalExporter(Boolean)(Option[Exporting]):Option[Exporting]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">optionalExporter</span>
+        
+        <span class="params">(<span name="condition">condition: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span name="e">e: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="prt" name="org.specs2.runner.TestInterfaceRunner#reporter" data-isabs="false">
       <a id="reporter(EventHandler)(Array[String]):Reporter"></a>
       <h4 class="signature">
@@ -380,7 +534,7 @@ It creates a Specification class with the given classLoader the classes which ca
       <span class="symbol"> 
         <span class="name">run</span>
         
-        <span class="params">(<span name="classname">classname: String</span>, <span name="fingerprint">fingerprint: <span name="org.scalatools.testing.TestFingerprint" class="extype">TestFingerprint</span></span>, <span name="handler">handler: <span name="org.scalatools.testing.EventHandler" class="extype">EventHandler</span></span>, <span name="args">args: <span name="scala.Array" class="extype">Array</span>[String]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="params">(<span name="className">className: String</span>, <span name="fingerprint">fingerprint: <span name="org.scalatools.testing.TestFingerprint" class="extype">TestFingerprint</span></span>, <span name="handler">handler: <span name="org.scalatools.testing.EventHandler" class="extype">EventHandler</span></span>, <span name="args">args: <span name="scala.Array" class="extype">Array</span>[String]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.TestInterfaceRunner" class="extype" href="">TestInterfaceRunner</a> → Runner</dd></dl></div>
@@ -497,7 +651,9 @@ It creates a Specification class with the given classLoader the classes which ca
 
         
 
-        <div name="org.specs2.reporter.TestLoggers" class="parent">
+        <div name="org.specs2.reporter.Exporters" class="parent">
+              <h3>Inherited from <span name="org.specs2.reporter.Exporters" class="extype">Exporters</span></h3>
+            </div><div name="org.specs2.reporter.TestLoggers" class="parent">
               <h3>Inherited from <a name="org.specs2.reporter.TestLoggers" class="extype" href="../reporter/TestLoggers.html">TestLoggers</a></h3>
             </div><div name="org.specs2.reporter.HandlerEvents" class="parent">
               <h3>Inherited from <a name="org.specs2.reporter.HandlerEvents" class="extype" href="../reporter/HandlerEvents.html">HandlerEvents</a></h3>

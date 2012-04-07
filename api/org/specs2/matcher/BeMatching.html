@@ -31,6 +31,9 @@
           <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="org.specs2" class="extype" href="../package.html">specs2</a>] </dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+        </div><div class="toggleContainer block">
+          <span class="toggle">Known Subclasses</span>
+          <div class="subClasses hiddenContent"><a name="org.specs2.matcher.BeMatchingPattern" class="extype" href="BeMatchingPattern.html">BeMatchingPattern</a>, <a name="org.specs2.matcher.BeMatchingRegex" class="extype" href="BeMatchingRegex.html">BeMatchingRegex</a></div>
         </div></div>
         
 
@@ -431,6 +434,31 @@ failure
       </h4>
       <p class="shortcomment cmt">the logical or between 2 matchers</p><div class="fullcomment"><div class="comment cmt"><p>the logical or between 2 matchers</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd><dt>See also</dt><dd><span class="cmt"><p>MatchResult.or
 </p></span></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Matcher#orPending" data-isabs="false">
+      <a id="orPending(String):Matcher[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">orPending</span>
+        
+        <span class="params">(<span name="m">m: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Pending MatchResult if this matcher fails, prefixing the failure message with a pending message.
+If the pending message is empty, only the failure message is printed
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.Matcher#orPending" data-isabs="false">
+      <a id="orPending:Matcher[String]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">orPending</span>
+        
+        <span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Pending MatchResult if this matcher fails
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher#orSkip" data-isabs="false">
       <a id="orSkip(String):Matcher[String]"></a>
       <h4 class="signature">
@@ -456,6 +484,17 @@ If the skip message is empty, only the failure message is printed
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Skip MatchResult if this matcher fails
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.BeMatching#pattern" data-isabs="false">
+      <a id="pattern:Pattern"></a>
+      <h4 class="signature">
+      <span class="kind">lazy val</span>
+      <span class="symbol"> 
+        <span class="name">pattern</span>
+        
+        <span class="result">: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="prt" name="org.specs2.matcher.Matcher#result" data-isabs="false">
       <a id="result[S&lt;:String](MatchResultMessage,Expectable[S]):MatchResult[S]"></a>
       <h4 class="signature">

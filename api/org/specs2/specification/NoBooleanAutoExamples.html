@@ -29,9 +29,12 @@
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait can be used to deactivate the Boolean conversions to fragments and examples
-</p></div><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.specification.NoBooleanAutoExamples" class="extype" href="">NoBooleanAutoExamples</a> with <span name="org.specs2.specification.FragmentsBuilder" class="extype">FragmentsBuilder</span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="org.specs2.specification.AutoExamples" class="extype">AutoExamples</span>, <span name="org.specs2.specification.AutoExamplesLowImplicits" class="extype">AutoExamplesLowImplicits</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+        </div><div class="toggleContainer block">
+          <span class="toggle">Known Subclasses</span>
+          <div class="subClasses hiddenContent"><a name="org.specs2.specification.NoAutoExamples" class="extype" href="NoAutoExamples.html">NoAutoExamples</a></div>
         </div></div>
         
 
@@ -118,6 +121,50 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.NoBooleanAutoExamples#aBooleanExample" data-isabs="false">
+      <a id="aBooleanExample(⇒ Boolean):ToBooleanExample"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">aBooleanExample</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamplesLowImplicits.ToBooleanExample" class="extype">ToBooleanExample</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.NoBooleanAutoExamples" class="extype" href="">NoBooleanAutoExamples</a> → AutoExamplesLowImplicits</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamples#aDataTableExample" data-isabs="false">
+      <a id="aDataTableExample[T](⇒ DecoratedResult[T]):ToDataTableExample[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">aDataTableExample</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="../execute/DecoratedResult.html">DecoratedResult</a>[T]</span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamples.ToDataTableExample" class="extype">ToDataTableExample</span>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this syntax allows to declare auto examples with { .</p><div class="fullcomment"><div class="comment cmt"><p>this syntax allows to declare auto examples with { ... }.eg in mutable specifications</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#aMatchResultExample" data-isabs="false">
+      <a id="aMatchResultExample(⇒ org.specs2.matcher.MatchResult[_]):ToMatchResultExample"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">aMatchResultExample</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamplesLowImplicits.ToMatchResultExample" class="extype">ToMatchResultExample</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#aResultExample" data-isabs="false">
+      <a id="aResultExample(⇒ Result):ToResultExample"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">aResultExample</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamplesLowImplicits.ToResultExample" class="extype">ToResultExample</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -177,27 +224,77 @@
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.AutoExamples#dataTableExample" data-isabs="false">
-      <a id="dataTableExample(⇒ DecoratedResult[DataTable]):Example"></a>
+      <a id="dataTableExample[T](⇒ DecoratedResult[T]):Example"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">dataTableExample</span>
-        
-        <span class="params">(<span name="result">result: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="../execute/DecoratedResult.html">DecoratedResult</a>[<a name="org.specs2.matcher.DataTable" class="extype" href="../matcher/DataTable.html">DataTable</a>]</span>)</span><span class="result">: <a name="org.specs2.specification.Example" class="extype" href="Example.html">Example</a></span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="result">result: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="../execute/DecoratedResult.html">DecoratedResult</a>[T]</span>)</span><span class="result">: <a name="org.specs2.specification.Example" class="extype" href="Example.html">Example</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.AutoExamples#dataTableFragments" data-isabs="false">
-      <a id="dataTableFragments(⇒ DecoratedResult[DataTable]):Fragments"></a>
+      <a id="dataTableFragments[T](⇒ DecoratedResult[T]):Fragments"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol"> 
         <span class="name">dataTableFragments</span>
-        
-        <span class="params">(<span name="result">result: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="../execute/DecoratedResult.html">DecoratedResult</a>[<a name="org.specs2.matcher.DataTable" class="extype" href="../matcher/DataTable.html">DataTable</a>]</span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="result">result: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="../execute/DecoratedResult.html">DecoratedResult</a>[T]</span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">specific implicits for datatables</p><div class="fullcomment"><div class="comment cmt"><p>specific implicits for datatables</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamples#eg" data-isabs="false">
+      <a id="eg[T](⇒ DecoratedResult[T]):ToDataTableExample[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">eg</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.DecoratedResult" class="extype" href="../execute/DecoratedResult.html">DecoratedResult</a>[T]</span>)</span><span class="result">: <span name="org.specs2.specification.AutoExamples.ToDataTableExample" class="extype">ToDataTableExample</span>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">explicit call</p><div class="fullcomment"><div class="comment cmt"><p>explicit call</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AutoExamples</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#eg" data-isabs="false">
+      <a id="eg(⇒ Result):Fragment"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">eg</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">explicit call
+The result type is different from the eg method to create examples in order to avoid an overloading error
+</p><div class="fullcomment"><div class="comment cmt"><p>explicit call
+The result type is different from the eg method to create examples in order to avoid an overloading error
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#eg" data-isabs="false">
+      <a id="eg(⇒ Boolean):Fragments"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">eg</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">explicit call.</p><div class="fullcomment"><div class="comment cmt"><p>explicit call.
+The result type is different from the eg method to create examples in order to avoid an overloading error
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.AutoExamplesLowImplicits#eg" data-isabs="false">
+      <a id="eg(⇒ org.specs2.matcher.MatchResult[_]):Example"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">eg</span>
+        
+        <span class="params">(<span name="expression">expression: ⇒ org.specs2.matcher.MatchResult[_]</span>)</span><span class="result">: <a name="org.specs2.specification.Example" class="extype" href="Example.html">Example</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">explicit call</p><div class="fullcomment"><div class="comment cmt"><p>explicit call</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -245,6 +342,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.specification.AutoExamplesLowImplicits#getDescription" data-isabs="false">
+      <a id="getDescription(Int,Int,Int):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getDescription</span>
+        
+        <span class="params">(<span name="depth">depth: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">9</span></span>, <span name="startOffset">startOffset: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">1</span></span>, <span name="endOffset">endOffset: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">1</span></span>)</span><span class="result">: String</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">get the description from the source file</p><div class="fullcomment"><div class="comment cmt"><p>get the description from the source file</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AutoExamplesLowImplicits</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">

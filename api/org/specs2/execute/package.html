@@ -53,7 +53,7 @@
       <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="DecoratedResult.html"><span class="name">DecoratedResult</span></a>
-        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="tparams">[<span name="T">+T</span>]</span>
         <span class="params">(<span name="decorator">decorator: T</span>, <span name="result">result: Result</span>)</span><span class="result"> extends Result with Product with Serializable</span>
       </span>
       </h4>
@@ -125,7 +125,20 @@
         <span class="params">(<span name="f">f: Failure</span>)</span><span class="result"> extends Exception with Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">this class allows to throw a failure in a Exception</p>
+      <p class="comment cmt">this class allows to throw a failure result in an Exception</p>
+    </li><li visbl="pub" name="org.specs2.execute.Isolable" data-isabs="true">
+      <a id="Isolable:Isolable"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="Isolable.html"><span class="name">Isolable</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait models elements which can be executed in a brand new context with new local variables
+It is used to execute examples in a new specification when needed
+</p>
     </li><li visbl="pub" name="org.specs2.execute.NoDetails" data-isabs="false">
       <a id="NoDetails:NoDetails"></a>
       <h4 class="signature">
@@ -160,6 +173,17 @@
       </span>
       </h4>
       <p class="comment cmt">Pending result</p>
+    </li><li visbl="pub" name="org.specs2.execute.PendingException" data-isabs="false">
+      <a id="PendingException:PendingException"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="PendingException.html"><span class="name">PendingException</span></a>
+        
+        <span class="params">(<span name="f">f: Pending</span>)</span><span class="result"> extends Exception with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">this class allows to throw a pending result in an Exception</p>
     </li><li visbl="pub" name="org.specs2.execute.PendingUntilFixed" data-isabs="true">
       <a id="PendingUntilFixed:PendingUntilFixed"></a>
       <h4 class="signature">
@@ -227,7 +251,7 @@
         <span class="params">(<span name="f">f: Skipped</span>)</span><span class="result"> extends Exception with Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">this class allows to throw a failure in a Exception</p>
+      <p class="comment cmt">this class allows to throw a skipped result in an Exception</p>
     </li><li visbl="pub" name="org.specs2.execute.Skipped" data-isabs="false">
       <a id="Skipped:Skipped"></a>
       <h4 class="signature">
@@ -258,7 +282,7 @@
       <span class="symbol"> 
         <a href="Success.html"><span class="name">Success</span></a>
         
-        <span class="params">(<span name="m">m: String</span>)</span><span class="result"> extends Result with Product with Serializable</span>
+        <span class="params">(<span name="m">m: String</span>, <span name="exp">exp: String</span>)</span><span class="result"> extends Result with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">This class represents the success of an execution

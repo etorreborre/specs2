@@ -259,6 +259,17 @@
       </span>
       </h4>
       <p class="shortcomment cmt">matches if map.</p><div class="fullcomment"><div class="comment cmt"><p>matches if map.contains(k)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MapBaseMatchers#haveKeys" data-isabs="false">
+      <a id="haveKeys[K](K*):Matcher[Iterable[(K, Any)]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">haveKeys</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        <span class="params">(<span name="keys">keys: K*</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[(K, <span name="scala.Any" class="extype">Any</span>)]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if map.</p><div class="fullcomment"><div class="comment cmt"><p>matches if map.contains(k) forall key k</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.MapBaseMatchers#havePair" data-isabs="false">
       <a id="havePair[K, V]((K, V)):Matcher[Iterable[(K, V)]]"></a>
       <h4 class="signature">
@@ -292,6 +303,17 @@
       </span>
       </h4>
       <p class="shortcomment cmt">matches if map contains a pair (key, value) with value == v</p><div class="fullcomment"><div class="comment cmt"><p>matches if map contains a pair (key, value) with value == v</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MapBaseMatchers#haveValues" data-isabs="false">
+      <a id="haveValues[V](V*):Matcher[Iterable[(Any, V)]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">haveValues</span>
+        <span class="tparams">[<span name="V">V</span>]</span>
+        <span class="params">(<span name="values">values: V*</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[(<span name="scala.Any" class="extype">Any</span>, V)]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if map contains a pair (key, value) with value == v  for all value v</p><div class="fullcomment"><div class="comment cmt"><p>matches if map contains a pair (key, value) with value == v  for all value v</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -311,6 +333,17 @@
         <span class="name">key</span>
         <span class="tparams">[<span name="K">K</span>]</span>
         <span class="params">(<span name="k">k: K</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[(K, <span name="scala.Any" class="extype">Any</span>)]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MapBeHaveMatchers#keys" data-isabs="false">
+      <a id="keys[K](K*):Matcher[Iterable[(K, Any)]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">keys</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        <span class="params">(<span name="ks">ks: K*</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[(K, <span name="scala.Any" class="extype">Any</span>)]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
@@ -443,6 +476,17 @@
         <span class="name">value</span>
         <span class="tparams">[<span name="V">V</span>]</span>
         <span class="params">(<span name="v">v: V</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[(<span name="scala.Any" class="extype">Any</span>, V)]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MapBeHaveMatchers#values" data-isabs="false">
+      <a id="values[V](V*):Matcher[Iterable[(Any, V)]]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">values</span>
+        <span class="tparams">[<span name="V">V</span>]</span>
+        <span class="params">(<span name="vs">vs: V*</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Iterable[(<span name="scala.Any" class="extype">Any</span>, V)]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>

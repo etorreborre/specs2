@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">ExecutableSpecification</span>
         
-        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>, <span name="fs">fs: Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -64,7 +64,7 @@
       <span class="symbol"> 
         <span class="name">ExecutableSpecification</span>
         
-        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>)</span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>, <span name="fs">fs: Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="FragmentSeq.html">FragmentSeq</a>]</span>)</span>
       </span>
       </h4>
       
@@ -139,7 +139,7 @@
       <span class="symbol"> 
         <span class="name">arguments</span>
         
-        <span class="result">: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>
+        <span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
       
@@ -215,6 +215,17 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#fragments" data-isabs="false">
+      <a id="fragments:Seq[Fragment]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">fragments</span>
+        
+        <span class="result">: <span name="scala.collection.Seq" class="extype">Seq</span>[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#fs" data-isabs="false">
       <a id="fs:Seq[FragmentSeq]"></a>
       <h4 class="signature">
@@ -259,6 +270,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#map" data-isabs="false">
+      <a id="map((Fragment) ⇒ Fragment):ExecutableSpecification"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">map</span>
+        
+        <span class="params">(<span name="f">f: (<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>) ⇒ <a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a></span>)</span><span class="result">: <a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="">ExecutableSpecification</a></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification#name" data-isabs="false">
       <a id="name:SpecName"></a>
       <h4 class="signature">

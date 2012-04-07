@@ -177,7 +177,7 @@
       <span class="symbol"> 
         <span class="name">descriptions</span>
         
-        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="org.specs2.reporter.JUnitDescriptions" class="extype">JUnitDescriptions</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>] { def initialFragment(className: String): org.specs2.specification.ExecutedText }</span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="org.specs2.reporter.JUnitDescriptions" class="extype">JUnitDescriptions</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>] { def initialFragment(className: String): org.specs2.specification.ExecutedText }</span>
       </span>
       </h4>
       <p class="shortcomment cmt">fold object used to create descriptions</p><div class="fullcomment"><div class="comment cmt"><p>fold object used to create descriptions</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.JUnitXmlPrinter" class="extype" href="JUnitXmlPrinter.html">JUnitXmlPrinter</a></dd></dl></div>
@@ -210,7 +210,7 @@
       <span class="symbol"> 
         <span class="name">export</span>
         
-        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
+        <span class="params">(<span class="implicit">implicit </span><span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a function exporting an ExecutingSpecification</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.JUnitXmlExporting" class="extype" href="">JUnitXmlExporting</a> → Exporting</dd></dl></div>
@@ -312,7 +312,7 @@
       <span class="symbol"> 
         <span class="name">print</span>
         
-        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a sequence of executed fragments for a given specification class into a html
@@ -337,7 +337,7 @@ the name of the html file is the full class name
       <span class="symbol"> 
         <span class="name">testSuite</span>
         
-        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <span name="org.specs2.main.Arguments" class="extype">Arguments</span></span>)</span><span class="result">: <a name="org.specs2.reporter.JUnitXmlPrinter.TestSuite" class="extype" href="JUnitXmlPrinter$TestSuite.html">TestSuite</a></span>
+        <span class="params">(<span name="name">name: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fs">fs: Seq[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="../specification/ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <a name="org.specs2.reporter.JUnitXmlPrinter.TestSuite" class="extype" href="JUnitXmlPrinter$TestSuite.html">TestSuite</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">create a TestSuite object containing all the examples

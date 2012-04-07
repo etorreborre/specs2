@@ -140,6 +140,28 @@
       </h4>
       <p class="shortcomment cmt">matches if a.</p><div class="fullcomment"><div class="comment cmt"><p>matches if a.toLowerCase.trim = b.toLowerCase.trim</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#=~" data-isabs="false">
+      <a id="=~(Regex):BeMatchingRegex"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">=~</span>
+        
+        <span class="params">(<span name="r">r: <span name="scala.util.matching.Regex" class="extype">Regex</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingRegex" class="extype" href="BeMatchingRegex.html">BeMatchingRegex</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for beMatching but matching just a fragment of the string</p><div class="fullcomment"><div class="comment cmt"><p>alias for beMatching but matching just a fragment of the string</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#=~" data-isabs="false">
+      <a id="=~(Pattern):BeMatchingPattern"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">=~</span>
+        
+        <span class="params">(<span name="p">p: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingPattern" class="extype" href="BeMatchingPattern.html">BeMatchingPattern</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for beMatching but matching just a fragment of the string</p><div class="fullcomment"><div class="comment cmt"><p>alias for beMatching but matching just a fragment of the string</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#=~" data-isabs="false">
       <a id="=~(⇒ String):BeMatching"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -162,13 +184,35 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#beMatching" data-isabs="false">
+      <a id="beMatching(Regex):BeMatchingRegex"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">beMatching</span>
+        
+        <span class="params">(<span name="a">a: <span name="scala.util.matching.Regex" class="extype">Regex</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingRegex" class="extype" href="BeMatchingRegex.html">BeMatchingRegex</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if b matches the regex a</p><div class="fullcomment"><div class="comment cmt"><p>matches if b matches the regex a</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#beMatching" data-isabs="false">
+      <a id="beMatching(Pattern):BeMatchingPattern"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">beMatching</span>
+        
+        <span class="params">(<span name="a">a: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingPattern" class="extype" href="BeMatchingPattern.html">BeMatchingPattern</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if b matches the pattern a</p><div class="fullcomment"><div class="comment cmt"><p>matches if b matches the pattern a</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#beMatching" data-isabs="false">
       <a id="beMatching(⇒ String):BeMatching"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">beMatching</span>
         
-        <span class="params">(<span name="t">t: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatching" class="extype" href="BeMatching.html">BeMatching</a></span>
+        <span class="params">(<span name="a">a: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatching" class="extype" href="BeMatching.html">BeMatching</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">matches if b matches the regular expression a</p><div class="fullcomment"><div class="comment cmt"><p>matches if b matches the regular expression a</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
@@ -253,13 +297,13 @@
       </h4>
       <p class="shortcomment cmt">matches if b.</p><div class="fullcomment"><div class="comment cmt"><p>matches if b.endsWith(a)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#endingWith" data-isabs="false">
-      <a id="endingWith(String):Matcher[String]"></a>
+      <a id="endingWith(⇒ String):Matcher[String]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">endingWith</span>
         
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String]</span>
+        <span class="params">(<span name="s">s: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBeHaveMatchers</dd></dl></div>
@@ -300,13 +344,35 @@
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#find" data-isabs="false">
-      <a id="find(String):FindMatcher"></a>
+      <a id="find(Regex):FindMatcherRegex"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">find</span>
         
-        <span class="params">(<span name="a">a: String</span>)</span><span class="result">: <span name="org.specs2.matcher.StringBaseMatchers.FindMatcher" class="extype">FindMatcher</span></span>
+        <span class="params">(<span name="r">r: <span name="scala.util.matching.Regex" class="extype">Regex</span></span>)</span><span class="result">: <span name="org.specs2.matcher.StringBaseMatchers.FindMatcherRegex" class="extype">FindMatcherRegex</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if the regexp r is found inside b</p><div class="fullcomment"><div class="comment cmt"><p>matches if the regexp r is found inside b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#find" data-isabs="false">
+      <a id="find(Pattern):FindMatcherPattern"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">find</span>
+        
+        <span class="params">(<span name="p">p: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>)</span><span class="result">: <span name="org.specs2.matcher.StringBaseMatchers.FindMatcherPattern" class="extype">FindMatcherPattern</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">matches if the pattern p is found inside b</p><div class="fullcomment"><div class="comment cmt"><p>matches if the pattern p is found inside b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBaseMatchers#find" data-isabs="false">
+      <a id="find(⇒ String):FindMatcher"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">find</span>
+        
+        <span class="params">(<span name="a">a: ⇒ String</span>)</span><span class="result">: <span name="org.specs2.matcher.StringBaseMatchers.FindMatcher" class="extype">FindMatcher</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">matches if the regexp a is found inside b</p><div class="fullcomment"><div class="comment cmt"><p>matches if the regexp a is found inside b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
@@ -343,6 +409,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#matching" data-isabs="false">
+      <a id="matching(Regex):BeMatchingRegex"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">matching</span>
+        
+        <span class="params">(<span name="r">r: <span name="scala.util.matching.Regex" class="extype">Regex</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingRegex" class="extype" href="BeMatchingRegex.html">BeMatchingRegex</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBeHaveMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#matching" data-isabs="false">
+      <a id="matching(Pattern):BeMatchingPattern"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">matching</span>
+        
+        <span class="params">(<span name="t">t: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeMatchingPattern" class="extype" href="BeMatchingPattern.html">BeMatchingPattern</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBeHaveMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#matching" data-isabs="false">
       <a id="matching(⇒ String):BeMatching"></a>
       <h4 class="signature">
@@ -399,13 +487,13 @@
       </h4>
       <p class="shortcomment cmt">matches if b.</p><div class="fullcomment"><div class="comment cmt"><p>matches if b.startsWith(a)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#startingWith" data-isabs="false">
-      <a id="startingWith(String):Matcher[String]"></a>
+      <a id="startingWith(⇒ String):Matcher[String]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">startingWith</span>
         
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String]</span>
+        <span class="params">(<span name="s">s: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[String]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StringBeHaveMatchers</dd></dl></div>

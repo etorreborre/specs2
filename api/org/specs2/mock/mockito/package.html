@@ -47,7 +47,18 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.mock.mockito.ArgumentCapture" data-isabs="false">
+              <ol><li visbl="pub" name="org.specs2.mock.mockito.ArgThat" data-isabs="true">
+      <a id="ArgThat:ArgThat"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ArgThat.html"><span class="name">ArgThat</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.mock.mockito.ArgumentCapture" data-isabs="false">
       <a id="ArgumentCapture:ArgumentCapture[T]"></a>
       <h4 class="signature">
       <span class="kind">class</span>
@@ -65,7 +76,7 @@
       <span class="symbol"> 
         <a href="CalledMatchers.html"><span class="name">CalledMatchers</span></a>
         
-        <span class="result"> extends NumberOfTimes with TheMockitoMocker with Expectations</span>
+        <span class="result"> extends NumberOfTimes with FunctionArguments with TheMockitoMocker with Expectations</span>
       </span>
       </h4>
       <p class="comment cmt">This trait provides methods to declare expectations on mock calls:<code>
@@ -106,6 +117,28 @@ got { two(mockedList).get(0) }
       <p class="comment cmt">Syntactic sugar on top of the ArgumentCaptor API
 to avoid using classOf and an explicit call to capture()
 </p>
+    </li><li visbl="pub" name="org.specs2.mock.mockito.FunctionArguments" data-isabs="true">
+      <a id="FunctionArguments:FunctionArguments"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="FunctionArguments.html"><span class="name">FunctionArguments</span></a>
+        
+        <span class="result"> extends FunctionArgumentsLowImplicits</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.mock.mockito.FunctionArgumentsLowImplicits" data-isabs="true">
+      <a id="FunctionArgumentsLowImplicits:FunctionArgumentsLowImplicits"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="FunctionArgumentsLowImplicits.html"><span class="name">FunctionArgumentsLowImplicits</span></a>
+        
+        <span class="result"> extends ArgThat with Expectations</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait allows to specify functions as arguments in mocked methods.</p>
     </li><li visbl="pub" name="org.specs2.mock.mockito.IgnoreStubs" data-isabs="false">
       <a id="IgnoreStubs:IgnoreStubs"></a>
       <h4 class="signature">
@@ -137,10 +170,11 @@ to avoid using classOf and an explicit call to capture()
       <span class="symbol"> 
         <a href="MockitoMatchers.html"><span class="name">MockitoMatchers</span></a>
         
-        <span class="result"> extends AnyRef</span>
+        <span class="result"> extends ArgThat</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Mockito Matchers for the most common types
+</p>
     </li><li visbl="pub" name="org.specs2.mock.mockito.MockitoStubs" data-isabs="true">
       <a id="MockitoStubs:MockitoStubs"></a>
       <h4 class="signature">
@@ -201,7 +235,32 @@ to avoid using classOf and an explicit call to capture()
         
         
 
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.mock.mockito.FunctionArgumentsGeneration" data-isabs="false">
+      <a id="FunctionArgumentsGeneration:FunctionArgumentsGeneration"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="FunctionArgumentsGeneration$.html"><span class="name">FunctionArgumentsGeneration</span></a>
         
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.mock.mockito.MockitoMatchersGeneration" data-isabs="false">
+      <a id="MockitoMatchersGeneration:MockitoMatchersGeneration"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="MockitoMatchersGeneration$.html"><span class="name">MockitoMatchersGeneration</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
 
         
 

@@ -47,7 +47,18 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
+              <ol><li visbl="pub" name="org.specs2.reporter.ConsoleNotifier" data-isabs="true">
+      <a id="ConsoleNotifier:ConsoleNotifier"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ConsoleNotifier.html"><span class="name">ConsoleNotifier</span></a>
+        
+        <span class="result"> extends Notifier</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
       <a id="ConsoleReporter:ConsoleReporter"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
@@ -77,10 +88,10 @@ Output:</p>
       <span class="symbol"> 
         <a href="DefaultSelection.html"><span class="name">DefaultSelection</span></a>
         
-        <span class="result"> extends WithDefaultStatisticsRepository</span>
+        <span class="result"> extends ExamplesIsolation with TagSelection with StatusSelection with ExamplesSelection with Selection</span>
       </span>
       </h4>
-      <p class="comment cmt">The DefaultSelection trait filters the fragments to execute by filtering Examples according to their names</p>
+      <p class="comment cmt">The DefaultSelection trait filters the fragments to execute by filtering Examples:</p>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSequence" data-isabs="true">
       <a id="DefaultSequence:DefaultSequence"></a>
       <h4 class="signature">
@@ -93,6 +104,17 @@ Output:</p>
       </h4>
       <p class="comment cmt">The DefaultSequence trait sorts the Fragments by making sure Steps will be executed before Examples
 </p>
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultStatisticsRepository" data-isabs="true">
+      <a id="DefaultStatisticsRepository:DefaultStatisticsRepository"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="DefaultStatisticsRepository.html"><span class="name">DefaultStatisticsRepository</span></a>
+        
+        <span class="result"> extends StatisticsRepository with OutputDir</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This repository store the results in one file per specification, in a special directory</p>
     </li><li visbl="pub" name="org.specs2.reporter.DescriptionAndExamples" data-isabs="false">
       <a id="DescriptionAndExamples:DescriptionAndExamples[T]"></a>
       <h4 class="signature">
@@ -116,6 +138,29 @@ Output:</p>
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.reporter.ExamplesIsolation" data-isabs="true">
+      <a id="ExamplesIsolation:ExamplesIsolation"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ExamplesIsolation.html"><span class="name">ExamplesIsolation</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait &quot;isolates&quot; examples by replacing their body with another one, created from a clone of the specification.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.ExamplesSelection" data-isabs="true">
+      <a id="ExamplesSelection:ExamplesSelection"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="ExamplesSelection.html"><span class="name">ExamplesSelection</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait filters examples based on their description
+</p>
     </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification" data-isabs="false">
       <a id="ExecutableSpecification:ExecutableSpecification"></a>
       <h4 class="signature">
@@ -127,6 +172,18 @@ Output:</p>
       </span>
       </h4>
       <p class="comment cmt">this case class transports the fragments to execute, grouped in sequences of examples which can be executed concurrently
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporter" data-isabs="true">
+      <a id="Exporter:Exporter"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="Exporter.html"><span class="name">Exporter</span></a>
+        
+        <span class="result"> extends Exporting</span>
+      </span>
+      </h4>
+      <p class="comment cmt">public trait to create a custom exporter
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.FragmentSeq" data-isabs="false">
       <a id="FragmentSeq:FragmentSeq"></a>
@@ -297,7 +354,7 @@ seen as a Tree of Fragments.</p>
       <span class="symbol"> 
         <a href="NotifierExporting.html"><span class="name">NotifierExporting</span></a>
         
-        <span class="result"> extends Exporting</span>
+        <span class="result"> extends Exporting with Exporters</span>
       </span>
       </h4>
       
@@ -371,6 +428,41 @@ different types of results.</p>
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.reporter.StatisticsRepository" data-isabs="true">
+      <a id="StatisticsRepository:StatisticsRepository"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="StatisticsRepository.html"><span class="name">StatisticsRepository</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.StatusSelection" data-isabs="true">
+      <a id="StatusSelection:StatusSelection"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="StatusSelection.html"><span class="name">StatusSelection</span></a>
+        
+        <span class="result"> extends WithDefaultStatisticsRepository</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait selects examples based on their previous execution
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.TagSelection" data-isabs="true">
+      <a id="TagSelection:TagSelection"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="TagSelection.html"><span class="name">TagSelection</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait selects fragments based on their tags
+</p>
     </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceReporter" data-isabs="false">
       <a id="TestInterfaceReporter:TestInterfaceReporter"></a>
       <h4 class="signature">
@@ -477,7 +569,7 @@ at the end of the specification
       <span class="symbol"> 
         <a href="ConsoleNotifier$.html"><span class="name">ConsoleNotifier</span></a>
         
-        <span class="result"> extends Notifier</span>
+        <span class="result"> extends ConsoleNotifier</span>
       </span>
       </h4>
       
@@ -533,6 +625,17 @@ at the end of the specification
         <a href="JUnitXmlExporting$.html"><span class="name">JUnitXmlExporting</span></a>
         
         <span class="result"> extends JUnitXmlExporting</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.TextExporting" data-isabs="false">
+      <a id="TextExporting:TextExporting"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="TextExporting$.html"><span class="name">TextExporting</span></a>
+        
+        <span class="result"> extends TextExporting</span>
       </span>
       </h4>
       

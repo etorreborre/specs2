@@ -205,6 +205,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="org.specs2" class="extype" href="../package.html">specs2</a>] </dd></dl></div>
+    </li><li visbl="prt" name="org.specs2.matcher.BeMatchingPattern" data-isabs="false">
+      <a id="BeMatchingPattern:BeMatchingPattern"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="BeMatchingPattern.html"><span class="name">BeMatchingPattern</span></a>
+        
+        <span class="result"> extends BeMatching</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="org.specs2" class="extype" href="../package.html">specs2</a>] </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.BeMatchingRegex" data-isabs="false">
+      <a id="BeMatchingRegex:BeMatchingRegex"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="BeMatchingRegex.html"><span class="name">BeMatchingRegex</span></a>
+        
+        <span class="result"> extends BeMatching</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.matcher.BeNull" data-isabs="false">
       <a id="BeNull:BeNull[T]"></a>
       <h4 class="signature">
@@ -528,7 +550,7 @@ and then to check that there's no unwanted dependency in the code.</p>
       <span class="kind">case class</span>
       <span class="symbol"> 
         <a href="ExpectedParsedResult.html"><span class="name">ExpectedParsedResult</span></a>
-        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="tparams">[<span name="T">+T</span>]</span>
         <span class="params">(<span name="t">t: T</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
@@ -660,6 +682,17 @@ to properties by appending forAll
         <a href="MatchFailure.html"><span class="name">MatchFailure</span></a>
         <span class="tparams">[<span name="T">T</span>]</span>
         <span class="params">(<span name="okMessage">okMessage: String</span>, <span name="koMessage">koMessage: String</span>, <span name="expectable">expectable: Expectable[T]</span>, <span name="details">details: Details</span>)</span><span class="result"> extends MatchResult[T] with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.MatchPending" data-isabs="false">
+      <a id="MatchPending:MatchPending[T]"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="MatchPending.html"><span class="name">MatchPending</span></a>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="message">message: String</span>, <span name="expectable">expectable: Expectable[T]</span>)</span><span class="result"> extends MatchResult[T] with Product with Serializable</span>
       </span>
       </h4>
       
@@ -1039,7 +1072,7 @@ If <code>node</code> has some children, then they are searched using equality
       <span class="symbol"> 
         <a href="ScalaCheckMatchers.html"><span class="name">ScalaCheckMatchers</span></a>
         
-        <span class="result"> extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters with FunctionPropertyImplicits with ResultPropertyImplicits with ApplicableArbitraries</span>
+        <span class="result"> extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters with FunctionPropertyImplicits with ResultPropertyImplicits with ApplicableArbitraries with Expectations</span>
       </span>
       </h4>
       <p class="comment cmt">The ScalaCheckMatchers trait provides matchers which allow to
@@ -1158,6 +1191,18 @@ a match fails
       </span>
       </h4>
       <p class="comment cmt">This trait can be used in conjonction with Pattern matchers:</p>
+    </li><li visbl="pub" name="org.specs2.matcher.StoredExpectations" data-isabs="true">
+      <a id="StoredExpectations:StoredExpectations"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="StoredExpectations.html"><span class="name">StoredExpectations</span></a>
+        
+        <span class="result"> extends Expectations</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait evaluates expectations and stores them in a local variable for further usage
+</p>
     </li><li visbl="pub" name="org.specs2.matcher.StringMatchers" data-isabs="true">
       <a id="StringMatchers:StringMatchers"></a>
       <h4 class="signature">

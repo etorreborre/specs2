@@ -29,7 +29,7 @@
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides building blocks to create steps and examples from regular expression.</p><p>It is used to implement a Given-When-Then way of describing systems.</p><p>Fragments are created by adding a <code>Given</code> step to a <code>Text</code>:</p><p> <code>"name: ${user}" ^ givenName</code></p><p>This creates a PreStep object containing the current context (representing all the extracted values) and a list of
-Fragments containing:</p><ul><li>the Text fragment: <code>Text("name: ${Eric}")</code></li><li>a Step containing the extraction code to get the value delimited by <code>${}</code></li></ul><p>Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
+Fragments containing:</p><ul><li>the Text fragment: <code>Text("name: ${user}")</code></li><li>a Step containing the extraction code to get the value delimited by <code>${}</code></li></ul><p>Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
 stores the additional Text fragment so that values can be extracted from it when a <code>When</code> step is added:
 <code>
  // this creates a PreStepText object
@@ -40,8 +40,7 @@ stores the additional Text fragment so that values can be extracted from it when
  "name: ${user}" ^ givenName ^
  "age: ${38}"    ^ thenAge ^
 </code></p><p>Eventually, when a <code>Then</code> step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
-the current context and the results returned by the <code>Then</code> objects to create Examples.</p><p>The last PostStep object contains the list of all fragments created by the Given/When/Then sequence:</p><ul><li>Text fragments</li><li>Steps</li><li>Examples
-</li></ul></div><div class="toggleContainer block">
+the current context and the results returned by the <code>Then</code> objects to create Examples.</p><p>The last PostStep object contains the list of all fragments created by the Given/When/Then sequence:</p><ul><li>Text fragments</li><li>Steps</li><li>Examples</li></ul></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
