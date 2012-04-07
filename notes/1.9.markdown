@@ -2,9 +2,9 @@ This version adds new features on top of 1.8.2:
 
  * `isolated` specifications where each example is executed in its own copy of the specification so that all local variables are re-initialized (an example [here](https://github.com/etorreborre/specs2/blob/1.9/src/test/scala/examples/StackIsolatedSpec.scala))
  * improved the documentation showing that `DataTables` can be displayed as examples
- * improved the performance of the `beMatching` matchers by compiling the regex once only
+ * improved the performance of the `beMatching` matchers by compiling the regex only once
  * added an `AllExpectations` trait to collect [all the expectations](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#All) of an example instead of stopping after the first failure
- * Mockito can now be used with functions having by-name arguments or implicitly converted arguments
+ * Mockito can now be used with methods having by-name arguments or implicitly converted arguments
  * added some helper functions and conversions to verify function/partial function parameters with Mockito. *Note*: the specs2 jar needs to be placed before the Mockito jar on the classpath
  * a `Notifier`/`Exporter` can now be specified as an argument for custom reporting of the specification
  * mutable specifications can now be used as acceptance specifications with: paragraphs and formatting fragments, auto-examples, given/when/then style
@@ -12,11 +12,11 @@ This version adds new features on top of 1.8.2:
  * the exact type of an exception happening during the execution of an example is now kept for better reporting
  * ScalaCheck properties can now be used inside contexts in a mutable specification
  * added `haveKeys` and `haveValues` matchers for Maps
- * added a `showAs` method to totally control how values are displayed in failure messages. This is especially useful for filtering and displaying collections or maps: `longList.showAs(_.filter(_.startsWith("hi")).mkString("\n")) must have size(100)`
+ * added a `showAs` method to totally control how values are displayed in failure messages. This is especially useful for filtering and displaying large  collections or maps: `longList.showAs(_.filter(_.startsWith("hi")).mkString("\n")) must have size(100)`
  * added a `stopOnSkip` argument to stop the execution of a specification after the first skipped value
  * added a `skipAllIf(condition)` argument to skip all the examples if a condition is verified
  * added a `checkUrl` argument to check that urls in the produced html files are indeed accessible
- * added a confliciting implicit with a method name explaining what is happening if an operator is forgotten for an example. When trying to compile: `"this example won't work" { ko }`, the compiler will raise an implicit conflict error with including this message `***If you see this message this means that you've forgotten an operator after the description string: you should write "example" >> result ***`
+ * added a confliciting implicit with a method name explaining what is happening if an operator is forgotten for an `Example`. When trying to compile: `"this example won't work" { ko }`, the compiler will raise an implicit conflict error with including this message `***If you see this message this means that you've forgotten an operator after the description string: you should write "example" >> result ***`
  
 And some fixes:
 

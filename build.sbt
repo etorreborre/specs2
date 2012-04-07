@@ -1,7 +1,11 @@
+import sbtrelease._
+import Release._
+import ReleaseKeys._
+
 /** Project */
 name := "specs2"
 
-version := "1.9-SNAPSHOT"
+version := "1.9"
 
 organization := "org.specs2"
 
@@ -93,3 +97,28 @@ pomExtra := (
       </developer>
     </developers>
 )
+
+seq(releaseSettings: _*)
+
+releaseProcess <<= thisProjectRef apply { ref =>
+  import ReleaseStateTransformations._
+  Seq[ReleasePart](
+    initialGitChecks,                     
+    checkSnapshotDependencies,    
+    releaseTask(check in Posterous in ref),  
+    inquireVersions,                        
+    setReleaseVersion,                      
+    runTest,                                
+    commitReleaseVersion,                   
+    tagRelease,                             
+    releaseTask(publish in Global in ref),
+    releaseTask(publish in Posterous in ref),    
+    setNextVersion,                         
+    commitNextVersion                       
+  )
+}
+
+seq(lsSettings :_*)
+
+(LsKeys.ghBranch in LsKeys.lsync) := Some("1.9")
+
