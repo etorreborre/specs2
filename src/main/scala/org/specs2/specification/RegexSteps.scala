@@ -4,6 +4,7 @@ package specification
 import execute._
 import main.Arguments
 import specification.StandardFragments.{Backtab, Tab, Br, End}
+import internal.scalaz.Scalaz._
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -103,6 +104,10 @@ private[specs2] case class PreStep[T](context: () => Either[Result, T], fs: Frag
 
 private[specs2] case class PreStepText[T](text: String, context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
   type RegexType = PreStepText[T]
+  def ^[R](step: Given[R]): PreStep[(T, R)] = {
+    lazy val pair = (context() <**> step.extractContext(text))((_,_))
+    new PreStep(() => pair, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(pair)))
+  }
   def ^[R](step: When[T, R]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
