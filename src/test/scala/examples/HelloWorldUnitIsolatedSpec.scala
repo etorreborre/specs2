@@ -1,4 +1,5 @@
-package org.specs2.examples
+package org.specs2
+package examples
 
 import org.specs2._
 
