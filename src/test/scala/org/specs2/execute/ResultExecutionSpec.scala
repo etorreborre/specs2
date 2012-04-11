@@ -14,6 +14,8 @@ class ResultExecutionSpec extends Specification { def is =
     { execute { throw new IllegalArgumentException("exception"); success } === Error("exception") }   ^
     "an AssertionError must return a Failure"                                                         ^
     { execute { throw new AssertionError("assertFalse"); success } === Failure("assertFalse") }       ^
+    "an AssertionError must return a Failure, even with a null message"                               ^
+    { execute { throw new AssertionError(null); success } === Failure("null") }                       ^
     "a NotImplementedError must return a Failure"                                                     ^
     { execute { throw NotImplementedError("???"); success } === Failure("???") }                      ^
     "any other type of Result must return itself"                                                     ^

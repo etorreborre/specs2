@@ -6,18 +6,18 @@ package text
  * @see http://en.wikipedia.org/wiki/ANSI_escape_code
  */
 trait AnsiColors {
-  val black   = "\033[30m"
-  val red     = "\033[31m"
-  val green   = "\033[32m"
-  val yellow  = "\033[33m"
-  val blue    = "\033[34m"
-  val magenta = "\033[35m"
-  val cyan    = "\033[36m"
-  val white   = "\033[37m"
+  lazy val black   = "\033[30m"
+  lazy val red     = "\033[31m"
+  lazy val green   = "\033[32m"
+  lazy val yellow  = "\033[33m"
+  lazy val blue    = "\033[34m"
+  lazy val magenta = "\033[35m"
+  lazy val cyan    = "\033[36m"
+  lazy val white   = "\033[37m"
     
-  val reset   = "\033[0m"
+  lazy val reset   = "\033[0m"
     
-  val all = Seq(black, red, green, yellow, blue, magenta, cyan, white, reset)
+  lazy val all = Seq(black, red, green, yellow, blue, magenta, cyan, white, reset)
 
   /** @return a string with no color codes */
   def removeColors(s: String, doIt: Boolean = true): String = {

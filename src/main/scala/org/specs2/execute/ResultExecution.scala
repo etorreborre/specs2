@@ -4,6 +4,7 @@ package execute
 import control.Exceptions._
 import control.Property
 import reflect.ClassName._
+import text.NotNullStrings._
 /**
  * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
  */
@@ -22,8 +23,8 @@ trait ResultExecution { outer =>
       case SkipException(f)                                                  => f
       case PendingException(f)                                               => f
       case e: Exception                                                      => Error(e)
-      case e: AssertionError                                                 => Failure(e.getMessage, "", e.getStackTrace.toList)
-      case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage, "", e.getStackTrace.toList)
+      case e: AssertionError                                                 => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
+      case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
       case other                                                             => throw other
     }
 
