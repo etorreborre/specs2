@@ -31,7 +31,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
   protected lazy val specification = tryToCreateObject[SpecificationStructure](klass.getName).get
 
   /** arguments for the specification */
-  implicit lazy val args: Arguments = specification.content.arguments
+  implicit lazy val args: Arguments = Arguments.extract(Seq(), properties) <| specification.content.arguments
   /** fold object used to create descriptions */
   private val descriptions = new JUnitDescriptionsFragments(klass.getName)
   /** extract the root Description object and the examples to execute */
@@ -62,11 +62,10 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
     }
 
   private def export = (executed: Seq[(Description, ExecutedFragment)]) => {
-    val commandLineArgs = properties.getProperty("commandline").getOrElse("").split("\\s")
-    def exportTo = (name: String) => properties.isDefined(name) || commandLineArgs.contains(name)
+    def exportTo = (name: String) => properties.isDefined(name) || args.contains(name)
 
     val executedSpecification = ExecutingSpecification.create(specification.content.specName, executed.map(_._2))
-    exportToOthers(Arguments(commandLineArgs:_*) <| args, exportTo)(executedSpecification)
+    exportToOthers(args, exportTo)(executedSpecification)
     executed
   }
 
@@ -113,8 +112,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
  */
 object JUnitRunner {
   def apply[T <: SpecificationStructure](implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure)
-  def apply[T <: SpecificationStructure](s: T)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
-    override protected lazy val specification = s	  
+  def apply[T <: SpecificationStructure](s: T)(implicit m: ClassManifest[T], p: SystemProperties) = new JUnitRunner(m.erasure) {
+    override protected lazy val specification = s
+    override protected lazy val properties = p
   }
   def apply[T <: SpecificationStructure](fs: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
     override protected lazy val specification = new Specification { def is = fs }

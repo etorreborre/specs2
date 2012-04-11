@@ -6,7 +6,7 @@ import Scalaz._
 import control._
 import Exceptions._
 import text._
-
+import Split._
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
  *
@@ -18,12 +18,13 @@ import text._
  * - report:  for the reporting of results
  *
  */
-case class Arguments (
+case class
+Arguments (
   select:        Select           = Select(),
   execute:       Execute          = Execute(),
   store:         Store            = Store(),
   report:        Report           = Report(),
-  commandLine:   Seq[String]      = Seq()
+  commandLine:   CommandLine      = CommandLine()
  ) extends ShowArgs {
   def ex: String                      = select.ex
   def include: String                 = select.include
@@ -71,7 +72,7 @@ case class Arguments (
       execute.overrideWith(other.execute),
       store.overrideWith(other.store),
       report.overrideWith(other.report),
-      if (other.commandLine.isEmpty) commandLine else other.commandLine
+      commandLine.overrideWith(other.commandLine)
     )
   }
 
@@ -90,17 +91,13 @@ case class Arguments (
   /**
    * @return a new Arguments object with only some arguments on the command line
    */
-  def commandLineFilter(included: String*) = copy(commandLine = commandLine.filter(included.toSet.contains))
+  def commandLineFilter(included: String*) = copy(commandLine = commandLine.filter(included:_*))
   /**
    * @return a new Arguments object with some arguments removed from the command line
    */
-  def commandLineFilterNot(excluded: String*) = copy(commandLine = commandLine.filterNot(excluded.toSet.contains))
+  def commandLineFilterNot(excluded: String*) = copy(commandLine = commandLine.filterNot(excluded:_*))
 
-  override def toString =
-    (List(select.toString,
-         execute.toString,
-         report.toString) ++
-         (if (commandLine.isEmpty) Seq() else Seq("commandLine = "+commandLine.mkString(", ")))).mkString("Arguments(", ", ", ")")
+  override def toString = Seq(select, execute, report, commandLine).mkString("Arguments(", ", ", ")")
 
 }
 import main.{SystemProperties => sysProperties}
@@ -112,13 +109,14 @@ object Arguments extends Extract {
   def apply(implicit arguments: String*): Arguments = {
     if (arguments.isEmpty) new Arguments() else extract(arguments, sysProperties)
   }
+
   private[specs2] def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Arguments = {
     new Arguments (
        select        = Select.extract,
        execute       = Execute.extract,
        store         = Store.extract,
        report        = Report.extract,
-       commandLine   = arguments
+       commandLine   = CommandLine.extract
     )
   }
   
@@ -364,6 +362,7 @@ case class Report(
     "exporter"       -> _exporter).flatMap(showArg).mkString("Report(", ", ", ")")
 
 }
+
 private[specs2]
 object Report extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report = {
@@ -386,6 +385,26 @@ object Report extends Extract {
       _exporter      = value("exporter")
     )
   }
+}
+/**
+ * Command-line arguments
+ */
+private[specs2]
+case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
+
+  def arguments: Seq[String] = _arguments
+  def contains(a: String) = arguments contains a
+  def filter(included: String*) = copy(_arguments = arguments.filter(included.toSet.contains))
+  def filterNot(excluded: String*) = copy(_arguments = arguments.filterNot(excluded.toSet.contains))
+  def overrideWith(other: CommandLine) = copy(_arguments = if (other.arguments.isEmpty) this._arguments else other.arguments)
+
+  override def toString = List("arguments" -> _arguments.mkString(",")).mkString("CommandLine(", ", ", ")")
+}
+
+private[specs2]
+object CommandLine extends Extract {
+  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): CommandLine =
+    new CommandLine(_arguments = value("commandline").map(_.splitQuoted).getOrElse(Seq()))
 }
 
 private[specs2]

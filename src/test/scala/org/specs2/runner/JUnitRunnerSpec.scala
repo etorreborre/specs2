@@ -7,6 +7,7 @@ import main._
 import _root_.org.junit.runner.notification.{ RunNotifier, Failure }
 import _root_.org.junit.runner.Description
 import _root_.org.junit.ComparisonFailure
+import text.FromString
 
 class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {  def is =
   
@@ -33,6 +34,9 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     "then the specification is also printed on the console"                                                             ! export().e1^
     "the commandline system property can be used to remove colors"                                                      ! export().e2^
                                                                                                                         p^
+  "If an exclude tag is passed as a system property"                                                                    ^
+    "then the corresponding examples must be excluded"                                                                  ! excluded().e1^
+                                                                                                                        p^
   "If the isolated argument is specified"                                                                               ^
     "then the examples executions must be isolated"                                                                     ! isolate().e1^
                                                                                                                         end
@@ -41,9 +45,11 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     lazy val notifier   = mock[RunNotifier]
     lazy val console    = mock[TextExporting]
     lazy val html       = mock[HtmlExporting]
-    lazy val properties = mock[SystemProperties]
+    implicit lazy val properties = mock[SystemProperties]
 
-    properties.getProperty("commandline") returns None
+    properties.getProperty(anyString) returns None
+    properties.getPropertyAs[Boolean](anyString)(any[FromString[Boolean]]) returns None
+
     val executeSpec = (s: ExecutingSpecification) => s.execute
     Seq(console, html).foreach(e => e.export(any[Arguments]) returns executeSpec)
 
@@ -114,6 +120,14 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
       there was one(html).export(any[Arguments])
     }
   }
+  case class excluded() extends WithNotifier {
+
+    def e1 = {
+      properties.getProperty("exclude") returns Some("wontwork")
+      run(new TaggedSpecWithOneExcludedExample)
+      there was no(notifier).fireTestFailure(any[Failure])
+    }
+  }
   case class isolate() extends WithNotifier {
 
     def e1 = {
@@ -121,4 +135,11 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
       there was no(notifier).fireTestFailure(any[Failure])
     }
   }
+}
+
+class TaggedSpecWithOneExcludedExample extends mutable.SpecificationWithJUnit with mutable.Tags {
+  "this example is ok" >> ok
+
+  tag("wontwork")
+  "this example is not" >> ko
 }
