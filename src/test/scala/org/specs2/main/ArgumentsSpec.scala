@@ -118,6 +118,6 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
              { (a, s, r) =>  a.canShow(s.status) must_== r }
 
 
-  def e19 = Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine === Seq("this", "cool")
-  def e20 = Arguments("this", "is", "cool").commandLineFilterNot("this", "cool").commandLine === Seq("is")
+  def e19 = Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine.arguments === Seq("this", "cool")
+  def e20 = Arguments("this", "is", "cool").commandLineFilterNot("this", "cool").commandLine.arguments === Seq("is")
 }

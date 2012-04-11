@@ -398,13 +398,13 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   def filterNot(excluded: String*) = copy(_arguments = arguments.filterNot(excluded.toSet.contains))
   def overrideWith(other: CommandLine) = copy(_arguments = if (other.arguments.isEmpty) this._arguments else other.arguments)
 
-  override def toString = List("arguments" -> _arguments.mkString(",")).mkString("CommandLine(", ", ", ")")
+  override def toString = _arguments.mkString("CommandLine(", ", ", ")")
 }
 
 private[specs2]
 object CommandLine extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): CommandLine =
-    new CommandLine(_arguments = value("commandline").map(_.splitQuoted).getOrElse(Seq()))
+    new CommandLine(_arguments = value("commandline").map(_.splitQuoted).getOrElse(Seq()) ++ arguments)
 }
 
 private[specs2]
