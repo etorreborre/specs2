@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Structure</title><a name="Structure"><h2 specId="319511059">Structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
+    </head><body><div id="container"><title>Structure</title><a name="Structure"><h2 specId="30074919">Structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
 <ul>
   <li>declare examples and expectations</li>
   <li>link specifications together</li>
@@ -231,12 +231,16 @@
 </ul><a name="Multiple+steps"><h5>Multiple steps</h5></a><p>A G/W/T sequence can contain more than just 3 steps. However the compiler will check that:</p>
 <ul>
   <li>only a <code class="prettyprint">Given[T]</code> extractor can start a sequence</li>
-  <li>only a <code class="prettyprint">When[T, S]</code> or a <code class="prettyprint">Then[T]</code> extractor can follow a <code class="prettyprint">Given[T]</code> extractor</li>
+  <li>only a <code class="prettyprint">Given[S]</code>, a <code class="prettyprint">When[T, S]</code> or a <code class="prettyprint">Then[T]</code> extractor can follow a <code class="prettyprint">Given[T]</code> extractor</li>
+  <li>only a <code class="prettyprint">When[T1, T2, S]</code> or a <code class="prettyprint">Then[T1, T2] can follow a sequence of</code>Given[T1], Given[T2]` extractors (up to 8 Given steps, after that types are paired)</li>
   <li>only a <code class="prettyprint">When[S, U]</code> extractor or a <code class="prettyprint">Then[S]</code> can follow a <code class="prettyprint">When[T, S]</code> extractor</li>
   <li>only a <code class="prettyprint">Then[S]</code> can follow a <code class="prettyprint">Then[S]</code> extractor</li>
 </ul><p>To be more concrete, here are a few valid sequences:</p>
 <ul>
   <li>Given[T] / When[T, S] / Then[S]</li>
+  <li>Given[T] / Given[T2] / Given[T2] / When[T, T1, T2, R] / Then[R]</li>
+  <li>Given[T] / Given[T2] / Given[T3] / Given[T4] / Then[T, T1, T2, T3, T4]</li>
+  <li>Given[T] / Given[T2] / ... / Given[T8] / Then[T, T1, T2, T3, T4, T5, T6, (T7, T8)]</li>
   <li>Given[T] / When[T, S] / Then[S] / Then[S]</li>
   <li>Given[T] / Then[T] / Then[T]</li>
   <li>Given[T] / When[T, S] / When[S, U] / Then[U]</li>
@@ -312,7 +316,49 @@
   }
   // thenX can be reused as a Then[Y] step because Y &lt;: X
   val thenY: Then[Y] = thenX
-</code></pre><a name="DataTables"><h4>DataTables</h4></a><p><a href="/org.specs2.guide.Matchers.html#DataTables">DataTables</a> are generally used to pack lots of expectations inside one example. A DataTable which is used as a <code class="prettyprint">Result</code> in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:</p>
+</code></pre><a name="Unit+specification"><h5>Unit specification</h5></a><p>Given / When / Step can also be used in a unit specification by using the <code class="prettyprint">&lt; &lt;</code> operator and local variables:</p>
+<pre><code class="prettyprint">    &quot;A given-when-then example for a calculator&quot;.txt.br
+
+      &quot;Given the following number: ${1}&quot; &lt;&lt; { s: String =&gt;
+        a = s.toInt
+      }
+      &quot;And a second number: ${2}&quot; &lt;&lt; { s: String =&gt;
+        b = s.toInt
+      }
+      &quot;When I use this operator: ${+}&quot; &lt;&lt; { s: String =&gt;
+        result = Operation(a, b, s).calculate
+      }
+      &quot;Then I should get: ${3}&quot; &lt;&lt; { s: String =&gt;
+        result === s.toInt
+      }
+      &quot;And it should be &gt; ${0}&quot; &lt;&lt; { s: String =&gt;
+        result must be_&gt;(s.toInt)
+      }
+
+    var a, b, result: Int = 0
+
+    case class Operation(n1: Int, n2: Int, operator: String) {
+      def calculate: Int = if (operator == &quot;+&quot;) n1 + n2 else n1 * n2
+    }
+</code></pre><p>Similarly, ScalaCheck generator and properties are supported:</p>
+<pre><code class="prettyprint">    &quot;Given a first number n1&quot; &lt;&lt; {
+      n1 = choose(-10, 10)
+    }
+    &quot;And a second number n2&quot; &lt;&lt; {
+      n2 = choose(-10, 10)
+    }
+    &quot;When I add them&quot; &lt;&lt; {
+      operation = Arbitrary {
+        for (a1 &lt;- n1; a2 &lt;- n2) yield Addition(a1, a2)
+      }
+    }
+    &quot;Then I should get n1 + n2&quot; &lt;&lt; check { (op: Addition) =&gt;
+        op.calculate must_== op.n1 + op.n2
+    }
+
+    var n1, n2: Gen[Int] = null
+    implicit var operation: Arbitrary[Addition] = null
+</code></pre><a name="DataTables"><h4>DataTables</h4></a><p><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a> are generally used to pack lots of expectations inside one example. A DataTable which is used as a <code class="prettyprint">Result</code> in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:</p>
 <pre><code class="prettyprint">  class DataTableSpec extends Specification with DataTables { def is =
 
     &quot;adding integers should just work in scala&quot;  ^ {
@@ -356,7 +402,7 @@
   &quot;text to highlight&quot; ~ specification
   &quot;text to highlight&quot; ~ (specification, &quot;after text&quot;)
   &quot;text to highlight&quot; ~ (specification, &quot;after text&quot;, &quot;tooltip&quot;)
-</code></pre><a name="Reference"><h4>Reference</h4></a><p>Sometimes you just want to reference another specification without triggering its execution. For example when <a href="#Create+an+index+page">creating an index page</a>:</p>
+</code></pre><a name="Reference"><h4>Reference</h4></a><p>Sometimes you just want to reference another specification without triggering its execution. For example when <a href="#Create+an+index">creating an index page</a>:</p>
 <pre><code class="prettyprint">  see(new MailSenderSpec)
 </code></pre><p>This will generate a html link in the main specification based on the referenced specification name. If you want to customize that link you can use the following syntax:</p>
 <pre><code class="prettyprint">  &quot;before text&quot; ~/ (&quot;text to highlight&quot;, specification, &quot;after text&quot;)
@@ -559,7 +605,7 @@
       &quot;second example&quot; in { (s: String) =&gt; s must_== s }
     }
   }
-</code></pre><p>Indeed in both examples above the <code class="prettyprint">s</code> string that will be passed is the Example description as specified <a href="#Using+the+Example+description">here</a>.</p><a name="Composition"><h4>Composition</h4></a><a name="Combinations"><h5>Combinations</h5></a><p><strong><em>specs2</em></strong> contexts can be combined in several ways. When you want to define both <code class="prettyprint">Before</code> and <code class="prettyprint">After</code> behavior, you can do it by simply extending those 2 traits:</p>
+</code></pre><p>Indeed in both examples above the <code class="prettyprint">s</code> string that will be passed is the Example description as specified <a href="#Use+descriptions">here</a>.</p><a name="Composition"><h4>Composition</h4></a><a name="Combinations"><h5>Combinations</h5></a><p><strong><em>specs2</em></strong> contexts can be combined in several ways. When you want to define both <code class="prettyprint">Before</code> and <code class="prettyprint">After</code> behavior, you can do it by simply extending those 2 traits:</p>
 <pre><code class="prettyprint">   case class withFile extends Before with After {
      def before = createFile(&quot;test&quot;)
      def after  = deleteFile(&quot;test&quot;)
@@ -715,6 +761,41 @@
 <pre><code class="prettyprint">  class MySpecWithNoIndent extends Specification {
     def is = noindent ^ ....
   }
+</code></pre><a name="Unit+specification"><h6>Unit specification</h6></a><p>Formatting fragments can be used in a unit specification as well. 2 forms are supported, either as a single declaration:</p>
+<pre><code class="prettyprint">  &quot;this is an example&quot; &gt;&gt; { 1 === 1 }
+  p // add a paragraph
+  &quot;this is another example&quot; &gt;&gt; { 2 === 2 }
+</code></pre><p>Or as a postfix operator on fragments:</p>
+<pre><code class="prettyprint">  &quot;this is some text and a paragraph&quot;.p
+  &quot;this is an example and a paragraph&quot; &gt;&gt; {
+    1 must_== 1
+  } p
+</code></pre><p>There are also 2 additional postfix operations which can be used to start new paragraphs. Instead of using <code class="prettyprint">endp</code> to end a group of examples and starte a new one:</p>
+<pre><code class="prettyprint">  &quot;This is a first block of examples&quot;.p
+  { 1 === 1 }.eg;
+  { 2 === 2 }.eg.endp
+
+  &quot;And a second block&quot;.p
+  { 3 === 3 }.eg;
+  { 4 === 4 }.eg
+</code></pre><p>You can use <code class="prettyprint">newp</code> (or <code class="prettyprint">newbr</code>) to the same effect:</p>
+<pre><code class="prettyprint">  &quot;This is a first block of examples&quot;.p
+  { 1 === 1 }.eg;
+  { 2 === 2 }.eg
+
+  &quot;And a second block&quot;.newp
+  { 3 === 3 }.eg;
+  { 4 === 4 }.eg
+</code></pre><p>A shortcut is also available to indent a 'subexample' locally:</p>
+<pre><code class="prettyprint">  &quot;this is the first major example&quot; &gt;&gt; { ok }
+      &quot;this is minor and should be indented&quot; &gt;&gt; { ok } lt;
+    &quot;this is the second major example&quot; &gt;&gt; { ok }
+  }
+</code></pre><p>This will output:</p>
+<pre><code class="prettyprint">  this is a group of examples
+  + this is the first major example
+    + this is minor and should be indented
+  + this is the second major example
 </code></pre><a name="Unit+specifications"><h3>Unit specifications</h3></a><p>Those are all the methods which you can use to create fragments in a unit specification:</p>
 <ul>
   <li><p><code class="prettyprint">can</code>: create a group of Examples, with the preceding Text fragment appended with <code class="prettyprint">can</code></p>
@@ -862,10 +943,11 @@ textFragment(&quot;this is a text fragment&quot;)
 </code></pre><p>If you wish to get a more precise failure message you can set an alias with the <code class="prettyprint">aka</code> method (<em>also known as</em>):</p>
 <pre><code class="prettyprint">  // will fail with &quot;the created tickets 'List(ticket1, ticket2)' doesn't have size 3&quot;
   machine.tickets aka &quot;the created tickets&quot; must haveSize(3)
-</code></pre><p>There is also a shortcut for <code class="prettyprint">value aka value.toString</code> which is simply <code class="prettyprint">value.aka</code>.</p><p>And when you want to other ways to customize the description, you can use:</p>
+</code></pre><p>There is also a shortcut for <code class="prettyprint">value aka value.toString</code> which is simply <code class="prettyprint">value.aka</code>.</p><p>And when you want other ways to customize the description, you can use:</p>
 <ul>
   <li><code class="prettyprint">post</code>: <code class="prettyprint">&quot;a&quot; post &quot;is the first letter&quot;</code> prints <code class="prettyprint">a is the first letter</code></li>
   <li><code class="prettyprint">as</code>: <code class="prettyprint">&quot;b&quot; as ((s:String) =&gt; &quot;a&quot;+s+&quot;c&quot;)</code> prints <code class="prettyprint">abc</code></li>
+  <li><code class="prettyprint">showAs</code>: <code class="prettyprint">Seq(1, 2, 3, 4).showAs((_:Seq[Int]).filter(isEven).mkString(&quot;|&quot;))</code> prints <code class="prettyprint">2|4</code>. This one is especially useful to filter out big data structures (lists, maps, xml...) before the failure display</li>
 </ul><a name="Share+examples"><h4>Share examples</h4></a><p>In a given specification some examples may look similar enough that you would like to &quot;factor&quot; them out and share them between<br />different parts of your specification. The best example of this situation is a specification for a Stack of limited size:</p>
 <pre><code class="prettyprint">  class StackSpec extends Specification { def is =
 
@@ -1043,8 +1125,8 @@ textFragment(&quot;this is a text fragment&quot;)
   <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt;</code><code class="prettyprint">&gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
 </ul>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="1320109239"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1974076266"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="25616786"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="26533207"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -1054,7 +1136,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="319511059"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="30074919"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1098,6 +1180,8 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="org.specs2.guide.Structure.html#Single+step">Single step</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Conversions">Conversions</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
             
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Structure.html#DataTables">DataTables</a>
@@ -1171,6 +1255,8 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
             
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
+            
           </li></ul>
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Structure.html#Unit+specifications">Unit specifications</a>
@@ -1198,7 +1284,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="672057418"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="14079686"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1245,12 +1331,14 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Auto-boxing">Auto-boxing</a>
             
+          </li><li id=""><a href="org.specs2.guide.Matchers.html#Byname">Byname</a>
+            
           </li></ul>
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1045048012"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="2152174"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1294,7 +1382,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="978642143"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="12409743"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1370,7 +1458,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="2120174701"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="24412685"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1414,7 +1502,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="889978978"><a href="org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="28147519"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1434,5 +1522,5 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1320109239','319511059'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['25616786','30074919'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
