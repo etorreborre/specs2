@@ -20,8 +20,9 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
     "A When[P, Q] extractor can be used as a When[R, S] step if P <: R and Q >: S, with an implicit conversion"         ! convert3^
                                                                                                                         endp^
     "Variables delimiters must be removed from descriptions"                                                            ! strip^ endp^
-    "Several Given steps can be followed by a When step where the input of the When step pairs the Given outputs"       ^ givens1^ endp^
-    "Several Given steps can be followed by a Then step where the input of the Then step pairs the Given outputs"       ^ givens2^
+    "Two Given steps can be followed by a When step where the input of the When step pairs the Given outputs"           ^ givens1^ endp^
+    "Two Given steps can be followed by a Then step where the input of the Then step pairs the Given outputs"           ^ givens2^ endp^
+    "Several Given steps can be followed by a When step where the input of the When step tuples the Given outputs"      ^ givens3^
     end
 
 
@@ -42,6 +43,14 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
     "with number ${0}"   ^ number0 ^
     "and number ${1}"    ^ number1 ^
     "the result is ${1}" ^ then0and1
+
+  def givens3 =
+    "with number ${0}"   ^ number0 ^
+    "and number ${1}"    ^ number1 ^
+    "and number ${2}"    ^ number1 ^
+    "and number ${3}"    ^ number1 ^
+    "when adding"        ^ when0to3 ^
+    "the result is ${6}" ^ then0to3
 
   trait X; trait Y extends X { override def toString = "Y"}
   trait P; trait R extends P
@@ -85,6 +94,17 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
     def extract(number0and1: (Int, Int), text: String) = {
       val (n0, n1) = number0and1
       n0 + n1
+    }
+  }
+  object when0to3 extends When[(Int, Int, Int, Int), Int] {
+    def extract(numbers: (Int, Int, Int, Int), text: String) = {
+      val (n0, n1, n2, n3) = numbers
+      n0 + n1 + n2 + n3
+    }
+  }
+  object then0to3 extends Then[Int] {
+    def extract(number: Int, text: String) = {
+      number must_== extract1(text).toInt
     }
   }
   object then0plus1 extends Then[Int] {

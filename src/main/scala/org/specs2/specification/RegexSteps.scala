@@ -102,11 +102,53 @@ private[specs2] case class PreStep[T](context: () => Either[Result, T], fs: Frag
   def add(f: Fragment): RegexType = new PreStep(context, fs.add(f))
 }
 
+private[specs2] case class PreStep2[T1, T2](context: () => Either[Result, (T1, T2)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStep2[T1, T2]
+  def ^(toExtract: String) = new PreStepText2(toExtract, context, fs)
+  def add(f: Fragment): RegexType = new PreStep2(context, fs.add(f))
+}
+
+private[specs2] case class PreStep3[T1, T2, T3](context: () => Either[Result, (T1, T2, T3)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStep3[T1, T2, T3]
+  def ^(toExtract: String) = new PreStepText3(toExtract, context, fs)
+  def add(f: Fragment): RegexType = new PreStep3(context, fs.add(f))
+}
+
+private[specs2] case class PreStep4[T1, T2, T3, T4](context: () => Either[Result, (T1, T2, T3, T4)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStep4[T1, T2, T3, T4]
+  def ^(toExtract: String) = new PreStepText4(toExtract, context, fs)
+  def add(f: Fragment): RegexType = new PreStep4(context, fs.add(f))
+}
+
+private[specs2] case class PreStep5[T1, T2, T3, T4, T5](context: () => Either[Result, (T1, T2, T3, T4, T5)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStep5[T1, T2, T3, T4, T5]
+  def ^(toExtract: String) = new PreStepText5(toExtract, context, fs)
+  def add(f: Fragment): RegexType = new PreStep5(context, fs.add(f))
+}
+
+private[specs2] case class PreStep6[T1, T2, T3, T4, T5, T6](context: () => Either[Result, (T1, T2, T3, T4, T5, T6)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStep6[T1, T2, T3, T4, T5, T6]
+  def ^(toExtract: String) = new PreStepText6(toExtract, context, fs)
+  def add(f: Fragment): RegexType = new PreStep6(context, fs.add(f))
+}
+
+private[specs2] case class PreStep7[T1, T2, T3, T4, T5, T6, T7](context: () => Either[Result, (T1, T2, T3, T4, T5, T6, T7)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStep7[T1, T2, T3, T4, T5, T6, T7]
+  def ^(toExtract: String) = new PreStepText7(toExtract, context, fs)
+  def add(f: Fragment): RegexType = new PreStep7(context, fs.add(f))
+}
+
+private[specs2] case class PreStep8[T1, T2, T3, T4, T5, T6, T7, T8](context: () => Either[Result, (T1, T2, T3, T4, T5, T6, T7, T8)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStep8[T1, T2, T3, T4, T5, T6, T7, T8]
+  def ^(toExtract: String) = new PreStepText8(toExtract, context, fs)
+  def add(f: Fragment): RegexType = new PreStep8(context, fs.add(f))
+}
+
 private[specs2] case class PreStepText[T](text: String, context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
   type RegexType = PreStepText[T]
-  def ^[R](step: Given[R]): PreStep[(T, R)] = {
+  def ^[R](step: Given[R]): PreStep2[T, R] = {
     lazy val pair = (context() <**> step.extractContext(text))((_,_))
-    new PreStep(() => pair, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(pair)))
+    new PreStep2(() => pair, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(pair)))
   }
   def ^[R](step: When[T, R]) = {
     lazy val extracted = step.extractContext(context(), text)
@@ -118,6 +160,127 @@ private[specs2] case class PreStepText[T](text: String, context: () => Either[Re
   }
   def add(f: Fragment): RegexType = new PreStepText(text, context, fs.add(f))
 }
+
+private[specs2] case class PreStepText2[T1, T2](text: String, context: () => Either[Result, (T1, T2)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStepText2[T1, T2]
+  def ^[R](step: Given[R]): PreStep3[T1, T2, R] = {
+    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,r))
+    new PreStep3(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
+  }
+  def ^[R](step: When[(T1, T2), R]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^(step: Then[(T1, T2)]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
+  }
+  def add(f: Fragment): RegexType = new PreStepText2(text, context, fs.add(f))
+}
+
+private[specs2] case class PreStepText3[T1, T2, T3](text: String, context: () => Either[Result, (T1, T2, T3)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStepText3[T1, T2, T3]
+  def ^[R](step: Given[R]): PreStep4[T1, T2, T3, R] = {
+    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,r))
+    new PreStep4(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
+  }
+  def ^[R](step: When[(T1, T2, T3), R]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^(step: Then[(T1, T2, T3)]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
+  }
+  def add(f: Fragment): RegexType = new PreStepText3(text, context, fs.add(f))
+}
+
+private[specs2] case class PreStepText4[T1, T2, T3, T4](text: String, context: () => Either[Result, (T1, T2, T3, T4)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStepText4[T1, T2, T3, T4]
+  def ^[R](step: Given[R]): PreStep5[T1, T2, T3, T4, R] = {
+    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,r))
+    new PreStep5(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
+  }
+  def ^[R](step: When[(T1, T2, T3, T4), R]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^(step: Then[(T1, T2, T3, T4)]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
+  }
+  def add(f: Fragment): RegexType = new PreStepText4(text, context, fs.add(f))
+}
+
+private[specs2] case class PreStepText5[T1, T2, T3, T4, T5](text: String, context: () => Either[Result, (T1, T2, T3, T4, T5)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStepText5[T1, T2, T3, T4, T5]
+  def ^[R](step: Given[R]): PreStep6[T1, T2, T3, T4, T5, R] = {
+    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,r))
+    new PreStep6(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
+  }
+  def ^[R](step: When[(T1, T2, T3, T4, T5), R]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^(step: Then[(T1, T2, T3, T4, T5)]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
+  }
+  def add(f: Fragment): RegexType = new PreStepText5(text, context, fs.add(f))
+}
+
+private[specs2] case class PreStepText6[T1, T2, T3, T4, T5, T6](text: String, context: () => Either[Result, (T1, T2, T3, T4, T5, T6)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStepText6[T1, T2, T3, T4, T5, T6]
+  def ^[R](step: Given[R]): PreStep7[T1, T2, T3, T4, T5, T6, R] = {
+    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,t._6,r))
+    new PreStep7(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
+  }
+  def ^[R](step: When[(T1, T2, T3, T4, T5, T6), R]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^(step: Then[(T1, T2, T3, T4, T5, T6)]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
+  }
+  def add(f: Fragment): RegexType = new PreStepText6(text, context, fs.add(f))
+}
+
+private[specs2] case class PreStepText7[T1, T2, T3, T4, T5, T6, T7](text: String, context: () => Either[Result, (T1, T2, T3, T4, T5, T6, T7)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStepText7[T1, T2, T3, T4, T5, T6, T7]
+  def ^[R](step: Given[R]): PreStep8[T1, T2, T3, T4, T5, T6, T7, R] = {
+    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,t._6,t._7,r))
+    new PreStep8(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
+  }
+  def ^[R](step: When[(T1, T2, T3, T4, T5, T6, T7), R]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^(step: Then[(T1, T2, T3, T4, T5, T6, T7)]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
+  }
+  def add(f: Fragment): RegexType = new PreStepText7(text, context, fs.add(f))
+}
+
+private[specs2] case class PreStepText8[T1, T2, T3, T4, T5, T6, T7, T8](text: String, context: () => Either[Result, (T1, T2, T3, T4, T5, T6, T7, T8)], fs: Fragments) extends RegexFragment {
+  type RegexType = PreStepText8[T1, T2, T3, T4, T5, T6, T7, T8]
+  def ^[R](step: Given[R]): PreStep8[T1, T2, T3, T4, T5, T6, T7, (T8, R)] = {
+    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,t._6,t._7,(t._8,r)))
+    new PreStep8(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
+  }
+  def ^[R](step: When[(T1, T2, T3, T4, T5, T6, T7, T8), R]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^(step: Then[(T1, T2, T3, T4, T5, T6, T7, T8)]) = {
+    lazy val extracted = step.extractContext(context(), text)
+    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
+  }
+  def add(f: Fragment): RegexType = new PreStepText8(text, context, fs.add(f))
+}
+
+
 
 private[specs2] case class PostStep[T](context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
   type RegexType = PostStep[T]
