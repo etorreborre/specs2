@@ -44,7 +44,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
     }
   }
 
-  private val nocolor = Arguments("nocolor")
+  private lazy val nocolor = Arguments("nocolor")
   /**
    * @return the uncolored textual status of the result
    */
