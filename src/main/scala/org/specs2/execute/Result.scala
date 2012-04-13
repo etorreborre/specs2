@@ -78,6 +78,19 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
 
   /** change this result's message */
   def mapMessage(f: String => String): Result = updateMessage(f(message))
+
+  /** update the expected of a result, keeping the subclass type */
+  def updateExpected(exp: String): Result =
+    this match {
+      case Success(m, e)         => Success(m,exp)
+      case Failure(m, e, st, d)  => Failure(m, exp, st, d)
+      case DecoratedResult(t, r) => DecoratedResult(t, r.updateExpected(exp))
+      case other                 => this
+    }
+
+  /** change this result's expected */
+  def mapExpected(f: String => String): Result = updateExpected(f(expected))
+
   /**
    * increment the number of expectations
    */

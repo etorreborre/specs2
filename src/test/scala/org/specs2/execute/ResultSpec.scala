@@ -52,7 +52,10 @@ more precisely:
   "results have methods to know their status: isSuccess, isPending, ..."                                                ! statuses^
   "A result message can be updated or mapped"                                                                           ^
   { success1.updateMessage("ok").message must_== "ok" }                                                                 ^
-  { success1.mapMessage(_.capitalize).message must_== "S1" }                                                            ^
+  { success1.mapMessage(_.capitalize).message must_== "S1" }                                                            ^ end^
+  "A result expected can be updated or mapped"                                                                          ^
+  { success1.updateExpected("ok").expected must_== "ok" }                                                               ^
+  { Success("s1", "s1").mapExpected(_.capitalize).expected must_== "S1" }                                               ^
                                                                                                                         end
 
   def statuses =
