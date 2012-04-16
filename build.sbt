@@ -9,9 +9,9 @@ version := "1.10-SNAPSHOT"
 
 organization := "org.specs2"
 
-scalaVersion := "2.9.1"
+scalaVersion := "2.9.2"
 
-crossScalaVersions := Seq("2.9.1-1", "2.9.2-RC2", "2.10.0-M2")
+crossScalaVersions := Seq("2.9.1", "2.9.1-1", "2.10.0-M2")
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -24,15 +24,15 @@ resolvers ++= Seq("releases" at "http://oss.sonatype.org/content/repositories/re
 
 libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.specs2" %% "specs2-scalaz-core" % "6.0.1",
-  "net.rosien" %% "sniff" % "0.2" % "test",
-  "org.scala-lang" % "scala-compiler" % scala_version % "optional", 
-  "org.scala-tools.testing" %% "scalacheck" % "1.9" % "optional", 
-  "org.scala-tools.testing" % "test-interface" % "0.5" % "optional", 
+  "org.scala-lang" % "scala-compiler" % scala_version % "optional",
+  "org.scala-tools.testing" %% "scalacheck" % "1.9" % "optional",
+  "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
   "org.mockito" % "mockito-all" % "1.9.0" % "optional",
   "junit" % "junit" % "4.7" % "optional",
   "org.pegdown" % "pegdown" % "1.0.2" % "optional",
-  "org.specs2" % "classycle" % "1.4.1" % "optional"
+  "org.specs2" % "classycle" % "1.4.1" % "optional",
+  "net.rosien" % "sniff_2.9.1" % "0.2" % "test"
   )
 }
 
