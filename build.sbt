@@ -25,7 +25,7 @@ resolvers ++= Seq("releases" at "http://oss.sonatype.org/content/repositories/re
 libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.specs2" %% "specs2-scalaz-core" % "6.0.1",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional",
-  "org.scala-tools.testing" %% "scalacheck" % "1.9" % "optional",
+  "org.scalacheck" %% "scalacheck" % "1.9" % "optional",
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
   "org.mockito" % "mockito-all" % "1.9.0" % "optional",
