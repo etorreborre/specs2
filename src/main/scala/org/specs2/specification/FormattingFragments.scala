@@ -12,7 +12,7 @@ trait FormattingFragments {
   def t(n: Int)  = StandardFragments.Tab(n)
   def bt         = StandardFragments.Backtab()
   def bt(n: Int) = StandardFragments.Backtab(n)
-  def endp       = Fragments.createList(end, StandardFragments.Br(), StandardFragments.Br())
+  def endp       = Fragments.createList(end, StandardFragments.Br())
   def endbr      = Fragments.createList(end, StandardFragments.Br())
 }
 private[specs2]
