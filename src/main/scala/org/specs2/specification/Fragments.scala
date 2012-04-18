@@ -12,13 +12,20 @@ import Fragments._
 case class Fragments(private val title: Option[SpecName] = None, middle: Seq[Fragment] = Vector(), arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
   def fragments: Seq[Fragment] = if (middle.isEmpty && !link.isDefined) Vector() else (start +: middle :+ end)
 
-  private def append(e: Fragment) = copy(middle = middle :+ e)
   def specTitleIs(name: SpecName): Fragments = copy(title = title.map(_.overrideWith(name)).orElse(Some(name)))
+
   def add(e: Fragment): Fragments = append(e)
   def add(fs: Seq[Fragment]): Fragments = copy(middle = middle ++ fs)
   def add(fs: Fragments): Fragments = add(fs.fragments)
   def add(a: Arguments): Fragments = copy(arguments = arguments.overrideWith(a))
-  
+
+  def insert(e: Fragment): Fragments = prepend(e)
+  def insert(fs: Seq[Fragment]): Fragments = copy(middle = fs ++ middle)
+  def insert(fs: Fragments): Fragments = insert(fs.fragments)
+
+  private def prepend(e: Fragment) = copy(middle = e +: middle)
+  private def append(e: Fragment) = copy(middle = middle :+ e)
+
   def linkIs(htmlLink: HtmlLink) = copy(link = Some(htmlLink))
   def seeIs(htmlLink: HtmlLink) = copy(middle = Vector(), link = Some(htmlLink), seeOnly = true)
 
