@@ -2,7 +2,7 @@ package org.specs2
 package mutable
 import execute._
 import main._
-import specification.{Action, Step, SpecificationStructure, FormattingFragments => FF, Fragments, FragmentsFragment, Example, GivenThen}
+import specification.{Action, Fragment, Step, SpecificationStructure, FormattingFragments => FF, Fragments, FragmentsFragment, Example, GivenThen}
 import specification.RegexStep._
 
 /**
@@ -35,8 +35,8 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 
   implicit def described(s: String): Described = new Described(s)
   class Described(s: String) {
-    def should(fs: =>Example) = addFragments(s, fs, "should")
-    def can(fs: =>Example) = addFragments(s, fs, "can")
+    def should(fs: =>Fragment) = addFragments(s, fs, "should")
+    def can(fs: =>Fragment) = addFragments(s, fs, "can")
   }
   /**
    * add a new example using 'in' or '>>' or '!'
@@ -51,10 +51,10 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def in(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
     def >>(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
 
-    def >>(e: =>Example)       : Example = in(e)
-    def >>(block: =>Unit)      : Unit    = in(block)
+    def >>[T <: Fragment](e: =>T): T    = in(e)
+    def >>(block: =>Unit)        : Unit = in(block)
 
-    def in(e: =>Example)       : Example = {
+    def in[T <: Fragment](e: =>T): T = {
       addFragments(s)
       val ex = e
       addFragments(FF.p)
