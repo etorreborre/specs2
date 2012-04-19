@@ -30,6 +30,9 @@ trait MockFileSystem extends FileSystem {
   var writableFiles = List[String]()
 
   /** @return the content of a file corresponding to a given path */
+  override def readLines(path: String) = readFile(path).split("\n").toIndexedSeq
+
+  /** @return the content of a file corresponding to a given path */
   override def readFile(path: String) = files(path)
 
   /** @return all file paths */

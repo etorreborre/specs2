@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import text.Quote._
-import io.FileSystem
+import io._
 
 /**
  * The PathMatchers trait provides matchers which are applicable to strings representing paths
@@ -121,7 +121,6 @@ trait FileBaseMatchers extends PathMatchers {
    * "c:/projects".path must exist
    */
   private implicit def asPath(p: String) = Path(p)
-
 }
 /**
  * This case class is used to provide the getPath() method,

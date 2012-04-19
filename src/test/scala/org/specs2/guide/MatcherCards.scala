@@ -15,7 +15,8 @@ object MatcherCards extends Cards {
     MapMatchers,
     XmlMatchers,
     JsonMatchers,
-    FileMatchers)
+    FileMatchers,
+    ContentMatchers)
 }
 
 object OptionalMatcherCards extends Cards {
@@ -371,6 +372,56 @@ The Java api for files is more or less mimicked as matchers which can operate on
  * `haveCanonicalPath` checks if afile has a given canonical path
  * `haveParent` checks if a file has a given parent path
  * `haveList` checks if a file has a given list of children
+"""
+}
+
+object ContentMatchers extends Card {
+  def title = "Content"
+  def text =  """
+A few matchers can help us check the contents of files or actually anything containing lines of Strings. We can check that 2 files have the same lines:
+
+ * `(file1, file2) must haveSameLines`
+ * `file1 must haveSameLinesAs(file2)`
+
+We can check that the content of one file is contained in another one:
+
+ * `file1 must containLines(file2)`
+
+***LinesContent***
+
+Files are not the only source of lines and it is possible to check the content of a `File` with a `Seq[String]`:
+
+ * `file1 must haveSameLinesAs(Seq(line1, line2, line3))`
+
+This is because those 2 types implement the `org.specs2.text.LinesContent` trait, defining:
+
+ * a name for the overall content
+ * a method for returning the lines
+ * a default method for computing the differences of 2 sequences of lines (in case you need to override this logic)
+
+So if you have a specific type `T` which you can represent as a `Seq[String]`, create an implicit `LinesContent` and then you'll be able to use the `ContentMatchers`:
+
+      implicit val linesforMyType: LinesContent[T] = new LinesContent[T] {
+        def name(t: T) = "My list of lines"
+        def lines(t: T): Seq[String] = ... // your implementation goes here
+      }
+
+***Order***
+
+It is possible to relax the constraint by requiring the equality or containment to be true regardless of the order of lines:
+
+ * `(file1, file2) must haveSameLines.unordered`
+ * `file1 must haveSameLinesAs(file2).unordered`
+ * `file1 must containLines(file2).unordered`
+
+***Show less differences***
+
+If there are too many differences, you can specify that you only want the first 10:
+
+ * `(file1, file2) must haveSameLines.showOnly(10.differences).unordered`
+
+In the code above `10.differences` builds a `DifferenceFilter` which is merely a filtering function: `(lines1: Seq[String], lines2: Seq[String]) => (Seq[String], Seq[String])`. The parameter `lines1` is the sequence of lines not found in the second content while `lines2` is the sequence of lines not found in the first content.
+
 """
 }
 
