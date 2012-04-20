@@ -16,8 +16,9 @@ It must display the differences if:
                                                                       index(l2.1 in lines1) > index(l2.2 in lines1)
  4. partial = true,  unordered = true  <=> lines1 contains lines2
 
-The following examples for point 3. are still not correct since we don't really check the order.
-Another issue is the order checking when there are equal lines.
+One difficulty of checking the differences is also that there can be duplicated lines, so:
+
+ * when unordered = true we must check that duplicated elements are all included
 
 """.newp
 
@@ -25,6 +26,8 @@ Another issue is the order checking when there are equal lines.
   val lines2 = Seq("c", "d", "b", "a")
   val lines3 = Seq("a", "b")
   val lines4 = Seq("b", "d")
+  val lines5 = Seq("a", "c", "d", "c")
+  val lines6 = Seq("c", "d", "c")
 
   "1. partial = false, unordered = false, reportMisplaced = true" >> {
    def diff(ls1: Seq[String], ls2: Seq[String]) =
@@ -44,6 +47,7 @@ Another issue is the order checking when there are equal lines.
     diff(lines1, lines3).show === (Seq(NotFoundLine("c", 3), NotFoundLine("d", 4)), Seq())
     diff(lines3, lines1).show === (Seq(), Seq(NotFoundLine("c", 3), NotFoundLine("d", 4)))
     diff(lines3, lines4).show === (Seq(NotFoundLine("a", 1)), Seq(NotFoundLine("d", 2)))
+    diff(lines1, lines5).show === (Seq(NotFoundLine("b", 2)), Seq(NotFoundLine("c", 4)))
   }
 
   "3. partial = true, unordered = false, reportMisplaced = true" >> {
@@ -64,5 +68,8 @@ Another issue is the order checking when there are equal lines.
     diff(lines1, lines3).show === (Seq(), Seq())
     diff(lines3, lines1).show === (Seq(), Seq(NotFoundLine("c", 3), NotFoundLine("d", 4)))
     diff(lines3, lines4).show === (Seq(), Seq(NotFoundLine("d", 2)))
+    diff(lines1, lines5).show === (Seq(), Seq(NotFoundLine("c", 4)))
+
   }
+
 }

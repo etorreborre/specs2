@@ -1,6 +1,9 @@
 package org.specs2
 package text
 
+import collection._
+import Seqx._
+
 /**
  * This trait represents the difference between 2 "contents"
  */
@@ -57,9 +60,11 @@ case class LinesContentDifference(
     (ls1 filterNot ls2.contains).map(l1 => MissingLine(l1, ls1.indexOf(l1)+1))
 
   // all && unordered
-  private lazy val showNotOrdered: Diffs =
-    ((lines1 filterNot lines2.contains).map(l1 => NotFoundLine(l1, lines1.indexOf(l1)+1)),
-     (lines2 filterNot lines1.contains).map(l2 => NotFoundLine(l2, lines2.indexOf(l2)+1)))
+  private lazy val showNotOrdered: Diffs = {
+    val compareLine = ((p: (String, Int), o: String) => p._1 == o)
+    (lines1.zipWithIndex.delta(lines2, compareLine).map { case (l, i) => NotFoundLine(l, i+1) },
+     lines2.zipWithIndex.delta(lines1, compareLine).map { case (l, i) => NotFoundLine(l, i+1) })
+  }
 
   // partial && ordered
   private lazy val showNotIncluded: Diffs =
@@ -69,11 +74,6 @@ case class LinesContentDifference(
   private lazy val showNotContained: Diffs  =
     LinesContentDifference(lines1 filter lines2.contains, lines2, partial = false, unordered, reportMisplaced).show
 
-  private def notFoundLine(l: String, lineNumber: Int, other: Seq[String]) =
-    if (reportMisplaced) {
-      if (other.contains(l)) MisplacedLine(l, lineNumber)
-      else                   MissingLine(l, lineNumber)
-    } else                   NotFoundLine(l, lineNumber)
 }
 
 /**
