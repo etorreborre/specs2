@@ -24,10 +24,36 @@ trait Seqx { outer =>
    * Additional methods for seqs
    */
   class ExtendedSeq[T](seq: Seq[T]) {
+
     def reduceWith[S](reducer: Reducer[T, S]) = FoldlGenerator[Seq].reduce(reducer, seq)
+
     def updateLast(f: T => T) = seq match {
-      case seq :+ last => seq :+ f(last)
-      case other       => other
+      case s :+ last => s :+ f(last)
+      case other     => other
+    }
+
+    /**
+     * remove the first element satisfying the predicate
+     * @return a seq minus the first element satisfying the predicate
+     */
+    def removeFirst(predicate: T => Boolean): Seq[T] = {
+      val (withoutElement, startWithElement) = seq span (x => !predicate(x))
+      withoutElement ++ startWithElement.drop(1)
+    }
+
+    /**
+     * @return all the elements in seq which are not in other, even if they are duplicates: Seq(1, 1).diff(Seq(1)) == Seq(1)
+     *         this uses a user given comparison function
+     */
+    def delta[S](other: Seq[S], compare: (T, S) => Boolean): Seq[T] = {
+      def notFound(ls1: Seq[T], ls2: Seq[S], result: Seq[T] = Seq()): Seq[T] =
+        ls1 match {
+          case Seq()        => result
+          case head +: rest =>
+            if  (ls2.exists(compare(head, _))) notFound(rest, ls2.removeFirst(l => compare(head, l)), result)
+            else                               notFound(rest, ls2, result :+ head)
+        }
+      notFound(seq, other)
     }
   }
 
@@ -45,6 +71,16 @@ trait Seqx { outer =>
     val filtered = xs.filter(_.nonEmpty)
     if (filtered.isEmpty) Seq()
     else filtered.map(_.head) +: transpose(filtered.map(_.tail))
+  }
+}
+
+/**
+ * extrator for the first element of Seq[T]
+ */
+object +: {
+  def unapply[T](l: Seq[T]): Option[(T, Seq[T])] = {
+    if(l.isEmpty) None
+    else          Some(l.head, l.tail)
   }
 }
 

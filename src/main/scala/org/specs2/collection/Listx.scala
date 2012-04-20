@@ -25,14 +25,6 @@ trait Listx { outer =>
    */
   class ExtendedList[T](list: List[T]) {
     /**
-     * remove the first element satisfying the predicate
-     * @return a list minus the first element satisfying the predicate
-     */
-    def removeFirst(predicate: T => Boolean): List[T] = {
-      val (withoutElement, startWithElement) = list span (x => !predicate(x))
-      withoutElement ++ startWithElement.drop(1)
-    }
-    /**
      * @return a randomly mixed list
      */
     def scramble = list.sortWith((a, b) => (new java.util.Random).nextInt(1) > 0)

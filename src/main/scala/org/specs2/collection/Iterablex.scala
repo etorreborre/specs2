@@ -1,6 +1,6 @@
 package org.specs2
 package collection
-import Listx._
+import Seqx._
 import scala.collection.{GenSeq, GenIterable}
 import org.specs2.internal.scalaz._
 import Generator._
