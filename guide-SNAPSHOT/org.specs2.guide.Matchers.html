@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Matchers</title><a name="Matchers"><h2 specId="14079686">Matchers</h2></a><status class="ok"><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+    </head><body><div id="container"><title>Matchers</title><a name="Matchers"><h2 specId="11586377">Matchers</h2></a><status class="ok"><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -373,6 +373,39 @@
   <li><code class="prettyprint">haveParent</code> checks if a file has a given parent path</li>
   <li><code class="prettyprint">haveList</code> checks if a file has a given list of children</li>
 </ul></td></tr>
+      </table>
+      
+    </form></div><div class="tabbertab" title="Content"><form>
+      <table class="dataTable">
+        <tr><td class="none" style="info"><p>A few matchers can help us check the contents of files or actually anything containing lines of Strings. We can check that 2 files have the same lines:</p>
+<ul>
+  <li><code class="prettyprint">(file1, file2) must haveSameLines</code></li>
+  <li><code class="prettyprint">file1 must haveSameLinesAs(file2)</code></li>
+</ul><p>We can check that the content of one file is contained in another one:</p>
+<ul>
+  <li><code class="prettyprint">file1 must containLines(file2)</code></li>
+</ul><p><strong><em>LinesContent</em></strong></p><p>Files are not the only possible source of lines and it is useful to be able to check the content of a <code class="prettyprint">File</code> with a <code class="prettyprint">Seq[String]</code>:</p>
+<ul>
+  <li><code class="prettyprint">file1 must haveSameLinesAs(Seq(line1, line2, line3))</code></li>
+</ul><p>This is because those 2 types implement the <code class="prettyprint">org.specs2.text.LinesContent</code> trait, defining:</p>
+<ul>
+  <li>a name for the overall content</li>
+  <li>a method for returning the lines</li>
+  <li>a default method for computing the differences of 2 sequences of lines (in case you need to override this logic)</li>
+</ul><p>So if you have a specific type <code class="prettyprint">T</code> which you can represent as a <code class="prettyprint">Seq[String]</code>, you can create an implicit <code class="prettyprint">LinesContent</code> and then you'll be able to use the <code class="prettyprint">ContentMatchers</code>:</p>
+<pre><code class="prettyprint">  implicit val linesforMyType: LinesContent[T] = new LinesContent[T] {
+    def name(t: T) = &quot;My list of lines&quot;
+    def lines(t: T): Seq[String] = ... // your implementation goes here
+  }
+</code></pre><p><strong><em>Order</em></strong></p><p>It is possible to relax the constraint by requiring the equality or containment to be true regardless of the order of lines:</p>
+<ul>
+  <li><code class="prettyprint">(file1, file2) must haveSameLines.unordered</code></li>
+  <li><code class="prettyprint">file1 must haveSameLinesAs(file2).unordered</code></li>
+  <li><code class="prettyprint">file1 must containLines(file2).unordered</code></li>
+</ul><p><strong><em>Missing only</em></strong></p><p>By default, <code class="prettyprint">(file1, file2) must haveSameLines</code> will report misplaced lines if any, that is, lines of <code class="prettyprint">f1</code> which appear in <code class="prettyprint">f2</code> but not at the right position. However if <code class="prettyprint">file2</code> is big, this search might degrade the performances. In that case you can turn it off with <code class="prettyprint">missingOnly</code>:</p><p><code class="prettyprint">(file1, file2) must haveSameLines.missingOnly</code></p><p><strong><em>Show less differences</em></strong></p><p>If there are too many differences, you can specify that you only want the first 10:</p>
+<ul>
+  <li><code class="prettyprint">(file1, file2) must haveSameLines.showOnly(10.differences).unordered</code></li>
+</ul><p>In the code above <code class="prettyprint">10.differences</code> builds a <code class="prettyprint">DifferenceFilter</code> which is merely a filtering function: <code class="prettyprint">(lines1: Seq[String], lines2: Seq[String]) =&gt; (Seq[String], Seq[String])</code>. The parameter <code class="prettyprint">lines1</code> is the sequence of lines not found in the second content while <code class="prettyprint">lines2</code> is the sequence of lines not found in the first content.</p></td></tr>
       </table>
       
     </form></div></div></td></tr>
@@ -823,7 +856,7 @@ iterator.next must be_==(3).eventually
        (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
     }
   }
-</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="2152174"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="24465427"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -839,8 +872,8 @@ iterator.next must be_==(3).eventually
   }
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="25616786"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="26533207"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="23267915"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="12841302"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -850,7 +883,7 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="30074919"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="21906937"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -998,7 +1031,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="14079686"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="11586377"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1052,7 +1085,7 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="2152174"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="24465427"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1096,7 +1129,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="12409743"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="10375021"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1172,7 +1205,7 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="24412685"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="25082214"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1216,7 +1249,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="28147519"><a href="org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="27602352"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1236,5 +1269,5 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['25616786','14079686'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['23267915','11586377'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
