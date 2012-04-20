@@ -389,7 +389,7 @@ We can check that the content of one file is contained in another one:
 
 ***LinesContent***
 
-Files are not the only source of lines and it is possible to check the content of a `File` with a `Seq[String]`:
+Files are not the only possible source of lines and it is useful to be able to check the content of a `File` with a `Seq[String]`:
 
  * `file1 must haveSameLinesAs(Seq(line1, line2, line3))`
 
@@ -399,7 +399,7 @@ This is because those 2 types implement the `org.specs2.text.LinesContent` trait
  * a method for returning the lines
  * a default method for computing the differences of 2 sequences of lines (in case you need to override this logic)
 
-So if you have a specific type `T` which you can represent as a `Seq[String]`, create an implicit `LinesContent` and then you'll be able to use the `ContentMatchers`:
+So if you have a specific type `T` which you can represent as a `Seq[String]`, you can create an implicit `LinesContent` and then you'll be able to use the `ContentMatchers`:
 
       implicit val linesforMyType: LinesContent[T] = new LinesContent[T] {
         def name(t: T) = "My list of lines"
@@ -413,6 +413,12 @@ It is possible to relax the constraint by requiring the equality or containment 
  * `(file1, file2) must haveSameLines.unordered`
  * `file1 must haveSameLinesAs(file2).unordered`
  * `file1 must containLines(file2).unordered`
+
+***Missing only***
+
+By default, `(file1, file2) must haveSameLines` will report misplaced lines if any, that is, lines of `f1` which appear in `f2` but not at the right position. However if `file2` is big, this search might degrade the performances. In that case you can turn it off with `missingOnly`:
+
+ `(file1, file2) must haveSameLines.missingOnly`
 
 ***Show less differences***
 

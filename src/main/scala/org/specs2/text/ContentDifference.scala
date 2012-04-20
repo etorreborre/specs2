@@ -76,7 +76,10 @@ case class LinesContentDifference(
     } else                   NotFoundLine(l, lineNumber)
 }
 
-trait DifferentLine
+/**
+ * case classes for the representation of lines which are different: not found, missing, misplaced
+ */
+sealed trait DifferentLine
 case class NotFoundLine(line: String, lineNumber: Int) extends DifferentLine {
   override def toString = lineNumber+". "+line
 }
@@ -87,8 +90,16 @@ case class MisplacedLine(line: String, lineNumber: Int) extends DifferentLine {
   override def toString = "MISPLACED: "+lineNumber+". "+line
 }
 
+/**
+ * A trait to filter results of a difference check
+ */
 trait DifferenceFilter extends Function1[(Seq[_], Seq[_]), (Seq[_], Seq[_])]
 
+/**
+ * This trait provides some syntactic sugar to create a DifferenceFilter to take only the first n differences:
+ *
+ *  10.differences == FirstNDifferencesFilter(10)
+ */
 trait DifferenceFilters {
   implicit def toDifferenceFilter(n: Int): FirstNDifferencesFilter = FirstNDifferencesFilter(n)
   case class FirstNDifferencesFilter(n: Int) {
@@ -97,14 +108,26 @@ trait DifferenceFilters {
   }
 }
 
+/**
+ * mix-in this trait to remove the implicit provided by the DifferenceFilters trait
+ */
 trait NoDifferenceFilters extends DifferenceFilters {
   override def toDifferenceFilter(n: Int): FirstNDifferencesFilter = super.toDifferenceFilter(n)
 }
 
+/**
+ * return all the differences
+ */
 object AllDifferences extends SomeDifferences((s: Seq[_]) => s)
 
+/**
+ * return the first n differences
+ */
 case class FirstDifferences(n: Int) extends SomeDifferences((s: Seq[_]) => s.take(n))
 
+/**
+ * return some of the differences, filtered with a function
+ */
 class SomeDifferences(f: Seq[_] => Seq[_]) extends DifferenceFilter {
   def apply(diffs: (Seq[_], Seq[_])) = (f(diffs._1), f(diffs._2))
 }
