@@ -102,7 +102,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   /**
    * @return the logical and combination of 2 results
    */
-  def and(r: =>Result): Result = this.addExpectationsNb(r.expectationsNb)
+  def and(r: =>Result): Result = this.addExpectationsNb(r.expectationsNb).mapExpected((e: String) => concat(e, r.expected))
   /**
    * @return the logical or combination of 2 results
    */
