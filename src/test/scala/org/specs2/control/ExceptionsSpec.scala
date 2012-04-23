@@ -4,7 +4,7 @@ import sys._
 
 class ExceptionsSpec extends Specification with Exceptions {  def is =
                                                                                                                         """
-The Exceptions trait provide functional ways to catch exceptions and deal with them:
+The Exceptions trait provides functional ways to catch exceptions and deal with them:
 
  * tryo returns the result in an Option
  * trye returns the result in an Either with the Left value being a function of the exception
