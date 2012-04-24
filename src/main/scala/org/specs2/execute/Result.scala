@@ -82,8 +82,8 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   /** update the expected of a result, keeping the subclass type */
   def updateExpected(exp: String): Result =
     this match {
-      case Success(m, e)         => Success(m,exp)
-      case Failure(m, e, st, d)  => Failure(m, exp, st, d)
+      case Success(m, e)         => Success(m,exp, expectationsNb)
+      case Failure(m, e, st, d)  => Failure(m, exp, st, d).setExpectationsNb(expectationsNb)
       case DecoratedResult(t, r) => DecoratedResult(t, r.updateExpected(exp))
       case other                 => this
     }
@@ -224,10 +224,8 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
                                                                                   expectationsNb + r.expectationsNb)
                                      else                                 Success(message+" and "+m, concat(exp, e),
                                                                                   expectationsNb + r.expectationsNb)
-      case e @ Error(_, _)        => r.addExpectationsNb(expectationsNb)
-      case Failure(_, _, _, _)    => r.addExpectationsNb(expectationsNb)
-      case Skipped(_,_)           => addExpectationsNb(r.expectationsNb)
-      case Pending(_)             => addExpectationsNb(r.expectationsNb)
+      case e @ Error(_, _)        => r.addExpectationsNb(expectationsNb).mapExpected((e: String) => concat(expected, e))
+      case Failure(_, _, _, _)    => r.addExpectationsNb(expectationsNb).mapExpected((e: String) => concat(expected, e))
       case DecoratedResult(d, r1) => DecoratedResult(d, and(r1))
       case _                      => super.and(r)
     }
