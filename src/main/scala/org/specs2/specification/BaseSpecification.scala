@@ -72,6 +72,18 @@ object SpecificationStructure {
    * create a SpecificationStructure from a className, returning None if that's not possible
    */
   def createSpecificationOption(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[SpecificationStructure] = {
-    tryToCreateObject[SpecificationStructure](className, loader = classLoader)
+    // try to create the specification from a class name, without displaying possible errors
+    tryToCreateObject[SpecificationStructure](className,
+                                              printMessage = false,
+                                              printStackTrace = false,
+                                              loader = classLoader).
+      // try to create the specification from an object class name
+      orElse(tryToCreateObject[SpecificationStructure](className+"$",
+                                                       printMessage = false,
+                                                       printStackTrace = false,
+                                                       loader = classLoader)).
+      // finally retry the original class name to display the error messages
+      orElse(tryToCreateObject[SpecificationStructure](className, loader = classLoader))
+
   }
 }
