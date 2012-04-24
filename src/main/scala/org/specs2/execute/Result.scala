@@ -261,6 +261,9 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   extends Result(m, e) with ResultStackTrace { outer =>
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
+
+  override def and(res: =>Result): Result = this
+
   override def or(res: =>Result): Result = {
     val r = res
     r match {

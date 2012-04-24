@@ -29,9 +29,9 @@ more precisely:
     { (success1 and failure1).expectationsNb must_== 2 }                                                                ^
     { (success1 and error1)  .expectationsNb must_== 2 }                                                                ^
     { (success1 and skipped1).expectationsNb must_== 2 }                                                                ^
-    { (failure1 and success1).expectationsNb must_== 2 }                                                                ^
-    { (failure1 and failure2).expectationsNb must_== 2 }                                                                ^
-    { (failure1 and error1)  .expectationsNb must_== 2 }                                                                ^
+    { (failure1 and success1).expectationsNb must_== 1 }                                                                ^
+    { (failure1 and failure2).expectationsNb must_== 1 }                                                                ^
+    { (failure1 and error1)  .expectationsNb must_== 1 }                                                                ^
                                                                                                                         endp^
   "Results can be combined with or"                                                                                     ^
   { (success1 or success2) must_== Success("s1") }                                                                      ^
