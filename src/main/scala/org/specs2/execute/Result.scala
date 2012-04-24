@@ -226,6 +226,8 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
                                                                                   expectationsNb + r.expectationsNb)
       case e @ Error(_, _)        => r.addExpectationsNb(expectationsNb)
       case Failure(_, _, _, _)    => r.addExpectationsNb(expectationsNb)
+      case Skipped(_,_)           => addExpectationsNb(r.expectationsNb)
+      case Pending(_)             => addExpectationsNb(r.expectationsNb)
       case DecoratedResult(d, r1) => DecoratedResult(d, and(r1))
       case _                      => super.and(r)
     }
@@ -261,6 +263,9 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   extends Result(m, e) with ResultStackTrace { outer =>
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
+
+  override def and(res: =>Result): Result = this
+
   override def or(res: =>Result): Result = {
     val r = res
     r match {
@@ -310,6 +315,9 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
   /** @return an exception created from the message and the stackTraceElements */
   def exception = e
   def stackTrace = e.getFullStackTrace.toList
+
+  override def and(res: =>Result): Result = this
+
   override def equals(o: Any) = {
     o match {
       case Error(m2, e2) => m == m2 && e.getMessage == e2.getMessage
