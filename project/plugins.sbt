@@ -13,9 +13,3 @@ addSbtPlugin("net.databinder" % "posterous-sbt" % "0.3.2")
 resolvers += "gseitz@github.com" at "http://gseitz.github.com/maven/"
 
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.4")
-
-resolvers += Classpaths.typesafeResolver
-
-addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse" % "1.5.0")
-
-
