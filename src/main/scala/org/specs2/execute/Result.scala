@@ -45,7 +45,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   }
 
   private lazy val nocolor = Arguments("nocolor")
-  /**
+  /**Skipped
    * @return the uncolored textual status of the result
    */
   def status: String = coloredStatus(nocolor)
@@ -84,6 +84,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
     this match {
       case Success(m, e)         => Success(m,exp, expectationsNb)
       case Failure(m, e, st, d)  => Failure(m, exp, st, d).setExpectationsNb(expectationsNb)
+      case Skipped(m, e)         => Skipped(m, exp)
       case DecoratedResult(t, r) => DecoratedResult(t, r.updateExpected(exp))
       case other                 => this
     }
@@ -232,7 +233,7 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
   }
   override def isSuccess = true
 
-  def setExpectationsNb(n: Int): Result = Success(m, n)
+  def setExpectationsNb(n: Int): Result = Success(m, expected, n)
 
   def mute = Success()
 

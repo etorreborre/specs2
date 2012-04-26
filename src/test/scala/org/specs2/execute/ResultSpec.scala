@@ -33,7 +33,16 @@ more precisely:
     { (failure1 and success1).expectationsNb must_== 1 }                                                                ^
     { (failure1 and failure2).expectationsNb must_== 1 }                                                                ^
     { (failure1 and error1)  .expectationsNb must_== 1 }                                                                ^
-    { (error1   and success1).expectationsNb must_== 1 }                                                                ^
+    { (error1   and success1).expectationsNb must_== 1 }                                                                ^bt^
+    "the expected message must be ok"                                                                                   ^
+    { (success1_1 and success2_1).expected must_== "exp1; exp2" }                                                       ^
+    { (success1_1 and failure1_1).expected must_== "exp1; exp1" }                                                       ^
+    { (success1_1 and error1)    .expected must_== "" }                                                                 ^
+    { (success1_1 and skipped1_1).expected must_== "exp1; exp1" }                                                       ^
+    { (failure1_1 and success1_1).expected must_== "exp1" }                                                             ^
+    { (failure1_1 and failure2_1).expected must_== "exp1" }                                                             ^
+    { (failure1_1 and error1)    .expected must_== "exp1" }                                                             ^
+    { (error1   and success1_1)  .expected must_== "" }                                                                 ^
                                                                                                                         endp^
   "Results can be combined with or"                                                                                     ^
   { (success1 or success2) must_== Success("s1") }                                                                      ^
@@ -77,4 +86,10 @@ more precisely:
   val error1   = Error("e1")
   val skipped1 = Skipped("sk1")
   val pending1 = Pending("p1")
-}    
+
+  val success1_1: Result = Success("s1", "exp1")
+  val success2_1 = Success("s2", "exp2")
+  val failure1_1 = Failure("f1", "exp1")
+  val failure2_1 = Failure("f2", "exp2")
+  val skipped1_1 = Skipped("sk1", "exp1")
+}
