@@ -1,6 +1,7 @@
 package org.specs2
 package data
 
+import text.Trim._
 /**
  * This trait provides a keep function which will determine if a element T must be kept with regards to:
  *
@@ -23,4 +24,13 @@ trait IncludedExcluded[T] {
 
   def isIncluded(t: T) = include.isEmpty || matchFunction(t, include)
   def isExcluded(t: T) = !exclude.isEmpty && matchFunction(t, exclude)
+}
+
+/**
+ * specialization of the IncludedExcluded trait for string separated tags
+ */
+case class SeparatedTags(included: String, excluded: String, separator: String = ",") extends IncludedExcluded[Seq[String]] {
+  val matchFunction = (n: Seq[String], tags: Seq[String]) => (n intersect tags).nonEmpty
+  val include = included.splitTrim(separator)
+  val exclude = excluded.splitTrim(separator)
 }

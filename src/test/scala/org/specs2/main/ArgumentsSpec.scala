@@ -1,7 +1,6 @@
 package org.specs2
 package main
 
-import specification.After
 import matcher.DataTables
 import execute.Result
 

@@ -9,9 +9,9 @@ import execute._
 import text._
 import text.Trim._
 import org.specs2.internal.scalaz.Monoid
-import data.IncludedExcluded
 import io.Location
 import scala.Either
+import data.{SeparatedTags, IncludedExcluded}
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
@@ -187,16 +187,10 @@ object StandardFragments {
  */
 object TagsFragments {
   trait TaggingFragment extends Fragment {
-    private def filter(args: Arguments) = new IncludedExcluded[Seq[String]] {
-      val matchFunction = (n: Seq[String], tags: Seq[String]) => (n intersect tags).nonEmpty
-      val include = args.include.splitTrim(",")
-      val exclude = args.exclude.splitTrim(",")
-    }
-    
     /** tagging names */
-    val names: Seq[String]
+    def names: Seq[String]
     /** @return true if the fragment tagged with this must be kept */
-    def keep(args: Arguments): Boolean = filter(args).keep(names)
+    def keep(args: Arguments): Boolean = SeparatedTags(args.include, args.exclude).keep(names)
     /** @return true if this tagging fragment is a section */
     def isSection: Boolean
   }

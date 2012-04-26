@@ -7,6 +7,8 @@ import control._
 import Exceptions._
 import text._
 import Split._
+import data.SeparatedTags
+
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
  *
@@ -29,6 +31,7 @@ Arguments (
   def ex: String                      = select.ex
   def include: String                 = select.include
   def exclude: String                 = select.exclude
+  def keep(tags: String*)             = select.keep(tags:_*)
   def wasIssue: Boolean               = select.wasIssue
   def was(s: String): Boolean         = select.was(s)
   def wasIsDefined: Boolean           = select.wasIsDefined
@@ -151,6 +154,7 @@ case class Select(
   def ex: String                    = _ex.getOrElse(".*")
   def include: String               = _include.getOrElse("")
   def exclude: String               = _exclude.getOrElse("")
+  def keep(tags: String*)           = SeparatedTags(include, exclude).keep(tags)
   def wasIssue: Boolean             = was("x") || was("!")
   def was(s: String): Boolean       = hasFlags(s, _was)
   def wasIsDefined: Boolean         = _was.isDefined
