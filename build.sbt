@@ -13,8 +13,7 @@ shellPrompt := { state => System.getProperty("user.name") + "> " }
 shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " }
 
 /** Dependencies */
-resolvers ++= Seq("releases" at "http://oss.sonatype.org/content/repositories/releases",
-                  "snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
+resolvers ++= Seq(Opts.resolver.sonatypeReleases, Opts.resolver.sonatypeSnapshots)
 
 libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.specs2" % "specs2-scalaz-core_2.10.0-M2" % "6.0.1",
@@ -58,11 +57,7 @@ initialCommands in console := "import org.specs2._"
 /** Publishing */
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
-publishTo <<= version { v: String =>
-  val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
-  else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
-}
+publishTo <<= version(v => Option(if (v.trim endsWith "SNAPSHOT") Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging))
 
 publishMavenStyle := true
 
