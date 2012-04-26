@@ -37,6 +37,10 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def skipAllIf(condition: =>Boolean): Arguments = args(skipAll = tryo(condition).getOrElse(true): Boolean)
   /**
+   * shortcut to skip all examples when a condition is false.
+   */
+  def skipAllUnless(condition: =>Boolean): Arguments = skipAllIf(!condition)
+  /**
    * shortcut to stop after the first failure or error
    */
   def stopOnFail: Arguments = args(stopOnFail = true)

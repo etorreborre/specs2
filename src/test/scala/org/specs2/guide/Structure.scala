@@ -1516,6 +1516,16 @@ For that specification above:
  * when the `section` call is appended to a block of Fragments on the same line, all the fragments of that block are part of
    the section: `example 5` and `example 6` are tagged with `slow`
 
+#### Skip examples
+
+You can skip all the examples of a specification by using the `skipAllIf` or `skipAllUnless` methods:
+
+      class EmailSpecification extends mutable.Specification {
+        skipAllIf(serverIsOffLine)
+        "test email" >> { sendEmail must beOk }
+      }
+
+
 #### Debug statements
 
 When quick and hacky `println` statements are what you want, the `Debug` trait, mixed in every `Specification`, provides useful methods:
