@@ -28,10 +28,12 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
   private val executor = new FragmentExecution {}
   
   /** specification to execute */
-  protected lazy val specification = tryToCreateObject[SpecificationStructure](klass.getName).get
+  protected lazy val specification = SpecificationStructure.createSpecification(klass.getName)(commandLineArgs)
 
+  /** command line arguments*/
+  lazy val commandLineArgs: Arguments = Arguments.extract(Seq(), properties)
   /** arguments for the specification */
-  implicit lazy val args: Arguments = Arguments.extract(Seq(), properties) <| specification.content.arguments
+  implicit lazy val args: Arguments = commandLineArgs <| specification.content.arguments
   /** fold object used to create descriptions */
   private val descriptions = new JUnitDescriptionsFragments(klass.getName)
   /** extract the root Description object and the examples to execute */

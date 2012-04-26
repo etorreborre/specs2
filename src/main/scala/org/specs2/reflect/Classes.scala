@@ -54,38 +54,56 @@ trait Classes extends Output {
    * 
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
-  def tryToCreateObject[T <: AnyRef](className: String, printMessage: Boolean= true, printStackTrace: Boolean = true,
-                                     loader: ClassLoader = Thread.currentThread.getContextClassLoader)
+  def tryToCreateObject[T <: AnyRef](className: String,
+                                     printMessage: Boolean= true,
+                                     printStackTrace: Boolean = true,
+                                     loader: ClassLoader = Thread.currentThread.getContextClassLoader,
+                                     parameter: Option[AnyRef] = None)
                                     (implicit m: Manifest[T]): Option[T] = {
 
     lazy val canPrintMessage    = printMessage    || sys.props("debugCreateObject") != null
     lazy val canPrintStackTrace = printStackTrace || sys.props("debugCreateObject") != null
 
-    loadClass(className, loader) match {
-      case None => None
-      case Some(c: Class[_]) => {
+    tryToCreateObjectEither(className, loader, parameter) match {
+      case Right(o) => Some(o)
+      case Left(e)  => {
+        if (canPrintMessage) println(e)
+        if (canPrintStackTrace) e.getFullStackTrace foreach (s => println(s.toString))
+        None
+      }
+    }
+  }
+
+  /**
+   * Try to create an instance of a given class by using whatever constructor is available
+   * and trying to instantiate the first parameter recursively if there is a parameter for that constructor.
+   *
+   * This is useful to instantiate nested classes which are referencing their outer class in their constructor
+   */
+  def tryToCreateObjectEither[T <: AnyRef](className: String,
+                                           loader: ClassLoader = Thread.currentThread.getContextClassLoader,
+                                           parameter: Option[AnyRef] = None)
+                                          (implicit m: Manifest[T]): Either[Throwable, T] = {
+    loadClassEither(className, loader) match {
+      case Left(e) => Left(e)
+      case Right(c: Class[_]) => {
         try {
           val constructors = c.getDeclaredConstructors.toList
-          if (constructors.isEmpty) {
-            if (canPrintMessage) println("Can't find a constructor for class "+c.getName)
-            None
-          }
+          if (constructors.isEmpty)
+            Left(new Exception("Can't find a constructor for class "+c.getName))
           else if (constructors.toList(0).getParameterTypes.isEmpty)
-            createInstanceOf[T](Some[Class[T]](c.asInstanceOf[Class[T]]))
+            createInstanceOfEither[T](Some[Class[T]](c.asInstanceOf[Class[T]]))
           else if (constructors.toList(0).getParameterTypes.size == 1) {
-            val outerClassName = getOuterClassName(c)
-            tryToCreateObject[T](outerClassName, printMessage, printStackTrace).map(constructors(0).newInstance(_).asInstanceOf[T])
+            // if the specification has a construction, it is either because it is a nested class
+            // or if it has an Arguments parameter
+            val outerClass = tryToCreateObject[T](getOuterClassName(c), false, false)
+            outerClass.orElse(parameter).map(constructors(0).newInstance(_).asInstanceOf[T]).toRight(new Exception("can't create an instance of "+className))
           }
           else {
-            if (canPrintMessage) println("Can't find a suitable constructor for class "+c.getName)
-            None
+            Left(new Exception("Can't find a suitable constructor for class "+c.getName))
           }
         } catch {
-          case e => {
-            if (canPrintMessage) println("Could not instantiate class " + className + ": " + e)
-            if (canPrintStackTrace) e.getFullStackTrace foreach (s => println(s.toString))
-            None
-          }
+          case e => Left(new Exception("Could not instantiate class " + className + ": " + e.getMessage, e))
         }
       }
     }
@@ -95,6 +113,13 @@ trait Classes extends Output {
    */
   private[reflect] def createInstanceOf[T <: AnyRef](c: Option[Class[T]])(implicit m: Manifest[T]): Option[T] = {
     c.map(createInstanceFor(_))
+  }
+  /**
+   * @return an instance of a given class, checking that the created instance typechecks as expected
+   */
+  private[reflect] def createInstanceOfEither[T <: AnyRef](c: Option[Class[T]])(implicit m: Manifest[T]): Either[Throwable, T] = {
+    try { c.map(createInstanceFor(_)).toRight(new Exception()) }
+    catch { case e => Left(e) }
   }
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
@@ -112,18 +137,32 @@ trait Classes extends Output {
   	  case e: java.lang.reflect.InvocationTargetException => throw e.getTargetException
   	}
   }
+
   /**
    * Load a class, given the class name
    * 
    * If the 'debugLoadClass' property is set, then an error message is printed out to the Console
    */
   private[reflect] def loadClass[T <: AnyRef](className: String, loader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[Class[T]] = {
-    tryo(Some(loadClassOf(className, loader).asInstanceOf[Class[T]])) { (e: Throwable) =>
-      if (sys.props("debugLoadClass") != null) {
-        println("Could not load class " + className + ": " + e.getMessage)
-        e.getStackTrace() foreach (s => println(s.toString))
+    loadClassEither(className, loader) match {
+      case Right(c) => Some(c.asInstanceOf[Class[T]])
+      case Left(e)  => {
+        if (sys.props("debugLoadClass") != null) {
+          println("Could not load class " + className + ": " + e.getMessage)
+          e.getStackTrace foreach (s => println(s.toString))
+        }
+        None
       }
-    }.flatMap(identity)
+    }
+  }
+  /**
+   * Load a class, given the class name
+   *
+   * If the 'debugLoadClass' property is set, then an error message is printed out to the Console
+   */
+  private[reflect] def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader = Thread.currentThread.getContextClassLoader):
+    Either[Throwable, Class[T]] = {
+    trye(loadClassOf(className, loader).asInstanceOf[Class[T]])
   }
   /**
    * Load a class, given the class name, without catching exceptions

@@ -55,7 +55,7 @@ trait FilesRunner extends SpecificationsFinder with SystemExit {
 
   /** @return the specifications to execute */
   protected def specifications(implicit args: Arguments): Seq[SpecificationStructure] =
-    specificationClassNames(args).flatMap(createSpecification(_))
+    specificationClassNames(args).flatMap(name => createSpecification(name))
 
   /** @return the specifications class names to execute */
   protected def specificationClassNames(implicit args: Arguments) = specificationNames(FromSource.srcDir, args.specName)

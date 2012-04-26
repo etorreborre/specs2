@@ -1278,6 +1278,15 @@ For example, you can turn off the concurrent execution of examples with the `arg
 
 For the complete list of arguments and shortcut methods read the [Runners](org.specs2.guide.Runners.html) page.
 
+#### Pass arguments
+
+Some specifications can depend on the arguments passed on the command line, for example to fine-tune the behaviour of some Context objects. If you need to do this, you can add an `Arguments` parameter to the Specification class. This parameter will be setup when the specification is instantiated:
+
+      class DependOnCommandLine(args: Arguments) extends mutable.Specification {
+        skipAllUnless(!args.commandLine.contains("DB"))
+        "database access" >> { dbAccess must beOk }
+      }
+
 #### Add a title
 
 Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:

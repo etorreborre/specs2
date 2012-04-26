@@ -31,8 +31,8 @@ class ClassRunner extends Classes with ConsoleOutput with SystemExit {
   def start(arguments: String*): Option[ExecutedSpecification] = {
     if (arguments.length == 0)
       println("The first argument should at least be the specification class name")
-
-    apply(createSpecification(arguments(0)))(Arguments(arguments.drop(1):_*)).headOption
+    implicit val commandLineArgs = Arguments(arguments.drop(1):_*)
+    apply(createSpecification(arguments(0))).headOption
   }
 
   /**
@@ -59,7 +59,8 @@ class ClassRunner extends Classes with ConsoleOutput with SystemExit {
     }
   }
 
-  protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader) =
+  protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
+                                   (implicit args: Arguments = Arguments()) =
     SpecificationStructure.createSpecification(className, classLoader)
 }
 

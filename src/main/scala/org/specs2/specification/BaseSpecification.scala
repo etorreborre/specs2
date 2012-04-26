@@ -62,28 +62,51 @@ object SpecificationStructure {
   /**
    * create a SpecificationStructure from a className, throwing an Error if that's not possible
    */
-  def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): SpecificationStructure = {
+  def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
+                         (implicit args: Arguments = Arguments()): SpecificationStructure = {
     createSpecificationOption(className, classLoader) match {
       case Some(s) => s
       case None    => sys.error("can not create specification: "+className)
     }
   }
+
   /**
    * create a SpecificationStructure from a className, returning None if that's not possible
    */
-  def createSpecificationOption(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): Option[SpecificationStructure] = {
-    // try to create the specification from a class name, without displaying possible errors
-    tryToCreateObject[SpecificationStructure](className,
-                                              printMessage = false,
-                                              printStackTrace = false,
-                                              loader = classLoader).
-      // try to create the specification from an object class name
-      orElse(tryToCreateObject[SpecificationStructure](className+"$",
-                                                       printMessage = false,
-                                                       printStackTrace = false,
-                                                       loader = classLoader)).
+  def createSpecificationOption(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
+                               (implicit args: Arguments = Arguments()) : Option[SpecificationStructure] = {
       // finally retry the original class name to display the error messages
+    createSpecificationFromClassOrObject(className, classLoader).
       orElse(tryToCreateObject[SpecificationStructure](className, loader = classLoader))
 
   }
+
+  /**
+   * create a SpecificationStructure from a className, returning an Exception if that's not possible
+   */
+  def createSpecificationEither(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
+                               (implicit args: Arguments = Arguments()) : Either[Throwable, SpecificationStructure] = {
+    // try to create the specification from a class name, without displaying possible errors
+    createSpecificationFromClassOrObject(className, classLoader).map(Right(_)).
+      // try to create the specification from an object class name
+      getOrElse(tryToCreateObjectEither[SpecificationStructure](className, classLoader, Some(args)))
+  }
+
+  private def createSpecificationFromClassOrObject(className: String,
+                                                   classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
+                                                  (implicit args: Arguments = Arguments()) : Option[SpecificationStructure] = {
+    // try to create the specification from a class name, without displaying possible errors
+    tryToCreateObject[SpecificationStructure](className,
+      printMessage = false,
+      printStackTrace = false,
+      loader = classLoader,
+      parameter = Some(args)).
+      // try to create the specification from an object class name
+      orElse(tryToCreateObject[SpecificationStructure](className+"$",
+      printMessage = false,
+      printStackTrace = false,
+      loader = classLoader,
+      parameter = Some(args)))
+  }
+
 }

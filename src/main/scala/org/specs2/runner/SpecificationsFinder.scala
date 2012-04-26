@@ -5,6 +5,7 @@ import java.util.regex._
 import io._
 import reflect.Classes
 import specification.SpecificationStructure
+import main.Arguments
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -22,7 +23,8 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
                      pattern: String = ".*Spec",
                      filter: String => Boolean = { (name: String) => true },
                      basePath: String = FromSource.srcDir,
-                     verbose: Boolean = false): Seq[SpecificationStructure] =
+                     verbose: Boolean = false)
+                    (implicit args: Arguments = Arguments()): Seq[SpecificationStructure] =
     specificationNames(path, pattern, basePath, verbose).view.filter(filter).flatMap(n => createSpecification(n))
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
@@ -57,7 +59,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    * The specification pattern is: "\\s*object\\s*(" + pattern + ")\\s*extends\\s*.*Spec.*\\s*\\{"
    * This may be later extended to support other arbitrary patterns
    *
-   * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
+   * @param packageName the base package for the class names
    * @param content content of the file
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    */
@@ -93,8 +95,9 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    * Tries to load the class name and cast it to a specification
    *         None in case of an exception.
    */
-  def createSpecification(className: String): Option[SpecificationStructure] =
-    tryToCreateObject[SpecificationStructure](className)
+  def createSpecification(className: String)(implicit args: Arguments): Option[SpecificationStructure] =
+    SpecificationStructure.createSpecificationOption(className)
+
   /**
    * @return a <code>SpecificationStructure</code> object from a className if that class is a <code>SpecificationStructure</code> class.<br>
    * Tries to load the class name and cast it to a specification

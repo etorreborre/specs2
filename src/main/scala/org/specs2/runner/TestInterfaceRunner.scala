@@ -48,29 +48,36 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
       case other                                       => runSpecification(className, handler, args)
     }
 
-  def runSpecification(classname: String, handler: EventHandler, args: Array[String]): Any = {
-    toRun[SpecificationStructure](classname, handler).right.toOption map { s =>
-      reporter(handler)(args).report(s)(s.content.arguments.overrideWith(Arguments(args:_*)))
+  def runSpecification(className: String, handler: EventHandler, args: Array[String]): Any = {
+    implicit val commandLineArguments = Arguments(args:_*)
+    SpecificationStructure.createSpecificationEither(className, loader) match {
+      case Left(e)  => handleClassCreationError(className, handler, e)
+      case Right(s) => reporter(handler)(args).report(s)(s.content.arguments.overrideWith(commandLineArguments))
     }
   }
   
-  def runFilesRunner(classname: String, handler: EventHandler, args: Array[String]) =
-    toRun[FilesRunner](classname, handler).right.toOption.map(_.main(args))
+  def runFilesRunner(className: String, handler: EventHandler, args: Array[String]) =
+    toRun[FilesRunner](className, handler).right.toOption.map(_.main(args))
 
-  private def toRun[T <: AnyRef : Manifest](classname: String, handler: EventHandler): Either[Throwable, T] = {
-    val runner: Either[Throwable, T] = create[T](classname + "$", loader) match {
+  private def toRun[T <: AnyRef : Manifest](className: String, handler: EventHandler): Either[Throwable, T] = {
+    val runner: Either[Throwable, T] = create[T](className + "$", loader) match {
       case Right(s) => Right(s)
-      case Left(e) => create[T](classname, loader)
+      case Left(e) => create[T](className, loader)
     }
-    runner.left.map { e =>
-      handler.handle(error(classname, e))
-      logError("Could not create an instance of "+classname+"\n")
-      (e :: e.chainedExceptions) foreach { s =>
-        logError("  caused by " + s.toString)
-        s.getStackTrace.foreach(t => logError("  " + t.toString))
-      }
-    }
+    runner.left.map { e => handleClassCreationError(className, handler, e) }
     runner
+  }
+
+  /**
+   * Notify sbt that the specification could not be created
+   */
+  private def handleClassCreationError(className: String, handler: EventHandler, e: Throwable) {
+    handler.handle(error(className, e))
+    logError("Could not create an instance of "+className+"\n")
+    (e :: e.chainedExceptions) foreach { s =>
+      logError("  caused by " + s.toString)
+      s.getStackTrace.foreach(t => logError("  " + t.toString))
+    }
   }
 
   protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {

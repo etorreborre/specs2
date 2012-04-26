@@ -12,7 +12,7 @@ class TestInterfaceRunnerSpec extends Specification { def is =
   A TestInterfaceRunner is responsible for instantiating Specification classes found by
   sbt and executing them using a TestInterfaceReporter
 
-                                                                                                                        """                                                                                          ^
+                                                                                                                        """^
   "if the specification class is missing"                                                                               ^
     "there must be an error logged"                                                                                     ! missing().e1^
     "a stacktrace must be logged"                                                                                       ! missing().e2^
