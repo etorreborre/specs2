@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Structure</title><a name="Structure"><h2 specId="21906937">Structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
+    </head><body><div id="container"><title>Structure</title><a name="Structure"><h2 specId="1530245204">Structure</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
 <ul>
   <li>declare examples and expectations</li>
   <li>link specifications together</li>
@@ -925,7 +925,12 @@ textFragment(&quot;this is a text fragment&quot;)
     &quot;the the second one&quot;               ! e2 ^
                                        end
   }
-</code></pre><p>For the complete list of arguments and shortcut methods read the <a href="org.specs2.guide.Runners.html">Runners</a> page.</p><a name="Add+a+title"><h4>Add a title</h4></a><p>Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:</p>
+</code></pre><p>For the complete list of arguments and shortcut methods read the <a href="org.specs2.guide.Runners.html">Runners</a> page.</p><a name="Pass+arguments"><h4>Pass arguments</h4></a><p>Some specifications can depend on the arguments passed on the command line, for example to fine-tune the behaviour of some Context objects. If you need to do this, you can add an <code class="prettyprint">Arguments</code> parameter to the Specification class. This parameter will be setup when the specification is instantiated:</p>
+<pre><code class="prettyprint">  class DependOnCommandLine(args: Arguments) extends mutable.Specification {
+    skipAllUnless(!args.commandLine.contains(&quot;DB&quot;))
+    &quot;database access&quot; &gt;&gt; { dbAccess must beOk }
+  }
+</code></pre><a name="Add+a+title"><h4>Add a title</h4></a><p>Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:</p>
 <pre><code class="prettyprint">  class MySpec extends Specification { def is =
      &quot;My beautiful specifications&quot;.title                           ^
                                                                    p^
@@ -1107,7 +1112,12 @@ textFragment(&quot;this is a text fragment&quot;)
   <li><p>when the <code class="prettyprint">tag</code> is appended to an example, it applies to that example: <code class="prettyprint">example 2</code> is tagged with <code class="prettyprint">integration</code></p></li>
   <li><p>when the <code class="prettyprint">section</code> call is inserted on a new line, this opens a section for all the following fragments. This should<br /> be closed by a corresponding <code class="prettyprint">section</code> call on a new line. For example, <code class="prettyprint">example 3</code> and <code class="prettyprint">example 4</code> are part of the<br /> &quot;checkin&quot; section</p></li>
   <li><p>when the <code class="prettyprint">section</code> call is appended to a block of Fragments on the same line, all the fragments of that block are part of<br /> the section: <code class="prettyprint">example 5</code> and <code class="prettyprint">example 6</code> are tagged with <code class="prettyprint">slow</code></p></li>
-</ul><a name="Debug+statements"><h4>Debug statements</h4></a><p>When quick and hacky <code class="prettyprint">println</code> statements are what you want, the <code class="prettyprint">Debug</code> trait, mixed in every <code class="prettyprint">Specification</code>, provides useful methods:</p>
+</ul><a name="Skip+examples"><h4>Skip examples</h4></a><p>You can skip all the examples of a specification by using the <code class="prettyprint">skipAllIf</code> or <code class="prettyprint">skipAllUnless</code> methods:</p>
+<pre><code class="prettyprint">  class EmailSpecification extends mutable.Specification {
+    skipAllIf(serverIsOffLine)
+    &quot;test email&quot; &gt;&gt; { sendEmail must beOk }
+  }
+</code></pre><a name="Debug+statements"><h4>Debug statements</h4></a><p>When quick and hacky <code class="prettyprint">println</code> statements are what you want, the <code class="prettyprint">Debug</code> trait, mixed in every <code class="prettyprint">Specification</code>, provides useful methods:</p>
 <ul>
   <li><code class="prettyprint">pp</code> or &quot;print and pass&quot;, prints a value to the console, then return it to be used in the rest of the expression: &quot;graph.pp must haveSize(3)&quot;</li>
   <li><code class="prettyprint">pp(condition)</code> prints a value if a condition holds</li>
@@ -1125,8 +1135,8 @@ textFragment(&quot;this is a text fragment&quot;)
   <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt;</code><code class="prettyprint">&gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
 </ul>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="23267915"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="12841302"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1754814161"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="671602412"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -1136,7 +1146,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="21906937"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1530245204"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1264,6 +1274,8 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="org.specs2.guide.Structure.html#How+to%3F">How to?</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Declare+arguments">Declare arguments</a>
             
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Pass+arguments">Pass arguments</a>
+            
           </li><li id=""><a href="org.specs2.guide.Structure.html#Add+a+title">Add a title</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Use+descriptions">Use descriptions</a>
@@ -1278,17 +1290,21 @@ textFragment(&quot;this is a text fragment&quot;)
             <ul><li id=""><a href="org.specs2.guide.Structure.html#In+a+unit+specification">In a unit specification</a>
             
           </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Skip+examples">Skip examples</a>
+            
           </li><li id=""><a href="org.specs2.guide.Structure.html#Debug+statements">Debug statements</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Remove+implicits">Remove implicits</a>
             
           </li></ul>
           </li></ul>
-          </li><li id="11586377"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="939219873"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
+            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Combinators">Combinators</a>
             
+          </li></ul>
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
             
@@ -1338,7 +1354,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="24465427"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="78092375"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1382,7 +1398,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="10375021"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1781738154"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1458,7 +1474,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="25082214"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1075051973"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1502,7 +1518,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="27602352"><a href="org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="691681982"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1522,5 +1538,5 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['23267915','21906937'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1754814161','1530245204'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>

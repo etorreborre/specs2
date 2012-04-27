@@ -59,7 +59,7 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script> 
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Matchers</title><a name="Matchers"><h2 specId="11586377">Matchers</h2></a><status class="ok"><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+    </head><body><div id="container"><title>Matchers</title><a name="Matchers"><h2 specId="939219873">Matchers</h2></a><status class="ok"><div class="level0"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -83,7 +83,7 @@
 <ul>
   <li><code class="prettyprint">done</code>: a <code class="prettyprint">Success</code> with the message &quot;DONE&quot;</li>
   <li><code class="prettyprint">todo</code>: a <code class="prettyprint">Pending</code> with the message &quot;TODO&quot;</li>
-</ul><a name="Match+results"><h3>Match results</h3></a><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.</p><a name="Out+of+the+box"><h4>Out of the box</h4></a><p>The most common matchers are automatically available when extending the <code class="prettyprint">Specification</code> trait:</p></div></status><form>
+</ul><a name="Combinators"><h4>Combinators</h4></a><p>Logical combinators like <code class="prettyprint">and</code>, <code class="prettyprint">or</code>, <code class="prettyprint">not</code> can be used to combine results. You can also use the <code class="prettyprint">eventually</code> method to retry a Result until it is ok (this will actually work with anything convertible to a Result).</p><a name="Match+results"><h3>Match results</h3></a><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.</p><a name="Out+of+the+box"><h4>Out of the box</h4></a><p>The most common matchers are automatically available when extending the <code class="prettyprint">Specification</code> trait:</p></div></status><form>
       <table class="dataTable">
         <tr><th colspan="101">Specification Matchers</th></tr><tr><td class="info" colspan="100"><div class="tabber"><div class="tabbertab" title="Equality"><form>
       <table class="dataTable">
@@ -593,7 +593,7 @@ Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) toR
   <li><p>using <code class="prettyprint">eventually</code> to try a match a number of times until it succeeds:</p>
   <pre><code class="prettyprint">val iterator = List(1, 2, 3).iterator
 iterator.next must be_==(3).eventually
- // Use eventually(retries, n.millis) to use another number of tries and waiting time
+// Use eventually(retries, n.millis) to use another number of tries and waiting time
 </code></pre></li>
   <li><p>using <code class="prettyprint">when</code> or <code class="prettyprint">unless</code> to apply a matcher only if a condition is satisfied:</p>
   <pre><code class="prettyprint">1 must be_==(2).when(false)                        // will return a success
@@ -856,7 +856,7 @@ iterator.next must be_==(3).eventually
        (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
     }
   }
-</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="24465427"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="78092375"></subtoc><status class="ok"><div class="level0"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -872,8 +872,8 @@ iterator.next must be_==(3).eventually
   }
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status></div><div id="tree">
-      <ul><li id="23267915"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="12841302"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1754814161"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="671602412"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -883,7 +883,7 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="21906937"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1530245204"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1011,6 +1011,8 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="org.specs2.guide.Structure.html#How+to%3F">How to?</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Declare+arguments">Declare arguments</a>
             
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Pass+arguments">Pass arguments</a>
+            
           </li><li id=""><a href="org.specs2.guide.Structure.html#Add+a+title">Add a title</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Use+descriptions">Use descriptions</a>
@@ -1025,17 +1027,21 @@ iterator.next must be_==(3).eventually
             <ul><li id=""><a href="org.specs2.guide.Structure.html#In+a+unit+specification">In a unit specification</a>
             
           </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Skip+examples">Skip examples</a>
+            
           </li><li id=""><a href="org.specs2.guide.Structure.html#Debug+statements">Debug statements</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Remove+implicits">Remove implicits</a>
             
           </li></ul>
           </li></ul>
-          </li><li id="11586377"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="939219873"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
+            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Combinators">Combinators</a>
             
+          </li></ul>
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
             
@@ -1085,7 +1091,7 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="24465427"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="78092375"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1129,7 +1135,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="10375021"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1781738154"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1205,7 +1211,7 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="25082214"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1075051973"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1249,7 +1255,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="27602352"><a href="org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="691681982"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1269,5 +1275,5 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['23267915','11586377'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1754814161','939219873'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></body></html>
