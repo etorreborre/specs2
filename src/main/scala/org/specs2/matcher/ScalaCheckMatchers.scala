@@ -230,9 +230,9 @@ trait ResultPropertyImplicits {
         lazy val result = execute.ResultExecution.execute(r)
         val prop = 
         result match {
-          case f : execute.Failure => Prop.falsified :| (f.message+" ("+f.location+")")
-          case e : execute.Error   => Prop.falsified :| (e.message+" ("+e.location+")")
-          case s : execute.Skipped => Prop.undecided :| s.message
+          case f : execute.Failure => Prop.falsified              :| (f.message+" ("+f.location+")")
+          case s : execute.Skipped => Prop.undecided              :| s.message
+          case e : execute.Error   => Prop.exception(e.exception)
           case other               => Prop.passed
         }
         prop.apply(params)
