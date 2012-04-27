@@ -43,6 +43,10 @@ Two additional results are also available to track the progress of features:
   * `done`: a `Success` with the message "DONE"
   * `todo`: a `Pending` with the message "TODO"
 
+#### Combinators
+
+Logical combinators like `and`, `or`, `not` can be used to combine results. You can also use the `eventually` method to retry a Result until it is ok (this will actually work with anything convertible to a Result).
+
 ### Match results
 
 This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.
@@ -100,7 +104,7 @@ There are many ways to create matchers for your specific usage. The simplest way
 
         val iterator = List(1, 2, 3).iterator
         iterator.next must be_==(3).eventually
-         // Use eventually(retries, n.millis) to use another number of tries and waiting time
+        // Use eventually(retries, n.millis) to use another number of tries and waiting time
 
  * using `when` or `unless` to apply a matcher only if a condition is satisfied:
 
