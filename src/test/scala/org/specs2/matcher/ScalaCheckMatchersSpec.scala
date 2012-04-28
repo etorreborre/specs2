@@ -42,6 +42,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
       "it will yield an Error"                                                                                          ! prop4^
       "showing the exception type if the message is null"                                                               ! prop4_1^
       "showing the cause"                                                                                               ! prop4_2^
+      "showing the stacktrace"                                                                                          ! prop4_3^
     "a Property can be used with check"                                                                                 ! prop5^
     "a FailureException can be thrown from a Prop"                                                                      ! prop6^
     "in the Context of a mutable specification"                                                                         ! prop7^
@@ -88,6 +89,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
   def prop4   = execute(exceptionProp()).toString must startWith("Error(A counter-example is")
   def prop4_1 = execute(exceptionProp("null")).toString must contain("java.lang.Exception")
   def prop4_2 = execute(exceptionProp()).toString must contain("java.lang.IllegalArgumentException")
+  def prop4_3 = execute(exceptionProp()) must beLike { case org.specs2.execute.Error(m, ex) => ex.getStackTrace must not be empty }
 
   def prop5 = execute(check(proved)) must beSuccessful
   def prop6 = execute(failureExceptionProp).toString must startWith("A counter-example is")
@@ -166,7 +168,7 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
     }
   }
 
-  def exceptionWithCause(msg: String) = new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
+  def exceptionWithCause(msg: String = "boom") = new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
   def exceptionProp(msg: String = "boom") = forAll((b: Boolean) => {throw exceptionWithCause(msg); true})
 
   def failureExceptionProp = forAll((b: Boolean) => {throw new execute.FailureException(failure); true})
