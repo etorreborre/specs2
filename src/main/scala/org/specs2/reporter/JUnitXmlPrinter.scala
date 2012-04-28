@@ -6,6 +6,7 @@ import java.net.InetAddress
 import scala.xml.{XML, NodeSeq}
 import org.junit.runner.Description
 import scala.collection.JavaConversions._
+import control.Exceptions._
 import xml.Nodex._
 import execute._
 import main.Arguments
@@ -71,7 +72,7 @@ trait JUnitXmlPrinter {
     def flush(out: Writer) = XML.write(out, xml, "", false, null)
 
     def xml =
-      <testsuite hostname={InetAddress.getLocalHost.getHostName}
+      <testsuite hostname={tryo(InetAddress.getLocalHost.getHostName).getOrElse("no host detected")}
                  name={className}
                  tests={tests.size.toString}
                  errors={errors.toString}
