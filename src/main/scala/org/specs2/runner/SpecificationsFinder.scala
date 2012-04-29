@@ -12,7 +12,7 @@ import main.Arguments
  * on a regular expression representing the Specification name, usually .*Spec
  */
 trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
-
+  private lazy val CLASSNAME_REGEX = "([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*".r
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
@@ -25,7 +25,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
                      basePath: String = FromSource.srcDir,
                      verbose: Boolean = false)
                     (implicit args: Arguments = Arguments()): Seq[SpecificationStructure] =
-    specificationNames(path, pattern, basePath, verbose).view.filter(filter).flatMap(n => createSpecification(n))
+    specificationNames(path, pattern, basePath, verbose).view.filter(filter).flatMap(n => createSpecification(n, verbose))
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
@@ -73,7 +73,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
 
     val found = result(pattern.matcher(content)).toList
     if (verbose && found.nonEmpty) println("found the following specifications: "+found.mkString(","))
-    found
+    found.filter(c => CLASSNAME_REGEX.pattern.matcher(c).matches)
   }
 
   /**
@@ -95,8 +95,15 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    * Tries to load the class name and cast it to a specification
    *         None in case of an exception.
    */
-  def createSpecification(className: String)(implicit args: Arguments): Option[SpecificationStructure] =
-    SpecificationStructure.createSpecificationOption(className)
+  def createSpecification(className: String, verbose: Boolean = false)(implicit args: Arguments): Option[SpecificationStructure] = {
+    SpecificationStructure.createSpecificationEither(className) match {
+      case Right(s) => Some(s)
+      case Left(e)  => {
+        if (verbose) { println(e.getMessage); e.printStackTrace }
+        None
+      }
+    }
+  }
 
   /**
    * @return a <code>SpecificationStructure</code> object from a className if that class is a <code>SpecificationStructure</code> class.<br>

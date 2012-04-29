@@ -75,7 +75,7 @@ object SpecificationStructure {
    */
   def createSpecificationOption(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
                                (implicit args: Arguments = Arguments()) : Option[SpecificationStructure] = {
-      // finally retry the original class name to display the error messages
+    // finally retry the original class name to display the error messages
     createSpecificationFromClassOrObject(className, classLoader).
       orElse(tryToCreateObject[SpecificationStructure](className, loader = classLoader))
 
