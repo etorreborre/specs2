@@ -1,6 +1,7 @@
 package org.specs2
 package html
 import Htmlx._
+import scala.xml.NodeSeq
 
 class HtmlxSpec extends Specification with HtmlDocuments { def is =
 
@@ -11,6 +12,10 @@ class HtmlxSpec extends Specification with HtmlDocuments { def is =
     `headersToTree builds a Tree of headers - 2`                                                                        ^
     { (<h2 id="1"/> ++ <h3/>).updateHeadAttribute("id", 3) === (<h2 id="3"/> ++ <h3/>) }                                ^
     { <h2>hello</h2>.addHeadersAnchors === <a name="hello"><h2>hello</h2></a> }                                         ^
+                                                                                                                        p^
+  "the headers methods"                                                                                                 ^
+    "collects all headers of a document"                                                                                ! h1^
+    "filters out notoc elements"                                                                                        ! h2^
                                                                                                                         p^
   "nodeText extracts the text from a Node"                                                                              ^
     { nodeText(<h2>Hello</h2>) must_== "Hello"}                                                                         ^
@@ -38,5 +43,8 @@ class HtmlxSpec extends Specification with HtmlDocuments { def is =
        .+- a h3 header
        .|
        .`- a h2 header""".stripMargin('.').replace("\r", "")
+
+  def h1 = headers(<body><h1>title1</h1>Some text <h2>title2</h2>Some other text</body>) must_== (<h1>title1</h1> ++ <h2>title2</h2>)
+  def h2 = headers(<body><h1>title1</h1>Some text <notoc><h2>title2</h2></notoc>Some other text</body>) must_== (<h1>title1</h1> ++ NodeSeq.Empty)
 
 }

@@ -119,12 +119,12 @@ trait NodeFunctions {
   }
 
   /** @return all the nodes satisfying a condition as a NodeSeq */
-  def filter(nodes: NodeSeq, condition: Node => Boolean): NodeSeq = {
+  def filter(nodes: NodeSeq, condition: Node => Boolean, recurse: Node => Boolean = (e: Node) => true): NodeSeq = {
     nodes.toList match {
-      case e :: rest if condition(e)  => e ++ filter(rest, condition)
-      case (e:Elem) :: rest           => filter(e.child, condition) ++ filter(rest, condition)
-      case e :: rest                  => filter(rest, condition)
-      case Nil                        => Nil
+      case e :: rest if condition(e)        => e ++ filter(rest, condition, recurse)
+      case (e:Elem) :: rest if (recurse(e)) => filter(e.child, condition, recurse) ++ filter(rest, condition, recurse)
+      case e :: rest                        => filter(rest, condition, recurse)
+      case Nil                              => Nil
     }
   }
 
