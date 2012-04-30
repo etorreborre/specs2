@@ -1287,6 +1287,13 @@ Some specifications can depend on the arguments passed on the command line, for 
         "database access" >> { dbAccess must beOk }
       }
 
+Alternatively, if you need to keep your specification as a trait, you can mix-in the `org.specs2.main.CommandLineArguments` trait. This trait has an `arguments` variable which will contain the command-line arguments:
+
+      class CommandedSpecification extends mutable.Specification with CommandLineArguments {
+        if (arguments.sequential) "this is" >> ok
+        else                      "this is" >> ko
+      }
+
 #### Add a title
 
 Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:

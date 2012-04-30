@@ -32,7 +32,7 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
   "junit" % "junit" % "4.7" % "optional",
   "org.pegdown" % "pegdown" % "1.0.2" % "optional",
   "org.specs2" % "classycle" % "1.4.1" % "optional",
-  "net.rosien" % "sniff_2.9.1" % "0.2" % "test"
+  "net.rosien" % "sniff_2.9.1" % "0.2" % "test" intransitive
   )
 }
 

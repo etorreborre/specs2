@@ -3,9 +3,9 @@ package specification
 
 import org.specs2.internal.scalaz._
 import Scalaz._
-import main.Arguments
 import Fragments._
 import reflect.Classes._
+import main.{CommandLineArguments, Arguments}
 
 /**
  * A Base specification contains the minimum elements for a Specification
@@ -77,7 +77,7 @@ object SpecificationStructure {
                                (implicit args: Arguments = Arguments()) : Option[SpecificationStructure] = {
     // finally retry the original class name to display the error messages
     createSpecificationFromClassOrObject(className, classLoader).
-      orElse(tryToCreateObject[SpecificationStructure](className, loader = classLoader))
+      orElse(tryToCreateObject[SpecificationStructure](className, loader = classLoader)).map(applyCommandLineArguments)
 
   }
 
@@ -89,7 +89,7 @@ object SpecificationStructure {
     // try to create the specification from a class name, without displaying possible errors
     createSpecificationFromClassOrObject(className, classLoader).map(Right(_)).
       // try to create the specification from an object class name
-      getOrElse(tryToCreateObjectEither[SpecificationStructure](className, classLoader, Some(args)))
+      getOrElse(tryToCreateObjectEither[SpecificationStructure](className, classLoader, Some(args))).map(applyCommandLineArguments)
   }
 
   private def createSpecificationFromClassOrObject(className: String,
@@ -109,4 +109,13 @@ object SpecificationStructure {
       parameter = Some(args)))
   }
 
+  /**
+   * store the command-line arguments in the CommandLineArguments trait if necessary
+   */
+  private def applyCommandLineArguments(implicit args: Arguments) = (spec: SpecificationStructure) => {
+    spec match {
+      case withCommandLineArguments : CommandLineArguments => withCommandLineArguments.set(args); spec
+      case other                                           => spec
+    }
+  }
 }
