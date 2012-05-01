@@ -125,7 +125,7 @@ trait HtmlPrinter {
   implicit object HtmlReducer extends Reducer[ExecutedFragment, Seq[HtmlLine]] {
     implicit override def unit(fragment: ExecutedFragment) = Seq(print(fragment))
     /** print an ExecutedFragment and its associated statistics */
-    def print(fragment: ExecutedFragment) = fragment match { 
+    def print(fragment: ExecutedFragment): HtmlLine = fragment match {
       case start @ ExecutedSpecStart(_,_,_)       => HtmlSpecStart(start)
       case result @ ExecutedResult(_,_,_,_,_)     => HtmlResult(result)
       case text @ ExecutedText(s, _)              => HtmlText(text)

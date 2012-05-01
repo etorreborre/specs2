@@ -61,5 +61,3 @@ trait FilesRunner extends SpecificationsFinder with SystemExit {
   protected def specificationClassNames(implicit args: Arguments) = specificationNames(FromSource.srcDir, args.specName)
 
 }
-
-object FilesRunner extends FilesRunner

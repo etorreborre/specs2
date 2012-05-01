@@ -124,7 +124,8 @@ object JUnitRunner {
   def apply[T <: SpecificationStructure](f: Fragments, props: SystemProperties, console: TextExporting, html: HtmlExporting)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
       override protected lazy val specification = new Specification { def is = f }
       override protected lazy val properties = props
-      override def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] = Seq(console, html)
+      override def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] =
+        Seq[Exporting](console, html)
   }
 }
 /**
