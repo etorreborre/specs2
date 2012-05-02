@@ -98,9 +98,14 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   /**
    * add a new link to the Fragments
    */
-  def link(f: Fragments) = addFragments(f)
+  override def link(f: Fragments) = addFragments(super.link(f))
+  override def link(f: Fragments, fs: Fragments*) = addFragments(super.link(f, fs:_*))
   override def link(s: SpecificationStructure) = addFragments(super.link(s))
+  override def link(s: SpecificationStructure, ss: SpecificationStructure*) = addFragments(super.link(s, ss:_*))
+  override def see(f: Fragments) = addFragments(super.see(f))
+  override def see(f: Fragments, fs: Fragments*) = addFragments(super.see(f, fs:_*))
   override def see(s: SpecificationStructure) = addFragments(super.see(s))
+  override def see(s: SpecificationStructure, ss: SpecificationStructure*) = addFragments(super.see(s, ss:_*))
 
   /**
    * Create GWT fragments with the << syntax for a mutable specification

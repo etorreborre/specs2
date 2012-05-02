@@ -31,11 +31,11 @@ case class Levels[T](private val levelsSeq: Vector[Level[T]] = Vector[Level[T]](
   lazy val levels = {
     import NestedBlocks._
     def toNestedBlock(bl: Level[T]): SpecBlock[Level[T]] = bl match {
-      case b @ Level(SpecStart(_,_,_,_), l)       => BlockStart(bl)
-      case b @ Level(ExecutedSpecStart(_,_,_), l) => BlockStart(bl)
-      case b @ Level(SpecEnd(_), l)               => BlockEnd(bl)
-      case b @ Level(ExecutedSpecEnd(_,_,_), l)   => BlockEnd(bl)
-      case b                                      => BlockBit(bl)
+      case b @ Level(SpecStart(_,_,_,_,_), l)       => BlockStart(bl)
+      case b @ Level(ExecutedSpecStart(_,_,_), l)   => BlockStart(bl)
+      case b @ Level(SpecEnd(_), l)                 => BlockEnd(bl)
+      case b @ Level(ExecutedSpecEnd(_,_,_), l)     => BlockEnd(bl)
+      case b                                        => BlockBit(bl)
     }
     sumContext(levelsSeq.map(toNestedBlock))(Levels.LevelMonoid[T])
   }
@@ -146,7 +146,7 @@ case object Levels {
       case t @ Tab(n)                => Indent(t, n)
       case t @ Backtab(n)            => Unindent(t, n)   
       case t @ Text(_)               => Indent(t)       
-      case t @ SpecStart(_,_,_,_)    => Neutral(t)
+      case t @ SpecStart(_,_,_,_,_)  => Neutral(t)
       case t @ SpecEnd(_)            => Neutral(t)
       case t @ End()                 => Reset(t)        
       case t                         => Neutral(t)        

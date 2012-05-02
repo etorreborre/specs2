@@ -98,9 +98,9 @@ Other elements
     def e9 = content4.start.arguments.include must_== "t2"
     def e10 = content5.start.arguments.sequential must beTrue
     def e11 = parentSpec1.content.fragments.toList must
-              beLike { case SpecStart(_,_,_,_) :: Text(_) :: SpecStart(_,_,Some(l), false) :: rest => ok }
+              beLike { case SpecStart(_,_,_,_,_) :: Text(_) :: SpecStart(_,_,Some(l), false, false) :: rest => ok }
     def e12 = parentSpec2.content.fragments.toList must
-              beLike { case SpecStart(_,_,_,_) :: Text(_) :: SpecStart(_,_,Some(l), true) :: rest => ok }
+              beLike { case SpecStart(_,_,_,_,_) :: Text(_) :: SpecStart(_,_,Some(l), true, false) :: rest => ok }
   }
 
   case class ex() {

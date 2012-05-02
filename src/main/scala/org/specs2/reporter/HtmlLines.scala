@@ -27,7 +27,7 @@ case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLin
 		         printBody {
                val xmlLines = printLines(output).xml
                if (toc.isEmpty) (<div id="leftcolumn"/> ++ <div id="central">{xmlLines}</div>)
-               else (<div id="rightcolumn">{xmlLines}</div> ++ toc)
+               else (toc ++ <div id="rightcolumn">{xmlLines}</div>)
              }.xml
       )
   }
@@ -69,11 +69,12 @@ case class HtmlSpecStart(start: ExecutedSpecStart, stats: Stats = Stats(), level
   def isIncludeLink = start.isIncludeLink
   def isLink        = start.isLink
   def link          = start.link
+  def hidden        = start.hidden
   def unlink        = HtmlSpecStart(start.unlink)
 
   def print(out: HtmlReportOutput) = {
     out.when(!args.xonly) { output =>
-      start.link.map(l => output.printLink(l, indent, stats)).getOrElse(output.printSpecStart(start.specName, stats))
+      start.link.map(l => output.printLink(l, indent, stats, hidden)).getOrElse(output.printSpecStart(start.specName, stats))
     } 
   }
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)

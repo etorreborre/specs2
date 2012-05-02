@@ -32,7 +32,12 @@ sealed trait Fragment {
  *    That name stores a unique id for the specification
  *  - the arguments for that specification
  */
-case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) extends Fragment {
+case class SpecStart(specName: SpecName,
+                     arguments: Arguments = Arguments(),
+                     link: Option[HtmlLink] = None,
+                     seeOnly: Boolean = false,
+                     hidden: Boolean = false) extends Fragment {
+
   def name = specName.name
   def title = specName.title
   override def matches(s: String) = name matches s

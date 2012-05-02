@@ -9,7 +9,13 @@ import Fragments._
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Vector(), arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
+case class Fragments(specTitle: Option[SpecName] = None,
+                     middle: Seq[Fragment] = Vector(),
+                     arguments: Arguments = Arguments(),
+                     link: Option[HtmlLink] = None,
+                     seeOnly: Boolean = false,
+                     hidden: Boolean = false) {
+
   def fragments: Seq[Fragment] = if (middle.isEmpty && !link.isDefined) Vector() else (start +: middle :+ end)
 
   def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.map(_.overrideWith(name)).orElse(Some(name)))
@@ -27,7 +33,8 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   private def append(e: Fragment) = copy(middle = middle :+ e)
 
   def linkIs(htmlLink: HtmlLink) = copy(link = Some(htmlLink))
-  def seeIs(htmlLink: HtmlLink) = copy(middle = Vector(), link = Some(htmlLink), seeOnly = true)
+  def seeIs(htmlLink: HtmlLink)  = copy(middle = Vector(), link = Some(htmlLink), seeOnly = true)
+  def hide                       = copy(link = Some(HtmlLink(this)), hidden = true)
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
   def examples: Seq[Example] = fragments.collect(isAnExample)
@@ -40,7 +47,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def specName = start.specName
   def name = start.name
   
-  lazy val start: SpecStart = SpecStart(specTitle.getOrElse(SpecName("")), arguments, link, seeOnly)
+  lazy val start: SpecStart = SpecStart(specTitle.getOrElse(SpecName("")), arguments, link, seeOnly, hidden)
   lazy val end: SpecEnd = SpecEnd(start.specName)
 
 }
@@ -60,9 +67,9 @@ object Fragments {
    */
   def create(fs: Fragment*) = {
     fs match {
-      case (s @ SpecStart(n, a, l, so)) +: rest :+ SpecEnd(_) => Fragments(Some(n), rest, a, l, so)
-      case (s @ SpecStart(n, a, l, so)) +: rest               => Fragments(Some(n), rest, a, l, so)
-      case _                                                  => createList(fs:_*)
+      case (s @ SpecStart(n, a, l, so, i)) +: rest :+ SpecEnd(_) => Fragments(Some(n), rest, a, l, so, i)
+      case (s @ SpecStart(n, a, l, so, i)) +: rest               => Fragments(Some(n), rest, a, l, so, i)
+      case _                                                     => createList(fs:_*)
     }
   }
 
@@ -77,7 +84,7 @@ object Fragments {
   /** @return true if the Fragment is a step */
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
   /** @return true if the Fragment is a SpecStart or a SpecEnd */
-  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_,_) | SpecEnd(_) => true; case _ => false }
+  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_,_,_) | SpecEnd(_) => true; case _ => false }
   /** @return true if the Fragment is an Example or a Step */
   def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
   /** @return the step if the Fragment is a Step*/

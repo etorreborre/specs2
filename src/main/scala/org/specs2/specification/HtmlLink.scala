@@ -8,12 +8,12 @@ package specification
 abstract class HtmlLink(val url: String, val beforeText: String, val linkText: String, val afterText: String, val tip: String) {
   def is(name: SpecName) = false
 }
-case class SpecHtmlLink(val name: SpecName,
+case class SpecHtmlLink(name: SpecName,
                         override val beforeText: String = "",
                         override val linkText: String = "",
                         override val afterText: String = "",
                         override val tip: String = "") extends
-   HtmlLink(name.url, beforeText, linkText, afterText, tip) {
+    HtmlLink(name.url, beforeText, linkText, afterText, tip) {
   override def is(n: SpecName) = name.id == n.id
 }
 
@@ -22,12 +22,14 @@ case class UrlHtmlLink(override val url: String,
                        override val linkText: String,
                        override val afterText: String,
                        override val tip: String) extends
-   HtmlLink(url, beforeText, linkText, afterText, tip)
+   HtmlLink(url, beforeText, linkText, afterText, tip) {
+}
 
 
 object HtmlLink {
  def apply(name: SpecName, beforeText: String = "", linkText: String = "", afterText: String = "", tip: String = ""): SpecHtmlLink  =
    new SpecHtmlLink(name, beforeText, linkText, afterText, tip)
 
-  def apply(s: SpecificationStructure): SpecHtmlLink = SpecHtmlLink(s.content.specName, linkText = s.content.name)
+  def apply(s: SpecificationStructure): SpecHtmlLink = HtmlLink(s.content)
+  def apply(f: Fragments): SpecHtmlLink              = SpecHtmlLink(f.specName, linkText = f.name)
 }

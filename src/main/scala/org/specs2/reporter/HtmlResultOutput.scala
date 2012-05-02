@@ -77,14 +77,16 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, baseDir: String = "./"
    *
    * - if this is an arbitrary link, print a normal html link
    */
-  def printLink(link: HtmlLink, level: Int = 0, stats: Stats) = {
+  def printLink(link: HtmlLink, level: Int = 0, stats: Stats = Stats(), hidden: Boolean = false) = {
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
+    val printLink = wiki(link.beforeText) ++ <a href={link.url} tooltip={link.tip}>{wiki(link.linkText)}</a> ++ wiki(link.afterText)
+
     link match {
-      case slink @ SpecHtmlLink(name, before, link, after, tip) =>
+      case slink @ SpecHtmlLink(name, before, l, after, tip) => {
         print(<subtoc specId={name.id.toString}/>).
-        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ wiki(before) ++ <a href={slink.url} tooltip={tip}>{wiki(link)}</a> ++ wiki(after), level), linkStatus)
-      case UrlHtmlLink(url, before, link, after, tip) =>
-        printStatus(div(t(before) ++ <a href={url} tooltip={tip}>{wiki(link)}</a> ++ wiki(after), level), linkStatus)
+        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ printLink, level, hidden), linkStatus)
+      }
+      case UrlHtmlLink(url, before, l, after, tip) => printStatus(div(printLink, level, hidden), linkStatus)
     }
   }
 
@@ -154,8 +156,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, baseDir: String = "./"
    * print the html for a Form, by just adding the corresponding xml to the current output
    */
 	def printForm(form: NodeSeq) = print(form)
-	
-	protected def printOkStatus(n: NodeSeq) = print(okStatus(n))
+
+  protected def printOkStatus(n: NodeSeq) = print(okStatus(n))
 	protected def printKoStatus(n: NodeSeq) = print(koStatus(n))
 	protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
 
@@ -169,7 +171,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, baseDir: String = "./"
   /** create a div around some markup text to be displayed at a certain level of identation */
 	protected def div(string: String, level: Int): NodeSeq  = div(t(string), level)
   /** create a div around a NodeSeq to be displayed at a certain level of identation */
-	protected def div(n: NodeSeq, level: Int): NodeSeq = <div class={"level"+level}>{n}</div>
+	protected def div(n: NodeSeq, level: Int, hidden: Boolean = false): NodeSeq = <div class={"level"+level} style={"display: "+(if (hidden) "none" else "show")}>{n}</div>
   /** create a paragraph around a NodeSeq to be displayed at a certain level of identation */
 	protected def p(n: NodeSeq, level: Int) = <p class={"level"+level}>{n}</p>
   /** create a Text node */

@@ -74,7 +74,7 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
    */
   protected def storeStats = (fn: (ExecutedFragment, SpecName)) => {
     fn match {
-      case (ExecutedSpecStart(start @ SpecStart(_,_,_,true), loc, st), _) =>
+      case (ExecutedSpecStart(start @ SpecStart(_,_,_,true,_), loc, st), _) =>
         ExecutedSpecStart(start, loc, repository.getStatistics(start.specName).getOrElse(st))
 
       case (f @ ExecutedSpecEnd(end @ SpecEnd(_), loc, st), _) => repository.storeStatistics(end.specName, st); f

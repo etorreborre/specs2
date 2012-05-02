@@ -22,9 +22,13 @@ trait BaseSpecification extends SpecificationStructure with FragmentsBuilder wit
  */
 trait SpecificationInclusion { this: FragmentsBuilder =>
   def include(f: Fragments): FragmentsFragment = fragmentsFragments(f)
+  def include(f: Fragments, fs: Fragments*): FragmentsFragment = include(ma(f +: fs).sum)
   implicit def include(s: SpecificationStructure): FragmentsFragment = include(s.content)
-  def include(s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(ma((Seq(s)++ss).map(_.content)).sum)
-  def include(args: Arguments, s: SpecificationStructure*): FragmentsFragment = include(ma(s.map(_.content)).sum.overrideArgs(args))
+  def include(s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(s.content, ss.map(_.content):_*)
+  def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(s.content)
+  def include(args: Arguments, s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(args, s.content, ss.map(_.content):_*)
+  def include(args: Arguments, f: Fragments): FragmentsFragment = include(f.overrideArgs(args))
+  def include(args: Arguments, f: Fragments, fs: Fragments*): FragmentsFragment = include(ma(f +: fs).sum.overrideArgs(args))
 }
 /**
  * The structure of a Specification is simply defined as a sequence of fragments
@@ -34,6 +38,10 @@ trait SpecificationStructure {
   def is: Fragments
   /** this method can be overriden to map additional behavior in the user-defined fragments */
   def map(fs: =>Fragments): Fragments = fs
+  /** specName provides useful information identifying the specification: title, className, url... */
+  def identification: SpecIdentification = content.specName
+  /** automatically convert a specification to its identification */
+  implicit def identifySpecificationStructure(s: SpecificationStructure): SpecIdentification = s.identification
   /** 
    * this "cached" version of the Fragments is kept hidden from the user to avoid polluting
    * the Specification namespace.
@@ -51,8 +59,8 @@ object SpecificationStructure {
   
   def apply(fs: Fragments): SpecificationStructure = new SpecificationStructure {
     def is = fs.fragments match {
-      case SpecStart(n,a,l,so) +: middle :+ SpecEnd(_) => Fragments(Some(n), middle, a, l, so)
-      case other                                       => fs
+      case SpecStart(n,a,l,so,h) +: middle :+ SpecEnd(_) => Fragments(Some(n), middle, a, l, so, h)
+      case other                                         => fs
     }
   }
   def apply(fs: Seq[Fragment]): SpecificationStructure = apply(Fragments.create(fs:_*))
