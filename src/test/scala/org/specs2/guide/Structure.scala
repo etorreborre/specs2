@@ -505,7 +505,9 @@ In order to create a User Guide such as this one, you might want the included sp
 
       link(new QuickStart)
 
-This declaration will include the child specification so it is executed when the parent specification is executed. However during the reporting, only a Html link will be created in the parent file, referencing a separate file for the children specification.
+This declaration will include the child specification so it is executed when the parent specification is executed. However during the reporting, only a Html link will be created in the parent file, referencing a separate file for the children specification. On the other hand if you "hide" the specification, the link will not be printed out:
+
+      link((new QuickStart).hide)
 
 ###### Html Link
 
