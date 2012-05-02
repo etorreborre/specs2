@@ -42,6 +42,7 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
   implicit def title(s: String): SpecTitle = new SpecTitle(s)
   class SpecTitle(name: String) {
     def title = Fragments(SpecName(name))
+    def title(filePath: String) = Fragments(SpecName(name, filePath))
   }
   /**
    * Example creation

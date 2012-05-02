@@ -1144,6 +1144,8 @@ Those are all the methods which you can use to create fragments in a unit specif
  * `title`: give a title to the Specification
 
         "My spec title".title
+        // file path can be used to specify a different path for the html reporting
+        "My spec title".title(filePath = "com/MySpec.html")
 
  * `args`: create arguments for the specification
 

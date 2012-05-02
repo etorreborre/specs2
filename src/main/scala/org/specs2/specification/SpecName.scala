@@ -38,6 +38,9 @@ private[specs2]
 object SpecName {
   def apply(s: SpecificationStructure): SpecName = SpecificationName(s)
   def apply(s: String): SpecificationTitle = SpecificationTitle(s)
+  def apply(s: String, filePath: String): SpecificationTitle = new SpecificationTitle(s) {
+    override def url = filePath
+  }
 
   implicit def SpecNameMonoid: Monoid[SpecName] = new Monoid[SpecName] {
     def append(a1: SpecName, a2: =>SpecName) = if (a2.name.isEmpty) a1 else a2
@@ -58,7 +61,8 @@ case class SpecificationName(s: SpecificationStructure) extends SpecName {
     case SpecificationName(s)  => this
     case SpecificationTitle(t) => new SpecificationName(s) {
       override def id = n.id
-      override def title =  t
+      override def title = t
+      override def url = n.url
     }
   }
   override def equals(a: Any) = a match {
@@ -67,7 +71,7 @@ case class SpecificationName(s: SpecificationStructure) extends SpecName {
   }
 }
 private[specs2]
-case class SpecificationTitle(t: String) extends SpecName {
+case class SpecificationTitle(t: String) extends SpecName { outer =>
   def title = t
   def name = title
   def fullName = name
@@ -81,6 +85,7 @@ case class SpecificationTitle(t: String) extends SpecName {
       override def title = t
       override def name = n.name
       override def fullName = n.fullName
+      override def url = outer.url
     }
   }
 
