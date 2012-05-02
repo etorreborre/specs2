@@ -541,6 +541,16 @@ This will generate a html link in the main specification based on the referenced
       "text to highlight" ~/ (specification, "after text")
       "text to highlight" ~/ (specification, "after text", "tooltip")
 
+#### Markdown url
+
+If you just want to reference the url of the html page that's being generated for a given specification in a paragraph of text, you can use the `markdownUrl` method:
+
+      "For more information you can read "+DetailedSpec.markdownUrl
+      // or
+      "For more information you can read "+DetailedSpec.markdownUrl("the detailed specification")
+      // or
+      "For more information you can read "+"the detailed specification".markdownUrl(DetailedSpec)
+
 ### Contexts
 
 In a specification some examples are very simple and just check that a function is behaving as expected. However other examples can be more complex and require a more elaborate set-up of data to:

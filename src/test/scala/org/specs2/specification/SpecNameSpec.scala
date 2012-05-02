@@ -52,6 +52,18 @@ class SpecNameSpec extends mutable.Specification {
   "A SpecName can define a url" >> {
     SpecName(this).url must endWith(getClass.getName + ".html")
   }
+
+  "A SpecName can define a markdown link for its url" >> {
+    "for a normal one" >> {
+      SpecName(this).markdownLink must_== "[SpecNameSpec](org.specs2.specification.SpecNameSpec.html)"
+    }
+    "when the title contains spaces" >> {
+      SpecificationTitle("hello world").markdownLink must_== "[hello world](hello%20world.html)"
+    }
+    "with a specific title" >> {
+      SpecName(this).markdownLink("the spec") must_== "[the spec](org.specs2.specification.SpecNameSpec.html)"
+    }
+  }
 }
 
 class TestSpecification extends Specification { def is  = "e1" ! success }
