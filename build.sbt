@@ -11,7 +11,7 @@ organization := "org.specs2"
 
 scalaVersion := "2.9.2"
 
-crossScalaVersions := Seq("2.9.1", "2.9.1-1", "2.10.0-M2")
+crossScalaVersions := Seq("2.9.1", "2.9.1-1")
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -25,7 +25,8 @@ resolvers ++= Seq("releases" at "http://oss.sonatype.org/content/repositories/re
 libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.specs2" %% "specs2-scalaz-core" % "6.0.1",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional",
-  "org.scalacheck" %% "scalacheck" % "1.9" % "optional",
+  if (scala_version contains "-1") "org.scalacheck" % "scalacheck_2.9.1" % "1.9" % "optional"
+  else                             "org.scalacheck" %% "scalacheck" % "1.9" % "optional",
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
   "org.mockito" % "mockito-all" % "1.9.0" % "optional",
