@@ -304,6 +304,7 @@ case class Report(
   _fromSource:    Option[Boolean]          = None,
   _traceFilter:   Option[StackTraceFilter] = None,
   _checkUrls :    Option[Boolean]          = None,
+  _notoc:         Option[Boolean]          = None,
   _notifier:      Option[String]           = None,
   _exporter:      Option[String]           = None) extends ShowArgs {
 
@@ -324,6 +325,7 @@ case class Report(
   def fromSource: Boolean           = _fromSource.getOrElse(true)
   def traceFilter: StackTraceFilter = _traceFilter.getOrElse(DefaultStackTraceFilter)
   def checkUrls: Boolean            = _checkUrls.getOrElse(false)
+  def notoc: Boolean                = _notoc.getOrElse(false)
   def notifier: String              = _notifier.getOrElse("")
   def exporter: String              = _exporter.getOrElse("")
 
@@ -343,6 +345,7 @@ case class Report(
       other._fromSource      .orElse(_fromSource),
       other._traceFilter     .orElse(_traceFilter),
       other._checkUrls       .orElse(_checkUrls),
+      other._notoc           .orElse(_notoc),
       other._notifier        .orElse(_notifier),
       other._exporter        .orElse(_exporter)
     )
@@ -363,6 +366,7 @@ case class Report(
     "fromSource"     -> _fromSource,
     "traceFilter"    -> _traceFilter,
     "checkUrls"      -> _checkUrls,
+    "notoc"          -> _notoc,
     "notifier"       -> _notifier,
     "exporter"       -> _exporter).flatMap(showArg).mkString("Report(", ", ", ")")
 
@@ -386,6 +390,7 @@ object Report extends Extract {
       _traceFilter   = bool("fullstacktrace").map(t=>NoStackTraceFilter).
                        orElse(value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_))),
       _checkUrls     = bool("checkUrls"),
+      _notoc         = bool("notoc"),
       _notifier      = value("notifier"),
       _exporter      = value("exporter")
     )

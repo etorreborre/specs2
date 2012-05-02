@@ -5,6 +5,7 @@ import org.specs2.internal.scalaz.{Tree, Reducer, Scalaz}
 import  Scalaz._
 import collection.Iterablex._
 import html._
+import xml.Nodex._
 import data.Trees._
 import data.Tuples._
 import TableOfContents._
@@ -70,7 +71,8 @@ trait HtmlPrinter {
                   id      = root.specId,
                   subTocs = Map(tree.subForest.map(subSpec => (subSpec.rootLabel.specId, tocItems(subSpec))):_*))
     }
-    TreeToc(htmlFiles.rootLabel.specId, tocItems(htmlFiles))
+    if (args.report.notoc) TreeToc(htmlFiles.rootLabel.specId, NodeSeq.Empty)
+    else                   TreeToc(htmlFiles.rootLabel.specId, tocItems(htmlFiles))
   }
 
   /**
@@ -150,6 +152,6 @@ case class TreeToc(rootCode: SpecId, toc: NodeSeq) {
     <div id="tree">
       <ul>{toc}</ul>
       <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+rootCode+"','"+currentCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
-    </div>
+    </div> unless toc.isEmpty
 
 }

@@ -110,6 +110,7 @@ trait ArgumentsArgs extends ArgProperties {
       fromSource:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       traceFilter:   ArgProperty[StackTraceFilter]  = ArgProperty[StackTraceFilter](),
       checkUrls:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      notoc:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notifier:      ArgProperty[String]            = ArgProperty[String](),
       exporter:      ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
        report = Report(xonly.toOption.map(v => if (v) "x!" else "x!+-o*").orElse(showOnly.toOption),
@@ -126,6 +127,7 @@ trait ArgumentsArgs extends ArgProperties {
                        fromSource.toOption,
                        traceFilter.toOption,
                        checkUrls.toOption,
+                       notoc.toOption,
                        notifier.toOption,
                        exporter.toOption))
 
