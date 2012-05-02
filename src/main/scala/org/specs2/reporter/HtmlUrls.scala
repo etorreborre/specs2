@@ -52,7 +52,7 @@ trait HtmlUrls extends FileSystem {
 
   protected def aliveResult(url: String, condition: Boolean): Result =
     if (condition) Success(url + " is alive")
-    else Failure(url + " is dead")
+    else           Failure(url + " is dead")
 
   /**
    * @return true if the url can be accessed through http

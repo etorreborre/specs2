@@ -15,6 +15,7 @@ import Statistics._
 import Levels._
 import SpecsArguments._
 import scala.xml.NodeSeq
+import io.Paths._
 
 /**
  * The Html printer is used to create an Html report of an executed specification.

@@ -27,6 +27,10 @@ class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls with 
       check(<html><a href="guide.html#spec+content"></a></html>) must beSuccessful
     }
   }
+  "it is possible to check local links of an html document, with spaces" >> {
+    addFile("./user guide.html", """<a name="spec+content"/>""")
+    check(<html><a href="user%20guide.html"></a></html>) must beSuccessful
+  }
   "only the failure messages are kept" >> {
     check {
       <html>
