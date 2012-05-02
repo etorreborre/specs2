@@ -9,10 +9,10 @@ import Fragments._
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-case class Fragments(title: Option[SpecName] = None, middle: Seq[Fragment] = Vector(), arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
+case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Vector(), arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) {
   def fragments: Seq[Fragment] = if (middle.isEmpty && !link.isDefined) Vector() else (start +: middle :+ end)
 
-  def specTitleIs(name: SpecName): Fragments = copy(title = title.map(_.overrideWith(name)).orElse(Some(name)))
+  def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.map(_.overrideWith(name)).orElse(Some(name)))
 
   def add(e: Fragment): Fragments = append(e)
   def add(fs: Seq[Fragment]): Fragments = copy(middle = middle ++ fs)
@@ -40,7 +40,7 @@ case class Fragments(title: Option[SpecName] = None, middle: Seq[Fragment] = Vec
   def specName = start.specName
   def name = start.name
   
-  lazy val start: SpecStart = SpecStart(title.getOrElse(SpecName("")), arguments, link, seeOnly)
+  lazy val start: SpecStart = SpecStart(specTitle.getOrElse(SpecName("")), arguments, link, seeOnly)
   lazy val end: SpecEnd = SpecEnd(start.specName)
 
 }
@@ -50,7 +50,7 @@ case class Fragments(title: Option[SpecName] = None, middle: Seq[Fragment] = Vec
  */
 object Fragments {
 
-  def apply(t: SpecName) = new Fragments(title = Some(t))
+  def apply(t: SpecName) = new Fragments(specTitle = Some(t))
   /**
    * @return a Fragments object containing only a seq of Fragments.
    */
