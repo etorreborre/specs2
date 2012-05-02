@@ -10,6 +10,7 @@ import specification._
 import main.Arguments
 import control.Identityx._
 import html._
+import io.Paths._
 
 /**
 * The HtmlFile class groups a list of HtmlLine objects to print to an output file for a given specification (identified by specName)
@@ -20,12 +21,18 @@ import html._
 private[specs2]
 case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLine] = Vector()) {
   def print(out: =>HtmlReportOutput, toc: NodeSeq) = {
-    out.printHtml (
-		  out.printHead.
-		      printBody(<div id="container">{printLines(out).xml}</div> ++ toc).xml
-    )
+    def output = out.baseDirIs(baseDir)
+    output.printHtml(
+		  output.printHead.
+		         printBody {
+               val xmlLines = printLines(output).xml
+               if (toc.isEmpty) (<div id="leftcolumn"/> ++ <div id="central">{xmlLines}</div>)
+               else (<div id="rightcolumn">{xmlLines}</div> ++ toc)
+             }.xml
+      )
   }
 
+  def baseDir = link.url.baseDir
   def printLines(out: HtmlReportOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
   
   def add(line: HtmlLine) = copy(lines = lines :+ line)

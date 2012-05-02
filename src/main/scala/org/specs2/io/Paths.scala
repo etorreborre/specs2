@@ -12,13 +12,16 @@ trait Paths { outer =>
     val normalized = s.normalize
     if (normalized.endsWith("/")) normalized
     else normalized + "/"
+
   }
   def normalize(s: String) = s.replace("\\", "/")
+  def baseDir(s: String) = "./"+("../" * (s.normalize.split("/").filterNot(_.isEmpty).size - 1))
 }
 
 case class Path(s: String) {
   def dirPath = Paths.dirPath(s)
   def normalize = Paths.normalize(s)
+  def baseDir = Paths.baseDir(s)
 }
 
 private[specs2]

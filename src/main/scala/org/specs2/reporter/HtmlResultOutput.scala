@@ -21,13 +21,14 @@ import html.Htmlx._
  *
  */
 private[specs2]
-case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutput {
+case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, baseDir: String = "./") extends HtmlReportOutput { outer =>
 
   /**
    * start of the output
    */
-  private[specs2] lazy val blank = new HtmlResultOutput
-
+  private[specs2] lazy val blank = new HtmlResultOutput(NodeSeq.Empty, outer.baseDir)
+  /** set the base directory */
+  def baseDirIs(dir: String) = copy(baseDir = dir)
   /** print the NodeSeq inside the html tags */
   def printHtml(n: =>NodeSeq) = print(<html>{n}</html>)
   /** print the NodeSeq inside the body tags, with anchors for header tags */
@@ -159,7 +160,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
 	protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
 
   protected def textWithIcon(message: MarkupString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ t(" ") ++ wiki(message.toHtml), level)
-  protected def icon(t: String) = "./images/icon_"+t+"_sml.gif"
+  protected def icon(t: String) = baseDir+"images/icon_"+t+"_sml.gif"
 
 	protected def okStatus(n: NodeSeq) = status(n, "ok")
 	protected def koStatus(n: NodeSeq) = status(n, "ko")
@@ -186,34 +187,34 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
    *  - tabber css and scripts to display tabs
    *  - show and hide functions
    */
-  def head = 
+  def head =
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
       <style type="text/css" media="all">
-        @import url('./css/maven-base.css');
-        @import url('./css/maven-theme.css');
+        {"@import url('"+baseDir+"css/maven-base.css');"}
+        {"@import url('"+baseDir+"css/maven-theme.css');"}
       </style>
-      <link href="./css/prettify.css" type="text/css" rel="stylesheet" />
-      <script type="text/javascript" src="./css/prettify.js"></script>
-      <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
-      <link href="./css/tooltip.css" rel="stylesheet" type="text/css" />
-      <script type="text/javascript" src="css/jquery.js"></script>
-      <script type="text/javascript" src="css/jquery.cookie.js"></script>
-      <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
-      <script type="text/javascript" src="css/jquery.jstree.js"></script>
-      <script type="text/javascript" src="./css/tooltip.js"/>
+      <link href={baseDir+"css/prettify.css"} type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src={baseDir+"css/prettify.js"}></script>
+      <link rel="stylesheet" href={baseDir+"css/print.css"} type="text/css" media="print" />
+      <link href={baseDir+"css/tooltip.css"} rel="stylesheet" type="text/css" />
+      <script type="text/javascript" src={baseDir+"css/jquery.js"}></script>
+      <script type="text/javascript" src={baseDir+"css/jquery.cookie.js"}></script>
+      <script type="text/javascript" src={baseDir+"css/jquery.hotkeys.js"}></script>
+      <script type="text/javascript" src={baseDir+"css/jquery.jstree.js"}></script>
+      <script type="text/javascript" src={baseDir+"css/tooltip.js"}/>
       {javascript}
       <script language="javascript">window.onload={"init;"}</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
-      <script type="text/javascript" src="./css/tabber.js"></script> 
-      <link rel="stylesheet" href="./css/tabber.css" type="text/css" media="screen"/> 
+      <script type="text/javascript" src={baseDir+"css/tabber.js"}></script>
+      <link rel="stylesheet" href={baseDir+"css/tabber.css"} type="text/css" media="screen"/>
     </head>
 
   /**
    * define custom javascript functions to manipulate elements on the page, mostly to show and hide elements
    */
-  def javascript = 
+  def javascript =
     <script language="javascript"><xml:unparsed>
       function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
@@ -264,8 +265,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty) extends HtmlReportOutp
    * @return some xml (rest) enclosed in another block
    */
   private def enclose(f: NodeSeq => NodeSeq)(rest: =>HtmlResultOutput): HtmlResultOutput = print(f(rest.xml))
-  private def print(xml2: NodeSeq): HtmlResultOutput = HtmlResultOutput(xml ++ xml2)
-  private def print(xml2: Elem): HtmlResultOutput = HtmlResultOutput(xml ++ xml2)
+  private def print(xml2: NodeSeq): HtmlResultOutput = copy(xml = xml ++ xml2)
+  private def print(xml2: Elem): HtmlResultOutput = copy(xml = xml ++ xml2)
 
   /**
    * @param elementClass class of elements to show/hide
