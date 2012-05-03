@@ -24,7 +24,7 @@ trait ExecutedSpecificationData extends Data[ExecutedSpecification] with Fragmen
 	def arbLinkedExecutedSpecificationFragments(seeOnly: Boolean = false): Arbitrary[Seq[ExecutedFragment]] = Arbitrary {
 		for (spec <- arbExecutedSpecification.arbitrary) yield {
 			spec.fragments match {
-				case ExecutedSpecStart(SpecStart(n,a,l,so,h),loc,timer) +: rest => ExecutedSpecStart(SpecStart(n,a,Some(HtmlLink(n)),seeOnly,h), loc, timer) +: rest
+				case ExecutedSpecStart(SpecStart(n,a,Linked(l,so,h)),loc,timer) +: rest => ExecutedSpecStart(SpecStart(n,a,Linked(Some(HtmlLink(n)),seeOnly,h)), loc, timer) +: rest
 				case other => other
 			}
 		}

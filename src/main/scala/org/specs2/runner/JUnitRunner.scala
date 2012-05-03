@@ -55,12 +55,12 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
 
   private def executeSpecification =
     executions.collect {
-      case (desc, f @ SpecStart(_,_,_,_,_)) => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Example(_, _))        => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Text(_))              => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Step(_))              => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Action(_))            => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ SpecEnd(_))           => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ SpecStart(_,_,_)) => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Example(_, _))    => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Text(_))          => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Step(_))          => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Action(_))        => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ SpecEnd(_))       => (desc, executor.executeFragment(args)(f))
     }
 
   private def export = (executed: Seq[(Description, ExecutedFragment)]) => {
@@ -154,7 +154,7 @@ class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fr
      */
     def mapper(className: String): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: Fragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case s @ SpecStart(_,_,_,_,_)   => Some(createDescription(className, suiteName=testName(s.name)) -> f)
+        case s @ SpecStart(_,_,_)       => Some(createDescription(className, suiteName=testName(s.name)) -> f)
         case Text(t)                    => Some(createDescription(className, suiteName=testName(t)) -> f)
         case Example(description, body) => Some(createDescription(className, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))) -> f)
         case Step(action)               => Some(createDescription(className, label=nodeLabel.toString, testName="step") -> f)

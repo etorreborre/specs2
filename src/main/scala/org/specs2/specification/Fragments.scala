@@ -6,17 +6,14 @@ import execute.Executable
 import main.Arguments
 import org.specs2.internal.scalaz.Monoid
 import Fragments._
+
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-case class Fragments(specTitle: Option[SpecName] = None,
-                     middle: Seq[Fragment] = Vector(),
-                     arguments: Arguments = Arguments(),
-                     link: Option[HtmlLink] = None,
-                     seeOnly: Boolean = false,
-                     hidden: Boolean = false) {
+case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Vector(),
+                     arguments: Arguments = Arguments(), linked: Linked = Linked()) {
 
-  def fragments: Seq[Fragment] = if (middle.isEmpty && !link.isDefined) Vector() else (start +: middle :+ end)
+  def fragments: Seq[Fragment] = if (middle.isEmpty && !linked.isLink) Vector() else (start +: middle :+ end)
 
   def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.map(_.overrideWith(name)).orElse(Some(name)))
 
@@ -32,9 +29,9 @@ case class Fragments(specTitle: Option[SpecName] = None,
   private def prepend(e: Fragment) = copy(middle = e +: middle)
   private def append(e: Fragment) = copy(middle = middle :+ e)
 
-  def linkIs(htmlLink: HtmlLink) = copy(link = Some(htmlLink))
-  def seeIs(htmlLink: HtmlLink)  = copy(middle = Vector(), link = Some(htmlLink), seeOnly = true)
-  def hide                       = copy(link = Some(HtmlLink(this)), hidden = true)
+  def linkIs(htmlLink: HtmlLink) = copy(linked = linked.linkIs(htmlLink))
+  def seeIs(htmlLink: HtmlLink)  = copy(middle = Vector(), linked = linked.seeIs(htmlLink))
+  def hide                       = copy(linked = linked.linkIs(HtmlLink(this)).hide)
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
   def examples: Seq[Example] = fragments.collect(isAnExample)
@@ -47,7 +44,7 @@ case class Fragments(specTitle: Option[SpecName] = None,
   def specName = start.specName
   def name = start.name
   
-  lazy val start: SpecStart = SpecStart(specTitle.getOrElse(SpecName("")), arguments, link, seeOnly, hidden)
+  lazy val start: SpecStart = SpecStart(specTitle.getOrElse(SpecName("")), arguments, linked)
   lazy val end: SpecEnd = SpecEnd(start.specName)
 
 }
@@ -57,7 +54,7 @@ case class Fragments(specTitle: Option[SpecName] = None,
  */
 object Fragments {
 
-  def apply(t: SpecName) = new Fragments(specTitle = Some(t))
+  def apply(t: SpecName): Fragments = Fragments().specTitleIs(t)
   /**
    * @return a Fragments object containing only a seq of Fragments.
    */
@@ -67,9 +64,9 @@ object Fragments {
    */
   def create(fs: Fragment*) = {
     fs match {
-      case (s @ SpecStart(n, a, l, so, i)) +: rest :+ SpecEnd(_) => Fragments(Some(n), rest, a, l, so, i)
-      case (s @ SpecStart(n, a, l, so, i)) +: rest               => Fragments(Some(n), rest, a, l, so, i)
-      case _                                                     => createList(fs:_*)
+      case (s @ SpecStart(n, a, l)) +: rest :+ SpecEnd(_) => Fragments(Some(n), rest, a, l)
+      case (s @ SpecStart(n, a, l)) +: rest               => Fragments(Some(n), rest, a, l)
+      case _                                              => createList(fs:_*)
     }
   }
 
@@ -84,7 +81,7 @@ object Fragments {
   /** @return true if the Fragment is a step */
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
   /** @return true if the Fragment is a SpecStart or a SpecEnd */
-  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_,_,_) | SpecEnd(_) => true; case _ => false }
+  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_) | SpecEnd(_) => true; case _ => false }
   /** @return true if the Fragment is an Example or a Step */
   def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
   /** @return the step if the Fragment is a Step*/
@@ -107,5 +104,18 @@ object Fragments {
     val zero = new Fragments()
     def append(s1: Fragments, s2: => Fragments) = s1 add s2
   }
+}
+
+/** encapsulation of the linking behaviour */
+case class Linked(link: Option[HtmlLink] = None, seeOnly: Boolean = false, hidden: Boolean = false) {
+  def isSeeOnlyLink = isLink && seeOnly
+  def isIncludeLink = isLink && !seeOnly
+  def isLink        = link.isDefined
+
+  def linkIs(htmlLink: HtmlLink) = copy(link = Some(htmlLink))
+  def seeIs(htmlLink: HtmlLink)  = copy(link = Some(htmlLink), seeOnly = true)
+  def hide                       = copy(hidden = true)
+
+  def linkToString = link.map(l => ", link:"+l.toString+", seeOnly:"+seeOnly).getOrElse("")
 }
 

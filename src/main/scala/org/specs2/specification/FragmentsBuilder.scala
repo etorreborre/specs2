@@ -98,25 +98,27 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
     def overrideArgs(args: Arguments) = fs.overrideArgs(args)
   }
 
+  /** create a link directly on a specification */
+  def link(s: SpecificationStructure): Fragments                              = link(s.content)
+  def link(s: SpecificationStructure, ss: SpecificationStructure*): Fragments = link(s +: ss)
+  def link(ss: Seq[SpecificationStructure], dummy: Int = 0): Fragments        = link(ss.map(_.content))
+  def link(fs: Fragments): Fragments                                          = link(HtmlLink(fs), fs)
+  def link(fs: Fragments, fss: Fragments*): Fragments                         = link(fs +: fss)
+  def link(fss: Seq[Fragments]): Fragments                                    = ma(fss.map(link)).sum
   /** create a link directly on a specification, with a given link */
-  def link(s: SpecificationStructure): Fragments = link(s.content)
-  def link(f: Fragments): Fragments = link(HtmlLink(f), f)
-  /** create a link directly on a specification, with a given link */
-  def link(s: SpecificationStructure, ss: SpecificationStructure*): Fragments = link(s.content, ss.map(_.content):_*)
-  def link(f: Fragments, fs: Fragments*): Fragments = fs.foldLeft(link(f)) { (res, cur) => res ^ link(f) }
-  /** create a link directly on a specification, with a given link */
-  def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = link(htmlLink, s.content)
-  def link(htmlLink: HtmlLink, f: Fragments): Fragments = f.linkIs(htmlLink)
+  def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments          = link(htmlLink, s.content)
+  def link(htmlLink: HtmlLink, f: Fragments): Fragments                       = f.linkIs(htmlLink)
 
   /** create a html link without including the other specification fragments */
-  def see(s: SpecificationStructure): Fragments = see(s.content)
-  def see(f: Fragments): Fragments = see(HtmlLink(f), f)
-  /** create a link directly on a specification, with a given link */
-  def see(s: SpecificationStructure, ss: SpecificationStructure*): Fragments = see(s.content, ss.map(_.content):_*)
-  def see(f: Fragments, fs: Fragments*): Fragments = fs.foldLeft(see(f)) { (res, cur) => res ^ see(f) }
-  /** create a link directly on a specification, with a given link */
-  def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments = see(htmlLink, s.content)
-  def see(htmlLink: HtmlLink, f: Fragments): Fragments = f.seeIs(htmlLink)
+  def see(s: SpecificationStructure, ss: SpecificationStructure*): Fragments  = see(s.content, ss.map(_.content):_*)
+  def see(ss: Seq[SpecificationStructure], dummy: Int = 0): Fragments         = see(ss.map(_.content))
+  def see(s: SpecificationStructure): Fragments                               = see(s.content)
+  def see(fs: Fragments): Fragments                                           = see(HtmlLink(fs), fs)
+  def see(fs: Fragments, fss: Fragments*): Fragments                          = see(fs +: fss)
+  def see(fss: Seq[Fragments]): Fragments                                     = ma(fss.map(see)).sum
+  /** create a see-only link directly on a specification, with a given link */
+  def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments            = see(htmlLink, s.content)
+  def see(htmlLink: HtmlLink, fs: Fragments): Fragments                        = fs.seeIs(htmlLink)
 
   /** create markdown links from string + spec identification */
   implicit def specIdentificationMarkdownLink(s: String): SpecIdentificationMarkdownLink = new SpecIdentificationMarkdownLink(s)
@@ -147,17 +149,17 @@ class FragmentsFragment(fs: =>Fragments) {
   def fragments = fs
   def ^(t: String) = fs add Text(t)
   def ^(f: Fragment) = f match {
-    case s @ SpecStart(_,_,_,_,_) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
+    case s @ SpecStart(_,_,_) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
     case _                        => fs add f
   }
   def ^(other: Seq[Fragment]) = fs add other
 
   def ^(other: Fragments) = {
     other match {
-      case Fragments(t, m, a, Some(l), so, i)    => fs add other.fragments
-      case Fragments(Some(t), m, a, None, so, i) => (fs add other.middle).specTitleIs(t).overrideArgs(a)
-      case Fragments(None, m, a, None, so, i)    => (fs add other.middle).overrideArgs(a)
-      case _                                     => fs add other.middle
+      case Fragments(t, m, a, Linked(Some(l), so, h))    => fs add other.fragments
+      case Fragments(Some(t), m, a, Linked(None, so, h)) => (fs add other.middle).specTitleIs(t).overrideArgs(a)
+      case Fragments(None, m, a, Linked(None, so, h))    => (fs add other.middle).overrideArgs(a)
+      case _                                             => fs add other.middle
     }
   }
 

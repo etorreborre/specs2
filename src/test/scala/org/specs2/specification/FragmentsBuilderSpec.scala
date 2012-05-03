@@ -42,6 +42,9 @@ SpecStart/SpecEnd
     "A specification can be linked"                                                                                     ^
       "and included"                                                                                                    ! startEnd().e11^
       "or just referenced"                                                                                              ! startEnd().e12^
+      "and hidden, it'll be executed but not reported"                                                                  ! startEnd().e13^
+                                                                                                                        p^
+    "Several specifications can be linked at once"                                                                      ! startEnd().e14^
                                                                                                                         endp^
                                                                                                                         """
 How to create an Example
@@ -80,6 +83,8 @@ Other elements
     lazy val content4 = new Specification { def is = args(include="t1") ^ "title".title ^ args(include="t2") ^ "text" }.content
     lazy val parentSpec1 = new Specification { def is = "e1" ^ link(spec1) }
     lazy val parentSpec2 = new Specification { def is = "e1" ^ see(spec2) }
+    lazy val parentSpec3 = new Specification { def is = "e1" ^ link(spec1.hide) }
+    lazy val parentSpec4 = new Specification { def is = "e1" ^ link(spec1, spec2) }
 
     trait CustomSpecification extends Specification {
       override def map(fs: =>Fragments) = "title".title ^ fs ^ "end of the spec"
@@ -97,10 +102,17 @@ Other elements
     def e8 = (content3.start.arguments.xonly must beTrue) and (content3.start.arguments.include must_== "t1")
     def e9 = content4.start.arguments.include must_== "t2"
     def e10 = content5.start.arguments.sequential must beTrue
+
     def e11 = parentSpec1.content.fragments.toList must
-              beLike { case SpecStart(_,_,_,_,_) :: Text(_) :: SpecStart(_,_,Some(l), false, false) :: rest => ok }
+              beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, false)) :: rest => ok }
     def e12 = parentSpec2.content.fragments.toList must
-              beLike { case SpecStart(_,_,_,_,_) :: Text(_) :: SpecStart(_,_,Some(l), true, false) :: rest => ok }
+              beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), true, false)) :: rest => ok }
+    def e13 = parentSpec3.content.fragments.toList must
+              beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, true)) :: rest => ok }
+    def e14 = parentSpec4.content.fragments.toList must
+              beLike { case SpecStart(_,_,_) :: Text(_) ::
+                         SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_) ::
+                         SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_) :: rest => ok }
   }
 
   case class ex() {

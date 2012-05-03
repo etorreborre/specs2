@@ -118,9 +118,9 @@ trait NestedBlocks {
   }
   
   def fragmentsToSpecBlock = (f: Fragment) => f match {
-    case SpecStart(_,_,_,_,_) => BlockStart(f)
-    case SpecEnd(_)           => BlockEnd(f)
-    case other                => BlockBit(f)
+    case SpecStart(_,_,_) => BlockStart(f)
+    case SpecEnd(_)       => BlockEnd(f)
+    case other            => BlockBit(f)
   }
 
   def executedFragmentsToSpecBlock = (f: ExecutedFragment) => f match {

@@ -2,8 +2,8 @@ package org.specs2
 package mutable
 import execute._
 import main._
-import specification.{Action, Fragment, Step, SpecificationStructure, FormattingFragments => FF, Fragments, FragmentsFragment, Example, GivenThen}
 import specification.RegexStep._
+import specification.{HtmlLink, Action, Fragment, Step, SpecificationStructure, FormattingFragments => FF, Fragments, FragmentsFragment, Example, GivenThen}
 
 /**
  * Adding new implicits to support specs-like naming: "the system" should "do this" in { ... }
@@ -98,14 +98,10 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   /**
    * add a new link to the Fragments
    */
-  override def link(f: Fragments) = addFragments(super.link(f))
-  override def link(f: Fragments, fs: Fragments*) = addFragments(super.link(f, fs:_*))
-  override def link(s: SpecificationStructure) = addFragments(super.link(s))
-  override def link(s: SpecificationStructure, ss: SpecificationStructure*) = addFragments(super.link(s, ss:_*))
-  override def see(f: Fragments) = addFragments(super.see(f))
-  override def see(f: Fragments, fs: Fragments*) = addFragments(super.see(f, fs:_*))
-  override def see(s: SpecificationStructure) = addFragments(super.see(s))
-  override def see(s: SpecificationStructure, ss: SpecificationStructure*) = addFragments(super.see(s, ss:_*))
+  override def link(fss: Seq[Fragments]): Fragments               = addFragments(super.link(fss))
+  override def link(htmlLink: HtmlLink, fs: Fragments): Fragments = addFragments(super.link(htmlLink, fs))
+  override def see(fss: Seq[Fragments]): Fragments                = addFragments(super.see(fss))
+  override def see(htmlLink: HtmlLink, fs: Fragments): Fragments  = addFragments(super.see(htmlLink, fs))
 
   /**
    * Create GWT fragments with the << syntax for a mutable specification
