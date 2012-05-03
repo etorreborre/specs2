@@ -39,6 +39,6 @@ trait SystemExit {
   /**
    * this method can be overriden for testing
    */
-  protected def exitWith(status: Int) = System.exit(status)
+  protected def exitWith(status: Int) { System.exit(status) }
 
 }

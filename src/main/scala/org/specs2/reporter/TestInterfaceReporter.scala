@@ -82,6 +82,14 @@ trait HandlerEvents {
     override def result = Result.Skipped
     override def error = null
   }
+  def result(r: execute.Result): NamedEvent = r match {
+    case s @ execute.Success(_, _)             => succeeded(r.message)
+    case f @ execute.Failure(_,_,_,_)          => failure(r.message, f.exception)
+    case e @ execute.Error(_,_)                => error(r.message, e.exception)
+    case p @ execute.Pending(_)                => skipped(r.message)
+    case k @ execute.Skipped(_,_)              => skipped(r.message)
+    case d @ execute.DecoratedResult(dec, res) => result(res)
+  }
 }
 object HandlerEvents extends HandlerEvents
 

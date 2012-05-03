@@ -56,8 +56,11 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     }
   }
   
-  def runFilesRunner(className: String, handler: EventHandler, args: Array[String]) =
-    toRun[FilesRunner](className, handler).right.toOption.map(_.main(args))
+  def runFilesRunner(className: String, handler: EventHandler, args: Array[String]) {
+    toRun[FilesRunner](className, handler).right.toOption.toSeq.flatMap(_.run(args)).flatMap(_.issues).foreach { issue =>
+      handler.handle(result(issue.result))
+    }
+  }
 
   private def toRun[T <: AnyRef : Manifest](className: String, handler: EventHandler): Either[Throwable, T] = {
     val runner: Either[Throwable, T] = create[T](className + "$", loader) match {
