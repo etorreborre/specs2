@@ -10,9 +10,10 @@ import internal.scalaz.Scalaz._
  */
 trait HtmlExporting extends Exporting with HtmlPrinter with HtmlFileWriter {
 
-  def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
+  def export(implicit arguments: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
     val executed = spec.execute
-    print(executed) |> writeFiles(args <| executed.arguments)
+    val args = arguments <| executed.arguments
+    print(executed)(args) |> writeFiles(args)
     executed
   }
 }
