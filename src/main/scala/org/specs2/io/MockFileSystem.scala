@@ -1,11 +1,13 @@
 package org.specs2
 package io
-import scala.collection.mutable. { ListBuffer, Queue, HashMap }
+import scala.collection.mutable. { ListBuffer, HashMap }
 import control.Exceptions._
 import scala.xml.NodeSeq
 import scala.io.Source._
 import scala.xml.parsing.XhtmlParser
 import xml.Nodex._
+import java.io.File
+
 /**
  * The MockFileSystem trait mocks the FileSystem by storing a Map[path, content] representing the content of the FileSystem
  */
@@ -118,7 +120,7 @@ trait MockFileSystem extends FileSystem {
     this
   }
   
-  override def exists(path: String) = files.contains(path)
+  override def exists(path: String) = files.keys.exists(f => samePath(f, path))
   
   override def inputStream(filePath: String) = new java.io.InputStream {
     val reader = new java.io.StringReader(readFile(filePath))

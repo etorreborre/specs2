@@ -5,8 +5,11 @@ import java.io._
 import scala.xml.NodeSeq
 import control.Exceptions._
 import scala.xml.parsing._
+import scala.io.Source
 import scala.io.Source._
 import xml.Nodex._
+
+
 /**
  * The FileReader trait provides functions to read files
  * It can be overridden if necessary to mock that behaviour
@@ -54,13 +57,21 @@ trait FileReader {
    *
    * if the file contains several nodes, it wraps them up in a single artificial node
    */
-  def loadXhtmlFile(filePath: String, report: (Exception, String) => Unit = defaultLoadXhtmlFileReport) = tryo {
+  def loadXhtmlFile(filePath: String, report: (Exception, String) => Unit = defaultLoadXhtmlFileReport, sourceErrors: Boolean = true) = tryo {
     val fileContent = readFile(filePath)
     val xhtml = fromString("<e>"+fileContent+"</e>")
-    val result = (XhtmlParser(xhtml)\\"e")(0).child.reduceNodes
+    val result = (parse(xhtml, sourceErrors)\\"e")(0).child.reduceNodes
     result
   }(e => report(e, filePath)).getOrElse(NodeSeq.Empty)
 
+  private def parse(source: Source, sourceErrors: Boolean = true) = {
+    if (sourceErrors) XhtmlParser(source)
+    else new XhtmlParser(source) {
+      override def reportSyntaxError(pos: Int, str: String): Unit = ()
+    }.initialize.document
+  }
+
+  def silentLoadXhtmlFileReport          = (e: Exception, filePath: String) => ()
   private def defaultLoadXhtmlFileReport = (e: Exception, filePath: String) => { scala.Console.println("trying to load: "+filePath+"\n"); e.printStackTrace }
 
 }
