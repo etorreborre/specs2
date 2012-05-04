@@ -1,8 +1,6 @@
 package org.specs2
 package specification
 
-import specification.SpecName._
-
 class SpecNameSpec extends mutable.Specification {
   
   "A spec name can be built from a single string" >> { 
@@ -55,13 +53,13 @@ class SpecNameSpec extends mutable.Specification {
 
   "A SpecName can define a markdown link for its url" >> {
     "for a normal one" >> {
-      SpecName(this).markdownLink must_== "[SpecNameSpec](org.specs2.specification.SpecNameSpec.html)"
+      SpecName(this).markdownLink.toString must_== "[SpecNameSpec](org.specs2.specification.SpecNameSpec.html)"
     }
     "when the title contains spaces" >> {
-      SpecificationTitle("hello world").markdownLink must_== "[hello world](hello%20world.html)"
+      SpecificationTitle("hello world").markdownLink.toString must_== "[hello world](hello%20world.html)"
     }
     "with a specific title" >> {
-      SpecName(this).markdownLink("the spec") must_== "[the spec](org.specs2.specification.SpecNameSpec.html)"
+      SpecName(this).markdownLink("the spec").toString must_== "[the spec](org.specs2.specification.SpecNameSpec.html)"
     }
   }
 }
