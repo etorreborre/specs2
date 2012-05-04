@@ -23,7 +23,7 @@ trait HtmlFileWriter extends OutputDir {
 
   protected def checkUrls(args: Arguments, others: Seq[HtmlFile]) = (file: HtmlFile) => {
     if (args.report.checkUrls) {
-      val result = HtmlUrls.check(file.xml, Map(others.map(f => (f.url, f.xml)):_*), outputDir)
+      val result = HtmlUrls.check(file.xml, Map(others.map(f => (f.url, f.xml)):_*), outputDir, file.url)
       if (!result.isSuccess) println(result)
     }
     file

@@ -6,6 +6,7 @@ import control._
 import main.{ Arguments, Diffs }
 import text.Markdown._
 import text._
+import io.Paths._
 import NotNullStrings._
 import text.Trim._
 import execute._
@@ -21,14 +22,16 @@ import html.Htmlx._
  *
  */
 private[specs2]
-case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, baseDir: String = "./") extends HtmlReportOutput { outer =>
+case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "") extends HtmlReportOutput { outer =>
 
   /**
    * start of the output
    */
-  private[specs2] lazy val blank = new HtmlResultOutput(NodeSeq.Empty, outer.baseDir)
-  /** set the base directory */
-  def baseDirIs(dir: String) = copy(baseDir = dir)
+  private[specs2] lazy val blank = new HtmlResultOutput(NodeSeq.Empty, outer.filePath)
+  /** set the file path of the file being written */
+  def filePathIs(path: String) = copy(filePath = path)
+  /** base directory for this file path */
+  def baseDir = filePath.baseDir
   /** print the NodeSeq inside the html tags */
   def printHtml(n: =>NodeSeq) = print(<html>{n}</html>)
   /** print the NodeSeq inside the body tags, with anchors for header tags */
@@ -79,7 +82,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, baseDir: String = "./"
    */
   def printLink(link: HtmlLink, level: Int = 0, stats: Stats = Stats(), hidden: Boolean = false) = {
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
-    val printLink = wiki(link.beforeText) ++ <a href={link.url} tooltip={link.tip}>{wiki(link.linkText)}</a> ++ wiki(link.afterText)
+    val printLink = wiki(link.beforeText) ++ <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{wiki(link.linkText)}</a> ++ wiki(link.afterText)
 
     link match {
       case slink @ SpecHtmlLink(name, before, l, after, tip) => {

@@ -21,7 +21,7 @@ import io.Paths._
 private[specs2]
 case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLine] = Vector()) {
   def print(out: =>HtmlReportOutput, toc: NodeSeq) = {
-    def output = out.baseDirIs(baseDir)
+    def output = out.filePathIs(link.url)
     output.printHtml(
 		  output.printHead.
 		         printBody {
@@ -32,7 +32,6 @@ case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLin
       )
   }
 
-  def baseDir = link.url.baseDir
   def printLines(out: HtmlReportOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
   
   def add(line: HtmlLine) = copy(lines = lines :+ line)

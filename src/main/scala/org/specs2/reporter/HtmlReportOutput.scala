@@ -16,8 +16,8 @@ import control.StackTraceFilter
 trait HtmlReportOutput {
   /** @return the build html code */
 	def xml: NodeSeq
-  /** set the base directory */
-  def baseDirIs(dir: String): HtmlReportOutput
+  /** set the file path for the current output */
+  def filePathIs(path: String): HtmlReportOutput
   /** enclose the nodes inside <html/> tags */
 	def printHtml(n: =>NodeSeq): HtmlReportOutput
   /** enclose the nodes inside <body/> tags */

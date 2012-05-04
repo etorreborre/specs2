@@ -7,6 +7,7 @@ import java.net.{HttpURLConnection, URL}
 import internal.scalaz.Scalaz
 import Scalaz._
 import control.Exceptions._
+import io.Paths._
 import text.Trim._
 import html.Htmlx._
 import execute.{Success, Failure, Result}
@@ -16,11 +17,12 @@ private[specs2]
 trait HtmlUrls extends FileSystem {
 
   /**
-   * check all the urls referenced in <a href="..."/> nodes of a html document
+   * check all the urls referenced in <a href="..."/> nodes of a html document having a given filePath.
+   *
    * @return a Result, Success or Failure summarizing all checks. In the case of a Failure, only the failure messages are kept
    */
-  def check(html: NodeSeq, others: Map[String, NodeSeq] = Map(), rootPath: String = "."): Result =
-    urls(html).foldMap(isAliveResult(_, html, others, rootPath)).mapMessage(_.replace("; ", "\n"))
+  def check(html: NodeSeq, others: Map[String, NodeSeq] = Map(), rootPath: String = ".", filePath: String = ""): Result =
+    urls(html, filePath).foldMap(isAliveResult(_, html, others, rootPath)).mapMessage(_.replace("; ", "\n"))
 
   /**@return true if it is possible to connect to this url through http or locally */
   def isAlive(url: String, html: NodeSeq = NodeSeq.Empty, others: Map[String, NodeSeq] = Map(), rootPath: String = "."): Boolean =
@@ -42,7 +44,7 @@ trait HtmlUrls extends FileSystem {
 
   protected def isAliveFileResult(url: String,
                                   others: Map[String, NodeSeq],
-                                  rootPath: String) = aliveResult(rootPath + "/" + url, isAliveFile(url, others, rootPath))
+                                  rootPath: String) = aliveResult(rootPath.dirPath + url, isAliveFile(url, others, rootPath))
 
   protected def isAliveAnchorResult(url: String, html: NodeSeq) = aliveResult(url, isAliveAnchor(url, html))
 
@@ -67,7 +69,7 @@ trait HtmlUrls extends FileSystem {
 
   /**@return true if the url can be accessed on the file system */
   def isAliveFile(url: String, others: Map[String, NodeSeq], root: String) =
-    others.keys.exists(_ == url) || exists(root + "/" + url)
+    others.keys.exists(o => o.samePathAs(url)) || exists(root.dirPath + url)
 
   /**@return true if the url is an anchor in the document */
   def isAliveAnchor(url: String, html: NodeSeq) = (html \\ "a").map(a => a.attribute("name").mkString).exists(_ == url.removeFirst("#"))
@@ -85,9 +87,9 @@ trait HtmlUrls extends FileSystem {
   def isAliveAnchorInFile(url: String, others: Map[String, NodeSeq], root: String) = {
     val (file, anchor) = (url.split("#")(0), url.split("#")(1))
     isAliveFile(file, others, root) &&
-      (isAliveAnchor(anchor, others.get(file).getOrElse(NodeSeq.Empty)) ||
-        isAliveAnchor(anchor, loadXhtmlFile(root + "/" + file)) ||
-        isAliveAnchor(anchor, readFile(root + "/" + file)))
+      (isAliveAnchor(anchor, others.find { case (k, v) => k.samePathAs(file) }.map(_._2).getOrElse(NodeSeq.Empty)) ||
+        isAliveAnchor(anchor, loadXhtmlFile(root.dirPath+file, silentLoadXhtmlFileReport, sourceErrors = false)) ||
+        isAliveAnchor(anchor, readFile(root.dirPath+file)))
   }
 }
 

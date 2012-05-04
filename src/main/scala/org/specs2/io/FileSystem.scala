@@ -228,6 +228,9 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
       copyDir(url, outputDir + src)
   }
 
+  /** @return true if 2 paths are the same according to their canonical representation */
+  def samePath(p1: String, p2: String) = new File(p1).getCanonicalPath == new File(p2).getCanonicalPath
+
   /**
    * @return a path that should be valid on all plateforms (@see issue 148 of the specs project)
    */

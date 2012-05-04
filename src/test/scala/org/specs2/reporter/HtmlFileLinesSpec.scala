@@ -14,7 +14,7 @@ class HtmlFileLinesSpec extends Specification { def is =
 
   lazy val spec1: Fragments = "ex1" ! failure ^ "a " ~  ("successfull spec", successfulSubSpec) ^ end
   lazy val spec2: Fragments = "ex1" ! failure ^ "a " ~/ ("successfull spec", successfulSubSpec) ^ end
-  lazy val spec3: Fragments = "title".title(filePath="different.html") ^ "ex1" ! ok
+  lazy val spec3: Fragments = "title".title.urlIs("different.html") ^ "ex1" ! ok
 
   lazy val successfulSubSpec = new Specification { def is = "ex1" ! success }
 
