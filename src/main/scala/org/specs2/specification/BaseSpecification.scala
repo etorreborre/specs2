@@ -25,7 +25,7 @@ trait SpecificationInclusion { this: FragmentsBuilder =>
   def include(f: Fragments, fs: Fragments*): FragmentsFragment = include(ma(f +: fs).sum)
   implicit def include(s: SpecificationStructure): FragmentsFragment = include(s.content)
   def include(s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(s.content, ss.map(_.content):_*)
-  def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(s.content)
+  def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(args, s.content)
   def include(args: Arguments, s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(args, s.content, ss.map(_.content):_*)
   def include(args: Arguments, f: Fragments): FragmentsFragment = include(f.overrideArgs(args))
   def include(args: Arguments, f: Fragments, fs: Fragments*): FragmentsFragment = include(ma(f +: fs).sum.overrideArgs(args))
@@ -47,7 +47,7 @@ trait SpecificationStructure {
    * the Specification namespace.
    * SpecStart and SpecEnd fragments are added if the user haven't inserted any
    */
-  private[specs2] lazy val content: Fragments = Fragments.withSpecName(map(is), this)
+  private[specs2] lazy val content: Fragments = map(Fragments.withSpecName(is, this))
 }
 
 /**

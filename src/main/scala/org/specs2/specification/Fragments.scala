@@ -29,6 +29,9 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   private def prepend(e: Fragment) = copy(middle = e +: middle)
   private def append(e: Fragment) = copy(middle = middle :+ e)
 
+  def urlIs(url: String)         = copy(specTitle = specTitle.map(_.urlIs(url)),     linked = linked.urlIs(url))
+  def baseDirIs(dir: String)     = copy(specTitle = specTitle.map(_.baseDirIs(dir)), linked = linked.baseDirIs(dir))
+
   def linkIs(htmlLink: HtmlLink) = copy(linked = linked.linkIs(htmlLink))
   def seeIs(htmlLink: HtmlLink)  = copy(middle = Vector(), linked = linked.seeIs(htmlLink))
   def hide                       = copy(linked = linked.linkIs(HtmlLink(this)).hide)
@@ -37,8 +40,8 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def examples: Seq[Example] = fragments.collect(isAnExample)
 
   def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
-  def map(function: Fragment => Fragment) = copy(middle = middle.map(function))
-  import StandardFragments._
+  def map(function: Fragment => Fragment) = Fragments.create(fragments.map(function):_*)
+
   override def toString = fragments.mkString("\n")
 
   def specName = start.specName
@@ -111,6 +114,9 @@ case class Linked(link: Option[HtmlLink] = None, seeOnly: Boolean = false, hidde
   def isSeeOnlyLink = isLink && seeOnly
   def isIncludeLink = isLink && !seeOnly
   def isLink        = link.isDefined
+
+  def urlIs(url: String)     = copy(link = link.map(_.urlIs(url)))
+  def baseDirIs(dir: String) = copy(link = link.map(_.baseDirIs(dir)))
 
   def linkIs(htmlLink: HtmlLink) = copy(link = Some(htmlLink))
   def seeIs(htmlLink: HtmlLink)  = copy(link = Some(htmlLink), seeOnly = true)

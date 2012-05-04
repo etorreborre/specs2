@@ -43,7 +43,6 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
   implicit def title(s: String): SpecTitle = new SpecTitle(s)
   class SpecTitle(name: String) {
     def title = Fragments(SpecName(name))
-    def title(filePath: String) = Fragments(SpecName(name, filePath))
   }
   /**
    * Example creation
@@ -139,6 +138,7 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
   override def title(s: String): SpecTitle = super.title(s)
   override def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = super.stringToHtmlLinkFragments(s)
   override def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = super.stringToHtmlLinkFragments2(s)
+  override def specificationStructureToFragments(s: SpecificationStructure): AsFragments = super.specificationStructureToFragments(s)
 }
 
 /**

@@ -60,6 +60,10 @@ case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), lin
   def withName(n: SpecName) = copy(specName = specName.overrideWith(n))
   /** @return a non-linked start*/
   def unlink = SpecStart(specName, arguments)
+  /** set the url for the generated documentation */
+  def urlIs(url: String) = copy(specName = specName.urlIs(url), linked = linked.urlIs(url))
+  /** set the base directory for the generated documentation */
+  def baseDirIs(dir: String) = copy(specName = specName.baseDirIs(dir), linked = linked.baseDirIs(dir))
 }
 
 /**
