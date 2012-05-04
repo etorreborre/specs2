@@ -33,8 +33,7 @@ class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls with 
     check(<html><a href="user%20guide.html"></a></html>) must beSuccessful
   }
   "it is possible to check local links of a relative html document" >> {
-    addFile("./guide/user.html", """<a name="spec+content"/>""")
-    check(<html><a href="../guide/user.html"></a></html>, Map("guide/user.html" -> NodeSeq.Empty)) must beSuccessful
+    check(<html><a href="../guide/price.html"></a></html>, Map("guide/price.html" -> NodeSeq.Empty), filePath = "guide/user.html") must beSuccessful
   }
   "only the failure messages are kept" >> {
     check {

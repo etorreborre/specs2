@@ -26,9 +26,7 @@ trait Paths { outer =>
   def uriEncode(url: String) = tryo(new URI("http", "", "/"+url, null).toASCIIString.replace("http:///", "")).getOrElse(url)
   def isRelative(s: String) = Seq("./", "../").exists(s.unixize.startsWith)
   def relativeTo(p1: String, p2: String) = (p2.baseDir+p1).normalize
-  def unrelativeTo(p1: String, p2: String) = if (p1.isRelative)
-    p2.parentDir + p1.fileName
-  else p1
+  def unrelativeTo(p1: String, p2: String) = if (p1.isRelative) p2.parentDir + p1.fileName else p1
 }
 
 case class Path(s: String) {
