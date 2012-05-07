@@ -18,6 +18,10 @@ import reporter._
 trait FilesRunner extends SpecificationsFinder with SystemExit {
 
   def main(arguments: Array[String]) {
+    exitSystem(run(arguments))
+  }
+
+  def run(arguments: Array[String]) = {
     implicit val args = createArguments(arguments)
     beforeExecution
 
@@ -25,20 +29,21 @@ trait FilesRunner extends SpecificationsFinder with SystemExit {
     if (reporters.isEmpty)
       println("No file to run because the arguments don't contain 'console' or 'html'\n")
 
-    val executedSpecs = reporters flatMap  { r =>
+    reporters flatMap  { r =>
       val executed = specs.map(execute(_, r))
       afterExecution(specs)
       executed
     }
-    exitSystem(executedSpecs)
   }
 
   /** print a message before the execution */
-  protected def beforeExecution(implicit args: Arguments) = println("\nExecuting specifications matching "+args.specName+" in "+FromSource.srcDir+"\n")
+  protected def beforeExecution(implicit args: Arguments) {
+    println("\nExecuting specifications matching " + args.specName + " in " + FromSource.srcDir + "\n")
+  }
   /** report a specification */
   protected def execute(s: SpecificationStructure, r: Reporter)(implicit args: Arguments) = r.report(s)
   /** print a message after the execution based on the number of specifications */
-  protected def afterExecution(specs: Seq[SpecificationStructure])(implicit args: Arguments) = {
+  protected def afterExecution(specs: Seq[SpecificationStructure])(implicit args: Arguments) {
     if (specs.size > 1)
       println("Finished the execution of "+specs.size+" specifications\n")
     else

@@ -16,7 +16,8 @@ import control.StackTraceFilter
 trait HtmlReportOutput {
   /** @return the build html code */
 	def xml: NodeSeq
-
+  /** set the file path for the current output */
+  def filePathIs(path: String): HtmlReportOutput
   /** enclose the nodes inside <html/> tags */
 	def printHtml(n: =>NodeSeq): HtmlReportOutput
   /** enclose the nodes inside <body/> tags */
@@ -37,7 +38,7 @@ trait HtmlReportOutput {
   def printSpecStart(name: SpecName, stats: Stats): HtmlReportOutput
 
   /** print a link to another specification */
-  def printLink(link: HtmlLink, level: Int = 0, stats: Stats): HtmlReportOutput
+  def printLink(link: HtmlLink, level: Int = 0, stats: Stats = Stats(), hidden: Boolean = false): HtmlReportOutput
   /** print some text with an icon */
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
   /** print an issue with an icon */

@@ -32,13 +32,14 @@ sealed trait Fragment {
  *    That name stores a unique id for the specification
  *  - the arguments for that specification
  */
-case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), link: Option[HtmlLink] = None, seeOnly: Boolean = false) extends Fragment {
+case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), linked: Linked = Linked()) extends Fragment {
+
   def name = specName.name
   def title = specName.title
   override def matches(s: String) = name matches s
-  override def toString = "SpecStart("+title+linkToString+")"
 
-  def linkToString = link.map(l => ", link:"+l.toString+", seeOnly:"+seeOnly).getOrElse("")
+  override def toString = "SpecStart("+title+linkToString+")"
+  def linkToString = linked.linkToString
 
   /** the new arguments take precedence over the old ones */
   def withArgs(args: Arguments) = copy(arguments = args)
@@ -46,15 +47,23 @@ case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), lin
   def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
   
   /** @return true if this spec starts only contains a link referencing another specification */
-  def isSeeOnlyLink = isLink && seeOnly
+  def isSeeOnlyLink = linked.isSeeOnlyLink
   /** @return true if this spec starts only contains a link including another specification */
-  def isIncludeLink = isLink && !seeOnly
+  def isIncludeLink = linked.isIncludeLink
   /** @return true if this spec starts only contains a link to another specification */
-  def isLink        = link.isDefined
+  def isLink        = linked.isLink
+  /** @return true if this spec must not be displayed */
+  def hidden        = linked.hidden
+  /** @return the html link if any */
+  def link          = linked.link
   /** The name of the specification can be overriden with a user defined title */
   def withName(n: SpecName) = copy(specName = specName.overrideWith(n))
   /** @return a non-linked start*/
   def unlink = SpecStart(specName, arguments)
+  /** set the url for the generated documentation */
+  def urlIs(url: String) = copy(specName = specName.urlIs(url), linked = linked.urlIs(url))
+  /** set the base directory for the generated documentation */
+  def baseDirIs(dir: String) = copy(specName = specName.baseDirIs(dir), linked = linked.baseDirIs(dir))
 }
 
 /**

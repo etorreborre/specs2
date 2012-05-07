@@ -181,7 +181,7 @@ class MutableSpecWithContextAndScalaCheck extends mutable.Specification with Sca
     }.set(minTestsOk -> 200)
   }
 
-  trait SC extends mutable.Before {
+  trait SC extends mutable.Before with MockOutput {
     val aString = "xxx"
     def before { println("before") }
   }

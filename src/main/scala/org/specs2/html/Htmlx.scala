@@ -6,7 +6,8 @@ import transform.{RuleTransformer, RewriteRule}
 import org.specs2.internal.scalaz.{ TreeLoc, Scalaz, Show }
 import Scalaz._
 import xml.Nodex._
-import specification.SpecName
+import java.net.URLDecoder
+import io.Paths._
 
 /**
  * This trait provide additional methods on a NodeSeq or a Node representing an html document
@@ -139,7 +140,15 @@ trait Htmlx { outer =>
   }
 
   /** @return the href urls in <a/> elements */
-  def urls(ns: NodeSeq): Seq[String] = (ns \\ "a").flatMap(a => a.attribute("href").map(_.mkString))
+  def urls(ns: NodeSeq, filePath: String = ""): Seq[String] = {
+    def decode(href: String) = {
+      val splitted = href.split("#").toSeq
+      val url    = URLDecoder.decode(splitted(0), "UTF-8").unrelativeTo(filePath)
+      val anchor = splitted.drop(1).lastOption.map(anchor => "#"+anchor).getOrElse("")
+      url + anchor
+    }
+    (ns \\ "a").flatMap(a => a.attribute("href").map(href => decode(href.mkString)))
+  }
 
 }
 

@@ -69,7 +69,7 @@ trait TextPrinter {
       case text @ ExecutedText(s, _)           => PrintText(text)
       case par @ ExecutedBr(_)                 => PrintBr()
       case end @ ExecutedSpecEnd(_,_, s)       => PrintSpecEnd(end, s)
-      case fragment                            => PrintOther(fragment)
+      case f                                   => PrintOther(f)
     }
   }
     
@@ -90,9 +90,11 @@ trait TextPrinter {
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
-      else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
-      out.printLine("")(args)
+      if (!start.hidden) {
+        if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
+        else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
+        out.printLine("")(args)
+      }
     }
   }
   case class PrintResult(r: ExecutedResult)           extends Print {

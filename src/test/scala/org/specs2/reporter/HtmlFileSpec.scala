@@ -68,7 +68,7 @@ class HtmlFileSpec extends Specification with Mockito { def is =
      */
     override protected def storeStats = (fn: (ExecutedFragment, SpecName)) => {
       fn match {
-        case (ExecutedSpecStart(start @ SpecStart(n,_,_,true), loc, st), name) if n.title == "failedSubSpec" =>
+        case (ExecutedSpecStart(start @ SpecStart(n,_,_), loc, st), name) if n.title == "failedSubSpec" && start.isSeeOnlyLink =>
           ExecutedSpecStart(start, loc, Stats(failures = 1))
         case (fragment, name) => fragment
       }

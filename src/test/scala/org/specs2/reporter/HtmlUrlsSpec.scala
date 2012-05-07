@@ -4,6 +4,7 @@ package reporter
 import mutable.Specification
 import matcher.ResultMatchers
 import io.MockFileSystem
+import scala.xml.NodeSeq
 
 class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls with MockFileSystem {
   skipAllIf(isDead("http://www.google.com"))
@@ -26,6 +27,13 @@ class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls with 
       addFile("./guide.html", """<a name="spec+content"/>""")
       check(<html><a href="guide.html#spec+content"></a></html>) must beSuccessful
     }
+  }
+  "it is possible to check local links of an html document, with spaces" >> {
+    addFile("./user guide.html", """<a name="spec+content"/>""")
+    check(<html><a href="user%20guide.html"></a></html>) must beSuccessful
+  }
+  "it is possible to check local links of a relative html document" >> {
+    check(<html><a href="../guide/price.html"></a></html>, Map("guide/price.html" -> NodeSeq.Empty), filePath = "guide/user.html") must beSuccessful
   }
   "only the failure messages are kept" >> {
     check {

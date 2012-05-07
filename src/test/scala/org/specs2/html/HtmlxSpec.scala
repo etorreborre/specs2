@@ -23,6 +23,7 @@ class HtmlxSpec extends Specification with HtmlDocuments { def is =
                                                                                                                         p^
   "urls extracts all urls from <a/> nodes"                                                                              ^
     { urls(<a href="www.google.com">hi</a>) must_== Seq("www.google.com") }                                             ^
+                                                                                                                        p^
                                                                                                                         end
 
   def `headersToTree builds a Tree of headers from a html document` =

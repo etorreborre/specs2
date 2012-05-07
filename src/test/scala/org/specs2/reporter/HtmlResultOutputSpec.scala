@@ -30,10 +30,9 @@ class HtmlResultOutputSpec extends Specification with DataTables { def is =
   
   case class links() {
     val out = new HtmlResultOutput
-	val specLink = out.printLink(SpecHtmlLink(SpecName("name"), "before", "link", "after", "tip"), 0, Stats())
-	
+	  val specLink    = out.printLink(SpecHtmlLink(SpecName("name"), "before", "link", "after", "tip"), 0, Stats())
+
     def e1 = specLink.xml must \\("subtoc", "specId")
-  
   }
 
   type Out = HtmlReportOutput

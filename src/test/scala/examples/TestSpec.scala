@@ -1,5 +1,0 @@
-package examples
-
-class TestSpec {
-
-}

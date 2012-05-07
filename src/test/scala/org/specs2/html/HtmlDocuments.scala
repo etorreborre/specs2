@@ -3,7 +3,11 @@ package html
 
 trait HtmlDocuments {
 
-  val aBodyWithHeaders           = <body><h1>title</h1>text with <h2>a header</h2></body>
+  val aBodyWithHeaders           =
+    <body>
+      <h1>title</h1>text with
+      <h2>a header</h2>
+    </body>
 
   val aBodyWithHeadersAndASubtoc =
     <body>

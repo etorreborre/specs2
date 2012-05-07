@@ -505,7 +505,9 @@ In order to create a User Guide such as this one, you might want the included sp
 
       link(new QuickStart)
 
-This declaration will include the child specification so it is executed when the parent specification is executed. However during the reporting, only a Html link will be created in the parent file, referencing a separate file for the children specification.
+This declaration will include the child specification so it is executed when the parent specification is executed. However during the reporting, only a Html link will be created in the parent file, referencing a separate file for the children specification. On the other hand if you "hide" the specification, the link will not be printed out:
+
+      link((new QuickStart).hide)
 
 ###### Html Link
 
@@ -540,6 +542,16 @@ This will generate a html link in the main specification based on the referenced
       "text to highlight" ~/ specification
       "text to highlight" ~/ (specification, "after text")
       "text to highlight" ~/ (specification, "after text", "tooltip")
+
+#### Markdown url
+
+If you just want to reference the url of the html page that's being generated for a given specification in a paragraph of text, you can use the `markdownUrl` method:
+
+      "For more information you can read "+DetailedSpec.markdownUrl
+      // or
+      "For more information you can read "+DetailedSpec.markdownUrl("the detailed specification")
+      // or
+      "For more information you can read "+"the detailed specification".markdownUrl(DetailedSpec)
 
 ### Contexts
 
@@ -1144,6 +1156,8 @@ Those are all the methods which you can use to create fragments in a unit specif
  * `title`: give a title to the Specification
 
         "My spec title".title
+        // file path can be used to specify a different path for the html reporting
+        "My spec title".title(filePath = "com/MySpec.html")
 
  * `args`: create arguments for the specification
 

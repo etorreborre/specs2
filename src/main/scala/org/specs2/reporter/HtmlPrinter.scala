@@ -15,6 +15,7 @@ import Statistics._
 import Levels._
 import SpecsArguments._
 import scala.xml.NodeSeq
+import io.Paths._
 
 /**
  * The Html printer is used to create an Html report of an executed specification.
@@ -64,15 +65,17 @@ trait HtmlPrinter {
    * @return a global toc from the Tree of html files
    */
   def createToc(htmlFiles: Tree[HtmlLinesFile])(implicit args: Arguments) = {
+    val root = htmlFiles.rootLabel
     def tocItems(tree: Tree[HtmlLinesFile]): NodeSeq = {
-      val root = tree.rootLabel
-      tocItemList(body    = root.printLines(output).xml,
-                  url     = root.link.url,
-                  id      = root.specId,
+      val current = tree.rootLabel
+      tocItemList(body    = current.printLines(output).xml,
+                  rootUrl = root.link.url,
+                  url     = current.link.url,
+                  id      = current.specId,
                   subTocs = Map(tree.subForest.map(subSpec => (subSpec.rootLabel.specId, tocItems(subSpec))):_*))
     }
-    if (args.report.notoc) TreeToc(htmlFiles.rootLabel.specId, NodeSeq.Empty)
-    else                   TreeToc(htmlFiles.rootLabel.specId, tocItems(htmlFiles))
+    if (args.report.notoc) TreeToc(root.specId, NodeSeq.Empty)
+    else                   TreeToc(root.specId, tocItems(htmlFiles))
   }
 
   /**
