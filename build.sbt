@@ -20,8 +20,7 @@ resolvers ++= Seq(Opts.resolver.sonatypeReleases, Opts.resolver.sonatypeSnapshot
 libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.specs2" % "specs2-scalaz-core_2.10.0-M3" % "6.0.1",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional",
-  if (scala_version contains "-1") "org.scalacheck" % "scalacheck_2.9.1" % "1.9" % "optional"
-  else                             "org.scalacheck" %% "scalacheck" % "1.9" % "optional",
+  "org.scalacheck" % "scalacheck_2.9.2" % "1.9" % "optional",
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
   "org.mockito" % "mockito-all" % "1.9.0" % "optional",
