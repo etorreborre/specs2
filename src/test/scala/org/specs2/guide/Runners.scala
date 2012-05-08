@@ -70,7 +70,7 @@ From inside a specification, the available arguments are the following:
  `diffs`         | `SmartDiffs`                             | use a specific algorithm to display differences
  `fromSource`    | true                                     | true takes an AutoExample description from the file, false from the expectation ok message
  `traceFilter`   | `DefaultStackTraceFilter`                | use a StackTraceFilter instance for filtering the reported stacktrace elements
- `checkUrl`      | false                                    | if true, will parse the html files and check that local or http hrefs can be accessed
+ `checkUrls`     | false                                    | if true, will parse the html files and check that local or http hrefs can be accessed
  `notoc`         | false                                    | if true, will not create a table of contents on the generated html page
  `notifier`      | String                                   | name of a class extending the `org.specs2.reporter.Notifier` trait
  `exporter`      | String                                   | name of a class extending the `org.specs2.reporter.Exporter` trait
@@ -227,7 +227,7 @@ On the command line you can pass the following arguments:
  `debugmarkdown`  | boolean                 |                                                                         |
  `fromsource`     | boolean                 |                                                                         |
  `fullstacktrace` | boolean                 |                                                                         |
- `checkurl`       | boolean                 |                                                                         |
+ `checkurls`      | boolean                 |                                                                         |
  `notoc`          | boolean                 |                                                                         |
  `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
  `notifier`       | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |

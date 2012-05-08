@@ -326,6 +326,7 @@ case class Report(
   def traceFilter: StackTraceFilter = _traceFilter.getOrElse(DefaultStackTraceFilter)
   def checkUrls: Boolean            = _checkUrls.getOrElse(false)
   def notoc: Boolean                = _notoc.getOrElse(false)
+  def hasToc: Boolean               = !notoc
   def notifier: String              = _notifier.getOrElse("")
   def exporter: String              = _exporter.getOrElse("")
 

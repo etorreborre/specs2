@@ -4,6 +4,7 @@ package reporter
 import specification._
 import io._
 import mock._
+import main.Arguments
 
 class HtmlFileSpec extends Specification with Mockito { def is =
 
@@ -56,7 +57,7 @@ class HtmlFileSpec extends Specification with Mockito { def is =
       val executedSpec = store(args())(ExecutingSpecification.create(SpecName("spec"), spec.fragments.map(executeFragment)))
       printer.reduce(executedSpec.execute)
     }
-    def print(spec: Fragments) = printer.sortByFile(SpecName("spec"), HtmlLink(SpecName("spec"), "", "spec"))(htmlLines(spec)).flatten.toSeq.head.printLines(new HtmlResultOutput).xml
+    def print(spec: Fragments) = printer.sortByFile(SpecName("spec"), Arguments(), HtmlLink("specs"))(htmlLines(spec)).flatten.toSeq.head.printLines(new HtmlResultOutput).xml
 
     def printSpec(spec: SpecificationStructure) = {
       printer.print(ExecutingSpecification.create(spec.content.specName, spec.content.fragments.map(executeFragment)).execute)

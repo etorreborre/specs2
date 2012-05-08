@@ -35,9 +35,7 @@ trait HtmlPrinter {
    * the name of the html file is the full class name
    */
   def print(spec: ExecutedSpecification)(implicit args: Arguments) = {
-    val htmlFiles = createHtmlLinesFiles(spec)
-    val toc = createToc(htmlFiles)
-    htmlFiles.flatten map printHtml(toc, output)
+    (createHtmlLinesFiles(spec) |> addToc).map(printHtml(output))
   }
 
   /**
@@ -46,25 +44,25 @@ trait HtmlPrinter {
    * @return a Tree of HtmlLinesFile where the root is the parent specification and children are the included specifications
    */
   def createHtmlLinesFiles(spec: ExecutedSpecification): Tree[HtmlLinesFile] =
-    reduce(spec) |> sortByFile(spec.name, parentLink = HtmlLink(spec.name, "", spec.name.name))
+    reduce(spec) |> sortByFile(spec.name, spec.arguments, parentLink = HtmlLink(spec.name, "", spec.name.name))
 
   /**
    * a function printing html lines to a file given:
    *
-   * - the table of contents for the full document
+   * - the list of lines to print
    * - an output object responsible for printing each HtmlLine as xhtml
    */
-  def printHtml(toc: TreeToc, output: =>HtmlReportOutput): HtmlLinesFile => HtmlFile = (file: HtmlLinesFile) => {
-    HtmlFile(file.link.url, printHtml(output, file, toc.toTree(file.specId)))
+  def printHtml(output: =>HtmlReportOutput): HtmlLinesFile => HtmlFile = (file: HtmlLinesFile) => {
+    HtmlFile(file.link.url, file.print(output).xml)
   }
 
   /** @return a new HtmlReportOutput object creating html elements */
   def output: HtmlReportOutput = new HtmlResultOutput
 
   /**
-   * @return a global toc from the Tree of html files
+   * @return add a toc to each HtmlFile where relevant
    */
-  def createToc(htmlFiles: Tree[HtmlLinesFile])(implicit args: Arguments) = {
+  def addToc(implicit args: Arguments): Tree[HtmlLinesFile] => Seq[HtmlLinesFile] = (htmlFiles: Tree[HtmlLinesFile]) => {
     val root = htmlFiles.rootLabel
     def tocItems(tree: Tree[HtmlLinesFile]): NodeSeq = {
       val current = tree.rootLabel
@@ -74,15 +72,15 @@ trait HtmlPrinter {
                   id      = current.specId,
                   subTocs = Map(tree.subForest.map(subSpec => (subSpec.rootLabel.specId, tocItems(subSpec))):_*))
     }
-    if (args.report.notoc) TreeToc(root.specId, NodeSeq.Empty)
-    else                   TreeToc(root.specId, tocItems(htmlFiles))
+    // add a toc only where a parent file defines it
+    // and propagate the same toc to the children
+    if ((args <| root.args).report.hasToc) {
+      val rootToc = TreeToc(root.specId, tocItems(htmlFiles))
+      root.copy(toc = rootToc) +: htmlFiles.subForest.flatMap(_.flatten).map(_.copy(toc = rootToc)).toSeq
+    }
+    else
+      root +: htmlFiles.subForest.flatMap(addToc).toSeq
   }
-
-  /**
-   * @return an HtmlReportOutput object containing all the html corresponding to the
-   *         html lines to print  
-   */  
-  def printHtml(output: =>HtmlReportOutput, file: HtmlLinesFile, toc: NodeSeq): NodeSeq = file.print(output, toc).xml
 
   /**
    * Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
@@ -99,14 +97,14 @@ trait HtmlPrinter {
    *
    * The goal is to create a file per included specification and to use the Tree of files to create a table of contents for the root specification
    */
-  def sortByFile(specName: SpecName, parentLink: HtmlLink) = (lines: Seq[HtmlLine]) => {
-    lazy val start = HtmlLinesFile(specName, parentLink, Vector())
+  def sortByFile(specName: SpecName, arguments: Arguments, parentLink: HtmlLink) = (lines: Seq[HtmlLine]) => {
+    lazy val start = HtmlLinesFile(specName, arguments, parentLink)
     lines.foldLeft (leaf(start).loc) { (res, cur) =>
       val updated = res.updateLabel(_.add(cur))
       // html lines for an included specification are placed into HtmlSpecStart and HtmlSpecEnd fragments
       cur match {
         case start @ HtmlSpecStart(s, st, l, a) if start.isIncludeLink =>
-          updated.insertDownLast(leaf(HtmlLinesFile(s.specName, start.link.getOrElse(parentLink), List(start.unlink))))
+          updated.insertDownLast(leaf(HtmlLinesFile(s.specName, s.args, start.link.getOrElse(parentLink), List(start.unlink), Some(updated.getLabel))))
         case HtmlSpecEnd(e, _, _, _) if e.specName == res.getLabel.specName => updated.getParent
         case other                                                          => updated
       }
@@ -149,7 +147,7 @@ case class HtmlFile(url: String, xml: NodeSeq) {
 /**
  * Table of contents, represented as a NodeSeq
  */
-case class TreeToc(rootCode: SpecId, toc: NodeSeq) {
+case class TreeToc(rootCode: SpecId, toc: NodeSeq = NodeSeq.Empty) {
   /** @return a "tree" div to be used with jstree, focusing on the current section */
   def toTree = (currentCode: SpecId) =>
     <div id="tree">
