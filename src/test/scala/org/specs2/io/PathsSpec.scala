@@ -48,6 +48,12 @@ class PathsSpec extends mutable.Specification with DataTables {
     "../../src/com/text1" !! "src/com/text2"     !! "src/com/text1" | { (a, b, c) => a.unrelativeTo(b) must_== c }
   }
 
+  "A relative path can be specified as if coming from the top of its own path" >> {
+    "path1"               || "result"              |>
+    "text1"               !! "text1"               |
+    "src/com/text1"       !! "../../src/com/text1" | { (a, b) => a.fromTop must_== b }
+  }
+
   "uriEncode encodes a String with special URI characters so that it can be used as an html link" >> {
     "a page".uriEncode === "a%20page"
   }

@@ -27,6 +27,7 @@ trait Paths { outer =>
   def isRelative(s: String) = Seq("./", "../").exists(s.unixize.startsWith)
   def relativeTo(p1: String, p2: String) = (p2.baseDir+p1).normalize
   def unrelativeTo(p1: String, p2: String) = if (p1.isRelative) p2.parentDir + p1.fileName else p1
+  def fromTop(s: String) = relativeTo(s, s)
 }
 
 case class Path(s: String) {
@@ -42,6 +43,7 @@ case class Path(s: String) {
   def isRelative = Paths.isRelative(s)
   def relativeTo(path: String) = Paths.relativeTo(s, path)
   def unrelativeTo(path: String) = Paths.unrelativeTo(s, path)
+  def fromTop = Paths.fromTop(s)
 }
 
 private[specs2]
