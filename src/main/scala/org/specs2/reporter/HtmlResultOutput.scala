@@ -203,6 +203,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
       <script type="text/javascript" src={baseDir+"css/prettify.js"}></script>
       <link rel="stylesheet" href={baseDir+"css/print.css"} type="text/css" media="print" />
       <link href={baseDir+"css/tooltip.css"} rel="stylesheet" type="text/css" />
+      <link href={baseDir+"css/specs2-user.css"} type="text/css" rel="stylesheet" />
+
       <script type="text/javascript" src={baseDir+"css/jquery.js"}></script>
       <script type="text/javascript" src={baseDir+"css/jquery.cookie.js"}></script>
       <script type="text/javascript" src={baseDir+"css/jquery.hotkeys.js"}></script>

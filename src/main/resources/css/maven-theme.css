@@ -321,11 +321,14 @@ table td {
 .formstacktrace {
   display: none;
 }
+
 #breadcrumbs {
-  position: fixed;
-  width: 15.7%;
+  position: static;
+  display: none;
+  width: 83.7%;
   border-top: 1px dashed #aaa;
   border-bottom: 1px dashed #aaa;
+  margin-left: 5px;
   background-color: #eee;
   font-size: 12px;
   font-style: italic;
@@ -335,14 +338,14 @@ table td {
   position: relative;
   left: 15%;
   width: 70%;
-  margin-top:-18px;
+  margin-top:-15px;
 }
 
 #rightcolumn {
   position: relative;
   left: 17%;
   width: 82%;
-  margin-top:-18px;
+  margin-top:1px;
 }
 
 #leftcolumn {
@@ -350,17 +353,18 @@ table td {
   position: fixed;
   width:15%;
   float:left;
+  margin-top:1px;
   overflow:auto;
   background-color:white;
 }
 
 #tree {
   position: fixed;
-  margin-top:2px;
+  margin-top:3px;
   border: solid #AAAAAA;
   border-width: 1px 1px 1px 8px;
   background-color:white;
-  width:15%;
+  width:13.5%;
   float:left;
   overflow:auto;
 }
