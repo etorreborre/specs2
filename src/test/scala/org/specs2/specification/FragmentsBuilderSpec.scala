@@ -129,7 +129,7 @@ Other elements
     def e5 = soExample.desc.toString must_== "given the name: eric, then the age is 18"
 
     def execute = FragmentExecution.executeFragment(args())
-    def e6 = execute("example" ! { throw new LinkageError(); success }).toString must contain("Fragment evaluation error")
+    def e6 = execute("example" ! { throw new NoSuchMethodError("flushBuffer"); success }).toString must beMatching(".*Fragment evaluation error.*NoSuchMethodError\\: flushBuffer.*")
     def e7 = execute("example" ! { throw new AssertionError(); success }).toString must not contain("Fragment evaluation error")
 
     def matches1 = ("Eric" ! success).matches("E.*")

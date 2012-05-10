@@ -338,7 +338,7 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
 case object Error {
   def apply(e: Exception) = new Error(e.getMessage.notNull, e)
   def apply(t: Throwable) = new Error(t.getMessage.notNull, new ThrowableException(t))
-  case class ThrowableException(t: Throwable) extends Exception(t)
+  case class ThrowableException(t: Throwable) extends Exception(t.getClass.getSimpleName+": "+t.getMessage, t)
   def apply(m: String = "") = new Error(m, new Exception(m))
 }
 /** 
