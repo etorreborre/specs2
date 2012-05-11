@@ -1,0 +1,8 @@
+language: scala
+
+script: sbt test
+scala:
+  - 2.9.1
+branches:
+  only:
+    - 1.10
