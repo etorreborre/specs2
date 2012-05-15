@@ -98,3 +98,6 @@ seq(lsSettings :_*)
 
 (LsKeys.ghBranch in LsKeys.lsync) <<= version { Some(_) }
 
+(LsKeys.ghUser in LsKeys.lsync) := Some("etorreborre")
+
+(LsKeys.ghRepo in LsKeys.lsync) := Some("specs2")
