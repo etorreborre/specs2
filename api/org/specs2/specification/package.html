@@ -2,26 +2,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>specification - org.specs2.specification</title>
-          <meta name="description" content="specification - org.specs2.specification" />
-          <meta name="keywords" content="specification org.specs2.specification" />
+          <title>org.specs2.specification</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
       <script type="text/javascript" src="../../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value" onload="sh_highlightDocument('../lib/', '.min.js');">
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
       <div id="definition">
         <img src="../../../lib/package_big.png" />
-        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
         <h1>specification</h1>
       </div>
 
-      <h4 id="signature" class="signature">
+      <h4 class="signature" id="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">package</span>
@@ -31,11 +29,11 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"></div>
-        
+      <div class="fullcommenttop" id="comment"></div>
+    
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
         
         
         <div id="visbl">
@@ -48,9 +46,9 @@
         <div id="allMembers">
         
 
-        <div id="types" class="types members">
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li name="org.specs2.specification.Action" visbl="pub" data-isabs="false" fullComment="yes">
+              <ol><li visbl="pub" name="org.specs2.specification.Action" data-isabs="false">
       <a id="Action:Action"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -62,7 +60,7 @@
       </span>
       </h4>
       <p class="comment cmt">An Action is similar to a Step but can be executed concurrently with other examples.</p>
-    </li><li name="org.specs2.specification.After" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.After" data-isabs="true">
       <a id="After:After"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -76,7 +74,7 @@
       <p class="comment cmt">The After trait can be inherited by classes representing a context
 where an action must be executing after the main executable action
 </p>
-    </li><li name="org.specs2.specification.AfterContextExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.AfterContextExample" data-isabs="true">
       <a id="AfterContextExample:AfterContextExample[C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -89,7 +87,7 @@ where an action must be executing after the main executable action
       </h4>
       <p class="comment cmt">For each created example use a given After context
 </p>
-    </li><li name="org.specs2.specification.AfterEach" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.AfterEach" data-isabs="true">
       <a id="AfterEach:AfterEach"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -101,7 +99,7 @@ where an action must be executing after the main executable action
       </span>
       </h4>
       <p class="comment cmt">apply an After context to each Example</p>
-    </li><li name="org.specs2.specification.AfterExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.AfterExample" data-isabs="true">
       <a id="AfterExample:AfterExample"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -114,7 +112,7 @@ where an action must be executing after the main executable action
       </h4>
       <p class="comment cmt">For each created example use a given after method
 </p>
-    </li><li name="org.specs2.specification.AllExpectations" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.AllExpectations" data-isabs="true">
       <a id="AllExpectations:AllExpectations"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -127,7 +125,7 @@ where an action must be executing after the main executable action
       </h4>
       <p class="comment cmt">This trait can be mixed-in a specification to allow examples to have all of their expectations being evaluated (unless
 the example body throws an exception of course).</p>
-    </li><li name="org.specs2.specification.Analysis" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Analysis" data-isabs="true">
       <a id="Analysis:Analysis"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -140,7 +138,7 @@ the example body throws an exception of course).</p>
       </h4>
       <p class="comment cmt">This trait provides integrated analysis method for a scala project
 </p>
-    </li><li name="org.specs2.specification.Apply" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Apply" data-isabs="true">
       <a id="Apply:Apply"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -152,7 +150,7 @@ the example body throws an exception of course).</p>
       </span>
       </h4>
       <p class="comment cmt">Apply a Context to a sequence of fragments containing examples.</p>
-    </li><li name="org.specs2.specification.Around" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Around" data-isabs="true">
       <a id="Around:Around"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -165,7 +163,7 @@ the example body throws an exception of course).</p>
       </h4>
       <p class="comment cmt">The Around trait can be inherited by classes which will
 execute some code inside the around method provided by the context.</p>
-    </li><li name="org.specs2.specification.AroundContextExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.AroundContextExample" data-isabs="true">
       <a id="AroundContextExample:AroundContextExample[C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -178,7 +176,7 @@ execute some code inside the around method provided by the context.</p>
       </h4>
       <p class="comment cmt">For each created example use a given Around context
 </p>
-    </li><li name="org.specs2.specification.AroundEach" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.AroundEach" data-isabs="true">
       <a id="AroundEach:AroundEach"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -190,7 +188,7 @@ execute some code inside the around method provided by the context.</p>
       </span>
       </h4>
       <p class="comment cmt">apply an Around context to each Example</p>
-    </li><li name="org.specs2.specification.AroundExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.AroundExample" data-isabs="true">
       <a id="AroundExample:AroundExample"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -203,7 +201,7 @@ execute some code inside the around method provided by the context.</p>
       </h4>
       <p class="comment cmt">For each created example use a given around method
 </p>
-    </li><li name="org.specs2.specification.AroundOutside" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.AroundOutside" data-isabs="true">
       <a id="AroundOutside:AroundOutside[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -216,7 +214,7 @@ execute some code inside the around method provided by the context.</p>
       </h4>
       <p class="comment cmt">The AroundOutside trait can be inherited by classes which will execute some code inside a given context, with a
 function using that context and actions before and after if necessary.</p>
-    </li><li name="org.specs2.specification.BaseSpecification" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BaseSpecification" data-isabs="true">
       <a id="BaseSpecification:BaseSpecification"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -228,7 +226,7 @@ function using that context and actions before and after if necessary.</p>
       </span>
       </h4>
       <p class="comment cmt">A Base specification contains the minimum elements for a Specification</p>
-    </li><li name="org.specs2.specification.Before" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Before" data-isabs="true">
       <a id="Before:Before"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -242,7 +240,7 @@ function using that context and actions before and after if necessary.</p>
       <p class="comment cmt">The Before trait can be inherited by classes representing a context
 where an action must be executing before the main executable action
 </p>
-    </li><li name="org.specs2.specification.BeforeAfter" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfter" data-isabs="true">
       <a id="BeforeAfter:BeforeAfter"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -256,7 +254,7 @@ where an action must be executing before the main executable action
       <p class="comment cmt">The BeforeAfter trait allows to declare before and after actions
 to execute before and after an Example
 </p>
-    </li><li name="org.specs2.specification.BeforeAfterAround" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterAround" data-isabs="true">
       <a id="BeforeAfterAround:BeforeAfterAround"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -269,7 +267,7 @@ to execute before and after an Example
       </h4>
       <p class="comment cmt">The BeforeAfter trait allows to declare before, around and after actions
 </p>
-    </li><li name="org.specs2.specification.BeforeAfterAroundContextExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterAroundContextExample" data-isabs="true">
       <a id="BeforeAfterAroundContextExample:BeforeAfterAroundContextExample[C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -282,7 +280,7 @@ to execute before and after an Example
       </h4>
       <p class="comment cmt">For each created example use a given BeforeAfterAround context
 </p>
-    </li><li name="org.specs2.specification.BeforeAfterAroundEach" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterAroundEach" data-isabs="true">
       <a id="BeforeAfterAroundEach:BeforeAfterAroundEach"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -294,7 +292,7 @@ to execute before and after an Example
       </span>
       </h4>
       <p class="comment cmt">apply a BeforeAfterAround context to each Example</p>
-    </li><li name="org.specs2.specification.BeforeAfterAroundExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterAroundExample" data-isabs="true">
       <a id="BeforeAfterAroundExample:BeforeAfterAroundExample"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -307,7 +305,7 @@ to execute before and after an Example
       </h4>
       <p class="comment cmt">For each created example use a given before/after method
 </p>
-    </li><li name="org.specs2.specification.BeforeAfterContextExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterContextExample" data-isabs="true">
       <a id="BeforeAfterContextExample:BeforeAfterContextExample[C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -320,7 +318,7 @@ to execute before and after an Example
       </h4>
       <p class="comment cmt">For each created example use a given BeforeAfter context
 </p>
-    </li><li name="org.specs2.specification.BeforeAfterEach" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterEach" data-isabs="true">
       <a id="BeforeAfterEach:BeforeAfterEach"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -332,7 +330,7 @@ to execute before and after an Example
       </span>
       </h4>
       <p class="comment cmt">apply a BeforeAfter context to each Example</p>
-    </li><li name="org.specs2.specification.BeforeAfterExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeAfterExample" data-isabs="true">
       <a id="BeforeAfterExample:BeforeAfterExample"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -345,7 +343,7 @@ to execute before and after an Example
       </h4>
       <p class="comment cmt">For each created example use a given before/after method
 </p>
-    </li><li name="org.specs2.specification.BeforeContextExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeContextExample" data-isabs="true">
       <a id="BeforeContextExample:BeforeContextExample[C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -358,7 +356,7 @@ to execute before and after an Example
       </h4>
       <p class="comment cmt">For each created example use a given Before context
 </p>
-    </li><li name="org.specs2.specification.BeforeEach" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeEach" data-isabs="true">
       <a id="BeforeEach:BeforeEach"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -370,7 +368,7 @@ to execute before and after an Example
       </span>
       </h4>
       <p class="comment cmt">apply a Before context to each Example</p>
-    </li><li name="org.specs2.specification.BeforeExample" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.BeforeExample" data-isabs="true">
       <a id="BeforeExample:BeforeExample"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -383,7 +381,7 @@ to execute before and after an Example
       </h4>
       <p class="comment cmt">For each created example use a given after method
 </p>
-    </li><li name="org.specs2.specification.Context" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Context" data-isabs="true">
       <a id="Context:Context"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -396,7 +394,7 @@ to execute before and after an Example
       </h4>
       <p class="comment cmt">generic trait for Before, After, Around
 </p>
-    </li><li name="org.specs2.specification.Contexts" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Contexts" data-isabs="true">
       <a id="Contexts:Contexts"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -408,7 +406,7 @@ to execute before and after an Example
       </span>
       </h4>
       <p class="comment cmt">This trait is only used when we wish to write after actions in unit specifications like this</p>
-    </li><li name="org.specs2.specification.Example" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Example" data-isabs="false">
       <a id="Example:Example"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -420,7 +418,7 @@ to execute before and after an Example
       </span>
       </h4>
       <p class="comment cmt">A Example is:</p>
-    </li><li name="org.specs2.specification.ExamplesFactory" visbl="pub" data-isabs="true" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExamplesFactory" data-isabs="true">
       <a id="ExamplesFactory:ExamplesFactory"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -432,7 +430,7 @@ to execute before and after an Example
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutedBacktab" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedBacktab" data-isabs="false">
       <a id="ExecutedBacktab:ExecutedBacktab"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -444,7 +442,7 @@ to execute before and after an Example
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutedBr" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedBr" data-isabs="false">
       <a id="ExecutedBr:ExecutedBr"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -456,7 +454,7 @@ to execute before and after an Example
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutedEnd" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedEnd" data-isabs="false">
       <a id="ExecutedEnd:ExecutedEnd"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -468,7 +466,7 @@ to execute before and after an Example
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutedFragment" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedFragment" data-isabs="true">
       <a id="ExecutedFragment:ExecutedFragment"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -482,7 +480,7 @@ to execute before and after an Example
       <p class="comment cmt">The Executed Fragments represent pieces of a Specification
 which have already been executed to provide a Result
 </p>
-    </li><li name="org.specs2.specification.ExecutedNoText" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedNoText" data-isabs="false">
       <a id="ExecutedNoText:ExecutedNoText"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -496,7 +494,7 @@ which have already been executed to provide a Result
       <p class="comment cmt">This executed Fragment is used when no text must be displayed (for the successful
 execution of an Action for example)
 </p>
-    </li><li name="org.specs2.specification.ExecutedResult" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedResult" data-isabs="false">
       <a id="ExecutedResult:ExecutedResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -508,7 +506,7 @@ execution of an Action for example)
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutedSpecEnd" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecEnd" data-isabs="false">
       <a id="ExecutedSpecEnd:ExecutedSpecEnd"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -520,7 +518,7 @@ execution of an Action for example)
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutedSpecStart" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecStart" data-isabs="false">
       <a id="ExecutedSpecStart:ExecutedSpecStart"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -532,7 +530,7 @@ execution of an Action for example)
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutedSpecification" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedSpecification" data-isabs="false">
       <a id="ExecutedSpecification:ExecutedSpecification"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -545,7 +543,7 @@ execution of an Action for example)
       </h4>
       <p class="comment cmt">A specification with a name and all of its fragments already executed
 </p>
-    </li><li name="org.specs2.specification.ExecutedStandardFragment" visbl="pub" data-isabs="true" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedStandardFragment" data-isabs="true">
       <a id="ExecutedStandardFragment:ExecutedStandardFragment"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -557,7 +555,7 @@ execution of an Action for example)
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutedTab" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedTab" data-isabs="false">
       <a id="ExecutedTab:ExecutedTab"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -569,7 +567,7 @@ execution of an Action for example)
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutedText" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutedText" data-isabs="false">
       <a id="ExecutedText:ExecutedText"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -581,7 +579,7 @@ execution of an Action for example)
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.ExecutingFragment" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutingFragment" data-isabs="true">
       <a id="ExecutingFragment:ExecutingFragment"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -593,7 +591,7 @@ execution of an Action for example)
       </span>
       </h4>
       <p class="comment cmt">The Executing Fragment trait represent a Fragment being executed.</p>
-    </li><li name="org.specs2.specification.ExecutingSpecification" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.ExecutingSpecification" data-isabs="false">
       <a id="ExecutingSpecification:ExecutingSpecification"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -606,7 +604,7 @@ execution of an Action for example)
       </h4>
       <p class="comment cmt">a specification with a name and a sequence of fragments being executed
 </p>
-    </li><li name="org.specs2.specification.FinishedExecutingFragment" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.FinishedExecutingFragment" data-isabs="false">
       <a id="FinishedExecutingFragment:FinishedExecutingFragment"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -619,7 +617,7 @@ execution of an Action for example)
       </h4>
       <p class="comment cmt">embed an already executed Fragment
 </p>
-    </li><li name="org.specs2.specification.FormMarkup" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.FormMarkup" data-isabs="false">
       <a id="FormMarkup:FormMarkup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -632,7 +630,7 @@ execution of an Action for example)
       </h4>
       <p class="comment cmt">The FormMarkup embeds the description of a form as text or as Xml
 </p>
-    </li><li name="org.specs2.specification.FormattingFragments" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.FormattingFragments" data-isabs="true">
       <a id="FormattingFragments:FormattingFragments"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -645,7 +643,7 @@ execution of an Action for example)
       </h4>
       <p class="comment cmt">Set of fragments which can be used for formatting
 </p>
-    </li><li name="org.specs2.specification.Forms" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Forms" data-isabs="true">
       <a id="Forms:Forms"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -659,7 +657,7 @@ execution of an Action for example)
       <p class="comment cmt">Allow a Form to be inserted among Fragments as a Text Fragment
 Allow a Form to be used as an example body and return a Result automatically
 </p>
-    </li><li name="org.specs2.specification.Fragment" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Fragment" data-isabs="true">
       <a id="Fragment:Fragment"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -671,7 +669,7 @@ Allow a Form to be used as an example body and return a Result automatically
       </span>
       </h4>
       <p class="comment cmt">A Fragment is a piece of a specification.</p>
-    </li><li name="org.specs2.specification.FragmentExecution" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.FragmentExecution" data-isabs="true">
       <a id="FragmentExecution:FragmentExecution"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -683,7 +681,7 @@ Allow a Form to be used as an example body and return a Result automatically
       </span>
       </h4>
       <p class="comment cmt">This trait executes Fragments</p>
-    </li><li name="org.specs2.specification.Fragments" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Fragments" data-isabs="false">
       <a id="Fragments:Fragments"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -696,7 +694,7 @@ Allow a Form to be used as an example body and return a Result automatically
       </h4>
       <p class="comment cmt">A Fragments object is a list of fragments with a SpecStart and a SpecEnd
 </p>
-    </li><li name="org.specs2.specification.Given" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Given" data-isabs="true">
       <a id="Given:Given[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -708,7 +706,7 @@ Allow a Form to be used as an example body and return a Result automatically
       </span>
       </h4>
       <p class="comment cmt">This step can start a sequence of Given / When / Then.</p>
-    </li><li name="org.specs2.specification.GivenThen" visbl="pub" data-isabs="true" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.GivenThen" data-isabs="true">
       <a id="GivenThen:GivenThen"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -720,7 +718,7 @@ Allow a Form to be used as an example body and return a Result automatically
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.GivenThenFunction" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.GivenThenFunction" data-isabs="false">
       <a id="GivenThenFunction:GivenThenFunction[R]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -732,7 +730,7 @@ Allow a Form to be used as an example body and return a Result automatically
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.HtmlLink" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.HtmlLink" data-isabs="true">
       <a id="HtmlLink:HtmlLink"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -745,7 +743,7 @@ Allow a Form to be used as an example body and return a Result automatically
       </h4>
       <p class="comment cmt">The HtmlLink class represents a link in a specification with an identifier (either a spec name, or a string) and
 link elements.</p>
-    </li><li name="org.specs2.specification.LazyExecutingFragment" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.LazyExecutingFragment" data-isabs="false">
       <a id="LazyExecutingFragment:LazyExecutingFragment"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -758,7 +756,7 @@ link elements.</p>
       </h4>
       <p class="comment cmt">embed an executing Fragment into a function to execute it on demand
 </p>
-    </li><li name="org.specs2.specification.Linked" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Linked" data-isabs="false">
       <a id="Linked:Linked"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -770,7 +768,7 @@ link elements.</p>
       </span>
       </h4>
       <p class="comment cmt">encapsulation of the linking behaviour</p>
-    </li><li name="org.specs2.specification.NoAutoExamples" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.NoAutoExamples" data-isabs="true">
       <a id="NoAutoExamples:NoAutoExamples"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -783,7 +781,7 @@ link elements.</p>
       </h4>
       <p class="comment cmt">This trait ca be used to deactivate all automatic conversions to examples
 </p>
-    </li><li name="org.specs2.specification.NoBooleanAutoExamples" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.NoBooleanAutoExamples" data-isabs="true">
       <a id="NoBooleanAutoExamples:NoBooleanAutoExamples"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -796,7 +794,7 @@ link elements.</p>
       </h4>
       <p class="comment cmt">This trait can be used to deactivate the Boolean conversions to fragments and examples
 </p>
-    </li><li name="org.specs2.specification.NoContexts" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.NoContexts" data-isabs="true">
       <a id="NoContexts:NoContexts"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -809,7 +807,7 @@ link elements.</p>
       </h4>
       <p class="comment cmt">Use this trait to deactivate the Contexts implicits
 </p>
-    </li><li name="org.specs2.specification.NoDataTableAutoExamples" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.NoDataTableAutoExamples" data-isabs="true">
       <a id="NoDataTableAutoExamples:NoDataTableAutoExamples"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -822,7 +820,7 @@ link elements.</p>
       </h4>
       <p class="comment cmt">This trait can be used to deactivate the DataTable conversions to fragments and examples
 </p>
-    </li><li name="org.specs2.specification.NoFragmentsBuilder" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.NoFragmentsBuilder" data-isabs="true">
       <a id="NoFragmentsBuilder:NoFragmentsBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -835,7 +833,7 @@ link elements.</p>
       </h4>
       <p class="comment cmt">This trait can be used to deactivate implicits for building fragments
 </p>
-    </li><li name="org.specs2.specification.NoMatchResultAutoExamples" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.NoMatchResultAutoExamples" data-isabs="true">
       <a id="NoMatchResultAutoExamples:NoMatchResultAutoExamples"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -848,7 +846,7 @@ link elements.</p>
       </h4>
       <p class="comment cmt">This trait can be used to deactivate the MatchResult conversions to fragments and examples
 </p>
-    </li><li name="org.specs2.specification.NoResultAutoExamples" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.NoResultAutoExamples" data-isabs="true">
       <a id="NoResultAutoExamples:NoResultAutoExamples"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -861,7 +859,7 @@ link elements.</p>
       </h4>
       <p class="comment cmt">This trait can be used to deactivate the Result conversions to fragments and examples
 </p>
-    </li><li name="org.specs2.specification.Outside" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Outside" data-isabs="true">
       <a id="Outside:Outside[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -874,7 +872,7 @@ link elements.</p>
       </h4>
       <p class="comment cmt">The Outside trait can be inherited by classes which will
 execute some code inside the outside method provided by the context.</p>
-    </li><li name="org.specs2.specification.PromisedExecutingFragment" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutingFragment" data-isabs="false">
       <a id="PromisedExecutingFragment:PromisedExecutingFragment"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -887,7 +885,7 @@ execute some code inside the outside method provided by the context.</p>
       </h4>
       <p class="comment cmt">embed an executed Fragment into a promise
 </p>
-    </li><li name="org.specs2.specification.RegexStep" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.RegexStep" data-isabs="true">
       <a id="RegexStep:RegexStep[P, T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -900,7 +898,7 @@ execute some code inside the outside method provided by the context.</p>
       </h4>
       <p class="comment cmt">A Regular expression step which takes a text and extracts meaningful values according to
 a regular expression:</p>
-    </li><li name="org.specs2.specification.RegexSteps" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.RegexSteps" data-isabs="true">
       <a id="RegexSteps:RegexSteps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -912,7 +910,7 @@ a regular expression:</p>
       </span>
       </h4>
       <p class="comment cmt">This trait provides building blocks to create steps and examples from regular expression.</p>
-    </li><li name="org.specs2.specification.ResultsContext" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.ResultsContext" data-isabs="false">
       <a id="ResultsContext:ResultsContext"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -924,7 +922,7 @@ a regular expression:</p>
       </span>
       </h4>
       <p class="comment cmt">This class is used to evaluate a Context as a sequence of results by side-effects.</p>
-    </li><li name="org.specs2.specification.Scope" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Scope" data-isabs="true">
       <a id="Scope:Scope"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -938,7 +936,7 @@ a regular expression:</p>
       <p class="comment cmt">Marker trait that is used to create a new scope with variables and implicitly converted to a Success in a mutable
 Specification
 </p>
-    </li><li name="org.specs2.specification.SpecEnd" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.SpecEnd" data-isabs="false">
       <a id="SpecEnd:SpecEnd"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -950,7 +948,7 @@ Specification
       </span>
       </h4>
       <p class="comment cmt">End of a specification.</p>
-    </li><li name="org.specs2.specification.SpecHtmlLink" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.SpecHtmlLink" data-isabs="false">
       <a id="SpecHtmlLink:SpecHtmlLink"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -962,7 +960,7 @@ Specification
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.SpecIdentification" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.SpecIdentification" data-isabs="true">
       <a id="SpecIdentification:SpecIdentification"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -975,7 +973,7 @@ Specification
       </h4>
       <p class="comment cmt">Identification information for a specification
 </p>
-    </li><li name="org.specs2.specification.SpecStart" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.SpecStart" data-isabs="false">
       <a id="SpecStart:SpecStart"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -987,7 +985,7 @@ Specification
       </span>
       </h4>
       <p class="comment cmt">Start of a specification.</p>
-    </li><li name="org.specs2.specification.SpecificationInclusion" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.SpecificationInclusion" data-isabs="true">
       <a id="SpecificationInclusion:SpecificationInclusion"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1000,7 +998,7 @@ Specification
       </h4>
       <p class="comment cmt">additional methods to include other specifications or Fragments
 </p>
-    </li><li name="org.specs2.specification.SpecificationStructure" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.SpecificationStructure" data-isabs="true">
       <a id="SpecificationStructure:SpecificationStructure"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1013,7 +1011,7 @@ Specification
       </h4>
       <p class="comment cmt">The structure of a Specification is simply defined as a sequence of fragments
 </p>
-    </li><li name="org.specs2.specification.Stats" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Stats" data-isabs="false">
       <a id="Stats:Stats"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1031,7 +1029,7 @@ Specification
 - errors
 - pending
 - skipped</p>
-    </li><li name="org.specs2.specification.Step" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Step" data-isabs="false">
       <a id="Step:Step"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1044,7 +1042,7 @@ Specification
       </h4>
       <p class="comment cmt">An Step creates a fragment that will either return an
 Error Result if there is an exception or a Success.</p>
-    </li><li name="org.specs2.specification.StoredExpectationsContext" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.StoredExpectationsContext" data-isabs="true">
       <a id="StoredExpectationsContext:StoredExpectationsContext"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1057,7 +1055,7 @@ Error Result if there is an exception or a Success.</p>
       </h4>
       <p class="comment cmt">This trait can be used when it is not desirable to use the AllExpectations trait, that is, when the specification
 examples must be executed concurrently and not isolated.</p>
-    </li><li name="org.specs2.specification.StoredResultsContext" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.StoredResultsContext" data-isabs="true">
       <a id="StoredResultsContext:StoredResultsContext"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1069,7 +1067,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       <p class="comment cmt">This trait is a context which will use the results provided by the class inheriting that trait.</p>
-    </li><li name="org.specs2.specification.Tags" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Tags" data-isabs="true">
       <a id="Tags:Tags"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1082,7 +1080,7 @@ examples must be executed concurrently and not isolated.</p>
       </h4>
       <p class="comment cmt">The tags trait allows the creation of Tags fragments in a Specification
 </p>
-    </li><li name="org.specs2.specification.Text" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Text" data-isabs="false">
       <a id="Text:Text"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1095,7 +1093,7 @@ examples must be executed concurrently and not isolated.</p>
       </h4>
       <p class="comment cmt">Free text, describing the system to specify
 </p>
-    </li><li name="org.specs2.specification.Then" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Then" data-isabs="true">
       <a id="Then:Then[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1107,7 +1105,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       <p class="comment cmt">This step define checks in a sequence of Given / When / Then.</p>
-    </li><li name="org.specs2.specification.UrlHtmlLink" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.UrlHtmlLink" data-isabs="false">
       <a id="UrlHtmlLink:UrlHtmlLink"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1119,7 +1117,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.When" visbl="pub" data-isabs="true" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.When" data-isabs="true">
       <a id="When:When[P, T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1136,9 +1134,9 @@ examples must be executed concurrently and not isolated.</p>
 
         
 
-        <div id="values" class="values members">
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li name="org.specs2.specification.Action" visbl="pub" data-isabs="false" fullComment="no">
+              <ol><li visbl="pub" name="org.specs2.specification.Action" data-isabs="false">
       <a id="Action:Action"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1150,7 +1148,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.Contexts" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.Contexts" data-isabs="false">
       <a id="Contexts:Contexts"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1162,7 +1160,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.Example" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.Example" data-isabs="false">
       <a id="Example:Example"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1174,7 +1172,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.FormMarkup" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.FormMarkup" data-isabs="false">
       <a id="FormMarkup:FormMarkup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1186,7 +1184,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.Forms" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.Forms" data-isabs="false">
       <a id="Forms:Forms"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1198,7 +1196,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.Fragments" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Fragments" data-isabs="false">
       <a id="Fragments:Fragments"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1211,7 +1209,7 @@ examples must be executed concurrently and not isolated.</p>
       </h4>
       <p class="comment cmt">Utility methods for fragments
 </p>
-    </li><li name="org.specs2.specification.FragmentsBuilder" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.FragmentsBuilder" data-isabs="false">
       <a id="FragmentsBuilder:FragmentsBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1223,7 +1221,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.HtmlLink" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.HtmlLink" data-isabs="false">
       <a id="HtmlLink:HtmlLink"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1235,7 +1233,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.RegexStep" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.RegexStep" data-isabs="false">
       <a id="RegexStep:RegexStep"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1247,7 +1245,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.Stats" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.Stats" data-isabs="false">
       <a id="Stats:Stats"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1265,7 +1263,7 @@ examples must be executed concurrently and not isolated.</p>
 - errors
 - pending
 - skipped</p>
-    </li><li name="org.specs2.specification.Step" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.Step" data-isabs="false">
       <a id="Step:Step"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1277,7 +1275,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.Tags" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.Tags" data-isabs="false">
       <a id="Tags:Tags"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1289,7 +1287,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.TagsFragments" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.specification.TagsFragments" data-isabs="false">
       <a id="TagsFragments:TagsFragments"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1302,7 +1300,7 @@ examples must be executed concurrently and not isolated.</p>
       </h4>
       <p class="comment cmt">Those fragments are used to tag other fragments in a specification\
 </p>
-    </li><li name="org.specs2.specification.gen" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.gen" data-isabs="false">
       <a id="gen:gen"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1314,7 +1312,7 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.so" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.specification.so" data-isabs="false">
       <a id="so:so"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1333,7 +1331,6 @@ examples must be executed concurrently and not isolated.</p>
         </div>
 
         <div id="inheritedMembers">
-        
         
         </div>
 

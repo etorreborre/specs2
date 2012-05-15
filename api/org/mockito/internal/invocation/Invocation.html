@@ -2,65 +2,55 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Invocation - org.mockito.internal.invocation.Invocation</title>
-          <meta name="description" content="Invocation - org.mockito.internal.invocation.Invocation" />
-          <meta name="keywords" content="Invocation org.mockito.internal.invocation.Invocation" />
+          <title>org.mockito.internal.invocation.Invocation</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
       <script type="text/javascript" src="../../../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type" onload="sh_highlightDocument('../lib/', '.min.js');">
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
       <div id="definition">
-        <a href="Invocation$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
-        <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.mockito">mockito</a>.<a href="../package.html" class="extype" name="org.mockito.internal">internal</a>.<a href="package.html" class="extype" name="org.mockito.internal.invocation">invocation</a></p>
-        <h1><a href="Invocation$.html" title="Go to companion">Invocation</a></h1>
+        <a title="Go to companion" href="Invocation$.html"><img src="../../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.mockito" class="extype" href="../../package.html">mockito</a>.<a name="org.mockito.internal" class="extype" href="../package.html">internal</a>.<a name="org.mockito.internal.invocation" class="extype" href="package.html">invocation</a></p>
+        <h1><a title="Go to companion" href="Invocation$.html">Invocation</a></h1>
       </div>
 
-      <h4 id="signature" class="signature">
+      <h4 class="signature" id="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Invocation</span><span class="result"> extends <span class="extype" name="org.mockito.exceptions.PrintableInvocation">PrintableInvocation</span> with <span class="extype" name="org.mockito.invocation.InvocationOnMock">InvocationOnMock</span> with <span class="extype" name="org.mockito.internal.reporting.PrintingFriendlyInvocation">PrintingFriendlyInvocation</span> with <span class="extype" name="org.mockito.internal.exceptions.VerificationAwareInvocation">VerificationAwareInvocation</span></span>
+        <span class="name">Invocation</span><span class="result"> extends <span name="org.mockito.exceptions.PrintableInvocation" class="extype">PrintableInvocation</span> with <span name="org.mockito.invocation.InvocationOnMock" class="extype">InvocationOnMock</span> with <span name="org.mockito.internal.reporting.PrintingFriendlyInvocation" class="extype">PrintingFriendlyInvocation</span> with <span name="org.mockito.internal.exceptions.VerificationAwareInvocation" class="extype">VerificationAwareInvocation</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This class redefines Mockito Invocation behavior class when evaluating byname arguments.</p><p>The only changed method is <code>argumentsToMatchers</code>
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This class redefines Mockito Invocation behavior class when evaluating byname arguments.</p><p>The only changed method is <code>argumentsToMatchers</code>
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@SuppressWarnings</span><span class="args">()</span>
               
         </dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="org.mockito.internal.exceptions.VerificationAwareInvocation">VerificationAwareInvocation</span>, <span class="extype" name="org.mockito.internal.reporting.PrintingFriendlyInvocation">PrintingFriendlyInvocation</span>, <span class="extype" name="org.mockito.invocation.InvocationOnMock">InvocationOnMock</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="org.mockito.exceptions.PrintableInvocation">PrintableInvocation</span>, AnyRef, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="org.mockito.internal.exceptions.VerificationAwareInvocation" class="extype">VerificationAwareInvocation</span>, <span name="org.mockito.internal.reporting.PrintingFriendlyInvocation" class="extype">PrintingFriendlyInvocation</span>, <span name="org.mockito.invocation.InvocationOnMock" class="extype">InvocationOnMock</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="org.mockito.exceptions.PrintableInvocation" class="extype">PrintableInvocation</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
-        
+    
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
         <div id="order">
               <span class="filtertype">Ordering</span>
               <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
             </div>
         <div id="ancestors">
-                <span class="filtertype">Inherited<br />
-                </span>
-                <ol id="linearization">
-                  <li class="in" name="org.mockito.internal.invocation.Invocation"><span>Invocation</span></li><li class="in" name="org.mockito.internal.exceptions.VerificationAwareInvocation"><span>VerificationAwareInvocation</span></li><li class="in" name="org.mockito.internal.reporting.PrintingFriendlyInvocation"><span>PrintingFriendlyInvocation</span></li><li class="in" name="org.mockito.invocation.InvocationOnMock"><span>InvocationOnMock</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="org.mockito.exceptions.PrintableInvocation"><span>PrintableInvocation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                </ol>
-              </div><div id="ancestors">
-            <span class="filtertype"></span>
-            <ol>
-              <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
-            </ol>
-            <a href="docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
-          </div>
+              <span class="filtertype">Inherited</span>
+              <ol><li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li></ol>
+              <ol id="linearization"><li name="org.mockito.internal.invocation.Invocation" class="in"><span>Invocation</span></li><li name="org.mockito.internal.exceptions.VerificationAwareInvocation" class="in"><span>VerificationAwareInvocation</span></li><li name="org.mockito.internal.reporting.PrintingFriendlyInvocation" class="in"><span>PrintingFriendlyInvocation</span></li><li name="org.mockito.invocation.InvocationOnMock" class="in"><span>InvocationOnMock</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="org.mockito.exceptions.PrintableInvocation" class="in"><span>PrintableInvocation</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+            </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
             <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
@@ -69,22 +59,22 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
+        <div class="members" id="constructors">
               <h3>Instance Constructors</h3>
-              <ol><li name="org.mockito.internal.invocation.Invocation#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no">
-      <a id="&lt;init&gt;:Invocation"></a>
+              <ol><li visbl="pub" name="org.mockito.internal.invocation.Invocation#this" data-isabs="false">
+      <a id="this:Invocation"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Invocation</span><span class="params">(<span name="mock">mock: AnyRef</span>, <span name="mockitoMethod">mockitoMethod: <span class="extype" name="org.mockito.internal.invocation.MockitoMethod">MockitoMethod</span></span>, <span name="args">args: <span class="extype" name="scala.Array">Array</span>[AnyRef]</span>, <span name="sequenceNumber">sequenceNumber: <span class="extype" name="scala.Int">Int</span></span>, <span name="realMethod">realMethod: <span class="extype" name="org.mockito.internal.invocation.realmethod.RealMethod">RealMethod</span></span>)</span>
+        <span class="name">Invocation</span><span class="params">(<span name="mock">mock: AnyRef</span>, <span name="mockitoMethod">mockitoMethod: <span name="org.mockito.internal.invocation.MockitoMethod" class="extype">MockitoMethod</span></span>, <span name="args">args: <span name="scala.Array" class="extype">Array</span>[AnyRef]</span>, <span name="sequenceNumber">sequenceNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="realMethod">realMethod: <span name="org.mockito.internal.invocation.realmethod.RealMethod" class="extype">RealMethod</span></span>)</span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no">
-      <a id="&lt;init&gt;:Invocation"></a>
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#this" data-isabs="false">
+      <a id="this:Invocation"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -102,9 +92,9 @@
 
         
 
-        <div id="values" class="values members">
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes">
+              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -112,11 +102,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -124,11 +114,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
       <a id="##():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -136,11 +126,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name" title="gt4s: $hash$hash">##</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
       <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -148,11 +138,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -160,11 +150,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#argumentsToMatchers" visbl="prt" data-isabs="false" fullComment="yes">
+    </li><li visbl="prt" name="org.mockito.internal.invocation.Invocation#argumentsToMatchers" data-isabs="false">
       <a id="argumentsToMatchers:List[org.hamcrest.Matcher[_]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -172,11 +162,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">argumentsToMatchers</span><span class="result">: <span class="extype" name="java.util.List">List</span>[org.hamcrest.Matcher[_]]</span>
+        <span class="name">argumentsToMatchers</span><span class="result">: <span name="java.util.List" class="extype">List</span>[org.hamcrest.Matcher[_]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -188,7 +178,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#callRealMethod" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#callRealMethod" data-isabs="false">
       <a id="callRealMethod():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -199,8 +189,8 @@
         <span class="name">callRealMethod</span><span class="params">()</span><span class="result">: AnyRef</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → InvocationOnMock</dd></dl></div>
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → InvocationOnMock</dd></dl></div>
+    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -211,11 +201,11 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java/lang/package.html" class="extype" name="java.lang">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -223,11 +213,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#equals" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -235,11 +225,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="o">o: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span><span class="params">(<span name="o">o: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -247,14 +237,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java/lang/package.html" class="extype" name="java.lang">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#getArguments" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#getArguments" data-isabs="false">
       <a id="getArguments():Array[AnyRef]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -262,11 +252,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getArguments</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[AnyRef]</span>
+        <span class="name">getArguments</span><span class="params">()</span><span class="result">: <span name="scala.Array" class="extype">Array</span>[AnyRef]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → InvocationOnMock</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#getArgumentsCount" visbl="pub" data-isabs="false" fullComment="no">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → InvocationOnMock</dd></dl></div>
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#getArgumentsCount" data-isabs="false">
       <a id="getArgumentsCount:Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -274,23 +264,23 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getArgumentsCount</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">getArgumentsCount</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
       
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes">
-      <a id="getClass():Class[_]"></a>
+    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
+      <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: Class[_]</span>
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#getLocation" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#getLocation" data-isabs="false">
       <a id="getLocation():Location"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -298,11 +288,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getLocation</span><span class="params">()</span><span class="result">: <span class="extype" name="org.mockito.internal.debugging.Location">Location</span></span>
+        <span class="name">getLocation</span><span class="params">()</span><span class="result">: <span name="org.mockito.internal.debugging.Location" class="extype">Location</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → PrintableInvocation</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#getMethod" visbl="pub" data-isabs="false" fullComment="yes">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → PrintableInvocation</dd></dl></div>
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#getMethod" data-isabs="false">
       <a id="getMethod():Method"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -310,11 +300,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getMethod</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.reflect.Method">Method</span></span>
+        <span class="name">getMethod</span><span class="params">()</span><span class="result">: <span name="java.lang.reflect.Method" class="extype">Method</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → InvocationOnMock</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#getMethodName" visbl="pub" data-isabs="false" fullComment="no">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → InvocationOnMock</dd></dl></div>
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#getMethodName" data-isabs="false">
       <a id="getMethodName:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -326,7 +316,7 @@
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#getMock" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#getMock" data-isabs="false">
       <a id="getMock():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -337,8 +327,8 @@
         <span class="name">getMock</span><span class="params">()</span><span class="result">: AnyRef</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → InvocationOnMock</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#getRawArguments" visbl="pub" data-isabs="false" fullComment="no">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → InvocationOnMock</dd></dl></div>
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#getRawArguments" data-isabs="false">
       <a id="getRawArguments:Array[AnyRef]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -346,11 +336,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getRawArguments</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[AnyRef]</span>
+        <span class="name">getRawArguments</span><span class="result">: <span name="scala.Array" class="extype">Array</span>[AnyRef]</span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#getSequenceNumber" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#getSequenceNumber" data-isabs="false">
       <a id="getSequenceNumber:Integer"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -358,11 +348,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getSequenceNumber</span><span class="result">: <span class="extype" name="java.lang.Integer">Integer</span></span>
+        <span class="name">getSequenceNumber</span><span class="result">: <span name="java.lang.Integer" class="extype">Integer</span></span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#hashCode" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -370,11 +360,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → AnyRef → Any</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#ignoreForVerification" visbl="pub" data-isabs="false" fullComment="no">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#ignoreForVerification" data-isabs="false">
       <a id="ignoreForVerification:Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -382,11 +372,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ignoreForVerification</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">ignoreForVerification</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#isDeclaredOnInterface" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#isDeclaredOnInterface" data-isabs="false">
       <a id="isDeclaredOnInterface:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -394,11 +384,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isDeclaredOnInterface</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isDeclaredOnInterface</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#isIgnoredForVerification" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#isIgnoredForVerification" data-isabs="false">
       <a id="isIgnoredForVerification:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -406,11 +396,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isIgnoredForVerification</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isIgnoredForVerification</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -418,11 +408,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#isToString" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#isToString" data-isabs="false">
       <a id="isToString:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -430,11 +420,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isToString</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isToString</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#isValidException" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#isValidException" data-isabs="false">
       <a id="isValidException(Throwable):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -442,11 +432,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isValidException</span><span class="params">(<span name="throwable">throwable: Throwable</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isValidException</span><span class="params">(<span name="throwable">throwable: Throwable</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#isValidReturnType" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#isValidReturnType" data-isabs="false">
       <a id="isValidReturnType(Class[_]):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -454,11 +444,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isValidReturnType</span><span class="params">(<span name="clazz">clazz: Class[_]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isValidReturnType</span><span class="params">(<span name="clazz">clazz: Class[_]</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#isVerified" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#isVerified" data-isabs="false">
       <a id="isVerified():Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -466,11 +456,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isVerified</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isVerified</span><span class="params">()</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → VerificationAwareInvocation</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#isVoid" visbl="pub" data-isabs="false" fullComment="no">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → VerificationAwareInvocation</dd></dl></div>
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#isVoid" data-isabs="false">
       <a id="isVoid:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -478,11 +468,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isVoid</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isVoid</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#markStubbed" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#markStubbed" data-isabs="false">
       <a id="markStubbed(StubInfo):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -490,11 +480,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">markStubbed</span><span class="params">(<span name="stubInfo">stubInfo: <span class="extype" name="org.mockito.internal.invocation.StubInfo">StubInfo</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">markStubbed</span><span class="params">(<span name="stubInfo">stubInfo: <span name="org.mockito.internal.invocation.StubInfo" class="extype">StubInfo</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -502,11 +492,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
       <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -514,11 +504,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -526,11 +516,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#printMethodReturnType" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#printMethodReturnType" data-isabs="false">
       <a id="printMethodReturnType:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -542,7 +532,7 @@
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#returnsPrimitive" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#returnsPrimitive" data-isabs="false">
       <a id="returnsPrimitive:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -550,11 +540,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">returnsPrimitive</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">returnsPrimitive</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li name="org.mockito.internal.invocation.Invocation#stubInfo" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#stubInfo" data-isabs="false">
       <a id="stubInfo:StubInfo"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -562,11 +552,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">stubInfo</span><span class="result">: <span class="extype" name="org.mockito.internal.invocation.StubInfo">StubInfo</span></span>
+        <span class="name">stubInfo</span><span class="result">: <span name="org.mockito.internal.invocation.StubInfo" class="extype">StubInfo</span></span>
       </span>
       </h4>
       
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -578,7 +568,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#toString" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#toString" data-isabs="false">
       <a id="toString(PrintSettings):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -586,11 +576,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">(<span name="printSettings">printSettings: <span class="extype" name="org.mockito.internal.reporting.PrintSettings">PrintSettings</span></span>)</span><span class="result">: String</span>
+        <span class="name">toString</span><span class="params">(<span name="printSettings">printSettings: <span name="org.mockito.internal.reporting.PrintSettings" class="extype">PrintSettings</span></span>)</span><span class="result">: String</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → PrintingFriendlyInvocation</dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#toString" visbl="prt" data-isabs="false" fullComment="yes">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → PrintingFriendlyInvocation</dd></dl></div>
+    </li><li visbl="prt" name="org.mockito.internal.invocation.Invocation#toString" data-isabs="false">
       <a id="toString(List[org.hamcrest.Matcher[_]],PrintSettings):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -598,11 +588,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">(<span name="matchers">matchers: <span class="extype" name="java.util.List">List</span>[org.hamcrest.Matcher[_]]</span>, <span name="printSettings">printSettings: <span class="extype" name="org.mockito.internal.reporting.PrintSettings">PrintSettings</span></span>)</span><span class="result">: String</span>
+        <span class="name">toString</span><span class="params">(<span name="matchers">matchers: <span name="java.util.List" class="extype">List</span>[org.hamcrest.Matcher[_]]</span>, <span name="printSettings">printSettings: <span name="org.mockito.internal.reporting.PrintSettings" class="extype">PrintSettings</span></span>)</span><span class="result">: String</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="org.mockito.internal.invocation.Invocation#toString" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.mockito.internal.invocation.Invocation#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -613,8 +603,8 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: String</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.mockito.internal.invocation.Invocation">Invocation</a> → PrintableInvocation → AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.mockito.internal.invocation.Invocation" class="extype" href="">Invocation</a> → PrintableInvocation → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -622,14 +612,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -637,14 +627,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -652,7 +642,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -666,22 +656,21 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="org.mockito.internal.exceptions.VerificationAwareInvocation">
-              <h3>Inherited from <span class="extype" name="org.mockito.internal.exceptions.VerificationAwareInvocation">VerificationAwareInvocation</span></h3>
-            </div><div class="parent" name="org.mockito.internal.reporting.PrintingFriendlyInvocation">
-              <h3>Inherited from <span class="extype" name="org.mockito.internal.reporting.PrintingFriendlyInvocation">PrintingFriendlyInvocation</span></h3>
-            </div><div class="parent" name="org.mockito.invocation.InvocationOnMock">
-              <h3>Inherited from <span class="extype" name="org.mockito.invocation.InvocationOnMock">InvocationOnMock</span></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="org.mockito.exceptions.PrintableInvocation">
-              <h3>Inherited from <span class="extype" name="org.mockito.exceptions.PrintableInvocation">PrintableInvocation</span></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div name="org.mockito.internal.exceptions.VerificationAwareInvocation" class="parent">
+              <h3>Inherited from <span name="org.mockito.internal.exceptions.VerificationAwareInvocation" class="extype">VerificationAwareInvocation</span></h3>
+            </div><div name="org.mockito.internal.reporting.PrintingFriendlyInvocation" class="parent">
+              <h3>Inherited from <span name="org.mockito.internal.reporting.PrintingFriendlyInvocation" class="extype">PrintingFriendlyInvocation</span></h3>
+            </div><div name="org.mockito.invocation.InvocationOnMock" class="parent">
+              <h3>Inherited from <span name="org.mockito.invocation.InvocationOnMock" class="extype">InvocationOnMock</span></h3>
+            </div><div name="java.io.Serializable" class="parent">
+              <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="org.mockito.exceptions.PrintableInvocation" class="parent">
+              <h3>Inherited from <span name="org.mockito.exceptions.PrintableInvocation" class="extype">PrintableInvocation</span></h3>
+            </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
-            </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div><div name="scala.Any" class="parent">
+              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
             </div>
-        
         </div>
 
       </div>

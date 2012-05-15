@@ -2,63 +2,53 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Decorator - org.specs2.form.Decorator</title>
-          <meta name="description" content="Decorator - org.specs2.form.Decorator" />
-          <meta name="keywords" content="Decorator org.specs2.form.Decorator" />
+          <title>org.specs2.form.Decorator</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
       <script type="text/javascript" src="../../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type" onload="sh_highlightDocument('../lib/', '.min.js');">
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
       <div id="definition">
         <img src="../../../lib/class_big.png" />
-        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.form">form</a></p>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.form" class="extype" href="package.html">form</a></p>
         <h1>Decorator</h1>
       </div>
 
-      <h4 id="signature" class="signature">
+      <h4 class="signature" id="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Decorator</span><span class="params">(<span name="label">label: (<span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Any">Any</span></span>, <span name="value">value: (<span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Any">Any</span></span>, <span name="labelStyles">labelStyles: Seq[String]</span>, <span name="valueStyles">valueStyles: Seq[String]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Decorator</span><span class="params">(<span name="label">label: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="value">value: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>, <span name="labelStyles">labelStyles: Seq[String]</span>, <span name="valueStyles">valueStyles: Seq[String]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This class contains functions to decorate and style a label and a value:</p><ul><li>with a function taking the xml for the label/value and returning some xml</li><li>with some xml attributes &quot;name&quot;:&quot;value&quot; to style those labels/values</li></ul><p>The methods of that class allow to stack new decoration, new styling attributes but also define standard decoration
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This class contains functions to decorate and style a label and a value:</p><ul><li>with a function taking the xml for the label/value and returning some xml</li><li>with some xml attributes &quot;name&quot;:&quot;value&quot; to style those labels/values</li></ul><p>The methods of that class allow to stack new decoration, new styling attributes but also define standard decoration
 and styles for bold / italic / centered ... text.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, AnyRef, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
-        
+    
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
         <div id="order">
               <span class="filtertype">Ordering</span>
               <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
             </div>
         <div id="ancestors">
-                <span class="filtertype">Inherited<br />
-                </span>
-                <ol id="linearization">
-                  <li class="in" name="org.specs2.form.Decorator"><span>Decorator</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                </ol>
-              </div><div id="ancestors">
-            <span class="filtertype"></span>
-            <ol>
-              <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
-            </ol>
-            <a href="docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
-          </div>
+              <span class="filtertype">Inherited</span>
+              <ol><li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li></ol>
+              <ol id="linearization"><li name="org.specs2.form.Decorator" class="in"><span>Decorator</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+            </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
             <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
@@ -67,17 +57,17 @@ and styles for bold / italic / centered ... text.
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
+        <div class="members" id="constructors">
               <h3>Instance Constructors</h3>
-              <ol><li name="org.specs2.form.Decorator#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no">
-      <a id="&lt;init&gt;:Decorator"></a>
+              <ol><li visbl="pub" name="org.specs2.form.Decorator#this" data-isabs="false">
+      <a id="this:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Decorator</span><span class="params">(<span name="label">label: (<span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Any">Any</span> = <span class="defval" name="{<br/>&amp;nbsp;&amp;nbsp;  ((x: Any) =&gt; scala.this.Predef.identity[Any](x))<br/>&amp;nbsp;&amp;nbsp;}">...</span></span>, <span name="value">value: (<span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Any">Any</span> = <span class="defval" name="{<br/>&amp;nbsp;&amp;nbsp;  ((x: Any) =&gt; scala.this.Predef.identity[Any](x))<br/>&amp;nbsp;&amp;nbsp;}">...</span></span>, <span name="labelStyles">labelStyles: Seq[String] = <span class="defval" name="scala.`package`.Vector.apply[Nothing]()">...</span></span>, <span name="valueStyles">valueStyles: Seq[String] = <span class="defval" name="scala.`package`.Vector.apply[Nothing]()">...</span></span>)</span>
+        <span class="name">Decorator</span><span class="params">(<span name="label">label: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span> = <span name="{<br></br>&amp;nbsp;&amp;nbsp;  ((x: Any) =&gt; scala.this.Predef.identity[Any](x))<br></br>&amp;nbsp;&amp;nbsp;}" class="defval">...</span></span>, <span name="value">value: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span> = <span name="{<br></br>&amp;nbsp;&amp;nbsp;  ((x: Any) =&gt; scala.this.Predef.identity[Any](x))<br></br>&amp;nbsp;&amp;nbsp;}" class="defval">...</span></span>, <span name="labelStyles">labelStyles: Seq[String] = <span name="scala.`package`.Vector.apply[Nothing]()" class="defval">...</span></span>, <span name="valueStyles">valueStyles: Seq[String] = <span name="scala.`package`.Vector.apply[Nothing]()" class="defval">...</span></span>)</span>
       </span>
       </h4>
       
@@ -88,9 +78,9 @@ and styles for bold / italic / centered ... text.
 
         
 
-        <div id="values" class="values members">
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes">
+              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,11 +88,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -110,11 +100,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
       <a id="##():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -122,11 +112,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name" title="gt4s: $hash$hash">##</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
       <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -134,11 +124,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -146,11 +136,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -162,7 +152,7 @@ and styles for bold / italic / centered ... text.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.specs2.form.Decorator#bkBlue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkBlue" data-isabs="false">
       <a id="bkBlue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -170,11 +160,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkBlue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkBlue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkBlueLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkBlueLabel" data-isabs="false">
       <a id="bkBlueLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -182,11 +172,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkBlueLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkBlueLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkBlueValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkBlueValue" data-isabs="false">
       <a id="bkBlueValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -194,11 +184,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkBlueValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkBlueValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkColor" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkColor" data-isabs="false">
       <a id="bkColor(String):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -206,11 +196,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkColor</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkColor</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkColorLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkColorLabel" data-isabs="false">
       <a id="bkColorLabel(String):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -218,11 +208,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkColorLabel</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkColorLabel</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkColorValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkColorValue" data-isabs="false">
       <a id="bkColorValue(String):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -230,11 +220,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkColorValue</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkColorValue</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkGreen" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkGreen" data-isabs="false">
       <a id="bkGreen:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -242,11 +232,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkGreen</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkGreen</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkGreenLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkGreenLabel" data-isabs="false">
       <a id="bkGreenLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -254,11 +244,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkGreenLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkGreenLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkGreenValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkGreenValue" data-isabs="false">
       <a id="bkGreenValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -266,11 +256,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkGreenValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkGreenValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkGrey" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkGrey" data-isabs="false">
       <a id="bkGrey:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -278,11 +268,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkGrey</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkGrey</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkGreyLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkGreyLabel" data-isabs="false">
       <a id="bkGreyLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -290,11 +280,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkGreyLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkGreyLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkGreyValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkGreyValue" data-isabs="false">
       <a id="bkGreyValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -302,11 +292,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkGreyValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkGreyValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkRed" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkRed" data-isabs="false">
       <a id="bkRed:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -314,11 +304,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkRed</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkRed</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkRedLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkRedLabel" data-isabs="false">
       <a id="bkRedLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -326,11 +316,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkRedLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkRedLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkRedValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkRedValue" data-isabs="false">
       <a id="bkRedValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -338,11 +328,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkRedValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkRedValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkWhite" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkWhite" data-isabs="false">
       <a id="bkWhite:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -350,11 +340,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkWhite</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkWhite</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkWhiteLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkWhiteLabel" data-isabs="false">
       <a id="bkWhiteLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -362,11 +352,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkWhiteLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkWhiteLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkWhiteValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkWhiteValue" data-isabs="false">
       <a id="bkWhiteValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -374,11 +364,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkWhiteValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkWhiteValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkYellow" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkYellow" data-isabs="false">
       <a id="bkYellow:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -386,11 +376,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkYellow</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkYellow</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkYellowLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkYellowLabel" data-isabs="false">
       <a id="bkYellowLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -398,11 +388,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkYellowLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkYellowLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bkYellowValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bkYellowValue" data-isabs="false">
       <a id="bkYellowValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -410,11 +400,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bkYellowValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bkYellowValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#blue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#blue" data-isabs="false">
       <a id="blue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -422,11 +412,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">blue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">blue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#blueLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#blueLabel" data-isabs="false">
       <a id="blueLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -434,11 +424,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">blueLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">blueLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#blueValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#blueValue" data-isabs="false">
       <a id="blueValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -446,11 +436,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">blueValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">blueValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#bold" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#bold" data-isabs="false">
       <a id="bold:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -458,11 +448,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bold</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">bold</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#boldLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#boldLabel" data-isabs="false">
       <a id="boldLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -470,11 +460,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">boldLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">boldLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#boldValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#boldValue" data-isabs="false">
       <a id="boldValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -482,11 +472,23 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">boldValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">boldValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#center" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#canEqual" data-isabs="false">
+      <a id="canEqual(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">canEqual</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a> → Equals</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.form.Decorator#center" data-isabs="false">
       <a id="center:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -494,11 +496,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">center</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">center</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#centerLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#centerLabel" data-isabs="false">
       <a id="centerLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -506,11 +508,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">centerLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">centerLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#centerValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#centerValue" data-isabs="false">
       <a id="centerValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -518,11 +520,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">centerValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">centerValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes">
+    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -533,11 +535,11 @@ and styles for bold / italic / centered ... text.
         <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java/lang/package.html" class="extype" name="java.lang">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="org.specs2.form.Decorator#code" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#code" data-isabs="false">
       <a id="code:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -545,11 +547,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">code</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">code</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#codeLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#codeLabel" data-isabs="false">
       <a id="codeLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -557,11 +559,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">codeLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">codeLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#codeValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#codeValue" data-isabs="false">
       <a id="codeValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -569,11 +571,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">codeValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">codeValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#color" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#color" data-isabs="false">
       <a id="color(String):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -581,11 +583,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">color</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">color</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#colorLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#colorLabel" data-isabs="false">
       <a id="colorLabel(String):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -593,11 +595,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">colorLabel</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">colorLabel</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#colorValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#colorValue" data-isabs="false">
       <a id="colorValue(String):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -605,11 +607,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">colorValue</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">colorValue</span><span class="params">(<span name="c">c: String</span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#decorateLabelWith" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#decorateLabelWith" data-isabs="false">
       <a id="decorateLabelWith((Any) ⇒ Any):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -617,11 +619,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">decorateLabelWith</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">decorateLabelWith</span><span class="params">(<span name="f">f: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#decorateValueWith" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#decorateValueWith" data-isabs="false">
       <a id="decorateValueWith((Any) ⇒ Any):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -629,11 +631,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">decorateValueWith</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">decorateValueWith</span><span class="params">(<span name="f">f: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#decorateWith" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#decorateWith" data-isabs="false">
       <a id="decorateWith((Any) ⇒ Any):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -641,11 +643,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">decorateWith</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">decorateWith</span><span class="params">(<span name="f">f: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -653,11 +655,23 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#equals" data-isabs="false">
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a> → Equals → AnyRef → Any</dd></dl></div>
+    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -665,26 +679,26 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java/lang/package.html" class="extype" name="java.lang">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes">
-      <a id="getClass():Class[_]"></a>
+    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
+      <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: Class[_]</span>
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.specs2.form.Decorator#green" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#green" data-isabs="false">
       <a id="green:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -692,11 +706,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">green</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">green</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#greenLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#greenLabel" data-isabs="false">
       <a id="greenLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -704,11 +718,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">greenLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">greenLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#greenValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#greenValue" data-isabs="false">
       <a id="greenValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -716,11 +730,23 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">greenValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">greenValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#hashCode" data-isabs="false">
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -728,11 +754,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.specs2.form.Decorator#italics" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#italics" data-isabs="false">
       <a id="italics:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -740,11 +766,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">italics</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">italics</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#italicsLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#italicsLabel" data-isabs="false">
       <a id="italicsLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -752,11 +778,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">italicsLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">italicsLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#italicsValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#italicsValue" data-isabs="false">
       <a id="italicsValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -764,11 +790,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">italicsValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">italicsValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#label" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#label" data-isabs="false">
       <a id="label:(Any) ⇒ Any"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -776,11 +802,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">label</span><span class="result">: (<span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Any">Any</span></span>
+        <span class="name">label</span><span class="result">: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#labelStyles" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#labelStyles" data-isabs="false">
       <a id="labelStyles:Seq[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -792,7 +818,7 @@ and styles for bold / italic / centered ... text.
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#left" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#left" data-isabs="false">
       <a id="left:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -800,11 +826,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">left</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">left</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#leftLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#leftLabel" data-isabs="false">
       <a id="leftLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -812,11 +838,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">leftLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">leftLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#leftValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#leftValue" data-isabs="false">
       <a id="leftValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -824,11 +850,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">leftValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">leftValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -836,11 +862,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
       <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -848,11 +874,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -860,11 +886,59 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.specs2.form.Decorator#red" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#productArity" data-isabs="false">
+      <a id="productArity:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productArity</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.form.Decorator#productElement" data-isabs="false">
+      <a id="productElement(Int):Any"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productElement</span><span class="params">(<span name="arg0">arg0: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Any" class="extype">Any</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="scala.Product#productIterator" data-isabs="false">
+      <a id="productIterator:Iterator[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productIterator</span><span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.form.Decorator#productPrefix" data-isabs="false">
+      <a id="productPrefix:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productPrefix</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.form.Decorator#red" data-isabs="false">
       <a id="red:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -872,11 +946,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">red</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">red</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#redLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#redLabel" data-isabs="false">
       <a id="redLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -884,11 +958,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">redLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">redLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#redValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#redValue" data-isabs="false">
       <a id="redValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -896,11 +970,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">redValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">redValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#right" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#right" data-isabs="false">
       <a id="right:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -908,11 +982,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">right</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">right</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#rightLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#rightLabel" data-isabs="false">
       <a id="rightLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -920,11 +994,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">rightLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">rightLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#rightValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#rightValue" data-isabs="false">
       <a id="rightValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -932,11 +1006,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">rightValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">rightValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#styleLabelWith" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#styleLabelWith" data-isabs="false">
       <a id="styleLabelWith((String, String)):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -944,11 +1018,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">styleLabelWith</span><span class="params">(<span name="s">s: (String, String)</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">styleLabelWith</span><span class="params">(<span name="s">s: (String, String)</span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#styleValueWith" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#styleValueWith" data-isabs="false">
       <a id="styleValueWith((String, String)):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -956,11 +1030,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">styleValueWith</span><span class="params">(<span name="s">s: (String, String)</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">styleValueWith</span><span class="params">(<span name="s">s: (String, String)</span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#styleWith" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#styleWith" data-isabs="false">
       <a id="styleWith((String, String)):Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -968,11 +1042,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">styleWith</span><span class="params">(<span name="s">s: (String, String)</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">styleWith</span><span class="params">(<span name="s">s: (String, String)</span>)</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -984,7 +1058,19 @@ and styles for bold / italic / centered ... text.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.specs2.form.Decorator#value" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#toString" data-isabs="false">
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: String</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.form.Decorator#value" data-isabs="false">
       <a id="value:(Any) ⇒ Any"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -992,11 +1078,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">value</span><span class="result">: (<span class="extype" name="scala.Any">Any</span>) ⇒ <span class="extype" name="scala.Any">Any</span></span>
+        <span class="name">value</span><span class="result">: (<span name="scala.Any" class="extype">Any</span>) ⇒ <span name="scala.Any" class="extype">Any</span></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#valueStyles" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#valueStyles" data-isabs="false">
       <a id="valueStyles:Seq[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1008,7 +1094,7 @@ and styles for bold / italic / centered ... text.
       </span>
       </h4>
       
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1016,14 +1102,14 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1031,14 +1117,14 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1046,14 +1132,14 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="org.specs2.form.Decorator#white" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#white" data-isabs="false">
       <a id="white:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1061,11 +1147,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">white</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">white</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#whiteLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#whiteLabel" data-isabs="false">
       <a id="whiteLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1073,11 +1159,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">whiteLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">whiteLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#whiteValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#whiteValue" data-isabs="false">
       <a id="whiteValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1085,11 +1171,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">whiteValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">whiteValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#yellow" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#yellow" data-isabs="false">
       <a id="yellow:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1097,11 +1183,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">yellow</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">yellow</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#yellowLabel" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#yellowLabel" data-isabs="false">
       <a id="yellowLabel:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1109,11 +1195,11 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">yellowLabel</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">yellowLabel</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.form.Decorator#yellowValue" visbl="pub" data-isabs="false" fullComment="no">
+    </li><li visbl="pub" name="org.specs2.form.Decorator#yellowValue" data-isabs="false">
       <a id="yellowValue:Decorator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1121,31 +1207,48 @@ and styles for bold / italic / centered ... text.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">yellowValue</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Decorator">Decorator</a></span>
+        <span class="name">yellowValue</span><span class="result">: <a name="org.specs2.form.Decorator" class="extype" href="">Decorator</a></span>
       </span>
       </h4>
       
     </li></ol>
             </div>
 
-        
+        <div class="values members" id="values">
+              <h3>Deprecated Value Members</h3>
+              <ol><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
+      <a id="productElements:Iterator[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2.8.0) use productIterator instead">productElements</span><span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.8.0)</i> use productIterator instead</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div name="scala.Serializable" class="parent">
+              <h3>Inherited from <span name="scala.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="java.io.Serializable" class="parent">
+              <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="scala.Product" class="parent">
+              <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
+            </div><div name="scala.Equals" class="parent">
+              <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
+            </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
-            </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div><div name="scala.Any" class="parent">
+              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
             </div>
-        
         </div>
 
       </div>

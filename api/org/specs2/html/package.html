@@ -2,26 +2,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>html - org.specs2.html</title>
-          <meta name="description" content="html - org.specs2.html" />
-          <meta name="keywords" content="html org.specs2.html" />
+          <title>org.specs2.html</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
       <script type="text/javascript" src="../../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value" onload="sh_highlightDocument('../lib/', '.min.js');">
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
       <div id="definition">
         <img src="../../../lib/package_big.png" />
-        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
         <h1>html</h1>
       </div>
 
-      <h4 id="signature" class="signature">
+      <h4 class="signature" id="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">package</span>
@@ -31,12 +29,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This package provides newtypes for strings representing toc ids
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This package provides newtypes for strings representing toc ids
 </p></div></div>
-        
+    
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
         
         
         <div id="visbl">
@@ -49,9 +47,9 @@
         <div id="allMembers">
         
 
-        <div id="types" class="types members">
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li name="org.specs2.data.TaggedTypes#@@" visbl="pub" data-isabs="false" fullComment="yes">
+              <ol><li visbl="pub" name="org.specs2.data.TaggedTypes#@@" data-isabs="false">
       <a id="@@:@@[T, U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -59,11 +57,11 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $at$at" class="name">@@</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="result"> = T with Tagged[U]</span>
+        <span class="name" title="gt4s: $at$at">@@</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="result"> = T with Tagged[U]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../data/TaggedTypes.html" class="extype" name="org.specs2.data.TaggedTypes">TaggedTypes</a></dd></dl></div>
-    </li><li name="org.specs2.html.MarkdownLink" visbl="pub" data-isabs="false" fullComment="yes">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TaggedTypes" class="extype" href="../data/TaggedTypes.html">TaggedTypes</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.html.MarkdownLink" data-isabs="false">
       <a id="MarkdownLink:MarkdownLink"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -76,7 +74,7 @@
       </h4>
       <p class="comment cmt">This class provides functionalities for manipulating Markdown links
 </p>
-    </li><li name="org.specs2.data.TaggedTypes#Newtype" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.data.TaggedTypes#Newtype" data-isabs="false">
       <a id="Newtype:Newtype[Repr, Ops]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -84,14 +82,14 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Newtype</span><span class="tparams">[<span name="Repr">Repr</span>, <span name="Ops">Ops</span>]</span><span class="result"> = Tagged[<a href="../data/TaggedTypes$NewtypeTag.html" class="extype" name="org.specs2.data.TaggedTypes.NewtypeTag">NewtypeTag</a>[Repr, Ops]]</span>
+        <span class="name">Newtype</span><span class="tparams">[<span name="Repr">Repr</span>, <span name="Ops">Ops</span>]</span><span class="result"> = Tagged[<a name="org.specs2.data.TaggedTypes.NewtypeTag" class="extype" href="../data/TaggedTypes$NewtypeTag.html">NewtypeTag</a>[Repr, Ops]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">New type with <code>Repr</code> as representation type and operations provided by <code>Ops</code>.</p><div class="fullcomment"><div class="comment cmt"><p>New type with <code>Repr</code> as representation type and operations provided by <code>Ops</code>.</p><p>Values of the newtype will not add any additional boxing beyond what's required for
 values of the representation type to conform to Any. In practice this means that value
 types will receive their standard Scala AnyVal boxing and reference types will be unboxed.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../data/TaggedTypes.html" class="extype" name="org.specs2.data.TaggedTypes">TaggedTypes</a></dd></dl></div>
-    </li><li name="org.specs2.data.TaggedTypes.NewtypeTag" visbl="pub" data-isabs="true" fullComment="no">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TaggedTypes" class="extype" href="../data/TaggedTypes.html">TaggedTypes</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.data.TaggedTypes.NewtypeTag" data-isabs="true">
       <a id="NewtypeTag:NewtypeTag[Repr, Ops]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -103,7 +101,7 @@ types will receive their standard Scala AnyVal boxing and reference types will b
       </span>
       </h4>
       
-    </li><li name="org.specs2.html.package#SpecId" visbl="pub" data-isabs="false" fullComment="yes">
+    </li><li visbl="pub" name="org.specs2.html.package#SpecId" data-isabs="false">
       <a id="SpecId:SpecId"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -111,11 +109,11 @@ types will receive their standard Scala AnyVal boxing and reference types will b
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">SpecId</span><span class="result"> = Tagged[<a href="../data/TaggedTypes$NewtypeTag.html" class="extype" name="org.specs2.data.TaggedTypes.NewtypeTag">NewtypeTag</a>[String, <a href="SpecIdOps.html" class="extype" name="org.specs2.html.SpecIdOps">SpecIdOps</a>]]</span>
+        <span class="name">SpecId</span><span class="result"> = Tagged[<a name="org.specs2.data.TaggedTypes.NewtypeTag" class="extype" href="../data/TaggedTypes$NewtypeTag.html">NewtypeTag</a>[String, <a name="org.specs2.html.package.SpecIdOps" class="extype" href="package$$SpecIdOps.html">SpecIdOps</a>]]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="package$.html" class="extype" name="org.specs2.html.package">package</a></dd></dl></div>
-    </li><li name="org.specs2.html.SpecIdOps" visbl="pub" data-isabs="false" fullComment="yes">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.html.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.html.package.SpecIdOps" data-isabs="false">
       <a id="SpecIdOps:SpecIdOps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -123,12 +121,11 @@ types will receive their standard Scala AnyVal boxing and reference types will b
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SpecIdOps.html"><span class="name">SpecIdOps</span></a><span class="params">(<span name="s">s: String</span>)</span><span class="result"> extends Product with Serializable</span>
+        <a href="package$$SpecIdOps.html"><span class="name">SpecIdOps</span></a><span class="params">(<span name="s">s: String</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">Wrapper for a specification id
-</p>
-    </li><li name="org.specs2.data.TaggedTypes#Tagged" visbl="pub" data-isabs="false" fullComment="yes">
+      
+    </li><li visbl="pub" name="org.specs2.data.TaggedTypes#Tagged" data-isabs="false">
       <a id="Tagged:Tagged[U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -139,8 +136,8 @@ types will receive their standard Scala AnyVal boxing and reference types will b
         <span class="name">Tagged</span><span class="tparams">[<span name="U">U</span>]</span><span class="result"> = AnyRef { type Tag = U }</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../data/TaggedTypes.html" class="extype" name="org.specs2.data.TaggedTypes">TaggedTypes</a></dd></dl></div>
-    </li><li name="org.specs2.data.TaggedTypes.Tagger" visbl="pub" data-isabs="false" fullComment="no">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TaggedTypes" class="extype" href="../data/TaggedTypes.html">TaggedTypes</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.data.TaggedTypes.Tagger" data-isabs="false">
       <a id="Tagger:Tagger[U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -157,9 +154,9 @@ types will receive their standard Scala AnyVal boxing and reference types will b
 
         
 
-        <div id="values" class="values members">
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li name="org.specs2.html.package#SpecId" visbl="pub" data-isabs="false" fullComment="yes">
+              <ol><li visbl="pub" name="org.specs2.html.package#SpecId" data-isabs="false">
       <a id="SpecId(String):SpecId"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -170,8 +167,8 @@ types will receive their standard Scala AnyVal boxing and reference types will b
         <span class="name">SpecId</span><span class="params">(<span name="id">id: String</span>)</span><span class="result">: SpecId</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="package$.html" class="extype" name="org.specs2.html.package">package</a></dd></dl></div>
-    </li><li name="org.specs2.data.TaggedTypes#newtype" visbl="pub" data-isabs="false" fullComment="yes">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.html.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.data.TaggedTypes#newtype" data-isabs="false">
       <a id="newtype[Repr, Ops](Repr):Newtype[Repr, Ops]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -183,8 +180,8 @@ types will receive their standard Scala AnyVal boxing and reference types will b
       </span>
       </h4>
       <p class="shortcomment cmt">Creates a value of the newtype given a value of its representation type.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a value of the newtype given a value of its representation type.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../data/TaggedTypes.html" class="extype" name="org.specs2.data.TaggedTypes">TaggedTypes</a></dd></dl></div>
-    </li><li name="org.specs2.data.TaggedTypes#newtypeOps" visbl="pub" data-isabs="false" fullComment="yes">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TaggedTypes" class="extype" href="../data/TaggedTypes.html">TaggedTypes</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.data.TaggedTypes#newtypeOps" data-isabs="false">
       <a id="newtypeOps[Repr, Ops](Newtype[Repr, Ops])((Repr) ⇒ Ops):Ops"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -197,8 +194,8 @@ types will receive their standard Scala AnyVal boxing and reference types will b
       </h4>
       <p class="shortcomment cmt">Implicit conversion of newtype to <code>Ops</code> type for the selection of <code>Ops</code> newtype operations.</p><div class="fullcomment"><div class="comment cmt"><p>Implicit conversion of newtype to <code>Ops</code> type for the selection of <code>Ops</code> newtype operations.</p><p>The implicit conversion <code>Repr =&gt; Ops</code> would typically be provided by publishing the companion
 object of the <code>Ops</code> type as an implicit value.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../data/TaggedTypes.html" class="extype" name="org.specs2.data.TaggedTypes">TaggedTypes</a></dd></dl></div>
-    </li><li name="org.specs2.data.TaggedTypes#tag" visbl="pub" data-isabs="false" fullComment="yes">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TaggedTypes" class="extype" href="../data/TaggedTypes.html">TaggedTypes</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.data.TaggedTypes#tag" data-isabs="false">
       <a id="tag[U]:Tagger[U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -206,10 +203,10 @@ object of the <code>Ops</code> type as an implicit value.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tag</span><span class="tparams">[<span name="U">U</span>]</span><span class="result">: <a href="../data/TaggedTypes$Tagger.html" class="extype" name="org.specs2.data.TaggedTypes.Tagger">Tagger</a>[U]</span>
+        <span class="name">tag</span><span class="tparams">[<span name="U">U</span>]</span><span class="result">: <a name="org.specs2.data.TaggedTypes.Tagger" class="extype" href="../data/TaggedTypes$Tagger.html">Tagger</a>[U]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../data/TaggedTypes.html" class="extype" name="org.specs2.data.TaggedTypes">TaggedTypes</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TaggedTypes" class="extype" href="../data/TaggedTypes.html">TaggedTypes</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -217,7 +214,6 @@ object of the <code>Ops</code> type as an implicit value.
         </div>
 
         <div id="inheritedMembers">
-        
         
         </div>
 
