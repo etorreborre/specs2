@@ -1,10 +1,10 @@
-This version adds new features on top of 1.9.0:
+This version adds new features on top of 1.9:
 
  * added a `skipAllUnless(condition)` to skip examples unless a condition is verified
- * added a `CommandLineArguments` trait to access the command-line arguments and use them to build the specification or to specialize the examples behaviour
- * added a `notoc` argument to avoid generating a table of contents
+ * added a [`CommandLineArguments` trait](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#Pass+arguments) to access the command-line arguments and use them to build the specification or to specialize the examples behaviour
+ * added a [`notoc` argument](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#API) to avoid generating a table of contents
  * added the possibility to add a `css/specs2-user.css` file to customize the display of the html documentation
- * a specification can be included in another one, to be executed at the same time, and not be displayed: `include(childSpec.hide)` 
+ * a specification can be included in another one so that it will be executed at the same time [but not displayed](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#Html+link): `include(childSpec.hide)` 
  * added the possibility to change the directory where the html documentation is generated: `class S extends Specification { def is = "Guide".title.baseDirIs("guide") ^ end }`
  * improved the error message when there is an `Error` thrown from an Example (see this [StackOverflow question](http://bit.ly/LlSNly))
  
