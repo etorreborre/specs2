@@ -8,10 +8,12 @@
       <script type="text/javascript" src="./css/prettify.js"></script>
       <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
       <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
-      <script type="text/javascript" src="css/jquery.js"></script>
-      <script type="text/javascript" src="css/jquery.cookie.js"></script>
-      <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
-      <script type="text/javascript" src="css/jquery.jstree.js"></script>
+      <link type="text/css" rel="stylesheet" href="./css/specs2-user.css" />
+
+      <script type="text/javascript" src="./css/jquery.js"></script>
+      <script type="text/javascript" src="./css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./css/tooltip.js"></script>
       <script language="javascript">
       function init() {  prettyPrint(); };
@@ -57,79 +59,11 @@
       <script language="javascript">window.onload=init;</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
-      <script type="text/javascript" src="./css/tabber.js"></script> 
-      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Design</title><a name="Design"><h2 specId="691681982">Design</h2></a><status class="ok"><div class="level0"><a name="Presentation"><h3>Presentation</h3></a><p>This page explains the overall design of <em>specs2</em>:</p>
-<ul>
-  <li>the structure of a specification</li>
-  <li>how the specification is built</li>
-  <li>how the specification is executed</li>
-  <li>how the reporting works</li>
-  <li>the packages dependencies</li>
-</ul><p><em>note</em>: some details might not be completely up to date as the code base evolves.</p><a name="Structure"><h3>Structure</h3></a><p>The structure of a specification is very simple, it is just a list of <code class="prettyprint">Fragments</code> provided by the <code class="prettyprint">is</code> method of the<br /><code class="prettyprint">SpecificationStructure</code> trait:</p>
-<pre><code class="prettyprint">  +---------------+                     1..n  +-----------+
-  | Specification | ------------------------&gt; | Fragment  |
-  +---------------+                           +-----------+
-                                                    ^
-                                                    |
-                +----------+-----------+-----------+-------------+-------------+---------------+
-                |          |           |           |             |             |               |
-            +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
-            | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | TaggingFragment |
-            +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
-</code></pre><p>Here's a short description of all the Fragments:</p>
-<ul>
-  <li>Text: free text describing the specified system</li>
-  <li>Example: a description and a piece of executable code returning a Result</li>
-  <li>Step / Action: some action on the system which is only reported if there's an exception</li>
-  <li>SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications.<br /> The SpecStart element holds: the Arguments used to tune the execution/reporting, the link to an included/referenced specification</li>
-  <li>TaggingFragments: those fragments enclose other fragments which can be included or excluded from the execution</li>
-</ul><a name="Creation"><h3>Creation</h3></a><a name="Creating+Fragments"><h4>Creating Fragments</h4></a><p>There are implicits to create Fragments (found in the <code class="prettyprint">org.specs2.specification.FragmentsBuilder</code> trait):</p>
-<ul>
-  <li><code class="prettyprint">String =&gt; Text</code>, to create a simple Text Fragment</li>
-  <li><code class="prettyprint">String ! Result =&gt; Example</code>, to create an Example</li>
-  <li>...</li>
-</ul><p>Once built, these Fragments can be &quot;linked&quot; with <code class="prettyprint">^</code>, creating a <code class="prettyprint">Fragments</code> object, containing a <code class="prettyprint">Seq[Fragment]</code>:</p>
-<pre><code class="prettyprint">    val fragments: Fragments =
-      &quot;this text&quot; ^
-      &quot;is related to this Example&quot; ! success
-</code></pre><p>The <code class="prettyprint">Fragments</code> object is used to hold temporarily a sequence of Fragments as it is built and it makes sure that when the building is done, the Fragments passed for execution will start and end with proper SpecStart and SpecEnd fragments.</p><a name="Mutable+Specification"><h4>Mutable Specification</h4></a><p>In a mutable Specification there is no visible &quot;link&quot; between Fragments, they're all created and linked through side-effects (thanks to an enhanced version of the <code class="prettyprint">FragmentsBuilder</code> trait in the <code class="prettyprint">org.specs2.mutable</code> package):</p>
-<pre><code class="prettyprint">    // build an Example and add it to the specFragments variable
-    &quot;this example must succeed&quot; in { success }
-    &quot;same thing here&quot; in { success }
-</code></pre><p>Of course this there is mutation involved here, it's not advised to do anything concurrent at that point.</p><a name="Execution"><h3>Execution</h3></a><p>The execution is triggered by the various reporters and goes through 5 steps:</p>
-<pre><code class="prettyprint">    // code from the Reporter trait
-    spec.content |&gt; select |&gt; sequence |&gt; execute |&gt; store |&gt; export(spec)
-</code></pre>
-<ol>
-  <li><p><u>Selection</u>: the Fragments are filtered according to the Arguments object. In that phase all examples but a few can be filtered if the <code class="prettyprint">only(&quot;this example&quot;)</code> option is used for instance. Another way to select fragments is to insert <code class="prettyprint">TaggingFragment</code>s inside the specification.<br />If the <code class="prettyprint">isolated</code> argument is true, each example body is replaced with the same body executing in a cloned Specification to avoid seeing side-effects on local variables.</p></li>
-  <li><p><u>Sequencing</u>: the Fragments are sorted in groups so that all the elements of a group can be executed concurrently. This usually why Steps are used. If my fragments are: <code class="prettyprint">fragments1 ^ step ^ fragments2</code> then all fragments1 will be executed,<br />then step, then fragments2.</p></li>
-  <li><p><u>Execution</u>: for each group, the execution of the fragments is concurrent by default and results are collected in<br />a sequence of <code class="prettyprint">ExecutingFragments</code>. We don't wait for the execution of all the Fragments to be finished before starting the reporting.</p></li>
-  <li><p><u>Storing</u>: after an execution we compute the statistics for each specification and store the results in a file (<code class="prettyprint">specs2-reports/specs2.stats</code>).<br />This allows to do consequent runs based on previous executions: to execute failed specifications only or to create the index page with an indicator of previously executed specifications</p></li>
-  <li><p><u>Exporting</u>: depending on the exporter, the ExecutedFragments are translated to <code class="prettyprint">PrintLines</code> or <code class="prettyprint">HtmlLines</code> to be flushed out to the console or in an html file</p></li>
-</ol><a name="Reporting"><h3>Reporting</h3></a><p>All the reporters start with a sequence of <code class="prettyprint">ExecutingFragment</code>s. A list of <code class="prettyprint">Reducers</code> is used to collect relevant information:</p>
-<ul>
-  <li>The text and results to display</li>
-  <li>The &quot;level&quot; of the text i.e. its indentation. The rules for this are given in the Layout section of the <a href="org.specs2.guide.Structure.html#Rules">Specification Structure</a> page</li>
-  <li>The statistics and execution times</li>
-  <li>The applicable arguments (where the arguments of an included specification must override the arguments of its parent)</li>
-</ul><p>One of the main difficulties in this 'reduction' is the fact that included specifications change the context of what needs to be accumulated. The <code class="prettyprint">reporter.NestedBlocks</code> trait provides functions to handle this.</p><p>Then, each fragment and associated data (level, statistics, arguments,...) is translated to a display element:</p>
-<ul>
-  <li>for a console output, <code class="prettyprint">PrintLines</code>: <code class="prettyprint">PrintSpecStart</code>, <code class="prettyprint">PrintText</code>, <code class="prettyprint">PrintResult</code>,...</li>
-  <li>for a Html output, <code class="prettyprint">HtmlLines</code>: <code class="prettyprint">HtmlSpecStart</code>, <code class="prettyprint">HtmlText</code>, <code class="prettyprint">HtmlResult</code>,...</li>
-  <li>for a JUnit output, a tree of JUnit <code class="prettyprint">Description</code> objects with the corresponding code to execute (in JUnit the Descriptions<br />are built first, then the examples are executed)</li>
-</ul><a name="Dependencies"><h3>Dependencies</h3></a><p>The following package dependencies should be always verified, from low-level packages to high-level ones, where no package on a low layer can depend on a package on a higher layer:</p>
-<pre><code class="prettyprint">  + runner
-  + reporter
-  + mutable    specification
-  + mock form
-  + matcher
-  + execute
-  + analysis reflect  xml html  time json
-  + collection control  io  text  main data
-</code></pre></div></status></div><div id="tree">
-      <ul><li id="1754814161"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="671602412"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" />
+    </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="org.specs2.guide.Design.html">Design</a></div><div id="leftcolumn"><div id="tree">
+      <ul><li id="2061778948"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1476655365"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -139,7 +73,7 @@
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1530245204"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="2055745414"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -198,6 +132,8 @@
           </li></ul>
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Structure.html#Reference">Reference</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
             
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Structure.html#Contexts">Contexts</a>
@@ -291,7 +227,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="939219873"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="313193407"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -347,7 +283,7 @@
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="78092375"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1791957406"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -391,7 +327,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1781738154"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1990520660"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -467,7 +403,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1075051973"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1713013682"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -511,7 +447,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="691681982"><a href="org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1874166759"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
@@ -531,5 +467,73 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1754814161','691681982'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
-    </div></body></html>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2061778948','1874166759'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>Design</title><a name="Design"><h2 specId="1874166759">Design</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>This page explains the overall design of <em>specs2</em>:</p>
+<ul>
+  <li>the structure of a specification</li>
+  <li>how the specification is built</li>
+  <li>how the specification is executed</li>
+  <li>how the reporting works</li>
+  <li>the packages dependencies</li>
+</ul><p><em>note</em>: some details might not be completely up to date as the code base evolves.</p><a name="Structure"><h3>Structure</h3></a><p>The structure of a specification is very simple, it is just a list of <code class="prettyprint">Fragments</code> provided by the <code class="prettyprint">is</code> method of the<br /><code class="prettyprint">SpecificationStructure</code> trait:</p>
+<pre><code class="prettyprint">  +---------------+                     1..n  +-----------+
+  | Specification | ------------------------&gt; | Fragment  |
+  +---------------+                           +-----------+
+                                                    ^
+                                                    |
+                +----------+-----------+-----------+-------------+-------------+---------------+
+                |          |           |           |             |             |               |
+            +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
+            | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | TaggingFragment |
+            +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
+</code></pre><p>Here's a short description of all the Fragments:</p>
+<ul>
+  <li>Text: free text describing the specified system</li>
+  <li>Example: a description and a piece of executable code returning a Result</li>
+  <li>Step / Action: some action on the system which is only reported if there's an exception</li>
+  <li>SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications.<br /> The SpecStart element holds: the Arguments used to tune the execution/reporting, the link to an included/referenced specification</li>
+  <li>TaggingFragments: those fragments enclose other fragments which can be included or excluded from the execution</li>
+</ul><a name="Creation"><h3>Creation</h3></a><a name="Creating+Fragments"><h4>Creating Fragments</h4></a><p>There are implicits to create Fragments (found in the <code class="prettyprint">org.specs2.specification.FragmentsBuilder</code> trait):</p>
+<ul>
+  <li><code class="prettyprint">String =&gt; Text</code>, to create a simple Text Fragment</li>
+  <li><code class="prettyprint">String ! Result =&gt; Example</code>, to create an Example</li>
+  <li>...</li>
+</ul><p>Once built, these Fragments can be &quot;linked&quot; with <code class="prettyprint">^</code>, creating a <code class="prettyprint">Fragments</code> object, containing a <code class="prettyprint">Seq[Fragment]</code>:</p>
+<pre><code class="prettyprint">    val fragments: Fragments =
+      &quot;this text&quot; ^
+      &quot;is related to this Example&quot; ! success
+</code></pre><p>The <code class="prettyprint">Fragments</code> object is used to hold temporarily a sequence of Fragments as it is built and it makes sure that when the building is done, the Fragments passed for execution will start and end with proper SpecStart and SpecEnd fragments.</p><a name="Mutable+Specification"><h4>Mutable Specification</h4></a><p>In a mutable Specification there is no visible &quot;link&quot; between Fragments, they're all created and linked through side-effects (thanks to an enhanced version of the <code class="prettyprint">FragmentsBuilder</code> trait in the <code class="prettyprint">org.specs2.mutable</code> package):</p>
+<pre><code class="prettyprint">    // build an Example and add it to the specFragments variable
+    &quot;this example must succeed&quot; in { success }
+    &quot;same thing here&quot; in { success }
+</code></pre><p>Of course this there is mutation involved here, it's not advised to do anything concurrent at that point.</p><a name="Execution"><h3>Execution</h3></a><p>The execution is triggered by the various reporters and goes through 5 steps:</p>
+<pre><code class="prettyprint">    // code from the Reporter trait
+    spec.content |&gt; select |&gt; sequence |&gt; execute |&gt; store |&gt; export(spec)
+</code></pre>
+<ol>
+  <li><p><u>Selection</u>: the Fragments are filtered according to the Arguments object. In that phase all examples but a few can be filtered if the <code class="prettyprint">only(&quot;this example&quot;)</code> option is used for instance. Another way to select fragments is to insert <code class="prettyprint">TaggingFragment</code>s inside the specification.<br />If the <code class="prettyprint">isolated</code> argument is true, each example body is replaced with the same body executing in a cloned Specification to avoid seeing side-effects on local variables.</p></li>
+  <li><p><u>Sequencing</u>: the Fragments are sorted in groups so that all the elements of a group can be executed concurrently. This usually why Steps are used. If my fragments are: <code class="prettyprint">fragments1 ^ step ^ fragments2</code> then all fragments1 will be executed,<br />then step, then fragments2.</p></li>
+  <li><p><u>Execution</u>: for each group, the execution of the fragments is concurrent by default and results are collected in<br />a sequence of <code class="prettyprint">ExecutingFragments</code>. We don't wait for the execution of all the Fragments to be finished before starting the reporting.</p></li>
+  <li><p><u>Storing</u>: after an execution we compute the statistics for each specification and store the results in a file (<code class="prettyprint">specs2-reports/specs2.stats</code>).<br />This allows to do consequent runs based on previous executions: to execute failed specifications only or to create the index page with an indicator of previously executed specifications</p></li>
+  <li><p><u>Exporting</u>: depending on the exporter, the ExecutedFragments are translated to <code class="prettyprint">PrintLines</code> or <code class="prettyprint">HtmlLines</code> to be flushed out to the console or in an html file</p></li>
+</ol><a name="Reporting"><h3>Reporting</h3></a><p>All the reporters start with a sequence of <code class="prettyprint">ExecutingFragment</code>s. A list of <code class="prettyprint">Reducers</code> is used to collect relevant information:</p>
+<ul>
+  <li>The text and results to display</li>
+  <li>The &quot;level&quot; of the text i.e. its indentation. The rules for this are given in the Layout section of the <a href="org.specs2.guide.Structure.html#Rules">Specification Structure</a> page</li>
+  <li>The statistics and execution times</li>
+  <li>The applicable arguments (where the arguments of an included specification must override the arguments of its parent)</li>
+</ul><p>One of the main difficulties in this 'reduction' is the fact that included specifications change the context of what needs to be accumulated. The <code class="prettyprint">reporter.NestedBlocks</code> trait provides functions to handle this.</p><p>Then, each fragment and associated data (level, statistics, arguments,...) is translated to a display element:</p>
+<ul>
+  <li>for a console output, <code class="prettyprint">PrintLines</code>: <code class="prettyprint">PrintSpecStart</code>, <code class="prettyprint">PrintText</code>, <code class="prettyprint">PrintResult</code>,...</li>
+  <li>for a Html output, <code class="prettyprint">HtmlLines</code>: <code class="prettyprint">HtmlSpecStart</code>, <code class="prettyprint">HtmlText</code>, <code class="prettyprint">HtmlResult</code>,...</li>
+  <li>for a JUnit output, a tree of JUnit <code class="prettyprint">Description</code> objects with the corresponding code to execute (in JUnit the Descriptions<br />are built first, then the examples are executed)</li>
+</ul><a name="Dependencies"><h3>Dependencies</h3></a><p>The following package dependencies should be always verified, from low-level packages to high-level ones, where no package on a low layer can depend on a package on a higher layer:</p>
+<pre><code class="prettyprint">  + runner
+  + reporter
+  + mutable    specification
+  + mock form
+  + matcher
+  + execute
+  + analysis reflect  xml html  time json
+  + collection control  io  text  main data
+</code></pre></div></status></div><div id="rightcolumn"></div></body></html>
