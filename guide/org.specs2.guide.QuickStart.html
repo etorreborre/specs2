@@ -8,10 +8,12 @@
       <script type="text/javascript" src="./css/prettify.js"></script>
       <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
       <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
-      <script type="text/javascript" src="css/jquery.js"></script>
-      <script type="text/javascript" src="css/jquery.cookie.js"></script>
-      <script type="text/javascript" src="css/jquery.hotkeys.js"></script>
-      <script type="text/javascript" src="css/jquery.jstree.js"></script>
+      <link type="text/css" rel="stylesheet" href="./css/specs2-user.css" />
+
+      <script type="text/javascript" src="./css/jquery.js"></script>
+      <script type="text/javascript" src="./css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./css/tooltip.js"></script>
       <script language="javascript">
       function init() {  prettyPrint(); };
@@ -57,76 +59,11 @@
       <script language="javascript">window.onload=init;</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
-      <script type="text/javascript" src="./css/tabber.js"></script> 
-      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" /> 
-    </head><body><div id="container"><title>Quick Start</title><a name="Quick+Start"><h2 specId="31884026">Quick Start</h2></a><status class="ok"><div class="level0"><p>There are 2 major styles of specifications with <strong><em>specs2</em></strong>:</p>
-<ul>
-  <li><p><em>unit</em> specifications where the specification text is interleaved with the specification code. It is generally used to<br /> specify a single class</p></li>
-  <li><p><em>acceptance</em> specifications where all the specification text stands as one and the implementation code is elsewhere.<br /> It is generally used for acceptance or integration scenarios</p></li>
-</ul><a name="Unit"><h4>Unit</h4></a><p>Unit specifications extend the <code class="prettyprint">org.specs2.mutable.Specification</code> trait and are using the <code class="prettyprint">should/in</code> format:</p>
-<pre><code class="prettyprint">  import org.specs2.mutable._
-
-  class HelloWorldSpec extends Specification {
-
-    &quot;The 'Hello world' string&quot; should {
-      &quot;contain 11 characters&quot; in {
-        &quot;Hello world&quot; must have size(11)
-      }
-      &quot;start with 'Hello'&quot; in {
-        &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
-      }
-      &quot;end with 'world'&quot; in {
-        &quot;Hello world&quot; must endWith(&quot;world&quot;)
-      }
-    }
-  }
-</code></pre><a name="Acceptance"><h4>Acceptance</h4></a><p>Acceptance specifications extend the <code class="prettyprint">org.specs2.Specification</code> trait and must define a method called <code class="prettyprint">is</code>:</p>
-<pre><code class="prettyprint">  import org.specs2._
-
-  class HelloWorldSpec extends Specification { def is =
-
-    &quot;This is a specification to check the 'Hello world' string&quot;                 ^
-                                                                                p^
-    &quot;The 'Hello world' string should&quot;                                           ^
-      &quot;contain 11 characters&quot;                                                   ! e1^
-      &quot;start with 'Hello'&quot;                                                      ! e2^
-      &quot;end with 'world'&quot;                                                        ! e3^
-                                                                                end
-    def e1 = &quot;Hello world&quot; must have size(11)
-    def e2 = &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
-    def e3 = &quot;Hello world&quot; must endWith(&quot;world&quot;)
-  }
-</code></pre><p>The <code class="prettyprint">is</code> method lists <a href="org.specs2.guide.Structure.html#Declare+examples"><em>specification fragments</em></a> which can be:</p>
-<ul>
-  <li>some text, to describe the system you're specifying</li>
-  <li>an example: a description and some executable code returning a result</li>
-  <li>formatting fragments: <code class="prettyprint">p</code> adds a blank line and starts a new block of examples</li>
-</ul><p>Fragments are separated by the <code class="prettyprint">^</code> character in order to build a list of them.</p><a name="Execution"><h4>Execution</h4></a><p>And this is it! Now to execute your specification, you use a <a href="org.specs2.guide.Runners.html#Presentation"><em>runner</em></a> which will display the results:</p>
-<pre><code class="prettyprint">  &gt; scala -cp ... specs2.run HelloWorldSpec
-
-  HelloWorldSpec
-
-  This is a specification to check the 'Hello world' string
-
-  The 'Hello world' string should
-  + contain 11 characters
-  + start with 'Hello'
-  + end with 'world'
-
-  Total for specification HelloWorldSpec
-  Finished in 0 second, 58 ms
-  3 examples, 0 failure, 0 error
-</code></pre><a name="And+much+more%21"><h4>And much more!</h4></a><p>You can explore the rest of this <a title="Guide" href="org.specs2.UserGuide.html">User Guide</a> to learn how to:</p>
-<ul>
-  <li>use the many <strong><em>specs2</em></strong> matchers to specify precise expectations</li>
-  <li>define <em>contexts</em> to setup/teardown data for your examples</li>
-  <li>include / link specifications and reuse examples</li>
-  <li>use Mockito or ScalaCheck</li>
-  <li>use sbt/maven/junit to execute a specification</li>
-  <li>export your specification as an html document (like this one!)</li>
-</ul></div></status></div><div id="tree">
-      <ul><li id="15785800"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="31884026"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" />
+    </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="org.specs2.guide.QuickStart.html">QuickStart</a></div><div id="leftcolumn"><div id="tree">
+      <ul><li id="2061778948"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1476655365"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -136,7 +73,7 @@
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="9097289"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="2055745414"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -195,6 +132,8 @@
           </li></ul>
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Structure.html#Reference">Reference</a>
+            
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
             
           </li></ul>
           </li><li id=""><a href="org.specs2.guide.Structure.html#Contexts">Contexts</a>
@@ -264,6 +203,8 @@
           </li><li id=""><a href="org.specs2.guide.Structure.html#How+to%3F">How to?</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Declare+arguments">Declare arguments</a>
             
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Pass+arguments">Pass arguments</a>
+            
           </li><li id=""><a href="org.specs2.guide.Structure.html#Add+a+title">Add a title</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Use+descriptions">Use descriptions</a>
@@ -278,17 +219,21 @@
             <ul><li id=""><a href="org.specs2.guide.Structure.html#In+a+unit+specification">In a unit specification</a>
             
           </li></ul>
+          </li><li id=""><a href="org.specs2.guide.Structure.html#Skip+examples">Skip examples</a>
+            
           </li><li id=""><a href="org.specs2.guide.Structure.html#Debug+statements">Debug statements</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Remove+implicits">Remove implicits</a>
             
           </li></ul>
           </li></ul>
-          </li><li id="32707528"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="313193407"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
+            <ul><li id=""><a href="org.specs2.guide.Matchers.html#Combinators">Combinators</a>
             
+          </li></ul>
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Match+results">Match results</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
             
@@ -338,7 +283,7 @@
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="86212"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1791957406"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -382,7 +327,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="18150653"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1990520660"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -458,7 +403,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="13103443"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1713013682"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -502,7 +447,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="14602049"><a href="org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1874166759"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
@@ -522,5 +467,70 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['15785800','31884026'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
-    </div></body></html>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2061778948','1476655365'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>Quick Start</title><a name="Quick+Start"><h2 specId="1476655365">Quick Start</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are 2 major styles of specifications with <strong><em>specs2</em></strong>:</p>
+<ul>
+  <li><p><em>unit</em> specifications where the specification text is interleaved with the specification code. It is generally used to<br /> specify a single class</p></li>
+  <li><p><em>acceptance</em> specifications where all the specification text stands as one and the implementation code is elsewhere.<br /> It is generally used for acceptance or integration scenarios</p></li>
+</ul><a name="Unit"><h4>Unit</h4></a><p>Unit specifications extend the <code class="prettyprint">org.specs2.mutable.Specification</code> trait and are using the <code class="prettyprint">should/in</code> format:</p>
+<pre><code class="prettyprint">  import org.specs2.mutable._
+
+  class HelloWorldSpec extends Specification {
+
+    &quot;The 'Hello world' string&quot; should {
+      &quot;contain 11 characters&quot; in {
+        &quot;Hello world&quot; must have size(11)
+      }
+      &quot;start with 'Hello'&quot; in {
+        &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
+      }
+      &quot;end with 'world'&quot; in {
+        &quot;Hello world&quot; must endWith(&quot;world&quot;)
+      }
+    }
+  }
+</code></pre><a name="Acceptance"><h4>Acceptance</h4></a><p>Acceptance specifications extend the <code class="prettyprint">org.specs2.Specification</code> trait and must define a method called <code class="prettyprint">is</code>:</p>
+<pre><code class="prettyprint">  import org.specs2._
+
+  class HelloWorldSpec extends Specification { def is =
+
+    &quot;This is a specification to check the 'Hello world' string&quot;                 ^
+                                                                                p^
+    &quot;The 'Hello world' string should&quot;                                           ^
+      &quot;contain 11 characters&quot;                                                   ! e1^
+      &quot;start with 'Hello'&quot;                                                      ! e2^
+      &quot;end with 'world'&quot;                                                        ! e3^
+                                                                                end
+    def e1 = &quot;Hello world&quot; must have size(11)
+    def e2 = &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
+    def e3 = &quot;Hello world&quot; must endWith(&quot;world&quot;)
+  }
+</code></pre><p>The <code class="prettyprint">is</code> method lists <a href="org.specs2.guide.Structure.html#Declare+examples"><em>specification fragments</em></a> which can be:</p>
+<ul>
+  <li>some text, to describe the system you're specifying</li>
+  <li>an example: a description and some executable code returning a result</li>
+  <li>formatting fragments: <code class="prettyprint">p</code> adds a blank line and starts a new block of examples</li>
+</ul><p>Fragments are separated by the <code class="prettyprint">^</code> character in order to build a list of them.</p><a name="Execution"><h4>Execution</h4></a><p>And this is it! Now to execute your specification, you use a <a href="org.specs2.guide.Runners.html#Presentation"><em>runner</em></a> which will display the results:</p>
+<pre><code class="prettyprint">  &gt; scala -cp ... specs2.run HelloWorldSpec
+
+  HelloWorldSpec
+
+  This is a specification to check the 'Hello world' string
+
+  The 'Hello world' string should
+  + contain 11 characters
+  + start with 'Hello'
+  + end with 'world'
+
+  Total for specification HelloWorldSpec
+  Finished in 0 second, 58 ms
+  3 examples, 0 failure, 0 error
+</code></pre><a name="And+much+more%21"><h4>And much more!</h4></a><p>You can explore the rest of this <a title="Guide" href="org.specs2.UserGuide.html">User Guide</a> to learn how to:</p>
+<ul>
+  <li>use the many <strong><em>specs2</em></strong> matchers to specify precise expectations</li>
+  <li>define <em>contexts</em> to setup/teardown data for your examples</li>
+  <li>include / link specifications and reuse examples</li>
+  <li>use Mockito or ScalaCheck</li>
+  <li>use sbt/maven/junit to execute a specification</li>
+  <li>export your specification as an html document (like this one!)</li>
+</ul></div></status></div><div id="rightcolumn"></div></body></html>
