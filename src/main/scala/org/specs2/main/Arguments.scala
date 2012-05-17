@@ -8,6 +8,7 @@ import Exceptions._
 import text._
 import Split._
 import data.SeparatedTags
+import scala.Predef._
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
@@ -405,6 +406,9 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
 
   def arguments: Seq[String] = _arguments
   def contains(a: String) = arguments contains a
+  def value(name: String) = Arguments.value(name)(_arguments, SystemProperties)
+  def int(name: String) = Arguments.int(name)(_arguments, SystemProperties)
+  def bool(name: String) = Arguments.bool(name)(_arguments, SystemProperties)
   def filter(included: String*) = copy(_arguments = arguments.filter(included.toSet.contains))
   def filterNot(excluded: String*) = copy(_arguments = arguments.filterNot(excluded.toSet.contains))
   def overrideWith(other: CommandLine) = copy(_arguments = if (other.arguments.isEmpty) this._arguments else other.arguments)
