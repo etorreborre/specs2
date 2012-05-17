@@ -58,7 +58,7 @@ class Duration(val at: Long) {
   def fromNow = Time(Time.now + this)
   def ago = Time(Time.now - this)
  
-  override def toString = inSeconds.toString
+  override def toString = SimpleTimer.fromString(inMillis.toString).time
  
   override def equals(other: Any) = {
     other match {
