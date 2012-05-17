@@ -1308,6 +1308,12 @@ Alternatively, if you need to keep your specification as a trait, you can mix-in
         else                      "this is" >> ko
       }
 
+Note that the `arguments` instance gives you access to all the specs2 arguments values like `sequential` but also to any of your own command line argument values:
+
+ * `arguments.commandLine.value("tag"): Option[String]`
+ * `arguments.commandLine.int("timeout"): Option[Int]`
+ * `arguments.commandLine.boolean("integration"): Boolean`
+
 #### Add a title
 
 Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:
