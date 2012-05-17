@@ -54,3 +54,8 @@ class MutableSpecificationAutoExamples extends org.specs2.mutable.Specification 
 
 }
 
+class SpecificationWithAShouldBlockAndExamples extends org.specs2.mutable.Specification {
+  "this" should {
+    1 must_== 1
+  }
+}

@@ -30,6 +30,9 @@ class FromSourceSpec extends Specification with FromSource {
   "If the specification doesn't end with an end fragment, the last example description should be found" in {
     checkExamples(spec3)
   }
+  "If the mutable specification has a single expectation in a should block" in {
+    checkExamples(spec4)
+  }
   "If there is a function call to a ScalaCheck example, the example description should be found" in {
     examples(scalaCheckSpec)(0).desc.toString must contain("a call to an example")
   }
@@ -47,6 +50,7 @@ class FromSourceSpec extends Specification with FromSource {
   val spec           = new UserFromSourceSpecification
   val spec2          = new SpecificationWithNoStartingText
   val spec3          = new SpecificationWithNoStartingTextAndNoEnd
+  val spec4          = new SpecificationWithAShouldBlockAndExamples
   val scalaCheckSpec = new UserFromSourceScalaCheckSpecification
   val mutableSpec    = new MutableSpecificationAutoExamples
 
