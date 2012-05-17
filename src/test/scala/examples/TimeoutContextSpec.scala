@@ -5,12 +5,14 @@ import org.specs2.mutable.Specification
 /**
  * This specification shows how to create an "Around" context which will time out every example
  */
-class TimeoutContextSpec extends Specification with ExamplesTimeout{
+class TimeoutContextSpec extends Specification with ExamplesTimeout {
+
   "This example should pass" >> {
     { Thread.sleep(50); 1 } must_== 1
   }
 //  "This example should timeout" >> {
-//     { Thread.sleep(200); 1 } must_== 1
+//    def loop: Unit = loop;
+//    { loop; 1 } must_== 1
 //  }
 //  "This example should fail" >> {
 //    { Thread.sleep(50); 2 } must_== 1
