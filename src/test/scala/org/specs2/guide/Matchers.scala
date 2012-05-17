@@ -124,12 +124,14 @@ There are many ways to create matchers for your specific usage. The simplest way
  * using `orSkip` to return a `Skipped` result instead of a Failure if the condition is not met
 
         1 must be_==(2).orSkip
-        1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orSkip("Precondition failed")    // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orSkip((ko:String) => "BAD "+ko) // prints "BAD '1' is not equal to '2'"
 
  * using `orPending` to return a `Pending` result instead of a Failure if the condition is not met
 
         1 must be_==(2).orPending
-        1 must be_==(2).orPending("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orPending("Precondition failed")    // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orPending((ko:String) => "BAD "+ko) // prints "BAD '1' is not equal to '2'"
 
  * using `mute` to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create
    properties showing no messages when they fail
