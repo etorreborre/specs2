@@ -106,7 +106,6 @@ Arguments (
 }
 import main.{SystemProperties => sysProperties}
 
-private[specs2]  
 object Arguments extends Extract {
   
   /** @return new arguments from command-line arguments */
