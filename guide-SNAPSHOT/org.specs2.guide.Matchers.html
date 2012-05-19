@@ -62,8 +62,8 @@
       <script type="text/javascript" src="./css/tabber.js"></script>
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" />
     </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="org.specs2.guide.Matchers.html">Matchers</a></div><div id="leftcolumn"><div id="tree">
-      <ul><li id="2061778948"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1476655365"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="720560461"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="272563097"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -73,7 +73,7 @@
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="2055745414"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1202693233"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -227,7 +227,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="313193407"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="688943187"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -283,7 +283,7 @@
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1791957406"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1212958053"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -327,7 +327,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1990520660"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1451974142"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -403,7 +403,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1713013682"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1499084437"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -447,7 +447,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1874166759"><a href="org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1697156638"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
@@ -467,8 +467,8 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2061778948','313193407'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
-    </div></div><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="313193407">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['720560461','688943187'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="688943187">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -1019,11 +1019,13 @@ iterator.next must be_==(3).eventually
 </code></pre></li>
   <li><p>using <code class="prettyprint">orSkip</code> to return a <code class="prettyprint">Skipped</code> result instead of a Failure if the condition is not met</p>
   <pre><code class="prettyprint">1 must be_==(2).orSkip
-1 must be_==(2).orSkip(&quot;Precondition failed&quot;)  // prints &quot;Precondition failed: '1' is not equal to '2'&quot;
+1 must be_==(2).orSkip(&quot;Precondition failed&quot;)    // prints &quot;Precondition failed: '1' is not equal to '2'&quot;
+1 must be_==(2).orSkip((ko:String) =&gt; &quot;BAD &quot;+ko) // prints &quot;BAD '1' is not equal to '2'&quot;
 </code></pre></li>
   <li><p>using <code class="prettyprint">orPending</code> to return a <code class="prettyprint">Pending</code> result instead of a Failure if the condition is not met</p>
   <pre><code class="prettyprint">1 must be_==(2).orPending
-1 must be_==(2).orPending(&quot;Precondition failed&quot;)  // prints &quot;Precondition failed: '1' is not equal to '2'&quot;
+1 must be_==(2).orPending(&quot;Precondition failed&quot;)    // prints &quot;Precondition failed: '1' is not equal to '2'&quot;
+1 must be_==(2).orPending((ko:String) =&gt; &quot;BAD &quot;+ko) // prints &quot;BAD '1' is not equal to '2'&quot;
 </code></pre></li>
   <li><p>using <code class="prettyprint">mute</code> to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create<br /> properties showing no messages when they fail</p></li>
 </ul><p>Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:</p>
@@ -1265,7 +1267,7 @@ iterator.next must be_==(3).eventually
        (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
     }
   }
-</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1791957406"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</code></pre><p>Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance).</p><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1212958053"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./images/icon_success_sml.gif" /> Here's <a tooltip="" href="org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
