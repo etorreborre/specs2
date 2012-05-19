@@ -62,8 +62,8 @@
       <script type="text/javascript" src="./css/tabber.js"></script>
       <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" />
     </head><body><div id="breadcrumbs"><a href="org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="org.specs2.guide.Structure.html">Structure</a></div><div id="leftcolumn"><div id="tree">
-      <ul><li id="2061778948"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1476655365"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="344228625"><a href="org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1135402101"><a href="org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -73,7 +73,7 @@
           </li><li id=""><a href="org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="2055745414"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1693790208"><a href="org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -227,7 +227,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="313193407"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1713363386"><a href="org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -283,7 +283,7 @@
           </li><li id=""><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1791957406"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1080292915"><a href="org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -327,7 +327,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1990520660"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="2113678263"><a href="org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -403,7 +403,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1713013682"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1346364524"><a href="org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -447,7 +447,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1874166759"><a href="org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1989556458"><a href="org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="org.specs2.guide.Design.html#Structure">Structure</a>
@@ -467,8 +467,8 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2061778948','2055745414'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
-    </div></div><div id="central"><title>Structure</title><a name="Structure"><h2 specId="2055745414">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['344228625','1693790208'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1693790208">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
 <ul>
   <li>declare examples and expectations</li>
   <li>link specifications together</li>
@@ -555,7 +555,7 @@
 
   def e1 = &quot;hello&quot; must have size(10000) and
                         startWith(&quot;hell&quot;)
-</code></pre><a name="Thrown"><h5>Thrown</h5></a><p>The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice by some. However you might see it as an annoying restriction. You can avoid it by extending the <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> trait. With that trait, any failing expectation will throw a <code class="prettyprint">FailureException</code> and the rest of the example will not be executed.</p><p>There is also an additional method <code class="prettyprint">failure(message)</code> to throw a <code class="prettyprint">FailureException</code> at will.</p><p>[Note that the <code class="prettyprint">ThrownMatchers</code> traits are mixed in the <code class="prettyprint">mutable.Specification</code> trait used for <em>unit</em> specifications].</p><a name="All"><h5>All</h5></a><p>The <code class="prettyprint">org.specs2.specification.AllExpectations</code> trait goes further and gives you the possibility to have all the failures of an Example to be reported without stopping at the first one. This enables a type of specification where it is possible to define lots of expectations inside the body of an example and get a maximum of information on what fails and what passes:</p>
+</code></pre><a name="Thrown"><h5>Thrown</h5></a><p>The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice by some. However you might see it as an annoying restriction. You can avoid it by mixing-in the <code class="prettyprint">org.specs2.matcher.ThrownExpectations</code> trait. With that trait, any failing expectation will throw a <code class="prettyprint">FailureException</code> and the rest of the example will not be executed.</p><p>There is also an additional method <code class="prettyprint">failure(message)</code> to throw a <code class="prettyprint">FailureException</code> at will.</p><p>[Note that the <code class="prettyprint">ThrownExpectations</code> traits is mixed in the <code class="prettyprint">mutable.Specification</code> trait used for <em>unit</em> specifications].</p><a name="All"><h5>All</h5></a><p>The <code class="prettyprint">org.specs2.specification.AllExpectations</code> trait goes further and gives you the possibility to have all the failures of an Example to be reported without stopping at the first one. This enables a type of specification where it is possible to define lots of expectations inside the body of an example and get a maximum of information on what fails and what passes:</p>
 <pre><code class="prettyprint">  import org.specs2._
   import specification._
 
