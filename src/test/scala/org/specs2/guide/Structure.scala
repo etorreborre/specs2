@@ -149,11 +149,11 @@ So the correct way of writing the example is:
 
 ##### Thrown
 
-The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice by some. However you might see it as an annoying restriction. You can avoid it by extending the `org.specs2.matcher.MustThrownMatchers` trait. With that trait, any failing expectation will throw a `FailureException` and the rest of the example will not be executed.
+The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice by some. However you might see it as an annoying restriction. You can avoid it by mixing-in the `org.specs2.matcher.ThrownExpectations` trait. With that trait, any failing expectation will throw a `FailureException` and the rest of the example will not be executed.
 
 There is also an additional method `failure(message)` to throw a `FailureException` at will.
 
-[Note that the `ThrownMatchers` traits are mixed in the `mutable.Specification` trait used for _unit_ specifications].
+[Note that the `ThrownExpectations` traits is mixed in the `mutable.Specification` trait used for _unit_ specifications].
 
 ##### All
 
