@@ -111,8 +111,8 @@ Other elements
               beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, true)) :: rest => ok }
     def e14 = parentSpec4.content.fragments.toList must
               beLike { case SpecStart(_,_,_) :: Text(_) ::
-                         SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_) ::
-                         SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_) :: rest => ok }
+                         SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_,_) ::
+                         SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_,_) :: rest => ok }
   }
 
   case class ex() {

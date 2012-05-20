@@ -33,7 +33,7 @@ case class Levels[T](private val levelsSeq: Vector[Level[T]] = Vector[Level[T]](
     def toNestedBlock(bl: Level[T]): SpecBlock[Level[T]] = bl match {
       case b @ Level(SpecStart(_,_,_), l)           => BlockStart(bl)
       case b @ Level(ExecutedSpecStart(_,_,_), l)   => BlockStart(bl)
-      case b @ Level(SpecEnd(_), l)                 => BlockEnd(bl)
+      case b @ Level(SpecEnd(_,_), l)               => BlockEnd(bl)
       case b @ Level(ExecutedSpecEnd(_,_,_), l)     => BlockEnd(bl)
       case b                                        => BlockBit(bl)
     }
@@ -147,7 +147,7 @@ case object Levels {
       case t @ Backtab(n)            => Unindent(t, n)   
       case t @ Text(_)               => Indent(t)       
       case t @ SpecStart(_,_,_)      => Neutral(t)
-      case t @ SpecEnd(_)            => Neutral(t)
+      case t @ SpecEnd(_,_)          => Neutral(t)
       case t @ End()                 => Reset(t)        
       case t                         => Neutral(t)        
     }

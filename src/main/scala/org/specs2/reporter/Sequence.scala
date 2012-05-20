@@ -46,7 +46,7 @@ trait DefaultSequence {
       res.toList match {
         case Nil => Vector(FragmentSeq.create(f))
         case last :: rest => f match {
-          case SpecStart(_,_,_) | SpecEnd(_)                      => FragmentSeq.create(f) +: res
+          case SpecStart(_,_,_) | SpecEnd(_,_)                    => FragmentSeq.create(f) +: res
           case Step(_) if last.fragments.exists(isExampleOrStep)  => FragmentSeq.create(f) +: res
           case Example(_, _) if last.fragments.exists(isStep)     => FragmentSeq.create(f) +: res
           case any if last.fragments.exists(isSpecStartOrEnd)     => FragmentSeq.create(f) +: res

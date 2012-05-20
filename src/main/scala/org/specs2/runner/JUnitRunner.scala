@@ -60,7 +60,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
       case (desc, f @ Text(_))          => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Step(_))          => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Action(_))        => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ SpecEnd(_))       => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ SpecEnd(_,_))     => (desc, executor.executeFragment(args)(f))
     }
 
   private def export = (executed: Seq[(Description, ExecutedFragment)]) => {

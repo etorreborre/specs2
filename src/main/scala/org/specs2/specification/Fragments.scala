@@ -67,9 +67,9 @@ object Fragments {
    */
   def create(fs: Fragment*) = {
     fs match {
-      case (s @ SpecStart(n, a, l)) +: rest :+ SpecEnd(_) => Fragments(Some(n), rest, a, l)
-      case (s @ SpecStart(n, a, l)) +: rest               => Fragments(Some(n), rest, a, l)
-      case _                                              => createList(fs:_*)
+      case (s @ SpecStart(n, a, l)) +: rest :+ SpecEnd(_,_) => Fragments(Some(n), rest, a, l)
+      case (s @ SpecStart(n, a, l)) +: rest                 => Fragments(Some(n), rest, a, l)
+      case _                                                => createList(fs:_*)
     }
   }
 
@@ -84,7 +84,7 @@ object Fragments {
   /** @return true if the Fragment is a step */
   def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
   /** @return true if the Fragment is a SpecStart or a SpecEnd */
-  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_) | SpecEnd(_) => true; case _ => false }
+  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_) | SpecEnd(_,_) => true; case _ => false }
   /** @return true if the Fragment is an Example or a Step */
   def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
   /** @return the step if the Fragment is a Step*/
