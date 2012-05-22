@@ -344,7 +344,7 @@ This can be avoided and even enhanced by using ScalaCheck to generate more value
           "And a second number n2"                                                     ^ number2 ^
           "When I add them"                                                            ^ add ^
           "Then I should get n1 + n2"                                                  ^ result ^
-                                                                                       end^
+                                                                                       end
 
         object number1 extends Given[Int] {
           def extract(text: String) = choose(-10, 10)
