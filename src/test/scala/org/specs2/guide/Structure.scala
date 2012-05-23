@@ -153,7 +153,7 @@ The above functionality encourages a specification style where every expectation
 
 There is also an additional method `failure(message)` to throw a `FailureException` at will.
 
-[Note that the `ThrownExpectations` traits is mixed in the `mutable.Specification` trait used for _unit_ specifications].
+Note that the `ThrownExpectations` traits is mixed in the `mutable.Specification` trait used for _unit_ specifications and, if you wish, you revert back to *not* throwing exceptions on failed expectations by mixing-in the `org.specs2.matcher.NoThrownExpectations` trait.
 
 ##### All
 

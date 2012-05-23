@@ -63,6 +63,15 @@ private [specs2]
 object ThrownExpectations extends ThrownExpectations
 
 /**
+ * This trait can be used to cancel the effect of thrown expectations.
+ *
+ * For example it can be mixed-in a mutable.Specification so that no exception is thrown on failure
+ */
+trait NoThrownExpectations extends Expectations {
+  override protected def checkResultFailure(r: Result) = r
+}
+
+/**
  * This trait can be used to integrate failures and skip messages into specs2
  */
 trait ThrownMessages { this: ThrownExpectations =>
