@@ -38,18 +38,20 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       "with n arguments"                                                                                                ! aMock().verify8^
       "with n arguments and a matcher for the return value"                                                             ! aMock().verify9^
       "as being anything"                                                                                               ! aMock().verify10^
+      "with Nothing as the return type"                                                                                 ! aMock().verify11^
+      "with Any as the return type"                                                                                     ! aMock().verify12^
                                                                                                                         p^
     "it is possible to check a partial function parameter"          		                                                ^
-      "with n arguments"                                                                                                ! aMock().verify11^
-      "with n arguments and a matcher for the return value"                                                             ! aMock().verify12^
-      "as being anything"                                                                                               ! aMock().verify13^
-      "when the argument is not defined"                                                                                ! aMock().verify14^
+      "with n arguments"                                                                                                ! aMock().verify13^
+      "with n arguments and a matcher for the return value"                                                             ! aMock().verify14^
+      "as being anything"                                                                                               ! aMock().verify15^
+      "when the argument is not defined"                                                                                ! aMock().verify16^
                                                                                                                         p^
     "it is possible to verify a function with implicit conversions"          		                                        ^
-      "with a single converted parameter"                                                                               ! aMock().verify15^
-      "with a single converted parameter, using a matcher"                                                              ! aMock().verify16^
+      "with a single converted parameter"                                                                               ! aMock().verify17^
+      "with a single converted parameter, using a matcher"                                                              ! aMock().verify18^
                                                                                                                         p^
-    "it is possible to verify a function with repeated parameters"          		                                        ! aMock().verify17^
+    "it is possible to verify a function with repeated parameters"          		                                        ! aMock().verify19^
                                                                                                                         endp^
   "It is also possible to return a specific value from a mocked method"                                                 ^
     "then when the mocked method is called, the same values will be returned" 	                                        ! aMock().return1^
@@ -127,6 +129,9 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     trait WithFunction2 { def call(f: (Int, Double) => String) = f(1, 2.0) }
     val function2 = mock[WithFunction2]
 
+    val functionNothing = mock[WithFunctionNothing]
+    val functionAny = mock[WithFunctionAny]
+
     trait WithPartialFunction { def call(f: PartialFunction[(Int, Double), String]) = f.apply((1, 2.0)) }
     val partial = mock[WithPartialFunction]
 
@@ -179,30 +184,38 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       there was one(function2).call(anyFunction2)
     }
     def verify11 = {
-      partial.call { case (i:Int, d: Double) => (i + d).toString }
-      there was one(partial).call((1, 3.0) -> "4.0")
+      functionNothing.call((i:Int) => throw new Exception)
+      there was one(functionNothing).call(anyFunction1)
     }
     def verify12 = {
-      partial.call { case (i:Int, d: Double) => (i + d).toString }
-      there was one(partial).call((1, 3.0) -> haveSize[String](3))
+      functionAny.call(() => throw new Exception)
+      there was one(functionAny).call(any[() => Any])
     }
     def verify13 = {
       partial.call { case (i:Int, d: Double) => (i + d).toString }
-      there was one(partial).call(anyPartialFunction)
+      there was one(partial).call((1, 3.0) -> "4.0")
     }
     def verify14 = {
+      partial.call { case (i:Int, d: Double) => (i + d).toString }
+      there was one(partial).call((1, 3.0) -> haveSize[String](3))
+    }
+    def verify15 = {
+      partial.call { case (i:Int, d: Double) => (i + d).toString }
+      there was one(partial).call(anyPartialFunction)
+    }
+    def verify16 = {
       partial.call { case (i:Int, d: Double) if i > 10 => (i + d).toString }
       there was one(partial).call((1, 3.0) -> "4.0") returns "a PartialFunction defined for (1,3.0)"
     }
-    def verify15 = {
+    def verify17 = {
       converted.call("test")
       there was one(converted).call("test")
     }
-    def verify16 = {
+    def verify18 = {
       converted.call("test")
       there was one(converted).call(startWith("t"))
     }
-    def verify17 = {
+    def verify19 = {
       repeated.call(1, 2, 3)
       (there was one(repeated).call(1, 2, 3)) and
       ((there was one(repeated).call(1, 2)) returns "WrappedArray(1, 2)")
@@ -381,3 +394,7 @@ case class reuse() extends FragmentExecution with MustMatchers {
     s.test must throwAn[AssertionFailedError]
   }
 }
+
+trait WithFunctionNothing { def call(f: Int => Nothing) = 1 }
+trait WithFunctionAny { def call(f: () => Any) = 1 }
+
