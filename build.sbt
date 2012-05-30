@@ -1,3 +1,8 @@
+import com.jsuereth.sbtsite.SiteKeys._
+import com.jsuereth.git.{GitKeys,GitRunner}
+import GitKeys.{gitBranch, gitRemoteRepo}
+import com.jsuereth.ghpages.GhPages.ghpages._
+
 /** Project */
 name := "specs2"
 
@@ -57,9 +62,31 @@ testOptions := Seq(Tests.Filter(s =>
 /** Console */
 initialCommands in console := "import org.specs2._"
 
-/** Publishing */
-credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
+/** Site building */
+site.settings
 
+seq(site.settings:_*)
+
+siteSourceDirectory := new java.io.File("target/specs2-reports")
+
+// depending on the version, copy the api files to a different directory
+siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
+  for((f, d) <- m) yield (f, "api/"+v+"/"+d)
+}
+
+/** Site publication */
+seq(ghpages.settings:_*)
+
+// override the synchLocal task to avoid removing the existing files
+synchLocal <<= (privateMappings, updatedRepository, GitKeys.gitRunner, streams) map { (mappings, repo, git, s) =>
+  val betterMappings = mappings map { case (file, target) => (file, repo / target) }
+  IO.copy(betterMappings)
+  repo
+}
+
+git.remoteRepo := "git@github.com:etorreborre/specs2.git"
+
+/** Publishing */
 publishTo <<= version { v: String =>
   val nexus = "https://oss.sonatype.org/"
   if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")

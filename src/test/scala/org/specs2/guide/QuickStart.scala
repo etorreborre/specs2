@@ -3,7 +3,7 @@ package guide
 
 import _root_.examples._
 
-class QuickStart extends Specification { def is = literate                                                              ^
+class QuickStart extends UserGuidePage { def is = literate                                                              ^
 "Quick Start".title.urlIs("org.specs2.guide.QuickStart.html") ^
 """
 There are 2 major styles of specifications with ***specs2***:

@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-class Runners extends Specification { def is = noindent ^
+class Runners extends UserGuidePage { def is =
                                                                                                                         """
 ### Presentation
 

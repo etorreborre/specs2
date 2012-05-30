@@ -4,7 +4,7 @@ package guide
 import _root_.examples._
 import specification._
 
-class Structure extends Specification { def is = noindent^
+class Structure extends UserGuidePage { def is =
                                                                                                                         """
 ### Presentation
 

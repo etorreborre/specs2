@@ -3,7 +3,7 @@ package guide
 
 import specification.Forms._
 
-class Matchers extends Specification { def is = literate ^
+class Matchers extends UserGuidePage { def is = literate ^
 """
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 

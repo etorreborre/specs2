@@ -1,8 +1,8 @@
 package org.specs2
 package guide
 
-class Philosophy extends Specification { def is = noindent                                                              ^
-                                                                                                                        """
+class Philosophy extends UserGuidePage { def is =
+"""
 ### The origins
 
 ***specs2*** has been created as an evolution of the [***specs***](http://code.google.com/p/specs) project.

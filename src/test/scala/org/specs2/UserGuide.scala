@@ -2,7 +2,7 @@ package org.specs2
 
 import guide._
 
-class UserGuide extends Specification { def is =
+class UserGuide extends UserGuidePage { def is =
 
   "User Guide".title.urlIs("org.specs2.UserGuide.html")                                          ^
                                                                                                  """
