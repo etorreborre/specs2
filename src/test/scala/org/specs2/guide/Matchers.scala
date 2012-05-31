@@ -386,8 +386,8 @@ More precisely, it will:
  * pass the mock object if both the method has no parameters and the function has one parameter:
    `mock.size answers { mock => mock.hashCode }`
  * pass the parameter if both the method and the function have one parameter:
-   `mock.get(0) answers ( i => i.toString )`
-  * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
+   `mock.get(0) answers { i => i.toString }`
+ * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
     `mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString }`
 
 In any other cases, if `f` is a function of 1 parameter, the array of the method parameters will be passed and if the function has 2 parameters, the second one will be the mock.

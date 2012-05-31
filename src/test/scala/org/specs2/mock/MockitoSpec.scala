@@ -18,6 +18,7 @@ Mockito is a Java library for mocking.
 The following samples are taken from the main documentation which can be found here:
 http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
                                                                                                                         """^p^
+  "CREATION"                                                                                                            ^
   "Mocks can be created"                                                                                                ^
     "with a name" 								                                                                                      ! creation().e1^
     "with a default return value"                            					                                                  ! creation().e2^
@@ -25,6 +26,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "with a default answer"                                           					                                        ! creation().e4^
     "with settings"                                                   					                                        ! creation().e5^
 																																																												p^
+  "VERIFICATION"                                                                                                        ^
   "When a mock is created with the mock method"                                                                         ^
     "it is possible to call methods on the mock" 								                                                        ! aMock().call1^
     "it is possible to verify that a method has been called" 					                                                  ! aMock().verify1^
@@ -66,6 +68,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
                                                                                                                         p^
   "A mock can be created and stubbed at the same time"                        	                                        ! aMock().mockAndStub^
                                                                                                                         p^
+  "NUMBER OF CALLS"                                                                                                     ^
   "The number of calls to a mocked method can be checked"                                                               ^
     "if the mocked method has been called once"                                                                         ! calls().calls1^
     "if the mocked method has been called twice"                                                                        ! calls().calls2^
@@ -76,13 +79,17 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "if the mocked method has not been called after some calls"                                                         ! calls().calls7^
     "if the mocked method has not been called after some calls - ignoring stubs"                                        ! calls().calls8^
                                                                                                                         p^
+  "ORDER OF CALLS"                                                                                                      ^
   "The order of calls to a mocked method can be checked"                                                                ^
     "with 2 calls that were indeed in order"                                                                            ! ordered().asExpected1^
     "with 2 calls that were indeed in order - ignoring stubbed methods"                                                 ! ordered().asExpected2^
     "with 2 calls that were indeed not in order"                                                                        ! ordered().failed^
     "with 3 calls that were indeed not in order"                                                                        ! ordered().failed2^
                                                                                                                         p^
-  "Callbacks can be created to control the returned a value"                                                            ! callbacks().c1^
+  "ANSWERS & PARAMETERS CAPTURE"                                                                                        ^
+  "Answers can be created to control the returned a value"                                                              ! callbacks().c1^
+  "Answers can use the mock instance as the second parameter"                                                           ! callbacks().c2^
+  "Answers can use the mock instance, even when the method has 0 parameters"                                            ! callbacks().c3^
                                                                                                                         p^
   "A parameter can be captured in order to check its value"                                                             ! captured().e1^
   "A parameter can be captured in order to check its successive values"                                                 ! captured().e2^
@@ -296,10 +303,18 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     }
   }
   case class callbacks() {
-    val list = mock[java.util.List[String]]
+    val list = mockAs[java.util.List[String]]("list")
     def c1 = {
       list.get(anyInt) answers { i => "The parameter is " + i.toString }
       list.get(2) must_== "The parameter is 2"
+    }
+    def c2 = {
+      list.get(anyInt) answers { (i, m) => "The parameters are " + (i.asInstanceOf[Array[_]].mkString, m) }
+      list.get(1) must_== "The parameters are (1,list)"
+    }
+    def c3 = {
+      list.size answers { m => m.toString.size }
+      list.size must_== 4
     }
   }
   case class ordered() {

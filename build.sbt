@@ -38,7 +38,7 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
 }
 
 /** Compilation */
-javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss6m")
+javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss10m")
 
 javaOptions += "-Xmx2G"
 
@@ -89,8 +89,8 @@ git.remoteRepo := "git@github.com:etorreborre/specs2.git"
 /** Publishing */
 publishTo <<= version { v: String =>
   val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
-  else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
+  if (v.trim.endsWith("SNAPSHOT")) Some("sonatype-snapshots" at nexus + "content/repositories/snapshots")
+  else                             Some("sonatype-staging" at nexus   + "service/local/staging/deploy/maven2")
 }
 
 publishMavenStyle := true
