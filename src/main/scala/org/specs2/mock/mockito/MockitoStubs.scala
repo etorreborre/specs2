@@ -85,28 +85,20 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
   class MockAnswer[T](function: Any => T) extends Answer[T] {
      def answer(invocation: InvocationOnMock): T = {
        val args = invocation.getArguments
-       if (args.size == 0) {
-         function match {
-           case f: Function0[_]   => f().asInstanceOf[T]
-           case f: Function1[_,_] => f(invocation.getMock).asInstanceOf[T]
-         }
-       } else {
-         function match {
-           case f: Function1[_, _]     => f(args(0)).asInstanceOf[T]
-         }
-       }
-     } 
+
+       if (args.size == 0) function match {
+                             case f: Function0[_]   => f().asInstanceOf[T]
+                             case f: Function1[_,_] => f(invocation.getMock).asInstanceOf[T]
+                           }
+       else                function(args(0)).asInstanceOf[T]
+     }
   }
 
   /**
    * in this case we suppose that the second expected parameter is the mock instance
    */
   class MockAnswer2[T](function: (Any, Any) => T) extends Answer[T] {
-    def answer(invocation: InvocationOnMock): T = {
-      val args = invocation.getArguments
-      val mock = invocation.getMock
-      function(args, mock)
-    }
+    def answer(invocation: InvocationOnMock): T = function(invocation.getArguments, invocation.getMock)
   }
 }
 
