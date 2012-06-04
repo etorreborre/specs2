@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import scala.xml.NodeSeq
+import scala.xml.{Elem, NodeSeq}
 import specification.{HtmlLink, Stats, SpecName}
 import text.MarkupString
 import execute.{Details, ResultStackTrace, Result}
@@ -16,6 +16,15 @@ import control.StackTraceFilter
 trait HtmlReportOutput {
   /** @return the build html code */
 	def xml: NodeSeq
+
+  /** print a NodeSeq */
+  def print(xml: NodeSeq): HtmlReportOutput
+  /** print an Elem */
+  def print(xml: Elem): HtmlReportOutput
+  /** print a Text Node */
+  def print(text: String): HtmlReportOutput = print(scala.xml.Text(text))
+  /** print a Text Node with a new line */
+  def println(text: String = ""): HtmlReportOutput = print(text+"\n")
   /** set the file path for the current output */
   def filePathIs(path: String): HtmlReportOutput
   /** enclose the nodes inside <html/> tags */
@@ -39,6 +48,8 @@ trait HtmlReportOutput {
 
   /** print a link to another specification */
   def printLink(link: HtmlLink, level: Int = 0, stats: Stats = Stats(), hidden: Boolean = false): HtmlReportOutput
+  /** print a single link */
+  def printLink(link: HtmlLink): HtmlReportOutput
   /** print some text with an icon */
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
   /** print an issue with an icon */

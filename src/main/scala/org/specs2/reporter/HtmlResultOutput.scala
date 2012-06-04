@@ -22,7 +22,7 @@ import html.Htmlx._
  *
  */
 private[specs2]
-case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "") extends HtmlReportOutput { outer =>
+case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "", textPrinter: String => NodeSeq = toXhtml(_)) extends HtmlReportOutput { outer =>
 
   /**
    * start of the output
@@ -82,16 +82,17 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
    */
   def printLink(link: HtmlLink, level: Int = 0, stats: Stats = Stats(), hidden: Boolean = false) = {
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
-    val printLink = wiki(link.beforeText) ++ <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{wiki(link.linkText)}</a> ++ wiki(link.afterText)
-
+    val htmlLink = HtmlResultOutput().printLink(link).xml
     link match {
       case slink @ SpecHtmlLink(name, before, l, after, tip) => {
         print(<subtoc specId={name.id.toString}/>).
-        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ printLink, level, hidden), linkStatus)
+        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ htmlLink, level, hidden), linkStatus)
       }
-      case UrlHtmlLink(url, before, l, after, tip) => printStatus(div(printLink, level, hidden), linkStatus)
+      case UrlHtmlLink(url, before, l, after, tip) => printStatus(div(htmlLink, level, hidden), linkStatus)
     }
   }
+
+  def printLink(link: HtmlLink) = print(wiki(link.beforeText) ++ <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{wiki(link.linkText)}</a> ++ wiki(link.afterText))
 
   /** print some text with a status icon (with an ok class) */
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
@@ -182,7 +183,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
   protected def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
   protected def id(a: Any) = System.identityHashCode(a).toString
   /** render some markup text as xhtml */
-  protected def wiki(text: String) = toXhtml(text)
+  protected def wiki(text: String) = textPrinter(text)
 
   /**
    * Head of the html document. It contains:
@@ -272,8 +273,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
    * @return some xml (rest) enclosed in another block
    */
   private def enclose(f: NodeSeq => NodeSeq)(rest: =>HtmlResultOutput): HtmlResultOutput = print(f(rest.xml))
-  private def print(xml2: NodeSeq): HtmlResultOutput = copy(xml = xml ++ xml2)
-  private def print(xml2: Elem): HtmlResultOutput = copy(xml = xml ++ xml2)
+  def print(xml2: NodeSeq): HtmlResultOutput = copy(xml = xml ++ xml2)
+  def print(xml2: Elem): HtmlResultOutput = copy(xml = xml ++ xml2)
 
   /**
    * @param elementClass class of elements to show/hide

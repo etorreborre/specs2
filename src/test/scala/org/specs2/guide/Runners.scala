@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 class Runners extends UserGuidePage { def is =
-                                                                                                                        """
+  """
 ### Presentation
 
 There are many ways to execute ***specs2*** specifications:
@@ -340,6 +340,8 @@ When you execute one test only, you can pass the arguments on the command line:
 
 ##### Output formats
 
+###### Html
+
 The `html` argument is available with sbt to allow the creation of the html report from the command line.
 
       > test-only org.specs2.UserGuide -- html
@@ -347,12 +349,24 @@ The `html` argument is available with sbt to allow the creation of the html repo
       // in your build.sbt file
       testOptions in Test += Tests.Argument("html")
 
+###### Markdown
+
+The `markup` argument can be used to create ".md" files (to use with websites like GitHub):
+
+      > test-only org.specs2.UserGuide -- markup
+
+In this case the markup text in the Specifications is not interpreted.
+
+###### JUnit
+
 Similarly, JUnit xml output files can be created by passing the `junitxml` option:
 
       > test-only org.specs2.examples.HelloWorldUnitSpec -- junitxml
 
       // in your build.sbt file
       testOptions in Test += Tests.Argument("junitxml")
+
+###### Console
 
 If you want to get a console output as well, don't forget to add the `console` argument:
 
@@ -545,8 +559,8 @@ You can use a custom `Exporter` from inside sbt by passing the `exporter` argume
 
    - - -
 
-           	                                                                                                            """ ^
-                                                                                                                        br ^
+  	                                                                                                            """ ^
+    br ^
   include(xonly, argumentsSpec)                                                                                          ^
                                                                                                                         end
 

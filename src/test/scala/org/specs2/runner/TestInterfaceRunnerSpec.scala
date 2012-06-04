@@ -74,15 +74,15 @@ case class reporting() extends Mockito with MockLogger with DataTables with matc
     implicit val args = Arguments()
 
     def export(condition: Boolean, e: String) = if (condition) Some(e) else None
-    def selectedExporters(c: Boolean, h: Boolean, j: Boolean) =
-      Seq(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(j, "JUnitXmlExporting$")).flatten
+    def selectedExporters(c: Boolean, h: Boolean, m: Boolean, j: Boolean) =
+      Seq(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(m, "MarkupExporting$"), export(j, "JUnitXmlExporting$")).flatten
 
-    "args"                                || "console" | "html" | "junitxml" |
-    "junitxml"                            !! false     ! false  ! true       |
-    "junitxml,console"                    !! true      ! false  ! true       |
-    "junitxml,html,console"               !! true      ! true   ! true       |
-    "junitxml,html,console"               !! true      ! true   ! true       |> { (arguments, c, h, j) =>
-      runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName) must containAllOf(selectedExporters(c, h, j))
+    "args"                                || "console" | "html" | "markup" | "junitxml" |
+    "junitxml"                            !! false     ! false  ! false    ! true       |
+    "junitxml,console"                    !! true      ! false  ! false    ! true       |
+    "junitxml,html,console"               !! true      ! true   ! false     ! true       |
+    "junitxml,markup,console"             !! true      ! false   ! true     ! true       |> { (arguments, c, h, m, j) =>
+      runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName) must containAllOf(selectedExporters(c, h, m, j))
     }
 
   }
