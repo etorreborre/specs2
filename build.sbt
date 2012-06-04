@@ -12,7 +12,7 @@ organization := "org.specs2"
 
 scalaVersion := "2.9.2"
 
-crossScalaVersions := Seq("2.9.1", "2.9.1-1")
+crossScalaVersions := Seq("2.9.1", "2.9.1-1", "2.9.2")
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -87,6 +87,8 @@ synchLocal <<= (privateMappings, updatedRepository, GitKeys.gitRunner, streams) 
 git.remoteRepo := "git@github.com:etorreborre/specs2.git"
 
 /** Publishing */
+credentials += Credentials(Path.userHome / ".ivy2" / ".credentials") 
+
 publishTo <<= version { v: String =>
   val nexus = "https://oss.sonatype.org/"
   if (v.trim.endsWith("SNAPSHOT")) Some("sonatype-snapshots" at nexus + "content/repositories/snapshots")
