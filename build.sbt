@@ -6,7 +6,7 @@ import com.jsuereth.ghpages.GhPages.ghpages._
 /** Project */
 name := "specs2"
 
-version := "1.11-SNAPSHOT"
+version := "1.10.1"
 
 organization := "org.specs2"
 
@@ -67,7 +67,7 @@ site.settings
 
 seq(site.settings:_*)
 
-siteSourceDirectory := new java.io.File("target/specs2-reports")
+siteSourceDirectory <<= target (_ / "specs2-reports")
 
 // depending on the version, copy the api files to a different directory
 siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
