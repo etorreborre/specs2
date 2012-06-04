@@ -1,5 +1,6 @@
 1. set build.sbt version to next number
-2. test/publish the jars
+2. test/cross publish the jars
+3. release on the sonatype website: http://oss.sonatype.org
 
 3. update the index.html and modify the versions (new version and next snapshot)
 4. create the user guide: `test-only *UserGuide* -- html`
