@@ -6,7 +6,7 @@ import com.jsuereth.ghpages.GhPages.ghpages._
 /** Project */
 name := "specs2"
 
-version := "1.11"
+version := "1.12-SNAPSHOT"
 
 organization := "org.specs2"
 
@@ -87,7 +87,7 @@ synchLocal <<= (privateMappings, updatedRepository, GitKeys.gitRunner, streams) 
 git.remoteRepo := "git@github.com:etorreborre/specs2.git"
 
 /** Publishing */
-credentials += Credentials(Path.userHome / ".ivy2" / ".credentials") 
+credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
 publishTo <<= version { v: String =>
   val nexus = "https://oss.sonatype.org/"
