@@ -5,8 +5,8 @@ import org.specs2.specification.{Then, When, RegexStep, Given}
 import org.specs2.execute.Result
 
 /**
-* This specification shows how to use the Given/When/Then style for a unit specifications.
-*/
+ * This specification shows how to use the Given/When/Then style for a unit specifications.
+ */
 class MutableGivenWhenThenSpec extends Specification { noindent
 
   "A given-when-then example for a calculator" >> {
