@@ -42,10 +42,11 @@ abstract class RegexStep[P, T](fullRegex: String = "", groupRegex: String = Rege
   def extract8(t: String) = RegexStep.extract8(t, full, group)
   def extract9(t: String) = RegexStep.extract9(t, full, group)
   def extract10(t: String)= RegexStep.extract10(t, full, group)
+  def extractAll(t: String) = RegexStep.extractAll(t, full, group)
 }
 
 object RegexStep {
-  private val DEFAULT_REGEX = """\$\{([^}]+)\}"""
+  val DEFAULT_REGEX = """\$\{([^}]+)\}"""
 
   def extract[R](text: String, f: PartialFunction[Any, R], regexToUse: Regex = DEFAULT_REGEX.r): R =
     regexToUse.findAllIn(text).size match {
@@ -62,7 +63,7 @@ object RegexStep {
     }
 
   /** extract all groups and return a list of strings */
-  def extractAll(text: String, full: Regex, group: Regex) =
+  def extractAll(text: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) =
     if (full.toString.isEmpty) group.findAllIn(text).matchData.collect { case Regex.Groups(g) => g }.toList
     else                       full.unapplySeq(text).get
 
@@ -92,7 +93,7 @@ object RegexStep {
  *
  * It must define the extract function creating a value of type T from the extracted values
  */
-abstract class Given[T](val regex: String = "") extends RegexStep[Unit, T](regex) {
+abstract class Given[T](val regex: String = "", val groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[Unit, T](regex, groupRegex) {
   /** if the extraction goes wrong, then an Error is propagated */
   private[specs2] def extractContext(text: String): Either[Result, T] = trye(extract(text))((e:Exception) => Error(e))
 
@@ -105,7 +106,7 @@ abstract class Given[T](val regex: String = "") extends RegexStep[Unit, T](regex
  * It must define the extract function taking the previous state of extracted values, P, and creating a new state
  * of type T from the extracted values
  */
-abstract class When[P, T](val regex: String = "") extends RegexStep[P, T](regex) {
+abstract class When[P, T](val regex: String = "", val groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[P, T](regex, groupRegex) {
   /**
    * if the previous extraction went wrong, then a Skipped result is propagated.
    * Otherwise if the current extraction goes wrong, then an Error is propagated
@@ -122,7 +123,7 @@ abstract class When[P, T](val regex: String = "") extends RegexStep[P, T](regex)
  *
  * It must define the extract function taking the state of extracted values, T, and return a `Result`
  */
-abstract class Then[T](regex: String = "") extends RegexStep[Either[Result, T], (T, Result)](regex) {
+abstract class Then[T](regex: String = "", val groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[Either[Result, T], (T, Result)](regex, groupRegex) {
   /**
    * if the previous extraction went wrong, then a Skipped result is propagated.
    * Otherwise if the current extraction goes wrong, then an Error is propagated
