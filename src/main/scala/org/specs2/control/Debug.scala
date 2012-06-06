@@ -9,7 +9,6 @@ package control
  *  will print 'this string' and pass it to the rest of the expectation
  *
  */
-private[specs2] 
 trait Debug {
   
   implicit def debug[T](t: =>T): Debuggable[T] = new Debuggable(t)
@@ -32,5 +31,4 @@ trait NoDebug extends Debug {
   override def debug[T](t: =>T) = super.debug(t)
 }
 
-private[specs2] 
 object Debug extends Debug
