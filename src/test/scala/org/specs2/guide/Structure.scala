@@ -5,7 +5,7 @@ import _root_.examples._
 import specification._
 
 class Structure extends UserGuidePage { def is =
-                                                                                                                        """
+  """
 ### Presentation
 
 In this page you will learn how to:
@@ -244,7 +244,7 @@ A few things to remember about this feature:
          // outputs: 'List(1, 2)' contains '1'
          descFromExpectations ^
          { List(1, 2) must contain(1) }
-"""^"""
+  """^"""
 #### G/W/T
 
 More sophisticated is the Given/When/Then style of writing specifications. This style is supported by interspersing Text fragments, with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example specification for a simple calculator:
@@ -585,6 +585,8 @@ Now let's see how this can be achieved with ***specs2***.
 
 Let's see an example of using a `Scope` with a mutable specification:
 
+      import org.specs2.specification.Scope
+
       class ContextSpec extends mutable.Specification {
         "this is the first example" in new trees {
           tree.removeNodes(2, 3) must have size(2)
@@ -600,6 +602,7 @@ Let's see an example of using a `Scope` with a mutable specification:
       }
 
 Each example of that specification gets a new instance of the `trees` trait. So it will have a brand new `tree` variable and even if this data is mutated by an example, other examples will be isolated from these changes.
+
 Now you might wonder why the `trees` trait is extending the `org.specs2.specification.Scope` trait? The reason is that the body of an Example only accepts objects which are convertible to a `Result`. By extending `Scope` we can take advantage of an implicit conversion provided by the `Specification` trait to convert our context object to a `Result`.
 
 Scopes are a way to create a "fresh" object and associated variables for each example being executed. The advantages are that:
@@ -1578,7 +1581,7 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
  * `org.specs2.specification.mutable.NoFragmentsBuilder`: deactivate the implicit conversions from to remove `in`, <code class="prettyprint">></code><code class="prettyprint">></code>, `should` and `can` methods from `String`s
 
   - - -
-                                                                                                                        """^
+      """^
                                                                                                                         br^
   include(xonly, new GivenWhenThenSpec)                                                                                 ^
   include(xonly, exampleTextIndentation)                                                                                ^
