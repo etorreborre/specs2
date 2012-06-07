@@ -108,12 +108,15 @@ trait Htmlx { outer =>
 
     def specId: SpecId = SpecId(node.attributes.get("specId").map(_.toString).getOrElse(""))
     def anchorName: String = name.anchorName
-    def anchorName(baseUrl: String): String = baseUrl + anchorName
+    def anchorName(baseUrl: String): String = createAnchorNameForNode(baseUrl + anchorName, node)
   }
 
   implicit object HeaderShow extends Show[Header] {
     def show(h : Header) = h.name.toList
   }
+
+  /** @return a unique anchor name for that node, so that 2 nodes having the same name will not direct to the same anchor in the same page */
+  private def createAnchorNameForNode(text: String, node: Node) = text + "_" + node.hashCode
 
   /** @return the text of the first child of a Node, removing notoc elements */
   def nodeText(n: Node) = <a>{n.child.filterNot(_.label == NotocTag.toString)}</a>.text
@@ -133,7 +136,7 @@ trait Htmlx { outer =>
   /** This rule can be used to add anchors to header elements */
   object headersAnchors extends RewriteRule {
     override def transform(n: Node): Seq[Node] = n match {
-      case e: Elem if isHeader(e) => <a name={nodeText(e).sanitize}>{e}</a>
+      case e: Elem if isHeader(e) => <a name={createAnchorNameForNode(nodeText(e).sanitize, n)}>{e}</a>
       case other                  => other
     }
     def addTo(n: Node) = new RuleTransformer(this).apply(n)
