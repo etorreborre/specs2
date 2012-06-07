@@ -1,7 +1,7 @@
 package examples
 
-import org.specs2.mutable.Specification
-import org.specs2.specification.{Then, When, RegexStep, Given}
+import org.specs2.mutable.{NameSpace, Specification}
+import org.specs2.specification._
 import org.specs2.execute.Result
 
 /**
@@ -9,8 +9,7 @@ import org.specs2.execute.Result
  */
 class MutableGivenWhenThenSpec extends Specification { noindent
 
-  "A given-when-then example for a calculator" >> {
-    var a, b, result: Int = 0
+  "A given-when-then example for a calculator" >> new operations {
 
     "Given the following number: ${1}" << { (s: String) =>
       a = s.toInt
@@ -29,8 +28,7 @@ class MutableGivenWhenThenSpec extends Specification { noindent
     }
   }
 
-  "A given-when-then example for a calculator - with regular expressions" >> {
-    var a, b, result: Int = 0
+  "A given-when-then example for a calculator - with regular expressions" >> new operations {
 
     // Reading in the text with a regular expression
     "Given the following number: 1" << readAs(".*(\\d).*") { s: String =>
@@ -52,6 +50,10 @@ class MutableGivenWhenThenSpec extends Specification { noindent
     "And it should be > 0" << groupAs("\\d") { s: String =>
       result must be_>(s.toInt)
     }
+  }
+
+  trait operations extends NameSpace {
+    var a, b, result: Int = 0
   }
 
   case class Operation(n1: Int, n2: Int, operator: String) {

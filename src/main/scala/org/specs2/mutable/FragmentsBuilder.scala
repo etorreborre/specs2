@@ -51,16 +51,15 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def in(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
     def >>(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
 
-    def >>[T <: Fragment](e: =>T): T    = in(e)
-    def >>(block: =>Unit)        : Unit = in(block)
+    def >>[T <: Fragment](e: =>T): T         = in(e)
+    def >>(block: =>Unit)        : Unit      = in(block)
+    def >>(block: =>NameSpace)   : NameSpace = in(block)
 
-    def in[T <: Fragment](e: =>T): T = {
-      addFragments(s)
-      val ex = e
-      addFragments(FF.p)
-      ex
-    }
-    def in(block: =>Unit)       : Unit = {
+    def in[T <: Fragment](block: =>T): T  = addSideEffectingBlock(block)
+    def in(block: =>NameSpace): NameSpace = addSideEffectingBlock(block)
+    def in(block: =>Unit): Unit           = addSideEffectingBlock(block)
+
+    private def addSideEffectingBlock[T](block: =>T): T = {
       addFragments(s)
       val b = block
       addFragments(FF.p)
