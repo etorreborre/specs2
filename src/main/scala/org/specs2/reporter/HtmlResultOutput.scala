@@ -80,9 +80,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
    *
    * - if this is an arbitrary link, print a normal html link
    */
-  def printLink(link: HtmlLink, level: Int = 0, stats: Stats = Stats(), hidden: Boolean = false) = {
+  def printLink(link: HtmlLink, level: Int, stats: Stats = Stats(), hidden: Boolean = false) = {
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
-    val htmlLink = HtmlResultOutput().printLink(link).xml
+    val htmlLink = outer.copy(xml = NodeSeq.Empty).printLink(link).xml
     link match {
       case slink @ SpecHtmlLink(name, before, l, after, tip) => {
         print(<subtoc specId={name.id.toString}/>).

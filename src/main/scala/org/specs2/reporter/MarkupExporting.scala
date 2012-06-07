@@ -65,7 +65,7 @@ case class MarkupResultOutput(
   def printForm(form: NodeSeq)                                                                  = MarkupResultOutput(output.printForm(form))
   def printStats(name: SpecName, stats: Stats)                                                  = MarkupResultOutput(output.printStats(name, stats))
   def printLink(link: HtmlLink)                                                                 = MarkupResultOutput(output.printLink(link))
-  def printLink(link: HtmlLink, level: Int = 0, stats: Stats = Stats(), hidden: Boolean = false)= {
+  def printLink(link: HtmlLink, level: Int, stats: Stats = Stats(), hidden: Boolean = false)    = {
     if (hidden) this
     else print(" * ").println(HtmlResultOutput().printLink(link).xml.toString)
   }

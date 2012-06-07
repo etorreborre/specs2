@@ -47,7 +47,7 @@ trait HtmlReportOutput {
   def printSpecStart(name: SpecName, stats: Stats): HtmlReportOutput
 
   /** print a link to another specification */
-  def printLink(link: HtmlLink, level: Int = 0, stats: Stats = Stats(), hidden: Boolean = false): HtmlReportOutput
+  def printLink(link: HtmlLink, level: Int, stats: Stats = Stats(), hidden: Boolean = false): HtmlReportOutput
   /** print a single link */
   def printLink(link: HtmlLink): HtmlReportOutput
   /** print some text with an icon */
