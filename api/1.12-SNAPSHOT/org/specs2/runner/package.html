@@ -1,0 +1,318 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.runner</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
+        <h1>runner</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">runner</span>
+      </span>
+      </h4>
+      
+      <div class="fullcommenttop" id="comment"></div>
+    
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.specs2.runner.ClassRunner" data-isabs="false">
+      <a id="ClassRunner:ClassRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ClassRunner.html"><span class="name">ClassRunner</span></a><span class="result"> extends Classes with ConsoleOutput with SystemExit</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class can be used to executed a Specification in the Console
+by specifying its name as the first argument on the command line
+</p>
+    </li><li visbl="pub" name="org.specs2.runner.FilesRunner" data-isabs="true">
+      <a id="FilesRunner:FilesRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FilesRunner.html"><span class="name">FilesRunner</span></a><span class="result"> extends SpecificationsFinder with SystemExit</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait finds specifications in the source directory, instantiate them as one big
+specification and report them using the ConsoleReporter or the HtmlReporter depending on the presence of the html flag
+</p>
+    </li><li visbl="pub" name="org.specs2.runner.FilesRunnerFingerprint" data-isabs="true">
+      <a id="FilesRunnerFingerprint:FilesRunnerFingerprint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FilesRunnerFingerprint.html"><span class="name">FilesRunnerFingerprint</span></a><span class="result"> extends TestFingerprint</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.runner.FinalResultsReporter" data-isabs="false">
+      <a id="FinalResultsReporter:FinalResultsReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FinalResultsReporter.html"><span class="name">FinalResultsReporter</span></a><span class="params">(<span name="handler">handler: EventHandler</span>, <span name="loggers">loggers: Array[Logger]</span>)</span><span class="result"> extends TestInterfaceReporter with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This reporter will just notify the test interface about test results for the end statistics</p>
+    </li><li visbl="pub" name="org.specs2.runner.HtmlRunner" data-isabs="false">
+      <a id="HtmlRunner:HtmlRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlRunner.html"><span class="name">HtmlRunner</span></a><span class="result"> extends ClassRunner</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This runner uses an HtmlReporter, creating html pages, for running the specification
+</p>
+    </li><li visbl="pub" name="org.specs2.runner.JUnitDescriptionsFragments" data-isabs="false">
+      <a id="JUnitDescriptionsFragments:JUnitDescriptionsFragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitDescriptionsFragments.html"><span class="name">JUnitDescriptionsFragments</span></a><span class="result"> extends JUnitDescriptions[Fragment]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Descriptions for a seq of Fragments to execute
+</p>
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner" data-isabs="false">
+      <a id="JUnitRunner:JUnitRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitRunner.html"><span class="name">JUnitRunner</span></a><span class="result"> extends Runner with ExecutionOrigin with DefaultSelection with DefaultSequence with Exporters</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
+to execute a specification as a JUnit suite.</p>
+    </li><li visbl="pub" name="org.specs2.runner.JUnitXmlRunner" data-isabs="false">
+      <a id="JUnitXmlRunner:JUnitXmlRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitXmlRunner.html"><span class="name">JUnitXmlRunner</span></a><span class="result"> extends ClassRunner</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This runner uses a JUnitXmlReporter, creating junit xml files
+</p>
+    </li><li visbl="pub" name="org.specs2.runner.NotifierRunner" data-isabs="false">
+      <a id="NotifierRunner:NotifierRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NotifierRunner.html"><span class="name">NotifierRunner</span></a><span class="params">(<span name="notifier">notifier: Notifier</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This runner can be used with any class implementing the Notifier trait
+</p>
+    </li><li visbl="pub" name="org.specs2.runner.SpecFailureAssertionFailedError" data-isabs="false">
+      <a id="SpecFailureAssertionFailedError:SpecFailureAssertionFailedError"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecFailureAssertionFailedError.html"><span class="name">SpecFailureAssertionFailedError</span></a><span class="result"> extends AssertionFailedError</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class refines the <code>AssertionFailedError</code> from junit
+and provides the stackTrace of an exception which occurred during the specification execution
+</p>
+    </li><li visbl="pub" name="org.specs2.runner.SpecificationsFinder" data-isabs="true">
+      <a id="SpecificationsFinder:SpecificationsFinder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecificationsFinder.html"><span class="name">SpecificationsFinder</span></a><span class="result"> extends FileSystem with Classes with ConsoleOutput</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait loads specifications found on a given source directory based
+on a regular expression representing the Specification name, usually .</p>
+    </li><li visbl="pub" name="org.specs2.runner.Specs2Fingerprint" data-isabs="true">
+      <a id="Specs2Fingerprint:Specs2Fingerprint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Specs2Fingerprint.html"><span class="name">Specs2Fingerprint</span></a><span class="result"> extends TestFingerprint</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.runner.SpecsFramework" data-isabs="false">
+      <a id="SpecsFramework:SpecsFramework"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecsFramework.html"><span class="name">SpecsFramework</span></a><span class="result"> extends Framework</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implementation of the Framework interface for the sbt tool.</p>
+    </li><li visbl="pub" name="org.specs2.runner.SystemExit" data-isabs="true">
+      <a id="SystemExit:SystemExit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SystemExit.html"><span class="name">SystemExit</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait is responsible for exiting the system after a run, depending on the success of the execution
+</p>
+    </li><li visbl="pub" name="org.specs2.runner.TestInterfaceRunner" data-isabs="false">
+      <a id="TestInterfaceRunner:TestInterfaceRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TestInterfaceRunner.html"><span class="name">TestInterfaceRunner</span></a><span class="result"> extends Runner with HandlerEvents with TestLoggers with Exporters</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Runner for TestInterface.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.runner.FilesRunner" data-isabs="false">
+      <a id="FilesRunner:FilesRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FilesRunner$.html"><span class="name">FilesRunner</span></a><span class="result"> extends FilesRunner</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.runner.Fingerprints" data-isabs="false">
+      <a id="Fingerprints:Fingerprints"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Fingerprints$.html"><span class="name">Fingerprints</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner" data-isabs="false">
+      <a id="JUnitRunner:JUnitRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitRunner$.html"><span class="name">JUnitRunner</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Factory methods to help with testing
+</p>
+    </li><li visbl="pub" name="org.specs2.runner.SpecificationsFinder" data-isabs="false">
+      <a id="SpecificationsFinder:SpecificationsFinder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecificationsFinder$.html"><span class="name">SpecificationsFinder</span></a><span class="result"> extends SpecificationsFinder</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
