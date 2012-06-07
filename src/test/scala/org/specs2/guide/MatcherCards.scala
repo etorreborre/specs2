@@ -640,7 +640,7 @@ Note: since this functionality relies on the scala compiler library, so you need
 
       // use sbt's scalaVersion Setting to define the scala-compiler library version
       libraryDependencies <<= scalaVersion { scala_version => Seq(
-        "org.specs2" %% "specs2" % "1.7" % "test",
+        "org.specs2" %% "specs2" % "1.10" % "test",
         "org.scala-lang" % "scala-compiler" % scala_version % "test")
       }
 """

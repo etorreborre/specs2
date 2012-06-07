@@ -404,7 +404,7 @@ Given / When / Then steps are invariant in their type parameters. This might be 
 
 ##### Unit specification
 
-Given / When / Step can also be used in a unit specification by using the `<<` operator and local variables:
+Given / When / Step can also be used in a unit specification by using the &lt;&lt; operator and local variables:
 
         "A given-when-then example for a calculator".txt.br
 
