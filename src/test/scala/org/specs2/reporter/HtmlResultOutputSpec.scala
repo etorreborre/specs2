@@ -1,8 +1,6 @@
 package org.specs2
 package reporter
-import execute._
 import specification._
-import main._
 import matcher.DataTables
 import text.NoMarkup
 

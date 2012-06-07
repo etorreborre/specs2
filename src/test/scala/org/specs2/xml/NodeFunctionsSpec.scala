@@ -18,7 +18,7 @@ class NodeFunctionsSpec extends Specification { def is =
                                                                                                                         endp^
   "The equalIgnoreSpace function must"                                                                                  ^
     "return false if 2 nodes are not equal after evaluation"                                                            ^
-    { <a>{"a"}</a> must not ==/(<a>{"b"}</a>) }                                                                         ^
+    { <a>{"a"}</a> must not ==/(<a>{"b"}</a>) }                                                                         ^bt^
     "return true if 2 nodes are equal even with spaces"                                                                 ^
     { <a>{"a"}</a> must ==/(<a>{" a "}</a>) }                                                                           ^
                                                                                                                         end

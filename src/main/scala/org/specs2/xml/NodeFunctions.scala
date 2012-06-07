@@ -96,7 +96,7 @@ trait NodeFunctions {
       
     def attributesValuesNamesPartialMatch(m: MetaData) = {
       val attributesNamesAndValues: Map[String, String] = Map(m.map((a: MetaData) => a.key -> a.value.toString).toList: _*)
-      attributeValues.forall((pair: (String, String)) =>  attributesNamesAndValues.isDefinedAt(pair._1) && attributesNamesAndValues(pair._1) == pair._2)
+      attributeValues.forall((pair: (String, String)) =>  attributesNamesAndValues.isDefinedAt(pair._1) && (attributesNamesAndValues(pair._1) matches pair._2))
     }
 
     def attributesNamesMatch(m: MetaData) = 

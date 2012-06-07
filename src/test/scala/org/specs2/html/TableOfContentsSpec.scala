@@ -16,12 +16,12 @@ class TableOfContentsSpec extends Specification with HtmlDocuments { def is =
                                                                                                   end
 
   def e1 = addToc(aBodyWithHeaders) must \\("li") \\ ("ul") \ ("li")
-//    <li><a href="http://specs2.org/#title">title</a>
-//      <ul><li><a href="http://specs2.org/#a+header">a header</a></li>
+//    <li><a href="http://specs2.org/#title_123456">title</a>
+//      <ul><li><a href="http://specs2.org/#a+header_123456">a header</a></li>
 //      </ul>
 //    </li>
   def e2 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a") \> "title"
-  def e3 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "../guide/UserGuide.html#title")
+  def e3 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "../guide/UserGuide.html#title.*")
   def e4 = addToc(aBodyWithHeaders) must \\ ("li", "id")
   def e5 = {
     val subtoc = <a href="http://specs2.org/#other" />
