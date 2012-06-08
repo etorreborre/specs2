@@ -139,10 +139,14 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 
   private def createStep(s: String, u: =>Unit) = {
     strip(s).txt
+    addFragments(FF.bt)
     step(u)
   }
   private def createExample[R <% Result](s: String, r: =>R) = {
-    forExample(strip(s)) ! r
+    addFragments(FF.t)
+    val e = forExample(strip(s)) ! r
+    addFragments(FF.bt)
+    e
   }
 
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {

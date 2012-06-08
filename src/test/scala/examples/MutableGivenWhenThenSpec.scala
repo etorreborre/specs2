@@ -7,7 +7,7 @@ import org.specs2.execute.Result
 /**
  * This specification shows how to use the Given/When/Then style for a unit specifications.
  */
-class MutableGivenWhenThenSpec extends Specification { noindent
+class MutableGivenWhenThenSpec extends Specification {
 
   "A given-when-then example for a calculator" >> new operations {
 
