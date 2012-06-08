@@ -107,7 +107,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
    * the message in enclosed in a div which has a unique id and associated onclick function to show/hide it
    */
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int) =
-    printKoStatus(div(<img src="images/collapsed.gif" onclick={toggleElement(e)}/> ++
+    printKoStatus(div(<img src={baseDir+"images/collapsed.gif"} onclick={toggleElement(e)}/> ++
 		                   t("  "+e.message.notNull+" ("+e.location+")"), level))
 
   /**
@@ -120,7 +120,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
         val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
         val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
         
-				printKoStatus(div(<img src="images/collapsed.gif"  onclick={toggleElement(details)}/> ++ t("details"), level) ++
+				printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
             <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
             { <pre class="details">{expectedFull+"\n"+actualFull}</pre> unless (diffs.showFull)  }
@@ -231,9 +231,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
       function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
       function toggleImage(image) {
         if (image.src.endsWith('images/expanded.gif')) 
-          image.src = 'images/collapsed.gif';
+          image.src = image.src.replace('expanded', 'collapsed');
         else 
-          image.src = 'images/expanded.gif';
+          image.src = image.src.replace('collapsed', 'expanded');
       };
       function showHide(id) {
         element = document.getElementById(id);
