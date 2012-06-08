@@ -331,6 +331,10 @@ There are some factory and implicit conversion methods to create Given/When/Then
         val number1: Given[Int] = groupAs("\\d+") and { (s: String) => s.toInt }
         number1.extract("pay 100 now") === 100
 
+        // if the Given step is only side-effecting we can omit the `and` call
+        // this simplifies the use of Given steps in Unit Specifications
+        val number1: Given[Unit] = groupAs("\\d+") and { (s: String) => value = s.toInt }
+
  * convert a function `T => String... => S`to a `When[T, S]` step (*note the use of `and` after `readAs` and `groupAs`*)
 
         // this assumes that the Int to extract is delimited with ${}
@@ -358,6 +362,10 @@ There are some factory and implicit conversion methods to create Given/When/Then
         // this uses capturing groups directly
         val number3: Then[(Int, Int)] = groupAs("\\d+") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
         number3.extract((100, 10), "the result is 90") must beSuccessful
+
+        // if the Then step is only side-effecting we can omit the `then` call
+        // this simplifies the use of Then steps in Unit Specifications
+        val number3: Then[Unit] = groupAs("\\d+") { (s: String) => value must_== s.toInt }
 
 ##### G/W/T sequences
 
@@ -475,6 +483,24 @@ Given / When / Step can also be used in a unit specification by using the &lt;&l
 
         case class Operation(n1: Int, n2: Int, operator: String) {
           def calculate: Int = if (operator == "+") n1 + n2 else n1 * n2
+        }
+
+If you want to use your own regular expression parsing, the &lt;&lt; operator also accepts `Given[Unit]` and `Then[Unit]` steps:
+
+        "Given the following number: 1" << readAs(".*(\\d).*") { s: String =>
+          a = s.toInt
+        }
+        "And a second number: 2" << groupAs("\\d") { s: Seq[String] =>
+          b = s.head.toInt
+        }
+        "When I use this operator: +" << groupAs("[\\+\\-]") { s: String =>
+          result = Operation(a, b, s).calculate
+        }
+        "Then I should get: 3" << groupAs("\\d") { s: String =>
+          result === s.toInt
+        }
+        "And it should be > 0" << groupAs("\\d") { s: String =>
+          result must be_>(s.toInt)
         }
 
 Similarly, ScalaCheck generator and properties are supported:
