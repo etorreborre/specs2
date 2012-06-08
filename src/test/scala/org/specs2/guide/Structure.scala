@@ -277,7 +277,7 @@ Here's some explanation of the object definitions that support the G/W/T style:
 
  * finally the `result` object defines the outcome of the Addition. Its `extract` method takes an `Addition` and the current text to return a `Result`
 
-##### Multiple steps
+##### Sequencing
 
 A G/W/T sequence can contain more than just 3 steps. However the compiler will check that:
 
