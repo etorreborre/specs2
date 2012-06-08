@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.specification.RegexSteps</title>
+          <title>org.specs2.specification.Given</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -12,41 +12,26 @@
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
       <div id="definition">
-        <img src="../../../lib/trait_big.png" />
+        <a title="Go to companion" href="Given.html"><img src="../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.specification" class="extype" href="package.html">specification</a></p>
-        <h1>RegexSteps</h1>
+        <h1><a title="Go to companion" href="Given.html">Given</a></h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">RegexSteps</span><span class="result"> extends <a name="org.specs2.specification.RegexStepsFactory" class="extype" href="RegexStepsFactory.html">RegexStepsFactory</a> with <a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></span>
+        <span class="name">Given</span><span class="result"> extends <a name="org.specs2.control.ImplicitParameters" class="extype" href="../control/ImplicitParameters.html">ImplicitParameters</a></span>
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides building blocks to create steps and examples from regular expression.</p><p>It is used to implement a Given-When-Then way of describing systems.</p><p>Fragments are created by adding a <code>Given</code> step to a <code>Text</code>:</p><p> <code>"name: ${user}" ^ givenName</code></p><p>This creates a PreStep object containing the current context (representing all the extracted values) and a list of
-Fragments containing:</p><ul><li>the Text fragment: <code>Text("name: ${user}")</code></li><li>a Step containing the extraction code to get the value delimited by <code>${}</code></li></ul><p>Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
-stores the additional Text fragment so that values can be extracted from it when a <code>When</code> step is added:
-<code>
- // this creates a PreStepText object
- "name: ${user}" ^ givenName ^
- "age: ${38}"
-
- // this creates a PreStep object
- "name: ${user}" ^ givenName ^
- "age: ${38}"    ^ thenAge ^
-</code></p><p>Eventually, when a <code>Then</code> step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
-the current context and the results returned by the <code>Then</code> objects to create Examples.</p><p>The last PostStep object contains the list of all fragments created by the Given/When/Then sequence:</p><ul><li>Text fragments</li><li>Steps</li><li>Examples</li></ul></div><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>implicit conversions to create Given objects</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a>, <a name="org.specs2.specification.RegexStepsFactory" class="extype" href="RegexStepsFactory.html">RegexStepsFactory</a>, <a name="org.specs2.control.ImplicitParameters" class="extype" href="../control/ImplicitParameters.html">ImplicitParameters</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
-        </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.specification.BaseSpecification" class="extype" href="BaseSpecification.html">BaseSpecification</a>, <a name="org.specs2.specification.FragmentsBuilder" class="extype" href="FragmentsBuilder$.html">FragmentsBuilder</a>, <a name="org.specs2.mutable.FragmentsBuilder" class="extype" href="../mutable/FragmentsBuilder.html">FragmentsBuilder</a>, <a name="org.specs2.specification.NoFragmentsBuilder" class="extype" href="NoFragmentsBuilder.html">NoFragmentsBuilder</a>, <a name="org.specs2.mutable.NoFragmentsBuilder" class="extype" href="../mutable/NoFragmentsBuilder.html">NoFragmentsBuilder</a>, <a name="org.specs2.specification.RegexSteps" class="extype" href="RegexSteps$.html">RegexSteps</a>, <a name="org.specs2.mutable.Specification" class="extype" href="../mutable/Specification.html">Specification</a>, <a name="org.specs2.Specification" class="extype" href="../Specification.html">Specification</a>, <a name="org.specs2.mutable.SpecificationFeatures" class="extype" href="../mutable/SpecificationFeatures.html">SpecificationFeatures</a>, <a name="org.specs2.SpecificationFeatures" class="extype" href="../SpecificationFeatures.html">SpecificationFeatures</a>, <a name="org.specs2.mutable.SpecificationWithJUnit" class="extype" href="../mutable/SpecificationWithJUnit.html">SpecificationWithJUnit</a>, <a name="org.specs2.SpecificationWithJUnit" class="extype" href="../SpecificationWithJUnit.html">SpecificationWithJUnit</a></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.control.ImplicitParameters" class="extype" href="../control/ImplicitParameters.html">ImplicitParameters</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
     
 
@@ -60,7 +45,7 @@ the current context and the results returned by the <code>Then</code> objects to
               <span class="filtertype">Inherited</span>
               <ol><li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li></ol>
-              <ol id="linearization"><li name="org.specs2.specification.RegexSteps" class="in"><span>RegexSteps</span></li><li name="org.specs2.data.TuplesToSeq" class="in"><span>TuplesToSeq</span></li><li name="org.specs2.specification.RegexStepsFactory" class="in"><span>RegexStepsFactory</span></li><li name="org.specs2.control.ImplicitParameters" class="in"><span>ImplicitParameters</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+              <ol id="linearization"><li name="org.specs2.specification.Given" class="in"><span>Given</span></li><li name="org.specs2.control.ImplicitParameters" class="in"><span>ImplicitParameters</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
             </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -206,18 +191,6 @@ the current context and the results returned by the <code>Then</code> objects to
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.specs2.specification.RegexStepsFactory.ReadAs" data-isabs="false">
-      <a id="ReadAs:ReadAs"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="RegexStepsFactory$ReadAs.html"><span class="name">ReadAs</span></a><span class="result"> extends AnyRef</span>
-      </span>
-      </h4>
-      <p class="comment cmt">This class creates Given or Then extractors from a regular expression and a function</p>
     </li></ol>
             </div>
 
@@ -285,18 +258,6 @@ the current context and the results returned by the <code>Then</code> objects to
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#RegexFragmentToFragments" data-isabs="false">
-      <a id="RegexFragmentToFragments(RegexFragment):Fragments"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">RegexFragmentToFragments</span><span class="params">(<span name="r">r: <span name="org.specs2.specification.RegexFragment" class="extype">RegexFragment</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">at any point in time a regex sequence can be transformed as a sequence of Fragments</p>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -324,19 +285,6 @@ the current context and the results returned by the <code>Then</code> objects to
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#downcastGiven" data-isabs="false">
-      <a id="downcastGiven[X, Y&lt;:X](Given[Y]):Given[X] { def extract(s: String): Y }"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">downcastGiven</span><span class="tparams">[<span name="X">X</span>, <span name="Y">Y &lt;: X</span>]</span><span class="params">(<span name="gv">gv: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[Y]</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[X] { def extract(s: String): Y }</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">implicit conversion to transform a Given[Y] to Given[X] when Y &lt;: X
-</p>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -376,6 +324,138 @@ the current context and the results returned by the <code>Then</code> objects to
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Given#function10ToGiven" data-isabs="false">
+      <a id="function10ToGiven[T]((String, String, String, String, String, String, String, String, String, String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function10ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String, String, String, String, String, String, String, String, String, String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#function1ToGiven" data-isabs="false">
+      <a id="function1ToGiven[T]((String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function1ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#function2ToGiven" data-isabs="false">
+      <a id="function2ToGiven[T]((String, String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function2ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String, String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#function3ToGiven" data-isabs="false">
+      <a id="function3ToGiven[T]((String, String, String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function3ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String, String, String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#function4ToGiven" data-isabs="false">
+      <a id="function4ToGiven[T]((String, String, String, String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function4ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String, String, String, String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#function5ToGiven" data-isabs="false">
+      <a id="function5ToGiven[T]((String, String, String, String, String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function5ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String, String, String, String, String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#function6ToGiven" data-isabs="false">
+      <a id="function6ToGiven[T]((String, String, String, String, String, String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function6ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String, String, String, String, String, String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#function7ToGiven" data-isabs="false">
+      <a id="function7ToGiven[T]((String, String, String, String, String, String, String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function7ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String, String, String, String, String, String, String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#function8ToGiven" data-isabs="false">
+      <a id="function8ToGiven[T]((String, String, String, String, String, String, String, String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function8ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String, String, String, String, String, String, String, String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#function9ToGiven" data-isabs="false">
+      <a id="function9ToGiven[T]((String, String, String, String, String, String, String, String, String) ⇒ T):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">function9ToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (String, String, String, String, String, String, String, String, String) ⇒ T</span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Given#functionSeqToGiven" data-isabs="false">
+      <a id="functionSeqToGiven[T]((Seq[String]) ⇒ T)(ImplicitParam):Given[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">functionSeqToGiven</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (Seq[String]) ⇒ T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="p">p: <a name="org.specs2.control.ImplicitParameters.ImplicitParam" class="extype" href="../control/ImplicitParameters$ImplicitParam.html">ImplicitParam</a></span>)</span><span class="result">: <a name="org.specs2.specification.Given" class="extype" href="Given.html">Given</a>[T]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -388,18 +468,6 @@ the current context and the results returned by the <code>Then</code> objects to
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.RegexStepsFactory#groupAs" data-isabs="false">
-      <a id="groupAs(String):ReadAs"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">groupAs</span><span class="params">(<span name="groupRegex">groupRegex: String</span>)</span><span class="result">: <a name="org.specs2.specification.RegexStepsFactory.ReadAs" class="extype" href="RegexStepsFactory$ReadAs.html">ReadAs</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">factory method to create a Given or a Then element from a regex, using a regex denoting groups to extract</p><div class="fullcomment"><div class="comment cmt"><p>factory method to create a Given or a Then element from a regex, using a regex denoting groups to extract</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexStepsFactory" class="extype" href="RegexStepsFactory.html">RegexStepsFactory</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -592,18 +660,6 @@ the current context and the results returned by the <code>Then</code> objects to
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.RegexStepsFactory#readAs" data-isabs="false">
-      <a id="readAs(String):ReadAs"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">readAs</span><span class="params">(<span name="regex">regex: String</span>)</span><span class="result">: <a name="org.specs2.specification.RegexStepsFactory.ReadAs" class="extype" href="RegexStepsFactory$ReadAs.html">ReadAs</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">factory method to create a Given or a Then element from a regex</p><div class="fullcomment"><div class="comment cmt"><p>factory method to create a Given or a Then element from a regex</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexStepsFactory" class="extype" href="RegexStepsFactory.html">RegexStepsFactory</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -628,140 +684,6 @@ the current context and the results returned by the <code>Then</code> objects to
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.TuplesToSeq#tupleToSeq10" data-isabs="false">
-      <a id="tupleToSeq10[T]((T, T, T, T, T, T, T, T, T, T)):Seq[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupleToSeq10</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: (T, T, T, T, T, T, T, T, T, T)</span>)</span><span class="result">: Seq[T]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.TuplesToSeq#tupleToSeq2" data-isabs="false">
-      <a id="tupleToSeq2[T]((T, T)):Seq[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupleToSeq2</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: (T, T)</span>)</span><span class="result">: Seq[T]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.TuplesToSeq#tupleToSeq3" data-isabs="false">
-      <a id="tupleToSeq3[T]((T, T, T)):Seq[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupleToSeq3</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: (T, T, T)</span>)</span><span class="result">: Seq[T]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.TuplesToSeq#tupleToSeq4" data-isabs="false">
-      <a id="tupleToSeq4[T]((T, T, T, T)):Seq[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupleToSeq4</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: (T, T, T, T)</span>)</span><span class="result">: Seq[T]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.TuplesToSeq#tupleToSeq5" data-isabs="false">
-      <a id="tupleToSeq5[T]((T, T, T, T, T)):Seq[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupleToSeq5</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: (T, T, T, T, T)</span>)</span><span class="result">: Seq[T]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.TuplesToSeq#tupleToSeq6" data-isabs="false">
-      <a id="tupleToSeq6[T]((T, T, T, T, T, T)):Seq[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupleToSeq6</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: (T, T, T, T, T, T)</span>)</span><span class="result">: Seq[T]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.TuplesToSeq#tupleToSeq7" data-isabs="false">
-      <a id="tupleToSeq7[T]((T, T, T, T, T, T, T)):Seq[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupleToSeq7</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: (T, T, T, T, T, T, T)</span>)</span><span class="result">: Seq[T]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.TuplesToSeq#tupleToSeq8" data-isabs="false">
-      <a id="tupleToSeq8[T]((T, T, T, T, T, T, T, T)):Seq[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupleToSeq8</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: (T, T, T, T, T, T, T, T)</span>)</span><span class="result">: Seq[T]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.TuplesToSeq#tupleToSeq9" data-isabs="false">
-      <a id="tupleToSeq9[T]((T, T, T, T, T, T, T, T, T)):Seq[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupleToSeq9</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: (T, T, T, T, T, T, T, T, T)</span>)</span><span class="result">: Seq[T]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#upcastThen" data-isabs="false">
-      <a id="upcastThen[X, Y&lt;:X](Then[X]):Then[Y]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">upcastThen</span><span class="tparams">[<span name="X">X</span>, <span name="Y">Y &lt;: X</span>]</span><span class="params">(<span name="th">th: <a name="org.specs2.specification.Then" class="extype" href="Then.html">Then</a>[X]</span>)</span><span class="result">: <a name="org.specs2.specification.Then" class="extype" href="Then.html">Then</a>[Y]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">implicit conversion to transform a Then[Y] to Then[X] when Y &lt;: X
-</p>
-    </li><li visbl="pub" name="org.specs2.specification.RegexSteps#updowncastWhen" data-isabs="false">
-      <a id="updowncastWhen[P, Q, R&lt;:P, S&gt;:Q](When[P, Q]):When[R, S]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">updowncastWhen</span><span class="tparams">[<span name="P">P</span>, <span name="Q">Q</span>, <span name="R">R &lt;: P</span>, <span name="S">S &gt;: Q</span>]</span><span class="params">(<span name="wh">wh: <a name="org.specs2.specification.When" class="extype" href="When.html">When</a>[P, Q]</span>)</span><span class="result">: <a name="org.specs2.specification.When" class="extype" href="When.html">When</a>[R, S]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">implicit conversion to transform a When[P, Q] to When[R, S] when R &lt;: P and S &gt;: Q
-</p>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -814,11 +736,7 @@ the current context and the results returned by the <code>Then</code> objects to
         </div>
 
         <div id="inheritedMembers">
-        <div name="org.specs2.data.TuplesToSeq" class="parent">
-              <h3>Inherited from <a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></h3>
-            </div><div name="org.specs2.specification.RegexStepsFactory" class="parent">
-              <h3>Inherited from <a name="org.specs2.specification.RegexStepsFactory" class="extype" href="RegexStepsFactory.html">RegexStepsFactory</a></h3>
-            </div><div name="org.specs2.control.ImplicitParameters" class="parent">
+        <div name="org.specs2.control.ImplicitParameters" class="parent">
               <h3>Inherited from <a name="org.specs2.control.ImplicitParameters" class="extype" href="../control/ImplicitParameters.html">ImplicitParameters</a></h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>

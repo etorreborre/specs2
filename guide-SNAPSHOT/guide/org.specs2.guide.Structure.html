@@ -23,9 +23,9 @@
       function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
       function toggleImage(image) {
         if (image.src.endsWith('images/expanded.gif')) 
-          image.src = 'images/collapsed.gif';
+          image.src = image.src.replace('expanded', 'collapsed');
         else 
-          image.src = 'images/expanded.gif';
+          image.src = image.src.replace('collapsed', 'expanded');
       };
       function showHide(id) {
         element = document.getElementById(id);
@@ -62,8 +62,8 @@
       <script type="text/javascript" src="./../../css/tabber.js"></script>
       <link type="text/css" media="screen" rel="stylesheet" href="./../../css/tabber.css" />
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html">Structure</a></div><div id="leftcolumn"><div id="tree">
-      <ul><li id="743613866"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide_-824556403">User Guide</a>
-            <ul><li id="1000844307"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start_1559045223">Quick Start</a>
+      <ul><li id="1660940455"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide_-1485660786">User Guide</a>
+            <ul><li id="408606960"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start_955161841">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit_-265658116">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance_-738870220">Acceptance</a>
@@ -73,7 +73,7 @@
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21_246332816">And much more!</a>
             
           </li></ul>
-          </li><li id="1333413855"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure_861238898">Structure</a>
+          </li><li id="266409052"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure_-728418160">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation_365374749">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples_-1032122672">Declare examples</a>
@@ -110,7 +110,11 @@
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#User+regexps_1338880410">User regexps</a>
             
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Factory+methods_285596770">Factory methods</a>
+            
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#G%2FW%2FT+sequences_-1991323091">G/W/T sequences</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Multiple+steps_2109836060">Multiple steps</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#ScalaCheck_-1548256549">ScalaCheck</a>
             
@@ -177,6 +181,8 @@
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Template_684178333">Template</a>
             
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#For+fragments_-2016874765">For fragments</a>
+            
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Execution_-68664595">Execution</a>
             
@@ -227,7 +233,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="485462410"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers_-1114235341">Matchers</a>
+          </li><li id="1180486399"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers_1095052042">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results_-979011587">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results_1717156868">Standard results</a>
@@ -283,7 +289,7 @@
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#DataTables_-813014967">DataTables</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms_-1403806608">Forms</a>
-            <ul><li id="1494783861"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms_-463225553">Forms</a>
+            <ul><li id="661386528"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms_74306768">Forms</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Fields_-874726952">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Effects_1709723400">Effects</a>
@@ -327,7 +333,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1436263212"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners_872377198">Runners</a>
+          </li><li id="1443067758"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners_1188868530">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation_365374749">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies_-1486089324">Dependencies</a>
@@ -411,7 +417,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1222727554"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy_-404287780">Philosophy</a>
+          </li><li id="1621517248"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy_341114975">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins_285155974">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score_-975445083">The score</a>
@@ -455,7 +461,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="116397374"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design_1321730296">Design</a>
+          </li><li id="299955130"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design_-1677740673">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation_365374749">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure_306083527">Structure</a>
@@ -475,8 +481,8 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['743613866','1333413855'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
-    </div></div><div id="central"><title>Structure</title><a name="Structure_861238898"><h2 specId="1333413855">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation_365374749"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1660940455','266409052'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>Structure</title><a name="Structure_-728418160"><h2 specId="266409052">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation_365374749"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
 <ul>
   <li>declare examples and expectations</li>
   <li>link specifications together</li>
@@ -665,7 +671,56 @@
 <pre><code class="prettyprint">  object number1 extends Given[Int](&quot;Given the following number: (.*)&quot;) {
     def extract(text: String): Int = extract1(text).toInt
   }
-</code></pre><p>The advantage of using this way is that the text is left in it's pristine form, the drawback is that most of the text is duplicated in 2 places, adding more maintenance burden.</p><a name="G%2FW%2FT+sequences_-1991323091"><h5>G/W/T sequences</h5></a><p>Given the rule saying that only a <code class="prettyprint">Then</code> block can follow another <code class="prettyprint">Then</code> block you might think that it is not possible to start another G/W/T<br />sequence in the same specification! Fortunately it is possible by just terminating the first sequence with an <code class="prettyprint">end</code> fragment:</p>
+</code></pre><p>The advantage of using this way is that the text is left in it's pristine form, the drawback is that most of the text is duplicated in 2 places, adding more maintenance burden.</p><a name="Factory+methods_285596770"><h5>Factory methods</h5></a><p>There are some factory and implicit conversion methods to create Given/When/Then steps by passing functions and / or regular expressions:</p>
+<ul>
+  <li><p>convert a function <code class="prettyprint">String... =&gt; T</code>to a <code class="prettyprint">Given[T]</code> step (<em>note the use of <code class="prettyprint">then</code> after <code class="prettyprint">readAs</code> and <code class="prettyprint">groupAs</code></em>)</p>
+  <pre><code class="prettyprint">// this assumes that the Int to extract is delimited with ${}
+val number1: Given[Int] = (s: String) =&gt; s.toInt
+number1.extract(&quot;pay ${100} now&quot;) === 100
+
+// this uses a regular expression with capturing groups matching the full text
+val number1: Given[Int] = readAs(&quot;.*(\\\\d+).*&quot;) and { (s: String) =&gt; s.toInt }
+number1.extract(&quot;pay 100 now&quot;) === 100
+
+// this uses capturing groups directly
+val number1: Given[Int] = groupAs(&quot;\\\\d+&quot;) and { (s: String) =&gt; s.toInt }
+number1.extract(&quot;pay 100 now&quot;) === 100
+
+// if the Given step is only side-effecting we can omit the `and` call
+// this simplifies the use of Given steps in Unit Specifications
+val number1: Given[Unit] = groupAs(&quot;\\\\d+&quot;) and { (s: String) =&gt; value = s.toInt }
+</code></pre></li>
+  <li><p>convert a function <code class="prettyprint">T =&gt; String... =&gt; S</code>to a <code class="prettyprint">When[T, S]</code> step (<em>note the use of <code class="prettyprint">and</code> after <code class="prettyprint">readAs</code> and <code class="prettyprint">groupAs</code></em>)</p>
+  <pre><code class="prettyprint">// this assumes that the Int to extract is delimited with ${}
+val number2: When[Int, (Int, Int)] = (n1: Int) =&gt; (s: String) =&gt; (n1, s.toInt)
+number2.extract(100, &quot;with a discount of ${10}%&quot;) === (100, 10)
+
+// this uses a regular expression with capturing groups matching the full text
+val number2: When[Int, (Int, Int)] = readAs(&quot;.*(\\\\d+).*&quot;) and { (n1: Int) =&gt; (s: String) =&gt; (n1, s.toInt) }
+number2.extract(100, &quot;with a discount of 10%&quot;) === (100, 10)
+
+// this uses capturing groups directly
+val number2: When[Int, (Int, Int)] = groupAs(&quot;\\\\d+&quot;) and { (n1: Int) =&gt; (s: String) =&gt; (n1, s.toInt) }
+number2.extract(100, &quot;with a discount of 10%&quot;) === (100, 10)
+</code></pre></li>
+  <li><p>convert a function <code class="prettyprint">T =&gt; String... =&gt; Result</code>to a <code class="prettyprint">Then[T]</code> step (<em>note the use of <code class="prettyprint">then</code> after <code class="prettyprint">readAs</code> and <code class="prettyprint">groupAs</code></em>)</p>
+  <pre><code class="prettyprint">// this assumes that the Int to extract is delimited with ${}
+val number3: Then[(Int, Int)] = (n: (Int, Int)) =&gt; (s: String) =&gt; discount(n._1, n._2) must_== s.toInt
+number3.extract((100, 10), &quot;the result is ${90}&quot;) must beSuccessful
+
+// this uses a regular expression with capturing groups matching the full text
+val number3: Then[(Int, Int)] = readAs(&quot;.*(\\\\d+).*&quot;) then { (n: (Int, Int)) =&gt; (s: String) =&gt; discount(n._1, n._2) must_== s.toInt }
+number3.extract((100, 10), &quot;the result is 90&quot;) must beSuccessful
+
+// this uses capturing groups directly
+val number3: Then[(Int, Int)] = groupAs(&quot;\\\\d+&quot;) then { (n: (Int, Int)) =&gt; (s: String) =&gt; discount(n._1, n._2) must_== s.toInt }
+number3.extract((100, 10), &quot;the result is 90&quot;) must beSuccessful
+
+// if the Then step is only side-effecting we can omit the `then` call
+// this simplifies the use of Then steps in Unit Specifications
+val number3: Then[Unit] = groupAs(&quot;\\\\d+&quot;) { (s: String) =&gt; value must_== s.toInt }
+</code></pre></li>
+</ul><a name="G%2FW%2FT+sequences_-1991323091"><h5>G/W/T sequences</h5></a><p>Given the rule saying that only a <code class="prettyprint">Then</code> block can follow another <code class="prettyprint">Then</code> block you might think that it is not possible to start another G/W/T<br />sequence in the same specification! Fortunately it is possible by just terminating the first sequence with an <code class="prettyprint">end</code> fragment:</p>
 <pre><code class="prettyprint">  &quot;A given-when-then example for the addition&quot;                 ^
     &quot;Given the following number: ${1}&quot;                         ^ number1 ^
     &quot;And a second number: ${2}&quot;                                ^ number2 ^
@@ -676,6 +731,15 @@
     &quot;And a second number: ${2}&quot;                                ^ number2 ^
     &quot;Then I should get: ${2}&quot;                                  ^ multiplication ^
                                                                end
+</code></pre><a name="Multiple+steps_2109836060"><h5>Multiple steps</h5></a><p>If there are lots of consecutive <code class="prettyprint">When</code> steps collecting the same kind of arguments, it will be easier to collect them in a <code class="prettyprint">Seq[T]</code> rather than a <code class="prettyprint">TupleN[T]</code>:</p>
+<pre><code class="prettyprint">  &quot;A given-when-then example for the addition&quot;                 ^
+    &quot;Given the following number: ${1}&quot;                         ^ number1 ^
+    &quot;And a second number: ${2}&quot;                                ^ number2 ^
+    &quot;And a third number: ${3}&quot;                                 ^ number3
+
+  val number1: Given[Int]               = (_:String).toInt
+  val number2: When[Int, (Int, Int)]    = (n1: Int) =&gt; (s: String) =&gt; (n1, s.toInt)
+  val number3: When[Seq[Int], Seq[Int]] = (numbers: Seq[Int]) =&gt; (s: String) =&gt; numbers :+ s.toInt
 </code></pre><a name="ScalaCheck_-1548256549"><h5>ScalaCheck</h5></a><p>Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.</p><p>This can be avoided and even enhanced by using ScalaCheck to generate more values for the same scenario. For the calculator above you could write:</p>
 <pre><code class="prettyprint">  import org.scalacheck.Gen._
   import specification.gen._
@@ -757,6 +821,22 @@
     case class Operation(n1: Int, n2: Int, operator: String) {
       def calculate: Int = if (operator == &quot;+&quot;) n1 + n2 else n1 * n2
     }
+</code></pre><p>If you want to use your own regular expression parsing, the &lt;&lt; operator also accepts <code class="prettyprint">Given[Unit]</code> and <code class="prettyprint">Then[Unit]</code> steps:</p>
+<pre><code class="prettyprint">    &quot;Given the following number: 1&quot; &lt;&lt; readAs(&quot;.*(\\\\d).*&quot;) { s: String =&gt;
+      a = s.toInt
+    }
+    &quot;And a second number: 2&quot; &lt;&lt; groupAs(&quot;\\\\d&quot;) { s: Seq[String] =&gt;
+      b = s.head.toInt
+    }
+    &quot;When I use this operator: +&quot; &lt;&lt; groupAs(&quot;[\\\\+\\\\-]&quot;) { s: String =&gt;
+      result = Operation(a, b, s).calculate
+    }
+    &quot;Then I should get: 3&quot; &lt;&lt; groupAs(&quot;\\\\d&quot;) { s: String =&gt;
+      result === s.toInt
+    }
+    &quot;And it should be &gt; 0&quot; &lt;&lt; groupAs(&quot;\\\\d&quot;) { s: String =&gt;
+      result must be_&gt;(s.toInt)
+    }
 </code></pre><p>Similarly, ScalaCheck generator and properties are supported:</p>
 <pre><code class="prettyprint">    &quot;Given a first number n1&quot; &lt;&lt; {
       n1 = choose(-10, 10)
@@ -770,7 +850,7 @@
       }
     }
     &quot;Then I should get n1 + n2&quot; &lt;&lt; check { (op: Addition) =&gt;
-        op.calculate must_== op.n1 + op.n2
+      op.calculate must_== op.n1 + op.n2
     }
 
     var n1, n2: Gen[Int] = null
@@ -1093,7 +1173,21 @@
     /** the map method allows to &quot;post-process&quot; the fragments after their creation */
     override def map(fs: =&gt;Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
   }
-</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="Execution_-68664595"><h3>Execution</h3></a><p>This section summarizes the execution algorithm of a specification based on its fragments:</p>
+</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="For+fragments_-2016874765"><h4>For fragments</h4></a><p>When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the <code class="prettyprint">org.specs2.mutable.NameSpace</code> trait:</p>
+<pre><code class="prettyprint">trait context extends mutable.NameSpace {
+  var variable1 = 1
+  var variable2 = 2
+}
+
+&quot;this is the first block&quot; &gt;&gt; new context {
+  &quot;using one variable&quot;      &gt;&gt; { variable1 === 1 }
+  &quot;using a second variable&quot; &gt;&gt; { variable2 === 2 }
+}
+&quot;this is the second block&quot; &gt;&gt; new context {
+  &quot;using one variable&quot;      &gt;&gt; { variable1 === 1 }
+  &quot;using a second variable&quot; &gt;&gt; { variable2 === 2 }
+}
+</code></pre><a name="Execution_-68664595"><h3>Execution</h3></a><p>This section summarizes the execution algorithm of a specification based on its fragments:</p>
 <ol>
   <li>all the fragments are divided into groups delimited by <code class="prettyprint">Steps</code></li>
   <li>if the <code class="prettyprint">sequential</code> argument is present, each fragment goes to its own group</li>

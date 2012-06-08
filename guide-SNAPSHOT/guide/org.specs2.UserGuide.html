@@ -23,9 +23,9 @@
       function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
       function toggleImage(image) {
         if (image.src.endsWith('images/expanded.gif')) 
-          image.src = 'images/collapsed.gif';
+          image.src = image.src.replace('expanded', 'collapsed');
         else 
-          image.src = 'images/expanded.gif';
+          image.src = image.src.replace('collapsed', 'expanded');
       };
       function showHide(id) {
         element = document.getElementById(id);
@@ -62,8 +62,8 @@
       <script type="text/javascript" src="./../../css/tabber.js"></script>
       <link type="text/css" media="screen" rel="stylesheet" href="./../../css/tabber.css" />
     </head><body><div id="leftcolumn"><div id="tree">
-      <ul><li id="743613866"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide_-824556403">User Guide</a>
-            <ul><li id="1000844307"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start_1559045223">Quick Start</a>
+      <ul><li id="1660940455"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide_-1485660786">User Guide</a>
+            <ul><li id="408606960"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start_955161841">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit_-265658116">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance_-738870220">Acceptance</a>
@@ -73,7 +73,7 @@
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21_246332816">And much more!</a>
             
           </li></ul>
-          </li><li id="1333413855"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure_861238898">Structure</a>
+          </li><li id="266409052"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure_-728418160">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation_365374749">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples_-1032122672">Declare examples</a>
@@ -110,7 +110,11 @@
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#User+regexps_1338880410">User regexps</a>
             
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Factory+methods_285596770">Factory methods</a>
+            
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#G%2FW%2FT+sequences_-1991323091">G/W/T sequences</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Multiple+steps_2109836060">Multiple steps</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#ScalaCheck_-1548256549">ScalaCheck</a>
             
@@ -177,6 +181,8 @@
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Template_684178333">Template</a>
             
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#For+fragments_-2016874765">For fragments</a>
+            
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Execution_-68664595">Execution</a>
             
@@ -227,7 +233,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="485462410"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers_-1114235341">Matchers</a>
+          </li><li id="1180486399"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers_1095052042">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results_-979011587">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results_1717156868">Standard results</a>
@@ -283,7 +289,7 @@
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#DataTables_-813014967">DataTables</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms_-1403806608">Forms</a>
-            <ul><li id="1494783861"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms_-463225553">Forms</a>
+            <ul><li id="661386528"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms_74306768">Forms</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Fields_-874726952">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Effects_1709723400">Effects</a>
@@ -327,7 +333,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1436263212"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners_872377198">Runners</a>
+          </li><li id="1443067758"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners_1188868530">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation_365374749">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies_-1486089324">Dependencies</a>
@@ -411,7 +417,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1222727554"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy_-404287780">Philosophy</a>
+          </li><li id="1621517248"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy_341114975">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins_285155974">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score_-975445083">The score</a>
@@ -455,7 +461,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="116397374"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design_1321730296">Design</a>
+          </li><li id="299955130"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design_-1677740673">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation_365374749">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure_306083527">Structure</a>
@@ -475,9 +481,9 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['743613866','743613866'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
-    </div></div><div id="central"><title>User Guide</title><a name="User+Guide_-824556403"><h2 specId="743613866">User Guide</h2></a><status class="ok"><div class="level0" style="display: show"><p><strong><em>specs2</em></strong> is a library for writing executable software specifications in Scala.</p><p>With <em>specs2</em> you can write:</p>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1660940455','1660940455'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>User Guide</title><a name="User+Guide_-1485660786"><h2 specId="1660940455">User Guide</h2></a><status class="ok"><div class="level0" style="display: show"><p><strong><em>specs2</em></strong> is a library for writing executable software specifications in Scala.</p><p>With <em>specs2</em> you can write:</p>
 <ul>
   <li>specifications for simple classes (<em>unit</em> specifications)</li>
   <li>specifications for full features (<em>acceptance</em> specifications)</li>
-</ul><p>In this user guide, you will find: </p></div></status><status class="ok"><p></p></status><subtoc specId="1000844307"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> a <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html">quick start guide</a></div></status><subtoc specId="1333413855"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> how to <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html">structure your specification</a></div></status><subtoc specId="485462410"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> how to use <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html">matchers</a></div></status><subtoc specId="1436263212"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> how to <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html">execute a specification</a></div></status><subtoc specId="1222727554"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> the <strong><em>specs2</em></strong> <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html">philosophy</a></div></status><subtoc specId="116397374"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> the <strong><em>specs2</em></strong> <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html">design</a></div></status></div><div id="rightcolumn"></div></body></html>
+</ul><p>In this user guide, you will find: </p></div></status><status class="ok"><p></p></status><subtoc specId="408606960"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> a <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html">quick start guide</a></div></status><subtoc specId="266409052"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> how to <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html">structure your specification</a></div></status><subtoc specId="1180486399"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> how to use <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html">matchers</a></div></status><subtoc specId="1443067758"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> how to <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html">execute a specification</a></div></status><subtoc specId="1621517248"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> the <strong><em>specs2</em></strong> <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html">philosophy</a></div></status><subtoc specId="299955130"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> the <strong><em>specs2</em></strong> <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html">design</a></div></status></div><div id="rightcolumn"></div></body></html>

@@ -906,10 +906,22 @@ a regular expression:</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="RegexSteps.html"><span class="name">RegexSteps</span></a><span class="result"> extends AnyRef</span>
+        <a href="RegexSteps.html"><span class="name">RegexSteps</span></a><span class="result"> extends RegexStepsFactory with TuplesToSeq</span>
       </span>
       </h4>
       <p class="comment cmt">This trait provides building blocks to create steps and examples from regular expression.</p>
+    </li><li visbl="pub" name="org.specs2.specification.RegexStepsFactory" data-isabs="true">
+      <a id="RegexStepsFactory:RegexStepsFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="RegexStepsFactory.html"><span class="name">RegexStepsFactory</span></a><span class="result"> extends ImplicitParameters</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.ResultsContext" data-isabs="false">
       <a id="ResultsContext:ResultsContext"></a>
       <h4 class="signature">
@@ -1221,6 +1233,18 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.specification.Given" data-isabs="false">
+      <a id="Given:Given"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Given$.html"><span class="name">Given</span></a><span class="result"> extends ImplicitParameters</span>
+      </span>
+      </h4>
+      <p class="comment cmt">implicit conversions to create Given objects</p>
     </li><li visbl="pub" name="org.specs2.specification.HtmlLink" data-isabs="false">
       <a id="HtmlLink:HtmlLink"></a>
       <h4 class="signature">
@@ -1300,6 +1324,30 @@ examples must be executed concurrently and not isolated.</p>
       </h4>
       <p class="comment cmt">Those fragments are used to tag other fragments in a specification\
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.Then" data-isabs="false">
+      <a id="Then:Then"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Then$.html"><span class="name">Then</span></a><span class="result"> extends ImplicitParameters</span>
+      </span>
+      </h4>
+      <p class="comment cmt">implicit conversions to create Then objects</p>
+    </li><li visbl="pub" name="org.specs2.specification.When" data-isabs="false">
+      <a id="When:When"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="When$.html"><span class="name">When</span></a><span class="result"> extends ImplicitParameters</span>
+      </span>
+      </h4>
+      <p class="comment cmt">implicit conversions to create When objects</p>
     </li><li visbl="pub" name="org.specs2.specification.gen" data-isabs="false">
       <a id="gen:gen"></a>
       <h4 class="signature">
