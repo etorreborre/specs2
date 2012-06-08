@@ -383,6 +383,19 @@ sequence in the same specification! Fortunately it is possible by just terminati
         "Then I should get: ${2}"                                  ^ multiplication ^
                                                                    end
 
+##### Multiple steps
+
+If there are lots of consecutive `When` steps collecting the same kind of arguments, it will be easier to collect them in a `Seq[T]` rather than a `TupleN[T]`:
+
+      "A given-when-then example for the addition"                 ^
+        "Given the following number: ${1}"                         ^ number1 ^
+        "And a second number: ${2}"                                ^ number2 ^
+        "And a third number: ${3}"                                 ^ number3
+
+      val number1: Given[Int]               = (_:String).toInt
+      val number2: When[Int, (Int, Int)]    = (n1: Int) => (s: String) => (n1, s.toInt)
+      val number3: When[Seq[Int], Seq[Int]] = (numbers: Seq[Int]) => (s: String) => numbers :+ s.toInt
+
 ##### ScalaCheck
 
 Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.
@@ -1014,6 +1027,24 @@ If that's the case you can define your own `Specification` trait doing the job:
       }
 
 The `DatabaseSpec` above will insert, in each inherited specification, one `Step` executed before all the fragments, and one executed after all of them.
+
+#### For fragments
+
+When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the `org.specs2.mutable.NameSpace` trait:
+
+    trait context extends mutable.NameSpace {
+      var variable1 = 1
+      var variable2 = 2
+    }
+
+    "this is the first block" >> new context {
+      "using one variable"      >> { variable1 === 1 }
+      "using a second variable" >> { variable2 === 2 }
+    }
+    "this is the second block" >> new context {
+      "using one variable"      >> { variable1 === 1 }
+      "using a second variable" >> { variable2 === 2 }
+    }
 
 ### Execution
 

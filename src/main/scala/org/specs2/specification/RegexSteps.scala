@@ -6,6 +6,7 @@ import main.Arguments
 import specification.StandardFragments.{Backtab, Tab, Br, End}
 import internal.scalaz.Scalaz._
 import control.ImplicitParameters
+import data.TuplesToSeq
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -44,7 +45,7 @@ import control.ImplicitParameters
  *  - Examples
  *
  */
-trait RegexSteps extends RegexStepsFactory {
+trait RegexSteps extends RegexStepsFactory with TuplesToSeq {
   /** at any point in time a regex sequence can be transformed as a sequence of Fragments */
   implicit def RegexFragmentToFragments(r: RegexFragment): Fragments = r.fs
 
@@ -64,6 +65,7 @@ trait RegexSteps extends RegexStepsFactory {
    * implicit conversion to transform a Then[Y] to Then[X] when Y <: X
    */
   implicit def upcastThen[X, Y <: X](th: Then[X]) = new Then[Y] { def extract(t: Y, s: String) = th.extract(t, s) }
+
 }
 
 trait RegexStepsFactory extends ImplicitParameters {
@@ -157,7 +159,7 @@ import RegexSteps._
 private[specs2]
 trait RegexFragment {
   type RegexType <: RegexFragment
-  val fs: Fragments
+  def fs: Fragments
   def add(f: Fragment): RegexType
   def ^(f: Text)        = add(f)
   def ^(f: Br)          = add(f)
@@ -225,6 +227,14 @@ private[specs2] case class PreStepText[T](text: String, context: () => Either[Re
   def ^[R](step: When[T, R]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^[R, S](step: When[Seq[S], R])(implicit ev: T => Seq[S]) = {
+    lazy val extracted = step.extractContext(context().right.map(ev), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^[R, S](step: Then[Seq[S]])(implicit ev: T => Seq[S]) = {
+    lazy val extracted = step.extractContext(context().right.map(ev), text)
+    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
   }
   def ^(step: Then[T]) = {
    lazy val extracted = step.extractContext(context(), text)

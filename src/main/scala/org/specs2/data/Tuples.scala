@@ -23,3 +23,27 @@ trait Tuples { outer =>
 }
 private[specs2]
 object Tuples extends Tuples
+
+trait TuplesToSeq {
+  implicit def tupleToSeq2[T] (t: (T, T)): Seq[T] = Seq(t._1, t._2)
+  implicit def tupleToSeq3[T] (t: (T, T, T)): Seq[T] = Seq(t._1, t._2, t._3)
+  implicit def tupleToSeq4[T] (t: (T, T, T, T)): Seq[T] = Seq(t._1, t._2, t._3, t._4)
+  implicit def tupleToSeq5[T] (t: (T, T, T, T, T)): Seq[T] = Seq(t._1, t._2, t._3, t._4, t._5)
+  implicit def tupleToSeq6[T] (t: (T, T, T, T, T, T)): Seq[T] = Seq(t._1, t._2, t._3, t._4, t._5, t._6)
+  implicit def tupleToSeq7[T] (t: (T, T, T, T, T, T, T)): Seq[T] = Seq(t._1, t._2, t._3, t._4, t._5, t._6, t._7)
+  implicit def tupleToSeq8[T] (t: (T, T, T, T, T, T, T, T)): Seq[T] = Seq(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
+  implicit def tupleToSeq9[T] (t: (T, T, T, T, T, T, T, T, T)): Seq[T] = Seq(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
+  implicit def tupleToSeq10[T](t: (T, T, T, T, T, T, T, T, T, T)): Seq[T] = Seq(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10)
+}
+
+trait NoTuplesToSeq extends TuplesToSeq {
+  override def tupleToSeq2[T] (t: (T, T)): Seq[T]                         = super.tupleToSeq2(t)
+  override def tupleToSeq3[T] (t: (T, T, T)): Seq[T]                      = super.tupleToSeq3(t)
+  override def tupleToSeq4[T] (t: (T, T, T, T)): Seq[T]                   = super.tupleToSeq4(t)
+  override def tupleToSeq5[T] (t: (T, T, T, T, T)): Seq[T]                = super.tupleToSeq5(t)
+  override def tupleToSeq6[T] (t: (T, T, T, T, T, T)): Seq[T]             = super.tupleToSeq6(t)
+  override def tupleToSeq7[T] (t: (T, T, T, T, T, T, T)): Seq[T]          = super.tupleToSeq7(t)
+  override def tupleToSeq8[T] (t: (T, T, T, T, T, T, T, T)): Seq[T]       = super.tupleToSeq8(t)
+  override def tupleToSeq9[T] (t: (T, T, T, T, T, T, T, T, T)): Seq[T]    = super.tupleToSeq9(t)
+  override def tupleToSeq10[T](t: (T, T, T, T, T, T, T, T, T, T)): Seq[T] = super.tupleToSeq10(t)
+}
