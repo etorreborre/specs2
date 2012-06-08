@@ -32,7 +32,7 @@ class GivenWhenThenSpec extends Specification { def is =
   val aNumber: Given[Int] = (_:String).toInt
 
   // when there are too many When[T, S] consecutive steps, it is possible to follow them with a When[Seq[T], S]
-  val operator: When[Seq[Int], Operation]        = (numbers: Seq[Int]) => (s: String) => Operation(numbers, s)
+  val operator: When[Seq[Int], Operation] = (numbers: Seq[Int]) => (s: String) => Operation(numbers, s)
 
   val result: Then[Operation]      = (operation: Operation) => (s: String) => { operation.calculate  must_== s.toInt }
   val greaterThan: Then[Operation] = (operation: Operation) => (s: String) => { operation.calculate  must be_>= (s.toInt) }
