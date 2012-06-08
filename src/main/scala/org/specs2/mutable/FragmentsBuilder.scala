@@ -119,7 +119,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def <<(f: Function8[String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract8(s)))
     def <<(f: Function9[String, String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract9(s)))
     def <<(f: Function10[String, String, String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract10(s)))
-    def <<(f: SeqFunction[String, Unit]): Fragments = createStep(s, f(extractAll(s)))
+    def <<(f: Seq[String] => Unit)(implicit p: ImplicitParam): Fragments = createStep(s, f(extractAll(s)))
 
     def <<(then: Then[Unit]): Example = createExample(s, then.extract((), s))
     def <<[R <% Result](r: =>R): Example = createExample(s, r)
@@ -133,7 +133,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def <<[R <% Result](f: Function8[String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract8(s)))
     def <<[R <% Result](f: Function9[String, String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract9(s)))
     def <<[R <% Result](f: Function10[String, String, String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract10(s)))
-    def <<[R <% Result](f: SeqFunction[String, R]): Example = createExample(s, f(extractAll(s)))
+    def <<[R](f: Seq[String] => R)(implicit r: R => Result, p: ImplicitParam): Example = createExample(s, f(extractAll(s)))
 
   }
 

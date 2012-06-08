@@ -5,6 +5,7 @@ import execute._
 import main.Arguments
 import specification.StandardFragments.{Backtab, Tab, Br, End}
 import internal.scalaz.Scalaz._
+import control.ImplicitParameters
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -43,7 +44,7 @@ import internal.scalaz.Scalaz._
  *  - Examples
  *
  */
-trait RegexSteps {
+trait RegexSteps extends RegexStepsFactory {
   /** at any point in time a regex sequence can be transformed as a sequence of Fragments */
   implicit def RegexFragmentToFragments(r: RegexFragment): Fragments = r.fs
 
@@ -63,14 +64,9 @@ trait RegexSteps {
    * implicit conversion to transform a Then[Y] to Then[X] when Y <: X
    */
   implicit def upcastThen[X, Y <: X](th: Then[X]) = new Then[Y] { def extract(t: Y, s: String) = th.extract(t, s) }
+}
 
-  /**
-   * this implicit is added to avoid overloading issues with parameters of the form Function[T, S] and
-   * parameters of the form Function[Seq[T], S]
-   */
-  implicit def functionToSeqFunction[T, S](f: Seq[T] => S): SeqFunction[T, S] = new SeqFunction[T, S] { def apply(t: Seq[T]) = f(t) }
-  trait SeqFunction[T, S] extends Function1[Seq[T], S]
-
+trait RegexStepsFactory extends ImplicitParameters {
   /** factory method to create a Given or a Then element from a regex */
   def readAs(regex: String) = new ReadAs(regex)
   /** factory method to create a Given or a Then element from a regex, using a regex denoting groups to extract */
@@ -78,56 +74,66 @@ trait RegexSteps {
 
   /** This class creates Given or Then extractors from a regular expression and a function */
   class ReadAs(regex: String = "", groups: String = "") {
-    def apply(f: String => Unit) = then[Unit](f)
+    def apply(f: String => Unit) = and[Unit](f)
 
-    def apply(f: (String, String) => Unit) = then[Unit](f)
-    def apply(f: (String, String, String) => Unit) = then[Unit](f)
-    def apply(f: (String, String, String, String) => Unit) = then[Unit](f)
-    def apply(f: (String, String, String, String, String) => Unit) = then[Unit](f)
-    def apply(f: (String, String, String, String, String, String) => Unit) = then[Unit](f)
-    def apply(f: (String, String, String, String, String, String, String) => Unit) = then[Unit](f)
-    def apply(f: (String, String, String, String, String, String, String, String) => Unit) = then[Unit](f)
-    def apply(f: (String, String, String, String, String, String, String, String, String) => Unit) = then[Unit](f)
-    def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = then[Unit](f)
-    def apply(f: SeqFunction[String, Unit]) = then[Unit](f)
+    def apply(f: (String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)
 
-    def then[T](f: String => T) = new Given[T](regex, groups) { def extract(text: String) = { f(extract1(text)) } }
-    def then[T](f: (String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract2(text)) } }
-    def then[T](f: (String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract3(text)) } }
-    def then[T](f: (String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract4(text)) } }
-    def then[T](f: (String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract5(text)) } }
-    def then[T](f: (String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract6(text)) } }
-    def then[T](f: (String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract7(text)) } }
-    def then[T](f: (String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract8(text)) } }
-    def then[T](f: (String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract9(text)) } }
-    def then[T](f: (String, String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract10(text)) } }
-    def then[T](f: SeqFunction[String, T]) = new Given[T](regex, groups) { def extract(text: String)  = f(extractAll(text)) }
+    def and[T](f: String => T) = new Given[T](regex, groups) { def extract(text: String) = { f(extract1(text)) } }
+    def and[T](f: (String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract2(text)) } }
+    def and[T](f: (String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract3(text)) } }
+    def and[T](f: (String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract4(text)) } }
+    def and[T](f: (String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract5(text)) } }
+    def and[T](f: (String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract6(text)) } }
+    def and[T](f: (String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract7(text)) } }
+    def and[T](f: (String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract8(text)) } }
+    def and[T](f: (String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract9(text)) } }
+    def and[T](f: (String, String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract10(text)) } }
+    def and[T](f: Seq[String] => T)(implicit p: ImplicitParam, p1: ImplicitParam1) = new Given[T](regex, groups) { def extract(text: String)  = f(extractAll(text)) }
 
-    def apply[R <% Result](f: String => R) = and[R, Unit](f)
-    def apply[R <% Result](f: (String, String) => R) = and[R, Unit](f)
-    def apply[R <% Result](f: (String, String, String) => R) = and[R, Unit](f)
-    def apply[R <% Result](f: (String, String, String, String) => R) = and[R, Unit](f)
-    def apply[R <% Result](f: (String, String, String, String, String) => R) = and[R, Unit](f)
-    def apply[R <% Result](f: (String, String, String, String, String, String) => R) = and[R, Unit](f)
-    def apply[R <% Result](f: (String, String, String, String, String, String, String) => R) = and[R, Unit](f)
-    def apply[R <% Result](f: (String, String, String, String, String, String, String, String) => R) = and[R, Unit](f)
-    def apply[R <% Result](f: (String, String, String, String, String, String, String, String, String) => R) = and[R, Unit](f)
-    def apply[R <% Result](f: (String, String, String, String, String, String, String, String, String, String) => R) = and[R, Unit](f)
+    def and[T, S](f: T => String => S) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t)(extract1(text)) } }
+    def and[T, S](f: T => (String, String) => S)(implicit p: ImplicitParam2) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract2(text)) } }
+    def and[T, S](f: T => (String, String, String) => S)(implicit p: ImplicitParam3) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract3(text)) } }
+    def and[T, S](f: T => (String, String, String, String) => S)(implicit p: ImplicitParam4) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract4(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String) => S)(implicit p: ImplicitParam5) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract5(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String) => S)(implicit p: ImplicitParam6) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract6(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam7) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract7(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam8) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract8(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam9) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract9(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam10) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract10(text)) } }
+    def and[T, S](f: T => Seq[String] => S)(implicit p: ImplicitParam) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).apply(extractAll(text)) } }
 
-    def apply[R <% Result](f: SeqFunction[String, R]) = and[R, Unit](f)
+    def apply[R <% Result](f: String => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String, String, String, String, String) => R) = then((u: Unit) => f)
+    def apply[R](f: Seq[String] => R)(implicit r: R => Result, p: ImplicitParam) = then[R, Unit]((u: Unit) => f)(r, p)
 
-    def and[R <% Result, T](f: String => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(extract1(text)) }
-    def and[R <% Result, T](f: (String, String) => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f.tupled(extract2(text)) }
-    def and[R <% Result, T](f: (String, String, String) => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f.tupled(extract3(text)) }
-    def and[R <% Result, T](f: (String, String, String, String) => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f.tupled(extract4(text)) }
-    def and[R <% Result, T](f: (String, String, String, String, String) => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f.tupled(extract5(text)) }
-    def and[R <% Result, T](f: (String, String, String, String, String, String) => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f.tupled(extract6(text)) }
-    def and[R <% Result, T](f: (String, String, String, String, String, String, String) => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f.tupled(extract7(text)) }
-    def and[R <% Result, T](f: (String, String, String, String, String, String, String, String) => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f.tupled(extract8(text)) }
-    def and[R <% Result, T](f: (String, String, String, String, String, String, String, String, String) => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f.tupled(extract9(text)) }
-    def and[R <% Result, T](f: (String, String, String, String, String, String, String, String, String, String) => R) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f.tupled(extract10(text)) }
-
-    def and[R <% Result, T](f: SeqFunction[String, R]) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(extractAll(text)) }
+    def then[R, T](f: T => String => R)(implicit r: R => Result) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t)(extract1(text)) }
+    def then[R, T](f: T => (String, String) => R)(implicit r: R => Result, p: ImplicitParam2) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract2(text)) }
+    def then[R, T](f: T => (String, String, String) => R)(implicit r: R => Result, p: ImplicitParam3) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract3(text)) }
+    def then[R, T](f: T => (String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam4) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract4(text)) }
+    def then[R, T](f: T => (String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam5) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract5(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam6) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract6(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam7) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract7(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam8) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract8(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam9) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract9(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam10) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract10(text)) }
+    def then[R, T](f: T => Seq[String] => R)(implicit r: R => Result, p: ImplicitParam) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t)(extractAll(text)) }
   }
 }
 

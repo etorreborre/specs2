@@ -2,6 +2,7 @@ package org.specs2
 package guide
 
 import _root_.examples._
+import matcher.{ ResultMatchers => RM }
 import specification._
 
 class Structure extends UserGuidePage { def is =
@@ -312,6 +313,52 @@ In the original way of declaring Given/When/Then steps, the text is left complet
 
 The advantage of using this way is that the text is left in it's pristine form, the drawback is that most of the text is duplicated in 2 places, adding more maintenance burden.
 
+##### Factory methods
+
+There are some factory and implicit conversion methods to create Given/When/Then steps by passing functions and / or regular expressions:
+
+ * convert a function `String... => T`to a `Given[T]` step (*note the use of `then` after `readAs` and `groupAs`*)
+
+        // this assumes that the Int to extract is delimited with ${}
+        val number1: Given[Int] = (s: String) => s.toInt
+        number1.extract("pay ${100} now") === 100
+
+        // this uses a regular expression with capturing groups matching the full text
+        val number1: Given[Int] = readAs(".*(\\d+).*") and { (s: String) => s.toInt }
+        number1.extract("pay 100 now") === 100
+
+        // this uses capturing groups directly
+        val number1: Given[Int] = groupAs("\\d+") and { (s: String) => s.toInt }
+        number1.extract("pay 100 now") === 100
+
+ * convert a function `T => String... => S`to a `When[T, S]` step (*note the use of `and` after `readAs` and `groupAs`*)
+
+        // this assumes that the Int to extract is delimited with ${}
+        val number2: When[Int, (Int, Int)] = (n1: Int) => (s: String) => (n1, s.toInt)
+        number2.extract(100, "with a discount of ${10}%") === (100, 10)
+
+        // this uses a regular expression with capturing groups matching the full text
+        val number2: When[Int, (Int, Int)] = readAs(".*(\\d+).*") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+        number2.extract(100, "with a discount of 10%") === (100, 10)
+
+        // this uses capturing groups directly
+        val number2: When[Int, (Int, Int)] = groupAs("\\d+") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+        number2.extract(100, "with a discount of 10%") === (100, 10)
+
+ * convert a function `T => String... => Result`to a `Then[T]` step (*note the use of `then` after `readAs` and `groupAs`*)
+
+        // this assumes that the Int to extract is delimited with ${}
+        val number3: Then[(Int, Int)] = (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt
+        number3.extract((100, 10), "the result is ${90}") must beSuccessful
+
+        // this uses a regular expression with capturing groups matching the full text
+        val number3: Then[(Int, Int)] = readAs(".*(\\d+).*") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+        number3.extract((100, 10), "the result is 90") must beSuccessful
+
+        // this uses capturing groups directly
+        val number3: Then[(Int, Int)] = groupAs("\\d+") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+        number3.extract((100, 10), "the result is 90") must beSuccessful
+
 ##### G/W/T sequences
 
 Given the rule saying that only a `Then` block can follow another `Then` block you might think that it is not possible to start another G/W/T
@@ -444,7 +491,7 @@ Similarly, ScalaCheck generator and properties are supported:
           }
         }
         "Then I should get n1 + n2" << check { (op: Addition) =>
-            op.calculate must_== op.n1 + op.n2
+          op.calculate must_== op.n1 + op.n2
         }
 
         var n1, n2: Gen[Int] = null
@@ -1588,6 +1635,7 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
   include(xonly, resetTextIndentation)                                                                                  ^
   include(xonly, pTextIndentation)                                                                                      ^
   include(xonly, databaseSpec)                                                                                          ^
+  include(xonly, factoryMethodsSpec)                                                                                    ^
                                                                                                                         end
 
   val exampleTextIndentation = new Specification { def is =
@@ -1643,5 +1691,40 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
       1 must_== 2
     }.pendingUntilFixed("ISSUE-123")^
     end
+  }
+
+  val factoryMethodsSpec = new mutable.Specification with RM {
+    def discount(n: Int, p: Int) = (n - n / p)
+
+    "all methods should compile and work as expected" >> {
+
+      var number1: Given[Int] = (s: String) => s.toInt
+      number1.extract("pay ${100} now") === 100
+
+      number1 = readAs(".*?(\\d+).*") and { (s: String) => s.toInt }
+      number1.extract("pay 100 now") === 100
+
+      number1 = groupAs("\\d+") and { (s: String) => s.toInt }
+      number1.extract("pay 100 now") === 100
+
+      var number2: When[Int, (Int, Int)] = (n1: Int) => (s: String) => (n1, s.toInt)
+      number2.extract(100, "with a discount of ${10}%") === (100, 10)
+
+      number2 = readAs(".*?(\\d+).*") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+      number2.extract(100, "with a discount of 10%") === (100, 10)
+
+      number2 = groupAs("\\d+") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+      number2.extract(100, "with a discount of 10%") === (100, 10)
+
+      var number3: Then[(Int, Int)] = (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt
+      number3.extract((100, 10), "the result is ${90}") must beSuccessful
+
+      number3 = readAs(".*?(\\d+).*") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+      number3.extract((100, 10), "the result is 90") must beSuccessful
+
+      number3 = groupAs("\\d+") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+      number3.extract((100, 10), "the result is 90") must beSuccessful
+
+    }
   }
 }
