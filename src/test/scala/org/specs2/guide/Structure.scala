@@ -317,55 +317,55 @@ The advantage of using this way is that the text is left in it's pristine form, 
 
 There are some factory and implicit conversion methods to create Given/When/Then steps by passing functions and / or regular expressions:
 
- * convert a function `String... => T`to a `Given[T]` step (*note the use of `then` after `readAs` and `groupAs`*)
+ * convert a function `String... => T` to a `Given[T]` step (*note the use of `and` after `readAs` and `groupAs`*)
 
         // this assumes that the Int to extract is delimited with ${}
         val number1: Given[Int] = (s: String) => s.toInt
         number1.extract("pay ${100} now") === 100
 
         // this uses a regular expression with capturing groups matching the full text
-        val number1: Given[Int] = readAs(".*(\\d+).*") and { (s: String) => s.toInt }
+        val number1: Given[Int] = readAs(".*(\d+).*") and { (s: String) => s.toInt }
         number1.extract("pay 100 now") === 100
 
         // this uses capturing groups directly
-        val number1: Given[Int] = groupAs("\\d+") and { (s: String) => s.toInt }
+        val number1: Given[Int] = groupAs("\d+") and { (s: String) => s.toInt }
         number1.extract("pay 100 now") === 100
 
         // if the Given step is only side-effecting we can omit the `and` call
         // this simplifies the use of Given steps in Unit Specifications
-        val number1: Given[Unit] = groupAs("\\d+") and { (s: String) => value = s.toInt }
+        val number1: Given[Unit] = groupAs("\d+") and { (s: String) => value = s.toInt }
 
- * convert a function `T => String... => S`to a `When[T, S]` step (*note the use of `and` after `readAs` and `groupAs`*)
+ * convert a function `T => String... => S` to a `When[T, S]` step (*note the use of `and` after `readAs` and `groupAs`*)
 
         // this assumes that the Int to extract is delimited with ${}
         val number2: When[Int, (Int, Int)] = (n1: Int) => (s: String) => (n1, s.toInt)
         number2.extract(100, "with a discount of ${10}%") === (100, 10)
 
         // this uses a regular expression with capturing groups matching the full text
-        val number2: When[Int, (Int, Int)] = readAs(".*(\\d+).*") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+        val number2: When[Int, (Int, Int)] = readAs(".*(\d+).*") and { (n1: Int) => (s: String) => (n1, s.toInt) }
         number2.extract(100, "with a discount of 10%") === (100, 10)
 
         // this uses capturing groups directly
-        val number2: When[Int, (Int, Int)] = groupAs("\\d+") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+        val number2: When[Int, (Int, Int)] = groupAs("\d+") and { (n1: Int) => (s: String) => (n1, s.toInt) }
         number2.extract(100, "with a discount of 10%") === (100, 10)
 
- * convert a function `T => String... => Result`to a `Then[T]` step (*note the use of `then` after `readAs` and `groupAs`*)
+ * convert a function `T => String... => Result` to a `Then[T]` step (*note the use of `then` after `readAs` and `groupAs`*)
 
         // this assumes that the Int to extract is delimited with ${}
         val number3: Then[(Int, Int)] = (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt
         number3.extract((100, 10), "the result is ${90}") must beSuccessful
 
         // this uses a regular expression with capturing groups matching the full text
-        val number3: Then[(Int, Int)] = readAs(".*(\\d+).*") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+        val number3: Then[(Int, Int)] = readAs(".*(\d+).*") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
         number3.extract((100, 10), "the result is 90") must beSuccessful
 
         // this uses capturing groups directly
-        val number3: Then[(Int, Int)] = groupAs("\\d+") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+        val number3: Then[(Int, Int)] = groupAs("\d+") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
         number3.extract((100, 10), "the result is 90") must beSuccessful
 
         // if the Then step is only side-effecting we can omit the `then` call
         // this simplifies the use of Then steps in Unit Specifications
-        val number3: Then[Unit] = groupAs("\\d+") { (s: String) => value must_== s.toInt }
+        val number3: Then[Unit] = groupAs("\d+") { (s: String) => value must_== s.toInt }
 
 ##### G/W/T sequences
 
