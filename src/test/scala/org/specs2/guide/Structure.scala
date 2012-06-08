@@ -1032,19 +1032,19 @@ The `DatabaseSpec` above will insert, in each inherited specification, one `Step
 
 When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the `org.specs2.mutable.NameSpace` trait:
 
-    trait context extends mutable.NameSpace {
-      var variable1 = 1
-      var variable2 = 2
-    }
+      trait context extends mutable.NameSpace {
+        var variable1 = 1
+        var variable2 = 2
+      }
 
-    "this is the first block" >> new context {
-      "using one variable"      >> { variable1 === 1 }
-      "using a second variable" >> { variable2 === 2 }
-    }
-    "this is the second block" >> new context {
-      "using one variable"      >> { variable1 === 1 }
-      "using a second variable" >> { variable2 === 2 }
-    }
+      "this is the first block" >> new context {
+        "using one variable"      >> { variable1 === 1 }
+        "using a second variable" >> { variable2 === 2 }
+      }
+      "this is the second block" >> new context {
+        "using one variable"      >> { variable1 === 1 }
+        "using a second variable" >> { variable2 === 2 }
+      }
 
 ### Execution
 
