@@ -11,17 +11,17 @@ import specification._
 class GivenWhenThenSpec extends Specification { def is =
 
   "A given-when-then example for a calculator"                 ^ br^
-    "Given the following number: ${1}"                         ^ number1^
-    "And a second number: ${2}"                                ^ number2^
-    "And a third number: ${6}"                                 ^ number3^
+    "Given the following number: ${1}"                         ^ aNumber^
+    "And a second number: ${2}"                                ^ aNumber^
+    "And a third number: ${6}"                                 ^ aNumber^
     "When I use this operator: ${+}"                           ^ operator^
     "Then I should get: ${9}"                                  ^ result^
     "And it should be >: ${0}"                                 ^ greaterThan^
                                                                endp^
   "Now with the multiplication"                                ^ br^
-    "Given the following number: ${4}"                         ^ number1^
-    "And a second number: ${5}"                                ^ number2^
-    "And a third number: ${6}"                                 ^ number3^
+    "Given the following number: ${4}"                         ^ aNumber^
+    "And a second number: ${5}"                                ^ aNumber^
+    "And a third number: ${6}"                                 ^ aNumber^
     "When I use this operator: ${*}"                           ^ operator^
     "Then I should get: ${120}"                                ^ result^
     "And it should be >: ${10}"                                ^ greaterThan^
@@ -29,9 +29,7 @@ class GivenWhenThenSpec extends Specification { def is =
                                                                end
 
 
-  val number1: Given[Int]                        = (_:String).toInt
-  val number2: When[Int, (Int, Int)]             = (n1: Int) => (s: String) => (n1, s.toInt)
-  val number3: When[(Int, Int), (Int, Int, Int)] = (numbers: (Int, Int)) => (s: String) => (numbers._1, numbers._2, s.toInt)
+  val aNumber: Given[Int] = (_:String).toInt
 
   // when there are too many When[T, S] consecutive steps, it is possible to follow them with a When[Seq[T], S]
   val operator: When[Seq[Int], Operation]        = (numbers: Seq[Int]) => (s: String) => Operation(numbers, s)

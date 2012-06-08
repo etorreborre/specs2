@@ -283,7 +283,7 @@ A G/W/T sequence can contain more than just 3 steps. However the compiler will c
 
  * only a `Given[T]` extractor can start a sequence
  * only a `Given[S]`, a `When[T, S]` or a `Then[T]` extractor can follow a `Given[T]` extractor
- * only a `When[T1, T2, S]` or a `Then[T1, T2] can follow a sequence of `Given[T1], Given[T2]` extractors (up to 8 Given steps, after that types are paired)
+ * only a `When[T1, T2, S]` or a `Then[T1, T2]` can follow a sequence of `Given[T1], Given[T2]` extractors (up to 8 Given steps, after that types are paired)
  * only a `When[S, U]` extractor or a `Then[S]` can follow a `When[T, S]` extractor
  * only a `Then[S]` can follow a `Then[S]` extractor
 

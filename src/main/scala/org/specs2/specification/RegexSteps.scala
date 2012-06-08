@@ -253,6 +253,10 @@ private[specs2] case class PreStepText2[T1, T2](text: String, context: () => Eit
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq2(t)), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
   def ^(step: Then[(T1, T2)]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
@@ -260,7 +264,7 @@ private[specs2] case class PreStepText2[T1, T2](text: String, context: () => Eit
   def add(f: Fragment): RegexType = new PreStepText2(text, context, fs.add(f))
 }
 
-private[specs2] case class PreStepText3[T1, T2, T3](text: String, context: () => Either[Result, (T1, T2, T3)], fs: Fragments) extends RegexFragment {
+private[specs2] case class PreStepText3[T1, T2, T3](text: String, context: () => Either[Result, (T1, T2, T3)], fs: Fragments) extends RegexFragment with ImplicitParameters {
   type RegexType = PreStepText3[T1, T2, T3]
   def ^[R](step: Given[R]): PreStep4[T1, T2, T3, R] = {
     lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,r))
@@ -268,6 +272,10 @@ private[specs2] case class PreStepText3[T1, T2, T3](text: String, context: () =>
   }
   def ^[R](step: When[(T1, T2, T3), R]) = {
     lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq3(t)), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
   def ^(step: Then[(T1, T2, T3)]) = {
@@ -287,6 +295,10 @@ private[specs2] case class PreStepText4[T1, T2, T3, T4](text: String, context: (
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq4(t)), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
   def ^(step: Then[(T1, T2, T3, T4)]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
@@ -302,6 +314,10 @@ private[specs2] case class PreStepText5[T1, T2, T3, T4, T5](text: String, contex
   }
   def ^[R](step: When[(T1, T2, T3, T4, T5), R]) = {
     lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T, ev5: T5 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq5(t)), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
   def ^(step: Then[(T1, T2, T3, T4, T5)]) = {
@@ -321,6 +337,10 @@ private[specs2] case class PreStepText6[T1, T2, T3, T4, T5, T6](text: String, co
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T, ev5: T5 <:< T, ev6: T6 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq6(t)), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
   def ^(step: Then[(T1, T2, T3, T4, T5, T6)]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
@@ -338,6 +358,10 @@ private[specs2] case class PreStepText7[T1, T2, T3, T4, T5, T6, T7](text: String
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T, ev5: T5 <:< T, ev6: T6 <:< T, ev7: T7 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq7(t)), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
   def ^(step: Then[(T1, T2, T3, T4, T5, T6, T7)]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
@@ -353,6 +377,10 @@ private[specs2] case class PreStepText8[T1, T2, T3, T4, T5, T6, T7, T8](text: St
   }
   def ^[R](step: When[(T1, T2, T3, T4, T5, T6, T7, T8), R]) = {
     lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T, ev5: T5 <:< T, ev6: T6 <:< T, ev7: T7 <:< T, ev8: T8 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq8(t)), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
   def ^(step: Then[(T1, T2, T3, T4, T5, T6, T7, T8)]) = {
