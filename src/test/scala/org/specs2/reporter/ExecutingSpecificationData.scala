@@ -24,7 +24,9 @@ trait ExecutingSpecificationData extends Data[ExecutingSpecification] {
         fragments     <- Gen.listOfN(size, genExecutingFragment(maxTime))
         name          <- arbAsciiString.arbitrary
       }
-      yield ExecutingSpecification(FinishedExecutingFragment(start(name)) +: fragments.toSeq :+ FinishedExecutingFragment(end(name)), Arguments())
+      yield ExecutingSpecification(FinishedExecutingFragment(start(name), specStart(name)) +:
+                                   fragments.toSeq :+
+                                   FinishedExecutingFragment(end(name), specEnd(name)), Arguments())
     }
 
     sizeOf1(genExecutingSpecification)
@@ -40,8 +42,8 @@ trait ExecutingSpecificationData extends Data[ExecutingSpecification] {
   def genExecutingFragment(maxTime: Int): Gen[ExecutingFragment] =
     Gen.frequency(
     (3, genTimedExecutedFragment(maxTime).map(f => PromisedExecutingFragment(promise(f())))),
-    (1, genTimedExecutedFragment(maxTime).map(f => LazyExecutingFragment(f))),
-    (4, genTimedExecutedFragment(maxTime).map(f => FinishedExecutingFragment(f())))
+    (1, genTimedExecutedFragment(maxTime).map(f => LazyExecutingFragment(f, Step()))),
+    (4, genTimedExecutedFragment(maxTime).map(f => FinishedExecutingFragment(f(), Text(""))))
     )
 
 

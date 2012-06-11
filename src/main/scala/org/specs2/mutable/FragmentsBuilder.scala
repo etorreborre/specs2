@@ -95,6 +95,14 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     newStep
   }
   /**
+   * add a new stopOnFail step to the Fragments
+   */
+  def step(stopOnFail: Boolean = true) = {
+    val newStep = Step(stopOnFail = true)
+    addFragments(newStep)
+    newStep
+  }
+  /**
    * add a new link to the Fragments
    */
   override def link(fss: Seq[Fragments]): Fragments               = addFragments(super.link(fss))

@@ -58,7 +58,7 @@ trait FragmentExecution {
 	  case End()                         => ExecutedEnd(f.location)
 	  case s @ SpecStart(_,a,_)          => ExecutedSpecStart(s.withArgs(arguments.overrideWith(a)), f.location, Stats().startTimer)
 	  case e @ SpecEnd(_,_)              => ExecutedSpecEnd(e, f.location, Stats().startTimer)
-    case s @ Step(_)                   => executeStep("step", s, f.location)
+    case s @ Step(_,_)                 => executeStep("step", s, f.location)
     case s @ Action(_)                 => executeStep("action", s, f.location)
     case _                             => ExecutedNoText(isAction = true, new SimpleTimer, f.location)
   }

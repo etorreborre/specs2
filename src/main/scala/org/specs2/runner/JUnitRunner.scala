@@ -58,7 +58,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
       case (desc, f @ SpecStart(_,_,_)) => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Example(_, _))    => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Text(_))          => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Step(_))          => (desc, executor.executeFragment(args)(f))
+      case (desc, f @ Step(_,_))        => (desc, executor.executeFragment(args)(f))
       case (desc, f @ Action(_))        => (desc, executor.executeFragment(args)(f))
       case (desc, f @ SpecEnd(_,_))     => (desc, executor.executeFragment(args)(f))
     }
@@ -157,7 +157,7 @@ class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fr
         case s @ SpecStart(_,_,_)       => Some(createDescription(className, suiteName=testName(s.name)) -> f)
         case Text(t)                    => Some(createDescription(className, suiteName=testName(t)) -> f)
         case Example(description, body) => Some(createDescription(className, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))) -> f)
-        case Step(action)               => Some(createDescription(className, label=nodeLabel.toString, testName="step") -> f)
+        case Step(action,_)             => Some(createDescription(className, label=nodeLabel.toString, testName="step") -> f)
         case Action(action)             => Some(createDescription(className, label=nodeLabel.toString, testName="action") -> f)
         case other                      => None
       }

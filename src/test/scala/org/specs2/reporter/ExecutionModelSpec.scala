@@ -32,8 +32,6 @@ class ExecutionModelSpec extends Specification with ScalaCheck { def is =
     def steps = check { spec: Specification =>
       val reporter = newReporter
       val s = exampleAndStepLabel(spec, reporter.textOutput)
-//      "new spec\n".pp
-//      s.content.fragments.mkString("\n").pp
       reporter.report(s)
 
       forall(reporter.outputLabels.inits.toSeq.filterNot(_.isEmpty)) { labels =>
@@ -59,11 +57,11 @@ class ExecutionModelSpec extends Specification with ScalaCheck { def is =
         case f: Executable => printAfterExecution("label "+i, output)(f)
       })
 
-    // print a label after each execution  for examples and steps
+    // print a label after each execution for examples and steps
     def exampleAndStepLabel(spec: Specification, output: Output) =
       label(spec)((i: Int) => {
         case f @ Example(_,_) => printAfterExecution("label example "+i, output)(f)
-        case f @ Step(_)      => printAfterExecution("label step "+i, output)(f)
+        case f @ Step(_,_)    => printAfterExecution("label step "+i, output)(f)
       })
 
     def printAfterExecution(s: String, output: Output) = (f: Executable) => {

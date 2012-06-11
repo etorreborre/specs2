@@ -38,22 +38,23 @@ object ExecutingSpecification {
 
   /**
    * @return an ExecutedSpecification from a sequence of already executed fragments
+   * this method is only for testing as it returns incorrect finished executing fragments (with a wrong "original" value)
    */
   def create(fs: Seq[ExecutedFragment], args: Arguments): ExecutingSpecification =
-    apply(fs.map(f => FinishedExecutingFragment(f)), args)
+    apply(fs.map(f => FinishedExecutingFragment(f, Text(""))), args)
   /**
    * @return an ExecutedSpecification from a sequence of already executed fragments
    */
   def create(name: SpecName, fs: Seq[ExecutedFragment], args: Arguments = Arguments()): ExecutingSpecification =
-    ExecutingSpecification(name, args, fs.map(f => FinishedExecutingFragment(f)))
+    ExecutingSpecification(name, args, fs.map(f => FinishedExecutingFragment(f, Text(""))))
 
   /**
    * @return an ExecutedSpecification from a sequence of fragments being executed
    */
   def apply(fs: Seq[ExecutingFragment], args: Arguments): ExecutingSpecification = {
     fs match {
-      case (FinishedExecutingFragment(s @ ExecutedSpecStart(_,_,_))) +: rest => ExecutingSpecification(s.specName, args, fs)
-      case other                                                             => ExecutingSpecification(SpecName(""), args, fs)
+      case (FinishedExecutingFragment(s @ ExecutedSpecStart(_,_,_),_)) +: rest => ExecutingSpecification(s.specName, args, fs)
+      case other                                                               => ExecutingSpecification(SpecName(""), args, fs)
     }
   }
 

@@ -82,13 +82,13 @@ object Fragments {
   /** @return the example if the Fragment is an Example */
   def isAnExample: PartialFunction[Fragment, Example] = { case e @ Example(_,_) => e }
   /** @return true if the Fragment is a step */
-  def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
+  def isStep: Function[Fragment, Boolean] = { case Step(_,_) => true; case _ => false }
   /** @return true if the Fragment is a SpecStart or a SpecEnd */
   def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_) | SpecEnd(_,_) => true; case _ => false }
   /** @return true if the Fragment is an Example or a Step */
   def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
   /** @return the step if the Fragment is a Step*/
-  def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_) => s }
+  def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_,_) => s }
 
   /** @return a Fragments object with the appropriate name set on the SpecStart fragment */
   def withSpecName(fragments: Fragments, name: SpecName): Fragments = fragments.specTitleIs(name)

@@ -37,8 +37,10 @@ trait ExecutedSpecificationData extends Data[ExecutedSpecification] with Fragmen
   implicit def execute(spec: SpecificationStructure): ExecutedSpecification = executing(spec).execute
   implicit def executing(spec: SpecificationStructure): ExecutingSpecification = spec |> sequence |> execute
 
-  def start(name: String) = ExecutedSpecStart(SpecStart(SpecName(name)))
-  def end(name: String)   = ExecutedSpecEnd(SpecEnd(SpecName(name)))
+  def specStart(name: String) = SpecStart(SpecName(name))
+  def specEnd(name: String) = SpecEnd(SpecName(name))
+  def start(name: String) = ExecutedSpecStart(specStart(name))
+  def end(name: String)   = ExecutedSpecEnd(specEnd(name))
 }
 
 object ExecutedSpecificationData extends ExecutedSpecificationData

@@ -39,8 +39,8 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     try {
       val executing = spec.fs.foldLeft(ExecutingFragments()) { (res, fs) =>
         val fsArgs = arguments <| fs.arguments
-        val executing = executeSequence(fs, res.barrier())(executionArgs(fsArgs, res.executionOk), Executor(executor))
-        res.addExecutingFragments(executing, fsArgs)
+        val executing = executeSequence(fs, res.barrier())(executionArgs(fsArgs, res.nextMustSkip), Executor(executor))
+        res.addExecutingFragments(executing, res.lastSequence, fsArgs)
       }
       ExecutingSpecification(spec.name, spec.arguments, executing.fragments, executor)
     } catch {
@@ -49,33 +49,53 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     }
   }
 
-    /**
-     * This class:
-     *
-     * - collect the list of executing fragments
-     * - keeps a "barrier": that's a function containing a group of executing fragments which must terminate before a new group of
-     *   fragments starts being executed. This makes sure that Steps will only start after a group of concurrent examples has finished
-     *   executing (and vice-versa)
-     * - keeps the status of the previous executions to be able to stop the execution when "stopOnFail" is true and one execution failed
-     *
-     */
-    private case class ExecutingFragments(fragments: Seq[ExecutingFragment] = Seq[ExecutingFragment](),
-                                          barrier: () => Any = () => 1,
-                                          executionOk: Boolean = true) {
-      def addExecutingFragments(fs: Seq[ExecutingFragment], arguments: Arguments) =
-        copy(fragments = fragments ++ fs,
-          barrier = () => fs.map(_.get),
-          executionOk = (!arguments.stopOnFail || (executionOk && fs.forall(f => isOk(f.get)))) &&
-                        (!arguments.stopOnSkip || (executionOk && fs.forall(f => !isSkipped(f.get)))))
-    }
+  /**
+   * This class:
+   *
+   * - collect the list of executing fragments
+   * - keeps a "barrier": that's a function containing a group of executing fragments which must terminate before a new group of
+   *   fragments starts being executed. This makes sure that Steps will only start after a group of concurrent examples has finished
+   *   executing (and vice-versa)
+   * - keeps the status of the previous executions to be able to stop the execution when "stopOnFail" is true and one execution failed
+   *
+   */
+  private case class ExecutingFragments(fragments: Seq[ExecutingFragment] = Seq[ExecutingFragment](),
+                                        lastSequence: Seq[ExecutingFragment] = Seq[ExecutingFragment](),
+                                        barrier: () => Any = () => 1,
+                                        nextMustSkip: Boolean = false) {
 
-  private def executionArgs(arguments: Arguments, previousExecutionOk: Boolean) =
-    if (!arguments.stopOnFail && !arguments.stopOnSkip || previousExecutionOk) arguments
-    else                                                                       arguments <| args(skipAll=true)
+    def addExecutingFragments(fs: Seq[ExecutingFragment], previousSequence: Seq[ExecutingFragment], arguments: Arguments) =
+      copy(fragments = fragments ++ fs,
+           lastSequence = fs,
+           barrier = () => fs.map(_.get),
+           nextMustSkip = nextMustSkip || nextSequenceMustSkipped(fs, arguments, previousSequence))
+
+    def nextSequenceMustSkipped(fs: Seq[ExecutingFragment], arguments: Arguments, previousSequence: Seq[ExecutingFragment]) =
+      skipAllAfterSkipped(fs, arguments.stopOnSkip) ||
+      skipAllAfterFailure(fs, arguments.stopOnFail) ||
+      skipAllAfterStopOnFailStep(fs, previousSequence)
+
+    def skipAllAfterFailure(fs: Seq[ExecutingFragment], stopOnFail: Boolean) =
+      stopOnFail && fs.exists(f => !isOk(f.get))
+
+    def skipAllAfterSkipped(fs: Seq[ExecutingFragment], stopOnSkip: Boolean) =
+      stopOnSkip && fs.exists(f => isSkipped(f.get))
+
+    def skipAllAfterStopOnFailStep(fs: Seq[ExecutingFragment], previousSequence: Seq[ExecutingFragment]) =
+      (fs.toList match {
+        case LazyExecutingFragment(_, Step(_, stopOnFail)) :: _     => stopOnFail
+        case FinishedExecutingFragment(_, Step(_, stopOnFail)) :: _ => stopOnFail
+        case other                                                  => false
+      }) && previousSequence.exists(f => !isOk(f.get))
+  }
+
+  private def executionArgs(arguments: Arguments, nextMustSkip: Boolean = false) =
+    if (nextMustSkip) arguments <| args(skipAll=true)
+    else              arguments
 
   private def executeSequence(fs: FragmentSeq, barrier: =>Any)(implicit args: Arguments, strategy: Strategy): Seq[ExecutingFragment] = {
     if (!args.sequential) executeConcurrently(fs, barrier, args)(strategy)
-    else                  fs.fragments.map(f => FinishedExecutingFragment(executeFragment(args)(f)))
+    else                  fs.fragments.map(f => FinishedExecutingFragment(executeFragment(args)(f), f))
   }
 
   private def executeConcurrently(fs: FragmentSeq, barrier: =>Any, args: Arguments)(implicit strategy: Strategy) = {
@@ -83,8 +103,8 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     fs.fragments.map {
       case f: Example  => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy))
       case f: Action   => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy))
-      case f: Step     => LazyExecutingFragment(() => executeWithBarrier(f))
-      case f           => FinishedExecutingFragment(executeWithBarrier(f))
+      case f: Step     => LazyExecutingFragment(() => executeWithBarrier(f), f)
+      case f           => FinishedExecutingFragment(executeWithBarrier(f), f)
     }
   }
 }
