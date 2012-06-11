@@ -39,6 +39,6 @@ class GivenWhenThenSpec extends Specification { def is =
   val lowerThan: Then[Operation]   = (operation: Operation) => (s: String) => { operation.calculate  must be_<= (s.toInt) }
 
   case class Operation(numbers: Seq[Int], operator: String) {
-    def calculate: Int = if (operator == "+") numbers.sum else numbers.reduce(_ * _)
+    def calculate: Int = if (operator == "+") numbers.sum else numbers.product
   }
 }
