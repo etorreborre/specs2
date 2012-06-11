@@ -25,7 +25,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Step</span><span class="params">(<span name="step">step: <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[<a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>]</span>)</span><span class="result"> extends <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a> with <a name="org.specs2.execute.Executable" class="extype" href="../execute/Executable.html">Executable</a> with <a name="org.specs2.execute.Isolable" class="extype" href="../execute/Isolable.html">Isolable</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="name">Step</span><span class="params">(<span name="step">step: <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[<a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>]</span>, <span name="stopOnFail">stopOnFail: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a> with <a name="org.specs2.execute.Executable" class="extype" href="../execute/Executable.html">Executable</a> with <a name="org.specs2.execute.Isolable" class="extype" href="../execute/Isolable.html">Isolable</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -68,7 +68,7 @@ the Fragments.</p><p>Note that a Step fragment will not be reported in the outpu
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Step</span><span class="params">(<span name="step">step: <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[<a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>] = <span name="control.LazyParameters.lazyfy[org.specs2.execute.Success](new org.specs2.execute.Success(execute.Success.apply$default$1, execute.Success.apply$default$2))" class="defval">...</span></span>)</span>
+        <span class="name">Step</span><span class="params">(<span name="step">step: <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[<a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>] = <span name="control.LazyParameters.lazyfy[org.specs2.execute.Success](new org.specs2.execute.Success(execute.Success.apply$default$1, execute.Success.apply$default$2))" class="defval">...</span></span>, <span name="stopOnFail">stopOnFail: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span>
       </span>
       </h4>
       
@@ -432,6 +432,18 @@ the Fragments.</p><p>Note that a Step fragment will not be reported in the outpu
       </span>
       <span class="symbol">
         <span class="name">step</span><span class="result">: <a name="org.specs2.control.LazyParameter" class="extype" href="../control/LazyParameter.html">LazyParameter</a>[<a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Step#stopOnFail" data-isabs="false">
+      <a id="stopOnFail:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stopOnFail</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
       

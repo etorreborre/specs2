@@ -612,7 +612,7 @@ execution of an Action for example)
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="FinishedExecutingFragment.html"><span class="name">FinishedExecutingFragment</span></a><span class="params">(<span name="f">f: ExecutedFragment</span>)</span><span class="result"> extends ExecutingFragment with Product with Serializable</span>
+        <a href="FinishedExecutingFragment.html"><span class="name">FinishedExecutingFragment</span></a><span class="params">(<span name="f">f: ExecutedFragment</span>, <span name="original">original: Fragment</span>)</span><span class="result"> extends ExecutingFragment with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">embed an already executed Fragment
@@ -751,7 +751,7 @@ link elements.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="LazyExecutingFragment.html"><span class="name">LazyExecutingFragment</span></a><span class="params">(<span name="f">f: () ⇒ ExecutedFragment</span>)</span><span class="result"> extends ExecutingFragment with Product with Serializable</span>
+        <a href="LazyExecutingFragment.html"><span class="name">LazyExecutingFragment</span></a><span class="params">(<span name="f">f: () ⇒ ExecutedFragment</span>, <span name="original">original: Fragment</span>)</span><span class="result"> extends ExecutingFragment with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">embed an executing Fragment into a function to execute it on demand
@@ -1049,7 +1049,7 @@ Specification
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Step.html"><span class="name">Step</span></a><span class="params">(<span name="step">step: LazyParameter[Result]</span>)</span><span class="result"> extends Fragment with Executable with Isolable with Product with Serializable</span>
+        <a href="Step.html"><span class="name">Step</span></a><span class="params">(<span name="step">step: LazyParameter[Result]</span>, <span name="stopOnFail">stopOnFail: Boolean</span>)</span><span class="result"> extends Fragment with Executable with Isolable with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">An Step creates a fragment that will either return an
