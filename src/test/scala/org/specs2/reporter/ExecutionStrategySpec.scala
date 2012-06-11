@@ -7,18 +7,29 @@ import io.MockOutput
 import text.AnsiColors._
 
 class ExecutionStrategySpec extends mutable.Specification {
-  "If there is a step with stopOnFail and if one example in the previous block was not ok, then skip all other examples" >> {
-    report(spec) === Seq(
-      "spec",
-      "+ ex1",
-      "+ ex2",
-      "x ex3",
-      " ko",
-      "o ex4",
-      "o ex5",
-      "Total for",
-      "Finished in",
-      "5 examples,")
+
+  "If there is a step with stopOnFail" >> {
+    "if one example in the previous block was not ok, then skip all other examples" >> {
+      report(spec1) must contain(
+        "spec1",
+        "+ ex1",
+        "+ ex2",
+        "x ex3",
+        " ko",
+        "o ex4",
+        "o ex5").inOrder
+    }
+
+    "if one example is ko, but not in the directly preceding block, then skip no examples" >> {
+      report(spec2) must contain(
+        "spec2",
+        "x ex1",
+        " ko",
+        "+ ex2",
+        "+ ex3",
+        "+ ex4",
+        "x ex5").inOrder
+    }
   }
 
   def report(s: SpecificationStructure) = {
@@ -32,14 +43,26 @@ class ExecutionStrategySpec extends mutable.Specification {
     lazy val messages = textOutput.messages
   }
 
-  val spec = new Specification { def is =
-    "spec".title ^
+  val spec1 = new Specification { def is =
+    "spec1".title ^
     "ex1" ! ok ^
     "ex2" ! ok ^
     "ex3" ! ko ^
     Step(stopOnFail = true) ^
     "ex4" ! ok ^
-    "ex5" ! ko ^
-    end
+    "ex5" ! ko ^ end
   }
+
+  val spec2 = new Specification { def is =
+    "spec2".title ^
+    "ex1" ! ko ^
+    step() ^
+    "ex2" ! ok ^
+    "ex3" ! ok ^
+    Step(stopOnFail = true) ^
+    "ex4" ! ok ^
+    "ex5" ! ko ^ end
+  }
+
+
 }
