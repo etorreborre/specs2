@@ -167,6 +167,10 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     specFragments = new FragmentsFragment(specFragments) ^ fs
     fs
   }
+  protected def addFragments(fs: Seq[Fragment]): Fragments = {
+    specFragments = new FragmentsFragment(specFragments) ^ fs
+    Fragments.createList(fs:_*)
+  }
   protected def addArguments(a: Arguments): Arguments = {
     specFragments = new FragmentsFragment(specFragments) ^ a
     a
