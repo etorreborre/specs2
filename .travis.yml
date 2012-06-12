@@ -7,4 +7,4 @@ branches:
   only:
     - 1.12
 
-script: sbt clean test
+script: sbt -Xss4M clean test
