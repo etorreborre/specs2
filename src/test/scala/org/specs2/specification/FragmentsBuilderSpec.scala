@@ -34,17 +34,18 @@ SpecStart/SpecEnd
     "When a title is created there is only one SpecStart in the specification"                                          ! startEnd().e5^
     "A title can be added before arguments are declared"                                                                ! startEnd().e6^
     "A title can be added after arguments are declared"                                                                 ! startEnd().e7^
+    "A title can not be empty"                                                                                          ! startEnd().e8^
     "Arguments can be added in different place in the spec"                                                             ^
-      "new Arguments values are added to the existing ones"                                                             ! startEnd().e8^
-      "and override them if already declared"                                                                           ! startEnd().e9^
-      "it also works with the map method in BaseSpecification"                                                          ! startEnd().e10^
+      "new Arguments values are added to the existing ones"                                                             ! startEnd().e9^
+      "and override them if already declared"                                                                           ! startEnd().e10^
+      "it also works with the map method in BaseSpecification"                                                          ! startEnd().e11^
                                                                                                                         endp^
     "A specification can be linked"                                                                                     ^
-      "and included"                                                                                                    ! startEnd().e11^
-      "or just referenced"                                                                                              ! startEnd().e12^
-      "and hidden, it'll be executed but not reported"                                                                  ! startEnd().e13^
+      "and included"                                                                                                    ! startEnd().e12^
+      "or just referenced"                                                                                              ! startEnd().e13^
+      "and hidden, it'll be executed but not reported"                                                                  ! startEnd().e14^
                                                                                                                         p^
-    "Several specifications can be linked at once"                                                                      ! startEnd().e14^
+    "Several specifications can be linked at once"                                                                      ! startEnd().e15^
                                                                                                                         endp^
                                                                                                                         """
 How to create an Example
@@ -90,6 +91,10 @@ Other elements
       override def map(fs: =>Fragments) = "title".title ^ fs ^ "end of the spec"
     }
     lazy val content5 = new CustomSpecification { def is = sequential ^ "text" }.content
+    lazy val content6 = new Specification {
+      val number: Given[Int] = (_:String).toInt
+      def is = "a number ${0}" ^ number
+    }.content
 
     def fragments = content.fragments
     def e1 = (fragments.head must haveClass[SpecStart]) and (fragments.last must haveClass[SpecEnd])
@@ -99,17 +104,18 @@ Other elements
     def e5 = content.fragments.map(_.toString) must contain(lazyfy("SpecStart(title)")).exactlyOnce
     def e6 = content.start.arguments.xonly must beTrue
     def e7 = (content2.start.title must_== "title") and (content2.start.arguments.xonly must beTrue)
-    def e8 = (content3.start.arguments.xonly must beTrue) and (content3.start.arguments.include must_== "t1")
-    def e9 = content4.start.arguments.include must_== "t2"
-    def e10 = content5.start.arguments.sequential must beTrue
+    def e8 = content6.start.title must not beEmpty
+    def e9 = (content3.start.arguments.xonly must beTrue) and (content3.start.arguments.include must_== "t1")
+    def e10 = content4.start.arguments.include must_== "t2"
+    def e11 = content5.start.arguments.sequential must beTrue
 
-    def e11 = parentSpec1.content.fragments.toList must
+    def e12 = parentSpec1.content.fragments.toList must
               beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, false)) :: rest => ok }
-    def e12 = parentSpec2.content.fragments.toList must
+    def e13 = parentSpec2.content.fragments.toList must
               beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), true, false)) :: rest => ok }
-    def e13 = parentSpec3.content.fragments.toList must
+    def e14 = parentSpec3.content.fragments.toList must
               beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, true)) :: rest => ok }
-    def e14 = parentSpec4.content.fragments.toList must
+    def e15 = parentSpec4.content.fragments.toList must
               beLike { case SpecStart(_,_,_) :: Text(_) ::
                          SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_,_) ::
                          SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_,_) :: rest => ok }

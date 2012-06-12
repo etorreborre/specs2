@@ -38,6 +38,8 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
         "with a function"                                                                                               ! factory.then1^
         "with a regular expression for parsing the whole text and a function"                                           ! factory.then2^
         "with a regular expression for grouping elements and a function"                                                ! factory.then3^
+                                                                                                                        endp^
+    "A G/W/T specification must have a title"                                                                           ! spec1^
                                                                                                                         end
 
 
@@ -134,6 +136,8 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
       number0.extract(1, "Two numbers 1 and 2") must beSuccessful
     }
   }
+
+  def spec1 = new Specification { def is = "a number ${0}" ^ number0 }.content.specName.title must not beEmpty
 
   object number0 extends Given[Int] {
     def extract(text: String): Int = extract1(text).toInt

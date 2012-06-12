@@ -15,7 +15,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
 
   def fragments: Seq[Fragment] = if (middle.isEmpty && !linked.isLink) Vector() else (start +: middle :+ end)
 
-  def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.map(_.overrideWith(name)).orElse(Some(name)))
+  def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.filterNot(_.title.isEmpty).map(_.overrideWith(name)).orElse(Some(name)))
 
   def add(e: Fragment): Fragments = append(e)
   def add(fs: Seq[Fragment]): Fragments = copy(middle = middle ++ fs)
