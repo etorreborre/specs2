@@ -126,4 +126,4 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
 /**
  * Utility class grouping the total description + fragments to execute for each Description
  */
-case class DescriptionAndExamples[T](val description: Description, executions: Stream[T])
+case class DescriptionAndExamples[T](description: Description, executions: Stream[T])
