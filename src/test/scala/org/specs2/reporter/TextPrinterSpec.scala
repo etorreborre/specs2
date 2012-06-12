@@ -8,7 +8,7 @@ import AnsiColors._
 import io.MockOutput
 import main.Arguments
 import execute._
-import specification._
+import specification.{Example, SpecificationStructure, ExecutedFragment, Fragments, ExecutingSpecification}
 import matcher.DataTables
 
 class TextPrinterSpec extends Specification with DataTables { def is =

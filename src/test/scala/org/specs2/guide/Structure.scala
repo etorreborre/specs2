@@ -3,7 +3,7 @@ package guide
 
 import _root_.examples._
 import matcher.{ ResultMatchers => RM }
-import specification._
+import specification.{Step, Given, When, Then}
 
 class Structure extends UserGuidePage { def is =
   """

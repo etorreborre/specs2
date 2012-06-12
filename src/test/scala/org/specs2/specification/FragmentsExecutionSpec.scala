@@ -1,10 +1,10 @@
 package org.specs2
 package specification
-import execute._
-import matcher._
-import mutable._
 
-class FragmentsExecutionSpec extends Specification {
+import execute._
+import _root_.org.specs2.mutable.{Specification => Spec}
+
+class FragmentsExecutionSpec extends Spec {
 
   "An example when executed returns a result" in {
     (1 must_== 1).toResult must_== Success("'1' is equal to '1'")

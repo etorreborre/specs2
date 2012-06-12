@@ -1,11 +1,11 @@
 package org.specs2
 package specification
+
 import io._
 import sys._
 import execute._
-import reporter._
 import matcher._
-import matcher.MustExpectable._
+import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter, Specification => Spec}
 
 class ContextSpec extends Specification with FragmentExecution with ResultMatchers { def is =
                                                                                                                         """
@@ -168,7 +168,7 @@ class ContextSpec extends Specification with FragmentExecution with ResultMatche
       executing(spec.content).prints("before")
     }
     def e2 = {
-      val spec = new mutable.Specification {
+      val spec = new Spec {
         implicit def before1 = before
         "e1" in { 1 must_== 1 }
       }
@@ -182,7 +182,7 @@ class ContextSpec extends Specification with FragmentExecution with ResultMatche
       executing(spec.content).prints("outside")
     }
     def e4 = {
-      val spec = new mutable.Specification {
+      val spec = new Spec {
         implicit def outside1 = outsideInt
         "e1" in { (s: Int) => s must_== s }
       }
@@ -245,13 +245,13 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   trait aroundContext extends Around {
     def around[R <% Result](r: =>R) = { println("before"); try { r } finally { println("after") }}
   }
-  trait beforeMutableContext extends mutable.Before {
+  trait beforeMutableContext extends MBefore {
     def before = println("before")
   }
-  trait afterMutableContext extends mutable.After {
+  trait afterMutableContext extends MAfter {
     def after = println("after")
   }
-  trait aroundMutableContext extends mutable.Around {
+  trait aroundMutableContext extends MAround {
     def around[R <% Result](r: =>R) = { println("before"); try { r } finally { println("after") }}
   }
 

@@ -1,10 +1,11 @@
 package org.specs2
 package specification
 
+import _root_.org.specs2.mutable.{Specification => Spec}
 import reporter._
 import user.specification.AllExpectationsSpecification
 
-class AllExpectationsSpec extends mutable.Specification with AllExpectations {
+class AllExpectationsSpec extends Spec with AllExpectations {
 
   "A specification with the AllExpectations trait should" >> {
     "evaluate all its expectations" >> {

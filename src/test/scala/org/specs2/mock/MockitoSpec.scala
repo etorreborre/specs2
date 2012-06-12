@@ -1,11 +1,9 @@
 package org.specs2
 package mock
-import specification._
+import specification.{FragmentExecution, Example}
 import execute.Result
 import control.Exceptions._
 import org.hamcrest.core.{ IsNull }
-import org.mockito.Matchers.{ anyInt }
-import org.mockito.stubbing._
 import org.mockito.Mockito.withSettings
 import org.mockito.invocation._
 import matcher._

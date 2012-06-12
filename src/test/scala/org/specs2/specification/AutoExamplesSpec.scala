@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import matcher._
+import _root_.org.specs2.mutable.{Specification => Spec}
 
 class AutoExamplesSpec extends Specification with DataTables { def is =
 
@@ -33,7 +34,7 @@ class AutoExamplesSpec extends Specification with DataTables { def is =
   def dt1 = firstExampleDescription("text" ^ datatableOk) must be empty
 
   def m1 = {
-    val spec = new mutable.Specification with DataTables {
+    val spec = new Spec with DataTables {
       { 1 must_== 1 }.eg
 
       { true }.eg

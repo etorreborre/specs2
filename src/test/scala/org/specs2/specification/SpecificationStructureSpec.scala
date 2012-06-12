@@ -4,8 +4,9 @@ package specification
 import SpecificationStructure._
 import main.{CommandLineArguments, Arguments}
 import matcher.{ResultMatchers, DataTables}
+import _root_.org.specs2.mutable.{Specification => Spec}
 
-class SpecificationStructureSpec extends mutable.Specification with DataTables with ResultMatchers {
+class SpecificationStructureSpec extends Spec with DataTables with ResultMatchers {
 
   "It is possible to create a specification from a class name" >> {
     "name"                            ||  "comment"                                       |>
@@ -39,18 +40,18 @@ class SpecificationStructureSpec extends mutable.Specification with DataTables w
 }
 
 class AnImmutableSpecification extends Specification { def is = ok }
-class AMutableSpecification extends mutable.Specification { "this is" >> ok }
+class AMutableSpecification extends Spec { "this is" >> ok }
 object AnImmutableSpecificationObject extends Specification { def is = ok }
-object AMutableSpecificationObject extends mutable.Specification { "this is" >> ok }
+object AMutableSpecificationObject extends Spec { "this is" >> ok }
 
 class AnImmutableClassUsingArguments(implicit args: Arguments) extends Specification { def is = ok }
-class AMutableClassUsingArguments(implicit args: Arguments) extends mutable.Specification { "this is" >> ok }
+class AMutableClassUsingArguments(implicit args: Arguments) extends Spec { "this is" >> ok }
 
 class CommandedSpecification extends Specification with CommandLineArguments { def is =
   "this is" ! { arguments.sequential must beTrue }
 }
 
-class MutableCommandedSpecification extends mutable.Specification with CommandLineArguments {
+class MutableCommandedSpecification extends Spec with CommandLineArguments {
   if (arguments.sequential) "this is" >> ok
   else                      "this is" >> ko
 }

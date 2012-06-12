@@ -3,10 +3,10 @@ package specification
 
 import execute.Result
 import matcher.DataTables._
-import specification.Stats._
 import time.SimpleTimer
+import _root_.org.specs2.mutable.{Specification => Spec}
 
-class StatsSpec extends mutable.Specification {
+class StatsSpec extends Spec {
 
   "A Stats object can be resumed to a Result" >> {
     "if there are no failures or errors -> success"  >> {
