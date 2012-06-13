@@ -68,7 +68,7 @@ trait JUnitXmlPrinter {
   private def formatTime(t: Long) = "%.3f" format (t / 1000.0)
 
   case class TestSuite(description: Description, className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq())(implicit args: Arguments) {
-    def addTest(t: TestCase) = copy(tests = tests :+ t)
+    def addTest(t: TestCase) = copy(tests = tests :+ t)(args)
     def flush(out: Writer) = XML.write(out, xml, "", false, null)
 
     def xml =
