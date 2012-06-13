@@ -39,7 +39,7 @@ trait JUnitXmlPrinter {
     lazy val start = TestSuite(desc, name.javaClassName, statistics.errors, statistics.failures, statistics.skipped, statistics.timer.totalMillis)
 
     executions.foldLeft(start) { (suite, de) =>
-      val (d, f) = de
+      val (f, d) = de
       if (d.isTest) suite.addTest(TestCase(d, f))
       else          suite
     }
@@ -58,9 +58,9 @@ trait JUnitXmlPrinter {
      */
     def mapper(className: String): (ExecutedFragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: ExecutedFragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case s @ ExecutedSpecStart(_,_,_)  => Some(createDescription(className, suiteName=testName(s.name)) -> f)
-        case ExecutedText(t, _)            => Some(createDescription(className, suiteName=testName(t)) -> f)
-        case r @ ExecutedResult(_,_,_,_,_) => Some(createDescription(className, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) -> f)
+        case s @ ExecutedSpecStart(_,_,_)  => Some(f -> createDescription(className, suiteName=testName(s.name)))
+        case ExecutedText(t, _)            => Some(f -> createDescription(className, suiteName=testName(t)))
+        case r @ ExecutedResult(_,_,_,_,_) => Some(f -> createDescription(className, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) )
         case other                         => None
       }
   }
