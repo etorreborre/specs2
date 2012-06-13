@@ -37,7 +37,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin with Defa
   /** fold object used to create descriptions */
   private val descriptions = new JUnitDescriptionsFragments(klass.getName)
   /** extract the root Description object and the examples to execute */
-  private lazy val DescriptionAndExamples(desc, descriptedFragments) = descriptions.foldAll((select(args)(specification)).fragments)
+  private lazy val DescriptionAndExamples(desc, descriptedFragments) = descriptions.foldAll((select(args)(specification)).content.fragments)
   /** system properties */
   protected lazy val properties: SystemProperties = SystemProperties
   /** @return a Description for the TestSuite */
