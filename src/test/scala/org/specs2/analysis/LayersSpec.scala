@@ -1,7 +1,7 @@
 package org.specs2
 package analysis
 
-import specification._
+import specification.Analysis
 
 class LayersSpec extends mutable.Specification with Analysis {
 

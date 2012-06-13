@@ -17,6 +17,7 @@ class StoringSpec extends SpecificationWithJUnit { def is =
        "stored per specification name"                                                             ! stored().e1^
        "each result also"                                                                          ! stored().e2^
        "and retrieved per specification name"                                                      ! stored().e3^
+       "except if the specification is see-only"                                                   ! stored().e4^
                                                                                                    endp^
    "It is possible to compute the trends of the statistics"                                        ^
      "between 2 runs"                                                                              ! trends().e1^
@@ -57,6 +58,10 @@ class StoringSpec extends SpecificationWithJUnit { def is =
      def e3 = {
         store("t1":Fragments)
         there was atLeastOne(repository).getStatistics(any[SpecName])
+     }
+     def e4 = {
+       store(see("t1"))
+       there was no(repository).storeStatistics(any[SpecName], any[Stats])
      }
    }
 

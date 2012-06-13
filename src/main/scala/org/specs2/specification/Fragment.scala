@@ -70,10 +70,15 @@ case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), lin
  * End of a specification.
  *
  * This marks the end of the Specification and must have the same name as the corresponding SpecStart.
+ *
+ * There is a Boolean flag on a SpecEnd indicating if the whole specification was just executed as a link (for an index page for example)
+ * In this case we must not store statistics for this specification (see Storing.scala)
  */
-case class SpecEnd(specName: SpecName) extends Fragment {
+case class SpecEnd(specName: SpecName, isSeeOnlyLink: Boolean = false) extends Fragment {
   def name = specName.name
   def title = specName.title
+  def seeOnlyLinkIs(s: Boolean) = copy(isSeeOnlyLink = s)
+
   override def matches(s: String) = name matches s
   override def toString = "SpecEnd("+title+")"
 }
@@ -127,7 +132,7 @@ case object Example {
  * @see the ContextSpec specification
  *
  */
-case class Step (step: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable with Isolable {
+case class Step (step: LazyParameter[Result] = lazyfy(Success()), stopOnFail: Boolean = false) extends Fragment with Executable with Isolable {
   val isolable = true
 
   def execute = step.value
@@ -152,6 +157,8 @@ case object Step {
   }
   /** create a Step object from any value */
   def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))
+  /** create a Step object from a stopOnFail value */
+  def apply(stopOnFail: Boolean) = new Step(stopOnFail = stopOnFail)
 }
 /**
  * An Action is similar to a Step but can be executed concurrently with other examples.

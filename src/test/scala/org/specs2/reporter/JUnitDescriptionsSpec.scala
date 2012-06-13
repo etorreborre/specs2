@@ -3,7 +3,6 @@ package reporter
 import specification._
 import org.junit.runner._
 import ShowDescription._
-import runner.JUnitDescriptionsFragments
 
 class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def is =
                                                                                                                         """

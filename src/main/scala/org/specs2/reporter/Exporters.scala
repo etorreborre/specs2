@@ -16,13 +16,14 @@ trait Exporters {
   }
 
   def exportToOthers(exporters: Seq[Exporting])(implicit arguments: Arguments): EE = (spec: ExecutingSpecification) => {
-    val args = arguments.commandLineFilterNot("html", "junitxml", "console", "notifier", "exporter")
+    val args = arguments.commandLineFilterNot("html", "markup", "junitxml", "console", "notifier", "exporter")
     exporters.foreach(_.export(args)(spec))
     spec.executed
   }
 
   def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] =
     Seq(exportHtml(accept),
+        exportMarkup(accept),
         exportJUnitxml(accept),
         exportNotifier(accept),
         exportCustom(accept),
@@ -37,6 +38,8 @@ trait Exporters {
   protected def optionalExporter(condition: Boolean)(e: Option[Exporting]) = if (condition) e else None
 
   def exportHtml(accept: String => Boolean)    (implicit arguments: Arguments) = exporter(accept("html"))(HtmlExporting)
+
+  def exportMarkup(accept: String => Boolean)  (implicit arguments: Arguments) = exporter(accept("markup"))(MarkupExporting)
 
   def exportJUnitxml(accept: String => Boolean)(implicit arguments: Arguments) = exporter(accept("junitxml"))(JUnitXmlExporting)
 

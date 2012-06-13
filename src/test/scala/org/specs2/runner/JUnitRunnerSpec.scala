@@ -1,7 +1,7 @@
 package org.specs2
 package runner
 import mock._
-import specification._
+import specification.{FragmentsSamples, ExecutingSpecification, SpecificationStructure, Fragments}
 import reporter._
 import main._
 import _root_.org.junit.runner.notification.{ RunNotifier, Failure }

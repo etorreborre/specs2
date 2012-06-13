@@ -32,23 +32,24 @@ abstract class JUnitDescriptions[F](className: String)(implicit reducer: Reducer
    */
   def initialFragment(className: String): F
 
-  implicit lazy val initial = (specificationDescription, initialFragment(className))
+  private implicit lazy val initial = initialFragment(className) -> specificationDescription
+  private lazy val defaultDescription = (f: F) => Description.createSuiteDescription("fragment not found:" + f)
 
   def foldAll(fs: Seq[F])(implicit args: Arguments) = {
     val leveledFragments = Levels.foldAll(fs)
 
     if (leveledFragments.isEmpty)
-      DescriptionAndExamples(specificationDescription, Seq(initial).toStream)
+      DescriptionAndExamples(specificationDescription, Map(initial).withDefault(defaultDescription))
     else {
       val descriptionTree = leveledFragments.toTree[DescribedFragment](mapper(className))
       val removeDanglingText = (t: Tree[DescribedFragment]) => {
         t.rootLabel  match {
-          case (desc, Text(_)) if t.subForest.isEmpty  => (None:Option[DescribedFragment])
+          case (Text(_), desc) if t.subForest.isEmpty  => (None:Option[DescribedFragment])
           case other                                   => Some(t.rootLabel)
         }
       }
       val prunedDescriptionTree = descriptionTree.prune(removeDanglingText)
-      DescriptionAndExamples(asOneDescription(prunedDescriptionTree), prunedDescriptionTree.flatten)
+      DescriptionAndExamples(asOneDescription(prunedDescriptionTree), Map(prunedDescriptionTree.flatten.toSeq:_*).withDefault(defaultDescription))
     }
   }
 
@@ -57,7 +58,7 @@ abstract class JUnitDescriptions[F](className: String)(implicit reducer: Reducer
 
 private[specs2]
 trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
-  type DescribedFragment = (Description, F)
+  type DescribedFragment = (F, Description)
   /**
    * This function is used to map each node in a Tree[Fragment] to a pair of 
    * (Description, Fragment)
@@ -73,22 +74,22 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
    */
   def asOneDescription(descriptionTree: Tree[DescribedFragment])(implicit args: Arguments = Arguments()): Description = {
     if (args.noindent)
-      descriptionTree.flatten.drop(1).foldLeft(descriptionTree.rootLabel)(flattenChildren)._1
+      descriptionTree.flatten.drop(1).foldLeft(descriptionTree.rootLabel)(flattenChildren)._2
     else
-      descriptionTree.bottomUp(addChildren).rootLabel._1
+      descriptionTree.bottomUp(addChildren).rootLabel._2
   }
   /** 
    * unfolding function attaching children descriptions their parent
    */
-  private val addChildren = (desc: (Description, F), children: Stream[DescribedFragment]) => {
-    children.foreach { child => desc._1.addChild(child._1) }
+  private val addChildren = (desc: (F, Description), children: Stream[DescribedFragment]) => {
+    children.foreach { child => desc._2.addChild(child._2) }
     desc
   }
   /**
    * unfolding function attaching children descriptions the root
    */
   private def flattenChildren = (result: DescribedFragment, current: DescribedFragment) => {
-    result._1.addChild(current._1)
+    result._2.addChild(current._2)
     result
   }
   /** @return a sanitized description */
@@ -107,7 +108,7 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
   import text.Trim._
 
   /** @return a seq containing the path of an example without the root name */
-  def parentPath(parentNodes: Seq[DescribedFragment]) = parentNodes.drop(1).map(_._1.getDisplayName)
+  def parentPath(parentNodes: Seq[DescribedFragment]) = parentNodes.drop(1).map(_._2.getDisplayName)
 
   /** @return a test name with no newlines */
   def testName(s: String, parentNodes: Seq[String] = Seq()): String = {
@@ -124,6 +125,6 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
   }
 }
 /**
- * Utility class grouping the total description + fragments to execute for each Description
+ * Utility class grouping the total description + map of each fragment to its description
  */
-case class DescriptionAndExamples[T](val description: Description, executions: Stream[T])
+case class DescriptionAndExamples[T](description: Description, descriptions: Map[T, Description])

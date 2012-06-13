@@ -10,7 +10,12 @@ package org.mockito.internal.matchers
 case class EqualsFunction0(wanted: scala.Any) extends Equals(wanted) {
 
   override def matches(actual: scala.Any) = {
-    val value = if (actual.isInstanceOf[Function0[_]]) actual.asInstanceOf[Function0[_]].apply() else actual
+    val value =
+      if (actual.isInstanceOf[Function0[_]])
+        try { actual.asInstanceOf[Function0[_]].apply() } catch { case e => e }
+      else
+        actual
+
     Equality.areEqual(super.getWanted, value)
   }
 

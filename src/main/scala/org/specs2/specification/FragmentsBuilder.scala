@@ -150,7 +150,7 @@ class FragmentsFragment(fs: =>Fragments) {
   def ^(t: String) = fs add Text(t)
   def ^(f: Fragment) = f match {
     case s @ SpecStart(_,_,_) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
-    case _                        => fs add f
+    case _                    => fs add f
   }
   def ^(other: Seq[Fragment]) = fs add other
 

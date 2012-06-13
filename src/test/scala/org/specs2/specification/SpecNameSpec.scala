@@ -1,7 +1,9 @@
 package org.specs2
 package specification
 
-class SpecNameSpec extends mutable.Specification {
+import _root_.org.specs2.mutable.{Specification => Spec}
+
+class SpecNameSpec extends Spec {
   
   "A spec name can be built from a single string" >> { 
     val specName = SpecificationTitle("t")

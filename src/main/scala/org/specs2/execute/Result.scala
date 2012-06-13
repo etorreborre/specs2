@@ -338,7 +338,7 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
 case object Error {
   def apply(e: Exception) = new Error(e.getMessage.notNull, e)
   def apply(t: Throwable) = new Error(t.getMessage.notNull, new ThrowableException(t))
-  case class ThrowableException(t: Throwable) extends Exception(t)
+  case class ThrowableException(t: Throwable) extends Exception(t.getClass.getSimpleName+": "+t.getMessage, t)
   def apply(m: String = "") = new Error(m, new Exception(m))
 }
 /** 
@@ -352,6 +352,27 @@ case class Pending(m: String = "")  extends Result(m) { outer =>
     override val expectationsNb = n
   }
 
+  override def and(res: =>Result): Result = {
+    val r = res
+    r match {
+      case s @ Success(m, exp)    => s
+      case f @ Failure(_,_,_,_)   => f
+      case e @ Error(_,_)         => e
+      case DecoratedResult(d, r1) => DecoratedResult(d, and(r1))
+      case _                      => super.and(r)
+    }
+  }
+
+  override def or(res: =>Result): Result = {
+    val r = res
+    r match {
+      case s @ Success(m, exp)      => s
+      case f @ Failure(m, e, st, d) => f
+      case DecoratedResult(d, r1)   => DecoratedResult(d, or(r1))
+      case _                        => super.or(r)
+    }
+  }
+
   override def isPending: Boolean = true
 }
 /** 
@@ -363,6 +384,27 @@ case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer
   def mute = Skipped()
   def setExpectationsNb(n: Int): Result = new Skipped(m) {
     override val expectationsNb = n
+  }
+
+  override def and(res: =>Result): Result = {
+    val r = res
+    r match {
+      case s @ Success(m, exp)    => s
+      case f @ Failure(_,_,_,_)   => f
+      case e @ Error(_,_)         => e
+      case DecoratedResult(d, r1) => DecoratedResult(d, and(r1))
+      case _                      => super.and(r)
+    }
+  }
+
+  override def or(res: =>Result): Result = {
+    val r = res
+    r match {
+      case s @ Success(m, exp)    => s
+      case f @ Failure(_,_,_,_)   => f
+      case DecoratedResult(d, r1) => DecoratedResult(d, or(r1))
+      case _                      => super.or(r)
+    }
   }
 
   override def isSkipped: Boolean = true

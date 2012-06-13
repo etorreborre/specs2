@@ -3,7 +3,7 @@ package mutable
 import execute._
 import main._
 import specification.RegexStep._
-import specification.{HtmlLink, Action, Fragment, Step, SpecificationStructure, FormattingFragments => FF, Fragments, FragmentsFragment, Example, GivenThen}
+import specification.{FormattingFragments => FF, _}
 
 /**
  * Adding new implicits to support specs-like naming: "the system" should "do this" in { ... }
@@ -51,16 +51,15 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def in(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
     def >>(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
 
-    def >>[T <: Fragment](e: =>T): T    = in(e)
-    def >>(block: =>Unit)        : Unit = in(block)
+    def >>[T <: Fragment](e: =>T): T         = in(e)
+    def >>(block: =>Unit)        : Unit      = in(block)
+    def >>(block: =>NameSpace)   : NameSpace = in(block)
 
-    def in[T <: Fragment](e: =>T): T = {
-      addFragments(s)
-      val ex = e
-      addFragments(FF.p)
-      ex
-    }
-    def in(block: =>Unit)       : Unit = {
+    def in[T <: Fragment](block: =>T): T  = addSideEffectingBlock(block)
+    def in(block: =>NameSpace): NameSpace = addSideEffectingBlock(block)
+    def in(block: =>Unit): Unit           = addSideEffectingBlock(block)
+
+    private def addSideEffectingBlock[T](block: =>T): T = {
       addFragments(s)
       val b = block
       addFragments(FF.p)
@@ -96,6 +95,14 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     newStep
   }
   /**
+   * add a new stopOnFail step to the Fragments
+   */
+  def step(stopOnFail: Boolean = false) = {
+    val newStep = Step(stopOnFail = stopOnFail)
+    addFragments(newStep)
+    newStep
+  }
+  /**
    * add a new link to the Fragments
    */
   override def link(fss: Seq[Fragments]): Fragments               = addFragments(super.link(fss))
@@ -108,6 +115,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
    */
   implicit def gwtToFragment(s: String): GWTToFragment = new GWTToFragment(s)
   class GWTToFragment(s: String) {
+    def <<(given: Given[Unit]): Fragments = createStep(s, given.extract(s))
     def <<(u: =>Unit): Step = createStep(s, u)
     def <<(f: Function[String, Unit]): Fragments = createStep(s, f(extract1(s)))
     def <<(f: Function2[String, String, Unit]): Fragments = createStep(s, f.tupled(extract2(s)))
@@ -119,7 +127,9 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def <<(f: Function8[String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract8(s)))
     def <<(f: Function9[String, String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract9(s)))
     def <<(f: Function10[String, String, String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract10(s)))
+    def <<(f: Seq[String] => Unit)(implicit p: ImplicitParam): Fragments = createStep(s, f(extractAll(s)))
 
+    def <<(then: Then[Unit]): Example = createExample(s, then.extract((), s))
     def <<[R <% Result](r: =>R): Example = createExample(s, r)
     def <<[R <% Result](f: Function[String, R]): Example = createExample(s, f(extract1(s)))
     def <<[R <% Result](f: Function2[String, String, R]): Example = createExample(s, f.tupled(extract2(s)))
@@ -131,16 +141,21 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def <<[R <% Result](f: Function8[String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract8(s)))
     def <<[R <% Result](f: Function9[String, String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract9(s)))
     def <<[R <% Result](f: Function10[String, String, String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract10(s)))
+    def <<[R](f: Seq[String] => R)(implicit r: R => Result, p: ImplicitParam): Example = createExample(s, f(extractAll(s)))
 
-    private def createStep(s: String, u: =>Unit) = {
-      strip(s).txt
-      step(u)
-    }
-    private def createExample[R <% Result](s: String, r: =>R) = {
-      forExample(strip(s)) ! r
-    }
   }
 
+  private def createStep(s: String, u: =>Unit) = {
+    strip(s).txt
+    addFragments(FF.bt)
+    step(u)
+  }
+  private def createExample[R <% Result](s: String, r: =>R) = {
+    addFragments(FF.t)
+    val e = forExample(strip(s)) ! r
+    addFragments(FF.bt)
+    e
+  }
 
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(s + " " + word)
@@ -151,6 +166,10 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   protected def addFragments(fs: Fragments): Fragments = {
     specFragments = new FragmentsFragment(specFragments) ^ fs
     fs
+  }
+  protected def addFragments(fs: Seq[Fragment]): Fragments = {
+    specFragments = new FragmentsFragment(specFragments) ^ fs
+    Fragments.createList(fs:_*)
   }
   protected def addArguments(a: Arguments): Arguments = {
     specFragments = new FragmentsFragment(specFragments) ^ a

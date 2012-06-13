@@ -51,7 +51,7 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
    */
   private def updateStatsOnSpecStart = (start: ExecutedFragment, end: ExecutedFragment) => {
     (start, end) match {
-      case (ExecutedSpecStart(ns, ss, ls), ExecutedSpecEnd(ne, se, le)) => (ExecutedSpecStart(ns, se, le), ExecutedSpecEnd(ne, se, le))
+      case (ExecutedSpecStart(ns, ss, ls), ExecutedSpecEnd(ne, se, le)) => (ExecutedSpecStart(ns, se, le), ExecutedSpecEnd(ne.seeOnlyLinkIs(ns.isSeeOnlyLink), se, le))
       case other                                                        => (start, end)
     }
   }
@@ -76,9 +76,10 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
     fn match {
       case (ExecutedSpecStart(start @ SpecStart(_,_,_), loc, st), _) if start.isSeeOnlyLink =>
         ExecutedSpecStart(start, loc, repository.getStatistics(start.specName).getOrElse(st))
-
-      case (f @ ExecutedSpecEnd(end @ SpecEnd(_), loc, st), _) => repository.storeStatistics(end.specName, st); f
-      case (other, name)                                       => other
+      // if the specification is see-only don't store the stats
+      // otherwise the index page will think that the last execution was successful
+      case (f @ ExecutedSpecEnd(end @ SpecEnd(_,_), loc, st), _) if !end.isSeeOnlyLink => repository.storeStatistics(end.specName, st); f
+      case (other, name)                                                               => other
     }
   }
   /**

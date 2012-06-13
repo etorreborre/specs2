@@ -1,9 +1,7 @@
 package org.specs2
 package matcher
 
-import control.Exceptions._
 import execute._
-import Expectable._
 import org.specs2.internal.scalaz._, Scalaz._
 import Foldable._
 import Generator._
@@ -11,7 +9,7 @@ import text.Quote._
 import text.Plural._
 import MatchResultMessages._
 import Result.ResultFailureMonoid
-import scala.collection.GenTraversable
+import scala.collection.{GenTraversable, GenTraversableOnce}
 
 /**
 * This trait provides implicit definitions from MatchResults and Booleans to Results.
@@ -138,15 +136,15 @@ trait MatchersImplicits extends Expectations {
   }
 
   /** verify the function f for all the values, stopping after the first failure */
-  def forall[T, U](values: GenTraversable[T])(f: T => MatchResult[U])      = verifyFunction(f).forall(values.seq.toSeq)
+  def forall[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U])      = verifyFunction(f).forall(values.seq.toSeq)
   /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined */
   def forallWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = forall(values.filter(f.isDefinedAt))(f)
   /** verify the function f for all the values, and collect all failures */
-  def foreach[T, U](values: GenTraversable[T])(f: T => MatchResult[U])     = verifyFunction(f).foreach(values.seq.toSeq)
+  def foreach[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U])     = verifyFunction(f).foreach(values.seq.toSeq)
   /** verify the function f for all the values, and collect all failures, where the PartialFunction is defined */
   def foreachWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = foreach(values.filter(f.isDefinedAt))(f)
   /** verify the function f for at least one value */
-  def atLeastOnce[T, U](values: GenTraversable[T])(f: T => MatchResult[U]) = verifyFunction(f).atLeastOnce(values.seq.toSeq)
+  def atLeastOnce[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).atLeastOnce(values.seq.toSeq)
   /** verify the function f for at least one value, where the PartialFunction is defined */
   def atLeastOnceWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = atLeastOnce(values.filter(f.isDefinedAt))(f)
   /**

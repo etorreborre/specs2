@@ -1,22 +1,17 @@
-1. update the gh pages and modify the versions (new version and next snapshot)
-2. review the posterous notes
+1. set build.sbt version to next number
+2. test/cross publish the jars
+3. release on the sonatype website: http://oss.sonatype.org
 
-3. create the user guide
-4. copy the user guide to the gh-pages
+3. update the index.html and modify the versions (new version and next snapshot)
+4. create the user guide: `test-only *UserGuide* -- html`
+5. make the site: `make-site` (this creates the scaladoc)
+6. push the new github pages: `ghpages-push-site`
 
-5. create the scaladoc
-6. copy the scaladoc to the gh-pages
+7. review the posterous notes and herald-publish them
 
-7. use the release plugin to
-   - set the version to next number
-   - test/publish the jars
-   - publish the posterous notes
-   - tag the released version
-   
-8. push the new version (check "include tags")
-9. create a new specs2 branch for the next SNAPSHOT
-
-10. publish the gh pages
+8. tag the released version
+9. push the new version (check "include tags")
+10. create a new specs2 branch for the next SNAPSHOT
 
 11 set the specs2-test project version
 12. tag and push the new version (check "include tags")
@@ -26,5 +21,4 @@
 15. close the milestone on github and create a new one
 16. change the default branch on github
 
-17. send a message on the scala-announce mailing-list
-18. send a message on the twitter account
+17. send a message on the twitter account

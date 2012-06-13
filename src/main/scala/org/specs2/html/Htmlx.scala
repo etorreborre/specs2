@@ -8,6 +8,8 @@ import Scalaz._
 import xml.Nodex._
 import java.net.URLDecoder
 import io.Paths._
+import scala.collection.mutable
+import data.UniqueNames
 
 /**
  * This trait provide additional methods on a NodeSeq or a Node representing an html document
@@ -60,7 +62,7 @@ trait Htmlx { outer =>
     lazy val currentLevel = headers.tree.rootLabel.level
 
     def insertHeader(eLevel: Int, e: Node, rest: NodeSeq): TreeLoc[Header] = {
-      val header = leaf(Header(eLevel, e))
+      val header = leaf(Header(eLevel, e, headers.getLabel.namer))
       val newHeaders = if (eLevel == currentLevel)
         headers.insertRight(header)
       else if (eLevel > currentLevel)
@@ -89,7 +91,6 @@ trait Htmlx { outer =>
     }
   }
 
-
   implicit def href(s: String) = HRef(s)
   case class HRef(s: String) {
     def sanitize = outer.sanitize(s)
@@ -101,14 +102,14 @@ trait Htmlx { outer =>
   /** create a sanitized anchor name */
   def anchorName(name: String) = "#"+sanitize(name)
 
-  case class Header(level: Int = 1, node: Node = new Atom("first level")) {
+  case class Header(level: Int = 1, node: Node = new Atom("first level"), namer: UniqueNames = uniqueNamer) {
     def name = nodeText(node)
     def isRoot = name.isEmpty && !isSubtoc
     def isSubtoc = outer.isSubtoc(node)
 
     def specId: SpecId = SpecId(node.attributes.get("specId").map(_.toString).getOrElse(""))
     def anchorName: String = name.anchorName
-    def anchorName(baseUrl: String): String = baseUrl + anchorName
+    def anchorName(baseUrl: String): String = createAnchorNameForNode(baseUrl + anchorName, namer)
   }
 
   implicit object HeaderShow extends Show[Header] {
@@ -131,13 +132,27 @@ trait Htmlx { outer =>
   def isSubtoc(e: Node) = e.label.matches(SubtocTag.toString)
 
   /** This rule can be used to add anchors to header elements */
-  object headersAnchors extends RewriteRule {
-    override def transform(n: Node): Seq[Node] = n match {
-      case e: Elem if isHeader(e) => <a name={nodeText(e).sanitize}>{e}</a>
-      case other                  => other
+  def headersAnchors = new RewriteRule {
+    val namer = uniqueNamer
+
+    def applyTransformation(ns: Seq[Node]): Seq[Node] = if (ns.isEmpty) ns else (applyTransformation(ns.head) ++ applyTransformation(ns.tail))
+    def applyTransformation(n: Node): Seq[Node] = n match {
+      case e: Elem if isHeader(e) => <a name = {createAnchorNameForNode(nodeText(e).sanitize, namer)}>{e}</a>
+      case Group(xs)              => Group(applyTransformation(xs))
+      case other                  => {
+        val ch = n.child
+        val nch = applyTransformation(ch)
+        if (ch eq nch) n
+        else           Elem(n.prefix, n.label, n.attributes, n.scope, nch: _*)
+      }
     }
-    def addTo(n: Node) = new RuleTransformer(this).apply(n)
+    def addTo(n: Node) = applyTransformation(n)
   }
+
+  /** @return a unique anchor name for that node, so that 2 nodes having the same name will not direct to the same anchor in the same page */
+  private def createAnchorNameForNode(text: String, namer: UniqueNames) = namer.uniqueName(text)
+  /** @return a unique namer adding + and an id if a name has already been used */
+  private def uniqueNamer = UniqueNames()
 
   /** @return the href urls in <a/> elements */
   def urls(ns: NodeSeq, filePath: String = ""): Seq[String] = {

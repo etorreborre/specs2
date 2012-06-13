@@ -3,7 +3,7 @@ package guide
 
 import specification.Forms._
 
-class Matchers extends Specification { def is = literate ^
+class Matchers extends UserGuidePage { def is = literate ^
 """
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 
@@ -124,12 +124,14 @@ There are many ways to create matchers for your specific usage. The simplest way
  * using `orSkip` to return a `Skipped` result instead of a Failure if the condition is not met
 
         1 must be_==(2).orSkip
-        1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orSkip("Precondition failed")    // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orSkip((ko:String) => "BAD "+ko) // prints "BAD '1' is not equal to '2'"
 
  * using `orPending` to return a `Pending` result instead of a Failure if the condition is not met
 
         1 must be_==(2).orPending
-        1 must be_==(2).orPending("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orPending("Precondition failed")    // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orPending((ko:String) => "BAD "+ko) // prints "BAD '1' is not equal to '2'"
 
  * using `mute` to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create
    properties showing no messages when they fail
@@ -384,8 +386,8 @@ More precisely, it will:
  * pass the mock object if both the method has no parameters and the function has one parameter:
    `mock.size answers { mock => mock.hashCode }`
  * pass the parameter if both the method and the function have one parameter:
-   `mock.get(0) answers ( i => i.toString )`
-  * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
+   `mock.get(0) answers { i => i.toString }`
+ * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
     `mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString }`
 
 In any other cases, if `f` is a function of 1 parameter, the array of the method parameters will be passed and if the function has 2 parameters, the second one will be the mock.

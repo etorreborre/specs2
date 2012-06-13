@@ -5,6 +5,8 @@ import execute._
 import main.Arguments
 import specification.StandardFragments.{Backtab, Tab, Br, End}
 import internal.scalaz.Scalaz._
+import control.ImplicitParameters
+import data.TuplesToSeq
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -43,7 +45,7 @@ import internal.scalaz.Scalaz._
  *  - Examples
  *
  */
-trait RegexSteps {
+trait RegexSteps extends RegexStepsFactory with TuplesToSeq {
   /** at any point in time a regex sequence can be transformed as a sequence of Fragments */
   implicit def RegexFragmentToFragments(r: RegexFragment): Fragments = r.fs
 
@@ -65,6 +67,78 @@ trait RegexSteps {
   implicit def upcastThen[X, Y <: X](th: Then[X]) = new Then[Y] { def extract(t: Y, s: String) = th.extract(t, s) }
 
 }
+
+trait RegexStepsFactory extends ImplicitParameters {
+  /** factory method to create a Given or a Then element from a regex */
+  def readAs(regex: String) = new ReadAs(regex)
+  /** factory method to create a Given or a Then element from a regex, using a regex denoting groups to extract */
+  def groupAs(groupRegex: String) = new ReadAs(groups = "("+groupRegex+")")
+
+  /** This class creates Given or Then extractors from a regular expression and a function */
+  class ReadAs(regex: String = "", groups: String = "") {
+    def apply(f: String => Unit) = and[Unit](f)
+
+    def apply(f: (String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)
+
+    def and[T](f: String => T) = new Given[T](regex, groups) { def extract(text: String) = { f(extract1(text)) } }
+    def and[T](f: (String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract2(text)) } }
+    def and[T](f: (String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract3(text)) } }
+    def and[T](f: (String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract4(text)) } }
+    def and[T](f: (String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract5(text)) } }
+    def and[T](f: (String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract6(text)) } }
+    def and[T](f: (String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract7(text)) } }
+    def and[T](f: (String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract8(text)) } }
+    def and[T](f: (String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract9(text)) } }
+    def and[T](f: (String, String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract10(text)) } }
+    def and[T](f: Seq[String] => T)(implicit p: ImplicitParam, p1: ImplicitParam1) = new Given[T](regex, groups) { def extract(text: String)  = f(extractAll(text)) }
+
+    def and[T, S](f: T => String => S) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t)(extract1(text)) } }
+    def and[T, S](f: T => (String, String) => S)(implicit p: ImplicitParam2) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract2(text)) } }
+    def and[T, S](f: T => (String, String, String) => S)(implicit p: ImplicitParam3) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract3(text)) } }
+    def and[T, S](f: T => (String, String, String, String) => S)(implicit p: ImplicitParam4) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract4(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String) => S)(implicit p: ImplicitParam5) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract5(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String) => S)(implicit p: ImplicitParam6) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract6(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam7) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract7(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam8) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract8(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam9) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract9(text)) } }
+    def and[T, S](f: T => (String, String, String, String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam10) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract10(text)) } }
+    def and[T, S](f: T => Seq[String] => S)(implicit p: ImplicitParam) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).apply(extractAll(text)) } }
+
+    def apply[R <% Result](f: String => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String, String, String, String) => R) = then[R, Unit]((u: Unit) => f)
+    def apply[R <% Result](f: (String, String, String, String, String, String, String, String, String, String) => R) = then((u: Unit) => f)
+    def apply[R](f: Seq[String] => R)(implicit r: R => Result, p: ImplicitParam) = then[R, Unit]((u: Unit) => f)(r, p)
+
+    def then[R, T](f: T => String => R)(implicit r: R => Result) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t)(extract1(text)) }
+    def then[R, T](f: T => (String, String) => R)(implicit r: R => Result, p: ImplicitParam2) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract2(text)) }
+    def then[R, T](f: T => (String, String, String) => R)(implicit r: R => Result, p: ImplicitParam3) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract3(text)) }
+    def then[R, T](f: T => (String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam4) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract4(text)) }
+    def then[R, T](f: T => (String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam5) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract5(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam6) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract6(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam7) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract7(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam8) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract8(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam9) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract9(text)) }
+    def then[R, T](f: T => (String, String, String, String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam10) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract10(text)) }
+    def then[R, T](f: T => Seq[String] => R)(implicit r: R => Result, p: ImplicitParam) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t)(extractAll(text)) }
+  }
+}
+
 private[specs2]
 object RegexSteps extends RegexSteps {
   def toResult[T](context: =>Either[Result, (T, Result)]) = {
@@ -85,7 +159,7 @@ import RegexSteps._
 private[specs2]
 trait RegexFragment {
   type RegexType <: RegexFragment
-  val fs: Fragments
+  def fs: Fragments
   def add(f: Fragment): RegexType
   def ^(f: Text)        = add(f)
   def ^(f: Br)          = add(f)
@@ -154,6 +228,14 @@ private[specs2] case class PreStepText[T](text: String, context: () => Either[Re
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
+  def ^[R, S](step: When[Seq[S], R])(implicit ev: T => Seq[S]) = {
+    lazy val extracted = step.extractContext(context().right.map(ev), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^[R, S](step: Then[Seq[S]])(implicit ev: T => Seq[S]) = {
+    lazy val extracted = step.extractContext(context().right.map(ev), text)
+    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
+  }
   def ^(step: Then[T]) = {
    lazy val extracted = step.extractContext(context(), text)
    new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
@@ -171,6 +253,10 @@ private[specs2] case class PreStepText2[T1, T2](text: String, context: () => Eit
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq2(t)), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
   def ^(step: Then[(T1, T2)]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
@@ -178,7 +264,7 @@ private[specs2] case class PreStepText2[T1, T2](text: String, context: () => Eit
   def add(f: Fragment): RegexType = new PreStepText2(text, context, fs.add(f))
 }
 
-private[specs2] case class PreStepText3[T1, T2, T3](text: String, context: () => Either[Result, (T1, T2, T3)], fs: Fragments) extends RegexFragment {
+private[specs2] case class PreStepText3[T1, T2, T3](text: String, context: () => Either[Result, (T1, T2, T3)], fs: Fragments) extends RegexFragment with ImplicitParameters {
   type RegexType = PreStepText3[T1, T2, T3]
   def ^[R](step: Given[R]): PreStep4[T1, T2, T3, R] = {
     lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,r))
@@ -186,6 +272,10 @@ private[specs2] case class PreStepText3[T1, T2, T3](text: String, context: () =>
   }
   def ^[R](step: When[(T1, T2, T3), R]) = {
     lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq3(t)), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
   def ^(step: Then[(T1, T2, T3)]) = {
@@ -205,6 +295,10 @@ private[specs2] case class PreStepText4[T1, T2, T3, T4](text: String, context: (
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq4(t)), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
   def ^(step: Then[(T1, T2, T3, T4)]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
@@ -220,6 +314,10 @@ private[specs2] case class PreStepText5[T1, T2, T3, T4, T5](text: String, contex
   }
   def ^[R](step: When[(T1, T2, T3, T4, T5), R]) = {
     lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T, ev5: T5 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq5(t)), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
   def ^(step: Then[(T1, T2, T3, T4, T5)]) = {
@@ -239,6 +337,10 @@ private[specs2] case class PreStepText6[T1, T2, T3, T4, T5, T6](text: String, co
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T, ev5: T5 <:< T, ev6: T6 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq6(t)), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
   def ^(step: Then[(T1, T2, T3, T4, T5, T6)]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
@@ -256,6 +358,10 @@ private[specs2] case class PreStepText7[T1, T2, T3, T4, T5, T6, T7](text: String
     lazy val extracted = step.extractContext(context(), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T, ev5: T5 <:< T, ev6: T6 <:< T, ev7: T7 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq7(t)), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
   def ^(step: Then[(T1, T2, T3, T4, T5, T6, T7)]) = {
     lazy val extracted = step.extractContext(context(), text)
     new PostStep(() => toContext(extracted), fs.add(Example(step.strip(text), toResult(extracted))))
@@ -271,6 +377,10 @@ private[specs2] case class PreStepText8[T1, T2, T3, T4, T5, T6, T7, T8](text: St
   }
   def ^[R](step: When[(T1, T2, T3, T4, T5, T6, T7, T8), R]) = {
     lazy val extracted = step.extractContext(context(), text)
+    new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
+  }
+  def ^[R, T](step: When[Seq[T], R])(implicit ev1: T1 <:< T, ev2: T2 <:< T, ev3: T3 <:< T, ev4: T4 <:< T, ev5: T5 <:< T, ev6: T6 <:< T, ev7: T7 <:< T, ev8: T8 <:< T) = {
+    lazy val extracted = step.extractContext(context().right.map(t => tupleToSeq8(t)), text)
     new PreStep(() => extracted, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(extracted)))
   }
   def ^(step: Then[(T1, T2, T3, T4, T5, T6, T7, T8)]) = {

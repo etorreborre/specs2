@@ -22,7 +22,7 @@ import html.Htmlx._
  *
  */
 private[specs2]
-case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "") extends HtmlReportOutput { outer =>
+case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "", textPrinter: String => NodeSeq = toXhtml(_)) extends HtmlReportOutput { outer =>
 
   /**
    * start of the output
@@ -80,18 +80,19 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
    *
    * - if this is an arbitrary link, print a normal html link
    */
-  def printLink(link: HtmlLink, level: Int = 0, stats: Stats = Stats(), hidden: Boolean = false) = {
+  def printLink(link: HtmlLink, level: Int, stats: Stats = Stats(), hidden: Boolean = false) = {
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
-    val printLink = wiki(link.beforeText) ++ <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{wiki(link.linkText)}</a> ++ wiki(link.afterText)
-
+    val htmlLink = outer.copy(xml = NodeSeq.Empty).printLink(link).xml
     link match {
       case slink @ SpecHtmlLink(name, before, l, after, tip) => {
         print(<subtoc specId={name.id.toString}/>).
-        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ printLink, level, hidden), linkStatus)
+        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ htmlLink, level, hidden), linkStatus)
       }
-      case UrlHtmlLink(url, before, l, after, tip) => printStatus(div(printLink, level, hidden), linkStatus)
+      case UrlHtmlLink(url, before, l, after, tip) => printStatus(div(htmlLink, level, hidden), linkStatus)
     }
   }
+
+  def printLink(link: HtmlLink) = print(wiki(link.beforeText) ++ <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{wiki(link.linkText)}</a> ++ wiki(link.afterText))
 
   /** print some text with a status icon (with an ok class) */
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
@@ -106,7 +107,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
    * the message in enclosed in a div which has a unique id and associated onclick function to show/hide it
    */
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int) =
-    printKoStatus(div(<img src="images/collapsed.gif" onclick={toggleElement(e)}/> ++
+    printKoStatus(div(<img src={baseDir+"images/collapsed.gif"} onclick={toggleElement(e)}/> ++
 		                   t("  "+e.message.notNull+" ("+e.location+")"), level))
 
   /**
@@ -119,7 +120,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
         val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
         val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
         
-				printKoStatus(div(<img src="images/collapsed.gif"  onclick={toggleElement(details)}/> ++ t("details"), level) ++
+				printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
             <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
             { <pre class="details">{expectedFull+"\n"+actualFull}</pre> unless (diffs.showFull)  }
@@ -182,7 +183,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
   protected def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
   protected def id(a: Any) = System.identityHashCode(a).toString
   /** render some markup text as xhtml */
-  protected def wiki(text: String) = toXhtml(text)
+  protected def wiki(text: String) = textPrinter(text)
 
   /**
    * Head of the html document. It contains:
@@ -203,6 +204,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
       <script type="text/javascript" src={baseDir+"css/prettify.js"}></script>
       <link rel="stylesheet" href={baseDir+"css/print.css"} type="text/css" media="print" />
       <link href={baseDir+"css/tooltip.css"} rel="stylesheet" type="text/css" />
+      <link href={baseDir+"css/specs2-user.css"} type="text/css" rel="stylesheet" />
+
       <script type="text/javascript" src={baseDir+"css/jquery.js"}></script>
       <script type="text/javascript" src={baseDir+"css/jquery.cookie.js"}></script>
       <script type="text/javascript" src={baseDir+"css/jquery.hotkeys.js"}></script>
@@ -228,9 +231,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
       function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
       function toggleImage(image) {
         if (image.src.endsWith('images/expanded.gif')) 
-          image.src = 'images/collapsed.gif';
+          image.src = image.src.replace('expanded', 'collapsed');
         else 
-          image.src = 'images/expanded.gif';
+          image.src = image.src.replace('collapsed', 'expanded');
       };
       function showHide(id) {
         element = document.getElementById(id);
@@ -270,8 +273,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "")
    * @return some xml (rest) enclosed in another block
    */
   private def enclose(f: NodeSeq => NodeSeq)(rest: =>HtmlResultOutput): HtmlResultOutput = print(f(rest.xml))
-  private def print(xml2: NodeSeq): HtmlResultOutput = copy(xml = xml ++ xml2)
-  private def print(xml2: Elem): HtmlResultOutput = copy(xml = xml ++ xml2)
+  def print(xml2: NodeSeq): HtmlResultOutput = copy(xml = xml ++ xml2)
+  def print(xml2: Elem): HtmlResultOutput = copy(xml = xml ++ xml2)
 
   /**
    * @param elementClass class of elements to show/hide

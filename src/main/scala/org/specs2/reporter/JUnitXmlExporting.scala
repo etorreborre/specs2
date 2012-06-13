@@ -34,7 +34,7 @@ trait JUnitXmlExporting extends Exporting with JUnitXmlPrinter {
    * file
    * the name of the html file is the full class name
    */
-  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
+  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit args: Arguments) {
     lazy val suite = testSuite(name, fs)
     fileWriter.write(filePath(suite.description)) { out => suite.flush(out) }
   }

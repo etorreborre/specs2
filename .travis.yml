@@ -1,0 +1,10 @@
+language: scala
+
+scala:
+  - 2.9.2
+ 
+branches:
+  only:
+    - 1.12
+
+script: sbt clean test

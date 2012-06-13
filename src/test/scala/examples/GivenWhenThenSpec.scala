@@ -11,40 +11,34 @@ import specification._
 class GivenWhenThenSpec extends Specification { def is =
 
   "A given-when-then example for a calculator"                 ^ br^
-    "Given the following number: ${1}"                         ^ number1^
-    "And a second number: ${2}"                                ^ number2^
+    "Given the following number: ${1}"                         ^ aNumber^
+    "And a second number: ${2}"                                ^ aNumber^
+    "And a third number: ${6}"                                 ^ aNumber^
     "When I use this operator: ${+}"                           ^ operator^
-    "Then I should get: ${3}"                                  ^ result^
+    "Then I should get: ${9}"                                  ^ result^
     "And it should be >: ${0}"                                 ^ greaterThan^
                                                                endp^
   "Now with the multiplication"                                ^ br^
-    "Given the following number: ${4}"                         ^ number1^
-    "And a second number: ${5}"                                ^ number2^
+    "Given the following number: ${4}"                         ^ aNumber^
+    "And a second number: ${5}"                                ^ aNumber^
+    "And a third number: ${6}"                                 ^ aNumber^
     "When I use this operator: ${*}"                           ^ operator^
-    "Then I should get: ${20}"                                 ^ result^
+    "Then I should get: ${120}"                                ^ result^
     "And it should be >: ${10}"                                ^ greaterThan^
-    "But not should be >: ${50}"                               ^ lowerThan^
+    "But not should be >: ${500}"                              ^ lowerThan^
                                                                end
 
-  object number1 extends Given[Int] {
-    def extract(text: String): Int = extract1(text).toInt
-  }
-  object number2 extends When[Int, (Int, Int)] {
-    def extract(number1: Int, text: String) = (number1, extract1(text).toInt)
-  }
-  object operator extends When[(Int, Int), Operation] {
-    def extract(numbers: (Int, Int), text: String) = Operation(numbers._1, numbers._2, extract1(text))
-  }
-  object result extends Then[Operation] {
-    def extract(operation: Operation, text: String) = operation.calculate  must_== extract1(text).toInt
-  }
-  object greaterThan extends Then[Operation] {
-    def extract(operation: Operation, text: String) = operation.calculate  must be_>=(extract1(text).toInt)
-  }
-  object lowerThan extends Then[Operation] {
-    def extract(operation: Operation, text: String) = operation.calculate  must be_<=(extract1(text).toInt)
-  }
-  case class Operation(n1: Int, n2: Int, operator: String) {
-    def calculate: Int = if (operator == "+") n1 + n2 else n1 * n2
+
+  val aNumber: Given[Int] = (_:String).toInt
+
+  // when there are too many Given[T, S] consecutive steps, it is possible to follow them with a When[Seq[T], S]
+  val operator: When[Seq[Int], Operation] = (numbers: Seq[Int]) => (s: String) => Operation(numbers, s)
+
+  val result: Then[Operation]      = (operation: Operation) => (s: String) => { operation.calculate  must_== s.toInt }
+  val greaterThan: Then[Operation] = (operation: Operation) => (s: String) => { operation.calculate  must be_>= (s.toInt) }
+  val lowerThan: Then[Operation]   = (operation: Operation) => (s: String) => { operation.calculate  must be_<= (s.toInt) }
+
+  case class Operation(numbers: Seq[Int], operator: String) {
+    def calculate: Int = if (operator == "+") numbers.sum else numbers.product
   }
 }

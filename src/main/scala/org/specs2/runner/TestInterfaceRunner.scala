@@ -93,7 +93,7 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
   protected def finalExporter(handler: EventHandler) = FinalResultsReporter(handler, loggers)
 
   def exporters(args: Array[String], handler: EventHandler)(implicit arguments: Arguments): Seq[Exporting] = {
-    val isConsole = !Seq("html", "junitxml").exists(args.contains) || args.contains("console")
+    val isConsole = !Seq("html", "junitxml", "markup").exists(args.contains) || args.contains("console")
 
     def console          = exporter(isConsole)(new TestInterfaceReporter(handler, loggers))
     def exportFinalStats = exporter(!isConsole)(finalExporter(handler))

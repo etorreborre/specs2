@@ -15,7 +15,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
 
   def fragments: Seq[Fragment] = if (middle.isEmpty && !linked.isLink) Vector() else (start +: middle :+ end)
 
-  def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.map(_.overrideWith(name)).orElse(Some(name)))
+  def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.filterNot(_.title.isEmpty).map(_.overrideWith(name)).orElse(Some(name)))
 
   def add(e: Fragment): Fragments = append(e)
   def add(fs: Seq[Fragment]): Fragments = copy(middle = middle ++ fs)
@@ -67,9 +67,9 @@ object Fragments {
    */
   def create(fs: Fragment*) = {
     fs match {
-      case (s @ SpecStart(n, a, l)) +: rest :+ SpecEnd(_) => Fragments(Some(n), rest, a, l)
-      case (s @ SpecStart(n, a, l)) +: rest               => Fragments(Some(n), rest, a, l)
-      case _                                              => createList(fs:_*)
+      case (s @ SpecStart(n, a, l)) +: rest :+ SpecEnd(_,_) => Fragments(Some(n), rest, a, l)
+      case (s @ SpecStart(n, a, l)) +: rest                 => Fragments(Some(n), rest, a, l)
+      case _                                                => createList(fs:_*)
     }
   }
 
@@ -82,13 +82,13 @@ object Fragments {
   /** @return the example if the Fragment is an Example */
   def isAnExample: PartialFunction[Fragment, Example] = { case e @ Example(_,_) => e }
   /** @return true if the Fragment is a step */
-  def isStep: Function[Fragment, Boolean] = { case Step(_) => true; case _ => false }
+  def isStep: Function[Fragment, Boolean] = { case Step(_,_) => true; case _ => false }
   /** @return true if the Fragment is a SpecStart or a SpecEnd */
-  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_) | SpecEnd(_) => true; case _ => false }
+  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_) | SpecEnd(_,_) => true; case _ => false }
   /** @return true if the Fragment is an Example or a Step */
   def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
   /** @return the step if the Fragment is a Step*/
-  def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_) => s }
+  def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_,_) => s }
 
   /** @return a Fragments object with the appropriate name set on the SpecStart fragment */
   def withSpecName(fragments: Fragments, name: SpecName): Fragments = fragments.specTitleIs(name)

@@ -4,6 +4,7 @@ package specification
 import control.Exceptions._
 import execute._
 import util.matching.Regex
+import control.ImplicitParameters
 
 /**
  * A Regular expression step which takes a text and extracts meaningful values according to
@@ -42,10 +43,11 @@ abstract class RegexStep[P, T](fullRegex: String = "", groupRegex: String = Rege
   def extract8(t: String) = RegexStep.extract8(t, full, group)
   def extract9(t: String) = RegexStep.extract9(t, full, group)
   def extract10(t: String)= RegexStep.extract10(t, full, group)
+  def extractAll(t: String) = RegexStep.extractAll(t, full, group)
 }
 
 object RegexStep {
-  private val DEFAULT_REGEX = """\$\{([^}]+)\}"""
+  val DEFAULT_REGEX = """\$\{([^}]+)\}"""
 
   def extract[R](text: String, f: PartialFunction[Any, R], regexToUse: Regex = DEFAULT_REGEX.r): R =
     regexToUse.findAllIn(text).size match {
@@ -62,7 +64,7 @@ object RegexStep {
     }
 
   /** extract all groups and return a list of strings */
-  def extractAll(text: String, full: Regex, group: Regex) =
+  def extractAll(text: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) =
     if (full.toString.isEmpty) group.findAllIn(text).matchData.collect { case Regex.Groups(g) => g }.toList
     else                       full.unapplySeq(text).get
 
@@ -92,11 +94,26 @@ object RegexStep {
  *
  * It must define the extract function creating a value of type T from the extracted values
  */
-abstract class Given[T](val regex: String = "") extends RegexStep[Unit, T](regex) {
+abstract class Given[T](val regex: String = "", val groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[Unit, T](regex, groupRegex) {
   /** if the extraction goes wrong, then an Error is propagated */
   private[specs2] def extractContext(text: String): Either[Result, T] = trye(extract(text))((e:Exception) => Error(e))
 
   def extract(text: String): T
+}
+
+/** implicit conversions to create Given objects */
+object Given extends ImplicitParameters {
+  implicit def function1ToGiven[T](f: String => T): Given[T] = new Given[T] { def extract(text: String) = f(extract1(text))  }
+  implicit def function2ToGiven[T](f: (String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract2(text))  }
+  implicit def function3ToGiven[T](f: (String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract3(text))  }
+  implicit def function4ToGiven[T](f: (String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract4(text))  }
+  implicit def function5ToGiven[T](f: (String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract5(text))  }
+  implicit def function6ToGiven[T](f: (String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract6(text))  }
+  implicit def function7ToGiven[T](f: (String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract7(text))  }
+  implicit def function8ToGiven[T](f: (String, String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract8(text))  }
+  implicit def function9ToGiven[T](f: (String, String, String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract9(text))  }
+  implicit def function10ToGiven[T](f:(String, String, String, String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract10(text))  }
+  implicit def functionSeqToGiven[T](f: Seq[String] => T)(implicit p: ImplicitParam): Given[T] = new Given[T] { def extract(text: String) = f(extractAll(text))  }
 }
 
 /**
@@ -105,7 +122,7 @@ abstract class Given[T](val regex: String = "") extends RegexStep[Unit, T](regex
  * It must define the extract function taking the previous state of extracted values, P, and creating a new state
  * of type T from the extracted values
  */
-abstract class When[P, T](val regex: String = "") extends RegexStep[P, T](regex) {
+abstract class When[P, T](val regex: String = "", val groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[P, T](regex, groupRegex) {
   /**
    * if the previous extraction went wrong, then a Skipped result is propagated.
    * Otherwise if the current extraction goes wrong, then an Error is propagated
@@ -116,13 +133,27 @@ abstract class When[P, T](val regex: String = "") extends RegexStep[P, T](regex)
   }
   def extract(p: P, text: String): T
 }
+/** implicit conversions to create When objects */
+object When extends ImplicitParameters {
+  implicit def function1ToWhen[T, S](f: T => String => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t)(extract1(text))  }
+  implicit def function2ToWhen[T, S](f: T => (String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract2(text))  }
+  implicit def function3ToWhen[T, S](f: T => (String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract3(text))  }
+  implicit def function4ToWhen[T, S](f: T => (String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract4(text))  }
+  implicit def function5ToWhen[T, S](f: T => (String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract5(text)) }
+  implicit def function6ToWhen[T, S](f: T => (String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract6(text)) }
+  implicit def function7ToWhen[T, S](f: T => (String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract7(text)) }
+  implicit def function8ToWhen[T, S](f: T => (String, String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract8(text)) }
+  implicit def function9ToWhen[T, S](f: T => (String, String, String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract9(text)) }
+  implicit def function10ToWhen[T, S](f: T => (String, String, String, String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract10(text)) }
+  implicit def functionSeqToWhen[T, S](f: T => Seq[String] => S)(implicit p: ImplicitParam): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t)(extractAll(text))  }
+}
 
 /**
  * This step define checks in a sequence of Given / When / Then.
  *
  * It must define the extract function taking the state of extracted values, T, and return a `Result`
  */
-abstract class Then[T](regex: String = "") extends RegexStep[Either[Result, T], (T, Result)](regex) {
+abstract class Then[T](regex: String = "", val groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[Either[Result, T], (T, Result)](regex, groupRegex) {
   /**
    * if the previous extraction went wrong, then a Skipped result is propagated.
    * Otherwise if the current extraction goes wrong, then an Error is propagated
@@ -132,6 +163,21 @@ abstract class Then[T](regex: String = "") extends RegexStep[Either[Result, T], 
     case Right(r) => trye((r, extract(r, text)))((e:Exception) => Error(e))
   }
   def extract(t: T, text: String): Result
+}
+/** implicit conversions to create Then objects */
+object Then extends ImplicitParameters {
+  implicit def function1ToThen[T, R <% Result](f: T => String => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t)(extract1(text))  }
+  implicit def function2ToThen[T, R <% Result](f: T => (String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract2(text))  }
+  implicit def function3ToThen[T, R <% Result](f: T => (String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract3(text))  }
+  implicit def function4ToThen[T, R <% Result](f: T => (String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract4(text))  }
+  implicit def function5ToThen[T, R <% Result](f: T => (String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract5(text))  }
+  implicit def function6ToThen[T, R <% Result](f: T => (String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract6(text))  }
+  implicit def function7ToThen[T, R <% Result](f: T => (String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract7(text))  }
+  implicit def function8ToThen[T, R <% Result](f: T => (String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract8(text))  }
+  implicit def function9ToThen[T, R <% Result](f: T => (String, String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract9(text))  }
+
+  implicit def function10ToThen[T, R <% Result](f: T => (String, String, String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract10(text))  }
+  implicit def functionSeqToThen[T, R](f: T => Seq[String] => R)(implicit r: R => Result, p: ImplicitParam): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t)(extractAll(text))  }
 }
 
 abstract class GivenThen(regex: String= "") extends RegexStep[String, Result](regex) {

@@ -2,9 +2,9 @@ package org.specs2
 
 import guide._
 
-class UserGuide extends Specification { def is =
+class UserGuide extends UserGuidePage { def is =
 
-  "User Guide".title                                                                             ^
+  "User Guide".title.urlIs("org.specs2.UserGuide.html")                                          ^
                                                                                                  """
   ***specs2*** is a library for writing executable software specifications in Scala.
 

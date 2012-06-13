@@ -75,10 +75,11 @@ case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, l
   def hasDescription = s match { case EmptyMarkup() => false; case _ => true }
   def stats = statistics.copy(timer = outer.timer)
   def message = result.message
-  def isSuccess = stats.isSuccess
-  def isError   = stats.hasErrors
-  def isFailure = stats.hasFailures
-  def isIssue   = stats.hasIssues
+
+  def isSuccess   = stats.isSuccess
+  def isError     = stats.hasErrors
+  def isFailure   = stats.hasFailures
+  def isIssue     = stats.hasIssues
   def isSuspended = stats.hasSuspended
 }
 private[specs2]
@@ -132,9 +133,9 @@ case class ExecutedNoText(isAction: Boolean = false,
 /**
  * embed an already executed Fragment
  */
-case class FinishedExecutingFragment(f: ExecutedFragment) extends ExecutingFragment {
+case class FinishedExecutingFragment(f: ExecutedFragment, original: Fragment) extends ExecutingFragment {
   def get = f
-  def map(function: ExecutedFragment => ExecutedFragment) = FinishedExecutingFragment(function(f))
+  def map(function: ExecutedFragment => ExecutedFragment) = FinishedExecutingFragment(function(f), original)
 }
 
 /**
@@ -148,9 +149,9 @@ case class PromisedExecutingFragment(promised: Promise[ExecutedFragment]) extend
 /**
  * embed an executing Fragment into a function to execute it on demand
  */
-case class LazyExecutingFragment(f: ()=>ExecutedFragment) extends ExecutingFragment {
+case class LazyExecutingFragment(f: ()=>ExecutedFragment, original: Fragment) extends ExecutingFragment {
   def get = f()
-  def map(function: ExecutedFragment => ExecutedFragment) = LazyExecutingFragment(() =>function(f()))
+  def map(function: ExecutedFragment => ExecutedFragment) = LazyExecutingFragment(() =>function(f()), original)
 }
 
 

@@ -10,6 +10,7 @@ import specification._
 import main.Arguments
 import control.Identityx._
 import html._
+import xml.Nodex._
 import io.Paths._
 
 /**
@@ -19,15 +20,16 @@ import io.Paths._
 * It can be written ('flushed') to an HtmlResultOuput by printing the lines one by one to this output
 */
 private[specs2]
-case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLine] = Vector()) {
-  def print(out: =>HtmlReportOutput, toc: NodeSeq) = {
+case class HtmlLinesFile(specName: SpecName, args: Arguments,
+                         link: HtmlLink, lines : Seq[HtmlLine] = Vector(), parent: Option[HtmlLinesFile] = None,
+                         toc: TreeToc = TreeToc(SpecId(""))) {
+  def print(out: =>HtmlReportOutput) = {
     def output = out.filePathIs(link.url)
     output.printHtml(
 		  output.printHead.
 		         printBody {
-               val xmlLines = printLines(output).xml
-               if (toc.isEmpty) (<div id="leftcolumn"/> ++ <div id="central">{xmlLines}</div>)
-               else (toc ++ <div id="rightcolumn">{xmlLines}</div>)
+               breadcrumbs ++
+               <div id="leftcolumn">{toc.toTree(specId)}</div> ++ <div id="central">{printLines(output).xml}</div> ++ <div id="rightcolumn"/>
              }.xml
       )
   }
@@ -40,6 +42,27 @@ case class HtmlLinesFile(specName: SpecName, link: HtmlLink, lines : Seq[HtmlLin
 
   /** a unique identifier for the specification */
   def specId: SpecId = SpecId(specName.id.toString)
+
+  /**
+   * breadcrumbs are created but hidden by default
+   * @return a breadcrumbs sequence for this file
+   */
+  def breadcrumbs: NodeSeq = <div id="breadcrumbs">{breadcrumbsLinks(link.url)}</div> unless !parent.isDefined
+
+  /**
+   * create breadcrumb links which will be embedded in a document having a specific url
+   */
+  def breadcrumbsLinks(relativeUrl: String): NodeSeq = {
+    parent.map { (p: HtmlLinesFile) =>
+      (if (p.parent.isDefined) p.breadcrumbsLinks(relativeUrl) else p.htmlLink(relativeUrl)) ++ <t> / </t> ++
+      htmlLink(relativeUrl)
+    }.getOrElse(NodeSeq.Empty)
+  }
+
+  /**
+   * @return an anchor for the link corresponding to this file
+   */
+  def htmlLink(relativeUrl: String) = <a href={link.url.relativeTo(relativeUrl)}>{specName.name}</a>
 
   override def toString = (link +: lines).mkString("\n")
 }

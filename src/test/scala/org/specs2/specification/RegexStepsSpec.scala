@@ -1,6 +1,7 @@
 package org.specs2
 package specification
 import matcher._
+import control.ImplicitParameters
 
 class RegexStepsSpec extends Specification with ResultMatchers with DataTables { def is =
 
@@ -23,7 +24,23 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
     "Two Given steps can be followed by a When step where the input of the When step pairs the Given outputs"           ^ givens1^ endp^
     "Two Given steps can be followed by a Then step where the input of the Then step pairs the Given outputs"           ^ givens2^ endp^
     "Several Given steps can be followed by a When step where the input of the When step tuples the Given outputs"      ^ givens3^
-    end
+                                                                                                                        endp^
+    "Factory methods can be used to create Given/When/Then steps from simple functions"                                 ^
+      "Given"                                                                                                           ^
+        "with a function"                                                                                               ! factory.given1^
+        "with a regular expression for parsing the whole text and a function"                                           ! factory.given2^
+        "with a regular expression for grouping elements and a function"                                                ! factory.given3^ endp^
+      "When"                                                                                                            ^
+        "with a function"                                                                                               ! factory.when1^
+        "with a regular expression for parsing the whole text and a function"                                           ! factory.when2^
+        "with a regular expression for grouping elements and a function"                                                ! factory.when3^ endp^
+      "Then"                                                                                                            ^
+        "with a function"                                                                                               ! factory.then1^
+        "with a regular expression for parsing the whole text and a function"                                           ! factory.then2^
+        "with a regular expression for grouping elements and a function"                                                ! factory.then3^
+                                                                                                                        endp^
+    "A G/W/T specification must have a title"                                                                           ! spec1^
+                                                                                                                        end
 
 
   def given = number1.extractContext("Given the following number: ${3}") must beRight(3)
@@ -80,6 +97,47 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
     "${abc\\def}"                  !! "abc\\def"                         |
     { (toStrip, result) => RegexStep.strip(toStrip) === result }
   }
+
+  object factory {
+    def given1 = {
+      val number0: Given[Int] = { (s1: String, s2: String) => s1.toInt + s2.toInt }
+      number0.extract("Two numbers ${1} and ${2}") === 3
+    }
+    def given2 = {
+      val number0 = readAs(".*?(\\d+).*(\\d+).*") and { (s1: String, s2: String) => s1.toInt + s2.toInt }
+      number0.extract("Two numbers 1 and 2") === 3
+    }
+    def given3 = {
+      val number0 = groupAs("\\d+") and { (s1: String, s2: String) => s1.toInt + s2.toInt }
+      number0.extract("Two numbers 1 and 2") === 3
+    }
+    def when1 = {
+      val number0: When[Int, (Int, Int)] = { n1: Int => (s2: String) => (n1,  s2.toInt) }
+      number0.extract(1, "with one more number ${2}") === (1, 2)
+    }
+    def when2 = {
+      val number0 = readAs(".*?(\\d+).*(\\d+).*") and { n1: Int => (s1: String, s2: String) => (n1, s1.toInt + s2.toInt) }
+      number0.extract(1, "Two numbers 2 and 3") === (1, 5)
+    }
+    def when3 = {
+      val number0 = groupAs("\\d+") and { n1: Int => (s1: String, s2: String) => (n1, s1.toInt + s2.toInt) }
+      number0.extract(1, "Two numbers 1 and 2") === (1, 3)
+    }
+    def then1 = {
+      val number0: Then[Int] = { n1: Int => (s2: String) => n1 + s2.toInt === 3 }
+      number0.extract(1, "with one more number ${2}") must beSuccessful
+    }
+    def then2 = {
+      val number0 = readAs(".*?(\\d+).*(\\d+).*") then { n1: Int => (s1: String, s2: String) => n1 + s1.toInt + s2.toInt === 6 }
+      number0.extract(1, "Two numbers 2 and 3") must beSuccessful
+    }
+    def then3 = {
+      val number0 = groupAs("\\d+") then { n1: Int => (s1: String, s2: String) => n1 + s1.toInt + s2.toInt === 4 }
+      number0.extract(1, "Two numbers 1 and 2") must beSuccessful
+    }
+  }
+
+  def spec1 = new Specification { def is = "a number ${0}" ^ number0 }.content.specName.title must not beEmpty
 
   object number0 extends Given[Int] {
     def extract(text: String): Int = extract1(text).toInt

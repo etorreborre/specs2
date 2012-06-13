@@ -2,6 +2,7 @@ package examples
 
 import org.specs2._
 import specification.{Before, BeforeExample, Context, Outside}
+import org.scalacheck.{Prop, Gen}
 
 /**
  * This specification shows various ways to setup contexts for examples.
@@ -59,6 +60,21 @@ class DefineContextsSpec extends Specification {
   }
 
   /**
+   * This specification uses an implicit Outside context for each example and ScalaCheck properties
+   */
+  class OutsideWithImplicitScalaCheckContextSpecification extends Specification with ScalaCheck { def is =
+
+    "This is a list of examples"                                     ^
+      "example1"                                                     ! e1^
+      "example2"                                                     ! e2^
+      end
+
+    implicit val outside: Outside[Int] = new Outside[Int] { def outside = 1 }
+
+    def e1 = (i: Int) => Prop.forAll(Gen.choose(1, 10)) { (n: Int) => n must be_>=(i) }
+    def e2 = (i: Int) => Prop.forAll(Gen.choose(1, 10)) { (n: Int) => n must be_>=(i) }
+  }
+  /**
    * Same thing as above for a mutable specification
    */
   class BeforeMutableSpecification extends mutable.Specification {
@@ -108,6 +124,7 @@ class DefineContextsSpec extends Specification {
            new BeforeSpecification ^
            new BeforeWithImplicitContextSpecification ^
            new OutsideWithImplicitContextSpecification ^
+           new OutsideWithImplicitScalaCheckContextSpecification ^
            new BeforeMutableSpecification ^
            new BeforeExampleMutableSpecification ^
            new BeforeExampleSpecification

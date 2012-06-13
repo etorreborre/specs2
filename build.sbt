@@ -1,13 +1,11 @@
 /** Project */
 name := "specs2"
 
-version := "1.10-SNAPSHOT"
+version := "1.12-SNAPSHOT"
 
 organization := "org.specs2"
 
-scalaVersion := "2.10.0-M3"
-
-crossScalaVersions := Seq("2.9.1", "2.9.1-1")
+scalaVersion := "2.10.0-M4"
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -31,7 +29,7 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
 }
 
 /** Compilation */
-javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss6m")
+javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss10m")
 
 javaOptions += "-Xmx2G"
 
@@ -87,4 +85,3 @@ pomExtra := (
       </developer>
     </developers>
 )
-

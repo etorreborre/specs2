@@ -58,10 +58,11 @@ trait SpecificationFeatures extends FragmentsBuilder
   implicit def contextToResult[T](t: MatchResult[T])(implicit context: Context = defaultContext): Result = context(asResult(t))
 
   /**
-   * apply an implicit Outside context to a function returning a MatchResult
+   * apply an implicit Outside context to a function returning anything convertible to a result
    *
    * @see examples.DefineContextsSpec#OutsideWithImplicitContextSpec
    */
-  implicit def outsideFunctionToResult[T, S](implicit o: Outside[T]) = (f: T => MatchResult[S]) => { o((t1:T) => f(t1).toResult) }
+  /** use an available outside context to transform a function returning a value convertible to a result, into a result */
+  implicit def outsideFunctionToResult[T, R](implicit outside: Outside[T], conv: R => Result) : (T => R) => Result = (f: T => R) => outside((t: T) => conv(f(t)))
 
 }

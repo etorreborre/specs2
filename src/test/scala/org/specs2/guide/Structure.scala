@@ -2,10 +2,11 @@ package org.specs2
 package guide
 
 import _root_.examples._
-import specification._
+import matcher.{ ResultMatchers => RM }
+import specification.{Step, Given, When, Then}
 
-class Structure extends Specification { def is = noindent^
-                                                                                                                        """
+class Structure extends UserGuidePage { def is =
+  """
 ### Presentation
 
 In this page you will learn how to:
@@ -149,11 +150,11 @@ So the correct way of writing the example is:
 
 ##### Thrown
 
-The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice by some. However you might see it as an annoying restriction. You can avoid it by extending the `org.specs2.matcher.MustThrownMatchers` trait. With that trait, any failing expectation will throw a `FailureException` and the rest of the example will not be executed.
+The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice by some. However you might see it as an annoying restriction. You can avoid it by mixing-in the `org.specs2.matcher.ThrownExpectations` trait. With that trait, any failing expectation will throw a `FailureException` and the rest of the example will not be executed.
 
 There is also an additional method `failure(message)` to throw a `FailureException` at will.
 
-[Note that the `ThrownMatchers` traits are mixed in the `mutable.Specification` trait used for _unit_ specifications].
+Note that the `ThrownExpectations` traits is mixed in the `mutable.Specification` trait used for _unit_ specifications and, if you wish, you revert back to *not* throwing exceptions on failed expectations by mixing-in the `org.specs2.matcher.NoThrownExpectations` trait.
 
 ##### All
 
@@ -244,7 +245,7 @@ A few things to remember about this feature:
          // outputs: 'List(1, 2)' contains '1'
          descFromExpectations ^
          { List(1, 2) must contain(1) }
-"""^"""
+  """^"""
 #### G/W/T
 
 More sophisticated is the Given/When/Then style of writing specifications. This style is supported by interspersing Text fragments, with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example specification for a simple calculator:
@@ -276,13 +277,13 @@ Here's some explanation of the object definitions that support the G/W/T style:
 
  * finally the `result` object defines the outcome of the Addition. Its `extract` method takes an `Addition` and the current text to return a `Result`
 
-##### Multiple steps
+##### Sequencing
 
 A G/W/T sequence can contain more than just 3 steps. However the compiler will check that:
 
  * only a `Given[T]` extractor can start a sequence
  * only a `Given[S]`, a `When[T, S]` or a `Then[T]` extractor can follow a `Given[T]` extractor
- * only a `When[T1, T2, S]` or a `Then[T1, T2] can follow a sequence of `Given[T1], Given[T2]` extractors (up to 8 Given steps, after that types are paired)
+ * only a `When[T1, T2, S]` or a `Then[T1, T2]` can follow a sequence of `Given[T1], Given[T2]` extractors (up to 8 Given steps, after that types are paired)
  * only a `When[S, U]` extractor or a `Then[S]` can follow a `When[T, S]` extractor
  * only a `Then[S]` can follow a `Then[S]` extractor
 
@@ -312,6 +313,60 @@ In the original way of declaring Given/When/Then steps, the text is left complet
 
 The advantage of using this way is that the text is left in it's pristine form, the drawback is that most of the text is duplicated in 2 places, adding more maintenance burden.
 
+##### Factory methods
+
+There are some factory and implicit conversion methods to create Given/When/Then steps by passing functions and / or regular expressions:
+
+ * convert a function `String... => T` to a `Given[T]` step (*note the use of `and` after `readAs` and `groupAs`*)
+
+        // this assumes that the Int to extract is delimited with ${}
+        val number1: Given[Int] = (s: String) => s.toInt
+        number1.extract("pay ${100} now") === 100
+
+        // this uses a regular expression with capturing groups matching the full text
+        val number1: Given[Int] = readAs(".*(\d+).*") and { (s: String) => s.toInt }
+        number1.extract("pay 100 now") === 100
+
+        // this uses capturing groups directly
+        val number1: Given[Int] = groupAs("\d+") and { (s: String) => s.toInt }
+        number1.extract("pay 100 now") === 100
+
+        // if the Given step is only side-effecting we can omit the `and` call
+        // this simplifies the use of Given steps in Unit Specifications
+        val number1: Given[Unit] = groupAs("\d+") and { (s: String) => value = s.toInt }
+
+ * convert a function `T => String... => S` to a `When[T, S]` step (*note the use of `and` after `readAs` and `groupAs`*)
+
+        // this assumes that the Int to extract is delimited with ${}
+        val number2: When[Int, (Int, Int)] = (n1: Int) => (s: String) => (n1, s.toInt)
+        number2.extract(100, "with a discount of ${10}%") === (100, 10)
+
+        // this uses a regular expression with capturing groups matching the full text
+        val number2: When[Int, (Int, Int)] = readAs(".*(\d+).*") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+        number2.extract(100, "with a discount of 10%") === (100, 10)
+
+        // this uses capturing groups directly
+        val number2: When[Int, (Int, Int)] = groupAs("\d+") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+        number2.extract(100, "with a discount of 10%") === (100, 10)
+
+ * convert a function `T => String... => Result` to a `Then[T]` step (*note the use of `then` after `readAs` and `groupAs`*)
+
+        // this assumes that the Int to extract is delimited with ${}
+        val number3: Then[(Int, Int)] = (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt
+        number3.extract((100, 10), "the result is ${90}") must beSuccessful
+
+        // this uses a regular expression with capturing groups matching the full text
+        val number3: Then[(Int, Int)] = readAs(".*(\d+).*") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+        number3.extract((100, 10), "the result is 90") must beSuccessful
+
+        // this uses capturing groups directly
+        val number3: Then[(Int, Int)] = groupAs("\d+") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+        number3.extract((100, 10), "the result is 90") must beSuccessful
+
+        // if the Then step is only side-effecting we can omit the `then` call
+        // this simplifies the use of Then steps in Unit Specifications
+        val number3: Then[Unit] = groupAs("\d+") { (s: String) => value must_== s.toInt }
+
 ##### G/W/T sequences
 
 Given the rule saying that only a `Then` block can follow another `Then` block you might think that it is not possible to start another G/W/T
@@ -327,6 +382,19 @@ sequence in the same specification! Fortunately it is possible by just terminati
         "And a second number: ${2}"                                ^ number2 ^
         "Then I should get: ${2}"                                  ^ multiplication ^
                                                                    end
+
+##### Multiple steps
+
+If there are lots of consecutive `When` steps collecting the same kind of arguments, it will be easier to collect them in a `Seq[T]` rather than a `TupleN[T]`:
+
+      "A given-when-then example for the addition"                 ^
+        "Given the following number: ${1}"                         ^ number1 ^
+        "And a second number: ${2}"                                ^ number2 ^
+        "And a third number: ${3}"                                 ^ number3
+
+      val number1: Given[Int]               = (_:String).toInt
+      val number2: When[Int, (Int, Int)]    = (n1: Int) => (s: String) => (n1, s.toInt)
+      val number3: When[Seq[Int], Seq[Int]] = (numbers: Seq[Int]) => (s: String) => numbers :+ s.toInt
 
 ##### ScalaCheck
 
@@ -344,7 +412,7 @@ This can be avoided and even enhanced by using ScalaCheck to generate more value
           "And a second number n2"                                                     ^ number2 ^
           "When I add them"                                                            ^ add ^
           "Then I should get n1 + n2"                                                  ^ result ^
-                                                                                       end^
+                                                                                       end
 
         object number1 extends Given[Int] {
           def extract(text: String) = choose(-10, 10)
@@ -404,7 +472,7 @@ Given / When / Then steps are invariant in their type parameters. This might be 
 
 ##### Unit specification
 
-Given / When / Step can also be used in a unit specification by using the `<<` operator and local variables:
+Given / When / Step can also be used in a unit specification by using the &lt;&lt; operator and local variables:
 
         "A given-when-then example for a calculator".txt.br
 
@@ -430,6 +498,24 @@ Given / When / Step can also be used in a unit specification by using the `<<` o
           def calculate: Int = if (operator == "+") n1 + n2 else n1 * n2
         }
 
+If you want to use your own regular expression parsing, the &lt;&lt; operator also accepts `Given[Unit]` and `Then[Unit]` steps:
+
+        "Given the following number: 1" << readAs(".*(\\d).*") { s: String =>
+          a = s.toInt
+        }
+        "And a second number: 2" << groupAs("\\d") { s: Seq[String] =>
+          b = s.head.toInt
+        }
+        "When I use this operator: +" << groupAs("[\\+\\-]") { s: String =>
+          result = Operation(a, b, s).calculate
+        }
+        "Then I should get: 3" << groupAs("\\d") { s: String =>
+          result === s.toInt
+        }
+        "And it should be > 0" << groupAs("\\d") { s: String =>
+          result must be_>(s.toInt)
+        }
+
 Similarly, ScalaCheck generator and properties are supported:
 
         "Given a first number n1" << {
@@ -444,7 +530,7 @@ Similarly, ScalaCheck generator and properties are supported:
           }
         }
         "Then I should get n1 + n2" << check { (op: Addition) =>
-            op.calculate must_== op.n1 + op.n2
+          op.calculate must_== op.n1 + op.n2
         }
 
         var n1, n2: Gen[Int] = null
@@ -585,6 +671,8 @@ Now let's see how this can be achieved with ***specs2***.
 
 Let's see an example of using a `Scope` with a mutable specification:
 
+      import org.specs2.specification.Scope
+
       class ContextSpec extends mutable.Specification {
         "this is the first example" in new trees {
           tree.removeNodes(2, 3) must have size(2)
@@ -600,6 +688,7 @@ Let's see an example of using a `Scope` with a mutable specification:
       }
 
 Each example of that specification gets a new instance of the `trees` trait. So it will have a brand new `tree` variable and even if this data is mutated by an example, other examples will be isolated from these changes.
+
 Now you might wonder why the `trees` trait is extending the `org.specs2.specification.Scope` trait? The reason is that the body of an Example only accepts objects which are convertible to a `Result`. By extending `Scope` we can take advantage of an implicit conversion provided by the `Specification` trait to convert our context object to a `Result`.
 
 Scopes are a way to create a "fresh" object and associated variables for each example being executed. The advantages are that:
@@ -939,6 +1028,24 @@ If that's the case you can define your own `Specification` trait doing the job:
 
 The `DatabaseSpec` above will insert, in each inherited specification, one `Step` executed before all the fragments, and one executed after all of them.
 
+#### For fragments
+
+When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the `org.specs2.mutable.NameSpace` trait:
+
+      trait context extends mutable.NameSpace {
+        var variable1 = 1
+        var variable2 = 2
+      }
+
+      "this is the first block" >> new context {
+        "using one variable"      >> { variable1 === 1 }
+        "using a second variable" >> { variable2 === 2 }
+      }
+      "this is the second block" >> new context {
+        "using one variable"      >> { variable1 === 1 }
+        "using a second variable" >> { variable2 === 2 }
+      }
+
 ### Execution
 
 This section summarizes the execution algorithm of a specification based on its fragments:
@@ -949,6 +1056,9 @@ This section summarizes the execution algorithm of a specification based on its 
  4. if the `isolated` argument is present, each example is executed in its own version of the Specification
  5. if the `isolated` argument is present, all the `Steps` preceding an example are executed before that example
  6. if the Specification inherits from the `AllExpectations` trait, then it is executed as an `isolated` Specification unless it is already set as `sequential`
+ 7. if the `stopOnFail` argument is present, all the examples in the next group of fragments will be skipped if there is a failure in one of the previous groups
+ 8. if the `stopOnSkip` argument is present, all the examples in the next group of fragments will be skipped if there is a skipped in one of the previous groups
+ 9. if there is a `Step(stopOnFail = true)`, all the examples in the next group of fragments will be skipped if there is a failure in the group before the `Step`
 
 ### Layout
 
@@ -1273,7 +1383,8 @@ To make things more concrete here is a full example:
           def e1 = string must have size(7)
         }
       }
-
+"""^
+"""
 ### How to?
 
 #### Declare arguments
@@ -1307,6 +1418,12 @@ Alternatively, if you need to keep your specification as a trait, you can mix-in
         if (arguments.sequential) "this is" >> ok
         else                      "this is" >> ko
       }
+
+Note that the `arguments` instance gives you access to all the specs2 arguments values like `sequential` but also to any of your own command line argument values:
+
+ * `arguments.commandLine.value("tag"): Option[String]`
+ * `arguments.commandLine.int("timeout"): Option[Int]`
+ * `arguments.commandLine.boolean("integration"): Boolean`
 
 #### Add a title
 
@@ -1572,13 +1689,14 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
  * `org.specs2.specification.mutable.NoFragmentsBuilder`: deactivate the implicit conversions from to remove `in`, <code class="prettyprint">></code><code class="prettyprint">></code>, `should` and `can` methods from `String`s
 
   - - -
-                                                                                                                        """^
+      """^
                                                                                                                         br^
   include(xonly, new GivenWhenThenSpec)                                                                                 ^
   include(xonly, exampleTextIndentation)                                                                                ^
   include(xonly, resetTextIndentation)                                                                                  ^
   include(xonly, pTextIndentation)                                                                                      ^
   include(xonly, databaseSpec)                                                                                          ^
+  include(xonly, factoryMethodsSpec)                                                                                    ^
                                                                                                                         end
 
   val exampleTextIndentation = new Specification { def is =
@@ -1634,5 +1752,40 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
       1 must_== 2
     }.pendingUntilFixed("ISSUE-123")^
     end
+  }
+
+  val factoryMethodsSpec = new mutable.Specification with RM {
+    def discount(n: Int, p: Int) = (n - n / p)
+
+    "all methods should compile and work as expected" >> {
+
+      var number1: Given[Int] = (s: String) => s.toInt
+      number1.extract("pay ${100} now") === 100
+
+      number1 = readAs(".*?(\\d+).*") and { (s: String) => s.toInt }
+      number1.extract("pay 100 now") === 100
+
+      number1 = groupAs("\\d+") and { (s: String) => s.toInt }
+      number1.extract("pay 100 now") === 100
+
+      var number2: When[Int, (Int, Int)] = (n1: Int) => (s: String) => (n1, s.toInt)
+      number2.extract(100, "with a discount of ${10}%") === (100, 10)
+
+      number2 = readAs(".*?(\\d+).*") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+      number2.extract(100, "with a discount of 10%") === (100, 10)
+
+      number2 = groupAs("\\d+") and { (n1: Int) => (s: String) => (n1, s.toInt) }
+      number2.extract(100, "with a discount of 10%") === (100, 10)
+
+      var number3: Then[(Int, Int)] = (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt
+      number3.extract((100, 10), "the result is ${90}") must beSuccessful
+
+      number3 = readAs(".*?(\\d+).*") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+      number3.extract((100, 10), "the result is 90") must beSuccessful
+
+      number3 = groupAs("\\d+") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+      number3.extract((100, 10), "the result is 90") must beSuccessful
+
+    }
   }
 }

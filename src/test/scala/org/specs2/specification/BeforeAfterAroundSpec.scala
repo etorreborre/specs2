@@ -3,6 +3,7 @@ package specification
 
 import io.MockOutput
 import execute.Result
+import _root_.org.specs2.mutable.{Specification => Spec}
 
 class BeforeAfterAroundSpec extends Specification { def is =
 
@@ -24,7 +25,7 @@ class BeforeAfterAroundSpec extends Specification { def is =
     s.messages must contain(messages.map(lazyfy(_)):_*).inOrder
   }
   def before = executeContains(
-    new mutable.Specification with BeforeExample with MockOutput {
+    new Spec with BeforeExample with MockOutput {
       def before = println("before")
       "ex1" ! success
     }, "before")
@@ -46,26 +47,26 @@ class BeforeAfterAroundSpec extends Specification { def is =
     }, "before", "before")
 
   def before4 = executeContains(
-    new mutable.Specification with MockOutput {
+    new Spec with MockOutput {
       object withBefore extends BeforeEach { def before = println("before") }
       override def is = withBefore(super.is)
       "ex1" ! { 1 must_== 2 }
     }, "before")
 
   def after = executeContains(
-    new mutable.Specification with AfterExample with MockOutput {
+    new Spec with AfterExample with MockOutput {
       def after = println("after")
       "ex1" ! success
     },"after")
 
   def around = executeContains(
-    new mutable.Specification with AroundExample with MockOutput {
+    new Spec with AroundExample with MockOutput {
       def around[R <% Result](r: =>R) = { println("around"); r }
       "ex1" ! success
     },"around")
 
   def beforeAfter = executeContains(
-    new mutable.Specification with BeforeAfterExample with MockOutput {
+    new Spec with BeforeAfterExample with MockOutput {
       def before = println("before")
       def after = println("after")
       "ex1" ! success
@@ -73,7 +74,7 @@ class BeforeAfterAroundSpec extends Specification { def is =
 
 
   def beforeAfterAround = executeContains(
-    new mutable.Specification with BeforeAfterAroundExample with MockOutput {
+    new Spec with BeforeAfterAroundExample with MockOutput {
       def before = println("before")
       def after = println("after")
       def around[R <% Result](r: =>R) = { println("around"); r }

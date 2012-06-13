@@ -1,8 +1,8 @@
 package org.specs2
 package guide
 
-class Design extends Specification { def is = noindent                                                                  ^
-                                                                                                                        """
+class Design extends UserGuidePage { def is =
+  """
 ### Presentation
 
 This page explains the overall design of _specs2_:

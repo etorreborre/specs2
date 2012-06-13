@@ -1,9 +1,7 @@
 package examples
 
 import org.specs2._
-import specification._
-import execute.Success
-
+import specification.{Before, Scope}
 /**
  * This specification shows how to use the mutable.Specification trait to create a unit Specification
  * where the fragments are built using a mutable variable

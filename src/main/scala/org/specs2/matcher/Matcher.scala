@@ -126,7 +126,12 @@ trait Matcher[-T] { outer =>
    * @return a Skip MatchResult if this matcher fails, prefixing the failure message with a skip message.
    * If the skip message is empty, only the failure message is printed
    */
-  def orSkip(m: String): Matcher[T] = new Matcher[T] {
+  def orSkip(m: String): Matcher[T] = orSkip((ko: String) => m prefix(": ", ko))
+
+  /**
+   * @return a Skip MatchResult if this matcher fails, modifying the failure message with a skip message.
+   */
+  def orSkip(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
       val result = tryOr(outer(a)) { (e: Exception) => e match {
           case FailureException(r) => MatchFailure(r.message, r.message, a)
@@ -135,7 +140,7 @@ trait Matcher[-T] { outer =>
         }
       }
       result match {
-    	  case MatchFailure(_, ko, _, d) => MatchSkip(m prefix(": ", ko), a)
+    	  case MatchFailure(_, ko, _, d) => MatchSkip(message(ko), a)
     	  case other => other
       }
     }
@@ -148,7 +153,12 @@ trait Matcher[-T] { outer =>
    * @return a Pending MatchResult if this matcher fails, prefixing the failure message with a pending message.
    * If the pending message is empty, only the failure message is printed
    */
-  def orPending(m: String): Matcher[T] = new Matcher[T] {
+  def orPending(m: String): Matcher[T] = orPending((ko: String) => m prefix(": ", ko))
+
+  /**
+   * @return a Pending MatchResult if this matcher fails, modifying the failure message with a pending message.
+   */
+  def orPending(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
       val result = tryOr(outer(a)) { (e: Exception) => e match {
         case FailureException(r) => MatchFailure(r.message, r.message, a)
@@ -157,11 +167,12 @@ trait Matcher[-T] { outer =>
       }
       }
       result match {
-        case MatchFailure(_, ko, _, d) => MatchPending(m prefix(": ", ko), a)
+        case MatchFailure(_, ko, _, d) => MatchPending(message(ko), a)
         case other => other
       }
     }
   }
+
   /** only apply this matcher if the condition is true */
   def when(b: Boolean, m: String= ""): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = if (b) outer(a) else MatchSuccess(m, "ko", a)

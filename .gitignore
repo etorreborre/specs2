@@ -1,6 +1,7 @@
 .cache
 .history
 .target/
+pgp.sbt
 project-old/lib_managed/
 project-old/boot/
 project-old/plugins/lib_managed/

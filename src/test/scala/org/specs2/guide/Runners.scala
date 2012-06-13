@@ -1,8 +1,8 @@
 package org.specs2
 package guide
 
-class Runners extends Specification { def is = noindent ^
-                                                                                                                        """
+class Runners extends UserGuidePage { def is =
+  """
 ### Presentation
 
 There are many ways to execute ***specs2*** specifications:
@@ -70,7 +70,7 @@ From inside a specification, the available arguments are the following:
  `diffs`         | `SmartDiffs`                             | use a specific algorithm to display differences
  `fromSource`    | true                                     | true takes an AutoExample description from the file, false from the expectation ok message
  `traceFilter`   | `DefaultStackTraceFilter`                | use a StackTraceFilter instance for filtering the reported stacktrace elements
- `checkUrl`      | false                                    | if true, will parse the html files and check that local or http hrefs can be accessed
+ `checkUrls`     | false                                    | if true, will parse the html files and check that local or http hrefs can be accessed
  `notoc`         | false                                    | if true, will not create a table of contents on the generated html page
  `notifier`      | String                                   | name of a class extending the `org.specs2.reporter.Notifier` trait
  `exporter`      | String                                   | name of a class extending the `org.specs2.reporter.Exporter` trait
@@ -227,7 +227,7 @@ On the command line you can pass the following arguments:
  `debugmarkdown`  | boolean                 |                                                                         |
  `fromsource`     | boolean                 |                                                                         |
  `fullstacktrace` | boolean                 |                                                                         |
- `checkurl`       | boolean                 |                                                                         |
+ `checkurls`      | boolean                 |                                                                         |
  `notoc`          | boolean                 |                                                                         |
  `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
  `notifier`       | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
@@ -340,6 +340,8 @@ When you execute one test only, you can pass the arguments on the command line:
 
 ##### Output formats
 
+###### Html
+
 The `html` argument is available with sbt to allow the creation of the html report from the command line.
 
       > test-only org.specs2.UserGuide -- html
@@ -347,12 +349,24 @@ The `html` argument is available with sbt to allow the creation of the html repo
       // in your build.sbt file
       testOptions in Test += Tests.Argument("html")
 
+###### Markdown
+
+The `markup` argument can be used to create ".md" files (to use with websites like GitHub):
+
+      > test-only org.specs2.UserGuide -- markup
+
+In this case the markup text in the Specifications is not interpreted.
+
+###### JUnit
+
 Similarly, JUnit xml output files can be created by passing the `junitxml` option:
 
       > test-only org.specs2.examples.HelloWorldUnitSpec -- junitxml
 
       // in your build.sbt file
       testOptions in Test += Tests.Argument("junitxml")
+
+###### Console
 
 If you want to get a console output as well, don't forget to add the `console` argument:
 
@@ -545,8 +559,8 @@ You can use a custom `Exporter` from inside sbt by passing the `exporter` argume
 
    - - -
 
-           	                                                                                                            """ ^
-                                                                                                                        br ^
+  	                                                                                                            """ ^
+    br ^
   include(xonly, argumentsSpec)                                                                                          ^
                                                                                                                         end
 
