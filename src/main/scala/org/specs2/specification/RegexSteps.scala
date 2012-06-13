@@ -87,7 +87,7 @@ trait RegexStepsFactory extends ImplicitParameters {
     def apply(f: (String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: (String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
-    def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)
+    def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)(p, implicitParam1)
 
     def and[T](f: String => T) = new Given[T](regex, groups) { def extract(text: String) = { f(extract1(text)) } }
     def and[T](f: (String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract2(text)) } }

@@ -16,7 +16,7 @@ shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project
 resolvers ++= Seq(Opts.resolver.sonatypeReleases, Opts.resolver.sonatypeSnapshots)
 
 libraryDependencies <<= scalaVersion { scala_version => Seq(
-  "org.specs2" % "specs2-scalaz-core_2.10.0-M3" % "6.0.1",
+  "org.specs2" % "specs2-scalaz-core_2.10" % "6.0.1",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional",
   "org.scalacheck" % "scalacheck_2.9.2" % "1.9" % "optional",
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",

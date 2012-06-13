@@ -98,7 +98,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
    * add a new stopOnFail step to the Fragments
    */
   def step(stopOnFail: Boolean = false) = {
-    val newStep = Step(stopOnFail = stopOnFail)
+    val newStep = new Step(stopOnFail = stopOnFail)
     addFragments(newStep)
     newStep
   }
