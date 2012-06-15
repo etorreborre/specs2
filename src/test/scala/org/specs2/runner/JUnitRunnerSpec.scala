@@ -8,6 +8,8 @@ import _root_.org.junit.runner.notification.{ RunNotifier, Failure }
 import _root_.org.junit.runner.Description
 import _root_.org.junit.ComparisonFailure
 import text.FromString
+import _root_.examples.HelloWorldUnitIsolatedSpec
+import io.MockOutput
 
 class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {  def is =
   
@@ -39,6 +41,9 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
                                                                                                                         p^
   "If the isolated argument is specified"                                                                               ^
     "then the examples executions must be isolated"                                                                     ! isolate().e1^
+                                                                                                                        p^
+  "If the sequential argument is specified"                                                                             ^
+    "then the examples executions must be in sequence"                                                                  ! sequence().e1^
                                                                                                                         end
 
   trait WithNotifier {
@@ -47,6 +52,14 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     lazy val html       = mock[HtmlExporting]
     implicit lazy val properties = mock[SystemProperties]
 
+    lazy val messagesNotifier = new RunNotifier with MockOutput {
+      override def fireTestRunStarted(desc: Description) { println("run started "+desc) }
+      override def fireTestRunFinished(result: org.junit.runner.Result) { println("run finished "+result) }
+      override def fireTestStarted(desc: Description) { println("test started "+desc) }
+      override def fireTestFailure(failure: org.junit.runner.notification.Failure) { println("test failed "+failure) }
+      override def fireTestIgnored(desc: Description) { println("test ignored "+desc) }
+      override def fireTestFinished(desc: Description) { println("test finished "+desc) }
+    }
     properties.getProperty(anyString) returns None
     properties.getPropertyAs[Boolean](anyString)(any[FromString[Boolean]]) returns None
 
@@ -56,6 +69,7 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     abstract class DummySpecification extends Specification
     def run(f: Fragments) = JUnitRunner.apply[DummySpecification](f, properties, console, html).run(notifier)
     def run(spec: SpecificationStructure) = JUnitRunner.apply(spec).run(notifier)
+    def messages(spec: SpecificationStructure) = { JUnitRunner.apply(spec).run(messagesNotifier); messagesNotifier.messages }
   }
 
   case class notified() extends WithNotifier {
@@ -129,10 +143,18 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     }
   }
   case class isolate() extends WithNotifier {
-
     def e1 = {
-      run(new examples.HelloWorldUnitIsolatedSpec)
+      run(new HelloWorldUnitIsolatedSpec)
       there was no(notifier).fireTestFailure(any[Failure])
+    }
+  }
+  case class sequence() extends WithNotifier {
+    def e1 = {
+      messages(new Specification { def is = sequential ^ "ex1" ! ko ^ "ex2" ! ok ^ "ex3" ! ok }).map(_.split(" ").take(2).mkString(" ")) must contain (
+        "test started", "test failed", "test finished",
+        "test started", "test finished",
+        "test started", "test finished"
+      ).inOrder
     }
   }
 }
