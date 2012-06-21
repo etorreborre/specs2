@@ -85,9 +85,9 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   "we can check if a traversable has the same elements as another one"                                                  ^
     { List("Hello", "World") must haveTheSameElementsAs(List("Hello", "World")) }                                       ^
     "regardless of the order"                                                                                           ^
-    { List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello")) }                                       ^
+    { List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello")) }                                       ^bt^
     "with a user-defined equality method"                                                                               ^
-    { List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"), lowerCaseEquality) }                    ^
+    { List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"), lowerCaseEquality) }                    ^bt^
     "recursively"                                                                                                       ! sameElems().e1 ^
                                                                                                                         bt^
     "with an adaptation"                                                                                                ^
