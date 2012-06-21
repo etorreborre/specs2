@@ -585,6 +585,12 @@ The effect of doing so is that all the fragments of the children specification w
 
 In the code above there are specific arguments to the included specifications so that they are only displayed when there are failures.
 
+##### Inline
+
+When you include a specification in another one the console will display the beginning and end statistics of the included specification. If you just want to insert the "middle" fragments of the included specification you can use `inline`:
+
+     inline(otherSpecification)
+
 ##### Html link
 
 In order to create a User Guide such as this one, you might want the included specification to be written to another html file. In this case, you need a "Link":
