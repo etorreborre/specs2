@@ -25,15 +25,15 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">JUnitRunner</span><span class="result"> extends <span name="org.junit.runner.Runner" class="extype">Runner</span> with <span name="org.specs2.control.ExecutionOrigin" class="extype">ExecutionOrigin</span> with <a name="org.specs2.reporter.DefaultSelection" class="extype" href="../reporter/DefaultSelection.html">DefaultSelection</a> with <a name="org.specs2.reporter.DefaultSequence" class="extype" href="../reporter/DefaultSequence.html">DefaultSequence</a> with <span name="org.specs2.reporter.Exporters" class="extype">Exporters</span></span>
+        <span class="name">JUnitRunner</span><span class="result"> extends <span name="org.junit.runner.Runner" class="extype">Runner</span> with <a name="org.specs2.reporter.DefaultSelection" class="extype" href="../reporter/DefaultSelection.html">DefaultSelection</a></span>
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The JUnitRunner class is a JUnit Runner class meant to be used with the RunWith annotation
 to execute a specification as a JUnit suite.</p><p>The implementation is using a description Fold to fold the fragments into a tree
-of Description objects and a Map relating each Description to a Fragment to execute.</p></div><div class="toggleContainer block">
+of Description objects and a Map relating each Description to a Fragment to execute.</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.runner.JUnitRunner" class="extype" href="">JUnitRunner</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="org.specs2.reporter.Exporters" class="extype">Exporters</span>, <a name="org.specs2.reporter.DefaultSequence" class="extype" href="../reporter/DefaultSequence.html">DefaultSequence</a>, <a name="org.specs2.reporter.DefaultSelection" class="extype" href="../reporter/DefaultSelection.html">DefaultSelection</a>, <a name="org.specs2.reporter.Selection" class="extype" href="../reporter/Selection.html">Selection</a>, <a name="org.specs2.reporter.ExamplesSelection" class="extype" href="../reporter/ExamplesSelection.html">ExamplesSelection</a>, <a name="org.specs2.reporter.StatusSelection" class="extype" href="../reporter/StatusSelection.html">StatusSelection</a>, <span name="org.specs2.reporter.WithDefaultStatisticsRepository" class="extype">WithDefaultStatisticsRepository</span>, <span name="org.specs2.reporter.WithStatisticsRepository" class="extype">WithStatisticsRepository</span>, <a name="org.specs2.reporter.TagSelection" class="extype" href="../reporter/TagSelection.html">TagSelection</a>, <a name="org.specs2.reporter.ExamplesIsolation" class="extype" href="../reporter/ExamplesIsolation.html">ExamplesIsolation</a>, <span name="org.specs2.control.ExecutionOrigin" class="extype">ExecutionOrigin</span>, <span name="org.specs2.control.Stacktraces" class="extype">Stacktraces</span>, <span name="org.junit.runner.Runner" class="extype">Runner</span>, <span name="org.junit.runner.Describable" class="extype">Describable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.reporter.DefaultSelection" class="extype" href="../reporter/DefaultSelection.html">DefaultSelection</a>, <a name="org.specs2.reporter.Selection" class="extype" href="../reporter/Selection.html">Selection</a>, <a name="org.specs2.reporter.ExamplesSelection" class="extype" href="../reporter/ExamplesSelection.html">ExamplesSelection</a>, <a name="org.specs2.reporter.StatusSelection" class="extype" href="../reporter/StatusSelection.html">StatusSelection</a>, <span name="org.specs2.reporter.WithDefaultStatisticsRepository" class="extype">WithDefaultStatisticsRepository</span>, <span name="org.specs2.reporter.WithStatisticsRepository" class="extype">WithStatisticsRepository</span>, <a name="org.specs2.reporter.TagSelection" class="extype" href="../reporter/TagSelection.html">TagSelection</a>, <a name="org.specs2.reporter.ExamplesIsolation" class="extype" href="../reporter/ExamplesIsolation.html">ExamplesIsolation</a>, <span name="org.junit.runner.Runner" class="extype">Runner</span>, <span name="org.junit.runner.Describable" class="extype">Describable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
     
 
@@ -47,7 +47,7 @@ of Description objects and a Map relating each Description to a Fragment to exec
               <span class="filtertype">Inherited</span>
               <ol><li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li></ol>
-              <ol id="linearization"><li name="org.specs2.runner.JUnitRunner" class="in"><span>JUnitRunner</span></li><li name="org.specs2.reporter.Exporters" class="in"><span>Exporters</span></li><li name="org.specs2.reporter.DefaultSequence" class="in"><span>DefaultSequence</span></li><li name="org.specs2.reporter.DefaultSelection" class="in"><span>DefaultSelection</span></li><li name="org.specs2.reporter.Selection" class="in"><span>Selection</span></li><li name="org.specs2.reporter.ExamplesSelection" class="in"><span>ExamplesSelection</span></li><li name="org.specs2.reporter.StatusSelection" class="in"><span>StatusSelection</span></li><li name="org.specs2.reporter.WithDefaultStatisticsRepository" class="in"><span>WithDefaultStatisticsRepository</span></li><li name="org.specs2.reporter.WithStatisticsRepository" class="in"><span>WithStatisticsRepository</span></li><li name="org.specs2.reporter.TagSelection" class="in"><span>TagSelection</span></li><li name="org.specs2.reporter.ExamplesIsolation" class="in"><span>ExamplesIsolation</span></li><li name="org.specs2.control.ExecutionOrigin" class="in"><span>ExecutionOrigin</span></li><li name="org.specs2.control.Stacktraces" class="in"><span>Stacktraces</span></li><li name="org.junit.runner.Runner" class="in"><span>Runner</span></li><li name="org.junit.runner.Describable" class="in"><span>Describable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+              <ol id="linearization"><li name="org.specs2.runner.JUnitRunner" class="in"><span>JUnitRunner</span></li><li name="org.specs2.reporter.DefaultSelection" class="in"><span>DefaultSelection</span></li><li name="org.specs2.reporter.Selection" class="in"><span>Selection</span></li><li name="org.specs2.reporter.ExamplesSelection" class="in"><span>ExamplesSelection</span></li><li name="org.specs2.reporter.StatusSelection" class="in"><span>StatusSelection</span></li><li name="org.specs2.reporter.WithDefaultStatisticsRepository" class="in"><span>WithDefaultStatisticsRepository</span></li><li name="org.specs2.reporter.WithStatisticsRepository" class="in"><span>WithStatisticsRepository</span></li><li name="org.specs2.reporter.TagSelection" class="in"><span>TagSelection</span></li><li name="org.specs2.reporter.ExamplesIsolation" class="in"><span>ExamplesIsolation</span></li><li name="org.junit.runner.Runner" class="in"><span>Runner</span></li><li name="org.junit.runner.Describable" class="in"><span>Describable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
             </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -74,22 +74,7 @@ of Description objects and a Map relating each Description to a Fragment to exec
     </li></ol>
             </div>
 
-        <div class="types members" id="types">
-              <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.reporter.Exporters#EE" data-isabs="false">
-      <a id="EE:(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">EE</span><span class="result"> = (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         
 
@@ -166,7 +151,7 @@ of Description objects and a Map relating each Description to a Fragment to exec
         <span class="name">args</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">arguments for the specification</p>
+      <p class="shortcomment cmt">arguments for this specification</p>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -194,18 +179,6 @@ of Description objects and a Map relating each Description to a Fragment to exec
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner#commandLineArgs" data-isabs="false">
-      <a id="commandLineArgs:Arguments"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">commandLineArgs</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">command line arguments</p>
     </li><li visbl="prt" name="org.specs2.reporter.ExamplesIsolation#copyBody" data-isabs="false">
       <a id="copyBody(SpecName,⇒ Result,Int)(Arguments):Result"></a>
       <h4 class="signature">
@@ -219,18 +192,30 @@ of Description objects and a Map relating each Description to a Fragment to exec
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Example which body comes from the execution of that example in a brand new instance of the Specification
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ExamplesIsolation" class="extype" href="../reporter/ExamplesIsolation.html">ExamplesIsolation</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#customExporter" data-isabs="false">
-      <a id="customExporter(Arguments):Option[Exporting]"></a>
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner#desc" data-isabs="false">
+      <a id="desc:Description"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">customExporter</span><span class="params">(<span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+        <span class="name">desc</span><span class="result">: <span name="org.junit.runner.Description" class="extype">Description</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+      <p class="shortcomment cmt">extract the root Description object and the examples to execute</p>
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner#descriptions" data-isabs="false">
+      <a id="descriptions:JUnitDescriptionsFragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">descriptions</span><span class="result">: <a name="org.specs2.reporter.JUnitDescriptionsFragments" class="extype" href="../reporter/JUnitDescriptionsFragments.html">JUnitDescriptionsFragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">descriptions for this specification</p>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -255,138 +240,6 @@ of Description objects and a Map relating each Description to a Fragment to exec
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportConsole" data-isabs="false">
-      <a id="exportConsole((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportConsole</span><span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportCustom" data-isabs="false">
-      <a id="exportCustom((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportCustom</span><span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportHtml" data-isabs="false">
-      <a id="exportHtml((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportHtml</span><span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportJUnitxml" data-isabs="false">
-      <a id="exportJUnitxml((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportJUnitxml</span><span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportMarkup" data-isabs="false">
-      <a id="exportMarkup((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportMarkup</span><span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportNotifier" data-isabs="false">
-      <a id="exportNotifier((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportNotifier</span><span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportToOthers" data-isabs="false">
-      <a id="exportToOthers(Seq[Exporting])(Arguments):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportToOthers</span><span class="params">(<span name="exporters">exporters: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportToOthers" data-isabs="false">
-      <a id="exportToOthers(Arguments,(String) ⇒ Boolean):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportToOthers</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>, <span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportToOthers" data-isabs="false">
-      <a id="exportToOthers(Arguments):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportToOthers</span><span class="params">(<span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="prt" name="org.specs2.reporter.Exporters#exporter" data-isabs="false">
-      <a id="exporter(Boolean)(⇒ Exporting):Option[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exporter</span><span class="params">(<span name="condition">condition: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span name="e">e: ⇒ <span name="org.specs2.reporter.Exporting" class="extype">Exporting</span></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exporters" data-isabs="false">
-      <a id="exporters((String) ⇒ Boolean)(Arguments):Seq[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exporters</span><span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection#filter" data-isabs="false">
       <a id="filter(Arguments):(Seq[(Fragment, Arguments, SpecName)]) ⇒ Seq[Fragment]"></a>
       <h4 class="signature">
@@ -457,6 +310,18 @@ keeping only the ones matching the ex attribute of the arguments object
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner#fragmentsDescriptions" data-isabs="false">
+      <a id="fragmentsDescriptions:Map[Fragment, Description]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fragmentsDescriptions</span><span class="result">: Map[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>, <span name="org.junit.runner.Description" class="extype">Description</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">extract the root Description object and the examples to execute</p>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -505,93 +370,6 @@ keeping only the ones matching the ex attribute of the arguments object
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.reporter.StatusSelection" class="extype" href="../reporter/StatusSelection.html">StatusSelection</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.control.Stacktraces#isExecutedFrom" data-isabs="false">
-      <a id="isExecutedFrom(String):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isExecutedFrom</span><span class="params">(<span name="name">name: String</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">This method is used to determine for example if the JUnit runner is executed from Maven or within Eclipse.</p><div class="fullcomment"><div class="comment cmt"><p>This method is used to determine for example if the JUnit runner is executed from Maven or within Eclipse.
-In the first the test case names don't need to have the hashcode example.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the this current piece of code contains name in its stacktrace.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Stacktraces</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromAnIDE" data-isabs="false">
-      <a id="isExecutedFromAnIDE:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isExecutedFromAnIDE</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">return true if the current test is executed from an IDE</p><div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed from an IDE</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ExecutionOrigin</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromEclipse" data-isabs="false">
-      <a id="isExecutedFromEclipse:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isExecutedFromEclipse</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">return true if the current test is executed with eclipse</p><div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with eclipse</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ExecutionOrigin</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromGradle" data-isabs="false">
-      <a id="isExecutedFromGradle:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isExecutedFromGradle</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">return true if the current test is executed with Gradle</p><div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with Gradle</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ExecutionOrigin</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromIntellij" data-isabs="false">
-      <a id="isExecutedFromIntellij:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isExecutedFromIntellij</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">return true if the current test is executed with Intellij</p><div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with Intellij</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ExecutionOrigin</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromMaven" data-isabs="false">
-      <a id="isExecutedFromMaven:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isExecutedFromMaven</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">return true if the current test is executed with Maven</p><div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with Maven</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ExecutionOrigin</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.control.ExecutionOrigin#isExecutedFromSBT" data-isabs="false">
-      <a id="isExecutedFromSBT:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isExecutedFromSBT</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">return true if the current test is executed with sbt</p><div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with sbt</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ExecutionOrigin</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -620,18 +398,6 @@ be isolated
 </p><div class="fullcomment"><div class="comment cmt"><p>This function &quot;clones&quot; the body of each example if the applicable arguments indicate that the specification should
 be isolated
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.reporter.ExamplesIsolation" class="extype" href="../reporter/ExamplesIsolation.html">ExamplesIsolation</a></dd></dl></div>
-    </li><li visbl="prt" name="org.specs2.reporter.DefaultSequence#isolateSteps" data-isabs="false">
-      <a id="isolateSteps(Seq[Fragment])(Arguments):Seq[FragmentSeq]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isolateSteps</span><span class="params">(<span name="fragments">fragments: Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="../reporter/FragmentSeq.html">FragmentSeq</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSequence" class="extype" href="../reporter/DefaultSequence.html">DefaultSequence</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -644,18 +410,6 @@ be isolated
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#notifierExporter" data-isabs="false">
-      <a id="notifierExporter(Arguments):Option[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">notifierExporter</span><span class="params">(<span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
       <a id="notify():Unit"></a>
       <h4 class="signature">
@@ -680,19 +434,7 @@ be isolated
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="prt" name="org.specs2.reporter.Exporters#optionalExporter" data-isabs="false">
-      <a id="optionalExporter(Boolean)(Option[Exporting]):Option[Exporting]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">optionalExporter</span><span class="params">(<span name="condition">condition: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span name="e">e: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="prt" name="org.specs2.runner.JUnitRunner#properties" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner#properties" data-isabs="false">
       <a id="properties:SystemProperties"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -703,7 +445,19 @@ be isolated
         <span class="name">properties</span><span class="result">: <span name="org.specs2.main.SystemProperties" class="extype">SystemProperties</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">system properties</p><div class="fullcomment"><div class="comment cmt"><p>system properties</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">system properties</p>
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner#propertiesArgs" data-isabs="false">
+      <a id="propertiesArgs:Arguments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">propertiesArgs</span><span class="result">: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">command line arguments, extracted from the system properties</p>
     </li><li visbl="prt" name="org.specs2.reporter.WithDefaultStatisticsRepository#repository" data-isabs="false">
       <a id="repository:StatisticsRepository"></a>
       <h4 class="signature">
@@ -724,18 +478,10 @@ be isolated
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">run</span><span class="params">(<span name="notifier">notifier: <span name="org.junit.runner.notification.RunNotifier" class="extype">RunNotifier</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+        <span class="name">run</span><span class="params">(<span name="n">n: <span name="org.junit.runner.notification.RunNotifier" class="extype">RunNotifier</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">run the suite by executing each fragment related to a description:
-- execute all fragments (including Steps which are reported as steps)
-- for each result, report the failure/error/skipped or pending message as a
-  junit failure or ignored event on the RunNotifier
-</p><div class="fullcomment"><div class="comment cmt"><p>run the suite by executing each fragment related to a description:
-- execute all fragments (including Steps which are reported as steps)
-- for each result, report the failure/error/skipped or pending message as a
-  junit failure or ignored event on the RunNotifier
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.JUnitRunner" class="extype" href="">JUnitRunner</a> → Runner</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.JUnitRunner" class="extype" href="">JUnitRunner</a> → Runner</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection#select" data-isabs="false">
       <a id="select(Seq[Fragment])(Arguments):Seq[Fragment]"></a>
       <h4 class="signature">
@@ -760,34 +506,19 @@ be isolated
       </span>
       </h4>
       <p class="shortcomment cmt">select function returning a filtered seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered seq of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSelection" class="extype" href="../reporter/DefaultSelection.html">DefaultSelection</a> → <a name="org.specs2.reporter.Selection" class="extype" href="../reporter/Selection.html">Selection</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.DefaultSequence#sequence" data-isabs="false">
-      <a id="sequence(SpecName,Seq[Fragment])(Arguments):Seq[FragmentSeq]"></a>
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner#selected" data-isabs="false">
+      <a id="selected:SpecificationStructure"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">sequence</span><span class="params">(<span name="specName">specName: <span name="org.specs2.specification.SpecName" class="extype">SpecName</span></span>, <span name="fragments">fragments: Seq[<a name="org.specs2.specification.Fragment" class="extype" href="../specification/Fragment.html">Fragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: Seq[<a name="org.specs2.reporter.FragmentSeq" class="extype" href="../reporter/FragmentSeq.html">FragmentSeq</a>]</span>
+        <span class="name">selected</span><span class="result">: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">the sequence method returns sequences of fragments which can be executed concurrently.</p><div class="fullcomment"><div class="comment cmt"><p>the sequence method returns sequences of fragments which can be executed concurrently.
-Among the constraints to respect, any Step Fragment must be executed before any following Example Fragment,
-so that &quot;first&quot; and &quot;last&quot; actions are executed properly in a Specification</p><p>If the arguments specify that the specification is sequential, then each fragment will be executed individually
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSequence" class="extype" href="../reporter/DefaultSequence.html">DefaultSequence</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.DefaultSequence#sequence" data-isabs="false">
-      <a id="sequence(Arguments):(SpecificationStructure) ⇒ ExecutableSpecification"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">sequence</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: (<a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a>) ⇒ <a name="org.specs2.reporter.ExecutableSpecification" class="extype" href="../reporter/ExecutableSpecification.html">ExecutableSpecification</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">sequence function returning an ordered seq of seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>sequence function returning an ordered seq of seq of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DefaultSequence" class="extype" href="../reporter/DefaultSequence.html">DefaultSequence</a></dd></dl></div>
-    </li><li visbl="prt" name="org.specs2.runner.JUnitRunner#specification" data-isabs="false">
+      <p class="shortcomment cmt">selected fragments to execute</p>
+    </li><li visbl="pub" name="org.specs2.runner.JUnitRunner#specification" data-isabs="false">
       <a id="specification:SpecificationStructure"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -798,7 +529,7 @@ so that &quot;first&quot; and &quot;last&quot; actions are executed properly in 
         <span class="name">specification</span><span class="result">: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="../specification/SpecificationStructure.html">SpecificationStructure</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">specification to execute</p><div class="fullcomment"><div class="comment cmt"><p>specification to execute</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">specification to execute</p>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -900,11 +631,7 @@ so that &quot;first&quot; and &quot;last&quot; actions are executed properly in 
         </div>
 
         <div id="inheritedMembers">
-        <div name="org.specs2.reporter.Exporters" class="parent">
-              <h3>Inherited from <span name="org.specs2.reporter.Exporters" class="extype">Exporters</span></h3>
-            </div><div name="org.specs2.reporter.DefaultSequence" class="parent">
-              <h3>Inherited from <a name="org.specs2.reporter.DefaultSequence" class="extype" href="../reporter/DefaultSequence.html">DefaultSequence</a></h3>
-            </div><div name="org.specs2.reporter.DefaultSelection" class="parent">
+        <div name="org.specs2.reporter.DefaultSelection" class="parent">
               <h3>Inherited from <a name="org.specs2.reporter.DefaultSelection" class="extype" href="../reporter/DefaultSelection.html">DefaultSelection</a></h3>
             </div><div name="org.specs2.reporter.Selection" class="parent">
               <h3>Inherited from <a name="org.specs2.reporter.Selection" class="extype" href="../reporter/Selection.html">Selection</a></h3>
@@ -920,10 +647,6 @@ so that &quot;first&quot; and &quot;last&quot; actions are executed properly in 
               <h3>Inherited from <a name="org.specs2.reporter.TagSelection" class="extype" href="../reporter/TagSelection.html">TagSelection</a></h3>
             </div><div name="org.specs2.reporter.ExamplesIsolation" class="parent">
               <h3>Inherited from <a name="org.specs2.reporter.ExamplesIsolation" class="extype" href="../reporter/ExamplesIsolation.html">ExamplesIsolation</a></h3>
-            </div><div name="org.specs2.control.ExecutionOrigin" class="parent">
-              <h3>Inherited from <span name="org.specs2.control.ExecutionOrigin" class="extype">ExecutionOrigin</span></h3>
-            </div><div name="org.specs2.control.Stacktraces" class="parent">
-              <h3>Inherited from <span name="org.specs2.control.Stacktraces" class="extype">Stacktraces</span></h3>
             </div><div name="org.junit.runner.Runner" class="parent">
               <h3>Inherited from <span name="org.junit.runner.Runner" class="extype">Runner</span></h3>
             </div><div name="org.junit.runner.Describable" class="parent">

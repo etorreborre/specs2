@@ -130,10 +130,10 @@ Output:</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="DescriptionAndExamples.html"><span class="name">DescriptionAndExamples</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="description">description: Description</span>, <span name="executions">executions: Stream[T]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <a href="DescriptionAndExamples.html"><span class="name">DescriptionAndExamples</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="description">description: Description</span>, <span name="descriptions">descriptions: Map[T, Description]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">Utility class grouping the total description + fragments to execute for each Description
+      <p class="comment cmt">Utility class grouping the total description + map of each fragment to its description
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.EndOfArguments" data-isabs="false">
       <a id="EndOfArguments:EndOfArguments[T]"></a>
@@ -300,6 +300,31 @@ with the xml method
       </h4>
       <p class="comment cmt">Reports a Specification as an Html page
 </p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitDescriptionsFragments" data-isabs="false">
+      <a id="JUnitDescriptionsFragments:JUnitDescriptionsFragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitDescriptionsFragments.html"><span class="name">JUnitDescriptionsFragments</span></a><span class="result"> extends JUnitDescriptions[Fragment]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Descriptions for a seq of Fragments to execute
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitReporter" data-isabs="true">
+      <a id="JUnitReporter:JUnitReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitReporter.html"><span class="name">JUnitReporter</span></a><span class="result"> extends ExecutionOrigin with DefaultReporter with Exporters</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The JUnitReporter reports a specification by using a JUnit RunNotifier</p>
     </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlExporting" data-isabs="true">
       <a id="JUnitXmlExporting:JUnitXmlExporting"></a>
       <h4 class="signature">
@@ -461,6 +486,20 @@ different types of results.</p>
       </span>
       </h4>
       <p class="comment cmt">The Sequence trait implements the logic for the fragments to execute according to their dependencies
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.SpecFailureAssertionFailedError" data-isabs="false">
+      <a id="SpecFailureAssertionFailedError:SpecFailureAssertionFailedError"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecFailureAssertionFailedError.html"><span class="name">SpecFailureAssertionFailedError</span></a><span class="result"> extends AssertionFailedError</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class refines the <code>AssertionFailedError</code> from junit
+and provides the stackTrace of an exception which occurred during the specification execution
 </p>
     </li><li visbl="pub" name="org.specs2.reporter.StartOfArguments" data-isabs="false">
       <a id="StartOfArguments:StartOfArguments[T]"></a>

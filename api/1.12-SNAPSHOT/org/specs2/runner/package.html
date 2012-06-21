@@ -113,19 +113,6 @@ specification and report them using the ConsoleReporter or the HtmlReporter depe
       </h4>
       <p class="comment cmt">This runner uses an HtmlReporter, creating html pages, for running the specification
 </p>
-    </li><li visbl="pub" name="org.specs2.runner.JUnitDescriptionsFragments" data-isabs="false">
-      <a id="JUnitDescriptionsFragments:JUnitDescriptionsFragments"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="JUnitDescriptionsFragments.html"><span class="name">JUnitDescriptionsFragments</span></a><span class="result"> extends JUnitDescriptions[Fragment]</span>
-      </span>
-      </h4>
-      <p class="comment cmt">Descriptions for a seq of Fragments to execute
-</p>
     </li><li visbl="pub" name="org.specs2.runner.JUnitRunner" data-isabs="false">
       <a id="JUnitRunner:JUnitRunner"></a>
       <h4 class="signature">
@@ -134,10 +121,10 @@ specification and report them using the ConsoleReporter or the HtmlReporter depe
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="JUnitRunner.html"><span class="name">JUnitRunner</span></a><span class="result"> extends Runner with ExecutionOrigin with DefaultSelection with DefaultSequence with Exporters</span>
+        <a href="JUnitRunner.html"><span class="name">JUnitRunner</span></a><span class="result"> extends Runner with DefaultSelection</span>
       </span>
       </h4>
-      <p class="comment cmt">The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
+      <p class="comment cmt">The JUnitRunner class is a JUnit Runner class meant to be used with the RunWith annotation
 to execute a specification as a JUnit suite.</p>
     </li><li visbl="pub" name="org.specs2.runner.JUnitXmlRunner" data-isabs="false">
       <a id="JUnitXmlRunner:JUnitXmlRunner"></a>
@@ -164,20 +151,6 @@ to execute a specification as a JUnit suite.</p>
       </span>
       </h4>
       <p class="comment cmt">This runner can be used with any class implementing the Notifier trait
-</p>
-    </li><li visbl="pub" name="org.specs2.runner.SpecFailureAssertionFailedError" data-isabs="false">
-      <a id="SpecFailureAssertionFailedError:SpecFailureAssertionFailedError"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="SpecFailureAssertionFailedError.html"><span class="name">SpecFailureAssertionFailedError</span></a><span class="result"> extends AssertionFailedError</span>
-      </span>
-      </h4>
-      <p class="comment cmt">This class refines the <code>AssertionFailedError</code> from junit
-and provides the stackTrace of an exception which occurred during the specification execution
 </p>
     </li><li visbl="pub" name="org.specs2.runner.SpecificationsFinder" data-isabs="true">
       <a id="SpecificationsFinder:SpecificationsFinder"></a>

@@ -25,11 +25,11 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">DescriptionAndExamples</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="description">description: <span name="org.junit.runner.Description" class="extype">Description</span></span>, <span name="executions">executions: Stream[T]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="name">DescriptionAndExamples</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="description">description: <span name="org.junit.runner.Description" class="extype">Description</span></span>, <span name="descriptions">descriptions: Map[T, <span name="org.junit.runner.Description" class="extype">Description</span>]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Utility class grouping the total description + fragments to execute for each Description
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Utility class grouping the total description + map of each fragment to its description
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
@@ -66,7 +66,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DescriptionAndExamples</span><span class="params">(<span name="description">description: <span name="org.junit.runner.Description" class="extype">Description</span></span>, <span name="executions">executions: Stream[T]</span>)</span>
+        <span class="name">DescriptionAndExamples</span><span class="params">(<span name="description">description: <span name="org.junit.runner.Description" class="extype">Description</span></span>, <span name="descriptions">descriptions: Map[T, <span name="org.junit.runner.Description" class="extype">Description</span>]</span>)</span>
       </span>
       </h4>
       
@@ -190,6 +190,18 @@
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.reporter.DescriptionAndExamples#descriptions" data-isabs="false">
+      <a id="descriptions:Map[T, Description]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">descriptions</span><span class="result">: Map[T, <span name="org.junit.runner.Description" class="extype">Description</span>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -214,18 +226,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.reporter.DescriptionAndExamples" class="extype" href="">DescriptionAndExamples</a> → Equals → AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.DescriptionAndExamples#executions" data-isabs="false">
-      <a id="executions:Stream[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">executions</span><span class="result">: Stream[T]</span>
-      </span>
-      </h4>
-      
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
