@@ -86,6 +86,8 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     { List("Hello", "World") must haveTheSameElementsAs(List("Hello", "World")) }                                       ^
     "regardless of the order"                                                                                           ^
     { List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello")) }                                       ^
+    "with a user-defined equality method"                                                                               ^
+    { List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"), lowerCaseEquality) }                    ^
     "recursively"                                                                                                       ! sameElems().e1 ^
                                                                                                                         bt^
     "with an adaptation"                                                                                                ^
@@ -135,5 +137,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   case class sameSeq() {
     def e1 = (List("Hello", "World") must contain("Hello2", "World2").inOrder.only) returns
              "'Hello, World' doesn't contain in order 'Hello2, World2'"
-  } 
+  }
+
+  def lowerCaseEquality = (_:String).toLowerCase == (_:String).toLowerCase
 }                                                                                          

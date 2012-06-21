@@ -212,6 +212,7 @@ Iterables can be checked with several matchers:
 
  * to check if an iterable has the same elements as another one, regardless of the order
  `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"))`
+ `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"), equalArrays)` // with your own equality method
 
  * to check if a sequence is sorted (works with any type `T` which has an `Ordering`)
  `Seq(1, 2, 3) must beSorted`

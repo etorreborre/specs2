@@ -1,16 +1,17 @@
 package org.specs2
 package collection
-import Seqx._
+
 import scala.collection.{GenSeq, GenIterable}
 import org.specs2.internal.scalaz._
 import Generator._
-import Scalaz._
+import Seqx._
 
 
 /**
-* This trait provides additional methods on Iterable
-*/
-private[specs2]
+ * This trait provides additional methods on Iterable.
+ *
+ * It is made public so that user can reuse the sameElementsAsMethod
+ */
 trait Iterablex {
   /**
    * implicit definition to transform an Iterable to an ExtendedIterable
@@ -115,7 +116,7 @@ trait Iterablex {
 
   }
 }
-private[specs2]
+
 object Iterablex extends Iterablex {
   import scala.collection.SeqLike
 

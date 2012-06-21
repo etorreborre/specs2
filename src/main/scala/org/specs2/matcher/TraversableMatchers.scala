@@ -54,7 +54,8 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
    * Matches if there l contains the same elements as the Traversable <code>traversable</code>.<br>
    * This verification does not consider the order of the elements but checks the traversables recursively
    */
-  def haveTheSameElementsAs[T](l: =>Traversable[T]) = new HaveTheSameElementsAs(l.toSeq)
+  def haveTheSameElementsAs[T](l: =>Traversable[T], equality: (T, T) => Boolean = (_:T) == (_:T)) =
+    new HaveTheSameElementsAs(l.toSeq, equality)
 
   private def containLike[T](pattern: =>String, matchType: String) =
     new ContainLikeMatcher[T](pattern, matchType) 
