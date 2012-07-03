@@ -17,9 +17,9 @@ trait Expectations extends CanBeEqual {
      */
     def aka: Expectable[T] = aka(value.toString)
     /** @return an expectable with an alias description */
-    def aka(alias: String): Expectable[T] = createExpectable(value, alias)
+    def aka(alias: =>String): Expectable[T] = createExpectable(value, alias)
     /** @return an expectable with an alias description, after the value string */
-    def post(alias: String): Expectable[T] = as((_:String)+" "+alias)
+    def post(alias: =>String): Expectable[T] = as((_:String)+" "+alias)
     /** @return an expectable with an alias description, after the value string */
     def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
     /** @return an expectable with a function to show the element T */
@@ -32,7 +32,7 @@ trait Expectations extends CanBeEqual {
   /** @return an Expectable */
   def createExpectable[T](t: =>T): Expectable[T] = createExpectable(t, None)
   /** @return an Expectable with a description */
-  def createExpectable[T](t: =>T, alias: String): Expectable[T] = createExpectable(t, Some(Expectable.aliasDisplay(alias)))
+  def createExpectable[T](t: =>T, alias: =>String): Expectable[T] = createExpectable(t, Some(Expectable.aliasDisplay(alias)))
   /** @return an Expectable with a description function */
   def createExpectable[T](t: =>T, alias: String => String): Expectable[T] = createExpectable(t, Some(alias))
   /** @return an Expectable with a description function */
