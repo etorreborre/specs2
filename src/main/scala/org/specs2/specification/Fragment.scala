@@ -7,12 +7,11 @@ import LazyParameters._
 import main.Arguments
 import execute._
 import text._
-import text.Trim._
+import Regexes._
 import org.specs2.internal.scalaz.Monoid
 import io.Location
 import scala.Either
 import data.{SeparatedTags, IncludedExcluded}
-import java.util.regex.Pattern
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
@@ -80,7 +79,7 @@ case class SpecEnd(specName: SpecName, isSeeOnlyLink: Boolean = false) extends F
   def title = specName.title
   def seeOnlyLinkIs(s: Boolean) = copy(isSeeOnlyLink = s)
 
-  override def matches(s: String) = name matches s
+  override def matches(s: String) = name.matchesSafely(s, ".*")
   override def toString = "SpecEnd("+title+")"
 }
 
@@ -101,14 +100,15 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
   val isolable = true
 
   def execute = body()
-  override def matches(s: String) = {
-    // if the regexp doesn't compile, we use it literally by quoting it
-    // however this regexp is usually passed for the Arguments.ex value, where it is enclosed with '.*' characters.
-    // So they must be removed and added back
-    val pattern = tryOrElse(Pattern.compile(s))(Pattern.compile(".*"+Pattern.quote(s.trimEnclosing(".*"))+".*"))
-    val b = pattern.matcher(desc.toString.removeAll("\n").removeAll("\r")).matches
-    b
-  }
+
+  /**
+   * match the description of an example with a regular expression.
+   *
+   * If the regexp doesn't compile, it is used literally by quoting it. However this regexp is usually passed as the
+   * Arguments.ex value, it is enclosed with '.*' characters, so they are removed and added back before quotation
+   */
+  override def matches(s: String) = desc.toString.matchesSafely(s, enclosing = ".*")
+
   override def toString = "Example("+desc+")"
   override def map(f: Result => Result) = Example(desc, f(body()))
 
