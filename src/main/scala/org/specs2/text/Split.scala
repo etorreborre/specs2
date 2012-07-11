@@ -5,7 +5,7 @@ import Trim._
 
 private[specs2]
 trait Split {
-  implicit def split(s: String) = new Splitted(s)
+  implicit def makeSplitted(s: String) = new Splitted(s)
 
   class Splitted(s: String) {
 
