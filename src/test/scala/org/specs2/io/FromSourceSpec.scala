@@ -47,12 +47,12 @@ class FromSourceSpec extends Specification with FromSource {
     ex(3).desc.toString must contain("an example")
   }
 
-  val spec           = new UserFromSourceSpecification
-  val spec2          = new SpecificationWithNoStartingText
-  val spec3          = new SpecificationWithNoStartingTextAndNoEnd
-  val spec4          = new SpecificationWithAShouldBlockAndExamples
-  val scalaCheckSpec = new UserFromSourceScalaCheckSpecification
-  val mutableSpec    = new MutableSpecificationAutoExamples
+  lazy val spec           = new UserFromSourceSpecification
+  lazy val spec2          = new SpecificationWithNoStartingText
+  lazy val spec3          = new SpecificationWithNoStartingTextAndNoEnd
+  lazy val spec4          = new SpecificationWithAShouldBlockAndExamples
+  lazy val scalaCheckSpec = new UserFromSourceScalaCheckSpecification
+  lazy val mutableSpec    = new MutableSpecificationAutoExamples
 
   def checkExamples(spec: SpecificationStructure) = { (e: (Example, Int)) =>
     val index = e._2 + 1

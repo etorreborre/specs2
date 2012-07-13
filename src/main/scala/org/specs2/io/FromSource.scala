@@ -42,7 +42,7 @@ trait FromSource {
    */
   def getCodeFromTo(start: Int = 6, end: Int = 9, startLineOffset: Int = -1, endLineOffset: Int = -1): Either[String, String] = {
     val stackTrace = new Exception().getStackTrace()
-    val (startTrace, endTrace) = (new TraceLocation(stackTrace.apply(start)), new TraceLocation(stackTrace.apply(end)))
+    val (startTrace, endTrace) = (TraceLocation(stackTrace.apply(start)), TraceLocation(stackTrace.apply(end)))
 
     if (startTrace.fileName != endTrace.fileName)
       Left("No source file found at "+srcDir+startTrace.path)
@@ -59,7 +59,7 @@ trait FromSource {
   def location(stackFilter: Seq[StackTraceElement] => Seq[StackTraceElement]): TraceLocation = {
     val stackTrace = new Exception().getStackTrace().toSeq
     val filtered = stackFilter(stackTrace)
-    new TraceLocation(filtered.headOption.getOrElse(stackTrace(0)))
+    TraceLocation(filtered.headOption.getOrElse(stackTrace(0)))
   }
 
   private def getCodeFromToWithLocation(startLine: Int, endLine: Int = 9, location: TraceLocation): Either[String, String] = {

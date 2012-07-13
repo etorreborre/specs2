@@ -37,7 +37,7 @@ The Throwablex trait provides extensions to regular throwables:
     def e1 = e.location must_== "ThrowablexContext.scala:6"
     def e2 = e.classLocation must_== "org.specs2.control.ThrowablexContext:6"
     def e3 = e.fullLocation must_== "org.specs2.control.ThrowablexContext (ThrowablexContext.scala:6)"
-    def e4 = new TraceLocation(trace).path must_== "org/specs2/control/ThrowablexContext.scala"
+    def e4 = TraceLocation(trace).path must_== "org/specs2/control/ThrowablexContext.scala"
   }
   object filter extends ThrowablexContext {
     def e1 = e.filter("org.specs2.control").getStackTrace.toList.map(_.toString) must
