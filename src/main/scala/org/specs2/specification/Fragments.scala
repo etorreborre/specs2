@@ -6,6 +6,7 @@ import execute.Executable
 import main.Arguments
 import org.specs2.internal.scalaz.Monoid
 import Fragments._
+import specification.StandardFragments.{End, Br}
 
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
@@ -85,10 +86,18 @@ object Fragments {
   def isStep: Function[Fragment, Boolean] = { case Step(_,_) => true; case _ => false }
   /** @return true if the Fragment is a SpecStart or a SpecEnd */
   def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_) | SpecEnd(_,_) => true; case _ => false }
+  /** @return the spec start if the Fragment is a SpecStart */
+  def isASpecStart: PartialFunction[Fragment, Fragment] = { case s @ SpecStart(_,_,_) => s }
+  /** @return the spec end if the Fragment is a SpecEnd */
+  def isASpecEnd: PartialFunction[Fragment, Fragment] = { case s @ SpecEnd(_,_) => s }
   /** @return true if the Fragment is an Example or a Step */
   def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
-  /** @return the step if the Fragment is a Step*/
+  /** @return the step if the Fragment is a Step */
   def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_,_) => s }
+  /** @return the step if the Fragment is a Br fragment */
+  def isABr: PartialFunction[Fragment, Fragment] = { case br @ Br() => br }
+  /** @return the step if the Fragment is an End fragment */
+  def isAnEnd: PartialFunction[Fragment, Fragment] = { case e @ End() => e }
 
   /** @return a Fragments object with the appropriate name set on the SpecStart fragment */
   def withSpecName(fragments: Fragments, name: SpecName): Fragments = fragments.specTitleIs(name)
