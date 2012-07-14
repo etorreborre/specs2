@@ -48,9 +48,24 @@ trait FromSource {
       Left("No source file found at "+srcDir+startTrace.path)
     else {
       val (startLine, endLine) = (startTrace.lineNumber+startLineOffset, endTrace.lineNumber+endLineOffset)
-      val stackFilter = (st: Seq[StackTraceElement]) => st.filter(_.toString.contains(".getSourceCode(")).drop(1)
-      getCodeFromToWithLocation(startLine, endLine, location(stackFilter))
+      getCodeFromToWithLocation(startLine, endLine, startTrace)
     }
+  }
+
+  /**
+   * get the source code of an example declared with the eg method as a prefix method
+   */
+  def getExampleFrom(depth: Int, lineOffset: Int): Either[String, String] = {
+    val stackTrace = new Exception().getStackTrace()
+    getCodeFromMethodCall(TraceLocation(stackTrace.apply(depth)))
+  }
+
+  /**
+   * get the source code of an example declared with the eg method as a postfix method
+   */
+  def getExampleTo(depth: Int, lineOffset: Int): Either[String, String] = {
+    val stackTrace = new Exception().getStackTrace()
+    getCodeToMethodCall(TraceLocation(stackTrace.apply(depth)))
   }
 
   /**
@@ -62,18 +77,61 @@ trait FromSource {
     TraceLocation(filtered.headOption.getOrElse(stackTrace(0)))
   }
 
+  /**
+   * @return lines of code specified by a start line and an end line in a file given by a TraceLocation
+   */
   private def getCodeFromToWithLocation(startLine: Int, endLine: Int = 9, location: TraceLocation): Either[String, String] = {
+    val path = srcDir+location.path
+
     if (endLine < startLine) {
-      Left[String, String]("No source file found at "+srcDir+location.path)
+      Left[String, String]("No source file found at "+path)
     } else {
       tryOr {
-        val content = readLines(srcDir+location.path)
-        val code = ((startLine to endLine) map content).mkString("\n")
-        Right[String, String](code): Either[String, String]
-      } { e => Left[String, String]("No source file found at "+srcDir+location.path) }
+        val content = readLines(path)
+        if (startLine >= 0) {
+          val code = ((startLine to endLine) map content).mkString("\n")
+          Right[String, String](code): Either[String, String]
+        } else Left[String, String]("Unvalid start line: "+startLine+" for file: "+path)
+
+      } { e => Left[String, String]("No source file found at "+path) }
     }
   }
 
+  /**
+   * @return lines of code after a method call, as specified by a TraceLocation.
+   * The end of the method call is given by the first '}' character that is encountered
+   */
+  private def getCodeFromMethodCall(location: TraceLocation): Either[String, String] = {
+    val (path, line) = (srcDir+location.path, location.lineNumber - 1)
+
+    tryOr {
+      val content = readLines(path)
+      if (line >= 0) {
+        val (start, last) = content.drop(line - 1).span(l => !l.contains("}"))
+        Right[String, String]((start ++ last.take(1)).mkString("\n")): Either[String, String]
+      } else Left[String, String]("Unvalid start line: "+line+" for file: "+path)
+
+    } { e => Left[String, String]("No source file found at "+path) }
+  }
+
+  /**
+   * @return lines of code before a method call (a postfix method), as specified by a TraceLocation.
+   * The beginning of the call is given by the first '{' character that is encountered
+   */
+  private def getCodeToMethodCall(location: TraceLocation): Either[String, String] = {
+    val (path, line) = (srcDir+location.path, location.lineNumber - 1)
+
+    tryOr {
+      val content = readLines(path)
+      if (line >= 0) {
+        val toMethodCall = content.dropRight(content.size - (line + 1))
+        val (start, last) = toMethodCall.reverse.span(l => !l.contains("{"))
+        val code = last.take(1) ++ start.reverse
+        Right[String, String](code.mkString("\n")): Either[String, String]
+      } else Left[String, String]("Unvalid start line: "+line+" for file: "+path)
+
+    } { e => Left[String, String]("No source file found at "+path) }
+  }
 }
 
 private[specs2]

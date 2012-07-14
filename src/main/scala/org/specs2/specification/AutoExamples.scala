@@ -78,14 +78,16 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
     Fragments.create(exampleFactory.newExample(CodeMarkup(getDescription(depth = d, startOffset = offset1, endOffset = offset2)), result))
 
   /** get the description from the source file */
-  protected def getDescription(depth: Int = 9, startOffset: Int = -1, endOffset: Int = -1) =
+  private[specs2] def getDescription(depth: Int = 9, startOffset: Int = -1, endOffset: Int = -1) =
     getSourceCode(startDepth = depth, endDepth= depth + 3, startLineOffset = startOffset, endLineOffset = endOffset)
+
+  private[specs2] lazy val exampleDepth = 10
 
   implicit def matchExample(expression: =>MatchResult[_]) : Example = createExample(expression.toResult)
   implicit def booleanExample(expression: =>Boolean)      : Example = createExample(toResult(expression))
   implicit def resultExample(expression: =>execute.Result): Example = createExample(expression)
 
-  private[specs2] def createExample(expression: =>execute.Result, depth: Int = 10): Example =
+  private[specs2] def createExample(expression: =>execute.Result, depth: Int = exampleDepth): Example =
     exampleFactory.newExample(CodeMarkup(getDescription(depth)), expression)
 
   implicit def aMatchResultExample(expression: =>MatchResult[_]): ToMatchResultExample = new ToMatchResultExample(expression)
@@ -120,7 +122,11 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
     val firstTry = getCodeFromTo(startDepth, endDepth, startLineOffset, endLineOffset)
     val code = firstTry match {
       case Right(c) => c
-      case Left(e)  => getCodeFromTo(startDepth, startDepth, startLineOffset, endLineOffset) match { case Right(r) => r;  case Left(l) => e }
+      case Left(e)  =>
+        getCodeFromTo(startDepth, startDepth, startLineOffset, endLineOffset) match {
+          case Right(r) => r
+          case Left(l)  => e
+        }
     }
     trimCode(code)
   }

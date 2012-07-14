@@ -1,6 +1,8 @@
 package user
 package specification
 
+import org.specs2.SpecificationWithJUnit
+
 class UserFromSourceSpecification extends org.specs2.Specification { def is = noindent^
                                                                                       p^
   "this is a one-liner"                                                               ^
@@ -50,12 +52,25 @@ class MutableSpecificationAutoExamples extends org.specs2.mutable.Specification 
     i === 1
   }
 
-  def `an example` = 4 === 4
+  { val i = 4
+    i === 4
+  }.eg
 
+  def `an example` = 4 === 4
 }
 
 class SpecificationWithAShouldBlockAndExamples extends org.specs2.mutable.Specification {
   "this" should {
     1 must_== 1
   }
+}
+
+class AcceptanceSpecificationWithJUnit extends SpecificationWithJUnit { def is =
+  "this is a one-liner"    ^
+  { 1 must_== 1 }          ^
+                           end
+}
+
+class MutableSpecificationWithJUnit extends org.specs2.mutable.SpecificationWithJUnit {
+  { 1 must_== 1 }.eg
 }

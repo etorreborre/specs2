@@ -4,7 +4,7 @@ import mutable._
 import specification.{SpecificationStructure, Example}
 import user.specification._
 
-class FromSourceSpec extends Specification with FromSource {
+class FromSourceSpec extends Specification with FromSource with Tags {
 
   "General reading of code".txt
   "An expression can be read from a source file" in {
@@ -41,18 +41,28 @@ class FromSourceSpec extends Specification with FromSource {
   }
   "A mutable specification can have auto-examples by annotating results with `.eg`" in {
     val ex = examples(mutableSpec)
-    ex must have size (5)
+    ex must have size (6)
     ex(0).desc.toString must contain("1 === 1")
     ex(1).desc.toString must contain("2 === 2")
     ex(3).desc.toString must contain("an example")
+    ex(5).desc.toString must contain("i === 4")
+  }
+  "An acceptance SpecificationWithJUnit can also have autoexamples" in {
+    examples(acceptanceJUnitSpec)(0).desc.toString must contain("1 must_== 1")
+  }
+  tag("x")
+  "A mutable SpecificationWithJUnit can also have autoexamples" in {
+    examples(mutableJUnitSpec)(0).desc.toString must contain("1 must_== 1")
   }
 
-  lazy val spec           = new UserFromSourceSpecification
-  lazy val spec2          = new SpecificationWithNoStartingText
-  lazy val spec3          = new SpecificationWithNoStartingTextAndNoEnd
-  lazy val spec4          = new SpecificationWithAShouldBlockAndExamples
-  lazy val scalaCheckSpec = new UserFromSourceScalaCheckSpecification
-  lazy val mutableSpec    = new MutableSpecificationAutoExamples
+  lazy val spec                = new UserFromSourceSpecification
+  lazy val spec2               = new SpecificationWithNoStartingText
+  lazy val spec3               = new SpecificationWithNoStartingTextAndNoEnd
+  lazy val spec4               = new SpecificationWithAShouldBlockAndExamples
+  lazy val scalaCheckSpec      = new UserFromSourceScalaCheckSpecification
+  lazy val mutableSpec         = new MutableSpecificationAutoExamples
+  lazy val acceptanceJUnitSpec = new AcceptanceSpecificationWithJUnit
+  lazy val mutableJUnitSpec    = new MutableSpecificationWithJUnit
 
   def checkExamples(spec: SpecificationStructure) = { (e: (Example, Int)) =>
     val index = e._2 + 1
