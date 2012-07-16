@@ -11,6 +11,7 @@ class JsonMatchersSpec extends Specification { def is =
                                                                                                                         p^
  "The / matcher matches a value if the input is an Array"                                                               ^
  { """["name", "Joe" ]""" must /("name") }                                                                              ^
+ { """[1.0, 2.0]""" must /(1.0) }                                                                                       ^
  { """{ "name": "Joe" }""" must not /("name") }                                                                         ^
  { ("""{ "name": "Joe" }""" must /("name")) returns "{ name: Joe } doesn't contain: 'name'" }                           ^
  { ("garbage" must /("name")) returns "Could not parse:\ngarbage" }                                                     ^
