@@ -5,7 +5,7 @@ version := "1.11"
 
 organization := "org.specs2"
 
-scalaVersion := "2.10.0-M4"
+scalaVersion := "2.10.0-M5"
 
 crossScalaVersions := Seq("2.9.1", "2.9.1-1", "2.9.2")
 
@@ -21,7 +21,7 @@ resolvers ++= Seq("releases" at "http://oss.sonatype.org/content/repositories/re
 libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.specs2" %% "specs2-scalaz-core" % "6.0.1",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional",
-  if (scala_version contains "-M4") "org.scalacheck" % "scalacheck_2.9.1" % "1.9" % "optional"
+  if (scala_version contains "-M") "org.scalacheck" % "scalacheck_2.9.1" % "1.9" % "optional"
   else                             "org.scalacheck" %% "scalacheck" % "1.9" % "optional",
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
