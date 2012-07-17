@@ -41,7 +41,7 @@ trait ExecutingSpecificationData extends Data[ExecutingSpecification] {
 
   def genExecutingFragment(maxTime: Int): Gen[ExecutingFragment] =
     Gen.frequency(
-    (3, genTimedExecutedFragment(maxTime).map(f => PromisedExecutingFragment(promise(f())))),
+    (3, genTimedExecutedFragment(maxTime).map(f => PromisedExecutingFragment(promise(f()), Step()))),
     (1, genTimedExecutedFragment(maxTime).map(f => LazyExecutingFragment(f, Step()))),
     (4, genTimedExecutedFragment(maxTime).map(f => FinishedExecutingFragment(f(), Text(""))))
     )

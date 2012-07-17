@@ -46,6 +46,8 @@ object ExecutedFragment {
   /** @return true if the ExecutedFragment is a Start */
   def isSomeExecutedSpecStart: PartialFunction[ExecutedFragment, ExecutedSpecStart] = { case s @ ExecutedSpecStart(_,_,_) => s }
   /** @return true if the ExecutedFragment is an End */
+  def isSomeExecutedSpecEnd: PartialFunction[ExecutedFragment, ExecutedSpecEnd] = { case s @ ExecutedSpecEnd(_,_,_) => s }
+  /** @return true if the ExecutedFragment is an End */
   def isExecutedSpecEnd: Function[ExecutedFragment, Boolean] = { case ExecutedSpecEnd(_,_,_) => true; case _ => false }
   /** @return true if the ExecutedFragment is a start with a link */
   def isIncludeLink: PartialFunction[ExecutedFragment, ExecutedSpecStart] = { case s @ ExecutedSpecStart(_,_,_) if s.isIncludeLink => s }
@@ -141,9 +143,9 @@ case class FinishedExecutingFragment(f: ExecutedFragment, original: Fragment) ex
 /**
  * embed an executed Fragment into a promise
  */
-case class PromisedExecutingFragment(promised: Promise[ExecutedFragment]) extends ExecutingFragment {
+case class PromisedExecutingFragment(promised: Promise[ExecutedFragment], f: Fragment) extends ExecutingFragment {
   def get = promised.get
-  def map(function: ExecutedFragment => ExecutedFragment) = PromisedExecutingFragment(promised.map(function))
+  def map(function: ExecutedFragment => ExecutedFragment) = copy(promised = promised.map(function))
 }
 
 /**

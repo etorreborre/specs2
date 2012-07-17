@@ -33,14 +33,14 @@ trait ExecutedSpecificationData extends Data[ExecutedSpecification] with Fragmen
   implicit lazy val arbExecutedSpecification: Arbitrary[ExecutedSpecification] =
     Arbitrary { arbSpecification.arbitrary.map(execute)  }
 
-  implicit def execute(fs: Fragments): ExecutedSpecification = execute(new Specification { def is = fs })
-  implicit def execute(spec: SpecificationStructure): ExecutedSpecification = executing(spec).execute
+  implicit def execute(fs: Fragments): ExecutedSpecification                   = execute(new Specification { def is = fs })
+  implicit def execute(spec: SpecificationStructure): ExecutedSpecification    = executing(spec).execute
   implicit def executing(spec: SpecificationStructure): ExecutingSpecification = spec |> sequence |> execute
 
   def specStart(name: String) = SpecStart(SpecName(name))
-  def specEnd(name: String) = SpecEnd(SpecName(name))
-  def start(name: String) = ExecutedSpecStart(specStart(name))
-  def end(name: String)   = ExecutedSpecEnd(specEnd(name))
+  def specEnd(name: String)   = SpecEnd(SpecName(name))
+  def start(name: String)     = ExecutedSpecStart(specStart(name))
+  def end(name: String)       = ExecutedSpecEnd(specEnd(name))
 }
 
 object ExecutedSpecificationData extends ExecutedSpecificationData

@@ -34,6 +34,9 @@ case class ExecutedSpecification(name: SpecName, fs: Seq[ExecutedFragment]) {
   /** @return the specification start */
   def start: ExecutedSpecStart = fs.view.collect(isSomeExecutedSpecStart).headOption.getOrElse(ExecutedSpecStart(SpecStart(name)))
 
+  /** @return the specification end */
+  def end: ExecutedSpecEnd = fs.view.collect(isSomeExecutedSpecEnd).headOption.getOrElse(ExecutedSpecEnd(SpecEnd(name)))
+
   /** @return the specification arguments */
   def arguments: Arguments = start.args
 
