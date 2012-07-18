@@ -6,6 +6,8 @@ import matcher.DataTables
 import reporter._
 import org.scalatools.testing._
 import main.{ArgumentsArgs, Arguments}
+import specification.ExecutingSpecification
+import execute.StandardResults
 
 class TestInterfaceRunnerSpec extends Specification { def is =
                                                                                                                         """
@@ -28,6 +30,11 @@ class TestInterfaceRunnerSpec extends Specification { def is =
   "A custom exporter can be specified on the command line with 'exporter <class name>'"                                 ! reporting().e4^
   "A custom notifier can be specified in the specification with 'args.report(exporter=<class name>)'"                   ! reporting().e5^
   "A custom exporter can be specified in the specification with 'args.report(exporter=<class name>)'"                   ! reporting().e6^
+                                                                                                                        p^
+  "Execution"                                                                                                           ^
+    "if the results are displayed on the console"                                                                       ^
+      "the storing must be done in parallel to the exporting (to get results asap on the console)"                      ! executing().e1^
+      "the other exporters must use the result of the storing"                                                          ! executing().e2^
                                                                                                                         end
 
   case class missing() {
@@ -80,8 +87,8 @@ case class reporting() extends Mockito with MockLogger with DataTables with matc
     "args"                                || "console" | "html" | "markup" | "junitxml" |
     "junitxml"                            !! false     ! false  ! false    ! true       |
     "junitxml,console"                    !! true      ! false  ! false    ! true       |
-    "junitxml,html,console"               !! true      ! true   ! false     ! true       |
-    "junitxml,markup,console"             !! true      ! false   ! true     ! true       |> { (arguments, c, h, m, j) =>
+    "junitxml,html,console"               !! true      ! true   ! false    ! true       |
+    "junitxml,markup,console"             !! true      ! false  ! true     ! true       |> { (arguments, c, h, m, j) =>
       runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName) must containAllOf(selectedExporters(c, h, m, j))
     }
 
@@ -114,6 +121,28 @@ case class reporting() extends Mockito with MockLogger with DataTables with matc
   }
 }
 
+case class executing() extends matcher.MustMatchers with ArgumentsArgs with StandardResults with MockOutput {
+  val eventHandler = new EventHandler { def handle(event: Event) = println("console export") }
+  val htmlExporter = new HtmlExporting { override def export(implicit args: Arguments) = (spec: ExecutingSpecification) =>
+    { println("html export"); spec.execute }
+  }
+
+  val reporter = new TestInterfaceConsoleReporter(Some(new TestInterfaceReporter(eventHandler, Array())), (a: Arguments) => Seq(htmlExporter)) {
+    // the storage takes a bit more time to make sure it is actually done after the console export
+    override def store(implicit args: Arguments) = (spec: ExecutingSpecification) => { Thread.sleep(50); println("stored"); spec }
+  }
+
+  val spec = new Specification { def is = ok }
+
+  def e1 = {
+    reporter.report(spec)(Arguments("console"))
+    messages must contain("console export", "stored").inOrder
+  }
+  def e2 = {
+    reporter.report(spec)(Arguments("console", "html"))
+    messages must contain("console export", "stored", "html export").inOrder
+  }
+}
 
 trait MockLogger extends matcher.MustExpectations with Mockito {
   val logger = new Logger with MockOutput {
@@ -124,8 +153,8 @@ trait MockLogger extends matcher.MustExpectations with Mockito {
 	  override def debug(message: String) = println("debug: " + message)
 	  override def trace(t: Throwable)    = println("trace: " + t)
   }
-
 }
+
 class SpecificationForSbtWithException extends Specification {
   val cause = new IllegalArgumentException("cause")
   throw new Exception("fail", cause)

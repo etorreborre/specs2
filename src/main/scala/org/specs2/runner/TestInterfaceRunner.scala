@@ -6,8 +6,12 @@ import main.Arguments
 import control.Throwablex._
 import reporter._
 import specification._
-import Fingerprints._
-
+import control.Exceptions._
+import runner.Fingerprints._
+import specification.ExecutedSpecification
+import reflect.Classes
+import io.ConsoleOutput
+import internal.scalaz.Scalaz._
 /**
  * Implementation of the Framework interface for the sbt tool.
  * It declares the classes which can be executed by the specs2 library.
@@ -38,7 +42,7 @@ trait FilesRunnerFingerprint extends TestFingerprint {
  * 
  * Then it uses a NotifierRunner to notify the EventHandler of the test events.
  */
-class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) extends _root_.org.scalatools.testing.Runner 
+class TestInterfaceRunner(val loader: ClassLoader, val loggers: Array[Logger]) extends _root_.org.scalatools.testing.Runner
   with HandlerEvents with TestLoggers with Exporters {
   import reflect.Classes._
 
@@ -83,21 +87,23 @@ class TestInterfaceRunner(loader: ClassLoader, val loggers: Array[Logger]) exten
     }
   }
 
-  protected def reporter(handler: EventHandler)(args: Array[String]): Reporter = new ConsoleReporter {
-    override def export(implicit arguments: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
-      exportToOthers(exporters(args, handler))(arguments <| spec.arguments)(spec)
-      spec.executed
-    }
-  }
+  protected def reporter(handler: EventHandler)(args: Array[String]): Reporter =
+    new TestInterfaceConsoleReporter(consoleExporter(args, handler), (a: Arguments) => otherExporters(args, handler)(a))
+
+  /** @return true if the console must report the results */
+  private def isConsole(args: Array[String]) = !Seq("html", "junitxml", "markup").exists(args.contains) || args.contains("console")
+  private def consoleExporter(args: Array[String], handler: EventHandler) = exporter(isConsole(args))(new TestInterfaceReporter(handler, loggers))
 
   protected def finalExporter(handler: EventHandler) = FinalResultsReporter(handler, loggers)
 
-  def exporters(args: Array[String], handler: EventHandler)(implicit arguments: Arguments): Seq[Exporting] = {
-    val isConsole = !Seq("html", "junitxml", "markup").exists(args.contains) || args.contains("console")
+  def otherExporters(args: Array[String], handler: EventHandler)(implicit arguments: Arguments): Seq[Exporting] = {
+    val exportFinalStats = exporter(!isConsole(args))(finalExporter(handler))
+    super.exporters((args.filterNot(_ == "console")).contains) ++ exportFinalStats.toSeq
+  }
 
-    def console          = exporter(isConsole)(new TestInterfaceReporter(handler, loggers))
-    def exportFinalStats = exporter(!isConsole)(finalExporter(handler))
-    super.exporters((args.filterNot(_ == "console")).contains) ++ Seq(console, exportFinalStats).flatten
+  /** @return the list of all the exporters depending on the arguments passed on the command line */
+  def exporters(args: Array[String], handler: EventHandler)(implicit arguments: Arguments): Seq[Exporting] = {
+    consoleExporter(args, handler).toSeq ++ otherExporters(args, handler)
   }
 }
 /**
@@ -114,3 +120,65 @@ case class FinalResultsReporter(override val handler: EventHandler,
   }
 }
 
+class TestInterfaceConsoleReporter(consoleExporter: Option[Exporting], otherExporters: Arguments => Seq[Exporting]) extends ConsoleReporter with Exporters {
+  override def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification = {
+    // if the results need to be exported to the console, we first do that making sure that the storing of statistics occurs in
+    // parallel to the export. This way, the results are displayed as soon as executed
+    // then we take the result of storing the stats, which sets up more information on the SpecStart/SpecEnd, and pass it
+    // to other exporters like the html exporter for example. This exporter needs this additional information to properly display
+    // index pages and total statistics
+    consoleExporter match {
+      case Some(e) => {
+        val storeAndExport = (spec: ExecutingSpecification) => Seq(store, e.export).par.map(_(spec)).head.asInstanceOf[ExecutingSpecification]
+        val executed = spec |> select |> sequence |> execute |> storeAndExport
+        val args = arguments <| executed.arguments
+        exportToOthers(otherExporters(args))(args).apply(executed)
+      }
+      case None => {
+        val executed = spec |> select |> sequence |> execute |> store
+        val args = arguments <| executed.arguments
+        exportToOthers(otherExporters(args))(args).apply(executed)
+      }
+    }
+  }
+}
+
+/**
+ * This object can be used to debug the behavior of the TestInterfaceRunner
+ */
+object testInterface extends TestInterfaceRunner(Thread.currentThread().getContextClassLoader, Array(ConsoleLogger)) with Classes with SystemExit with ConsoleOutput {
+  def main(arguments: Array[String]) {
+    exitSystem(start(arguments:_*))
+  }
+
+  protected val errorHandler: PartialFunction[Throwable, Unit] = {  case e =>
+    println("\nAn error occurred. " +
+      "Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.")
+    e.printStackTrace
+  }
+
+  def start(arguments: String*): Option[ExecutedSpecification] = {
+    if (arguments.length == 0)
+      println("The first argument should at least be the specification class name")
+    implicit val commandLineArgs = Arguments(arguments.drop(1):_*)
+    val testInterfaceReporter = reporter(NullEventHandler)(arguments.toArray)
+    execute(testInterfaceReporter, createSpecification(arguments(0))).headOption
+  }
+
+  private def execute(testInterfaceReporter: Reporter, specification: SpecificationStructure)(implicit args: Arguments = Arguments()): Option[ExecutedSpecification] = {
+    tryo(testInterfaceReporter.report(specification)(args.overrideWith(specification.content.arguments)))(errorHandler)
+  }
+
+  private def createSpecification(className: String)(implicit args: Arguments) = SpecificationStructure.createSpecification(className, loader)
+}
+object NullEventHandler extends EventHandler {
+  def handle(event: Event) {}
+}
+object ConsoleLogger extends Logger {
+  def ansiCodesSupported = false
+  def error(message: String) = println("error: " + message)
+  def info(message: String)  = println("info: " + message)
+  def warn(message: String)  = println("warn: " + message)
+  def debug(message: String) = println("debug: " + message)
+  def trace(t: Throwable)    = println("trace: " + t)
+}
