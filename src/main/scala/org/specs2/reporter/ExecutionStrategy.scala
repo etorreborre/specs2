@@ -101,9 +101,11 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
   private def executeConcurrently(fs: FragmentSeq, barrier: =>Any, args: Arguments)(implicit strategy: Strategy) = {
     def executeWithBarrier(f: Fragment) = { barrier; executeFragment(args)(f) }
     fs.fragments.map {
-      case f: Example  => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
-      case f: Action   => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
-      case f           => LazyExecutingFragment(() => executeWithBarrier(f), f)
+      case f: Example => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
+      case f: Action  => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
+      case f: Step    => LazyExecutingFragment(() => executeWithBarrier(f), f)
+      case f: SpecEnd => LazyExecutingFragment(() => executeWithBarrier(f), f)
+      case f          => FinishedExecutingFragment(executeFragment(args)(f), f)
     }
   }
 }
