@@ -129,7 +129,7 @@ case class executing() extends matcher.MustMatchers with ArgumentsArgs with Stan
 
   val reporter = new TestInterfaceConsoleReporter(Some(new TestInterfaceReporter(eventHandler, Array())), (a: Arguments) => Seq(htmlExporter)) {
     // the storage takes a bit more time to make sure it is actually done after the console export
-    override def store(implicit args: Arguments) = (spec: ExecutingSpecification) => { Thread.sleep(50); println("stored"); spec }
+    override def store(implicit args: Arguments) = (spec: ExecutingSpecification) => { Thread.sleep(100); println("stored"); spec }
   }
 
   val spec = new Specification { def is = ok }
