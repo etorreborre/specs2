@@ -4,7 +4,6 @@ package reporter
 import specification._
 import main._
 import io._
-import org.scalacheck._
 import execute.Success
 
 class SelectionSpec extends Specification with Tags { def is =
@@ -18,7 +17,7 @@ class SelectionSpec extends Specification with Tags { def is =
    "when the user specifies a regular expression: ex = ex1.*"                                                           ^
      "in the spec"                                                                                                      ! filter().e1^
      "on the command line"                                                                                              ! filter().e2^
-     "if the regexp is invalid, it is quoted"                                                                           ! filter().e3^tag("x")^
+     "if the regexp is invalid, it is quoted"                                                                           ! filter().e3^
    "if no filter is specified, nothing must be filtered out"                                                            ! filter().e4^
                                                                                                                         p^
  "It is possible to select only some previously executed fragments"                                                     ^
@@ -31,6 +30,7 @@ class SelectionSpec extends Specification with Tags { def is =
    "actions bodies must be copied"                                                                                      ! isolate().e4^
    "if the examples, steps or actions are marked as global, they are never copied"                                      ! isolate().e5^t^
      "with a global step before an example"                                                                             ! isolate().e6^
+   "tags can be used"                                                                                                   ! isolate().e7^
                                                                                                                         end
   
   case class filter() extends WithSelection {
@@ -69,6 +69,15 @@ class SelectionSpec extends Specification with Tags { def is =
 
     def e5 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ ("e1" ! { i = 1; ok }).global }, expectedLocalValue = 1)
     def e6 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ Step(i = 1).global ^ "e1" ! { i = 2; ok } }, expectedLocalValue = 1)
+    def e7 = {
+      val spec = (new org.specs2.mutable.Specification with org.specs2.mutable.Tags {
+        isolated
+        "ex1" >> ok
+        tag("x")
+        "ex2" >> ok
+      })
+      selection.select(Arguments("include x"))(spec).content.examples must have size(1)
+    }
   }
 
   trait SpecificationWithLocalVariable extends Specification {
