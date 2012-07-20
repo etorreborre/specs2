@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import java.io.File
+
 class MatcherSpec extends Specification with ResultMatchers { def is =
                                                                                                                         """
   Matchers can be created in different ways
@@ -9,6 +11,7 @@ class MatcherSpec extends Specification with ResultMatchers { def is =
   "a matcher can be adapted with a function and a description function for the expectable"                              ! e1_1^
   "if the matcher is for equality, it has to be the typed equality matcher be_==="                                      ! e1_2^
   "a matcher can be adapted with a function for both expected and actual values"                                        ! e2^
+  "a function can be adapted with a matcher to create a matcher"                                                        ! e2_1^
   "a matcher can be defined by a function with 1 message"                                                               ! e3^
   "a matcher can be defined by a function with 2 messages"                                                              ! e3_1^
   "a matcher can be defined by a function returning a triplet"                                                          ! e3_2^
@@ -37,6 +40,10 @@ class MatcherSpec extends Specification with ResultMatchers { def is =
     case class Human(age: Int, wealth: Int)
     def beMostlyEqualTo = (be_==(_:Human)) ^^^ ((_:Human).copy(wealth = 0))
     Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) toResult
+  }
+  def e2_1 = {
+    def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
+    new File("spec.scala") must haveExtension(".scala")
   }
   def e3 = {
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, "is odd")

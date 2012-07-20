@@ -94,6 +94,15 @@ trait MatchersImplicits extends Expectations {
   }
 
   /**
+   * this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
+   * - def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
+   */
+  implicit def adapterFunction[T, S](f: T => S) = new AdapterFunction(f)
+  case class AdapterFunction[T, S](f: T => S) {
+    def ^^(m: Matcher[S]): Matcher[T] = m ^^ f
+  }
+
+  /**
    * The <code>SeqMatcher</code> class is a matcher matching a sequence of objects with a matcher returned by a function.<p>
    * Usage:<code>List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3)) </code>
    */

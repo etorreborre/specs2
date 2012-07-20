@@ -4,7 +4,7 @@ package guide
 import specification.Forms._
 
 class Matchers extends UserGuidePage { def is = literate ^
-"""
+  """
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 
   * Boolean
@@ -54,9 +54,9 @@ This is by far the largest category of Results in ***specs2***. They cover many 
 #### Out of the box
 
 The most common matchers are automatically available when extending the `Specification` trait:
-"""^
+  """^
   MatcherCards.toTabs^p^
-"""
+  """
 The examples above show how to use matchers:
 
  * the general form for using a matcher is: `a must matcher`
@@ -67,9 +67,9 @@ The examples above show how to use matchers:
 #### Optional
 
 These other matchers need to be selectively added to the specification by adding a new trait:
-"""^
+  """^
   OptionalMatcherCards.toTabs^p^
-"""
+  """
 
 #### Custom
 
@@ -84,14 +84,17 @@ There are many ways to create matchers for your specific usage. The simplest way
         def allBeGreaterThan3: Matcher[Seq[Int]]   = be_>=(2).foreach    // like forall but execute all matchers and collect the results
         def haveOneGreaterThan2: Matcher[Seq[Int]] = be_>=(2).atLeastOnce
 
- * adapting the actual value. This matcher adapts the existing `be_<=` matcher to a matcher applicable to `Any`
+ * adapting the actual value
 
+        // This matcher adapts the existing `be_<=` matcher to a matcher applicable to `Any`
         def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size }
         def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size aka "the string size" }
 
         // !!! use a BeTypedEqualTo matcher when using aka and equality !!!
         def beFive = be_===(5) ^^ { (t: Any) => t.toString.size aka "the string size" }
 
+        // The adaptation can also be done the other way around when it's more readable
+        def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
 
  * adapting the actual and expected values. This matcher compares 2 `Human` objects but set their `wealth` field to 0
    so that the equals method will not fail on that field:
@@ -537,7 +540,7 @@ Forms are a way to represent domain objects or service, and declare expected val
 
 Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.
 
-""" ^
+  """ ^
   "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms) ^
 """
 
