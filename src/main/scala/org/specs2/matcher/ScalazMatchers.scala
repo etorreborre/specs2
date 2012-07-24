@@ -4,9 +4,13 @@ package matcher
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
 import org.specs2.internal._
 import scalaz._, Scalaz._
+
 /**
  * This trait provides matchers for some Scalaz (http://code.google.com/p/scalaz) datatypes.
+ *
+ * It uses Scalaz classes from the repackaged version of scalaz 6 so it can not be used outside of specs2
  */
+private[specs2]
 trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMatchers =>
 
   implicit def semigroupProperty[T](implicit s: Semigroup[T]): SemigroupProperty[T] = new SemigroupProperty[T]()(s)
