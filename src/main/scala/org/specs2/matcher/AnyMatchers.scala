@@ -232,7 +232,7 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
     def be_!=(t: T) = result(outer.be_!=(t))
     def be_===(t: T) = result(outer.be_===(t))
     def be_!==(t: T) = result(outer.be_!==(t))
-    def be_==~[S](s: =>S)(implicit convert: S => T) = result(outer.be_==~(s))
+    def be_==~[S](s: =>S)(implicit convert: S => T) = result(outer.be_==~[T,S](s))
     def equalTo(t: T) = result(outer.be_==(t))
     def asNullAs[T](a: =>T) = result(outer.beAsNullAs(a))
     def oneOf(t: T*) = result(beOneOf(t:_*))
