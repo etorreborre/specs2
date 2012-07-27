@@ -12,7 +12,7 @@ import specification.{FormattingFragments => FF, _}
  * is created.
  *
  */
-trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFactory {
+trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFactory with SideEffectingBlocks {
   /** local mutable contents of the specification */
   protected[specs2] var specFragments: Fragments = new Fragments()
 
@@ -44,12 +44,12 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   implicit def inExample(s: String): InExample = new InExample(s)
   /** transient class to hold an example description before creating a full Example */
   class InExample(s: String) {
-    def in[T <% Result](r: =>T): Example = exampleFactory.newExample(s, r)
+    def in[T <% Result](r: =>T): Example         = exampleFactory.newExample(s, r)
     def in[T <% Result](f: String => T): Example = exampleFactory.newExample(s, f(s))
-    def >>[T <% Result](r: =>T): Example = in(r)
+    def >>[T <% Result](r: =>T): Example         = in(r)
     def >>[T <% Result](f: String => T): Example = in(f)
-    def in(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
-    def >>(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
+    def in(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
+    def >>(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
 
     def >>[T <: Fragment](e: =>T): T         = in(e)
     def >>(block: =>Unit)        : Unit      = in(block)
@@ -61,7 +61,9 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 
     private def addSideEffectingBlock[T](block: =>T): T = {
       addFragments(s)
+      startBlock
       val b = block
+      endBlock
       addFragments(FF.p)
       b
     }
@@ -159,17 +161,23 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(s + " " + word)
+    startBlock
     fs
+    endBlock
     addFragments(FF.p)
   }
-  protected def >>(fs: Fragments) = addFragments(fs)
+
   protected def addFragments(fs: Fragments): Fragments = {
-    specFragments = new FragmentsFragment(specFragments) ^ fs
+    val element = fs.middle.lastOption.getOrElse((Text("root")))
+    addBlockElement(element)
+    element match {
+      case e @ Example(_,_) => specFragments = new FragmentsFragment(specFragments) ^ e.creationPathIs(creationPath)
+      case other            => specFragments = new FragmentsFragment(specFragments) ^ fs
+    }
     fs
   }
   protected def addFragments(fs: Seq[Fragment]): Fragments = {
-    specFragments = new FragmentsFragment(specFragments) ^ fs
-    Fragments.createList(fs:_*)
+    addFragments(Fragments.createList(fs:_*))
   }
   protected def addArguments(a: Arguments): Arguments = {
     specFragments = new FragmentsFragment(specFragments) ^ a
@@ -178,7 +186,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 
   protected def addExample[T <% Result](ex: =>Example): Example = {
     val example = ex
-    specFragments = new FragmentsFragment(specFragments) ^ example
+    addFragments(Fragments.createList(example))
     example
   }
 
@@ -192,4 +200,46 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
   override def inExample(s: String): InExample = super.inExample(s)
   override def title(s: String)                = super.title(s)
   override def text(s: String)                 = super.text(s)
+}
+
+import internal.scalaz.{TreeLoc, Scalaz}
+import Scalaz._
+import data.Trees._
+
+trait SideEffectingBlocks {
+
+ /**
+  * This tree loc contains the "path" of Examples and Actions when they are created in a block creating another fragment
+  * For example:
+  *
+  * "this" should {
+  *   "create an example" >> ok
+  * }
+  *
+  * The execution of the block above creates a Text fragment followed by an example. The blocksTree tree tracks the order of creation
+  * so that we can attach a "block creation path" to the Example showing which fragment creation precedes him. This knowledge is used to
+  * run a specification in the "isolation" mode were the changes in local variables belonging to blocks are not seen by
+  * other examples
+  */
+ private[specs2] var blocksTree: TreeLoc[(Int, Any)] = leaf((0, Text("root"))).loc
+
+  /** @return the Tree of creation paths */
+  private[specs2] def blocksCreationTree = blocksTree.toTree.map(_._1)
+
+  /** @return the current path to root */
+  private[specs2] def creationPath = blocksTree.lastChild.getOrElse(blocksTree).map(_._1).path.reverse.toIndexedSeq
+
+  private def nextNodeNumber = blocksTree.lastChild.map(_.getLabel._1 + 1).getOrElse(0)
+
+  def startBlock {
+    blocksTree = blocksTree.lastChild.getOrElse(blocksTree)
+  }
+  def endBlock {
+    blocksTree = blocksTree.getParent
+  }
+
+  def addBlockElement(e: Any) {
+    blocksTree = blocksTree.addChild((nextNodeNumber, e))
+  }
+
 }

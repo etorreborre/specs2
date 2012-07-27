@@ -96,8 +96,11 @@ case class Text(t: String) extends Fragment {
  * - a description: some text, with possibly some markup annotations for rendering code fragments (used in AutoExamples)
  * - a body: some executable code returning a Result
  */
-case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable with Isolable {
+case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable with Isolable { outer =>
   val isolable = true
+
+  /** internal specs2 variable to keep track of how an Example has been created */
+  private[specs2] val creationPath: Seq[Int] = Seq()
 
   def execute = body()
 
@@ -120,7 +123,16 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
   }
 
   /** this fragment can not be executed in a separate specification */
-  def global = new Example(desc, body) { override val isolable = false }
+  def global = new Example(desc, body) {
+    override val isolable = false
+    override val creationPath = outer.creationPath
+  }
+
+  /** set a creation path on this example to possibly isolate it during its execution */
+  private[specs2] def creationPathIs(path: Seq[Int]) = new Example(desc, body) {
+    override val isolable = outer.isolable
+    override val creationPath = path
+  }
 }
 
 case object Example {
