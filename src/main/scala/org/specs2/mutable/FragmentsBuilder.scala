@@ -4,6 +4,7 @@ import execute._
 import main._
 import specification.RegexStep._
 import specification.{FormattingFragments => FF, _}
+import StandardResults._
 
 /**
  * Adding new implicits to support specs-like naming: "the system" should "do this" in { ... }
@@ -46,18 +47,19 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   class InExample(s: String) {
     def in[T <% Result](r: =>T): Example         = exampleFactory.newExample(s, r)
     def in[T <% Result](f: String => T): Example = exampleFactory.newExample(s, f(s))
+    def in(block: =>Unit): Example               = exampleFactory.newExample(s, {block; success})
+
     def >>[T <% Result](r: =>T): Example         = in(r)
     def >>[T <% Result](f: String => T): Example = in(f)
     def in(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
     def >>(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
 
     def >>[T <: Fragment](e: =>T): T         = in(e)
-    def >>(block: =>Unit)        : Unit      = in(block)
+    def >>(block: =>Unit)        : Unit = { lazy val b = block; >>(new NameSpace { b }); b }
     def >>(block: =>NameSpace)   : NameSpace = in(block)
 
     def in[T <: Fragment](block: =>T): T  = addSideEffectingBlock(block)
     def in(block: =>NameSpace): NameSpace = addSideEffectingBlock(block)
-    def in(block: =>Unit): Unit           = addSideEffectingBlock(block)
 
     private def addSideEffectingBlock[T](block: =>T): T = {
       addFragments(s)

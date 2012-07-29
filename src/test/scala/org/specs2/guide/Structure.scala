@@ -1269,6 +1269,18 @@ Those are all the methods which you can use to create fragments in a unit specif
           "have a name" in { ... }
         }
 
+   Note that you can use a `for` loop to create examples with <code class="prettyprint">></code><code class="prettyprint">></code>:
+
+        "this system has 5 examples" >> {
+          (1 to 5) foreach { i => "example "+i >> ok }
+        }
+
+   And you can also use a `for` loop with the `in` operator to create a block of expectations:
+
+        "this example has 5 expectations" in {
+          (1 to 5) foreach { i => i must_== i }
+        }
+
  * `title`: give a title to the Specification
 
         "My spec title".title
@@ -1389,7 +1401,7 @@ To make things more concrete here is a full example:
           def e1 = string must have size(7)
         }
       }
-"""^
+      """^
 """
 ### How to?
 
