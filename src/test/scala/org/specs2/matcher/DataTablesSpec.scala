@@ -20,6 +20,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
     "when succeeding"                                                                                                   ! e9^
     "when failing"                                                                                                      ! e10^bt^
   "2 tables results can be and-ed together"                                                                             ! e11^
+  "a cell can have null values"                                                                                         ! e12^
                                                                                                                         end
 
   def boom = error("boom")
@@ -109,6 +110,10 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
       "x | 2 | 2 | 5 | '4' is not equal to '5'"
   }
 
+  def e12 =
+    "a"            || "b"    |>
+    "a"            !! "b"    |
+    (null: String) !! ""     | { (a, b) =>  ok }
 }
 
 class InAMutableContext extends MustThrownMatchers with DataTables {

@@ -3,8 +3,9 @@ package matcher
 
 import execute._
 import ResultExecution._
-import text.{Trim, TextTable}
+import text.{Trim, TextTable, NotNullStrings}
 import Trim._
+import NotNullStrings._
 
 /**
  * This trait provides implicit definitions and types to create DataTables.
@@ -198,7 +199,7 @@ trait DataTables extends Expectations {
 
   abstract class DataRow[+T1, +T2, +T3, +T4, +T5, +T6, +T7, +T8, +T9, +T10] extends Product {
     def show = productIterator.mkString("|", "|", "|")
-    def showCells = productIterator.map(_.toString).toSeq
+    def showCells = productIterator.map(_.notNull).toSeq
   }
 
   case class DataRow1[T1](t1: T1) extends DataRow[T1, Any, Any, Any, Any, Any, Any, Any, Any, Any] {
