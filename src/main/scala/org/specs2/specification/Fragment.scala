@@ -100,7 +100,7 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
   val isolable = true
 
   /** internal specs2 variable to keep track of how an Example has been created */
-  private[specs2] val creationPath: Seq[Int] = Seq()
+  private[specs2] val creationPath: Option[CreationPath] = None
 
   def execute = body()
 
@@ -128,10 +128,10 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
     override val creationPath = outer.creationPath
   }
 
-  /** set a creation path on this example to possibly isolate it during its execution */
-  private[specs2] def creationPathIs(path: Seq[Int]) = new Example(desc, body) {
+  /** set a creation path, if not already set, on this example to possibly isolate it during its execution */
+  private[specs2] def creationPathIs(path: CreationPath) = new Example(desc, body) {
     override val isolable = outer.isolable
-    override val creationPath = path
+    override val creationPath = if (outer.creationPath.isDefined) outer.creationPath else Some(path)
   }
 }
 

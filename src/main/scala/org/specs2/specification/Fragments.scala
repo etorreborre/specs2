@@ -108,6 +108,13 @@ object Fragments {
    * That name is derived from the specification structure name
    */
   def withSpecName(fragments: Fragments, s: SpecificationStructure): Fragments = withSpecName(fragments, SpecName(s))
+  /**
+   * @return a Fragments object with creation paths set on Examples and Actions
+   */
+  def withCreationPaths(fragments: Fragments): Fragments = Fragments.create(fragments.fragments.zipWithIndex.map {
+    case (e @ Example(_,_), i) => e.creationPathIs(AcceptanceCreationPath(Seq(i)))
+    case (other, i)            => other
+  }:_*)
 
   /**
    * Fragments can be added as a monoid

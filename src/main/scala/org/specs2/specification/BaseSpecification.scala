@@ -49,8 +49,10 @@ trait SpecificationStructure {
    * this "cached" version of the Fragments is kept hidden from the user to avoid polluting
    * the Specification namespace.
    * SpecStart and SpecEnd fragments are added if the user haven't inserted any
+   *
+   * A creation path is possibly set on Examples and Actions if they haven't any
    */
-  private[specs2] lazy val content: Fragments = map(Fragments.withSpecName(is, this))
+  private[specs2] lazy val content: Fragments = map(Fragments.withCreationPaths(Fragments.withSpecName(is, this)))
 }
 
 /**
@@ -89,7 +91,6 @@ object SpecificationStructure {
     // finally retry the original class name to display the error messages
     createSpecificationFromClassOrObject(className, classLoader).
       orElse(tryToCreateObject[SpecificationStructure](className, loader = classLoader)).map(applyCommandLineArguments)
-
   }
 
   /**

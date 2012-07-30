@@ -48,6 +48,7 @@ trait SpecificationFeatures extends FragmentsBuilder
    with TimeConversions
    with PendingUntilFixed
    with Contexts
+   with SpecificationNavigation
    with Debug {
 
   /**
@@ -64,5 +65,4 @@ trait SpecificationFeatures extends FragmentsBuilder
    */
   /** use an available outside context to transform a function returning a value convertible to a result, into a result */
   implicit def outsideFunctionToResult[T, R](implicit outside: Outside[T], conv: R => Result) : (T => R) => Result = (f: T => R) => outside((t: T) => conv(f(t)))
-
 }

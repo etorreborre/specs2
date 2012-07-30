@@ -30,6 +30,7 @@ trait SpecificationNavigation {
 
 sealed trait CreationPath {
   def path: Seq[Int]
+  def startsWith(other: CreationPath) = path.take(other.path.size) == other
 }
 case class MutableCreationPath(path: Seq[Int]) extends CreationPath
 case class AcceptanceCreationPath(path: Seq[Int]) extends CreationPath

@@ -6,6 +6,7 @@ import control.LazyParameters._
 import execute.Result
 import specification._
 import specification.Fragments._
+import reflect.Classes
 
 /**
  * This trait "isolates" examples by replacing their body with another one, created from a clone of the specification.
@@ -58,8 +59,8 @@ trait ExamplesIsolation { self: DefaultSelection =>
       val (fragment, args, name) = fan
       if ((arguments <| args).isolated) {
         fragment match {
-          case e @ Example(_,_) if e.isolable => e.copy(body = () => copyBody2(name, e.body()))
-          case a @ Action(_)    if a.isolable => a.copy(action = lazyfy(copyBody2(name, a.execute)))
+          case e @ Example(_,_) if e.isolable => e.copy(body = () => copyBody2(name, e, e.body()))
+          case a @ Action(_)    if a.isolable => a.copy(action = lazyfy(copyBody2(name, a, a.execute)))
           case other                          => other
         }
       } else fragment
@@ -69,19 +70,16 @@ trait ExamplesIsolation { self: DefaultSelection =>
   /**
    * @return an Example which body comes from the execution of that example in a brand new instance of the Specification
    */
-  protected def copyBody2(name: SpecName, body: =>Result, index: Int = 0)(implicit arguments: Arguments) = {
-    SpecificationStructure.createSpecificationOption(name.javaClassName).map { specification =>
-      val fragments = select(specification.content.fragments)
+  protected def copyBody2(name: SpecName, f: Fragment, body: =>Result)(implicit arguments: Arguments) = {
+    Classes.tryToCreateObject[Specification](name.javaClassName).map { specification =>
+      val fragments = select(specification.fragmentsTo(f))
 
-      def executeStepsBefore(n: Int) =
-        fragments.zipWithIndex.collect { case (f, i) if i < n => f }.
-          collect(isAStep).
-          filter(_.isolable).foreach(_.execute)
+      def executeStepsBefore = fragments.collect(isAStep).filter(_.isolable).foreach(_.execute)
 
-      fragments(index) match {
-        case e @ Example(_, _) => executeStepsBefore(index); e.execute
-        case a @ Action(_)     => executeStepsBefore(index); a.execute
-        case other             => body
+      fragments.lastOption match {
+        case Some(e @ Example(_, _)) => executeStepsBefore; e.execute
+        case Some(a @ Action(_))     => executeStepsBefore; a.execute
+        case other                   => body
       }
     }.getOrElse(body)
   }

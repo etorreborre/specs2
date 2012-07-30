@@ -5,6 +5,7 @@ import main._
 import specification.RegexStep._
 import specification.{FormattingFragments => FF, _}
 import StandardResults._
+import control.ImplicitParameters
 
 /**
  * Adding new implicits to support specs-like naming: "the system" should "do this" in { ... }
@@ -13,7 +14,7 @@ import StandardResults._
  * is created.
  *
  */
-trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFactory with SideEffectingBlocks {
+trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFactory with SideEffectingCreationPaths with ImplicitParameters {
   /** local mutable contents of the specification */
   protected[specs2] var specFragments: Fragments = new Fragments()
 
@@ -37,7 +38,10 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   implicit def described(s: String): Described = new Described(s)
   class Described(s: String) {
     def should(fs: =>Fragment) = addFragments(s, fs, "should")
-    def can(fs: =>Fragment) = addFragments(s, fs, "can")
+    def can(fs: =>Fragment)    = addFragments(s, fs, "can")
+
+    def should(fs: =>Unit)(implicit p: ImplicitParam) = addFragments(s, fs, "should")
+    def can(fs: =>Unit)(implicit p: ImplicitParam)    = addFragments(s, fs, "can")
   }
   /**
    * add a new example using 'in' or '>>' or '!'
@@ -54,20 +58,19 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def in(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
     def >>(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
 
-    def >>[T <: Fragment](e: =>T): T         = in(e)
-    def >>(block: =>Unit)        : Unit = { lazy val b = block; >>(new NameSpace { b }); b }
-    def >>(block: =>NameSpace)   : NameSpace = in(block)
+    def >>(block: =>Unit)                                                      : Unit = { lazy val b = block; >>(new NameSpace { b }); b }
+    def >>[T <: Fragment](e: =>T)(implicit p: ImplicitParam)   : Unit = in(e)(p)
+    def >>(block: =>NameSpace)   (implicit p1: ImplicitParam1,
+                                           p2: ImplicitParam2): Unit = in(block)(p1, p2)
 
-    def in[T <: Fragment](block: =>T): T  = addSideEffectingBlock(block)
-    def in(block: =>NameSpace): NameSpace = addSideEffectingBlock(block)
+    def in[T <: Fragment](block: =>T)(implicit p: ImplicitParam): Unit  = addSideEffectingBlock(block)
+    def in(block: =>NameSpace)(implicit p1: ImplicitParam1,
+                                        p2: ImplicitParam2)    : Unit  = addSideEffectingBlock(block)
 
-    private def addSideEffectingBlock[T](block: =>T): T = {
+    private def addSideEffectingBlock[T](block: =>T) {
       addFragments(s)
-      startBlock
-      val b = block
-      endBlock
+      executeBlock(block)
       addFragments(FF.p)
-      b
     }
     def in(fs: =>Fragments): Fragments = fs
     def >>(fs: =>Fragments): Fragments = fs
@@ -163,9 +166,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(s + " " + word)
-    startBlock
-    fs
-    endBlock
+    executeBlock(fs)
     addFragments(FF.p)
   }
 
@@ -207,10 +208,9 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
 import internal.scalaz.{TreeLoc, Scalaz}
 import Scalaz._
 import data.Trees._
+trait SideEffectingCreationPaths extends SpecificationNavigation {
 
-trait SideEffectingBlocks {
-
- /**
+  /**
   * This tree loc contains the "path" of Examples and Actions when they are created in a block creating another fragment
   * For example:
   *
@@ -223,25 +223,51 @@ trait SideEffectingBlocks {
   * run a specification in the "isolation" mode were the changes in local variables belonging to blocks are not seen by
   * other examples
   */
- private[specs2] var blocksTree: TreeLoc[(Int, Any)] = leaf((0, Text("root"))).loc
+  private[mutable] var blocksTree: TreeLoc[(Int, Any)] = leaf((0, Text("root"))).loc
+
+  /** when a target path is specified we might limit the creation of fragments to only the fragments on the desired path */
+  private[mutable] var targetPath: Option[CreationPath] = None
 
   /** @return the Tree of creation paths */
-  private[specs2] def blocksCreationTree = blocksTree.toTree.map(_._1)
+  private[mutable] def blocksCreationTree = blocksTree.toTree.map(_._1)
 
   /** @return the current path to root */
-  private[specs2] def creationPath = blocksTree.lastChild.getOrElse(blocksTree).map(_._1).path.reverse.toIndexedSeq
+  private[mutable] def creationPath = MutableCreationPath(blocksTree.lastChild.getOrElse(blocksTree).map(_._1).path.reverse.toIndexedSeq)
 
   private def nextNodeNumber = blocksTree.lastChild.map(_.getLabel._1 + 1).getOrElse(0)
 
-  def startBlock {
+  private[mutable] def startBlock {
     blocksTree = blocksTree.lastChild.getOrElse(blocksTree)
   }
-  def endBlock {
+
+  private[mutable] def endBlock {
     blocksTree = blocksTree.getParent
   }
 
-  def addBlockElement(e: Any) {
+  private[mutable] def executeBlock[T](block: =>T) = {
+    startBlock
+    targetPath match {
+      case Some(path) => if (path.startsWith(creationPath)) block
+      case None       => block
+    }
+    endBlock
+  }
+
+  private[mutable] def addBlockElement(e: Any) {
     blocksTree = blocksTree.addChild((nextNodeNumber, e))
   }
 
+  /**
+  * @return the list of fragments which have been created before a given one
+  */
+  private[specs2]
+  override def fragmentsTo(f: Fragment): Seq[Fragment] = {
+    // set the target path
+    targetPath = f match {
+      case e @ Example(_,_) => e.creationPath
+      case other            => None
+    }
+    // return the fragments created till all path nodes have been created
+    content.fragments
+  }
 }

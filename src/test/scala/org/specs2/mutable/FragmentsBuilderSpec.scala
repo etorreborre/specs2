@@ -1,7 +1,8 @@
 package org.specs2
 package mutable
+
 import text.Trim._
-import specification.AllExpectations
+import specification.{MutableCreationPath, AllExpectations}
 import internal.scalaz.Scalaz._
 
 class FragmentsBuilderSpec extends Specification with AllExpectations {
@@ -31,10 +32,15 @@ class FragmentsBuilderSpec extends Specification with AllExpectations {
       """.stripMargin.trimNewLines
   }
   "Examples must be created with their 'blockCreationPath'" >> {
-    spec.content.examples(0).creationPath ==== Seq(0, 0, 0, 0)
-    spec.content.examples(1).creationPath ==== Seq(0, 0, 2)
-    spec.content.examples(2).creationPath ==== Seq(0, 2, 0)
+    spec.content.examples(0).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 0, 0)))
+    spec.content.examples(1).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 2)))
+    spec.content.examples(2).creationPath ==== Some(MutableCreationPath(Seq(0, 2, 0)))
   }
+  "It is possible to collect all the fragments which are created on a given 'path'" >> {
+    val example = spec.content.examples(2)
+    spec.fragmentsTo(example) must contain(example)
+  }
+
   "Fragments creation with Unit" >> {
     "if a block returning Unit is created with '>>', then it is interpreted as a block of fragments" >> {
       val s = new Specification {
