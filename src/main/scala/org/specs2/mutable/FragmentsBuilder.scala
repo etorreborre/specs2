@@ -174,8 +174,9 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     val element = fs.middle.lastOption.getOrElse((Text("root")))
     addBlockElement(element)
     element match {
-      case e @ Example(_,_) => specFragments = new FragmentsFragment(specFragments) ^ e.creationPathIs(creationPath)
-      case other            => specFragments = new FragmentsFragment(specFragments) ^ fs
+      case e @ Example(_,_) => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ e.creationPathIs(creationPath))
+      case a @ Action(_)    => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ a.creationPathIs(creationPath))
+      case other            => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ fs)
     }
     fs
   }
@@ -183,8 +184,12 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     addFragments(Fragments.createList(fs:_*))
   }
   protected def addArguments(a: Arguments): Arguments = {
-    specFragments = new FragmentsFragment(specFragments) ^ a
+    updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ a)
     a
+  }
+
+  private def updateSpecFragments(f: Fragments => Fragments) = {
+    specFragments = f(specFragments)
   }
 
   protected def addExample[T <% Result](ex: =>Example): Example = {
@@ -265,6 +270,7 @@ trait SideEffectingCreationPaths extends SpecificationNavigation {
     // set the target path
     targetPath = f match {
       case e @ Example(_,_) => e.creationPath
+      case a @ Action(_)    => a.creationPath
       case other            => None
     }
     // return the fragments created till all path nodes have been created

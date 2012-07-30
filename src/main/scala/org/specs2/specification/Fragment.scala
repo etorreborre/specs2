@@ -161,7 +161,9 @@ case class Step (step: LazyParameter[Result] = lazyfy(Success()), stopOnFail: Bo
   override def map(f: Result => Result) = Step(step map f)
 
   /** this fragment can not be executed in a separate specification */
-  def global = new Step(step) { override val isolable = false }
+  def global = new Step(step) {
+    override val isolable = false
+  }
 }
 case object Step {
   /** create a Step object from either a previous result, or a value to evaluate */
@@ -185,8 +187,11 @@ case object Step {
  *
  * It is only reported in case of a failure
  */
-case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable with Isolable {
+case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable with Isolable { outer =>
   val isolable = true
+
+  /** internal specs2 variable to keep track of how an Example has been created */
+  private[specs2] val creationPath: Option[CreationPath] = None
 
   def execute = action.value
   override def toString = "Action"
@@ -194,7 +199,17 @@ case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fr
   override def map(f: Result => Result) = Action(action map f)
 
   /** this fragment can not be executed in a separate specification */
-  def global = new Action(action) { override val isolable = false }
+  def global = new Action(action) {
+    override val isolable = false
+    override val creationPath = outer.creationPath
+  }
+
+  /** set a creation path, if not already set, on this example to possibly isolate it during its execution */
+  private[specs2] def creationPathIs(path: CreationPath) = new Action(action) {
+    override val isolable = outer.isolable
+    override val creationPath = if (outer.creationPath.isDefined) outer.creationPath else Some(path)
+  }
+
 }
 case object Action {
   /** create an Action object from any value */

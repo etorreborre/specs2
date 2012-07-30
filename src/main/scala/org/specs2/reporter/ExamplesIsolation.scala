@@ -71,8 +71,8 @@ trait ExamplesIsolation { self: DefaultSelection =>
    * @return an Example which body comes from the execution of that example in a brand new instance of the Specification
    */
   protected def copyBody2(name: SpecName, f: Fragment, body: =>Result)(implicit arguments: Arguments) = {
-    Classes.tryToCreateObject[Specification](name.javaClassName).map { specification =>
-      val fragments = select(specification.fragmentsTo(f))
+    Classes.tryToCreateObject[SpecificationNavigation](name.javaClassName).map { specification =>
+      val fragments = select(specification.fragmentsTo(f)).toIndexedSeq
 
       def executeStepsBefore = fragments.collect(isAStep).filter(_.isolable).foreach(_.execute)
 

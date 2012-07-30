@@ -9,18 +9,20 @@ class ExamplesIsolationSpec extends Specification with SilentConsoleReporter {
     report(spec)(Arguments("isolated")).issues.map(_.message) === Seq()
   }.pendingUntilFixed("This needs further developments")
 
-  val spec = new Specification {
-    isolated
-    "a system" >> {
-      var a = 1
-      "should increment variables" >> {
-        a = 2
-        "ex" >> { a === 2 }
-        "ex" >> { a += 1; a === 3}
-      }
-      "or leave them untouched" >> {
-        "ex" >> { a === 1 }
-      }
+  val spec = new SpecificationWithLocalVariables
+}
+
+class SpecificationWithLocalVariables extends Specification {
+  isolated
+  "a system" >> {
+    var a = 1
+    "should increment variables" >> {
+      a = 2
+      "ex1" >> { a === 2 }
+      "ex2" >> { a += 1; a === 3}
+    }
+    "or leave them untouched" >> {
+      "ex3" >> { a === 1 }
     }
   }
 }
