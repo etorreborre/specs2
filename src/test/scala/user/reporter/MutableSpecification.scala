@@ -10,7 +10,7 @@ class MutableSpecification extends Specification {
 }
 
 class MutableScalaCheckSpecification extends Specification with org.specs2.ScalaCheck {
-  "test" >> check { i: Int =>
+  "test" >> prop { i: Int =>
     i === (i+1)
   }
 }

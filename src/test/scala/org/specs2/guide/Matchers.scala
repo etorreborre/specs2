@@ -197,22 +197,22 @@ If you have the same "MatchResult" expression that you'd like to verify for diff
 
 A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
 
-To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can pass functions to the `check` method and use the resulting block as your example body:
+To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can pass functions returning any kind of `Result` (`Boolean`, `Result`, `MatchResult`) to the `prop` method and use the resulting `Prop` as your example body:
 
-      "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }
+      "addition and multiplication are related" ! prop { (a: Int) => a + a == 2 * a }
 
 The function that is checked can either return:
 
       // a Boolean
-      "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }
+      "addition and multiplication are related" ! prop { (a: Int) => a + a == 2 * a }
 
       // a MatchResult
-      "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }
+      "addition and multiplication are related" ! prop { (a: Int) => a + a must_== 2 * a }
 
       // a Prop
-      "addition and multiplication are related" ! check { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) }
+      "addition and multiplication are related" ! prop { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) }
 
-Note that if you pass functions using MatchResults you will get better failure messages so you are encouraged to do so.
+Note that if you pass functions using `MatchResult`s you will get better failure messages so you are encouraged to do so.
 
 #### Arbitrary instances
 
@@ -257,7 +257,7 @@ ScalaCheck test generation can be tuned with a few properties. If you want to ch
 
 It is also possible to specifically set the execution parameters on a given property:
 
-      "this is a specific property" ! check { (a: Int, b: Int) =>
+      "this is a specific property" ! prop { (a: Int, b: Int) =>
         (a + b) must_== (b + a)
       }.set(minTestsOk -> 200, workers -> 3)
 
@@ -614,14 +614,14 @@ In specs2, those 2 methods are defined by the `org.specs2.matcher.ThrownMessages
     implicit val params = set(minTestsOk -> 20)
 
     def is = "Scalacheck".title ^
-    "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }              ^
-    "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }                    ^
-    "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }               ^
-    "addition and multiplication are related" ! check { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) } ^
-    "this is a specific property" ! check { (a: Int, b: Int) =>
+    "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }             ^
+    "addition and multiplication are related" ! prop { (a: Int) => a + a == 2 * a }                    ^
+    "addition and multiplication are related" ! prop { (a: Int) => a + a must_== 2 * a }               ^
+    "addition and multiplication are related" ! prop { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) } ^
+    "this is a specific property" ! prop { (a: Int, b: Int) =>
       (a + b) must_== (b + a)
-    }.set(minTestsOk -> 200, workers -> 1)                                                              ^
-                                                                                                        end
+    }.set(minTestsOk -> 200, workers -> 1)                                                             ^
+                                                                                                       end
   }
 
   import org.specs2.matcher._
