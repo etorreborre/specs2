@@ -24,6 +24,8 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
         check { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) }                                                       ^p^
       "an implication and a boolean value"                                                                              ^
         check { (i:Int) => (i > 0) ==> (i > 0) }                                                                        ^p^
+      "a unit value with side-effects"                                                                                  ^
+        check { (i:Int) => { (1 to 5) foreach { n => n must_== n } } }                                                  ^p^
       "a specific arbitrary instance in the enclosing scope"                                                            ^ {
         implicit val arbitrary = positiveInts
         check { (i:Int) => i must be_>(0) }
@@ -38,6 +40,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
     "if it is proved the execution will yield a Success"                                                                ! prop1^
     "if it is a function which is always true, it will yield a Success"                                                 ! prop2^
     "if it is a function which is always false, it will yield a Failure"                                                ! prop3^
+                                                                                                                        p^
     "if it is a property throwing an exception"                                                                         ^
       "it will yield an Error"                                                                                          ! prop4^
       "showing the exception type if the message is null"                                                               ! prop4_1^

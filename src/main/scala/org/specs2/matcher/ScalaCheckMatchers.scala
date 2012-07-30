@@ -219,6 +219,7 @@ object PartialFunctionPropertyImplicits extends PartialFunctionPropertyImplicits
 
 trait ResultPropertyImplicits {
 
+  implicit def unitToProp(u: =>Unit): Prop = booleanToProp({u; true})
   implicit def propToProp(p: =>Prop): Prop = p
   implicit def booleanToProp(b: =>Boolean): Prop = resultProp(if (b) execute.Success() else execute.Failure())
   implicit def callByNameMatchResultToProp[T](m: =>MatchResult[T]): Prop = resultProp(m.toResult)
