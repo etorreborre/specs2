@@ -14,3 +14,5 @@ trait StandardMatchResults extends Expectations {
   lazy val ok = new MatchSuccess("ok", "ko", createExpectable(None))
   lazy val ko = new MatchFailure("ok", "ko", createExpectable(None))
 }
+
+object StandardMatchResults extends StandardMatchResults

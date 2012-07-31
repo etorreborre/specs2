@@ -23,7 +23,7 @@ trait MatchersImplicits extends Expectations {
   /** 
    * implicit definition to transform a Seq of MatchResults to a Result
    */ 
-  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.reduceLeft(_ and _).toResult
+  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.foldLeft(StandardResults.success: Result)(_ and _.toResult)
   /** 
    * implicit definition to transform any MatchResult to a Result
    */ 
