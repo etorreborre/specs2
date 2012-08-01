@@ -18,9 +18,8 @@ import data.{SeparatedTags, IncludedExcluded}
  * an Example
  */
 sealed trait Fragment {
-  val linkedTo: Option[SpecificationStructure] = None
-  def matches(s: String) = true
   val location: Location = new Location
+  def matches(s: String) = true
 }
 
 /**
@@ -124,18 +123,17 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
 
   /** this fragment can not be executed in a separate specification */
   def global = new Example(desc, body) {
-    override val isolable = false
+    override val isolable     = false
     override val creationPath = outer.creationPath
-    override val location = outer.location
-    override val linkedTo = outer.linkedTo
+    override val location     = outer.location
   }
 
   /** set a creation path, if not already set, on this example to possibly isolate it during its execution */
-  private[specs2] def creationPathIs(path: CreationPath) = new Example(desc, body) {
-    override val isolable = outer.isolable
+  private[specs2]
+  def creationPathIs(path: CreationPath) = new Example(desc, body) {
     override val creationPath = if (outer.creationPath.isDefined) outer.creationPath else Some(path)
-    override val location = outer.location
-    override val linkedTo = outer.linkedTo
+    override val isolable     = outer.isolable
+    override val location     = outer.location
   }
 }
 
@@ -206,12 +204,14 @@ case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fr
   def global = new Action(action) {
     override val isolable = false
     override val creationPath = outer.creationPath
+    override val location     = outer.location
   }
 
-  /** set a creation path, if not already set, on this example to possibly isolate it during its execution */
+  /** set a creation path, if not already set, on this action to possibly isolate it during its execution */
   private[specs2] def creationPathIs(path: CreationPath) = new Action(action) {
-    override val isolable = outer.isolable
     override val creationPath = if (outer.creationPath.isDefined) outer.creationPath else Some(path)
+    override val isolable     = outer.isolable
+    override val location     = outer.location
   }
 
 }
