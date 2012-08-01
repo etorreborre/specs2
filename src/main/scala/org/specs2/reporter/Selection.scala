@@ -30,7 +30,7 @@ trait DefaultSelection extends ExamplesIsolation with TagSelection with StatusSe
   /** select function returning a filtered seq of Fragments */
   def select(implicit arguments: Arguments): SpecificationStructure => SpecificationStructure = (spec: SpecificationStructure) => {
     // isolate examples if necessary, using the arguments of the current specification in case of included specifications
-    val fs = SpecsArguments.foldAll(select(spec.content.fragments)(arguments)).filter(isolateExamples2)
+    val fs = SpecsArguments.foldAll(select(spec.content.fragments)(arguments)).filter(isolateExamples)
     SpecificationStructure(fs)
   }
 
