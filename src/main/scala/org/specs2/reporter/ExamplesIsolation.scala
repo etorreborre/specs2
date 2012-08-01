@@ -76,7 +76,7 @@ trait ExamplesIsolation { self: DefaultSelection =>
 
       def executeStepsBefore = fragments.collect(isAStep).filter(_.isolable).foreach(_.execute)
 
-      fragments.lastOption match {
+      fragments.collect(isAnExample.orElse(isAnAction)).lastOption match {
         case Some(e @ Example(_, _)) => executeStepsBefore; e.execute
         case Some(a @ Action(_))     => executeStepsBefore; a.execute
         case other                   => body

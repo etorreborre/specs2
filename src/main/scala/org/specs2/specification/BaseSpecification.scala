@@ -52,7 +52,7 @@ trait SpecificationStructure {
    *
    * A creation path is possibly set on Examples and Actions if they haven't any
    */
-  private[specs2] lazy val content: Fragments = map(Fragments.withSpecName(is, this))
+  private[specs2] lazy val content: Fragments = map(Fragments.withCreationPaths(Fragments.withSpecName(is, this)))
 }
 
 /**

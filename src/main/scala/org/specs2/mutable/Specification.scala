@@ -9,7 +9,7 @@ import main.ArgumentsShortcuts
 import specification._
 
 trait Specification extends SpecificationStructure with SpecificationFeatures {
-  def is = specFragments
+  def is = fragments
 }
 
 trait SpecificationFeatures extends FragmentsBuilder

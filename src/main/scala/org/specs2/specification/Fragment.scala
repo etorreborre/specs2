@@ -126,12 +126,16 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
   def global = new Example(desc, body) {
     override val isolable = false
     override val creationPath = outer.creationPath
+    override val location = outer.location
+    override val linkedTo = outer.linkedTo
   }
 
   /** set a creation path, if not already set, on this example to possibly isolate it during its execution */
   private[specs2] def creationPathIs(path: CreationPath) = new Example(desc, body) {
     override val isolable = outer.isolable
     override val creationPath = if (outer.creationPath.isDefined) outer.creationPath else Some(path)
+    override val location = outer.location
+    override val linkedTo = outer.linkedTo
   }
 }
 

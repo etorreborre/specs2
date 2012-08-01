@@ -94,6 +94,8 @@ object Fragments {
   def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
   /** @return the step if the Fragment is a Step */
   def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_,_) => s }
+  /** @return the action if the Fragment is an Actino */
+  def isAnAction: PartialFunction[Fragment, Action] = { case a @ Action(_) => a }
   /** @return the step if the Fragment is a Br fragment */
   def isABr: PartialFunction[Fragment, Fragment] = { case br @ Br() => br }
   /** @return the step if the Fragment is an End fragment */
@@ -110,11 +112,17 @@ object Fragments {
   def withSpecName(fragments: Fragments, s: SpecificationStructure): Fragments = withSpecName(fragments, SpecName(s))
   /**
    * @return a Fragments object with creation paths set on Examples and Actions
+   *
+   * The path of a Fragment is either:
+   *
+   *  - set at construction time when it comes from a mutable specification
+   *  - its index in the sequence of fragments for an acceptance specification
    */
-  def withCreationPaths(fragments: Fragments): Fragments = Fragments.create(fragments.fragments.zipWithIndex.map {
-    case (e @ Example(_,_), i) => e.creationPathIs(AcceptanceCreationPath(Seq(i)))
+  def withCreationPaths(fragments: Fragments): Fragments = fragments.copy(middle = fragments.middle.zipWithIndex.map {
+    case (e @ Example(_,_), i) => e.creationPathIs(AcceptanceCreationPath(Seq(i+1)))
+    case (a @ Action(_), i)    => a.creationPathIs(AcceptanceCreationPath(Seq(i+1)))
     case (other, i)            => other
-  }:_*)
+  })
 
   /**
    * Fragments can be added as a monoid

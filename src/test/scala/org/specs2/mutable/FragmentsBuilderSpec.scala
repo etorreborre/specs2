@@ -2,13 +2,14 @@ package org.specs2
 package mutable
 
 import text.Trim._
-import specification.{MutableCreationPath, AllExpectations}
+import specification.{AcceptanceCreationPath, MutableCreationPath, AllExpectations}
 import internal.scalaz.Scalaz._
 
 class FragmentsBuilderSpec extends Specification with AllExpectations {
 
   "Creating fragments must maintain a tree showing all the creation paths for each block" >> {
-    spec.blocksTree.toTree.map(b => (b._1, b._2.toString)).drawTree.trimNewLines ====
+    spec1.content
+    spec1.blocksTree.toTree.map(b => (b._1, b._2.toString)).drawTree.trimNewLines ====
       """
       |(0, Text(root))
       ||
@@ -32,13 +33,20 @@ class FragmentsBuilderSpec extends Specification with AllExpectations {
       """.stripMargin.trimNewLines
   }
   "Examples must be created with their 'blockCreationPath'" >> {
-    spec.content.examples(0).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 0, 0)))
-    spec.content.examples(1).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 2)))
-    spec.content.examples(2).creationPath ==== Some(MutableCreationPath(Seq(0, 2, 0)))
+    "for a mutable specification" >> {
+      spec1.content.examples(0).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 0, 0)))
+      spec1.content.examples(1).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 2)))
+      spec1.content.examples(2).creationPath ==== Some(MutableCreationPath(Seq(0, 2, 0)))
+    }
+    "for an acceptance specification" >> {
+      spec2.content.examples(0).creationPath ==== Some(AcceptanceCreationPath(Seq(3)))
+      spec2.content.examples(1).creationPath ==== Some(AcceptanceCreationPath(Seq(4)))
+      spec2.content.examples(2).creationPath ==== Some(AcceptanceCreationPath(Seq(6)))
+    }
   }
   "It is possible to collect all the fragments which are created on a given 'path'" >> {
-    val example = spec.content.examples(2)
-    spec.fragmentsTo(example) must contain(example)
+    val example = spec1.content.examples(2)
+    spec1.fragmentsTo(example) must contain(example)
   }
 
   "Fragments creation with Unit" >> {
@@ -56,16 +64,27 @@ class FragmentsBuilderSpec extends Specification with AllExpectations {
     }
   }
 
-  lazy val spec = new Specification {
-    "a" >> {
-      "b" >> {
-        "c" >> ok
-      }
-      "d" >> ok
-    }
-    "e" >> {
-      "f" >> ok
-    }
-  }
+  lazy val spec1 = new FragmentsBuilderExample1
+  lazy val spec2 = new FragmentsBuilderExample2
+}
 
+class FragmentsBuilderExample1 extends Specification {
+  "a" >> {
+    "b" >> {
+      "c" >> ok
+    }
+    "d" >> ok
+  }
+  "e" >> {
+    "f" >> ok
+  }
+}
+
+class FragmentsBuilderExample2 extends org.specs2.Specification { def is = isolated ^ sequential ^
+  "a"   ^
+  "b"   ^
+    "c" ! ok ^
+    "d" ! ok ^
+  "e"   ^
+  "f"   ! ok
 }

@@ -16,7 +16,8 @@ import control.ImplicitParameters
  */
 trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFactory with SideEffectingCreationPaths with ImplicitParameters {
   /** local mutable contents of the specification */
-  protected[specs2] var specFragments: Fragments = new Fragments()
+  protected[mutable] var specFragments: Fragments = new Fragments()
+  protected[specs2] def fragments: Fragments = { replay; specFragments }
 
   /** @return a Fragments object from a single piece of text */
   override implicit def textFragment(s: String): FragmentsFragment = {
@@ -58,7 +59,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def in(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
     def >>(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
 
-    def >>(block: =>Unit)                                                      : Unit = { lazy val b = block; >>(new NameSpace { b }); b }
+    def >>(block: =>Unit)                                      : Unit = { lazy val b = block; >>(new NameSpace { b }); b }
     def >>[T <: Fragment](e: =>T)(implicit p: ImplicitParam)   : Unit = in(e)(p)
     def >>(block: =>NameSpace)   (implicit p1: ImplicitParam1,
                                            p2: ImplicitParam2): Unit = in(block)(p1, p2)
@@ -189,7 +190,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   }
 
   private def updateSpecFragments(f: Fragments => Fragments) = {
-    specFragments = f(specFragments)
+    effect(specFragments = f(specFragments))
   }
 
   protected def addExample[T <% Result](ex: =>Example): Example = {
@@ -233,6 +234,27 @@ trait SideEffectingCreationPaths extends SpecificationNavigation {
   /** when a target path is specified we might limit the creation of fragments to only the fragments on the desired path */
   private[mutable] var targetPath: Option[CreationPath] = None
 
+  /** list of actions to create fragments */
+  private[mutable] var effects: scala.collection.mutable.ListBuffer[() => Unit] = new scala.collection.mutable.ListBuffer()
+
+  /**
+   * play all the effects. After each executed effect, new effects might have been created.
+   * Push them first at the beginning of the effects list so that they can be played first
+   */
+  private[mutable] def replay = {
+    def targetReached = targetPath.map(_ == creationPath).getOrElse(false)
+
+    while (!effects.isEmpty) {
+      val effect = effects.remove(0)
+      val rest = effects.take(effects.size)
+      effects = new scala.collection.mutable.ListBuffer()
+      effect.apply()
+      effects.append(rest:_*)
+      if (targetReached)
+        effects = effects.take(1)
+    }
+  }
+
   /** @return the Tree of creation paths */
   private[mutable] def blocksCreationTree = blocksTree.toTree.map(_._1)
 
@@ -242,24 +264,30 @@ trait SideEffectingCreationPaths extends SpecificationNavigation {
   private def nextNodeNumber = blocksTree.lastChild.map(_.getLabel._1 + 1).getOrElse(0)
 
   private[mutable] def startBlock {
-    blocksTree = blocksTree.lastChild.getOrElse(blocksTree)
+    effect(blocksTree = blocksTree.lastChild.getOrElse(blocksTree))
   }
 
   private[mutable] def endBlock {
-    blocksTree = blocksTree.getParent
+    effect(blocksTree = blocksTree.getParent)
   }
 
   private[mutable] def executeBlock[T](block: =>T) = {
     startBlock
-    targetPath match {
-      case Some(path) => if (path.startsWith(creationPath)) block
-      case None       => block
+    effect {
+      targetPath match {
+        case Some(path) => if (path.startsWith(creationPath)) block
+        case None       => block
+      }
     }
     endBlock
   }
 
+  private[mutable] def effect(a: =>Unit) {
+    effects.append(() => a)
+  }
+
   private[mutable] def addBlockElement(e: Any) {
-    blocksTree = blocksTree.addChild((nextNodeNumber, e))
+    effect(blocksTree = blocksTree.addChild((nextNodeNumber, e)))
   }
 
   /**
